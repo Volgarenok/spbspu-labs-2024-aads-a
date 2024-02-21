@@ -281,7 +281,7 @@ bool belokurskaya::List< T >::operator<(const List< T >& other) const
     current1 = current1->next;
     current2 = current2->next;
   }
-  return (bool)current2;
+  return current2 != nullptr;
 }
 
 template< typename T >

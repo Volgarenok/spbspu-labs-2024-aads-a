@@ -1,8 +1,9 @@
 #include "readSequences.hpp"
 #include <iostream>
 
-belokurskaya::SequenceVector readSequences()
+belokurskaya::SequenceVector belokurskaya::readSequences()
 {
+  using namespace belokurskaya;
   SequenceVector sequences;
   std::string name;
   int number;
