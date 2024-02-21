@@ -1,7 +1,7 @@
 #include "readSequences.hpp"
 #include <iostream>
 
-SequenceVector readSequences()
+belokurskaya::SequenceVector readSequences()
 {
   SequenceVector sequences;
   std::string name;

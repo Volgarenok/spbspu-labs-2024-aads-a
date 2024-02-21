@@ -1,8 +1,11 @@
-#ifndef READSEQUENCES_H
-#define READSEQUENCES_H
+#ifndef READSEQUENCES_HPP
+#define READSEQUENCES_HPP
 
 #include "SequenceVector.hpp"
 
-SequenceVector readSequences();
+namespace belokurskaya
+{
+  SequenceVector readSequences();
+}
 
 #endif

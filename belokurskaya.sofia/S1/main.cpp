@@ -7,6 +7,7 @@
 
 int main()
 {
+  using namespace belokurskaya;
   try
   {
     SequenceVector sequences = readSequences();

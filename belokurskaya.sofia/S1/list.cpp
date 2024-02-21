@@ -1,10 +1,10 @@
 #include "list.hpp"
 
 template< typename T >
-List< T >::List(): head(nullptr), tail(nullptr) {}
+belokurskaya::List< T >::List(): head(nullptr), tail(nullptr) {}
 
 template< typename T >
-List< T >::List(size_t count, const T & value): head(nullptr), tail(nullptr)
+belokurskaya::List< T >::List(size_t count, const T & value): head(nullptr), tail(nullptr)
 {
   for (size_t i = 0; i < count; ++i)
   {
@@ -13,7 +13,7 @@ List< T >::List(size_t count, const T & value): head(nullptr), tail(nullptr)
 }
 
 template< typename T >
-List< T >::List(const std::initializer_list< T > & ilist): head(nullptr), tail(nullptr)
+belokurskaya::List< T >::List(const std::initializer_list< T > & ilist): head(nullptr), tail(nullptr)
 {
   for (const T & value: ilist)
   {
@@ -22,7 +22,7 @@ List< T >::List(const std::initializer_list< T > & ilist): head(nullptr), tail(n
 }
 
 template< typename T >
-List< T >::~List()
+belokurskaya::List< T >::~List()
 {
   while (head)
   {
@@ -33,13 +33,13 @@ List< T >::~List()
 }
 
 template< typename T >
-bool List< T >::empty() const
+bool belokurskaya::List< T >::empty() const
 {
   return head == nullptr;
 }
 
 template< typename T >
-void List< T >::push_back(T value)
+void belokurskaya::List< T >::push_back(T value)
 {
   Node * newNode = new Node(value);
   if (!head)
@@ -54,7 +54,7 @@ void List< T >::push_back(T value)
 }
 
 template< typename T >
-void List< T >::push_front(T value)
+void belokurskaya::List< T >::push_front(T value)
 {
   Node * newNode = new Node(value);
   if (!head)
@@ -69,7 +69,7 @@ void List< T >::push_front(T value)
 }
 
 template< typename T >
-void List< T >::pop_back()
+void belokurskaya::List< T >::pop_back()
 {
   if (!head)
   {
@@ -94,7 +94,7 @@ void List< T >::pop_back()
 }
 
 template< typename T >
-void List< T >::pop_front()
+void belokurskaya::List< T >::pop_front()
 {
   if (!head)
   {
@@ -113,7 +113,7 @@ void List< T >::pop_front()
 }
 
 template< typename T >
-void List< T >::insert(size_t index, T value)
+void belokurskaya::List< T >::insert(size_t index, T value)
 {
   if (index == 0)
   {
@@ -145,7 +145,7 @@ void List< T >::insert(size_t index, T value)
 }
 
 template< typename T >
-void List< T >::erase(size_t index)
+void belokurskaya::List< T >::erase(size_t index)
 {
   if (index == 0)
   {
@@ -177,7 +177,7 @@ void List< T >::erase(size_t index)
 }
 
 template< typename T >
-void List< T >::remove(T value)
+void belokurskaya::List< T >::remove(T value)
 {
   while (head && head->value == value)
   {
@@ -213,7 +213,7 @@ void List< T >::remove(T value)
 }
 
 template< typename T >
-T & List< T >::at(size_t index) const
+T & belokurskaya::List< T >::at(size_t index) const
 {
   Node * current = head;
   for (size_t i = 0; i < index; ++i)
@@ -232,7 +232,7 @@ T & List< T >::at(size_t index) const
 }
 
 template< typename T >
-size_t List< T >::size() const
+size_t belokurskaya::List< T >::size() const
 {
   size_t count = 0;
   Node * current = head;
@@ -245,7 +245,7 @@ size_t List< T >::size() const
 }
 
 template< typename T >
-bool List< T >::operator==(const List< T >& other) const
+bool belokurskaya::List< T >::operator==(const List< T >& other) const
 {
   Node * current1 = head;
   Node * current2 = other.head;
@@ -262,13 +262,13 @@ bool List< T >::operator==(const List< T >& other) const
 }
 
 template< typename T >
-bool List< T >::operator!=(const List< T >& other) const
+bool belokurskaya::List< T >::operator!=(const List< T >& other) const
 {
   return !(* this == other);
 }
 
 template< typename T >
-bool List< T >::operator<(const List< T >& other) const
+bool belokurskaya::List< T >::operator<(const List< T >& other) const
 {
   Node * current1 = head;
   Node * current2 = other.head;
@@ -280,26 +280,26 @@ bool List< T >::operator<(const List< T >& other) const
     }
     current1 = current1->next;
     current2 = current2->next;
-    }
+  }
   return (bool)current2;
 }
 
 template< typename T >
-bool List< T >::operator<=(const List< T >& other) const
+bool belokurskaya::List< T >::operator<=(const List< T >& other) const
 {
   return * this < other || * this == other;
 }
 
 template< typename T >
-bool List< T >::operator>(const List< T >& other) const
+bool belokurskaya::List< T >::operator>(const List< T >& other) const
 {
   return !(* this <= other);
 }
 
 template< typename T >
-bool List< T >::operator>=(const List< T >& other) const
+bool belokurskaya::List< T >::operator>=(const List< T >& other) const
 {
   return * this > other || * this == other;
 }
 
-template class List< int >;
+template class belokurskaya::List< int >;

@@ -1,13 +1,13 @@
 #include "SequenceVector.hpp"
 
-SequenceVector::SequenceVector(): pairs(new SequencePair[10000]), size(0), capacity(10000) {}
+belokurskaya::SequenceVector::SequenceVector(): pairs(new SequencePair[10000]), size(0), capacity(10000) {}
 
-SequenceVector::~SequenceVector()
+belokurskaya::SequenceVector::~SequenceVector()
 {
   delete[] pairs;
 }
 
-void SequenceVector::push_back(const SequencePair & pair)
+void belokurskaya::SequenceVector::push_back(const SequencePair & pair)
 {
   if (size < capacity)
   {
@@ -34,12 +34,12 @@ void SequenceVector::push_back(const SequencePair & pair)
   }
 }
 
-size_t SequenceVector::getSize() const
+size_t belokurskaya::SequenceVector::getSize() const
 {
   return size;
 }
 
-SequencePair & SequenceVector::operator[](size_t index)
+belokurskaya::SequencePair & belokurskaya::SequenceVector::operator[](size_t index)
 {
   if (index >= size)
   {
@@ -48,7 +48,7 @@ SequencePair & SequenceVector::operator[](size_t index)
   return pairs[index];
 }
 
-const SequencePair & SequenceVector::operator[](size_t index) const
+const belokurskaya::SequencePair & belokurskaya::SequenceVector::operator[](size_t index) const
 {
   if (index >= size)
   {
