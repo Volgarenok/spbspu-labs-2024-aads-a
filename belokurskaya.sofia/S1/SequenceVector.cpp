@@ -1,4 +1,4 @@
-#include "SequenceVector.h"
+#include "SequenceVector.hpp"
 
 SequenceVector::SequenceVector(): pairs(new SequencePair[10000]), size(0), capacity(10000) {}
 

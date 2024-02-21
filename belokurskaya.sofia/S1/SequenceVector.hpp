@@ -1,7 +1,7 @@
 #ifndef SEQUENCE_VECTOR_H
 #define SEQUENCE_VECTOR_H
 
-#include "List.h"
+#include "List.hpp"
 #include <stdexcept>
 
 class SequencePair
