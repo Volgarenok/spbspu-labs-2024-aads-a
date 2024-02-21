@@ -25,3 +25,20 @@ class SequencePair
       return sequence;
     }
 };
+
+class SequenceVector
+{
+  SequencePair * pairs;
+  size_t size;
+  size_t capacity;
+
+  public:
+    SequenceVector();
+    ~SequenceVector();
+    void push_back(const SequencePair & pair);
+    size_t getSize() const;
+    SequencePair & operator[](size_t index);
+    const SequencePair & operator[](size_t index) const;
+};
+
+#endif
