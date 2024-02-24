@@ -13,18 +13,32 @@ namespace piyavkin
       tail_(nullptr),
       size_(0)
     {}
-  private:
+    void push_back(const T& value)
+    {
+      Node* new_node = new Node(value);
+      new_node->prev_ = tail_;
+      if (tail_)
+      {
+        tail_->next_ = new_node;
+      }
+      if (!head_)
+      {
+        head_ = new_node;
+      }
+      tail_ = new_node;
+    }
+//  private:
     struct Node
     {
-      Node(const T& value) :
-        val(value),
-        next(nullptr),
-        prev(nullptr)
+      Node(const T& value = T(), Node* next = nullptr, Node* prev = nullptr):
+        value_(value),
+        next_(next),
+        prev_(prev)
       {}
       ~Node() = default;
-      T val;
-      Node* next;
-      Node* prev;
+      T value_;
+      Node* next_;
+      Node* prev_;
     };
     Node* head_;
     Node* tail_;
