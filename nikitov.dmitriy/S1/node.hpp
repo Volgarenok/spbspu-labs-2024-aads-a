@@ -7,20 +7,15 @@ namespace nikitov
   struct Node
   {
   public:
-    Node():
-      value_(0),
-      next_(nullptr),
-      prev_(nullptr)
-    {}
-    Node(T value, Node* next, Node* prev):
+    Node(T value):
       value_(value),
-      next_(next),
-      prev_(prev)
+      prev_(nullptr),
+      next_(nullptr)
     {}
     ~Node() = default;
     T value_;
-    Node* next_;
     Node* prev_;
+    Node* next_;
   };
 }
 #endif

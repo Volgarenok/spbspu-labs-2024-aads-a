@@ -24,8 +24,9 @@ namespace nikitov
     {
       while (tail_->prev_ != nullptr)
       {
-      tail_ = tail_->prev_;
-      delete tail_->next_;
+        Node< T >* ptr = tail_->prev_;
+        delete tail_;
+        tail_ = ptr;
       }
       delete tail_;
     }
@@ -36,7 +37,7 @@ namespace nikitov
     }
     Node< T >* end()
     {
-       return tail_;
+      return tail_;
     }
     size_t size() const
     {
@@ -44,14 +45,33 @@ namespace nikitov
     }
     void push_back(T value)
     {
-      tail_ = new Node< T >(value, tail_, nullptr);
+      Node< T >* ptr = new Node< T >(value);
+      ptr->prev_ = tail_;
+      if (tail_ != nullptr)
+      {
+        tail_->next_ = ptr;
+      }
+      else
+      {
+        head_ = ptr;
+        tail_ = ptr;
+      }
+      tail_ = ptr;
       ++size_;
     }
     void pop_back()
     {
-      tail_ = tail_->prev_;
-      delete tail_->next_;
-      tail_->next_ = nullptr;
+      Node< T >* ptr = tail_->prev_;
+      if (ptr != nullptr)
+      {
+        ptr->next_ = nullptr;
+      }
+      else
+      {
+        head_ = nullptr;
+      }
+      delete tail_;
+      tail_ = ptr;
       --size_;
     }
   private:
