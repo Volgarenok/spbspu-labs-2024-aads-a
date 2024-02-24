@@ -14,14 +14,13 @@ namespace nikitov
   {
     friend class List< T >;
   public:
-    T& operator*() const
-    {
-      return node_.value;
-    }
-    T* operator->() const
-    {
-      return &node_.value;
-    }
+    Iterator():
+      node_(nullptr)
+    {}
+    Iterator(const Iterator &) = default;
+    ~Iterator() = default;
+
+    Iterator& operator=(const Iterator&) = default;
     Iterator& operator++()
     {
       node_->next_;
@@ -44,6 +43,25 @@ namespace nikitov
       node_->prev_;
       return temp;
     }
+
+    T& operator*()
+    {
+      return node_.value;
+    }
+    T* operator->()
+    {
+      return std::addressof(node_.value);
+    }
+
+    const T& operator*() const
+    {
+      return node_.value;
+    }
+    const T* operator->() const
+    {
+      return std::addressof(node_.value);
+    }
+
     bool operator==(const Iterator& other) const
     {
       return node_ == other.node_;
