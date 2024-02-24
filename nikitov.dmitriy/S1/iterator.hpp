@@ -1,3 +1,4 @@
+/*
 #ifndef ITERATOR_HPP
 #define ITERATIR_HPP
 
@@ -10,23 +11,23 @@ namespace nikitov
   class List;
 
   template< typename T >
-  class Iterator: public std::iterator< std::input_iterator_tag, T >
+  class ListIterator: public std::iterator< std::input_iterator_tag, T >
   {
     friend class List< T >;
   public:
-    Iterator():
+    ListIterator():
       node_(nullptr)
     {}
-    Iterator(const Iterator &) = default;
+    ListIterator(const Iterator &) = default;
     ~Iterator() = default;
 
-    Iterator& operator=(const Iterator&) = default;
-    Iterator& operator++()
+    ListIterator& operator=(const ListIterator&) = default;
+    ListIterator& operator++()
     {
       node_->next_;
       return *this;
     }
-    Iterator operator++(int)
+    ListIterator operator++(int)
     {
       Iterator temp(*this);
       node_->next_;
@@ -75,3 +76,4 @@ namespace nikitov
   };
 }
 #endif
+*/
