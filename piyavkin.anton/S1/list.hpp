@@ -14,6 +14,10 @@ namespace piyavkin
       tail_(nullptr),
       size_(0)
     {}
+    ~List()
+    {
+      clear();
+    }
     size_t size()
     {
       return size_;
@@ -86,6 +90,13 @@ namespace piyavkin
         head_ = head_->next_;
         delete head_->prev_;
         --size_;
+      }
+    }
+    void clear()
+    {
+      while (size() != 0)
+      {
+        pop_back();
       }
     }
 //  private:

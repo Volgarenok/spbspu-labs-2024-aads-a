@@ -5,7 +5,7 @@
 int main()
 {
   using namespace piyavkin;
-  std::pair< std::string, piyavkin::List< unsigned int > >* pairs = nullptr;
+  std::pair< std::string, piyavkin::List< unsigned int >* >* pairs = nullptr;
   try
   {
     pairs = inputList(std::cin);
