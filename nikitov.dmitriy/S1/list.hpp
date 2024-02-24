@@ -31,17 +31,49 @@ namespace nikitov
       delete tail_;
     }
 
-    Node< T >* begin()
+    T& front()
     {
-      return head_;
+      return head_->value_;
     }
-    Node< T >* end()
+    T& back()
     {
-      return tail_;
+      return tail_->value_;
     }
     size_t size() const
     {
       return size_;
+    }
+
+    void push_front(T value)
+    {
+      Node< T >* ptr = new Node< T >(value);
+      ptr->next_ = head_;
+      if (head_ != nullptr)
+      {
+        head_->prev_ = ptr;
+      }
+      else
+      {
+        head_ = ptr;
+        tail_ = ptr;
+      }
+      head_ = ptr;
+      ++size_;
+    }
+    void pop_front()
+    {
+      Node< T >* ptr = head_->next_;
+      if (ptr != nullptr)
+      {
+        ptr->prev_ = nullptr;
+      }
+      else
+      {
+        tail_ = nullptr;
+      }
+      delete head_;
+      head_ = ptr;
+      --size_;
     }
     void push_back(T value)
     {
