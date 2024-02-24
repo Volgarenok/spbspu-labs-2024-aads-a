@@ -13,6 +13,20 @@ namespace piyavkin
       tail_(nullptr),
       size_(0)
     {}
+    void push_front(const T& value)
+    {
+      Node* new_node = new Node(value);
+      new_node->next_ = head_;
+      if (head_)
+      {
+        head_->prev_ = new_node;
+      }
+      if (!tail_)
+      {
+        tail_ = new_node;
+      }
+      head_ = new_node;
+    }
     void push_back(const T& value)
     {
       Node* new_node = new Node(value);
