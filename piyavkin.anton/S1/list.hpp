@@ -21,6 +21,35 @@ namespace piyavkin
     {
       clear();
     }
+    T& get_element(size_t i)
+    {
+      iterator_.node = head_;
+      for (size_t j = 0; j < i; ++j)
+      {
+        ++iterator_;
+      }
+      return iterator_.node->value_;
+    }
+    void out_val(std::ostream& out, size_t i, size_t& sum)
+    {
+      if (!head_)
+      {
+        throw std::logic_error("error");
+      }
+      if (i < size())
+      {
+        iterator_.node = head_;
+        for (size_t j = 0; j < i; ++j)
+        {
+          ++iterator_;
+        }
+        if (i < size())
+        {
+          sum += iterator_.node->value_;
+          out << iterator_.node->value_;
+        }
+      }
+    }
     size_t size() const
     {
       return size_;
@@ -43,6 +72,32 @@ namespace piyavkin
       iterator_.node = tail_;
       return iterator_;
     }
+    void erase(ListIterator< T > it)
+    {
+      if (it == begin())
+      {
+        pop_front();
+      }
+      else if (it == end())
+      {
+        pop_back();
+      }
+      else
+      {
+        it.node->next_->prev_ = it.node->prev_;
+        it.node->prev_->next_ = it.node->next_;
+        delete it.node;
+        --size_;
+      }
+    }
+    void erase(ListIterator< T >& it_start, ListIterator< T >& it_finish)
+    {
+      while (it_start != it_finish)
+      {
+        erase(it_start++);
+      }
+      erase(it_start);
+    }
     void insert(ListIterator< T >& it, const T& value)
     {
       if (it == begin())
@@ -61,6 +116,7 @@ namespace piyavkin
         new_node->prev_ = it.node->prev_;
         it.node->prev_ = new_node;
         new_node->prev_->next_ = new_node;
+        ++size_;
       }
     }
     bool empty() const
@@ -140,7 +196,7 @@ namespace piyavkin
         pop_back();
       }
     }
-//  private:
+  private:
     Node< T >* head_;
     Node< T >* tail_;
     size_t size_;

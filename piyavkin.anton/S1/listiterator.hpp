@@ -25,13 +25,13 @@ namespace piyavkin
       node = node->prev_;
       return *this;
     }
-    ListIterator< D >& operator++(int)
+    ListIterator< D > operator++(int)
     {
       ListIterator< D > result(*this);
       ++(*this);
       return result;
     }
-    ListIterator< D >& operator--(int)
+    ListIterator< D > operator--(int)
     {
       ListIterator< D > result(*this);
       --(*this);
