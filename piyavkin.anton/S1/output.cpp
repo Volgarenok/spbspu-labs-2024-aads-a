@@ -1,6 +1,7 @@
 #include "output.hpp"
 
-void piyavkin::output(std::ostream& out, const std::pair< std::string, piyavkin::List< unsigned int >* >* pairs, size_t size, size_t max_size_list)
+using pair_t = std::pair< std::string, piyavkin::List< unsigned int >* >*;
+void piyavkin::output(std::ostream& out, const pair_t pairs, size_t size, size_t max_size_list)
 {
   for (size_t i = 0; i < size; ++i)
   {

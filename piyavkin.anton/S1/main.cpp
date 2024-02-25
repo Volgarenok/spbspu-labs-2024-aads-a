@@ -21,7 +21,8 @@ int main()
   }
   if (!pairs)
   {
-    std::cout << 0 << '\n';
+    std::cout << 0;
   }
+  std::cout << '\n';
   delete[] pairs;
 }

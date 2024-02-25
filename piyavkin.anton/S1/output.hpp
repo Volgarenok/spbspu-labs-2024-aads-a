@@ -6,6 +6,7 @@
 
 namespace piyavkin
 {
-  void output(std::ostream& out, const std::pair< std::string, List< unsigned int >* >* pairs, size_t size, size_t max_size_list);
+  using pair_t = std::pair< std::string, piyavkin::List< unsigned int >* >*;
+  void output(std::ostream& out, const pair_t pairs, size_t size, size_t max_size_list);
 }
 #endif
