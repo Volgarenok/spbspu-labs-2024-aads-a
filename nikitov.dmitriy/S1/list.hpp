@@ -23,6 +23,16 @@ namespace nikitov
       tail_(nullptr),
       size_(0)
     {}
+    List(size_t n, const T& value):
+      head_(nullptr),
+      tail_(nullptr),
+      size_(n)
+    {
+      for (size_t i = 0; i != n; ++i)
+      {
+        push_front(value);
+      }
+    }
     ~List()
     {
       while (tail_->prev_ != nullptr)
