@@ -2,6 +2,7 @@
 #define LIST_HPP
 
 #include <cstddef>
+#include <utility>
 #include "node.hpp"
 #include "iterator.hpp"
 
@@ -31,6 +32,8 @@ namespace nikitov
       delete tail_;
     }
 
+    Iterator begin()
+
     T& front()
     {
       return head_->value_;
@@ -39,12 +42,17 @@ namespace nikitov
     {
       return tail_->value_;
     }
+
     size_t size() const
     {
       return size_;
     }
+    bool empty() const
+    {
+      return !size_;
+    }
 
-    void push_front(T value)
+    void push_front(const T& value)
     {
       Node< T >* ptr = new Node< T >(value);
       ptr->next_ = head_;
@@ -75,7 +83,8 @@ namespace nikitov
       head_ = ptr;
       --size_;
     }
-    void push_back(T value)
+
+    void push_back(const T& value)
     {
       Node< T >* ptr = new Node< T >(value);
       ptr->prev_ = tail_;
@@ -106,6 +115,25 @@ namespace nikitov
       tail_ = ptr;
       --size_;
     }
+
+    void clear()
+    {
+      while (tail_->prev_ != nullptr)
+      {
+        Node< T >* ptr = tail_->prev_;
+        delete tail_;
+        tail_ = ptr;
+      }
+      delete tail_;
+      size_ = 0;
+    }
+    void swap(List< T >& other)
+    {
+      std::swap(head_, other.head_);
+      std::swap(tail_, other.tail_);
+      std::swap(size_, other.size_);
+    }
+
   private:
     Node< T >* head_;
     Node< T >* tail_;
