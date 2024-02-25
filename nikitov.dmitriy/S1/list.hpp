@@ -15,6 +15,8 @@ namespace nikitov
   class List
   {
     friend class Node< T >;
+    typedef ListIterator< int > iterator;
+    typedef ListIterator< const int > constIterator;
   public:
     List():
       head_(nullptr),
@@ -32,7 +34,22 @@ namespace nikitov
       delete tail_;
     }
 
-    Iterator begin()
+    iterator begin()
+    {
+      return iterator(head_);
+    }
+    constIterator cbegin() const
+    {
+      return constIterator(head_);
+    }
+    iterator end()
+    {
+      return iterator(tail_);
+    }
+    constIterator cend() const
+    {
+      return constIterator(tail_);
+    }
 
     T& front()
     {

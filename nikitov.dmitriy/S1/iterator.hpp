@@ -1,57 +1,56 @@
-/*
 #ifndef ITERATOR_HPP
-#define ITERATIR_HPP
+#define ITERATOR_HPP
 
 #include <iterator>
-#include "list.hpp"
+#include "node.hpp"
 
 namespace nikitov
 {
   template< typename T >
-  class List;
+  class Node;
 
   template< typename T >
-  class ListIterator: public std::iterator< std::input_iterator_tag, T >
+  class ListIterator: public std::iterator< std::bidirectional_iterator_tag, T >
   {
-    friend class List< T >;
+    friend class Node< T >;
   public:
-    ListIterator():
-      node_(nullptr)
+    ListIterator(Node< T >* node):
+      node_(node)
     {}
-    ListIterator(const Iterator &) = default;
-    ~Iterator() = default;
+    ListIterator(const ListIterator&) = default;
+    ~ListIterator() = default;
 
     ListIterator& operator=(const ListIterator&) = default;
     ListIterator& operator++()
     {
-      node_->next_;
+      node_ = node_->next_;
       return *this;
     }
     ListIterator operator++(int)
     {
-      Iterator temp(*this);
-      node_->next_;
+      ListIterator temp(*this);
+      node_ = node_->next_;
       return temp;
     }
-    Iterator& operator--()
+    ListIterator& operator--()
     {
-      node_->prev_;
+      node_ = node_->prev_;
       return *this;
     }
-    Iterator operator--(int)
+    ListIterator operator--(int)
     {
-      Iterator temp(*this);
-      node_->prev_;
+      ListIterator temp(*this);
+      node_ = node_->prev_;
       return temp;
     }
 
     T& operator*()
     {
-      return node_.value;
+      return node_->value_;
     }
     T* operator->()
     {
-      return std::addressof(node_.value);
+      return std::addressof(node_.value_);
     }
 
     const T& operator*() const
@@ -63,17 +62,17 @@ namespace nikitov
       return std::addressof(node_.value);
     }
 
-    bool operator==(const Iterator& other) const
+    bool operator==(const ListIterator& other) const
     {
       return node_ == other.node_;
     }
-    bool operator!=(const Iterator& other) const
+    bool operator!=(const ListIterator& other) const
     {
       return node_ != other.node_;
     }
+
   private:
-    List< T >* node_;
+    Node< T >* node_;
   };
 }
 #endif
-*/
