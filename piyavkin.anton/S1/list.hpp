@@ -1,7 +1,8 @@
 #ifndef LIST_HPP
 #define LIST_HPP
 #include <cstddef>
-#include<stdexcept>
+#include <stdexcept>
+#include "node.hpp"
 
 namespace piyavkin
 {
@@ -18,17 +19,17 @@ namespace piyavkin
     {
       clear();
     }
-    size_t size()
+    size_t size() const
     {
       return size_;
     }
-    bool empty()
+    bool empty() const
     {
       return size_ == 0;
     }
     void push_front(const T& value)
     {
-      Node* new_node = new Node(value);
+      Node< T >* new_node = new Node< T >(value);
       new_node->next_ = head_;
       if (head_)
       {
@@ -43,7 +44,7 @@ namespace piyavkin
     }
     void push_back(const T& value)
     {
-      Node* new_node = new Node(value);
+      Node< T >* new_node = new Node< T >(value);
       new_node->prev_ = tail_;
       if (tail_)
       {
@@ -99,21 +100,60 @@ namespace piyavkin
         pop_back();
       }
     }
-//  private:
-    struct Node
+    template< class D >
+    class ListIterator
     {
-      Node(const T& value = T(), Node* next = nullptr, Node* prev = nullptr):
-        value_(value),
-        next_(next),
-        prev_(prev)
+    public:
+      ListIterator():
+        node(nullptr)
       {}
-      ~Node() = default;
-      T value_;
-      Node* next_;
-      Node* prev_;
+      ListIterator(const ListIterator< D >&) = default;
+      ListIterator< D > operator=(const ListIterator< D >&) = default;
+      ~ListIterator() = default;
+      ListIterator< D > operator++()
+      {
+        node = node->next_;
+        return *this;
+      }
+      ListIterator< D > operator--()
+      {
+        node = node->prev_;
+        return *this;
+      }
+      ListIterator< D > operator++(int)
+      {
+        ListIterator< D > result(*this);
+        ++(*this);
+        return result;
+      }
+      ListIterator< D > operator--(int)
+      {
+        ListIterator< D > result(*this);
+        --(*this);
+        return result;
+      }
+      bool operator==(const ListIterator< D >& rhs) const
+      {
+        return node == rhs.node;
+      }
+      bool operator!=(const ListIterator< D >& rhs) const
+      {
+        return !(*this == rhs);
+      }
+      D* operator->()
+      {
+        return std::addressof(node->value_);
+      }
+      D& operator*()
+      {
+        return node->value_;
+      }
+    private:
+      Node< D >* node;
     };
-    Node* head_;
-    Node* tail_;
+  private:
+    Node< T >* head_;
+    Node< T >* tail_;
     size_t size_;
   };
 }
