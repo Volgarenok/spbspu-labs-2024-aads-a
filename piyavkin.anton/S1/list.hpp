@@ -18,23 +18,21 @@ namespace piyavkin
       iterator_()
     {}
     List(const List< T >& rhs):
-      size_(rhs.size_),
-      iterator_(rhs.iterator_)
+      List()
     {
-      size_t i = 1;
       try
       {
-        head_ = new Node< T >(rhs.head_->value_);
-        Node< T >* node = head_;
-        while (i < rhs.size() - 1)
+        Node< T >* node = rhs.head_;
+        while (size_ != rhs.size_)
         {
-          node->next_ = new Node< T >(get_element(i++));
+          push_back(node->value_);
+          node = node->next_;
         }
-        tail_ = new Node< T >(rhs.tail_->value_);
+        iterator_ = rhs.iterator_;
       }
       catch (const std::exception& e)
       {
-        for (size_t j = 0; j < i; ++j)
+        for (size_t j = 0; j < size_; ++j)
         {
           pop_front();
         }
@@ -70,19 +68,18 @@ namespace piyavkin
     }
     void swap(List< T >& list)
     {
-      List< T > temp;
-      temp->head_ = head_;
-      temp->tail_ = tail_;
-      temp->size_ = size_;
-      temp->iterator_ = iterator_;
-      head_ = list->head_;
-      tail_ = list->tail_;
-      size_ = list->size_;
-      iterator_ = list->iterator_;
-      list->head_ = temp->head_;
-      list->tail_ = temp->tail_;
-      list->size_ = temp->size_;
-      list->iterator_ = temp->iterator_;
+      Node< T >* temp_head_ = head_;
+      Node< T >* temp_tail_ = tail_;
+      size_t temp_size_ = size_;
+      ListIterator< T > temp_iterator_ = iterator_;
+      head_ = list.head_;
+      tail_ = list.tail_;
+      size_ = list.size_;
+      iterator_ = list.iterator_;
+      list.head_ = temp_head_;
+      list.tail_ = temp_tail_;
+      list.size_ = temp_size_;
+      list.iterator_ = temp_iterator_;
     }
     T& get_element(size_t i)
     {
