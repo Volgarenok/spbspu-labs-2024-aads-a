@@ -66,6 +66,55 @@ namespace piyavkin
     {
       clear();
     }
+    void remove(const T& value)
+    {
+      Node< T >* node = head_;
+      while (node->value_ != value)
+      {
+        node = node->next_;
+      }
+      if (node == head_)
+      {
+        pop_front();
+      }
+      else if (node == tail_)
+      {
+        pop_back();
+      }
+      else
+      {
+        node->next_->prev_ = node->prev_;
+        node->prev_->next_ = node->next_;
+        delete node;
+        --size_;
+      }
+    }
+    template< Functor >
+    void remove_it(Functor f)
+    {
+      Node< T >* node = head_;
+      while (node)
+      {
+        if (f(node))
+        {
+          if (node == head_)
+          {
+            pop_front();
+          }
+          else if (node == tail_)
+          {
+            pop_back();
+          }
+          else
+          {
+            node->next_->prev_ = node->prev_;
+            node->prev_->next_ = node->next_;
+            delete node;
+            --size_;
+           }
+        }
+      }
+    }
     void swap(List< T >& list)
     {
       Node< T >* temp_head_ = head_;
