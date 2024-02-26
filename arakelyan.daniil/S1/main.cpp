@@ -9,7 +9,7 @@
 #include "node.hpp"
 
 int main()
-{ 
+{
   using namespace arakelyan;
 
   BinList<double> list;
