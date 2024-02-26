@@ -68,9 +68,9 @@ namespace zaitsev
     node_t* cur = other.head_->next_;
     try
     {
-      while (!cur)
+      while (cur)
       {
-        head->next = new node_t(cur->value);
+        head->next_ = new node_t(cur->value_);
         head = head->next_;
         cur = cur->next_;
       }
@@ -103,8 +103,8 @@ namespace zaitsev
   template< typename T >
   void ForwardList< T >::push_front(const T& value)
   {
-    node_t* new_head = new Node(value);
-    new_head->next = head_;
+    node_t* new_head = new node_t(value);
+    new_head->next_ = head_;
     head_ = new_head;
   }
 

@@ -26,7 +26,7 @@ namespace zaitsev
   {
     while (head_node)
     {
-      Node< T >* temp = head_node->next;
+      Node< T >* temp = head_node->next_;
       delete head_node;
       head_node = temp;
     }
