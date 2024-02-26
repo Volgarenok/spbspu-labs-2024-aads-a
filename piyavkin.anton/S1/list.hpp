@@ -16,6 +16,14 @@ namespace piyavkin
       tail_(nullptr),
       size_(0)
     {}
+    List(const T& value, size_t count):
+      List()
+    {
+      for (size_t i = 0; i < count; ++i)
+      {
+        push_back(value);
+      }
+    }
     List(const List< T >& rhs):
       List()
     {
@@ -62,6 +70,14 @@ namespace piyavkin
     ~List()
     {
       clear();
+    }
+    void assign(const T& value, size_t count)
+    {
+      clear();
+      for (size_t i = 0; i < count; ++i)
+      {
+        push_back(value);
+      }
     }
     void remove(const T& value)
     {

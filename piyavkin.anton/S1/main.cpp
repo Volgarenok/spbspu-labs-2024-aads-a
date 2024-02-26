@@ -25,19 +25,15 @@ int main()
 //  }
 //  std::cout << '\n';
 //  delete[] pairs;
-  List< int > list;
+  List< int > list(5, 5);
   size_t sum = 0;
-  for (size_t i = 0; i < 5; ++i)
-  {
-    list.push_back(i);
-  }
   for (size_t i = 0; i < 5; ++i)
   {
     list.out_val(std::cout, i, sum);
     std::cout << ' ';
   }
   std::cout << '\n';
-  list.insert(++list.begin(), 10);
+  list.assign(4, 4);
   for (size_t i = 0; i < 6; ++i)
   {
     list.out_val(std::cout, i, sum);
