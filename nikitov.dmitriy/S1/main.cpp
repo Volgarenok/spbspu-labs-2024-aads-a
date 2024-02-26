@@ -11,7 +11,14 @@ int main()
   try
   {
     List< std::pair< std::string, List< int >* >* > pairsList = inputList(std::cin);
-    outputList(pairsList, std::cout);
+    if (pairsList.size() == 0)
+    {
+      std::cout << "0\n";
+    }
+    else
+    {
+      outputList(pairsList, std::cout);
+    }
   }
   catch(...)
   {
