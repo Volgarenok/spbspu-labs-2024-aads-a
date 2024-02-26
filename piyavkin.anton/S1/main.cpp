@@ -17,7 +17,7 @@ int main()
   catch (const std::out_of_range& e)
   {
     std::cerr << e.what() << '\n';
-    return 1;
+    return 0;
   }
   catch (const std::logic_error& e)
   {
