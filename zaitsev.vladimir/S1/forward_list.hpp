@@ -173,4 +173,4 @@ namespace zaitsev
     head_ = temp;
   }
 }
-#endif 
+#endif
