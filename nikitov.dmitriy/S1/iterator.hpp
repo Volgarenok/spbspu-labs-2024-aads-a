@@ -41,7 +41,24 @@ namespace nikitov
       node_ = node_->prev_;
       return temp;
     }
-
+    ListIterator& advance(int n)
+    {
+      if (n > 0)
+      {
+        for (int i = 0; i != n; ++i)
+        {
+          node_ = node_->next_;
+        }
+      }
+      else if (n < 0)
+      {
+        for (int i = 0; i != -n; ++i)
+        {
+          node_ = node_->prev_;
+        }
+      }
+      return *this;
+    }
     T& operator*()
     {
       return node_->value_;
