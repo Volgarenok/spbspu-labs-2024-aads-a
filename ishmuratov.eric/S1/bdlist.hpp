@@ -4,59 +4,91 @@
 namespace ishmuratov
 {
   template< class T >
+  struct Node
+  {
+    Node(T data):
+      data_(data),
+      next_(nullptr),
+      prev_(nullptr)
+    {}
+    T data_;
+    Node * prev_;
+    Node * next_;
+  };
+
+  template< class T >
   class List
   {
     public:
-      Node * head;
-      Node * tail;
-      List()
+      List():
+        head_(nullptr),
+        tail_(nullptr)
+      {}
+
+      void pushFront(T data)
       {
-        head = nullptr;
-        tail = nullptr;
+        Node< T > * ptr = new Node< T >(data);
+        ptr->next_ = head_;
+        if (head_ != nullptr)
+        {
+          head_->prev_ = ptr;
+        }
+        if (tail_ == nullptr)
+        {
+          tail_ = ptr;
+        }
+        head_ = ptr;
       }
-      Node * pushFront(T data)
+
+      void pushBack(T data)
       {
-        Node * ptr = new Node(data);
-        ptr->next = head;
-        if (head != nullptr)
+        Node< T > * ptr = new Node< T >(data);
+        ptr->prev_ = tail_;
+        if (tail_ != nullptr)
         {
-          head->prev = ptr;
+          tail_->next_ = ptr;
         }
-        if (tail == nullptr)
+        if (head_ == nullptr)
         {
-          tail = ptr;
+          head_ = ptr;
         }
-        head = ptr;
-        return ptr;
+        tail_ = ptr;
       }
-      Node * pushBack(T data)
+
+      void popFront()
       {
-        Node * ptr = new Node(data);
-        ptr->prev = tail;
-        if (tail != nullptr)
+        if (head_ == nullptr)
         {
-          tail->next = ptr;
+          return;
         }
-        if (head == nullptr)
+        Node< T > * ptr = head_->next_;
+        if (ptr != nullptr)
         {
-          head = ptr;
+          ptr->prev_ = nullptr;
         }
-        tail = ptr;
-        return ptr;
+        tail_ = nullptr;
+        delete head_;
+        head_ = ptr;
+      }
+
+      void popBack()
+      {
+        if (tail_ == nullptr)
+        {
+          return;
+        }
+        Node< T > * ptr = tail_->prev_;
+        if (ptr != nullptr)
+        {
+          ptr->next_ = nullptr;
+        }
+        head_ = nullptr;
+        delete tail_;
+        tail_ = ptr;
       }
     private:
-      struct Node
-      {
-        T data;
-        Node * prev;
-        Node * next;
-        Node(T data)
-        {
-          this->data = data;
-          this->prev = nullptr;
-          this->next = nullptr;
-        }
-      };
+      Node< T > * head_;
+      Node< T > * tail_;
   };
 }
 
