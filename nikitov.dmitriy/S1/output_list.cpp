@@ -24,26 +24,32 @@ void nikitov::outputList(List< std::pair< std::string, List< int >* >* >& pairsL
   for (size_t i = 0; i != maxSize; ++i)
   {
     int sum = 0;
-    size_t j = 0;
     pairsIterator = pairsList.begin();
-    for (j = 0; j != sizeOfPairs; ++j)
+    for (size_t j = 0; j != sizeOfPairs; ++j)
     {
       std::pair< std::string, List< int >* >* pair = *pairsIterator;
       ListIterator< int > numbersIterator = pair->second->begin();
       if (i < pair->second->size())
       {
+        if (sum != 0)
+        {
+          output << ' ';
+        }
         int number = *(numbersIterator.advance(i));
         sum += number;
         output << number;
       }
       ++pairsIterator;
     }
-
-    sums[j] = sum;
+    sums[i] = sum;
     output << '\n';
   }
   for (size_t i = 0; i != sizeOfPairs; ++i)
   {
+    if (i != 0)
+    {
+      output << ' ';
+    }
     output << sums[i];
   }
 
