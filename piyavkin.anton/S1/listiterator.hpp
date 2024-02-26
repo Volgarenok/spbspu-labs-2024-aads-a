@@ -1,16 +1,20 @@
 #ifndef LISTITERATOT_HPP
 #define LISTITERATOR_HPP
 #include <memory>
+#include <iterator>
 #include "node.hpp"
 
 namespace piyavkin
 {
   template< class D >
-  class ListIterator
+  class ListIterator: public std::iterator< std::bidirectional_iterator_tag, D >
   {
   public:
     ListIterator():
       node(nullptr)
+    {}
+    ListIterator(Node< D >* nd):
+      node(nd)
     {}
     ListIterator(const ListIterator< D >&) = default;
     ListIterator< D >& operator=(const ListIterator< D >&) = default;
@@ -45,14 +49,15 @@ namespace piyavkin
     {
       return !(*this == rhs);
     }
-    D* operator->()
+    D* operator->() const
     {
       return std::addressof(node->value_);
     }
-    D& operator*()
+    D& operator*() const
     {
       return node->value_;
     }
+  private:
     Node< D >* node;
   };
 }
