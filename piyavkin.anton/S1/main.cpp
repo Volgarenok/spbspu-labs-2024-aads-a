@@ -40,7 +40,7 @@ int main()
     std::cout << ' ';
   }
   std::cout << '\n';
-  list.remove_if([](int n){ return n == 10; });
+  list.erase(++list.begin(), list.cend());
   for (size_t i = 0; i < 10; ++i)
   {
     list.out_val(std::cout, i, sum);

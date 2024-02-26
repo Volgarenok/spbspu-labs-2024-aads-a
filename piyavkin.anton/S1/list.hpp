@@ -191,6 +191,14 @@ namespace piyavkin
     {
       return ListIterator< T >(tail_);
     }
+    const ListIterator< T > cbegin() const
+    {
+      return ListIterator< T >(head_);
+    }
+    const ListIterator< T > cend() const
+    {
+      return ListIterator< T >(tail_);
+    }
     void erase(const ListIterator< T >& it)
     {
       if (it == begin())
