@@ -1,15 +1,14 @@
 #include <iostream>
-#include "iterator.hpp"
+#include <string>
 #include "list.hpp"
+#include "iterator.hpp"
+#include "input_list.hpp"
+#include "output_list.hpp"
 
 int main()
 {
   using namespace nikitov;
-  std::cout << "good";
-  List< int > list;
-  list.push_back(3);
-  list.push_back(4);
-  std::cout << list.size();
-  list.pop_back();
-  std::cout << list.size();
+  List< std::pair< std::string, List< int >* >* > pairsList = inputList(std::cin);
+  outputList(pairsList, std::cout);
+  return 0;
 }
