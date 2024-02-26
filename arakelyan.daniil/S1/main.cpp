@@ -1,16 +1,18 @@
 #include <iostream>
 
-#include "list.hpp"
-#include "list.cpp"
+#include "binList.hpp"
+#include "binList.cpp"
+
+#include "iterator.hpp"
+#include "iterator.cpp"
 
 #include "node.hpp"
-#include "node.cpp"
 
 int main()
 { 
   using namespace arakelyan;
 
-  List<double> list;
+  BinList<double> list;
   double var = 1;
   double flag = 0;
 

@@ -1,29 +1,37 @@
-#ifndef LIST_HPP
-#define LIST_HPP
+#ifndef BINLIST_HPP
+#define BINLIST_HPP
+
+#include <iostream>
 
 #include "node.hpp"
-#include <iostream>
+#include "iterator.hpp"
 
 namespace arakelyan
 {
   template < class T >
-  struct List
+  struct BinList
   {
-    Node<T> *head;
-    Node<T> *tail;
+    Node<T> *head_;
+    Node<T> *tail_;
+    Iterator< T > iterator_;
 
-    List();
+    BinList();
+
     bool isEmpty() const;
+
     T & begin() const;
     T & end() const;
+
     void push_back(const T & el);
     void push_front(const T & el);
     void pop_front();
     void pop_back();
+
     void clear();
     void printList(std::ostream & out) const;
     // Node * getLastNode() const;
-    ~List();
+
+    ~BinList();
   };
 }
 #endif
