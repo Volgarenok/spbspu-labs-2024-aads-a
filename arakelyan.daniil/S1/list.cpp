@@ -5,31 +5,29 @@
 
 template < class T >
 arakelyan::List< T >::List():
-  head(nullptr)
+  head(nullptr),
+  tail(nullptr)
 {}
 
-
 template < class T >
-bool arakelyan::List< T >::isEmpty() const
+bool arakelyan::List<T>::isEmpty() const
 {
   return head == nullptr;
 }
 
 template < class T >
-void arakelyan::List< T >::push_back(const T & el)
+void arakelyan::List<T>::push_back(const T & el)
 {
   Node<T> * node = new Node<T>(el);
   if (isEmpty())
   {
     head = node;
-    return;
   }
-  Node<T> *current = head;
-  while(current->nextPtr)
+  if (tail != nullptr)
   {
-    current = current->nextPtr;
+    tail->nextPtr = node;
   }
-  current->nextPtr = node;
+  tail = node;
 }
 
 template < class T >
@@ -38,8 +36,51 @@ void arakelyan::List< T >::push_front(const T & el)
   Node<T> * node = new Node<T>(el);
   node->nextPtr = head;
   head = node;
+  if (tail == nullptr)
+  {
+    tail = node;
+  }
 }
 
+template < class T >
+void arakelyan::List<T>::pop_front()
+{
+  if (isEmpty())
+  {
+    return;
+  }
+  if (head == tail)
+  {
+    delete tail;
+    head = nullptr;
+    tail = nullptr;
+    return;
+  }
+  Node<T> * node = head;
+  head = node->nextPtr;
+  delete node;
+}
+
+template < class T >
+void arakelyan::List<T>::pop_back()
+{
+  if (tail == nullptr)
+  {
+    return;
+  }
+  if (head == tail)
+  {
+    delete tail;
+    head = nullptr;
+    tail = nullptr;
+    return;
+  }
+  Node<T> * noda = head;
+  for (; noda->nextPtr != tail; noda = noda->nextPtr);
+  noda->nextPtr = nullptr;
+  delete tail;
+  tail = noda;
+}
 
 template < class T >
 void arakelyan::List< T >::printList(std::ostream & out) const
@@ -55,4 +96,13 @@ void arakelyan::List< T >::printList(std::ostream & out) const
     i = i->nextPtr;
   }
   out << "end";
+}
+
+template < class T >
+arakelyan::List<T>::~List()
+{
+  while (head != nullptr)
+  {
+    pop_front();
+  }
 }

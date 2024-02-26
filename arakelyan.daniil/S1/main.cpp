@@ -12,9 +12,24 @@ int main()
 
   List<double> list;
   double var = 1;
+
   list.push_back(15);
+  list.printList(std::cout);
+  std::cout << "\n";
+
   list.push_front(17);
+  list.printList(std::cout);
+  std::cout << "\n";
+
+  list.pop_front();
+  list.printList(std::cout);
+  std::cout << "\n";
+
   list.push_back(16);
+  list.printList(std::cout);
+  std::cout << "\n";
+
+  list.pop_back();
   list.printList(std::cout);
   std::cout << "\n";
   do
