@@ -134,7 +134,7 @@ namespace zaitsev
     {
       for (size_t i = 0; i < count; ++i)
       {
-        node_t* temp = new Node(value);
+        node_t* temp = new node_t(value);
         temp->next_ = new_head;
         new_head = temp;
       }
