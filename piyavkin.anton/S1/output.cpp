@@ -16,20 +16,10 @@ void piyavkin::output(std::ostream& out, const pair_t pairs, size_t size, size_t
   size_t space = 0;
   for (size_t i = 0; i < max_size_list; ++i)
   {
+    space = 0;
     for (size_t j = 0; j < size; ++j)
     {
-      try
-      {
-        pairs[j].second->out_val(out, i, sum[i]);
-        if (j + 1 < max_size_list - space)
-        {
-          out << ' ';
-        }
-      }
-      catch (...)
-      {
-        ++space;
-      }
+      pairs[j].second->out_val(out, i, sum[i], space);
     }
     out << '\n';
   }

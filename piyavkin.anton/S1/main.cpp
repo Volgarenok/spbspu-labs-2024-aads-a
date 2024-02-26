@@ -17,13 +17,11 @@ int main()
   catch (const std::out_of_range& e)
   {
     std::cerr << e.what() << '\n';
-    delete[] pairs;
     return 1;
   }
   catch (const std::logic_error& e)
   {
     std::cout << 0 << '\n';
-    delete[] pairs;
     return 0;
   }
   catch (const std::exception& e)

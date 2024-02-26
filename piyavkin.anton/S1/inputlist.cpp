@@ -1,4 +1,5 @@
 #include "inputlist.hpp"
+#include <iostream>
 #include <cstring>
 #include <cmath>
 
@@ -36,9 +37,10 @@ std::pair< std::string, piyavkin::List< unsigned int >* >* piyavkin::inputList(s
         {
           val = std::stoi(str2);
         }
-        catch (const std::out_of_range& e)
+        catch (const std::out_of_range&)
         {
           delete list;
+          delete[] pairs;
           throw;
         }
         list->push_back(val);
@@ -52,9 +54,10 @@ std::pair< std::string, piyavkin::List< unsigned int >* >* piyavkin::inputList(s
         {
           val = std::stoi(str);
         }
-        catch (const std::out_of_range& e)
+        catch (const std::out_of_range&)
         {
           delete list;
+          delete[] pairs;
           throw;
         }
         list->push_back(val);
@@ -68,6 +71,7 @@ std::pair< std::string, piyavkin::List< unsigned int >* >* piyavkin::inputList(s
   }
   if (name == "")
   {
+    delete[] pairs;
     throw std::logic_error("There was no input");
   }
   return pairs;

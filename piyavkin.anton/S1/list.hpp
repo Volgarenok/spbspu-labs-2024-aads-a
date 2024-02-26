@@ -1,5 +1,6 @@
 #ifndef LIST_HPP
 #define LIST_HPP
+#include <iostream>
 #include <cstddef>
 #include <stdexcept>
 #include "node.hpp"
@@ -187,11 +188,11 @@ namespace piyavkin
       }
       return *iterator;
     }
-    void out_val(std::ostream& out, size_t i, size_t& sum)
+    void out_val(std::ostream& out, size_t i, size_t& sum, size_t& j)
     {
       if (!head_)
       {
-        throw std::logic_error("error");
+        return;
       }
       if (i < size())
       {
@@ -201,11 +202,11 @@ namespace piyavkin
           node = node->next_;
         }
         sum += node->value_;
-        out << node->value_;
-        if (!node->next_)
+        if (j++ != 0)
         {
-          throw std::logic_error("error");
+          std::cout << " ";
         }
+        out << node->value_;
       }
     }
     size_t size() const
