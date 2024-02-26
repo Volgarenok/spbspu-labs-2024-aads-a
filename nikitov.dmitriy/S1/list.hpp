@@ -43,6 +43,27 @@ namespace nikitov
         push_front(value);
       }
     }
+    List(List< T >&& other):
+      head_(other.head_),
+      tail_(other.tail_),
+      size_(other.size_)
+    {
+      other.head_ = nullptr;
+      other.tail_ = nullptr;
+      other.size_ = 0;
+    }
+    List< T >& operator=(List< T >&& other)
+    {
+      List< T > temp(std::move(other));
+      if (std::addressof(other) != this)
+      {
+        swap(temp);
+         other.head_ = nullptr;
+         other.tail_ = nullptr;
+         other.size_ = 0;
+      }
+      return *this;
+}
     ~List()
     {
       while (tail_->prev_ != nullptr)
