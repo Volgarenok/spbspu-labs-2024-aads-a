@@ -1,5 +1,6 @@
 #include "input_list.hpp"
 #include <string>
+#include <sstream>
 #include <fstream>
 #include "list"
 
@@ -9,16 +10,16 @@ nikitov::List< std::pair< std::string, nikitov::List< int >* >* > nikitov::input
   std::string line = "";
   while (input >> line)
   {
-    List< int >* numberList = new List< int >;
     std::string numbers = "";
     std::getline(input, numbers);
-    const char* cNumbers = numbers.substr(1).c_str();
+    std::stringstream numbersStream;
+    numbersStream << numbers;
 
-    size_t coordinatePointer = 0;
-    while (cNumbers[0] != '\0')
+    List< int >* numberList = new List< int >;
+    int number = 0;
+    while (numbersStream >> number)
     {
-      numberList->push_back(std::stod(cNumbers, std::addressof(coordinatePointer)));
-      cNumbers += coordinatePointer;
+      numberList->push_back(number);
     }
 
     std::pair< std::string, List< int >* >* element = new std::pair< std::string, List< int >* >{line, numberList};
