@@ -3,18 +3,28 @@
 
 #include <cstddef>
 #include <utility>
-#include "node.hpp"
 #include "iterator.hpp"
 
 namespace nikitov
 {
   template< typename T >
-  class Node;
+  struct Node
+  {
+  public:
+    Node(T value):
+      value_(value),
+      prev_(nullptr),
+      next_(nullptr)
+    {}
+    ~Node() = default;
+    T value_;
+    Node* prev_;
+    Node* next_;
+  };
 
   template< typename T >
   class List
   {
-    friend class Node< T >;
     typedef ListIterator< int > iterator;
     typedef ListIterator< const int > constIterator;
   public:

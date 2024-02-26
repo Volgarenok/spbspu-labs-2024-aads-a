@@ -2,7 +2,6 @@
 #define ITERATOR_HPP
 
 #include <iterator>
-#include "node.hpp"
 
 namespace nikitov
 {
@@ -12,7 +11,6 @@ namespace nikitov
   template< typename T >
   class ListIterator: public std::iterator< std::bidirectional_iterator_tag, T >
   {
-    friend class Node< T >;
   public:
     ListIterator(Node< T >* node):
       node_(node)
