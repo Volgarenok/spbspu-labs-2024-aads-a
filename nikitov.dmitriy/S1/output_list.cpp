@@ -48,6 +48,6 @@ void nikitov::outputList(List< std::pair< std::string, List< int >* >* >& pairsL
   }
 
   output << '\n';
-  delete sums;
+  delete[] sums;
 }
 
