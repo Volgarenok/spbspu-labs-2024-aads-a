@@ -17,9 +17,29 @@ namespace piyavkin
       size_(0),
       iterator_()
     {}
+    List(const List< T >& rhs)
+    {
+      
+    }
     ~List()
     {
       clear();
+    }
+    void swap(List< T >& list)
+    {
+      List< T > temp;
+      temp->head_ = head_;
+      temp->tail_ = tail_;
+      temp->size_ = size_;
+      temp->iterator_ = iterator_;
+      head_ = list->head_;
+      tail_ = list->tail_;
+      size_ = list->size_;
+      iterator_ = list->iterator_;
+      list->head_ = temp->head_;
+      list->tail_ = temp->tail_;
+      list->size_ = temp->size_;
+      list->iterator_ = temp->iterator_;
     }
     T& get_element(size_t i)
     {
