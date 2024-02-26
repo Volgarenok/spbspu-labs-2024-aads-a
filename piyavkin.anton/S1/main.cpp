@@ -14,6 +14,12 @@ int main()
     pairs = inputList(std::cin, size, max_size_list);
     output(std::cout, pairs, size, max_size_list);
   }
+  catch (const std::out_of_range& e)
+  {
+    std::cerr << e.what() << '\n';
+    delete[] pairs;
+    return 1;
+  }
   catch (const std::logic_error& e)
   {
     std::cout << 0 << '\n';

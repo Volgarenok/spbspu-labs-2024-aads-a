@@ -31,14 +31,32 @@ std::pair< std::string, piyavkin::List< unsigned int >* >* piyavkin::inputList(s
       if (strchr(str.c_str(), ' ') != nullptr)
       {
         std::string str2 = str.substr(0, str.find(' '));
-        unsigned int val = std::stoul(str2);
+        unsigned int val = 0;
+        try
+        {
+          val = std::stoi(str2);
+        }
+        catch (const std::out_of_range& e)
+        {
+          delete list;
+          throw;
+        }
         list->push_back(val);
         ++max_size;
         str.erase(0, str.find(' ') + 1);
       }
       else
       {
-        unsigned int val = std::stoul(str);
+        unsigned int val = 0;
+        try
+        {
+          val = std::stoi(str);
+        }
+        catch (const std::out_of_range& e)
+        {
+          delete list;
+          throw;
+        }
         list->push_back(val);
         ++max_size;
         str = "";
