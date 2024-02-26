@@ -2,6 +2,7 @@
 #define LIST_HPP
 #include <iostream>
 #include "iterator.hpp"
+#include "node.hpp"
 
 namespace novokhatskiy
 {
@@ -9,25 +10,44 @@ namespace novokhatskiy
   class Iterator;
 
   template <typename T >
+  class Node;
+
+  template <typename T >
   class List
   {
     friend class novokhatskiy::Iterator<T>;
   public:
+    using iterPtr = Iterator<T>*;
     List():
       head_(nullptr)
+    {}
+    List(List<T>* other):
+      head_(other->head_)
     {}
     List(List&& other) noexcept :
       head_(other.head_)
     {
       other.head_ = nullptr;
     }
-    novokhatskiy::Iterator<T>* begin() const
+    iterPtr begin() //const
     {
       if (head_ != nullptr)
       {
-        return head_;
+        iterator_.node_ = head_;
+        return iterator_;
       }
     }
+    iterPtr end()
+    {
+      iterPtr temp = iterator_;
+      temp->node_ = head_;
+      while (temp->node_ != nullptr && temp.node_->next_ != nullptr)
+      {
+        temp = temp.node_->next_;
+      }
+      return temp;
+    }
+        
     bool empty() const
     {
       return (head_ == nullptr);
@@ -36,43 +56,76 @@ namespace novokhatskiy
     {
       return head_->value_;
     }
-    ~List()
-    {
-      while (head_->next_ != nullptr)
-      {
-        Node* ptr = head_->next_;
-        delete head_;
-        head_ = ptr;
-      }
-    }
     void push_front(const T& value)
     {
-      Node* ptr = new Node(value);
+      Node<T>* ptr = new Node<T>(value);
       ptr->next_ = head_;
       head_ = ptr;
     }
     void pop_front()
     {
-      if (head_ == nullptr) // можно было использовать метод empty()?
+      if (empty()) 
       {
         std::cerr << "The forward_list is empty\n";
         return;
       }
-      Node* temp = head_;
+      Node<T>* temp = head_;
       head_ = head_->next_;
       delete temp;
     }
-  private:
-    struct Node
+    void clear()
     {
-      T value_;
-      Node* next_;
-      Node(const T& value, Node* next = nullptr):
-        value_(value),
-        next_(next)
-      {}
-    };
-    Node* head_;
+      while (!empty())
+      {
+        pop_front();
+      }
+    }
+    void swap(List<T>& other)
+    {
+      std::swap(head_, other.head_);
+    }
+    void remove(const T& value)
+    {
+      Node<T>* current = head_;
+      Node<T>* prev = nullptr;
+      while (current != nullptr)
+      {
+        if (current->value_ == value)
+        {
+          head_ = current->next_;
+          delete current;
+          current = head_;
+        }
+        else 
+        {
+          prev->next_ = current->next_;
+          delete current;
+          current = prev->next_;
+        }
+      }
+    }
+    void print() {
+      //Node<T>* current = head_;
+      while (head_ != nullptr) {
+        std::cout << head_->value_ << " ";
+        head_ = head_->next_;
+      }
+      std::cout << std::endl;
+    }
+    ~List()
+    {
+     /*while (head_->next_ != nullptr)
+      {
+        Node<T>* ptr = head_->next_;
+        delete head_;
+        head_ = ptr;
+      }
+     */ 
+      clear();
+    }
+  private:
+    Node<T>* head_;
+    Iterator<T>* iterator_;
   };
 }
 

@@ -1,7 +1,4 @@
-#include <vector>
 #include <iostream>
-#include <string>
-#include <forward_list>
 #include "list.hpp"
 #include "iterator.hpp"
 
@@ -12,7 +9,10 @@ int main()
   double b = 10;
   a1.push_front(b);
   a1.push_front(100);
-  a1.pop_front();
-  std::cout << a1.front();
   a1.push_front(55);
+  List<double> a2;
+  a2.push_front(33);
+  a2.push_front(44);
+  a1.swap(a2);
+  a1.print();
 }

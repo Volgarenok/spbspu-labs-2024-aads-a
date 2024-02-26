@@ -1,6 +1,7 @@
 #ifndef ITERATOR_HPP
 #define ITERATOR_HPP
 #include "list.hpp"
+#include "node.hpp"
 
 namespace novokhatskiy
 {
@@ -8,27 +9,28 @@ namespace novokhatskiy
   class List;
 
   template <typename T>
-  class Iterator //: public std::iterator<std::forward_iterator_tag, T > // Что это нам дает?
+  class Node;
+
+  template <typename T>
+  class Iterator : public std::iterator<std::forward_iterator_tag, T > 
   {
     friend class novokhatskiy::List<T>;
   public:
     Iterator() :
       node_(nullptr)
     {}
-    Iterator(const T* pointer) :
-      node_(pointer)
-    {}
     Iterator(const Iterator<T>&) = default;
     Iterator<T>& operator=(const Iterator<T>&) = default;
 
     Iterator<T>& operator++() // Prefix increment operator.
     {
-      node_ = node_.next_;
+      node_ = node_->next_;
       return *this;
     };
     Iterator<T> operator++(int)    // Postfix increment operator.
     {
       Iterator<T> temp = (*this);
+      //node_ = node_->next_;
       ++*this;
       return temp;
     };
@@ -42,15 +44,15 @@ namespace novokhatskiy
     }
     T& operator*()
     {
-      return node_.value_;//?????????
+      return node_->value_;
     }
     const T& operator*() const
     {
       return node_.value_;
     }
-    T* operator->() // Я думаю, что все-таки лучше возвращать List<T>* , right? хотяяя
+    T* operator->() 
     {
-      return std::addressof(node_.value_);//????????????? ПОЧЕМУ ОН НЕ ВИДИТ next_
+      return std::addressof(node_.value_);
     }
     const T* operator->() const
     {
@@ -58,7 +60,10 @@ namespace novokhatskiy
     }
     ~Iterator() = default;
   private:
-    List<T>* node_;
+    Iterator(Node<T>* other) :
+      node_(other)
+    {}
+    Node<T>* node_;
   };
 }
 #endif
