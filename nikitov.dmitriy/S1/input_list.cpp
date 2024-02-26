@@ -8,22 +8,28 @@ nikitov::List< std::pair< std::string, nikitov::List< int >* >* > nikitov::input
 {
   List< std::pair< std::string, List< int >* >* > pairsList;
   std::string line = "";
-  while (input >> line)
+  while (std::getline(input, line))
   {
-    std::string numbers = "";
-    std::getline(input, numbers);
-    std::stringstream numbersStream;
-    numbersStream << numbers;
+    if (!input)
+    {
+      throw std::logic_error("Error: Wrong input");
+    }
+    std::stringstream streamLine;
+    streamLine << line;
 
-    List< int >* numberList = new List< int >;
+    std::string word = "";
+    streamLine >> word;
+
     int number = 0;
-    while (numbersStream >> number)
+    List< int >* numberList = new List< int >;
+    while (streamLine >> number)
     {
       numberList->push_back(number);
     }
 
-    std::pair< std::string, List< int >* >* element = new std::pair< std::string, List< int >* >{line, numberList};
-    pairsList.push_back(element);
+    std::pair< std::string, nikitov::List< int >* >* pairPtr = nullptr;
+    pairPtr = new std::pair< std::string, nikitov::List< int >* >{ word, numberList };
+    pairsList.push_back(pairPtr);
   }
   return pairsList;
 }
