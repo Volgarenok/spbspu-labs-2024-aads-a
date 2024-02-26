@@ -41,9 +41,23 @@ namespace piyavkin
         throw;
       }
     }
-    List< T > operator=(const List< T >& rhs)
+    List(const List< T >&& rhs)
     {
-      if (this != &rhs)
+      swap(rhs);
+    }
+    List< T >& operator=(const List< T >&& rhs)
+    {
+      if (this != std::addressof(rhs))
+      {
+        clear();
+        iterator_->node = nullptr;
+        swap(rhs);
+      }
+      return *this;
+    }
+    List< T >& operator=(const List< T >& rhs)
+    {
+      if (this != std::addressof(rhs))
       {
         List< T > temp(rhs);
         temp.swap(*this);
