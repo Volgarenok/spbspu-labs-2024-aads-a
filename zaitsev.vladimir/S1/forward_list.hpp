@@ -2,15 +2,17 @@
 #define FORWARD_LIST_HPP
 #include <stdexcept>
 #include <cstddef>
+#include "node.hpp"
 
 namespace zaitsev
 {
-
   template< typename T >
   class ForwardList
   {
+    using NodeT = Node< T >;
   public:
     ForwardList();
+    ForwardList(size_t count, const T& value);
     ForwardList(const ForwardList& other);
     ~ForwardList();
     bool empty() const;
@@ -22,18 +24,33 @@ namespace zaitsev
     void assign(size_t count, const T& value);
     void swap(ForwardList& other);
   private:
-    struct Node
-    {
-      T value;
-      Node* next;
-    };
-    Node* head_;
+    NodeT* head_;
   };
 
   template< typename T >
   ForwardList<T>::ForwardList():
     head_(nullptr)
   {}
+
+  template<typename T>
+  ForwardList<T>::ForwardList(size_t count, const T& value)
+  {
+    NodeT* head = new NodeT(value);
+    head_ = head;
+    try
+    {
+      for (size_t i = 1; i < count; ++i)
+      {
+        head->next_ = new NodeT(value);
+        head = head->next_;
+      }
+    }
+    catch (const std::bad_alloc&)
+    {
+      freeNodes(head);
+      throw;
+    }
+  }
 
   template< typename T >
   ForwardList<T>::ForwardList(const ForwardList& other)
@@ -43,42 +60,35 @@ namespace zaitsev
       head_ = nullptr;
       return;
     }
-    head_ = new Node(other.head_);
-    head_->next = nullptr;
-    Node* head = head_;
-    Node* cur = other.head_;
+    head_ = new NodeT(other.head_->value_);
+    NodeT* head = head_;
+    NodeT* cur = other.head_->next_;
     try
     {
-      while (!cur->next)
+      while (!cur)
       {
-        head->next = new Node(cur->next);
-        head = head->next;
-        head->next = nullptr;
-        cur = cur->next;
+        head->next = new NodeT(cur->value);
+        head = head->next_;
+        cur = cur->next_;
       }
     }
     catch (const std::bad_alloc&)
     {
-      while (head_)
-      {
-        Node* temp = head->next;
-        delete head_;
-        head_ = temp;
-      }
+      freeNodes(head_);
+      throw;
     }
   }
 
   template< typename T >
   ForwardList< T >::~ForwardList()
   {
-    clear();
+    freeNodes(head_);
   }
 
   template< typename T >
   void ForwardList< T >::push_front(const T& value)
   {
-    Node* new_head = new Node;
-    new_head->value = value;
+    NodeT* new_head = new Node(value);
     new_head->next = head_;
     head_ = new_head;
   }
@@ -90,7 +100,7 @@ namespace zaitsev
     {
       throw std::runtime_error("List is empty");
     }
-    Node* temp = head_;
+    NodeT* temp = head_;
     head_ = head_->next;
     delete head_;
   }
@@ -98,25 +108,28 @@ namespace zaitsev
   template< typename T >
   void ForwardList< T >::clear()
   {
-    while (head_)
-    {
-      Node* temp = head_->next;
-      delete head_;
-      head_ = temp;
-    }
+    freeNodes(head_);
   }
 
   template< typename T >
   void ForwardList< T >::assign(size_t count, const T& value)
   {
-    clear();
-    for (size_t i = 0; i < count; ++i)
+    NodeT* new_head = nullptr;
+    try
     {
-      Node* temp = new Node;
-      temp->value = value;
-      temp->next = head_;
-      head_ = temp;
+      for (size_t i = 0; i < count; ++i)
+      {
+        NodeT* temp = new Node(value);
+        temp->next_ = new_head;
+        new_head = temp;
+      }
     }
+    catch(const std::bad_alloc&)
+    {
+      freeNodes(new_head);
+    }
+    freeNodes(head_);
+    head_ = new_head;
   }
 
   template< typename T >
@@ -128,19 +141,19 @@ namespace zaitsev
   template< typename T >
   T& ForwardList< T >::front()
   {
-    return head_->value;
+    return head_->value_;
   }
 
   template< typename T >
   const T& ForwardList< T >::front() const
   {
-    return head_->value;
+    return head_->value_;
   }
 
   template< typename T >
-  void ForwardList< T >::swap(ForwardList& other)
+  void ForwardList< T >::swap(ForwardList< T >& other)
   {
-    Node* temp = other.head_;
+    NodeT* temp = other.head_;
     other.head_ = head_;
     head_ = temp;
   }
