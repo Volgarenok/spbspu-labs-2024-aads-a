@@ -17,9 +17,38 @@ namespace piyavkin
       size_(0),
       iterator_()
     {}
-    List(const List< T >& rhs)
+    List(const List< T >& rhs):
+      size_(rhs.size_),
+      iterator_(rhs.iterator_)
     {
-      
+      size_t i = 1;
+      try
+      {
+        head_ = new Node< T >(rhs.head_->value_);
+        Node< T >* node = head_;
+        while (i < rhs.size() - 1)
+        {
+          node->next_ = new Node< T >(get_element(i++));
+        }
+        tail_ = new Node< T >(rhs.tail_->value_);
+      }
+      catch (const std::exception& e)
+      {
+        for (size_t j = 0; j < i; ++j)
+        {
+          pop_front();
+        }
+        throw;
+      }
+    }
+    List< T > operator=(const List< T >& rhs)
+    {
+      if (this != &rhs)
+      {
+        List< T > temp(rhs);
+        temp.swap(*this);
+      }
+      return *this;
     }
     ~List()
     {
