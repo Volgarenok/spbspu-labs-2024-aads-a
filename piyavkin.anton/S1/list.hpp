@@ -49,6 +49,42 @@ namespace piyavkin
     {
       swap(rhs);
     }
+    bool operator<(List< T >& rhs)
+    {
+      size_t min_size = std::min(rhs.size_, size_);
+      Node< T >* node = head_;
+      Node< T >* rhs_node = rhs.head_;
+      for (size_t i = 0; i < min_size; ++i)
+      {
+        if (node->value_ != rhs_node->value_)
+        {
+          return node->value_ < rhs_node->value_;
+        }
+        node = node->next_;
+        rhs_node = rhs_node->next_;
+      }
+      return false;
+    }
+    bool operator>=(List< T >& rhs)
+    {
+      return !(*this < rhs);
+    }
+    bool operator<=(List< T >& rhs)
+    {
+      return !(rhs < *this);
+    }
+    bool operator>(List< T >& rhs)
+    {
+      return (rhs < *this);
+    }
+    bool operator==(List< T >& rhs)
+    {
+      return !(*this < rhs) && !(rhs < *this);
+    }
+    bool operator!=(List< T >& rhs)
+    {
+      return !(rhs == *this);
+    }
     List< T >& operator=(const List< T >&& rhs)
     {
       if (this != std::addressof(rhs))

@@ -49,11 +49,19 @@ namespace piyavkin
     {
       return !(*this == rhs);
     }
-    D* operator->() const
+    D* operator->()
     {
       return std::addressof(node->value_);
     }
-    D& operator*() const
+    D& operator*()
+    {
+      return node->value_;
+    }
+    const D* operator->() const
+    {
+      return std::addressof(node->value_);
+    }
+    const D& operator*() const
     {
       return node->value_;
     }
