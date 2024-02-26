@@ -8,5 +8,7 @@
 namespace nikitov
 {
   List< std::pair< std::string, List< int >* >* > inputList(std::istream& input);
+
+  void clearPairs(List< std::pair< std::string, List< int >* >* >& pairsList);
 }
 #endif

@@ -33,3 +33,14 @@ nikitov::List< std::pair< std::string, nikitov::List< int >* >* > nikitov::input
   }
   return pairsList;
 }
+
+void nikitov::clearPairs(nikitov::List< std::pair< std::string, nikitov::List< int >* >* >& pairsList)
+{
+  ListIterator< std::pair< std::string, nikitov::List< int >* >* > pairsIterator = pairsList.begin();
+  size_t sizeOfPairs = pairsList.size();
+  for (size_t i = 0; i != sizeOfPairs; ++i)
+  {
+    delete *pairsIterator;
+    pairsIterator++;
+  }
+}
