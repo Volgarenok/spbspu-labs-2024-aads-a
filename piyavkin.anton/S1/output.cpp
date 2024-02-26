@@ -11,7 +11,7 @@ void piyavkin::output(std::ostream& out, const pair_t pairs, size_t size, size_t
     }
     out << pairs[i].first;
   }
-  size_t* sum = new size_t[size] {};
+  size_t* sum = new size_t[max_size_list] {};
   out << '\n';
   size_t space = 0;
   for (size_t i = 0; i < max_size_list; ++i)
@@ -33,7 +33,7 @@ void piyavkin::output(std::ostream& out, const pair_t pairs, size_t size, size_t
     }
     out << '\n';
   }
-  for (size_t i = 0; i < size; ++i)
+  for (size_t i = 0; i < max_size_list; ++i)
   {
     if (i != 0)
     {
