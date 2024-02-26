@@ -17,6 +17,7 @@ int main()
   catch (const std::logic_error& e)
   {
     std::cout << 0 << '\n';
+    delete[] pairs;
     return 0;
   }
   catch (const std::exception& e)

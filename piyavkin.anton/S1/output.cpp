@@ -33,13 +33,19 @@ void piyavkin::output(std::ostream& out, const pair_t pairs, size_t size, size_t
     }
     out << '\n';
   }
+  size_t sum_sum = 0;
   for (size_t i = 0; i < max_size_list; ++i)
   {
     if (i != 0)
     {
       out << ' ';
     }
+    sum_sum += sum[i];
     out << sum[i];
+  }
+  if (sum_sum == 0)
+  {
+    out << 0;
   }
   delete[] sum;
 }

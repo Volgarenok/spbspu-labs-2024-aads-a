@@ -195,15 +195,16 @@ namespace piyavkin
       }
       if (i < size())
       {
-        ListIterator< T > iterator(head_);
+        Node< T >* node = head_;
         for (size_t j = 0; j < i; ++j)
         {
-          ++iterator;
+          node = node->next_;
         }
-        if (i < size())
+        sum += node->value_;
+        out << node->value_;
+        if (!node->next_)
         {
-          sum += *iterator;
-          out << *iterator;
+          throw std::logic_error("error");
         }
       }
     }
