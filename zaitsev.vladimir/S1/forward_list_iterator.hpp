@@ -49,12 +49,12 @@ namespace zaitsev
   template< typename T >
   ForwardListIterator< T > ForwardListIterator< T >::operator++(int)
   {
-    ForwardListIterator< T > = *this;
+    ForwardListIterator< T > res = *this;
     if (!node_)
     {
       throw std::runtime_error("Iterator is out of range");
     }
-    return ForwardListIterator<T>();
+    return ++res;
   }
 
   template<typename T>
