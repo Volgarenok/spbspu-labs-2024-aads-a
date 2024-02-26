@@ -1,6 +1,7 @@
 #include "list.hpp"
 
 #include <iostream>
+#include <stdexcept>
 #include "node.hpp"
 
 template < class T >
@@ -10,15 +11,23 @@ arakelyan::List< T >::List():
 {}
 
 template < class T >
-bool arakelyan::List<T>::isEmpty() const
+bool arakelyan::List< T >::isEmpty() const
 {
   return head == nullptr;
 }
 
 template < class T >
-void arakelyan::List<T>::push_back(const T & el)
+void arakelyan::List< T >::push_back(const T & el)
 {
-  Node<T> * node = new Node<T>(el);
+  Node<T> * node = nullptr;
+  try
+  {
+    node = new Node<T>(el);
+  }
+  catch (...)
+  {
+    throw std::logic_error("error!");
+  }
   if (isEmpty())
   {
     head = node;
@@ -33,7 +42,15 @@ void arakelyan::List<T>::push_back(const T & el)
 template < class T >
 void arakelyan::List< T >::push_front(const T & el)
 {
-  Node<T> * node = new Node<T>(el);
+  Node<T> * node = nullptr;
+  try
+  {
+    node = new Node<T>(el);
+  }
+  catch (...)
+  {
+    throw std::logic_error("error!");
+  }
   node->nextPtr = head;
   head = node;
   if (tail == nullptr)
@@ -43,7 +60,7 @@ void arakelyan::List< T >::push_front(const T & el)
 }
 
 template < class T >
-void arakelyan::List<T>::pop_front()
+void arakelyan::List< T >::pop_front()
 {
   if (isEmpty())
   {
@@ -62,7 +79,7 @@ void arakelyan::List<T>::pop_front()
 }
 
 template < class T >
-void arakelyan::List<T>::pop_back()
+void arakelyan::List< T >::pop_back()
 {
   if (tail == nullptr)
   {
@@ -83,6 +100,19 @@ void arakelyan::List<T>::pop_back()
 }
 
 template < class T >
+void arakelyan::List< T >::clear()
+{
+  if (isEmpty())
+  {
+    return;
+  }
+  while (head != nullptr)
+  {
+    pop_front();
+  }
+}
+
+template < class T >
 void arakelyan::List< T >::printList(std::ostream & out) const
 {
   if (isEmpty())
@@ -99,7 +129,7 @@ void arakelyan::List< T >::printList(std::ostream & out) const
 }
 
 template < class T >
-arakelyan::List<T>::~List()
+arakelyan::List< T >::~List()
 {
   while (head != nullptr)
   {

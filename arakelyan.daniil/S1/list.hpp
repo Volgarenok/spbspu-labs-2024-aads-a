@@ -14,12 +14,14 @@ namespace arakelyan
 
     List();
     bool isEmpty() const;
+    T & begin() const;
+    T & end() const;
     void push_back(const T & el);
     void push_front(const T & el);
     void pop_front();
     void pop_back();
+    void clear();
     void printList(std::ostream & out) const;
-    // void deleteNode(Node * val);
     // Node * getLastNode() const;
     ~List();
   };
