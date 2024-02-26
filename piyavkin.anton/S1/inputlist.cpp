@@ -48,5 +48,9 @@ std::pair< std::string, piyavkin::List< unsigned int >* >* piyavkin::inputList(s
     max_size_list = std::max(max_size, max_size_list);
     max_size = 0;
   }
+  if (name == "")
+  {
+    throw std::logic_error("There was no input");
+  }
   return pairs;
 }
