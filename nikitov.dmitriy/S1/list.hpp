@@ -25,8 +25,8 @@ namespace nikitov
   template< typename T >
   class List
   {
-    typedef ListIterator< int > iterator;
-    typedef ListIterator< const int > constIterator;
+    typedef ListIterator< T > iterator;
+    typedef ListIterator< const T > constIterator;
   public:
     List():
       head_(nullptr),

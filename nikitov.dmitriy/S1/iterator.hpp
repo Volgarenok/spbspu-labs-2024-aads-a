@@ -48,7 +48,7 @@ namespace nikitov
     }
     T* operator->()
     {
-      return std::addressof(node_.value_);
+      return std::addressof(node_->value_);
     }
 
     const T& operator*() const
