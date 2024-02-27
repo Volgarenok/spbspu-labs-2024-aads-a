@@ -387,4 +387,5 @@ namespace piyavkin
     size_t size_;
   };
 }
+
 #endif
