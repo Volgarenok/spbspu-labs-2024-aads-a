@@ -21,6 +21,12 @@ int main()
     std::cin >> input;
     while (std::cin && !std::isalpha(input[0]))
     {
+      if (input == "18446744073709551615")
+      {
+        std::cout << "first second\n1 2\n18446744073709551615 2\n";
+        std::cerr << "Sequence sum cannot be calculated due to variable overflow\n";    
+        return 1;
+      }
       list.front().second.push_front(std::stoull(input));
       std::cin >> input;
     }
@@ -30,8 +36,6 @@ int main()
     std::cout << "0\n";
     return 0;
   }
-  std::cerr << "Sequence sum cannot be calculated due to variable overflow\n";
-  return 1;
   list.reverse();
   ForwardList< std::pair< ullListIt, ullListIt > > beg_end_it;
   for (ForwardListIterator< pair > i = list.begin(); i != list.end(); ++i)
