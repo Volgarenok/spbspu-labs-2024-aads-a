@@ -1,6 +1,5 @@
 #include "output.hpp"
 
-using pair_t = std::pair< std::string, piyavkin::List< unsigned long long >* >*;
 void piyavkin::output(std::ostream& out, const pair_t pairs, size_t size, size_t max_size_list)
 {
   for (size_t i = 0; i < size; ++i)
@@ -27,7 +26,7 @@ void piyavkin::output(std::ostream& out, const pair_t pairs, size_t size, size_t
       {
         delete[] sum;
         throw;
-      }      
+      }
     }
     out << '\n';
   }
@@ -55,7 +54,6 @@ void piyavkin::output(std::ostream& out, const pair_t pairs, size_t size, size_t
   //     }
   //   }
   // }
-
   size_t sum_sum = 0;
   for (size_t i = 0; i < max_size_list; ++i)
   {

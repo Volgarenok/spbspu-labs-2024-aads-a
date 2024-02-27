@@ -1,19 +1,20 @@
 #include "inputlist.hpp"
 #include <cmath>
 
-std::pair< std::string, piyavkin::List< unsigned long long int >* >* piyavkin::inputList(std::istream& in, size_t& size, size_t& max_size_list)
+using pair_t = std::pair< std::string, piyavkin::List< unsigned long long >* >*;
+pair_t piyavkin::inputList(std::istream& in, size_t& size, size_t& max_size_list)
 {
   size_t max_size = 0;
   std::string name = "";
   size_t capacity = 10;
   char symbol = 0;
   unsigned long long val = 0;
-  std::pair< std::string, List< unsigned long long >* >* pairs = new std::pair< std::string, List< unsigned long long >* >[capacity] {};
+  pair_t pairs = new std::pair< std::string, List< unsigned long long >* >[capacity] {};
   while (in >> name)
   {
     if (size == capacity)
     {
-      std::pair< std::string, List< unsigned long long >* >* old_pairs = pairs;
+      pair_t old_pairs = pairs;
       pairs = new std::pair< std::string, List< unsigned long long >* >[capacity + 10] {};
       for (size_t j = 0; j < capacity; ++j)
       {
