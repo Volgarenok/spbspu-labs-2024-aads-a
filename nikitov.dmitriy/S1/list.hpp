@@ -43,6 +43,11 @@ namespace nikitov
         push_front(value);
       }
     }
+    List(const List< T >& other):
+      head_(other.head_),
+      tail_(other.tail_),
+      size_(other.size_)
+    {}
     List(List< T >&& other):
       head_(other.head_),
       tail_(other.tail_),
@@ -52,18 +57,6 @@ namespace nikitov
       other.tail_ = nullptr;
       other.size_ = 0;
     }
-    List< T >& operator=(List< T >&& other)
-    {
-      List< T > temp(std::move(other));
-      if (std::addressof(other) != this)
-      {
-        swap(temp);
-         other.head_ = nullptr;
-         other.tail_ = nullptr;
-         other.size_ = 0;
-      }
-      return *this;
-}
     ~List()
     {
       while (tail_->prev_ != nullptr)
@@ -73,6 +66,28 @@ namespace nikitov
         tail_ = ptr;
       }
       delete tail_;
+    }
+
+   List< T >& operator=(const List< T >& other)
+    {
+      List< T > temp(other);
+      if (std::addressof(other) != this)
+      {
+        swap(temp);
+      }
+      return *this;
+    }
+    List< T >& operator=(List< T >&& other)
+    {
+      List< T > temp(std::move(other));
+      if (std::addressof(other) != this)
+      {
+        swap(temp);
+        other.head_ = nullptr;
+        other.tail_ = nullptr;
+        other.size_ = 0;
+      }
+      return *this;
     }
 
     iterator begin()
