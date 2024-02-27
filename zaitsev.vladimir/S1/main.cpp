@@ -86,7 +86,7 @@ int main()
   if (overflow)
   {
     std::cerr << "Sequence sum cannot be calculated due to variable overflow\n";
-    return 1;
+    return 0;
   }
   if (!sums.empty())
   {
