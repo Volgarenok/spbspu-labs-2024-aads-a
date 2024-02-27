@@ -1,4 +1,5 @@
 #include <iostream>
+#include <limits>
 #include <string>
 #include <cstring>
 #include "forward_list.hpp"
@@ -7,9 +8,9 @@
 int main()
 {
   using namespace zaitsev;
-  using pair = std::pair<std::string, ForwardList<unsigned long long>>;
-  using FLI = ForwardListIterator<unsigned long long>;
-  ForwardList<pair> list;
+  using pair = std::pair< std::string, ForwardList< unsigned long long> >;
+  using FLI = ForwardListIterator< unsigned long long >;
+  ForwardList< pair > list;
   std::string input;
   std::cin >> input;
   while (std::cin)
@@ -28,8 +29,8 @@ int main()
     return 0;
   }
   list.reverse();
-  ForwardList<std::pair<FLI, FLI>> beg_iterators;
-  for (ForwardListIterator<pair> i = list.begin(); i != list.end(); ++i)
+  ForwardList< std::pair< FLI, FLI > > beg_iterators;
+  for (ForwardListIterator< pair > i = list.begin(); i != list.end(); ++i)
   {
     i->second.reverse();
     if (i != list.begin())
@@ -41,13 +42,14 @@ int main()
   }
   beg_iterators.reverse();
   std::cout << '\n';
-  ForwardList<unsigned long long> sums;
+  ForwardList< unsigned long long > sums;
   unsigned long long sum = 1;
+  bool overflow = false;
   while (sum)
   {
     sum = 0;
     bool beg = true;
-    for (ForwardListIterator<std::pair<FLI, FLI>> i = beg_iterators.begin(); i != beg_iterators.end(); ++i)
+    for (ForwardListIterator< std::pair< FLI, FLI > > i = beg_iterators.begin(); i != beg_iterators.end(); ++i)
     {
       if (i->first != i->second)
       {
@@ -60,7 +62,14 @@ int main()
           std::cout << " ";
         }
         std::cout << *(i->first);
-        sum += *(i->first);
+        if (std::numeric_limits< unsigned long long >::max() - sum >= *(i->first)&&!overflow)
+        {
+          sum += *(i->first);
+        }
+        else
+        {
+          overflow = true;
+        }
         ++i->first;
       }
     }
@@ -69,6 +78,12 @@ int main()
       std::cout << "\n";
       sums.push_front(sum);
     }
+  }
+
+  if (overflow) 
+  {
+    std::cerr << "Sequence sum cannot be calculated due to variable overflow\n";
+    return 1;
   }
   if (!sums.empty())
   {
