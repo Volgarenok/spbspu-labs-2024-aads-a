@@ -23,8 +23,11 @@ namespace zhalilov
 
     T &operator*();
     T *operator->();
-    friend bool operator==(const Iterator &, const Iterator &);
-    friend bool operator!=(const Iterator &, const Iterator &);
+
+    template < typename X >
+    friend bool operator==(const Iterator< X > &, const Iterator< X > &);
+    template < typename X >
+    friend bool operator!=(const Iterator< X > &, const Iterator< X > &);
 
   private:
     Node< T > *m_node;
