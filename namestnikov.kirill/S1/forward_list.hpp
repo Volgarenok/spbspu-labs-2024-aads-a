@@ -64,6 +64,27 @@ namespace namestnikov
     {
       return (!size_ && !head_);
     }
+    T & front()
+    {
+      return head_->data_;
+    }
+    void push_front(const T & value)
+    {
+      Node<T> * newHead = new Node<T>(value);
+      newHead->next = head_;
+      head_ = newHead;
+      ++size_;
+    }
+    void pop_front()
+    {
+      if (size_ == 0)
+      {
+        throw std::runtime_error("ForwardList is empty");
+      }
+      Node<T> * temp = head_;
+      head_ = head_->next;
+      delete temp;
+    }
   private:
     Node<T> * head_;
     size_t size_;
