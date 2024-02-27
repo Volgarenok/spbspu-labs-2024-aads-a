@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <limits>
 #include <string>
 #include <cstring>
@@ -11,7 +12,6 @@ int main()
   using ull = unsigned long long;
   using pair = std::pair< std::string, ForwardList< ull> >;
   using ullListIt = ForwardListIterator< ull >;
-
   ForwardList< pair > list;
   std::string input;
   std::cin >> input;
@@ -30,6 +30,8 @@ int main()
     std::cout << "0\n";
     return 0;
   }
+  std::cerr << "Sequence sum cannot be calculated due to variable overflow\n";
+  return 1;
   list.reverse();
   ForwardList< std::pair< ullListIt, ullListIt > > beg_end_it;
   for (ForwardListIterator< pair > i = list.begin(); i != list.end(); ++i)
@@ -82,11 +84,10 @@ int main()
       sums.push_front(sum);
     }
   }
-
   if (overflow)
   {
     std::cerr << "Sequence sum cannot be calculated due to variable overflow\n";
-    return 3;
+    return 1;
   }
   if (!sums.empty())
   {
