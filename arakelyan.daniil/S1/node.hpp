@@ -5,12 +5,12 @@ template < class T >
 struct Node
 {
   T value;
-  Node * nextNode;
-  Node * prevNode;
+  Node *nextNode;
+  Node *prevNode;
 
   Node();
   ~Node() = default;
-  Node(const T& val);
+  Node(const T &val);
 };
 
 #endif

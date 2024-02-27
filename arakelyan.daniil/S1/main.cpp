@@ -2,7 +2,6 @@
 
 #include "binList.hpp"
 #include "binList.cpp"
-
 #include "node.hpp"
 #include "node.cpp"
 
@@ -28,7 +27,7 @@ int main()
   list.push_back(16);
   list.printList(std::cout);
   std::cout << "\n";
-  
+
   list.pop_back();
   list.printList(std::cout);
   std::cout << "\n";

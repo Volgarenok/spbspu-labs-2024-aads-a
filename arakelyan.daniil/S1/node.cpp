@@ -8,7 +8,7 @@ Node< T >::Node():
 {};
 
 template < typename T >
-Node< T >::Node(const T & el):
+Node< T >::Node(const T &el):
   value(el),
   nextNode(nullptr),
   prevNode(nullptr)
