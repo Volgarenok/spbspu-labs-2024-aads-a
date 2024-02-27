@@ -21,6 +21,7 @@ void nikitov::outputList(List< std::pair< std::string, List< size_t > > >& pairs
 
   size_t sizeOfPairs = pairsList.size();
   size_t* sums = new size_t[sizeOfPairs]{};
+  bool isOverflow = false;
   for (size_t i = 0; i != maxSize; ++i)
   {
     size_t sum = 0;
@@ -40,15 +41,22 @@ void nikitov::outputList(List< std::pair< std::string, List< size_t > > >& pairs
         size_t maxNum = std::numeric_limits< size_t >::max();
         if (maxNum - number < sum)
         {
-          delete[] sums;
-          throw std::out_of_range("Error: Sum is overflow");
+          isOverflow = true;
         }
-        sum += number;
+        else
+        {
+          sum += number;
+        }
       }
       ++pairsIterator;
     }
     sums[i] = sum;
     output << '\n';
+  }
+  if (isOverflow)
+  {
+    delete[] sums;
+    throw std::out_of_range("Error: Sum is overflow");
   }
   for (size_t i = 0; i != sizeOfPairs; ++i)
   {
