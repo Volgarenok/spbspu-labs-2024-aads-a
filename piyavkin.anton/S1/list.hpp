@@ -2,6 +2,7 @@
 #define LIST_HPP
 #include <iostream>
 #include <cstddef>
+#include <limits>
 #include <stdexcept>
 #include "node.hpp"
 #include "listiterator.hpp"
@@ -197,9 +198,14 @@ namespace piyavkin
       if (i < size())
       {
         Node< T >* node = head_;
+        unsigned long long max = std::numeric_limits< unsigned long long >::max();
         for (size_t j = 0; j < i; ++j)
         {
           node = node->next_;
+        }
+        if (max - sum < node->value_)
+        {
+          throw std::invalid_argument("Overflow");
         }
         sum += node->value_;
         if (j++ != 0)

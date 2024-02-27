@@ -1,20 +1,20 @@
 #include "inputlist.hpp"
 #include <cmath>
 
-std::pair< std::string, piyavkin::List< unsigned int >* >* piyavkin::inputList(std::istream& in, size_t& size, size_t& max_size_list)
+std::pair< std::string, piyavkin::List< unsigned long long int >* >* piyavkin::inputList(std::istream& in, size_t& size, size_t& max_size_list)
 {
   size_t max_size = 0;
   std::string name = "";
   size_t capacity = 10;
   char symbol = 0;
-  unsigned int val = 0;
-  std::pair< std::string, List< unsigned int >* >* pairs = new std::pair< std::string, List< unsigned int >* >[capacity] {};
+  unsigned long long val = 0;
+  std::pair< std::string, List< unsigned long long >* >* pairs = new std::pair< std::string, List< unsigned long long >* >[capacity] {};
   while (in >> name)
   {
     if (size == capacity)
     {
-      std::pair< std::string, List< unsigned int >* >* old_pairs = pairs;
-      pairs = new std::pair< std::string, List< unsigned int >* >[capacity + 10] {};
+      std::pair< std::string, List< unsigned long long >* >* old_pairs = pairs;
+      pairs = new std::pair< std::string, List< unsigned long long >* >[capacity + 10] {};
       for (size_t j = 0; j < capacity; ++j)
       {
         pairs[j] = old_pairs[j];
@@ -22,7 +22,7 @@ std::pair< std::string, piyavkin::List< unsigned int >* >* piyavkin::inputList(s
       delete[] old_pairs;
       capacity += 10;
     }
-    List< unsigned int >* list = new List< unsigned int >;
+    List< unsigned long long >* list = new List< unsigned long long >;
     pairs[size].first = name;
     in >> std::noskipws;
     in >> symbol;

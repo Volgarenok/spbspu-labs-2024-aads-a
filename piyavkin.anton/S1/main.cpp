@@ -8,7 +8,7 @@ int main()
   using namespace piyavkin;
   size_t size = 0;
   size_t max_size_list = 0;
-  std::pair< std::string, piyavkin::List< unsigned int >* >* pairs = nullptr;
+  std::pair< std::string, piyavkin::List< unsigned long long >* >* pairs = nullptr;
   try
   {
     pairs = inputList(std::cin, size, max_size_list);
@@ -17,6 +17,16 @@ int main()
   catch (const std::out_of_range& e)
   {
     std::cerr << e.what() << '\n';
+    return 1;
+  }
+  catch (const std::invalid_argument& e)
+  {
+    std::cerr << e.what() << '\n';
+    for (size_t i = 0; i < size; ++i)
+    {
+      delete pairs[i].second;
+    }
+    delete[] pairs;
     return 1;
   }
   catch (const std::logic_error& e)

@@ -5,6 +5,6 @@
 
 namespace piyavkin
 {
-  std::pair< std::string, List< unsigned int >* >* inputList(std::istream& in, size_t& size, size_t& max_size_list);
+  std::pair< std::string, List< unsigned long long >* >* inputList(std::istream& in, size_t& size, size_t& max_size_list);
 }
 #endif
