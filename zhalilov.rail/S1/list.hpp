@@ -142,6 +142,7 @@ namespace zhalilov
     Node< T > prev = m_tail->prev;
     delete m_tail;
     m_tail = prev;
+    --m_size;
   }
 
   template < typename T >
@@ -154,6 +155,7 @@ namespace zhalilov
     Node< T > next = m_head->next;
     delete m_head;
     m_head = next;
+    --m_size;
   }
 
   template < typename T >
