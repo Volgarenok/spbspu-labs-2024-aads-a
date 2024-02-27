@@ -13,7 +13,10 @@ namespace arakelyan
     {
       Node< T > *node;
 
-      Iterator(const Iterator &val) = default;
+      Iterator(const Iterator &val):
+        node(val.node)
+      {}
+
       Iterator & operator=(const Iterator &val) = default;
 
       // operator--
@@ -24,13 +27,17 @@ namespace arakelyan
         node(nullptr)
       {}
 
+      Iterator(Node<T> *val):
+        node(val)
+      {}
+
       Iterator & operator++()
       {
         if (node == nullptr)
         {
           throw std::logic_error("node == nullptr!");
         }
-        node = node->nextPtr;
+        node = node->nextNode;
         return *this;
       }
 
@@ -75,16 +82,11 @@ namespace arakelyan
       }
     };
 
-    Node<T> *head_;
-    Node<T> *tail_;
-    size_t size;
-
-
     BinList();
 
     //size() - возвр размер списка
 
-    Iterator &begin() const; // должен возв итератор на первый элемент
+    Iterator begin() const; // должен возв итератор на первый элемент
     Iterator end() const; // должен возв итератор на послед элемент
 
     //font - получение значения первого эл
@@ -104,6 +106,12 @@ namespace arakelyan
     void printList(std::ostream &out) const;
 
     ~BinList();
+
+    Node<T> *head_;
+    Node<T> *tail_;
+    size_t size;
+
+
   };
 }
 #endif
