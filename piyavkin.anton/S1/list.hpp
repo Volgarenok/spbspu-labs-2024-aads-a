@@ -209,7 +209,7 @@ namespace piyavkin
         out << node->value_;
       }
     }
-    size_t size() const
+    size_t size()
     {
       return size_;
     }
