@@ -54,7 +54,8 @@ namespace zaitsev
     {
       throw std::runtime_error("Iterator is out of range");
     }
-    return ++res;
+    ++(*this);
+    return res;
   }
 
   template<typename T>

@@ -26,6 +26,7 @@ namespace zaitsev
     void clear();
     void assign(size_t count, const T& value);
     void swap(ForwardList& other);
+    void reverse();
   private:
     node_t* head_;
   };
@@ -150,7 +151,7 @@ namespace zaitsev
   template< typename T >
   bool ForwardList< T >::empty() const
   {
-    return head_;
+    return !head_;
   }
 
   template< typename T >
@@ -171,6 +172,26 @@ namespace zaitsev
     node_t* temp = other.head_;
     other.head_ = head_;
     head_ = temp;
+  }
+
+  template< typename T >
+  void ForwardList< T >::reverse()
+  {
+    if (!head_)
+    {
+      return;
+    }
+    Node< T >* new_head = head_;
+    Node< T >* tail = head_->next_;
+    new_head->next_ = nullptr;
+    while (tail)
+    {
+      Node< T >* temp = tail->next_;
+      tail->next_=new_head;
+      new_head = tail;
+      tail = temp;
+    }
+    head_ = new_head;
   }
 }
 #endif
