@@ -3,6 +3,7 @@
 
 #include <cstddef>
 #include <utility>
+#include <stdexcept>
 
 #include "iterator.hpp"
 #include "node.hpp"
@@ -16,6 +17,9 @@ namespace zhalilov
     using iterator = Iterator< T >;
     List();
     ~List();
+
+    size_t capacity();
+    bool empty();
 
     void push_back(T &&);
     void push_front(T &&);
@@ -47,10 +51,22 @@ namespace zhalilov
   }
 
   template < typename T >
+  size_t List< T >::capacity()
+  {
+    return m_size;
+  }
+
+  template < typename T >
+  bool List< T >::empty()
+  {
+    return m_size == 0;
+  }
+
+  template < typename T >
   void List< T >::push_back(T &&value)
   {
     Node< T > *newTail = new Node< T >(std::forward< T >(value), m_tail, nullptr);
-    if (m_size > 0)
+    if (empty)
     {
       m_tail->next = newTail;
       m_tail = newTail;
@@ -67,7 +83,7 @@ namespace zhalilov
   void List< T >::push_front(T &&value)
   {
     Node< T > *newHead = new Node< T >(std::forward< T >(value), m_head, nullptr);
-    if (m_size > 0)
+    if (empty)
     {
       m_head->prev = newHead;
       m_head = newHead;
@@ -83,14 +99,22 @@ namespace zhalilov
   template < typename T >
   void List< T >::pop_back()
   {
+    if (empty)
+    {
+      throw std::underflow_error("calling 'pop' in already empty list");
+    }
     Node< T > prev = m_tail->prev;
     delete m_tail;
     m_tail = prev;
   }
 
   template < typename T >
-  void List<T>::pop_front()
+  void List< T >::pop_front()
   {
+    if (empty)
+    {
+      throw std::underflow_error("calling 'pop' in already empty list");
+    }
     Node< T > next = m_head->next;
     delete m_head;
     m_head = next;
