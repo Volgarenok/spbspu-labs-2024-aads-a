@@ -5,6 +5,10 @@
 
 void nikitov::outputList(List< std::pair< std::string, List< size_t > > >& pairsList, std::ostream& output)
 {
+  if (pairsList.size() == 0)
+  {
+    throw std::invalid_argument("Error: Empty list");
+  }
   ListIterator< std::pair< std::string, List< size_t > > > pairsIterator = pairsList.begin();
   size_t maxSize = 0;
   for (size_t i = 0; i != pairsList.size(); ++i)

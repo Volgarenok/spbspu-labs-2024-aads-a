@@ -11,16 +11,13 @@ int main()
   {
     List< std::pair< std::string, List< size_t > > > pairsList;
     inputList(pairsList, std::cin);
-    if (pairsList.size() == 0)
-    {
-      std::cout << 0 << '\n';
-    }
-    else
-    {
-      outputList(pairsList, std::cout);
-    }
+    outputList(pairsList, std::cout);
   }
-  catch(std::exception& e)
+  catch (const std::invalid_argument& e)
+  {
+    std::cout << 0 << '\n';
+  }
+  catch (const std::exception& e)
   {
     std::cerr << e.what() << '\n';
     return 1;
