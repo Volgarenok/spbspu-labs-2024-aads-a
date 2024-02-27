@@ -50,9 +50,13 @@ int main()
     {
       if (i->first != i->second)
       {
-        std::cout << *(i->first) << " ";
+        std::cout << *(i->first);
         sum += *(i->first);
         ++i->first;
+        if (i->first != i->second)
+        {
+          std::cout << '\n';
+        }
       }
     }
     if (sum)
