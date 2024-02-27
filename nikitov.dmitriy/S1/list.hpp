@@ -59,13 +59,7 @@ namespace nikitov
     }
     ~List()
     {
-      while (tail_->prev_ != nullptr)
-      {
-        Node< T >* ptr = tail_->prev_;
-        delete tail_;
-        tail_ = ptr;
-      }
-      delete tail_;
+      clear();
     }
 
    List< T >& operator=(const List< T >& other)
@@ -191,14 +185,10 @@ namespace nikitov
 
     void clear()
     {
-      while (tail_->prev_ != nullptr)
+      while (size_ >= 1)
       {
-        Node< T >* ptr = tail_->prev_;
-        delete tail_;
-        tail_ = ptr;
+        pop_back();
       }
-      delete tail_;
-      size_ = 0;
     }
     void swap(List< T >& other)
     {
