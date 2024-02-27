@@ -4,7 +4,8 @@
 namespace zhalilov
 {
   template < typename T >
-  struct Node {
+  struct Node
+  {
     T value;
     Node *prev;
     Node *next;
