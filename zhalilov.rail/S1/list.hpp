@@ -27,8 +27,8 @@ namespace zhalilov
     size_t capacity();
     bool empty();
 
-    void push_back(T &&);
-    void push_front(T &&);
+    void push_back(const T &);
+    void push_front(const T &);
 
     void pop_back();
     void pop_front();
@@ -75,13 +75,13 @@ namespace zhalilov
   }
 
   template < typename T >
-  T & List<T>::front()
+  T &List< T >::front()
   {
     return m_head->value;
   }
 
   template < typename T >
-  T & List<T>::back()
+  T &List< T >::back()
   {
     return m_tail->value;
   }
@@ -99,10 +99,10 @@ namespace zhalilov
   }
 
   template < typename T >
-  void List< T >::push_back(T &&value)
+  void List< T >::push_back(const T &value)
   {
     Node< T > *newTail = new Node< T >(std::forward< T >(value), m_tail, nullptr);
-    if (empty)
+    if (!empty)
     {
       m_tail->next = newTail;
       m_tail = newTail;
@@ -116,10 +116,10 @@ namespace zhalilov
   }
 
   template < typename T >
-  void List< T >::push_front(T &&value)
+  void List< T >::push_front(const T &value)
   {
     Node< T > *newHead = new Node< T >(std::forward< T >(value), m_head, nullptr);
-    if (empty)
+    if (!empty)
     {
       m_head->prev = newHead;
       m_head = newHead;
