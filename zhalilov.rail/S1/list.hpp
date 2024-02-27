@@ -16,6 +16,7 @@ namespace zhalilov
   public:
     using iterator = Iterator< T >;
     List();
+    List(const List< T > &);
     List(List< T > &&);
     ~List();
 
@@ -50,6 +51,20 @@ namespace zhalilov
     m_head(nullptr),
     m_tail(nullptr)
   {}
+
+  template < typename T >
+  List< T >::List(const List< T > &other):
+    m_size(0),
+    m_head(nullptr),
+    m_tail(nullptr)
+  {
+    Node< T > *node = other.m_head;
+    while (node != nullptr)
+    {
+      push_back(node->value);
+      node = node->next;
+    }
+  }
 
   template < typename T >
   List< T >::List(List< T > &&other):
@@ -101,8 +116,8 @@ namespace zhalilov
   template < typename T >
   void List< T >::push_back(const T &value)
   {
-    Node< T > *newTail = new Node< T >(std::forward< T >(value), m_tail, nullptr);
-    if (!empty)
+    auto newTail = new Node< T >(value, m_tail, nullptr);
+    if (m_head != nullptr)
     {
       m_tail->next = newTail;
       m_tail = newTail;
@@ -118,8 +133,8 @@ namespace zhalilov
   template < typename T >
   void List< T >::push_front(const T &value)
   {
-    Node< T > *newHead = new Node< T >(std::forward< T >(value), m_head, nullptr);
-    if (!empty)
+    auto newHead = new Node< T >(value, m_head, nullptr);
+    if (m_head != nullptr)
     {
       m_head->prev = newHead;
       m_head = newHead;
