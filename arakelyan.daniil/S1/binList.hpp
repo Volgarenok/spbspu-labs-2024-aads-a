@@ -13,23 +13,31 @@ namespace arakelyan
   {
     Node<T> *head_;
     Node<T> *tail_;
+    //size_t size - размер списка
     Iterator< T > iterator_;
 
     BinList();
 
-    // bool isEmpty() const;
+    //size() - возвр размер списка
 
-    T & begin() const;
-    T & end() const;
+    T &begin() const; // должен возв итератор на первый элемент
+    T &end() const; // должен возв итератор на послед элемент
 
-    void push_back(const T & el);
-    void push_front(const T & el);
-    void pop_front();
-    void pop_back();
+    //font - получение значения первого эл
+    //back - получение значения посл эл
 
-    void clear();
-    void printList(std::ostream & out) const;
-    // Node * getLastNode() const;
+    void push_back(const T &el); // - доб в конец.
+    void push_front(const T &el); // - доб в нач.
+
+    //insert - втсавтка эл в произвольную поз.
+    void clear(); // - нахрен все
+
+    void pop_front(); // - удаление первого
+    void pop_back(); // - удаление последнего
+
+    //earse - удаление произвольного
+
+    void printList(std::ostream &out) const;
 
     ~BinList();
   };

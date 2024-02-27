@@ -35,7 +35,7 @@ Iterator< T > Iterator< T >::operator++(int)
 }
 
 template < class T >
-T & Iterator< T >::operator*()
+T &Iterator< T >::operator*()
 {
   if (node == nullptr)
   {
@@ -45,7 +45,7 @@ T & Iterator< T >::operator*()
 }
 
 template < class  T >
-T * Iterator< T >::operator->()
+T *Iterator< T >::operator->()
 {
   if (node == nullptr)
   {
@@ -56,13 +56,13 @@ T * Iterator< T >::operator->()
 
 
 template < class T >
-bool Iterator< T >::operator!=(const Iterator< T > & val) const
+bool Iterator< T >::operator!=(const Iterator< T > &val) const
 {
   return node == val.node;
 }
 
 template < class T >
-bool Iterator< T >::operator==(const Iterator< T > & val) const
+bool Iterator< T >::operator==(const Iterator< T > &val) const
 {
   return !(val == *this);
 }

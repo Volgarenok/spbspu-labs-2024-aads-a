@@ -10,16 +10,10 @@ arakelyan::BinList< T >::BinList():
   tail_(nullptr)
 {}
 
-// template < class T >
-// bool arakelyan::BinList< T >::isEmpty() const
-// {
-//   return head_ == nullptr;
-// }
-
 template < class T >
-void arakelyan::BinList< T >::push_back(const T & el)
+void arakelyan::BinList< T >::push_back(const T &el)
 {
-  Node<T> * node = nullptr;
+  Node<T> *node = nullptr;
   try
   {
     node = new Node<T>(el);
@@ -41,9 +35,9 @@ void arakelyan::BinList< T >::push_back(const T & el)
 }
 
 template < class T >
-void arakelyan::BinList< T >::push_front(const T & el)
+void arakelyan::BinList< T >::push_front(const T &el)
 {
-  Node<T> * node = nullptr;
+  Node<T> *node = nullptr;
   try
   {
     node = new Node<T>(el);
@@ -71,7 +65,7 @@ void arakelyan::BinList< T >::pop_front()
   {
     return;
   }
-  Node< T > * node = head_->nextNode;
+  Node< T > *node = head_->nextNode;
   if (node != nullptr)
   {
     node->prevNode = nullptr;
@@ -91,7 +85,7 @@ void arakelyan::BinList< T >::pop_back()
   {
     return;
   }
-  Node< T > * node = tail_->prevNode;
+  Node< T > *node = tail_->prevNode;
   if (node != nullptr)
   {
     node->nextNode = nullptr;
@@ -118,13 +112,13 @@ void arakelyan::BinList< T >::clear()
 }
 
 template < class T >
-void arakelyan::BinList< T >::printList(std::ostream & out) const
+void arakelyan::BinList< T >::printList(std::ostream &out) const
 {
   if (head_ == nullptr)
   {
     return;
   }
-  Node<T> * i = head_;
+  Node<T> *i = head_;
   while (i)
   {
     out << i->value << " -> ";
