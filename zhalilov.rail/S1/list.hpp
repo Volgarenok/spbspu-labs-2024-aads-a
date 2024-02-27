@@ -16,7 +16,12 @@ namespace zhalilov
   public:
     using iterator = Iterator< T >;
     List();
+    List(List< T > &&);
     ~List();
+
+    List< T > &operator=(List< T > &&);
+
+    void swap(List< T > &other);
 
     size_t capacity();
     bool empty();
@@ -45,9 +50,34 @@ namespace zhalilov
   {}
 
   template < typename T >
+  List< T >::List(List< T > &&other):
+    m_size(other.m_size),
+    m_head(other.m_head),
+    m_tail(other.m_tail)
+  {}
+
+  template < typename T >
   List< T >::~List()
   {
     clear();
+  }
+
+  template < typename T >
+  List< T > &List< T >::operator=(List< T > &&other)
+  {
+    clear();
+    m_size = other.m_size;
+    m_head = other.m_head;
+    m_tail = other.m_tail;
+    return *this;
+  }
+
+  template < typename T >
+  void List< T >::swap(List< T > &other)
+  {
+    List< T > temp(std::move(*this));
+    *this = std::move(other);
+    other = std::move(temp);
   }
 
   template < typename T >
