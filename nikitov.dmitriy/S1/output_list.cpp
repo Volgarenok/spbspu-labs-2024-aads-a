@@ -1,5 +1,6 @@
 #include "output_list.hpp"
 #include <fstream>
+#include <limits>
 #include "iterator.hpp"
 
 void nikitov::outputList(List< std::pair< std::string, List< size_t > > >& pairsList, std::ostream& output)
@@ -22,7 +23,7 @@ void nikitov::outputList(List< std::pair< std::string, List< size_t > > >& pairs
   size_t* sums = new size_t[sizeOfPairs]{};
   for (size_t i = 0; i != maxSize; ++i)
   {
-    int sum = 0;
+    size_t sum = 0;
     pairsIterator = pairsList.begin();
     for (size_t j = 0; j != sizeOfPairs; ++j)
     {
@@ -33,7 +34,7 @@ void nikitov::outputList(List< std::pair< std::string, List< size_t > > >& pairs
         size_t number = *(numbersIterator.advance(i));
         if (maxNum - number < sum)
         {
-          delete[] sum;
+          delete[] sums;
           throw std::out_of_range("Error: Sum is out of range");
         }
         else if (sum != 0)
