@@ -8,28 +8,28 @@ namespace namestnikov
 {
   template <class T>
   struct ForwardIterator:
-    public std::forward_iterator_tag
+    public std::iterator<std::forward_iterator_tag, T>
   {
     using this_t = ForwardIterator<T>;
-    ForwardIterator(): node(nullptr) {}
+    ForwardIterator(): node_(nullptr) {}
     ForwardIterator(const this_t &) = default;
     this_t & operator=(const this_t &) = default;
     this_t & operator++()
     {
       assert(node != nullptr);
-      node = node->next;
+      node_ = node_->next;
       return *this;
     }
     this_t operator++(int)
     {
-      assert(node != nullptr);
+      assert(node_ != nullptr);
       this_t result(*this);
       ++(*this);
       return result;
     }
     bool operator!=(const this_t & other) const
     {
-      return node == other.node;
+      return node_ == other.node_;
     }
     bool operator==(const this_t & other) const
     {
@@ -37,26 +37,26 @@ namespace namestnikov
     }
     T & operator*()
     {
-      assert(node != nullptr);
-      return node->data_;
+      assert(node_ != nullptr);
+      return node_->data_;
     }
     const T & operator*() const
     {
-      assert(node != nullptr);
-      return node->data_;
+      assert(node_ != nullptr);
+      return node_->data_;
     }
     T * operator->()
     {
-      assert(node != nullptr);
-      return std::addressof(node->data_);
+      assert(node_ != nullptr);
+      return std::addressof(node_->data_);
     }
     const T * operator->() const
     {
-      assert(node != nullptr);
-      return std::addressof(node->data_);
+      assert(node_ != nullptr);
+      return std::addressof(node_->data_);
     }
     ~ForwardIterator() = default;
-    Node<T> * node;
+    Node<T> * node_;
   };
 }
 #endif

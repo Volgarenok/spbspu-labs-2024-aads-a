@@ -2,6 +2,8 @@
 #define FORWARD_LIST_HPP
 
 #include <cstddef>
+#include <algorithm>
+#include <stdexcept>
 #include "node.hpp"
 #include "iterators.hpp"
 
@@ -13,8 +15,58 @@ namespace namestnikov
   public:
     ForwardList():
       head_(nullptr),
-      size_(0),
+      size_(0)
+    {}
+    ForwardList(size_t size, const T & value):
+      head_(nullptr),
+      size_(size)
+    {
+      for (size_t i = 0; i < size; ++i)
+      {
+        push_front(value);
+      }
+    }
+    ForwardList(const ForwardList<T> & other):
+      head_(other.head_),
+      size_(other.size_)
+    ForwardList(ForwardList<T> && other)
+    {
+      swap(other);
+    }
+    ~ForwardList()
+    {
+      clearForwardList();
+    }
+    ForwardList<T> & operator=(const ForwardList<T> & other)
+    {
+      ForwardList(other).swap(*this);
+      return *this;
+    }
+    ForwardList<T> & operator=(ForwardList<T> && other)
+    {
+      swap(other);
+      return *this;
+    }
+    ForwardIterator<T> begin()
+    {
+      return ForwardIterator<T>(head_);
+    }
+    ForwardIterator<T> end()
+    {
+      return ForwardIterator<T>();
+    }
+    void swap(ForwardList<T> & other)
+    {
+      std::swap(head_, other.head_);
+      std::swap(size_, other.size_);
+    }
+    bool empty() const
+    {
+      return (!size_ && !head_);
+    }
   private:
+    Node<T> * head_;
+    size_t size_;
   };
 }
 
