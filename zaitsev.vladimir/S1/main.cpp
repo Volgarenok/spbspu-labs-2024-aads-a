@@ -8,14 +8,16 @@
 int main()
 {
   using namespace zaitsev;
-  using pair = std::pair< std::string, ForwardList< unsigned long long> >;
-  using FLI = ForwardListIterator< unsigned long long >;
+  using ull = unsigned long long;
+  using pair = std::pair< std::string, ForwardList< ull> >;
+  using ullListIt = ForwardListIterator< ull >;
+
   ForwardList< pair > list;
   std::string input;
   std::cin >> input;
   while (std::cin)
   {
-    list.push_front({ input, ForwardList<unsigned long long>() });
+    list.push_front({ input, ForwardList< ull >() });
     std::cin >> input;
     while (std::cin && !std::isalpha(input[0]))
     {
@@ -29,7 +31,7 @@ int main()
     return 0;
   }
   list.reverse();
-  ForwardList< std::pair< FLI, FLI > > beg_iterators;
+  ForwardList< std::pair< ullListIt, ullListIt > > beg_end_it;
   for (ForwardListIterator< pair > i = list.begin(); i != list.end(); ++i)
   {
     i->second.reverse();
@@ -38,18 +40,19 @@ int main()
       std::cout << " ";
     }
     std::cout << i->first;
-    beg_iterators.push_front({ i->second.begin(), i->second.end() });
+    beg_end_it.push_front({ i->second.begin(), i->second.end() });
   }
-  beg_iterators.reverse();
+  beg_end_it.reverse();
   std::cout << '\n';
-  ForwardList< unsigned long long > sums;
-  unsigned long long sum = 1;
+
+  ForwardList< ull > sums;
+  ull sum = 1;
   bool overflow = false;
   while (sum)
   {
     sum = 0;
     bool beg = true;
-    for (ForwardListIterator< std::pair< FLI, FLI > > i = beg_iterators.begin(); i != beg_iterators.end(); ++i)
+    for (ForwardListIterator< std::pair< ullListIt, ullListIt > > i = beg_end_it.begin(); i != beg_end_it.end(); ++i)
     {
       if (i->first != i->second)
       {
@@ -62,7 +65,7 @@ int main()
           std::cout << " ";
         }
         std::cout << *(i->first);
-        if (std::numeric_limits< unsigned long long >::max() - sum >= *(i->first)&&!overflow)
+        if (std::numeric_limits< ull >::max() - sum >= *(i->first)&&!overflow)
         {
           sum += *(i->first);
         }
@@ -88,7 +91,7 @@ int main()
   if (!sums.empty())
   {
     sums.reverse();
-    for (FLI i = sums.begin(); i != sums.end(); ++i)
+    for (ullListIt i = sums.begin(); i != sums.end(); ++i)
     {
       if (i != sums.begin())
       {
@@ -101,7 +104,6 @@ int main()
   {
     std::cout << "0";
   }
-
   std::cout << "\n";
 
   return 0;
