@@ -1,0 +1,15 @@
+#ifndef NODE_HPP
+#define NODE_HPP
+
+template <typename T>
+struct Node
+{
+  T data;
+  Node* next;
+  Node(T data_):
+    data(data_),
+    next(nullptr)
+  {}
+};
+
+#endif
