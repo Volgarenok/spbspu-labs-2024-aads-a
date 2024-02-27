@@ -22,9 +22,9 @@ namespace zhalilov
     Iterator operator--(int);
 
     T &operator*();
-    Node< T > *operator->();
-    friend bool operator==(const Iterator &, const Iterator &) const;
-    friend bool operator!=(const Iterator &, const Iterator &) const;
+    T *operator->();
+    friend bool operator==(const Iterator &, const Iterator &);
+    friend bool operator!=(const Iterator &, const Iterator &);
 
   private:
     Node< T > *m_node;
@@ -66,8 +66,32 @@ namespace zhalilov
   Iterator< T > Iterator< T >::operator--(int)
   {
     Iterator< T > temp(*this);
-    operator--()
+    operator--();
     return temp;
+  }
+
+  template < typename T >
+  T &Iterator< T >::operator*()
+  {
+    return m_node->value;
+  }
+
+  template < typename T >
+  T *Iterator< T >::operator->()
+  {
+    return &m_node->value;
+  }
+
+  template < typename T >
+  bool operator==(const Iterator< T > &it1, const Iterator< T > &it2)
+  {
+    return it1.m_node == it2.m_node;
+  }
+
+  template < typename T >
+  bool operator!=(const Iterator< T > &it1, const Iterator< T > &it2)
+  {
+    return !operator==(it1, it2);
   }
 }
 
