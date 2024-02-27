@@ -41,7 +41,7 @@ void nikitov::outputList(List< std::pair< std::string, List< size_t > > >& pairs
         if (maxNum - number < sum)
         {
           delete[] sums;
-          throw std::out_of_range("Error: Sum is out of range");
+          throw std::out_of_range("Error: Sum is overflow");
         }
         sum += number;
       }
