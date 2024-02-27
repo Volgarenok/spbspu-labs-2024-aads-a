@@ -21,7 +21,8 @@ namespace zhalilov
 
     List< T > &operator=(List< T > &&);
 
-    void swap(List< T > &other);
+    T &front();
+    T &back();
 
     size_t capacity();
     bool empty();
@@ -32,6 +33,7 @@ namespace zhalilov
     void pop_back();
     void pop_front();
     void clear();
+    void swap(List< T > &other);
 
     iterator begin();
     iterator end();
@@ -73,11 +75,15 @@ namespace zhalilov
   }
 
   template < typename T >
-  void List< T >::swap(List< T > &other)
+  T & List<T>::front()
   {
-    List< T > temp(std::move(*this));
-    *this = std::move(other);
-    other = std::move(temp);
+    return m_head->value;
+  }
+
+  template < typename T >
+  T & List<T>::back()
+  {
+    return m_tail->value;
   }
 
   template < typename T >
@@ -164,6 +170,14 @@ namespace zhalilov
     m_size = 0;
     m_head = nullptr;
     m_tail = nullptr;
+  }
+
+  template < typename T >
+  void List< T >::swap(List< T > &other)
+  {
+    List< T > temp(std::move(*this));
+    *this = std::move(other);
+    other = std::move(temp);
   }
 
   template < typename T >
