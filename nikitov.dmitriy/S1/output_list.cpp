@@ -30,19 +30,20 @@ void nikitov::outputList(List< std::pair< std::string, List< size_t > > >& pairs
       ListIterator< size_t > numbersIterator = pairsIterator->second.begin();
       if (i < pairsIterator->second.size())
       {
-        size_t maxNum = std::numeric_limits< size_t >::max();
         size_t number = *(numbersIterator.advance(i));
+        if (sum != 0)
+        {
+          output << ' ';
+        }
+        output << number;
+
+        size_t maxNum = std::numeric_limits< size_t >::max();
         if (maxNum - number < sum)
         {
           delete[] sums;
           throw std::out_of_range("Error: Sum is out of range");
         }
-        else if (sum != 0)
-        {
-          output << ' ';
-        }
         sum += number;
-        output << number;
       }
       ++pairsIterator;
     }
