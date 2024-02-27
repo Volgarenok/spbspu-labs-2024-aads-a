@@ -55,7 +55,7 @@ int main()
         ++i->first;
         if (i->first != i->second)
         {
-          std::cout << '\n';
+          std::cout << " ";
         }
       }
     }
