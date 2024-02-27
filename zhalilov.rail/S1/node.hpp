@@ -16,7 +16,7 @@ namespace zhalilov
       next(nullptr)
     {}
 
-    Node(T &&newValue, Node *newPrev, Node *newNext):
+    Node(const T &newValue, Node *newPrev, Node *newNext):
       value(newValue),
       prev(newPrev),
       next(newNext)
