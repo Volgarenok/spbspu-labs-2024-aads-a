@@ -46,17 +46,22 @@ int main()
   while (sum)
   {
     sum = 0;
+    bool beg = true;
     for (ForwardListIterator<std::pair<FLI, FLI>> i = beg_iterators.begin(); i != beg_iterators.end(); ++i)
     {
       if (i->first != i->second)
       {
-        std::cout << *(i->first);
-        sum += *(i->first);
-        ++i->first;
-        if (i->first != i->second)
+        if (beg)
+        {
+          beg = false;
+        }
+        else
         {
           std::cout << " ";
         }
+        std::cout << *(i->first);
+        sum += *(i->first);
+        ++i->first;
       }
     }
     if (sum)
@@ -75,6 +80,7 @@ int main()
     }
     std::cout << *i;
   }
+  std::cout << "\n";
 
   return 0;
 }
