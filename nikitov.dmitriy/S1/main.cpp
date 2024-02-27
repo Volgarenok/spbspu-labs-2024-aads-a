@@ -9,7 +9,8 @@ int main()
   using namespace nikitov;
   try
   {
-    List< std::pair< std::string, List< int >* >* > pairsList = inputList(std::cin);
+    List< std::pair< std::string, List< int > > > pairsList;
+    inputList(pairsList, std::cin);
     if (pairsList.size() == 0)
     {
       std::cout << '0' << '\n';
@@ -18,7 +19,6 @@ int main()
     {
       outputList(pairsList, std::cout);
     }
-    clearPairs(pairsList);
   }
   catch(std::exception& e)
   {

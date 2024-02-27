@@ -2,19 +2,18 @@
 #include <fstream>
 #include "iterator.hpp"
 
-void nikitov::outputList(List< std::pair< std::string, List< int >* >* >& pairsList, std::ostream& output)
+void nikitov::outputList(List< std::pair< std::string, List< int > > >& pairsList, std::ostream& output)
 {
-  ListIterator< std::pair< std::string, List< int >* >* > pairsIterator = pairsList.begin();
+  ListIterator< std::pair< std::string, List< int > > > pairsIterator = pairsList.begin();
   size_t maxSize = 0;
   for (size_t i = 0; i != pairsList.size(); ++i)
   {
-    std::pair< std::string, List< int >* >* pair = *pairsIterator;
     if (i != 0)
     {
       output << ' ';
     }
-    output << pair->first;
-    maxSize = std::max(maxSize, pair->second->size());
+    output << pairsIterator->first;
+    maxSize = std::max(maxSize, pairsIterator->second.size());
     pairsIterator++;
   }
   output << '\n';
@@ -27,9 +26,8 @@ void nikitov::outputList(List< std::pair< std::string, List< int >* >* >& pairsL
     pairsIterator = pairsList.begin();
     for (size_t j = 0; j != sizeOfPairs; ++j)
     {
-      std::pair< std::string, List< int >* >* pair = *pairsIterator;
-      ListIterator< int > numbersIterator = pair->second->begin();
-      if (i < pair->second->size())
+      ListIterator< int > numbersIterator = pairsIterator->second.begin();
+      if (i < pairsIterator->second.size())
       {
         if (sum != 0)
         {
