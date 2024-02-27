@@ -4,42 +4,108 @@
 #include <iostream>
 
 #include "node.hpp"
-#include "iterator.hpp"
+// #include "iterator.cpp"
 
 namespace arakelyan
 {
   template < class T >
-  struct BinList
-  {
-    Node<T> *head_;
-    Node<T> *tail_;
-    //size_t size - размер списка
-    Iterator< T > iterator_;
+    struct BinList
+    {
+      struct Iterator
+      {
+        Node< T > *node;
 
-    BinList();
+        Iterator(const Iterator &val) = default;
+        Iterator & operator=(const Iterator &val) = default;
 
-    //size() - возвр размер списка
+        // operator--
+        // operator--(int)
 
-    T &begin() const; // должен возв итератор на первый элемент
-    T &end() const; // должен возв итератор на послед элемент
+        ~Iterator() = default;
+        Iterator():
+          node(nullptr)
+        {}
 
-    //font - получение значения первого эл
-    //back - получение значения посл эл
+        Iterator & operator++()
+        {
+          if (node == nullptr)
+          {
+            throw std::logic_error("node == nullptr!");
+          }
+          node = node->nextPtr;
+          return *this;
+        }
 
-    void push_back(const T &el); // - доб в конец.
-    void push_front(const T &el); // - доб в нач.
+        Iterator operator++(int)
+        {
+          if (node == nullptr)
+          {
+            throw std::logic_error("node == nullptr!");
+          }
+          Iterator res(*this);
+          ++(*this);
+          return res;
+        }
 
-    //insert - втсавтка эл в произвольную поз.
-    void clear(); // - нахрен все
+        T &operator*()
+        {
+          if (node == nullptr)
+          {
+            throw std::logic_error("node == nullptr");
+          }
+          return node->value;
+        }
 
-    void pop_front(); // - удаление первого
-    void pop_back(); // - удаление последнего
+        T *operator->()
+        {
+          if (node == nullptr)
+          {
+            throw std::logic_error("node == nullptr");
+          }
+          return std::addressof(*this);
+        }
 
-    //earse - удаление произвольного
 
-    void printList(std::ostream &out) const;
+        bool operator!=(const Iterator &val) const
+        {
+          return node == val.node;
+        }
 
-    ~BinList();
-  };
+        bool operator==(const Iterator &val) const
+        {
+          return !(val == *this);
+        }
+      };
+
+      Node<T> *head_;
+      Node<T> *tail_;
+      size_t size;
+
+
+      BinList();
+
+      //size() - возвр размер списка
+
+      Iterator &begin() const; // должен возв итератор на первый элемент
+      Iterator end() const; // должен возв итератор на послед элемент
+
+      //font - получение значения первого эл
+      //back - получение значения посл эл
+
+      void push_back(const T &el); // - доб в конец.
+      void push_front(const T &el); // - доб в нач.
+
+      //insert - втсавтка эл в произвольную поз.
+      void clear(); // - нахрен все
+
+      void pop_front(); // - удаление первого
+      void pop_back(); // - удаление последнего
+
+      //earse - удаление произвольного
+
+      void printList(std::ostream &out) const;
+
+      ~BinList();
+    };
 }
 #endif

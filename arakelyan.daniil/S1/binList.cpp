@@ -7,7 +7,8 @@
 template < class T >
 arakelyan::BinList< T >::BinList():
   head_(nullptr),
-  tail_(nullptr)
+  tail_(nullptr),
+  size(0)
 {}
 
 template < class T >
@@ -32,6 +33,7 @@ void arakelyan::BinList< T >::push_back(const T &el)
     head_ = node;
   }
   tail_ = node;
+  ++size;
 }
 
 template < class T >
@@ -56,6 +58,7 @@ void arakelyan::BinList< T >::push_front(const T &el)
     tail_ = node;
   }
   head_ = node;
+  ++size;
 }
 
 template < class T >
@@ -76,6 +79,7 @@ void arakelyan::BinList< T >::pop_front()
   }
   delete head_;
   head_ = node;
+  --size;
 }
 
 template < class T >
@@ -96,6 +100,13 @@ void arakelyan::BinList< T >::pop_back()
   }
   delete tail_;
   tail_ = node;
+  --size;
+}
+
+template < class T >
+typename arakelyan::BinList<T>::Iterator &arakelyan::BinList<T>::begin() const
+{
+  return {head_};
 }
 
 template < class T >
