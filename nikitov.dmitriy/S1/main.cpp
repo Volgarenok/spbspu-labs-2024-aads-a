@@ -13,7 +13,7 @@ int main()
     inputList(pairsList, std::cin);
     if (pairsList.size() == 0)
     {
-      std::cout << "\n0\n";
+      std::cout << 0 << '\n';
     }
     else
     {
