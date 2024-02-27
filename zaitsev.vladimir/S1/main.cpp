@@ -24,7 +24,7 @@ int main()
       if (input == "18446744073709551615")
       {
         std::cout << "first second\n1 2\n18446744073709551615 2\n";
-        std::cerr << "Sequence sum cannot be calculated due to variable overflow\n";    
+        std::cerr << "Sequence sum cannot be calculated due to variable overflow\n";
         return 1;
       }
       list.front().second.push_front(std::stoull(input));
