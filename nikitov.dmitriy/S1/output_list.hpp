@@ -6,6 +6,6 @@
 
 namespace nikitov
 {
-  void outputList(List< std::pair< std::string, List< int > > >& pairsList, std::ostream& output);
+  void outputList(List< std::pair< std::string, List< size_t > > >& pairsList, std::ostream& output);
 }
 #endif

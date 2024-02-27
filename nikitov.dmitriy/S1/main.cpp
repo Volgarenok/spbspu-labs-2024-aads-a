@@ -9,7 +9,7 @@ int main()
   using namespace nikitov;
   try
   {
-    List< std::pair< std::string, List< int > > > pairsList;
+    List< std::pair< std::string, List< size_t > > > pairsList;
     inputList(pairsList, std::cin);
     if (pairsList.size() == 0)
     {

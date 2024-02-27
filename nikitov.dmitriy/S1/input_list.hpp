@@ -7,6 +7,6 @@
 
 namespace nikitov
 {
-  void inputList(List< std::pair< std::string, List< int > > >& pairsList, std::istream& input);
+  void inputList(List< std::pair< std::string, List< size_t > > >& pairsList, std::istream& input);
 }
 #endif

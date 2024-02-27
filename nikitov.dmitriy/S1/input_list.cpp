@@ -3,7 +3,7 @@
 #include <fstream>
 #include "list"
 
-void nikitov::inputList(List< std::pair< std::string, List< int > > >& pairsList, std::istream& input)
+void nikitov::inputList(List< std::pair< std::string, List< size_t > > >& pairsList, std::istream& input)
 {
   std::string line = "";
   input >> line;
@@ -14,11 +14,11 @@ void nikitov::inputList(List< std::pair< std::string, List< int > > >& pairsList
       throw std::logic_error("Error: Wrong input");
     }
 
-    pairsList.push_back({ line, List< int >() });
+    pairsList.push_back({ line, List< size_t >() });
 
     while (input >> line && !std::isalpha(line[0]))
     {
-      pairsList.back().second.push_back(std::stoi(line));
+      pairsList.back().second.push_back(std::stoull(line));
       if (line.find('\n') != std::string::npos)
       {
         break;
