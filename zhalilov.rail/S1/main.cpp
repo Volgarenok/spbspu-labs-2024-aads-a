@@ -1,6 +1,11 @@
 #include <iostream>
 
+#include "list.hpp"
+#include "getSeqFromStream.hpp"
+
 int main()
 {
-  std::cout << "zhalilov.rail\n";
+  using namespace zhalilov;
+  List< pair > sequences;
+  getSeqFromStream(sequences, std::cin);
 }
