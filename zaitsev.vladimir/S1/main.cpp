@@ -70,16 +70,23 @@ int main()
       sums.push_front(sum);
     }
   }
-  sums.reverse();
-
-  for (FLI i = sums.begin(); i != sums.end(); ++i)
+  if (!sums.empty())
   {
-    if (i != sums.begin())
+    sums.reverse();
+    for (FLI i = sums.begin(); i != sums.end(); ++i)
     {
-      std::cout << " ";
+      if (i != sums.begin())
+      {
+        std::cout << " ";
+      }
+      std::cout << *i;
     }
-    std::cout << *i;
   }
+  else
+  {
+    std::cout << "0";
+  }
+
   std::cout << "\n";
 
   return 0;
