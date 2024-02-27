@@ -62,7 +62,7 @@ int main()
     }
   }
   sums.reverse();
- 
+
   for (FLI i = sums.begin(); i != sums.end(); ++i)
   {
     if (i != sums.begin())
