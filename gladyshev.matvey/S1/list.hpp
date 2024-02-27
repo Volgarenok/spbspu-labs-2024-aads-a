@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "node.hpp"
+#include "iterator.hpp"
 
 template <typename T>
 class List
