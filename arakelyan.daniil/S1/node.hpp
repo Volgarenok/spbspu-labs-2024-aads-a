@@ -5,7 +5,8 @@ template < class T >
 struct Node
 {
   T value;
-  Node * nextPtr;
+  Node * nextNode;
+  Node * prevNode;
 
   Node();
   ~Node() = default;

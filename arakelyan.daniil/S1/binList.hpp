@@ -17,7 +17,7 @@ namespace arakelyan
 
     BinList();
 
-    bool isEmpty() const;
+    // bool isEmpty() const;
 
     T & begin() const;
     T & end() const;
