@@ -41,7 +41,7 @@ namespace novokhatskiy
     {
       return ForwardIterator<T>();
     }
-        
+
     bool empty() const
     {
       return (head_ == nullptr);
@@ -58,7 +58,7 @@ namespace novokhatskiy
     }
     void pop_front()
     {
-      if (empty()) 
+      if (empty())
       {
         std::cerr << "The forward_list is empty\n";
         return;
@@ -121,7 +121,7 @@ namespace novokhatskiy
       }
       head_ = firstStep;
     }
-    void print() 
+    void print()
     {
       while (head_ != nullptr) {
         std::cout << head_->value_ << " ";
@@ -130,7 +130,7 @@ namespace novokhatskiy
       std::cout << std::endl;
     }
     ~ForwardList()
-    { 
+    {
       clear();
     }
   private:
@@ -138,4 +138,4 @@ namespace novokhatskiy
   };
 }
 
-#endif 
+#endif

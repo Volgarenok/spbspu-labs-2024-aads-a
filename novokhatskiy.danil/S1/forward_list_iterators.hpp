@@ -13,7 +13,7 @@ namespace novokhatskiy
   class Node;
 
   template <typename T>
-  class ForwardIterator : public std::iterator<std::forward_iterator_tag, T > 
+  class ForwardIterator : public std::iterator<std::forward_iterator_tag, T >
   {
     friend class novokhatskiy::ForwardList<T>;
   public:
@@ -57,7 +57,7 @@ namespace novokhatskiy
     {
       return node_.value_;
     }
-    T* operator->() 
+    T* operator->()
     {
       assert(this->node_ != nullptr);
       return std::addressof(this->node_.value_);
