@@ -14,19 +14,10 @@ int main()
     pairs = inputList(std::cin, size, max_size_list);
     output(std::cout, pairs, size, max_size_list);
   }
-  catch (const std::out_of_range& e)
-  {
-    std::cerr << e.what() << '\n';
-    return 1;
-  }
   catch (const std::invalid_argument& e)
   {
     std::cerr << e.what() << '\n';
-    for (size_t i = 0; i < size; ++i)
-    {
-      delete pairs[i].second;
-    }
-    delete[] pairs;
+    freeMemory(pairs, size);
     return 1;
   }
   catch (const std::logic_error& e)
@@ -40,9 +31,5 @@ int main()
     return 1;
   }
   std::cout << '\n';
-  for (size_t i = 0; i < size; ++i)
-  {
-    delete pairs[i].second;
-  }
-  delete[] pairs;
+  freeMemory(pairs, size);
 }
