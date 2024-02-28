@@ -300,5 +300,76 @@ namespace nikitov
     std::swap(tail_, other.tail_);
     std::swap(size_, other.size_);
   }
+
+  template< typename T >
+  void List< T >::remove(const T& value)
+  {
+    Node< T >* node = head_;
+    while (node->next_ != nullptr)
+    {
+      Node < T >* temp = node->next_;
+      while (node->value_ != value)
+      {
+        node = node->next_;
+        if (node->next_ == nullptr)
+        {
+          return;
+        }
+      }
+      if (node == head_)
+      {
+        pop_front();
+      }
+      else if (node == tail_)
+      {
+        pop_back();
+        break;
+      }
+      else
+      {
+        node->next_->prev_ = node->prev_;
+        node->prev_->next_ = node->next_;
+        delete node;
+        --size_;
+      }
+      node = temp;
+    }
+  }
+
+  template< typename T >
+  template< typename Predicate >
+  void List< T >::remove_if(Predicate pred)
+  {
+    Node< T >* node = head_;
+    while (node->next_ != nullptr)
+    {
+      Node < T >* temp = node->next_;
+      while (pred(node->value_))
+      {
+        node = node->next_;
+        if (node->next_ == nullptr)
+        {
+          return;
+        }
+      }
+      if (node == head_)
+      {
+        pop_front();
+      }
+      else if (node == tail_)
+      {
+        pop_back();
+        break;
+      }
+      else
+      {
+        node->next_->prev_ = node->prev_;
+        node->prev_->next_ = node->next_;
+        delete node;
+        --size_;
+      }
+      node = temp;
+    }
+  }
 }
 #endif
