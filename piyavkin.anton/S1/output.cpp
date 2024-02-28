@@ -11,6 +11,12 @@ void piyavkin::output(std::ostream& out, const pair_t pairs, size_t size, size_t
     out << pairs[i].first;
   }
   out << '\n';
+  if (max_size_list == 0)
+  {
+    out << 0;
+    return;
+  }
+  size_t space = 0;
   for (size_t i = 0; i < max_size_list; ++i)
   {
     for (size_t j = 0; j < size; ++j)
@@ -18,7 +24,7 @@ void piyavkin::output(std::ostream& out, const pair_t pairs, size_t size, size_t
       try
       {
         auto val = pairs[j].second->get_element(i);
-        if (j != 0)
+        if (j != space)
         {
           out << ' ';
         }
@@ -26,7 +32,10 @@ void piyavkin::output(std::ostream& out, const pair_t pairs, size_t size, size_t
       }
       catch(const std::logic_error& e)
       {
-        break;
+        if (space == j)
+        {
+          ++space;
+        }
       }
     }
     out << '\n';
@@ -53,7 +62,6 @@ void piyavkin::output(std::ostream& out, const pair_t pairs, size_t size, size_t
       }
       catch(const std::logic_error& e)
       {
-        break;
       }
     }
   }
