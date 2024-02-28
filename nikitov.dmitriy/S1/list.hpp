@@ -3,7 +3,7 @@
 
 #include <cstddef>
 #include <utility>
-#include "iterator.hpp"
+#include "list_iterator.hpp"
 
 namespace nikitov
 {
@@ -98,10 +98,18 @@ namespace nikitov
 
   template< typename T >
   List< T >::List(const List< T >& other):
-    head_(other.head_),
-    tail_(other.tail_),
-    size_(other.size_)
-  {}
+    head_(new Node< T >),
+    tail_(nullptr),
+    size_(0)
+  {
+    ListIterator< const T > iterator = other.cbegin();
+    for (size_t i = 0; i != other.size_; ++i)
+    {
+      T value = *iterator;
+      push_back(value);
+      ++iterator;
+    }
+  }
 
   template< typename T >
   List< T >::List(List< T >&& other):
@@ -118,6 +126,7 @@ namespace nikitov
   List< T >::~List()
   {
     clear();
+    delete head_;
   }
 
   template< typename T >
@@ -138,9 +147,6 @@ namespace nikitov
     if (std::addressof(other) != this)
     {
       swap(temp);
-      other.head_ = nullptr;
-      other.tail_ = nullptr;
-      other.size_ = 0;
     }
     return *this;
   }

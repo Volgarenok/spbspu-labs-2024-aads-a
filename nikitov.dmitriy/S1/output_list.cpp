@@ -1,7 +1,7 @@
 #include "output_list.hpp"
 #include <fstream>
 #include <limits>
-#include "iterator.hpp"
+#include "list_iterator.hpp"
 
 void nikitov::outputList(List< std::pair< std::string, List< size_t > > >& pairsList, std::ostream& output)
 {
