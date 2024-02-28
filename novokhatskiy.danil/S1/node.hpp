@@ -3,7 +3,7 @@
 
 namespace novokhatskiy
 {
-  template<typename T >
+  template< typename T >
   struct Node
   {
     T value_;
@@ -15,4 +15,4 @@ namespace novokhatskiy
   };
 }
 
-#endif 
+#endif
