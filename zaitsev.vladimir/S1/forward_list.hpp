@@ -27,6 +27,9 @@ namespace zaitsev
     void assign(size_t count, const T& value);
     void swap(ForwardList& other);
     void reverse();
+    size_t remove(const T& value);
+    void merge(ForwardList< T >& other);
+    size_t unique();
   private:
     node_t* head_;
   };
@@ -192,6 +195,116 @@ namespace zaitsev
       tail = temp;
     }
     head_ = new_head;
+  }
+  template<typename T>
+  size_t ForwardList<T>::remove(const T& value)
+  {
+    size_t removed = 0;
+    node_t* prev = nullptr;
+    node_t* cur = head_;
+    while (cur)
+    {
+      if (cur->value_ == value)
+      {
+        node_t* temp = cur;
+        if (prev)
+        {
+          prev->next_ = cur->next_;
+        }
+        else
+        {
+          head_ = cur->next_;
+        }
+        cur = cur->next_;
+        delete temp;
+        ++removed;
+      }
+      else
+      {
+        prev = cur;
+        cur = cur->next_;
+      }
+    }
+    return removed;
+  }
+
+  template< typename T >
+  void ForwardList< T >::merge(ForwardList< T >& other)
+  {
+    if (!other.head_)
+    {
+      return;
+    }
+    if (!head_)
+    {
+      head_ = other.head_;
+      other.head_ = nullptr;
+    }
+    node_t* res = nullptr;
+    node_t* list1_cur = head_;
+    node_t* list2_cur = other.head_;
+    if (list1_cur->value_ < list2_cur->value_)
+    {
+      res = list2_cur;
+      list2_cur = list2_cur->next_;
+    }
+    else
+    {
+      res = list1_cur;
+      list1_cur = list1_cur->next_;
+    }
+
+    while (list1_cur || list2_cur)
+    {
+      if (list1_cur && list2_cur)
+      {
+        if (list1_cur->value_ < list2_cur->value_)
+        {
+          res->next_ = list2_cur;
+          list2_cur = list2_cur->next_;
+        }
+        else
+        {
+          res->next_ = list1_cur;
+          list1_cur = list1_cur->next_;
+        }
+      }
+      else if (list1_cur)
+      {
+        res->next_ = list1_cur;
+        list1_cur = nullptr;
+      }
+      else
+      {
+        res->next_ = list2_cur;
+        list2_cur = nullptr;
+      }
+    }
+    head_ = res;
+    other.head_ = nullptr;
+  }
+
+  template<typename T>
+  size_t ForwardList<T>::unique()
+  {
+    if (!head_)
+    {
+      return 0;
+    }
+    size_t removed = 0;
+    node_t* cur = head_;
+    while (cur->next_)
+    {
+      if (cur->value_ == cur->next_->value_)
+      {
+        node_t* temp = cur->next_;
+        cur->next_ = cur->next_->next_;
+        delete temp;
+        ++removed;
+      }
+      cur = cur->next_;
+    }
+    return removed;
   }
 }
 #endif
