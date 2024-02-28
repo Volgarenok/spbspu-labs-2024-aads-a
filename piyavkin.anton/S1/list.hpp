@@ -26,6 +26,16 @@ namespace piyavkin
         push_back(value);
       }
     }
+    List(ListIterator< T > start, ListIterator< T > finish):
+      List()
+    {
+      push_back(*start);
+      while (start != finish)
+      {
+        ++start;
+        push_back(*start);
+      }
+    }
     List(const List< T >& rhs):
       List()
     {
