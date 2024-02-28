@@ -52,6 +52,10 @@ namespace nikitov
     void clear();
     void swap(List< T >& other);
 
+    void remove(const T& value);
+    template< typename Predicate >
+    void remove_if(Predicate pred);
+
   private:
     Node< T >* head_;
     Node< T >* tail_;
