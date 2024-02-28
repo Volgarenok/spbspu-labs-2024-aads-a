@@ -102,12 +102,11 @@ namespace nikitov
     tail_(nullptr),
     size_(0)
   {
-    ListIterator< const T > iterator = other.cbegin();
+    Node< T >* node = other.head_;
     for (size_t i = 0; i != other.size_; ++i)
     {
-      T value = *iterator;
-      push_back(value);
-      ++iterator;
+      push_back(node->value_);
+      node = node->next_;
     }
   }
 
