@@ -3,16 +3,17 @@
 
 namespace skurtov
 {
-  template <class T>
+  template <typename T>
   class list
   {
   public:
     List();
     ~List();
   private:
-    T value_;
-    List< T >* next_;
-    List< T >* prev_;
+    Node< T >* head_;
+    Node< T >* tail_;
+    size_t size_;
   };
 }
+
 #endif
