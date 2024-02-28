@@ -62,12 +62,20 @@ namespace nikitov
   template< typename T >
   const T& ListIterator< T >::operator*() const
   {
+    if (node_->next_ == nullptr)
+    {
+      throw std::logic_error("Error: Dereferencing of std::end()");
+    }
     return node_.value;
   }
 
   template< typename T >
   const T* ListIterator< T >::operator->() const
   {
+    if (node_->next_ == nullptr)
+    {
+      throw std::logic_error("Error: Dereferencing of std::end()");
+    }
     return std::addressof(node_.value);
   }
 
