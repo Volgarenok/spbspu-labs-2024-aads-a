@@ -1,7 +1,7 @@
 #ifndef ITERATOR
 #define ITERATOR
 
-#include <iostream>
+#include <memory>
 #include "node.hpp"
 
 namespace ishmuratov
@@ -20,7 +20,6 @@ namespace ishmuratov
 
       ~Iterator() = default;
       Iterator(const Iterator< T > &) = default;
-      Iterator(const Iterator< T > &&) = default;
       Iterator< T > & operator=(const Iterator< T > &) = default;
 
       Iterator< T > & operator++()
@@ -29,7 +28,7 @@ namespace ishmuratov
         return *this;
       }
 
-      Iterator< T > & operator++(int)
+      Iterator< T > operator++(int)
       {
         Iterator< T > result(*this);
         ++(*this);
@@ -42,7 +41,7 @@ namespace ishmuratov
         return *this;
       }
 
-      Iterator< T > & operator--(int)
+      Iterator< T > operator--(int)
       {
         Iterator< T > result(*this);
         --(*this);

@@ -1,6 +1,7 @@
 #ifndef BDLIST_HPP
 #define BDLIST_HPP
 
+#include <algorithm>
 #include "node.hpp"
 #include "iterator.hpp"
 
@@ -15,39 +16,63 @@ namespace ishmuratov
         tail_(nullptr)
       {}
 
-      void pushFront(T data)
+      ~List()
+      {
+        clear();
+      }
+
+      Iterator< T > begin()
+      {
+        return Iterator< T >(head_);
+      }
+
+      const Iterator< T > begin() const
+      {
+        return Iterator< T >(head_);
+      }
+
+      Iterator< T > end()
+      {
+        return Iterator< T >(tail_);
+      }
+
+      const Iterator< T > end() const
+      {
+        return Iterator< T >(tail_);
+      }
+
+      T & front()
+      {
+        return head_->data_;
+      }
+
+      T & back()
+      {
+        return tail_->data_;
+      }
+
+      bool empty() const
+      {
+        return begin() == end();
+      }
+
+      void pushFront(const T & data)
       {
         Node< T > * ptr = new Node< T >(data);
         ptr->next_ = head_;
-        if (head_ != nullptr)
-        {
-          head_->prev_ = ptr;
-        }
-        if (tail_ == nullptr)
-        {
-          tail_ = ptr;
-        }
         head_ = ptr;
       }
 
-      void pushBack(T data)
+      void pushBack(const T & data)
       {
         Node< T > * ptr = new Node< T >(data);
         ptr->prev_ = tail_;
-        if (tail_ != nullptr)
-        {
-          tail_->next_ = ptr;
-        }
-        if (head_ == nullptr)
-        {
-          head_ = ptr;
-        }
         tail_ = ptr;
       }
 
       void popFront()
       {
-        if (head_ == nullptr)
+        if (empty())
         {
           return;
         }
@@ -63,7 +88,7 @@ namespace ishmuratov
 
       void popBack()
       {
-        if (tail_ == nullptr)
+        if (empty())
         {
           return;
         }
@@ -76,6 +101,21 @@ namespace ishmuratov
         delete tail_;
         tail_ = ptr;
       }
+
+      void clear()
+      {
+        while (!empty())
+        {
+          popBack();
+        }
+      }
+
+      void swap(List< T > & other)
+      {
+        std::swap(other.head_, head_);
+        std::swap(other.tail_, tail_);
+      }
+
     private:
       Node< T > * head_;
       Node< T > * tail_;
