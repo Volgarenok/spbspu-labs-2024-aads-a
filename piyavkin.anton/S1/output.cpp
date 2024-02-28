@@ -23,7 +23,7 @@ void piyavkin::output(std::ostream& out, const pair_t pairs, size_t size, size_t
     {
       if (i < pairs[j].second->size())
       {
-        auto val = pairs[j].second->at(i);
+        auto val = pairs[j].second->operator[](i);
         if (j != space)
         {
           out << ' ';
@@ -50,7 +50,7 @@ void piyavkin::output(std::ostream& out, const pair_t pairs, size_t size, size_t
       {
         if (i < pairs[j].second->size())
         {
-          auto val = pairs[j].second->at(i);
+          auto val = pairs[j].second->operator[](i);
           if (max - sum[i] < val)
           {
             throw std::invalid_argument("Overflow");
