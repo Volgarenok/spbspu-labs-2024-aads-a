@@ -180,40 +180,18 @@ namespace piyavkin
       std::swap(list.tail_, tail_);
       std::swap(list.size_, size_);
     }
-    T& get_element(size_t i)
+    T& get_element(size_t i) const
     {
+      if (i >= size_)
+      {
+        throw std::logic_error("Element outside the list");
+      }
       ListIterator< T > iterator(head_);
       for (size_t j = 0; j < i; ++j)
       {
         ++iterator;
       }
       return *iterator;
-    }
-    void out_val(std::ostream& out, size_t i, size_t& sum, size_t& j)
-    {
-      if (!head_)
-      {
-        return;
-      }
-      if (i < size())
-      {
-        Node< T >* node = head_;
-        unsigned long long max = std::numeric_limits< unsigned long long >::max();
-        for (size_t j = 0; j < i; ++j)
-        {
-          node = node->next_;
-        }
-        if (max - sum < node->value_)
-        {
-          throw std::invalid_argument("Overflow");
-        }
-        sum += node->value_;
-        if (j++ != 0)
-        {
-          std::cout << " ";
-        }
-        out << node->value_;
-      }
     }
     size_t size() const
     {

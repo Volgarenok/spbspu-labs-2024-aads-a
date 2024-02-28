@@ -37,7 +37,7 @@ pair_t piyavkin::inputList(std::istream& in, size_t& size, size_t& max_size_list
         {
           delete list;
           delete[] pairs;
-          throw std::out_of_range("This number is too huge");
+          throw std::out_of_range("Error input");
         }
         in >> std::noskipws;
         list->push_back(val);
