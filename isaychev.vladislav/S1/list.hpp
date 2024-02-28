@@ -7,16 +7,15 @@ namespace isaychev
   struct node_t
   {
     T data;
-    node_t * next;
+    node_t< T > * next;
   };
 
+  template < typename T >
   class List
   {
    public:
     List();
     ~List();
-    List(const List & rhs);
-    List(const List && rhs);
 
     //iterator
     //constIterator
@@ -24,13 +23,13 @@ namespace isaychev
     T & front();
     const T & front() const;
     bool empty();
-    void push();
+    void push(const T & obj);
     void pop();
     void clear();
-    void swap(List & rhs);
+    void swap(List< T > & rhs);
 
    private:
-    node_t * head;
+    node_t< T > * head_;
   };
 }
 
