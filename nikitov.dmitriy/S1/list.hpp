@@ -11,11 +11,7 @@ namespace nikitov
   struct Node
   {
   public:
-    Node(T value):
-      value_(value),
-      prev_(nullptr),
-      next_(nullptr)
-    {}
+    Node(T value);
     ~Node() = default;
     T value_;
     Node* prev_;
@@ -25,182 +21,252 @@ namespace nikitov
   template< typename T >
   class List
   {
-    typedef ListIterator< T > iterator;
-    typedef ListIterator< const T > constIterator;
+    using iterator =  ListIterator< T >;
+    using constIterator = ListIterator< const T >;
   public:
-    List():
-      head_(nullptr),
-      tail_(nullptr),
-      size_(0)
-    {}
-    List(size_t n, const T& value):
-      head_(nullptr),
-      tail_(nullptr),
-      size_(n)
-    {
-      for (size_t i = 0; i != n; ++i)
-      {
-        push_front(value);
-      }
-    }
-    List(const List< T >& other):
-      head_(other.head_),
-      tail_(other.tail_),
-      size_(other.size_)
-    {}
-    List(List< T >&& other):
-      head_(other.head_),
-      tail_(other.tail_),
-      size_(other.size_)
-    {
-      other.head_ = nullptr;
-      other.tail_ = nullptr;
-      other.size_ = 0;
-    }
-    ~List()
-    {
-      clear();
-    }
+    List();
+    List(size_t n, const T& value);
+    List(const List< T >& other);
+    List(List< T >&& other);
+    ~List();
 
-   List< T >& operator=(const List< T >& other)
-    {
-      List< T > temp(other);
-      if (std::addressof(other) != this)
-      {
-        swap(temp);
-      }
-      return *this;
-    }
-    List< T >& operator=(List< T >&& other)
-    {
-      List< T > temp(std::move(other));
-      if (std::addressof(other) != this)
-      {
-        swap(temp);
-        other.head_ = nullptr;
-        other.tail_ = nullptr;
-        other.size_ = 0;
-      }
-      return *this;
-    }
+    List< T >& operator=(const List< T >& other);
+    List< T >& operator=(List< T >&& other);
 
-    iterator begin()
-    {
-      return iterator(head_);
-    }
-    constIterator cbegin() const
-    {
-      return constIterator(head_);
-    }
-    iterator end()
-    {
-      return iterator(tail_);
-    }
-    constIterator cend() const
-    {
-      return constIterator(tail_);
-    }
+    iterator begin();
+    constIterator cbegin() const;
+    iterator end();
+    constIterator cend() const;
 
-    T& front()
-    {
-      return head_->value_;
-    }
-    T& back()
-    {
-      return tail_->value_;
-    }
+    T& front();
+    T& back();
 
-    size_t size() const
-    {
-      return size_;
-    }
-    bool empty() const
-    {
-      return !size_;
-    }
+    size_t size() const;
+    bool empty() const;
 
-    void push_front(const T& value)
-    {
-      Node< T >* ptr = new Node< T >(value);
-      ptr->next_ = head_;
-      if (head_ != nullptr)
-      {
-        head_->prev_ = ptr;
-      }
-      else
-      {
-        head_ = ptr;
-        tail_ = ptr;
-      }
-      head_ = ptr;
-      ++size_;
-    }
-    void pop_front()
-    {
-      Node< T >* ptr = head_->next_;
-      if (ptr != nullptr)
-      {
-        ptr->prev_ = nullptr;
-      }
-      else
-      {
-        tail_ = nullptr;
-      }
-      delete head_;
-      head_ = ptr;
-      --size_;
-    }
+    void push_front(const T& value);
+    void pop_front();
 
-    void push_back(const T& value)
-    {
-      Node< T >* ptr = new Node< T >(value);
-      ptr->prev_ = tail_;
-      if (tail_ != nullptr)
-      {
-        tail_->next_ = ptr;
-      }
-      else
-      {
-        head_ = ptr;
-        tail_ = ptr;
-      }
-      tail_ = ptr;
-      ++size_;
-    }
-    void pop_back()
-    {
-      Node< T >* ptr = tail_->prev_;
-      if (ptr != nullptr)
-      {
-        ptr->next_ = nullptr;
-      }
-      else
-      {
-        head_ = nullptr;
-      }
-      delete tail_;
-      tail_ = ptr;
-      --size_;
-    }
+    void push_back(const T& value);
+    void pop_back();
 
-    void clear()
-    {
-      while (size_ >= 1)
-      {
-        pop_back();
-      }
-    }
-    void swap(List< T >& other)
-    {
-      std::swap(head_, other.head_);
-      std::swap(tail_, other.tail_);
-      std::swap(size_, other.size_);
-    }
+    void clear();
+    void swap(List< T >& other);
 
   private:
     Node< T >* head_;
     Node< T >* tail_;
     size_t size_;
   };
+
+  template< typename T >
+  Node< T >::Node(T value):
+    value_(value),
+    prev_(nullptr),
+    next_(nullptr)
+  {}
+
+  template< typename T >
+  List< T >::List():
+    head_(nullptr),
+    tail_(nullptr),
+    size_(0)
+  {}
+
+  template< typename T >
+  List< T >::List(size_t n, const T& value):
+    head_(nullptr),
+    tail_(nullptr),
+    size_(n)
+  {
+    for (size_t i = 0; i != n; ++i)
+    {
+      push_front(value);
+    }
+  }
+
+  template< typename T >
+  List< T >::List(const List< T >& other):
+    head_(other.head_),
+    tail_(other.tail_),
+    size_(other.size_)
+  {}
+
+  template< typename T >
+  List< T >::List(List< T >&& other):
+    head_(other.head_),
+    tail_(other.tail_),
+    size_(other.size_)
+  {
+    other.head_ = nullptr;
+    other.tail_ = nullptr;
+    other.size_ = 0;
+  }
+
+  template< typename T >
+  List< T >::~List()
+  {
+    clear();
+  }
+
+  template< typename T >
+  List< T >& List< T >::operator=(const List< T >& other)
+  {
+    List< T > temp(other);
+    if (std::addressof(other) != this)
+    {
+      swap(temp);
+    }
+    return *this;
+  }
+
+  template< typename T >
+  List< T >& List< T >::operator=(List< T >&& other)
+  {
+    List< T > temp(std::move(other));
+    if (std::addressof(other) != this)
+    {
+      swap(temp);
+      other.head_ = nullptr;
+      other.tail_ = nullptr;
+      other.size_ = 0;
+    }
+    return *this;
+  }
+
+  template< typename T >
+  ListIterator< T > List< T >::begin()
+  {
+    return ListIterator< T >(head_);
+  }
+
+  template< typename T >
+  ListIterator< const T > List< T >::cbegin() const
+  {
+    return ListIterator< const T >(head_);
+  }
+
+  template< typename T >
+  ListIterator< T > List< T >::end()
+  {
+    return ListIterator< T >(tail_);
+  }
+
+  template< typename T >
+  ListIterator< const T > List< T >::cend() const
+  {
+    return ListIterator< const T >(tail_);
+  }
+
+  template< typename T >
+  T& List< T >::front()
+  {
+    return head_->value_;
+  }
+
+  template< typename T >
+  T& List< T >::back()
+  {
+    return tail_->value_;
+  }
+
+  template< typename T >
+  size_t List< T >::size() const
+  {
+    return size_;
+  }
+
+  template< typename T >
+  bool List< T >::empty() const
+  {
+    return !size_;
+  }
+
+  template< typename T >
+  void List< T >::push_front(const T& value)
+  {
+    Node< T >* ptr = new Node< T >(value);
+    ptr->next_ = head_;
+    if (head_ != nullptr)
+    {
+      head_->prev_ = ptr;
+    }
+    else
+    {
+      head_ = ptr;
+        tail_ = ptr;
+    }
+    head_ = ptr;
+    ++size_;
+  }
+
+  template< typename T >
+  void List< T >::pop_front()
+  {
+    Node< T >* ptr = head_->next_;
+    if (ptr != nullptr)
+    {
+      ptr->prev_ = nullptr;
+    }
+    else
+    {
+      tail_ = nullptr;
+    }
+    delete head_;
+    head_ = ptr;
+    --size_;
+  }
+
+  template< typename T >
+  void List< T >::push_back(const T& value)
+  {
+    Node< T >* ptr = new Node< T >(value);
+    ptr->prev_ = tail_;
+    if (tail_ != nullptr)
+    {
+      tail_->next_ = ptr;
+    }
+      else
+      {
+        head_ = ptr;
+        tail_ = ptr;
+      }
+      tail_ = ptr;
+      ++size_;
+    }
+
+  template< typename T >
+  void List< T >::pop_back()
+  {
+    Node< T >* ptr = tail_->prev_;
+    if (ptr != nullptr)
+    {
+      ptr->next_ = nullptr;
+    }
+    else
+    {
+      head_ = nullptr;
+    }
+    delete tail_;
+    tail_ = ptr;
+    --size_;
+  }
+
+  template< typename T >
+  void List< T >::clear()
+  {
+    while (size_ >= 1)
+    {
+      pop_back();
+    }
+  }
+
+  template< typename T >
+  void List< T >::swap(List< T >& other)
+  {
+    std::swap(head_, other.head_);
+    std::swap(tail_, other.tail_);
+    std::swap(size_, other.size_);
+  }
 }
 #endif
