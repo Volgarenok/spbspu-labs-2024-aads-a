@@ -11,6 +11,7 @@ namespace nikitov
   struct Node
   {
   public:
+    Node();
     Node(T value);
     ~Node() = default;
     T value_;
@@ -63,6 +64,13 @@ namespace nikitov
   };
 
   template< typename T >
+  Node< T >::Node():
+    value_(T()),
+    prev_(nullptr),
+    next_(nullptr)
+  {}
+
+  template< typename T >
   Node< T >::Node(T value):
     value_(value),
     prev_(nullptr),
@@ -71,14 +79,14 @@ namespace nikitov
 
   template< typename T >
   List< T >::List():
-    head_(nullptr),
+    head_(new Node< T >),
     tail_(nullptr),
     size_(0)
   {}
 
   template< typename T >
   List< T >::List(size_t n, const T& value):
-    head_(nullptr),
+    head_(new Node< T >),
     tail_(nullptr),
     size_(n)
   {
@@ -152,13 +160,13 @@ namespace nikitov
   template< typename T >
   ListIterator< T > List< T >::end()
   {
-    return ListIterator< T >(tail_);
+    return ListIterator< T >(tail_->next_);
   }
 
   template< typename T >
   ListIterator< const T > List< T >::cend() const
   {
-    return ListIterator< const T >(tail_);
+    return ListIterator< const T >(tail_->next_);
   }
 
   template< typename T >
@@ -199,14 +207,15 @@ namespace nikitov
   {
     Node< T >* ptr = new Node< T >(value);
     ptr->next_ = head_;
-    if (head_ != nullptr)
+    if (head_->next_ != nullptr)
     {
       head_->prev_ = ptr;
     }
     else
     {
-      head_ = ptr;
-        tail_ = ptr;
+      ptr->next_ = head_;
+      head_->prev_ = ptr;
+      tail_ = ptr;
     }
     head_ = ptr;
     ++size_;
@@ -216,12 +225,13 @@ namespace nikitov
   void List< T >::pop_front()
   {
     Node< T >* ptr = head_->next_;
-    if (ptr != nullptr)
+    if (ptr->next_ != nullptr)
     {
       ptr->prev_ = nullptr;
     }
     else
     {
+      ptr->prev_ = nullptr;
       tail_ = nullptr;
     }
     delete head_;
@@ -236,16 +246,19 @@ namespace nikitov
     ptr->prev_ = tail_;
     if (tail_ != nullptr)
     {
+      ptr->next_ = tail_->next_;
+      ptr->next_->prev_ = ptr;
       tail_->next_ = ptr;
     }
-      else
-      {
-        head_ = ptr;
-        tail_ = ptr;
-      }
-      tail_ = ptr;
-      ++size_;
+    else
+    {
+      ptr->next_ = head_;
+      head_->prev_ = ptr;
+      head_ = ptr;
     }
+    tail_ = ptr;
+    ++size_;
+  }
 
   template< typename T >
   void List< T >::pop_back()
@@ -253,11 +266,13 @@ namespace nikitov
     Node< T >* ptr = tail_->prev_;
     if (ptr != nullptr)
     {
-      ptr->next_ = nullptr;
+      ptr->next_ = tail_->next_;
+      ptr->next_->prev_ = ptr;
     }
     else
     {
-      head_ = nullptr;
+      head_ = tail_->next_;
+      head_->prev_ = nullptr;
     }
     delete tail_;
     tail_ = ptr;
