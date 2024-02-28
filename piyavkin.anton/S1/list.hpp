@@ -180,12 +180,24 @@ namespace piyavkin
       std::swap(list.tail_, tail_);
       std::swap(list.size_, size_);
     }
-    T& get_element(size_t i) const
+    const T& at(size_t i) const
     {
       if (i >= size_)
       {
         throw std::logic_error("Element outside the list");
       }
+      return operator[](i);
+    }
+    T& at(size_t i)
+    {
+      return const_cast< T& >(static_cast< const List< T >& >(*this).at(i));
+    }
+    T& operator[](size_t i)
+    {
+      return const_cast< T& >(static_cast< const List< T >& >(*this).operator[](i));
+    }
+    const T& operator[](size_t i) const
+    {
       ListIterator< T > iterator(head_);
       for (size_t j = 0; j < i; ++j)
       {
