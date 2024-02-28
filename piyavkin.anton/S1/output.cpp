@@ -65,4 +65,5 @@ void piyavkin::output(std::ostream& out, const pair_t pairs, size_t size, size_t
     }
     out << sum[i];
   }
+  delete[] sum;
 }
