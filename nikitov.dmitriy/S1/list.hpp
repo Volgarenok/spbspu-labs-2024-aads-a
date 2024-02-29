@@ -165,13 +165,27 @@ namespace nikitov
   template< typename T >
   ListIterator< T > List< T >::end()
   {
-    return ListIterator< T >(tail_->next_);
+    if (tail_ == nullptr)
+    {
+      return ListIterator< T >(head_);
+    }
+    else
+    {
+      return ListIterator< T >(tail_->next_);
+    }
   }
 
   template< typename T >
   ListIterator< const T > List< T >::cend() const
   {
-    return ListIterator< const T >(tail_->next_);
+    if (tail_ == nullptr)
+    {
+      return ListIterator< const T >(head_);
+    }
+    else
+    {
+      return ListIterator< const T >(tail_->next_);
+    }
   }
 
   template< typename T >
