@@ -9,7 +9,7 @@ int main()
 {
   using namespace arakelyan;
   using List = BinList<double>;
-  using iterator_list = BinList<double>::Iterator;
+  using iterator_list = Iterator<double>;
 
   List list;
   try 

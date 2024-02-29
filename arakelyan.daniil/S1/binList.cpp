@@ -104,15 +104,15 @@ void arakelyan::BinList< T >::pop_back()
 }
 
 template < class T >
-typename arakelyan::BinList< T >::Iterator arakelyan::BinList<T>::begin() const
+Iterator< T > arakelyan::BinList<T>::begin() const
 {
-  return Iterator(head_);
+  return Iterator< T >(head_);
 }
 
 template < class T >
-typename arakelyan::BinList< T >::Iterator arakelyan::BinList<T>::end() const
+Iterator< T > arakelyan::BinList<T>::end() const
 {
-  return Iterator(tail_);
+  return Iterator< T >(tail_);
 }
 
 template < class T >
