@@ -22,7 +22,7 @@ namespace nikitov
   template< typename T >
   class List
   {
-    using iterator =  ListIterator< T >;
+    using iterator = ListIterator< T >;
     using constIterator = ListIterator< const T >;
   public:
     List();
