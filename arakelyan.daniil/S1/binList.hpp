@@ -10,25 +10,27 @@ namespace arakelyan
   template < class T >
   struct BinList
   {
-
     BinList();
 
-    //size() - возвр размер списка
+    size_t getSize() const; // fine
+    bool isEmpty() const; // fine
 
-    Iterator< T > begin() const; // должен возв итератор на первый элемент
-    Iterator< T > end() const; // должен возв итератор на послед элемент
+    Iterator< T > begin() const; // должен возв итератор на первый элемент - fine
+    Iterator< T > end() const; // должен возв итератор на послед элемент - fine
 
-    //font - получение значения первого эл
-    //back - получение значения посл эл
+    //first - получение значения первого эл
+    T getFirst() const; // fine
+    //last - получение значения посл эл
+    T getLast() const; // fine
 
-    void push_back(const T &el); // - доб в конец.
-    void push_front(const T &el); // - доб в нач.
+    void push_back(const T &el); // - доб в конец. - fine
+    void push_front(const T &el); // - доб в нач. - fine
 
     //insert - втсавтка эл в произвольную поз.
-    void clear(); // - нахрен все
+    void clear(); // - нахрен все - fine
 
-    void pop_front(); // - удаление первого
-    void pop_back(); // - удаление последнего
+    void pop_front(); // - удаление первого - fine
+    void pop_back(); // - удаление последнего - fine
 
     //earse - удаление произвольного
 
@@ -36,6 +38,7 @@ namespace arakelyan
 
     ~BinList();
 
+  private:
     Node<T> *head_;
     Node<T> *tail_;
     size_t size;

@@ -7,27 +7,33 @@
 template < class T >
 struct Iterator
 {
-  Node< T > *node;
+  Iterator<T>(const Iterator<T> &val) = default;
 
-  Iterator(const Iterator &val):
-    node(val.node)
-  {}
+  Iterator<T> & operator=(const Iterator<T> &val) = default;
 
-  Iterator & operator=(const Iterator &val) = default;
-
-  // operator--
-  // operator--(int)
-
-  ~Iterator() = default;
-  Iterator():
+  Iterator<T>():
     node(nullptr)
   {}
 
-  Iterator(Node<T> *val):
+  Iterator<T>(Node<T> *val):
     node(val)
   {}
 
-  Iterator & operator++()
+  // operator--
+  Iterator<T> &operator--()
+  {
+    node = node->prevNode;
+    return *this;
+  }
+  // operator--(int)
+  Iterator<T> operator--(int)
+  {
+    Iterator<T> res(*this);
+    --(*this);
+    return res;
+  }
+
+  Iterator<T> &operator++()
   {
     if (node == nullptr)
     {
@@ -37,45 +43,45 @@ struct Iterator
     return *this;
   }
 
-  Iterator operator++(int)
+  Iterator<T> operator++(int)
   {
     if (node == nullptr)
     {
       throw std::logic_error("node == nullptr!");
     }
-    Iterator res(*this);
+    Iterator<T> res(*this);
     ++(*this);
     return res;
   }
 
   T &operator*()
   {
-    if (node == nullptr)
-    {
-      throw std::logic_error("node == nullptr");
-    }
     return node->value;
   }
 
   T *operator->()
   {
-    if (node == nullptr)
-    {
-      throw std::logic_error("node == nullptr");
-    }
+    // if (node == nullptr)
+    // {
+    //   throw std::logic_error("node == nullptr");
+    // }
     return std::addressof(*this);
   }
 
-
-  bool operator!=(const Iterator &val) const
+  bool operator!=(const Iterator<T> &val) const
   {
     return node == val.node;
   }
 
-  bool operator==(const Iterator &val) const
+  bool operator==(const Iterator<T> &val) const
   {
     return !(val == *this);
   }
+
+  ~Iterator() = default;
+
+private:
+  Node< T > *node;
 };
 
 #endif

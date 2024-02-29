@@ -12,6 +12,42 @@ arakelyan::BinList< T >::BinList():
 {}
 
 template < class T >
+size_t arakelyan::BinList< T >::getSize() const
+{
+  return size;
+}
+
+template < class T >
+bool arakelyan::BinList< T >::isEmpty() const
+{
+  return head_ == nullptr;
+}
+
+template < class T >
+Iterator< T > arakelyan::BinList<T>::begin() const
+{
+  return Iterator< T >(head_);
+}
+
+template < class T >
+Iterator< T > arakelyan::BinList<T>::end() const
+{
+  return Iterator< T >(tail_);
+}
+
+template < class T >
+T arakelyan::BinList< T >::getFirst() const
+{
+  return head_->value;
+}
+
+template < class T >
+T arakelyan::BinList< T >::getLast() const
+{
+  return tail_->value;
+}
+
+template < class T >
 void arakelyan::BinList< T >::push_back(const T &el)
 {
   Node<T> *node = nullptr;
@@ -62,6 +98,19 @@ void arakelyan::BinList< T >::push_front(const T &el)
 }
 
 template < class T >
+void arakelyan::BinList< T >::clear()
+{
+  if (head_ == nullptr)
+  {
+    return;
+  }
+  while (head_ != nullptr)
+  {
+    pop_front();
+  }
+}
+
+template < class T >
 void arakelyan::BinList< T >::pop_front()
 {
   if (head_ == nullptr)
@@ -101,31 +150,6 @@ void arakelyan::BinList< T >::pop_back()
   delete tail_;
   tail_ = node;
   --size;
-}
-
-template < class T >
-Iterator< T > arakelyan::BinList<T>::begin() const
-{
-  return Iterator< T >(head_);
-}
-
-template < class T >
-Iterator< T > arakelyan::BinList<T>::end() const
-{
-  return Iterator< T >(tail_);
-}
-
-template < class T >
-void arakelyan::BinList< T >::clear()
-{
-  if (head_ == nullptr)
-  {
-    return;
-  }
-  while (head_ != nullptr)
-  {
-    pop_front();
-  }
 }
 
 template < class T >

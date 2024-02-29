@@ -20,21 +20,24 @@ int main()
     list.printList(std::cout);
     std::cout << "\n";
 
-    list.push_front(17);
-    list.printList(std::cout);
-    std::cout << "\n";
+    // list.push_front(17);
+    // list.printList(std::cout);
+    // std::cout << "\n";
 
-    list.pop_front();
-    list.printList(std::cout);
-    std::cout << "\n";
+    // list.pop_front();
+    // list.printList(std::cout);
+    // std::cout << "\n";
 
-    list.push_back(16);
-    list.printList(std::cout);
-    std::cout << "\n";
+    // list.push_back(16);
+    // list.printList(std::cout);
+    // std::cout << "\n";
 
-    list.pop_back();
-    list.printList(std::cout);
-    std::cout << "\n";
+    // list.pop_back();
+    // list.printList(std::cout);
+    // std::cout << "\n";
+
+    std::cout << "val in first node of list " << list.getFirst() << "\n";
+    std::cout << "val in last node of list " << list.getLast() << "\n";
     do
     {
       std::cin >> var;
@@ -58,13 +61,24 @@ int main()
       }
     }
     while (var != 0);
-    std::cout << "while end. now for\n";
-    iterator_list it = list.begin();
-    std::cout << *it << "\n";
+    std::cout << "while end. now another while. loop whith all el in list\n";
+    iterator_list  it_b = list.begin();
+    std::cout << "it_b = " << *it_b << "\n";
+    iterator_list it_l = list.end();
+    std::cout << "it_l = " << *it_l << "\n";
 
-    for (iterator_list it = list.begin(); it != list.end(); ++it)
+    it_b++;
+    std::cout <<"it_t++ " << *it_b << "\n";
+    it_b++;
+    std::cout <<"it_b++ " << *it_b << "\n";
+    it_l--;
+    std::cout <<"it_l-- " << *it_l << "\n";
+    it_l--;
+    std::cout <<"it_l-- " << *it_l << "\n";
+
+    for (iterator_list iter = list.begin(); iter != list.end(); iter++)
     {
-      std::cout << *it << " ";
+      std::cout << *iter << " ";
     }
   }
   catch (...)
