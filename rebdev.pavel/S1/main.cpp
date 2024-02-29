@@ -45,9 +45,10 @@ int main()
     {
       try
       {
-        size_t element = std::get < 1 > (pairsArr[j]).element(i);
+        size_t element = std::get < 1 > (pairsArr[j]).front();
         std::cout << element << ' ';
         sumOfNum[i] += element;
+        std::get< 1 >(pairsArr[j]).pop_front();
       }
       catch (...){}
     }

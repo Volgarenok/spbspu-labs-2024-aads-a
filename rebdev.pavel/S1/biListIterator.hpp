@@ -1,11 +1,12 @@
 #ifndef BILISTITERATOR_HPP
 #define BILISTITERATOR_HPP
 
+#include <memory>
 #include "biListNode.hpp"
 
 namespace rebdev
 {
-  template < typename T >
+  template < class T >
   class biListIterator
   {
     public:
@@ -27,11 +28,11 @@ namespace rebdev
         node_ = nullptr;
       };
 
-      biListIterator< T >& operator = (const biListIterator< T >& iterator)
+      biListIterator< T >& operator = (const biListIterator< T >& iterator) noexcept
       {
         node_ = iterator.node_;
       };
-      biListIterator< T >& operator = (biListIterator< T >&& iterator)
+      biListIterator< T >& operator = (biListIterator< T >&& iterator) noexcept
       {
         node_ = iterator.node_;
       };
@@ -70,7 +71,7 @@ namespace rebdev
       biListIterator< T >& operator -- ()
       {
         node_ = node_ -> last_;
-        return node;
+        return node_;
       };
       biListIterator< T >& operator -- (int)
       {
