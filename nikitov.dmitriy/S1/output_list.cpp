@@ -11,7 +11,7 @@ void nikitov::outputList(List< std::pair< std::string, List< size_t > > >& pairs
   }
 
   ListIterator< std::pair< std::string, List< size_t > > > pairsIterator = pairsList.begin();
-  size_t maxSize = 0;
+  size_t maxSize = 1;
   for (; pairsIterator != pairsList.end(); ++pairsIterator)
   {
     maxSize = std::max(maxSize, pairsIterator->second.size());
@@ -52,8 +52,11 @@ void nikitov::outputList(List< std::pair< std::string, List< size_t > > >& pairs
         }
       }
     }
+    if (sum != 0)
+    {
+      output << '\n';
+    }
     sumsList.push_back(sum);
-    output << '\n';
   }
 
   if (isOverflow)
@@ -62,7 +65,7 @@ void nikitov::outputList(List< std::pair< std::string, List< size_t > > >& pairs
   }
 
   ListIterator< size_t > sumsIterator = sumsList.begin();
-  for (; sumsIterator != sumsList.end() ; ++sumsIterator)
+  for (; sumsIterator != sumsList.end(); ++sumsIterator)
   {
     if (sumsIterator != sumsList.begin())
     {
