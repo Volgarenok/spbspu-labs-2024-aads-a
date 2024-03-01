@@ -1,19 +1,33 @@
 #include <iostream>
+#include <utility>
+#include <string>
+#include <stdexcept>
 #include "list.hpp"
 
 int main()
 {
   using namespace erohin;
-  List< int > list;
-  int elem = 0;
-  while (std::cin >> elem)
+  using named_list = std::pair< std::string, List< int > >;
+  List< named_list > sequence;
+  while (!std::cin.eof())
   {
-    list.push_front(elem);
+    sequence.push_front({ "", {} });
+    named_list & current_line = sequence.front();
+    std::cin.clear();
+    std::cin >> current_line.first;
+    int elem = 0;
+    while (std::cin >> elem)
+    {
+      try
+      {
+        current_line.second.push_front(elem);
+      }
+      catch (const std::bad_alloc &)
+      {
+        std::cout << "Cannot allocate memory\n";
+        return 1;
+      }
+    }
   }
-  List< int > other_list(list);
-  auto iter = other_list.begin();
-  while (iter != other_list.end())
-  {
-    std::cout << *(iter++) << "\n";
-  }
+  return 0;
 }

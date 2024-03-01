@@ -18,13 +18,15 @@ namespace erohin
     List();
     List(const List & list);
     List(List && list) noexcept;
+    List(size_t count, const T & value);
+    List(std::initializer_list< T > init_list);
     ~List();
-    iterator begin() noexcept;
-    iterator end() noexcept;
-    const_iterator begin() const noexcept;
-    const_iterator end() const noexcept;
-    const_iterator cbegin() const noexcept;
-    const_iterator cend() const noexcept;
+    iterator begin();
+    iterator end();
+    const_iterator begin() const;
+    const_iterator end() const;
+    const_iterator cbegin() const;
+    const_iterator cend() const;
     T & front();
     const T & front() const;
     bool empty() const;
@@ -69,43 +71,65 @@ namespace erohin
   }
 
   template< class T >
+  List< T >::List(size_t count, const T & value):
+    head_(nullptr)
+  {
+    for (size_t i = 0; i < count; ++i)
+    {
+      push_front(value);
+    }
+  }
+
+  template< class T >
+  List< T >::List(std::initializer_list< T > init_list):
+    head_(nullptr)
+  {
+    auto init_begin = init_list.begin();
+    auto init_end = init_list.end();
+    while (init_begin != init_end)
+    {
+      push_front(*(init_begin++));
+    }
+  }
+
+  template< class T >
   List< T >::~List()
   {
     clear();
   }
 
   template< class T >
-  ListIterator< T > List< T >::begin() noexcept
+  ListIterator< T > List< T >::begin()
   {
     return ListIterator< T >(head_);
   }
 
   template< class T >
-  ListIterator< T > List< T >::end() noexcept
+  ListIterator< T > List< T >::end()
   {
     return ListIterator< T >(nullptr);
   }
 
   template< class T >
-  ListConstIterator< T > List< T >::begin() const noexcept
+  ListConstIterator< T > List< T >::begin() const
   {
     return ListConstIterator< T >(head_);
   }
 
   template< class T >
-  ListConstIterator< T > List< T >::end() const noexcept
+  ListConstIterator< T > List< T >::end() const
   {
     return ListConstIterator< T >(nullptr);
   }
 
   template< class T >
-  ListConstIterator< T > List< T >::cbegin() const noexcept
+  ListConstIterator< T > List< T >::cbegin() const
   {
     return ListConstIterator< T >(head_);
   }
 
   template< class T >
-  ListConstIterator< T > List< T >::cend() const noexcept
+  ListConstIterator< T > List< T >::cend() const
   {
     return ListConstIterator< T >(nullptr);
   }
