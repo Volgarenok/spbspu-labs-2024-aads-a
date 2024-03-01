@@ -12,8 +12,8 @@ namespace ishmuratov
       prev_(nullptr)
     {}
     T data_;
-    Node * prev_;
     Node * next_;
+    Node * prev_;
   };
 }
 
