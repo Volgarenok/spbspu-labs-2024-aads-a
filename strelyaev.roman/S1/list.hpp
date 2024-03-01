@@ -25,6 +25,7 @@ namespace strelyaev
       head_(head),
       tail_(tail)
     {}
+    private:
      Node< T >* head_;
      Node< T >* tail_;
   };
