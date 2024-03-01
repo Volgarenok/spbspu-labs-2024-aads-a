@@ -20,6 +20,8 @@ namespace erohin
     List(List && list) noexcept;
     List(size_t count, const T & value);
     List(std::initializer_list< T > init_list);
+    template< class InputIt >
+    List(InputIt first, InputIt last);
     ~List();
     iterator begin();
     iterator end();
@@ -76,7 +78,15 @@ namespace erohin
   {
     for (size_t i = 0; i < count; ++i)
     {
-      push_front(value);
+      try
+      {
+        push_front(value);
+      }
+      catch (const std::bad_alloc &)
+      {
+        clear();
+        throw;
+      }
     }
   }
 
@@ -88,7 +98,34 @@ namespace erohin
     auto init_end = init_list.end();
     while (init_begin != init_end)
     {
-      push_front(*(init_begin++));
+      try
+      {
+        push_front(*(init_begin++));
+      }
+      catch (const std::bad_alloc &)
+      {
+        clear();
+        throw;
+      }
+    }
+  }
+
+  template< class T >
+  template< class InputIt >
+  List< T >::List(InputIt first, InputIt last):
+    head_(nullptr)
+  {
+    while(first != last)
+    {
+      try
+      {
+        push_front(*(first++));
+      }
+      catch (const std::bad_alloc &)
+      {
+        clear();
+        throw;
+      }
     }
   }
 
