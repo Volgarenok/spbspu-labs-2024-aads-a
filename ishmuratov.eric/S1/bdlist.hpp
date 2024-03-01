@@ -26,7 +26,7 @@ namespace ishmuratov
         return Iterator< T >(head_);
       }
 
-      const Iterator< T > begin() const
+      const Iterator< T > cbegin() const
       {
         return Iterator< T >(head_);
       }
@@ -36,7 +36,7 @@ namespace ishmuratov
         return Iterator< T >(tail_);
       }
 
-      const Iterator< T > end() const
+      const Iterator< T > cend() const
       {
         return Iterator< T >(tail_);
       }
@@ -53,13 +53,21 @@ namespace ishmuratov
 
       bool empty() const
       {
-        return begin() == end();
+        return head_ == nullptr && tail_ == nullptr;
       }
 
       void pushFront(const T & data)
       {
         Node< T > * ptr = new Node< T >(data);
         ptr->next_ = head_;
+        if (tail_ == nullptr)
+        {
+          tail_ = ptr;
+        }
+        if (head_ != nullptr)
+        {
+          head_->prev_ = ptr;
+        }
         head_ = ptr;
       }
 
@@ -67,6 +75,14 @@ namespace ishmuratov
       {
         Node< T > * ptr = new Node< T >(data);
         ptr->prev_ = tail_;
+        if (head_ == nullptr)
+        {
+          head_ = ptr;
+        }
+        if (tail_ != nullptr)
+        {
+          tail_->next_ = ptr;
+        }
         tail_ = ptr;
       }
 
