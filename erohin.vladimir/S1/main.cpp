@@ -4,8 +4,15 @@
 int main()
 {
   using namespace erohin;
-  int a = 0;
-  std::cin >> a;
   List< int > list;
-  list.insert(a);
+  int elem = 0;
+  while (std::cin >> elem)
+  {
+    list.insert(elem);
+  }
+  auto iter = list.begin();
+  while (iter != list.end())
+  {
+    std::cout << *(iter++) << "\n";
+  }
 }
