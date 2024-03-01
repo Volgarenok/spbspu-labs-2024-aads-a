@@ -8,10 +8,11 @@ int main()
   int elem = 0;
   while (std::cin >> elem)
   {
-    list.insert(elem);
+    list.push_front(elem);
   }
-  auto iter = list.begin();
-  while (iter != list.end())
+  List< int > other_list(list);
+  auto iter = other_list.begin();
+  while (iter != other_list.end())
   {
     std::cout << *(iter++) << "\n";
   }
