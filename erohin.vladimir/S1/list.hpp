@@ -16,9 +16,10 @@ namespace erohin
     List(const List & list);
     List(List && list) noexcept;
     ~List();
-    void insert(const T & value);
     iterator begin();
     iterator end();
+    void insert(const T & value);
+    void clear();
   private:
     Node< T > * head_;
   };
@@ -43,12 +44,7 @@ namespace erohin
   template< class T >
   List< T >::~List()
   {
-    while (head_)
-    {
-      Node< T > * new_head = head_->next_;
-      delete head_;
-      head_ = new_head;
-    }
+    clear();
   }
 
   template< class T >
@@ -68,6 +64,17 @@ namespace erohin
   {
     Node< T > * elem = new Node< T >(value, head_);
     head_ = elem;
+  }
+
+  template< class T >
+  void List< T >::clear()
+  {
+    while (head_)
+    {
+      Node< T > * new_head = head_->next_;
+      delete head_;
+      head_ = new_head;
+    }
   }
 }
 
