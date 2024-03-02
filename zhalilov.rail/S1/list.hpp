@@ -190,7 +190,7 @@ namespace zhalilov
     {
       throw std::underflow_error("calling 'pop' in already empty list");
     }
-    Node< T > next = m_head->next;
+    Node< T > *next = m_head->next;
     delete m_head;
     m_head = next;
     --m_size;
