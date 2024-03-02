@@ -11,11 +11,11 @@ std::ostream &zhalilov::outputSeqs(List< pair > sequences, std::ostream &output)
     output << currIt->first << " ";
     currIt++;
   }
-  output << "\n";
 
   bool allEmpty = false;
   while (!allEmpty)
   {
+    output << "\n";
     currIt = sequences.begin();
     allEmpty = true;
     while (currIt != lastIt)
@@ -29,7 +29,6 @@ std::ostream &zhalilov::outputSeqs(List< pair > sequences, std::ostream &output)
       }
       currIt++;
     }
-    output << "\n";
   }
   return output;
 }
