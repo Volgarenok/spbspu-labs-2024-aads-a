@@ -21,6 +21,7 @@ namespace zhalilov
     ~List();
 
     List< T > &operator=(List< T > &&);
+    List< T > &operator=(const List< T > &);
 
     T &front();
     T &back();
@@ -94,6 +95,20 @@ namespace zhalilov
     other.m_head = nullptr;
     other.m_tail = nullptr;
     return *this;
+  }
+
+  template < typename T >
+  List<T> & List<T>::operator=(const List<T> &other)
+  {
+    m_size = other.m_size;
+    m_head = other.m_head;
+    m_tail = other.m_tail;
+    Node< T > *node = other.m_head;
+    while (node != nullptr)
+    {
+      push_back(node->value);
+      node = node->next;
+    }
   }
 
   template < typename T >
