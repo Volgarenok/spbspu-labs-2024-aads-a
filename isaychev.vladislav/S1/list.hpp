@@ -8,14 +8,15 @@ namespace isaychev
   template < typename T >
   class List
   {
+    using iter = fwdIterator< T >;
+
    public:
     List();
     ~List();
 
-    fwdIterator< T > begin();
-    fwdIterator< T > end();
-    //cbegin
-    //cend
+    iter begin();
+    iter end();
+
     T & front();
     const T & front() const;
     bool empty();
@@ -37,6 +38,18 @@ namespace isaychev
   List< T >::~List()
   {
     clear();
+  }
+
+  template < typename T >
+  fwdIterator< T > List< T >::begin()
+  {
+    return fwdIterator< T >(head_);
+  }
+
+  template < typename T >
+  fwdIterator< T > List< T >::end()
+  {
+    return fwdIterator< T >(nullptr);
   }
 
   template < typename T >
