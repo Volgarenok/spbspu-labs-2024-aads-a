@@ -2,12 +2,11 @@
 #include "forward_list.hpp"
 #include "iterators.hpp"
 #include "node.hpp"
+#include "input_output_lists.hpp"
 
 int main()
 {
   using namespace namestnikov;
-  ForwardList<int> Fwd;
-  Fwd.push_front(1);
-  Fwd.push_front(2);
-  Fwd.pop_front();
+  ForwardList<pair_t> Fwd;
+  inputLists(std::cin, Fwd);
 }

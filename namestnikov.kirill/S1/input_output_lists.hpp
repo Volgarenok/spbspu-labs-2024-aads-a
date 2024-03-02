@@ -7,8 +7,8 @@
 namespace namestnikov
 {
   using pair_t = std::pair<std::string, ForwardList<int>>;
-  void inputLists(std::istream & in, pair_t * listsArray);
-  void outputLists(std::ostream & out, pair_t * listsarray);
+  void inputLists(std::istream & in, ForwardList<pair_t> & dataList);
+  void outputLists(std::ostream & out, ForwardList<pair_t> & dataList);
 }
 
 #endif
