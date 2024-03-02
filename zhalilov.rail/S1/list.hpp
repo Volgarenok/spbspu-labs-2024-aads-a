@@ -98,7 +98,7 @@ namespace zhalilov
   }
 
   template < typename T >
-  List<T> & List<T>::operator=(const List<T> &other)
+  List< T > &List< T >::operator=(const List< T > &other)
   {
     m_size = other.m_size;
     m_head = other.m_head;
@@ -173,10 +173,6 @@ namespace zhalilov
   template < typename T >
   void List< T >::pop_back()
   {
-    if (empty())
-    {
-      throw std::underflow_error("calling 'pop' in already empty list");
-    }
     Node< T > prev = m_tail->prev;
     delete m_tail;
     m_tail = prev;
@@ -186,10 +182,6 @@ namespace zhalilov
   template < typename T >
   void List< T >::pop_front()
   {
-    if (empty())
-    {
-      throw std::underflow_error("calling 'pop' in already empty list");
-    }
     Node< T > *next = m_head->next;
     delete m_head;
     m_head = next;
