@@ -1,6 +1,6 @@
 #ifndef FORWARD_LIST_HPP
 #define FORWARD_LIST_HPP
-#include <cstddef>
+#include <iostream>
 #include <stdexcept>
 #include "forward_list_iterators.hpp"
 #include "node.hpp"
@@ -31,17 +31,42 @@ namespace novokhatskiy
       other.head_ = nullptr;
     }
     ForwardList(const ForwardList<T>& other):
-      head_(other)
-    {}
+      head_(nullptr)
+    {
+      auto iter_begin = other.begin();
+      auto iter_end = other.end();
+      while (iter_begin != iter_end)
+      {
+        try
+        {
+          push_front(*(iter_begin++));
+        }
+        catch (const std::bad_alloc&)
+        {
+          clear();
+          throw;
+        }
+      }     
+    }
+
     iter begin()
     {
-      return ForwardIterator< T >(head_);
+      return iter(head_);
+    }
+
+    iter begin() const
+    {
+      return iter(head_);
     }
     iter end()
     {
-      return ForwardIterator<T>();
+      return iter();
     }
 
+    iter end() const
+    {
+      return iter();
+    }
     bool empty() const
     {
       return (head_ == nullptr);
@@ -121,9 +146,27 @@ namespace novokhatskiy
       }
       head_ = firstStep;
     }
+    void reverse()
+    {
+      Node< T >* curr = head_;
+      try
+      {
+        while (curr)
+        {
+          head_ = head_->next_;
+          push_front(curr->value_);
+          curr = head_;
+        }   
+      }
+      catch (...)
+      {
+        
+      }
+    }
     void print()
     {
-      while (head_ != nullptr) {
+      while (head_ != nullptr) 
+      {
         std::cout << head_->value_ << " ";
         head_ = head_->next_;
       }

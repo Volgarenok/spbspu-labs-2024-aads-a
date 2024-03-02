@@ -1,18 +1,23 @@
 #include <iostream>
-#include "list.hpp"
-#include "iterator.hpp"
+#include "forward_list.hpp"
+#include "forward_list_iterators.hpp"
 
 int main()
 {
   using namespace novokhatskiy;
-  List<double> a1;
-  double b = 10;
-  a1.push_front(b);
-  a1.push_front(100);
-  a1.push_front(55);
-  List<double> a2;
-  a2.push_front(33);
-  a2.push_front(44);
-  a1.swap(a2);
-  a1.print();
+  ForwardList<int> l;
+  for (size_t i = 0; i < 10; i++)
+  {
+    l.push_front(i);
+  }
+  ForwardList<int> l2(l);
+  for (auto i = l2.begin(); i != l2.end(); i++)
+  {
+    std::cout << *i << ' ';
+  };
+  l2.reverse();
+  for (auto i = l2.begin(); i != l2.end(); i++)
+  {
+      std::cout << *i << ' ';
+  };
 }
