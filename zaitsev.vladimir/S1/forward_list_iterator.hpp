@@ -1,12 +1,14 @@
 #ifndef FORWARD_LIST_ITERATOR_HPP
 #define FORWARD_LIST_ITERATOR_HPP
 #include <stdexcept>
+#include <iterator>
 #include "node.hpp"
 
 namespace zaitsev
 {
   template< typename T >
-  class ForwardListIterator {
+  class ForwardListIterator: public std::iterator< std::forward_iterator_tag, T >
+  {
   public:
     ForwardListIterator();
     ForwardListIterator(Node< T >* node);

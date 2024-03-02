@@ -89,7 +89,7 @@ namespace zaitsev
     }
   }
 
-  template<typename T>
+  template< typename T >
   ForwardList<T>::ForwardList(ForwardList&& other)
   {
     freeNodes(head_);
@@ -103,16 +103,16 @@ namespace zaitsev
     freeNodes(head_);
   }
 
-  template<typename T>
-  ForwardListIterator<T> ForwardList<T>::begin()
+  template< typename T >
+  ForwardListIterator< T > ForwardList<T>::begin()
   {
-    return ForwardListIterator<T>(head_);
+    return ForwardListIterator< T >(head_);
   }
 
-  template<typename T>
-  ForwardListIterator<T> ForwardList<T>::end()
+  template< typename T >
+  ForwardListIterator< T > ForwardList<T>::end()
   {
-    return ForwardListIterator<T>();
+    return ForwardListIterator< T >();
   }
 
   template< typename T >
@@ -207,6 +207,7 @@ namespace zaitsev
     }
     head_ = new_head;
   }
+
   template<typename T>
   size_t ForwardList<T>::remove(const T& value)
   {
@@ -295,8 +296,8 @@ namespace zaitsev
     other.head_ = nullptr;
   }
 
-  template<typename T>
-  size_t ForwardList<T>::unique()
+  template< typename T >
+  size_t ForwardList< T >::unique()
   {
     if (!head_)
     {
@@ -318,7 +319,7 @@ namespace zaitsev
     return removed;
   }
   template< typename T >
-  template< class UnaryPredicate >
+  template< typename UnaryPredicate >
   size_t ForwardList< T >::remove_if(UnaryPredicate p)
   {
     size_t removed = 0;
