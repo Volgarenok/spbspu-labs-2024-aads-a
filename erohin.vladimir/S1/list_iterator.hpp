@@ -10,6 +10,7 @@ namespace erohin
   class ListIterator
   {
   public:
+    Node< T > * node_;
     ListIterator();
     ListIterator(Node< T > * const node_ptr);
     ListIterator(const ListIterator< T > &) = default;
@@ -23,8 +24,6 @@ namespace erohin
     const T * operator->() const;
     bool operator==(const ListIterator< T > & rhs);
     bool operator!=(const ListIterator< T > & rhs);
-  private:
-    Node< T > * node_;
   };
 
   template< class T >
@@ -41,7 +40,7 @@ namespace erohin
   ListIterator< T > & ListIterator< T >::operator++()
   {
     node_ = node_->next_;
-    return this;
+    return *this;
   }
 
   template< class T >
