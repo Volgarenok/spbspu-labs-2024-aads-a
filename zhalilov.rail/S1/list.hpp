@@ -109,6 +109,7 @@ namespace zhalilov
       push_back(node->value);
       node = node->next;
     }
+    return *this;
   }
 
   template < typename T >
