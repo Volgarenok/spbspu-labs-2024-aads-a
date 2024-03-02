@@ -29,13 +29,19 @@ namespace namestnikov
     ForwardList(const ForwardList<T> & other):
       head_(other.head_),
       size_(other.size_)
+    {}
     ForwardList(ForwardList<T> && other)
     {
       swap(other);
     }
     ~ForwardList()
     {
-      clearForwardList();
+      while (head_)
+      {
+        auto todel = head_;
+        head_ = head_->next_;
+        delete todel;
+      }
     }
     ForwardList<T> & operator=(const ForwardList<T> & other)
     {
@@ -71,7 +77,7 @@ namespace namestnikov
     void push_front(const T & value)
     {
       Node<T> * newHead = new Node<T>(value);
-      newHead->next = head_;
+      newHead->next_ = head_;
       head_ = newHead;
       ++size_;
     }
@@ -81,9 +87,10 @@ namespace namestnikov
       {
         throw std::runtime_error("ForwardList is empty");
       }
-      Node<T> * temp = head_;
-      head_ = head_->next;
-      delete temp;
+      Node<T> * temp = head_->next_;
+      delete head_;
+      head_ = temp;
+      --size_;
     }
   private:
     Node<T> * head_;
