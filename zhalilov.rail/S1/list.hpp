@@ -173,7 +173,7 @@ namespace zhalilov
   template < typename T >
   void List< T >::pop_back()
   {
-    if (empty)
+    if (empty())
     {
       throw std::underflow_error("calling 'pop' in already empty list");
     }
@@ -186,7 +186,7 @@ namespace zhalilov
   template < typename T >
   void List< T >::pop_front()
   {
-    if (empty)
+    if (empty())
     {
       throw std::underflow_error("calling 'pop' in already empty list");
     }
