@@ -10,7 +10,7 @@ namespace zhalilov
   {
   public:
     Iterator();
-    Iterator(Iterator< T > &) = default;
+    Iterator(const Iterator< T > &) = default;
     Iterator(Node< T > *);
     ~Iterator() = default;
 
