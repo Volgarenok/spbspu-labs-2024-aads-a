@@ -13,8 +13,9 @@ namespace zaitsev
     using node_t = Node< T >;
   public:
     ForwardList();
-    ForwardList(size_t count, const T& value);
     ForwardList(const ForwardList& other);
+    ForwardList(ForwardList&& other);
+    ForwardList(size_t count, const T& value);
     ~ForwardList();
     ForwardListIterator< T > begin();
     ForwardListIterator< T > end();
@@ -28,6 +29,8 @@ namespace zaitsev
     void swap(ForwardList& other);
     void reverse();
     size_t remove(const T& value);
+    template< class UnaryPredicate >
+    size_t remove_if(UnaryPredicate p);
     void merge(ForwardList< T >& other);
     size_t unique();
   private:
@@ -84,6 +87,14 @@ namespace zaitsev
       freeNodes(head_);
       throw;
     }
+  }
+
+  template<typename T>
+  ForwardList<T>::ForwardList(ForwardList&& other)
+  {
+    freeNodes(head_);
+    head_ = other.head_;
+    other.head_ = nullptr;
   }
 
   template< typename T >
@@ -303,6 +314,38 @@ namespace zaitsev
         ++removed;
       }
       cur = cur->next_;
+    }
+    return removed;
+  }
+  template< typename T >
+  template< class UnaryPredicate >
+  size_t ForwardList< T >::remove_if(UnaryPredicate p)
+  {
+    size_t removed = 0;
+    node_t* prev = nullptr;
+    node_t* cur = head_;
+    while (cur)
+    {
+      if (p(cur->value_))
+      {
+        node_t* temp = cur;
+        if (prev)
+        {
+          prev->next_ = cur->next_;
+        }
+        else
+        {
+          head_ = cur->next_;
+        }
+        cur = cur->next_;
+        delete temp;
+        ++removed;
+      }
+      else
+      {
+        prev = cur;
+        cur = cur->next_;
+      }
     }
     return removed;
   }
