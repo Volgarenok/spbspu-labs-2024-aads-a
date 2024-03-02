@@ -31,7 +31,7 @@ namespace zaitsev
     size_t remove(const T& value);
     template< class UnaryPredicate >
     size_t remove_if(UnaryPredicate p);
-    void merge(ForwardList< T >& other);
+    void merge(ForwardList& other);
     size_t unique();
   private:
     node_t* head_;
@@ -92,7 +92,6 @@ namespace zaitsev
   template< typename T >
   ForwardList<T>::ForwardList(ForwardList&& other)
   {
-    freeNodes(head_);
     head_ = other.head_;
     other.head_ = nullptr;
   }
