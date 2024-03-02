@@ -90,6 +90,9 @@ namespace zhalilov
     m_size = other.m_size;
     m_head = other.m_head;
     m_tail = other.m_tail;
+    other.m_size = 0;
+    other.m_head = nullptr;
+    other.m_tail = nullptr;
     return *this;
   }
 
