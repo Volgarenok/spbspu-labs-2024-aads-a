@@ -24,8 +24,10 @@ namespace zhalilov
     T &operator*();
     T *operator->();
 
-    bool operator==(const Iterator< T > &);
-    bool operator!=(const Iterator< T > &);
+    template < typename X >
+    friend bool operator==(const Iterator< X > &, const Iterator< X > &);
+    template < typename X >
+    friend bool operator!=(const Iterator< X > &, const Iterator< X > &);
 
   private:
     Node< T > *m_node;
@@ -84,15 +86,15 @@ namespace zhalilov
   }
 
   template < typename T >
-  bool Iterator< T >::operator==(const Iterator< T > &it)
+  bool operator==(const Iterator< T > &it1, const Iterator< T > &it2)
   {
-    return m_node == it.m_node;
+    return it1.m_node == it2.m_node;
   }
 
   template < typename T >
-  bool Iterator< T >::operator!=(const Iterator< T > &it)
+  bool operator!=(const Iterator< T > &it1, const Iterator< T > &it2)
   {
-    return !operator==(it);
+    return !operator==(it1, it2);
   }
 }
 
