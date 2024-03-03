@@ -50,6 +50,14 @@ namespace namestnikov
     {
       return std::addressof(node_->data_);
     }
+    this_t & advance(size_t n)
+    {
+      for (size_t i = 0; i < n; ++i)
+      {
+        node_ = node_->next_;
+      }
+      return *this;
+    }
     ~ForwardIterator() = default;
     Node<T> * node_;
   };

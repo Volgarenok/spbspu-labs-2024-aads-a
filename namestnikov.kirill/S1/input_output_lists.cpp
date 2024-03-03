@@ -1,5 +1,6 @@
 #include "input_output_lists.hpp"
 #include <string>
+#include <limits>
 #include <iostream>
 
 void namestnikov::inputLists(std::istream & in, ForwardList<pair_t> & dataList)
@@ -9,11 +10,13 @@ void namestnikov::inputLists(std::istream & in, ForwardList<pair_t> & dataList)
   while (in)
   {
     dataList.push_front({listParameters, ForwardList<unsigned long long>()});
-    while (in >> listParameters && (std::isdigit(listParameters[0])))
+    while (in && (std::isdigit(listParameters[0])))
     {
       dataList.front().second.push_front(std::stoull(listParameters));
+      in >> listParameters;
     }
   }
+  //std::cout << dataList.size();
 }
 
 
@@ -21,16 +24,53 @@ void namestnikov::outputLists(std::ostream & out, ForwardList<pair_t> & dataList
 {
   if (dataList.empty())
   {
-    out << "0";
+    out << "0\n";
   }
   else
   {
     dataList.reverse();
     ForwardIterator<pair_t> fwdIt = dataList.begin();
+    size_t maxSize = 0;
     for (; fwdIt != dataList.end(); ++fwdIt)
     {
+      maxSize = std::max(maxSize, fwdIt->second.size());
+      fwdIt->second.reverse();
       fwdIt != dataList.begin() ? out << " " << fwdIt->first : out << fwdIt->first;
     }
+    out << "\n";
     //output numbers + output sums;
+    ForwardList<unsigned long long> sumsList;
+    unsigned long long sum = 0;
+    const unsigned long long maxSum = std::numeric_limits<unsigned long long>::max();
+    for (size_t i = 0; i < maxSize; ++i)
+    {
+      for (auto it = dataList.begin(); it != dataList.end(); ++it)
+      {
+        ForwardIterator<unsigned long long> numIt = it->second.begin();
+        size_t currentListSize = it->second.size();
+        if (i < currentListSize)
+        {
+          unsigned long long number = *(numIt.advance(i));
+          sum != 0 ? out << " " << number : out << number;
+          if (maxSum - sum < number)
+          {
+            throw std::logic_error("Can not find a sum");
+          }
+          sum += number;
+        }
+      }
+      if (sum != 0)
+      {
+        out << "\n";
+      }
+      sumsList.push_front(sum);
+      sum = 0;
+    }
+    sumsList.reverse();
+    for (ForwardIterator<unsigned long long> sumIt; sumIt != sumsList.end(); ++sumIt)
+    {
+      sumIt != sumsList.begin() ? out << " " << *sumIt : out << *sumIt;
+    }
+    out << "\n";
   }
 }
