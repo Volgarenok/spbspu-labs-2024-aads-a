@@ -14,6 +14,7 @@ namespace namestnikov
   class ForwardList
   {
   public:
+    using node_t = Node<T>;
     ForwardList():
       head_(nullptr),
       size_(0)
@@ -106,6 +107,20 @@ namespace namestnikov
         temp_ = temp_->next_;
       }
       std::cout << "\n";
+    }
+    void reverse()
+    {
+      node_t * newHead = head_;
+      node_t * tail = head_->next_;
+      newHead->next_ = nullptr;
+      while (tail)
+      {
+        node_t * temp = tail->next_;
+        tail->next_ = newHead;
+        newHead = tail;
+        tail = temp;
+      }
+      head_ = newHead;
     }
   private:
     Node<T> * head_;

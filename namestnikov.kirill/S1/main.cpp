@@ -13,12 +13,6 @@ int main()
     Fwd.push_front(i);
   }
   std::cout << Fwd.size();
+  Fwd.reverse();
   Fwd.print();
-  ForwardIterator<int> p = Fwd.begin();
-  ForwardIterator<int> q = Fwd.end();
-
-  for (auto i = Fwd.begin(); i != Fwd.end(); ++i)
-  {
-    std::cout << *i << " ";
-  }
 }
