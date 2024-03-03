@@ -6,98 +6,119 @@
 #include "node.hpp"
 #include "iterator.hpp"
 
-template <typename T>
-class List
+namespace gladyshev
 {
-public:
-  typedef Iterator<T> iterator;
-  List():
-    head_(nullptr)
-  {}
-  void pop()
+  template <typename T>
+  class List
   {
-    if (head_)
+  public:
+    typedef Iterator<T> iterator;
+    List():
+      head_(nullptr)
+    {}
+    ~List()
     {
+      clear();
+    }
+    void clear()
+    {
+      while (!(empty()))
+      {
+        pop_front();
+      }
+    }
+    bool empty() const
+    {
+      return head_ == nullptr;
+    }
+    void reverse()
+    {
+      Node<T>* prev = nullptr;
+      Node<T>* current = head_;
+      Node<T>* temp = nullptr;
+      while (current != nullptr)
+      {
+        temp = current->next;
+        current->next = prev;
+        prev = current;
+        current = temp;
+      }
+      head_ = prev;
+    }
+    void push_back(T data)
+    {
+      Node<T>* newNode = new Node<T>(data);
+      if (empty())
+      {
+        head_ = newNode;
+      }
+      else
+      {
+        Node<T>* temp = head_;
+        while (temp->next)
+        {
+          temp = temp->next;
+        }
+        temp->next = newNode;
+      }
+    }
+    void push_front(const T& data)
+    {
+      Node<T>* temp = new Node<T>(data);
+      temp->next = head_;
+      head_ = temp;
+    }
+    T& front()
+    {
+      return head_->data;
+    }
+    void pop_front()
+    {
+      if (empty())
+      {
+        throw;
+      }
       Node<T>* temp = head_;
       head_ = head_->next;
       delete temp;
     }
-  }
-  void clear()
-  {
-    while (head_)
+    void pop_back()
     {
-      pop();
-    }
-  }
-  bool empty() const
-  {
-    return head_ == nullptr;
-  }
-  void push_back(T data)
-  {
-    Node<T>* newNode = new Node<T>(data);
-    if (empty())
-    {
-      head_ = newNode;
-    }
-    else
-    {
-      Node<T>* temp = head_;
-      while (temp->next)
+      if (empty())
       {
-        temp = temp->next;
+        throw;
       }
-      temp->next = newNode;
-    }
-  }
-  void push_front(const T& data)
-  {
-    Node<T>* temp = new Node<T>(data);
-    temp->next = head_;
-    head_ = temp;
-  }
-  void pop_front()
-  {
-    if (!empty())
-    {
-      Node<T>* temp = head_;
-      head_ = head_->next;
-      delete temp;
-    }
-  }
-  void pop_back()
-  {
-    if (head_->next == nullptr)
-    {
-      delete head_;
-      head_ = nullptr;
-    }
-    else
-    {
-      Node<T>* temp = head_;
-      while (temp->next->next != nullptr)
+      if (head_->next == nullptr)
       {
-        temp = temp->next;
+        delete head_;
+        head_ = nullptr;
       }
-      delete temp->next;
-      temp->next = nullptr;
+      else
+      {
+        Node<T>* temp = head_;
+        while (temp->next->next != nullptr)
+        {
+          temp = temp->next;
+        }
+        delete temp->next;
+        temp->next = nullptr;
+      }
     }
-  }
-  void swap(List& other)
-  {
-    std::swap(head_, other.head_);
-  }
-  iterator begin()
-  {
-    return iterator(head_);
-  }
-  iterator end()
-  {
-    return iterator(nullptr);
-  }
-private:
-  Node<T>* head_;
-};
+    void swap(List& other)
+    {
+      std::swap(head_, other.head_);
+    }
+    iterator begin() const
+    {
+      return iterator(head_);
+    }
+    iterator end() const
+    {
+      return iterator(nullptr);
+    }
+  private:
+    Node<T>* head_;
+  };
+}
 
 #endif
