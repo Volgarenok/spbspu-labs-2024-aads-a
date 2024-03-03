@@ -10,4 +10,4 @@ namespace novokhatskiy
   void inputForwardList(ForwardList<std::pair<std::string, novokhatskiy::ForwardList< size_t > > >& pairsOfList, std::istream& input);
 }
 
-#endif 
+#endif
