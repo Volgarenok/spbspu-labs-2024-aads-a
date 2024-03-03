@@ -9,10 +9,9 @@
 int main()
 {
   using namespace novokhatskiy;
-  using ull = unsigned long long;
   try
   {
-    ForwardList< std::pair< std::string, ForwardList< ull > > > pairsOfForwardList;
+    ForwardList< std::pair< std::string, ForwardList< size_t > > > pairsOfForwardList;
     inputForwardList(pairsOfForwardList, std::cin);
     outputForwardList(std::cout, pairsOfForwardList);
   }

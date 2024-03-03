@@ -1,13 +1,12 @@
 #include "outputForwardList.hpp"
 
-void novokhatskiy::outputForwardList(std::ostream& out, ForwardList<std::pair<std::string, ForwardList< unsigned long long > > >& pairs)
+void novokhatskiy::outputForwardList(std::ostream& out, ForwardList<std::pair<std::string, ForwardList< size_t  > > >& pairs)
 {
-  using ull = unsigned long long;
   if (pairs.empty())
   {
     throw std::invalid_argument("Your list is empty");
   }
-  ForwardIterator< std::pair<std::string, ForwardList< ull > > > iter = pairs.begin();
+  ForwardIterator< std::pair<std::string, ForwardList< size_t > > > iter = pairs.begin();
   size_t maxSize{};
   for (; iter != pairs.end(); iter++)
   {
@@ -26,13 +25,13 @@ void novokhatskiy::outputForwardList(std::ostream& out, ForwardList<std::pair<st
     maxSize = std::max(maxSize, iter->second.max_size());
   }
   std::cout << '\n';
-  ForwardList< ull > listOfSums;
-  ull sum{};
+  ForwardList< size_t > listOfSums;
+  size_t sum{};
   for (size_t i = 0; i < maxSize; i++)
   {
     for (auto j = pairs.begin(); j != pairs.end(); ++j)
     {
-      ForwardIterator< ull > numberIter = j->second.begin();
+      ForwardIterator< size_t > numberIter = j->second.begin();
       if (j->second.max_size() <= i)
       {
         continue;
