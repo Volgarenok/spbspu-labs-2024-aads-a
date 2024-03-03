@@ -1,9 +1,12 @@
 #include <iostream>
-#include "node.hpp"
+#include "list.hpp"
 
 int main()
 {
   using namespace grechishnikov;
-  Node< int > test(12, nullptr, nullptr);
-  std::cout << test.data_ << '\n';
+  List< int > testList;
+  testList.push_back(12);
+  testList.push_back(13);
+
+  List< int > testList2(testList);
 }
