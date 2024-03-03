@@ -26,7 +26,7 @@ namespace piyavkin
         push_back(value);
       }
     }
-    List(ListIterator< T > start, const ListIterator< T >& finish):
+    List(ListIterator< T > start, ListIterator< T > finish):
       List()
     {
       while (start != finish)
@@ -183,6 +183,46 @@ namespace piyavkin
         delete node;
         --size_;
       }
+    }
+    void splice(ListIterator< T > it, List< T >& list)
+    {
+      ListIterator< T > iterator(head_);
+      Node< T >* node = head_;
+      if (it == iterator)
+      {
+        head_->prev_ = list.tail_;
+        delete list.tail_->next_;
+        list.tail_->next_ = head_;
+        head_ = list.head_;
+        list.head_ = nullptr;
+        list.tail_ = nullptr;
+        list.size_ = 0;
+        return;
+      }
+      else if (it == end())
+      {
+        delete tail_->next_;
+        list.head_->prev_ = tail_;
+        tail_->next_ = list.head_;
+        tail_ = list.tail_;
+        list.head_ = nullptr;
+        list.tail_ = nullptr;
+        list.size_ = 0;
+        return;
+      }
+      while (iterator != it)
+      {
+        node = node->next_;
+        ++iterator;
+      }
+      node->next_->prev_ = list.tail_;
+      delete list.tail_->next_;
+      list.tail_->next_ = node->next_;
+      list.head_->prev_ = node;
+      node->next_ = list.head_;
+      list.head_ = nullptr;
+      list.tail_ = nullptr;
+      list.size_ = 0;
     }
     template< class Functor >
     void remove_if(Functor f)
