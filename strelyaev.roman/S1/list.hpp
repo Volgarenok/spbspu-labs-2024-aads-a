@@ -1,23 +1,12 @@
 #ifndef LIST_HPP
 #define LIST_HPP
 #include <stdexcept>
+#include <iostream>
+#include "node.hpp"
+#include "iterator.hpp"
 
 namespace strelyaev
 {
-  template< typename T >
-  struct Node
-  {
-    Node(T value):
-      value_(value),
-      next_(nullptr),
-      prev_(nullptr)
-    {}
-    ~Node() = default;
-    T value_;
-    Node* next_;
-    Node* prev_;
-  };
-
   template< typename T >
   class List
   {
@@ -91,6 +80,16 @@ namespace strelyaev
          delete temp_tail;
          tail_ = nullptr;
        }
+     }
+
+     Iterator< T > begin()
+     {
+       return Iterator< T >(head_);
+     }
+
+     Iterator< T > end()
+     {
+       return Iterator< T >(tail_);
      }
 
     private:
