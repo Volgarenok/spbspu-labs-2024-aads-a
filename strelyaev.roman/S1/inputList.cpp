@@ -1,19 +1,27 @@
 #include "inputList.hpp"
 #include <utility>
 #include <string>
-#include <istream>
+#include <iostream>
 #include "list.hpp"
 
-std::pair< std::string, strelyaev::List< double > > strelyaev::makeSequence(std::istream& in)
+void strelyaev::makeSequence(std::istream& in, List < std::pair < std::string, List< int > > >& list_of_lists)
 {
-  List< double > list_of_double;
-  std::string name = "";
+  std::string line = "";
+  in >> line;
   while (in)
   {
-    double a = 0;
-    in >> a;
-    list_of_double.push_back(a);
+    if (!in)
+    {
+      throw std::logic_error("Something went wrong with the input");
+    }
+    std::string name = line;
+    List < int > list_of_nums;
+    while (in >> line && !std::isalpha(line[0]))
+    {
+      std::cout << "впихиваю " << std::stoi(line) << " в список\n";
+      list_of_nums.push_back(std::stoi(line));
+    }
+    std::cout << "Впихиваю список в спико\n";
+    list_of_lists.push_back({name, list_of_nums});
   }
-  std::pair< std::string, List< double > > pairs = {name, list_of_double};
-  return pairs;
 }

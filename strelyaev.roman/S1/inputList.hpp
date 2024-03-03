@@ -4,6 +4,6 @@
 #include <istream>
 namespace strelyaev
 {
-  std::pair< std::string, strelyaev::List< double > > makeSequence(std::istream&);
+void makeSequence(std::istream&, List < std::pair < std::string, List< int > > >&);
 }
 #endif
