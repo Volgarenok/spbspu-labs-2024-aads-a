@@ -3,6 +3,7 @@
 
 #include <cstddef>
 #include <utility>
+#include <initializer_list>
 #include "list_iterator.hpp"
 #include "const_list_iterator.hpp"
 
@@ -31,6 +32,7 @@ namespace nikitov
     List(constIterator first, constIterator second);
     List(const List< T >& other);
     List(List< T >&& other);
+    List (std::initializer_list< T > initList);
     ~List();
 
     List< T >& operator=(const List< T >& other);
@@ -133,6 +135,18 @@ namespace nikitov
     other.head_ = nullptr;
     other.tail_ = nullptr;
     other.size_ = 0;
+  }
+
+  template< typename T >
+  List< T >::List(std::initializer_list< T > initList):
+    head_(new Node< T >),
+    tail_(nullptr),
+    size_(0)
+  {
+    for (T value : initList)
+    {
+      push_back(value);
+    }
   }
 
   template< typename T >
