@@ -32,14 +32,9 @@ int main()
   // }
   // std::cout << '\n';
   // freeMemory(pairs, size);
-  List< int > list;
-  for (size_t i = 0; i < 6; ++i)
-  {
-    list.push_back(i);
-  }
-  std::cout << list.front();
-  list.remove_if([](int n){ return n == 1; });
-  std::cout << list.front();
-  list.pop_front();
-  std::cout << list.front();
+  List< int > list({1,2,3,4,5});
+  List< int > list2({6,7,8,9});
+  std::cout << list.front() << ' ' << list.back() << '\n';
+  list.assign({10,11,12,13,14,15});
+  std::cout << list.front() << ' ' << list.back() << '\n';
 }

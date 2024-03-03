@@ -26,7 +26,7 @@ namespace piyavkin
         push_back(value);
       }
     }
-    List(ListIterator< const T >& start, const ListIterator< const T >& finish):
+    List(ListIterator< T > start, const ListIterator< T >& finish):
       List()
     {
       while (start != finish)
@@ -131,9 +131,34 @@ namespace piyavkin
     void assign(const T& value, size_t count)
     {
       clear();
+      head_ = nullptr;
+      tail_ = nullptr;
       for (size_t i = 0; i < count; ++i)
       {
         push_back(value);
+      }
+    }
+    void assign(ListIterator< T > start, ListIterator< T > finish)
+    {
+      clear();
+      head_ = nullptr;
+      tail_ = nullptr;
+      while (start != finish)
+      {
+        push_back(*start);
+        ++start;
+      }
+    }
+    void assign(std::initializer_list< T > il)
+    {
+      clear();
+      head_ = nullptr;
+      tail_ = nullptr;
+      auto it = il.begin();
+      while (it != il.end())
+      {
+        push_back(*it);
+        ++it;
       }
     }
     void remove(const T& value)
