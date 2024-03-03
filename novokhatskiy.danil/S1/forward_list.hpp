@@ -50,11 +50,11 @@ namespace novokhatskiy
           clear();
           throw;
         }
-      }     
+      }
     }
     ForwardList(size_t size, const T& value) :
       head_(nullptr)
-    { 
+    {
       try
       {
         for (size_t i = 0; i != size; i++)
@@ -102,7 +102,7 @@ namespace novokhatskiy
     {
       return iter();
     }
-        
+
     bool empty() const
     {
       return (head_ == nullptr);
@@ -129,7 +129,7 @@ namespace novokhatskiy
     }
     void pop_front()
     {
-      if (empty()) 
+      if (empty())
       {
         std::cerr << "The forward_list is empty\n";
         return;
@@ -138,12 +138,12 @@ namespace novokhatskiy
       head_ = head_->next_;
       delete temp;
     }
-    size_t max_size() noexcept
+    size_t max_size() const
     {
       size_t count{};
       if (head_ == nullptr)
       {
-        throw std::invalid_argument("Can not count the max_size of ForwardList");
+        return 0;
       }
       Node< T >* curr = head_;
       while (curr)
@@ -191,7 +191,6 @@ namespace novokhatskiy
     {
       if (!head_)
       {
-        std::cerr << "There is nothing to reverse\n";
         return;
       }
       Node< T >* result = head_;
@@ -226,11 +225,10 @@ namespace novokhatskiy
       }
       head_ = firstStep;
     }
-    
-    void print() 
-    {      
-      while (head_ != nullptr) 
-      {
+
+    void print()
+    {
+      while (head_ != nullptr) {
         std::cout << head_->value_ << " ";
         head_ = head_->next_;
       }

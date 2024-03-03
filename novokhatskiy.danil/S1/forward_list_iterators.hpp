@@ -1,8 +1,8 @@
 #ifndef FORWARD_LIST_ITERATORS_HPP
 #define FORWARD_LIST_ITERATORS_HPP
-#include <assert.h>
 #include "forward_list.hpp"
 #include "node.hpp"
+#include <assert.h>
 
 namespace novokhatskiy
 {
@@ -47,6 +47,14 @@ namespace novokhatskiy
     bool operator!=(const iter& other) const
     {
       return !(node_ == other.node_);
+    }
+    iter& moveIterator(size_t size)
+    {
+      for (size_t i = 0; i != size; i++)
+      {
+        node_ = node_->next_;
+      }
+      return *this;
     }
     T& operator*()
     {
