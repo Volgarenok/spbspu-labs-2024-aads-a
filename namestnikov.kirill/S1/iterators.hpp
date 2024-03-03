@@ -10,12 +10,14 @@ namespace namestnikov
   struct ForwardIterator: public std::iterator<std::forward_iterator_tag, T>
   {
     using this_t = ForwardIterator<T>;
+    using node_t = Node<T>;
     ForwardIterator(): node_(nullptr) {}
+    ForwardIterator(node_t * node): node_(node) {}
     ForwardIterator(const this_t &) = default;
     this_t & operator=(const this_t &) = default;
     this_t & operator++()
     {
-      node_ = node_->next;
+      node_ = node_->next_;
       return *this;
     }
     this_t operator++(int)
@@ -26,11 +28,11 @@ namespace namestnikov
     }
     bool operator!=(const this_t & other) const
     {
-      return node_ == other.node_;
+      return !(node_ == other.node_);
     }
     bool operator==(const this_t & other) const
     {
-      return !(other == *this);
+      return other.node_ == node_;
     }
     T & operator*()
     {

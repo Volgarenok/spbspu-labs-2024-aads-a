@@ -2,6 +2,7 @@
 #define FORWARD_LIST_HPP
 
 #include <cstddef>
+#include <iostream>
 #include <algorithm>
 #include <stdexcept>
 #include "node.hpp"
@@ -53,6 +54,10 @@ namespace namestnikov
       swap(other);
       return *this;
     }
+    size_t size() const
+    {
+      return size_;
+    }
     ForwardIterator<T> begin()
     {
       return ForwardIterator<T>(head_);
@@ -91,6 +96,16 @@ namespace namestnikov
       delete head_;
       head_ = temp;
       --size_;
+    }
+    void print()
+    {
+      Node<T> * temp_ = head_;
+      while (temp_)
+      {
+        std::cout << temp_->data_ << " ";
+        temp_ = temp_->next_;
+      }
+      std::cout << "\n";
     }
   private:
     Node<T> * head_;

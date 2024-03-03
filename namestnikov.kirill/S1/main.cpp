@@ -7,6 +7,18 @@
 int main()
 {
   using namespace namestnikov;
-  ForwardList<pair_t> Fwd;
-  inputLists(std::cin, Fwd);
+  ForwardList<int> Fwd;
+  for (int i = 0; i < 10; ++i)
+  {
+    Fwd.push_front(i);
+  }
+  std::cout << Fwd.size();
+  Fwd.print();
+  ForwardIterator<int> p = Fwd.begin();
+  ForwardIterator<int> q = Fwd.end();
+
+  for (auto i = Fwd.begin(); i != Fwd.end(); ++i)
+  {
+    std::cout << *i << " ";
+  }
 }
