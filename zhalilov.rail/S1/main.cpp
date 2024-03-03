@@ -9,8 +9,7 @@ int main()
 {
   using namespace zhalilov;
   List< pair > sequences;
-  std::ifstream file("test");
-  getSeqFromStream(sequences, file);
+  getSeqFromStream(sequences, std::cin);
   if (sequences.empty())
   {
     return 0;
