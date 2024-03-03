@@ -26,13 +26,23 @@ namespace piyavkin
         push_back(value);
       }
     }
-    List(ListIterator< T > start, ListIterator< T > finish):
+    List(ListIterator< const T >& start, const ListIterator< const T >& finish):
       List()
     {
       while (start != finish)
       {
         push_back(*start);
         ++start;
+      }
+    }
+    List(std::initializer_list< T > il):
+      List()
+    {
+      auto it = il.begin();
+      while (it != il.end())
+      {
+        push_back(*it);
+        ++it;
       }
     }
     List(const List< T >& rhs):
@@ -281,7 +291,7 @@ namespace piyavkin
         delete node;
         --size_;
       }
-      return ++iterator;
+      return it;
     }
     ListIterator< T >& erase(ListIterator< T >& it_start, const ListIterator< T >& it_finish)
     {
