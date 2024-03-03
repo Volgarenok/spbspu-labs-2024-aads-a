@@ -6,7 +6,7 @@
 
 namespace namestnikov
 {
-  using pair_t = std::pair<std::string, ForwardList<int>>;
+  using pair_t = std::pair<std::string, ForwardList<unsigned long long>>;
   void inputLists(std::istream & in, ForwardList<pair_t> & dataList);
   void outputLists(std::ostream & out, ForwardList<pair_t> & dataList);
 }

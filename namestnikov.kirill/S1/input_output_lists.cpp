@@ -1,21 +1,23 @@
 #include "input_output_lists.hpp"
+#include <string>
+#include <iostream>
 
 void namestnikov::inputLists(std::istream & in, ForwardList<pair_t> & dataList)
 {
-  std::string listName = "";
-  int parameter = 0;
-  ForwardList<int> parametersList;
-  while (in >> listName)
+  std::string listParameters = "";
+  in >> listParameters;
+  while (in)
   {
-    while (in >> parameter)
+    dataList.push_front({listParameters, ForwardList<unsigned long long>()});
+    while (in >> listParameters && (std::isdigit(listParameters[0])))
     {
-      parametersList.push_front(parameter);
+      dataList.front().second.push_front(std::stoull(listParameters));
     }
-    dataList.push_front({listName, parametersList});
   }
 }
 
 
 void namestnikov::outputLists(std::ostream & out, ForwardList<pair_t> & dataList)
 {
+  
 }
