@@ -2,6 +2,7 @@
 #define LIST_HPP
 
 #include "iterator.hpp"
+#include "cIterator.hpp"
 
 namespace isaychev
 {
@@ -9,13 +10,15 @@ namespace isaychev
   class List
   {
     using iter = fwdIterator< T >;
-
+    using cIter = cFwdIterator< T >;
    public:
     List();
     ~List();
 
     iter begin();
+    cIter begin() const;
     iter end();
+    cIter end() const;
 
     T & front();
     const T & front() const;
@@ -47,9 +50,21 @@ namespace isaychev
   }
 
   template < typename T >
+  cFwdIterator< T > List< T >::begin() const
+  {
+    return cFwdIterator< T >(head_);
+  }
+
+  template < typename T >
   fwdIterator< T > List< T >::end()
   {
     return fwdIterator< T >(nullptr);
+  }
+
+  template < typename T >
+  cFwdIterator< T > List< T >::end() const
+  {
+    return cFwdIterator< T >(nullptr);
   }
 
   template < typename T >
