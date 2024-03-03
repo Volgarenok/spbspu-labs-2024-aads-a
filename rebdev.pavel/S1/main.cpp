@@ -7,48 +7,53 @@
 
 int main()
 {
-  using pairs = std::pair < std::string, rebdev::BiList< size_t > >;
-  pairs * pairsArr = nullptr;
+  using pairs = std::pair< std::string, rebdev::BiList< size_t >>;
+  pairs * pairArr = nullptr;
   size_t numOfPairs = 0;
   size_t maxNumber = 0;
+  rebdev::BiList< size_t >* numList = nullptr;
+  std::string listName;
 
-  while (!std::cout.eof())
+  while (std::getline(std::cin, listName, ' '))
   {
-    std::string listName;
-    rebdev::BiList < size_t > numList;
-
     try
     {
-      rebdev::expandPairArr(pairsArr, numOfPairs);
-      std::getline(std::cin, listName, ' ');
-      size_t num = rebdev::inputNumbersList(std::cin, numList);
-      maxNumber = std::max(maxNumber, num);
-      pairsArr[numOfPairs++] = std::make_pair(listName, numList);
+      numList = new rebdev::BiList< size_t >;
+
+      maxNumber = std::max(maxNumber, rebdev::inputNumbersList(std::cin, numList));
+
+      pairArr = rebdev::expandPairArr(pairArr, numOfPairs);
+      pairArr[numOfPairs].first = listName;
+      pairArr[numOfPairs].second = *numList;
+      numOfPairs += 1;
     }
     catch (const std::exception & e)
     {
-      delete[] pairsArr;
+      delete[] pairArr;
       std::cerr << e.what();
       return 1;
     }
+
+    listName.clear();
   }
 
   for (size_t i = 0; i < numOfPairs; ++i)
   {
-    std::cout << std::get < 0 > (pairsArr[i]) << ' ';
+    std::cout << pairArr[i].first << ' ';
   }
   std::cout << '\n';
+
   size_t sumOfNum[maxNumber] = {};
   for (size_t i = 0; i < maxNumber; ++i)
   {
-    for (size_t j = 0; j < numOfPairs; ++i)
+    for (size_t j = 0; j < numOfPairs; ++j)
     {
       try
       {
-        size_t element = std::get < 1 > (pairsArr[j]).front();
+        size_t element = pairArr[j].second.front();
         std::cout << element << ' ';
         sumOfNum[i] += element;
-        std::get< 1 >(pairsArr[j]).pop_front();
+        pairArr[j].second.pop_front();
       }
       catch (...){}
     }
@@ -59,6 +64,6 @@ int main()
     std::cout << sumOfNum[i] << ' ';
   }
 
-  delete[] pairsArr;
+  delete[] pairArr;
   return 0;
 }

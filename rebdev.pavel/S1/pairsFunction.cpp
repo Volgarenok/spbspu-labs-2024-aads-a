@@ -1,8 +1,7 @@
 #include "pairsFunction.hpp"
 
-void rebdev::expandPairArr(std::pair < std::string, BiList < size_t > > * pairsArr, size_t numOfPairs)
+rebdev::pairs * rebdev::expandPairArr(pairs * pairsArr, size_t numOfPairs)
 {
-  using pairs = std::pair < std::string, rebdev::BiList< size_t > >;
   pairs * newPairsArr = new pairs[numOfPairs + 1];
 
   for (size_t i = 0; i < numOfPairs; ++i)
@@ -13,18 +12,18 @@ void rebdev::expandPairArr(std::pair < std::string, BiList < size_t > > * pairsA
   delete[] pairsArr;
   pairsArr = newPairsArr;
   newPairsArr = nullptr;
+  return pairsArr;
 }
 
-size_t rebdev::inputNumbersList(std::istream & in, BiList < size_t > & numList)
+size_t rebdev::inputNumbersList(std::istream & in, BiList< size_t >* numList)
 {
   size_t num = 0, lenght = 0;
 
   while (in >> num)
   {
-    numList.push_front(num);
+    numList->push_back(num);
     ++lenght;
   }
-
   in.clear();
 
   return lenght;
