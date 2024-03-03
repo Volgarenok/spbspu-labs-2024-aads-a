@@ -56,6 +56,7 @@ namespace nikitov
     size_t size() const;
     bool empty() const;
 
+    void assign(constIterator first, constIterator second);
     void assign(size_t n, const T& value);
     void push_front(const T& value);
     void pop_front();
@@ -314,6 +315,16 @@ namespace nikitov
   bool List< T >::empty() const
   {
     return !size_;
+  }
+
+  template< typename T >
+  void List< T >::assign(constIterator first, constIterator second)
+  {
+    clear();
+    for (auto i = first; i != second; ++i)
+    {
+      push_back(*i);
+    }
   }
 
   template< typename T >
