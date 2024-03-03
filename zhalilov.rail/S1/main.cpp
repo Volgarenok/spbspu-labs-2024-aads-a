@@ -4,7 +4,6 @@
 #include "list.hpp"
 #include "getSeqFromStream.hpp"
 #include "outputSeqs.hpp"
-#include "countSum.hpp"
 
 int main()
 {
