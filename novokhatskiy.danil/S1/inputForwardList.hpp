@@ -7,7 +7,7 @@
 
 namespace novokhatskiy
 {
-  void inputForwardList(novokhatskiy::ForwardList<std::pair<std::string, novokhatskiy::ForwardList< unsigned long long > > >& pairsOfList, std::istream& input);
+  void inputForwardList(novokhatskiy::ForwardList<std::pair<std::string, novokhatskiy::ForwardList< size_t > > >& pairsOfList, std::istream& input);
 }
 
 #endif 
