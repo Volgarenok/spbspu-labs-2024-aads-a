@@ -257,7 +257,7 @@ namespace piyavkin
     {
       return ListIterator< T >(tail_->next_);
     }
-    void erase(const ListIterator< T >& it)
+    ListIterator< T >& erase(const ListIterator< T >& it)
     {
       if (it == begin())
       {
@@ -281,15 +281,17 @@ namespace piyavkin
         delete node;
         --size_;
       }
+      return ++iterator;
     }
-    void erase(ListIterator< T >& it_start, const ListIterator< T >& it_finish)
+    ListIterator< T >& erase(ListIterator< T >& it_start, const ListIterator< T >& it_finish)
     {
       while (it_start != it_finish)
       {
         erase(it_start++);
       }
+      return it_finish;
     }
-    void insert(ListIterator< T >& it, const T& value)
+    ListIterator< T >& insert(const ListIterator< T >& it, const T& value)
     {
       if (it == begin())
       {
@@ -313,6 +315,7 @@ namespace piyavkin
         new_node->prev_->next_ = new_node;
         ++size_;
       }
+      return it;
     }
     bool empty() const
     {
@@ -327,8 +330,9 @@ namespace piyavkin
       }
       if (!tail_)
       {
+        Node< T >* end_node = new Node< T >(value);
         tail_ = new_node;
-        Node< T >* end_node = new Node< T >(value, nullptr, tail_);
+        end_node->prev_ = tail_;
         tail_->next_ = end_node;
       }
       head_ = new_node;
@@ -345,9 +349,10 @@ namespace piyavkin
       }
       if (!head_)
       {
+        Node< T >* end_node = new Node< T >(value);
         head_ = new_node;
         tail_ = head_;
-        Node< T >* end_node = new Node< T >(value, nullptr, tail_);
+        end_node->prev_ = tail_;
         tail_->next_ = end_node;
         ++size_;
         return;
@@ -357,11 +362,7 @@ namespace piyavkin
     }
     void pop_back()
     {
-      if (empty())
-      {
-        throw std::logic_error("The list is empty");
-      }
-      else if (size_ == 1)
+      if (size_ == 1)
       {
         delete tail_->next_;
         delete tail_;
@@ -379,11 +380,7 @@ namespace piyavkin
     }
     void pop_front()
     {
-      if (empty())
-      {
-        throw std::logic_error("The list is empty");
-      }
-      else if (size_ == 1)
+      if (size_ == 1)
       {
         delete tail_->next_;
         delete head_;
@@ -398,7 +395,7 @@ namespace piyavkin
     }
     void clear()
     {
-      while (size() != 0)
+      while (!empty())
       {
         pop_back();
       }
