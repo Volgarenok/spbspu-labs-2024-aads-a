@@ -29,7 +29,7 @@ namespace nikitov
     ConstListIterator< T >& advance(int n);
 
   private:
-    Node< T >* node_;
+    const Node< T >* node_;
   };
 
   template< typename T >

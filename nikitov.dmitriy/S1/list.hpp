@@ -28,6 +28,7 @@ namespace nikitov
   public:
     List();
     List(size_t n, const T& value);
+    List(constIterator first, constIterator second);
     List(const List< T >& other);
     List(List< T >&& other);
     ~List();
@@ -89,11 +90,23 @@ namespace nikitov
   List< T >::List(size_t n, const T& value):
     head_(new Node< T >),
     tail_(nullptr),
-    size_(n)
+    size_(0)
   {
     for (size_t i = 0; i != n; ++i)
     {
-      push_front(value);
+      push_back(value);
+    }
+  }
+
+  template< typename T >
+  List< T >::List(constIterator first, constIterator second):
+    head_(new Node< T >),
+    tail_(nullptr),
+    size_(0)
+  {
+    for (auto i = first; i != second; ++i)
+    {
+      push_back(*i);
     }
   }
 
