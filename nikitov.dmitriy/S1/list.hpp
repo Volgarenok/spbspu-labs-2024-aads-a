@@ -32,11 +32,18 @@ namespace nikitov
     List(constIterator first, constIterator second);
     List(const List< T >& other);
     List(List< T >&& other);
-    List (std::initializer_list< T > initList);
+    List(std::initializer_list< T > initList);
     ~List();
 
     List< T >& operator=(const List< T >& other);
     List< T >& operator=(List< T >&& other);
+
+    bool operator==(const List< T >& other) const;
+    bool operator!=(const List< T >& other) const;
+    bool operator<(const List< T >& other) const;
+    bool operator>(const List< T >& other) const;
+    bool operator<=(const List< T >& other) const;
+    bool operator>=(const List< T >& other) const;
 
     iterator begin();
     constIterator cbegin() const;
@@ -176,6 +183,75 @@ namespace nikitov
       swap(temp);
     }
     return *this;
+  }
+
+  template< typename T >
+  bool List< T >::operator==(const List< T >& other) const
+  {
+    if (size_ == other.size_)
+    {
+      auto otherIterator = other.cbegin();
+      for (auto ownIterator = cbegin(); ownIterator != cend(); ++ownIterator)
+      {
+        if (*ownIterator != *otherIterator)
+        {
+          return false;
+        }
+        ++otherIterator;
+      }
+    }
+    else
+    {
+      return false;
+    }
+    return true;
+  }
+
+  template< typename T >
+  bool List< T >::operator!=(const List< T >& other) const
+  {
+    return !(*this == other);
+  }
+
+  template< typename T >
+  bool List< T >::operator<(const List< T >& other) const
+  {
+    auto otherIterator = other.cbegin();
+    for (auto ownIterator = cbegin(); ownIterator != cend(); ++ownIterator)
+    {
+        if (otherIterator == other.cend())
+        {
+          return false;
+        }
+        if (*ownIterator < *otherIterator)
+        {
+          return true;
+        }
+        else if (*ownIterator > *otherIterator)
+        {
+          return false;
+        }
+        ++otherIterator;
+    }
+    return false;
+  }
+
+  template< typename T >
+  bool List< T >::operator>(const List< T >& other) const
+  {
+    return !(*this < other);
+  }
+
+  template< typename T >
+  bool List< T >::operator<=(const List< T >& other) const
+  {
+    return (*this < other || *this == other);
+  }
+
+  template< typename T >
+  bool List< T >::operator>=(const List< T >& other) const
+  {
+    return (*this > other || *this == other);
   }
 
   template< typename T >
