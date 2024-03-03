@@ -19,5 +19,18 @@ void namestnikov::inputLists(std::istream & in, ForwardList<pair_t> & dataList)
 
 void namestnikov::outputLists(std::ostream & out, ForwardList<pair_t> & dataList)
 {
-  
+  if (dataList.empty())
+  {
+    out << "0";
+  }
+  else
+  {
+    dataList.reverse();
+    ForwardIterator<pair_t> fwdIt = dataList.begin();
+    for (; fwdIt != dataList.end(); ++fwdIt)
+    {
+      fwdIt != dataList.begin() ? out << " " << fwdIt->first : out << fwdIt->first;
+    }
+    //output numbers + output sums;
+  }
 }

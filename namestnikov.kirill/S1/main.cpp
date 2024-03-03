@@ -7,15 +7,7 @@
 int main()
 {
   using namespace namestnikov;
-  //ForwardList<int> Fwd;
-  //for (int i = 0; i < 10; ++i)
-  //{
-  //  Fwd.push_front(i);
-  //}
-  //std::cout << Fwd.size();
-  //Fwd.reverse();
-  //Fwd.print();
   ForwardList<pair_t> list;
   inputLists(std::cin, list);
-  std::cout << list.size();
+  outputLists(std::cout, list);
 }
