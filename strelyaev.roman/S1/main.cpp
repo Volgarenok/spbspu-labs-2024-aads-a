@@ -4,10 +4,10 @@
 
 int main()
 {
-  strelyaev::Iterator< int > a;
+  strelyaev::List< int > list;
   try
   {
-    a++;
+    list.pop_back();
   }
   catch (const std::exception& e)
   {
