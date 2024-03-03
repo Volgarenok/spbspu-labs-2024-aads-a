@@ -179,7 +179,14 @@ namespace piyavkin
         }
         else
         {
-          node = node->next_;
+          if (node == tail_)
+          {
+            node = nullptr;
+          }
+          else
+          {
+            node = node->next_;
+          }
         }
       }
     }
@@ -218,11 +225,19 @@ namespace piyavkin
     {
       return size_;
     }
-    T& back() const
+    T& back()
     {
       return tail_->value_;
     }
-    T& front() const
+    T& front()
+    {
+      return head_->value_;
+    }
+    const T& back() const
+    {
+      return tail_->value_;
+    }
+    const T& front() const
     {
       return head_->value_;
     }

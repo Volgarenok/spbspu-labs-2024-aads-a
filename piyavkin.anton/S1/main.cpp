@@ -3,16 +3,6 @@
 #include "inputlist.hpp"
 #include "output.hpp"
 
-struct A
-{
-  A(int k) :
-    a(k)
-  {}
-private:
-  A() {}
-  int a;
-};
-
 int main()
 {
   using namespace piyavkin;
@@ -42,11 +32,14 @@ int main()
   // }
   // std::cout << '\n';
   // freeMemory(pairs, size);
-  List< A > list;
-  for (size_t i = 0; i < 5; ++i)
+  List< int > list;
+  for (size_t i = 0; i < 6; ++i)
   {
     list.push_back(i);
   }
-  auto end = list.end();
-  --end;
+  std::cout << list.front();
+  list.remove_if([](int n){ return n == 1; });
+  std::cout << list.front();
+  list.pop_front();
+  std::cout << list.front();
 }
