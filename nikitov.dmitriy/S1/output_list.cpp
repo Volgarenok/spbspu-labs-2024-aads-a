@@ -27,13 +27,18 @@ void nikitov::outputList(List< std::pair< std::string, List< size_t > > >& pairs
   for (size_t i = 0; i != maxSize; ++i)
   {
     size_t sum = 0;
+    bool isFirst = true;
     for (auto pairsIterator = pairsList.begin(); pairsIterator != pairsList.end(); ++pairsIterator)
     {
       auto numbersIterator = pairsIterator->second.begin();
       if (i < pairsIterator->second.size())
       {
         size_t number = *(numbersIterator.advance(i));
-        if (sum != 0)
+        if (isFirst)
+        {
+          isFirst = false;
+        }
+        else
         {
           output << ' ';
         }
@@ -50,7 +55,7 @@ void nikitov::outputList(List< std::pair< std::string, List< size_t > > >& pairs
         }
       }
     }
-    if (sum != 0)
+    if (!isFirst)
     {
       output << '\n';
     }
