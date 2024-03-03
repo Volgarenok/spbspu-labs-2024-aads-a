@@ -3,6 +3,7 @@
 
 #include <utility>
 #include "node.hpp"
+#include "list_iterator.hpp"
 
 namespace erohin
 {
@@ -12,12 +13,13 @@ namespace erohin
   public:
     const Node< T > * node_;
     ListConstIterator();
-    ListConstIterator(const Node< T > * const node_ptr);
+    ListConstIterator(const Node< T > * node_ptr);
     ListConstIterator(const ListConstIterator< T > &) = default;
     ~ListConstIterator() = default;
     ListConstIterator< T > & operator=(const ListConstIterator< T > &) = default;
     ListConstIterator< T > & operator++();
     ListConstIterator< T > operator++(int);
+    ListConstIterator< T > operator+(int number);
     const T & operator*() const;
     const T * operator->() const;
     bool operator==(const ListConstIterator< T > & rhs);
@@ -30,7 +32,7 @@ namespace erohin
   {}
 
   template< class T >
-  ListConstIterator< T >::ListConstIterator(const Node< T > * const node_ptr):
+  ListConstIterator< T >::ListConstIterator(const Node< T > * node_ptr):
     node_(node_ptr)
   {}
 
@@ -38,7 +40,7 @@ namespace erohin
   ListConstIterator< T > & ListConstIterator< T >::operator++()
   {
     node_ = node_->next_;
-    return this;
+    return *this;
   }
 
   template< class T >
@@ -47,6 +49,17 @@ namespace erohin
     ListConstIterator< T > prev = *this;
     node_ = node_->next_;
     return prev;
+  }
+
+  template< class T >
+  ListConstIterator< T > ListConstIterator< T >::operator+(int number)
+  {
+    ListConstIterator< T > result = *this;
+    for (int i = 0; i < number; ++i)
+    {
+      ++result;
+    }
+    return result;
   }
 
   template< class T >

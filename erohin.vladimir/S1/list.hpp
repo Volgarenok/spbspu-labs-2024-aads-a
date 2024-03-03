@@ -43,16 +43,36 @@ namespace erohin
     iterator erase_after(const_iterator first, const_iterator last);
   private:
     Node< T > * head_;
+    Node< T > * before_head_;
+    Node< T > * create_empty_node();
   };
 
   template< class T >
+  Node< T > * List< T >::create_empty_node()
+  {
+    Node< T > * result = nullptr;
+    try
+    {
+      result = new Node< T >(head_);
+    }
+    catch (const std::bad_alloc &)
+    {
+      clear();
+      throw;
+    }
+    return before_head_;
+  }
+
+  template< class T >
   List< T >::List():
-    head_(nullptr)
+    head_(nullptr),
+    before_head_(create_empty_node())
   {}
 
   template< class T >
   List< T >::List(const List< T > & list):
-    head_(nullptr)
+    head_(nullptr),
+    before_head_(create_empty_node())
   {
     auto current_iter = list.begin();
     auto end_iter = list.end();
@@ -72,14 +92,17 @@ namespace erohin
 
   template< class T >
   List< T >::List(List< T > && list) noexcept:
-    head_(list.head_)
+    head_(list.head_),
+    before_head_(list.before_head_)
   {
     list.head_ = nullptr;
+    list.before_head_ = nullptr;
   }
 
   template< class T >
   List< T >::List(size_t count, const T & value):
-    head_(nullptr)
+    head_(nullptr),
+    before_head_(new Node< T >(head_))
   {
     for (size_t i = 0; i < count; ++i)
     {
@@ -97,7 +120,8 @@ namespace erohin
 
   template< class T >
   List< T >::List(std::initializer_list< T > init_list):
-    head_(nullptr)
+    head_(nullptr),
+    before_head_(nullptr)
   {
     auto init_begin = init_list.begin();
     auto init_end = init_list.end();
@@ -118,7 +142,8 @@ namespace erohin
   template< class T >
   template< class InputIt >
   List< T >::List(InputIt first, InputIt last):
-    head_(nullptr)
+    head_(nullptr),
+    before_head_(new Node< T >(head_))
   {
     while(first != last)
     {
@@ -171,12 +196,6 @@ namespace erohin
   }
 
   template< class T >
-  ListConstIterator< T > List< T >::cend() const
-  {
-    return ListConstIterator< T >(nullptr);
-  }
-
-  template< class T >
   T & List< T >::front()
   {
     return head_->data_;
@@ -216,6 +235,7 @@ namespace erohin
     {
       pop_front();
     }
+    delete before_head_;
   }
 
   template< class T >
@@ -228,29 +248,23 @@ namespace erohin
   ListIterator< T > List< T >::insert_after(ListConstIterator< T > pos, const T & value)
   {
     ListIterator< T > iter_result(pos.node_);
-    Node< T > * subhead = iter_result.node_;
-    Node< T > * new_node = new Node< T >(value, nullptr);
-    new_node->next_ = subhead->next_;
-    subhead->next_ = new_node;
+    Node< T > * new_node = new Node< T >(value, iter_result.node_->next_);
+    iter_result.node_->next_ = new_node;
     return (++iter_result);
   }
 
   template< class T >
   ListIterator< T > List< T >::insert_after(ListConstIterator< T > pos, T && value)
   {
-    ListIterator< T > iter_result(const_cast< Node< T > * >(pos.node_));
-    Node< T > * subhead = iter_result.node_;
-    Node< T > * new_node = new Node< T >(value, nullptr);
-    new_node->next_ = subhead->next_;
-    subhead->next_ = new_node;
+    ListIterator< T > iter_result(pos.node_);
+    Node< T > * new_node = new Node< T >(value, iter_result.node_->next_);
+    iter_result.node_->next_ = new_node;
     return (++iter_result);
   }
 
   template< class T >
   ListIterator< T > List< T >::insert_after(ListConstIterator< T > pos, size_t count, const T & value)
   {
-    Node< T > * elem = nullptr;
-    ListIterator< T > temp;
     for (size_t i = 0; i < count; ++i)
     {
       pos = insert_after(pos, value);
@@ -261,24 +275,24 @@ namespace erohin
   template< class T >
   ListIterator< T > List< T >::erase_after(ListConstIterator< T > pos)
   {
-    ListIterator< T > iter_result(const_cast< Node< T > * >(pos.node_));
+    ListIterator< T > iter_result(pos.node_);
     Node< T > * to_delete = iter_result.node_->next_;
     Node< T > * to_become_next = to_delete->next_;
     delete to_delete;
     iter_result.node_->next_ = to_become_next;
-    return (++iter_result);
+    return ListIterator< T >(to_become_next);
   }
 
   template< class T >
   ListIterator< T > List< T >::erase_after(ListConstIterator< T > first, ListConstIterator< T > last)
   {
-    Node< T > * to_delete = nullptr;
-    Node< T > * to_become_next = nullptr;
-    while (first != last)
+    ListIterator< T > iter_result(first.node_);
+    ListIterator< T > iter_end(last.node_);
+    while (iter_result != iter_end)
     {
-      erase_after(first);
+      iter_result = erase_after(ListConstIterator< T >(iter_result.node_));
     }
-    return (++first);
+    return iter_result;
   }
 }
 
