@@ -17,7 +17,11 @@ int main()
 
   for (auto list = pairs.cbegin(); list != nullptr; ++list)
   {
-    std::cout << list->first << " ";
+    std::cout << list->first;
+    if (list != pairs.cend())
+    {
+      std::cout << " ";
+    }
   }
   std::cout << "\n";
 
@@ -33,9 +37,12 @@ int main()
       //Iterator< size_t > num = pair->second.begin();
       if (!pair->second.empty())
       {
-        anotherList = true;
         //std::cout << *num << " ";
-        std::cout << pair->second.front() << " ";
+        if (anotherList)
+        {
+          std::cout << " ";
+        }
+        std::cout << pair->second.front();
         if (maxvalue - lsum > pair->second.front())
         {
           lsum += pair->second.front();
@@ -44,11 +51,12 @@ int main()
         {
           overflow = true;
         }
+        anotherList = true;
       }
     }
-    lsums.pushBack(lsum);
     if (anotherList)
     {
+       lsums.pushBack(lsum);
        std::cout << "\n";
     }
     for (auto pair = pairs.begin(); pair != nullptr; ++pair)
@@ -59,14 +67,23 @@ int main()
       }
     }
   }
+  if (lsums.empty())
+  {
+    std::cout << "0\n";
+    return 0;
+  }
   if (overflow)
   {
     std::cerr << "Overflow!\n";
     return 1;
   }
-  for (auto sum = lsums.begin(); sum != lsums.end(); ++sum)
+  for (auto sum = lsums.begin(); sum != nullptr; ++sum)
   {
-    std::cout << *sum << " ";
+    std::cout << *sum;
+    if (sum != lsums.end())
+    {
+      std::cout << " ";
+    }
   }
   std::cout << "\n";
   return 0;
