@@ -23,8 +23,10 @@ int main()
       std::cout << " ";
     }
   }
-  std::cout << "\n";
-
+  if (!pairs.empty())
+  {
+    std::cout << "\n";
+  }
   List< size_t > lsums;
   bool anotherList = true;
   bool overflow = false;
