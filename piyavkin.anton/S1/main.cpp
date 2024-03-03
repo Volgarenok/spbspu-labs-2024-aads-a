@@ -35,6 +35,6 @@ int main()
   List< int > list({1,2,3,4,5});
   List< int > list2({6,7,8,9});
   std::cout << list.front() << ' ' << list.back() << '\n';
-  list.splice(--list.end(), list2);
+  list.reverse();
   std::cout << list.front() << ' ' << list.back() << '\n';
 }

@@ -186,9 +186,7 @@ namespace piyavkin
     }
     void splice(ListIterator< T > it, List< T >& list)
     {
-      ListIterator< T > iterator(head_);
-      Node< T >* node = head_;
-      if (it == iterator)
+      if (it == begin())
       {
         head_->prev_ = list.tail_;
         delete list.tail_->next_;
@@ -210,6 +208,8 @@ namespace piyavkin
         list.size_ = 0;
         return;
       }
+      ListIterator< T > iterator(head_);
+      Node< T >* node = head_;
       while (iterator != it)
       {
         node = node->next_;
@@ -223,6 +223,20 @@ namespace piyavkin
       list.head_ = nullptr;
       list.tail_ = nullptr;
       list.size_ = 0;
+    }
+    void reverse()
+    {
+      Node< T >* start = head_;
+      Node< T >* finish = tail_;
+      while (start != finish)
+      {
+        std::swap(start->value_, finish->value_);
+        start = start->next_;
+        if (start != finish)
+        {
+          finish = finish->prev_;
+        }
+      }
     }
     template< class Functor >
     void remove_if(Functor f)
