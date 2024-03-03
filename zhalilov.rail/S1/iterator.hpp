@@ -2,16 +2,13 @@
 #define ITERATOR_HPP
 
 #include "node.hpp"
-#include "type_traits"
 
 namespace zhalilov
 {
-  template < bool isConst, typename T >
+  template < typename T >
   class Iterator
   {
   public:
-    Iterator();
-    Iterator(const Iterator< isConst, T > &) = default;
     Iterator(Node< T > *);
     ~Iterator() = default;
 
@@ -22,90 +19,71 @@ namespace zhalilov
     Iterator operator++(int);
     Iterator operator--(int);
 
-    typename std::enable_if< isConst, const T >::type &operator*() const;
-    typename std::enable_if< !isConst, T >::type &operator*();
-    typename std::enable_if< isConst, T >::type *operator->() const;
-    typename std::enable_if< !isConst, T >::type *operator->();
+    T &operator*();
+    T *operator->();
 
-    bool operator==(const Iterator< isConst, T > &);
-    bool operator!=(const Iterator< isConst, T > &);
+    bool operator==(const Iterator< T > &);
+    bool operator!=(const Iterator< T > &);
 
   private:
     Node< T > *m_node;
   };
 
-  template < bool isConst, typename T >
-  Iterator< isConst, T >::Iterator():
-    m_node(nullptr)
-  {}
-
-  template < bool isConst, typename T >
-  Iterator< isConst, T >::Iterator(Node< T > *node):
+  template < typename T >
+  Iterator< T >::Iterator(Node< T > *node):
     m_node(node)
   {}
 
-  template < bool isConst, typename T >
-  Iterator< isConst, T > &Iterator< isConst, T >::operator++()
+  template < typename T >
+  Iterator< T > &Iterator< T >::operator++()
   {
     m_node = m_node->next;
     return *this;
   }
 
-  template < bool isConst, typename T >
-  Iterator< isConst, T > &Iterator< isConst, T >::operator--()
+  template < typename T >
+  Iterator< T > &Iterator< T >::operator--()
   {
     m_node = m_node->prev;
     return *this;
   }
 
-  template < bool isConst, typename T >
-  Iterator< isConst, T > Iterator< isConst, T >::operator++(int)
+  template < typename T >
+  Iterator< T > Iterator< T >::operator++(int)
   {
-    Iterator< isConst, T > temp(*this);
+    Iterator< T > temp(*this);
     operator++();
     return temp;
   }
 
-  template < bool isConst, typename T >
-  Iterator< isConst, T > Iterator< isConst, T >::operator--(int)
+  template < typename T >
+  Iterator< T > Iterator< T >::operator--(int)
   {
-    Iterator< isConst, T > temp(*this);
+    Iterator< T > temp(*this);
     operator--();
     return temp;
   }
 
-  template < bool isConst, typename T >
-  typename std::enable_if< isConst, const T >::type &Iterator< isConst, T >::operator*() const
+  template < typename T >
+  T &Iterator< T >::operator*()
   {
     return m_node->value;
   }
 
-  template < bool isConst, typename T >
-  typename std::enable_if< !isConst, T >::type &Iterator< isConst, T >::operator*()
-  {
-    return m_node->value;
-  }
-
-  template < bool isConst, typename T >
-  typename std::enable_if< isConst, T >::type *Iterator< isConst, T >::operator->() const
+  template < typename T >
+  T *Iterator< T >::operator->()
   {
     return &m_node->value;
   }
 
-  template < bool isConst, typename T >
-  typename std::enable_if< !isConst, T >::type *Iterator< isConst, T >::operator->()
-  {
-    return &m_node->value;
-  }
-
-  template < bool isConst, typename T >
-  bool Iterator< isConst, T >::operator==(const Iterator< isConst, T > &it)
+  template < typename T >
+  bool Iterator< T >::operator==(const Iterator< T > &it)
   {
     return m_node == it.m_node;
   }
 
-  template < bool isConst, typename T >
-  bool Iterator< isConst, T >::operator!=(const Iterator< isConst, T > &it)
+  template < typename T >
+  bool Iterator< T >::operator!=(const Iterator< T > &it)
   {
     return !operator==(it);
   }
