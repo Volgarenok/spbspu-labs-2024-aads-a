@@ -18,6 +18,7 @@ int main()
   try
   {
     outputSeqs(sequences, std::cout);
+    std::cout << "\n";
   }
   catch (const std::overflow_error &e)
   {
