@@ -15,7 +15,6 @@ void nikitov::inputList(List< std::pair< std::string, List< size_t > > >& pairsL
     }
 
     pairsList.push_back({ line, List< size_t >() });
-
     while (input >> line && !std::isalpha(line[0]))
     {
       pairsList.back().second.push_back(std::stoull(line));

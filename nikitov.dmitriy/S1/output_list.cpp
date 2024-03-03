@@ -10,9 +10,8 @@ void nikitov::outputList(List< std::pair< std::string, List< size_t > > >& pairs
     throw std::invalid_argument("Error: Empty list");
   }
 
-  ListIterator< std::pair< std::string, List< size_t > > > pairsIterator = pairsList.begin();
   size_t maxSize = 1;
-  for (; pairsIterator != pairsList.end(); ++pairsIterator)
+  for (auto pairsIterator = pairsList.begin(); pairsIterator != pairsList.end(); ++pairsIterator)
   {
     maxSize = std::max(maxSize, pairsIterator->second.size());
     if (pairsIterator != pairsList.begin())
@@ -28,10 +27,9 @@ void nikitov::outputList(List< std::pair< std::string, List< size_t > > >& pairs
   for (size_t i = 0; i != maxSize; ++i)
   {
     size_t sum = 0;
-    pairsIterator = pairsList.begin();
-    for (; pairsIterator != pairsList.end(); ++pairsIterator)
+    for (auto pairsIterator = pairsList.begin(); pairsIterator != pairsList.end(); ++pairsIterator)
     {
-      ListIterator< size_t > numbersIterator = pairsIterator->second.begin();
+      auto numbersIterator = pairsIterator->second.begin();
       if (i < pairsIterator->second.size())
       {
         size_t number = *(numbersIterator.advance(i));
@@ -64,8 +62,7 @@ void nikitov::outputList(List< std::pair< std::string, List< size_t > > >& pairs
     throw std::out_of_range("Error: Sum is out of range");
   }
 
-  ListIterator< size_t > sumsIterator = sumsList.begin();
-  for (; sumsIterator != sumsList.end(); ++sumsIterator)
+  for (auto sumsIterator = sumsList.begin(); sumsIterator != sumsList.end(); ++sumsIterator)
   {
     if (sumsIterator != sumsList.begin())
     {
