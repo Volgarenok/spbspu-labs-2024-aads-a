@@ -4,6 +4,7 @@
 #include <cstddef>
 #include <utility>
 #include "list_iterator.hpp"
+#include "const_list_iterator.hpp"
 
 namespace nikitov
 {
@@ -23,7 +24,7 @@ namespace nikitov
   class List
   {
     using iterator = ListIterator< T >;
-    using constIterator = ListIterator< const T >;
+    using constIterator = ConstListIterator< T >;
   public:
     List();
     List(size_t n, const T& value);
@@ -157,9 +158,9 @@ namespace nikitov
   }
 
   template< typename T >
-  ListIterator< const T > List< T >::cbegin() const
+  ConstListIterator< T > List< T >::cbegin() const
   {
-    return ListIterator< const T >(head_);
+    return ConstListIterator< T >(head_);
   }
 
   template< typename T >
@@ -176,15 +177,15 @@ namespace nikitov
   }
 
   template< typename T >
-  ListIterator< const T > List< T >::cend() const
+  ConstListIterator< T > List< T >::cend() const
   {
     if (tail_ == nullptr)
     {
-      return ListIterator< const T >(head_);
+      return ConstListIterator< T >(head_);
     }
     else
     {
-      return ListIterator< const T >(tail_->next_);
+      return ConstListIterator< T >(tail_->next_);
     }
   }
 

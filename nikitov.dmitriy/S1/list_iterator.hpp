@@ -18,8 +18,6 @@ namespace nikitov
 
     T& operator*();
     T* operator->();
-    const T& operator*() const;
-    const T* operator->() const;
     ListIterator< T >& operator=(const ListIterator&) = default;
     ListIterator< T >& operator++();
     ListIterator< T > operator++(int);
@@ -57,26 +55,6 @@ namespace nikitov
       throw std::logic_error("Error: Dereferencing of std::end()");
     }
     return std::addressof(node_->value_);
-  }
-
-  template< typename T >
-  const T& ListIterator< T >::operator*() const
-  {
-    if (node_->next_ == nullptr)
-    {
-      throw std::logic_error("Error: Dereferencing of std::end()");
-    }
-    return node_.value;
-  }
-
-  template< typename T >
-  const T* ListIterator< T >::operator->() const
-  {
-    if (node_->next_ == nullptr)
-    {
-      throw std::logic_error("Error: Dereferencing of std::end()");
-    }
-    return std::addressof(node_.value);
   }
 
   template< typename T >
