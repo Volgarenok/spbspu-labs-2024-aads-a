@@ -58,6 +58,7 @@ namespace nikitov
 
     void assign(constIterator first, constIterator second);
     void assign(size_t n, const T& value);
+    void assign(std::initializer_list< T > initList);
     void push_front(const T& value);
     void pop_front();
     void push_back(const T& value);
@@ -332,6 +333,16 @@ namespace nikitov
   {
     clear();
     for (size_t i = 0; i != n; ++i)
+    {
+      push_back(value);
+    }
+  }
+
+  template< typename T >
+  void List< T >::assign(std::initializer_list< T > initList)
+  {
+    clear();
+    for (T value : initList)
     {
       push_back(value);
     }
