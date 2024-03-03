@@ -19,6 +19,22 @@ namespace strelyaev
       head_(nullptr),
       tail_(nullptr)
      {}
+     ~List()
+     {
+      this->clear();
+     }
+
+     void swap(List< T >& val)
+     {
+       Node< T >* temp = val.head_;
+       val.head_ = head_;
+       head_ = temp;
+     }
+
+     bool empty()
+     {
+      return head_ == tail_;
+     }
 
      void push_back(const T& val)
      {
@@ -26,7 +42,11 @@ namespace strelyaev
        new_node->prev_ = tail_;
        if (tail_)
        {
-	 tail_->next_ = new_node;
+	       tail_->next_ = new_node;
+       }
+       if (!head_)
+       {
+        head_ = new_node;
        }
        tail_ = new_node;
      }
@@ -38,6 +58,10 @@ namespace strelyaev
        if (head_)
        {
          head_->prev_ = new_node;
+       }
+       if (!tail_)
+       {
+         tail_ = new_node;
        }
        head_ = new_node;
      }
@@ -82,6 +106,20 @@ namespace strelyaev
        }
      }
 
+
+     void clear()
+     {
+     /* Node< T >* current = head_;
+      while (current != nullptr)
+      {
+        Node< T >* next = current->next_;
+        delete current;
+        current = next;
+      }
+      head_ = nullptr;
+      tail_ = nullptr;*/
+     }
+
      Iterator< T > begin()
      {
        return Iterator< T >(head_);
@@ -89,10 +127,10 @@ namespace strelyaev
 
      Iterator< T > end()
      {
-       return Iterator< T >(tail_);
+       return Iterator< T >(nullptr);
      }
 
-    private:
+    //private:
      Node< T >* head_;
      Node< T >* tail_;
   };

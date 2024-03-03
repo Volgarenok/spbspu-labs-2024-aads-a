@@ -3,6 +3,12 @@
 #include <stdexcept>
 #include "node.hpp"
 
+
+
+
+
+#include <iostream>
+
 namespace strelyaev
 {
   template< typename T >
@@ -37,7 +43,10 @@ namespace strelyaev
 
      Iterator< T >& operator++() // ++a
      {
-       node_ = node_->next_;
+       if (node_ != nullptr)
+       {
+        node_ = node_->next_;
+       }
        return *this;
      }
 
