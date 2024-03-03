@@ -1,8 +1,8 @@
 #ifndef FORWARD_LIST_ITERATORS_HPP
 #define FORWARD_LIST_ITERATORS_HPP
+#include <assert.h>
 #include "forward_list.hpp"
 #include "node.hpp"
-#include<assert.h>
 
 namespace novokhatskiy
 {
@@ -60,7 +60,7 @@ namespace novokhatskiy
     T* operator->()
     {
       assert(this->node_ != nullptr);
-      return std::addressof(this->node_.value_);
+      return std::addressof(this->node_->value_);
     }
     const T* operator->() const
     {

@@ -1,7 +1,6 @@
 #ifndef FORWARD_LIST_HPP
 #define FORWARD_LIST_HPP
 #include <iostream>
-#include <stdexcept>
 #include "forward_list_iterators.hpp"
 #include "node.hpp"
 
@@ -22,9 +21,14 @@ namespace novokhatskiy
     ForwardList():
       head_(nullptr)
     {}
-    ForwardList(ForwardList<T>* other):
-      head_(other->head_)
-    {}
+    ForwardList(const T& value) :
+      head_(new Node< T >)
+    {
+      for (auto i = begin(); i < end(); i++)
+      {
+        push_front(value);
+      }
+    }
     ForwardList(ForwardList&& other) noexcept :
       head_(other.head_)
     {
@@ -48,12 +52,44 @@ namespace novokhatskiy
         }
       }     
     }
-
-    iter begin()
+    ForwardList(size_t size, const T& value) :
+      head_(nullptr)
+    { 
+      try
+      {
+        for (size_t i = 0; i != size; i++)
+        {
+          push_front(value);
+        }
+      }
+      catch (const std::bad_alloc&)
+      {
+        clear();
+        throw;
+      }
+    }
+    ForwardList(std::initializer_list< T > list) :
+      head_(nullptr)
+    {
+      auto begin = list.begin();
+      auto end = list.end();
+      while (begin != end)
+      {
+        try
+        {
+          push_front(*(begin++)); //--end(), use to change the order
+        }
+        catch (const std::bad_alloc&)
+        {
+          clear();
+          throw;
+        }
+      }
+    }
+    iter begin() //const
     {
       return iter(head_);
     }
-
     iter begin() const
     {
       return iter(head_);
@@ -62,16 +98,20 @@ namespace novokhatskiy
     {
       return iter();
     }
-
     iter end() const
     {
       return iter();
     }
+        
     bool empty() const
     {
       return (head_ == nullptr);
     }
     const T& front() const
+    {
+      return head_->value_;
+    }
+    T& front()
     {
       return head_->value_;
     }
@@ -81,9 +121,15 @@ namespace novokhatskiy
       ptr->next_ = head_;
       head_ = ptr;
     }
+    void push_front(T& value)
+    {
+      Node<T>* ptr = new Node<T>(value);
+      ptr->next_ = head_;
+      head_ = ptr;
+    }
     void pop_front()
     {
-      if (empty())
+      if (empty()) 
       {
         std::cerr << "The forward_list is empty\n";
         return;
@@ -91,6 +137,21 @@ namespace novokhatskiy
       Node<T>* temp = head_;
       head_ = head_->next_;
       delete temp;
+    }
+    size_t max_size() noexcept
+    {
+      size_t count{};
+      if (head_ == nullptr)
+      {
+        throw std::invalid_argument("Can not count the max_size of ForwardList");
+      }
+      Node< T >* curr = head_;
+      while (curr)
+      {
+        count++;
+        curr = curr->next_;
+      }
+      return count;
     }
     void clear()
     {
@@ -126,6 +187,25 @@ namespace novokhatskiy
     {
       std::swap(head_, other.head_);
     }
+    void reverse()
+    {
+      if (!head_)
+      {
+        std::cerr << "There is nothing to reverse\n";
+        return;
+      }
+      Node< T >* result = head_;
+      Node< T >* temp = head_->next_;
+      result->next_ = nullptr;
+      while (temp)
+      {
+        Node< T >* rofl = temp->next_;
+        temp->next_ = result;
+        result = temp;
+        temp = rofl;
+      }
+      head_ = result;
+    }
     void remove(const T& value)
     {
       Node< T >* curr = head_;
@@ -146,25 +226,9 @@ namespace novokhatskiy
       }
       head_ = firstStep;
     }
-    void reverse()
-    {
-      Node< T >* curr = head_;
-      try
-      {
-        while (curr)
-        {
-          head_ = head_->next_;
-          push_front(curr->value_);
-          curr = head_;
-        }   
-      }
-      catch (...)
-      {
-        
-      }
-    }
-    void print()
-    {
+    
+    void print() 
+    {      
       while (head_ != nullptr) 
       {
         std::cout << head_->value_ << " ";
