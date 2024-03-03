@@ -29,11 +29,10 @@ namespace piyavkin
     List(ListIterator< T > start, ListIterator< T > finish):
       List()
     {
-      push_back(*start);
       while (start != finish)
       {
-        ++start;
         push_back(*start);
+        ++start;
       }
     }
     List(const List< T >& rhs):
@@ -233,7 +232,7 @@ namespace piyavkin
     }
     ListIterator< T > end()
     {
-      return ListIterator< T >(tail_);
+      return ListIterator< T >(tail_->next_);
     }
     const ListIterator< T > cbegin() const
     {
@@ -241,7 +240,7 @@ namespace piyavkin
     }
     const ListIterator< T > cend() const
     {
-      return ListIterator< T >(tail_);
+      return ListIterator< T >(tail_->next_);
     }
     void erase(const ListIterator< T >& it)
     {
@@ -274,7 +273,6 @@ namespace piyavkin
       {
         erase(it_start++);
       }
-      erase(it_start);
     }
     void insert(ListIterator< T >& it, const T& value)
     {
@@ -282,13 +280,12 @@ namespace piyavkin
       {
         push_front(value);
       }
-      else if (++it == end())
+      else if (it == end())
       {
         push_back(value);
       }
       else
       {
-        --it;
         ListIterator< T > iterator(head_);
         Node< T >* node = head_;
         while (iterator != it)
@@ -296,9 +293,7 @@ namespace piyavkin
           node = node->next_;
           ++iterator;
         }
-        Node< T >* new_node = new Node< T >(value);
-        new_node->next_ = node;
-        new_node->prev_ = node->prev_;
+        Node< T >* new_node = new Node< T >(value, node, node->prev_);
         node->prev_ = new_node;
         new_node->prev_->next_ = new_node;
         ++size_;
@@ -310,8 +305,7 @@ namespace piyavkin
     }
     void push_front(const T& value)
     {
-      Node< T >* new_node = new Node< T >(value);
-      new_node->next_ = head_;
+      Node< T >* new_node = new Node< T >(value, head_, nullptr);
       if (head_)
       {
         head_->prev_ = new_node;
@@ -319,21 +313,29 @@ namespace piyavkin
       if (!tail_)
       {
         tail_ = new_node;
+        Node< T >* end_node = new Node< T >(value, nullptr, tail_);
+        tail_->next_ = end_node;
       }
       head_ = new_node;
       ++size_;
     }
     void push_back(const T& value)
     {
-      Node< T >* new_node = new Node< T >(value);
-      new_node->prev_ = tail_;
+      Node< T >* new_node = new Node< T >(value, nullptr, tail_);
       if (tail_)
       {
+        tail_->next_->prev_ = new_node;
+        new_node->next_ = tail_->next_;
         tail_->next_ = new_node;
       }
       if (!head_)
       {
         head_ = new_node;
+        tail_ = head_;
+        Node< T >* end_node = new Node< T >(value, nullptr, tail_);
+        tail_->next_ = end_node;
+        ++size_;
+        return;
       }
       tail_ = new_node;
       ++size_;
@@ -346,13 +348,17 @@ namespace piyavkin
       }
       else if (size_ == 1)
       {
+        delete tail_->next_;
         delete tail_;
         --size_;
       }
       else
       {
+        Node< T >* temp = tail_;
+        tail_->next_->prev_ = tail_->prev_;
+        tail_->prev_->next_ = tail_->next_;
         tail_ = tail_->prev_;
-        delete tail_->next_;
+        delete temp;
         --size_;
       }
     }
@@ -364,6 +370,7 @@ namespace piyavkin
       }
       else if (size_ == 1)
       {
+        delete tail_->next_;
         delete head_;
         --size_;
       }
