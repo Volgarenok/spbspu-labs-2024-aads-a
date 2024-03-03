@@ -6,16 +6,17 @@ std::ostream &zhalilov::outputSeqs(List< pair > sequences, std::ostream &output)
 {
   List< pair >::iterator currIt = sequences.begin();
   List< pair >::iterator lastIt = sequences.end();
+  std::string txtToOutput = "";
   while (currIt != lastIt)
   {
-    output << currIt->first << " ";
+    txtToOutput += currIt->first + " ";
     currIt++;
   }
 
   bool allEmpty = false;
   while (!allEmpty)
   {
-    output << "\n";
+    txtToOutput += "\n";
     currIt = sequences.begin();
     allEmpty = true;
     while (currIt != lastIt)
@@ -24,11 +25,12 @@ std::ostream &zhalilov::outputSeqs(List< pair > sequences, std::ostream &output)
       if (!currList.empty())
       {
         allEmpty = false;
-        output << currList.front() << " ";
+        txtToOutput += currList.front() + " ";
         currList.pop_front();
       }
       currIt++;
     }
   }
+  output << txtToOutput;
   return output;
 }
