@@ -319,6 +319,7 @@ namespace nikitov
   template< typename T >
   void List< T >::assign(size_t n, const T& value)
   {
+    clear();
     for (size_t i = 0; i != n; ++i)
     {
       push_back(value);
