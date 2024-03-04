@@ -25,4 +25,10 @@ int main()
   List< int > testList4;
   testList3 = testList2;
   testList4 = std::move(testList2);
+
+  List< int > testListAccess;
+  testListAccess.push_back(12);
+  std::cout << testListAccess[0] << '\n';
+  testListAccess[0] = 14;
+  std::cout << testListAccess[0] << '\n';
 }

@@ -3,6 +3,7 @@
 
 #include <cstddef>
 #include <algorithm>
+#include <cstddef>
 #include "node.hpp"
 #include "iterator.hpp"
 
@@ -19,10 +20,11 @@ namespace grechishnikov
 
     List< T >& operator=(const List< T >&);
     List< T >& operator=(List< T >&&);
-
-    void clear();
+    T& operator[](size_t);
 
     bool empty();
+
+    void clear();
     void push_back(const T&);
     void push_front(const T&);
     void pop_back();
@@ -86,6 +88,13 @@ namespace grechishnikov
     std::swap(head_, other.head_);
     std::swap(tail_, other.tail_);
     return *this;
+  }
+
+  template< typename T >
+  T& List< T >::operator[](size_t pos)
+  {
+    Iterator< T > iter(head_);
+    return iter[pos].data_;
   }
 
   template< typename T >
