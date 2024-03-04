@@ -9,6 +9,7 @@ void novokhatskiy::inputForwardList(ForwardList<std::pair<std::string, ForwardLi
     if (!input)
     {
       throw std::invalid_argument("Can not read the line");
+      return;
     }
     pairsOfList.push_front({ line, ForwardList< size_t > ()});
     while (input >> line && !std::isalpha(line[0]))

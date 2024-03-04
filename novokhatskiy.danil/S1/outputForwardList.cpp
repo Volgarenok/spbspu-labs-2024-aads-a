@@ -1,10 +1,11 @@
 #include "outputForwardList.hpp"
+#include <limits>
 
-void novokhatskiy::outputForwardList(std::ostream& out, ForwardList<std::pair<std::string, ForwardList< size_t  > > >& pairs)
+int novokhatskiy::outputForwardList(std::ostream& out, ForwardList<std::pair<std::string, ForwardList< size_t  > > >& pairs)
 {
   if (pairs.empty())
   {
-    throw std::invalid_argument("Your list is empty");
+    out << "0" << '\n';
   }
   ForwardIterator< std::pair<std::string, ForwardList< size_t > > > iter = pairs.begin();
   size_t maxSize{};
@@ -41,6 +42,11 @@ void novokhatskiy::outputForwardList(std::ostream& out, ForwardList<std::pair<st
       {
         out << ' ';
       }
+      if (std::numeric_limits< size_t>::max() - *numberIter <= *numberIter)
+      {
+        std::cerr << "Overflow\n";
+        return 1;
+      }
       out << *numberIter;
       sum += *numberIter;
     }
@@ -58,4 +64,5 @@ void novokhatskiy::outputForwardList(std::ostream& out, ForwardList<std::pair<st
     out << *i;
   }
   out << '\n';
+  return 0;
 }
