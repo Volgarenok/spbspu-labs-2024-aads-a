@@ -10,20 +10,23 @@ int main()
 {
   using namespace grechishnikov;
 
-  List< int > testListSwap1;
-  List< int > testListSwap2;
-
-  testListSwap1.push_front(1);
-  testListSwap2.push_front(2);
-  testListSwap1.swap(testListSwap2);
-  std::cout << "F: " << testListSwap1[0] << " " << "S: " << testListSwap2[0] << '\n';
-
-  List< int > testListIter;
+  List< size_t > testListIter;
   testListIter.push_front(1);
   testListIter.push_front(2);
   testListIter.push_front(3);
   testListIter.push_front(4);
   testListIter.push_front(5);
 
-  std::cout << std::for_each(testListIter.begin(), testListIter.end(), pr) << '\n';
+  auto it = testListIter.begin();
+  it++;
+  testListIter.assign(it, testListIter.end());
+
+  std::for_each(testListIter.begin(), testListIter.end(), pr);
+  std::cout << '\n';
+
+  List< size_t > testListInit;
+  testListInit.assign({ 1, 2, 4, 6, 7, 9 });
+  std::for_each(testListInit.begin(), testListInit.end(), pr);
+  std::cout << '\n';
+
 }

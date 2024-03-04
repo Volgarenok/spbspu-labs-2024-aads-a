@@ -34,6 +34,10 @@ namespace grechishnikov
     void pop_front();
     void swap(List< T >&);
 
+    void assign(size_t, const T&);
+    void assign(Iterator< T >, Iterator< T >);
+    void assign(std::initializer_list< T >);
+
   private:
     Node< T >* head_;
     Node< T >* tail_;
@@ -203,6 +207,41 @@ namespace grechishnikov
   {
     std::swap(head_, other.head_);
     std::swap(tail_, other.tail_);
+  }
+
+  template< typename T >
+  void List< T >::assign(size_t count, const T& value)
+  {
+    clear();
+    for (size_t i = 0; i < count; i++)
+    {
+      push_back(value);
+    }
+  }
+
+  template< typename T >
+  void List< T >::assign(Iterator< T > first, Iterator< T > last)
+  {
+    List< T > temp;
+    while (first != last)
+    {
+      temp.push_back(*first);
+      first++;
+    }
+    std::swap(head_, temp.head_);
+    std::swap(tail_, temp.tail_);
+  }
+
+  template< typename T >
+  void List< T >::assign(std::initializer_list< T > ilist)
+  {
+    clear();
+    auto init = ilist.begin();
+    while (init != ilist.end())
+    {
+      push_back(*init);
+      init++;
+    }
   }
 
 }
