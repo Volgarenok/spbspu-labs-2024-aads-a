@@ -40,34 +40,39 @@ int main()
     listName.clear();
   }
 
-  for (size_t i = 0; i < numOfPairs; ++i)
+  for (size_t i = 0; i < (numOfPairs - 1); ++i)
   {
     std::cout << pairArr[i].first << ' ';
   }
-  std::cout << '\b' << '\n';
+  std::cout << pairArr[numOfPairs - 1] << '\n';
 
   size_t sumOfNum[maxNumber] = {};
   for (size_t i = 0; i < maxNumber; ++i)
   {
+    bool firstElement = true;
     for (size_t j = 0; j < numOfPairs; ++j)
     {
       list & numList = pairArr[j].second;
       if (numList.capacity())
       {
         size_t element = numList.front();
-        std::cout << element << ' ';
+        if (!firstElement)
+        {
+          std::cout << ' ';
+        }
+        std::cout << element;
         sumOfNum[i] += element;
         numList.pop_front();
+        firstElement = false;
       }
     }
-    std::cout << '\b' << '\n';
+    std::cout << '\n';
   }
-  for (size_t i = 0; i < maxNumber; ++i)
+  for (size_t i = 0; i < (maxNumber - 1); ++i)
   {
     std::cout << sumOfNum[i] << ' ';
   }
-  std::cout << '\b' << '\n';
-
+  std::cout << sumOfNum[maxNumber - 1] << '\n';
   delete[] pairArr;
   return 0;
 }
