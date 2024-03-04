@@ -73,6 +73,7 @@ namespace nikitov
     void swap(List< T >& other);
 
     void splice(constIterator position, List< T >& other, constIterator otherPosition);
+    void splice(constIterator position, List< T >& other);
     void sort();
     void unique();
     void reverse();
@@ -614,6 +615,15 @@ namespace nikitov
       node->prev_ = otherNode;
     }
     ++size_;
+  }
+
+  template< typename T >
+  void List< T >::splice(ConstListIterator< T > position, List< T >& other)
+  {
+    while (other.size_ != 0)
+    {
+       splice(position, other, other.cbegin());
+    }
   }
 
   template< typename T >
