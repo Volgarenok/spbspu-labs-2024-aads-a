@@ -32,10 +32,9 @@ int main()
   // }
   // std::cout << '\n';
   // freeMemory(pairs, size);
-  List< int > list({ 5,5,4,3,2,1 });
-  List< int > list2(5, 5);
-  std::cout << list.front() << '\n';
-  list.sort();
-  list2.merge(list);
-  std::cout << list2.front();
+  List< int > list({1,2,3,4,5});
+  List< int > list2({6,7,8,9});
+  list.insert(list.cbegin(), list2.begin(), list2.end());
+  list2.emplace(list2.cbegin(), 1,2,3,4,5,6,7);
+  std::cout << *--list2.end();
 }

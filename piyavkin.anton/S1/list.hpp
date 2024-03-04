@@ -429,17 +429,22 @@ namespace piyavkin
       }
       return it_finish;
     }
-    ConstListIterator< T > insert(ConstListIterator< T > it, const T& value)
+    ListIterator< T > insert(ConstListIterator< T > it, const T& value)
     {
       try
       {
+        ListIterator< T > ret;
         if (it == cbegin())
         {
           push_front(value);
+          ListIterator< T > temp(begin());
+          ret = temp;
         }
         else if (it == cend())
         {
           push_back(value);
+          ListIterator< T > temp(--end());
+          ret = temp;
         }
         else
         {
@@ -454,8 +459,29 @@ namespace piyavkin
           node->prev_ = new_node;
           new_node->prev_->next_ = new_node;
           ++size_;
+          ListIterator< T > temp(new_node);
+          ret = temp;
         }
-        return it;
+        return ret;
+      }
+      catch(const std::exception& e)
+      {
+        clear();
+        throw;
+      }
+    }
+    ListIterator< T > insert(ConstListIterator< T > it, ListIterator< T > start, ListIterator< T > finish)
+    {
+      try
+      {
+        ListIterator< T > iterator(start);
+        while (start != finish)
+        {
+          insert(it, *start);
+          ++it;
+          ++start;
+        }
+        return iterator;
       }
       catch(const std::exception& e)
       {
@@ -642,6 +668,16 @@ namespace piyavkin
       list.clear();
       list.head_ = nullptr;
       list.tail_ = nullptr;
+    }
+    void emplace(ConstListIterator< T >)
+    {}
+    template< class... Args >
+    ListIterator< T > emplace(ConstListIterator< T > it, const T& val, Args&&... args)
+    {
+      ConstListIterator< T > temp(it);
+      ListIterator< T > iterator = insert(temp, val);
+      emplace(it, args...);
+      return iterator;
     }
   private:
     Node< T >* head_;
