@@ -169,8 +169,8 @@ void List<T>::reverse()
 template<typename T>
 void List<T>::remove(const T& value)
 {
-  Node* current = head_;
-  Node* prev = nullptr;
+  Node<T>* current = head_;
+  Node<T>* prev = nullptr;
 
   while (current != nullptr) {
     if (current->data == value)
@@ -210,7 +210,7 @@ template<typename T>
 T& List<T>::operator[](const int index)
 {
   int counter = 0;
-  Node* current = this->head;
+  Node<T>* current = this->head;
   if (size <= index || index < 0)
   {
     throw std::out_of_range("Index out of range");
