@@ -72,6 +72,7 @@ namespace nikitov
     void clear();
     void swap(List< T >& other);
 
+    void splice(constIterator position, List< T >& other, constIterator otherPosition);
     void sort();
     void unique();
     void reverse();
@@ -552,6 +553,67 @@ namespace nikitov
     std::swap(head_, other.head_);
     std::swap(tail_, other.tail_);
     std::swap(size_, other.size_);
+  }
+
+  template< typename T >
+  void List< T >::splice(ConstListIterator< T > position, List< T >& other, ConstListIterator< T > otherPosition)
+  {
+    auto otherIterator = other.begin();
+    Node< T >* otherNode = other.head_;
+    while (otherIterator != otherPosition)
+    {
+      ++otherIterator;
+      otherNode = otherNode->next_;
+    }
+
+    if (otherPosition == other.cbegin())
+    {
+      other.head_ = otherNode->next_;
+      otherNode->next_->prev_ = otherNode->prev_;
+    }
+    else if (otherPosition == --(other.cend()))
+    {
+      other.tail_ = otherNode->prev_;
+      otherNode->next_->prev_ = other.tail_;
+      other.tail_->next_ = otherNode->next_;
+    }
+    else
+    {
+      otherNode->next_->prev_ = otherNode->prev_;
+      otherNode->prev_->next_ = otherNode->next_;
+    }
+    --other.size_;
+
+    if (position == cbegin())
+    {
+      otherNode->prev_ = head_->prev_;
+      otherNode->next_ = head_;
+      head_->prev_ = otherNode;
+      head_ = otherNode;
+    }
+    else if (position == cend())
+    {
+      otherNode->prev_ = tail_;
+      otherNode->next_ = tail_->next_;
+      tail_->next_->prev_ = otherNode;
+      tail_->next_ = otherNode;
+      tail_ = otherNode;
+    }
+    else
+    {
+      auto iterator = begin();
+      Node< T >* node = head_;
+      while (iterator != position)
+      {
+        ++iterator;
+        node = node->next_;
+      }
+      otherNode->prev_ = node->prev_;
+      otherNode->next_ = node;
+      otherNode->prev_->next_ = otherNode;
+      node->prev_ = otherNode;
+    }
+    ++size_;
   }
 
   template< typename T >
