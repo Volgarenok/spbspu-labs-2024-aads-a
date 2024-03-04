@@ -20,4 +20,5 @@ namespace zakozhurnikova
   }
 
   void printNames(const List<pair>& l);
+  void printByIndex(const List<pair>& l);
 }
