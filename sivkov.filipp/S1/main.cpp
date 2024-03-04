@@ -15,6 +15,7 @@ int main()
   List<size_t> numbers;
   while (allData)
   {
+    bool flag = false;
     allData = false;
     for (auto iteratorForPair = list.cbegin(); iteratorForPair != list.cend(); ++iteratorForPair)
     {
