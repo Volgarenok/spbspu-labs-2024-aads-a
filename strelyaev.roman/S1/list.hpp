@@ -15,13 +15,25 @@ namespace strelyaev
       head_(head),
       tail_(tail)
      {}
+
      List():
       head_(nullptr),
       tail_(nullptr)
      {}
+
+     List(const List& other):
+       head_(nullptr),
+       tail_(nullptr)
+     {
+       for (auto it = other.head_; it != nullptr; it = it->next_)
+       {
+         push_back(it->value_);
+       }
+     }
+
      ~List()
      {
-      this->clear();
+      clear();
      }
 
      void swap(List< T >& val)
@@ -68,30 +80,19 @@ namespace strelyaev
 
      void pop_front()
      {
-       if (!head_)
+       Node< T >* temp = head_->next_;
+       if (!temp)
        {
-         throw std::out_of_range("Unable to pop_front()");
-       }
-       Node< T >* temp_head = head_;
-       if (head_->next_)
-       {
-         head_->next_->prev_ = nullptr;
-         head_ = head_->next_;
-         delete temp_head;
-       }
-       else
-       {
-         delete temp_head;
+         delete head_;
          head_ = nullptr;
+         return;
        }
+       delete head_;
+       head_ = temp;
      }
 
      void pop_back()
      {
-       if (!tail_)
-       {
-         throw std::out_of_range("Unable to pop_back()");
-       }
        Node< T >* temp_tail = tail_;
        if (tail_->prev_)
        {
@@ -106,18 +107,22 @@ namespace strelyaev
        }
      }
 
+     T& back()
+     {
+      return tail_->value_;
+     }
+
+     T& front()
+     {
+      return head_->value_;
+     }
 
      void clear()
      {
-     /* Node< T >* current = head_;
-      while (current != nullptr)
-      {
-        Node< T >* next = current->next_;
-        delete current;
-        current = next;
-      }
-      head_ = nullptr;
-      tail_ = nullptr;*/
+       while (head_ != nullptr)
+       {
+         pop_front();
+       }
      }
 
      Iterator< T > begin()
@@ -130,7 +135,7 @@ namespace strelyaev
        return Iterator< T >(nullptr);
      }
 
-    //private:
+    private:
      Node< T >* head_;
      Node< T >* tail_;
   };
