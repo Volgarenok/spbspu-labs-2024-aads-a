@@ -25,7 +25,7 @@ namespace strelyaev
       {
         for (auto it = other.head_; it != nullptr; it = it->next_)
         {
-          push_back(it->value);
+          push_back(it->value_);
         }
       }
 
@@ -135,7 +135,6 @@ namespace strelyaev
       {
         return Iterator< T >(nullptr);
       }
-
 
     private:
       Node< T >* head_;
