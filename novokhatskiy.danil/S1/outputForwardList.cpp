@@ -8,13 +8,6 @@ void novokhatskiy::outputForwardList(std::ostream& out, ForwardList<std::pair<st
     throw std::invalid_argument("ForwardList is empty");
   }
   ForwardIterator< std::pair<std::string, ForwardList< size_t > > > iter = pairs.begin();
-  for (; iter != pairs.end(); iter++)
-  {
-    if (std::numeric_limits< size_t>::max() - iter->second.front() <= iter->second.front())
-    {
-      throw std::out_of_range("Overflow");
-    }
-  }
   size_t maxSize{};
   for (; iter != pairs.end(); iter++)
   {
