@@ -63,7 +63,7 @@ void novokhatskiy::outputForwardList(std::ostream& out, ForwardList<std::pair<st
   listOfSums.reverse();
   if (listOfSums.empty())
   {
-    std::cout << "0";
+    std::cout << "0\n";
   }
   else
   {
