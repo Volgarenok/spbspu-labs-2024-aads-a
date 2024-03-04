@@ -234,7 +234,7 @@ namespace piyavkin
     }
     void splice(ConstListIterator< T > it, List< T >& list)
     {
-      if (it == begin())
+      if (it == cbegin())
       {
         head_->prev_ = list.tail_;
         delete list.tail_->next_;
@@ -245,7 +245,7 @@ namespace piyavkin
         list.size_ = 0;
         return;
       }
-      else if (it == end())
+      else if (it == cend())
       {
         delete tail_->next_;
         list.head_->prev_ = tail_;
@@ -396,11 +396,12 @@ namespace piyavkin
     }
     ConstListIterator< T > erase(ConstListIterator< T > it)
     {
+      ConstListIterator< T > end(tail_);
       if (it == cbegin())
       {
         pop_front();
       }
-      else if (it == cend())
+      else if (it == end)
       {
         pop_back();
       }
@@ -559,6 +560,41 @@ namespace piyavkin
       while (!empty())
       {
         pop_back();
+      }
+    }
+    void unique()
+    {
+      ConstListIterator< T > it(head_);
+      ConstListIterator< T > end(tail_);
+      while (it != cend())
+      {
+        ConstListIterator< T > temp(it);
+        ++temp;
+        while (temp != cend())
+        {
+          ConstListIterator< T > temp_end(tail_);
+          end = temp_end;
+          if (temp == end)
+          {
+            if (*temp == *it)
+            {
+              erase(temp);
+            }
+            break;
+          }
+          if (*temp == *it)
+          {
+            ConstListIterator< T > temp2(temp);
+            ++temp2;
+            erase(temp);
+            temp = temp2;
+          }
+          else
+          {
+            ++temp;
+          }
+        }
+        ++it;
       }
     }
   private:

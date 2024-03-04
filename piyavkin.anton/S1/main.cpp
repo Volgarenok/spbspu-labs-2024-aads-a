@@ -32,9 +32,10 @@ int main()
   // }
   // std::cout << '\n';
   // freeMemory(pairs, size);
-  List< int > list({1,2,3,4,5});
-  List< int > list2(5,5);
+  List< int > list({ 1,2,2,3,3,3,3,3,3,4,4,4,4,4,5 });
+  List< int > list2(5, 5);
+  std::cout << list.size() << '\n';
   List< int > list3(list2.begin(), list2.end());
-  list.erase(list.cbegin(), list.cend());
-  list2.insert(list2.cbegin(), 5);
+  list.unique();
+  std::cout << list.size();
 }
