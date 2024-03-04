@@ -586,7 +586,6 @@ int main()
       std::cout << " ";
     }
   }
-  std::cout << "\n";
 
   if (lst.empty())
   {
