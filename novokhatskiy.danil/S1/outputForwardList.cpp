@@ -6,6 +6,7 @@ int novokhatskiy::outputForwardList(std::ostream& out, ForwardList<std::pair<std
   if (pairs.empty())
   {
     out << "0" << '\n';
+    return 0;
   }
   ForwardIterator< std::pair<std::string, ForwardList< size_t > > > iter = pairs.begin();
   size_t maxSize{};
