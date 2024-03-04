@@ -2,10 +2,9 @@
 #include <iostream>
 #include <stdexcept>
 
-#include "binList.cpp"
 #include "binList.hpp"
+#include "binList.cpp"
 #include "iterator.hpp"
-#include "node.cpp"
 #include "node.hpp"
 
 int main()
@@ -67,6 +66,7 @@ int main()
     iterator_list it_start = list.begin();
     iterator_list it_end = list.end();
     ++it_start;
+    it_end--;
 
     std::cout << "list_2\n";
     List list_t;

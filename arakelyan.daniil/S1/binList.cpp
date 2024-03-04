@@ -48,25 +48,25 @@ bool arakelyan::BinList< T >::isEmpty() const
 }
 
 template < class T >
-Iterator< T > arakelyan::BinList< T >::begin() const
+arakelyan::Iterator< T > arakelyan::BinList< T >::begin() const
 {
   return Iterator< T >(head_);
 }
 
 template < class T >
-const Iterator< T > arakelyan::BinList< T >::cbegin() const
+const arakelyan::Iterator< T > arakelyan::BinList< T >::cbegin() const
 {
   return Iterator< T >(head_);
 }
 
 template < class T >
-Iterator< T > arakelyan::BinList< T >::end() const
+arakelyan::Iterator< T > arakelyan::BinList< T >::end() const
 {
   return Iterator< T >(tail_->nextNode);
 }
 
 template < class T >
-const Iterator< T > arakelyan::BinList< T >::cend() const
+const arakelyan::Iterator< T > arakelyan::BinList< T >::cend() const
 {
   return Iterator< T >(tail_->nextNode);
 }
@@ -182,7 +182,6 @@ void arakelyan::BinList< T >::pop_back()
   tail_ = node;
   --size_;
 }
-
 
 template < class T >
 void arakelyan::BinList< T >::assign(const T &val, const size_t size)

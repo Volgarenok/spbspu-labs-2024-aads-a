@@ -2,75 +2,82 @@
 #define ITERATOR_HPP
 
 #include <stdexcept>
+#include <cassert>
 #include "node.hpp"
 
-template < class T >
-struct Iterator
+namespace arakelyan
 {
-  Iterator<T>(const Iterator< T > &val) = default;
-
-  Iterator<T> &operator=(const Iterator< T > &val) = default;
-
-  Iterator< T >():
-    node(nullptr)
-  {}
-
-  Iterator< T >(Node< T > *val) :
-    node(val)
-  {}
-
-  // operator--
-  Iterator< T > &operator--()
+  template < class T >
+  struct Iterator
   {
-    node = node->prevNode;
-    return *this;
-  }
+    Iterator< T >(const Iterator< T > &val) = default;
 
-  // operator--(int)
-  Iterator< T > operator--(int)
-  {
-    Iterator< T > res(*this);
-    --(*this);
-    return res;
-  }
+    Iterator< T > &operator=(const Iterator< T > &val) = default;
 
-  Iterator< T > operator++() // ++a
-  {
-    node = node->nextNode;
-    return *this;
-  }
+    Iterator< T >():
+      node(nullptr)
+    {}
 
-  Iterator< T > operator++(int) // a++
-  {
-    Iterator< T > res(*this);
-    ++(*this);
-    return res;
-  }
+    Iterator< T >(Node< T > *val):
+      node(val)
+    {}
 
-  T &operator*() // + const ver
-  {
-    return node->value;
-  }
+    Iterator< T > &operator--()
+    {
+      assert(node != nullptr);
+      node = node->prevNode;
+      return *this;
+    }
 
-  T *operator->() // + const ver
-  {
-    return std::addressof(*this);
-  }
+    Iterator< T > operator--(int)
+    {
+      assert(node != nullptr);
+      Iterator< T > res(*this);
+      --(*this);
+      return res;
+    }
 
-  bool operator!=(const Iterator< T > &val) const
-  {
-    return !(*this == val);
-  }
+    Iterator< T > operator++() // ++a
+    {
+      assert(node != nullptr);
+      node = node->nextNode;
+      return *this;
+    }
 
-  bool operator==(const Iterator< T > &val) const
-  {
-    return node == val.node;
-  }
+    Iterator< T > operator++(int) // a++
+    {
+      assert(node != nullptr);
+      Iterator< T > res(*this);
+      ++(*this);
+      return res;
+    }
 
-  ~Iterator() = default;
+    T &operator*() const
+    {
+      assert(node != nullptr);
+      return node->value;
+    }
 
-private:
-  Node< T > *node;
-};
+    T *operator->() const
+    {
+      assert(node != nullptr);
+      return std::addressof(*this);
+    }
 
+    bool operator!=(const Iterator< T > &val) const
+    {
+      return !(*this == val);
+    }
+
+    bool operator==(const Iterator< T > &val) const
+    {
+      return node == val.node;
+    }
+
+    ~Iterator() = default;
+
+  private:
+    Node< T > *node;
+  };
+}
 #endif
