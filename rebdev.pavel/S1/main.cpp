@@ -44,7 +44,7 @@ int main()
   {
     std::cout << pairArr[i].first << ' ';
   }
-  std::cout << pairArr[numOfPairs - 1] << '\n';
+  std::cout << pairArr[numOfPairs - 1].first << '\n';
 
   size_t sumOfNum[maxNumber] = {};
   for (size_t i = 0; i < maxNumber; ++i)
