@@ -151,10 +151,10 @@ void List<T>::reverse()
   result->next = nullptr;
   while (temp)
   {
-    Node< T >* rofl = temp->next;
+    Node< T >* node = temp->next;
     temp->next = result;
     result = temp;
-    temp = rofl;
+    temp = node;
   }
   head_ = result;
 }
