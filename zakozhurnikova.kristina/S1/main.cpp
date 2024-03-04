@@ -18,9 +18,12 @@ int main()
   }
   catch (const std::range_error& e)
   {
+    return 1;
   }
   catch (const std::out_of_range& e)
   {
+    std::cerr << "Overflow numbers!\n";
+    return 1;
   }
   return 0;
 }
