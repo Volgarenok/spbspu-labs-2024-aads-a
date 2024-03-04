@@ -21,4 +21,34 @@ namespace zakozhurnikova
 
   void printNames(const List<pair>& l);
   void printByIndex(const List<pair>& l);
+
+  template <typename T>
+  void printSums(const List<pair>& l)
+  {
+    constexpr size_t max = std::numeric_limits<size_t>::max();
+    T maxSize = getMaxSize< T >(l);
+    for (size_t i = 0; i < maxSize; ++i)
+    {
+      T sum = 0;
+      for (pair p : l)
+      {
+        if (i >= p.second.size())
+        {
+          continue;
+        }
+        if (max - sum > *(p.second.cbegin() + i))
+        {
+          sum += *(p.second.cbegin() + i);
+        }
+        else
+        {
+          throw std::range_error("Failed input numbers with overflow");
+        }
+
+      }
+      std::cout << sum << ' ';
+    }
+  }
 }
+
+#endif
