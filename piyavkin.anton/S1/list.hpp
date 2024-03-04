@@ -614,6 +614,35 @@ namespace piyavkin
         node1 = node1->next_;
       }
     }
+    void merge(List< T >& list)
+    {
+      ConstListIterator< T > start(head_);
+      ConstListIterator< T > list_start(list.head_);
+      while (list_start != list.cend())
+      {
+        if (*start >= *list_start)
+        {
+          insert(start, *list_start);
+          ++start;
+          ++list_start;
+          if (start == cend())
+          {
+            while (list_start != list.cend())
+            {
+              push_back(*list_start);
+              ++list_start;
+            }
+          }
+        }
+        else
+        {
+          ++list_start;
+        }
+      }
+      list.clear();
+      list.head_ = nullptr;
+      list.tail_ = nullptr;
+    }
   private:
     Node< T >* head_;
     Node< T >* tail_;
