@@ -9,6 +9,7 @@ int main()
   outputNames(list);
 
   bool allData = true;
+  bool flag = false;
   size_t sum = 0;
   size_t counter = 0;
   List<size_t> numbers;
@@ -37,8 +38,8 @@ int main()
         }
         else
         {
-          throw std::out_of_range("Overflow");
-          return 1;
+          flag = true;
+
         }
         std::cout << *iteratorForNums;
         allData = true;
@@ -60,5 +61,9 @@ int main()
   }
   numbers.reverse();
   outputSums(numbers);
+  if (flag == true)
+  {
+    std::cerr << "OverFlow\n";
+  }
   return 0;
 }
