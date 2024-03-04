@@ -372,20 +372,24 @@ namespace erohin
   template< class UnaryPredicate >
   void List< T >::remove_if(UnaryPredicate p)
   {
-    auto iter_begin = begin();
-    auto iter_end = end();
-    if (iter_begin != iter_end)
+    T list_front_value(std::move(front()));
+    pop_front();
+    if (!p(list_front_value))
     {
-      pop_front();
+      push_front(std::move(list_front_value));
     }
-    ++iter_begin;
-    while (iter_begin != iter_end)
+    auto iter_begin = cbegin();
+    auto iter_end = cend();
+    while (iter_begin + 1 != iter_end)
     {
-      if (true)
+      if (p(*(iter_begin + 1)))
       {
         erase_after(iter_begin);
       }
-      ++iter_begin;
+      else
+      {
+        ++iter_begin;
+      }
     }
   }
 
