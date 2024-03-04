@@ -580,7 +580,11 @@ int main()
 
   for (auto& sum : lst)
   {
-    std::cout << sum << " ";
+    std::cout << sum;
+    if (&sum != &lst.back())
+    {
+      std::cout << " ";
+    }
   }
   std::cout << "\n";
 
