@@ -6,8 +6,9 @@ namespace namestnikov
   template<class T>
   struct Node
   {
-    Node(const T & data = T(), Node * next = nullptr):
-      data_(data), next_(next)
+    Node() = default;
+    Node(const T & data):
+      data_(data), next_(nullptr)
     {}
     ~Node() = default;
     T data_;

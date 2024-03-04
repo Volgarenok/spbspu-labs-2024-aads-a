@@ -10,15 +10,14 @@ void namestnikov::inputLists(std::istream & in, ForwardList<pair_t> & dataList)
   while (in)
   {
     dataList.push_front({listParameters, ForwardList<unsigned long long>()});
-    while (in && (std::isdigit(listParameters[0])))
+    while ((in >> listParameters) && (std::isdigit(listParameters[0])))
     {
-      dataList.front().second.push_front(std::stoull(listParameters));
-      in >> listParameters;
+      unsigned long long number = std::stoull(listParameters);
+      dataList.front().second.push_front(number);
     }
   }
   //std::cout << dataList.size();
 }
-
 
 void namestnikov::outputLists(std::ostream & out, ForwardList<pair_t> & dataList)
 {

@@ -13,15 +13,15 @@ namespace namestnikov
   template <class T>
   class ForwardList
   {
+   using node_t = Node<T>;
   public:
-    using node_t = Node<T>;
     ForwardList():
       head_(nullptr),
       size_(0)
     {}
     ForwardList(size_t size, const T & value):
       head_(nullptr),
-      size_(size)
+      size_(0)
     {
       for (size_t i = 0; i < size; ++i)
       {
@@ -40,9 +40,9 @@ namespace namestnikov
     {
       while (head_)
       {
-        auto todel = head_;
-        head_ = head_->next_;
-        delete todel;
+        node_t * temp = head_->next_;
+        delete head_;
+        head_ = temp;
       }
     }
     ForwardList<T> & operator=(const ForwardList<T> & other)
@@ -74,7 +74,7 @@ namespace namestnikov
     }
     bool empty() const
     {
-      return !size_;
+      return head_ == nullptr;
     }
     T & front()
     {
@@ -89,27 +89,31 @@ namespace namestnikov
     }
     void pop_front()
     {
-      if (size_ == 0)
+      if (empty())
       {
         throw std::runtime_error("ForwardList is empty");
       }
-      node_t * temp = head_->next_;
-      delete head_;
-      head_ = temp;
+      node_t * temp = head_;
+      head_ = head_->next_;
+      delete temp;
       --size_;
     }
-    void print()
-    {
-      node_t * temp = head_;
-      while (temp)
-      {
-        std::cout << temp->data_ << " ";
-        temp = temp->next_;
-      }
-      std::cout << "\n";
-    }
+    //void print()
+    //{
+    //  node_t * temp = head_;
+    //  while (temp)
+    //  {
+    //    std::cout << temp->data_ << " ";
+    //    temp = temp->next_;
+    //  }
+    //  std::cout << "\n";
+    //}
     void reverse()
     {
+      if (!head_)
+      {
+        return;
+      }
       node_t * newHead = head_;
       node_t * tail = head_->next_;
       newHead->next_ = nullptr;

@@ -7,7 +7,7 @@
 int main()
 {
   using namespace namestnikov;
-  ForwardList<pair_t> list;
-  inputLists(std::cin, list);
-  outputLists(std::cout, list);
+  ForwardList<pair_t> dataList;
+  inputLists(std::cin, dataList);
+  //outputLists(std::cout, list);
 }

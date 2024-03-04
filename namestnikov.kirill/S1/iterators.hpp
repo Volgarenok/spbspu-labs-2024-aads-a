@@ -7,10 +7,11 @@
 namespace namestnikov
 {
   template <class T>
-  struct ForwardIterator: public std::iterator<std::forward_iterator_tag, T>
+  class ForwardIterator: public std::iterator<std::forward_iterator_tag, T>
   {
     using this_t = ForwardIterator<T>;
     using node_t = Node<T>;
+  public:
     ForwardIterator(): node_(nullptr) {}
     ForwardIterator(node_t * node): node_(node) {}
     ForwardIterator(const this_t &) = default;
@@ -32,7 +33,7 @@ namespace namestnikov
     }
     bool operator==(const this_t & other) const
     {
-      return other.node_ == node_;
+      return node_ == other.node_;
     }
     T & operator*()
     {
@@ -59,7 +60,8 @@ namespace namestnikov
       return *this;
     }
     ~ForwardIterator() = default;
-    Node<T> * node_;
+  private:
+    node_t * node_;
   };
 }
 #endif
