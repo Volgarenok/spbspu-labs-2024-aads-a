@@ -57,6 +57,52 @@ namespace piyavkin
     {
       return node->value_;
     }
+  private:
+    Node< D >* node;
+  };
+  template< class D >
+  class ConstListIterator: public std::iterator< std::bidirectional_iterator_tag, D >
+  {
+  public:
+    ConstListIterator():
+      node(nullptr)
+    {}
+    ConstListIterator(Node< D >* nd):
+      node(nd)
+    {}
+    ConstListIterator(const ConstListIterator< D >&) = default;
+    ConstListIterator< D >& operator=(const ConstListIterator< D >&) = default;
+    ~ConstListIterator() = default;
+    ConstListIterator< D >& operator++()
+    {
+      node = node->next_;
+      return *this;
+    }
+    ConstListIterator< D >& operator--()
+    {
+      node = node->prev_;
+      return *this;
+    }
+    ConstListIterator< D > operator++(int)
+    {
+      ConstListIterator< D > result(*this);
+      ++(*this);
+      return result;
+    }
+    ConstListIterator< D > operator--(int)
+    {
+      ConstListIterator< D > result(*this);
+      --(*this);
+      return result;
+    }
+    bool operator==(const ConstListIterator< D >& rhs) const
+    {
+      return node == rhs.node;
+    }
+    bool operator!=(const ConstListIterator< D >& rhs) const
+    {
+      return !(*this == rhs);
+    }
     const D* operator->() const
     {
       return std::addressof(node->value_);

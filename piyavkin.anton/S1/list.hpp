@@ -21,28 +21,52 @@ namespace piyavkin
     List(const T& value, size_t count):
       List()
     {
-      for (size_t i = 0; i < count; ++i)
+      try
       {
-        push_back(value);
+        for (size_t i = 0; i < count; ++i)
+        {
+          push_back(value);
+        }
+      }
+      catch (const std::exception& e)
+      {
+        clear();
+        throw;
       }
     }
     List(ListIterator< T > start, ListIterator< T > finish):
       List()
     {
-      while (start != finish)
+      try
       {
-        push_back(*start);
-        ++start;
+        while (start != finish)
+        {
+          push_back(*start);
+          ++start;
+        }
+      }
+      catch (const std::exception& e)
+      {
+        clear();
+        throw;
       }
     }
     List(std::initializer_list< T > il):
       List()
     {
-      auto it = il.begin();
-      while (it != il.end())
+      try
       {
-        push_back(*it);
-        ++it;
+        auto it = il.begin();
+        while (it != il.end())
+        {
+          push_back(*it);
+          ++it;
+        }
+      }
+      catch (const std::exception& e)
+      {
+        clear();
+        throw;
       }
     }
     List(const List< T >& rhs):
@@ -130,35 +154,59 @@ namespace piyavkin
     }
     void assign(const T& value, size_t count)
     {
-      clear();
-      head_ = nullptr;
-      tail_ = nullptr;
-      for (size_t i = 0; i < count; ++i)
+      try
       {
-        push_back(value);
+        clear();
+        head_ = nullptr;
+        tail_ = nullptr;
+        for (size_t i = 0; i < count; ++i)
+        {
+          push_back(value);
+        }
+      }
+      catch(const std::exception& e)
+      {
+        clear();
+        throw;
       }
     }
     void assign(ListIterator< T > start, ListIterator< T > finish)
     {
-      clear();
-      head_ = nullptr;
-      tail_ = nullptr;
-      while (start != finish)
+      try
       {
-        push_back(*start);
-        ++start;
+        clear();
+        head_ = nullptr;
+        tail_ = nullptr;
+        while (start != finish)
+        {
+          push_back(*start);
+          ++start;
+        }
+      }
+      catch(const std::exception& e)
+      {
+        clear();
+        throw;
       }
     }
     void assign(std::initializer_list< T > il)
     {
-      clear();
-      head_ = nullptr;
-      tail_ = nullptr;
-      auto it = il.begin();
-      while (it != il.end())
+      try
       {
-        push_back(*it);
-        ++it;
+        clear();
+        head_ = nullptr;
+        tail_ = nullptr;
+        auto it = il.begin();
+        while (it != il.end())
+        {
+          push_back(*it);
+          ++it;
+        }
+      }
+      catch(const std::exception& e)
+      {
+        clear();
+        throw;
       }
     }
     void remove(const T& value)
@@ -184,7 +232,7 @@ namespace piyavkin
         --size_;
       }
     }
-    void splice(ListIterator< T > it, List< T >& list)
+    void splice(ConstListIterator< T > it, List< T >& list)
     {
       if (it == begin())
       {
@@ -208,7 +256,7 @@ namespace piyavkin
         list.size_ = 0;
         return;
       }
-      ListIterator< T > iterator(head_);
+      ConstListIterator< T > iterator(head_);
       Node< T >* node = head_;
       while (iterator != it)
       {
@@ -303,7 +351,7 @@ namespace piyavkin
     }
     const T& operator[](size_t i) const
     {
-      ListIterator< T > iterator(head_);
+      ConstListIterator< T > iterator(head_);
       for (size_t j = 0; j < i; ++j)
       {
         ++iterator;
@@ -338,27 +386,27 @@ namespace piyavkin
     {
       return ListIterator< T >(tail_->next_);
     }
-    const ListIterator< T > cbegin() const
+    const ConstListIterator< T > cbegin() const
     {
-      return ListIterator< T >(head_);
+      return ConstListIterator< T >(head_);
     }
-    const ListIterator< T > cend() const
+    const ConstListIterator< T > cend() const
     {
-      return ListIterator< T >(tail_->next_);
+      return ConstListIterator< T >(tail_->next_);
     }
-    ListIterator< T >& erase(const ListIterator< T >& it)
+    ConstListIterator< T > erase(ConstListIterator< T > it)
     {
-      if (it == begin())
+      if (it == cbegin())
       {
         pop_front();
       }
-      else if (it == end())
+      else if (it == cend())
       {
         pop_back();
       }
       else
       {
-        ListIterator< T > iterator(head_);
+        ConstListIterator< T > iterator(head_);
         Node< T >* node = head_;
         while (iterator != it)
         {
@@ -372,7 +420,7 @@ namespace piyavkin
       }
       return it;
     }
-    ListIterator< T >& erase(ListIterator< T >& it_start, const ListIterator< T >& it_finish)
+    ConstListIterator< T > erase(ConstListIterator< T > it_start, ConstListIterator< T > it_finish)
     {
       while (it_start != it_finish)
       {
@@ -380,31 +428,39 @@ namespace piyavkin
       }
       return it_finish;
     }
-    ListIterator< T >& insert(const ListIterator< T >& it, const T& value)
+    ConstListIterator< T > insert(ConstListIterator< T > it, const T& value)
     {
-      if (it == begin())
+      try
       {
-        push_front(value);
-      }
-      else if (it == end())
-      {
-        push_back(value);
-      }
-      else
-      {
-        ListIterator< T > iterator(head_);
-        Node< T >* node = head_;
-        while (iterator != it)
+        if (it == cbegin())
         {
-          node = node->next_;
-          ++iterator;
+          push_front(value);
         }
-        Node< T >* new_node = new Node< T >(value, node, node->prev_);
-        node->prev_ = new_node;
-        new_node->prev_->next_ = new_node;
-        ++size_;
+        else if (it == cend())
+        {
+          push_back(value);
+        }
+        else
+        {
+          ConstListIterator< T > iterator(head_);
+          Node< T >* node = head_;
+          while (iterator != it)
+          {
+            node = node->next_;
+            ++iterator;
+          }
+          Node< T >* new_node = new Node< T >(value, node, node->prev_);
+          node->prev_ = new_node;
+          new_node->prev_->next_ = new_node;
+          ++size_;
+        }
+        return it;
       }
-      return it;
+      catch(const std::exception& e)
+      {
+        clear();
+        throw;
+      }
     }
     bool empty() const
     {
@@ -419,10 +475,18 @@ namespace piyavkin
       }
       if (!tail_)
       {
-        Node< T >* end_node = new Node< T >(value);
-        tail_ = new_node;
-        end_node->prev_ = tail_;
-        tail_->next_ = end_node;
+        try
+        {
+          Node< T >* end_node = new Node< T >(value);
+          tail_ = new_node;
+          end_node->prev_ = tail_;
+          tail_->next_ = end_node;
+        }
+        catch(const std::exception& e)
+        {
+          delete new_node;
+          throw;
+        }
       }
       head_ = new_node;
       ++size_;
@@ -438,13 +502,21 @@ namespace piyavkin
       }
       if (!head_)
       {
-        Node< T >* end_node = new Node< T >(value);
-        head_ = new_node;
-        tail_ = head_;
-        end_node->prev_ = tail_;
-        tail_->next_ = end_node;
-        ++size_;
-        return;
+        try
+        {
+          Node< T >* end_node = new Node< T >(value);
+          head_ = new_node;
+          tail_ = head_;
+          end_node->prev_ = tail_;
+          tail_->next_ = end_node;
+          ++size_;
+          return; 
+        }
+        catch(const std::exception& e)
+        {
+          delete new_node;
+          throw;
+        }
       }
       tail_ = new_node;
       ++size_;
