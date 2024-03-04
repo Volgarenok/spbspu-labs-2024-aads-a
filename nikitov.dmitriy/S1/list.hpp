@@ -63,6 +63,7 @@ namespace nikitov
     void pop_front();
     void push_back(const T& value);
     void pop_back();
+    iterator insert(constIterator position, const T& value);
     void clear();
     void swap(List< T >& other);
 
@@ -423,6 +424,38 @@ namespace nikitov
     delete tail_;
     tail_ = ptr;
     --size_;
+  }
+
+  template< typename T >
+  ListIterator< T > List< T >::insert(ConstListIterator< T > position, const T& value)
+  {
+    if (position == cbegin())
+    {
+      push_front(value);
+      return begin();
+    }
+    else if (position == cend())
+    {
+      push_back(value);
+      return --end();
+    }
+    else
+    {
+      auto iterator = begin();
+      Node< T >* node = head_;
+      while (iterator != position)
+      {
+        ++iterator;
+        node = node->next_;
+      }
+      Node< T >* newNode = new Node< T >(value);
+      newNode->prev_ = node->prev_;
+      newNode->next_ = node;
+      newNode->prev_->next_ = newNode;
+      node->prev_ = newNode;
+      ++size_;
+      return iterator;
+    }
   }
 
   template< typename T >
