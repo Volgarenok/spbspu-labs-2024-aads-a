@@ -2,29 +2,36 @@
 #define CONST_LIST_ITERATOR_HPP
 
 #include <iterator>
+#include "list_iterator.hpp"
 
 namespace nikitov
 {
+  template< typename T >
+  class ListIterator;
+
   template< typename T >
   class Node;
 
   template< typename T >
   class ConstListIterator: public std::iterator< std::bidirectional_iterator_tag, T >
   {
+    friend class ListIterator< T >;
   public:
     ConstListIterator(Node< T >* node);
-    ConstListIterator(const ConstListIterator&) = default;
+    ConstListIterator(const ConstListIterator< T >&) = default;
     ~ConstListIterator() = default;
 
     const T& operator*() const;
     const T* operator->() const;
-    ConstListIterator< T >& operator=(const ConstListIterator&) = default;
+    ConstListIterator< T >& operator=(const ConstListIterator< T >&) = default;
     ConstListIterator< T >& operator++();
     ConstListIterator< T > operator++(int);
     ConstListIterator< T >& operator--();
     ConstListIterator< T > operator--(int);
-    bool operator==(const ConstListIterator& other) const;
-    bool operator!=(const ConstListIterator& other) const;
+    bool operator==(const ListIterator< T >& other) const;
+    bool operator!=(const ListIterator< T >& other) const;
+    bool operator==(const ConstListIterator< T >& other) const;
+    bool operator!=(const ConstListIterator< T >& other) const;
 
     ConstListIterator< T >& advance(int n);
 
@@ -88,13 +95,25 @@ namespace nikitov
   }
 
   template< typename T >
-  bool ConstListIterator< T >::operator==(const ConstListIterator& other) const
+  bool ConstListIterator< T >::operator==(const ListIterator< T >& other) const
   {
     return node_ == other.node_;
   }
 
   template< typename T >
-  bool ConstListIterator< T >::operator!=(const ConstListIterator& other) const
+  bool ConstListIterator< T >::operator!=(const ListIterator< T >& other) const
+  {
+    return node_ != other.node_;
+  }
+
+  template< typename T >
+  bool ConstListIterator< T >::operator==(const ConstListIterator< T >& other) const
+  {
+    return node_ == other.node_;
+  }
+
+  template< typename T >
+  bool ConstListIterator< T >::operator!=(const ConstListIterator< T >& other) const
   {
     return node_ != other.node_;
   }

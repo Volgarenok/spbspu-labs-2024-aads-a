@@ -2,29 +2,36 @@
 #define LIST_ITERATOR_HPP
 
 #include <iterator>
+#include "const_list_iterator.hpp"
 
 namespace nikitov
 {
+  template< typename T >
+  class ConstListIterator;
+
   template< typename T >
   class Node;
 
   template< typename T >
   class ListIterator: public std::iterator< std::bidirectional_iterator_tag, T >
   {
+    friend class ConstListIterator< T >;
   public:
     ListIterator(Node< T >* node);
-    ListIterator(const ListIterator&) = default;
+    ListIterator(const ListIterator< T >&) = default;
     ~ListIterator() = default;
 
     T& operator*();
     T* operator->();
-    ListIterator< T >& operator=(const ListIterator&) = default;
+    ListIterator< T >& operator=(const ListIterator< T >&) = default;
     ListIterator< T >& operator++();
     ListIterator< T > operator++(int);
     ListIterator< T >& operator--();
     ListIterator< T > operator--(int);
-    bool operator==(const ListIterator& other) const;
-    bool operator!=(const ListIterator& other) const;
+    bool operator==(const ConstListIterator< T >& other) const;
+    bool operator!=(const ConstListIterator< T >& other) const;
+    bool operator==(const ListIterator< T >& other) const;
+    bool operator!=(const ListIterator< T >& other) const;
 
     ListIterator< T >& advance(int n);
 
@@ -88,13 +95,25 @@ namespace nikitov
   }
 
   template< typename T >
-  bool ListIterator< T >::operator==(const ListIterator& other) const
+  bool ListIterator< T >::operator==(const ConstListIterator< T >& other) const
   {
     return node_ == other.node_;
   }
 
   template< typename T >
-  bool ListIterator< T >::operator!=(const ListIterator& other) const
+  bool ListIterator< T >::operator!=(const ConstListIterator< T >& other) const
+  {
+    return node_ != other.node_;
+  }
+
+  template< typename T >
+  bool ListIterator< T >::operator==(const ListIterator< T >& other) const
+  {
+    return node_ == other.node_;
+  }
+
+  template< typename T >
+  bool ListIterator< T >::operator!=(const ListIterator< T >& other) const
   {
     return node_ != other.node_;
   }
