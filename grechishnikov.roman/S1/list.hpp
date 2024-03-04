@@ -16,8 +16,15 @@ namespace grechishnikov
     List(List< T >&& other);
     ~List();
 
+
     void clear();
+
+    bool empty();
     void push_back(const T&);
+    void push_front(const T&);
+    void pop_back();
+    void pop_front();
+
   private:
     Node< T >* head_;
     Node< T >* tail_;
@@ -49,6 +56,12 @@ namespace grechishnikov
   }
 
   template< typename T >
+  bool List< T >::empty()
+  {
+    return !head_;
+  }
+
+  template< typename T >
   void List< T >::clear()
   {
     while (head_)
@@ -74,6 +87,57 @@ namespace grechishnikov
       tail_ = pushNode;
     }
   }
+
+  template< typename T >
+  void List< T >::push_front(const T& data)
+  {
+    Node< T >* pushNode = new Node< T >(data, nullptr, head_);
+    if (!head_)
+    {
+      head_ = pushNode;
+      tail_ = pushNode;
+    }
+    else
+    {
+      head_->prev_ = pushNode;
+      head_ = pushNode;
+    }
+  }
+
+  template< typename T >
+  void List< T >::pop_back()
+  {
+    if (head_ == tail_)
+    {
+      delete head_;
+      head_ = nullptr;
+      tail_ = nullptr;
+    }
+    else
+    {
+      Node< T >* temp = tail_->prev_;
+      delete tail_;
+      tail_ = temp;
+    }
+  }
+
+  template< typename T >
+  void List< T >::pop_front()
+  {
+    if (head_ == tail_)
+    {
+      delete head_;
+      head_ = nullptr;
+      tail_ = nullptr;
+    }
+    else
+    {
+      Node< T >* temp = head_->next_;
+      delete head_;
+      head_ = temp;
+    }
+  }
+
 }
 
 #endif
