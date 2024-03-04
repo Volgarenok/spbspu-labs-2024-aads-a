@@ -49,14 +49,24 @@ void novokhatskiy::outputForwardList(std::ostream& out, ForwardList<std::pair<st
       out << *numberIter;
       sum += *numberIter;
     }
-    out << '\n';
-    listOfSums.push_front(sum);
-    sum = 0;
+    if (sum == 0)
+    {
+      continue;
+    }
+    else
+    {
+      out << '\n';
+      listOfSums.push_front(sum);
+      sum = 0;
+    }
   }
-  listOfSums.reverse();
-  for (auto i = listOfSums.begin(); i != listOfSums.end() || i == nullptr; ++i)
+  if (listOfSums.empty())
   {
-    if (!listOfSums.empty())
+    std::cout << "0";
+  }
+  else
+  {
+    for (auto i = listOfSums.begin(); i != listOfSums.end(); ++i)
     {
       if (i != listOfSums.begin())
       {
@@ -64,14 +74,6 @@ void novokhatskiy::outputForwardList(std::ostream& out, ForwardList<std::pair<st
       }
       out << *i;
     }
-    else
-    {
-      std::cout << "0";
-      if (i == nullptr)
-      {
-        return;
-      }
-    };
+    out << '\n';
   }
-  out << '\n';
 }
