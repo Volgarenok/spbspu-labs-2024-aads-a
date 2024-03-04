@@ -10,7 +10,7 @@ void strelyaev::makeSequence(std::istream& in, List < std::pair < std::string, L
   in >> line;
   while (in)
   {
-    if (!in)
+    if (!in.good())
     {
       throw std::logic_error("Something went wrong with the input");
     }

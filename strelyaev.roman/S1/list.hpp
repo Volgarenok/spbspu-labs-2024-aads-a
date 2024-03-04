@@ -3,6 +3,9 @@
 #include "node.hpp"
 #include "iterator.hpp"
 
+
+
+#include <iostream>
 namespace strelyaev
 {
   template< typename T >
@@ -78,28 +81,34 @@ namespace strelyaev
 
       void pop_front()
       {
-        Node< T >* temp = head_->next_;
-        if (!temp)
+        if (!head_)
         {
-          delete head_;
-          head_ = nullptr;
           return;
         }
-        delete head_;
-        head_ = temp;
+        Node< T >* temp = head_;
+        head_ = head_->next_;
+        if (head_)
+        {
+          head_->prev_ = nullptr;
+        }
+        delete temp;
       }
 
       void pop_back()
       {
-        Node< T >* temp = tail_->prev_;
-        if (!temp)
+        if (!tail_)
         {
-          delete tail_;
-          tail_ = nullptr;
           return;
         }
-        delete tail_;
-        tail_ = temp;
+        Node< T >* temp = tail_;
+        std::cout << "Перехожу на следующий";
+        tail_ = tail_->prev_;
+        std::cout << "Перешел на следующий";
+        if (tail_)
+        {
+          tail_->next_ = nullptr;
+        }
+        delete temp;
       }
 
       T& back() const
