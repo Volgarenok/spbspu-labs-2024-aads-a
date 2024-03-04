@@ -548,6 +548,11 @@ namespace nikitov
   template< typename T >
   void List< T >::sort()
   {
+    if (size_ != 0)
+    {
+      return;
+    }
+
     bool isSorted = false;
     while (!isSorted)
     {
