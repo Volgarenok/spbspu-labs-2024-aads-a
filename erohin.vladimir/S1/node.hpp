@@ -1,6 +1,8 @@
 #ifndef NODE_HPP
 #define NODE_HPP
 
+#include <utility>
+
 namespace erohin
 {
   template< class T >
@@ -22,7 +24,7 @@ namespace erohin
 
   template< class T >
   Node< T >::Node(T && value, const Node * next_node):
-    data_(value),
+    data_(std::move(value)),
     next_(const_cast< Node * >(next_node))
   {}
 }

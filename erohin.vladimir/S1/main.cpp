@@ -8,11 +8,11 @@ int main()
 {
   using namespace erohin;
   using named_list = std::pair< std::string, List< int > >;
-  List< named_list > sequence;
+  List< named_list > lines;
   while (!std::cin.eof())
   {
-    sequence.push_front({ "", {} });
-    named_list & current_line = sequence.front();
+    lines.push_front({ "", {} });
+    named_list & current_line = lines.front();
     std::cin.clear();
     std::cin >> current_line.first;
     int elem = 0;
@@ -28,9 +28,10 @@ int main()
         return 1;
       }
     }
+    current_line.second.reverse();
   }
-  sequence.reverse();
-  for (auto line : sequence)
+  lines.reverse();
+  for (auto line : lines)
   {
     std::cout << line.first;
     for (auto elem : line.second)

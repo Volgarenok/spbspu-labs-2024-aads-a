@@ -72,6 +72,7 @@ namespace erohin
         throw;
       }
     }
+    reverse();
   }
 
   template< class T >
@@ -79,7 +80,6 @@ namespace erohin
     head_(list.head_)
   {
     list.head_ = nullptr;
-    std::cout << "List(List< T > && list)";
   }
 
   template< class T >
@@ -137,6 +137,7 @@ namespace erohin
         throw;
       }
     }
+    reverse();
   }
 
   template< class T >
