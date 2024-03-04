@@ -45,12 +45,14 @@ int main()
     }
   }
 
-  if (!sums.empty())
+  if (sums.empty())
   {
-    for (auto it = sums.begin(); it != sums.end(); it++)
-    {
-      std::cout << *it << " ";
-    }
+    std::cout << "0\n";
+    return 0;
+  }
+  for (auto it = sums.begin(); it != sums.end(); it++)
+  {
+    std::cout << *it << " ";
   }
   std::cout << "\n";
 }
