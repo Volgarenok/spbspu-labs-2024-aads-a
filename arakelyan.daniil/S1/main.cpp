@@ -1,4 +1,3 @@
-#include <__config>
 #include <iostream>
 #include <stdexcept>
 
@@ -10,74 +9,27 @@
 int main()
 {
   using namespace arakelyan;
-  using List = BinList< double >;
-  using iterator_list = Iterator< double >;
+  using List = BinList< int >;
+  // using iterator_list = Iterator< int >;
+  using pair_t = std::pair< std::string, List >;
 
-  List list;
-  double var = 1;
+  BinList< std::pair< std::string, BinList< int > > > list;
 
-  try
-  {
-    list.push_back(15);
-    list.printList(std::cout);
-    std::cout << "\n";
 
-    // list.push_front(17);
-    // list.printList(std::cout);
-    // std::cout << "\n";
+  List tempList;
+  tempList.assign({1,2,3,4});
+  std::string str = "first";
 
-    // list.pop_front();
-    // list.printList(std::cout);
-    // std::cout << "\n";
+  list.push_back({str, tempList});
 
-    // list.push_back(16);
-    // list.printList(std::cout);
-    // std::cout << "\n";
+  auto it = list.begin();
 
-    // list.pop_back();
-    // list.printList(std::cout);
-    // std::cout << "\n";
+  pair_t pair = *it;
 
-    std::cout << "val in first node of list " << list.getFirst() << "\n";
-    std::cout << "val in last node of list " << list.getLast() << "\n";
-    do
-    {
-      std::cin >> var;
+  List tempOut = pair.second;
 
-      list.push_back(var);
-      list.printList(std::cout);
-      std::cout << "\n";
-      if (var == 1)
-      {
-        list.pop_back();
-        list.pop_back();
-        list.printList(std::cout);
-        std::cout << "\n";
-      }
-      // list.pop_back();
-      std::cout << "\n";
-      if (var == 3)
-      {
-        list.clear();
-        std::cout << "empty list\n";
-      }
-    } while (var != 0);
-
-    iterator_list it_start = list.begin();
-    iterator_list it_end = list.end();
-    ++it_start;
-    it_end--;
-
-    std::cout << "list_2\n";
-    List list_t;
-    list_t.assign(it_start, it_end);
-    list_t.printList(std::cout);
-  }
-  catch (const std::exception &e)
-  {
-    std::cerr << "Error: " << e.what() << "\n";
-    list.clear();
-    return 1;
-  }
+  std::cout << pair.first << "\n";
+  tempOut.printList(std::cout);
   return 0;
 }
+

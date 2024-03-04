@@ -1,6 +1,5 @@
 #include "binList.hpp"
 
-#include <__config>
 #include <iostream>
 #include <stdexcept>
 #include "iterator.hpp"

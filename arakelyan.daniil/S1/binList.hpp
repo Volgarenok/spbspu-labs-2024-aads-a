@@ -16,43 +16,43 @@ namespace arakelyan
 
     BinList();
     BinList(int size);
-    BinList(size_t size, const T &val); // fine
-    BinList(const BinList< T > &ls); // fine
+    BinList(size_t size, const T &val);
+    BinList(const BinList< T > &ls);
 
-    size_t getSize() const; // fine
-    bool isEmpty() const;   // fine
+    size_t getSize() const;
+    bool isEmpty() const;
 
-    iterator begin() const; // должен возв итератор на первый элемент - fine
-    const_iterator cbegin() const; // fine
-    iterator end() const; // должен возв итератор на послед элемент - fine
-    const_iterator cend() const; // fine
+    iterator begin() const;
+    const_iterator cbegin() const;
+    iterator end() const;
+    const_iterator cend() const;
 
-    T getFirst() const; // fine
-    T getLast() const;  // fine
+    T getFirst() const;
+    T getLast() const;
 
-    void push_back(const T &el);  // доб в конец. - fine
-    void push_front(const T &el); // доб в нач. - fine
+    void push_back(const T &el);
+    void push_front(const T &el);
     //void insert(iterator it_pos, const T &val); // втсавтка эл в произвольную поз.
 
-    void clear(); // нахрен все - fine
+    void clear();
 
-    void pop_front(); // удаление первого - fine
-    void pop_back();  // удаление последнего - fine
+    void pop_front();
+    void pop_back();
 
     //void erase(iterator it_pos); // удаление произвольного, принимает итератор
     //void erase(iterator it_start, iterator it_end); // удаление элементов из заданного диапозона
 
-    void assign(const T &val, size_t size); // делает список значениями val и размером size - fine
-    void assign(iterator it_start, iterator it_end); // делает список из диап итераторов другого списка - fine
-    void assign(std::initializer_list<T> l); // делает список из значений списковой инициализации - fine
+    void assign(const T &val, size_t size);
+    void assign(iterator it_start, iterator it_end);
+    void assign(std::initializer_list<T> ls);
 
     // operator!=
     // operator ==
     // operator =
 
-    void printList(std::ostream &out) const; // fine
+    void printList(std::ostream &out) const;
 
-    ~BinList(); // fine
+    ~BinList();
   private:
     Node< T > *head_;
     Node< T > *tail_;
