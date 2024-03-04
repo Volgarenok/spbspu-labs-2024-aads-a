@@ -1,5 +1,6 @@
 #include <iostream>
 #include <sstream>
+#include <limits>
 
 template <typename T>
 class Node
