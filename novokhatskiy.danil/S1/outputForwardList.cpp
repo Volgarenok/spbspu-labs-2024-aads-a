@@ -28,6 +28,7 @@ void novokhatskiy::outputForwardList(std::ostream& out, ForwardList<std::pair<st
   std::cout << '\n';
   ForwardList< size_t > listOfSums;
   size_t sum{};
+  bool overFlow = false;
   for (size_t i = 0; i < maxSize; i++)
   {
     for (auto j = pairs.begin(); j != pairs.end(); ++j)
@@ -42,12 +43,15 @@ void novokhatskiy::outputForwardList(std::ostream& out, ForwardList<std::pair<st
       {
         out << ' ';
       }
-      if (std::numeric_limits< size_t>::max() - *numberIter <= *numberIter)
-      {
-        throw std::out_of_range("Overflow");
-      }
       out << *numberIter;
-      sum += *numberIter;
+      if (std::numeric_limits< size_t>::max() - *numberIter < sum)
+      {
+        overFlow = true;
+      }
+      else
+      {
+        sum += *numberIter;
+      }
     }
     if (sum == 0)
     {
@@ -59,6 +63,10 @@ void novokhatskiy::outputForwardList(std::ostream& out, ForwardList<std::pair<st
       listOfSums.push_front(sum);
       sum = 0;
     }
+  }
+  if (overFlow)
+  {
+    throw std::out_of_range("Overflow");
   }
   listOfSums.reverse();
   if (listOfSums.empty())
