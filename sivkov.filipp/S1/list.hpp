@@ -60,8 +60,8 @@ public:
   T& operator[](const int index);
 
 private:
-  Node<T>* head_;
   size_t size;
+  Node<T>* head_;
 };
 
 template<typename T>
