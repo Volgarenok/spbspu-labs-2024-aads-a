@@ -7,7 +7,16 @@
 int main()
 {
   using namespace namestnikov;
+  using pair_t = std::pair<std::string, ForwardList<unsigned long long>>;
   ForwardList<pair_t> dataList;
-  inputLists(std::cin, dataList);
-  outputLists(std::cout, dataList);
+  try
+  {
+    inputLists(std::cin, dataList);
+    outputLists(std::cout, dataList);
+  }
+  catch (const std::exception & e)
+  {
+    std::cerr << e.what() << "\n";
+    return 1;
+  }
 }
