@@ -3,6 +3,8 @@
 #include <utility>
 #include <cstddef>
 #include <string>
+#include "iterator.hpp"
+#include "functions.hpp"
 #include "node.hpp"
 
 namespace zakozhurnikova
@@ -129,11 +131,31 @@ namespace zakozhurnikova
       std::swap(size_, rhs.size_);
     }
 
-    void remove()
-    {}
+    void remove(const T& value)
+    {
+      Iterator<T> first = begin();
+      Iterator<T> last = end();
+      for (Iterator<T> it = first; it != last; ++it)
+      {
+        if (*it != value)
+        {
+          *first++ = std::move(*it);
+        }
+      }
+    }
 
-    void remove_if()
-    {}
+    void remove_if(predicateFunction<T> p)
+    {
+      auto first = begin();
+      auto last = end();
+      for (auto it = first; it != last; ++it)
+      {
+        if (!p(*(it)))
+        {
+          *first++ = std::move(*it);
+        }
+      }
+    }
 
     void assign(Iterator<T> first, Iterator<T> last, const T& value)
     {
