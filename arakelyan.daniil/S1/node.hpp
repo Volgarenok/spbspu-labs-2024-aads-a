@@ -4,9 +4,26 @@
 template < class T >
 struct Node
 {
-  Node();
-  Node(const T &val, Node< T > *next, Node< T > *prev);
-  Node(const T &val);
+  Node() = default;
+
+  Node(const T &val, Node *nextPtr, Node *prevPtr):
+    value(val),
+    nextNode(nextPtr),
+    prevNode(prevPtr)
+  {}
+
+  Node(const T &el):
+    value(el),
+    nextNode(nullptr),
+    prevNode(nullptr)
+  {}
+
+  Node(Node *nextPtr, Node *prevPtr):
+    nextNode(nextPtr),
+    prevNode(prevPtr)
+  {}
+
+  Node(const Node &anotherNode) = default;
   ~Node() = default;
 
   T value;

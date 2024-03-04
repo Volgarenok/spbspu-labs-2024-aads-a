@@ -39,8 +39,8 @@ namespace arakelyan
     void pop_front(); // удаление первого - fine
     void pop_back();  // удаление последнего - fine
 
-    void erase(iterator it_pos); // удаление произвольного, принимает итератор
-    void erase(iterator it_start, iterator it_end); // удаление элементов из заданного диапозона
+    //void erase(iterator it_pos); // удаление произвольного, принимает итератор
+    //void erase(iterator it_start, iterator it_end); // удаление элементов из заданного диапозона
 
     void assign(const T &val, size_t size); // делает список значениями val и размером size - fine
     void assign(iterator it_start, iterator it_end); // делает список из диап итераторов другого списка - fine
