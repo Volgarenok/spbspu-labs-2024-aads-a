@@ -54,6 +54,12 @@ int main()
     ++counter;
   }
 
+  if (flag == true)
+  {
+    std::cerr << "OverFlow\n";
+    return 1;
+  }
+
   if (numbers.empty())
   {
     std::cout << "0\n";
@@ -61,10 +67,5 @@ int main()
   }
   numbers.reverse();
   outputSums(numbers);
-  if (flag == true)
-  {
-    std::cerr << "OverFlow\n";
-    return 1;
-  }
   return 0;
 }
