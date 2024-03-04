@@ -48,6 +48,8 @@ namespace erohin
     void assign(std::initializer_list< T > init_list);
     template< class InputIt >
     void assign(InputIt first, InputIt last);
+    void splice_after(const_iterator pos, List< T > & other);
+    void splice_after(const_iterator pos, List< T > && other);
     void remove(const T & value);
     template< class UnaryPredicate >
     void remove_if(UnaryPredicate p);
@@ -258,7 +260,7 @@ namespace erohin
   ListIterator< T > List< T >::insert_after(ListConstIterator< T > pos, T && value)
   {
     ListIterator< T > iter_result(pos.node_);
-    Node< T > * new_node = new Node< T >(value, iter_result.node_->next_);
+    Node< T > * new_node = new Node< T >(std::move(value), iter_result.node_->next_);
     iter_result.node_->next_ = new_node;
     return (++iter_result);
   }
@@ -342,6 +344,34 @@ namespace erohin
         throw;
       }
     }
+  }
+
+  template< class T >
+  void List< T >::splice_after(ListConstIterator< T > pos, List< T > & other)
+  {
+    auto iter_current = other.cbegin();
+    auto iter_end = other.cend();
+    while (iter_current != iter_end)
+    {
+      insert_after(pos, std::move(*iter_current));
+      ++iter_current;
+      ++pos;
+    }
+    other.clear();
+  }
+
+  template< class T >
+  void List< T >::splice_after(ListConstIterator< T > pos, List< T > && other)
+  {
+    auto iter_current = other.cbegin();
+    auto iter_end = other.cend();
+    while (iter_current != iter_end)
+    {
+      insert_after(pos, std::move(*iter_current));
+      ++iter_current;
+      ++pos;
+    }
+    other.clear();
   }
 
   template< class T >
