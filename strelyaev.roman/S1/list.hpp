@@ -136,7 +136,7 @@ namespace strelyaev
         return Iterator< T >(nullptr);
       }
 
-      
+
     private:
       Node< T >* head_;
       Node< T >* tail_;
