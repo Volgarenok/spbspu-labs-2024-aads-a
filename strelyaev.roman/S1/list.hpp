@@ -8,7 +8,6 @@ namespace strelyaev
   template< typename T >
   class List
   {
-    
   };
 }
 #endif
