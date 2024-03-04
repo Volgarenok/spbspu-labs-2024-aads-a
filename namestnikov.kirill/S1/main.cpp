@@ -14,6 +14,11 @@ int main()
     inputLists(std::cin, dataList);
     outputLists(std::cout, dataList);
   }
+  catch (std::invalid_argument &)
+  {
+    std::cout << "0\n";
+    return 0;
+  }
   catch (const std::exception & e)
   {
     std::cerr << e.what() << "\n";

@@ -10,6 +10,7 @@ namespace namestnikov
   void inputLists(std::istream & in, ForwardList<pair_t> & dataList);
   void outputNames(std::ostream & out, ForwardList<pair_t> & dataList, size_t & maxSize);
   void outputNumsAndSums(std::ostream & out, ForwardList<pair_t> & dataList, size_t maxSize);
+  bool haveNumbers(ForwardList<pair_t> & dataList);
   void outputLists(std::ostream & out, ForwardList<pair_t> & dataList);
 }
 
