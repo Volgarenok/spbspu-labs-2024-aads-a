@@ -18,7 +18,6 @@ int main()
   catch (const std::invalid_argument&)
   {
     std::cout << 0 << '\n';
-    
   }
   catch (const std::exception& e)
   {
