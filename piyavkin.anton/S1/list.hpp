@@ -597,6 +597,23 @@ namespace piyavkin
         ++it;
       }
     }
+    void sort()
+    {
+      Node< T >* node1 = head_;
+      for (size_t i = 0; i < size_; ++i)
+      {
+        Node< T >* node2 = node1;
+        for (size_t j = i; j < size_; ++j)
+        {
+          if (node1->value_ > node2->value_)
+          {
+            std::swap(node1->value_, node2->value_);
+          }
+          node2 = node2->next_;
+        }
+        node1 = node1->next_;
+      }
+    }
   private:
     Node< T >* head_;
     Node< T >* tail_;
