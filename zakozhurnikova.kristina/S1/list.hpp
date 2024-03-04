@@ -1,5 +1,10 @@
 #ifndef LIST_HPP
 #define LIST_HPP
+#include <utility>
+#include <iostream>
+#include <cstddef>
+#include <string>
+#include "node.hpp"
 
 namespace zakozhurnikova
 {
@@ -59,6 +64,60 @@ namespace zakozhurnikova
     ~List()
     {
       clear();
+    }
+
+    void push(T data)
+    {
+      Node< T >* temp = new Node< T >{ data };
+
+      if (!tail_)
+      {
+        tail_ = temp;
+        head_ = temp;
+      }
+      else
+      {
+        tail_->next = temp;
+        temp->prev = tail_;
+        tail_ = temp;
+      }
+      ++size_;
+    }
+
+    void pop() noexcept
+    {
+      Node< T >* toDelete = tail_;
+      tail_ = tail_->prev;
+      if (!tail_)
+      {
+        head_ = nullptr;
+        tail_ = nullptr;
+      }
+      else
+      {
+        tail_->next = nullptr;
+      }
+      delete toDelete;
+      --size_;
+    }
+
+    size_t size() const
+    {
+      return size_;
+    }
+
+    void clear() noexcept
+    {
+      while (tail_)
+      {
+        pop();
+      }
+      head_ = nullptr;
+    }
+
+    bool empty() noexcept
+    {
+      return size_ == 0;
     }
 
   private:
