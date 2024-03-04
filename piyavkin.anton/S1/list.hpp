@@ -537,7 +537,7 @@ namespace piyavkin
           end_node->prev_ = tail_;
           tail_->next_ = end_node;
           ++size_;
-          return; 
+          return;
         }
         catch(const std::exception& e)
         {
