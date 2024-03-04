@@ -22,6 +22,9 @@ namespace grechishnikov
     List< T >& operator=(List< T >&&);
     T& operator[](size_t);
 
+    Iterator< T > begin();
+    Iterator< T > end();
+
     bool empty();
 
     void clear();
@@ -29,6 +32,7 @@ namespace grechishnikov
     void push_front(const T&);
     void pop_back();
     void pop_front();
+    void swap(List< T >&);
 
   private:
     Node< T >* head_;
@@ -95,6 +99,18 @@ namespace grechishnikov
   {
     Iterator< T > iter(head_);
     return iter[pos].data_;
+  }
+
+  template< typename T >
+  Iterator< T > List< T >::begin()
+  {
+    return Iterator< T >(head_);
+  }
+
+  template< typename T >
+  Iterator< T > List< T >::end()
+  {
+    return Iterator< T >(nullptr);
   }
 
   template< typename T >
@@ -180,6 +196,13 @@ namespace grechishnikov
       delete head_;
       head_ = temp;
     }
+  }
+
+  template< typename T >
+  void List< T >::swap(List< T >& other)
+  {
+    std::swap(head_, other.head_);
+    std::swap(tail_, other.tail_);
   }
 
 }

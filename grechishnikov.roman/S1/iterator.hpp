@@ -14,12 +14,18 @@ namespace grechishnikov
     Iterator(Node< T >* node);
     Iterator(const Iterator< T >& other);
 
+    T& operator*();
+    T* operator->();
+
     Iterator& operator++();
     Iterator& operator--();
     Iterator operator++(int);
     Iterator operator--(int);
 
     Node< T >& operator[](size_t);
+
+    bool operator==(const Iterator< T >& other);
+    bool operator!=(const Iterator< T >& other);
 
   private:
     Node< T >* node_;
@@ -34,6 +40,18 @@ namespace grechishnikov
   Iterator< T >::Iterator(const Iterator< T >& other):
     node_(other.node_)
   {}
+
+  template< typename T >
+  T& Iterator< T >::operator*()
+  {
+    return node_->data_;
+  }
+
+  template< typename T >
+  T* Iterator< T >::operator->()
+  {
+    return &node_->data_;
+  }
 
   template< typename T >
   Iterator< T >& Iterator< T >::operator++()
@@ -74,6 +92,19 @@ namespace grechishnikov
     }
     return *node_;
   }
+
+  template< typename T >
+  bool Iterator< T >::operator==(const Iterator< T >& other)
+  {
+    return node_ == other.node_;
+  }
+
+  template< typename T >
+  bool Iterator< T >::operator!=(const Iterator< T >& other)
+  {
+    return !(node_ == other.node_);
+  }
+
 
 }
 

@@ -1,34 +1,29 @@
 #include <iostream>
 #include "list.hpp"
 
+void pr(size_t sth)
+{
+  std::cout << sth << " ";
+}
+
 int main()
 {
   using namespace grechishnikov;
 
-  List< int > testList;
-  testList.push_back(12);
-  testList.push_back(13);
-  testList.push_front(12313);
-  testList.pop_back();
-  testList.pop_front();
+  List< int > testListSwap1;
+  List< int > testListSwap2;
 
-  std::cout << testList.empty() << '\n';
-  testList.pop_front();
-  std::cout << testList.empty() << '\n';
+  testListSwap1.push_front(1);
+  testListSwap2.push_front(2);
+  testListSwap1.swap(testListSwap2);
+  std::cout << "F: " << testListSwap1[0] << " " << "S: " << testListSwap2[0] << '\n';
 
-  testList.push_front(12313);
-  testList.push_front(12313);
-  List< int > testList2(testList);
-  List< int > testList2p5(std::move(testList));
+  List< int > testListIter;
+  testListIter.push_front(1);
+  testListIter.push_front(2);
+  testListIter.push_front(3);
+  testListIter.push_front(4);
+  testListIter.push_front(5);
 
-  List< int > testList3;
-  List< int > testList4;
-  testList3 = testList2;
-  testList4 = std::move(testList2);
-
-  List< int > testListAccess;
-  testListAccess.push_back(12);
-  std::cout << testListAccess[0] << '\n';
-  testListAccess[0] = 14;
-  std::cout << testListAccess[0] << '\n';
+  std::cout << std::for_each(testListIter.begin(), testListIter.end(), pr) << '\n';
 }
