@@ -5,7 +5,7 @@
 
 namespace zakozhurnikova
 {
-  template <typename T>
+  template < typename T >
   struct Iterator
   {
     using this_t = Iterator<T>;

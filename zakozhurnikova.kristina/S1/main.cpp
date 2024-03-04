@@ -1,15 +1,17 @@
 #include <iostream>
 #include <algorithm>
 #include <limits>
-#include "List.hpp"
+#include "list.hpp"
 #include "inputOperations.hpp"
 #include "print.hpp"
 
 int main()
 {
+  using namespace zakozhurnikova;
+  using pair = std::pair<std::string, List<size_t>>;
   try {
     List<pair> list;
-    readList<size_t>(list, std::cin);
+    readList(list, std::cin);
     printNames(list);
     std::cout << '\n';
     printByIndex(list);

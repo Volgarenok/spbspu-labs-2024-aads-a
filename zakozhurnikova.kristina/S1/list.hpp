@@ -3,10 +3,10 @@
 #include <utility>
 #include <cstddef>
 #include <string>
-#include "iterator.hpp"
-#include "constIterator.hpp"
-#include "functions.hpp"
 #include "node.hpp"
+#include "iterator.hpp"
+#include "functions.hpp"
+#include "constIterator.hpp"
 
 namespace zakozhurnikova
 {
@@ -189,3 +189,5 @@ namespace zakozhurnikova
     size_t size_;
   };
 }
+
+#endif

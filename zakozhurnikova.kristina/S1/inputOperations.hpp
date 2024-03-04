@@ -1,10 +1,13 @@
 #ifndef INPUT_OPERATIONS_HPP
 #define INPUT_OPERATIONS_HPP
+#include <iostream>
+#include <iosfwd>
+#include <utility>
+#include "list.hpp"
 
 namespace zakozhurnikova
 {
   using pair = std::pair<std::string, List<size_t>>;
-  template <typename T>
   void readList(List<pair>& list, std::istream& in)
   {
     while (!in.eof())
@@ -20,10 +23,10 @@ namespace zakozhurnikova
 
       size_t pos = 0;
       const char* str = input.c_str();
-      List<T> numbers;
+      List< size_t > numbers;
       while (*str)
       {
-        int k = std::stoll(str, &pos);
+        size_t k = std::stoll(str, &pos);
         numbers.push(k);
         str += pos;
       }
@@ -32,4 +35,6 @@ namespace zakozhurnikova
     }
   };
 }
+
+#endif
 
