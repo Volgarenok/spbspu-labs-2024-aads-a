@@ -39,10 +39,11 @@ namespace zakozhurnikova
     List(List&& rhs) noexcept :
       head_(rhs.head_),
       tail_(rhs.tail_),
-      size_(size_)
+      size_(rhs.size_)
     {
       rhs.head_ = nullptr;
       rhs.tail_ = nullptr;
+      rhs.size_ = 0;
     }
 
     List& operator=(const List& rhs)
