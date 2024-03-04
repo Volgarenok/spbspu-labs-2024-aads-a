@@ -14,10 +14,10 @@ namespace rebdev
         node_(nullptr)
       {}
       biListIterator(const biListIterator< T >& iterator):
-        node_(iterator->node_)
+        node_(iterator -> node_)
       {}
       biListIterator(biListIterator< T >&& iterator):
-        node_(iterator->node_)
+        node_(iterator -> node_)
       {}
       biListIterator(biListNode< T >* node):
         node_(node)

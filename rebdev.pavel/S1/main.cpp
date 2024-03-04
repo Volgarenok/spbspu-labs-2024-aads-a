@@ -7,18 +7,19 @@
 
 int main()
 {
-  using pairs = std::pair< std::string, rebdev::BiList< size_t >>;
+  using list = rebdev::BiList< size_t >;
+  using pairs = std::pair< std::string, list>;
   pairs * pairArr = nullptr;
   size_t numOfPairs = 0;
   size_t maxNumber = 0;
-  rebdev::BiList< size_t >* numList = nullptr;
+  list * numList = nullptr;
   std::string listName;
 
   while (std::cin >> listName)
   {
     try
     {
-      numList = new rebdev::BiList< size_t >;
+      numList = new list;
 
       maxNumber = std::max(maxNumber, rebdev::inputNumbersList(std::cin, numList));
 
@@ -43,27 +44,29 @@ int main()
   {
     std::cout << pairArr[i].first << ' ';
   }
+  std::cout << '\b' << '\n';
 
   size_t sumOfNum[maxNumber] = {};
-  for (size_t i = 0; i <= maxNumber; ++i)
+  for (size_t i = 0; i < maxNumber; ++i)
   {
-    std::cout << '\n';
     for (size_t j = 0; j < numOfPairs; ++j)
     {
-      rebdev::BiList< size_t > list = pairArr[j].second;
-      if (list.capacity())
+      list & numList = pairArr[j].second;
+      if (numList.capacity())
       {
-        size_t element = pairArr[j].second.front();
+        size_t element = numList.front();
         std::cout << element << ' ';
         sumOfNum[i] += element;
-        pairArr[j].second.pop_front();
+        numList.pop_front();
       }
     }
+    std::cout << '\b' << '\n';
   }
   for (size_t i = 0; i < maxNumber; ++i)
   {
     std::cout << sumOfNum[i] << ' ';
   }
+  std::cout << '\b' << '\n';
 
   delete[] pairArr;
   return 0;
