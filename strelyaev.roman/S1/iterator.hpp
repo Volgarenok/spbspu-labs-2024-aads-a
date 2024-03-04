@@ -3,12 +3,6 @@
 #include <stdexcept>
 #include "node.hpp"
 
-
-
-
-
-#include <iostream>
-
 namespace strelyaev
 {
   template< typename T >
