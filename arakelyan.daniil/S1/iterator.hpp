@@ -59,7 +59,7 @@ struct Iterator
 
   bool operator!=(const Iterator< T > &val) const
   {
-    return !(*this == val); 
+    return !(*this == val);
   }
 
   bool operator==(const Iterator< T > &val) const
