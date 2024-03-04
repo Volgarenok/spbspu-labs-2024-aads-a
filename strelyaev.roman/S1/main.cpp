@@ -1,5 +1,6 @@
 #include <iostream>
 #include <utility>
+#include <limits>
 #include "list.hpp"
 #include "iterator.hpp"
 #include "inputList.hpp"
@@ -7,7 +8,8 @@
 int main()
 {
   using namespace strelyaev;
-  List< std::pair< std::string, List < int > > > l;
+  size_t max_value = std::numeric_limits<size_t>::max();
+  List< std::pair< std::string, List < size_t > > > l;
   try
   {
     makeSequence(std::cin, l);
@@ -23,7 +25,7 @@ int main()
   }
 
   bool all_empty = false;
-  List< int > sums;
+  List< size_t > sums;
   while (!all_empty)
   {
     std::cout << "\n";
@@ -35,7 +37,15 @@ int main()
       {
         all_empty = false;
         std::cout << it->second.front() << " ";
-        sum += it->second.front();
+        if (max_value - i > it->second.front())
+        {
+          sum += it->second.front();
+        }
+        else
+        {
+          std::cerr << "Overflow!\n"
+          return 1;
+        }
         it->second.pop_front();
       }
     }

@@ -3,9 +3,6 @@
 #include "node.hpp"
 #include "iterator.hpp"
 
-
-
-#include <iostream>
 namespace strelyaev
 {
   template< typename T >
@@ -101,9 +98,7 @@ namespace strelyaev
           return;
         }
         Node< T >* temp = tail_;
-        std::cout << "Перехожу на следующий";
         tail_ = tail_->prev_;
-        std::cout << "Перешел на следующий";
         if (tail_)
         {
           tail_->next_ = nullptr;
