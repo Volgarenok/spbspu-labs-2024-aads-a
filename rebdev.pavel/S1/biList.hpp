@@ -16,19 +16,17 @@ namespace rebdev
     {
       headNode_ -> next_ = tailNode_;
       tailNode_ -> last_ = headNode_;
-    };
+    }
     BiList(const BiList< T >& oldList):
       headNode_(nullptr),
       tailNode_(nullptr)
     {
-      this = oldList;
-    };
+      this -> operator = (oldList);
+    }
     BiList(BiList< T >&& rList):
-      headNode_(nullptr),
-      tailNode_(nullptr)
-    {
-      this = std::move(rList);
-    };
+      headNode_(headNode_),
+      tailNode_(tailNode_)
+    {}
     BiList(const T & firstElement):
     headNode_(nullptr),
     tailNode_(nullptr)
@@ -37,12 +35,12 @@ namespace rebdev
       biListNode< T >* newNode = new biListNode< T >{firstElement, headNode_, tailNode_};
       headNode_ -> next_ = newNode;
       tailNode_ -> last_ = newNode;
-    };
+    }
 
     ~BiList() noexcept
     {
       clear();
-    };
+    }
 
     BiList< T >& operator = (const BiList< T >& originalList)
     {
@@ -70,20 +68,22 @@ namespace rebdev
       }
 
       return *this;
-    };
+    }
     BiList< T >& operator = (const BiList< T >&& originalList)
     {
-      return operator = (originalList);
-    };
+      headNode_ = originalList.headNode_;
+      tailNode_ = originalList.tailNode_;
+      return *this;
+    }
 
     T front() const
     {
       return headNode_ -> next_ -> data_;
-    };
+    }
     T back() const
     {
       return tailNode_ -> last_ -> data_;
-    };
+    }
 
     void push_back(const T & newElement)
     {
@@ -93,7 +93,7 @@ namespace rebdev
       tailNode_ = newNode;
       newNode = nullptr;
 
-    };
+    }
     void push_front(const T & newElement)
     {
       biListNode< T >* newNode = new biListNode< T >{0, nullptr, headNode_};
@@ -101,7 +101,7 @@ namespace rebdev
       headNode_ -> last_ = newNode;
       headNode_ = newNode;
       newNode = nullptr;
-    };
+    }
     void pop_back() noexcept
     {
       biListNode< T >* newTail = tailNode_ -> last_;
@@ -110,7 +110,7 @@ namespace rebdev
       newTail -> next_ = nullptr;
       tailNode_ = newTail;
       newTail = nullptr;
-    };
+    }
     void pop_front() noexcept
     {
       biListNode< T >* newHead = headNode_ -> next_;
@@ -119,7 +119,7 @@ namespace rebdev
       newHead -> last_ = nullptr;
       headNode_ = newHead;
       newHead = nullptr;
-    };
+    }
     void clear() noexcept
     {
       while (headNode_)
@@ -129,33 +129,31 @@ namespace rebdev
         headNode_ = next;
       }
       delete headNode_;
-    };
+    }
     void swap(BiList< T >* secondList)
     {
       biListNode< T > secondHead = secondList.begin(), secondTail = secondList.end();
       secondTail.headNode_ = headNode_;
       secondList.tailNode_ = tailNode_;
-    };
+    }
 
     biListIterator< T > begin() const noexcept
     {
       return biListIterator< T >(headNode_);
-    };
+    }
     biListIterator< T > end() const noexcept
     {
       return biListIterator< T >(tailNode_);
-    };
+    }
 
     bool capacity()
     {
-      return ((headNode_ -> next_) == tailNode_);
-    };
+      return ((headNode_ -> next_) != tailNode_);
+    }
 
     private:
     biListNode< T >* headNode_;
     biListNode< T >* tailNode_;
-
-    bool headIsFull, tailIsFull;
   };
 }
 #endif

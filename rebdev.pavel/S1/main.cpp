@@ -14,7 +14,7 @@ int main()
   rebdev::BiList< size_t >* numList = nullptr;
   std::string listName;
 
-  while (std::getline(std::cin, listName, ' '))
+  while (std::cin >> listName)
   {
     try
     {
@@ -26,6 +26,8 @@ int main()
       pairArr[numOfPairs].first = listName;
       pairArr[numOfPairs].second = *numList;
       numOfPairs += 1;
+
+      delete numList;
     }
     catch (const std::exception & e)
     {
@@ -41,23 +43,22 @@ int main()
   {
     std::cout << pairArr[i].first << ' ';
   }
-  std::cout << '\n';
 
   size_t sumOfNum[maxNumber] = {};
-  for (size_t i = 0; i < maxNumber; ++i)
+  for (size_t i = 0; i <= maxNumber; ++i)
   {
+    std::cout << '\n';
     for (size_t j = 0; j < numOfPairs; ++j)
     {
-      try
+      rebdev::BiList< size_t > list = pairArr[j].second;
+      if (list.capacity())
       {
         size_t element = pairArr[j].second.front();
         std::cout << element << ' ';
         sumOfNum[i] += element;
         pairArr[j].second.pop_front();
       }
-      catch (...){}
     }
-    std::cout << '\n';
   }
   for (size_t i = 0; i < maxNumber; ++i)
   {
