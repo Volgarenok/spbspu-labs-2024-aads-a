@@ -445,7 +445,7 @@ namespace nikitov
   }
 
   template< typename T >
-  ListIterator< T > List< T >::insert(ConstListIterator< T > position, const T& value)
+  ListIterator< T > List< T >::insert(constIterator position, const T& value)
   {
     if (position == cbegin())
     {
@@ -579,7 +579,7 @@ namespace nikitov
   }
 
   template< typename T >
-  void List< T >::splice(ConstListIterator< T > position, List< T >& other, ConstListIterator< T > otherPosition)
+  void List< T >::splice(constIterator position, List< T >& other, constIterator otherPosition)
   {
     auto otherIterator = other.begin();
     Node< T >* otherNode = other.head_;
@@ -640,7 +640,7 @@ namespace nikitov
   }
 
   template< typename T >
-  void List< T >::splice(ConstListIterator< T > position, List< T >& other)
+  void List< T >::splice(constIterator position, List< T >& other)
   {
     while (other.size_ != 0)
     {
