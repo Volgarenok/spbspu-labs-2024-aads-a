@@ -132,6 +132,26 @@ namespace zakozhurnikova
       std::swap(size_, rhs.size_);
     }
 
+    Iterator<T> begin() const
+    {
+      return Iterator<T>(head_);
+    }
+
+    Iterator<T> end() const
+    {
+      return Iterator<T>();
+    }
+
+    ConstIterator<T> cbegin() const
+    {
+      return ConstIterator<T>(head_);
+    }
+
+    ConstIterator<T> cend() const
+    {
+      return ConstIterator<T>();
+    }
+
     void remove(const T& value)
     {
       Iterator<T> first = begin();
