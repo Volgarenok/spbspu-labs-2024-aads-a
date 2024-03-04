@@ -63,6 +63,8 @@ namespace nikitov
     void pop_front();
     void push_back(const T& value);
     void pop_back();
+    template < class... Args >
+    iterator emplace(constIterator position, Args&&... args);
     iterator insert(constIterator position, const T& value);
     iterator insert(constIterator position, constIterator first, constIterator last);
     iterator erase(constIterator position);
@@ -430,6 +432,13 @@ namespace nikitov
     delete tail_;
     tail_ = ptr;
     --size_;
+  }
+
+  template< typename T >
+  template< class... Args >
+  ListIterator< T > List< T >::emplace(constIterator position, Args&&... args)
+  {
+    return insert(position, T(args...));
   }
 
   template< typename T >
