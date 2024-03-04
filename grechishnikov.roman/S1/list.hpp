@@ -2,6 +2,7 @@
 #define LIST_HPP
 
 #include <cstddef>
+#include <algorithm>
 #include "node.hpp"
 #include "iterator.hpp"
 
@@ -12,10 +13,12 @@ namespace grechishnikov
   {
   public:
     List();
-    List(const List< T >& other);
+    List(const List< T >&);
     List(List< T >&& other);
     ~List();
 
+    List< T >& operator=(const List< T >&);
+    List< T >& operator=(List< T >&&);
 
     void clear();
 
@@ -50,9 +53,39 @@ namespace grechishnikov
   }
 
   template< typename T >
+  List< T >::List(List< T >&& other):
+    head_(nullptr),
+    tail_(nullptr)
+  {
+    std::swap(head_, other.head_);
+    std::swap(tail_, other.tail_);
+  }
+
+  template< typename T >
   List< T >::~List()
   {
     clear();
+  }
+
+  template< typename T >
+  List< T >& List< T >::operator=(const List< T >& other)
+  {
+    clear();
+    Node< T >* temp = other.head_;
+    while (!temp)
+    {
+      push_back(temp->data_);
+      temp = temp->next_;
+    }
+    return *this;
+  }
+
+  template< typename T >
+  List< T >& List< T >::operator=(List< T >&& other)
+  {
+    std::swap(head_, other.head_);
+    std::swap(tail_, other.tail_);
+    return *this;
   }
 
   template< typename T >
@@ -70,6 +103,8 @@ namespace grechishnikov
       delete head_;
       head_ = temp;
     }
+    head_ = nullptr;
+    tail_ = nullptr;
   }
 
   template< typename T >
