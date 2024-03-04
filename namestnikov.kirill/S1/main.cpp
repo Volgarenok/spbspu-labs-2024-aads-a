@@ -9,5 +9,5 @@ int main()
   using namespace namestnikov;
   ForwardList<pair_t> dataList;
   inputLists(std::cin, dataList);
-  //outputLists(std::cout, list);
+  outputLists(std::cout, dataList);
 }

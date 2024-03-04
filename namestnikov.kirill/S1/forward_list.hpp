@@ -14,6 +14,7 @@ namespace namestnikov
   class ForwardList
   {
     using iterator_t = ForwardIterator<T>;
+    using node_t = Node<T>;
   public:
     ForwardList() :
       head_(nullptr)
@@ -33,12 +34,12 @@ namespace namestnikov
     {
       if (head_)
       {
-        Node<T> * newHead = head_;
-        Node<T> * tail = head_->next_;
+        node_t * newHead = head_;
+        node_t * tail = head_->next_;
         newHead->next_ = nullptr;
         while (tail)
         {
-          Node<T> * temp = tail->next_;
+          node_t * temp = tail->next_;
           tail->next_ = newHead;
           newHead = tail;
           tail = temp;
@@ -48,7 +49,7 @@ namespace namestnikov
     }
     void push_front(const T & data)
     {
-      Node<T> * newHead = new Node<T>(data);
+      node_t * newHead = new node_t(data);
       newHead->next_ = head_;
       head_ = newHead;
     }
@@ -60,13 +61,25 @@ namespace namestnikov
     {
       std::swap(head_, other.head_);
     }
+    size_t size()
+    {
+      size_t size = 0;
+      node_t * temp = head_;
+      while (head_)
+      {
+        ++size;
+        head_ = head_->next_;
+      }
+      head_ = temp;
+      return size;
+    }
     void pop_front()
     {
       if (empty())
       {
         throw std::runtime_error("ForwardList is empty");
       }
-      Node<T> * oldHead = head_;
+      node_t * oldHead = head_;
       head_ = head_->next_;
       delete oldHead;
     }
@@ -82,8 +95,18 @@ namespace namestnikov
     {
       clear();
     }
+    void print()
+    {
+      node_t * temp = head_;
+      while (temp)
+      {
+        std::cout << temp->data_ << " ";
+        temp = temp ->next_;
+      }
+      std::cout << "\n";
+    }
   private:
-    Node<T> * head_;
+    node_t * head_;
   };
 }
 

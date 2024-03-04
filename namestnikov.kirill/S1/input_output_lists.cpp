@@ -18,7 +18,7 @@ void namestnikov::inputLists(std::istream & in, ForwardList<pair_t> & dataList)
   }
 }
 
-/*void namestnikov::outputLists(std::ostream & out, ForwardList<pair_t> & dataList)
+void namestnikov::outputLists(std::ostream & out, ForwardList<pair_t> & dataList)
 {
   if (dataList.empty())
   {
@@ -36,7 +36,6 @@ void namestnikov::inputLists(std::istream & in, ForwardList<pair_t> & dataList)
       fwdIt != dataList.begin() ? out << " " << fwdIt->first : out << fwdIt->first;
     }
     out << "\n";
-    //output numbers + output sums;
     ForwardList<unsigned long long> sumsList;
     unsigned long long sum = 0;
     const unsigned long long maxSum = std::numeric_limits<unsigned long long>::max();
@@ -65,10 +64,10 @@ void namestnikov::inputLists(std::istream & in, ForwardList<pair_t> & dataList)
       sum = 0;
     }
     sumsList.reverse();
-    for (ForwardIterator<unsigned long long> sumIt; sumIt != sumsList.end(); ++sumIt)
+    for (ForwardIterator<unsigned long long> sumIt = sumsList.begin(); sumIt != sumsList.end(); ++sumIt)
     {
       sumIt != sumsList.begin() ? out << " " << *sumIt : out << *sumIt;
     }
     out << "\n";
   }
-}*/
+}
