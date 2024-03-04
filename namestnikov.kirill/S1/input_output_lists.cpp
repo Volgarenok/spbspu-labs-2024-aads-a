@@ -74,10 +74,10 @@ void namestnikov::outputNumsAndSums(std::ostream & out, ForwardList<pair_t> & da
 
 bool namestnikov::haveNumbers(ForwardList<pair_t> & dataList)
 {
-  bool gotNumbers = true;
+  bool gotNumbers = false;
   for (auto it = dataList.begin(); it != dataList.end(); ++it)
   {
-    gotNumbers = gotNumbers && !(it->second.empty());
+    gotNumbers = gotNumbers || !(it->second.empty());
   }
   return gotNumbers;
 }
