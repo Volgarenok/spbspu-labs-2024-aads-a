@@ -37,13 +37,13 @@ int main()
       {
         all_empty = false;
         std::cout << it->second.front() << " ";
-        if (max_value - i > it->second.front())
+        if (max_value - sum > it->second.front())
         {
           sum += it->second.front();
         }
         else
         {
-          std::cerr << "Overflow!\n"
+          std::cerr << "Overflow!\n";
           return 1;
         }
         it->second.pop_front();
