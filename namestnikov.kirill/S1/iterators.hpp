@@ -9,31 +9,40 @@ namespace namestnikov
   template <class T>
   class ForwardIterator: public std::iterator<std::forward_iterator_tag, T>
   {
-    using this_t = ForwardIterator<T>;
+    using iterator_t = ForwardIterator<T>;
     using node_t = Node<T>;
   public:
-    ForwardIterator(): node_(nullptr) {}
-    ForwardIterator(node_t * node): node_(node) {}
-    ForwardIterator(const this_t &) = default;
-    this_t & operator=(const this_t &) = default;
-    this_t & operator++()
+    ForwardIterator() :
+      node_(nullptr)
+    {}
+    ForwardIterator(node_t * node):
+      node_(node)
+    {}
+    ForwardIterator(const iterator_t &) = default;
+    iterator_t & operator=(const iterator_t &) = default;
+    ForwardIterator(ForwardIterator && other) noexcept:
+      node_(other.node_)
+    {
+      other.node_ = nullptr;
+    }
+    iterator_t & operator++()
     {
       node_ = node_->next_;
       return *this;
     }
-    this_t operator++(int)
+    iterator_t operator++(int)
     {
-      this_t result(*this);
+      iterator_t temp(*this);
       ++(*this);
-      return result;
+      return temp;
     }
-    bool operator!=(const this_t & other) const
+    bool operator!=(const iterator_t & other) const
     {
       return !(node_ == other.node_);
     }
-    bool operator==(const this_t & other) const
+    bool operator==(const iterator_t & other) const
     {
-      return node_ == other.node_;
+      return (node_ == other.node_);
     }
     T & operator*()
     {
@@ -51,7 +60,7 @@ namespace namestnikov
     {
       return std::addressof(node_->data_);
     }
-    this_t & advance(size_t n)
+    iterator_t & advance(size_t n)
     {
       for (size_t i = 0; i < n; ++i)
       {
