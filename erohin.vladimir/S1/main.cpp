@@ -29,5 +29,15 @@ int main()
       }
     }
   }
+  sequence.reverse();
+  for (auto line : sequence)
+  {
+    std::cout << line.first;
+    for (auto elem : line.second)
+    {
+      std::cout << " " << elem;
+    }
+    std::cout << "\n";
+  }
   return 0;
 }
