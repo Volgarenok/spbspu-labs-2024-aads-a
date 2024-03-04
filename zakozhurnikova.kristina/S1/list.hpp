@@ -1,13 +1,15 @@
 #ifndef LIST_HPP
 #define LIST_HPP
 #include <utility>
-#include <iostream>
 #include <cstddef>
 #include <string>
 #include "node.hpp"
 
 namespace zakozhurnikova
 {
+  template <typename T>
+  using predicateFunction = bool (*)(T);
+
   template <typename T>
   class List
   {
@@ -118,6 +120,24 @@ namespace zakozhurnikova
     bool empty() noexcept
     {
       return size_ == 0;
+    }
+
+    void swap(List& rhs) noexcept
+    {
+      std::swap(head_, rhs.head_);
+      std::swap(tail_, rhs.tail_);
+      std::swap(size_, rhs.size_);
+    }
+
+    void remove()
+    {}
+
+    void remove_if()
+    {}
+
+    void assign(Iterator<T> first, Iterator<T> last, const T& value)
+    {
+      fill(first, last, value);
     }
 
   private:
