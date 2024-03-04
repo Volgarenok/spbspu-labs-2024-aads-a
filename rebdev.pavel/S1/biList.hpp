@@ -3,7 +3,6 @@
 
 #include "biListIterator.hpp"
 #include "biListNode.hpp"
-#include <iostream>
 
 namespace rebdev
 {
@@ -19,13 +18,17 @@ namespace rebdev
       tailNode_ -> last_ = headNode_;
     };
     BiList(const BiList< T >& oldList):
-      headNode_(oldList.headNode_),
-      tailNode_(oldList.tailNode_)
-    {};
+      headNode_(nullptr),
+      tailNode_(nullptr)
+    {
+      this = oldList;
+    };
     BiList(BiList< T >&& rList):
-      headNode_(rList.headNode_),
-      tailNode_(rList.tailNode_)
-    {};
+      headNode_(nullptr),
+      tailNode_(nullptr)
+    {
+      this = std::move(rList);
+    };
     BiList(const T & firstElement):
     headNode_(nullptr),
     tailNode_(nullptr)
@@ -38,13 +41,7 @@ namespace rebdev
 
     ~BiList() noexcept
     {
-      while (headNode_)
-      {
-        biListNode< T > * next = headNode_ -> next_;
-        delete headNode_;
-        headNode_ = next;
-      }
-      delete headNode_;
+      clear();
     };
 
     BiList< T >& operator = (const BiList< T >& originalList)
@@ -81,30 +78,27 @@ namespace rebdev
 
     T front() const
     {
-      return headNode_ -> data_;
+      return headNode_ -> next_ -> data_;
     };
     T back() const
     {
-      return tailNode_ -> data_;
+      return tailNode_ -> last_ -> data_;
     };
 
     void push_back(const T & newElement)
     {
-      biListNode< T > * newNode = new biListNode< T >{newElement, nullptr, nullptr};
-
-      newNode -> last_ = tailNode_;
+      biListNode< T > * newNode = new biListNode< T >{0, tailNode_, nullptr};
+      tailNode_ -> data_ = newElement;
       tailNode_ -> next_ = newNode;
-
       tailNode_ = newNode;
       newNode = nullptr;
+
     };
     void push_front(const T & newElement)
     {
-      biListNode< T >* newNode = new biListNode< T >{newElement, nullptr, nullptr};
-
-      newNode -> next_ = headNode_;
+      biListNode< T >* newNode = new biListNode< T >{0, nullptr, headNode_};
+      headNode_ -> data_ = newElement;
       headNode_ -> last_ = newNode;
-
       headNode_ = newNode;
       newNode = nullptr;
     };
@@ -126,7 +120,7 @@ namespace rebdev
       headNode_ = newHead;
       newHead = nullptr;
     };
-    void clear()
+    void clear() noexcept
     {
       while (headNode_)
       {
@@ -141,8 +135,6 @@ namespace rebdev
       biListNode< T > secondHead = secondList.begin(), secondTail = secondList.end();
       secondTail.headNode_ = headNode_;
       secondList.tailNode_ = tailNode_;
-      headNode_ = secondHead;
-      tailNode_ = secondTail;
     };
 
     biListIterator< T > begin() const noexcept
@@ -162,6 +154,8 @@ namespace rebdev
     private:
     biListNode< T >* headNode_;
     biListNode< T >* tailNode_;
+
+    bool headIsFull, tailIsFull;
   };
 }
 #endif

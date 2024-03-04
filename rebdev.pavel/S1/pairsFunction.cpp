@@ -21,7 +21,7 @@ size_t rebdev::inputNumbersList(std::istream & in, BiList< size_t >* numList)
 
   while (in >> num)
   {
-    numList->push_back(num);
+    numList -> push_back(num);
     ++lenght;
   }
   in.clear();
