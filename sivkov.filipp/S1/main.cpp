@@ -64,6 +64,7 @@ int main()
   if (flag == true)
   {
     std::cerr << "OverFlow\n";
+    return 1;
   }
   return 0;
 }
