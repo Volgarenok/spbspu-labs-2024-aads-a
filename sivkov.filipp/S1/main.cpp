@@ -62,7 +62,7 @@ int main()
 
   if (numbers.empty())
   {
-    std::cout << "0\n";
+    std::cout << 0 << "\n";
     return 0;
   }
   numbers.reverse();
