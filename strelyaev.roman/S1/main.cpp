@@ -21,7 +21,12 @@ int main()
 
   for (auto it = l.begin(); it != l.end(); it++)
   {
-    std::cout << it->first << " ";
+    std::cout << it->first;
+    auto temp_it = it;
+    if (++temp_it != l.end())
+    {
+      std::cout << " ";
+    }
   }
 
   bool all_empty = false;
@@ -36,7 +41,7 @@ int main()
       if (!it->second.empty())
       {
         all_empty = false;
-        std::cout << it->second.front() << " ";
+        std::cout << it->second.front();
         if (max_value - sum > it->second.front())
         {
           sum += it->second.front();
@@ -47,6 +52,11 @@ int main()
           return 1;
         }
         it->second.pop_front();
+        auto temp_it = it;
+        if ((++temp_it != l.end()))
+        {
+          std::cout << " ";
+        }
       }
     }
     if (sum > 0)
