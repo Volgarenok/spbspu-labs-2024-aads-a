@@ -11,11 +11,9 @@ int main()
   bool allData = true;
   size_t sum = 0;
   size_t counter = 0;
-
   List<size_t> numbers;
   while (allData)
   {
-    bool flag = false;
     allData = false;
     for (auto iteratorForPair = list.cbegin(); iteratorForPair != list.cend(); ++iteratorForPair)
     {
@@ -39,7 +37,8 @@ int main()
         }
         else
         {
-          flag = true;
+          throw std::out_of_range("Overflow");
+          return 1;
         }
         std::cout << *iteratorForNums;
         allData = true;
