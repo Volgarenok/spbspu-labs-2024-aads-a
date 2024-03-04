@@ -18,4 +18,6 @@ namespace zakozhurnikova
     }
     return max;
   }
+
+  void printNames(const List<pair>& l);
 }
