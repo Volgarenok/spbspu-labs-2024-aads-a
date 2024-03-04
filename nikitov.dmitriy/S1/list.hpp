@@ -72,6 +72,7 @@ namespace nikitov
     void clear();
     void swap(List< T >& other);
 
+    void merge(List< T >& other);
     void splice(constIterator position, List< T >& other, constIterator otherPosition);
     void splice(constIterator position, List< T >& other);
     void sort();
@@ -554,6 +555,27 @@ namespace nikitov
     std::swap(head_, other.head_);
     std::swap(tail_, other.tail_);
     std::swap(size_, other.size_);
+  }
+
+  template< typename T >
+  void List< T >::merge(List< T >& other)
+  {
+    for (auto i = cbegin(); i != cend(); ++i)
+    {
+      auto j = other.cbegin();
+      while (j != other.cend())
+      {
+        if (*j <= *i)
+        {
+          splice(i, other, j++);
+        }
+        else
+        {
+          ++j;
+        }
+      }
+    }
+    splice(cend(), other);
   }
 
   template< typename T >
