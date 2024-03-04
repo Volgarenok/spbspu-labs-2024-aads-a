@@ -8,7 +8,6 @@ int main()
   list.reverse();
   outputNames(list);
 
-  bool flag = false;
   bool allData = true;
   size_t sum = 0;
   size_t counter = 0;
