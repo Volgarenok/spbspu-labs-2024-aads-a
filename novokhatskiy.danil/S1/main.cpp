@@ -15,6 +15,11 @@ int main()
     inputForwardList(pairsOfForwardList, std::cin);
     outputForwardList(std::cout, pairsOfForwardList);
   }
+  catch (const std::invalid_argument&)
+  {
+    std::cout << 0 << '\n';
+    
+  }
   catch (const std::exception& e)
   {
     std::cerr << e.what() << '\n';
