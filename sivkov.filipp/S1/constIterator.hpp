@@ -1,3 +1,6 @@
+#ifndef CONSTITERATOR_HPP
+#define CONSTITERATOR_HPP
+
 #include <iostream>
 #include "node.hpp"
 
@@ -80,3 +83,5 @@ ConstIterator<T> ConstIterator<T>::operator++(int)
   ++(*this);
   return result;
 }
+
+#endif

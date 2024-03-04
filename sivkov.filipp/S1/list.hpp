@@ -1,3 +1,6 @@
+#ifndef LIST_HPP
+#define LIST_HPP
+
 #include <iostream>
 #include "node.hpp"
 #include "constIterator.hpp"
@@ -12,6 +15,7 @@ public:
     head_(nullptr)
   {}
   List(std::size_t count, const T& value) :
+    size(0),
     head_(nullptr)
   {
     for (std::size_t i = 0; i < count; ++i)
@@ -21,6 +25,7 @@ public:
   }
 
   List(const List& other) :
+    size(0),
     head_(nullptr)
   {
     Node<T>* current = other.head_;
@@ -32,6 +37,7 @@ public:
   }
 
   List(List&& other) noexcept:
+    size(0),
     head_(other.head_)
   {
     other.head_ = nullptr;
@@ -52,6 +58,7 @@ public:
   ConstIterator<T> cbegin() const { return ConstIterator<T>(head_); }
   ConstIterator<T> cend() const { return ConstIterator<T>(nullptr); }
   T& operator[](const int index);
+
 private:
   Node<T>* head_;
   size_t size;
@@ -151,10 +158,10 @@ void List<T>::reverse()
   result->next = nullptr;
   while (temp)
   {
-    Node< T >* node = temp->next;
+    Node< T >* rofl = temp->next;
     temp->next = result;
     result = temp;
-    temp = node;
+    temp = rofl;
   }
   head_ = result;
 }
@@ -166,18 +173,22 @@ void List<T>::remove(const T& value)
   Node* prev = nullptr;
 
   while (current != nullptr) {
-    if (current->data == value) {
-      if (prev == nullptr) {
+    if (current->data == value)
+    {
+      if (prev == nullptr)
+      {
         head_ = current->next;
       }
-      else {
+      else
+      {
         prev->next = current->next;
       }
       delete current;
       --size;
       current = (prev == nullptr) ? head_ : prev->next;
     }
-    else {
+    else
+    {
       prev = current;
       current = current->next;
     }
@@ -215,3 +226,5 @@ T& List<T>::operator[](const int index)
   }
   throw std::logic_error("Index not found");
 }
+
+#endif
