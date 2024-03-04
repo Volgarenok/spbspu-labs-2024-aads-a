@@ -8,8 +8,8 @@ int main()
   using namespace strelyaev;
   List< int > a1;
   a1.push_back(1);
-  a1.push_back(2);
-  a1.push_back(3);
+  a1.push_back(1);
+  a1.push_back(1);
 
   List< int > a2;
   a2.push_back(2);
@@ -34,29 +34,33 @@ int main()
   l.push_back(b3);
   l.push_back(b4);
 
-  for (auto it = l.begin(); it != l.end(); ++it)
+
+  for (auto it = l.begin(); it != l.end(); it++)
   {
     std::cout << it->first << " ";
   }
-
   std::cout << "\n";
 
-  bool all_empty = false;
   List< int > sums;
-
-  while (!all_empty)
+  for (int i = 0; i < 4; i++)
   {
-    int i = 0;
-    all_empty = true;
+    int sum = 0;
     for (auto it = l.begin(); it != l.end(); it++)
     {
-      for (auto in_it = it->second.begin(); in_it != it->second.end(); in_it++)
+      if (!it->second.empty())
       {
-        std::cout << *in_it << " ";
+        std::cout << it->second.front() << " ";
+        sum += it->second.front();
+        it->second.pop_front();
       }
-      std::cout << "\n";
     }
     std::cout << "\n";
-    sums.push_back(i);
+    sums.push_back(sum);
   }
+
+  for (auto it = sums.begin(); it != sums.end(); it++)
+  {
+    std::cout << *it << " ";
+  }
+  std::cout << "\n";
 }

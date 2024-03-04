@@ -45,7 +45,7 @@ namespace strelyaev
 
      bool empty()
      {
-      return head_ == tail_;
+      return head_ == nullptr;
      }
 
      void push_back(const T& val)
