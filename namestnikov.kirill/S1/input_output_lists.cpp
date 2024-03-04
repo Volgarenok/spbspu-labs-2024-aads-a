@@ -84,6 +84,10 @@ bool namestnikov::haveNumbers(ForwardList<pair_t> & dataList)
 
 void namestnikov::outputLists(std::ostream & out, ForwardList<pair_t> & dataList)
 {
+  if (dataList.empty())
+  {
+    throw std::invalid_argument("List is empty");
+  }
   size_t maxSize = 0;
   outputNames(out, dataList, maxSize);
   if (!haveNumbers(dataList))
