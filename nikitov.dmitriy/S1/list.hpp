@@ -70,6 +70,7 @@ namespace nikitov
     void clear();
     void swap(List< T >& other);
 
+    void unique();
     void reverse();
     void remove(const T& value);
     template< typename Predicate >
@@ -541,6 +542,31 @@ namespace nikitov
     std::swap(head_, other.head_);
     std::swap(tail_, other.tail_);
     std::swap(size_, other.size_);
+  }
+
+  template< typename T >
+  void List< T >::unique()
+  {
+    for (auto i = cbegin(); i != cend(); ++i)
+    {
+      auto j = cbegin();
+      while(j != cend())
+      {
+        if (i == j)
+        {
+          ++j;
+          continue;
+        }
+        else if (*i == *j)
+        {
+          erase(j++);
+        }
+        else
+        {
+          ++j;
+        }
+      }
+    }
   }
 
   template< typename T >
