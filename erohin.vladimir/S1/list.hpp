@@ -44,6 +44,13 @@ namespace erohin
     iterator insert_after(const_iterator pos, size_t count, const T & value);
     iterator erase_after(const_iterator pos);
     iterator erase_after(const_iterator first, const_iterator last);
+    void assign(size_t count, const T & value);
+    void assign(std::initializer_list< T > init_list);
+    template< class InputIt >
+    void assign(InputIt first, InputIt last);
+    void remove(const T & value);
+    template< class UnaryPredicate >
+    void remove_if(UnaryPredicate p);
     void reverse();
   private:
     Node< T > * head_;
@@ -280,13 +287,106 @@ namespace erohin
   template< class T >
   ListIterator< T > List< T >::erase_after(ListConstIterator< T > first, ListConstIterator< T > last)
   {
-    ListIterator< T > iter_result(first.node_);
-    ListIterator< T > iter_end(last.node_);
-    while (iter_result + 1 != iter_end)
+    while (first + 1 != last)
     {
-      erase_after(ListConstIterator< T >(iter_result.node_));
+      erase_after(first);
     }
-    return iter_end;
+    return ListIterator< T >(last.node_);
+  }
+
+  template< class T >
+  void List< T >::assign(size_t count, const T & value)
+  {
+    clear();
+    for (size_t i = 0; i < count; ++i)
+    {
+      push_front(value);
+    }
+  }
+
+  template< class T >
+  template< class InputIt >
+  void List< T >::assign(InputIt first, InputIt last)
+  {
+    clear();
+    while(first != last)
+    {
+      try
+      {
+        push_front(*(first++));
+      }
+      catch (const std::bad_alloc &)
+      {
+        clear();
+        throw;
+      }
+    }
+    reverse();
+  }
+
+  template< class T >
+  void List< T >::assign(std::initializer_list< T > init_list)
+  {
+    clear();
+    auto init_begin = init_list.begin();
+    auto init_end = init_list.end();
+    while (init_begin != init_end)
+    {
+      try
+      {
+        push_front(*(--init_end));
+      }
+      catch (const std::bad_alloc &)
+      {
+        clear();
+        throw;
+      }
+    }
+  }
+
+  template< class T >
+  void List< T >::remove(const T & value)
+  {
+    T list_front_value(std::move(front()));
+    pop_front();
+    if (list_front_value != value)
+    {
+      push_front(std::move(list_front_value));
+    }
+    auto iter_begin = cbegin();
+    auto iter_end = cend();
+    while (iter_begin + 1 != iter_end)
+    {
+      if (*(iter_begin + 1) == value)
+      {
+        erase_after(iter_begin);
+      }
+      else
+      {
+        ++iter_begin;
+      }
+    }
+  }
+
+  template< class T >
+  template< class UnaryPredicate >
+  void List< T >::remove_if(UnaryPredicate p)
+  {
+    auto iter_begin = begin();
+    auto iter_end = end();
+    if (iter_begin != iter_end)
+    {
+      pop_front();
+    }
+    ++iter_begin;
+    while (iter_begin != iter_end)
+    {
+      if (true)
+      {
+        erase_after(iter_begin);
+      }
+      ++iter_begin;
+    }
   }
 
   template< class T >
