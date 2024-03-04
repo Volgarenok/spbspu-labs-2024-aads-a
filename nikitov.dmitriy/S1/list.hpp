@@ -70,6 +70,7 @@ namespace nikitov
     void clear();
     void swap(List< T >& other);
 
+    void reverse();
     void remove(const T& value);
     template< typename Predicate >
     void remove_if(Predicate pred);
@@ -540,6 +541,25 @@ namespace nikitov
     std::swap(head_, other.head_);
     std::swap(tail_, other.tail_);
     std::swap(size_, other.size_);
+  }
+
+  template< typename T >
+  void List< T >::reverse()
+  {
+   if (size_ != 0)
+   {
+     Node< T >* node = head_;
+     node->prev_ = tail_->next_;
+     node->next_->prev_ = node;
+     tail_->next_ = nullptr;
+     while(node != nullptr)
+     {
+       Node< T >* temp = node->next_;
+       std::swap(node->prev_, node->next_);
+       node = temp;
+     }
+     std::swap(head_, tail_);
+   }
   }
 
   template< typename T >
