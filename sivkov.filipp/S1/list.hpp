@@ -1,91 +1,217 @@
-template< class T >
-class Node
-{
-public:
-  T data_;
-  Node* next_;
-  Node(const T& value, Node* const next);
-  Node(T&& value, Node* const next);
-  ~Node() = default;
-};
+#include <iostream>
+#include "node.hpp"
+#include "constIterator.hpp"
 
-template< class T >
-Node< T >::Node(const T& value, Node* const next) :
-  data_(value),
-  next_(next)
-{}
-
-template< class T >
-Node< T >::Node(T&& value, Node* const next) :
-  data_(value),
-  next_(next)
-{}
-
-
-template <class T>
+template <typename T>
 class List
 {
 public:
-	List();
-	~List();
+  ConstIterator<T> cIterator;
+  List():
+    size(0),
+    head_(nullptr)
+  {}
+  List(std::size_t count, const T& value) :
+    head_(nullptr)
+  {
+    for (std::size_t i = 0; i < count; ++i)
+    {
+      push_back(value);
+    }
+  }
 
-  bool empty() const;
-  void push_front(const T& value);
+  List(const List& other) :
+    head_(nullptr)
+  {
+    Node<T>* current = other.head_;
+    while (current != nullptr)
+    {
+      push_back(current->data);
+      current = current->next;
+    }
+  }
+
+  List(List&& other) noexcept:
+    head_(other.head_)
+  {
+    other.head_ = nullptr;
+  }
+
+  ~List() { clear(); }
+  void push_front(const T& data);
+  void push_back(T data);
+  void clear();
+  bool empty() const {return head_ == nullptr;}
   void pop_front();
-  void del();
-  void swap(List< T >& list);
-
-
+  void pop_back();
+  void swap(List& other);
+  void reverse();
+  void remove(const T& value);
+  void assign(std::size_t count, const T& value);
+  T& front() { return head_->data; }
+  ConstIterator<T> cbegin() const { return ConstIterator<T>(head_); }
+  ConstIterator<T> cend() const { return ConstIterator<T>(nullptr); }
+  T& operator[](const int index);
 private:
-  Node< T >* head_;
+  Node<T>* head_;
+  size_t size;
 };
 
-
-
-template<class T>
-List<T>::List()
+template<typename T>
+void List<T>::push_front(const T& data)
 {
-  head_(nullptr);
+  Node<T>* temp = new Node<T>(data);
+  temp->next = head_;
+  head_ = temp;
+  size++;
 }
 
-template<class T>
-List<T>::~List()
+template<typename T>
+void List<T>::push_back(T data)
 {
-  del();
+  Node<T>* newNode = new Node<T>(data);
+  if (empty())
+  {
+    head_ = newNode;
+  }
+  else
+  {
+    Node<T>* head = head_;
+    while (head->next)
+    {
+      head = head->next;
+    }
+    head->next = newNode;
+  }
+  size++;
 }
 
-template<class T>
-bool List<T>::empty() const
+template<typename T>
+void List<T>::clear()
 {
-  return !head_;
-}
-
-template<class T>
-void List<T>::push_front(const T& value)
-{
-  Node< T >* data = new Node< T >(value, head_);
-  head_ = data;
-}
-
-template<class T>
-void List<T>::pop_front()
-{
-  Node< T >* new_head = head_->next_;
-  delete head_;
-  head_ = new_head;
-}
-
-template<class T>
-void List<T>::del()
-{
-  while (head_)
+  while (!(empty()))
   {
     pop_front();
   }
 }
 
-template<class T>
-void List<T>::swap(List<T>& list)
+template<typename T>
+void List<T>::pop_front()
 {
-  std::swap(head_, list.head_);
+  if (empty())
+  {
+    throw;
+  }
+  Node<T>* head = head_;
+  head_ = head_->next;
+  delete head;
+  size--;
+}
+
+template<typename T>
+void List<T>::pop_back()
+{
+  if (empty())
+  {
+    throw;
+  }
+  if (head_->next == nullptr)
+  {
+    delete head_;
+    head_ = nullptr;
+  }
+  else
+  {
+    Node<T>* head = head_;
+    while (head->next->next != nullptr)
+    {
+      head = head->next;
+    }
+    delete head->next;
+    head->next = nullptr;
+  }
+  size--;
+}
+
+template<typename T>
+void List<T>::swap(List& other)
+{
+  std::swap(head_, other.head_);
+}
+
+template<typename T>
+void List<T>::reverse()
+{
+  if (!head_)
+  {
+    return;
+  }
+  Node< T >* result = head_;
+  Node< T >* temp = head_->next;
+  result->next = nullptr;
+  while (temp)
+  {
+    Node< T >* rofl = temp->next;
+    temp->next = result;
+    result = temp;
+    temp = rofl;
+  }
+  head_ = result;
+}
+
+template<typename T>
+void List<T>::remove(const T& value)
+{
+  Node* current = head_;
+  Node* prev = nullptr;
+
+  while (current != nullptr) {
+    if (current->data == value) {
+      if (prev == nullptr) {
+        head_ = current->next;
+      }
+      else {
+        prev->next = current->next;
+      }
+      delete current;
+      --size;
+      current = (prev == nullptr) ? head_ : prev->next;
+    }
+    else {
+      prev = current;
+      current = current->next;
+    }
+  }
+}
+
+template<typename T>
+void List<T>::assign(std::size_t count, const T& value)
+{
+  clear();
+
+  for (std::size_t i = 0; i < count; ++i)
+  {
+    push_back(value);
+  }
+}
+
+template<typename T>
+T& List<T>::operator[](const int index)
+{
+  int counter = 0;
+  Node* current = this->head;
+  if (size <= index || index < 0)
+  {
+    throw std::out_of_range("Index out of range");
+  }
+  while (current != nullptr)
+  {
+    if (counter == index)
+    {
+      return current->data;
+    }
+    current = current->pNext;
+    counter++;
+  }
+  throw std::logic_error("Index not found");
 }
