@@ -70,6 +70,7 @@ namespace nikitov
     void clear();
     void swap(List< T >& other);
 
+    void sort();
     void unique();
     void reverse();
     void remove(const T& value);
@@ -542,6 +543,46 @@ namespace nikitov
     std::swap(head_, other.head_);
     std::swap(tail_, other.tail_);
     std::swap(size_, other.size_);
+  }
+
+  template< typename T >
+  void List< T >::sort()
+  {
+    bool isSorted = false;
+    while (!isSorted)
+    {
+      isSorted = true;
+      Node< T >* node = head_;
+      while (node != tail_)
+      {
+        if (node->value_ > node->next_->value_)
+        {
+          isSorted = false;
+          if (node->prev_ != nullptr)
+          {
+            std::swap(node->prev_->next_, node->next_->next_->prev_);
+          }
+          else
+          {
+            node->next_->next_->prev_ = node;
+            head_ = node->next_;
+          }
+          node->next_->prev_ = node->prev_;
+          Node< T >* temp = node->next_->next_;
+          node->prev_ = node->next_;
+          node->next_ = temp;
+          node->prev_->next_ = node;
+          if (node->prev_ == tail_)
+          {
+            tail_ = node;
+          }
+        }
+        else
+        {
+          node = node->next_;
+        }
+      }
+    }
   }
 
   template< typename T >
