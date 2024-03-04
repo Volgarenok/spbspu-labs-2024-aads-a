@@ -104,18 +104,12 @@ namespace strelyaev
 
       T& back() const
       {
-        if (tail_)
-        {
-          return tail_->value_;
-        }
+        return tail_->value_;
       }
 
       T& front() const
       {
-        if (head_)
-        {
-          return head_->value_;
-        }
+        return head_->value_;
       }
 
       void clear()
