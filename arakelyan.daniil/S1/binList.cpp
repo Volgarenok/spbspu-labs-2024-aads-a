@@ -1,20 +1,44 @@
 #include "binList.hpp"
 
+#include <__config>
 #include <iostream>
 #include <stdexcept>
+#include "iterator.hpp"
 #include "node.hpp"
 
 template < class T >
 arakelyan::BinList< T >::BinList():
   head_(nullptr),
   tail_(nullptr),
-  size(0)
+  size_(0)
 {}
+
+template < class T >
+arakelyan::BinList< T >::BinList(size_t size, const T &val):
+  BinList()
+{
+  for (size_t i = 0; i < size; ++i)
+  {
+    push_back(val);
+  }
+}
+
+template < class T >
+arakelyan::BinList< T >::BinList(const BinList<T> &ls):
+  BinList()
+{
+  Node< T > * node = ls.head_;
+  while (size_ != ls.size_)
+  {
+    push_back(node->value);
+    node = node->nextNode;
+  }
+}
 
 template < class T >
 size_t arakelyan::BinList< T >::getSize() const
 {
-  return size;
+  return size_;
 }
 
 template < class T >
@@ -24,15 +48,27 @@ bool arakelyan::BinList< T >::isEmpty() const
 }
 
 template < class T >
-Iterator< T > arakelyan::BinList<T>::begin() const
+Iterator< T > arakelyan::BinList< T >::begin() const
 {
   return Iterator< T >(head_);
 }
 
 template < class T >
-Iterator< T > arakelyan::BinList<T>::end() const
+const Iterator< T > arakelyan::BinList< T >::cbegin() const
 {
-  return Iterator< T >(tail_);
+  return Iterator< T >(head_);
+}
+
+template < class T >
+Iterator< T > arakelyan::BinList< T >::end() const
+{
+  return Iterator< T >(tail_->nextNode);
+}
+
+template < class T >
+const Iterator< T > arakelyan::BinList< T >::cend() const
+{
+  return Iterator< T >(tail_->nextNode);
 }
 
 template < class T >
@@ -50,64 +86,59 @@ T arakelyan::BinList< T >::getLast() const
 template < class T >
 void arakelyan::BinList< T >::push_back(const T &el)
 {
-  Node<T> *node = nullptr;
+  Node< T > *node = nullptr;
   try
   {
-    node = new Node<T>(el);
+    node = new Node< T >(el);
   }
   catch (...)
   {
     throw std::logic_error("error!");
   }
-  node->prevNode = tail_;
-  if (tail_ != nullptr)
-  {
-    tail_->nextNode = node;
-  }
-  if (head_ == nullptr)
+  if ((head_ == nullptr) && (tail_ == nullptr))
   {
     head_ = node;
+    tail_ = node;
   }
-  tail_ = node;
-  ++size;
+  else
+  {
+    tail_->nextNode = node;
+    node->prevNode = tail_;
+    tail_ = node;
+  }
+  ++size_;
 }
 
 template < class T >
 void arakelyan::BinList< T >::push_front(const T &el)
 {
-  Node<T> *node = nullptr;
+  Node< T > *node = nullptr;
   try
   {
-    node = new Node<T>(el);
+    node = new Node< T >(el);
   }
   catch (...)
   {
     throw std::logic_error("error!");
   }
   node->nextNode = head_;
-  if (head_ != nullptr)
+  if (head_ == nullptr && tail_ == nullptr)
   {
-    head_->prevNode = node;
-  }
-  if (tail_ == nullptr)
-  {
+    head_ = node;
     tail_ = node;
   }
   head_ = node;
-  ++size;
+  ++size_;
 }
 
 template < class T >
 void arakelyan::BinList< T >::clear()
 {
-  if (head_ == nullptr)
-  {
-    return;
-  }
-  while (head_ != nullptr)
+  while (head_)
   {
     pop_front();
   }
+  tail_ = nullptr;
 }
 
 template < class T >
@@ -128,7 +159,7 @@ void arakelyan::BinList< T >::pop_front()
   }
   delete head_;
   head_ = node;
-  --size;
+  --size_;
 }
 
 template < class T >
@@ -149,7 +180,44 @@ void arakelyan::BinList< T >::pop_back()
   }
   delete tail_;
   tail_ = node;
-  --size;
+  --size_;
+}
+
+
+template < class T >
+void arakelyan::BinList< T >::assign(const T &val, const size_t size)
+{
+  clear();
+  head_ = nullptr;
+  tail_ = nullptr;
+  for (size_t i = 0; i < size; ++i)
+  {
+    push_back(val);
+  }
+}
+
+template < class T >
+void arakelyan::BinList< T >::assign(std::initializer_list< T > ls)
+{
+  clear();
+  head_ = nullptr;
+  tail_ = nullptr;
+  for (auto it = ls.begin(); it != ls.end(); ++it)
+  {
+    push_back(*it);
+  }
+}
+
+template < class T >
+void arakelyan::BinList< T >::assign(Iterator< T > it_start, Iterator< T > it_end)
+{
+  clear();
+  head_ = nullptr;
+  tail_ = nullptr;
+  for (auto it = it_start; it != it_end; ++it)
+  {
+    push_back(*it);
+  }
 }
 
 template < class T >
@@ -159,7 +227,7 @@ void arakelyan::BinList< T >::printList(std::ostream &out) const
   {
     return;
   }
-  Node<T> *i = head_;
+  Node< T > *i = head_;
   while (i)
   {
     out << i->value << " -> ";
@@ -171,8 +239,5 @@ void arakelyan::BinList< T >::printList(std::ostream &out) const
 template < class T >
 arakelyan::BinList< T >::~BinList()
 {
-  while (head_ != nullptr)
-  {
-    pop_front();
-  }
+  clear();
 }

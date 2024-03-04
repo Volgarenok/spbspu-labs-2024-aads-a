@@ -1,21 +1,24 @@
+#include <__config>
 #include <iostream>
+#include <stdexcept>
 
-#include "binList.hpp"
 #include "binList.cpp"
-#include "node.hpp"
+#include "binList.hpp"
+#include "iterator.hpp"
 #include "node.cpp"
+#include "node.hpp"
 
 int main()
 {
   using namespace arakelyan;
-  using List = BinList<double>;
-  using iterator_list = Iterator<double>;
+  using List = BinList< double >;
+  using iterator_list = Iterator< double >;
 
   List list;
-  try 
-  {
-    double var = 1;
+  double var = 1;
 
+  try
+  {
     list.push_back(15);
     list.printList(std::cout);
     std::cout << "\n";
@@ -59,34 +62,22 @@ int main()
         list.clear();
         std::cout << "empty list\n";
       }
-    }
-    while (var != 0);
-    std::cout << "while end. now another while. loop whith all el in list\n";
-    iterator_list  it_b = list.begin();
-    std::cout << "it_b = " << *it_b << "\n";
-    iterator_list it_l = list.end();
-    std::cout << "it_l = " << *it_l << "\n";
+    } while (var != 0);
 
-    it_b++;
-    std::cout <<"it_t++ " << *it_b << "\n";
-    it_b++;
-    std::cout <<"it_b++ " << *it_b << "\n";
-    it_l--;
-    std::cout <<"it_l-- " << *it_l << "\n";
-    it_l--;
-    std::cout <<"it_l-- " << *it_l << "\n";
+    iterator_list it_start = list.begin();
+    iterator_list it_end = list.end();
+    ++it_start;
 
-    for (iterator_list iter = list.begin(); iter != list.end(); iter++)
-    {
-      std::cout << *iter << " ";
-    }
+    std::cout << "list_2\n";
+    List list_t;
+    list_t.assign(it_start, it_end);
+    list_t.printList(std::cout);
   }
-  catch (...)
+  catch (const std::exception &e)
   {
-    std::cerr << "wrong!\n";
+    std::cerr << "Error: " << e.what() << "\n";
     list.clear();
     return 1;
   }
-
   return 0;
 }
