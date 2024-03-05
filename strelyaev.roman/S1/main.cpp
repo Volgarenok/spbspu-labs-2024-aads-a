@@ -37,7 +37,18 @@ int main()
 
   bool all_empty = false;
   List< size_t > sums;
-  while (!all_empty)
+  size_t max_element = 0;
+  for (auto it = list.begin(); it != list.end(); it++)
+  {
+    size_t i = 0;
+    for (auto inner_it = it->second.begin(); inner_it != it->second.end(); inner_it++)
+    {
+      i++;
+      max_element = std::max(max_element, i);
+    }
+  }
+
+  for (size_t i = 0; i < max_element; i++)
   {
     std::cout << "\n";
     all_empty = true;
@@ -47,7 +58,7 @@ int main()
       if (!it->second.empty())
       {
         all_empty = false;
-        std::cout << it->second.front();
+        std::cout << it->second.front() << " ";
         if (max_value - sum > it->second.front())
         {
           sum += it->second.front();
@@ -60,11 +71,13 @@ int main()
         it->second.pop_front();
       }
     }
-    if (sum > 0)
+    if (sum > 0 || all_empty)
     {
       sums.push_back(sum);
     }
   }
+
+  std::cout << "\n";
 
   for (auto it = sums.begin(); it != sums.end(); it++)
   {
