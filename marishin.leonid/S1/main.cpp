@@ -563,6 +563,7 @@ int main()
         else
         {
           overflow = true;
+          sum = std::numeric_limits<size_t>::max();
           pair.second.pop_front();
         }
       }
