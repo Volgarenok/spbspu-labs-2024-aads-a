@@ -17,21 +17,21 @@ namespace rebdev
       biListC_Iterator():
         node_(nullptr)
       {}
-      biListIterator(const c_iter& iterator):
+      biListC_Iterator(const c_iter& iterator):
         node_(nullptr)
       {
         this -> operator = (iterator);
       }
-      biListIterator(c_iter&& iterator):
+      biListC_Iterator(c_iter&& iterator):
         node_(nullptr)
       {
         this -> operator = (std::move(iterator));
       }
-      biListIterator(const node& originalNode):
+      biListC_Iterator(const node& originalNode):
         node_(originalNode)
       {}
 
-      ~biListIterator() noexcept
+      ~biListC_Iterator() noexcept
       {
         node_ = nullptr;
       }
@@ -40,7 +40,7 @@ namespace rebdev
       {
         node_ = iterator.node_;
       }
-      iter& operator = (c_iter&& iterator) noexcept
+      c_iter& operator = (c_iter&& iterator) noexcept
       {
         node_ = iterator.node_;
       }
