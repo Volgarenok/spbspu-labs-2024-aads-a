@@ -587,7 +587,7 @@ int main()
     }
     if (&sum == &lst.back())
     {
-      std::cout << "\0";
+      std::cout << "\n";
     }
   }
 
