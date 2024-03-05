@@ -5,6 +5,7 @@
 
 #include "node.hpp"
 #include "iterator.hpp"
+#include "constiterator.hpp"
 
 namespace gladyshev
 {
@@ -13,12 +14,43 @@ namespace gladyshev
   {
   public:
     typedef Iterator<T> iterator;
+    typedef ConstIterator<T> constIterator;
     List():
       head_(nullptr)
     {}
     ~List()
     {
       clear();
+    }
+    List(const T& data, size_t size):
+      List()
+    {
+      try
+      {
+        for (size_t i = 0; i < size; ++i)
+        {
+          push_front(data);
+        }
+      }
+      catch (const std::bad_alloc& e)
+      {
+        clear();
+      }
+    }
+    List(const List& other):
+      head_(nullptr)
+    {
+      Node<T> * curr = other.head_;
+      while (curr != nullptr)
+      {
+        push_back(curr->data);
+        curr = curr->next;
+      }
+    }
+    List(List&& other):
+      head_(other.head)
+    {
+      other.head = nullptr;
     }
     void clear()
     {
@@ -30,6 +62,14 @@ namespace gladyshev
     bool empty() const
     {
       return head_ == nullptr;
+    }
+    void assign(size_t size, const T& value)
+    {
+      clear();
+      for (size_t i = 0; i < size; ++i)
+      {
+        push_front(value);
+      }
     }
     void reverse()
     {
@@ -44,6 +84,59 @@ namespace gladyshev
         current = temp;
       }
       head_ = prev;
+    }
+    void remove(const T& value)
+    {
+      if (empty())
+      {
+        return;
+      }
+      if (head_->data = value)
+      {
+        pop_front();
+        return;
+      }
+      Node<T>* firstTemp = head_;
+      Node<T>* secondTemp = head_->next;
+      while (secondTemp && secondTemp->data != value)
+      {
+        firstTemp = firstTemp->next;
+        secondTemp = secondTemp->next;
+      }
+      if (!secondTemp)
+      {
+        return;
+      }
+      firstTemp->next = secondTemp->next;
+      delete secondTemp;
+    }
+    template <typename UnaryPredicate>
+    void remove_if(UnaryPredicate p)
+    {
+      Node<T>* curr = head_;
+      Node<T>* temp = nullptr;
+      while (curr)
+      {
+        if (p(curr->data))
+        {
+          if (curr == head_)
+          {
+            pop_front();
+            curr = head_;
+          }
+          else
+          {
+            temp->next = curr->next;
+            delete curr;
+            curr = temp->next;
+          }
+        }
+        else
+        {
+          temp = curr;
+          curr = curr->next;
+        }
+      }
     }
     void push_back(T data)
     {
@@ -108,11 +201,19 @@ namespace gladyshev
     {
       std::swap(head_, other.head_);
     }
-    iterator begin() const
+    constIterator cbegin() const
+    {
+      return constIterator(head_);
+    }
+    constIterator cend() const
+    {
+      return constIterator(nullptr);
+    }
+    iterator begin()
     {
       return iterator(head_);
     }
-    iterator end() const
+    iterator end()
     {
       return iterator(nullptr);
     }

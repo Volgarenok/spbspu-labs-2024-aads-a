@@ -19,11 +19,6 @@ namespace gladyshev
     {}
     Iterator(const Iterator<T>&) = default;
     Iterator<T>& operator=(const Iterator<T>&) = default;
-    Iterator(Iterator&& other) noexcept:
-      node_(other.node_)
-    {
-      other.node_ = nullptr;
-    }
     ~Iterator() = default;
     Iterator<T>& operator++()
     {
@@ -43,14 +38,6 @@ namespace gladyshev
     bool operator==(const Iterator<T>& other) const
     {
       return (node_ == other.node_);
-    }
-    const T& operator*() const
-    {
-      return node_->data;
-    }
-    const T* operator->() const
-    {
-      return std::addressof(node_->data);
     }
     T& operator*()
     {
