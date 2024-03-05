@@ -78,7 +78,12 @@ int main()
 
   for (auto it = sums.begin(); it != sums.end(); it++)
   {
-    std::cout << *it << " ";
+    std::cout << *it;
+    auto temp_it = it;
+    if (temp_it != sums.end())
+    {
+      std::cout << " ";
+    }
   }
   std::cout << "\n";
 }
