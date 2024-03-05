@@ -1,6 +1,7 @@
 #include <iostream>
 #include <utility>
 #include <string>
+#include <limits>
 
 #include "biList.hpp"
 #include "pairsFunction.hpp"
@@ -10,10 +11,11 @@ int main()
   using list = rebdev::BiList< size_t >;
   using pairs = std::pair< std::string, list>;
   pairs * pairArr = nullptr;
-  size_t numOfPairs = 0;
-  size_t maxNumber = 0;
   list * numList = nullptr;
   std::string listName;
+  size_t numOfPairs = 0;
+  size_t maxNumber = 0;
+
 
   while (std::cin >> listName)
   {
@@ -39,6 +41,11 @@ int main()
 
     listName.clear();
   }
+  if (numOfPairs == 0)
+  {
+    std::cerr << "separate line as output\n";
+    return 0;
+  }
 
   for (size_t i = 0; i < (numOfPairs - 1); ++i)
   {
@@ -61,6 +68,13 @@ int main()
           std::cout << ' ';
         }
         std::cout << element;
+        bool moreThanMax = ((std::numeric_limits< size_t >::max() - sumOfNum[j]) < element);
+        if (moreThanMax)
+        {
+          delete[] pairArr;
+          std::cerr << "overlow in math operation\n";
+          return 1;
+        }
         sumOfNum[i] += element;
         numList.pop_front();
         firstElement = false;
