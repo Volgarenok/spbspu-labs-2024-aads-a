@@ -13,7 +13,6 @@ int main()
     List<pair> list;
     readList(list, std::cin);
     printNames(list);
-    std::cout << '\n';
     printByIndex(list);
     printSums<size_t>(list);
     std::cout << '\n';

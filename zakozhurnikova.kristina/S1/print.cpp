@@ -10,6 +10,10 @@ void zakozhurnikova::printNames(const List<pair>& l)
       std::cout << ' ';
     }
   }
+  if (l.size() != 0)
+  {
+    std::cout << '\n';
+  }
 }
 
 void zakozhurnikova::printByIndex(const List<pair> &l)
