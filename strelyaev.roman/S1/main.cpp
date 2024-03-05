@@ -61,11 +61,11 @@ int main()
         std::cout << it->second.front();
         sum += it->second.front();
         it->second.pop_front();
-      }
-      auto temp_it = it;
-      if (++temp_it != list.end())
-      {
-        std::cout << " ";
+        auto temp_it = it;
+        if (++temp_it != list.end())
+        {
+          std::cout << " ";
+        }
       }
     }
     std::cout << "\n";
