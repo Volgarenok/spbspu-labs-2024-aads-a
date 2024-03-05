@@ -69,7 +69,7 @@ namespace zaitsev
   }
 
   template<typename T>
-  const T* ConstForwardListIterator<T>::operator->() const 
+  const T* ConstForwardListIterator<T>::operator->() const
   {
     if (!node_)
     {
