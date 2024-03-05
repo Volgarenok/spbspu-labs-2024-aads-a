@@ -7,15 +7,18 @@ namespace skuratov
   class Node
   {
   public:
-    int data{};
-    Node<T> prev_;
-    Node<T> next_;
-    T value_;
+    ~Node() = default;
+    //*
+    size_t data{};
+    //*
+    Node<T>* prev;
+    Node<T>* next;
+    T value;
   private:
-    Node(int data)
+    Node(size_t data)
     {
       this->data = data;
-      this->prev_ = this->next_ = NULL;
+      this->prev = this->next = NULL;
     }
   };
 }
