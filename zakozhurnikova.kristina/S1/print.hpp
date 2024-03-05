@@ -47,7 +47,11 @@ namespace zakozhurnikova
         }
 
       }
-      std::cout << sum << ' ';
+      std::cout << sum;
+      if (i < maxSize)
+      {
+       std::cout << ' ';
+      }
     }
     if (maxSize == 0)
     {
