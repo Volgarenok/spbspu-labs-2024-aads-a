@@ -20,15 +20,15 @@ namespace rebdev
       biListC_Iterator(const c_iter& iterator):
         node_(nullptr)
       {
-        this -> operator = (iterator);
+        *this = iterator;
       }
       biListC_Iterator(c_iter&& iterator):
         node_(nullptr)
       {
-        this -> operator = (std::move(iterator));
+        *this = std::move(iterator);
       }
       biListC_Iterator(const node& originalNode):
-        node_(originalNode)
+        node_(&originalNode)
       {}
 
       ~biListC_Iterator() noexcept
@@ -51,43 +51,43 @@ namespace rebdev
       }
       bool operator != (const c_iter& iterator) const noexcept
       {
-        return !(this == iterator);
+        return !(*this == iterator);
       }
 
       const T & operator * () const
       {
-        assert(node_ != nullptr);
         return node_ -> data_;
       }
       const T * operator -> () const
       {
-        assert(node_ != nullptr);
-        return std::addressof(node_ -> data);
+        return std::addressof(node_ -> data_);
       }
 
       c_iter& operator ++ ()
       {
-        assert(node_ != nullptr);
         node_ = node_ -> next_;
-        return node_;
+        return *this;
       }
-      c_iter& operator ++ (int)
+      c_iter operator ++ (int)
       {
-        node oldNode = node_;
+        c_iter oldIter(node_);
         ++node_;
-        return oldNode;
+        return oldIter;
       }
       c_iter& operator -- ()
       {
-        assert(node_ != nullptr);
         node_ = node_ -> last_;
-        return node_;
+        return *this;
       }
-      c_iter& operator -- (int)
+      c_iter operator -- (int)
       {
-        node oldNode = node_;
+        c_iter oldIter(node_);
         --node_;
-        return oldNode;
+        return oldIter;
+      }
+      const T* getNode() const
+      {
+        return node_;
       }
 
     private:

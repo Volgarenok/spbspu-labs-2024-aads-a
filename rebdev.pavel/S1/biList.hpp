@@ -11,39 +11,50 @@ namespace rebdev
   {
     using node = biListNode< T >;
     using list = BiList< T >;
+    using iter = biListIterator< T >;
 
     public:
-      BiList():
-        headNode_(new node{0, nullptr, nullptr}),
-        tailNode_(new node{0, nullptr, nullptr})
-      {
-        headNode_ -> next_ = tailNode_;
-        tailNode_ -> last_ = headNode_;
-      }
+      BiList(): BiList(0, 0)
+      {}
       BiList(const list& oldList):
         headNode_(nullptr),
         tailNode_(nullptr)
       {
-        this -> operator = (oldList);
+        *this = oldList;
       }
+
       BiList(list&& rList):
         headNode_(headNode_),
         tailNode_(tailNode_)
       {}
       BiList(const T & firstElement):
-      headNode_(nullptr),
-      tailNode_(nullptr)
+      headNode_(new node{0, nullptr, nullptr}),
+      tailNode_(new node{0, nullptr, nullptr})
       {
-        BiList();
         node* newNode = new node{firstElement, headNode_, tailNode_};
         headNode_ -> next_ = newNode;
         tailNode_ -> last_ = newNode;
+      }
+
+      BiList(size_t n): BiList(n, 0)
+      {}
+      BiList(size_t n, const T& val):
+      headNode_(new node{0, nullptr, nullptr}),
+      tailNode_(new node{0, nullptr, nullptr})
+      {
+        headNode_ -> next_ = tailNode_;
+        tailNode_ -> last_ = headNode_;
+        for (size_t i = 0; i < n; ++i)
+        {
+          push_back(val);
+        }
       }
 
       ~BiList() noexcept
       {
         clear();
       }
+
 
       list& operator = (const list& originalList)
       {
@@ -78,6 +89,23 @@ namespace rebdev
         return *this;
       }
 
+
+      iter begin() const noexcept
+      {
+        return iter(*headNode_);
+      }
+      iter end() const noexcept
+      {
+        return iter(*tailNode_);
+      }
+
+
+      bool empty() const noexcept
+      {
+        return ((headNode_ -> next_) == tailNode_);
+      }
+
+
       T front() const
       {
         return headNode_ -> next_ -> data_;
@@ -85,6 +113,40 @@ namespace rebdev
       T back() const
       {
         return tailNode_ -> last_ -> data_;
+      }
+
+      template <class InputIterator>
+      void assign (InputIterator first, InputIterator last)
+      {
+        clear();
+
+        headNode_ = new node{*first, nullptr, nullptr};
+
+        ++first;
+
+        tailNode_ = new node{*first, headNode_, nullptr};
+        headNode_ -> next_ = tailNode_;
+
+        while (first != last)
+        {
+          ++first;
+          node * newNode = new node{*first, tailNode_, nullptr};
+
+          tailNode_ -> next_ = newNode;
+          tailNode_ = newNode;
+
+          newNode = nullptr;
+        }
+      }
+      void assign (size_t n, const T& val)
+      {
+        clear();
+        BiList(n, val);
+      }
+      void assign (list il)
+      {
+        clear();
+        *this = il;
       }
 
       void push_back(const T & newElement)
@@ -103,6 +165,7 @@ namespace rebdev
         headNode_ = newNode;
         newNode = nullptr;
       }
+
       void push_back(T && newElement)
       {
         push_back(newElement);
@@ -111,6 +174,7 @@ namespace rebdev
       {
         pushFront(newElement);
       }
+
       void pop_back()
       {
         node* newTail = tailNode_ -> last_;
@@ -127,6 +191,14 @@ namespace rebdev
         headNode_ = newHead;
         newHead = nullptr;
       }
+
+      void swap(list* secondList)
+      {
+        node secondHead = secondList.begin(), secondTail = secondList.end();
+        secondTail.headNode_ = headNode_;
+        secondList.tailNode_ = tailNode_;
+      }
+
       void clear() noexcept
       {
         while (headNode_)
@@ -137,25 +209,39 @@ namespace rebdev
         }
         delete headNode_;
       }
-      void swap(list* secondList)
+
+
+      void remove (const T& val)
       {
-        node secondHead = secondList.begin(), secondTail = secondList.end();
-        secondTail.headNode_ = headNode_;
-        secondList.tailNode_ = tailNode_;
+        iter iterNow = begin();
+        while ((++iterNow) != end())
+        {
+          if (*iterNow == val)
+          {
+            node* lastNode = iterNow.getNode() -> last_;
+            node* nextNode = iterNow.getNode() -> next_;
+            lastNode -> next_ = nextNode;
+            nextNode -> last_ = lastNode;
+            delete iterNow.getNode();
+          }
+        }
       }
 
-      biListIterator< T > begin() const noexcept
+      template < class Predicate >
+      void remove_if (Predicate pred)
       {
-        return biListIterator< T >(headNode_);
-      }
-      biListIterator< T > end() const noexcept
-      {
-        return biListIterator< T >(tailNode_);
-      }
-
-      bool empty() const noexcept
-      {
-        return ((headNode_ -> next_) == tailNode_);
+        iter iterNow = begin();
+        while ((++iterNow) != end())
+        {
+          if (pred(iterNow))
+          {
+            node* lastNode = iterNow.getNode() -> last_;
+            node* nextNode = iterNow.getNode() -> next_;
+            lastNode -> next_ = nextNode;
+            nextNode -> last_ = lastNode;
+            delete iterNow.getNode();
+          }
+        }
       }
 
     private:
