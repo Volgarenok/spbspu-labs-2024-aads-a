@@ -10,12 +10,14 @@ int main()
 {
   using list = rebdev::BiList< size_t >;
   using pairs = std::pair< std::string, list>;
+
   pairs * pairArr = nullptr;
   list * numList = nullptr;
+
   std::string listName;
+
   size_t numOfPairs = 0;
   size_t maxNumber = 0;
-
 
   while (std::cin >> listName)
   {

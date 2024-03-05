@@ -1,7 +1,6 @@
 #ifndef BILISTITERATOR_HPP
 #define BILISTITERATOR_HPP
 
-#include <memory>
 #include "biListNode.hpp"
 
 namespace rebdev
@@ -9,18 +8,21 @@ namespace rebdev
   template < class T >
   class biListIterator
   {
+    using iter = biListIterator< T >;
+    using node = biListNode< T >;
+
     public:
       biListIterator():
         node_(nullptr)
       {}
-      biListIterator(const biListIterator< T >& iterator):
+      biListIterator(const iter& iterator):
         node_(iterator -> node_)
       {}
-      biListIterator(biListIterator< T >&& iterator):
+      biListIterator(iter&& iterator):
         node_(iterator -> node_)
       {}
-      biListIterator(biListNode< T >* node):
-        node_(node)
+      biListIterator(const node& originalNode):
+        node_(originalNode)
       {}
 
       ~biListIterator() noexcept
@@ -28,20 +30,20 @@ namespace rebdev
         node_ = nullptr;
       }
 
-      biListIterator< T >& operator = (const biListIterator< T >& iterator) noexcept
+      iter& operator = (const iter& iterator) noexcept
       {
         node_ = iterator.node_;
       }
-      biListIterator< T >& operator = (biListIterator< T >&& iterator) noexcept
+      iter& operator = (iter&& iterator) noexcept
       {
         node_ = iterator.node_;
       }
 
-      bool operator == (const biListIterator< T >& iterator) const noexcept
+      bool operator == (const iter& iterator) const noexcept
       {
         return (node_ == iterator.node_);
       }
-      bool operator != (const biListIterator< T >& iterator) const noexcept
+      bool operator != (const iter& iterator) const noexcept
       {
         return !(this == iterator);
       }
@@ -57,31 +59,33 @@ namespace rebdev
         return std::addressof(node_ -> data);
       }
 
-      biListIterator< T >& operator ++ ()
+      iter& operator ++ ()
       {
+        assert(node_ != nullptr);
         node_ = node_ -> next_;
         return node_;
       }
-      biListIterator< T >& operator ++ (int)
+      iter& operator ++ (int)
       {
-        biListNode< T > oldNode = node_;
+        node oldNode = node_;
         ++node_;
         return oldNode;
       }
-      biListIterator< T >& operator -- ()
+      iter& operator -- ()
       {
+        assert(node_ != nullptr);
         node_ = node_ -> last_;
         return node_;
       }
-      biListIterator< T >& operator -- (int)
+      iter& operator -- (int)
       {
-        biListNode< T > oldNode = node_;
+        node oldNode = node_;
         --node_;
         return oldNode;
       }
 
     private:
-      biListNode< T >* node_;
+      node* node_;
   };
 }
 

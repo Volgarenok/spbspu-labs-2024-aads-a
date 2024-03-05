@@ -9,151 +9,150 @@ namespace rebdev
   template < class T >
   class BiList
   {
+    using node = biListNode< T >;
+    using list = BiList< T >;
+
     public:
-    BiList():
-      headNode_(new biListNode< T >{0, nullptr, nullptr}),
-      tailNode_(new biListNode< T >{0, nullptr, nullptr})
-    {
-      headNode_ -> next_ = tailNode_;
-      tailNode_ -> last_ = headNode_;
-    }
-    BiList(const BiList< T >& oldList):
+      BiList():
+        headNode_(new node{0, nullptr, nullptr}),
+        tailNode_(new node{0, nullptr, nullptr})
+      {
+        headNode_ -> next_ = tailNode_;
+        tailNode_ -> last_ = headNode_;
+      }
+      BiList(const list& oldList):
+        headNode_(nullptr),
+        tailNode_(nullptr)
+      {
+        this -> operator = (oldList);
+      }
+      BiList(list&& rList):
+        headNode_(headNode_),
+        tailNode_(tailNode_)
+      {}
+      BiList(const T & firstElement):
       headNode_(nullptr),
       tailNode_(nullptr)
-    {
-      this -> operator = (oldList);
-    }
-    BiList(BiList< T >&& rList):
-      headNode_(headNode_),
-      tailNode_(tailNode_)
-    {}
-    BiList(const T & firstElement):
-    headNode_(nullptr),
-    tailNode_(nullptr)
-    {
-      BiList();
-      biListNode< T >* newNode = new biListNode< T >{firstElement, headNode_, tailNode_};
-      headNode_ -> next_ = newNode;
-      tailNode_ -> last_ = newNode;
-    }
-
-    ~BiList() noexcept
-    {
-      clear();
-    }
-
-    BiList< T >& operator = (const BiList< T >& originalList)
-    {
-      clear();
-      using node = biListNode< T >;
-
-      node* nodePointer = originalList.headNode_;
-
-      headNode_ = new node{nodePointer -> data_, nullptr, nullptr};
-
-      nodePointer = nodePointer -> next_;
-
-      tailNode_ = new node{nodePointer -> data_, headNode_, nullptr};
-      headNode_ -> next_ = tailNode_;
-
-      while (nodePointer != (originalList.tailNode_))
       {
-        nodePointer = nodePointer -> next_;
-        node * newNode = new node{nodePointer -> data_, tailNode_, nullptr};
+        BiList();
+        node* newNode = new node{firstElement, headNode_, tailNode_};
+        headNode_ -> next_ = newNode;
+        tailNode_ -> last_ = newNode;
+      }
 
+      ~BiList() noexcept
+      {
+        clear();
+      }
+
+      list& operator = (const list& originalList)
+      {
+        clear();
+
+        node* nodePointer = originalList.headNode_;
+
+        headNode_ = new node{nodePointer -> data_, nullptr, nullptr};
+
+        nodePointer = nodePointer -> next_;
+
+        tailNode_ = new node{nodePointer -> data_, headNode_, nullptr};
+        headNode_ -> next_ = tailNode_;
+
+        while (nodePointer != (originalList.tailNode_))
+        {
+          nodePointer = nodePointer -> next_;
+          node * newNode = new node{nodePointer -> data_, tailNode_, nullptr};
+
+          tailNode_ -> next_ = newNode;
+          tailNode_ = newNode;
+
+          newNode = nullptr;
+        }
+
+        return *this;
+      }
+      list& operator = (const list&& originalList)
+      {
+        headNode_ = originalList.headNode_;
+        tailNode_ = originalList.tailNode_;
+        return *this;
+      }
+
+      T front() const
+      {
+        return headNode_ -> next_ -> data_;
+      }
+      T back() const
+      {
+        return tailNode_ -> last_ -> data_;
+      }
+
+      void push_back(const T & newElement)
+      {
+        node* newNode = new node{0, tailNode_, nullptr};
+        tailNode_ -> data_ = newElement;
         tailNode_ -> next_ = newNode;
         tailNode_ = newNode;
-
         newNode = nullptr;
       }
-
-      return *this;
-    }
-    BiList< T >& operator = (const BiList< T >&& originalList)
-    {
-      headNode_ = originalList.headNode_;
-      tailNode_ = originalList.tailNode_;
-      return *this;
-    }
-
-    T front() const
-    {
-      return headNode_ -> next_ -> data_;
-    }
-    T back() const
-    {
-      return tailNode_ -> last_ -> data_;
-    }
-
-    void push_back(const T & newElement)
-    {
-      biListNode< T > * newNode = new biListNode< T >{0, tailNode_, nullptr};
-      tailNode_ -> data_ = newElement;
-      tailNode_ -> next_ = newNode;
-      tailNode_ = newNode;
-      newNode = nullptr;
-
-    }
-    void push_front(const T & newElement)
-    {
-      biListNode< T >* newNode = new biListNode< T >{0, nullptr, headNode_};
-      headNode_ -> data_ = newElement;
-      headNode_ -> last_ = newNode;
-      headNode_ = newNode;
-      newNode = nullptr;
-    }
-    void pop_back() noexcept
-    {
-      biListNode< T >* newTail = tailNode_ -> last_;
-
-      delete tailNode_;
-      newTail -> next_ = nullptr;
-      tailNode_ = newTail;
-      newTail = nullptr;
-    }
-    void pop_front() noexcept
-    {
-      biListNode< T >* newHead = headNode_ -> next_;
-
-      delete headNode_;
-      newHead -> last_ = nullptr;
-      headNode_ = newHead;
-      newHead = nullptr;
-    }
-    void clear() noexcept
-    {
-      while (headNode_)
+      void push_front(const T & newElement)
       {
-        biListNode< T >* next = headNode_ -> next_;
-        delete headNode_;
-        headNode_ = next;
+        node* newNode = new node{0, nullptr, headNode_};
+        headNode_ -> data_ = newElement;
+        headNode_ -> last_ = newNode;
+        headNode_ = newNode;
+        newNode = nullptr;
       }
-      delete headNode_;
-    }
-    void swap(BiList< T >* secondList)
-    {
-      biListNode< T > secondHead = secondList.begin(), secondTail = secondList.end();
-      secondTail.headNode_ = headNode_;
-      secondList.tailNode_ = tailNode_;
-    }
+      void pop_back()
+      {
+        node* newTail = tailNode_ -> last_;
+        delete tailNode_;
+        newTail -> next_ = nullptr;
+        tailNode_ = newTail;
+        newTail = nullptr;
+      }
+      void pop_front()
+      {
+        node* newHead = headNode_ -> next_;
+        delete headNode_;
+        newHead -> last_ = nullptr;
+        headNode_ = newHead;
+        newHead = nullptr;
+      }
+      void clear() noexcept
+      {
+        while (headNode_)
+        {
+          node* next = headNode_ -> next_;
+          delete headNode_;
+          headNode_ = next;
+        }
+        delete headNode_;
+      }
+      void swap(BiList< T >* secondList)
+      {
+        node secondHead = secondList.begin(), secondTail = secondList.end();
+        secondTail.headNode_ = headNode_;
+        secondList.tailNode_ = tailNode_;
+      }
 
-    biListIterator< T > begin() const noexcept
-    {
-      return biListIterator< T >(headNode_);
-    }
-    biListIterator< T > end() const noexcept
-    {
-      return biListIterator< T >(tailNode_);
-    }
+      biListIterator< T > begin() const noexcept
+      {
+        return biListIterator< T >(headNode_);
+      }
+      biListIterator< T > end() const noexcept
+      {
+        return biListIterator< T >(tailNode_);
+      }
 
-    bool capacity()
-    {
-      return ((headNode_ -> next_) != tailNode_);
-    }
+      bool capacity()
+      {
+        return ((headNode_ -> next_) != tailNode_);
+      }
 
     private:
-    biListNode< T >* headNode_;
-    biListNode< T >* tailNode_;
+      node* headNode_;
+      node* tailNode_;
   };
 }
 #endif
