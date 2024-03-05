@@ -538,6 +538,7 @@ int main()
     std::cout << "\n";
   }
 
+  bool overflow = false;
   LinkedList<size_t> lst;
   while (!pairs.empty())
   {
@@ -561,10 +562,9 @@ int main()
         }
         else
         {
+          overflow = true;
           lst.push_back(sum);
           sum = 0;
-          std::cerr << "Overflow!\n";
-          return 1;
         }
       }
     }
@@ -589,6 +589,12 @@ int main()
     {
       std::cout << "\n";
     }
+  }
+
+  if (overflow)
+  {
+    std::cerr << "Overflow!\n";
+    return 1;
   }
 
   if (lst.empty())
