@@ -1,6 +1,8 @@
 #ifndef BILISTITERATOR_HPP
 #define BILISTITERATOR_HPP
 
+#include <memory>
+
 #include "biListNode.hpp"
 
 namespace rebdev
