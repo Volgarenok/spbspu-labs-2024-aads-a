@@ -585,6 +585,10 @@ int main()
     {
       std::cout << " ";
     }
+    if (&sum == &lst.back())
+    {
+      std::cout << "\0";
+    }
   }
 
   if (lst.empty())
