@@ -5,12 +5,60 @@
 #include <utility>
 #include <stdexcept>
 
-#include "iterator.hpp"
-#include "const_iterator.hpp"
 #include "node.hpp"
 
 namespace zhalilov
 {
+  template < typename T >
+  class Iterator
+  {
+  public:
+    Iterator(Node< T > *);
+    ~Iterator() = default;
+
+    Iterator &operator=(const Iterator &) = default;
+
+    Iterator &operator++();
+    Iterator &operator--();
+    Iterator operator++(int);
+    Iterator operator--(int);
+
+    T &operator*();
+    T *operator->();
+
+    bool operator==(const Iterator< T > &);
+    bool operator!=(const Iterator< T > &);
+
+  private:
+    Node< T > *m_node;
+  };
+
+  template < typename T >
+  class ConstIterator
+  {
+  public:
+    ConstIterator(Node< T > *);
+    ~ConstIterator() = default;
+
+    ConstIterator &operator=(const ConstIterator &) = default;
+
+    ConstIterator &operator++();
+    ConstIterator &operator--();
+    ConstIterator operator++(int);
+    ConstIterator operator--(int);
+
+    const T &operator*();
+    const T *operator->();
+
+    bool operator==(const ConstIterator< T > &);
+    bool operator!=(const ConstIterator< T > &);
+
+    friend
+
+  private:
+    Node< T > *m_node;
+  };
+
   template < typename T >
   class List
   {
@@ -31,6 +79,7 @@ namespace zhalilov
     size_t capacity();
     bool empty();
 
+    void insert(const_iterator, T &&);
     void push_back(const T &);
     void push_front(const T &);
 
@@ -49,6 +98,124 @@ namespace zhalilov
     Node< T > *m_head;
     Node< T > *m_tail;
   };
+
+  template < typename T >
+  Iterator< T >::Iterator(Node< T > *node):
+    m_node(node)
+  {}
+
+  template < typename T >
+  Iterator< T > &Iterator< T >::operator++()
+  {
+    m_node = m_node->next;
+    return *this;
+  }
+
+  template < typename T >
+  Iterator< T > &Iterator< T >::operator--()
+  {
+    m_node = m_node->prev;
+    return *this;
+  }
+
+  template < typename T >
+  Iterator< T > Iterator< T >::operator++(int)
+  {
+    Iterator< T > temp(*this);
+    operator++();
+    return temp;
+  }
+
+  template < typename T >
+  Iterator< T > Iterator< T >::operator--(int)
+  {
+    Iterator< T > temp(*this);
+    operator--();
+    return temp;
+  }
+
+  template < typename T >
+  T &Iterator< T >::operator*()
+  {
+    return m_node->value;
+  }
+
+  template < typename T >
+  T *Iterator< T >::operator->()
+  {
+    return &m_node->value;
+  }
+
+  template < typename T >
+  bool Iterator< T >::operator==(const Iterator< T > &it)
+  {
+    return m_node == it.m_node;
+  }
+
+  template < typename T >
+  bool Iterator< T >::operator!=(const Iterator< T > &it)
+  {
+    return !operator==(it);
+  }
+
+  template < typename T >
+  ConstIterator< T >::ConstIterator(Node< T > *node):
+    m_node(node)
+  {}
+
+  template < typename T >
+  ConstIterator< T > &ConstIterator< T >::operator++()
+  {
+    m_node = m_node->next;
+    return *this;
+  }
+
+  template < typename T >
+  ConstIterator< T > &ConstIterator< T >::operator--()
+  {
+    m_node = m_node->prev;
+    return *this;
+  }
+
+  template < typename T >
+  ConstIterator< T > ConstIterator< T >::operator++(int)
+  {
+    ConstIterator< T > temp(*this);
+    operator++();
+    return temp;
+  }
+
+  template < typename T >
+  ConstIterator< T > ConstIterator< T >::operator--(int)
+  {
+    ConstIterator< T > temp(*this);
+    operator--();
+    return temp;
+  }
+
+  template < typename T >
+  const T &ConstIterator< T >::operator*()
+  {
+    return m_node->value;
+  }
+
+  template < typename T >
+  const T *ConstIterator< T >::operator->()
+  {
+    return &m_node->value;
+  }
+
+  template < typename T >
+  bool ConstIterator< T >::operator==(const ConstIterator< T > &it)
+  {
+    return m_node == it.m_node;
+  }
+
+  template < typename T >
+  bool ConstIterator< T >::operator!=(const ConstIterator< T > &it)
+  {
+    return !operator==(it);
+  }
 
   template < typename T >
   List< T >::List():
@@ -138,6 +305,12 @@ namespace zhalilov
   bool List< T >::empty()
   {
     return m_size == 0;
+  }
+
+  template < typename T >
+  void List< T >::insert(const_iterator pos, T &&value)
+  {
+    auto newTail = new Node< T >(value);
   }
 
   template < typename T >
