@@ -24,7 +24,7 @@ void zakozhurnikova::printByIndex(const List<pair>& l)
       {
         continue;
       }
-      std::cout << *(it->second.cbegin() + i) << (it + 1 == l.cend() ? "" : " ");
+      std::cout << *(it->second.cbegin() + i) << (it + 1 != l.cend() ? " " : "");
     }
     std::cout << '\n';
   }
