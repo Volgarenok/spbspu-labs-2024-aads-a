@@ -88,6 +88,7 @@ namespace zhalilov
   List< T >::~List()
   {
     clear();
+    delete m_head;
   }
 
   template < typename T >
@@ -196,7 +197,6 @@ namespace zhalilov
     {
       pop_back();
     }
-    delete m_head;
   }
 
   template < typename T >
