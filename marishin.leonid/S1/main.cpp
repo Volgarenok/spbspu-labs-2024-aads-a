@@ -578,23 +578,25 @@ int main()
     std::cout << "\n";
   }
 
-  for (auto& sum : lst)
-  {
-    std::cout << sum;
-    if (&sum != &lst.back())
-    {
-      std::cout << " ";
-    }
-    if (&sum == &lst.back())
-    {
-      std::cout << "\n";
-    }
-  }
-
   if (overflow)
   {
     std::cerr << "Overflow!\n";
     return 1;
+  }
+  else
+  {
+    for (auto& sum : lst)
+    {
+      std::cout << sum;
+      if (&sum != &lst.back())
+      {
+        std::cout << " ";
+      }
+      if (&sum == &lst.back())
+      {
+        std::cout << "\n";
+      }
+    }
   }
 
   if (lst.empty())
