@@ -54,6 +54,8 @@ int main()
   std::cout << pairArr[numOfPairs - 1].first << '\n';
 
   size_t sumOfNum[maxNumber] = {};
+  bool overlowError = false;
+
   for (size_t i = 0; i < maxNumber; ++i)
   {
     bool firstElement = true;
@@ -68,25 +70,37 @@ int main()
           std::cout << ' ';
         }
         std::cout << element;
-        bool moreThanMax = ((std::numeric_limits< size_t >::max() - sumOfNum[j]) < element);
-        if (moreThanMax)
+
+        if ((std::numeric_limits< size_t >::max() - sumOfNum[j]) >= element)
         {
-          delete[] pairArr;
-          std::cerr << "overlow in math operation\n";
-          return 0;
+          sumOfNum[i] += element;
         }
-        sumOfNum[i] += element;
+        else
+        {
+          overlowError = true;
+        }
+
         numList.pop_front();
         firstElement = false;
       }
     }
     std::cout << '\n';
   }
+
+  delete pairArr[];
+
+  if (overlowError)
+  {
+    std::cerr << "overlow in math operation\n";
+    return 1;
+  }
+
   for (size_t i = 0; i < (maxNumber - 1); ++i)
   {
     std::cout << sumOfNum[i] << ' ';
   }
+
   std::cout << sumOfNum[maxNumber - 1] << '\n';
-  delete[] pairArr;
+
   return 0;
 }
