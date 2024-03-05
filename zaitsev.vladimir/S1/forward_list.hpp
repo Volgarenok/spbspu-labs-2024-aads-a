@@ -4,6 +4,7 @@
 #include <cstddef>
 #include "node.hpp"
 #include "forward_list_iterator.hpp"
+#include "forward_list_const_iterator.hpp"
 
 namespace zaitsev
 {
@@ -11,26 +12,37 @@ namespace zaitsev
   class ForwardList
   {
     using node_t = Node< T >;
+    using Iterator = ForwardListIterator< T >;
+    using ConstIterator = ConstForwardListIterator< T >;
   public:
     ForwardList();
     ForwardList(const ForwardList& other);
     ForwardList(ForwardList&& other);
-    ForwardList(size_t count, const T& value);
     ~ForwardList();
-    ForwardListIterator< T > begin();
-    ForwardListIterator< T > end();
+
+    Iterator begin();
+    Iterator end();
+    ConstIterator cbegin() const;
+    ConstIterator cend() const;
     bool empty() const;
     T& front();
     const T& front() const;
     void push_front(const T& value);
     void pop_front();
-    void clear();
     void assign(size_t count, const T& value);
+    void clear();
     void swap(ForwardList& other);
-    void reverse();
+
+    ForwardList(size_t count, const T& value);
     size_t remove(const T& value);
     template< class UnaryPredicate >
     size_t remove_if(UnaryPredicate p);
+
+    Iterator insert_after(ConstIterator pos, const T& value);
+    Iterator erase_after(ConstIterator pos);
+    void splice_after(ConstIterator pos, ForwardList& other);
+    void reverse();
+
     void merge(ForwardList& other);
     size_t unique();
   private:
@@ -38,12 +50,12 @@ namespace zaitsev
   };
 
   template< typename T >
-  ForwardList<T>::ForwardList():
+  ForwardList< T >::ForwardList():
     head_(nullptr)
   {}
 
-  template<typename T>
-  ForwardList<T>::ForwardList(size_t count, const T& value)
+  template< typename T >
+  ForwardList< T >::ForwardList(size_t count, const T& value)
   {
     node_t* head = new node_t(value);
     head_ = head;
@@ -90,9 +102,9 @@ namespace zaitsev
   }
 
   template< typename T >
-  ForwardList<T>::ForwardList(ForwardList&& other)
+  ForwardList< T >::ForwardList(ForwardList&& other):
+    head_(other.head_)
   {
-    head_ = other.head_;
     other.head_ = nullptr;
   }
 
@@ -109,9 +121,21 @@ namespace zaitsev
   }
 
   template< typename T >
-  ForwardListIterator< T > ForwardList<T>::end()
+  ForwardListIterator< T > ForwardList< T >::end()
   {
     return ForwardListIterator< T >();
+  }
+
+  template<typename T>
+  ConstForwardListIterator< T > ForwardList< T >::cbegin() const
+  {
+    return ConstForwardListIterator< T >(head_);
+  }
+
+  template<typename T>
+  ConstForwardListIterator< T > ForwardList<T>::cend() const
+  {
+    return ConstForwardListIterator< T >();
   }
 
   template< typename T >
@@ -185,6 +209,59 @@ namespace zaitsev
     node_t* temp = other.head_;
     other.head_ = head_;
     head_ = temp;
+  }
+
+  template<typename T>
+  ForwardListIterator<T> ForwardList<T>::insert_after(ConstIterator pos, const T& value)
+  {
+    if (pos == cend())
+    {
+      throw std::out_of_range("Iterator is out of range");
+    }
+    node_t* new_node(value);
+    new_node->next_ = pos.node_->next_;
+    pos.node_->next_ = new_node;
+    return ++pos;
+  }
+
+  template<typename T>
+  ForwardListIterator<T> ForwardList<T>::erase_after(ConstIterator pos)
+  {
+    if (pos == cend())
+    {
+      throw std::out_of_range("Iterator is out of range");
+    }
+    if (pos.node_->next_)
+    {
+      Iterator ret(pos.node_->next_->next_);
+      delete pos.node_->next_;
+      pos.node_->next_ = ret.node_;
+      return ret;
+    }
+    else
+      return end();
+  }
+
+  template<typename T>
+  void ForwardList<T>::splice_after(ConstIterator pos, ForwardList& other)
+  {
+    if (pos == cend())
+    {
+      throw std::out_of_range("Iterator is out of range");
+    }
+    if (!other.head_)
+    {
+      return;
+    }
+
+    node_t* temp = pos.node_->next_;
+    pos.node_->next_ = other.head_;
+    while (other.head_->next_)
+    {
+      other.head_ = other.head_->next_;
+    }
+    other.head_->next_ = temp;
+    other.head_ = nullptr;
   }
 
   template< typename T >

@@ -12,11 +12,18 @@ namespace zaitsev
     Node* next_;
     Node() = default;
     Node(const T& value);
+    Node(T&& value);
     ~Node() = default;
   };
 
   template<typename T>
   Node<T>::Node(const T& value):
+    value_(value),
+    next_(nullptr)
+  {}
+
+  template<typename T>
+  Node<T>::Node(T&& value):
     value_(value),
     next_(nullptr)
   {}

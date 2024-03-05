@@ -8,15 +8,16 @@
 int main()
 {
   using namespace zaitsev;
-  using ull = unsigned long long;
-  using pair = std::pair< std::string, ForwardList< ull> >;
+  using ull = size_t;
+  using ullList = ForwardList< ull>;
+  using pair = std::pair< std::string, ullList >;
   using ullListIt = ForwardListIterator< ull >;
   ForwardList< pair > list;
   std::string input;
   std::cin >> input;
   while (std::cin)
   {
-    list.push_front({ input, ForwardList< ull >() });
+    list.push_front({ input, ullList() });
     std::cin >> input;
     while (std::cin && !std::isalpha(input[0]))
     {
@@ -44,7 +45,7 @@ int main()
   beg_end_it.reverse();
   std::cout << '\n';
 
-  ForwardList< ull > sums;
+  ullList sums;
   ull sum = 1;
   bool overflow = false;
   while (sum)
