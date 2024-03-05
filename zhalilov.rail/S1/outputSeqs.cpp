@@ -8,16 +8,17 @@ std::ostream &zhalilov::outputSeqs(List< pair > sequences, std::ostream &output)
 {
   List< pair >::iterator currIt = sequences.begin();
   List< pair >::iterator lastIt = sequences.end();
-  lastIt--;
   size_t longestList = 0;
   std::string txtToOutput = "";
   while (currIt != lastIt)
   {
     longestList = std::max(longestList, currIt->second.capacity());
-    txtToOutput += currIt->first + ' ';
-    currIt++;
+    txtToOutput += currIt->first;
+    if (++currIt != lastIt)
+    {
+      txtToOutput += ' ';
+    }
   }
-  txtToOutput += currIt->first;
 
   List< size_t > sumList;
   size_t max = std::numeric_limits< size_t >::max();
