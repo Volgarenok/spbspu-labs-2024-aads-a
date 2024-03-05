@@ -49,9 +49,8 @@ int main()
   }
   else if ((numOfPairs == 1) && (!pairArr[0].second.capacity()))
   {
-    pairArr[0].second.push_front(0);
-    delete[] pairArr;
     std::cout << pairArr[0].first << "\n0";
+    delete[] pairArr;
     return 0;
   }
 
