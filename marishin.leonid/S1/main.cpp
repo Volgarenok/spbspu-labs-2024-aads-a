@@ -554,7 +554,7 @@ int main()
         }
         anyNonEmptyList = true;
         std::cout << pair.second.front();
-        if (sum + pair.second.front() <= maxvalue)
+        if (maxvalue - sum > pair.second.front())
         {
           sum += pair.second.front();
           pair.second.pop_front();
