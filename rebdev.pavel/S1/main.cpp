@@ -41,9 +41,15 @@ int main()
 
     listName.clear();
   }
+
   if (numOfPairs == 0)
   {
     std::cout << "0\n";
+    return 0;
+  }
+  else if ((numOfPairs == 1) && (!pairArr[0].second.capacity()))
+  {
+    std::cout << pairArr[0].first << "0\n";
     return 0;
   }
 
