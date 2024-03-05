@@ -12,18 +12,19 @@ void zakozhurnikova::printNames(const List<pair>& l)
   }
 }
 
-void zakozhurnikova::printByIndex(const List<pair>& l)
+void zakozhurnikova::printByIndex(const List<pair> &l)
 {
   size_t maxSize = getMaxSize<size_t>(l);
   for (size_t i = 0; i < maxSize; ++i)
   {
-    for(auto it = l.cbegin(); it != l.cend(); ++it)
+    size_t printed = 0;
+    for (auto it = l.cbegin(); it != l.cend(); ++it)
     {
       if (i >= it->second.size())
       {
         continue;
       }
-      std::cout << *(it->second.cbegin() + i) << ((it + 1) != l.cend() ? " " : "");
+      std::cout << (printed++ == 0 ? "" : " ") << *(it->second.cbegin() + i);
     }
     std::cout << '\n';
   }
