@@ -563,8 +563,7 @@ int main()
         else
         {
           overflow = true;
-          lst.push_back(sum);
-          sum = 0;
+          pair.second.pop_front();
         }
       }
     }
