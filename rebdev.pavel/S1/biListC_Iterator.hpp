@@ -1,5 +1,5 @@
-#ifndef BILISTITERATOR_HPP
-#define BILISTITERATOR_HPP
+#ifndef BILISTC_ITERATOR_HPP
+#define BILISTC_ITERATOR_HPP
 
 #include <memory>
 
@@ -8,21 +8,21 @@
 namespace rebdev
 {
   template < class T >
-  class biListIterator
+  class biListC_Iterator
   {
-    using iter = biListIterator< T >;
+    using c_iter = biListC_Iterator< T >;
     using node = biListNode< T >;
 
     public:
-      biListIterator():
+      biListC_Iterator():
         node_(nullptr)
       {}
-      biListIterator(const iter& iterator):
+      biListIterator(const c_iter& iterator):
         node_(nullptr)
       {
         this -> operator = (iterator);
       }
-      biListIterator(iter&& iterator):
+      biListIterator(c_iter&& iterator):
         node_(nullptr)
       {
         this -> operator = (std::move(iterator));
@@ -36,54 +36,54 @@ namespace rebdev
         node_ = nullptr;
       }
 
-      iter& operator = (const iter& iterator) noexcept
+      c_iter& operator = (const c_iter& iterator) noexcept
       {
         node_ = iterator.node_;
       }
-      iter& operator = (iter&& iterator) noexcept
+      iter& operator = (c_iter&& iterator) noexcept
       {
         node_ = iterator.node_;
       }
 
-      bool operator == (const iter& iterator) const noexcept
+      bool operator == (const c_iter& iterator) const noexcept
       {
         return (node_ == iterator.node_);
       }
-      bool operator != (const iter& iterator) const noexcept
+      bool operator != (const c_iter& iterator) const noexcept
       {
         return !(this == iterator);
       }
 
-      T & operator * () const
+      const T & operator * () const
       {
         assert(node_ != nullptr);
         return node_ -> data_;
       }
-      T * operator -> () const
+      const T * operator -> () const
       {
         assert(node_ != nullptr);
         return std::addressof(node_ -> data);
       }
 
-      iter& operator ++ ()
+      c_iter& operator ++ ()
       {
         assert(node_ != nullptr);
         node_ = node_ -> next_;
         return node_;
       }
-      iter& operator ++ (int)
+      c_iter& operator ++ (int)
       {
         node oldNode = node_;
         ++node_;
         return oldNode;
       }
-      iter& operator -- ()
+      c_iter& operator -- ()
       {
         assert(node_ != nullptr);
         node_ = node_ -> last_;
         return node_;
       }
-      iter& operator -- (int)
+      c_iter& operator -- (int)
       {
         node oldNode = node_;
         --node_;
@@ -91,7 +91,7 @@ namespace rebdev
       }
 
     private:
-      node* node_;
+      const node* node_;
   };
 }
 #endif
