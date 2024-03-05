@@ -59,13 +59,13 @@ int main()
       if (!it->second.empty())
       {
         std::cout << it->second.front();
-        auto temp_it = it;
-        if (temp_it != list.end())
-        {
-          std::cout << " ";
-        }
         sum += it->second.front();
         it->second.pop_front();
+      }
+      auto temp_it = it;
+      if (++temp_it != list.end())
+      {
+        std::cout << " ";
       }
     }
     std::cout << "\n";
@@ -80,7 +80,7 @@ int main()
   {
     std::cout << *it;
     auto temp_it = it;
-    if (temp_it != sums.end())
+    if (++temp_it != sums.end())
     {
       std::cout << " ";
     }
