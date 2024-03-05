@@ -31,6 +31,7 @@ namespace zhalilov
     size_t capacity();
     bool empty();
 
+    iterator insert(const_iterator, const T &);
     iterator insert(const_iterator, T &&);
     void push_back(const T &);
     void push_front(const T &);
@@ -48,39 +49,35 @@ namespace zhalilov
   private:
     size_t m_size;
     Node< T > *m_head;
-    Node< T > *m_tail;
   };
 
   template < typename T >
   List< T >::List():
     m_size(0),
-    m_head(nullptr),
-    m_tail(nullptr)
+    m_head(nullptr)
   {}
 
   template < typename T >
   List< T >::List(const List< T > &other):
     m_size(0),
-    m_head(nullptr),
-    m_tail(nullptr)
+    m_head(nullptr)
   {
-    Node< T > *node = other.m_head;
-    while (node != nullptr)
+    const_iterator curr = other.cbegin();
+    const_iterator end = other.cend();
+    while (curr != end)
     {
-      push_back(node->value);
-      node = node->next;
+      push_back(*curr);
+      curr++;
     }
   }
 
   template < typename T >
   List< T >::List(List< T > &&other):
     m_size(other.m_size),
-    m_head(other.m_head),
-    m_tail(other.m_tail)
+    m_head(other.m_head)
   {
     other.m_size = 0;
     other.m_head = nullptr;
-    other.m_tail = nullptr;
   }
 
   template < typename T >
@@ -95,10 +92,8 @@ namespace zhalilov
     clear();
     m_size = other.m_size;
     m_head = other.m_head;
-    m_tail = other.m_tail;
     other.m_size = 0;
     other.m_head = nullptr;
-    other.m_tail = nullptr;
     return *this;
   }
 
@@ -107,12 +102,12 @@ namespace zhalilov
   {
     m_size = other.m_size;
     m_head = other.m_head;
-    m_tail = other.m_tail;
-    Node< T > *node = other.m_head;
-    while (node != nullptr)
+    iterator curr = other.begin();
+    iterator end = other.end();
+    while (curr != end)
     {
-      push_back(node->value);
-      node = node->next;
+      push_back(*curr);
+      curr++;
     }
     return *this;
   }
@@ -126,7 +121,7 @@ namespace zhalilov
   template < typename T >
   T &List< T >::back()
   {
-    return m_tail->value;
+    return m_head->prev->value;
   }
 
   template < typename T >
@@ -142,7 +137,7 @@ namespace zhalilov
   }
 
   template < typename T >
-  typename List< T >::iterator List< T >::insert(const_iterator pos, T &&value)
+  typename List< T >::iterator List< T >::insert(const_iterator pos, const T &value)
   {
     auto newNode = new Node< T >(value);
     Node< T > *prev = pos.m_node->prev;
@@ -153,71 +148,50 @@ namespace zhalilov
   }
 
   template < typename T >
+  typename List< T >::iterator List< T >::insert(const_iterator pos, T &&value)
+  {
+    insert(pos, value);
+  }
+
+  template < typename T >
   void List< T >::push_back(const T &value)
   {
-    auto newTail = new Node< T >(value, m_tail, nullptr);
-    if (m_head != nullptr)
-    {
-      m_tail->next = newTail;
-      m_tail = newTail;
-    }
-    else
-    {
-      m_head = newTail;
-      m_tail = newTail;
-    }
-    m_size++;
+    insert(cend(), value);
   }
 
   template < typename T >
   void List< T >::push_front(const T &value)
   {
-    auto newHead = new Node< T >(value, m_head, nullptr);
-    if (m_head != nullptr)
-    {
-      m_head->prev = newHead;
-      m_head = newHead;
-    }
-    else
-    {
-      m_head = newHead;
-      m_tail = newHead;
-    }
-    m_size++;
+    insert(cbegin(), value);
   }
 
   template < typename T >
   void List< T >::pop_back()
   {
-    Node< T > prev = m_tail->prev;
-    delete m_tail;
-    m_tail = prev;
+    Node< T > *tail = m_head->prev->prev;
+    delete tail->next;
+    tail->next = m_head;
+    m_head->prev = tail;
     --m_size;
   }
 
   template < typename T >
   void List< T >::pop_front()
   {
-    Node< T > *next = m_head->next;
-    delete m_head;
-    m_head = next;
+    Node< T > *next = m_head->next->next;
+    delete next->prev;
+    next->prev = m_head;
+    m_head->next = next;
     --m_size;
   }
 
   template < typename T >
   void List< T >::clear()
   {
-    Node< T > *currNode = m_head;
-    Node< T > *nextNode = nullptr;
-    while (currNode)
+    while (!empty())
     {
-      nextNode = currNode->next;
-      delete currNode;
-      currNode = nextNode;
+      pop_back();
     }
-    m_size = 0;
-    m_head = nullptr;
-    m_tail = nullptr;
   }
 
   template < typename T >
@@ -231,25 +205,25 @@ namespace zhalilov
   template < typename T >
   typename List< T >::iterator List< T >::begin()
   {
-    return iterator(m_head);
+    return iterator(m_head->next);
   }
 
   template < typename T >
   typename List< T >::iterator List< T >::end()
   {
-    return iterator(nullptr);
+    return iterator(m_head);
   }
 
   template < typename T >
   typename List< T >::const_iterator List< T >::cbegin() const
   {
-    return const_iterator(m_head);
+    return const_iterator(m_head->next);
   }
 
   template < typename T >
   typename List< T >::const_iterator List< T >::cend() const
   {
-    return const_iterator(nullptr);
+    return const_iterator(m_head);
   }
 }
 
