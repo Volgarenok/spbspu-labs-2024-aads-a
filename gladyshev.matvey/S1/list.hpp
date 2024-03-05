@@ -48,9 +48,9 @@ namespace gladyshev
       }
     }
     List(List&& other):
-      head_(other.head)
+      head_(other.head_)
     {
-      other.head = nullptr;
+      other.head_ = nullptr;
     }
     void clear()
     {
