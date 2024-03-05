@@ -16,10 +16,10 @@ namespace zhalilov
       next(nullptr)
     {}
 
-    Node(const T &newValue, Node *newPrev, Node *newNext):
+    Node(const T &newValue):
       value(newValue),
-      prev(newPrev),
-      next(newNext)
+      prev(nullptr),
+      next(nullptr)
     {}
   };
 }
