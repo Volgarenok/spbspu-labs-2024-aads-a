@@ -103,6 +103,14 @@ namespace rebdev
         headNode_ = newNode;
         newNode = nullptr;
       }
+      void push_back(T && newElement)
+      {
+        push_back(newElement);
+      }
+      void push_front(T && newElement)
+      {
+        pushFront(newElement);
+      }
       void pop_back()
       {
         node* newTail = tailNode_ -> last_;
@@ -129,7 +137,7 @@ namespace rebdev
         }
         delete headNode_;
       }
-      void swap(BiList< T >* secondList)
+      void swap(list* secondList)
       {
         node secondHead = secondList.begin(), secondTail = secondList.end();
         secondTail.headNode_ = headNode_;
@@ -145,9 +153,9 @@ namespace rebdev
         return biListIterator< T >(tailNode_);
       }
 
-      bool capacity()
+      bool empty() const noexcept
       {
-        return ((headNode_ -> next_) != tailNode_);
+        return ((headNode_ -> next_) == tailNode_);
       }
 
     private:

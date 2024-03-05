@@ -49,7 +49,7 @@ int main()
     std::cout << "0\n";
     return 0;
   }
-  else if ((numOfPairs == 1) && (!pairArr[0].second.capacity()))
+  else if ((numOfPairs == 1) && (pairArr[0].second.empty()))
   {
     std::cout << pairArr[0].first << "\n0\n";
     delete[] pairArr;
@@ -71,7 +71,7 @@ int main()
     for (size_t j = 0; j < numOfPairs; ++j)
     {
       list & numList = pairArr[j].second;
-      if (numList.capacity())
+      if (!numList.empty())
       {
         size_t element = numList.front();
         if (!firstElement)
