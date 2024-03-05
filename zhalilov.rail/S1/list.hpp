@@ -31,6 +31,7 @@ namespace zhalilov
     size_t capacity();
     bool empty();
 
+    iterator insert(const_iterator, T &&);
     void push_back(const T &);
     void push_front(const T &);
 
@@ -138,6 +139,17 @@ namespace zhalilov
   bool List< T >::empty()
   {
     return m_size == 0;
+  }
+
+  template < typename T >
+  typename List< T >::iterator List< T >::insert(const_iterator pos, T &&value)
+  {
+    auto newNode = new Node< T >(value);
+    Node< T > *prev = pos.m_node->prev;
+    newNode->next = pos.m_node;
+    newNode->prev = prev;
+    pos.m_node->prev = newNode;
+    return iterator(newNode);
   }
 
   template < typename T >
