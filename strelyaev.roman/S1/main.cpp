@@ -9,21 +9,27 @@ int main()
 {
   using namespace strelyaev;
   size_t max_value = std::numeric_limits<size_t>::max();
-  List< std::pair< std::string, List < size_t > > > l;
+  List< std::pair< std::string, List < size_t > > > list;
   try
   {
-    makeSequence(std::cin, l);
+    makeSequence(std::cin, list);
   }
   catch (const std::exception& e)
   {
     std::cerr << e.what() << '\n';
   }
 
-  for (auto it = l.begin(); it != l.end(); it++)
+  if (list.empty())
+  {
+    std::cout << "0\n";
+    return 0;
+  }
+
+  for (auto it = list.begin(); it != list.end(); it++)
   {
     std::cout << it->first;
     auto temp_it = it;
-    if (++temp_it != l.end())
+    if (++temp_it != list.end())
     {
       std::cout << " ";
     }
@@ -36,7 +42,7 @@ int main()
     std::cout << "\n";
     all_empty = true;
     int sum = 0;
-    for (auto it = l.begin(); it != l.end(); it++)
+    for (auto it = list.begin(); it != list.end(); it++)
     {
       if (!it->second.empty())
       {
@@ -52,11 +58,6 @@ int main()
           return 1;
         }
         it->second.pop_front();
-        auto temp_it = it;
-        if ((++temp_it != l.end()))
-        {
-          std::cout << " ";
-        }
       }
     }
     if (sum > 0)
@@ -65,11 +66,6 @@ int main()
     }
   }
 
-  if (sums.empty())
-  {
-    std::cout << "0\n";
-    return 0;
-  }
   for (auto it = sums.begin(); it != sums.end(); it++)
   {
     std::cout << *it << " ";
