@@ -6,6 +6,9 @@
 namespace zhalilov
 {
   template < typename T >
+  class List;
+
+  template < typename T >
   class Iterator
   {
   public:
@@ -24,6 +27,8 @@ namespace zhalilov
 
     bool operator==(const Iterator< T > &);
     bool operator!=(const Iterator< T > &);
+
+    friend List< T >;
 
   private:
     Node< T > *m_node;
