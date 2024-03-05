@@ -8,7 +8,6 @@
 int main()
 {
   using namespace strelyaev;
-  size_t max_value = std::numeric_limits<size_t>::max();
   List< std::pair< std::string, List < size_t > > > list;
   try
   {
