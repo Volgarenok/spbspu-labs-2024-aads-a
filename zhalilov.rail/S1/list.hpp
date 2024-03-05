@@ -22,14 +22,14 @@ namespace zhalilov
     List(List< T > &&);
     ~List();
 
-    List< T > &operator=(List< T > &&);
     List< T > &operator=(const List< T > &);
+    List< T > &operator=(List< T > &&);
 
     T &front();
     T &back();
 
     size_t capacity();
-    bool empty();
+    bool empty() const;
 
     iterator insert(const_iterator, const T &);
     iterator insert(const_iterator, T &&);
@@ -56,22 +56,24 @@ namespace zhalilov
     m_size(0),
     m_head(nullptr)
   {
-    m_head = new Node<T>;
+    m_head = new Node< T >;
     m_head->next = m_head;
     m_head->prev = m_head;
   }
 
   template < typename T >
   List< T >::List(const List< T > &other):
-    m_size(0),
-    m_head(nullptr)
+    List()
   {
-    const_iterator curr = other.cbegin();
-    const_iterator end = other.cend();
-    while (curr != end)
+    if (!other.empty())
     {
-      push_back(*curr);
-      curr++;
+      const_iterator curr = other.cbegin();
+      const_iterator end = other.cend();
+      while (curr != end)
+      {
+        push_back(*curr);
+        curr++;
+      }
     }
   }
 
@@ -92,17 +94,6 @@ namespace zhalilov
   }
 
   template < typename T >
-  List< T > &List< T >::operator=(List< T > &&other)
-  {
-    clear();
-    m_size = other.m_size;
-    m_head = other.m_head;
-    other.m_size = 0;
-    other.m_head = nullptr;
-    return *this;
-  }
-
-  template < typename T >
   List< T > &List< T >::operator=(const List< T > &other)
   {
     m_size = other.m_size;
@@ -118,9 +109,20 @@ namespace zhalilov
   }
 
   template < typename T >
+  List< T > &List< T >::operator=(List< T > &&other)
+  {
+    clear();
+    m_size = other.m_size;
+    m_head = other.m_head;
+    other.m_size = 0;
+    other.m_head = nullptr;
+    return *this;
+  }
+
+  template < typename T >
   T &List< T >::front()
   {
-    return m_head->value;
+    return m_head->next->value;
   }
 
   template < typename T >
@@ -136,7 +138,7 @@ namespace zhalilov
   }
 
   template < typename T >
-  bool List< T >::empty()
+  bool List< T >::empty() const
   {
     return m_size == 0;
   }
@@ -148,7 +150,9 @@ namespace zhalilov
     Node< T > *prev = pos.m_node->prev;
     newNode->next = pos.m_node;
     newNode->prev = prev;
+    prev->next = newNode;
     pos.m_node->prev = newNode;
+    m_size++;
     return iterator(newNode);
   }
 
