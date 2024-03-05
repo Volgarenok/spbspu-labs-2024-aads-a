@@ -58,14 +58,13 @@ int main()
     {
       if (!it->second.empty())
       {
-        std::cout << it->second.front();
-        sum += it->second.front();
-        it->second.pop_front();
-        auto temp_it = it;
-        if (++temp_it != list.end())
+        if (sum > 0)
         {
           std::cout << " ";
         }
+        std::cout << it->second.front();
+        sum += it->second.front();
+        it->second.pop_front();
       }
     }
     std::cout << "\n";
