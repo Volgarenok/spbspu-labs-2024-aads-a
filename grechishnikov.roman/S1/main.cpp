@@ -6,6 +6,15 @@ void pr(size_t sth)
   std::cout << sth << " ";
 }
 
+bool ch(size_t sth)
+{
+  if (sth % 2 == 0)
+  {
+    return true;
+  }
+  return false;
+}
+
 int main()
 {
   using namespace grechishnikov;
@@ -22,8 +31,8 @@ int main()
   std::cout << '\n';
 
   List< size_t > testListRemove;
-  testListRemove.assign({ 1, 2, 1, 1, 1, 1, 7, 9, 1 });
-  testListRemove.remove(1);
+  testListRemove.assign({ 1, 2, 1, 4, 1, 1, 7, 9, 1 });
+  testListRemove.remove_if(ch);
 
   std::for_each(testListRemove.begin(), testListRemove.end(), pr);
   std::cout << '\n';

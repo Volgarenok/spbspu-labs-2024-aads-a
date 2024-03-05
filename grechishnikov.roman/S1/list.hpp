@@ -41,6 +41,7 @@ namespace grechishnikov
     void assign(std::initializer_list< T >);
 
     void remove(const T& data);
+    void remove_if(bool (*)(T));
 
     Iterator< T > erase(Iterator< T >);
 
@@ -271,6 +272,24 @@ namespace grechishnikov
   }
 
   template< typename T >
+  void List< T >::remove_if(bool (*f)(T))
+  {
+    auto first = begin();
+    auto last = end();
+    while (first != last)
+    {
+      if (f(*first))
+      {
+        first = erase(first);
+      }
+      else
+      {
+        first++;
+      }
+    }
+  }
+
+  template< typename T >
   Iterator< T > List< T >::erase(Iterator< T > iter)
   {
     Node< T >* prevPoi = iter.getNode()->prev_;
@@ -279,7 +298,7 @@ namespace grechishnikov
     auto temp = iter + 1;
     if (!prevPoi)
     {
-      pop_front();
+       pop_front();
       return temp;
     }
     if (!nextPoi)
