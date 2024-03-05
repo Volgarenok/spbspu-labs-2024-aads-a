@@ -87,7 +87,7 @@ int main()
     std::cout << '\n';
   }
 
-  delete pairArr[];
+  delete[] pairArr;
 
   if (overlowError)
   {
