@@ -43,7 +43,7 @@ int main()
   }
   if (numOfPairs == 0)
   {
-    std::cerr << "separate line as output\n";
+    std::cout << "0\n";
     return 0;
   }
 
@@ -73,7 +73,7 @@ int main()
         {
           delete[] pairArr;
           std::cerr << "overlow in math operation\n";
-          return 1;
+          return 0;
         }
         sumOfNum[i] += element;
         numList.pop_front();
