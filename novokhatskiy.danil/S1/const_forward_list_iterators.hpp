@@ -49,7 +49,7 @@ namespace novokhatskiy
     {
       return !(node_ == other.node_);
     }
-    
+
     constIter& moveIterator(size_t size)
     {
       for (size_t i = 0; i != size; i++)
