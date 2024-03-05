@@ -1,6 +1,5 @@
 #ifndef LIST_HPP
 #define LIST_HPP
-#include <iostream>
 #include <cstddef>
 #include <limits>
 #include <stdexcept>
