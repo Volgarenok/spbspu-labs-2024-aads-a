@@ -59,27 +59,23 @@ int main()
     {
       if (!it->second.empty())
       {
-        std::cout << it->second.front() << " ";
-        if (max_value - sum > it->second.front())
+        std::cout << it->second.front();
+        auto temp_it = it;
+        if (temp_it != list.end())
         {
-          sum += it->second.front();
+          std::cout << " ";
         }
-        else
-        {
-          std::cerr << "Overflow!\n";
-          return 1;
-        }
+        sum += it->second.front();
         it->second.pop_front();
       }
     }
+    std::cout << "\n";
     if (sums_i != max_element)
     {
       sums_i++;
       sums.push_back(sum);
     }
   }
-
-  std::cout << "\n";
 
   for (auto it = sums.begin(); it != sums.end(); it++)
   {
