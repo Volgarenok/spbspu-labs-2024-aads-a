@@ -55,7 +55,11 @@ namespace zhalilov
   List< T >::List():
     m_size(0),
     m_head(nullptr)
-  {}
+  {
+    m_head = new Node<T>;
+    m_head->next = m_head;
+    m_head->prev = m_head;
+  }
 
   template < typename T >
   List< T >::List(const List< T > &other):
@@ -192,6 +196,7 @@ namespace zhalilov
     {
       pop_back();
     }
+    delete m_head;
   }
 
   template < typename T >
