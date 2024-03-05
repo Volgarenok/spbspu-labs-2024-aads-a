@@ -10,23 +10,22 @@ int main()
 {
   using namespace grechishnikov;
 
-  List< size_t > testListIter;
-  testListIter.push_front(1);
-  testListIter.push_front(2);
-  testListIter.push_front(3);
-  testListIter.push_front(4);
-  testListIter.push_front(5);
+  List< size_t > testListErase;
+  testListErase.assign({ 1, 2, 4, 6, 7, 9 });
 
-  auto it = testListIter.begin();
-  it++;
-  testListIter.assign(it, testListIter.end());
+//  testListErase.erase(testListErase.begin()[3]);
 
-  std::for_each(testListIter.begin(), testListIter.end(), pr);
+  std::for_each(testListErase.begin(), testListErase.end(), pr);
   std::cout << '\n';
 
-  List< size_t > testListInit;
-  testListInit.assign({ 1, 2, 4, 6, 7, 9 });
-  std::for_each(testListInit.begin(), testListInit.end(), pr);
+  std::cout << testListErase[3];
+  std::cout << '\n';
+
+  List< size_t > testListRemove;
+  testListRemove.assign({ 1, 2, 1, 1, 1, 1, 7, 9, 1 });
+  testListRemove.remove(1);
+
+  std::for_each(testListRemove.begin(), testListRemove.end(), pr);
   std::cout << '\n';
 
 }

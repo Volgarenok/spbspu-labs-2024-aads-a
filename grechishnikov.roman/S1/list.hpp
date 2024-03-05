@@ -28,15 +28,21 @@ namespace grechishnikov
     bool empty();
 
     void clear();
+
     void push_back(const T&);
     void push_front(const T&);
     void pop_back();
     void pop_front();
+
     void swap(List< T >&);
 
     void assign(size_t, const T&);
     void assign(Iterator< T >, Iterator< T >);
     void assign(std::initializer_list< T >);
+
+    void remove(const T& data);
+
+    Iterator< T > erase(Iterator< T >);
 
   private:
     Node< T >* head_;
@@ -102,7 +108,7 @@ namespace grechishnikov
   T& List< T >::operator[](size_t pos)
   {
     Iterator< T > iter(head_);
-    return iter[pos].data_;
+    return *(iter[pos]);
   }
 
   template< typename T >
@@ -182,6 +188,7 @@ namespace grechishnikov
       Node< T >* temp = tail_->prev_;
       delete tail_;
       tail_ = temp;
+      tail_->next_ = nullptr;
     }
   }
 
@@ -199,6 +206,7 @@ namespace grechishnikov
       Node< T >* temp = head_->next_;
       delete head_;
       head_ = temp;
+      head_->prev_ = nullptr;
     }
   }
 
@@ -244,7 +252,47 @@ namespace grechishnikov
     }
   }
 
+  template< typename T >
+  void List< T >::remove(const T& data)
+  {
+    auto first = begin();
+    auto last = end();
+    while (first != last)
+    {
+      if (*first == data)
+      {
+        first = erase(first);
+      }
+      else
+      {
+        first++;
+      }
+    }
+  }
+
+  template< typename T >
+  Iterator< T > List< T >::erase(Iterator< T > iter)
+  {
+    Node< T >* prevPoi = iter.getNode()->prev_;
+    Node< T >* nextPoi = iter.getNode()->next_;
+
+    auto temp = iter + 1;
+    if (!prevPoi)
+    {
+      pop_front();
+      return temp;
+    }
+    if (!nextPoi)
+    {
+      pop_back();
+      return end();
+    }
+    prevPoi->next_ = nextPoi;
+    nextPoi->prev_ = prevPoi;
+    delete iter.getNode();
+    return temp;
+  }
+
 }
 
 #endif
-
