@@ -25,8 +25,8 @@ namespace zhalilov
     const T &operator*();
     const T *operator->();
 
-    bool operator==(const ConstIterator< T > &);
-    bool operator!=(const ConstIterator< T > &);
+    bool operator==(const ConstIterator< T > &) const;
+    bool operator!=(const ConstIterator< T > &) const;
 
     friend List< T >;
 
@@ -82,13 +82,13 @@ namespace zhalilov
   }
 
   template < typename T >
-  bool ConstIterator< T >::operator==(const ConstIterator< T > &it)
+  bool ConstIterator< T >::operator==(const ConstIterator< T > &it) const
   {
     return m_node == it.m_node;
   }
 
   template < typename T >
-  bool ConstIterator< T >::operator!=(const ConstIterator< T > &it)
+  bool ConstIterator< T >::operator!=(const ConstIterator< T > &it) const
   {
     return !operator==(it);
   }
