@@ -1,8 +1,9 @@
 #ifndef FORWARD_LIST_ITERATORS_HPP
 #define FORWARD_LIST_ITERATORS_HPP
-#include "forward_list.hpp"
-#include "node.hpp"
 #include <assert.h>
+#include "forward_list.hpp"
+#include "const_forward_list_iterators.hpp"
+#include "node.hpp"
 
 namespace novokhatskiy
 {
@@ -11,6 +12,9 @@ namespace novokhatskiy
 
   template <typename T>
   class Node;
+
+  template <typename T>
+  class ConstForwardIterator;
 
   template <typename T>
   class ForwardIterator : public std::iterator<std::forward_iterator_tag, T >

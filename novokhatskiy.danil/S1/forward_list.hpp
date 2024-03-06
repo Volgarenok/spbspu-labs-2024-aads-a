@@ -14,11 +14,16 @@ namespace novokhatskiy
   class Node;
 
   template <typename T >
+  class ConstForwardIterator;
+
+  template <typename T >
   class ForwardList
   {
     friend class novokhatskiy::ForwardIterator<T>;
+    friend class novokhatskiy::ConstForwardIterator<T>;
   public:
     using iter = ForwardIterator<T>;
+    using constIter = ConstForwardIterator<T>;
     ForwardList():
       head_(nullptr)
     {}
@@ -112,17 +117,20 @@ namespace novokhatskiy
     {
       return iter(head_);
     }
-    iter begin() const
+
+    constIter cbegin() const
     {
-      return iter(head_);
+      return constIter(head_);
     }
+
     iter end()
     {
       return iter();
     }
-    iter end() const
+
+    constIter cend() const
     {
-      return iter();
+      return constIter();
     }
 
     bool empty() const
@@ -137,6 +145,48 @@ namespace novokhatskiy
     {
       return head_->value_;
     }
+
+    iter insert_after(constIter pos, const T& value)
+    {
+      if (pos == cend())
+      {
+        throw std::out_of_range("Can not insert");
+      }
+      auto goToPos = this->begin();
+      while (pos.operator!=(goToPos))
+      {
+        goToPos++;
+      }
+      Node< T >* node = new Node< T >(value);
+      node->next_ = goToPos.node_->next_;
+      goToPos.node_->next_ = node;
+      return goToPos++;
+    }
+
+    iter erase_after(constIter pos)
+    {
+      if (pos == cend())
+      {
+        throw std::out_of_range("Can not insert");
+      }
+      auto goToPos = this->begin();
+      while (pos.operator!=(goToPos))
+      {
+        goToPos++;
+      }
+      if (goToPos.node_->next_)
+      {
+        ForwardIterator< T > next(goToPos.node_->next_->next_);
+        delete goToPos.node_->next_;
+        goToPos.node_->next_ = next.node_;
+        return next;
+      }
+      else
+      {
+        return end();
+      }
+    }
+
     void push_front(const T& value)
     {
       Node<T>* ptr = new Node<T>(value);
@@ -220,10 +270,10 @@ namespace novokhatskiy
       result->next_ = nullptr;
       while (temp)
       {
-        Node< T >* rofl = temp->next_;
+        Node< T >* prev = temp->next_;
         temp->next_ = result;
         result = temp;
-        temp = rofl;
+        temp = prev;
       }
       head_ = result;
     }
@@ -247,6 +297,39 @@ namespace novokhatskiy
       }
       head_ = firstStep;
     }
+    template< typename P >
+    size_t remove_if(P predicate)
+    {
+      size_t removedElement{};
+      Node< T >* curr = head_;
+      Node< T >* prev = nullptr;
+      while (curr)
+      {
+        if (predicate(curr->value_))
+        {
+          if (head_ == curr)
+          {
+            prev->next_ = curr->next_;
+            delete curr;
+          }
+          else
+          {
+            head_ = curr->next_;
+          }
+          Node< T >* temp = curr;
+          curr = curr->next_;
+          ++removedElement;
+          delete temp;
+        }
+        else
+        {
+          prev = curr;
+          curr = curr->next_;
+        }
+      }
+      return removedElement;
+    }
+
     bool operator==(ForwardList< T >& other) const
     {
       size_t maxPossibleSize = std::min(this->max_size(), other.max_size());

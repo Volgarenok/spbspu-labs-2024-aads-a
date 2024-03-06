@@ -14,9 +14,13 @@ namespace novokhatskiy
   class Node;
 
   template <typename T>
+  class ForwardIterator;
+
+  template <typename T>
   class ConstForwardIterator: public std::iterator<std::forward_iterator_tag, T >
   {
     friend class novokhatskiy::ForwardList<T>;
+    friend class novokhatskiy::ForwardIterator< T >;
   public:
     using constIter = ConstForwardIterator< T >;
     ConstForwardIterator() :
@@ -48,6 +52,11 @@ namespace novokhatskiy
     bool operator!=(const constIter& other) const
     {
       return !(node_ == other.node_);
+    }
+
+    bool operator!=(ForwardIterator< T >& other) const
+    {
+      return node_ != other.node_;
     }
 
     constIter& moveIterator(size_t size)
