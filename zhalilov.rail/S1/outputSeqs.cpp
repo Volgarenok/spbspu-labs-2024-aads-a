@@ -6,6 +6,23 @@
 
 #include "outputList.hpp"
 
+size_t zhalilov::countSum(const List< size_t > &list)
+{
+  size_t max = std::numeric_limits< size_t >::max();
+  size_t sum = 0;
+  List< size_t >::const_iterator it = list.cbegin();
+  while (it != list.cend())
+  {
+    if (sum > max - *it)
+    {
+      throw std::overflow_error("total sum is too large");
+    }
+    sum += *it;
+    it++;
+  }
+  return sum;
+}
+
 std::ostream &zhalilov::outputSeqs(List< pair > sequences, std::ostream &output)
 {
   List< pair >::iterator currIt = sequences.begin();
@@ -47,5 +64,13 @@ std::ostream &zhalilov::outputSeqs(List< pair > sequences, std::ostream &output)
     output << '\n';
     listOfListsIt++;
   }
+
+  List< size_t > sums;
+  while (!listOfNumbersList.empty())
+  {
+    List< size_t > &currNumList = listOfNumbersList.front();
+    sums.push_back(countSum(currNumList));
+  }
+  output << sums;
   return output;
 }
