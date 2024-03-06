@@ -25,28 +25,54 @@ int main()
   {
     std::cerr << e.what() << "\n";
   }
+
   if (!lines.empty())
   {
     std::cout << lines.front().name;
   }
-  auto current = lines.cbegin() + 1;
+  auto current = ++lines.cbegin();
   auto end = lines.cend();
   while (current != end)
   {
-    std::cout << " " << iter_current->name;
+    std::cout << " " << current->name;
     ++current;
   }
   std::cout << "\n";
 
-  List< named_list.number_list::const_iterator > iter;
+  List< ListConstIterator< int > > num_list_iter;
   current = lines.cbegin();
-  end = lines.cend();
-  while (iter_current != iter_end)
+  try
   {
-    iter.push_front((iter_current++)->number_list.cbegin());
+    while (current != end)
+    {
+      num_list_iter.push_front(current->number_list.cbegin());
+      ++current;
+    }
   }
-  iter.reverse();
-  auto iter_end = lines.front().number_list.front().cend();
+  catch (const std::bad_alloc &)
+  {
+    std::cerr << "Bad allocation\n";
+    return 2;
+  }
+  num_list_iter.reverse();
+  auto iter_end = lines.front().number_list.cend();
+  size_t count = 0;
+  while (!num_list_iter.empty())
+  {
+    for (auto & iter: num_list_iter)
+    {
+      if (iter != iter_end)
+      {
+        std::cout << *(iter++) << " ";
+      }
+      else
+      {
+        ++count;
+      }
+    }
+    std::cout << "\n";
+    num_list_iter.remove(iter_end);
+  }
 
   List< long long > sums({ 0 });
   if (isBigNumberFound)

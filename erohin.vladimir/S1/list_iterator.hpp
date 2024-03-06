@@ -99,6 +99,18 @@ namespace erohin
   {
     return !(operator==(rhs));
   }
+
+  template< class T >
+  bool operator==(const ListIterator< T > & lhs, const ListIterator< T > & rhs)
+  {
+    return (lhs.node_ == rhs.node_);
+  }
+
+  template< class T >
+  bool operator!=(const ListIterator< T > & lhs, const ListIterator< T > & rhs)
+  {
+    return !(lhs == rhs);
+  }
 }
 
 #endif
