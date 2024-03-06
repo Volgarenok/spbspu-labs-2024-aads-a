@@ -14,7 +14,7 @@ int main()
     calculateSums(pairs, overflow, lst);
     printResults(lst, overflow);
   }
-  catch (std::bad_alloc& e)
+  catch (std::exception& e)
   {
     std::cerr << "Error: " << e.what() << '\n';
     return 1;

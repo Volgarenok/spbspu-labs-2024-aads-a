@@ -89,8 +89,7 @@ void marishin::printResults(const LinkedList< size_t >& lst, bool overflow)
 {
   if (overflow)
   {
-    std::cerr << "Overflow!\n";
-    return 1;
+    throw std::overflow_error("Overflow!");
   }
   else
   {
