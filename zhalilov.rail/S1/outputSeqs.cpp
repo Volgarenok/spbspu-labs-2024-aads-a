@@ -38,6 +38,12 @@ std::ostream &zhalilov::outputSeqs(List< pair > sequences, std::ostream &output)
   output << names;
   output << '\n';
 
+  if (longestList == 0)
+  {
+    output << '0';
+    return output;
+  }
+
   List< List< size_t > > listOfNumbersList;
   for (size_t i = 0; i < longestList; i++)
   {

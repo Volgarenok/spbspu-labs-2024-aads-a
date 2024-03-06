@@ -1,6 +1,8 @@
 #include <iostream>
 #include <fstream>
 
+#include <list>
+
 #include "list.hpp"
 #include "getSeqFromStream.hpp"
 #include "outputSeqs.hpp"
