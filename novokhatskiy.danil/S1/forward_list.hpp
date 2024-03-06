@@ -87,7 +87,28 @@ namespace novokhatskiy
         }
       }
     }
-    iter begin() //const
+
+    ForwardList< T >& operator=(const ForwardList< T >& other)
+    {
+      ForwardList< T > tmp(other);
+      if (std::addressof(other) != this)
+      {
+        swap(tmp);
+      }
+      return *this;
+    }
+
+    ForwardList< T >& operator=(ForwardList < T >&& other)
+    {
+      ForwardList< T > tmp(std::move(other));
+      if (std::addressof(other) != this)
+      {
+        swap(tmp);
+      }
+      return *this;
+    }
+
+    iter begin()
     {
       return iter(head_);
     }
