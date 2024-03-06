@@ -12,6 +12,11 @@ int main()
   using namespace zhalilov;
   List< pair > sequences;
   getSeqFromStream(sequences, std::cin);
+  if (sequences.empty())
+  {
+    std::cout << "0\n";
+    return 0;
+  }
 
   try
   {

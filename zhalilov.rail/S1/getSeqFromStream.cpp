@@ -20,6 +20,9 @@ void zhalilov::getSeqFromStream(List< pair > &sequences, std::istream &input)
       input.clear();
     }
     auto pair = std::make_pair(seqName, numbers);
-    sequences.push_back(pair);
+    if (!seqName.empty())
+    {
+      sequences.push_back(pair);
+    }
   }
 }
