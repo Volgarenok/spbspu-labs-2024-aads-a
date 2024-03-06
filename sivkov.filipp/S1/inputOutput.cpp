@@ -2,9 +2,14 @@
 #include <iostream>
 #include <string>
 #include "list.hpp"
+#include "exception"
 
 void outputNames(List<std::pair<std::string, List<size_t>>>& list)
 {
+  if (list.empty())
+  {
+    throw std::invalid_argument("");
+  }
   for (auto it = list.cbegin(); it != list.cend(); ++it)
   {
     std::cout << it->first;
