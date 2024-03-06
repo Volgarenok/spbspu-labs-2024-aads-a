@@ -38,11 +38,8 @@ namespace zhalilov
     void assign(iterator, iterator);
     void assign(std::initializer_list< T >);
 
-    iterator insert
-    (const_iterator,
-     const T &
-    );
-    iterator insert(const_iterator, T &&);
+    iterator insert(const_iterator, const T &);
+    iterator insert(const_iterator, size_t, const T &);
     void push_back(const T &);
     void push_front(const T &);
 
@@ -231,9 +228,14 @@ namespace zhalilov
   }
 
   template < typename T >
-  typename List< T >::iterator List< T >::insert(const_iterator pos, T &&value)
+  typename List<T>::iterator List<T>::insert(const_iterator pos, size_t n, const T &value)
   {
-    insert(pos, value);
+    for (size_t i = 0; i < n; i++)
+    {
+      auto newIt = insert(pos, value);
+      pos = const_iterator(newIt.m_node);
+    }
+    return iterator(pos.m_node->prev);
   }
 
   template < typename T >
