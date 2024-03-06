@@ -24,10 +24,11 @@ namespace zakozhurnikova
   void printByIndex(const List<pair>& l);
 
   template <typename T>
-  void printSums(const List<pair>& l)
+  void printSums(const List<pair>& l, bool& overflow)
   {
     constexpr size_t max = std::numeric_limits<size_t>::max();
     T maxSize = getMaxSize< T >(l);
+    List <size_t> listSum;
     for (size_t i = 0; i < maxSize; ++i)
     {
       T sum = 0;
@@ -43,14 +44,21 @@ namespace zakozhurnikova
         }
         else
         {
-          throw std::range_error("Failed input numbers with overflow");
+          overflow = true;
         }
-
       }
-      std::cout << sum;
-      if (i + 1 != maxSize)
+      listSum.push(sum);
+    }
+    if (overflow)
+    {
+      throw std::range_error("Failed input numbers with overflow");
+    }
+    for (auto it = listSum.begin(); it != listSum.end(); ++it)
+    {
+      std::cout << *(it);
+      if (it + 1 != listSum.end())
       {
-       std::cout << ' ';
+        std::cout << ' ';
       }
     }
     if (maxSize == 0)

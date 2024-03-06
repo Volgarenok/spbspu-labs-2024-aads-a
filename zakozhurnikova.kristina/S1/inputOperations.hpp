@@ -26,7 +26,7 @@ namespace zakozhurnikova
       List< size_t > numbers;
       while (*str)
       {
-        size_t k = std::stoll(str, &pos);
+        size_t k = std::stoull(str, &pos);
         numbers.push(k);
         str += pos;
       }
