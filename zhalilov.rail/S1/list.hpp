@@ -206,7 +206,7 @@ namespace zhalilov
     {
       if (pred(*it))
       {
-        ~*it;
+        ~(it.m_node->value);
         erase(it);
         break;
       }
