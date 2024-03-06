@@ -15,7 +15,7 @@ void strelyaev::makeSequence(std::istream& in, List < std::pair < std::string, L
       throw std::logic_error("Something went wrong with the input");
     }
     std::string name = line;
-    List < size_t > list_of_nums;
+    List < size_t > list_of_nums{};
     while (in >> line && !std::isalpha(line[0]))
     {
       list_of_nums.push_back(std::stoull(line));

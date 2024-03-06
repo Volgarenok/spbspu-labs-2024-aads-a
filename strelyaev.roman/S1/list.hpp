@@ -1,5 +1,6 @@
 #ifndef LIST_HPP
 #define LIST_HPP
+#include <initializer_list>
 #include "node.hpp"
 #include "iterator.hpp"
 #include "constIterator.hpp"
@@ -14,6 +15,16 @@ namespace strelyaev
         head_(head),
         tail_(tail)
       {}
+
+      List(ConstIterator< T > begin, ConstIterator< T > end):
+        head_(new Node< T >),
+        tail_(head_)
+      {
+        for (auto i = begin; i != end; i++)
+        {
+          push_back(*i);
+        }
+      }
 
       List():
         head_(nullptr),
@@ -44,6 +55,16 @@ namespace strelyaev
         }
       }
 
+      List(std::initializer_list< T > init):
+        head_(new Node< T >),
+        tail_(head_)
+      {
+        for (T it : init)
+        {
+          push_back(it);
+        }
+      }
+
       ~List()
       {
         clear();
@@ -58,11 +79,43 @@ namespace strelyaev
         }
       }
 
+      void assign(std::initializer_list< T > init)
+      {
+        clear();
+        for (T it : init)
+        {
+          push_back(it);
+        }
+      }
+
       void swap(List& other)
       {
         Node< T >* temp = other.head_;
         other.head_ = head_;
         head_ = temp;
+      }
+
+      Iterator< T > insert(ConstIterator< T > pos, const T& value)
+      {
+        if (pos == cbegin())
+        {
+          push_front(value);
+          return begin();
+        }
+        if (pos == cend())
+        {
+          push_back(value);
+          return end();
+        }
+        else
+        {
+          Node< T >* new_node = new Node< T >(value);
+          Node< T >* next_node = pos->node_->next_;
+          pos->node_->next_ = new_node;
+          next_node->prev_ = new_node;
+          new_node->next_ = next_node;
+          new_node->prev_ = pos->node_;
+        }
       }
 
       bool empty()
