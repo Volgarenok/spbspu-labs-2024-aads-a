@@ -2,6 +2,7 @@
 #define LIST_HPP
 #include "node.hpp"
 #include "iterator.hpp"
+#include "constIterator.hpp"
 
 namespace strelyaev
 {
@@ -29,9 +30,32 @@ namespace strelyaev
         }
       }
 
+      List(List< T >&& other):
+        head_(other.head_)
+      {}
+
+      List(size_t n, const T& value):
+        head_(new Node< T >),
+        tail_(head_)
+      {
+        for (size_t i = 0; i < n; i++)
+        {
+          push_back(value);
+        }
+      }
+
       ~List()
       {
         clear();
+      }
+
+      void assign(size_t n, const T& value)
+      {
+        clear();
+        for (size_t i = 0; i < n; i++)
+        {
+          push_back(value);
+        }
       }
 
       void swap(List& other)
@@ -124,6 +148,33 @@ namespace strelyaev
         }
       }
 
+      void remove(const T& value)
+      {
+        Node< T >* node = head_;
+        while (node != nullptr)
+        {
+          if (node->value_ = value)
+          {
+            if (node == head_)
+            {
+              pop_front();
+              continue;
+            }
+            if (node == tail_)
+            {
+              pop_back();
+              continue;
+            }
+            Node< T >* temp = node;
+            node->prev_->next_ = node->next_;
+            node->next_->prev_ = node->prev_;
+            node = node->next_;
+            delete temp;
+
+          }
+        }
+      }
+
       Iterator< T > begin()
       {
         return Iterator< T >(head_);
@@ -132,6 +183,16 @@ namespace strelyaev
       Iterator< T > end()
       {
         return Iterator< T >(nullptr);
+      }
+
+      ConstIterator< T > cbegin() const
+      {
+        return ConstIterator< T >(head_);
+      }
+
+      ConstIterator< T > cend() const
+      {
+        return ConstIterator< T >(nullptr);
       }
 
     private:

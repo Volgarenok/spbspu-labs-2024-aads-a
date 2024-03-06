@@ -1,6 +1,7 @@
 #ifndef ITERATOR_HPP
 #define ITERATOR_HPP
-#include <stdexcept>
+#include <cstddef>
+#include <memory>
 #include "node.hpp"
 
 namespace strelyaev
@@ -28,14 +29,14 @@ namespace strelyaev
        this->node_ = val.node_;
      }
 
-     Iterator< T > operator++(int) // a++
+     Iterator< T > operator++(int)
      {
        Iterator result = *this;
        ++(*this);
        return result;
      }
 
-     Iterator< T >& operator++() // ++a
+     Iterator< T >& operator++()
      {
        if (node_ != nullptr)
        {
@@ -53,7 +54,10 @@ namespace strelyaev
 
      Iterator< T >& operator--()
      {
-       node_ = node_->prev_;
+       if (node_ != nullptr)
+       {
+         node_ = node_->prev_;
+       }
        return *this;
      }
 
