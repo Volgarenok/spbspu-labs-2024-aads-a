@@ -6,6 +6,7 @@
 int main()
 {
   using namespace erohin;
+  bool isBigNumberFound = false;
   List< named_list > lines;
   try
   {
@@ -14,7 +15,11 @@ int main()
   catch (const std::bad_alloc &)
   {
     std::cerr << "Bad allocation\n";
-    return 1;
+    return 2;
+  }
+  catch (const std::out_of_range &)
+  {
+    isBigNumberFound = true;
   }
   catch (const std::exception & e)
   {
@@ -32,7 +37,12 @@ int main()
     std::cout << " " << iter_current->name;
     ++iter_current;
   }
-  std::cout << compare(lines.cbegin()->number_list, (lines.cbegin() + 1)->number_list);
+  std::cout << "\n"
   std::cout << sum;
+  if (isBigNumberFound)
+  {
+    std::cerr << "Big number is found\n";
+    return 1;
+  }
   return 0;
 }
