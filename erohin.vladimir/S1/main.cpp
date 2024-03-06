@@ -56,25 +56,30 @@ int main()
   }
   num_list_iter.reverse();
   auto iter_end = lines.front().number_list.cend();
-  size_t count = 0;
+  List< long long > sums;
   while (!num_list_iter.empty())
   {
+    sums.push_front(0ll);
     for (auto & iter: num_list_iter)
     {
       if (iter != iter_end)
       {
-        std::cout << *(iter++) << " ";
-      }
-      else
-      {
-        ++count;
+        std::cout << *iter << " ";
+        sums.front() += *(iter++);
       }
     }
     std::cout << "\n";
     num_list_iter.remove(iter_end);
   }
-
-  List< long long > sums({ 0 });
+  sums.reverse();
+  for (auto elem: sums)
+  {
+    std::cout << elem << " ";
+  }
+  if (sums.empty())
+  {
+    std::cout << 0;
+  }
   if (isBigNumberFound)
   {
     std::cerr << "Big number is found\n";
