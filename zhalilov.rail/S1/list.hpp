@@ -21,6 +21,7 @@ namespace zhalilov
     List(List< T > &&);
     List(size_t);
     List(size_t, const T &);
+    List(std::initializer_list< T >);
     ~List();
 
     List< T > &operator=(const List< T > &);
@@ -104,6 +105,18 @@ namespace zhalilov
     List()
   {
     assign(n, value);
+  }
+
+  template < typename T >
+  List< T >::List(std::initializer_list< T > il):
+    List()
+  {
+    typename std::initializer_list<T>::iterator ilIt = il.begin();
+    while (ilIt != il.end())
+    {
+      push_back(*ilIt);
+      ilIt++;
+    }
   }
 
   template < typename T >
