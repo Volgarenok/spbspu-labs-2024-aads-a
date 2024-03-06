@@ -11,7 +11,7 @@ int main()
 {
   using namespace zhalilov;
   List< pair > sequences;
-  std::ifstream file("test");
+  getSeqFromStream(sequences, std::cin);
 
   try
   {
