@@ -10,6 +10,10 @@ void zhalilov::getSeqFromStream(List< pair > &sequences, std::istream &input)
   {
     List< size_t > numbers;
     input >> seqName;
+    if (seqName.empty())
+    {
+      break;
+    }
     std::cout << seqName;
     while (input >> currNum)
     {
@@ -20,9 +24,6 @@ void zhalilov::getSeqFromStream(List< pair > &sequences, std::istream &input)
       input.clear();
     }
     auto pair = std::make_pair(seqName, numbers);
-    if (!seqName.empty())
-    {
-      sequences.push_back(pair);
-    }
+    sequences.push_back(pair);
   }
 }
