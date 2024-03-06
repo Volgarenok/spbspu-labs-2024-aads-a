@@ -26,6 +26,7 @@ public:
   bool operator==(const ConstIterator<T>& other) const;
   const T& operator*() const;
   const T* operator->() const;
+  void advance(size_t n);
   ConstIterator<T>& operator++();
   ConstIterator<T> operator++(int);
 
@@ -67,6 +68,19 @@ template<typename T>
 const T* ConstIterator<T>::operator->() const
 {
   return std::addressof(node_->data);
+}
+
+template<typename T>
+void ConstIterator<T>::advance(size_t n)
+{
+  for (size_t i = 0; i < n; ++i)
+  {
+    if (node_ == nullptr)
+    {
+      return;
+    }
+    node_ = node_->next;
+  }
 }
 
 template<typename T>
