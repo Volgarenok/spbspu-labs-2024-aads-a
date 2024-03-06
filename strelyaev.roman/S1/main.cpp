@@ -61,18 +61,19 @@ int main()
     {
       if (!it->second.empty())
       {
-        if (sum > 0)
+        if (sum > 0 || overflow)
         {
           std::cout << " ";
         }
         std::cout << it->second.front();
-        if (sum > max_sizet - it->second.front())
+        if (sum < max_sizet - it->second.front())
+        {
+          sum += it->second.front();
+        }
+        else
         {
           overflow = true;
-          it->second.pop_front();
-          continue;
         }
-        sum += it->second.front();
         it->second.pop_front();
       }
     }
