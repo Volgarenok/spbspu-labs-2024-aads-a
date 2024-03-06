@@ -10,6 +10,7 @@ void zhalilov::getSeqFromStream(List< pair > &sequences, std::istream &input)
   {
     List< size_t > numbers;
     input >> seqName;
+    std::cout << seqName;
     while (input >> currNum)
     {
       numbers.push_back(currNum);
