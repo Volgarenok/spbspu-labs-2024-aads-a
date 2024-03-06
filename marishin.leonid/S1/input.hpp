@@ -2,6 +2,7 @@
 #define INPUT_HPP
 
 #include "linkedList.hpp"
+#include <limits>
 
 void readInput(LinkedList< std::pair< std::string, LinkedList< size_t >>>& pairs);
 void printPairs(const LinkedList< std::pair< std::string, LinkedList< size_t >>>& pairs);
