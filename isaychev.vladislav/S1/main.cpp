@@ -1,29 +1,12 @@
 #include <iostream>
-#include <string>
-#include "list.hpp"
+#include "inputList.hpp"
 
 int main()
 {
   using namespace isaychev;
   using myPair = std::pair< std::string, List< size_t > >;
   List< myPair > mainList;
-  std::string arg = "";
-  std::cin >> arg;
-  while (!std::cin.eof())
-  {
-    mainList.push({arg, List< size_t >()});
-    while (std::cin >> arg)
-    {
-      try
-      {
-        mainList.front().second.push(std::stoull(arg));
-      }
-      catch (const std::invalid_argument &)
-      {
-        break;
-      }
-    }
-  }
+  inputList(std::cin, mainList);
 /*  List < int > l;
   for (int i = 0; i < 4; ++i)
   {
