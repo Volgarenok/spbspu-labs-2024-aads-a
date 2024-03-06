@@ -277,7 +277,7 @@ public:
     Iterator nextIter(toDelete -> next_);
     if (toDelete -> prev_)
     {
-      toDelete -> prev _-> next_ = toDelete -> next_;
+      toDelete -> prev_ -> next_ = toDelete -> next_;
     }
     else
     {
