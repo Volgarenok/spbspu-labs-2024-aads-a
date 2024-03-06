@@ -25,6 +25,7 @@ namespace isaychev
     const T & front() const;
     bool empty();
     void push(const T & obj);
+    void pushBack(const T & obj);
     void pop();
     void clear();
     void swap(List< T > & rhs);
@@ -87,17 +88,31 @@ namespace isaychev
   }
 
   template < typename T >
-  void getToNextNode(node_t< T > * ptr)
-  {
-    ptr = ptr->next;
-  }
-
-  template < typename T >
   void List< T >::push(const T & obj)
   {
     node_t< T > * temp = new node_t< T >(obj);
     temp->next = head_;
     head_ = temp;
+  }
+
+  template < typename T >
+  void List< T >::pushBack(const T & obj)
+  {
+    if(!head_)
+    {
+      head_ = new node_t< T >(obj);
+    }
+    else
+    {
+      node_t< T > * temp1 = head_;
+      node_t< T > * temp2 = head_->next;
+      while (temp2)
+      {
+        temp1 = temp1->next;
+        temp2 = temp2->next;
+      }
+      temp1->next = new node_t< T >(obj);
+    }
   }
 
   template < typename T >
