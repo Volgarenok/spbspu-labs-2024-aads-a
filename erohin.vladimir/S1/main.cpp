@@ -66,16 +66,11 @@ int main()
       {
         std::cout << *iter << " ";
         sums.front() += *iter;
-        //++iter;
+        ++iter;
       }
     }
     std::cout << "\n";
     num_list_iter.remove(iter_end);
-    for (auto iter: num_list_iter)
-    {
-      std::cout << *iter;
-    }
-    break;
   }
   sums.reverse();
   for (auto elem: sums)

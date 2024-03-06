@@ -44,15 +44,15 @@ namespace erohin
     iterator insert_after(const_iterator pos, size_t count, const T & value);
     iterator erase_after(const_iterator pos);
     iterator erase_after(const_iterator first, const_iterator last);
+    void remove(const T & value);
+    template< class UnaryPredicate >
+    void remove_if(UnaryPredicate p);
     void assign(size_t count, const T & value);
     void assign(std::initializer_list< T > init_list);
     template< class InputIt >
     void assign(InputIt first, InputIt last);
     void splice_after(const_iterator pos, List< T > & other);
     void splice_after(const_iterator pos, List< T > && other);
-    void remove(const T & value);
-    template< class UnaryPredicate >
-    void remove_if(UnaryPredicate p);
     void reverse();
   private:
     Node< T > * head_;
@@ -185,7 +185,6 @@ namespace erohin
     return ListConstIterator< T >(head_);
   }
 
-
   template< class T >
   ListConstIterator< T > List< T >::cend() const
   {
@@ -297,6 +296,40 @@ namespace erohin
   }
 
   template< class T >
+  void List< T >::remove(const T & value)
+  {
+    remove_if([&](T elem){ return (elem == value); });
+  }
+
+  template< class T >
+  template< class UnaryPredicate >
+  void List< T >::remove_if(UnaryPredicate p)
+  {
+    if (empty())
+    {
+      return;
+    }
+    bool is_front_equal_value = p(front());
+    auto iter_begin = cbegin();
+    auto iter_end = cend();
+    while (iter_begin + 1 != iter_end)
+    {
+      if (p(*(iter_begin + 1)))
+      {
+        erase_after(iter_begin);
+      }
+      else
+      {
+        ++iter_begin;
+      }
+    }
+    if (is_front_equal_value)
+    {
+      pop_front();
+    }
+  }
+
+  template< class T >
   void List< T >::assign(size_t count, const T & value)
   {
     clear();
@@ -372,55 +405,6 @@ namespace erohin
       ++pos;
     }
     other.clear();
-  }
-
-  template< class T >
-  void List< T >::remove(const T & value)
-  {
-    T list_front_value(std::move(front()));
-    pop_front();
-    if (list_front_value != value)
-    {
-      push_front(std::move(list_front_value));
-    }
-    auto iter_begin = cbegin();
-    auto iter_end = cend();
-    while (iter_begin + 1 != iter_end)
-    {
-      if (*(iter_begin + 1) == value)
-      {
-        erase_after(iter_begin);
-      }
-      else
-      {
-        ++iter_begin;
-      }
-    }
-  }
-
-  template< class T >
-  template< class UnaryPredicate >
-  void List< T >::remove_if(UnaryPredicate p)
-  {
-    T list_front_value(std::move(front()));
-    pop_front();
-    if (!p(list_front_value))
-    {
-      push_front(std::move(list_front_value));
-    }
-    auto iter_begin = cbegin();
-    auto iter_end = cend();
-    while (iter_begin + 1 != iter_end)
-    {
-      if (p(*(iter_begin + 1)))
-      {
-        erase_after(iter_begin);
-      }
-      else
-      {
-        ++iter_begin;
-      }
-    }
   }
 
   template< class T >
