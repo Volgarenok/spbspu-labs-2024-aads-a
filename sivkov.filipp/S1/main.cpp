@@ -11,7 +11,7 @@ int main()
   try
   {
     outputNames(list);
-    addnum(list, sums);
+    outputNums(list, sums);
     sums.reverse();
     outputSums(sums);
   }

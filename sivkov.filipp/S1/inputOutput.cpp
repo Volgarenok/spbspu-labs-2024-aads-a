@@ -61,11 +61,20 @@ void input(std::istream& input, List<std::pair<std::string, List<size_t>>>& list
   }
 }
 
-void addnum(List<std::pair<std::string, List<size_t>>>& list, List<size_t>& numbers)
+#include "inputOutput.hpp"
+#include <iostream>
+#include "node.hpp"
+#include "constIterator.hpp"
+#include "list.hpp"
+
+
+
+void outputNums(List<std::pair<std::string, List<size_t>>>& list, List<size_t>& numbers)
 {
   bool allData = true;
   size_t maxNums = 0;
   size_t sum = 0;
+  size_t size = 0;
 
   for (auto iteratorForPair = list.cbegin(); iteratorForPair != list.cend(); ++iteratorForPair)
   {
@@ -104,6 +113,7 @@ void addnum(List<std::pair<std::string, List<size_t>>>& list, List<size_t>& numb
         std::cout << *iteratorForNums;
         allData = true;
       }
+      ++size;
     }
     if (allData)
     {
@@ -111,4 +121,9 @@ void addnum(List<std::pair<std::string, List<size_t>>>& list, List<size_t>& numb
       numbers.push_front(sum);
     }
   }
+  if (allData && size == 0)
+  {
+    numbers.push_front(sum);
+  }
 }
+

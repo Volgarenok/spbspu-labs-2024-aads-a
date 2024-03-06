@@ -7,6 +7,6 @@
 void outputNames(List<std::pair<std::string, List<size_t>>>& list);
 void outputSums(List<size_t> &numbers);
 void input(std::istream& input, List<std::pair<std::string, List<size_t>>>& list);
-void addnum(List<std::pair<std::string, List<size_t>>>& list, List<size_t>& numbers);
+void outputNums(List<std::pair<std::string, List<size_t>>>& list, List<size_t>& numbers);
 
 #endif
