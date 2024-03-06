@@ -32,7 +32,11 @@ int main()
 
   for (auto iter = listOfPairs.begin(); iter != listOfPairs.end(); ++iter)
   {
-    std::cout << iter->first << " ";
+    std::cout << iter->first;
+    if (iter != listOfPairs.end())
+    {
+      std::cout << " ";
+    }
   }
   std::cout << "\n";
 
@@ -71,8 +75,13 @@ int main()
   }
   for (auto it = sumList.begin(); it != sumList.end(); ++it)
   {
-    std::cout << *it << " ";
+    std::cout << *it;
+    if (it != sumList.end())
+    {
+      std::cout << " ";
+    }
   }
+  std::cout << "\n";
 
   return 0;
 }
