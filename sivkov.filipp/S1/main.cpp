@@ -1,7 +1,6 @@
-#include <limits>
+#include <iostream>
 #include "inputOutput.hpp"
 #include "list.hpp"
-#include "outputNums.hpp"
 
 int main()
 {

@@ -54,6 +54,7 @@ public:
   void reverse();
   void remove(const T& value);
   void assign(std::size_t count, const T& value);
+  size_t getSize();
   T& front() { return head_->data; }
   ConstIterator<T> cbegin() const { return ConstIterator<T>(head_); }
   ConstIterator<T> cend() const { return ConstIterator<T>(nullptr); }
@@ -70,7 +71,7 @@ void List<T>::push_front(const T& data)
   Node<T>* temp = new Node<T>(data);
   temp->next = head_;
   head_ = temp;
-  size++;
+  ++size;
 }
 
 template<typename T>
@@ -90,7 +91,7 @@ void List<T>::push_back(T data)
     }
     head->next = newNode;
   }
-  size++;
+  ++size;
 }
 
 template<typename T>
@@ -100,6 +101,7 @@ void List<T>::clear()
   {
     pop_front();
   }
+  size = 0;
 }
 
 template<typename T>
@@ -112,7 +114,7 @@ void List<T>::pop_front()
   Node<T>* head = head_;
   head_ = head_->next;
   delete head;
-  size--;
+  --size;
 }
 
 template<typename T>
@@ -137,7 +139,7 @@ void List<T>::pop_back()
     delete head->next;
     head->next = nullptr;
   }
-  size--;
+  --size;
 }
 
 template<typename T>
@@ -204,6 +206,12 @@ void List<T>::assign(std::size_t count, const T& value)
   {
     push_back(value);
   }
+}
+
+template<typename T>
+size_t List<T>::getSize()
+{
+  return size;
 }
 
 template<typename T>
