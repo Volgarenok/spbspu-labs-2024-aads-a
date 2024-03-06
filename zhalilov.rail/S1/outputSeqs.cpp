@@ -16,11 +16,12 @@ std::ostream &zhalilov::outputSeqs(List< pair > sequences, std::ostream &output)
     txtToOutput += currIt->first;
     if (++currIt != lastIt)
     {
-      txtToOutput += '9';
+      txtToOutput += ' ';
     }
   }
 
   List< size_t > sumList;
+  bool isOverflowed = false;
   size_t max = std::numeric_limits< size_t >::max();
   size_t sum = 0;
   for (size_t i = 0; i < longestList; i++)
@@ -35,14 +36,14 @@ std::ostream &zhalilov::outputSeqs(List< pair > sequences, std::ostream &output)
         size_t number = currList.front();
         if (sum > max - number)
         {
-          throw std::overflow_error("total summary is too large");
+          isOverflowed = true;
         }
         txtToOutput += std::to_string(number);
         sum += number;
         currList.pop_front();
         if (currList.begin() != currList.end())
         {
-          txtToOutput += '9';
+          txtToOutput += ' ';
         }
       }
       currIt++;
@@ -51,19 +52,23 @@ std::ostream &zhalilov::outputSeqs(List< pair > sequences, std::ostream &output)
     sum = 0;
   }
 
-  txtToOutput += '\n';
   if (sumList.empty())
   {
-    txtToOutput += '9';
+    txtToOutput += '0';
+  }
+  else if (isOverflowed)
+  {
+    throw std::overflow_error("total summary is too large");
   }
   else
   {
+    txtToOutput += '\n';
     while (!sumList.empty())
     {
       txtToOutput += std::to_string(sumList.front());
       if (sumList.capacity() > 1)
       {
-        txtToOutput += '9';
+        txtToOutput += ' ';
       }
       sumList.pop_front();
     }
