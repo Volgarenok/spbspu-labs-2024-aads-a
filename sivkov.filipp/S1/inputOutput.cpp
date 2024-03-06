@@ -99,7 +99,7 @@ void outputNums(List<std::pair<std::string, List<size_t>>>& list, List<size_t>& 
         }
         else
         {
-           throw std::out_of_range("out of range");
+          throw std::out_of_range("out of range");
           continue;
         }
         std::cout << *iteratorForNums;

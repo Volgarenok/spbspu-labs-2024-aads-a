@@ -5,8 +5,8 @@
 int main()
 {
   List<std::pair<std::string, List<size_t>>> list;
-  input(std::cin, list);
   list.reverse();
+  input(std::cin, list);
   List<size_t> sums;
   try
   {
@@ -17,11 +17,12 @@ int main()
   }
   catch (std::invalid_argument& e)
   {
-    std::cout << 0;
+    std::cout << "0\n";
     return 0;
   }
   catch (std::out_of_range& e)
   {
+    std::cerr << "overflow\n";
     return 1;
   }
 
