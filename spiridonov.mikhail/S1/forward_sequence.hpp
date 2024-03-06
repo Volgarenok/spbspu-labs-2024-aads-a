@@ -1,20 +1,9 @@
 #ifndef FORWARD_SEQUENCE_HPP
 #define FORWARD_SEQUENCE_HPP
+#include "node.hpp"
 
 namespace spiridonov
 {
-
-  template <typename T>
-  class Node
-  {
-  public:
-    T data;
-    Node<T>* next;
-
-    Node(T value) : data(value), next(nullptr)
-    {
-    }
-  };
 
   template <typename T>
   class Sequence
