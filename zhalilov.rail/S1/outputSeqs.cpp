@@ -40,7 +40,7 @@ std::ostream &zhalilov::outputSeqs(List< pair > sequences, std::ostream &output)
 
   if (longestList == 0)
   {
-    output << '0';
+    output << "\n0";
     return output;
   }
 
