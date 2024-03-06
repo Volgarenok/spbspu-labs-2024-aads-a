@@ -3,7 +3,6 @@
 
 namespace spiridonov
 {
-
   template <typename T>
   class Node
   {
