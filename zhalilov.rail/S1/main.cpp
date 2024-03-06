@@ -14,7 +14,7 @@ int main()
   getSeqFromStream(sequences, std::cin);
   if (sequences.empty())
   {
-    std::cout << '0\n';
+    std::cout << "0\n";
     return 0;
   }
 
