@@ -118,12 +118,22 @@ namespace novokhatskiy
       return iter(head_);
     }
 
+    iter begin() const
+    {
+      return iter(head_);
+    }
+
     constIter cbegin() const
     {
       return constIter(head_);
     }
 
     iter end()
+    {
+      return iter();
+    }
+
+    iter end() const
     {
       return iter();
     }
