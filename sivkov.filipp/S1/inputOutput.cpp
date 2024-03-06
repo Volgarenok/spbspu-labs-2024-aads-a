@@ -53,7 +53,7 @@ void input(std::istream& input, List<std::pair<std::string, List<size_t>>>& list
         size_t number = std::stoull(line);
         list.front().second.push_back(number);
       }
-      catch (const std::invalid_argument&)
+      catch (std::invalid_argument&)
       {
         break;
       }
@@ -61,7 +61,7 @@ void input(std::istream& input, List<std::pair<std::string, List<size_t>>>& list
   }
 }
 
-void outputNums(List<std::pair<std::string, List<size_t>>>& list, List<size_t>& numbers)
+void outputNums(List<std::pair<std::string, List<size_t>>>& list, List<size_t>& numbers, bool overflowFlag)
 {
   bool allData = true;
   size_t maxNums = 0;
@@ -99,8 +99,7 @@ void outputNums(List<std::pair<std::string, List<size_t>>>& list, List<size_t>& 
         }
         else
         {
-          throw std::out_of_range("out of range");
-          continue;
+          overflowFlag = true;
         }
         std::cout << *iteratorForNums;
         allData = true;
