@@ -16,6 +16,7 @@ std::ostream &zhalilov::outputSeqs(List< pair > sequences, std::ostream &output)
   {
     longestList = std::max(longestList, currIt->second.capacity());
     names.push_back(currIt->first);
+    currIt++;
   }
   output << names;
   output << '\n';
