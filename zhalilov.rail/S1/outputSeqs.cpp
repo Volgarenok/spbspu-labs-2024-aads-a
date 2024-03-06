@@ -4,75 +4,46 @@
 #include <stdexcept>
 #include <limits>
 
+#include "outputList.hpp"
+
 std::ostream &zhalilov::outputSeqs(List< pair > sequences, std::ostream &output)
 {
   List< pair >::iterator currIt = sequences.begin();
   List< pair >::iterator lastIt = sequences.end();
   size_t longestList = 0;
-  std::string txtToOutput = "";
+  List< std::string > names;
   while (currIt != lastIt)
   {
     longestList = std::max(longestList, currIt->second.capacity());
-    txtToOutput += currIt->first;
-    if (++currIt != lastIt)
-    {
-      txtToOutput += ' ';
-    }
+    names.push_back(currIt->first);
   }
+  output << names;
+  output << '\n';
 
-  List< size_t > sumList;
-  bool isOverflowed = false;
-  size_t max = std::numeric_limits< size_t >::max();
-  size_t sum = 0;
+  List< List< size_t > > listOfNumbersList;
   for (size_t i = 0; i < longestList; i++)
   {
-    txtToOutput += '\n';
+    listOfNumbersList.push_back(List< size_t >());
+    List< size_t > &lastSeq = listOfNumbersList.back();
     currIt = sequences.begin();
     while (currIt != lastIt)
     {
-      List< size_t > &currList = currIt->second;
-      if (!currList.empty())
+      List< size_t > &oldNumList = currIt->second;
+      if (!oldNumList.empty())
       {
-        size_t number = currList.front();
-        if (sum > max - number)
-        {
-          isOverflowed = true;
-        }
-        txtToOutput += std::to_string(number);
-        sum += number;
-        currList.pop_front();
-        if (currList.begin() != currList.end())
-        {
-          txtToOutput += ' ';
-        }
+        lastSeq.push_back(oldNumList.front());
+        oldNumList.pop_front();
       }
       currIt++;
     }
-    sumList.push_back(sum);
-    sum = 0;
   }
 
-  if (sumList.empty())
+  auto listOfListsIt = listOfNumbersList.cbegin();
+  auto listOfListsEnd = listOfNumbersList.cend();
+  while (listOfListsIt != listOfListsEnd)
   {
-    txtToOutput += '0';
+    output << *listOfListsIt;
+    output << '\n';
   }
-  else if (isOverflowed)
-  {
-    throw std::overflow_error("total summary is too large");
-  }
-  else
-  {
-    txtToOutput += '\n';
-    while (!sumList.empty())
-    {
-      txtToOutput += std::to_string(sumList.front());
-      if (sumList.capacity() > 1)
-      {
-        txtToOutput += ' ';
-      }
-      sumList.pop_front();
-    }
-  }
-  output << txtToOutput;
   return output;
 }
