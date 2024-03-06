@@ -226,6 +226,26 @@ namespace novokhatskiy
       }
       head_ = firstStep;
     }
+    bool operator==(ForwardList< T >& other) const
+    {
+      size_t maxPossibleSize = std::min(this->max_size(), other.max_size());
+      Node< T >* curr = head_;
+      Node< T >* otherHead = other.head_;
+      for (size_t i = 0; i < maxPossibleSize; i++)
+      {
+        if (curr->value_ != otherHead->value_)
+        {
+          return false;
+        }
+        curr = curr->next_;
+        otherHead = otherHead->next_;
+      }
+      return true;
+    }
+    bool operator!=(ForwardList< T >& other) const
+    {
+      return !(*this == other);
+    }
     bool operator<(const ForwardList< T >& other) const
     {
       size_t maxPossibleSize = std::min(this->max_size(), other.max_size());
