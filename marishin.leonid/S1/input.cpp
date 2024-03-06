@@ -1,6 +1,6 @@
 #include "input.hpp"
 
-void readInput(LinkedList< std::pair< std::string, LinkedList< size_t >>>& pairs)
+void marishin::readInput(LinkedList< std::pair< std::string, LinkedList< size_t >>>& pairs)
 {
   std::string str;
   std::istream& input = std::cin;
@@ -17,7 +17,7 @@ void readInput(LinkedList< std::pair< std::string, LinkedList< size_t >>>& pairs
   }
 }
 
-void printPairs(const LinkedList< std::pair< std::string, LinkedList< size_t >>>& pairs)
+void marishin::printPairs(const LinkedList< std::pair< std::string, LinkedList< size_t >>>& pairs)
 {
   auto iter = pairs.begin();
   auto end = pairs.end();
@@ -37,7 +37,7 @@ void printPairs(const LinkedList< std::pair< std::string, LinkedList< size_t >>>
   }
 }
 
-void calculateSums(const LinkedList< std::pair< std::string, LinkedList< size_t >>>& pairs, bool& overflow, LinkedList< size_t >& lst)
+void marishin::calculateSums(const LinkedList< std::pair< std::string, LinkedList< size_t >>>& pairs, bool& overflow, LinkedList< size_t >& lst)
 {
   constexpr size_t maxvalue = std::numeric_limits< size_t >::max();
   while (!pairs.empty())
@@ -57,7 +57,7 @@ void calculateSums(const LinkedList< std::pair< std::string, LinkedList< size_t 
         emptyList = true;
         auto frontValue = pair.second.front();
         std::cout << frontValue;
-        if (maxvalue > frontValue + sum)
+        if (maxvalue - sum > frontValue)
         {
           sum += frontValue;
           pair.second.pop_front();
@@ -81,7 +81,7 @@ void calculateSums(const LinkedList< std::pair< std::string, LinkedList< size_t 
   }
 }
 
-void printResults(const LinkedList< size_t >& lst, bool overflow)
+void marishin::printResults(const LinkedList< size_t >& lst, bool overflow)
 {
   if (overflow)
   {

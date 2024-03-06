@@ -2,6 +2,7 @@
 
 int main()
 {
+  using namespace marishin;
   LinkedList< std::pair< std::string, LinkedList< size_t >>> pairs;
   LinkedList< size_t > lst;
   bool overflow = false;
