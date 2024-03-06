@@ -17,7 +17,7 @@ int main()
     std::cout << "0\n";
     return 0;
   }
-
+  sequences.back().second.remove(4);
   try
   {
     outputSeqs(sequences, std::cout);
