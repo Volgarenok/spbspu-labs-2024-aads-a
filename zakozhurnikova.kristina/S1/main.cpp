@@ -14,7 +14,7 @@ int main()
     readList(list, std::cin);
     printNames(list);
     printByIndex(list);
-    bool overflow;
+    bool overflow = false;
     printSums<size_t>(list, overflow);
     std::cout << '\n';
   }
