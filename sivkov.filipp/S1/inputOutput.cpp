@@ -61,7 +61,7 @@ void input(std::istream& input, List<std::pair<std::string, List<size_t>>>& list
   }
 }
 
-void outputNums(List<std::pair<std::string, List<size_t>>>& list, List<size_t>& numbers, bool overflowFlag)
+void outputNums(List<std::pair<std::string, List<size_t>>>& list, List<size_t>& numbers, bool &overflowFlag)
 {
   bool allData = true;
   size_t maxNums = 0;
