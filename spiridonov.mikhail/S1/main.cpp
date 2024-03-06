@@ -1,7 +1,8 @@
 #include <iostream>
 #include "forward_sequence.hpp"
 
-namespace spiridonov {
+namespace spiridonov
+{
 
   void processSequences()
   {
@@ -39,7 +40,8 @@ namespace spiridonov {
           namedSequences[numSequences].sequence[namedSequences[numSequences].length++] = value;
           value = 0;
         }
-        else {
+        else
+        {
           value = value * 10 + (sequenceName[i] - '0');
         }
         i++;
@@ -57,7 +59,8 @@ namespace spiridonov {
     int sumIndex = 0;
 
     int maxSequenceLength = 0;
-    for (int i = 0; i < numSequences; ++i) {
+    for (int i = 0; i < numSequences; ++i)
+    {
       maxSequenceLength = std::max(maxSequenceLength, namedSequences[i].length);
     }
 
@@ -75,7 +78,8 @@ namespace spiridonov {
     for (int i = 0; i < sumIndex; ++i)
     {
       std::cout << allNumbers[i] << " ";
-      if ((i + 1) % numSequences == 0) {
+      if ((i + 1) % numSequences == 0)
+      {
         std::cout << "\n";
       }
     }
