@@ -25,20 +25,30 @@ int main()
   {
     std::cerr << e.what() << "\n";
   }
-  long long sum = 0;
   if (!lines.empty())
   {
     std::cout << lines.front().name;
   }
-  auto iter_current = lines.cbegin() + 1;
-  auto iter_end = lines.cend();
-  while (iter_current != iter_end)
+  auto current = lines.cbegin() + 1;
+  auto end = lines.cend();
+  while (current != end)
   {
     std::cout << " " << iter_current->name;
-    ++iter_current;
+    ++current;
   }
-  std::cout << "\n"
-  std::cout << sum;
+  std::cout << "\n";
+
+  List< named_list.number_list::const_iterator > iter;
+  current = lines.cbegin();
+  end = lines.cend();
+  while (iter_current != iter_end)
+  {
+    iter.push_front((iter_current++)->number_list.cbegin());
+  }
+  iter.reverse();
+  auto iter_end = lines.front().number_list.front().cend();
+
+  List< long long > sums({ 0 });
   if (isBigNumberFound)
   {
     std::cerr << "Big number is found\n";
