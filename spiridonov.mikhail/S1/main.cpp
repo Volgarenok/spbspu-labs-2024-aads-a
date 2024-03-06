@@ -53,12 +53,8 @@ namespace spiridonov {
       numSequences++;
     }
 
-    for (int i = 0; i < numSequences; ++i)
-    {
-      std::cout << namedSequences[i].name << " ";
-    }
-    std::cout << "\n";
-
+    int allNumbers[max_sequences * max_sequence_len];
+    int sumIndex = 0;
 
     int maxSequenceLength = 0;
     for (int i = 0; i < numSequences; ++i) {
@@ -67,17 +63,19 @@ namespace spiridonov {
 
     for (int i = 0; i < maxSequenceLength; ++i)
     {
-      bool printed = false;
       for (int j = 0; j < numSequences; ++j)
       {
         if (i < namedSequences[j].length)
         {
-          std::cout << namedSequences[j].sequence[i] << " ";
-          printed = true;
+          allNumbers[sumIndex++] = namedSequences[j].sequence[i];
         }
       }
-      if (printed)
-      {
+    }
+
+    for (int i = 0; i < sumIndex; ++i)
+    {
+      std::cout << allNumbers[i] << " ";
+      if ((i + 1) % numSequences == 0) {
         std::cout << "\n";
       }
     }
@@ -85,25 +83,21 @@ namespace spiridonov {
     for (int i = 0; i < maxSequenceLength; ++i)
     {
       int sum = 0;
-      bool summed = false;
       for (int j = 0; j < numSequences; ++j)
       {
         if (i < namedSequences[j].length)
         {
           sum += namedSequences[j].sequence[i];
-          summed = true;
         }
       }
-
-      if (summed)
-      {
-        std::cout << sum << " ";
-      }
+      std::cout << sum << " ";
     }
     std::cout << "\n";
+
   }
 
 }
+
 int main()
 {
   spiridonov::processSequences();
