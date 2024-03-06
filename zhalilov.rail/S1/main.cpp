@@ -1,16 +1,14 @@
 #include <iostream>
 #include <fstream>
 
-#include <list>
-
 #include "list.hpp"
 #include "getSeqFromStream.hpp"
 #include "outputSeqs.hpp"
 
-#include "outputList.hpp"
-
 int main()
 {
+  using namespace zhalilov;
+  List< pair > sequences;
   getSeqFromStream(sequences, std::cin);
   if (sequences.empty())
   {
