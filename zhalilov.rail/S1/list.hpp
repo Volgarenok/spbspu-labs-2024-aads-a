@@ -40,6 +40,8 @@ namespace zhalilov
 
     iterator insert(const_iterator, const T &);
     iterator insert(const_iterator, size_t, const T &);
+    iterator insert(const_iterator, iterator, iterator);
+
     void push_back(const T &);
     void push_front(const T &);
 
@@ -228,12 +230,24 @@ namespace zhalilov
   }
 
   template < typename T >
-  typename List<T>::iterator List<T>::insert(const_iterator pos, size_t n, const T &value)
+  typename List< T >::iterator List< T >::insert(const_iterator pos, size_t n, const T &value)
   {
     for (size_t i = 0; i < n; i++)
     {
       auto newIt = insert(pos, value);
       pos = const_iterator(newIt.m_node);
+    }
+    return iterator(pos.m_node->prev);
+  }
+
+  template < typename T >
+  typename List< T >::iterator List< T >::insert(const_iterator pos, iterator first, iterator last)
+  {
+    while (first != last)
+    {
+      auto newIt = insert(pos, *first);
+      pos = const_iterator(newIt.m_node);
+      first++;
     }
     return iterator(pos.m_node->prev);
   }
