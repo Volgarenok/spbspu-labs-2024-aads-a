@@ -21,6 +21,7 @@ namespace zhalilov
     List(List< T > &&);
     List(size_t);
     List(size_t, const T &);
+    List(iterator, iterator);
     List(std::initializer_list< T >);
     ~List();
 
@@ -34,8 +35,13 @@ namespace zhalilov
     bool empty() const;
 
     void assign(size_t, const T &);
+    void assign(iterator, iterator);
+    void assign(std::initializer_list< T >);
 
-    iterator insert(const_iterator, const T &);
+    iterator insert
+    (const_iterator,
+     const T &
+    );
     iterator insert(const_iterator, T &&);
     void push_back(const T &);
     void push_front(const T &);
@@ -108,15 +114,17 @@ namespace zhalilov
   }
 
   template < typename T >
+  List< T >::List(iterator first, iterator last):
+    List()
+  {
+    assign(first, last);
+  }
+
+  template < typename T >
   List< T >::List(std::initializer_list< T > il):
     List()
   {
-    typename std::initializer_list<T>::iterator ilIt = il.begin();
-    while (ilIt != il.end())
-    {
-      push_back(*ilIt);
-      ilIt++;
-    }
+    assign(il);
   }
 
   template < typename T >
@@ -183,6 +191,29 @@ namespace zhalilov
     for (size_t i = 0; i < n; i++)
     {
       push_back(value);
+    }
+  }
+
+  template < typename T >
+  void List< T >::assign(iterator first, iterator last)
+  {
+    clear();
+    while (first != last)
+    {
+      push_back(*first);
+      first++;
+    }
+  }
+
+  template < typename T >
+  void List< T >::assign(std::initializer_list< T > il)
+  {
+    clear();
+    typename std::initializer_list< T >::iterator ilIt = il.begin();
+    while (ilIt != il.end())
+    {
+      push_back(*ilIt);
+      ilIt++;
     }
   }
 
