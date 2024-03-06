@@ -199,6 +199,7 @@ namespace zhalilov
     delete it.m_node;
     prev->next = next;
     next->prev = prev;
+    m_size--;
     return iterator(next);
   }
 
