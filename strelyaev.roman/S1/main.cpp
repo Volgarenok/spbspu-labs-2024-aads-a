@@ -56,7 +56,7 @@ int main()
 
   for (size_t i = 0; i < max_element; i++)
   {
-    int sum = 0;
+    size_t sum = 0;
     for (auto it = list.begin(); it != list.end(); it++)
     {
       if (!it->second.empty())
