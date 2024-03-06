@@ -30,12 +30,9 @@ int main()
   while (iter_current != iter_end)
   {
     std::cout << " " << iter_current->name;
-    for (auto elem: iter_current->number_list)
-    {
-      std::cout << elem;
-    }
     ++iter_current;
   }
+  std::cout << compare(lines.cbegin()->number_list, (lines.cbegin() + 1)->number_list);
   std::cout << sum;
   return 0;
 }

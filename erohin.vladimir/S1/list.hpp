@@ -479,7 +479,7 @@ namespace erohin
   template< class T >
   bool operator==(const List< T > & lhs, const List< T > & rhs)
   {
-    return (compare(lhs, rhs) == 0)
+    return (compare(lhs, rhs) == 0);
   }
 
   template< class T >
