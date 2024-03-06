@@ -8,6 +8,7 @@
 int main()
 {
   using namespace strelyaev;
+  bool overflow = false;
   List< std::pair< std::string, List < size_t > > > list;
   try
   {
@@ -15,7 +16,7 @@ int main()
   }
   catch (const std::exception& e)
   {
-    std::cerr << e.what() << '\n';
+    std::cerr << e.what() << "\n";
   }
 
   if (list.empty())
@@ -33,9 +34,11 @@ int main()
       std::cout << " ";
     }
   }
+
   size_t sums_i = 0;
   List< size_t > sums;
   size_t max_element = 1;
+  size_t max_sizet = std::numeric_limits< size_t >::max();
   for (auto it = list.begin(); it != list.end(); it++)
   {
     size_t i = 0;
@@ -63,6 +66,12 @@ int main()
           std::cout << " ";
         }
         std::cout << it->second.front();
+        if (sum > max_sizet - it->second.front())
+        {
+          overflow = true;
+          it->second.pop_front();
+          continue;
+        }
         sum += it->second.front();
         it->second.pop_front();
       }
@@ -85,4 +94,10 @@ int main()
     }
   }
   std::cout << "\n";
+
+  if (overflow)
+  {
+    std::cerr << "Overflow!\n";
+    return 1;
+  }
 }
