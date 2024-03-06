@@ -1,5 +1,6 @@
 #include "binList.hpp"
 
+#include <exception>
 #include <iostream>
 #include <stdexcept>
 #include "iterator.hpp"
@@ -13,7 +14,13 @@ arakelyan::BinList< T >::BinList():
 {}
 
 template < class T >
-arakelyan::BinList< T >::BinList(size_t size, const T &val):
+arakelyan::BinList< T >::BinList(Node< T > *head, Node< T > *tail):
+  head_(head),
+  tail_(tail)
+{}
+
+template < class T >
+arakelyan::BinList< T >::BinList(const T &val, size_t size):
   BinList()
 {
   for (size_t i = 0; i < size; ++i)
@@ -90,9 +97,10 @@ void arakelyan::BinList< T >::push_back(const T &el)
   {
     node = new Node< T >(el);
   }
-  catch (...)
+  catch (const std::exception & e)
   {
-    throw std::logic_error("error!");
+    clear();
+    throw;
   }
   if ((head_ == nullptr) && (tail_ == nullptr))
   {
@@ -116,9 +124,10 @@ void arakelyan::BinList< T >::push_front(const T &el)
   {
     node = new Node< T >(el);
   }
-  catch (...)
+  catch (const std::exception & e)
   {
-    throw std::logic_error("error!");
+    clear();
+    throw;
   }
   node->nextNode = head_;
   if (head_ == nullptr && tail_ == nullptr)
@@ -185,36 +194,60 @@ void arakelyan::BinList< T >::pop_back()
 template < class T >
 void arakelyan::BinList< T >::assign(const T &val, const size_t size)
 {
-  clear();
-  head_ = nullptr;
-  tail_ = nullptr;
-  for (size_t i = 0; i < size; ++i)
+  try
   {
-    push_back(val);
+    clear();
+    head_ = nullptr;
+    tail_ = nullptr;
+    for (size_t i = 0; i < size; ++i)
+    {
+      push_back(val);
+    }
+  }
+  catch (const std::exception & e)
+  {
+    clear();
+    throw;
   }
 }
 
 template < class T >
 void arakelyan::BinList< T >::assign(std::initializer_list< T > ls)
 {
-  clear();
-  head_ = nullptr;
-  tail_ = nullptr;
-  for (auto it = ls.begin(); it != ls.end(); ++it)
+  try
   {
-    push_back(*it);
+    clear();
+    head_ = nullptr;
+    tail_ = nullptr;
+    for (auto it = ls.begin(); it != ls.end(); ++it)
+    {
+      push_back(*it);
+    }
+  }
+  catch (const std::exception & e)
+  {
+    clear();
+    throw;
   }
 }
 
 template < class T >
 void arakelyan::BinList< T >::assign(Iterator< T > it_start, Iterator< T > it_end)
 {
-  clear();
-  head_ = nullptr;
-  tail_ = nullptr;
-  for (auto it = it_start; it != it_end; ++it)
+  try
   {
-    push_back(*it);
+    clear();
+    head_ = nullptr;
+    tail_ = nullptr;
+    for (auto it = it_start; it != it_end; ++it)
+    {
+      push_back(*it);
+    }
+  }
+  catch (const std::exception & e)
+  {
+    clear();
+    throw;
   }
 }
 

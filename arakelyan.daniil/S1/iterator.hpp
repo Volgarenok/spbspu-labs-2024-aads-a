@@ -61,7 +61,7 @@ namespace arakelyan
     T *operator->() const
     {
       assert(node != nullptr);
-      return std::addressof(*this);
+      return std::addressof(node->value);
     }
 
     bool operator!=(const Iterator< T > &val) const

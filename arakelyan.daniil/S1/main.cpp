@@ -1,35 +1,67 @@
 #include <iostream>
+#include <exception>
+#include <limits>
+#include <string>
 #include <stdexcept>
 
 #include "binList.hpp"
-#include "binList.cpp"
+#include "inputData.hpp"
 #include "iterator.hpp"
 #include "node.hpp"
 
 int main()
 {
   using namespace arakelyan;
-  using List = BinList< int >;
-  // using iterator_list = Iterator< int >;
-  using pair_t = std::pair< std::string, List >;
 
-  BinList< std::pair< std::string, BinList< int > > > list;
+  BinList< std::pair< std::string, BinList < size_t > > > listOfPairs;
+
+  try
+  {
+    inputData(std::cin, listOfPairs);
+  }
+  catch (const std::exception& e)
+  {
+    std::cerr << e.what() << "\n";
+  }
+
+  if (listOfPairs.isEmpty())
+  {
+    std::cout << "0\n";
+    return 0;
+  }
+
+  for (auto iter = listOfPairs.begin(); iter != listOfPairs.end(); ++iter)
+  {
+    std::cout << iter->first << " ";
+  }
+  std::cout << "\n";
+
+  size_t maxSize = std::numeric_limits< size_t >::max();
+  BinList< int > sumList;
+  bool overflow = false;
+
+  for (size_t i = 0; i < listOfPairs.getSize(); ++i)
+  {
+    size_t sum = 0;
+    for (auto iter = listOfPairs.begin(); iter != listOfPairs.end(); ++iter)
+    {
+      if (!iter->second.isEmpty())
+      {
+        if (sum < maxSize - iter->second.isEmpty())
+        {
+          std::cout << iter->second.getFirst() << " ";
+          iter->second.pop_front();
+        }
+        else
+        {
+          overflow = true;
+        }
+      }
+    }
+    std::cout << "\n";
+  }
 
 
-  List tempList;
-  tempList.assign({1,2,3,4});
-  std::string str = "first";
-
-  list.push_back({str, tempList});
-
-  auto it = list.begin();
-
-  pair_t pair = *it;
-
-  List tempOut = pair.second;
-
-  std::cout << pair.first << "\n";
-  tempOut.printList(std::cout);
   return 0;
 }
 

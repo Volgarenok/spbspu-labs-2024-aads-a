@@ -15,9 +15,10 @@ namespace arakelyan
     using const_iterator = const Iterator< T >;
 
     BinList();
-    BinList(int size);
-    BinList(size_t size, const T &val);
+    BinList(const T &val, size_t size);
+    BinList(Node< T > *head, Node< T > *tail);
     BinList(const BinList< T > &ls);
+    //конструктор range формата
 
     size_t getSize() const;
     bool isEmpty() const;
@@ -26,6 +27,9 @@ namespace arakelyan
     const_iterator cbegin() const;
     iterator end() const;
     const_iterator cend() const;
+
+    //spile
+    //reverse
 
     T getFirst() const;
     T getLast() const;
@@ -38,6 +42,10 @@ namespace arakelyan
 
     void pop_front();
     void pop_back();
+    //remove
+    //remove if
+
+    //swap
 
     //void erase(iterator it_pos); // удаление произвольного, принимает итератор
     //void erase(iterator it_start, iterator it_end); // удаление элементов из заданного диапозона
