@@ -32,6 +32,8 @@ namespace zhalilov
     size_t capacity();
     bool empty() const;
 
+    void assign(size_t, const T &);
+
     iterator insert(const_iterator, const T &);
     iterator insert(const_iterator, T &&);
     void push_back(const T &);
@@ -93,20 +95,15 @@ namespace zhalilov
   }
 
   template < typename T >
-  List< T >::List(size_t n)
-    :
+  List< T >::List(size_t n):
     List(n, T())
   {}
 
   template < typename T >
-  List< T >::List(size_t n, const T &value)
-    :
+  List< T >::List(size_t n, const T &value):
     List()
   {
-    for (size_t i = 0; i < n; i++)
-    {
-      push_back(value);
-    }
+    assign(n, value);
   }
 
   template < typename T >
@@ -164,6 +161,16 @@ namespace zhalilov
   bool List< T >::empty() const
   {
     return m_size == 0;
+  }
+
+  template < typename T >
+  void List< T >::assign(size_t n, const T &value)
+  {
+    clear();
+    for (size_t i = 0; i < n; i++)
+    {
+      push_back(value);
+    }
   }
 
   template < typename T >
