@@ -1,6 +1,8 @@
 #ifndef OUTPUTLIST_HPP
 #define OUTPUTLIST_HPP
 
+#include <ostream>
+
 #include "list.hpp"
 
 namespace zhalilov
