@@ -37,7 +37,11 @@ void marishin::printPairs(const LinkedList< std::pair< std::string, LinkedList< 
   }
 }
 
-void marishin::calculateSums(const LinkedList< std::pair< std::string, LinkedList< size_t >>>& pairs, bool& overflow, LinkedList< size_t >& lst)
+void marishin::calculateSums(
+  const LinkedList< std::pair< std::string, LinkedList< size_t >>>& pairs,
+  bool& overflow,
+  LinkedList< size_t >& lst
+)
 {
   constexpr size_t maxvalue = std::numeric_limits< size_t >::max();
   while (!pairs.empty())
