@@ -1,5 +1,6 @@
 #ifndef LIST_HPP
 #define LIST_HPP
+
 #include "node.hpp"
 
 namespace baranov
@@ -8,15 +9,18 @@ namespace baranov
   class List
   {
     public:
-      List():
-        head_(nullptr),
-        tail_(nullptr)
-      {}
-
+      List();
     private:
       Node< T > * head_;
       Node< T > * tail_;
   };
+
+
+  template < class T >
+  List< T >::List():
+    head_(nullptr),
+    tail_(nullptr)
+  {}
 }
 
 #endif
