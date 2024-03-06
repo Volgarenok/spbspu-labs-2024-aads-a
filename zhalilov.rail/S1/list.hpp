@@ -37,6 +37,10 @@ namespace zhalilov
     void push_back(const T &);
     void push_front(const T &);
 
+    template < typename Predicate >
+    void remove_if(Predicate);
+    void remove(const T &);
+
     iterator erase(const_iterator);
     void pop_back();
     void pop_front();
@@ -89,13 +93,15 @@ namespace zhalilov
   }
 
   template < typename T >
-  List<T>::List(size_t n)
-    :List(n, T())
+  List< T >::List(size_t n)
+    :
+    List(n, T())
   {}
 
   template < typename T >
-  List<T>::List(size_t n, const T &value)
-    :List()
+  List< T >::List(size_t n, const T &value)
+    :
+    List()
   {
     for (size_t i = 0; i < n; i++)
     {
@@ -192,7 +198,30 @@ namespace zhalilov
   }
 
   template < typename T >
-  typename List<T>::iterator List<T>::erase(const_iterator it)
+  template < typename Predicate >
+  void List< T >::remove_if(Predicate pred)
+  {
+    List< T >::const_iterator it = cbegin();
+    while (it != cend())
+    {
+      if (pred(*it))
+      {
+        ~(*it);
+        erase(it);
+        break;
+      }
+    }
+  }
+
+  template < typename T >
+  void List< T >::remove(const T &value)
+  {
+    auto predicate = [value](const T &listValue)-> bool { return listValue == value; };
+    remove_if(predicate);
+  }
+
+  template < typename T >
+  typename List< T >::iterator List< T >::erase(const_iterator it)
   {
     Node< T > *prev = it.m_node->prev;
     Node< T > *next = it.m_node->next;
