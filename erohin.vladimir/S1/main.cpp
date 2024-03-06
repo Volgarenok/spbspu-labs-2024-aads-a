@@ -1,56 +1,41 @@
 #include <iostream>
-#include <utility>
-#include <string>
-#include <cctype>
 #include <stdexcept>
 #include "list.hpp"
+#include "input_named_list.hpp"
 
 int main()
 {
   using namespace erohin;
-  using named_list = std::pair< std::string, List< int > >;
   List< named_list > lines;
-  while (!std::cin.eof())
+  try
   {
-    lines.push_front({ "", {} });
-    named_list & current_line = lines.front();
-    std::cin.clear();
-    std::cin >> current_line.first;
-    std::string string_number;
-    int elem = 0;
-    while (std::cin.peek() != '\n' && !std::cin.eof())
-    {
-      std::cin >> string_number;
-      try
-      {
-        elem = stoi(string_number);
-        current_line.second.push_front(elem);
-      }
-      catch (const std::invalid_argument &)
-      {
-        std::cerr << "Input is not a number\n";
-      }
-      catch (const std::out_of_range &)
-      {
-        std::cerr << "Number is too big\n";
-      }
-      catch (const std::bad_alloc &)
-      {
-        std::cout << "Cannot allocate memory\n";
-        return 1;
-      }
-    }
-    current_line.second.reverse();
+    input_named_list(std::cin, lines);
   }
-  lines.reverse();
-  for (auto line : lines)
+  catch (const std::bad_alloc &)
   {
-    std::cout << line.first;
-    for (auto elem : line.second)
-    {
-      std::cout << " " << elem;
-    }
-    std::cout << "\n";
+    std::cerr << "Bad allocation\n";
+    return 1;
   }
+  catch (const std::exception & e)
+  {
+    std::cerr << e.what() << "\n";
+  }
+  long long sum = 0;
+  if (!lines.empty())
+  {
+    std::cout << lines.front().name;
+  }
+  auto iter_current = lines.cbegin() + 1;
+  auto iter_end = lines.cend();
+  while (iter_current != iter_end)
+  {
+    std::cout << " " << iter_current->name;
+    for (auto elem: iter_current->number_list)
+    {
+      std::cout << elem;
+    }
+    ++iter_current;
+  }
+  std::cout << sum;
   return 0;
 }
