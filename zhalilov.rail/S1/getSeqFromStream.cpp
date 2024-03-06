@@ -14,7 +14,6 @@ void zhalilov::getSeqFromStream(List< pair > &sequences, std::istream &input)
     {
       break;
     }
-    std::cout << seqName;
     while (input >> currNum)
     {
       numbers.push_back(currNum);
