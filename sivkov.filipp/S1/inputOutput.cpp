@@ -9,7 +9,7 @@ void outputNames(List<std::pair<std::string, List<size_t>>>& list)
 {
   if (list.empty())
   {
-    throw std::invalid_argument("");
+    throw std::invalid_argument("Empty list");
   }
   for (auto it = list.cbegin(); it != list.cend(); ++it)
   {
@@ -61,14 +61,6 @@ void input(std::istream& input, List<std::pair<std::string, List<size_t>>>& list
   }
 }
 
-#include "inputOutput.hpp"
-#include <iostream>
-#include "node.hpp"
-#include "constIterator.hpp"
-#include "list.hpp"
-
-
-
 void outputNums(List<std::pair<std::string, List<size_t>>>& list, List<size_t>& numbers)
 {
   bool allData = true;
@@ -107,7 +99,7 @@ void outputNums(List<std::pair<std::string, List<size_t>>>& list, List<size_t>& 
         }
         else
         {
-          throw std::out_of_range("OverFlow");
+           throw std::out_of_range("out of range");
           continue;
         }
         std::cout << *iteratorForNums;

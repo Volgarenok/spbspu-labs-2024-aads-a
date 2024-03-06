@@ -22,7 +22,6 @@ int main()
   }
   catch (std::out_of_range& e)
   {
-    std::cerr << "OverFlow";
     return 1;
   }
 
