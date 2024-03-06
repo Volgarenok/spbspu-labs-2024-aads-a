@@ -76,6 +76,7 @@ std::ostream &zhalilov::outputSeqs(List< pair > sequences, std::ostream &output)
   {
     List< size_t > &currNumList = listOfNumbersList.front();
     sums.push_back(countSum(currNumList));
+    listOfNumbersList.pop_front();
   }
   output << sums;
   return output;
