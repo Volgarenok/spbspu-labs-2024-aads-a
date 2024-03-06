@@ -8,7 +8,13 @@ namespace isaychev
   {
     T data;
     node_t< T > * next;
+
+    node_t(const T & obj):
+      data(obj),
+      next(nullptr)
+    {}
   };
+
 }
 
 #endif

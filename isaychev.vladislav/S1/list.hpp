@@ -11,6 +11,7 @@ namespace isaychev
   {
     using iter = fwdIterator< T >;
     using cIter = cFwdIterator< T >;
+
    public:
     List();
     ~List();
@@ -86,27 +87,23 @@ namespace isaychev
   }
 
   template < typename T >
+  void getToNextNode(node_t< T > * ptr)
+  {
+    ptr = ptr->next;
+  }
+
+  template < typename T >
   void List< T >::push(const T & obj)
   {
-    if (empty())
-    {
-      head_ = new node_t< T >{obj, nullptr};
-    }
-    else
-    {
-      node_t< T > * temp = head_->next;
-      while (temp != nullptr)
-      {
-        temp = temp->next;
-      }
-      temp = new node_t< T >{obj, nullptr};
-    }
+    node_t< T > * temp = new node_t< T >(obj);
+    temp->next = head_;
+    head_ = temp;
   }
 
   template < typename T >
   void List< T >::pop()
   {
-    if (!empty())
+    if (head_)
     {
       node_t< T > * temp = head_->next;
       delete head_;
@@ -117,7 +114,7 @@ namespace isaychev
   template < typename T >
   void List< T >::clear()
   {
-    while (!empty())
+    while (head_)
     {
       pop();
     }
@@ -126,9 +123,6 @@ namespace isaychev
   template < typename T >
   void List< T >::swap(List< T > & rhs)
   {
-    /*node_t< T > * tempHead = head_;
-    head_ = rhs.head_;
-    rhs.head_ = tempHead;*/
     std::swap(head_, rhs.head);
   }
 }
