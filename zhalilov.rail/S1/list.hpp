@@ -37,6 +37,7 @@ namespace zhalilov
     void push_back(const T &);
     void push_front(const T &);
 
+    iterator erase(const_iterator);
     void pop_back();
     void pop_front();
     void clear();
@@ -191,23 +192,26 @@ namespace zhalilov
   }
 
   template < typename T >
+  typename List<T>::iterator List<T>::erase(const_iterator it)
+  {
+    Node< T > *prev = it.m_node->prev;
+    Node< T > *next = it.m_node->next;
+    delete it.m_node;
+    prev->next = next;
+    next->prev = prev;
+    return iterator(next);
+  }
+
+  template < typename T >
   void List< T >::pop_back()
   {
-    Node< T > *tail = m_head->prev->prev;
-    delete tail->next;
-    tail->next = m_head;
-    m_head->prev = tail;
-    --m_size;
+    erase(--cend());
   }
 
   template < typename T >
   void List< T >::pop_front()
   {
-    Node< T > *next = m_head->next->next;
-    delete next->prev;
-    next->prev = m_head;
-    m_head->next = next;
-    --m_size;
+    erase(cbegin());
   }
 
   template < typename T >
