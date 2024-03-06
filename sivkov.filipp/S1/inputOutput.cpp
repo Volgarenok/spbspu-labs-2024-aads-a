@@ -5,7 +5,7 @@
 #include "list.hpp"
 #include "exception"
 
-void outputNames(List<std::pair<std::string, List<size_t>>>& list)
+void sivkov::outputNames(List<std::pair<std::string, List<size_t>>>& list)
 {
   if (list.empty())
   {
@@ -24,7 +24,7 @@ void outputNames(List<std::pair<std::string, List<size_t>>>& list)
   std::cout << "\n";
 }
 
-void outputSums(List<size_t> &numbers)
+void sivkov::outputSums(List<size_t> &numbers)
 {
   for (auto it = numbers.cbegin(); it != numbers.cend(); ++it)
   {
@@ -39,7 +39,7 @@ void outputSums(List<size_t> &numbers)
   std::cout << "\n";
 }
 
-void input(std::istream& input, List<std::pair<std::string, List<size_t>>>& list)
+void sivkov::input(std::istream& input, List<std::pair<std::string, List<size_t>>>& list)
 {
   std::string line = "";
   input >> line;
@@ -61,7 +61,7 @@ void input(std::istream& input, List<std::pair<std::string, List<size_t>>>& list
   }
 }
 
-void outputNums(List<std::pair<std::string, List<size_t>>>& list, List<size_t>& numbers, bool &overflowFlag)
+void sivkov::outputNums(List<std::pair<std::string, List<size_t>>>& list, List<size_t>& numbers, bool &overflowFlag)
 {
   bool allData = true;
   size_t maxNums = 0;

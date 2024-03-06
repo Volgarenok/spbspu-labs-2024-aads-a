@@ -4,6 +4,7 @@
 
 int main()
 {
+  using namespace sivkov;
   List<std::pair<std::string, List<size_t>>> list;
   input(std::cin, list);
   list.reverse();

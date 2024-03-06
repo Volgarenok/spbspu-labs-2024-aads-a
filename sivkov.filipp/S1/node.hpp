@@ -1,15 +1,18 @@
 #ifndef NODE_HPP
 #define NODE_HPP
 
-template <typename T>
-struct Node
+namespace sivkov
 {
-  T data;
-  Node* next;
-  Node(const T& data_) :
-    data(data_),
-    next(nullptr)
-  {}
-};
+  template <typename T>
+  struct Node
+  {
+    T data;
+    Node* next;
+    Node(const T& data_) :
+      data(data_),
+      next(nullptr)
+    {}
+  };
+}
 
 #endif
