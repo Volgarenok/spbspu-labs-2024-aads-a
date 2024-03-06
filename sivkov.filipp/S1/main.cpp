@@ -25,6 +25,10 @@ int main()
     std::cerr << "overflow\n";
     return 1;
   }
-
+  catch (std::exception&e)
+  {
+    std::cerr << e.what();
+    return 1;
+  }
   return 0;
 }
