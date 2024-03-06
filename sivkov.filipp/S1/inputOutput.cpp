@@ -45,16 +45,18 @@ void input(std::istream& input, List<std::pair<std::string, List<size_t>>>& list
   input >> line;
   while (input)
   {
-    if (!input)
-    {
-      throw std::logic_error("Wrong input");
-    }
-
     list.push_front({ line, List<size_t>{} });
     while (input >> line)
     {
-      size_t number = std::stoull(line);
-      list.front().second.push_back(number);
+      try
+      {
+        size_t number = std::stoull(line);
+        list.front().second.push_back(number);
+      }
+      catch (const std::invalid_argument&)
+      {
+        break;
+      }
     }
   }
 }
