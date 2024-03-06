@@ -44,6 +44,7 @@ std::ostream &zhalilov::outputSeqs(List< pair > sequences, std::ostream &output)
   {
     output << *listOfListsIt;
     output << '\n';
+    listOfListsIt++;
   }
   return output;
 }
