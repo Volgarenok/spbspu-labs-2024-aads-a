@@ -5,8 +5,8 @@
 int main()
 {
   List<std::pair<std::string, List<size_t>>> list;
-  list.reverse();
   input(std::cin, list);
+  list.reverse();
   List<size_t> sums;
   try
   {
