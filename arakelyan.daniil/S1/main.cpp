@@ -38,6 +38,8 @@ int main()
 
   size_t maxSize = std::numeric_limits< size_t >::max();
   BinList< int > sumList;
+
+
   bool overflow = false;
 
   for (size_t i = 0; i < listOfPairs.getSize(); ++i)
@@ -47,20 +49,30 @@ int main()
     {
       if (!iter->second.isEmpty())
       {
-        if (sum < maxSize - iter->second.isEmpty())
+        std::cout << iter->second.getFirst() << " ";
+        if (sum < (maxSize - iter->second.isEmpty()))
         {
-          std::cout << iter->second.getFirst() << " ";
-          iter->second.pop_front();
+          sum += iter->second.getFirst();
         }
         else
         {
           overflow = true;
         }
+        iter->second.pop_front();
       }
     }
+    sumList.push_back(sum);
     std::cout << "\n";
   }
-
+  if (overflow)
+  {
+    std::cerr << "overflow error\n";
+    return 1;
+  }
+  for (auto it = sumList.begin(); it != sumList.end(); ++it)
+  {
+    std::cout << *it << " ";
+  }
 
   return 0;
 }
