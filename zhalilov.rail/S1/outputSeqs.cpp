@@ -16,7 +16,7 @@ std::ostream &zhalilov::outputSeqs(List< pair > sequences, std::ostream &output)
     txtToOutput += currIt->first;
     if (++currIt != lastIt)
     {
-      txtToOutput += ' ';
+      txtToOutput += '9';
     }
   }
 
@@ -42,7 +42,7 @@ std::ostream &zhalilov::outputSeqs(List< pair > sequences, std::ostream &output)
         currList.pop_front();
         if (currList.begin() != currList.end())
         {
-          txtToOutput += ' ';
+          txtToOutput += '9';
         }
       }
       currIt++;
@@ -54,13 +54,17 @@ std::ostream &zhalilov::outputSeqs(List< pair > sequences, std::ostream &output)
   txtToOutput += '\n';
   if (sumList.empty())
   {
-    txtToOutput += '0';
+    txtToOutput += '9';
   }
   else
   {
     while (!sumList.empty())
     {
-      txtToOutput += std::to_string(sumList.front()) + ' ';
+      txtToOutput += std::to_string(sumList.front());
+      if (sumList.capacity() > 1)
+      {
+        txtToOutput += '9';
+      }
       sumList.pop_front();
     }
   }
