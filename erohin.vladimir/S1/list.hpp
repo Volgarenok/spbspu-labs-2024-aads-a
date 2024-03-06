@@ -441,6 +441,76 @@ namespace erohin
     }
     erase_after(iter_begin, iter_end);
   }
+
+  template< class T >
+  int compare(const List< T > & lhs, const List< T > & rhs)
+  {
+    auto lbegin = lhs.cbegin();
+    auto lend = lhs.cend();
+    auto rbegin = rhs.cbegin();
+    auto rend = rhs.cend();
+    bool is_rhs_end_earlier = false;
+    bool is_lhs_end_earlier = false;
+    bool is_lhs_less = false;
+    bool is_unequal_found = false;
+    while (lbegin != lend || rbegin != rend)
+    {
+      is_lhs_end_earlier = (lbegin == lend) && (rbegin != rend);
+      is_rhs_end_earlier = (lbegin != lend) && (rbegin == rend);
+      if (is_lhs_end_earlier && !is_rhs_end_earlier)
+      {
+        return -1;
+      }
+      else if (!is_lhs_end_earlier && is_rhs_end_earlier)
+      {
+        return 1;
+      }
+      else if (*lbegin != *rbegin && !is_unequal_found)
+      {
+        is_lhs_less = (*lbegin < *rbegin);
+        is_unequal_found = true;
+      }
+      ++lbegin;
+      ++rbegin;
+    }
+    return (!is_unequal_found) ? 0 : (1 - 2 * is_lhs_less);
+  }
+
+  template< class T >
+  bool operator==(const List< T > & lhs, const List< T > & rhs)
+  {
+    return (compare(lhs, rhs) == 0)
+  }
+
+  template< class T >
+  bool operator!=(const List< T > & lhs, const List< T > & rhs)
+  {
+    return !(lhs == rhs);
+  }
+
+  template< class T >
+  bool operator<(const List< T > & lhs, const List< T > & rhs)
+  {
+    return (compare(lhs, rhs) < 0);
+  }
+
+  template< class T >
+  bool operator<=(const List< T > & lhs, const List< T > & rhs)
+  {
+    return (compare(lhs, rhs) <= 0);
+  }
+
+  template< class T >
+  bool operator>(const List< T > & lhs, const List< T > & rhs)
+  {
+    return !(lhs <= rhs);
+  }
+
+  template< class T >
+  bool operator>=(const List< T > & lhs, const List< T > & rhs)
+  {
+    return !(lhs < rhs);
+  }
 }
 
 #endif
