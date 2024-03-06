@@ -3,7 +3,6 @@
 
 #include <cstddef>
 #include <utility>
-#include <stdexcept>
 
 #include "iterator.hpp"
 #include "const_iterator.hpp"
@@ -20,6 +19,8 @@ namespace zhalilov
     List();
     List(const List< T > &);
     List(List< T > &&);
+    List(size_t);
+    List(size_t, const T &);
     ~List();
 
     List< T > &operator=(const List< T > &);
@@ -84,6 +85,21 @@ namespace zhalilov
   {
     other.m_size = 0;
     other.m_head = nullptr;
+  }
+
+  template < typename T >
+  List<T>::List(size_t n)
+    :List(n, T())
+  {}
+
+  template < typename T >
+  List<T>::List(size_t n, const T &value)
+    :List()
+  {
+    for (size_t i = 0; i < n; i++)
+    {
+      push_back(value);
+    }
   }
 
   template < typename T >
