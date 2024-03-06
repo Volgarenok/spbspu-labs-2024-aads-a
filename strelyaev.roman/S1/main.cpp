@@ -78,6 +78,13 @@ int main()
       }
     }
     std::cout << "\n";
+
+    if (overflow)
+    {
+      std::cerr << "Overflow\n";
+      return 1;
+    }
+
     if (sums_i != max_element)
     {
       sums_i++;
@@ -96,9 +103,4 @@ int main()
   }
   std::cout << "\n";
 
-  if (overflow)
-  {
-    std::cerr << "Overflow!\n";
-    return 1;
-  }
 }
