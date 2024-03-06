@@ -13,13 +13,13 @@ int main()
   {
     outputNames(list);
     outputNums(list, sums, overflowFlag);
-    sums.reverse();
-    outputSums(sums);
     if (overflowFlag)
     {
       std::cerr << "overflow \n";
       return 1;
     }
+    sums.reverse();
+    outputSums(sums);
   }
   catch (std::invalid_argument& e)
   {
