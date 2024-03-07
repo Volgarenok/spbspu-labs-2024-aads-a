@@ -30,7 +30,7 @@ int main()
   catch (const std::logic_error & e)
   {
     std::cout << 0 << "\n";
-    std::cerr << e.what();
+    std::cerr << e.what() << "\n";
   }
   catch (const std::exception & e)
   {
