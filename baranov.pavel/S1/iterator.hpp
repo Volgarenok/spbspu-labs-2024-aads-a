@@ -15,6 +15,9 @@ namespace baranov
       ~Iterator() = default;
       Iterator(const this_t &) = default;
       this_t & operator=(const this_t &) = default;
+
+      this_t & operator++();
+      this_t operator ++(int);
     private:
       Node< T > * node_;
   };
@@ -23,6 +26,21 @@ namespace baranov
   Iterator< T >::Iterator():
     node_(nullptr)
   {}
+
+  template< class T >
+  Iterator< T > & Iterator< T >::operator++()
+  {
+    Iterator temp = *this;
+    ++(*this);
+    return temp;
+  }
+
+  template< class T >
+  Iterator< T > Iterator< T >::operator++(int)
+  {
+    node_ = node_->next_;
+    return * this;
+  }
 }
 
 #endif
