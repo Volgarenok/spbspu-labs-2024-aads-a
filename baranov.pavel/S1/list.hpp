@@ -15,6 +15,7 @@ namespace baranov
       Iterator< T > end();
       bool empty() const;
       void push(T data);
+      void pop();
     private:
       Node< T > * head_;
       Node< T > * tail_;
@@ -61,6 +62,23 @@ namespace baranov
     }
   }
 
+  template< class T >
+  void List< T >::pop()
+  {
+    if (head_ == tail_)
+    {
+      delete head_;
+      head_ = nullptr;
+      tail_ = nullptr;
+    }
+    else
+    {
+      Node< T > newtail = tail_->prev_;
+      delete tail_;
+      tail_ = newtail;
+      tail_->next = nullptr;
+    }
+  }
 }
 
 #endif
