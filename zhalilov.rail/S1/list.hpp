@@ -45,6 +45,9 @@ namespace zhalilov
     iterator insert(const_iterator, std::initializer_list< T >);
 
     void splice(const_iterator, List< T > &);
+    void splice(const_iterator, List< T > &&);
+    void splice(const_iterator, List< T > &, const_iterator);
+    void splice(const_iterator, List< T > &&, const_iterator);
 
     void push_back(const T &);
     void push_back(T &&);
@@ -273,12 +276,32 @@ namespace zhalilov
   template < typename T >
   void List< T >::splice(const_iterator pos, List< T > &list)
   {
-    while(!list.empty())
+    while (!list.empty())
     {
       splicer(pos, list.cbegin());
       list.m_size--;
       m_size++;
     }
+  }
+
+  template < typename T >
+  void List< T >::splice(const_iterator pos, List< T > &&list)
+  {
+    splice(pos, list);
+  }
+
+  template < typename T >
+  void List< T >::splice(const_iterator pos, List< T > &list, const_iterator otherListPos)
+  {
+    splicer(pos, otherListPos);
+    list.m_size--;
+    m_size++;
+  }
+
+  template < typename T >
+  void List< T >::splice(const_iterator pos, List< T > &&list, const_iterator otherListPos)
+  {
+    splice(pos, list, otherListPos);
   }
 
   template < typename T >
