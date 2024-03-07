@@ -44,6 +44,8 @@ namespace zhalilov
     iterator insert(const_iterator, iterator, iterator);
     iterator insert(const_iterator, std::initializer_list< T >);
 
+    void splice(const_iterator, List< T > &);
+
     void push_back(const T &);
     void push_back(T &&);
     void push_front(const T &);
@@ -69,6 +71,7 @@ namespace zhalilov
     Node< T > *m_head;
 
     void inserter(const_iterator, Node< T > *);
+    const_iterator splicer(const_iterator, const_iterator);
   };
 
   template < typename T >
@@ -268,6 +271,16 @@ namespace zhalilov
   }
 
   template < typename T >
+  void List< T >::splice(const_iterator pos, List< T > &list)
+  {
+    while(!list.empty())
+    {
+      splicer(pos, list.cbegin());
+      list.m_size--;
+    }
+  }
+
+  template < typename T >
   void List< T >::push_back(const T &value)
   {
     insert(cend(), value);
@@ -388,6 +401,23 @@ namespace zhalilov
     prev->next = newNode;
     pos.m_node->prev = newNode;
     m_size++;
+  }
+
+  template < typename T >
+  typename List< T >::const_iterator List< T >::splicer(const_iterator pos, const_iterator otherListPos)
+  {
+    Node< T > *prev = pos.m_node->prev;
+    prev->next = otherListPos.m_node;
+    pos.m_node->prev = otherListPos.m_node;
+
+    Node< T > *otherPrev = otherListPos.m_node->prev;
+    Node< T > *otherNext = otherListPos.m_node->next;
+    otherPrev->next = otherNext;
+    otherNext->prev = otherPrev;
+
+    otherListPos.m_node->next = pos.m_node;
+    otherListPos.m_node->prev = prev;
+    return pos;
   }
 }
 
