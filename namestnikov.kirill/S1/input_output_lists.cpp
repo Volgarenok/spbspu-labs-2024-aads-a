@@ -34,7 +34,7 @@ void namestnikov::outputNumsAndSums(std::ostream & out, ForwardList<pair_t> & da
 {
   ForwardList<unsigned long long> sumsList;
   unsigned long long sum = 0;
-  bool flag = false;
+  bool gotOverflow = false;
   const unsigned long long MAX_SUM = std::numeric_limits<unsigned long long>::max();
   for (size_t i = 0; i < maxSize; ++i)
   {
@@ -48,7 +48,7 @@ void namestnikov::outputNumsAndSums(std::ostream & out, ForwardList<pair_t> & da
         sum != 0 ? out << " " << number : out << number;
         if (MAX_SUM - sum < number)
         {
-          flag = true;
+          gotOverflow = true;
         }
         sum += number;
       }
@@ -60,7 +60,7 @@ void namestnikov::outputNumsAndSums(std::ostream & out, ForwardList<pair_t> & da
     sumsList.push_front(sum);
     sum = 0;
   }
-  if (flag)
+  if (gotOverflow)
   {
     throw std::overflow_error("The number is too big");
   }
