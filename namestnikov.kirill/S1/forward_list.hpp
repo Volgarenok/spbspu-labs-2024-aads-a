@@ -19,6 +19,41 @@ namespace namestnikov
     ForwardList() :
       head_(nullptr)
     {}
+    ForwardList(size_t count, const T & value) :
+      head_(nullptr)
+    {
+      try
+      {
+        for (size_t i = 0; i < count; ++i)
+        {
+          push_front(value);
+        }
+      }
+      catch (const std::bad_alloc &)
+      {
+        clear();
+        throw std::invalid_argument("Too many args for a list");
+      }
+    }
+    ForwardList(const ForwardList<T> & other) :
+      head_(nullptr)
+    {
+      node_t * temp = other.head_;
+      while (temp)
+      {
+        push_front(temp->data_);
+        temp = temp->next_;
+      }
+    }
+    ForwardList<T> & operator=(const ForwardList<T> & other)
+    {
+      ForwardList<T> temp(other);
+      if (std::addressof(other) != this)
+      {
+        swap(temp);
+      }
+      return *this;
+    }
     void clear()
     {
       while (!(empty()))
