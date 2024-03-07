@@ -43,6 +43,7 @@ std::ostream & erohin::printElementsAndSums(std::ostream & output, const List< n
   List< ListConstIterator< int > > iter_list;
   auto current = list.cbegin();
   auto last = list.cend();
+  size_t max_count = 0;
   while (current != last)
   {
     iter_list.push_front(current->number_list.cbegin());
@@ -54,34 +55,22 @@ std::ostream & erohin::printElementsAndSums(std::ostream & output, const List< n
   while (!iter_list.empty())
   {
     sum.push_front(0ll);
-    /*
-    auto current = iter_list.begin();
-    auto last = iter_list.end();
-    output << **current;
-    sum.front() += **current;
-    ++(*current);
-    while (current != last)
-    {
-      if (*current != iter_end)
-      {
-        output << " " << **current;
-        sum.front() += **current;
-        ++(*current);
-      }
-      ++current;
-    }
-    */
+    size_t count = 0;
     for (auto & iter: iter_list)
     {
       if (iter != iter_end)
       {
-        std::cout << *iter << " ";
+        std::cout << (count ? " " : "") << *iter;
         sum.front() += *iter;
         ++iter;
+        ++count;
       }
     }
-    std::cout << "\n";
     iter_list.remove(iter_end);
+    if (!(max_count == count && iter_list.empty()))
+    {
+      std::cout << "\n";
+    }
   }
   sum.reverse();
   printSums(output, sum);

@@ -19,7 +19,6 @@ int main()
     }
     else
     {
-      std::cout << "Why&";
       printNames(std::cout, lines);
       std::cout << "\n";
       printElementsAndSums(std::cout, lines);

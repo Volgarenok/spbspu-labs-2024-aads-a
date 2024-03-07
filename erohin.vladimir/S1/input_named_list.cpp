@@ -9,10 +9,9 @@ void erohin::inputNamedList(std::istream & input, List< named_list > & result)
   while (!input.eof())
   {
     input.clear();
-    std::string list_name;
-    input >> list_name;
-    result.push_front({ list_name, {} });
+    result.push_front({ "", {} });
     named_list & current_line = result.front();
+    input >> current_line.name;
     std::string string_number;
     int elem = 0;
     while (input.peek() != '\n' && !input.eof())
@@ -31,10 +30,6 @@ void erohin::inputNamedList(std::istream & input, List< named_list > & result)
       {
         is_out_of_range = true;
       }
-    }
-    if (input.eof() && list_name == "")
-    {
-      result.pop_front();
     }
     current_line.number_list.reverse();
   }
