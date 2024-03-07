@@ -21,6 +21,12 @@ namespace zhalilov
       prev(nullptr),
       next(nullptr)
     {}
+
+    Node(T &&newValue):
+      value(std::move(newValue)),
+      prev(nullptr),
+      next(nullptr)
+    {}
   };
 }
 
