@@ -14,8 +14,10 @@ namespace baranov
       Iterator< T > begin();
       Iterator< T > end();
       bool empty() const;
-      void push(T data);
-      void pop();
+      void push_back(T data);
+      void pop_back();
+      void push_front(T data);
+      void pop_front();
     private:
       Node< T > * head_;
       Node< T > * tail_;
@@ -47,7 +49,7 @@ namespace baranov
   }
 
   template< class T >
-  void List< T >::push(T data)
+  void List< T >::push_back(T data)
   {
     Node< T > * topush = new Node< T >{ data };
     if (empty())
@@ -63,8 +65,9 @@ namespace baranov
   }
 
   template< class T >
-  void List< T >::pop()
+  void List< T >::pop_back()
   {
+    assert(!empty);
     if (head_ == tail_)
     {
       delete head_;
@@ -77,6 +80,40 @@ namespace baranov
       delete tail_;
       tail_ = newtail;
       tail_->next = nullptr;
+    }
+  }
+  template< class T >
+  void List< T >::push_front(T data)
+  {
+    Node< T > * topush = new Node< T >{ data };
+    if (empty())
+    {
+      head_ = topush;
+      tail_ = topush;
+    }
+    else
+    {
+      head_->prev_ = topush;
+      head_ = topush;
+    }
+  }
+
+  template< class T >
+  void List< T >::pop_front()
+  {
+    assert(!empty());
+    if (head_ == tail_)
+    {
+      delete head_;
+      head_ = nullptr;
+      tail_ = nullptr;
+    }
+    else
+    {
+      Node< T > newhead = head_->next_;
+      delete head_;
+      head_ = newhead;
+      head_->prev = nullptr;
     }
   }
 }
