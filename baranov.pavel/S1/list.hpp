@@ -11,6 +11,7 @@ namespace baranov
   {
     public:
       List();
+      T & operator[](size_t);
       Iterator< T > begin();
       Iterator< T > end();
       bool empty() const;
@@ -29,6 +30,13 @@ namespace baranov
     head_(nullptr),
     tail_(nullptr)
   {}
+
+  template< class T >
+  T & List< T >::operator[](size_t index)
+  {
+    Iterator< T > iterator = begin();
+    return *(iterator[index]);
+  }
 
   template< class T >
   Iterator< T > List< T >::begin()

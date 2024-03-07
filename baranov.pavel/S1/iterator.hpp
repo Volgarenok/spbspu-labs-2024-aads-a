@@ -13,6 +13,7 @@ namespace baranov
       using this_t = Iterator< T >;
 
       Iterator();
+      Iterator(Node< T > * node);
       ~Iterator() = default;
       Iterator(const this_t &) = default;
       this_t & operator=(const this_t &) = default;
@@ -22,6 +23,9 @@ namespace baranov
 
       this_t & operator--();
       this_t operator --(int);
+
+      this_t operator+(size_t);
+      this_t operator-(size_t);
 
       T & operator*();
       T * operator->();
@@ -35,6 +39,11 @@ namespace baranov
   template< class T >
   Iterator< T >::Iterator():
     node_(nullptr)
+  {}
+
+  template< class T >
+  Iterator< T >::Iterator(Node< T > * node):
+    node_(node)
   {}
 
   template< class T >
@@ -68,6 +77,28 @@ namespace baranov
   {
     assert(node_ != nullptr);
     node_ = node_->prev_;
+    return * this;
+  }
+
+  template< class T >
+  Iterator< T > Iterator< T >::operator+(size_t rhs)
+  {
+    assert(node_ != nullptr);
+    for (size_t i; i < rhs; ++i)
+    {
+      ++(*this);
+    }
+    return * this;
+  }
+
+  template< class T >
+  Iterator< T > Iterator< T >::operator-(size_t rhs)
+  {
+    assert(node_ != nullptr);
+    for (size_t i; i < rhs; ++i)
+    {
+      --(*this);
+    }
     return * this;
   }
 
