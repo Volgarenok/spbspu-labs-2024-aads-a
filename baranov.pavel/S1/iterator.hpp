@@ -1,6 +1,7 @@
 #ifndef ITERATOR_HPP
 #define ITERATOR_HPP
 
+#include <memory>
 #include "node.hpp"
 
 namespace baranov
@@ -21,6 +22,9 @@ namespace baranov
 
       this_t & operator--();
       this_t operator --(int);
+
+      T & operator*();
+      T * operator->();
 
       bool operator==(const this_t &) const;
       bool operator!=(const this_t &) const;
@@ -65,6 +69,18 @@ namespace baranov
     assert(node_ != nullptr);
     node_ = node_->prev_;
     return * this;
+  }
+
+  template< class T >
+  T & Iterator< T >::operator*() {
+    assert(node_ != nullptr);
+    return node_->data_;
+  }
+
+  template< class T >
+  T * Iterator< T >::operator->() {
+    assert(node_ != nullptr);
+    return std::addressof(node_->data_);
   }
 
   template< class T >
