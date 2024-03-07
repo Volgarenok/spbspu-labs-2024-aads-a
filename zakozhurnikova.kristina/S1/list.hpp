@@ -10,10 +10,10 @@
 
 namespace zakozhurnikova
 {
-  template <typename T>
+  template < typename T >
   using predicateFunction = bool (*)(T);
 
-  template <typename T>
+  template < typename T >
   class List
   {
   public:
@@ -133,31 +133,31 @@ namespace zakozhurnikova
       std::swap(size_, rhs.size_);
     }
 
-    Iterator<T> begin() const
+    Iterator< T > begin() const
     {
-      return Iterator<T>(head_);
+      return Iterator< T >(head_);
     }
 
-    Iterator<T> end() const
+    Iterator< T > end() const
     {
-      return Iterator<T>();
+      return Iterator< T >();
     }
 
-    ConstIterator<T> cbegin() const
+    ConstIterator< T > cbegin() const
     {
-      return ConstIterator<T>(head_);
+      return ConstIterator< T >(head_);
     }
 
-    ConstIterator<T> cend() const
+    ConstIterator< T > cend() const
     {
-      return ConstIterator<T>();
+      return ConstIterator< T >();
     }
 
     void remove(const T& value)
     {
-      Iterator<T> first = begin();
-      Iterator<T> last = end();
-      for (Iterator<T> it = first; it != last; ++it)
+      Iterator< T > first = begin();
+      Iterator< T > last = end();
+      for (Iterator< T > it = first; it != last; ++it)
       {
         if (*it != value)
         {
@@ -166,7 +166,7 @@ namespace zakozhurnikova
       }
     }
 
-    void remove_if(predicateFunction<T> p)
+    void remove_if(predicateFunction< T > p)
     {
       auto first = begin();
       auto last = end();
@@ -179,7 +179,7 @@ namespace zakozhurnikova
       }
     }
 
-    void assign(Iterator<T> first, Iterator<T> last, const T& value)
+    void assign(Iterator< T > first, Iterator< T > last, const T& value)
     {
       fill(first, last, value);
     }

@@ -3,7 +3,7 @@
 
 namespace zakozhurnikova
 {
-  template <typename T>
+  template < typename T >
   struct Node
   {
     T data;

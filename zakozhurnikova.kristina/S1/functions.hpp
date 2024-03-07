@@ -4,10 +4,10 @@
 
 namespace zakozhurnikova
 {
-  template <typename T>
-  void fill(Iterator<T> first, Iterator<T> last, const T& value)
+  template < typename T >
+  void fill(Iterator< T > first, Iterator< T > last, const T& value)
   {
-    for (Iterator<T> it = first; it != last; ++it)
+    for (Iterator< T > it = first; it != last; ++it)
     {
       *it = value;
     }

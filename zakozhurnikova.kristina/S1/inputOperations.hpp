@@ -7,8 +7,8 @@
 
 namespace zakozhurnikova
 {
-  using pair = std::pair<std::string, List<size_t>>;
-  void readList(List<pair>& list, std::istream& in)
+  using pair = std::pair< std::string, List< size_t > >;
+  void readList(List< pair >& list, std::istream& in)
   {
     while (!in.eof())
     {

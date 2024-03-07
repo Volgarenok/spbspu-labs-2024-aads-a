@@ -8,14 +8,14 @@
 int main()
 {
   using namespace zakozhurnikova;
-  using pair = std::pair<std::string, List<size_t>>;
+  using pair = std::pair< std::string, List< size_t > >;
   try {
     List<pair> list;
     readList(list, std::cin);
     printNames(list);
     printByIndex(list);
     bool overflow = false;
-    printSums<size_t>(list, overflow);
+    printSums< size_t >(list, overflow);
     std::cout << '\n';
   }
   catch (const std::range_error& e)

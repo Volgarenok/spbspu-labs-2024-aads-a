@@ -16,9 +16,9 @@ void zakozhurnikova::printNames(const List<pair>& l)
   }
 }
 
-void zakozhurnikova::printByIndex(const List<pair> &l)
+void zakozhurnikova::printByIndex(const List< pair > &l)
 {
-  size_t maxSize = getMaxSize<size_t>(l);
+  size_t maxSize = getMaxSize< size_t >(l);
   for (size_t i = 0; i < maxSize; ++i)
   {
     size_t printed = 0;

@@ -8,7 +8,7 @@ namespace zakozhurnikova
   template < typename T >
   struct Iterator
   {
-    using this_t = Iterator<T>;
+    using this_t = Iterator< T >;
     Iterator();
     Iterator(Node< T >* node);
     Iterator(const this_t&) = default;
@@ -33,10 +33,10 @@ namespace zakozhurnikova
     Node< T >* node_;
   };
 
-  template <typename T>
-  Iterator<T> Iterator<T>::operator+(size_t k)
+  template < typename T >
+  Iterator< T > Iterator< T >::operator+(size_t k)
   {
-    Iterator<T> result(*this);
+    Iterator< T > result(*this);
     for (size_t i = 0; i < k; ++i)
     {
       ++result;
@@ -44,10 +44,10 @@ namespace zakozhurnikova
     return result;
   }
 
-  template <typename T>
-  Iterator<T> Iterator<T>::operator-(size_t k)
+  template < typename T >
+  Iterator< T > Iterator< T >::operator-(size_t k)
   {
-    Iterator<T> result(*this);
+    Iterator< T > result(*this);
     for (size_t i = 0; i < k; ++i)
     {
       --result;
@@ -55,79 +55,79 @@ namespace zakozhurnikova
     return result;
   }
 
-  template <typename T>
-  Iterator<T>::Iterator() :
+  template < typename T >
+  Iterator< T >::Iterator() :
     node_(nullptr)
   {}
 
-  template <typename T>
-  Iterator<T>::Iterator(Node< T >* node) :
+  template < typename T >
+  Iterator< T >::Iterator(Node< T >* node) :
     node_(node)
   {}
 
-  template <typename T>
-  Iterator<T>& Iterator<T>::operator++()
+  template < typename T >
+  Iterator< T >& Iterator< T >::operator++()
   {
     node_ = node_->next;
     return *this;
   }
 
-  template <typename T>
-  Iterator<T> Iterator<T>::operator++(int rhs)
+  template < typename T >
+  Iterator< T > Iterator< T >::operator++(int rhs)
   {
-    Iterator<T> result(*this);
+    Iterator< T > result(*this);
     ++(*this);
     return result;
   }
 
-  template <typename T>
-  Iterator<T>& Iterator<T>::operator--()
+  template < typename T >
+  Iterator< T >& Iterator< T >::operator--()
   {
     node_ = node_->prev;
     return *this;
   }
 
 
-  template <typename T>
-  Iterator<T> Iterator<T>::operator--(int rhs)
+  template < typename T >
+  Iterator< T > Iterator< T >::operator--(int rhs)
   {
-    Iterator<T> result(*this);
+    Iterator< T > result(*this);
     --(*this);
     return result;
   }
 
-  template <typename T>
-  bool Iterator<T>::operator==(const Iterator<T>& rhs) const
+  template < typename T >
+  bool Iterator< T >::operator==(const Iterator< T >& rhs) const
   {
     return node_ == rhs.node_;
   }
 
-  template <typename T>
-  bool Iterator<T>::operator!=(const Iterator<T>& rhs) const
+  template < typename T >
+  bool Iterator< T >::operator!=(const Iterator< T >& rhs) const
   {
     return !(*this == rhs);
   }
 
-  template <typename T>
-  T& Iterator<T>::operator*()
+  template < typename T >
+  T& Iterator< T >::operator*()
   {
     return node_->data;
   }
 
-  template <typename T>
-  T& Iterator<T>::operator*() const
+  template < typename T >
+  T& Iterator< T >::operator*() const
   {
     return node_->data;
   }
 
-  template <typename T>
-  T* Iterator<T>::operator->()
+  template < typename T >
+  T* Iterator< T >::operator->()
   {
     return std::addressof(node_->data);
   }
 
-  template <typename T>
-  T* Iterator<T>::operator->() const
+  template < typename T >
+  T* Iterator< T >::operator->() const
   {
     return std::addressof(node_->data);
   }

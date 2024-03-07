@@ -6,10 +6,10 @@
 
 namespace zakozhurnikova
 {
-  using pair = std::pair<std::string, List<size_t>>;
+  using pair = std::pair< std::string, List< size_t > >;
 
-  template <typename T>
-  size_t getMaxSize(const List<pair>& l)
+  template < typename T >
+  size_t getMaxSize(const List< pair >& l)
   {
     T max = 0;
     for (pair p : l)
@@ -20,15 +20,15 @@ namespace zakozhurnikova
     return max;
   }
 
-  void printNames(const List<pair>& l);
-  void printByIndex(const List<pair>& l);
+  void printNames(const List< pair >& l);
+  void printByIndex(const List< pair >& l);
 
-  template <typename T>
-  void printSums(const List<pair>& l, bool& overflow)
+  template < typename T >
+  void printSums(const List< pair >& l, bool& overflow)
   {
-    constexpr size_t max = std::numeric_limits<size_t>::max();
+    constexpr size_t max = std::numeric_limits< size_t >::max();
     T maxSize = getMaxSize< T >(l);
-    List <size_t> listSum;
+    List < size_t > listSum;
     for (size_t i = 0; i < maxSize; ++i)
     {
       T sum = 0;
