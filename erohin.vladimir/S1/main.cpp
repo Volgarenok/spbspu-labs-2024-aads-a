@@ -13,17 +13,10 @@ int main()
   try
   {
     inputNamedList(std::cin, lines);
-    if (lines.empty())
-    {
-      std::cout << 0 << "\n";
-    }
-    else
-    {
-      printNames(std::cout, lines);
-      std::cout << "\n";
-      printElementsAndSums(std::cout, lines);
-      std::cout << "\n";
-    }
+    printNames(std::cout, lines);
+    std::cout << "\n";
+    printElementsAndSums(std::cout, lines);
+    std::cout << "\n";
   }
   catch (const std::bad_alloc &)
   {
@@ -33,6 +26,11 @@ int main()
   catch (const std::out_of_range &)
   {
     isBigNumberFound = true;
+  }
+  catch (const std::logic_error & e)
+  {
+    std::cout << 0 << "\n";
+    std::cerr << e.what();
   }
   catch (const std::exception & e)
   {

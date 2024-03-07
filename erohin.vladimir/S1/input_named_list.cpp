@@ -1,6 +1,7 @@
 #include "input_named_list.hpp"
 #include <iostream>
 #include <string>
+#include <stdexcept>
 
 void erohin::inputNamedList(std::istream & input, List< named_list > & result)
 {
@@ -32,6 +33,10 @@ void erohin::inputNamedList(std::istream & input, List< named_list > & result)
       }
     }
     current_line.number_list.reverse();
+  }
+  if (result.empty())
+  {
+    throw std::logic_error("List is empty");
   }
   result.reverse();
   if (is_invalid_argument)
