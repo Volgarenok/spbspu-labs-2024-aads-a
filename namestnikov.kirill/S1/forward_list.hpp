@@ -54,6 +54,19 @@ namespace namestnikov
       }
       return *this;
     }
+    ForwardList(ForwardList<T> && other)
+    {
+      swap(other);
+    }
+    ForwardList<T> & operator=(ForwardList<T> && other)
+    {
+      ForwardList<T> temp(std::move(other));
+      if (std::addressof(other) != this)
+      {
+        swap(temp);
+      }
+      return *this;
+    }
     void clear()
     {
       while (!(empty()))
