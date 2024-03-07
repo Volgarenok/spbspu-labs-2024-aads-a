@@ -55,9 +55,10 @@ int main()
     {
       for (auto k = j->second.begin(); k != getToPos(mainList, 1); ++k)
       {
-        
       }
     }
  // }*/
-  size_t upBorder = getElemNum(mainList.front().second);
+//  size_t upBorder = getElemNum(mainList.front().second);
+
+  mainList.reverse();
 }

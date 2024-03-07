@@ -25,10 +25,10 @@ namespace isaychev
     const T & front() const;
     bool empty();
     void push(const T & obj);
-    void pushBack(const T & obj);
     void pop();
     void clear();
     void swap(List< T > & rhs);
+    void reverse();
 
    private:
     node_t< T > * head_;
@@ -96,26 +96,6 @@ namespace isaychev
   }
 
   template < typename T >
-  void List< T >::pushBack(const T & obj)
-  {
-    if(!head_)
-    {
-      head_ = new node_t< T >(obj);
-    }
-    else
-    {
-      node_t< T > * temp1 = head_;
-      node_t< T > * temp2 = head_->next;
-      while (temp2)
-      {
-        temp1 = temp1->next;
-        temp2 = temp2->next;
-      }
-      temp1->next = new node_t< T >(obj);
-    }
-  }
-
-  template < typename T >
   void List< T >::pop()
   {
     if (head_)
@@ -139,6 +119,25 @@ namespace isaychev
   void List< T >::swap(List< T > & rhs)
   {
     std::swap(head_, rhs.head);
+  }
+
+  template < typename T >
+  void List< T >::reverse()
+  {
+    if (head_)
+    {
+      node_t< T > * currElem = head_;
+      node_t< T > * temp1 = nullptr;
+      node_t< T > * temp2 = head_;
+      while (currElem)
+      {
+        temp2 = currElem->next;
+        currElem->next = temp1;
+        temp1 = currElem;
+        currElem = temp2;
+      }
+      head_ = temp1;
+    }
   }
 }
 
