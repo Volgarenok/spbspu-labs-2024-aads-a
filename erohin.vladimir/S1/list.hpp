@@ -410,13 +410,13 @@ namespace erohin
   template< class T >
   void List< T >::reverse()
   {
-    ListConstIterator< T > iter_begin = cbegin();
-    ListConstIterator< T > iter_end = cend();
-    ListConstIterator< T > iter_current = iter_begin;
-    if (iter_current == iter_end)
+    if (empty())
     {
       return;
     }
+    ListConstIterator< T > iter_begin = cbegin();
+    ListConstIterator< T > iter_end = cend();
+    ListConstIterator< T > iter_current = iter_begin;
     ++iter_current;
     while(iter_current != iter_end)
     {
