@@ -9,7 +9,12 @@ namespace baranov
   class Iterator
   {
     public:
+      using this_t = Iterator< T >;
+
       Iterator();
+      ~Iterator() = default;
+      Iterator(const this_t &) = default;
+      this_t & operator=(const this_t &) = default;
     private:
       Node< T > * node_;
   };
