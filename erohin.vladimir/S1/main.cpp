@@ -12,7 +12,14 @@ int main()
   List< named_list > lines;
   try
   {
-    inputNamedList(std::cin, lines);
+    try
+    {
+      inputNamedList(std::cin, lines);
+    }
+    catch (const std::out_of_range &)
+    {
+      isBigNumberFound = true;
+    }
     printNames(std::cout, lines);
     std::cout << "\n";
     printElementsAndSums(std::cout, lines);
@@ -23,14 +30,10 @@ int main()
     std::cerr << "Bad allocation\n";
     return 2;
   }
-  catch (const std::out_of_range &)
-  {
-    isBigNumberFound = true;
-  }
-  catch (const std::logic_error & e)
+
+  catch (const std::logic_error &)
   {
     std::cout << 0 << "\n";
-    std::cerr << e.what() << "\n";
   }
   catch (const std::exception & e)
   {
