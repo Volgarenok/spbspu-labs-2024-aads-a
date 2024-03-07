@@ -36,8 +36,7 @@ namespace baranov
   template< class T >
   T & List< T >::operator[](size_t index)
   {
-  assert(!empty());
-  {
+    assert(!empty());
     Iterator< T > iterator = begin();
     return *(iterator[index]);
   }
