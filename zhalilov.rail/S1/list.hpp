@@ -277,6 +277,7 @@ namespace zhalilov
     {
       splicer(pos, list.cbegin());
       list.m_size--;
+      m_size++;
     }
   }
 
