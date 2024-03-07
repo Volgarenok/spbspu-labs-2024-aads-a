@@ -20,7 +20,7 @@ size_t getElemNum(const isaychev::List < size_t > & list)
   {
     num++;
   }
-  std::cout << num << "\n";
+//  std::cout << num << "\n";
   return num;
 }
 
@@ -42,14 +42,14 @@ int main()
   using myPair = std::pair< std::string, List< size_t > >;
   List< myPair > mainList;
   inputList(std::cin, mainList);
-/*  auto i = mainList.begin();
+  auto i = mainList.begin();
   std::cout << i->first;
   for (++i ; i != mainList.end(); ++i)
   {
     std::cout << " " << i->first;
   }
   std::cout << "\n";
-//  for (
+/*  for (
  // {
     for (auto j = mainList.begin(); j != mainList.end(); ++i)
     {
@@ -58,7 +58,13 @@ int main()
       }
     }
  // }*/
-//  size_t upBorder = getElemNum(mainList.front().second);
-
+//  std::cout << getMaxFwdElemNum(mainList) << "\n";
   mainList.reverse();
+  i = mainList.begin();
+  std::cout << i->first;
+  for (++i ; i != mainList.end(); ++i)
+  {
+    std::cout << " " << i->first;
+  }
+  std::cout << "\n";
 }
