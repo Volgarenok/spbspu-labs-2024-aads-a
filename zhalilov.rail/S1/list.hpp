@@ -137,15 +137,8 @@ namespace zhalilov
   template < typename T >
   List< T > &List< T >::operator=(const List< T > &other)
   {
-    m_size = other.m_size;
-    m_head = other.m_head;
-    iterator curr = other.begin();
-    iterator end = other.end();
-    while (curr != end)
-    {
-      push_back(*curr);
-      curr++;
-    }
+    List< T > tmp(other);
+    swap(tmp);
     return *this;
   }
 
