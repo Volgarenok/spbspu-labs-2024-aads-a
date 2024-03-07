@@ -18,6 +18,9 @@ namespace baranov
 
       this_t & operator++();
       this_t operator ++(int);
+
+      this_t & operator--();
+      this_t operator --(int);
     private:
       Node< T > * node_;
   };
@@ -30,6 +33,7 @@ namespace baranov
   template< class T >
   Iterator< T > & Iterator< T >::operator++()
   {
+    assert(node_ != nullptr);
     Iterator temp = *this;
     ++(*this);
     return temp;
@@ -38,7 +42,25 @@ namespace baranov
   template< class T >
   Iterator< T > Iterator< T >::operator++(int)
   {
+    assert(node_ != nullptr);
     node_ = node_->next_;
+    return * this;
+  }
+
+  template< class T >
+  Iterator< T > & Iterator< T >::operator--()
+  {
+    assert(node_ != nullptr);
+    Iterator temp = *this;
+    --(*this);
+    return temp;
+  }
+
+  template< class T >
+  Iterator< T > Iterator< T >::operator--(int)
+  {
+    assert(node_ != nullptr);
+    node_ = node_->prev_;
     return * this;
   }
 }
