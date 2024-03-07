@@ -38,18 +38,18 @@ namespace zhalilov
     void assign(iterator, iterator);
     void assign(std::initializer_list< T >);
 
-    iterator insert(const_iterator, const T &);
-    iterator insert(const_iterator, T &&);
-    iterator insert(const_iterator, size_t, const T &);
-    iterator insert(const_iterator, iterator otherPosFirst, iterator otherPosLast);
-    iterator insert(const_iterator, std::initializer_list< T >);
-
     void splice(const_iterator, List< T > &);
     void splice(const_iterator, List< T > &&);
     void splice(const_iterator, List< T > &, const_iterator otherListPos);
     void splice(const_iterator, List< T > &&, const_iterator otherListPos);
     void splice(const_iterator, List< T > &, const_iterator otherPosFirst, const_iterator otherPosLast);
     void splice(const_iterator, List< T > &&, const_iterator otherPosFirst, const_iterator otherPosLast);
+
+    iterator insert(const_iterator, const T &);
+    iterator insert(const_iterator, T &&);
+    iterator insert(const_iterator, size_t, const T &);
+    iterator insert(const_iterator, iterator otherPosFirst, iterator otherPosLast);
+    iterator insert(const_iterator, std::initializer_list< T >);
 
     void push_back(const T &);
     void push_back(T &&);
@@ -65,6 +65,8 @@ namespace zhalilov
     void pop_front();
     void clear();
     void swap(List< T > &other);
+
+    void reverse();
 
     iterator begin();
     iterator end();
@@ -321,7 +323,8 @@ namespace zhalilov
   }
 
   template < typename T >
-  void List< T >::splice(const_iterator pos, List< T > &&list, const_iterator otherPosFirst, const_iterator otherPosLast)
+  void List< T >::splice(const_iterator pos, List< T > &&list, const_iterator otherPosFirst,
+                         const_iterator otherPosLast)
   {
     splice(pos, list, otherPosFirst, otherPosLast);
   }
@@ -412,6 +415,18 @@ namespace zhalilov
     List< T > temp(std::move(*this));
     *this = std::move(other);
     other = std::move(temp);
+  }
+
+  template < typename T >
+  void List< T >::reverse()
+  {
+    List< T > newList;
+    while (!empty())
+    {
+      newList.push_front(front());
+      pop_front();
+    }
+    swap(newList);
   }
 
   template < typename T >
