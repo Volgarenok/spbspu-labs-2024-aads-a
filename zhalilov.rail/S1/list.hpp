@@ -39,12 +39,15 @@ namespace zhalilov
     void assign(std::initializer_list< T >);
 
     iterator insert(const_iterator, const T &);
+    iterator insert(const_iterator, T &&);
     iterator insert(const_iterator, size_t, const T &);
     iterator insert(const_iterator, iterator, iterator);
     iterator insert(const_iterator, std::initializer_list< T >);
 
     void push_back(const T &);
+    void push_back(T &&);
     void push_front(const T &);
+    void push_front(T &&);
 
     template < typename Predicate >
     void remove_if(Predicate);
@@ -64,6 +67,8 @@ namespace zhalilov
   private:
     size_t m_size;
     Node< T > *m_head;
+
+    void inserter(const_iterator, Node< T > *);
   };
 
   template < typename T >
@@ -214,12 +219,15 @@ namespace zhalilov
   typename List< T >::iterator List< T >::insert(const_iterator pos, const T &value)
   {
     auto newNode = new Node< T >(value);
-    Node< T > *prev = pos.m_node->prev;
-    newNode->next = pos.m_node;
-    newNode->prev = prev;
-    prev->next = newNode;
-    pos.m_node->prev = newNode;
-    m_size++;
+    inserter(pos, newNode);
+    return iterator(newNode);
+  }
+
+  template < typename T >
+  typename List< T >::iterator List< T >::insert(const_iterator pos, T &&value)
+  {
+    auto newNode = new Node< T >(std::move(value));
+    inserter(pos, newNode);
     return iterator(newNode);
   }
 
@@ -266,9 +274,21 @@ namespace zhalilov
   }
 
   template < typename T >
+  void List< T >::push_back(T &&value)
+  {
+    insert(cend(), std::move(value));
+  }
+
+  template < typename T >
   void List< T >::push_front(const T &value)
   {
     insert(cbegin(), value);
+  }
+
+  template < typename T >
+  void List< T >::push_front(T &&value)
+  {
+    insert(cbegin(), std::move(value));
   }
 
   template < typename T >
@@ -357,6 +377,17 @@ namespace zhalilov
   typename List< T >::const_iterator List< T >::cend() const
   {
     return const_iterator(m_head);
+  }
+
+  template < typename T >
+  void List< T >::inserter(const_iterator pos, Node< T > *newNode)
+  {
+    Node< T > *prev = pos.m_node->prev;
+    newNode->next = pos.m_node;
+    newNode->prev = prev;
+    prev->next = newNode;
+    pos.m_node->prev = newNode;
+    m_size++;
   }
 }
 
