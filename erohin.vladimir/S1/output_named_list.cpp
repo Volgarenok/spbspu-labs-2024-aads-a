@@ -1,24 +1,23 @@
 #include "output_named_list.hpp"
 #include <iostream>
-#include "named_number_list.hpp"
 
 std::ostream & erohin::printNames(std::ostream & output, const List< named_list > & list)
 {
   if (!list.empty())
   {
-    output << list.front().name;
+    output << list.front().first;
   }
   auto current = ++list.cbegin();
   auto last = list.cend();
   while (current != last)
   {
-    output << " " << current->name;
+    output << " " << current->first;
     ++current;
   }
   return output;
 }
 
-std::ostream & erohin::printSums(std::ostream & output, const List< long long > & sum)
+std::ostream & erohin::printSums(std::ostream & output, const List< size_t > & sum)
 {
   if (!sum.empty())
   {
@@ -40,36 +39,37 @@ std::ostream & erohin::printSums(std::ostream & output, const List< long long > 
 
 std::ostream & erohin::printElementsAndSums(std::ostream & output, const List< named_list > & list)
 {
-  List< ListConstIterator< int > > iter_list;
+  using iterator_list = List< ListConstIterator< size_t > >;
+  iterator_list iters;
   auto current = list.cbegin();
   auto last = list.cend();
   size_t max_count = 0;
   while (current != last)
   {
-    iter_list.push_front(current->number_list.cbegin());
+    iters.push_front(current->second.cbegin());
     ++current;
   }
-  iter_list.reverse();
-  List< long long > sum;
-  auto iter_end = list.front().number_list.cend();
-  while (!iter_list.empty())
+  iters.reverse();
+  List< size_t > sum;
+  auto iter_end = list.front().second.cend();
+  while (!iters.empty())
   {
-    sum.push_front(0ll);
+    sum.push_front(0);
     size_t count = 0;
-    for (auto & iter: iter_list)
+    for (auto & cur_iter: iters)
     {
-      if (iter != iter_end)
+      if (cur_iter != iter_end)
       {
-        std::cout << (count ? " " : "") << *iter;
-        sum.front() += *iter;
-        ++iter;
+        output << (count ? " " : "") << *cur_iter;
+        sum.front() += *cur_iter;
+        ++cur_iter;
         ++count;
       }
     }
-    iter_list.remove(iter_end);
-    if (!(max_count == count && iter_list.empty()))
+    iters.remove(iter_end);
+    if (!(max_count == count && iters.empty()))
     {
-      std::cout << "\n";
+      output << "\n";
     }
   }
   sum.reverse();

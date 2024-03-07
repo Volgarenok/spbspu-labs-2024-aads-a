@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <stdexcept>
+#include <utility>
 
 void erohin::inputNamedList(std::istream & input, List< named_list > & result)
 {
@@ -13,13 +14,13 @@ void erohin::inputNamedList(std::istream & input, List< named_list > & result)
     std::string name;
     input >> name;
     std::string string_number;
-    List< int > num_list;
-    int elem = 0;
+    List< size_t > num_list;
+    size_t elem = 0;
     while (input.peek() != '\n' && input >> string_number)
     {
       try
       {
-        elem = stoi(string_number);
+        elem = stoull(string_number);
         num_list.push_front(elem);
       }
       catch (const std::invalid_argument &)
@@ -34,7 +35,7 @@ void erohin::inputNamedList(std::istream & input, List< named_list > & result)
     if (name != "")
     {
       num_list.reverse();
-      result.push_front({ name, std::move(num_list) });
+      result.push_front(std::make_pair(name, std::move(num_list)));
     }
   }
   result.reverse();

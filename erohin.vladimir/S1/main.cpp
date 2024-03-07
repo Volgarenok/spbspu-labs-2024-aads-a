@@ -3,7 +3,6 @@
 #include "list.hpp"
 #include "input_named_list.hpp"
 #include "output_named_list.hpp"
-#include "named_number_list.hpp"
 
 int main()
 {
@@ -21,7 +20,7 @@ int main()
     }
     else
     {
-      std::cerr << "0\n";
+      std::cout << "0\n";
     }
   }
   catch (const std::out_of_range &)
