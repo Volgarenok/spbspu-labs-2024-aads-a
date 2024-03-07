@@ -41,13 +41,15 @@ namespace zhalilov
     iterator insert(const_iterator, const T &);
     iterator insert(const_iterator, T &&);
     iterator insert(const_iterator, size_t, const T &);
-    iterator insert(const_iterator, iterator, iterator);
+    iterator insert(const_iterator, iterator otherPosFirst, iterator otherPosLast);
     iterator insert(const_iterator, std::initializer_list< T >);
 
     void splice(const_iterator, List< T > &);
     void splice(const_iterator, List< T > &&);
-    void splice(const_iterator, List< T > &, const_iterator);
-    void splice(const_iterator, List< T > &&, const_iterator);
+    void splice(const_iterator, List< T > &, const_iterator otherListPos);
+    void splice(const_iterator, List< T > &&, const_iterator otherListPos);
+    void splice(const_iterator, List< T > &, const_iterator otherPosFirst, const_iterator otherPosLast);
+    void splice(const_iterator, List< T > &&, const_iterator otherPosFirst, const_iterator otherPosLast);
 
     void push_back(const T &);
     void push_back(T &&);
@@ -302,6 +304,26 @@ namespace zhalilov
   void List< T >::splice(const_iterator pos, List< T > &&list, const_iterator otherListPos)
   {
     splice(pos, list, otherListPos);
+  }
+
+  template < typename T >
+  void List< T >::splice(const_iterator pos, List< T > &list, const_iterator otherPosFirst, const_iterator otherPosLast)
+  {
+    while (otherPosFirst != otherPosLast)
+    {
+      const_iterator nextPos = otherPosFirst;
+      nextPos++;
+      splicer(pos, otherPosFirst);
+      otherPosFirst = nextPos;
+      list.m_size--;
+      m_size++;
+    }
+  }
+
+  template < typename T >
+  void List< T >::splice(const_iterator pos, List< T > &&list, const_iterator otherPosFirst, const_iterator otherPosLast)
+  {
+    splice(pos, list, otherPosFirst, otherPosLast);
   }
 
   template < typename T >
