@@ -19,8 +19,8 @@ namespace isaychev
     cFwdIterator(const this_t & rhs) = default;
     this_t & operator=(const this_t & rhs) = default;
 
-    this_t & operator++();
-    this_t & operator++(int);
+    this_t operator++();
+    this_t operator++(int);
     const T & operator*();
     const T * operator->();
     bool operator==(const this_t & rhs) const;
@@ -41,7 +41,7 @@ namespace isaychev
   {}
 
   template < typename T >
-  cFwdIterator< T > & cFwdIterator< T >::operator++()
+  cFwdIterator< T >  cFwdIterator< T >::operator++()
   {
     assert(currNode_ != nullptr);
     currNode_ = currNode_->next;
@@ -49,7 +49,7 @@ namespace isaychev
   }
 
   template < typename T >
-  cFwdIterator< T > & cFwdIterator< T >::operator++(int)
+  cFwdIterator< T >  cFwdIterator< T >::operator++(int)
   {
     this_t res(*this);
     ++(*this);
