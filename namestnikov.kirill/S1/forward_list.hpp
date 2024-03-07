@@ -54,9 +54,10 @@ namespace namestnikov
       }
       return *this;
     }
-    ForwardList(ForwardList<T> && other)
+    ForwardList(ForwardList<T> && other) :
+      head_(other.head_)
     {
-      swap(other);
+      other.head_ = nullptr;
     }
     ForwardList<T> & operator=(ForwardList<T> && other)
     {
