@@ -19,6 +19,8 @@ namespace baranov
       void pop_back();
       void push_front(T data);
       void pop_front();
+      void clear();
+      void swap(List &);
     private:
       Node< T > * head_;
       Node< T > * tail_;
@@ -33,6 +35,8 @@ namespace baranov
 
   template< class T >
   T & List< T >::operator[](size_t index)
+  {
+  assert(!empty());
   {
     Iterator< T > iterator = begin();
     return *(iterator[index]);
@@ -75,7 +79,7 @@ namespace baranov
   template< class T >
   void List< T >::pop_back()
   {
-    assert(!empty);
+    assert(!empty());
     if (head_ == tail_)
     {
       delete head_;
@@ -123,6 +127,22 @@ namespace baranov
       head_ = newhead;
       head_->prev = nullptr;
     }
+  }
+
+  template< class T >
+  void List< T >::clear()
+  {
+    while(head_)
+    {
+      pop_front();
+    }
+  }
+
+  template< class T >
+  void List< T >::swap(List & rhs)
+  {
+    std::swap(rhs.head_, head_);
+    std::swap(rhs.tail_, tail_);
   }
 }
 
