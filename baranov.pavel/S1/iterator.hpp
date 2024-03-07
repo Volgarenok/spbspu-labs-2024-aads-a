@@ -21,6 +21,9 @@ namespace baranov
 
       this_t & operator--();
       this_t operator --(int);
+
+      bool operator==(const this_t &) const;
+      bool operator!=(const this_t &) const;
     private:
       Node< T > * node_;
   };
@@ -62,6 +65,18 @@ namespace baranov
     assert(node_ != nullptr);
     node_ = node_->prev_;
     return * this;
+  }
+
+  template< class T >
+  bool Iterator< T >::operator==(const this_t & rhs) const
+  {
+    return node_ == rhs.node_;
+  }
+
+  template< class T >
+  bool Iterator< T >::operator!=(const this_t & rhs) const
+  {
+    return !(rhs == *this);
   }
 }
 
