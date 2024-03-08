@@ -49,7 +49,8 @@ namespace arakelyan
     void swap(BinList &ls);
 
     iterator erase(iterator it_pos); // удаление произвольного, принимает итератор - added
-    iterator erase(iterator it_start, iterator it_end); // удаление элементов из заданного диапозона - added
+    iterator erase(iterator it_start, iterator it_end); // удаление элементов из заданного
+    // диапозона - added
 
     void assign(const T &val, size_t size);
     void assign(iterator it_start, iterator it_end);
