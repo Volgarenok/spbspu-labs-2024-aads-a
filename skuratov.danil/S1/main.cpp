@@ -3,7 +3,6 @@
 #include <algorithm>
 #include <iterator>
 
-
 int main()
 {
   using inputIterT = std::istream_iterator< int >;

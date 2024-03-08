@@ -18,9 +18,9 @@ namespace skuratov
       head = tail = NULL;
     }
 
-    Node* push_front(size_t data)
+    Node< T >* push_front(size_t data)
     {
-      Node* ptr = new Node(data);
+      Node< T >* ptr = new Node(data);
       ptr->next = head;
       if (head != NULL)
       {
@@ -35,9 +35,9 @@ namespace skuratov
       return ptr;
     }
 
-    Node* push_back(size_t data)
+    Node< T >* push_back(size_t data)
     {
-      Node* ptr = new Node(data);
+      Node< T >* ptr = new Node(data);
       ptr->prev = tail;
       if (tail != NULL)
       {
@@ -58,7 +58,7 @@ namespace skuratov
       {
         return;
       }
-      Node* ptr = head->next;
+      Node< T >* ptr = head->next;
       if (ptr != NULL)
       {
         ptr->prev = NULL;
@@ -77,7 +77,7 @@ namespace skuratov
       {
         return;
       }
-      Node* ptr = tail->prev;
+      Node< T >* ptr = tail->prev;
       if (ptr != NULL)
       {
         ptr->next = NULL;
@@ -90,10 +90,10 @@ namespace skuratov
       tail = ptr;
     }
 
-    Node* getAt(int index)
+    Node< T >* getAt(size_t index)
     {
       Node* ptr = head;
-      for (int j = 0; j != index; j++)
+      for (size_t j = 0; j != index; j++)
       {
         if (ptr == NULL)
         {
@@ -103,6 +103,17 @@ namespace skuratov
       }
       return ptr;
     }
+
+    Node< T >* operator [] (int index)
+    {
+      return getAt(index);
+    }
+
+    Node< T >* insert(int index, double data)
+    {
+      Node* right = getAt(index)
+    }
+
   };
 }
 
