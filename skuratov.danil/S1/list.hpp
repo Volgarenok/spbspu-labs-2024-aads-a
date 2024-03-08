@@ -18,6 +18,14 @@ namespace skuratov
       head = tail = NULL;
     }
 
+    ~List()
+    {
+      while (head != NULL)
+      {
+        pop_front();
+      }
+    }
+
     Node< T >* push_front(size_t data)
     {
       Node< T >* ptr = new Node(data);
@@ -127,11 +135,11 @@ namespace skuratov
       ptr->next = right;
       left->prev = ptr;
       right->next = ptr;
-      
+
       return ptr;
     }
 
-    void earse(int index)
+    void erase(int index)
     {
       Node< T >* ptr = getAt(index);
       if (ptr == NULL)
