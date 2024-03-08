@@ -1,7 +1,7 @@
 #ifndef CITERATOR_HPP
 #define CITERATOR_HPP
 
-#include <cassert>
+#include <stdexcept>
 #include <utility>
 #include "node.hpp"
 
@@ -43,7 +43,10 @@ namespace isaychev
   template < typename T >
   cFwdIterator< T >  cFwdIterator< T >::operator++()
   {
-    assert(currNode_ != nullptr);
+    if (currNode_ == nullptr)
+    {
+      throw std::out_of_range("out of range");
+    }
     currNode_ = currNode_->next;
     return *this;
   }

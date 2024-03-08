@@ -3,17 +3,25 @@
 #include "inputList.hpp"
 
 template < typename T >
-isaychev::fwdIterator< T > getToPos(const isaychev::List< T > & list, size_t pos)
+isaychev::fwdIterator< T > getToPos(isaychev::List< T > & list, size_t pos)
 {
   isaychev::fwdIterator< T > it = list.begin();
   for (size_t i = 0; i < pos; ++i)
   {
-    ++it;
+    try
+    {
+      ++it;
+    }
+    catch (const std::out_of_range &)
+    {
+      break;
+    }
   }
   return it;
 }
 
-size_t getElemNum(const isaychev::List < size_t > & list)
+template < typename T >
+size_t getElemNum(const isaychev::List < T > & list)
 {
   size_t num = 0;
   for (auto i = list.begin(); i != list.end(); i++)
@@ -42,6 +50,9 @@ int main()
   using myPair = std::pair< std::string, List< size_t > >;
   List< myPair > mainList;
   inputList(std::cin, mainList);
+
+  mainList.reverse();
+
   auto i = mainList.begin();
   std::cout << i->first;
   for (++i ; i != mainList.end(); ++i)
@@ -49,22 +60,18 @@ int main()
     std::cout << " " << i->first;
   }
   std::cout << "\n";
-/*  for (
+
+  size_t upperBorder = getMaxFwdElemNum(mainList);
+//  for (size_t n = 0; n < upperBorder; ++n)
  // {
-    for (auto j = mainList.begin(); j != mainList.end(); ++i)
-    {
-      for (auto k = j->second.begin(); k != getToPos(mainList, 1); ++k)
-      {
-      }
-    }
- // }*/
-//  std::cout << getMaxFwdElemNum(mainList) << "\n";
-  mainList.reverse();
-  i = mainList.begin();
-  std::cout << i->first;
-  for (++i ; i != mainList.end(); ++i)
-  {
-    std::cout << " " << i->first;
-  }
-  std::cout << "\n";
+//      for (auto j = mainList.begin(); j != mainList.end(); ++i)
+//      {
+        for (auto k = mainList.front().second.begin(); k != getToPos(mainList.front().second, 1); ++k)
+        {
+          std::cout << *k << "\n";
+        }
+//     }
+ // }
+//  std::cout <<
+//auto k = 
 }

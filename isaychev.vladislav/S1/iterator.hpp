@@ -1,7 +1,7 @@
 #ifndef ITERATOR_HPP
 #define ITERATOR_HPP
 
-#include <cassert>
+#include <stdexcept>
 #include <utility>
 #include "node.hpp"
 
@@ -40,7 +40,10 @@ namespace isaychev
   template < typename T >
   fwdIterator< T > fwdIterator< T >::operator++()
   {
-    assert(currNode_ != nullptr);
+    if (currNode_ == nullptr)
+    {
+      throw std::out_of_range("out of range");
+    }
     currNode_ = currNode_->next;
     return *this;
   }

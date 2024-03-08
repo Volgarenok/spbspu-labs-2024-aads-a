@@ -14,7 +14,6 @@ namespace isaychev
       next(nullptr)
     {}
   };
-
 }
 
 #endif
