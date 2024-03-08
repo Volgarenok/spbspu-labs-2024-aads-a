@@ -28,7 +28,7 @@ namespace skuratov
 
     Node< T >* push_front(size_t data)
     {
-      Node< T >* ptr = new Node(data);
+      Node< T >* ptr = new Node< T >(data);
       ptr->next = head;
       if (head != NULL)
       {
@@ -45,7 +45,7 @@ namespace skuratov
 
     Node< T >* push_back(size_t data)
     {
-      Node< T >* ptr = new Node(data);
+      Node< T >* ptr = new Node< T >(data);
       ptr->prev = tail;
       if (tail != NULL)
       {
@@ -124,13 +124,13 @@ namespace skuratov
       {
         return push_back(data);
       }
-      Node< T >* left = right->prev
+      Node< T >* left = right->prev;
       if (left == NULL)
       {
         return push_front(data);
       }
 
-      Node< T >* ptr = new Node(data);
+      Node< T >* ptr = new Node< T >(data);
       ptr->prev = left;
       ptr->next = right;
       left->prev = ptr;
