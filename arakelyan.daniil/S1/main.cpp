@@ -30,15 +30,13 @@ int main()
     return 0;
   }
 
-  size_t size = 0;
   for (auto iter = listOfPairs.begin(); iter != listOfPairs.end(); ++iter)
   {
-    std::cout << iter->first;
-    ++size;
-    if (size != listOfPairs.getSize())
+    if (iter != listOfPairs.begin())
     {
       std::cout << " ";
     }
+    std::cout << iter->first;
   }
 
   if ((listOfPairs.getSize() != 1) && !(listOfPairs.begin()->second.isEmpty()))
@@ -52,12 +50,21 @@ int main()
 
   for (size_t i = 0; i < listOfPairs.getSize(); ++i)
   {
+    size_t outed = 0;
     size_t sum = 0;
     for (auto iter = listOfPairs.begin(); iter != listOfPairs.end(); ++iter)
     {
       if (!iter->second.isEmpty())
       {
+        if (outed == 0)
+        {
+          std::cout << "";
+        }
+        else {
+          std::cout << " ";
+        }
         std::cout << iter->second.getFirst();
+        ++outed;
         if (sum < (maxSize - iter->second.isEmpty()))
         {
           sum += iter->second.getFirst();
@@ -65,10 +72,6 @@ int main()
         else
         {
           overflow = true;
-        }
-        if (i != listOfPairs.getSize())
-        {
-          std::cout << " ";
         }
         iter->second.pop_front();
       }
@@ -81,15 +84,14 @@ int main()
     std::cerr << "overflow error\n";
     return 1;
   }
-  size = 0;
+
   for (auto it = sumList.begin(); it != sumList.end(); ++it)
   {
-    std::cout << *it;
-    ++size;
-    if (size != listOfPairs.getSize())
+    if (it != sumList.begin())
     {
       std::cout << " ";
     }
+    std::cout << *it;
   }
   std::cout << "\n";
 
