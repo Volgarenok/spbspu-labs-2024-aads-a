@@ -162,6 +162,33 @@ namespace namestnikov
       head_ = head_->next_;
       delete oldHead;
     }
+    void remove(const T & value)
+    {
+      node_t * prev = nullptr;
+      node_t * temp = head_;
+      while (temp)
+      {
+        if (temp->data_ == value)
+        {
+          node_t * todel = temp;
+          if (prev)
+          {
+            prev->next_ = temp->next_;
+          }
+          else
+          {
+            head_ = temp->next_;
+          }
+          temp = temp->next_;
+          delete todel;
+        }
+        else
+        {
+          prev = temp;
+          temp = temp->next_;
+        }
+      }
+    }
     iterator_t begin() const
     {
       return iterator_t(head_);
