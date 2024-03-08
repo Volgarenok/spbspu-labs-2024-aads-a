@@ -2,9 +2,12 @@
 
 #include <exception>
 #include <iostream>
+#include <queue>
 #include <stdexcept>
 #include "iterator.hpp"
 #include "node.hpp"
+
+using iterator = arakelyan::Iterator< class T >;
 
 template < class T >
 arakelyan::BinList< T >::BinList():
@@ -38,6 +41,24 @@ arakelyan::BinList< T >::BinList(const BinList<T> &ls):
   {
     push_back(node->value);
     node = node->nextNode;
+  }
+}
+
+template < class T >
+arakelyan::BinList< T >::BinList(std::initializer_list< T > ls)
+{
+  for (auto it = ls.begin(); it != ls.end(); ++it)
+  {
+    push_back(*it);
+  }
+}
+
+template < class T >
+arakelyan::BinList< T >::BinList(iterator it_start, iterator it_end)
+{
+  for (; it_start != it_end; ++it_start)
+  {
+    push_back(*it_start);
   }
 }
 
@@ -92,16 +113,7 @@ T arakelyan::BinList< T >::getLast() const
 template < class T >
 void arakelyan::BinList< T >::push_back(const T &el)
 {
-  Node< T > *node = nullptr;
-  try
-  {
-    node = new Node< T >(el);
-  }
-  catch (const std::exception & e)
-  {
-    clear();
-    throw;
-  }
+  Node< T > *node = new Node< T >(el);
   if ((head_ == nullptr) && (tail_ == nullptr))
   {
     head_ = node;
@@ -119,16 +131,8 @@ void arakelyan::BinList< T >::push_back(const T &el)
 template < class T >
 void arakelyan::BinList< T >::push_front(const T &el)
 {
-  Node< T > *node = nullptr;
-  try
-  {
-    node = new Node< T >(el);
-  }
-  catch (const std::exception & e)
-  {
-    clear();
-    throw;
-  }
+  Node< T > *node = new Node< T >(el);
+
   node->nextNode = head_;
   if (head_ == nullptr && tail_ == nullptr)
   {
@@ -137,6 +141,30 @@ void arakelyan::BinList< T >::push_front(const T &el)
   }
   head_ = node;
   ++size_;
+}
+
+template < class T >
+arakelyan::Iterator< T > arakelyan::BinList< T >::insert_after(iterator it_pos, const T &val)
+{
+  if (it_pos == begin())
+  {
+    push_front(val);
+    return begin();
+  }
+  else if (it_pos == end())
+  {
+    push_back(val);
+    return begin();
+  }
+  else
+  {
+    Node< T > *node = new Node< T >(val);
+    Node< T > *nextNode = it_pos->node->nextNode;
+    it_pos->node->nextNode = node;
+    node->nextNode = nextNode;
+    node->prevNode = it_pos->node;
+    return Iterator< T >(node);
+  }
 }
 
 template < class T >
@@ -189,6 +217,70 @@ void arakelyan::BinList< T >::pop_back()
   delete tail_;
   tail_ = node;
   --size_;
+}
+
+template < class T >
+void arakelyan::BinList< T >::swap(BinList<T> &ls)
+{
+  std::swap(head_, ls.head_);
+  std::swap(tail_, ls.tail_);
+  std::swap(size_, ls.size_);
+}
+
+template < class T >
+arakelyan::Iterator< T > arakelyan::BinList< T >::erase(iterator it_pos)
+{
+  Node< T > *nodeToDel = it_pos->node;
+  if (nodeToDel == begin())
+  {
+    pop_front();
+    return begin();
+  }
+  else if (nodeToDel == end())
+  {
+    pop_back();
+    return end();
+  }
+  else
+  {
+    Node< T > *prevNode = nodeToDel->prevNode;
+    Node< T > *nextNode = nodeToDel->nextNode;
+    prevNode->nextNode = nextNode;
+    nextNode->prevNode = prevNode;
+    delete nodeToDel;
+    return Iterator< T >(nextNode);
+  }
+}
+
+template < class T >
+arakelyan::Iterator< T > arakelyan::BinList< T >::erase(iterator it_start, iterator it_end)
+{
+  if (it_start == begin() && it_end == end())
+  {
+    clear();
+    return end();
+  }
+  else if (it_start == begin() && it_end != end())
+  {
+    while (it_start != it_end && it_start != end())
+    {
+      ++it_start;
+      pop_front();
+    }
+    return it_start;
+  }
+  else if (it_start != begin() && it_end == end())
+  {
+    while (it_start != it_end)
+    {
+      it_start = erase(it_start);
+    }
+    return it_start;
+  }
+  while (it_start != it_end && it_start != end())
+  {
+    it_start = erase(it_start);
+  }
 }
 
 template < class T >

@@ -18,7 +18,8 @@ namespace arakelyan
     BinList(const T &val, size_t size);
     BinList(Node< T > *head, Node< T > *tail);
     BinList(const BinList< T > &ls);
-    //конструктор range формата
+    BinList(std::initializer_list< T > ls);
+    BinList(iterator it_start, iterator it_end);
 
     size_t getSize() const;
     bool isEmpty() const;
@@ -36,23 +37,23 @@ namespace arakelyan
 
     void push_back(const T &el);
     void push_front(const T &el);
-    //void insert(iterator it_pos, const T &val); // втсавтка эл в произвольную поз.
+    iterator insert_after(iterator it_pos, const T &val); // втсавтка эл в произвольную поз. - added
 
     void clear();
 
     void pop_front();
     void pop_back();
-    //remove
+    // void remove()
     //remove if
 
-    //swap
+    void swap(BinList &ls);
 
-    //void erase(iterator it_pos); // удаление произвольного, принимает итератор
-    //void erase(iterator it_start, iterator it_end); // удаление элементов из заданного диапозона
+    iterator erase(iterator it_pos); // удаление произвольного, принимает итератор - added
+    iterator erase(iterator it_start, iterator it_end); // удаление элементов из заданного диапозона - added
 
     void assign(const T &val, size_t size);
     void assign(iterator it_start, iterator it_end);
-    void assign(std::initializer_list<T> ls);
+    void assign(std::initializer_list< T > ls);
 
     // operator!=
     // operator ==
