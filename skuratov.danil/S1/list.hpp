@@ -10,8 +10,8 @@ namespace skuratov
   {
   public:
     size_t size_;
-	Node< T >* head;
-	Node< T >* tail;
+    Node< T >* head;
+    Node< T >* tail;
   public:
     List()
     {
@@ -52,7 +52,57 @@ namespace skuratov
       return ptr;
     }
 
+    void pop_front()
+    {
+      if (head == NULL)
+      {
+        return;
+      }
+      Node* ptr = head->next;
+      if (ptr != NULL)
+      {
+        ptr->prev = NULL;
+      }
+      else
+      {
+        tail = NULL;
+      }
+      delete head;
+      head = ptr;
+    }
 
+    void pop_back()
+    {
+      if (tail == NULL)
+      {
+        return;
+      }
+      Node* ptr = tail->prev;
+      if (ptr != NULL)
+      {
+        ptr->next = NULL;
+      }
+      else
+      {
+        head = NULL;
+      }
+      delete tail;
+      tail = ptr;
+    }
+
+    Node* getAt(int index)
+    {
+      Node* ptr = head;
+      for (int j = 0; j != index; j++)
+      {
+        if (ptr == NULL)
+        {
+          return ptr;
+        }
+        ptr = ptr->next;
+      }
+      return ptr;
+    }
   };
 }
 

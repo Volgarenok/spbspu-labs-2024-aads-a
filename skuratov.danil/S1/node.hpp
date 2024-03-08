@@ -8,9 +8,7 @@ namespace skuratov
   {
   public:
     ~Node() = default;
-    //*
     size_t data{};
-    //*
     Node<T>* prev;
     Node<T>* next;
     T value;
