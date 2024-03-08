@@ -217,6 +217,24 @@ namespace namestnikov
         }
       }
     }
+    void assign(size_t count, const T & value)
+    {
+      node_t * other = nullptr;
+      try
+      {
+        for (size_t i = 0; i < count; ++i)
+        {
+          node_t * temp = new Node<T>(value);
+          temp->next_ = other;
+          other = temp;
+        }
+      }
+      catch (const std::bad_alloc &)
+      {
+        clear();
+      }
+      head_ = other;
+    }
     iterator_t begin() const
     {
       return iterator_t(head_);
