@@ -2,6 +2,7 @@
 #define ITERATOR_HPP
 
 #include <memory>
+#include <cassert>
 #include "node.hpp"
 
 namespace baranov
@@ -50,34 +51,34 @@ namespace baranov
   Iterator< T > & Iterator< T >::operator++()
   {
     assert(node_ != nullptr);
-    Iterator temp = *this;
-    ++(*this);
-    return temp;
+    node_ = node_->next_;
+    return * this;
   }
 
   template< class T >
   Iterator< T > Iterator< T >::operator++(int)
   {
     assert(node_ != nullptr);
-    node_ = node_->next_;
-    return * this;
+    this_t result = *this;
+    ++(*this);
+    return result;
   }
 
   template< class T >
   Iterator< T > & Iterator< T >::operator--()
   {
     assert(node_ != nullptr);
-    Iterator temp = *this;
-    --(*this);
-    return temp;
+    node_->prev_;
+    return *this;
   }
 
   template< class T >
   Iterator< T > Iterator< T >::operator--(int)
   {
     assert(node_ != nullptr);
-    node_ = node_->prev_;
-    return * this;
+    this_t result = *this;
+    --(*this);
+    return result;
   }
 
   template< class T >

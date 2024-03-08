@@ -4,10 +4,11 @@ void baranov::inputList(std::istream & input, ds_t & list)
 {
   size_t number = 0;
   std::string name = "";
-  while (input)
+  while (!input.eof())
   {
+    input.clear();
     input >> name;
-    List < size_t > in_lst;
+    List< size_t > in_lst;
     while (input >> number)
     {
       in_lst.push_back(number);
