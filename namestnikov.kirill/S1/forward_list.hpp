@@ -41,11 +41,39 @@ namespace namestnikov
       head_(nullptr)
     {
       node_t * temp = other.head_;
-      while (temp)
+      try
       {
-        push_front(temp->data_);
-        temp = temp->next_;
+        while (temp)
+        {
+          push_front(temp->data_);
+          temp = temp->next_;
+        }
       }
+      catch (const std::bad_alloc &)
+      {
+        clear();
+        throw std::invalid_argument("Too many args for a list");
+      }
+    }
+    ForwardList(std::initializer_list<T> list) :
+      head_(nullptr)
+    {
+      auto begin = list.begin();
+      auto end = list.end();
+      while (begin != end)
+      {
+        try
+        {
+          push_front(*begin);
+          ++begin;
+        }
+        catch (const std::bad_alloc &)
+        {
+          clear();
+          throw std::invalid_argument("Too many args for a list");
+        }
+      }
+      reverse();
     }
     ForwardList<T> & operator=(const ForwardList<T> & other)
     {
