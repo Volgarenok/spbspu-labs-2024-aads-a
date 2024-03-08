@@ -197,6 +197,23 @@ namespace novokhatskiy
       }
     }
 
+    void splice_after(constIter& pos, ForwardList< T >& other)
+    {
+      if (pos == cend())
+      {
+        throw std::out_of_range("Can not insert");
+      }
+      Node< T >* next = pos.node_->next_;
+      pos.node_->next_ = other.head_;
+      while (other.head_)
+      {
+        other.head_ = other.head_->next_;
+        pos.node_ = pos.node_->next_;
+        pos.node_->next_ = other.head_;
+      }
+      pos.node_->next_ = next;
+    }
+
     void push_front(const T& value)
     {
       Node<T>* ptr = new Node<T>(value);
