@@ -23,7 +23,7 @@ void namestnikov::outputNames(std::ostream & out, ForwardList<pair_t> & dataList
   dataList.reverse();
   for (ForwardIterator<pair_t> fwdIt = dataList.begin(); fwdIt != dataList.end(); ++fwdIt)
   {
-    maxSize = std::max(maxSize, fwdIt->second.size());
+    maxSize = std::max(maxSize, fwdIt->second.max_size());
     fwdIt->second.reverse();
     fwdIt != dataList.begin() ? out << " " << fwdIt->first : out << fwdIt->first;
   }
@@ -41,7 +41,7 @@ void namestnikov::outputNumsAndSums(std::ostream & out, ForwardList<pair_t> & da
     for (auto it = dataList.begin(); it != dataList.end(); ++it)
     {
       ForwardIterator<unsigned long long> numIt = it->second.begin();
-      size_t currentListSize = it->second.size();
+      size_t currentListSize = it->second.max_size();
       if (i < currentListSize)
       {
         unsigned long long number = *(numIt.advance(i));

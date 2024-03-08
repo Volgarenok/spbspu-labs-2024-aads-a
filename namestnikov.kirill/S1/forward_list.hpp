@@ -140,7 +140,7 @@ namespace namestnikov
     {
       std::swap(head_, other.head_);
     }
-    size_t size()
+    size_t max_size()
     {
       size_t size = 0;
       node_t * temp = head_;
