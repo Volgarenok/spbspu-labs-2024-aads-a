@@ -92,7 +92,7 @@ namespace skuratov
 
     Node< T >* getAt(size_t index)
     {
-      Node* ptr = head;
+      Node< T >* ptr = head;
       for (size_t j = 0; j != index; j++)
       {
         if (ptr == NULL)
@@ -111,9 +111,50 @@ namespace skuratov
 
     Node< T >* insert(int index, double data)
     {
-      Node* right = getAt(index)
+      Node< T >* right = getAt(index);
+      if (right == NULL)
+      {
+        return push_back(data);
+      }
+      Node< T >* left = right->prev
+      if (left == NULL)
+      {
+        return push_front(data);
+      }
+
+      Node< T >* ptr = new Node(data);
+      ptr->prev = left;
+      ptr->next = right;
+      left->prev = ptr;
+      right->next = ptr;
+      
+      return ptr;
     }
 
+    void earse(int index)
+    {
+      Node< T >* ptr = getAt(index);
+      if (ptr == NULL)
+      {
+        return;
+      }
+      if (ptr->prev == NULL)
+      {
+        pop_front();
+        return;
+      }
+      if (ptr->prev == NULL)
+      {
+        pop_back();
+        return;
+      }
+      Node< T >* left = ptr->prev;
+      Node< T >* right = ptr->next;
+      left->next = right;
+      right->prev = left;
+
+      delete ptr;
+    }
   };
 }
 
