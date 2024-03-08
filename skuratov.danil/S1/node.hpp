@@ -1,25 +1,21 @@
 #ifndef NODE_HPP
 #define NODE_HPP
 
-#include "cstddef"
-
 namespace skuratov
 {
   template <typename T>
   class Node
   {
-  public:
-    ~Node() = default;
-    size_t data{};
     Node<T>* prev;
     Node<T>* next;
-    T value;
-  private:
-    Node(size_t data)
-    {
-      this->data = data;
-      this->prev = this->next = NULL;
-    }
+    T data;
+
+    Node(const T& value):
+      data(value),
+      prev(nullptr),
+      next(nullptr)
+    {}
+    ~Node() = default;
   };
 }
 #endif

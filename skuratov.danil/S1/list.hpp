@@ -1,6 +1,7 @@
 #ifndef LIST_HPP
 #define LIST_HPP
 
+#include "cstddef"
 #include "node.hpp"
 
 namespace skuratov
@@ -8,10 +9,6 @@ namespace skuratov
   template <typename T>
   class List
   {
-  public:
-    size_t size_;
-    Node< T >* head;
-    Node< T >* tail;
   public:
     List()
     {
@@ -163,6 +160,10 @@ namespace skuratov
 
       delete ptr;
     }
+  private:
+    Node< T >* head;
+    Node< T >* tail;
+    size_t size;
   };
 }
 
