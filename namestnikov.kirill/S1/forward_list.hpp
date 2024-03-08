@@ -7,6 +7,7 @@
 #include <stdexcept>
 #include "node.hpp"
 #include "iterators.hpp"
+#include "const_iterators.hpp"
 
 namespace namestnikov
 {
@@ -14,6 +15,7 @@ namespace namestnikov
   class ForwardList
   {
     using iterator_t = ForwardIterator<T>;
+    using const_it_t = ConstForwardIterator<T>;
     using node_t = Node<T>;
   public:
     ForwardList() :
@@ -136,9 +138,17 @@ namespace namestnikov
     {
       return iterator_t(head_);
     }
+    const_it_t cbegin() const
+    {
+      return const_it_t(head_);
+    }
     iterator_t end() const
     {
       return iterator_t(nullptr);
+    }
+    const_it_t cend() const
+    {
+      return const_it_t(nullptr);
     }
     ~ForwardList()
     {
