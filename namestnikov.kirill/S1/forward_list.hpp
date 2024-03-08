@@ -189,6 +189,34 @@ namespace namestnikov
         }
       }
     }
+    template <class Predicate>
+    void remove_if(Predicate p)
+    {
+      node_t * prev = nullptr;
+      node_t * temp = head_;
+      while (temp)
+      {
+        if (p(temp->data_))
+        {
+          node_t * todel = temp;
+          if (prev)
+          {
+            prev->next_ = temp->next_;
+          }
+          else
+          {
+            head_ = temp->next_;
+          }
+          temp = temp->next_;
+          delete todel;
+        }
+        else
+        {
+          prev = temp;
+          temp = temp->next_;
+        }
+      }
+    }
     iterator_t begin() const
     {
       return iterator_t(head_);
