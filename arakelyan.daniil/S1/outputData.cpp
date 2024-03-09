@@ -3,7 +3,9 @@
 #include "binList.hpp"
 #include <stdexcept>
 
-void arakelyan::outputPairsNames(arakelyan::BinList< std::pair< std::string, arakelyan::BinList< size_t > > > listOfPairs, std::ostream & out)
+using BinList_t = arakelyan::BinList< std::pair< std::string, arakelyan::BinList< size_t > > >;
+
+void arakelyan::outputPairsNames(BinList_t listOfPairs, std::ostream & out)
 {
   for (auto iter = listOfPairs.begin(); iter != listOfPairs.end(); ++iter)
   {
@@ -16,7 +18,7 @@ void arakelyan::outputPairsNames(arakelyan::BinList< std::pair< std::string, ara
 }
 
 
-void arakelyan::outputPairsLists(arakelyan::BinList< std::pair< std::string, arakelyan::BinList< size_t > > > &listOfPairs, arakelyan::BinList< size_t > &sumList, std::ostream & out)
+void arakelyan::outputPairsLists(BinList_t &listOfPairs, arakelyan::BinList< size_t > &sumList, std::ostream & out)
 {
   if ((listOfPairs.getSize() != 1) && !(listOfPairs.begin()->second.isEmpty()))
   {
