@@ -1,7 +1,6 @@
 #ifndef LIST_HPP
 #define LIST_HPP
 
-#include <iostream>
 #include "node.hpp"
 #include "iterator.hpp"
 
