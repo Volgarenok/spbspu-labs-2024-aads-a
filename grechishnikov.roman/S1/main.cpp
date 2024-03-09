@@ -30,7 +30,7 @@ int main()
     std::cout << '\n';
   }
 
-  size_t maxSize = 0;
+  size_t maxSize = 1;
   for (auto namedIter = namedLists.begin(); namedIter != namedLists.end(); namedIter++)
   {
     maxSize = std::max(maxSize, namedIter->second.size());
@@ -46,14 +46,17 @@ int main()
       if (i < iter->second.size())
       {
         outList[i].push_back(iter->second[i]);
-       }
+      }
     }
   }
 
   for (auto outIter = outList.begin(); outIter != outList.end(); outIter++)
   {
     outputList(*outIter, std::cout);
-    std::cout << '\n';
+    if (!outIter->empty())
+    {
+      std::cout << '\n';
+    }
   }
 
   try

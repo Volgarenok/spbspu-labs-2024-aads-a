@@ -37,6 +37,10 @@ grechishnikov::List< grechishnikov::namedList > grechishnikov::inputLists(std::i
 
 size_t grechishnikov::countSum(List< size_t >& list)
 {
+  if (list.empty())
+  {
+    return 0;
+  }
   size_t sum = 0;
   auto iter = list.begin();
   while (iter != list.end())
