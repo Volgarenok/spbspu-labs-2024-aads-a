@@ -7,60 +7,74 @@
 
 int main()
 {
-  using namespace skuratov;
-  std::vector<Sequence> sequences;
-  std::string line;
+    using namespace skuratov;
+    std::vector<Sequence> sequences;
+    std::string line;
 
-  while (std::getline(std::cin, line))
-  {
-    if (!line.empty())
+    while (std::getline(std::cin, line))
     {
-      std::istringstream iss(line);
-      std::string name;
-      iss >> name;
-      Sequence sequence(name);
-      int num = {};
-      while (iss >> num)
-      {
-        sequence.numbers().push_back(num);
-      }
-      sequences.push_back(sequence);
+        if (!line.empty())
+        {
+            std::istringstream iss(line);
+            std::string name;
+            iss >> name;
+            Sequence sequence(name);
+            int num = {};
+            while (iss >> num)
+            {
+                sequence.numbers().push_back(num);
+            }
+            sequences.push_back(sequence);
+        }
     }
-  }
 
-  for (const auto& seq : sequences)
-  {
-    std::cout << seq.name() << " ";
-  }
-  std::cout << '\n';
+    for (const auto& seq : sequences)
+    {
+        std::cout << seq.name() << " ";
+    }
+    std::cout << '\n';
 
-  size_t max_size = 0;
-  for (const auto& seq : sequences) {
-      max_size = std::max(max_size, seq.numbers().size());
-  }
+    size_t maxSize = 0;
+    for (const auto& seq : sequences)
+    {
+        maxSize = std::max(maxSize, seq.numbers().size());
+    }
 
-  for (size_t i = 0; i < max_size; ++i)
-  {
-      for (const auto& seq : sequences)
-      {
-          const auto& numbers = seq.numbers();
-          if (i < numbers.size())
-          {
-              std::cout << numbers[i] << " ";
-          }
-      }
-      std::cout << '\n';
-  }
+    // Обходим последовательности по индексам
+    for (size_t i = 0; i < maxSize; ++i) {
+        // Для каждого индекса выводим элементы из всех последовательностей
+        for (const auto& seq : sequences) {
+            const auto& numbers = seq.numbers();
+            if (i < numbers.size()) {
+                std::cout << numbers[i] << " ";
+            }
+        }
+        std::cout << '\n';
+    }
 
-  for (const auto& seq : sequences)
-  {
-      const auto& numbers = seq.numbers();
-      if (!numbers.empty())
-      {
-          int sum = std::accumulate(numbers.begin(), numbers.end(), 0);
-          std::cout << sum << " ";
-      }
-  }
-  std::cout << '\n';
-  return 0;
+
+    // Вектор, хранящий суммы элементов по колонкам
+    std::vector<int> column_sums(maxSize, 0);
+
+    // Суммируем элементы по колонкам
+    for (size_t i = 0; i < maxSize; ++i)
+    {
+        for (const auto& seq : sequences)
+        {
+            const auto& numbers = seq.numbers();
+            if (i < numbers.size())
+            {
+                column_sums[i] += numbers[i];
+            }
+        }
+    }
+
+    // Выводим суммы элементов по колонкам
+    for (const auto& sum : column_sums)
+    {
+        std::cout << sum << " ";
+    }
+    std::cout << '\n';
+
+    return 0;
 }
