@@ -61,7 +61,7 @@ namespace grechishnikov
 
   template< typename T >
   List< T >::List(const List< T >& other):
-    size_(other.size_),
+    size_(0),
     head_(nullptr),
     tail_(nullptr)
   {
@@ -93,7 +93,6 @@ namespace grechishnikov
   List< T >& List< T >::operator=(const List< T >& other)
   {
     clear();
-    size_ = other.size_;
     Node< T >* temp = other.head_;
     while (!temp)
     {

@@ -1,5 +1,5 @@
-#ifndef INPUT_LIST_HPP
-#define INPUT_LIST_HPP
+#ifndef LIST_FUNCTIONS_HPP
+#define LIST_FUNCTIONS_HPP
 
 #include <istream>
 #include <utility>
