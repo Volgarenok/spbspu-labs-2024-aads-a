@@ -219,21 +219,39 @@ namespace namestnikov
     }
     void assign(size_t count, const T & value)
     {
-      node_t * other = nullptr;
+      clear();
       try
       {
         for (size_t i = 0; i < count; ++i)
         {
-          node_t * temp = new Node<T>(value);
-          temp->next_ = other;
-          other = temp;
+          push_front(value);
         }
       }
       catch (const std::bad_alloc &)
       {
         clear();
+        throw std::invalid_argument("Too many args for a list");
       }
-      head_ = other;
+    }
+    void assign(std::initializer_list<T> list)
+    {
+      clear();
+      try
+      {
+        auto begin = list.begin();
+        auto end = list.end();
+        while (begin != end)
+        {
+          push_front(*begin);
+          ++begin;
+        }
+      }
+      catch (const std::bad_alloc &)
+      {
+        clear();
+        throw std::invalid_argument("Too many args for a list");
+      }
+      reverse();
     }
     iterator_t begin() const
     {
