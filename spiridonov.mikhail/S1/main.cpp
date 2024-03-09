@@ -1,23 +1,20 @@
 #include <iostream>
 #include <string>
 #include "forward_list.hpp"
-#include "stack.hpp"
-#include "queue.hpp"
+
+using namespace spiridonov;
 
 int main()
 {
-  using namespace spiridonov;
-  spiridonov::NamedList lists[100];
-  int numLists = 0;
-
-  spiridonov::Queue<int> queue;
-  spiridonov::Stack<int> stack;
+  NamedList lists[100];
+  size_t numLists = 0;
+  size_t sums[100] = { 0 };
+  int totalSize = 0;
 
   while (std::cin >> lists[numLists].name)
   {
     char c;
-    std::cin >> std::noskipws;
-    while (std::cin >> c && c != '\n')
+    while (std::cin.get(c) && c != '\n')
     {
       if (std::isdigit(c))
       {
@@ -25,13 +22,13 @@ int main()
         int num;
         std::cin >> num;
         lists[numLists].list.push_back(num);
+        sums[numLists] += num;
       }
     }
-    std::cin >> std::skipws;
     numLists++;
   }
-  int totalSize = 0;
 
+  totalSize = 0;
   for (size_t i = 0; i < numLists; i++)
   {
     totalSize = std::max(totalSize, lists[i].list.get_size());
@@ -41,39 +38,42 @@ int main()
   {
     std::cout << lists[i].name << " ";
   }
-
-  std::cout << "\n";
-  for (size_t i = 0; i < totalSize; i++)
-  {
-    for (size_t j = 0; j < numLists; j++)
-    {
-      if (i < lists[j].list.get_size())
-      {
-        std::cout << lists[j].list[i] << " ";
-        queue.push(lists[j].list[i]);
-      }
-    }
-  }
   std::cout << "\n";
 
-  if (totalSize > 0)
+  for (size_t i = 0; i < totalSize; ++i)
   {
-    int sum = 0;
-    for (size_t i = 0; i < numLists; i++)
+    for (size_t j = 0; j < numLists; ++j)
     {
-      for (size_t j = 0; j < lists[i].list.get_size(); j++)
+      List<int>::iterator it = lists[j].list.begin();
+      for (size_t k = 0; k < i; ++k)
       {
-        sum += lists[i].list[j];
+        ++it;
       }
-      std::cout << sum << " ";
+      if (it != lists[j].list.end())
+      {
+        std::cout << *it << " ";
+      }
     }
     std::cout << "\n";
   }
 
-  else
+  for (size_t i = 0; i < numLists; ++i)
   {
-    std::cout << "Unable to calculate sum as no lists are entered." << "\n";
+    int sum = 0;
+    List<int>::iterator it = lists[i].list.begin();
+    while (it != lists[i].list.end())
+    {
+      sum += *it;
+      ++it;
+    }
+    sums[i] = sum;
   }
+
+  for (size_t i = 0; i < numLists; ++i)
+  {
+    std::cout << sums[i] << " ";
+  }
+  std::cout << "\n";
 
   return 0;
 }
