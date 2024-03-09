@@ -1,15 +1,36 @@
 #include <iostream>
+#include <sstream>
 #include <vector>
-#include <algorithm>
-#include <iterator>
+#include <numeric>
+#include "sequence.hpp"
 #include "list.hpp"
 
 int main()
 {
   using namespace skuratov;
-  using inputIterT = std::istream_iterator< int >;
-  std::vector< int > data(inputIterT{std::cin}, inputIterT{});
+  std::vector<Sequence> sequences;
+  std::string line;
 
-  using outputIterT = std::ostream_iterator< int >;
-  std::copy(data.cbegin(), data.cend(), outputIterT{std::cout, "\n"});
+  while (std::getline(std::cin, line))
+  {
+    if (!line.empty())
+    {
+      std::istringstream iss(line);
+      std::string name;
+      iss >> name;
+      Sequence sequence(name);
+      int num = {};
+      while (iss >> num)
+      {
+        sequence.numbers().push_back(num);
+      }
+      sequences.push_back(sequence);
+    }
+  }
+
+  for (const auto& seq : sequences)
+  {
+    std::cout << seq.name() << " ";
+  }
+  std::cout << '\n';
 }
