@@ -3,6 +3,7 @@
 #include <stdexcept>
 #include <iterator>
 #include "node.hpp"
+#include "forward_list_iterator.hpp"
 
 namespace zaitsev
 {
@@ -11,17 +12,16 @@ namespace zaitsev
   {
   public:
     ConstForwardListIterator();
-    ConstForwardListIterator(const Node< T >* node);
+    ConstForwardListIterator(Node< T >* node);
     ConstForwardListIterator(const ConstForwardListIterator&) = default;
     ~ConstForwardListIterator() = default;
-    ConstForwardListIterator& operator=(const ConstForwardListIterator&) = default;
     ConstForwardListIterator& operator++();
     ConstForwardListIterator operator++(int);
     const T& operator*() const;
     const T* operator->() const;
     bool operator!=(const ConstForwardListIterator& other) const;
     bool operator==(const ConstForwardListIterator& other) const;
-  private:
+  protected:
     Node< T >* node_;
   };
 
@@ -31,7 +31,7 @@ namespace zaitsev
   {}
 
   template< typename T >
-  ConstForwardListIterator< T >::ConstForwardListIterator(const Node< T >* node):
+  ConstForwardListIterator< T >::ConstForwardListIterator(Node< T >* node):
     node_(node)
   {}
 

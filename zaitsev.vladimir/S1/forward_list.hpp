@@ -28,6 +28,7 @@ namespace zaitsev
     T& front();
     const T& front() const;
     void push_front(const T& value);
+    void push_front(T&& value);
     void pop_front();
     void assign(size_t count, const T& value);
     void clear();
@@ -39,6 +40,10 @@ namespace zaitsev
     size_t remove_if(UnaryPredicate p);
 
     Iterator insert_after(ConstIterator pos, const T& value);
+    Iterator insert_after(ConstIterator pos, size_t count, const T& value);
+    Iterator insert_after(ConstIterator pos, T&& value);
+    Iterator insert_after(ConstIterator pos, ConstIterator first, ConstIterator last);
+
     Iterator erase_after(ConstIterator pos);
     void splice_after(ConstIterator pos, ForwardList& other);
     void reverse();
@@ -146,6 +151,14 @@ namespace zaitsev
     head_ = new_head;
   }
 
+  template<typename T>
+  void ForwardList<T>::push_front(T&& value)
+  {
+    node_t* new_head = new node_t(value);
+    new_head->next_ = head_;
+    head_ = new_head;
+  }
+
   template< typename T >
   void ForwardList< T >::pop_front()
   {
@@ -222,6 +235,90 @@ namespace zaitsev
     new_node->next_ = pos.node_->next_;
     pos.node_->next_ = new_node;
     return ++pos;
+  }
+
+  template<typename T>
+  ForwardListIterator< T > ForwardList< T >::insert_after(ConstIterator pos, size_t count, const T& value)
+  {
+    if (pos == cend())
+    {
+      throw std::out_of_range("Iterator is out of range");
+    }
+    if (!count)
+    {
+      return pos;
+    }
+    node_t* next = pos.node_->next_;
+    node_t* new_range(value);
+    Iterator new_end(new_range);
+
+    try
+    {
+      for (size_t i = 0; i < count - 1; ++i)
+      {
+        node_t* new_node(value);
+        new_end.node_->next_ = new_node;
+        ++new_end;
+      }
+      pos.node_->next_ = new_range;
+      new_end.node_->next_ = next;
+    }
+    catch (const std::bad_alloc&)
+    {
+      freeNodes(new_range);
+      throw;
+    }
+
+    return new_end;
+  }
+
+  template<typename T>
+  ForwardListIterator< T > ForwardList< T >::insert_after(ConstIterator pos, T&& value)
+  {
+    if (pos == cend())
+    {
+      throw std::out_of_range("Iterator is out of range");
+    }
+    node_t* new_node(value);
+    new_node->next_ = pos.node_->next_;
+    pos.node_->next_ = new_node;
+
+    return ++pos;
+  }
+
+  template<typename T>
+  ForwardListIterator< T > ForwardList< T >::insert_after(ConstIterator pos, ConstIterator first, ConstIterator last)
+  {
+    if (pos == cend())
+    {
+      throw std::out_of_range("Iterator is out of range");
+    }
+    if (begin == end)
+    {
+      return pos;
+    }
+    node_t* next = pos.node_->next_;
+    node_t* new_range(*first.node_);
+    Iterator new_end(new_range);
+    ++first;
+    try
+    {
+      for (; first != last; ++first)
+      {
+        node_t* new_node(*first.node_);
+        new_end.node_->next_ = new_node;
+        ++new_end;
+      }
+      pos.node_->next_ = new_range;
+      new_end.node_->next_ = next;
+    }
+    catch (const std::bad_alloc&)
+    {
+      freeNodes(new_range);
+      throw;
+    }
+
+    return new_end;
   }
 
   template< typename T >
@@ -394,6 +491,7 @@ namespace zaitsev
     }
     return removed;
   }
+
   template< typename T >
   template< typename UnaryPredicate >
   size_t ForwardList< T >::remove_if(UnaryPredicate p)

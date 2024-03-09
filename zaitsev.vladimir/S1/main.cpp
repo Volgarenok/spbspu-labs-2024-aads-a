@@ -8,8 +8,8 @@
 int main()
 {
   using namespace zaitsev;
-  using ull = size_t;
-  using ullList = ForwardList< ull>;
+  using ull = unsigned long long;
+  using ullList = ForwardList< ull >;
   using pair = std::pair< std::string, ullList >;
   using ullListIt = ForwardListIterator< ull >;
   ForwardList< pair > list;
@@ -31,6 +31,7 @@ int main()
     return 0;
   }
   list.reverse();
+
   ForwardList< std::pair< ullListIt, ullListIt > > beg_end_it;
   for (ForwardListIterator< pair > i = list.begin(); i != list.end(); ++i)
   {
