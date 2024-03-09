@@ -181,7 +181,7 @@ namespace gladyshev
       {
         throw;
       }
-      if (head_->next == nullptr)
+      if (!head_->next)
       {
         delete head_;
         head_ = nullptr;
@@ -189,7 +189,7 @@ namespace gladyshev
       else
       {
         Node<T>* temp = head_;
-        while (temp->next->next != nullptr)
+        while (temp->next->next)
         {
           temp = temp->next;
         }
