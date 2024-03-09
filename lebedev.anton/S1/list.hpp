@@ -58,6 +58,28 @@ namespace lebedev
       ++size_;
     }
 
+    void pop_back()
+    {
+      if (tail_ != nullptr)
+      {
+        Node< T > * todelete = tail_;
+        tail_ = tail_->prev_;
+        tail_->next_ = nullptr;
+        delete todelete;
+        --size_;
+      }
+    }
+    void pop_front()
+    {
+      if (head_ != nullptr)
+      {
+        Node< T > * todelete = head_;
+        head_ = head_->next_;
+        head_->prev_ = nullptr;
+        delete todelete;
+        --size_;
+      }
+    }
 
     void outputList(std::ostream & out) const
     {
