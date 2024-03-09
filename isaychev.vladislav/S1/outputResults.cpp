@@ -43,8 +43,17 @@ void reverseAll(isaychev::List< std::pair< std::string, isaychev::ullList > > & 
   }
   list.reverse();
 }
-
-
+template < typename T >
+void outputList(std::ostream & out, isaychev::List< T > & list)
+{
+  auto k = list.begin();
+  out << *k;
+  for (++k; k != list.end(); ++k)
+  {
+    out << " " << *k;
+  }
+  out << "\n";
+}
 
 void isaychev::outputResults(std::ostream & out, List< std::pair< std::string, ullList > > & list)
 {
@@ -52,7 +61,6 @@ void isaychev::outputResults(std::ostream & out, List< std::pair< std::string, u
 
   size_t upperBorder = getMaxFwdElemNum(list) + 1;
   size_t numOfPairs = getElemNum(list);
-//  out << upperBorder << " " << numOfPairs << "\n";
   if (upperBorder > 1)
   {
     List< size_t > sums;
@@ -104,24 +112,26 @@ void isaychev::outputResults(std::ostream & out, List< std::pair< std::string, u
         nums.push(iter);
       }
       nums.reverse();
-      auto k = nums.begin();
+/*      auto k = nums.begin();
       out << *k;
       for (++k; k != sums.end(); ++k)
       {
         out << " " << *k;
       }
-      out << "\n";
+      out << "\n";*/
+      outputList(out, nums);
       nums.clear();
     }
 
     sums.reverse();
-    auto j = sums.begin();
+    /*auto j = sums.begin();
     out << *j;
     for (++j; j != sums.end(); ++j)
     {
       out << " " << *j;
     }
-    out << "\n";
+    out << "\n";*/
+    outputList(out, sums);
   }
   else if (upperBorder == 1 && numOfPairs == 1)
   {
@@ -129,7 +139,7 @@ void isaychev::outputResults(std::ostream & out, List< std::pair< std::string, u
   }
   else if (numOfPairs == 0)
   {
-    throw std::logic_error("empty input");
+    out << 0 << "\n";
   }
 
   reverseAll(list);
