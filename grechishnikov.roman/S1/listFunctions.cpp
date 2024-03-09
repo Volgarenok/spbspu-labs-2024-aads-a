@@ -8,6 +8,10 @@ grechishnikov::namedList grechishnikov::inputList(std::istream& in)
 {
   std::string listName = "";
   in >> listName;
+  if (listName == "")
+  {
+    throw std::logic_error("Nothing was entered");
+  }
   List< size_t > inputList;
   size_t inNum = 0;
   while (in >> inNum)

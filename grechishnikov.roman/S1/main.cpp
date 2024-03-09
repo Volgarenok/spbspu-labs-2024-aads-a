@@ -12,6 +12,7 @@ int main()
   {
    std::cout << namedIter->first << ' ';
   }
+  std::cout << '\n';
 
   size_t maxSize = 0;
   for (auto namedIter = namedLists.begin(); namedIter != namedLists.end(); namedIter++)
@@ -38,6 +39,10 @@ int main()
       std::cout << countSum(namedIter->second) << ' ';
     }
     std::cout << '\n';
+  }
+  catch (const std::logic_error &e)
+  {
+    return 0;
   }
   catch (const std::exception &e)
   {
