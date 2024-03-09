@@ -6,13 +6,13 @@ namespace lebedev
   template< class T >
   struct Node
   {
-    Node(const T & data = T(), Node * next = nullptr, Node * prev = nullptr):
+    Node(const T & data, Node * next = nullptr, Node * prev = nullptr) :
       data_(data),
       next_(next),
       prev_(prev)
     {}
     ~Node() = default;
-    T data;
+    T data_;
     Node * next_;
     Node * prev_;
   };
