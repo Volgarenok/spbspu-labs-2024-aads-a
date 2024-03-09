@@ -28,6 +28,13 @@ namespace zhalilov
     List< T > &operator=(const List< T > &);
     List< T > &operator=(List< T > &&);
 
+    bool operator==(const List< T > &);
+    bool operator!=(const List< T > &);
+    bool operator<(const List< T > &);
+    bool operator<=(const List< T > &);
+    bool operator>(const List< T > &);
+    bool operator>=(const List< T > &);
+
     T &front();
     T &back();
 
@@ -166,6 +173,91 @@ namespace zhalilov
     other.m_size = 0;
     other.m_head = nullptr;
     return *this;
+  }
+
+  template < typename T >
+  bool List< T >::operator==(const List< T > &list)
+  {
+    if (m_size == list.m_size)
+    {
+      List< T >::const_iterator thisIt = cbegin();
+      List< T >::const_iterator thisEnd = cend();
+      List< T >::const_iterator otherIt = list.cbegin();
+      List< T >::const_iterator otherEnd = list.cend();
+      while (thisIt != thisEnd)
+      {
+        if (*thisIt != *otherIt)
+        {
+          return false;
+        }
+        thisIt++;
+        otherIt++;
+      }
+      return true;
+    }
+    return false;
+  }
+
+  template < typename T >
+  bool List< T >::operator!=(const List< T > &list)
+  {
+    return !(*this == list);
+  }
+
+  template < typename T >
+  bool List< T >::operator<(const List< T > &list)
+  {
+    if (m_size < list.m_size)
+    {
+      List< T >::const_iterator thisIt = cbegin();
+      List< T >::const_iterator thisEnd = cend();
+      List< T >::const_iterator otherIt = list.cbegin();
+      List< T >::const_iterator otherEnd = list.cend();
+      while (thisIt != thisEnd)
+      {
+        if (*thisIt != *otherIt)
+        {
+          return false;
+        }
+        thisIt++;
+        otherIt++;
+      }
+      return true;
+    }
+    return false;
+  }
+
+  template < typename T >
+  bool List< T >::operator<=(const List< T > &list)
+  {
+    return *this == list || *this < list;
+  }
+
+  template < typename T >
+  bool List< T >::operator>(const List< T > &list)
+  {
+    if (m_size > list.m_size)
+    {
+      List< T >::const_iterator thisIt = cbegin();
+      List< T >::const_iterator thisEnd = cend();
+      List< T >::const_iterator otherIt = list.cbegin();
+      List< T >::const_iterator otherEnd = list.cend();
+      while (otherIt != otherEnd)
+      {
+        if (*thisIt != *otherIt)
+        {
+          return false;
+        }
+      }
+      return true;
+    }
+    return false;
+  }
+
+  template < typename T >
+  bool List< T >::operator>=(const List< T > &list)
+  {
+    return *this == list || *this > list;
   }
 
   template < typename T >
