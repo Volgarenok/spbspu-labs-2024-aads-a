@@ -56,7 +56,7 @@ namespace rebdev
 
       BiList(list&& rList):
         headNode_(rList.headNode_),
-        tailNode_(rLIst.tailNode_)
+        tailNode_(rList.tailNode_)
       {}
 
       BiList(const T & firstElement):
