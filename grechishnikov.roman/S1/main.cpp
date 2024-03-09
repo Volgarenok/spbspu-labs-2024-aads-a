@@ -61,14 +61,12 @@ int main()
 
   try
   {
+    List< size_t > sumList;
     for (auto outIter = outList.begin(); outIter != outList.end(); outIter++)
     {
-      std::cout << countSum(*outIter);
-      if (outIter + 1 != outList.end())
-      {
-        std::cout << ' ';
-      }
+      sumList.push_back(countSum(*outIter));
     }
+    outputList(sumList, std::cout);
     std::cout << '\n';
   }
   catch (const std::exception &e)
