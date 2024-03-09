@@ -14,8 +14,8 @@ void erohin::inputNamedList(std::istream & input, List< named_list > & result)
     std::string name;
     input >> name;
     std::string string_number;
-    List< size_t > num_list;
-    size_t elem = 0;
+    List< int_t > num_list;
+    int_t elem = 0;
     while (input.peek() != '\n' && input >> string_number)
     {
       try

@@ -21,30 +21,10 @@ std::ostream & erohin::printNames(std::ostream & output, const List< named_list 
   return output;
 }
 
-std::ostream & erohin::printNumList(std::ostream & output, const List< size_t > & list)
-{
-  if (!list.empty())
-  {
-    output << list.front();
-  }
-  else
-  {
-    return output;
-  }
-  auto current = ++list.cbegin();
-  auto last = list.cend();
-  while (current != last)
-  {
-    output << " " << *current;
-    ++current;
-  }
-  return output;
-}
-
-void erohin::formOrderedNumLists(List < List< size_t > > & result, const List< named_list > & list)
+void erohin::formOrderedNumLists(List < List< int_t > > & result, const List< named_list > & list)
 {
   result.clear();
-  using iterator_list = List< ListConstIterator< size_t > >;
+  using iterator_list = List< ListConstIterator< int_t > >;
   iterator_list iters;
   auto current = list.cbegin();
   auto last = list.cend();
@@ -58,7 +38,7 @@ void erohin::formOrderedNumLists(List < List< size_t > > & result, const List< n
   auto end_line_iter = result.cbegin();
   while (!iters.empty())
   {
-    List< size_t > current_number_line;
+    List< int_t > current_number_line;
     for (auto & cur_iter: iters)
     {
       if (cur_iter != iter_to_delete)
@@ -69,7 +49,7 @@ void erohin::formOrderedNumLists(List < List< size_t > > & result, const List< n
     }
     current_number_line.reverse();
     iters.remove(iter_to_delete);
-    if (!iters.empty())
+    if (!current_number_line.empty())
     {
       result.push_front(std::move(current_number_line));
     }
@@ -77,7 +57,7 @@ void erohin::formOrderedNumLists(List < List< size_t > > & result, const List< n
   result.reverse();
 }
 
-void erohin::formSumList(List< size_t > & result, const List < List< size_t > > & list)
+void erohin::formSumList(List< long_t > & result, const List < List< int_t > > & list)
 {
   result.clear();
   if (list.empty())

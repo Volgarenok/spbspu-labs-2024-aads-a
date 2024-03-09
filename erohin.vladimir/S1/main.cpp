@@ -9,8 +9,8 @@ int main()
   using namespace erohin;
   bool isBigNumberFound = false;
   List< named_list > lines;
-  List< List< size_t > > reformed_lines;
-  List< size_t > sums;
+  List< List< int_t > > reformed_lines;
+  List< long_t > sums;
   try
   {
     inputNamedList(std::cin, lines);
@@ -40,7 +40,7 @@ int main()
     formOrderedNumLists(reformed_lines, lines);
     for (auto cur_line: reformed_lines)
     {
-      printNumList(std::cout, cur_line);
+      printList(std::cout, cur_line);
       std::cout << "\n";
     }
     formSumList(sums, reformed_lines);
@@ -57,7 +57,7 @@ int main()
   }
   else
   {
-    printNumList(std::cout, sums);
+    printList(std::cout, sums);
     std::cout << "\n";
   }
   return 0;
