@@ -30,4 +30,7 @@ int main()
 //git test
   List< namedList > testListInput2 = inputLists(std::cin);
   std::for_each(testListInput2.begin(), testListInput2.end(), prList);
+  std::cout << countSum(testListInput2.begin()->second);
+
+
 }

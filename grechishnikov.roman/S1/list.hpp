@@ -26,6 +26,7 @@ namespace grechishnikov
     Iterator< T > end();
 
     bool empty();
+    size_t size();
 
     void clear();
 
@@ -46,18 +47,21 @@ namespace grechishnikov
     Iterator< T > erase(Iterator< T >);
 
   private:
+    size_t size_;
     Node< T >* head_;
     Node< T >* tail_;
   };
 
   template< typename T >
   List< T >::List():
+    size_(0),
     head_(nullptr),
     tail_(nullptr)
   {}
 
   template< typename T >
   List< T >::List(const List< T >& other):
+    size_(other.size_),
     head_(nullptr),
     tail_(nullptr)
   {
@@ -71,6 +75,7 @@ namespace grechishnikov
 
   template< typename T >
   List< T >::List(List< T >&& other):
+    size_(other.size_),
     head_(nullptr),
     tail_(nullptr)
   {
@@ -88,6 +93,7 @@ namespace grechishnikov
   List< T >& List< T >::operator=(const List< T >& other)
   {
     clear();
+    size_ = other.size_;
     Node< T >* temp = other.head_;
     while (!temp)
     {
@@ -100,6 +106,7 @@ namespace grechishnikov
   template< typename T >
   List< T >& List< T >::operator=(List< T >&& other)
   {
+    size_ = other.size_;
     std::swap(head_, other.head_);
     std::swap(tail_, other.tail_);
     return *this;
@@ -131,6 +138,12 @@ namespace grechishnikov
   }
 
   template< typename T >
+  size_t List< T >::size()
+  {
+    return size_;
+  }
+
+  template< typename T >
   void List< T >::clear()
   {
     while (head_)
@@ -139,6 +152,7 @@ namespace grechishnikov
       delete head_;
       head_ = temp;
     }
+    size_ = 0;
     head_ = nullptr;
     tail_ = nullptr;
   }
@@ -157,6 +171,7 @@ namespace grechishnikov
       tail_->next_ = pushNode;
       tail_ = pushNode;
     }
+    size_++;
   }
 
   template< typename T >
@@ -173,6 +188,7 @@ namespace grechishnikov
       head_->prev_ = pushNode;
       head_ = pushNode;
     }
+    size_++;
   }
 
   template< typename T >
@@ -191,6 +207,7 @@ namespace grechishnikov
       tail_ = temp;
       tail_->next_ = nullptr;
     }
+    size_--;
   }
 
   template< typename T >
@@ -209,11 +226,13 @@ namespace grechishnikov
       head_ = temp;
       head_->prev_ = nullptr;
     }
+    size_--;
   }
 
   template< typename T >
   void List< T >::swap(List< T >& other)
   {
+    std::swap(size_, other.size__);
     std::swap(head_, other.head_);
     std::swap(tail_, other.tail_);
   }
@@ -222,6 +241,7 @@ namespace grechishnikov
   void List< T >::assign(size_t count, const T& value)
   {
     clear();
+    size_ = count;
     for (size_t i = 0; i < count; i++)
     {
       push_back(value);
@@ -236,7 +256,9 @@ namespace grechishnikov
     {
       temp.push_back(*first);
       first++;
+      temp.size_++;
     }
+    std::swap(size_, temp.size_);
     std::swap(head_, temp.head_);
     std::swap(tail_, temp.tail_);
   }
@@ -250,6 +272,7 @@ namespace grechishnikov
     {
       push_back(*init);
       init++;
+      size_++;
     }
   }
 
@@ -294,11 +317,11 @@ namespace grechishnikov
   {
     Node< T >* prevPoi = iter.getNode()->prev_;
     Node< T >* nextPoi = iter.getNode()->next_;
-
+    size_--;
     auto temp = iter + 1;
     if (!prevPoi)
     {
-       pop_front();
+      pop_front();
       return temp;
     }
     if (!nextPoi)

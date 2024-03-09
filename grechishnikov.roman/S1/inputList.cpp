@@ -1,4 +1,8 @@
 #include "inputList.hpp"
+#include <stdexcept>
+#include <limits>
+
+size_t safeSum(const size_t& first, const size_t& second);
 
 grechishnikov::namedList grechishnikov::inputList(std::istream& in)
 {
@@ -16,10 +20,39 @@ grechishnikov::namedList grechishnikov::inputList(std::istream& in)
 grechishnikov::List< grechishnikov::namedList > grechishnikov::inputLists(std::istream& in)
 {
   List< namedList > inputedLists;
-  while (!in.eof())
+  while (in)
   {
     inputedLists.push_back(inputList(in));
+    if (!in.eof())
+    {
+      in.clear();
+    }
   }
   return inputedLists;
 }
 
+size_t grechishnikov::countSum(List< size_t >& list)
+{
+  size_t sum = 0;
+
+  auto iter = list.begin();
+  while (iter != list.end())
+  {
+    sum = safeSum(sum, *iter);
+    iter++;
+  }
+  return sum;
+}
+
+size_t safeSum(const size_t& first, const size_t& second)
+{
+  size_t max = std::numeric_limits< size_t >::max();
+  if (max - first >= second)
+  {
+    return first + second;
+  }
+  else
+  {
+    throw std::overflow_error("Sum is too big");
+  }
+}
