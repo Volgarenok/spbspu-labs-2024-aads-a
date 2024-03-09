@@ -25,11 +25,19 @@ void skuratov::inputOutput()
     }
   }
 
+  bool first = true;
   for (const auto& seq : sequences)
   {
-    std::cout << seq.name() << " ";
+    if (!first)
+    {
+      std::cout << " ";
+    }
+    std::cout << seq.name();
+    first = false;
   }
   std::cout << '\n';
+
+
 
   size_t maxSize = 0;
   for (const auto& seq : sequences)
@@ -70,9 +78,16 @@ void skuratov::inputOutput()
     }
   }
 
+  bool firstSeq = true;
   for (const auto& sum : column_sums)
   {
-    std::cout << sum << " ";
+    if (!firstSeq)
+    {
+      std::cout << " ";
+    }
+    std::cout << sum;
+    firstSeq = false;
   }
   std::cout << '\n';
+
 }
