@@ -29,7 +29,7 @@ int main()
   }
 
   totalSize = 0;
-  for (size_t i = 0; i < numLists; i++)
+  for (int i = 0; i < numLists; i++)
   {
     totalSize = std::max(totalSize, lists[i].list.get_size());
   }
