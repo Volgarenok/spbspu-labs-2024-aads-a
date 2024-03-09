@@ -42,8 +42,6 @@ void skuratov::inputOutput()
   }
   std::cout << '\n';
 
-
-
   size_t maxSize = 1;
   for (const auto& seq : sequences)
   {
@@ -66,7 +64,10 @@ void skuratov::inputOutput()
         isFirst = false;
       }
     }
-    std::cout << '\n';
+    if (!isFirst)
+    {
+      std::cout << '\n';
+    }
   }
 
   std::vector<int> column_sums(maxSize, 0);
@@ -94,5 +95,4 @@ void skuratov::inputOutput()
     firstSeq = false;
   }
   std::cout << '\n';
-
 }
