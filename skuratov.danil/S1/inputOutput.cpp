@@ -86,7 +86,7 @@ void skuratov::inputOutput()
         }
         else
         {
-          throw std::exception("Impossible to calculate");
+          throw std::out_of_range("Impossible to calculate");
         }
       }
     }
