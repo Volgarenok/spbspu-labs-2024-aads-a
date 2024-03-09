@@ -24,15 +24,23 @@ grechishnikov::namedList grechishnikov::inputList(std::istream& in)
 grechishnikov::List< grechishnikov::namedList > grechishnikov::inputLists(std::istream& in)
 {
   List< namedList > inputedLists;
-  while (in)
+  try
   {
-    inputedLists.push_back(inputList(in));
-    if (!in.eof())
+    while (in)
     {
-      in.clear();
+      inputedLists.push_back(inputList(in));
+      if (!in.eof())
+      {
+        in.clear();
+      }
     }
+    return inputedLists;
   }
-  return inputedLists;
+  catch (const std::logic_error &e)
+  {
+    inputedLists.clear();
+    throw;
+  }
 }
 
 size_t grechishnikov::countSum(List< size_t >& list)

@@ -6,11 +6,19 @@ int main()
 {
   using namespace grechishnikov;
 
-  List< namedList > namedLists = inputLists(std::cin);
+  List< namedList > namedLists;
+  try
+  {
+    namedLists = inputLists(std::cin);
+  }
+  catch (const std::logic_error &e)
+  {
+    return 0;
+  }
 
   for (auto namedIter = namedLists.begin(); namedIter != namedLists.end(); namedIter++)
   {
-   std::cout << namedIter->first << ' ';
+    std::cout << namedIter->first << ' ';
   }
   std::cout << '\n';
 
@@ -31,7 +39,6 @@ int main()
     }
     std::cout << '\n';
   }
-
   try
   {
     for (auto namedIter = namedLists.begin(); namedIter != namedLists.end(); namedIter++)
@@ -39,10 +46,6 @@ int main()
       std::cout << countSum(namedIter->second) << ' ';
     }
     std::cout << '\n';
-  }
-  catch (const std::logic_error &e)
-  {
-    return 0;
   }
   catch (const std::exception &e)
   {
