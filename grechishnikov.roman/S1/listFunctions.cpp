@@ -8,11 +8,11 @@ grechishnikov::namedList grechishnikov::inputList(std::istream& in)
 {
   std::string listName = "";
   in >> listName;
+  List< size_t > inputList;
   if (listName == "")
   {
     throw std::logic_error("Nothing was entered");
   }
-  List< size_t > inputList;
   size_t inNum = 0;
   while (in >> inNum)
   {
@@ -24,9 +24,9 @@ grechishnikov::namedList grechishnikov::inputList(std::istream& in)
 grechishnikov::List< grechishnikov::namedList > grechishnikov::inputLists(std::istream& in)
 {
   List< namedList > inputedLists;
-  try
+  while (in)
   {
-    while (in)
+    try
     {
       inputedLists.push_back(inputList(in));
       if (!in.eof())
@@ -34,13 +34,12 @@ grechishnikov::List< grechishnikov::namedList > grechishnikov::inputLists(std::i
         in.clear();
       }
     }
-    return inputedLists;
+    catch (const std::logic_error &e)
+    {
+      return inputedLists;
+    }
   }
-  catch (const std::logic_error &e)
-  {
-    inputedLists.clear();
-    throw;
-  }
+  return inputedLists;
 }
 
 size_t grechishnikov::countSum(List< size_t >& list)

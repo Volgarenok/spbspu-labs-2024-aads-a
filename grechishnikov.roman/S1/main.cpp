@@ -6,35 +6,37 @@ int main()
 {
   using namespace grechishnikov;
 
-  List< namedList > namedLists;
-  try
-  {
-    namedLists = inputLists(std::cin);
-  }
-  catch (const std::logic_error &e)
-  {
-    return 0;
-  }
+  List< namedList > namedLists = inputLists(std::cin);
 
   for (auto namedIter = namedLists.begin(); namedIter != namedLists.end(); namedIter++)
   {
-    std::cout << namedIter->first << ' ';
+    std::cout << namedIter->first;
+    if (namedIter + 1 != namedLists.end())
+    {
+      std::cout << ' ';
+    }
   }
-  std::cout << '\n';
+  if (!namedLists.empty())
+  {
+    std::cout << '\n';
+  }
 
   size_t maxSize = 0;
   for (auto namedIter = namedLists.begin(); namedIter != namedLists.end(); namedIter++)
   {
     maxSize = std::max(maxSize, namedIter->second.size());
   }
-
   for (size_t i = 0; i < maxSize; i++)
   {
     for (auto iter = namedLists.begin(); iter != namedLists.end(); iter++)
     {
       if (iter->second.size() > i)
       {
-        std::cout << iter->second[i] << ' ';
+        std::cout << iter->second[i];
+        if (iter + 1 != namedLists.end())
+        {
+          std::cout << ' ';
+        }
       }
     }
     std::cout << '\n';
