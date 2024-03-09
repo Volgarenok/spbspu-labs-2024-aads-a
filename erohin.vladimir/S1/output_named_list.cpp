@@ -62,7 +62,7 @@ void erohin::formSumList(List< long_type > & result, const List < List< int_type
   result.clear();
   if (list.empty())
   {
-    result.push_front(0ull);
+    result.push_front(0);
     return;
   }
   for (auto num_list: list)

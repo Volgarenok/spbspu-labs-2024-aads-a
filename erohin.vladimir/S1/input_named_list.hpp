@@ -6,8 +6,8 @@
 
 namespace erohin
 {
-  using int_type = unsigned int;
-  using long_type = unsigned long long;
+  using int_type = int;
+  using long_type = long long;
   using named_list = std::pair< std::string, List< int_type > >;
   void inputNamedList(std::istream & input, List< named_list > & result);
 }

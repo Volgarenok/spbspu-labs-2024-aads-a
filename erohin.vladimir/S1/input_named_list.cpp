@@ -20,7 +20,7 @@ void erohin::inputNamedList(std::istream & input, List< named_list > & result)
     {
       try
       {
-        elem = stoull(string_number);
+        elem = stoi(string_number);
         num_list.push_front(elem);
       }
       catch (const std::invalid_argument &)
