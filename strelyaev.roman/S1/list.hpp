@@ -17,13 +17,10 @@ namespace strelyaev
       {}
 
       List(ConstIterator< T > begin, ConstIterator< T > end):
-        head_(new Node< T >),
-        tail_(head_)
+        head_(nullptr),
+        tail_(nullptr)
       {
-        for (auto i = begin; i != end; i++)
-        {
-          push_back(*i);
-        }
+        assign(begin, end);
       }
 
       List():
@@ -85,7 +82,15 @@ namespace strelyaev
         }
       }
 
-
+      void assign(Iterator< T > begin, Iterator< T > end)
+      {
+        clear();
+        while (begin != end)
+        {
+          push_back(*begin);
+          ++begin;
+        }
+      }
 
       void swap(List& other)
       {
@@ -106,15 +111,31 @@ namespace strelyaev
           push_back(value);
           return end();
         }
-        else
-        {
           Node< T >* new_node = new Node< T >(value);
           Node< T >* next_node = pos->node_->next_;
           pos->node_->next_ = new_node;
           next_node->prev_ = new_node;
           new_node->next_ = next_node;
           new_node->prev_ = pos->node_;
+      }
+
+      void splice(Iterator< T > pos, List< T >& other)
+      {
+        if (&other == this)
+        {
+          return;
         }
+        if (other.empty())
+        {
+          return;
+        }
+        Node< T >* current = pos.get_node();
+        current->next_->last_ = other.tail_;
+        other.tail_->next_ = current->next_;
+        current->next_ = other.head_;
+        other.head_->last_ = current;
+        other.head_ = nullptr;
+        other.tail_ = nullptr;
       }
 
       bool empty()
@@ -150,6 +171,26 @@ namespace strelyaev
           tail_ = new_node;
         }
         head_ = new_node;
+      }
+
+      Iterator< T > erase(Iterator< T > pos)
+      {
+        if (pos == begin())
+        {
+          pop_front();
+          return ++pos;
+        }
+        if (pos == end())
+        {
+          pop_back();
+          return end();
+        }
+        auto next_it = pos;
+        next_it++;
+        pos.get_node()->next_->prev_ = pos.get_node()->prev_;
+        pos.get_node()->prev_->next_ = pos.get_node()->next_;
+        delete pos.get_node();
+        return next_it;
       }
 
       void pop_front()
@@ -266,6 +307,70 @@ namespace strelyaev
       ConstIterator< T > cend() const
       {
         return ConstIterator< T >(nullptr);
+      }
+
+      List< T >& operator=(const List< T > other)
+      {
+        if (this == &other)
+        {
+          return *this;
+        }
+        assign(other.begin(), other.end());
+      }
+
+      bool operator==(const List< T >& other) const
+      {
+        size_t size_this = 0;
+        size_t size_other = 0;
+        for (auto it = begin(); it != end(); it++, size_this++)
+        for (auto it = other.begin(); it != other.end(); it++, size_other++);
+        if (size_this != size_other)
+        {
+          return false;
+        }
+        auto this_it = begin();
+        auto other_it = other.begin();
+        for (this_it; this_it != end(); this_it++, other_it++)
+        {
+          if (*this_it != *other_it)
+          {
+            return false;
+          }
+        }
+        return true;
+      }
+
+      bool operator!=(const List< T >& other) const
+      {
+        return !(*this == other);
+      }
+
+      bool operator<(const List< T >& other) const
+      {
+        size_t size_this = 0;
+        size_t size_other = 0;
+        for (auto it = begin(); it != end(); it++, size_this++)
+        for (auto it = other.begin(); it != other.end(); it++, size_other++);
+        if (size_this < size_other)
+        {
+          return true;
+        }
+        return false;
+      }
+
+      bool operator>(const List< T >& other) const
+      {
+        return other < *this;
+      }
+
+      bool operator<=(const List< T >& other) const
+      {
+        return (*this < other) || (*this == other);
+      }
+
+      bool operator>=(const List< T >& other) const
+      {
+        return (*this > other) || (*this == other);
       }
 
     private:

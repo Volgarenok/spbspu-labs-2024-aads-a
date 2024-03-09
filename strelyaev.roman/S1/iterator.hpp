@@ -81,6 +81,11 @@ namespace strelyaev
       return temp;
      }
 
+     Node< T >* get_node()
+     {
+      return node_;
+     }
+
      T& operator*()
      {
        return node_->value_;
@@ -100,7 +105,6 @@ namespace strelyaev
      {
        return !(*this == val);
      }
-
 
     private:
      Node< T >* node_;
