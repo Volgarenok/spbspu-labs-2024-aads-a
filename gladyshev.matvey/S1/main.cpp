@@ -32,7 +32,7 @@ int main()
   size_t sum = 0;
   size_t counter = 0;
   bool moreData = true;
-  List<size_t> listOfNums{};
+  List<size_t> listOfNums;
   while (moreData)
   {
     moreData = false;
