@@ -43,10 +43,6 @@ namespace isaychev
   template < typename T >
   cFwdIterator< T >  cFwdIterator< T >::operator++()
   {
-    if (currNode_ == nullptr)
-    {
-      throw std::out_of_range("out of range");
-    }
     currNode_ = currNode_->next;
     return *this;
   }
