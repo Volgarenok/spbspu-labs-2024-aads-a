@@ -239,6 +239,7 @@ namespace piyavkin
         delete list.tail_->next_;
         list.tail_->next_ = head_;
         head_ = list.head_;
+        size_ += list.size_;
         list.head_ = nullptr;
         list.tail_ = nullptr;
         list.size_ = 0;
@@ -250,6 +251,7 @@ namespace piyavkin
         list.head_->prev_ = tail_;
         tail_->next_ = list.head_;
         tail_ = list.tail_;
+        size_ += list.size_;
         list.head_ = nullptr;
         list.tail_ = nullptr;
         list.size_ = 0;
@@ -267,9 +269,22 @@ namespace piyavkin
       list.tail_->next_ = node->next_;
       list.head_->prev_ = node;
       node->next_ = list.head_;
+      size_ += list.size_;
       list.head_ = nullptr;
       list.tail_ = nullptr;
       list.size_ = 0;
+    }
+    void splice(ListIterator< T > it, List< T >& list, ConstListIterator< T > list_it)
+    {
+      insert(it, *list_it);
+      list.erase(list_it);
+    }
+    void splice(ListIterator< T > it, List< T >& list, ConstListIterator< T > list_start, ConstListIterator< T > list_finish)
+    {
+      while (list_start != list_finish)
+      {
+        splice(it, list, list_start++);
+      }
     }
     void reverse()
     {
@@ -428,26 +443,21 @@ namespace piyavkin
       }
       return it_finish;
     }
-    ListIterator< T > insert(ConstListIterator< T > it, const T& value)
+    ListIterator< T > insert(ListIterator< T > it, const T& value)
     {
       try
       {
-        ListIterator< T > ret;
-        if (it == cbegin())
+        if (it == begin())
         {
           push_front(value);
-          ListIterator< T > temp(begin());
-          ret = temp;
         }
-        else if (it == cend())
+        else if (it == end())
         {
           push_back(value);
-          ListIterator< T > temp(--end());
-          ret = temp;
         }
         else
         {
-          ConstListIterator< T > iterator(head_);
+          ListIterator< T > iterator(head_);
           Node< T >* node = head_;
           while (iterator != it)
           {
@@ -458,10 +468,8 @@ namespace piyavkin
           node->prev_ = new_node;
           new_node->prev_->next_ = new_node;
           ++size_;
-          ListIterator< T > temp(new_node);
-          ret = temp;
         }
-        return ret;
+        return ++it;
       }
       catch(const std::exception& e)
       {
@@ -469,18 +477,17 @@ namespace piyavkin
         throw;
       }
     }
-    ListIterator< T > insert(ConstListIterator< T > it, ListIterator< T > start, ListIterator< T > finish)
+    ListIterator< T > insert(ListIterator< T > it, ListIterator< T > start, ListIterator< T > finish)
     {
       try
       {
-        ListIterator< T > iterator(start);
         while (start != finish)
         {
           insert(it, *start);
           ++it;
           ++start;
         }
-        return iterator;
+        return it;
       }
       catch(const std::exception& e)
       {
@@ -488,7 +495,7 @@ namespace piyavkin
         throw;
       }
     }
-    ListIterator< T > insert(ConstListIterator< T > it, size_t n, const T& value)
+    ListIterator< T > insert(ListIterator< T > it, size_t n, const T& value)
     {
       for (size_t i = 0; i < n; ++i)
       {
@@ -496,12 +503,12 @@ namespace piyavkin
       }
       return it;
     }
-    ListIterator< T > insert(ConstListIterator< T > it, std::initializer_list< T > il)
+    ListIterator< T > insert(ListIterator< T > it, std::initializer_list< T > il)
     {
         auto iterator = il.begin();
         while (iterator != il.end())
         {
-          insert(it++, *iterator);
+          insert(it, *iterator);
           ++iterator;
         }
         return it;
@@ -658,7 +665,7 @@ namespace piyavkin
       }
     }
     template< class Compare >
-    vois sort(Compare comp)
+    void sort(Compare comp)
     {
       Node< T >* node1 = head_;
       for (size_t i = 0; i < size_; ++i)
