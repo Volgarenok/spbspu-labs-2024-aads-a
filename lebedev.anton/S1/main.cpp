@@ -8,8 +8,14 @@ int main()
   list.push_back(10);
   list.push_back(20);
   list.push_back(30);
-  list.push_front(-10);
-  list.clear();
+
+  List< int > list2;
+  list2.push_back(-10);
+  list2.push_back(-20);
+  list2.push_back(-30);
+  list2.push_back(-40);
+
+  list.swap(list2);
 
   list.outputList(std::cout);
   std::cout << list.size() << '\n';

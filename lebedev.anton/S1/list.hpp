@@ -105,6 +105,14 @@ namespace lebedev
       }
     }
 
+    void swap(List< T > & list)
+    {
+      std::swap(list.head_, head_);
+      std::swap(list.tail_, tail_);
+      std::swap(list.size_, size_);
+    }
+
+
     void outputList(std::ostream & out) const
     {
       Node< T > * head = head_;
