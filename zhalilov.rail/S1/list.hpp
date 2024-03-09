@@ -52,6 +52,13 @@ namespace zhalilov
     void splice(const_iterator, List< T > &, const_iterator, const_iterator);
     void splice(const_iterator, List< T > &&, const_iterator, const_iterator);
 
+    template < typename... Args >
+    void emplace(const_iterator, Args &&...);
+    template < typename... Args >
+    void emplace_back(Args &&...);
+    template < typename... Args >
+    void emplace_front(Args &&...);
+
     iterator insert(const_iterator, const T &);
     iterator insert(const_iterator, T &&);
     iterator insert(const_iterator, size_t, const T &);
@@ -318,58 +325,6 @@ namespace zhalilov
   }
 
   template < typename T >
-  typename List< T >::iterator List< T >::insert(const_iterator pos, const T &value)
-  {
-    auto newNode = new Node< T >(value);
-    inserter(pos, newNode);
-    return iterator(newNode);
-  }
-
-  template < typename T >
-  typename List< T >::iterator List< T >::insert(const_iterator pos, T &&value)
-  {
-    auto newNode = new Node< T >(std::move(value));
-    inserter(pos, newNode);
-    return iterator(newNode);
-  }
-
-  template < typename T >
-  typename List< T >::iterator List< T >::insert(const_iterator pos, size_t n, const T &value)
-  {
-    for (size_t i = 0; i < n; i++)
-    {
-      auto newIt = insert(pos, value);
-      pos = const_iterator(newIt.m_node);
-    }
-    return iterator(pos.m_node->prev);
-  }
-
-  template < typename T >
-  typename List< T >::iterator List< T >::insert(const_iterator pos, iterator first, iterator last)
-  {
-    while (first != last)
-    {
-      auto newIt = insert(pos, *first);
-      pos = const_iterator(newIt.m_node);
-      first++;
-    }
-    return iterator(pos.m_node->prev);
-  }
-
-  template < typename T >
-  typename List< T >::iterator List< T >::insert(const_iterator pos, std::initializer_list< T > il)
-  {
-    typename std::initializer_list< T >::iterator ilIt = il.begin();
-    while (ilIt != il.end())
-    {
-      auto newIt = insert(pos, *ilIt);
-      pos = const_iterator(newIt.m_node);
-      ilIt++;
-    }
-    return iterator(pos.m_node->prev);
-  }
-
-  template < typename T >
   void List< T >::splice(const_iterator pos, List< T > &list)
   {
     while (!list.empty())
@@ -419,6 +374,80 @@ namespace zhalilov
                          const_iterator otherPosLast)
   {
     splice(pos, list, otherPosFirst, otherPosLast);
+  }
+
+  template < typename T >
+  template < typename... Args >
+  void List< T >::emplace(const_iterator pos, Args &&... args)
+  {
+    Node< T > *newNode = new Node< T >(std::forward< Args >(args));
+    inserter(pos, newNode);
+  }
+
+  template < typename T >
+  template < typename... Args >
+  void List< T >::emplace_back(Args &&... args)
+  {
+    emplace(cend(), std::forward< Args >(args));
+  }
+
+  template < typename T >
+  template < typename... Args >
+  void List< T >::emplace_front(Args &&... args)
+  {
+    emplace(cbegin(), std::forward< Args >(args));
+  }
+
+  template < typename T >
+  typename List< T >::iterator List< T >::insert(const_iterator pos, const T &value)
+  {
+    Node< T > *newNode = new Node< T >(value);
+    inserter(pos, newNode);
+    return iterator(newNode);
+  }
+
+  template < typename T >
+  typename List< T >::iterator List< T >::insert(const_iterator pos, T &&value)
+  {
+    Node< T > *newNode = new Node< T >(std::move(value));
+    inserter(pos, newNode);
+    return iterator(newNode);
+  }
+
+  template < typename T >
+  typename List< T >::iterator List< T >::insert(const_iterator pos, size_t n, const T &value)
+  {
+    for (size_t i = 0; i < n; i++)
+    {
+      auto newIt = insert(pos, value);
+      pos = const_iterator(newIt.m_node);
+    }
+    return iterator(pos.m_node->prev);
+  }
+
+  template < typename T >
+  typename List< T >::iterator List< T >::insert(const_iterator pos, iterator first, iterator last)
+  {
+    while (first != last)
+    {
+      auto newIt = insert(pos, *first);
+      pos = const_iterator(newIt.m_node);
+      first++;
+    }
+    return iterator(pos.m_node->prev);
+  }
+
+  template < typename T >
+  typename List< T >::iterator List< T >::insert(const_iterator pos, std::initializer_list< T > il)
+  {
+    typename std::initializer_list< T >::iterator ilIt = il.begin();
+    while (ilIt != il.end())
+    {
+      auto newIt = insert(pos, *ilIt);
+      pos = const_iterator(newIt.m_node);
+      ilIt++;
+    }
+    return iterator(pos.m_node->prev);
   }
 
   template < typename T >
