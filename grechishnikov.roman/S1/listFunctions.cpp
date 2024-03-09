@@ -26,17 +26,10 @@ grechishnikov::List< grechishnikov::namedList > grechishnikov::inputLists(std::i
   List< namedList > inputedLists;
   while (in)
   {
-    try
+    inputedLists.push_back(inputList(in));
+    if (!in.eof())
     {
-      inputedLists.push_back(inputList(in));
-      if (!in.eof())
-      {
-        in.clear();
-      }
-    }
-    catch (const std::logic_error &e)
-    {
-      return inputedLists;
+      in.clear();
     }
   }
   return inputedLists;

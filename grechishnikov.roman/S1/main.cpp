@@ -6,7 +6,16 @@ int main()
 {
   using namespace grechishnikov;
 
-  List< namedList > namedLists = inputLists(std::cin);
+  List< namedList > namedLists;
+  try
+  {
+    namedLists = inputLists(std::cin);
+  }
+  catch (std::logic_error &e)
+  {
+    std::cout << 0 << '\n';
+    return 0;
+  }
 
   for (auto namedIter = namedLists.begin(); namedIter != namedLists.end(); namedIter++)
   {
