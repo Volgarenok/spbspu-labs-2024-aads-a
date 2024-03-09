@@ -47,10 +47,10 @@ namespace zhalilov
 
     void splice(const_iterator, List< T > &);
     void splice(const_iterator, List< T > &&);
-    void splice(const_iterator, List< T > &, const_iterator otherListPos);
-    void splice(const_iterator, List< T > &&, const_iterator otherListPos);
-    void splice(const_iterator, List< T > &, const_iterator first, const_iterator last);
-    void splice(const_iterator, List< T > &&, const_iterator first, const_iterator last);
+    void splice(const_iterator, List< T > &, const_iterator);
+    void splice(const_iterator, List< T > &&, const_iterator);
+    void splice(const_iterator, List< T > &, const_iterator, const_iterator);
+    void splice(const_iterator, List< T > &&, const_iterator, const_iterator);
 
     iterator insert(const_iterator, const T &);
     iterator insert(const_iterator, T &&);
