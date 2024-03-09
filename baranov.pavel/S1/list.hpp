@@ -1,6 +1,7 @@
 #ifndef LIST_HPP
 #define LIST_HPP
 
+#include <iostream>
 #include "node.hpp"
 #include "iterator.hpp"
 
@@ -11,6 +12,7 @@ namespace baranov
   {
     public:
       List();
+      ~List();
       Iterator< T > begin();
       Iterator< T > end();
       bool empty() const;
@@ -34,6 +36,12 @@ namespace baranov
     tail_(nullptr),
     size_(0)
   {}
+
+  template< class T >
+  List< T >::~List()
+  {
+    clear();
+  }
 
   template< class T >
   Iterator< T > List< T >::begin()
@@ -88,10 +96,10 @@ namespace baranov
     }
     else
     {
-      Node< T > newtail = tail_->prev_;
+      Node< T > * newtail = tail_->prev_;
       delete tail_;
       tail_ = newtail;
-      tail_->next = nullptr;
+      tail_->next_ = nullptr;
     }
     --size_;
   }
@@ -125,10 +133,10 @@ namespace baranov
     }
     else
     {
-      Node< T > newhead = head_->next_;
+      Node< T > * newhead = head_->next_;
       delete head_;
       head_ = newhead;
-      head_->prev = nullptr;
+      head_->prev_ = nullptr;
     }
     --size_;
   }

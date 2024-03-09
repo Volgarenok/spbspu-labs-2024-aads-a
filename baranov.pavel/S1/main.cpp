@@ -9,10 +9,11 @@ int main()
   using namespace baranov;
   List< std::pair< std::string, List< size_t > > > list;
   inputList(std::cin, list);
-
+  std::cout << "in done" << std::endl;
   printNames(std::cout, list);
 
   List< List < size_t > > numbers;
   readByElement(numbers, list);
+  printLists(std::cout, numbers);
 }
 

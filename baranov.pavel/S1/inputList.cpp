@@ -2,17 +2,16 @@
 
 void baranov::inputList(std::istream & input, ds_t & list)
 {
-  size_t number = 0;
-  std::string name = "";
-  while (!input.eof())
+  std::string str = "";
+  input >> str;
+  while (input)
   {
-    input.clear();
-    input >> name;
-    List< size_t > in_lst;
-    while (input >> number)
+    auto pair = std::make_pair(str, List< size_t >());
+    list.push_back(pair);
+    while (input >> str && std::isdigit(str[0]))
     {
-      in_lst.push_back(number);
+      list.end()->second.push_back(std::stoull(str));
     }
-    list.push_back(std::make_pair(name, in_lst));
   }
 }
+
