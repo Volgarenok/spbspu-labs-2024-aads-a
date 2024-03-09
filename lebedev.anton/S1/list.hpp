@@ -27,8 +27,8 @@ namespace lebedev
 
     void push_back(const T & val)
     {
-      Node< T > * node = new Node< T >(val);
-      if (head_ == nullptr)
+      Node< T > * node = new Node< T >(val, nullptr, tail_);
+      if ((head_ == nullptr) && (tail_ == nullptr))
       {
         head_ = node;
         tail_ = node;
@@ -41,6 +41,23 @@ namespace lebedev
       }
       ++size_;
     }
+    void push_front(const T & val)
+    {
+      Node< T > * node = new Node< T >(val, head_, nullptr);
+      if ((head_ == nullptr) && (tail_ == nullptr))
+      {
+        head_ = node;
+        tail_ = node;
+      }
+      else
+      {
+        node->next_ = head_;
+        head_->prev_ = node;
+        head_ = node;
+      }
+      ++size_;
+    }
+
 
     void outputList(std::ostream & out) const
     {
