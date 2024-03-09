@@ -343,20 +343,7 @@ namespace nikitov
   template< class T >
   void List< T >::push_front(const T& value)
   {
-    Node< T >* ptr = new Node< T >(value);
-    ptr->next_ = head_;
-    if (head_->next_ != nullptr)
-    {
-      head_->prev_ = ptr;
-    }
-    else
-    {
-      ptr->next_ = head_;
-      head_->prev_ = ptr;
-      tail_ = ptr;
-    }
-    head_ = ptr;
-    ++size_;
+    embed(cbegin(), value);
   }
 
   template< class T >
@@ -380,22 +367,7 @@ namespace nikitov
   template< class T >
   void List< T >::push_back(const T& value)
   {
-    Node< T >* ptr = new Node< T >(value);
-    ptr->prev_ = tail_;
-    if (tail_ != nullptr)
-    {
-      ptr->next_ = tail_->next_;
-      ptr->next_->prev_ = ptr;
-      tail_->next_ = ptr;
-    }
-    else
-    {
-      ptr->next_ = head_;
-      head_->prev_ = ptr;
-      head_ = ptr;
-    }
-    tail_ = ptr;
-    ++size_;
+    embed(cend(), value);
   }
 
   template< class T >
@@ -457,65 +429,31 @@ namespace nikitov
   template< class T >
   ListIterator< T > List< T >::insert(constIterator position, const T& value)
   {
-    if (position == cbegin())
-    {
-      push_front(value);
-      return begin();
-    }
-    else if (position == cend())
-    {
-      push_back(value);
-      return --end();
-    }
-    else
-    {
-      auto iterator = begin();
-      Node< T >* node = head_;
-      while (iterator != position)
-      {
-        ++iterator;
-        node = node->next_;
-      }
-      Node< T >* newNode = new Node< T >(value);
-      newNode->prev_ = node->prev_;
-      newNode->next_ = node;
-      newNode->prev_->next_ = newNode;
-      node->prev_ = newNode;
-      ++size_;
-      return ListIterator< T >(newNode);
-    }
+    return embed(position, value);
   }
 
   template< class T >
   ListIterator< T > List< T >::insert(constIterator position, size_t n, const T& value)
   {
-    auto iterator = begin();
-    while (iterator != position)
-    {
-      ++iterator;
-    }
+    iterator iter = begin();
     for (size_t i = 0; i != n; ++i)
     {
-      insert(position, value);
+      iter = embed(position, value);
     }
-    return iterator.advance(-n);
+    return iter.advance(-n + 1);
   }
 
   template< class T >
   ListIterator< T > List< T >::insert(constIterator position, constIterator first, constIterator last)
   {
-    auto iterator = begin();
-    while (iterator != position)
-    {
-      ++iterator;
-    }
+    iterator iter;
     size_t countNewElements = 0;
     for (auto i = first; i != last; ++i)
     {
-      insert(position, *i);
+      iter = embed(position, *i);
       ++countNewElements;
     }
-    return iterator.advance(-countNewElements);
+    return iter.advance(-countNewElements + 1);
   }
 
   template< class T >
