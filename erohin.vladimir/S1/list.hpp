@@ -53,6 +53,10 @@ namespace erohin
     void assign(std::initializer_list< T > init_list);
     void splice_after(const_iterator pos, List< T > & other);
     void splice_after(const_iterator pos, List< T > && other);
+    void splice_after(const_iterator pos, List< T > & other, const_iterator it);
+    void splice_after(const_iterator pos, List< T > && other, const_iterator it);
+    void splice_after(const_iterator pos, List< T > & other, const_iterator first, const_iterator last);
+    void splice_after(const_iterator pos, List< T > && other, const_iterator first, const_iterator last);
     void reverse();
   private:
     Node< T > * head_;
@@ -358,6 +362,52 @@ namespace erohin
       ++pos;
     }
     other.clear();
+  }
+
+  template< class T >
+  void List< T >::splice_after(ListConstIterator< T > pos, List< T > & other, ListConstIterator< T > it)
+  {
+    if (pos == it || pos == (it + 1))
+    {
+      return;
+    }
+    splice_after(pos, other, it, other.cend());
+  }
+
+  template< class T >
+  void List< T >::splice_after(ListConstIterator< T > pos, List< T > && other, ListConstIterator< T > it)
+  {
+    if (pos == it || pos == (it + 1))
+    {
+      return;
+    }
+    splice_after(pos, std::move(other), it, other.cend());
+  }
+
+  template< class T >
+  void List< T >::splice_after(ListConstIterator< T > pos, List< T > & other, ListConstIterator< T > first, ListConstIterator< T > last)
+  {
+    auto iter_current = first;
+    auto iter_end = last;
+    while (iter_current + 1 != iter_end)
+    {
+      insert_after(pos, std::move(*(iter_current + 1)));
+      other.erase_after(iter_current);
+      ++pos;
+    }
+  }
+
+  template< class T >
+  void List< T >::splice_after(ListConstIterator< T > pos, List< T > && other, ListConstIterator< T > first, ListConstIterator< T > last)
+  {
+    auto iter_current = first;
+    auto iter_end = last;
+    while (iter_current + 1 != iter_end)
+    {
+      insert_after(pos, std::move(*(iter_current + 1)));
+      other.erase_after(iter_current);
+      ++pos;
+    }
   }
 
   template< class T >
