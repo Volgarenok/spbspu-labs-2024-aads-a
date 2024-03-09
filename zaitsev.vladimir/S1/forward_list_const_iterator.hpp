@@ -3,7 +3,6 @@
 #include <stdexcept>
 #include <iterator>
 #include "node.hpp"
-#include "forward_list_iterator.hpp"
 
 namespace zaitsev
 {
