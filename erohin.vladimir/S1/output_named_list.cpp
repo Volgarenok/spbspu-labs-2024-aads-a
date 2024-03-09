@@ -21,10 +21,10 @@ std::ostream & erohin::printNames(std::ostream & output, const List< named_list 
   return output;
 }
 
-void erohin::formOrderedNumLists(List < List< int_t > > & result, const List< named_list > & list)
+void erohin::formOrderedNumLists(List < List< int_type > > & result, const List< named_list > & list)
 {
   result.clear();
-  using iterator_list = List< ListConstIterator< int_t > >;
+  using iterator_list = List< ListConstIterator< int_type > >;
   iterator_list iters;
   auto current = list.cbegin();
   auto last = list.cend();
@@ -38,7 +38,7 @@ void erohin::formOrderedNumLists(List < List< int_t > > & result, const List< na
   auto end_line_iter = result.cbegin();
   while (!iters.empty())
   {
-    List< int_t > current_number_line;
+    List< int_type > current_number_line;
     for (auto & cur_iter: iters)
     {
       if (cur_iter != iter_to_delete)
@@ -57,7 +57,7 @@ void erohin::formOrderedNumLists(List < List< int_t > > & result, const List< na
   result.reverse();
 }
 
-void erohin::formSumList(List< long_t > & result, const List < List< int_t > > & list)
+void erohin::formSumList(List< long_type > & result, const List < List< int_type > > & list)
 {
   result.clear();
   if (list.empty())
@@ -67,7 +67,7 @@ void erohin::formSumList(List< long_t > & result, const List < List< int_t > > &
   }
   for (auto num_list: list)
   {
-    size_t sum = 0;
+    long_type sum = 0;
     for (auto num: num_list)
     {
       sum += num;

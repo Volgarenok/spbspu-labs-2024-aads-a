@@ -9,8 +9,8 @@ int main()
   using namespace erohin;
   bool isBigNumberFound = false;
   List< named_list > lines;
-  List< List< int_t > > reformed_lines;
-  List< long_t > sums;
+  List< List< int_type > > reformed_lines;
+  List< long_type > sums;
   try
   {
     inputNamedList(std::cin, lines);
