@@ -37,8 +37,7 @@ int main()
   }
 
   List< size_t > temp;
-  List< List< size_t > > outList;
-  outList.assign(maxSize, temp);
+  List< List< size_t > > outList(maxSize, temp);
   for (size_t i = 0; i < maxSize; i++)
   {
     for (auto iter = namedLists.begin(); iter != namedLists.end(); iter++)

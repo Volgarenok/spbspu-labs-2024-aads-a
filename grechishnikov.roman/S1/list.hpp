@@ -15,6 +15,8 @@ namespace grechishnikov
   public:
     List();
     List(const List< T >&);
+    List(std::initializer_list< T >);
+    List(size_t, const T&);
     List(List< T >&& other);
     ~List();
 
@@ -70,6 +72,31 @@ namespace grechishnikov
     {
       push_back(node->data_);
       node = node->next_;
+    }
+  }
+
+  template< typename T >
+  List< T >::List(std::initializer_list< T > ilist):
+    size_(0),
+    head_(nullptr),
+    tail_(nullptr)
+  {
+    auto init = ilist.begin();
+    while (init != ilist.end())
+    {
+      push_back(*init);
+      init++;
+    }
+  }
+  template< typename T >
+  List< T >::List(size_t count, const T& value):
+    size_(0),
+    head_(nullptr),
+    tail_(nullptr)
+  {
+    for (size_t i = 0; i < count; i++)
+    {
+      push_back(value);
     }
   }
 
@@ -240,7 +267,6 @@ namespace grechishnikov
   void List< T >::assign(size_t count, const T& value)
   {
     clear();
-    size_ = count;
     for (size_t i = 0; i < count; i++)
     {
       push_back(value);
@@ -255,7 +281,6 @@ namespace grechishnikov
     {
       temp.push_back(*first);
       first++;
-      temp.size_++;
     }
     std::swap(size_, temp.size_);
     std::swap(head_, temp.head_);
@@ -271,7 +296,6 @@ namespace grechishnikov
     {
       push_back(*init);
       init++;
-      size_++;
     }
   }
 
