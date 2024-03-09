@@ -51,7 +51,7 @@ namespace baranov
   template< class T >
   Iterator< T > List< T >::end()
   {
-    return Iterator< T >(nullptr);
+    return Iterator< T >(tail_);
   }
 
   template< class T >
