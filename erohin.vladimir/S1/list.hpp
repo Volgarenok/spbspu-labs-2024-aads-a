@@ -110,24 +110,8 @@ namespace erohin
   }
 
   template< class T >
-  List< T >::List(std::initializer_list< T > init_list):
-    head_(nullptr)
-  {
-    auto init_begin = init_list.begin();
-    auto init_end = init_list.end();
-    while (init_begin != init_end)
-    {
-      try
-      {
-        push_front(*(--init_end));
-      }
-      catch (const std::bad_alloc &)
-      {
-        clear();
-        throw;
-      }
-    }
-  }
+  List< T >::List(std::initializer_list< T > init_list): List(init_list.begin(), init_list.end())
+  {}
 
   template< class T >
   template< class InputIt >
