@@ -1,6 +1,7 @@
 #include <iostream>
 #include <sstream>
 #include <numeric>
+#include <limits>
 #include "inputOutput.hpp"
 
 void skuratov::inputOutput()
@@ -16,7 +17,7 @@ void skuratov::inputOutput()
       std::string name;
       iss >> name;
       Sequence sequence(name);
-      int num = {};
+      size_t num = {};
       while (iss >> num)
       {
         sequence.numbers().push_back(num);
@@ -79,11 +80,17 @@ void skuratov::inputOutput()
       const auto& numbers = seq.numbers();
       if (i < numbers.size())
       {
-        column_sums[i] += numbers[i];
+        if (column_sums[i] <= std::numeric_limits<int>::max() - numbers[i])
+        {
+          column_sums[i] += numbers[i];
+        }
+        else
+        {
+          throw std::exception("Impossible to calculate");
+        }
       }
     }
   }
-
   bool firstSeq = true;
   for (const auto& sum : column_sums)
   {
