@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-#include "list.hpp"
 #include "inputOutput.hpp"
 
 int main()

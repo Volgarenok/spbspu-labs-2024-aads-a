@@ -1,12 +1,10 @@
 #include <iostream>
 #include <sstream>
 #include <numeric>
-#include "sequence.hpp"
-#include "list.hpp"
+#include "inputOutput.hpp"
 
 void skuratov::inputOutput()
 {
-    
     std::vector<Sequence> sequences;
     std::string line;
 

@@ -2,7 +2,7 @@
 #define INPUT_OUTPUT
 
 #include <fstream>
-#include "list.hpp"
+#include "sequence.hpp"
 
 namespace skuratov
 {

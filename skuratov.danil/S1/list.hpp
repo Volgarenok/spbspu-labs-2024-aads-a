@@ -22,7 +22,7 @@ namespace skuratov
         pop_front();
       }
     }
-    
+
     Node<T>* push_front(T value)
     {
       Node<T>* ptr = new Node<T>(value);
