@@ -116,8 +116,8 @@ void isaychev::outputResults(std::ostream & out, List< std::pair< std::string, u
       nums.clear();
     }
 
- //   sums.reverse();
-  //  outputList(out, sums);
+    sums.reverse();
+    outputList(out, sums);
   }
   else if (upperBorder == 1 && numOfPairs == 1)
   {
