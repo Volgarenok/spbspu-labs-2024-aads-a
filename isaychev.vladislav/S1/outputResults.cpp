@@ -25,7 +25,7 @@ size_t getElemNum(const isaychev::List < size_t > & list)
 
 size_t getMaxFwdElemNum(isaychev::List< std::pair< std::string, isaychev::List< size_t > > > & list)
 {
-  size_t maxSize = 0, k = 0;
+  size_t maxSize = 0;
   for (auto i = list.begin(); i != list.end(); ++i)
   {
     size_t temp = getElemNum(i->second);
