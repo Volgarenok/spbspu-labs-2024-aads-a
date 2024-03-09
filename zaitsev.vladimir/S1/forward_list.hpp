@@ -75,7 +75,7 @@ namespace zaitsev
   }
 
   template< typename T >
-  ForwardList<T>::ForwardList(const ForwardList& other)
+  ForwardList< T >::ForwardList(const ForwardList& other)
   {
     if (!other.head_)
     {
@@ -115,7 +115,7 @@ namespace zaitsev
   }
 
   template< typename T >
-  ForwardListIterator< T > ForwardList<T>::begin()
+  ForwardListIterator< T > ForwardList< T >::begin()
   {
     return ForwardListIterator< T >(head_);
   }
@@ -126,14 +126,14 @@ namespace zaitsev
     return ForwardListIterator< T >();
   }
 
-  template<typename T>
+  template< typename T >
   ConstForwardListIterator< T > ForwardList< T >::cbegin() const
   {
     return ConstForwardListIterator< T >(head_);
   }
 
-  template<typename T>
-  ConstForwardListIterator< T > ForwardList<T>::cend() const
+  template< typename T >
+  ConstForwardListIterator< T > ForwardList< T >::cend() const
   {
     return ConstForwardListIterator< T >();
   }
@@ -211,8 +211,8 @@ namespace zaitsev
     head_ = temp;
   }
 
-  template<typename T>
-  ForwardListIterator<T> ForwardList<T>::insert_after(ConstIterator pos, const T& value)
+  template< typename T >
+  ForwardListIterator< T > ForwardList< T >::insert_after(ConstIterator pos, const T& value)
   {
     if (pos == cend())
     {
@@ -224,8 +224,8 @@ namespace zaitsev
     return ++pos;
   }
 
-  template<typename T>
-  ForwardListIterator<T> ForwardList<T>::erase_after(ConstIterator pos)
+  template< typename T >
+  ForwardListIterator< T > ForwardList< T >::erase_after(ConstIterator pos)
   {
     if (pos == cend())
     {
@@ -242,8 +242,8 @@ namespace zaitsev
       return end();
   }
 
-  template<typename T>
-  void ForwardList<T>::splice_after(ConstIterator pos, ForwardList& other)
+  template< typename T >
+  void ForwardList< T >::splice_after(ConstIterator pos, ForwardList& other)
   {
     if (pos == cend())
     {
@@ -284,8 +284,8 @@ namespace zaitsev
     head_ = new_head;
   }
 
-  template<typename T>
-  size_t ForwardList<T>::remove(const T& value)
+  template< typename T >
+  size_t ForwardList< T >::remove(const T& value)
   {
     size_t removed = 0;
     node_t* prev = nullptr;

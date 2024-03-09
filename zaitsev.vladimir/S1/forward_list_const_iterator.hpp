@@ -11,27 +11,27 @@ namespace zaitsev
   {
   public:
     ConstForwardListIterator();
-    ConstForwardListIterator(Node< T >* node);
-    ConstForwardListIterator(const ConstForwardListIterator< T >&) = default;
+    ConstForwardListIterator(const Node< T >* node);
+    ConstForwardListIterator(const ConstForwardListIterator&) = default;
     ~ConstForwardListIterator() = default;
-    ConstForwardListIterator< T >& operator=(const ConstForwardListIterator< T >&) = default;
-    ConstForwardListIterator< T >& operator++();
-    ConstForwardListIterator< T > operator++(int);
+    ConstForwardListIterator& operator=(const ConstForwardListIterator&) = default;
+    ConstForwardListIterator& operator++();
+    ConstForwardListIterator operator++(int);
     const T& operator*() const;
     const T* operator->() const;
-    bool operator!=(const ConstForwardListIterator< T >& other) const;
-    bool operator==(const ConstForwardListIterator< T >& other) const;
+    bool operator!=(const ConstForwardListIterator& other) const;
+    bool operator==(const ConstForwardListIterator& other) const;
   private:
     Node< T >* node_;
   };
 
-  template<typename T>
-  ConstForwardListIterator<T>::ConstForwardListIterator():
+  template< typename T >
+  ConstForwardListIterator< T >::ConstForwardListIterator():
     node_(nullptr)
   {}
 
-  template<typename T>
-  ConstForwardListIterator<T>::ConstForwardListIterator(Node<T>* node):
+  template< typename T >
+  ConstForwardListIterator< T >::ConstForwardListIterator(const Node< T >* node):
     node_(node)
   {}
 
@@ -58,8 +58,8 @@ namespace zaitsev
     return res;
   }
 
-  template<typename T>
-  const T& ConstForwardListIterator<T>::operator*() const
+  template< typename T >
+  const T& ConstForwardListIterator< T >::operator*() const
   {
     if (!node_)
     {
@@ -68,8 +68,8 @@ namespace zaitsev
     return this->node_->value_;
   }
 
-  template<typename T>
-  const T* ConstForwardListIterator<T>::operator->() const
+  template< typename T >
+  const T* ConstForwardListIterator< T >::operator->() const
   {
     if (!node_)
     {
@@ -79,7 +79,7 @@ namespace zaitsev
   }
 
   template< typename T >
-  bool ConstForwardListIterator< T >::operator!=(const ConstForwardListIterator<T>& other) const
+  bool ConstForwardListIterator< T >::operator!=(const ConstForwardListIterator< T >& other) const
   {
     return node_ != other.node_;
   }

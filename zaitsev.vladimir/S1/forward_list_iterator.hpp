@@ -11,12 +11,12 @@ namespace zaitsev
   {
   public:
     ForwardListIterator();
-    ForwardListIterator(Node< T >* node);
+    ForwardListIterator(Node* node);
     ForwardListIterator(const ForwardListIterator&) = default;
     ~ForwardListIterator() = default;
-    ForwardListIterator< T >& operator=(const ForwardListIterator< T >&) = default;
-    ForwardListIterator< T >& operator++();
-    ForwardListIterator< T > operator++(int);
+    ForwardListIterator& operator=(const ForwardListIterator&) = default;
+    ForwardListIterator& operator++();
+    ForwardListIterator operator++(int);
     T& operator*();
     T* operator->();
     bool operator!=(const ForwardListIterator& other) const;
@@ -25,13 +25,13 @@ namespace zaitsev
     Node< T >* node_;
   };
 
-  template<typename T>
-  ForwardListIterator<T>::ForwardListIterator():
+  template< typename T >
+  ForwardListIterator< T >::ForwardListIterator():
     node_(nullptr)
   {}
 
-  template<typename T>
-  ForwardListIterator<T>::ForwardListIterator(Node<T>*node):
+  template< typename T >
+  ForwardListIterator< T >::ForwardListIterator(Node< T >*node):
     node_(node)
   {}
 
@@ -58,14 +58,14 @@ namespace zaitsev
     return res;
   }
 
-  template<typename T>
-  T& ForwardListIterator<T>::operator*()
+  template< typename T >
+  T& ForwardListIterator< T >::operator*()
   {
     return this->node_->value_;
   }
 
-  template<typename T>
-  T* ForwardListIterator<T>::operator->()
+  template< typename T >
+  T* ForwardListIterator< T >::operator->()
   {
     return std::addressof(this->node_->value_);
   }
