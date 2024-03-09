@@ -6,7 +6,7 @@
 int main()
 {
   using namespace isaychev;
-  using myPair = std::pair< std::string, List< size_t > >;
+  using myPair = std::pair< std::string, List< unsigned long long int > >;
   List< myPair > mainList;
   try
   {
@@ -22,5 +22,10 @@ int main()
   {
     std::cerr << e.what() << "\n";
     return 1;
+  }
+  catch (const std::logic_error & e)
+  {
+    std::cerr << e.what() << "\n";
+    return 0;
   }
 }

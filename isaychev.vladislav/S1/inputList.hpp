@@ -7,7 +7,8 @@
 
 namespace isaychev
 {
-  void inputList(std::istream & in, List< std::pair< std::string, List< size_t > > > & list);
+  using ullList = List< unsigned long long int >;
+  void inputList(std::istream & in, List< std::pair< std::string, ullList > > & list);
 }
 
 #endif
