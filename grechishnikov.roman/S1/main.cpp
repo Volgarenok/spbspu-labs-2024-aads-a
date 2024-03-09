@@ -8,6 +8,11 @@ int main()
 
   List< namedList > namedLists = inputLists(std::cin);
 
+  for (auto namedIter = namedLists.begin(); namedIter != namedLists.end(); namedIter++)
+  {
+   std::cout << namedIter->first << ' ';
+  }
+
   size_t maxSize = 0;
   for (auto namedIter = namedLists.begin(); namedIter != namedLists.end(); namedIter++)
   {
