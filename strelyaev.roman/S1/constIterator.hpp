@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <memory>
 #include "node.hpp"
+
 namespace strelyaev
 {
   template< typename T >

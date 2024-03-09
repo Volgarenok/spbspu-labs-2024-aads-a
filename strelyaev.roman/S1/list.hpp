@@ -46,13 +46,10 @@ namespace strelyaev
       {}
 
       List(size_t n, const T& value):
-        head_(new Node< T >),
+        head_(nullptr),
         tail_(head_)
       {
-        for (size_t i = 0; i < n; i++)
-        {
-          push_back(value);
-        }
+        assign(n, value);
       }
 
       List(std::initializer_list< T > init):
@@ -88,6 +85,8 @@ namespace strelyaev
         }
       }
 
+
+
       void swap(List& other)
       {
         Node< T >* temp = other.head_;
@@ -97,12 +96,12 @@ namespace strelyaev
 
       Iterator< T > insert(ConstIterator< T > pos, const T& value)
       {
-        if (pos == cbegin())
+        if (pos == begin())
         {
           push_front(value);
           return begin();
         }
-        if (pos == cend())
+        if (pos == end())
         {
           push_back(value);
           return end();
@@ -199,31 +198,52 @@ namespace strelyaev
         {
           pop_front();
         }
+        tail_ = nullptr;
       }
 
       void remove(const T& value)
       {
-        Node< T >* node = head_;
-        while (node != nullptr)
+        for (auto it = begin(); it != end(); it++)
         {
-          if (node->value_ = value)
+          if (*it == value)
           {
-            if (node == head_)
+            if (it == begin())
             {
               pop_front();
-              continue;
+              return;
             }
-            if (node == tail_)
+            if (it == end())
             {
               pop_back();
-              continue;
+              return;
             }
-            Node< T >* temp = node;
-            node->prev_->next_ = node->next_;
-            node->next_->prev_ = node->prev_;
-            node = node->next_;
-            delete temp;
+            it->prev_->next_ = it->next_;
+            it->next_prev_ = it->prev_;
+            delete *it;
+          }
+        }
+      }
 
+      template< class P >
+      void remove_if (P predicate)
+      {
+        for (auto it = begin(); it != end(); it++)
+        {
+          if (predicate(it))
+          {
+            if (it == begin())
+            {
+              pop_front();
+              return;
+            }
+            if (it == end())
+            {
+              pop_back();
+              return;
+            }
+            it->prev_->next_ = it->next_;
+            it->next_prev_ = it->prev_;
+            delete *it;
           }
         }
       }
