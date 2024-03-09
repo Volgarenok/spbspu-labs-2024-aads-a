@@ -18,8 +18,8 @@ namespace arakelyan
     BinList();
     BinList(const T &val, size_t size);
     BinList(Node< T > *head, Node< T > *tail);
-    BinList(const BinList< T > &ls);
-    BinList(std::initializer_list< T > ls);
+    BinList(const BinList< T > &otherLs);
+    BinList(std::initializer_list< T > otherLs);
     BinList(iterator it_start, iterator it_end);
 
     size_t getSize() const;//fine
@@ -55,11 +55,16 @@ namespace arakelyan
 
     void assign(const T &val, size_t size);//fine
     void assign(iterator it_start, iterator it_end);//fine
-    void assign(std::initializer_list< T > ls);//fine
+    void assign(std::initializer_list< T > otherLs);//fine
 
-    // operator!=
-    // operator ==
-    // operator =
+    BinList< T > &operator=(const BinList< T > &otherLs);//fine
+    BinList< T > &operator=(BinList< T > &&otherLs);//fine
+    BinList< T > &operator=(std::initializer_list< T > otherLs);//fine
+
+    bool operator==(const BinList &otherLs);
+    bool operator!=(const BinList &otherLs);
+    bool operator<(const BinList &otherLs);
+    bool operator>(const BinList &otherLs);
 
     void printList(std::ostream &out) const;
 
