@@ -9,7 +9,7 @@
 
 namespace arakelyan
 {
-  template < class T>
+  template < class T >
   struct BinList
   {
     using iterator = Iterator< T >;
@@ -22,39 +22,40 @@ namespace arakelyan
     BinList(std::initializer_list< T > ls);
     BinList(iterator it_start, iterator it_end);
 
-    size_t getSize() const;
-    bool isEmpty() const;
+    size_t getSize() const;//fine
+    bool isEmpty() const;//fine
 
-    iterator begin() const;
-    const_iterator cbegin() const;
-    iterator end() const;
-    const_iterator cend() const;
+    iterator begin() const;//fine
+    const_iterator cbegin() const;//fine
+    iterator end() const;//fine
+    const_iterator cend() const;//fine
 
     //spile
     //reverse
 
-    T getFirst() const;
-    T getLast() const;
+    T getFirst() const;//fine
+    T getLast() const;//fine
 
-    void push_back(const T &el);
-    void push_front(const T &el);
-    const_iterator insert_after(const_iterator it_pos, const T &val);
+    void push_back(const T &el);//fine
+    void push_front(const T &el);//fine
+    iterator insert_after(const_iterator it_pos, const T &val);//fine
 
-    void clear();
+    void clear();//fine
 
-    void pop_front();
-    void pop_back();
+    void pop_front();//fine
+    void pop_back();//fine
     void remove(const T &val);
-    // void remove_if(Unarypredicate p);
+    template < class Unarypredicate >
+    void remove_if(Unarypredicate p);
 
-    void swap(BinList &ls);
+    void swap(BinList &ls);//fine
 
-    iterator erase(iterator it_pos);
-    iterator erase(iterator it_start, iterator it_end);
+    iterator erase(iterator it_pos);//fine
+    iterator erase(iterator it_start, iterator it_end);//fine
 
-    void assign(const T &val, size_t size);
-    void assign(iterator it_start, iterator it_end);
-    void assign(std::initializer_list< T > ls);
+    void assign(const T &val, size_t size);//fine
+    void assign(iterator it_start, iterator it_end);//fine
+    void assign(std::initializer_list< T > ls);//fine
 
     // operator!=
     // operator ==
