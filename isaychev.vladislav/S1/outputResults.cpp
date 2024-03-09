@@ -93,8 +93,8 @@ void isaychev::outputResults(std::ostream & out, List< std::pair< std::string, u
 
     List< size_t > sums;
     unsigned long long int maxSize = std::numeric_limits< unsigned long long int >::max(), sum = 0;
-    try
-    {
+//    try
+ //   {
       for (size_t n = 1; n < upperBorder; ++n)
       {
         for (auto j = list.begin(); j != list.end(); ++j)
@@ -118,12 +118,12 @@ void isaychev::outputResults(std::ostream & out, List< std::pair< std::string, u
         sums.push(sum);
         sum = 0;
       }
-    }
-    catch (const std::out_of_range & e)
+   // }
+   /* catch (const std::out_of_range & e)
     {
       out << 0 << "\n";
       throw;
-    }
+    }*/
 
     sums.reverse();
     outputList(out, sums);
