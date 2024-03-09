@@ -435,6 +435,49 @@ namespace rebdev
         }
       }
 
+
+      //relational operators
+      bool operator > (const list& rhl) const
+      {
+        c_iter thisIterNow = begin();
+        c_iter rhlIterNow = rhl.begin();
+
+        while ((thisIterNow != end()) && (rhlIterNow != rhl.end()))
+        {
+          if (*(thisIterNow++) < *(rhlIterNow++)) return false;
+        }
+
+        return !((thisIterNow == end()) && (rhlIterNow != rhl.end()));
+      }
+      bool operator == (const list& rhl) const
+      {
+        c_iter thisIterNow = begin();
+        c_iter rhlIterNow = rhl.begin();
+
+        while ((thisIterNow != end()) && (rhlIterNow != rhl.end()))
+        {
+          if (*(thisIterNow++) != *(rhlIterNow++)) return false;
+        }
+
+        return (thisIterNow != end()) && (rhlIterNow != rhl.end());
+      }
+      bool operator < (const list& rhl) const
+      {
+        return (rhl > *this);
+      }
+      bool operator != (const list& rhl) const
+      {
+        return !(*this == rhl);
+      }
+      bool operator >= (const list& rhl) const
+      {
+        return (*this > rhl) || (*this == rhl);
+      }
+      bool operator <= (const list& rhl) const
+      {
+        return (*this < rhl) || (*this == rhl);
+      }
+
     private:
       node* headNode_;
       node* tailNode_;
