@@ -27,7 +27,7 @@ int main()
 
 //  namedList testListInput = inputList(std::cin);
 //  std::for_each(testListInput.second.begin(), testListInput.second.end(), pr);
-
+//git test
   List< namedList > testListInput2 = inputLists(std::cin);
   std::for_each(testListInput2.begin(), testListInput2.end(), prList);
 }
