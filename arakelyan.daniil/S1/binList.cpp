@@ -507,22 +507,6 @@ bool arakelyan::BinList< T >::operator>=(const BinList< T > &otherLs) const
 }
 
 template < class T >
-void arakelyan::BinList< T >::printList(std::ostream &out) const
-{
-  if (head_ == nullptr)
-  {
-    return;
-  }
-  Node< T > *i = head_;
-  while (i)
-  {
-    out << i->value << " -> ";
-    i = i->nextNode;
-  }
-  out << "end";
-}
-
-template < class T >
 arakelyan::BinList< T >::~BinList()
 {
   clear();

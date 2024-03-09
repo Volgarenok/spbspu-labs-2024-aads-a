@@ -22,53 +22,51 @@ namespace arakelyan
     BinList(std::initializer_list< T > otherLs);
     BinList(iterator it_start, iterator it_end);
 
-    size_t getSize() const;//fine
-    bool isEmpty() const;//fine
+    size_t getSize() const;
+    bool isEmpty() const;
 
-    iterator begin() const;//fine
-    const_iterator cbegin() const;//fine
-    iterator end() const;//fine
-    const_iterator cend() const;//fine
+    iterator begin() const;
+    const_iterator cbegin() const;
+    iterator end() const;
+    const_iterator cend() const;
 
     //spile
     //reverse
 
-    T getFirst() const;//fine
-    T getLast() const;//fine
+    T getFirst() const;
+    T getLast() const;
 
-    void push_back(const T &el);//fine
-    void push_front(const T &el);//fine
-    iterator insert_after(const_iterator it_pos, const T &val);//fine
+    void push_back(const T &el);
+    void push_front(const T &el);
+    iterator insert_after(const_iterator it_pos, const T &val);
 
-    void clear();//fine
+    void clear();
 
-    void pop_front();//fine
-    void pop_back();//fine
+    void pop_front();
+    void pop_back();
     void remove(const T &val);
     template < class Unarypredicate >
     void remove_if(Unarypredicate p);
 
-    void swap(BinList &ls);//fine
+    void swap(BinList &ls);
 
-    iterator erase(iterator it_pos);//fine
-    iterator erase(iterator it_start, iterator it_end);//fine
+    iterator erase(iterator it_pos);
+    iterator erase(iterator it_start, iterator it_end);
 
-    void assign(const T &val, size_t size);//fine
-    void assign(iterator it_start, iterator it_end);//fine
-    void assign(std::initializer_list< T > otherLs);//fine
+    void assign(const T &val, size_t size);
+    void assign(iterator it_start, iterator it_end);
+    void assign(std::initializer_list< T > otherLs);
 
-    BinList< T > &operator=(const BinList< T > &otherLs);//fine
-    BinList< T > &operator=(BinList< T > &&otherLs);//fine
-    BinList< T > &operator=(std::initializer_list< T > otherLs);//fine
+    BinList< T > &operator=(const BinList< T > &otherLs);
+    BinList< T > &operator=(BinList< T > &&otherLs);
+    BinList< T > &operator=(std::initializer_list< T > otherLs);
 
-    bool operator==(const BinList< T > &otherLs) const;//fine
-    bool operator!=(const BinList< T > &otherLs) const;//fine
-    bool operator<(const BinList< T > &otherLs) const;//fine
-    bool operator>(const BinList< T > &otherLs) const;//fine
-    bool operator<=(const BinList< T > &otherLs) const;//fine
-    bool operator>=(const BinList< T > &otherLs) const;//fine
-
-    void printList(std::ostream &out) const;
+    bool operator==(const BinList< T > &otherLs) const;
+    bool operator!=(const BinList< T > &otherLs) const;
+    bool operator<(const BinList< T > &otherLs) const;
+    bool operator>(const BinList< T > &otherLs) const;
+    bool operator<=(const BinList< T > &otherLs) const;
+    bool operator>=(const BinList< T > &otherLs) const;
 
     ~BinList();
   private:
