@@ -13,7 +13,8 @@ size_t getElemOnPos(size_t pos, isaychev::List< size_t > & l)
   return *it;
 }
 
-size_t getElemNum(const isaychev::List < size_t > & list)
+template < typename T >
+size_t getElemNum(isaychev::List < T > & list)
 {
   size_t num = 0;
   for (auto i = list.begin(); i != list.end(); i++)
@@ -47,69 +48,82 @@ void isaychev::outputResults(std::ostream & out, List< std::pair< std::string, L
 {
   reverseAll(list);
 
-  auto i = list.begin();
-  out << i->first;
-  for (++i ; i != list.end(); ++i)
-  {
-    out << " " << i->first;
-  }
-  out << "\n";
-
   size_t upperBorder = getMaxFwdElemNum(list) + 1;
-  for (size_t n = 1; n < upperBorder; ++n)
+  size_t numOfPairs = getElemNum(list);
+//  out << upperBorder << " " << numOfPairs << "\n";
+  if (upperBorder > 1)
   {
-    for (auto j = list.begin(); j != list.end(); ++j)
+    List< size_t > sums;
+    size_t maxSize = std::numeric_limits< size_t >::max(), sum = 0;
+    for (size_t n = 1; n < upperBorder; ++n)
     {
-      size_t bord = getElemNum(j->second);
-      size_t iter = 0;
-      if (n > bord)
+      for (auto j = list.begin(); j != list.end(); ++j)
       {
-        continue;
+        size_t bord = getElemNum(j->second);
+        size_t num = 0;
+        if (n > bord)
+        {
+          continue;
+        }
+        num = getElemOnPos(n, j->second);
+        if (maxSize - num < sum)
+        {
+          throw std::out_of_range("sum is too big");
+        }
+        else
+        {
+          sum += num;
+        }
       }
-      iter = getElemOnPos(n, j->second);
-      out << iter;
-      if (n == bord)
-      {
-        out << "\n";
-      }
-      else
-      {
-        out << " ";
-      }
+      sums.push(sum);
+      sum = 0;
     }
-  }
 
-  size_t maxSize = std::numeric_limits< size_t >::max(), sum = 0;
-  for (size_t n = 1; n < upperBorder; ++n)
-  {
-    for (auto j = list.begin(); j != list.end(); ++j)
+    auto i = list.begin();
+    out << i->first;
+    for (++i ; i != list.end(); ++i)
     {
-      size_t bord = getElemNum(j->second);
-      size_t num = 0;
-      if (n > bord)
-      {
-        continue;
-      }
-      num = getElemOnPos(n, j->second);
-      if (maxSize - num < sum)
-      {
-        throw std::out_of_range("sum is too big");
-      }
-      else
-      {
-        sum += num;
-      }
+      out << " " << i->first;
     }
-    out << sum;
-    if (n == upperBorder - 1)
+    out << "\n";
+
+    List< size_t > nums;
+    for (size_t n = 1; n < upperBorder; ++n)
     {
+      for (auto j = list.begin(); j != list.end(); ++j)
+      {
+        size_t bord = getElemNum(j->second);
+        size_t iter = 0;
+        if (n > bord)
+        {
+          continue;
+        }
+        iter = getElemOnPos(n, j->second);
+        nums.push(iter);
+      }
+      nums.reverse();
+      auto k = nums.begin();
+      out << *k;
+      for (++k; k != sums.end(); ++k)
+      {
+        out << " " << *k;
+      }
       out << "\n";
+      nums.clear();
     }
-    else
+
+    sums.reverse();
+    auto j = sums.begin();
+    out << *j;
+    for (++j; j != sums.end(); ++j)
     {
-      out << " ";
+      out << " " << *j;
     }
-    sum = 0;
+    out << "\n";
+  }
+  else if (upperBorder == 1 && numOfPairs == 1)
+  {
+    out << list.front().first << "\n" << 0 << "\n";
   }
 
   reverseAll(list);
