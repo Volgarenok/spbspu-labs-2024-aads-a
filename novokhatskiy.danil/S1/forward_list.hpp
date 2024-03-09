@@ -379,7 +379,7 @@ namespace novokhatskiy
       }
       reverse();
     }
-    
+
     void swap(ForwardList<T>& other)
     {
       std::swap(head_, other.head_);
