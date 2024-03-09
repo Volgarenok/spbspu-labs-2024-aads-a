@@ -289,6 +289,26 @@ namespace strelyaev
         }
       }
 
+      void reverse()
+      {
+        if (empty())
+        {
+          return;
+        }
+        Node< T >* current = head_;
+        Node< T >* temp = nullptr;
+         while (current != nullptr)
+         {
+          temp = current->prev_;
+          current->prev_ = current->next_;
+          current->next_ = temp;
+          current = current->prev_;
+        }
+        temp = head_;
+        head_ = tail_;
+        tail_ = temp;
+      }
+
       Iterator< T > begin()
       {
         return Iterator< T >(head_);
