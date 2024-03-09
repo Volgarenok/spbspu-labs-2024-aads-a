@@ -169,7 +169,7 @@ namespace gladyshev
     {
       if (empty())
       {
-        throw;
+        return;
       }
       Node<T>* temp = head_;
       head_ = head_->next;
@@ -179,7 +179,7 @@ namespace gladyshev
     {
       if (empty())
       {
-        throw;
+        return;
       }
       if (!head_->next)
       {
