@@ -138,7 +138,7 @@ namespace gladyshev
         }
       }
     }
-    void push_back(T data)
+    void push_back(const T& data)
     {
       Node<T>* newNode = new Node<T>(data);
       if (empty())
