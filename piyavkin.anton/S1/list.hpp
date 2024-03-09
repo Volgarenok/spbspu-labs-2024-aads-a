@@ -647,6 +647,42 @@ namespace piyavkin
         ++it;
       }
     }
+    template< class Pred >
+    void unique(Pred p)
+    {
+      ConstListIterator< T > it(head_);
+      ConstListIterator< T > end(tail_);
+      while (it != cend())
+      {
+        ConstListIterator< T > temp(it);
+        ++temp;
+        while (temp != cend())
+        {
+          ConstListIterator< T > temp_end(tail_);
+          end = temp_end;
+          if (temp == end)
+          {
+            if (p(*temp, *it))
+            {
+              erase(temp);
+            }
+            break;
+          }
+          if (p(*temp, *it))
+          {
+            ConstListIterator< T > temp2(temp);
+            ++temp2;
+            erase(temp);
+            temp = temp2;
+          }
+          else
+          {
+            ++temp;
+          }
+        }
+        ++it;
+      }
+    }
     void sort()
     {
       Node< T >* node1 = head_;
@@ -682,10 +718,40 @@ namespace piyavkin
         node1 = node1->next_;
       }
     }
+    template< class Compare >
+    void merge(List< T >& list, Compare comp)
+    {
+      ListIterator< T > start(head_);
+      ListIterator< T > list_start(list.head_);
+      while (list_start != list.cend())
+      {
+        if (comp(*start, *list_start))
+        {
+          insert(start, *list_start);
+          ++start;
+          ++list_start;
+          if (start == cend())
+          {
+            while (list_start != list.cend())
+            {
+              push_back(*list_start);
+              ++list_start;
+            }
+          }
+        }
+        else
+        {
+          ++list_start;
+        }
+      }
+      list.clear();
+      list.head_ = nullptr;
+      list.tail_ = nullptr;
+    }
     void merge(List< T >& list)
     {
-      ConstListIterator< T > start(head_);
-      ConstListIterator< T > list_start(list.head_);
+      ListIterator< T > start(head_);
+      ListIterator< T > list_start(list.head_);
       while (list_start != list.cend())
       {
         if (*start >= *list_start)
@@ -714,10 +780,9 @@ namespace piyavkin
     void emplace(ConstListIterator< T >)
     {}
     template< class... Args >
-    ListIterator< T > emplace(ConstListIterator< T > it, const T& val, Args&&... args)
+    ListIterator< T > emplace(ListIterator< T > it, const T& val, Args&&... args)
     {
-      ConstListIterator< T > temp(it);
-      ListIterator< T > iterator = insert(temp, val);
+      ListIterator< T > iterator = insert(it, val);
       emplace(it, args...);
       return iterator;
     }
