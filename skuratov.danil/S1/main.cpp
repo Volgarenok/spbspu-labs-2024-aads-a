@@ -34,22 +34,33 @@ int main()
   }
   std::cout << '\n';
 
-  bool moreNumbers = true;
-  size_t index = 0;
-  while (moreNumbers)
-  {
-    moreNumbers = false;
-    for (const auto& seq : sequences)
-    {
-      const auto& numbers = seq.numbers();
-      if (index < numbers.size())
-      {
-        std::cout << numbers[index] << " ";
-        moreNumbers = true;
-      }
-    }
-    std::cout << '\n';
-    ++index;
+  size_t max_size = 0;
+  for (const auto& seq : sequences) {
+      max_size = std::max(max_size, seq.numbers().size());
   }
+
+  for (size_t i = 0; i < max_size; ++i)
+  {
+      for (const auto& seq : sequences)
+      {
+          const auto& numbers = seq.numbers();
+          if (i < numbers.size())
+          {
+              std::cout << numbers[i] << " ";
+          }
+      }
+      std::cout << '\n';
+  }
+
+  for (const auto& seq : sequences)
+  {
+      const auto& numbers = seq.numbers();
+      if (!numbers.empty())
+      {
+          int sum = std::accumulate(numbers.begin(), numbers.end(), 0);
+          std::cout << sum << " ";
+      }
+  }
+  std::cout << '\n';
   return 0;
 }
