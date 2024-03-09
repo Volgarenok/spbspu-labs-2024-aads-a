@@ -380,7 +380,7 @@ namespace zhalilov
   template < typename... Args >
   void List< T >::emplace(const_iterator pos, Args &&... args)
   {
-    Node< T > *newNode = new Node< T >(std::forward< Args >(args));
+    Node< T > *newNode = new Node< T >(std::forward< Args >(args)...);
     inserter(pos, newNode);
   }
 
@@ -388,14 +388,14 @@ namespace zhalilov
   template < typename... Args >
   void List< T >::emplace_back(Args &&... args)
   {
-    emplace(cend(), std::forward< Args >(args));
+    emplace(cend(), std::forward< Args >(args)...);
   }
 
   template < typename T >
   template < typename... Args >
   void List< T >::emplace_front(Args &&... args)
   {
-    emplace(cbegin(), std::forward< Args >(args));
+    emplace(cbegin(), std::forward< Args >(args)...);
   }
 
   template < typename T >
