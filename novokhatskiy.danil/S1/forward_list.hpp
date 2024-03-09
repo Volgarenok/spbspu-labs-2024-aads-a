@@ -173,6 +173,46 @@ namespace novokhatskiy
       return goToPos++;
     }
 
+    iter insert_after(constIter pos, size_t count, const T& value)
+    {
+      if (pos == cend())
+      {
+        throw std::out_of_range("Can not insert");
+      }
+      auto goToPos = this->begin();
+      while (pos.operator!=(goToPos))
+      {
+        goToPos++;
+      }
+      for (size_t i = 0; i < count; i++)
+      {
+        Node< T >* node = new Node< T >(value);
+        node->next_ = goToPos.node_->next_;
+        goToPos.node_->next_ = node;
+      }
+      return goToPos++;
+    }
+
+    iter insert_after(constIter pos, std::initializer_list< T > list)
+    {
+      if (pos == cend())
+      {
+        throw std::out_of_range("Can not insert");
+      }
+      auto goToPos = this->begin();
+      while (pos.operator!=(goToPos))
+      {
+        goToPos++;
+      }
+      for (T value : list)
+      {
+        Node< T >* node = new Node< T >(value);
+        node->next_ = goToPos.node_->next_;
+        goToPos.node_->next_ = node;
+      }
+      return goToPos++;
+    }
+
     iter erase_after(constIter pos)
     {
       if (pos == cend())
@@ -197,6 +237,34 @@ namespace novokhatskiy
       }
     }
 
+    iter erase_after(constIter first, constIter last)
+    {
+      if (first == cend())
+      {
+        throw std::out_of_range("Can not insert");
+      }
+      auto goToPos = begin();
+      while (goToPos.operator!=(first))
+      {
+        goToPos++;
+      }
+      while (goToPos != last)
+      {
+        if (goToPos.node_->next_)
+        {
+          ForwardIterator< T > next(goToPos.node_->next_->next_);
+          delete goToPos.node_->next_;
+          goToPos.node_->next_ = next.node_;
+          return next;
+        }
+        else
+        {
+          return end();
+        }
+      }
+      return goToPos++;
+    }
+
     void splice_after(constIter& pos, ForwardList< T >& other)
     {
       if (pos == cend())
@@ -212,6 +280,7 @@ namespace novokhatskiy
         pos.node_->next_ = other.head_;
       }
       pos.node_->next_ = next;
+      other.head_ = nullptr;
     }
 
     void push_front(const T& value)
@@ -282,6 +351,35 @@ namespace novokhatskiy
       }
       head_ = otherHead;
     }
+
+    void assign(std::initializer_list< T > list)
+    {
+      try
+      {
+        clear();
+        for (T data : list)
+        {
+          push_front(data);
+        }
+        reverse();
+      }
+      catch (const std::bad_alloc&)
+      {
+        clear();
+        throw;
+      }
+    }
+
+    void assign(iter first, iter last)
+    {
+      clear();
+      while (first != last)
+      {
+        push_front(*first++);
+      }
+      reverse();
+    }
+    
     void swap(ForwardList<T>& other)
     {
       std::swap(head_, other.head_);
