@@ -407,11 +407,11 @@ arakelyan::BinList< T > &arakelyan::BinList< T >::operator=(const arakelyan::Bin
   if (this != &otherLs)
   {
     clear();
-    Node< T > *otherNode = otherLs.head_;
-    while (otherNode != nullptr)
+    const auto otherIt = otherLs.cbegin();
+    while (otherIt != otherLs.cend())
     {
-      push_back(otherNode->value);
-      otherNode = otherNode->nextNode;
+      push_back(*otherIt);
+      ++otherIt;
     }
   }
   return *this;
@@ -438,6 +438,72 @@ arakelyan::BinList< T > &arakelyan::BinList< T >::operator=(std::initializer_lis
     push_back(*otherIt++);
   }
   return *this;
+}
+
+template < class T >
+bool arakelyan::BinList< T >::operator==(const BinList< T > &otherLs) const
+{
+  if (size_ != otherLs.size_)
+  {
+    return false;
+  }
+  auto it = begin();
+  auto otherIt = otherLs.begin();
+  while (it != end() && otherIt != otherLs.end())
+  {
+    if (*it != *otherIt)
+    {
+      return false;
+    }
+    ++it;
+    ++otherIt;
+  }
+  return true;
+}
+
+template < class T >
+bool arakelyan::BinList< T >::operator!=(const BinList< T > &otherLs) const
+{
+  return !(*this == otherLs);
+}
+
+template < class T >
+bool arakelyan::BinList< T >::operator<(const BinList< T > &otherLs) const
+{
+  const auto it = cbegin();
+  const auto otherIt = otherLs.cbegin();
+  while (it != cend() && otherIt != otherLs.cend())
+  {
+    if (*it < *otherIt)
+    {
+      return true;
+    }
+    else if (*it > *otherIt)
+    {
+      return false;
+    }
+    ++it;
+    ++otherIt;
+  }
+  return (it == cend() && otherIt != otherLs.cend());
+}
+
+template < class T >
+bool arakelyan::BinList< T >::operator>(const BinList< T > &otherLs) const
+{
+  return !(*this < otherLs);
+}
+
+template < class T >
+bool arakelyan::BinList< T >::operator<=(const BinList< T > &otherLs) const
+{
+  return (*this < otherLs || *this == otherLs);
+}
+
+template < class T >
+bool arakelyan::BinList< T >::operator>=(const BinList< T > &otherLs) const
+{
+  return !(*this < otherLs || *this == otherLs);
 }
 
 template < class T >

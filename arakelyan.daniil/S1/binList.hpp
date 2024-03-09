@@ -61,10 +61,12 @@ namespace arakelyan
     BinList< T > &operator=(BinList< T > &&otherLs);//fine
     BinList< T > &operator=(std::initializer_list< T > otherLs);//fine
 
-    bool operator==(const BinList &otherLs);
-    bool operator!=(const BinList &otherLs);
-    bool operator<(const BinList &otherLs);
-    bool operator>(const BinList &otherLs);
+    bool operator==(const BinList< T > &otherLs) const;//fine
+    bool operator!=(const BinList< T > &otherLs) const;//fine
+    bool operator<(const BinList< T > &otherLs) const;//fine
+    bool operator>(const BinList< T > &otherLs) const;//fine
+    bool operator<=(const BinList< T > &otherLs) const;//fine
+    bool operator>=(const BinList< T > &otherLs) const;//fine
 
     void printList(std::ostream &out) const;
 
