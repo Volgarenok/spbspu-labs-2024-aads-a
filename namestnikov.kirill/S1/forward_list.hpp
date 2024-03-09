@@ -271,7 +271,7 @@ namespace namestnikov
       }
       reverse();
     }
-    T & operator[](const size_t index)
+    const T & operator[](size_t index)
     {
       size_t counter = 0;
       auto temp = head_;
@@ -285,6 +285,14 @@ namespace namestnikov
         ++counter;
       }
       return temp->data_;
+    }
+    const T & at(size_t index)
+    {
+      if ((index < 0) || (index >= max_size()))
+      {
+        throw std::out_of_range("Can not give you access to this element");
+      }
+      return operator[](index);
     }
     bool operator==(ForwardList<T> & other)
     {
