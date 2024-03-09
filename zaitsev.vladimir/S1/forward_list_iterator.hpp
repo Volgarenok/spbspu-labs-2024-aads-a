@@ -11,7 +11,7 @@ namespace zaitsev
   {
   public:
     ForwardListIterator();
-    ForwardListIterator(Node* node);
+    ForwardListIterator(Node< T >* node);
     ForwardListIterator(const ForwardListIterator&) = default;
     ~ForwardListIterator() = default;
     ForwardListIterator& operator=(const ForwardListIterator&) = default;
