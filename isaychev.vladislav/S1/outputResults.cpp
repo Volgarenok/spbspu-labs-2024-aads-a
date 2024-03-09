@@ -76,7 +76,7 @@ void isaychev::outputResults(std::ostream & out, List< std::pair< std::string, u
           continue;
         }
         num = getElemOnPos(n, j->second);
-        if (maxSize - num < sum)
+        if (maxSize - sum >= num)
         {
           throw std::out_of_range("sum is too big");
         }
@@ -112,26 +112,12 @@ void isaychev::outputResults(std::ostream & out, List< std::pair< std::string, u
         nums.push(iter);
       }
       nums.reverse();
-/*      auto k = nums.begin();
-      out << *k;
-      for (++k; k != sums.end(); ++k)
-      {
-        out << " " << *k;
-      }
-      out << "\n";*/
       outputList(out, nums);
       nums.clear();
     }
 
-    sums.reverse();
-    /*auto j = sums.begin();
-    out << *j;
-    for (++j; j != sums.end(); ++j)
-    {
-      out << " " << *j;
-    }
-    out << "\n";*/
-    outputList(out, sums);
+ //   sums.reverse();
+  //  outputList(out, sums);
   }
   else if (upperBorder == 1 && numOfPairs == 1)
   {
