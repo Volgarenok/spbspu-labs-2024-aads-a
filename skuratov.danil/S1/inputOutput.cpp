@@ -80,7 +80,7 @@ void skuratov::inputOutput()
       const auto& numbers = seq.numbers();
       if (i < numbers.size())
       {
-        if (column_sums[i] <= std::numeric_limits<int>::max() - numbers[i])
+        if (column_sums[i] <= std::numeric_limits<size_t>::max() - numbers[i])
         {
           column_sums[i] += numbers[i];
         }
