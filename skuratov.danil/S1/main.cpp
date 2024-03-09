@@ -1,77 +1,23 @@
 #include <iostream>
-#include <sstream>
-#include <vector>
-#include <numeric>
-#include "sequence.hpp"
+#include <string>
 #include "list.hpp"
+#include "inputOutput.hpp"
 
 int main()
 {
   using namespace skuratov;
-  std::vector<Sequence> sequences;
-  std::string line;
-
-  while (std::getline(std::cin, line))
+  try
   {
-    if (!line.empty())
-    {
-      std::istringstream iss(line);
-      std::string name;
-      iss >> name;
-      Sequence sequence(name);
-      int num = {};
-      while (iss >> num)
-      {
-        sequence.numbers().push_back(num);
-      }
-      sequences.push_back(sequence);
-    }
+    inputOutput();
   }
-
-  for (const auto& seq : sequences)
+  catch (const std::invalid_argument& e)
   {
-    std::cout << seq.name() << " ";
+    std::cout << 0 << '\n';
   }
-  std::cout << '\n';
-
-  size_t maxSize = 0;
-  for (const auto& seq : sequences)
+  catch (const std::exception& e)
   {
-    maxSize = std::max(maxSize, seq.numbers().size());
+    std::cerr << e.what() << '\n';
+    return 1;
   }
-
-  for (size_t i = 0; i < maxSize; ++i)
-  {
-    for (const auto& seq : sequences)
-    {
-      const auto& numbers = seq.numbers();
-      if (i < numbers.size())
-      {
-        std::cout << numbers[i] << " ";
-      }
-    }
-    std::cout << '\n';
-  }
-
-  std::vector<int> column_sums(maxSize, 0);
-
-  for (size_t i = 0; i < maxSize; ++i)
-  {
-    for (const auto& seq : sequences)
-    {
-      const auto& numbers = seq.numbers();
-      if (i < numbers.size())
-      {
-        column_sums[i] += numbers[i];
-      }
-    }
-  }
-
-  for (const auto& sum : column_sums)
-  {
-    std::cout << sum << " ";
-  }
-  std::cout << '\n';
-
   return 0;
 }

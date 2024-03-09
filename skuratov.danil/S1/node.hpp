@@ -6,16 +6,20 @@ namespace skuratov
   template <typename T>
   class Node
   {
-    Node<T>* prev;
-    Node<T>* next;
-    T data;
-
-    Node(const T& value):
-      data(value),
+  public:
+    Node():
+      prev(nullptr),
+      next(nullptr)
+    {}
+    Node(T value):
+      value(value),
       prev(nullptr),
       next(nullptr)
     {}
     ~Node() = default;
+    T value;
+    Node* prev;
+    Node* next;
   };
 }
 #endif

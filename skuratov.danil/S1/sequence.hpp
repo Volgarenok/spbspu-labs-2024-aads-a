@@ -9,7 +9,8 @@ namespace skuratov
   class Sequence
   {
   public:
-    Sequence(const std::string& name): name_(name)
+    Sequence(const std::string& name):
+      name_(name)
     {}
     const std::string& name() const { return name_; }
     std::vector<int>& numbers() { return numbers_; }
