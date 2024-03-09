@@ -91,6 +91,8 @@ namespace nikitov
     void remove_if(Predicate pred);
 
   private:
+    iterator embed(constIterator position, const T& value);
+
     Node< T >* head_;
     Node< T >* tail_;
     size_t size_;
@@ -829,6 +831,60 @@ namespace nikitov
       }
       node = temp;
     }
+  }
+
+  template< class T >
+  ListIterator< T > List< T >::embed(constIterator position, const T& value)
+  {
+    Node< T >* newNode = new Node< T >(value);
+    if (position == cbegin())
+    {
+      newNode->next_ = head_;
+      if (head_->next_ != nullptr)
+      {
+        head_->prev_ = newNode;
+      }
+      else
+      {
+        newNode->next_ = head_;
+        head_->prev_ = newNode;
+        tail_ = newNode;
+      }
+      head_ = newNode;
+    }
+    else if (position == cend())
+    {
+      newNode->prev_ = tail_;
+      if (tail_ != nullptr)
+      {
+        newNode->next_ = tail_->next_;
+        newNode->next_->prev_ = newNode;
+        tail_->next_ = newNode;
+      }
+      else
+      {
+        newNode->next_ = head_;
+        head_->prev_ = newNode;
+        head_ = newNode;
+      }
+      tail_ = newNode;
+    }
+    else
+    {
+      auto iterator = begin();
+      Node< T >* node = head_;
+      while (iterator != position)
+      {
+        ++iterator;
+        node = node->next_;
+      }
+      newNode->prev_ = node->prev_;
+      newNode->next_ = node;
+      newNode->prev_->next_ = newNode;
+      node->prev_ = newNode;
+    }
+    ++size_;
+    return ListIterator< T >(newNode);
   }
 }
 #endif
