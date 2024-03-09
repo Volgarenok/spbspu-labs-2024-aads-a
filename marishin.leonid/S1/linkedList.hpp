@@ -56,6 +56,69 @@ namespace marishin
       return *this;
     }
 
+    bool operator==(const LinkedList& other) const
+    {
+      if (size_ != other.size_)
+      {
+        return false;
+      }
+
+      auto this_iter = begin();
+      auto other_iter = other.begin();
+
+      while (this_iter != end() && other_iter != other.end())
+      {
+        if (*this_iter != *other_iter)
+        {
+          return false;
+        }
+        ++this_iter;
+        ++other_iter;
+      }
+      return true;
+    }
+
+    bool operator!=(const LinkedList& other) const
+    {
+      return !(*this == other);
+    }
+
+    bool operator<(const LinkedList& other) const
+    {
+      auto this_iter = begin();
+      auto other_iter = other.begin();
+
+      while (this_iter != end() && other_iter != other.end())
+      {
+        if (*this_iter < *other_iter)
+        {
+          return true;
+        }
+        else if (*other_iter < *this_iter)
+        {
+          return false;
+        }
+        ++this_iter;
+        ++other_iter;
+      }
+      return size_ < other.size_;
+    }
+
+    bool operator>(const LinkedList& other) const
+    {
+      return other < *this;
+    }
+
+    bool operator<=(const LinkedList& other) const
+    {
+      return !(other < *this);
+    }
+
+    bool operator>=(const LinkedList& other) const
+    {
+      return !(*this < other);
+    }
+
     class Iterator
     {
     private:
