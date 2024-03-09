@@ -76,7 +76,7 @@ void isaychev::outputResults(std::ostream & out, List< std::pair< std::string, u
           continue;
         }
         num = getElemOnPos(n, j->second);
-        if (maxSize - sum >= num)
+        if (maxSize - num <= sum)
         {
           throw std::out_of_range("sum is too big");
         }
