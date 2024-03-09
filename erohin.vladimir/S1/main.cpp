@@ -7,10 +7,9 @@
 int main()
 {
   using namespace erohin;
-  bool isBigNumberFound = false;
   List< named_list > lines;
-  List< List< int_type > > reformed_lines;
-  List< long_type > sums;
+  List< List< int_t > > reformed_lines;
+  List< int_t > sums;
   try
   {
     inputNamedList(std::cin, lines);
@@ -20,13 +19,9 @@ int main()
       return 0;
     }
   }
-  catch (const std::out_of_range &)
-  {
-    isBigNumberFound = true;
-  }
   catch (const std::bad_alloc &)
   {
-    std::cerr << "Bad allocation\n";
+    std::cerr << "Bad allocation in list creation\n";
     return 2;
   }
   catch (const std::exception & e)
@@ -45,20 +40,17 @@ int main()
     }
     formSumList(sums, reformed_lines);
   }
-  catch (const std::bad_alloc &)
+  catch (const std::overflow_error & e)
   {
-    std::cerr << "Bad allocation\n";
-    return 2;
-  }
-  if (isBigNumberFound)
-  {
-    std::cerr << "Big number is found\n";
+    std::cerr << e.what() << "\n";
     return 1;
   }
-  else
+  catch (const std::bad_alloc &)
   {
-    printList(std::cout, sums);
-    std::cout << "\n";
+    std::cerr << "Bad allocation in list handling\n";
+    return 2;
   }
+  printList(std::cout, sums);
+  std::cout << "\n";
   return 0;
 }

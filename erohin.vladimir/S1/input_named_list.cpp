@@ -3,36 +3,20 @@
 #include <string>
 #include <stdexcept>
 #include <utility>
-#include <limits>
 
 void erohin::inputNamedList(std::istream & input, List< named_list > & result)
 {
-  constexpr int_type max_value = std::numeric_limits< int_type >::max();
-  bool is_invalid_argument = false;
-  bool is_out_of_range = false;
   while (!input.eof())
   {
     input.clear();
     std::string name;
     input >> name;
     std::string string_number;
-    List< int_type > num_list;
+    List< int_t > num_list;
+    int_t elem = 0;
     while (input.peek() != '\n' && input >> string_number)
     {
-      int_type elem = 0;
-      try
-      {
-        elem = stoi(string_number);
-      }
-      catch (const std::invalid_argument &)
-      {
-        is_invalid_argument = true;
-      }
-      catch (const std::out_of_range &)
-      {
-        elem = max_value;
-        is_out_of_range = true;
-      }
+      elem = std::stoull(string_number);
       num_list.push_front(elem);
     }
     if (name != "")
@@ -42,12 +26,4 @@ void erohin::inputNamedList(std::istream & input, List< named_list > & result)
     }
   }
   result.reverse();
-  if (is_invalid_argument)
-  {
-    throw std::invalid_argument("Not a number was inputed");
-  }
-  if (is_out_of_range)
-  {
-    throw std::out_of_range("Too big number was inputed");
-  }
 }
