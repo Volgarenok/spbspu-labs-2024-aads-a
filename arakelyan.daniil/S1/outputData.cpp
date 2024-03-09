@@ -1,7 +1,10 @@
 #include "outputData.hpp"
+
+#include <limits>
+#include <stdexcept>
+
 #include "binList.cpp"
 #include "binList.hpp"
-#include <stdexcept>
 
 using BinList_t = arakelyan::BinList< std::pair< std::string, arakelyan::BinList< size_t > > >;
 
