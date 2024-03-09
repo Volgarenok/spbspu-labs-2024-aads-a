@@ -411,7 +411,7 @@ arakelyan::BinList< T > &arakelyan::BinList< T >::operator=(const arakelyan::Bin
     while (otherNode != nullptr)
     {
       push_back(otherNode->value);
-      otherNode = otherNode->nextNode; 
+      otherNode = otherNode->nextNode;
     }
   }
   return *this;
