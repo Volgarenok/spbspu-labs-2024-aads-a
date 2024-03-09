@@ -93,7 +93,7 @@ namespace piyavkin
     {
       swap(rhs);
     }
-    bool operator<(List< T >& rhs)
+    bool operator<(const List< T >& rhs) const
     {
       size_t min_size = std::min(rhs.size_, size_);
       Node< T >* node = head_;
@@ -109,23 +109,23 @@ namespace piyavkin
       }
       return false;
     }
-    bool operator>=(List< T >& rhs)
+    bool operator>=(const List< T >& rhs) const
     {
       return !(*this < rhs);
     }
-    bool operator<=(List< T >& rhs)
+    bool operator<=(const List< T >& rhs) const
     {
       return !(rhs < *this);
     }
-    bool operator>(List< T >& rhs)
+    bool operator>(const List< T >& rhs) const
     {
       return (rhs < *this);
     }
-    bool operator==(List< T >& rhs)
+    bool operator==(const List< T >& rhs) const
     {
       return !(*this < rhs) && !(rhs < *this);
     }
-    bool operator!=(List< T >& rhs)
+    bool operator!=(const List< T >& rhs) const
     {
       return !(rhs == *this);
     }
@@ -385,11 +385,11 @@ namespace piyavkin
     {
       return ListIterator< T >(tail_->next_);
     }
-    const ConstListIterator< T > cbegin() const
+    ConstListIterator< T > cbegin() const
     {
       return ConstListIterator< T >(head_);
     }
-    const ConstListIterator< T > cend() const
+    ConstListIterator< T > cend() const
     {
       return ConstListIterator< T >(tail_->next_);
     }
@@ -487,6 +487,24 @@ namespace piyavkin
         clear();
         throw;
       }
+    }
+    ListIterator< T > insert(ConstListIterator< T > it, size_t n, const T& value)
+    {
+      for (size_t i = 0; i < n; ++i)
+      {
+        insert(it++, value);
+      }
+      return it;
+    }
+    ListIterator< T > insert(ConstListIterator< T > it, std::initializer_list< T > il)
+    {
+        auto iterator = il.begin();
+        while (iterator != il.end())
+        {
+          insert(it++, *iterator);
+          ++iterator;
+        }
+        return it;
     }
     bool empty() const
     {
@@ -639,6 +657,24 @@ namespace piyavkin
         node1 = node1->next_;
       }
     }
+    template< class Compare >
+    vois sort(Compare comp)
+    {
+      Node< T >* node1 = head_;
+      for (size_t i = 0; i < size_; ++i)
+      {
+        Node< T >* node2 = node1;
+        for (size_t j = i; j < size_; ++j)
+        {
+          if (comp(node1->value_, node2->value_))
+          {
+            std::swap(node1->value_, node2->value_);
+          }
+          node2 = node2->next_;
+        }
+        node1 = node1->next_;
+      }
+    }
     void merge(List< T >& list)
     {
       ConstListIterator< T > start(head_);
@@ -684,5 +720,4 @@ namespace piyavkin
     size_t size_;
   };
 }
-
 #endif
