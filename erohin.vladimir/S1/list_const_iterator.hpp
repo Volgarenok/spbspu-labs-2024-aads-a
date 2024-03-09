@@ -7,9 +7,13 @@
 
 namespace erohin
 {
+  template < class T >
+  class List;
+
   template< class T >
   class ListConstIterator
   {
+    friend class List< T >;
   public:
     ListConstIterator();
     ListConstIterator(const Node< T > * node_ptr);
@@ -23,8 +27,8 @@ namespace erohin
     const T * operator->() const;
     bool operator==(const ListConstIterator< T > & rhs);
     bool operator!=(const ListConstIterator< T > & rhs);
-    const Node< T > * node_;
   private:
+    const Node< T > * node_;
   };
 
   template< class T >
