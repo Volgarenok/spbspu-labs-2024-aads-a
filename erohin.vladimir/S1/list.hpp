@@ -21,9 +21,9 @@ namespace erohin
     List(const List & list);
     List(List && list) noexcept;
     List(size_t count, const T & value);
-    List(std::initializer_list< T > init_list);
     template< class InputIt >
     List(InputIt first, InputIt last);
+    List(std::initializer_list< T > init_list);
     ~List();
     iterator begin();
     iterator end();
@@ -48,9 +48,9 @@ namespace erohin
     template< class UnaryPredicate >
     void remove_if(UnaryPredicate p);
     void assign(size_t count, const T & value);
-    void assign(std::initializer_list< T > init_list);
     template< class InputIt >
     void assign(InputIt first, InputIt last);
+    void assign(std::initializer_list< T > init_list);
     void splice_after(const_iterator pos, List< T > & other);
     void splice_after(const_iterator pos, List< T > && other);
     void reverse();
@@ -64,25 +64,8 @@ namespace erohin
   {}
 
   template< class T >
-  List< T >::List(const List< T > & list):
-    head_(nullptr)
-  {
-    auto current_iter = list.begin();
-    auto end_iter = list.end();
-    while (current_iter != end_iter)
-    {
-      try
-      {
-        push_front(*(current_iter++));
-      }
-      catch (const std::bad_alloc &)
-      {
-        clear();
-        throw;
-      }
-    }
-    reverse();
-  }
+  List< T >::List(const List< T > & list): List(list.cbegin(), list.cend())
+  {}
 
   template< class T >
   List< T >::List(List< T > && list) noexcept:
@@ -110,10 +93,6 @@ namespace erohin
   }
 
   template< class T >
-  List< T >::List(std::initializer_list< T > init_list): List(init_list.begin(), init_list.end())
-  {}
-
-  template< class T >
   template< class InputIt >
   List< T >::List(InputIt first, InputIt last):
     head_(nullptr)
@@ -132,6 +111,10 @@ namespace erohin
     }
     reverse();
   }
+
+  template< class T >
+  List< T >::List(std::initializer_list< T > init_list): List(init_list.begin(), init_list.end())
+  {}
 
   template< class T >
   List< T >::~List()
@@ -346,21 +329,7 @@ namespace erohin
   template< class T >
   void List< T >::assign(std::initializer_list< T > init_list)
   {
-    clear();
-    auto init_begin = init_list.begin();
-    auto init_end = init_list.end();
-    while (init_begin != init_end)
-    {
-      try
-      {
-        push_front(*(--init_end));
-      }
-      catch (const std::bad_alloc &)
-      {
-        clear();
-        throw;
-      }
-    }
+    assign(init_list.begin(), init_list.end());
   }
 
   template< class T >
