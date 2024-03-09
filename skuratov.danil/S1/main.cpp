@@ -33,4 +33,23 @@ int main()
     std::cout << seq.name() << " ";
   }
   std::cout << '\n';
+
+  bool moreNumbers = true;
+  size_t index = 0;
+  while (moreNumbers)
+  {
+    moreNumbers = false;
+    for (const auto& seq : sequences)
+    {
+      const auto& numbers = seq.numbers();
+      if (index < numbers.size())
+      {
+        std::cout << numbers[index] << " ";
+        moreNumbers = true;
+      }
+    }
+    std::cout << '\n';
+    ++index;
+  }
+  return 0;
 }
