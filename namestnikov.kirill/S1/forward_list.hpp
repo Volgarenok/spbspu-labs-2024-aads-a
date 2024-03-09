@@ -271,6 +271,21 @@ namespace namestnikov
       }
       reverse();
     }
+    T & operator[](const size_t index)
+    {
+      size_t counter = 0;
+      auto temp = head_;
+      while (temp)
+      {
+        if (counter == index)
+        {
+          break;
+        }
+        temp = temp->next_;
+        ++counter;
+      }
+      return temp->data_;
+    }
     bool operator==(ForwardList<T> & other)
     {
       size_t size = std::min(max_size(), other.max_size());
