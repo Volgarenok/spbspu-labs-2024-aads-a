@@ -71,7 +71,7 @@ void skuratov::inputOutput()
     }
   }
 
-  std::vector<int> column_sums(maxSize, 0);
+  std::vector<size_t> column_sums(maxSize, 0);
 
   for (size_t i = 0; i < maxSize; ++i)
   {
