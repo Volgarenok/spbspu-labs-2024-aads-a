@@ -60,31 +60,55 @@ namespace lebedev
 
     void pop_back()
     {
-      if (tail_ != nullptr)
+
+      if (tail_ == nullptr)
       {
-        Node< T > * todelete = tail_;
-        tail_ = tail_->prev_;
-        tail_->next_ = nullptr;
-        delete todelete;
-        --size_;
+        return;
       }
+      Node< T > * newtail = tail_->prev_;
+      if (newtail)
+      {
+        newtail->next_ = nullptr;
+      }
+      else
+      {
+        head_ = nullptr;
+      }
+      delete tail_;
+      tail_ = newtail;
+      --size_;
     }
     void pop_front()
     {
-      if (head_ != nullptr)
+      if (head_ == nullptr)
       {
-        Node< T > * todelete = head_;
-        head_ = head_->next_;
-        head_->prev_ = nullptr;
-        delete todelete;
-        --size_;
+        return;
+      }
+      Node< T > * newhead = head_->next_;
+      if (newhead)
+      {
+        newhead->prev_ = nullptr;
+      }
+      else
+      {
+        tail_ = nullptr;
+      }
+      delete head_;
+      head_ = newhead;
+      --size_;
+    }
+    void clear()
+    {
+      while (tail_)
+      {
+        pop_back();
       }
     }
 
     void outputList(std::ostream & out) const
     {
       Node< T > * head = head_;
-      while (head)
+      while (head != nullptr)
       {
         out << head->data_ << '\n';
         head = head->next_;

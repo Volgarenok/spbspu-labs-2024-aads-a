@@ -9,8 +9,7 @@ int main()
   list.push_back(20);
   list.push_back(30);
   list.push_front(-10);
-  list.pop_back();
-  list.pop_front();
+  list.clear();
 
   list.outputList(std::cout);
   std::cout << list.size() << '\n';
