@@ -35,26 +35,36 @@ int main()
   {
     maxSize = std::max(maxSize, namedIter->second.size());
   }
+
+  List< size_t > temp;
+  List< List< size_t > > outList;
+  outList.assign(maxSize, temp);
   for (size_t i = 0; i < maxSize; i++)
   {
     for (auto iter = namedLists.begin(); iter != namedLists.end(); iter++)
     {
-      if (iter->second.size() > i)
+      if (i < iter->second.size())
       {
-        std::cout << iter->second[i];
-        if (iter + 1 != namedLists.end())
-        {
-          std::cout << ' ';
-        }
-      }
+        outList[i].push_back(iter->second[i]);
+       }
     }
+  }
+
+  for (auto outIter = outList.begin(); outIter != outList.end(); outIter++)
+  {
+    outputList(*outIter, std::cout);
     std::cout << '\n';
   }
+
   try
   {
-    for (auto namedIter = namedLists.begin(); namedIter != namedLists.end(); namedIter++)
+    for (auto outIter = outList.begin(); outIter != outList.end(); outIter++)
     {
-      std::cout << countSum(namedIter->second) << ' ';
+      std::cout << countSum(*outIter);
+      if (outIter + 1 != outList.end())
+      {
+        std::cout << ' ';
+      }
     }
     std::cout << '\n';
   }

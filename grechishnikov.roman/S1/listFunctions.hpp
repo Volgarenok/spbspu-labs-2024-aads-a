@@ -8,9 +8,11 @@
 namespace grechishnikov
 {
   using namedList = std::pair < std::string, List< size_t > >;
+
   namedList inputList(std::istream& in);
   List< namedList > inputLists(std::istream& in);
   size_t countSum(List< size_t >& list);
+  void outputList(List< size_t >& lisr, std::ostream& out);
 }
 
 #endif

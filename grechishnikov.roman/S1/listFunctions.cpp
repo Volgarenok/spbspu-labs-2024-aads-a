@@ -38,7 +38,6 @@ grechishnikov::List< grechishnikov::namedList > grechishnikov::inputLists(std::i
 size_t grechishnikov::countSum(List< size_t >& list)
 {
   size_t sum = 0;
-
   auto iter = list.begin();
   while (iter != list.end())
   {
@@ -46,6 +45,20 @@ size_t grechishnikov::countSum(List< size_t >& list)
     iter++;
   }
   return sum;
+}
+
+void grechishnikov::outputList(List< size_t >& list, std::ostream& out)
+{
+  auto iter = list.begin();
+  while (iter != list.end())
+  {
+    out << *iter;
+    if (iter + 1 != list.end())
+    {
+      out << ' ';
+    }
+    iter++;
+  }
 }
 
 size_t safeSum(const size_t& first, const size_t& second)
