@@ -7,8 +7,8 @@ using namespace spiridonov;
 int main()
 {
   NamedList lists[100];
-  size_t numLists = 0;
-  size_t sums[100] = { 0 };
+  int numLists = 0;
+  int sums[100] = { 0 };
   int totalSize = 0;
 
   while (std::cin >> lists[numLists].name)
@@ -29,7 +29,7 @@ int main()
   }
 
   totalSize = 0;
-  for (int i = 0; i < numLists; i++)
+  for (size_t i = 0; i < numLists; i++)
   {
     totalSize = std::max(totalSize, lists[i].list.get_size());
   }
