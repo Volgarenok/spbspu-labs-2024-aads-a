@@ -4,15 +4,16 @@
 #include <iostream>
 #include <initializer_list>
 #include "iterator.hpp"
+#include "constIterator.hpp"
 #include "node.hpp"
 
 namespace arakelyan
 {
-  template < class T >
+  template < class T>
   struct BinList
   {
     using iterator = Iterator< T >;
-    using const_iterator = const Iterator< T >;
+    using const_iterator =  ConstIterator< T >;
 
     BinList();
     BinList(const T &val, size_t size);
@@ -37,20 +38,19 @@ namespace arakelyan
 
     void push_back(const T &el);
     void push_front(const T &el);
-    iterator insert_after(iterator it_pos, const T &val); // втсавтка эл в произвольную поз. - added
+    const_iterator insert_after(const_iterator it_pos, const T &val);
 
     void clear();
 
     void pop_front();
     void pop_back();
-    // void remove()
-    //remove if
+    void remove(const T &val);
+    // void remove_if(Unarypredicate p);
 
     void swap(BinList &ls);
 
-    iterator erase(iterator it_pos); // удаление произвольного, принимает итератор - added
-    iterator erase(iterator it_start, iterator it_end); // удаление элементов из заданного
-    // диапозона - added
+    iterator erase(iterator it_pos);
+    iterator erase(iterator it_start, iterator it_end);
 
     void assign(const T &val, size_t size);
     void assign(iterator it_start, iterator it_end);
