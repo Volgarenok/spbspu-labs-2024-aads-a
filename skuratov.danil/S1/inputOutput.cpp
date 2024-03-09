@@ -25,6 +25,11 @@ void skuratov::inputOutput()
     }
   }
 
+  if (sequences.empty())
+  {
+    throw std::invalid_argument("Empty list");
+  }
+
   bool first = true;
   for (const auto& seq : sequences)
   {
@@ -39,7 +44,7 @@ void skuratov::inputOutput()
 
 
 
-  size_t maxSize = 0;
+  size_t maxSize = 1;
   for (const auto& seq : sequences)
   {
     maxSize = std::max(maxSize, seq.numbers().size());

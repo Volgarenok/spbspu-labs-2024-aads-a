@@ -167,6 +167,11 @@ namespace skuratov
       return size;
     }
 
+    bool empty() const
+    {
+      return !size;
+    }
+
   private:
     Node<T>* head;
     Node<T>* tail;
