@@ -253,6 +253,24 @@ namespace namestnikov
       }
       reverse();
     }
+    void assign(iterator_t begin, iterator_t end)
+    {
+      clear();
+      try
+      {
+        while (begin != end)
+        {
+          push_front(*begin);
+          ++begin;
+        }
+      }
+      catch (const std::bad_alloc &)
+      {
+        clear();
+        throw std::invalid_argument("Too many args for a list");
+      }
+      reverse();
+    }
     iterator_t begin() const
     {
       return iterator_t(head_);
