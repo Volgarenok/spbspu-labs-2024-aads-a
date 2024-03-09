@@ -8,15 +8,17 @@ namespace spiridonov
   template <typename T>
   class List
   {
+  public:
+    class iterator;
+
   private:
     Node<T>* head;
     Node<T>* tail;
-    int size;
+    size_t size = 0;
 
   public:
     List() : head(nullptr), tail(nullptr), size(0)
-    {
-    }
+    {}
 
     ~List()
     {
@@ -26,6 +28,11 @@ namespace spiridonov
         head = head->next;
         delete temp;
       }
+    }
+
+    Node<T>* get_head() const
+    {
+      return head;
     }
 
     void push_back(const T& value)
@@ -47,6 +54,57 @@ namespace spiridonov
     bool is_empty() const
     {
       return size == 0;
+    }
+
+    int get_size() const
+    {
+      return size;
+    }
+
+    class iterator
+    {
+    private:
+      Node<T>* current;
+
+    public:
+      iterator(Node<T>* node) : current(node)
+      {}
+
+      iterator& operator++()
+      {
+        if (current) current = current->next;
+        return *this;
+      }
+
+      bool operator==(const iterator& other) const
+      {
+        return current == other.current;
+      }
+
+      bool operator!=(const iterator& other) const
+      {
+        return current != other.current;
+      }
+
+      T& operator*() const
+      {
+        return current->data;
+      }
+
+      T* operator->() const
+      {
+        return &(current->data);
+      }
+    };
+
+    iterator begin() const
+    {
+      return iterator(head);
+    }
+
+    iterator end() const
+    {
+      return iterator(nullptr);
     }
 
     T pop_back()
@@ -94,12 +152,6 @@ namespace spiridonov
 
       return value;
     }
-
-    int get_size() const
-    {
-      return size;
-    }
-
     T& operator[](int index)
     {
       if (index < 0 || index >= size)
