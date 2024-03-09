@@ -55,8 +55,8 @@ namespace rebdev
       }
 
       BiList(list&& rList):
-        headNode_(headNode_),
-        tailNode_(tailNode_)
+        headNode_(rList.headNode_),
+        tailNode_(rLIst.tailNode_)
       {}
 
       BiList(const T & firstElement):
@@ -107,6 +107,8 @@ namespace rebdev
       }
       list& operator = (const list&& originalList)
       {
+        clear();
+
         headNode_ = originalList.headNode_;
         tailNode_ = originalList.tailNode_;
         return *this;
@@ -190,8 +192,10 @@ namespace rebdev
       void assign (size_t n, const T& val)
       {
         clear();
-        headNode_ = new node{0, nullptr, tailNode_};
+        headNode_ = new node{0, nullptr, nullptr};
         tailNode_ = new node{0, headNode_, nullptr};
+        headNode_ -> next_ = tailNode_;
+
         for (size_t i = 0; i < n; ++i)
         {
           push_back(val);
@@ -243,8 +247,8 @@ namespace rebdev
 
       iter insert(c_iter position, const T& val)
       {
-        node* last = position.getNode() -> last_;
-        node* next = position.getNode();
+        node* last = position.getNode();
+        node* next = position.getNode() -> next_;
         node* newNode = new node(val, last, next);
         last.next_ = newNode;
         next.last_ = newNode;
@@ -254,7 +258,7 @@ namespace rebdev
       }
       iter insert(c_iter position, size_t n, const T& val)
       {
-        iter firstIter(insert(position, val));
+        c_iter firstIter(insert(position, val));
         c_iter iterNow = firstIter;
 
         for (size_t i = 1; i < n; ++i)
