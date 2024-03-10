@@ -7,30 +7,27 @@
 namespace nikitov
 {
   template< class T >
-  class ConstListIterator;
-
-  template< class T >
   class Node;
 
   template< class T >
   class ListIterator: public std::iterator< std::bidirectional_iterator_tag, T >
   {
-    friend class ConstListIterator< T >;
   public:
     ListIterator();
     ListIterator(Node< T >* node);
     ListIterator(const ListIterator< T >&) = default;
     ~ListIterator() = default;
 
-    T& operator*();
-    T* operator->();
     ListIterator< T >& operator=(const ListIterator< T >&) = default;
+
     ListIterator< T >& operator++();
     ListIterator< T > operator++(int);
     ListIterator< T >& operator--();
     ListIterator< T > operator--(int);
-    bool operator==(const ConstListIterator< T >& other) const;
-    bool operator!=(const ConstListIterator< T >& other) const;
+
+    T& operator*();
+    T* operator->();
+
     bool operator==(const ListIterator< T >& other) const;
     bool operator!=(const ListIterator< T >& other) const;
 
@@ -49,26 +46,6 @@ namespace nikitov
   ListIterator< T >::ListIterator(Node< T >* node):
     node_(node)
   {}
-
-  template< class T >
-  T& ListIterator< T >::operator*()
-  {
-    if (node_->next_ == nullptr)
-    {
-      throw std::logic_error("Error: Dereferencing of std::end()");
-    }
-    return node_->value_;
-  }
-
-  template< class T >
-  T* ListIterator< T >::operator->()
-  {
-    if (node_->next_ == nullptr)
-    {
-      throw std::logic_error("Error: Dereferencing of std::end()");
-    }
-    return std::addressof(node_->value_);
-  }
 
   template< class T >
   ListIterator< T >& ListIterator< T >::operator++()
@@ -101,15 +78,23 @@ namespace nikitov
   }
 
   template< class T >
-  bool ListIterator< T >::operator==(const ConstListIterator< T >& other) const
+  T& ListIterator< T >::operator*()
   {
-    return node_ == other.node_;
+    if (node_->next_ == nullptr)
+    {
+      throw std::logic_error("Error: Dereferencing of std::end()");
+    }
+    return node_->value_;
   }
 
   template< class T >
-  bool ListIterator< T >::operator!=(const ConstListIterator< T >& other) const
+  T* ListIterator< T >::operator->()
   {
-    return node_ != other.node_;
+    if (node_->next_ == nullptr)
+    {
+      throw std::logic_error("Error: Dereferencing of std::end()");
+    }
+    return std::addressof(node_->value_);
   }
 
   template< class T >
