@@ -62,6 +62,7 @@ namespace nikitov
     iterator insert(constIterator position, const T& value);
     iterator insert(constIterator position, size_t n, const T& value);
     iterator insert(constIterator position, constIterator first, constIterator last);
+    iterator insert(constIterator position, T&& value);
 
     iterator erase(constIterator position);
     iterator erase(constIterator first, constIterator last);
@@ -420,6 +421,12 @@ namespace nikitov
       ++countNewElements;
     }
     return iter.advance(-countNewElements + 1);
+  }
+
+  template< class T >
+  ListIterator< T > List< T >::insert(constIterator position, T&& value)
+  {
+    return embed(position, new Node< T >(std::move(value)));
   }
 
   template< class T >
