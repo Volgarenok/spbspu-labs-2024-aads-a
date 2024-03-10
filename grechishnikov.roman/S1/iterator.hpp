@@ -15,9 +15,11 @@ namespace grechishnikov
     Iterator(const Iterator< T >& other);
     ~Iterator() = default;
 
+
     T& operator*();
     T* operator->();
 
+    Iterator& operator=(const Iterator< T >& other) = default;
     Iterator& operator++();
     Iterator& operator--();
     Iterator operator++(int);

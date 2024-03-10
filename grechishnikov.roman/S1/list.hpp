@@ -48,6 +48,12 @@ namespace grechishnikov
 
     Iterator< T > erase(Iterator< T >);
 
+    Iterator< T > insert(Iterator< T >, const T&);
+    Iterator< T > insert(Iterator< T >, T&&);
+    Iterator< T > insert(Iterator< T >, size_t, const T&);
+    Iterator< T > insert(Iterator< T >, Iterator< T >, Iterator< T >);
+    Iterator< T > insert(Iterator< T >, std::initializer_list< T >);
+
   private:
     size_t size_;
     Node< T >* head_;
@@ -356,6 +362,63 @@ namespace grechishnikov
     nextPoi->prev_ = prevPoi;
     delete iter.getNode();
     return temp;
+  }
+
+  template< typename T >
+  Iterator< T > List< T >::insert(Iterator< T > where, const T& value)
+  {
+    auto mValue = value;
+    return insert(where, std::move(mValue));
+  }
+
+  template< typename T >
+  Iterator< T > List< T >::insert(Iterator< T > where, T&& value)
+  {
+    auto temp = new Node< T > (value, nullptr, nullptr);
+    auto nextNode = where + 1;
+    if (where == end())
+    {
+      push_back(value);
+    }
+    where.getNode()->next_ = temp;
+    nextNode.getNode()->prev_ = temp;
+    temp->prev_ = where.getNode();
+    temp->next_ = nextNode.getNode();
+    size_++;
+    return where + 1;
+  }
+
+  template< typename T >
+  Iterator< T > List< T >::insert(Iterator< T > where, size_t count, const T& value)
+  {
+    for (size_t i = 0; i < count; i++)
+    {
+      where = insert(where, value);
+    }
+    return where;
+  }
+
+  template< typename T >
+  Iterator< T > List< T >::insert(Iterator< T > where, Iterator< T > first, Iterator< T > last)
+  {
+    while (first != last)
+    {
+      where = insert(where, *first);
+      first++;
+    }
+    return where;
+  }
+
+  template< typename T >
+  Iterator< T > List< T >::insert(Iterator< T > where, std::initializer_list< T > ilist)
+  {
+    auto init = ilist.begin();
+    while (init != ilist.end())
+    {
+      where = insert(where, *init);
+      init++;
+    }
+    return where;
   }
 
 }
