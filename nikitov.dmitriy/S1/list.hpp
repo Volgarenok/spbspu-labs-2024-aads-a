@@ -73,6 +73,7 @@ namespace nikitov
     void splice(constIterator position, List< T >& other);
 
     void merge(List< T >& other);
+    void merge(List< T >&& other);
     void sort();
     void unique();
     void reverse();
@@ -498,6 +499,35 @@ namespace nikitov
   template< class T >
   void List< T >::merge(List< T >& other)
   {
+    if (std::addressof(other) == this)
+    {
+      return;
+    }
+    for (auto i = cbegin(); i != cend(); ++i)
+    {
+      auto j = other.cbegin();
+      while (j != other.cend())
+      {
+        if (*j <= *i)
+        {
+          splice(i, other, j++);
+        }
+        else
+        {
+          ++j;
+        }
+      }
+    }
+    splice(cend(), other);
+  }
+
+  template< class T >
+  void List< T >::merge(List< T >&& other)
+  {
+    if (std::addressof(other) == this)
+    {
+      return;
+    }
     for (auto i = cbegin(); i != cend(); ++i)
     {
       auto j = other.cbegin();
