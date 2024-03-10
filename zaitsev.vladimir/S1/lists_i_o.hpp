@@ -10,4 +10,4 @@ namespace zaitsev
   ForwardList< ull >* print_lists(ForwardList< std::pair< std::string, ForwardList< ull > > >& list);
   void print_sums(ForwardList< ull >& sums);
 }
-#endif 
+#endif
