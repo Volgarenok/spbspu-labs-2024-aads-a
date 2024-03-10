@@ -4,24 +4,12 @@
 #include <cstddef>
 #include <utility>
 #include <initializer_list>
+#include "node.hpp"
 #include "list_iterator.hpp"
 #include "const_list_iterator.hpp"
 
 namespace nikitov
 {
-  template< class T >
-  struct Node
-  {
-  public:
-    Node();
-    Node(const T& value);
-    Node(T&& value);
-    ~Node() = default;
-    T value_;
-    Node* prev_;
-    Node* next_;
-  };
-
   template< class T >
   class List
   {
@@ -101,27 +89,6 @@ namespace nikitov
     Node< T >* tail_;
     size_t size_;
   };
-
-  template< class T >
-  Node< T >::Node():
-    value_(T()),
-    prev_(nullptr),
-    next_(nullptr)
-  {}
-
-  template< class T >
-  Node< T >::Node(const T& value):
-    value_(value),
-    prev_(nullptr),
-    next_(nullptr)
-  {}
-
-  template< class T >
-  Node< T >::Node(T&& value):
-    value_(std::move(value)),
-    prev_(nullptr),
-    next_(nullptr)
-  {}
 
   template< class T >
   List< T >::List():
