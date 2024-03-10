@@ -2,7 +2,6 @@
 #define LIST_ITERATOR_HPP
 
 #include <iterator>
-#include "const_list_iterator.hpp"
 
 namespace nikitov
 {
@@ -57,7 +56,7 @@ namespace nikitov
   template< class T >
   ListIterator< T > ListIterator< T >::operator++(int)
   {
-    ListIterator temp(*this);
+    ListIterator< T > temp(*this);
     node_ = node_->next_;
     return temp;
   }
@@ -72,7 +71,7 @@ namespace nikitov
   template< class T >
   ListIterator< T > ListIterator< T >::operator--(int)
   {
-    ListIterator temp(*this);
+    ListIterator< T > temp(*this);
     node_ = node_->prev_;
     return temp;
   }
