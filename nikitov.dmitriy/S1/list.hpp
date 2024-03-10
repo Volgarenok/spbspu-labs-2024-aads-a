@@ -14,7 +14,8 @@ namespace nikitov
   {
   public:
     Node();
-    Node(T value);
+    Node(const T& value);
+    Node(T&& value);
     ~Node() = default;
     T value_;
     Node* prev_;
@@ -57,8 +58,10 @@ namespace nikitov
     bool empty() const;
 
     void push_front(const T& value);
+    void push_front(T&& value);
     void pop_front();
     void push_back(const T& value);
+    void push_back(T&& value);
     void pop_back();
 
     void assign(constIterator first, constIterator second);
@@ -107,8 +110,15 @@ namespace nikitov
   {}
 
   template< class T >
-  Node< T >::Node(T value):
+  Node< T >::Node(const T& value):
     value_(value),
+    prev_(nullptr),
+    next_(nullptr)
+  {}
+
+  template< class T >
+  Node< T >::Node(T&& value):
+    value_(std::move(value)),
     prev_(nullptr),
     next_(nullptr)
   {}
@@ -348,6 +358,12 @@ namespace nikitov
   }
 
   template< class T >
+  void List< T >::push_front(T&& value)
+  {
+    embed(cbegin(), new Node< T >(std::move(value)));
+  }
+
+  template< class T >
   void List< T >::pop_front()
   {
     cut(cbegin());
@@ -357,6 +373,12 @@ namespace nikitov
   void List< T >::push_back(const T& value)
   {
     embed(cend(), new Node< T >(value));
+  }
+
+  template< class T >
+  void List< T >::push_back(T&& value)
+  {
+    embed(cend(), new Node< T >(std::move(value)));
   }
 
   template< class T >
