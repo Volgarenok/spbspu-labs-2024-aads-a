@@ -273,11 +273,11 @@ namespace nikitov
   {
     if (tail_ == nullptr)
     {
-      return ListIterator< T >(head_);
+      return iterator(head_);
     }
     else
     {
-      return ListIterator< T >(tail_->next_);
+      return iterator(tail_->next_);
     }
   }
 
@@ -286,11 +286,11 @@ namespace nikitov
   {
     if (tail_ == nullptr)
     {
-      return ConstListIterator< T >(head_);
+      return constIterator(head_);
     }
     else
     {
-      return ConstListIterator< T >(tail_->next_);
+      return constIterator(tail_->next_);
     }
   }
 
