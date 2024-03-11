@@ -101,7 +101,6 @@ namespace spiridonov
   {
     return size;
   }
-
   template<typename T>
   T& List<T>::operator[](size_t index)
   {
@@ -172,6 +171,30 @@ namespace spiridonov
     }
 
     return size < other.size;
+  }
+
+  template <typename T>
+  bool List<T>::operator>(const List& other) const
+  {
+    return (other < *this);
+  }
+
+  template <typename T>
+  bool List<T>::operator<=(const List& other) const
+  {
+    return !(other < *this);
+  }
+
+  template <typename T>
+  bool List<T>::operator>=(const List& other) const
+  {
+    return !(*this < other);
+  }
+
+  template <typename T>
+  void List<T>::fill(const T& value, size_t count)
+  {
+    *this = List<T>(value, count);
   }
 
   /*  T pop_back()
