@@ -15,9 +15,6 @@ namespace isaychev
    public:
     cFwdIterator();
     cFwdIterator(node_t< T > * pos);
-    ~cFwdIterator() = default;
-    cFwdIterator(const this_t & rhs) = default;
-    this_t & operator=(const this_t & rhs) = default;
 
     this_t operator++();
     this_t operator++(int);

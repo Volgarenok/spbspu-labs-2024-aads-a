@@ -13,6 +13,11 @@ namespace isaychev
       data(obj),
       next(nullptr)
     {}
+
+    node_t(const node_t< T > & rhs):
+      data(rhs.data),
+      next(nullptr)
+    {}
   };
 }
 

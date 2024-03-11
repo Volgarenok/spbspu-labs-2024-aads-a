@@ -15,11 +15,13 @@ namespace isaychev
    public:
     List();
     ~List();
+    List(const List & rhs);
+    
 
     iter begin();
-    cIter begin() const;
+    cIter сbegin() const;
     iter end();
-    cIter end() const;
+    cIter сend() const;
 
     T & front();
     const T & front() const;
@@ -52,7 +54,7 @@ namespace isaychev
   }
 
   template < typename T >
-  cFwdIterator< T > List< T >::begin() const
+  cFwdIterator< T > List< T >::сbegin() const
   {
     return cFwdIterator< T >(head_);
   }
@@ -64,7 +66,7 @@ namespace isaychev
   }
 
   template < typename T >
-  cFwdIterator< T > List< T >::end() const
+  cFwdIterator< T > List< T >::сend() const
   {
     return cFwdIterator< T >(nullptr);
   }
