@@ -264,7 +264,7 @@ namespace grechishnikov
   template< typename T >
   void List< T >::swap(List< T >& other)
   {
-    std::swap(size_, other.size__);
+    std::swap(size_, other.size_);
     std::swap(head_, other.head_);
     std::swap(tail_, other.tail_);
   }
@@ -288,9 +288,7 @@ namespace grechishnikov
       temp.push_back(*first);
       first++;
     }
-    std::swap(size_, temp.size_);
-    std::swap(head_, temp.head_);
-    std::swap(tail_, temp.tail_);
+    swap(temp);
   }
 
   template< typename T >
