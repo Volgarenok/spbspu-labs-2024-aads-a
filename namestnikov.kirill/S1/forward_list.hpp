@@ -302,6 +302,26 @@ namespace namestnikov
         return position;
       }
     }
+    iterator_t insert_after(const_it_t pos, T && value)
+    {
+      if (pos == cend())
+      {
+        throw std::out_of_range("Can not insert here");
+      }
+      else
+      {
+        auto position = begin();
+        while (position != pos)
+        {
+          ++position;
+        }
+        node_t * node = new node_t(value);
+        node->next_ = position.node_->next_;
+        position.node_->next_ = node;
+        ++position;
+        return position;
+      }
+    }
     iterator_t insert_after(const_it_t pos, size_t count, const T & value)
     {
       if (pos == cend())
