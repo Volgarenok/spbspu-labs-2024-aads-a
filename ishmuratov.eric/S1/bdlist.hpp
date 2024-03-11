@@ -17,48 +17,6 @@ namespace ishmuratov
         size_(0)
       {}
 
-      List(const T & data, size_t size):
-        List()
-      {
-        try
-        {
-          for (size_t i = 0; i < size; ++i)
-          {
-            pushBack(data);
-          }
-        }
-        catch(const std::exception & e)
-        {
-          clear();
-        }
-      }
-
-      List(const List & other):
-        head_(nullptr)
-      {
-        try
-        {
-          Node< T > * cur = other.head_;
-          while (size_ != other.size_)
-          {
-            pushBack(cur->data_);
-            cur = cur->next_;
-          }
-        }
-         catch (const std::exception & e)
-        {
-          clear();
-        }
-      }
-
-      List(List && other):
-        head_(other.head_),
-        size_(other.size_)
-      {
-        other.head_ = nullptr;
-        other.size_ = 0;
-      }
-
       ~List()
       {
         clear();

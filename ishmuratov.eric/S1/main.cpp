@@ -36,10 +36,8 @@ int main()
     anotherList = false;
     for (auto pair = pairs.begin(); pair != nullptr; ++pair)
     {
-      //Iterator< size_t > num = pair->second.begin();
       if (!pair->second.empty())
       {
-        //std::cout << *num << " ";
         if (anotherList)
         {
           std::cout << " ";
