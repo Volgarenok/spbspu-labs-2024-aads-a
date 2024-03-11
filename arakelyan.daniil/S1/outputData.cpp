@@ -81,5 +81,4 @@ void arakelyan::outputPairListsSums(arakelyan::BinList< size_t > sumList, std::o
     }
     out << *it;
   }
-  out << "\n";
 }

@@ -1,7 +1,8 @@
 #ifndef CONSTITERATOR_HPP
 #define CONSTITERATOR_HPP
 
-#include <stdexcept>
+#include <cassert>
+#include <memory>
 #include "node.hpp"
 
 namespace arakelyan

@@ -1,11 +1,5 @@
 #include "binList.hpp"
 
-#include <exception>
-#include <iterator>
-#include <stdexcept>
-
-using iterator = arakelyan::Iterator< class T >;
-
 template < class T >
 arakelyan::BinList< T >::BinList():
   head_(nullptr),

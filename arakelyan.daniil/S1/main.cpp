@@ -37,6 +37,7 @@ int main()
     outputPairsNames(listOfPairs, std::cout);
     outputPairsLists(listOfPairs, sumList, std::cout);
     outputPairListsSums(sumList, std::cout);
+    std::cout << "\n";
   }
   catch (const std::overflow_error & e)
   {

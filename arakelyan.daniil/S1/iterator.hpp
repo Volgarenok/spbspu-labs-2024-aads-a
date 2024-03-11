@@ -1,8 +1,8 @@
 #ifndef ITERATOR_HPP
 #define ITERATOR_HPP
 
-#include <stdexcept>
 #include <cassert>
+#include <memory>
 #include "node.hpp"
 
 namespace arakelyan
