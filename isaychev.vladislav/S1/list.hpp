@@ -61,7 +61,8 @@ namespace isaychev
   }*/
 
   template < typename T >
-  List< T >::List(const List< T > & rhs)
+  List< T >::List(const List< T > & rhs):
+    head_(nullptr)
   {
     for (auto i = rhs.begin(); i != rhs.end(); ++i)
     {
