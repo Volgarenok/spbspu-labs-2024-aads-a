@@ -15,10 +15,10 @@ namespace isaychev
    public:
     List();
     ~List();
+    List(List< T > && rhs);
     List(const List< T > & rhs);
-    List(const List< T > && rhs);
+    List< T > & operator=(List< T >&& rhs);
     List< T > & operator=(const List< T > & rhs);
-    List< T > & operator=(const List< T >&& rhs);
 
     iter begin();
     iter end();
@@ -58,13 +58,16 @@ namespace isaychev
     {
       list.push(*i);
     }
-  }
+  }*/
 
   template < typename T >
   List< T >::List(const List< T > & rhs)
   {
-    copyList(*this, rhs);
-  }*/
+    for (auto i = rhs.begin(); i != rhs.end(); ++i)
+    {
+      this->push(*i);
+    }
+  }
 
   template < typename T >
   List< T >::List(List< T > && rhs):
@@ -73,15 +76,18 @@ namespace isaychev
     rhs.head_ = nullptr;
   }
 
-  /*template < typename T >
+  template < typename T >
   List< T > & List< T >::operator=(const List< T > & rhs)
   {
     if (this != std::addressof(rhs))
     {
       this->clear();
-      copyList(*this, rhs);
+      for (auto i = rhs.begin(); i != rhs.end(); ++i)
+      {
+        this->push(*i);
+      }
     }
-  }*/
+  }
 
   template < typename T >
   List< T > & List< T >::operator=(List< T > && rhs)
