@@ -54,6 +54,8 @@ namespace grechishnikov
     Iterator< T > insert(Iterator< T >, Iterator< T >, Iterator< T >);
     Iterator< T > insert(Iterator< T >, std::initializer_list< T >);
 
+    void reverse();
+
   private:
     size_t size_;
     Node< T >* head_;
@@ -108,12 +110,11 @@ namespace grechishnikov
 
   template< typename T >
   List< T >::List(List< T >&& other):
-    size_(other.size_),
+    size_(0),
     head_(nullptr),
     tail_(nullptr)
   {
-    std::swap(head_, other.head_);
-    std::swap(tail_, other.tail_);
+    swap(other);
   }
 
   template< typename T >
@@ -419,6 +420,18 @@ namespace grechishnikov
     return where;
   }
 
+  template< typename T >
+  void List< T >::reverse()
+  {
+    List< T > temp;
+    auto iter = Iterator< T >(tail_);
+    while (iter !=  nullptr)
+    {
+      temp.push_back(*iter);
+      iter--;
+    }
+    swap(temp);
+  }
 }
 
 #endif
