@@ -70,7 +70,35 @@ namespace spiridonov
     }
   }
 
-  Node<T>* get_head() const
+  template<typename T>
+  List<T>::List(const T& value, size_t count) : head(nullptr), tail(nullptr), size(0)
+  {
+    for (size_t i = 0; i < count; ++i)
+    {
+      push_back(value);
+    }
+  }
+
+  template <typename T>
+  List<T>::List(std::initializer_list<T> ilist) : head(nullptr), tail(nullptr), size(0)
+  {
+    for (const auto& value : ilist)
+    {
+      push_back(value);
+    }
+  }
+
+  template <typename T>
+  List<T>::List(iterator<T> first, iterator<T> last) : head(nullptr), tail(nullptr), size(0)
+  {
+    for (auto it = first; it != last; ++it)
+    {
+      push_back(*it);
+    }
+  }
+
+  template <typename T>
+  Node<T>* List<T>::get_head() const
   {
     return head;
   }
@@ -96,6 +124,24 @@ namespace spiridonov
   bool List<T>::is_empty() const
   {
     return size == 0;
+  }
+
+  template <typename T>
+  size_t List<T>::get_size() const
+  {
+    return size;
+  }
+
+  template <typename T>
+  iterator<T> List<T>::begin() const
+  {
+    return iterator<T>(head);
+  }
+
+  template <typename T>
+  iterator<T> List<T>::end() const
+  {
+    return iterator<T>(nullptr);
   }
 
   template <typename T>
@@ -127,15 +173,25 @@ namespace spiridonov
     size--;
     return value;
   }
-  bool is_empty() const
+
+  template <typename T>
+  T List<T>::pop_front()
   {
-    return size == 0;
+    if (is_empty())
+      throw std::out_of_range("Trying to pop from an empty sequence");
+
+    T value = head->data;
+    Node<T>* temp = head;
+    head = head->next;
+    delete temp;
+    size--;
+
+    if (head == nullptr)
+      tail = nullptr;
+
+    return value;
   }
 
-  int get_size() const
-  {
-    return size;
-  }
   template<typename T>
   T& List<T>::operator[](size_t index)
   {
@@ -231,28 +287,6 @@ namespace spiridonov
   {
     *this = List<T>(value, count);
   }
-
-  /*
-
-  T pop_front()
-  {
-    if (is_empty())
-      throw std::out_of_range("Trying to pop from an empty sequence");
-
-    T value = head->data;
-    Node<T>* temp = head;
-    head = head->next;
-    delete temp;
-    size--;
-
-    if (head == nullptr)
-      tail = nullptr;
-
-    return value;
-  }
-
-};
-*/
 }
 
 #endif
