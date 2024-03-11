@@ -390,6 +390,33 @@ namespace namestnikov
         return position;
       }
     }
+    iterator_t erase_after(const_it_t pos)
+    {
+      if (pos == cend())
+      {
+        throw std::out_of_range("Can not erase from here");
+      }
+      else
+      {
+        auto position = begin();
+        while (pos != position)
+        {
+          ++position;
+        }
+        if (position.node_->next_)
+        {
+          iterator_t temp = position.node_->next_->next_;
+          auto todel = position.node_->next_;
+          delete todel;
+          position.node_->next_ = temp.node_;
+          return temp;
+        }
+        else
+        {
+          return end();
+        }
+      }
+    }
     const T & operator[](size_t index)
     {
       size_t counter = 0;
