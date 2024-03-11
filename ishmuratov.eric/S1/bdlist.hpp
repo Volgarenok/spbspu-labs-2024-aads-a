@@ -13,8 +13,51 @@ namespace ishmuratov
     public:
       List():
         head_(nullptr),
-        tail_(nullptr)
+        tail_(nullptr),
+        size_(0)
       {}
+
+      List(const T & data, size_t size):
+        List()
+      {
+        try
+        {
+          for (size_t i = 0; i < size; ++i)
+          {
+            pushBack(data);
+          }
+        }
+        catch(const std::exception & e)
+        {
+          clear();
+        }
+      }
+
+      List(const List & other):
+        head_(nullptr)
+      {
+        try
+        {
+          Node< T > * cur = other.head_;
+          while (size_ != other.size_)
+          {
+            pushBack(cur->data_);
+            cur = cur->next_;
+          }
+        }
+         catch (const std::exception & e)
+        {
+          clear();
+        }
+      }
+
+      List(List && other):
+        head_(other.head_),
+        size_(other.size_)
+      {
+        other.head_ = nullptr;
+        other.size_ = 0;
+      }
 
       ~List()
       {
@@ -56,6 +99,30 @@ namespace ishmuratov
         return head_ == nullptr && tail_ == nullptr;
       }
 
+      size_t size() const
+      {
+        return size();
+      }
+
+      void assign(size_t count, const T & value)
+      {
+        clear();
+        for (size_t i = 0; i < size; ++i)
+        {
+          pushBack(value);
+        }
+      }
+
+      void assign(Iterator< T > first, Iterator< T > last)
+      {
+        clear();
+        while (first != last)
+        {
+          pushBack(*first);
+          ++first;
+        }
+      }
+
       void pushFront(const T & data)
       {
         Node< T > * ptr = new Node< T >(data);
@@ -69,6 +136,7 @@ namespace ishmuratov
           head_->prev_ = ptr;
         }
         head_ = ptr;
+        ++size_;
       }
 
       void pushBack(const T & data)
@@ -84,6 +152,70 @@ namespace ishmuratov
           tail_->next_ = ptr;
         }
         tail_ = ptr;
+        ++size_;
+      }
+
+      void remove(const T & value)
+      {
+        if (empty())
+        {
+          return;
+        }
+        Node< T > * temp = head_;
+        while (temp->data_ != value)
+        {
+          temp = temp->next;
+        }
+        if (temp == head_)
+        {
+          popFront();
+        }
+        else if (temp == tail_)
+        {
+          popBack();
+        }
+        else
+        {
+          temp->next_->prev_ = temp->prev_;
+          temp->prev_->next_ = temp->next_;
+          delete temp;
+          --size_;
+        }
+      }
+
+      template < class UnaryPredicate >
+      void remove_if(UnaryPredicate p)
+      {
+        Node< T > * cur = head_;
+        Node< T > * temp = nullptr;
+        while (cur)
+        {
+          if (p(cur->data_))
+          {
+            if (cur == head_)
+            {
+              popFront();
+              cur = head_;
+            }
+            else if(cur == tail_)
+            {
+              popBack();
+              cur = tail_;
+            }
+            else
+            {
+              temp->next_ = cur->next_;
+              delete cur;
+              cur = temp->next;
+              --size_;
+            }
+          }
+          else
+          {
+            temp = cur;
+            cur = cur->next;
+          }
+        }
       }
 
       void popFront()
@@ -100,6 +232,7 @@ namespace ishmuratov
         tail_ = nullptr;
         delete head_;
         head_ = ptr;
+        --size_;
       }
 
       void popBack()
@@ -116,6 +249,7 @@ namespace ishmuratov
         head_ = nullptr;
         delete tail_;
         tail_ = ptr;
+        --size_;
       }
 
       void clear()
@@ -124,6 +258,7 @@ namespace ishmuratov
         {
           popBack();
         }
+        size_ = 0;
       }
 
       void swap(List< T > & other)
@@ -135,6 +270,7 @@ namespace ishmuratov
     private:
       Node< T > * head_;
       Node< T > * tail_;
+      size_t size_;
   };
 }
 
