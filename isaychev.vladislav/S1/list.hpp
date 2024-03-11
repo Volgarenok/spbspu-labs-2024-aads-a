@@ -21,8 +21,10 @@ namespace isaychev
     List< T > & operator=(const List< T >&& rhs);
 
     iter begin();
-    cIter сbegin() const;
     iter end();
+    cIter begin() const;
+    cIter end() const;
+    cIter сbegin() const;
     cIter сend() const;
 
     T & front();
@@ -49,7 +51,7 @@ namespace isaychev
     clear();
   }
 
-  template < typename T >
+/*  template < typename T >
   void copyList(const List< T > & list, const List< T > & rhs)
   {
     for (auto i = rhs.begin(); i != rhs.end(); ++i)
@@ -62,16 +64,16 @@ namespace isaychev
   List< T >::List(const List< T > & rhs)
   {
     copyList(*this, rhs);
-  }
+  }*/
 
   template < typename T >
-  List< T >::List(const List< T > && rhs):
+  List< T >::List(List< T > && rhs):
     head_(rhs.head_)
   {
     rhs.head_ = nullptr;
   }
 
-  template < typename T >
+  /*template < typename T >
   List< T > & List< T >::operator=(const List< T > & rhs)
   {
     if (this != std::addressof(rhs))
@@ -79,10 +81,10 @@ namespace isaychev
       this->clear();
       copyList(*this, rhs);
     }
-  }
+  }*/
 
   template < typename T >
-  List< T > & List< T >::operator=(const List< T > && rhs)
+  List< T > & List< T >::operator=(List< T > && rhs)
   {
     if (this != std::addressof(rhs))
     {
@@ -99,15 +101,27 @@ namespace isaychev
   }
 
   template < typename T >
-  cFwdIterator< T > List< T >::сbegin() const
+  fwdIterator< T > List< T >::end()
+  {
+    return fwdIterator< T >(nullptr);
+  }
+
+  template < typename T >
+  cFwdIterator< T > List< T >::begin() const
   {
     return cFwdIterator< T >(head_);
   }
 
   template < typename T >
-  fwdIterator< T > List< T >::end()
+  cFwdIterator< T > List< T >::end() const
   {
-    return fwdIterator< T >(nullptr);
+    return cFwdIterator< T >(nullptr);
+  }
+
+  template < typename T >
+  cFwdIterator< T > List< T >::сbegin() const
+  {
+    return cFwdIterator< T >(head_);
   }
 
   template < typename T >
