@@ -1,20 +1,59 @@
 #ifndef FORWARD_LIST_HPP
 #define FORWARD_LIST_HPP
-#include "node.hpp"
 #include <stdexcept>
+#include "node.hpp"
+#include "iterator.hpp"
+#include <list>
 
 namespace spiridonov
 {
   template <typename T>
   class List
   {
-  public:
-    class iterator;
-
   private:
     Node<T>* head;
     Node<T>* tail;
     size_t size = 0;
+
+  public:
+    List();
+    List(const List<T>& other);
+    List(const T& value, size_t count);
+    List(std::initializer_list<T> ilist);
+    List(iterator<T> first, iterator<T> last);
+
+    Node<T>* get_head() const;
+    void push_back(const T& value);
+    void clear();
+    void swap(int pos1, int pos2);
+    void swap(List<T>& other);
+    void fill(const T& value, size_t count);
+    void remove(const T& value);
+    template <typename UnaryPredicate>
+    void remove_if(UnaryPredicate p);
+    void assign(const T& value, size_t count);
+    void insert(iterator<T> position, const T& value);
+    void erase(iterator<T> position);
+    void assign(std::initializer_list<T> ilist);
+    void assign(iterator<T> first, iterator<T> last);
+    void splice(iterator<T> position, List<T>& other);
+    void reverse();
+
+    bool is_empty() const;
+    size_t get_size() const;
+    iterator<T> begin() const;
+    iterator<T> end() const;
+    T pop_back();
+    T pop_front();
+
+    T& operator[](size_t index);
+    bool operator==(const List& other) const;
+    bool operator!=(const List& other) const;
+    bool operator<(const List& other) const;
+    bool operator>(const List& other) const;
+    bool operator<=(const List& other) const;
+    bool operator>=(const List& other) const;
+  };
 
   public:
     List() : head(nullptr), tail(nullptr), size(0)
@@ -167,12 +206,6 @@ namespace spiridonov
 
       return current->data;
     }
-  };
-
-  struct NamedList
-  {
-    std::string name;
-    List<int> list;
   };
 }
 
