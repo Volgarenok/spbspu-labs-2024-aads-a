@@ -51,15 +51,6 @@ namespace isaychev
     clear();
   }
 
-/*  template < typename T >
-  void copyList(const List< T > & list, const List< T > & rhs)
-  {
-    for (auto i = rhs.begin(); i != rhs.end(); ++i)
-    {
-      list.push(*i);
-    }
-  }*/
-
   template < typename T >
   List< T >::List(const List< T > & rhs):
     head_(nullptr)
