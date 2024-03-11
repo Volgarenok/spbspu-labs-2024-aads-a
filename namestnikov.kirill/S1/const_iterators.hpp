@@ -14,7 +14,7 @@ namespace namestnikov
 
   template <class T>
   class Node;
-  
+
   template <class T>
   class ConstForwardIterator: public std::iterator<std::forward_iterator_tag, T>
   {
