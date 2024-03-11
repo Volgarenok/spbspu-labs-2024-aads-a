@@ -55,158 +55,173 @@ namespace spiridonov
     bool operator>=(const List& other) const;
   };
 
-  public:
-    List() : head(nullptr), tail(nullptr), size(0)
-    {}
+  template <typename T>
+  List<T>::List() : head(nullptr), tail(nullptr), size(0) {}
 
-    ~List()
+  template <typename T>
+  List<T>::List(const List& other) : head(nullptr), tail(nullptr), size(0)
+  {
+    Node<T>* current = other.head;
+
+    while (current != nullptr)
     {
-      while (head != nullptr)
-      {
-        Node<T>* temp = head;
-        head = head->next;
-        delete temp;
-      }
+      push_back(current->data);
+      current = current->next;
+    }
+  }
+
+  Node<T>* get_head() const
+  {
+    return head;
+  }
+
+  /*void push_back(const T& value)
+  {
+    Node<T>* newNode = new Node<T>(value);
+    if (head == nullptr)
+    {
+      head = newNode;
+      tail = newNode;
+    }
+    else
+    {
+      tail->next = newNode;
+      tail = newNode;
+    }
+    size++;
+  }
+*/
+
+  bool is_empty() const
+  {
+    return size == 0;
+  }
+
+  int get_size() const
+  {
+    return size;
+  }
+
+  template<typename T>
+  T& List<T>::operator[](size_t index)
+  {
+    if (index < 0 || index >= size)
+    {
+      throw std::out_of_range("Index out of bounds");
     }
 
-    Node<T>* get_head() const
+    Node<T>* current = head;
+    for (int i = 0; i < index; i++)
     {
-      return head;
+      current = current->next;
     }
 
-    void push_back(const T& value)
+    return current->data;
+  }
+
+  template <typename T>
+  bool List<T>::operator==(const List& other) const
+  {
+    if (size != other.size)
     {
-      Node<T>* newNode = new Node<T>(value);
-      if (head == nullptr)
-      {
-        head = newNode;
-        tail = newNode;
-      }
-      else
-      {
-        tail->next = newNode;
-        tail = newNode;
-      }
-      size++;
+      return false;
     }
 
-    bool is_empty() const
+    Node<T>* current = head;
+    Node<T>* otherCurrent = other.head;
+
+    while (current != nullptr)
     {
-      return size == 0;
+      if (current->data != otherCurrent->data)
+      {
+        return false;
+      }
+
+      current = current->next;
+      otherCurrent = otherCurrent->next;
     }
 
-    int get_size() const
+    return true;
+  }
+
+  template <typename T>
+  bool List<T>::operator!=(const List& other) const
+  {
+    return !(*this == other);
+  }
+
+  template <typename T>
+  bool List<T>::operator<(const List& other) const
+  {
+    Node<T>* current = head;
+    Node<T>* otherCurrent = other.head;
+
+    while (current != nullptr && otherCurrent != nullptr)
     {
-      return size;
+      if (current->data < otherCurrent->data)
+      {
+        return true;
+      }
+      else if (current->data > otherCurrent->data)
+      {
+        return false;
+      }
+
+      current = current->next;
+      otherCurrent = otherCurrent->next;
     }
 
-    class iterator
+    return size < other.size;
+  }
+
+  /*  T pop_back()
+  {
+    if (is_empty())
+      throw std::out_of_range("Trying to pop from an empty sequence");
+
+    T value;
+    if (head == tail)
     {
-    private:
-      Node<T>* current;
-
-    public:
-      iterator(Node<T>* node) : current(node)
-      {}
-
-      iterator& operator++()
-      {
-        if (current) current = current->next;
-        return *this;
-      }
-
-      bool operator==(const iterator& other) const
-      {
-        return current == other.current;
-      }
-
-      bool operator!=(const iterator& other) const
-      {
-        return current != other.current;
-      }
-
-      T& operator*() const
-      {
-        return current->data;
-      }
-
-      T* operator->() const
-      {
-        return &(current->data);
-      }
-    };
-
-    iterator begin() const
-    {
-      return iterator(head);
+      value = tail->data;
+      delete tail;
+      head = nullptr;
+      tail = nullptr;
     }
-
-    iterator end() const
+    else
     {
-      return iterator(nullptr);
-    }
-
-    T pop_back()
-    {
-      if (is_empty())
-        throw std::out_of_range("Trying to pop from an empty sequence");
-
-      T value;
-      if (head == tail)
-      {
-        value = tail->data;
-        delete tail;
-        head = nullptr;
-        tail = nullptr;
-      }
-      else
-      {
-        Node<T>* temp = head;
-        while (temp->next != tail)
-        {
-          temp = temp->next;
-        }
-        value = tail->data;
-        delete tail;
-        tail = temp;
-        tail->next = nullptr;
-      }
-      size--;
-      return value;
-    }
-
-    T pop_front()
-    {
-      if (is_empty())
-        throw std::out_of_range("Trying to pop from an empty sequence");
-
-      T value = head->data;
       Node<T>* temp = head;
-      head = head->next;
-      delete temp;
-      size--;
-
-      if (head == nullptr)
-        tail = nullptr;
-
-      return value;
-    }
-    T& operator[](int index)
-    {
-      if (index < 0 || index >= size)
+      while (temp->next != tail)
       {
-        throw std::out_of_range("Index out of bounds");
+        temp = temp->next;
       }
-
-      Node<T>* current = head;
-      for (int i = 0; i < index; i++)
-      {
-        current = current->next;
-      }
-
-      return current->data;
+      value = tail->data;
+      delete tail;
+      tail = temp;
+      tail->next = nullptr;
     }
-  };
+    size--;
+    return value;
+  }
+
+  T pop_front()
+  {
+    if (is_empty())
+      throw std::out_of_range("Trying to pop from an empty sequence");
+
+    T value = head->data;
+    Node<T>* temp = head;
+    head = head->next;
+    delete temp;
+    size--;
+
+    if (head == nullptr)
+      tail = nullptr;
+
+    return value;
+  }
+
+};
+*/
 }
 
 #endif
