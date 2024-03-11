@@ -75,9 +75,10 @@ namespace spiridonov
     return head;
   }
 
-  /*void push_back(const T& value)
+  template <typename T>
+  void List<T>::push_back(const T& value)
   {
-    Node<T>* newNode = new Node<T>(value);
+    Node<T>* newNode = new Node<T>(value, nullptr);
     if (head == nullptr)
     {
       head = newNode;
@@ -90,8 +91,42 @@ namespace spiridonov
     }
     size++;
   }
-*/
 
+  template <typename T>
+  bool List<T>::is_empty() const
+  {
+    return size == 0;
+  }
+
+  template <typename T>
+  T List<T>::pop_back()
+  {
+    if (is_empty())
+      throw std::out_of_range("Trying to pop from an empty sequence");
+
+    T value;
+    if (head == tail)
+    {
+      value = tail->data;
+      delete tail;
+      head = nullptr;
+      tail = nullptr;
+    }
+    else
+    {
+      Node<T>* temp = head;
+      while (temp->next != tail)
+      {
+        temp = temp->next;
+      }
+      value = tail->data;
+      delete tail;
+      tail = temp;
+      tail->next = nullptr;
+    }
+    size--;
+    return value;
+  }
   bool is_empty() const
   {
     return size == 0;
@@ -197,34 +232,7 @@ namespace spiridonov
     *this = List<T>(value, count);
   }
 
-  /*  T pop_back()
-  {
-    if (is_empty())
-      throw std::out_of_range("Trying to pop from an empty sequence");
-
-    T value;
-    if (head == tail)
-    {
-      value = tail->data;
-      delete tail;
-      head = nullptr;
-      tail = nullptr;
-    }
-    else
-    {
-      Node<T>* temp = head;
-      while (temp->next != tail)
-      {
-        temp = temp->next;
-      }
-      value = tail->data;
-      delete tail;
-      tail = temp;
-      tail->next = nullptr;
-    }
-    size--;
-    return value;
-  }
+  /*
 
   T pop_front()
   {
