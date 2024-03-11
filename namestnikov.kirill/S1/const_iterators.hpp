@@ -7,9 +7,21 @@
 namespace namestnikov
 {
   template <class T>
+  class ForwardList;
+
+  template <class T>
+  class ForwardIterator;
+
+  template <class T>
+  class Node;
+  
+  template <class T>
   class ConstForwardIterator: public std::iterator<std::forward_iterator_tag, T>
   {
+    friend class namestnikov::ForwardIterator<T>;
+    friend class namestnikov::ForwardList<T>;
     using const_it_t = ConstForwardIterator<T>;
+    using iterator_t = ForwardIterator<T>;
     using node_t = Node<T>;
   public:
     ConstForwardIterator():
@@ -36,6 +48,14 @@ namespace namestnikov
       return !(node_ == other.node_);
     }
     bool operator==(const const_it_t & other) const
+    {
+      return node_ == other.node_;
+    }
+    bool operator!=(iterator_t & other) const
+    {
+      return node_ != other.node_;
+    }
+    bool operator==(iterator_t & other) const
     {
       return node_ == other.node_;
     }

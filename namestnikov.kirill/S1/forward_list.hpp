@@ -11,9 +11,20 @@
 
 namespace namestnikov
 {
+  template <class T>
+  class ForwardIterator;
+
+  template <class T>
+  class ConstForwardIterator;
+
+  template <class T>
+  class Node;
+
   template<class T>
   class ForwardList
   {
+    friend class namestnikov::ForwardIterator<T>;
+    friend class namestnikov::ConstForwardIterator<T>;
     using iterator_t = ForwardIterator<T>;
     using const_it_t = ConstForwardIterator<T>;
     using node_t = Node<T>;
@@ -270,6 +281,94 @@ namespace namestnikov
         throw std::invalid_argument("Too many args for a list");
       }
       reverse();
+    }
+    iterator_t insert_after(const_it_t pos, const T & value)
+    {
+      if (pos == cend())
+      {
+        throw std::out_of_range("Can not insert here");
+      }
+      else
+      {
+        auto position = begin();
+        while (position != pos)
+        {
+          ++position;
+        }
+        node_t * node = new node_t(value);
+        node->next_ = position.node_->next_;
+        position.node_->next_ = node;
+        ++position;
+        return position;
+      }
+    }
+    iterator_t insert_after(const_it_t pos, size_t count, const T & value)
+    {
+      if (pos == cend())
+      {
+        throw std::out_of_range("Can not insert here");
+      }
+      else
+      {
+        auto position = begin();
+        while (position != pos)
+        {
+          ++position;
+        }
+        if (count == 0)
+        {
+          return position;
+        }
+        try
+        {
+          for (size_t i = 0; i < count; ++i)
+          {
+            node_t * node = new node_t(value);
+            node->next_ = position.node_->next_;
+            position.node_->next_ = node;
+            ++position;
+          }
+        }
+        catch (const std::bad_alloc &)
+        {
+          clear();
+          throw std::invalid_argument("Too many args for a list");
+        }
+        return position;
+      }
+    }
+    iterator_t insert_after(const_it_t pos, std::initializer_list<T> list)
+    {
+      if (pos == cend())
+      {
+        throw std::out_of_range("Can not insert here");
+      }
+      else
+      {
+        auto position = begin();
+        while (position != pos)
+        {
+          ++position;
+        }
+        auto begin = list.begin();
+        auto end = list.end();
+        try
+        {
+          for (; begin != end; ++begin)
+          {
+            node_t * node = new node_t(*begin);
+            node->next_ = position.node_->next_;
+            position.node_->next_ = node;
+            ++position;
+          }
+        }
+        catch (const std::bad_alloc &)
+        {
+          clear();
+          throw std::invalid_argument("Too many args for a list");
+        }
+        return position;
+      }
     }
     const T & operator[](size_t index)
     {
