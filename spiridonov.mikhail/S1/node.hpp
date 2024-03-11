@@ -5,17 +5,23 @@ namespace spiridonov
 {
 
   template <typename T>
-  class Node
+  struct Node
   {
-  public:
     T data;
     Node<T>* next;
 
-    Node(T value) : data(value), next(nullptr)
-    {
-    }
-  };
+    Node()
+    {}
+    Node(T value);
+    Node(T value, Node* next);
+    Node<T>::Node() : data(T()), next(nullptr)
+    {}
+    Node<T>::Node(T value) : data(value), next(nullptr)
+    {}
+    Node<T>::Node(T value, Node* next) : data(value), next(next)
+    {}
 
+  };
 }
 
 #endif
