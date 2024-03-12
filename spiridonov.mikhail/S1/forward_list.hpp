@@ -56,7 +56,8 @@ namespace spiridonov
   };
 
   template <typename T>
-  List<T>::List(): head(nullptr), tail(nullptr), size(0) {}
+  List<T>::List(): head(nullptr), tail(nullptr), size(0)
+  {}
 
   template <typename T>
   List<T>::List(const List& other): head(nullptr), tail(nullptr), size(0)
