@@ -20,23 +20,17 @@ int main()
     return 0;
   }
 
-  auto it = sequences.begin();
-  auto prevIt = it;
-
-  while (it != sequences.end())
+  if (!sequences.is_empty())
   {
+    auto it = sequences.begin();
     std::cout << it->first;
-    if (++it != sequences.end())
+    ++it;
+    for (; it != sequences.end(); ++it)
     {
-      std::cout << " ";
+      std::cout << ' ' << it->first;
     }
-    else if (prevIt != sequences.begin())
-    {
-      std::cout << " ";
-    }
-    prevIt = it;
+    std::cout << "\n";
   }
-  std::cout << "\n";
 
   List<List<int>> nums;
   bool empty = false;
