@@ -8,11 +8,11 @@ using namespace spiridonov;
 
 int main()
 {
-  List<nameList> sequences;
+  List<nameList> sequences = {};
 
   try
   {
-    sequences = std::move(input(std::cin));
+    sequences = input(std::cin);
   }
   catch (std::invalid_argument& ex)
   {
