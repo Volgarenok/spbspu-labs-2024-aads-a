@@ -1,9 +1,9 @@
 #ifndef FORWARD_LIST_HPP
 #define FORWARD_LIST_HPP
 #include <stdexcept>
+#include <list>
 #include "node.hpp"
 #include "iterator.hpp"
-#include <list>
 
 namespace spiridonov
 {
