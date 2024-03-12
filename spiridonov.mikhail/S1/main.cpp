@@ -12,7 +12,7 @@ int main()
 
   try
   {
-    sequences = input(std::cin);
+    sequences = std::move(input(std::cin));
   }
   catch (std::invalid_argument& ex)
   {
