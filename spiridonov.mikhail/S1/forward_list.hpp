@@ -48,6 +48,7 @@ namespace spiridonov
 
     T& operator[](size_t index);
     bool operator==(const List& other) const;
+    List<T>& operator=(const List<T>& other);
     bool operator!=(const List& other) const;
     bool operator<(const List& other) const;
     bool operator>(const List& other) const;
@@ -394,6 +395,26 @@ namespace spiridonov
     }
 
     return true;
+  }
+
+  template <typename T>
+  List<T>& List<T>::operator=(const List& other)
+  {
+    if (this == &other)
+    {
+      return *this;
+    }
+
+    clear();
+
+    Node<T>* temp = other.head;
+    while (temp != nullptr)
+    {
+      push_back(temp->data);
+      temp = temp->next;
+    }
+
+    return *this;
   }
 
   template <typename T>
