@@ -23,8 +23,11 @@ int main()
   if (!sequences.is_empty())
   {
     auto it = sequences.begin();
-    std::cout << it->first;
-    ++it;
+    if(it != sequences.end())
+    {
+      std::cout << it->first;
+      ++it;
+    }
     for (; it != sequences.end(); ++it)
     {
       std::cout << ' ' << it->first;
