@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <utility>
 #include "forward_list.hpp"
 #include "functions.hpp"
 
@@ -15,73 +16,54 @@ int main()
   }
   catch (std::invalid_argument& ex)
   {
-    std::cout << '0' << '\n';
+    std::cout << '0' << "\n";
     return 0;
   }
 
- /* while (std::cin >> lists[numLists].name)
+  for (auto it = sequences.begin(); it != sequences.end(); ++it)
   {
-    char c;
-    while (std::cin.get(c) && c != '\n')
-    {
-      if (std::isdigit(c))
-      {
-        std::cin.putback(c);
-        int num;
-        std::cin >> num;
-        lists[numLists].list.push_back(num);
-        sums[numLists] += num;
-      }
-    }
-    numLists++;
-  }
-*/
-  totalSize = 0;
-  for (size_t i = 0; i < numLists; i++)
-  {
-    totalSize = std::max(totalSize, lists[i].list.get_size());
-  }
-
-  for (size_t i = 0; i < numLists; ++i)
-  {
-    std::cout << lists[i].name << " ";
+    std::cout << it->first << " ";
   }
   std::cout << "\n";
 
-  for (size_t i = 0; i < totalSize; ++i)
+  List<List<int>> nums;
+  bool empty = false;
+  while (!empty)
   {
-    for (size_t j = 0; j < numLists; ++j)
+    empty = true;
+    List<int> cumulate;
+    for (auto it = sequences.begin(); it != sequences.end(); ++it)
     {
-      List<int>::iterator it = lists[j].list.begin();
-      for (size_t k = 0; k < i; ++k)
+      if (!it->second.is_empty())
       {
-        ++it;
-      }
-      if (it != lists[j].list.end())
-      {
-        std::cout << *it << " ";
+        empty = false;
+        cumulate.push_back(it->second.pop_front());
       }
     }
-    std::cout << "\n";
-  }
-
-  for (size_t i = 0; i < numLists; ++i)
-  {
-    int sum = 0;
-    List<int>::iterator it = lists[i].list.begin();
-    while (it != lists[i].list.end())
+    if (empty == false)
     {
-      sum += *it;
-      ++it;
+      nums.push_back(cumulate);
     }
-    sums[i] = sum;
   }
 
-  for (size_t i = 0; i < numLists; ++i)
+  for (auto it = nums.begin(); it != nums.end(); ++it)
   {
-    std::cout << sums[i] << " ";
+    printListValues(*it);
   }
-  std::cout << "\n";
 
+  try
+  {
+    List<int> sum;
+    for (auto it = nums.begin(); it != nums.end(); ++it)
+    {
+      sum.push_back(sumListValues(*it));
+    }
+    printListValues(sum);
+  }
+  catch (std::exception ex)
+  {
+    std::cerr << "Error: Calculation of sum is not possible." << "\n";
+    return 1;
+  }
   return 0;
 }
