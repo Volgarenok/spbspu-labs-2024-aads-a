@@ -28,14 +28,15 @@ namespace spiridonov
   };
 
   template <typename T>
-  iterator<T>::iterator() {}
-
-  template <typename T>
-  iterator<T>::iterator(Node<T>* node) : current(node)
+  iterator<T>::iterator()
   {}
 
   template <typename T>
-  iterator<T>::iterator(const iterator& other) : current(other.current)
+  iterator<T>::iterator(Node<T>* node): current(node)
+  {}
+
+  template <typename T>
+  iterator<T>::iterator(const iterator& other): current(other.current)
   {}
 
   template <typename T>
