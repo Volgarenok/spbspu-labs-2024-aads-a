@@ -192,6 +192,167 @@ namespace spiridonov
     return value;
   }
 
+  template <typename T>
+  void List<T>::clear()
+  {
+    while (head)
+    {
+      Node<T>* nextNode = head->next;
+      delete head;
+      head = nextNode;
+    }
+    tail = nullptr;
+    size = 0;
+  }
+
+  template <typename T>
+  void List<T>::swap(int pos1, int pos2)
+  {
+    if (pos1 < 0 || pos1 >= size || pos2 < 0 || pos2 >= size)
+    {
+      throw std::out_of_range("Index out of bounds");
+    }
+
+    T& data1 = (*this)[pos1];
+    T& data2 = (*this)[pos2];
+
+    T temp = data1;
+    data1 = data2;
+    data2 = temp;
+  }
+
+  template< typename T >
+  void List< T >::swap(List< T >& other)
+  {
+    std::swap(size, other.size);
+    std::swap(head, other.head);
+    std::swap(tail, other.tail);
+  }
+
+  template <typename T>
+  void List<T>::insert(iterator<T> position, const T& value)
+  {
+    Node<T>* newNode = new Node<T>(value);
+
+    if (position == end())
+    {
+      push_back(value);
+    }
+    else
+    {
+      Node<T>* current = position.current;
+      newNode->next = current->next;
+      current->next = newNode;
+      size++;
+    }
+  }
+
+  template <typename T>
+  void List<T>::erase(iterator<T> position)
+  {
+    if (position == end())
+    {
+      throw std::out_of_range("Cannot erase end iterator");
+    }
+
+    Node<T>* current = position.current;
+
+    if (current == head)
+    {
+      pop_front();
+    }
+    else
+    {
+      Node<T>* prev = head;
+      while (prev->next != current)
+      {
+        prev = prev->next;
+      }
+
+      prev->next = current->next;
+      delete current;
+      size--;
+    }
+  }
+
+  template <typename T>
+  void List<T>::assign(std::initializer_list<T> ilist)
+  {
+    clear();
+
+    for (const auto& value : ilist)
+    {
+      push_back(value);
+    }
+  }
+
+  template<typename T>
+  inline void List<T>::assign(iterator<T> first, iterator<T> last)
+  {
+    clear();
+
+    for (iterator<T> it = first; it != last; ++it)
+    {
+      push_back(*it);
+    }
+  }
+
+  template <typename T>
+  void List<T>::splice(iterator<T> position, List<T>& other)
+  {
+    if (!other.is_empty())
+    {
+      if (position == end())
+      {
+        tail->next = other.head;
+        tail = other.tail;
+        size += other.size;
+
+        other.head = nullptr;
+        other.tail = nullptr;
+        other.size = 0;
+      }
+      else
+      {
+        Node<T>* current = position.current;
+
+        other.tail->next = current->next;
+        current->next = other.head;
+
+        if (current == tail)
+        {
+          tail = other.tail;
+        }
+
+        size += other.size;
+
+        other.head = nullptr;
+        other.tail = nullptr;
+        other.size = 0;
+      }
+    }
+  }
+
+  template <typename T>
+  void List<T>::reverse()
+  {
+    Node<T>* prevNode = nullptr;
+    Node<T>* currentNode = head;
+
+    while (currentNode != nullptr)
+    {
+      Node<T>* nextNode = currentNode->next;
+
+      currentNode->next = prevNode;
+
+      prevNode = currentNode;
+      currentNode = nextNode;
+    }
+
+    tail = head;
+    head = prevNode;
+  }
+
   template<typename T>
   T& List<T>::operator[](size_t index)
   {
@@ -287,6 +448,81 @@ namespace spiridonov
   {
     *this = List<T>(value, count);
   }
+
+  template <typename T>
+  void List<T>::remove(const T& value)
+  {
+    Node<T>* current = head;
+    Node<T>* prev = nullptr;
+
+    while (current != nullptr)
+    {
+      if (current->data == value)
+      {
+        if (prev == nullptr)
+        {
+          pop_front();
+          current = head;
+        }
+        else
+        {
+          prev->next = current->next;
+          delete current;
+          current = prev->next;
+          size--;
+        }
+      }
+      else
+      {
+        prev = current;
+        current = current->next;
+      }
+    }
+  }
+
+  template <typename T>
+  template <typename UnaryPredicate>
+  void List<T>::remove_if(UnaryPredicate p)
+  {
+    Node<T>* current = head;
+    Node<T>* prev = nullptr;
+
+    while (current != nullptr)
+    {
+      if (p(current->data))
+      {
+        if (prev == nullptr)
+        {
+          pop_front();
+          current = head;
+        }
+        else
+        {
+          prev->next = current->next;
+          delete current;
+          current = prev->next;
+          size--;
+        }
+      }
+      else
+      {
+        prev = current;
+        current = current->next;
+      }
+    }
+  }
+
+  template <typename T>
+  void List<T>::assign(const T& value, size_t count)
+  {
+    clear();
+
+    for (size_t i = 0; i < count; ++i)
+    {
+      push_back(value);
+    }
+  }
+
 }
 
 #endif
