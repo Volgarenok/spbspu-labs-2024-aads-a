@@ -21,6 +21,8 @@ int main()
   }
 
   auto it = sequences.begin();
+  auto prevIt = it;
+
   while (it != sequences.end())
   {
     std::cout << it->first;
@@ -28,6 +30,11 @@ int main()
     {
       std::cout << " ";
     }
+    else if (prevIt != sequences.begin())
+    {
+      std::cout << " ";
+    }
+    prevIt = it;
   }
   std::cout << "\n";
 
