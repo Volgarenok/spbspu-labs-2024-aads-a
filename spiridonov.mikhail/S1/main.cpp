@@ -20,9 +20,14 @@ int main()
     return 0;
   }
 
-  for (auto it = sequences.begin(); it != sequences.end(); ++it)
+  auto it = sequences.begin();
+  while (it != sequences.end())
   {
-    std::cout << it->first << " ";
+    std::cout << it->first;
+    if (++it != sequences.end())
+    {
+      std::cout << " ";
+    }
   }
   std::cout << "\n";
 
