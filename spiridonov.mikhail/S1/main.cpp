@@ -60,7 +60,7 @@ int main()
     }
     printListValues(sum);
   }
-  catch (std::exception ex)
+  catch (std::exception& ex)
   {
     std::cerr << "Error: Calculation of sum is not possible." << "\n";
     return 1;
