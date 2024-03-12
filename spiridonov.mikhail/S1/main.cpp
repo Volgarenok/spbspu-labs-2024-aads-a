@@ -1,17 +1,25 @@
 #include <iostream>
 #include <string>
 #include "forward_list.hpp"
+#include "functions.hpp"
 
 using namespace spiridonov;
 
 int main()
 {
-  NamedList lists[100];
-  int numLists = 0;
-  int sums[100] = { 0 };
-  int totalSize = 0;
+  List<nameList> sequences;
 
-  while (std::cin >> lists[numLists].name)
+  try
+  {
+    sequences = input(std::cin);
+  }
+  catch (std::invalid_argument& ex)
+  {
+    std::cout << '0' << '\n';
+    return 0;
+  }
+
+ /* while (std::cin >> lists[numLists].name)
   {
     char c;
     while (std::cin.get(c) && c != '\n')
@@ -27,7 +35,7 @@ int main()
     }
     numLists++;
   }
-
+*/
   totalSize = 0;
   for (size_t i = 0; i < numLists; i++)
   {
