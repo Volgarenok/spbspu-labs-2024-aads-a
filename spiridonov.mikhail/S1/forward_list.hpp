@@ -17,6 +17,7 @@ namespace spiridonov
 
   public:
     List();
+    ~List();
     List(const List<T>& other);
     List(const T& value, size_t count);
     List(std::initializer_list<T> ilist);
@@ -69,6 +70,18 @@ namespace spiridonov
     {
       push_back(current->data);
       current = current->next;
+    }
+  }
+
+  template <typename T>
+  List<T>::~List()
+  {
+    Node<T>* current = head;
+    while (current != nullptr)
+    {
+      Node<T>* temp = current;
+      current = current->next;
+      delete temp;
     }
   }
 
