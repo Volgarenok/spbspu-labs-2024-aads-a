@@ -11,8 +11,7 @@ namespace spiridonov
     T data;
     Node<T>* next;
 
-    Node()
-    {};
+    Node();
     Node(T value);
     Node(T value, Node* next);
   };
