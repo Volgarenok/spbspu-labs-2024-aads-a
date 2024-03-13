@@ -417,6 +417,60 @@ namespace namestnikov
         }
       }
     }
+    iterator_t erase_after(const_it_t first, const_it_t last)
+    {
+      if (first == cend())
+      {
+        throw std::out_of_range("Can not erase from here");
+      }
+      else
+      {
+        auto position = begin();
+        while (position != first)
+        {
+          ++position;
+        }
+        iterator_t res = position;
+        for (; position != last; ++position)
+        {
+          if (position.node_->next_)
+          {
+            iterator_t temp = position.node_->next_->next_;
+            auto todel = position.node_->next_;
+            delete todel;
+            position.node_->next_ = temp.node_;
+          }
+          else
+          {
+            return end();
+          }
+        }
+        return res;
+      }
+    }
+    void splice_after(const_it_t pos, ForwardList & other)
+    {
+      if (pos == cend())
+      {
+        throw std::out_of_range("Can not splice here");
+      }
+      if (other.head_)
+      {
+        auto position = begin();
+        while (position != pos)
+        {
+          ++position;
+        }
+        node_t * temp = position.node_->next_;
+        position.node_->next_ = other.head_;
+        while (other.head_->next_)
+        {
+          other.head_ = other.head_->next_;
+        }
+        other.head_->next_ = temp;
+        other.head_ = nullptr;
+      }
+    }
     const T & operator[](size_t index)
     {
       size_t counter = 0;
