@@ -23,8 +23,8 @@ namespace namestnikov
   template<class T>
   class ForwardList
   {
-    friend class namestnikov::ForwardIterator<T>;
-    friend class namestnikov::ConstForwardIterator<T>;
+    friend class ForwardIterator<T>;
+    friend class ConstForwardIterator<T>;
     using iterator_t = ForwardIterator<T>;
     using const_it_t = ConstForwardIterator<T>;
     using node_t = Node<T>;
@@ -526,19 +526,19 @@ namespace namestnikov
       }
       return true;
     }
-    bool operator!=(ForwardList<T> & other)
+    bool operator!=(ForwardList<T> & other) const
     {
       return !(*this == other);
     }
-    bool operator>(ForwardList<T> & other)
+    bool operator>(ForwardList<T> & other) const
     {
       return !(*this <= other);
     }
-    bool operator<=(ForwardList<T> & other)
+    bool operator<=(ForwardList<T> & other) const
     {
       return ((*this < other) || (*this == other));
     }
-    bool operator>=(ForwardList<T> & other)
+    bool operator>=(ForwardList<T> & other) const
     {
       return ((*this > other) || (*this == other));
     }
@@ -561,16 +561,6 @@ namespace namestnikov
     ~ForwardList()
     {
       clear();
-    }
-    void print()
-    {
-      node_t * temp = head_;
-      while (temp)
-      {
-        std::cout << temp->data_ << " ";
-        temp = temp ->next_;
-      }
-      std::cout << "\n";
     }
   private:
     node_t * head_;

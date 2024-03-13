@@ -18,8 +18,8 @@ namespace namestnikov
   template <class T>
   class ConstForwardIterator: public std::iterator<std::forward_iterator_tag, T>
   {
-    friend class namestnikov::ForwardIterator<T>;
-    friend class namestnikov::ForwardList<T>;
+    friend class ForwardIterator<T>;
+    friend class ForwardList<T>;
     using const_it_t = ConstForwardIterator<T>;
     using iterator_t = ForwardIterator<T>;
     using node_t = Node<T>;
