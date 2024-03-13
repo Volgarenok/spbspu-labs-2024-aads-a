@@ -20,7 +20,7 @@ namespace namestnikov
   template <class T>
   class Node;
 
-  template<class T>
+  template <class T>
   class ForwardList
   {
     friend class ForwardIterator<T>;
@@ -496,35 +496,31 @@ namespace namestnikov
     }
     bool operator==(ForwardList<T> & other)
     {
+      bool check = true;
       size_t size = std::min(max_size(), other.max_size());
       node_t * ourNode = head_;
       node_t * otherNode = other.head_;
       for (size_t i = 0; i < size; ++i)
       {
-        if (ourNode->data_ != otherNode->data_)
-        {
-          return false;
-        }
+        check = check && (ourNode->data_ == otherNode->data_);
         ourNode = ourNode->next_;
         otherNode = otherNode->next_;
       }
-      return true;
+      return check;
     }
     bool operator<(ForwardList<T> & other)
     {
+      bool check = true;
       size_t size = std::min(max_size(), other.max_size());
       node_t * ourNode = head_;
       node_t * otherNode = other.head_;
       for (size_t i = 0; i < size; ++i)
       {
-        if (ourNode->data_ >= otherNode->data_)
-        {
-          return false;
-        }
+        check = check && (ourNode->data_ < otherNode->data_);
         ourNode = ourNode->next_;
         otherNode = otherNode->next_;
       }
-      return true;
+      return check;
     }
     bool operator!=(ForwardList<T> & other) const
     {
