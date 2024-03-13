@@ -1,8 +1,6 @@
 #ifndef LIST_HPP
 #define LIST_HPP
 
-#include <iostream>
-
 #include <initializer_list>
 #include <stdexcept>
 #include "node.hpp"

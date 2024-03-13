@@ -1,7 +1,6 @@
 #include "input_named_list.hpp"
 #include <iostream>
 #include <string>
-#include <stdexcept>
 #include <utility>
 
 void erohin::inputNamedList(std::istream & input, List< named_list > & result)
