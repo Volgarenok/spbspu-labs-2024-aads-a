@@ -17,10 +17,10 @@ int main()
     return 0;
   }
 
-  for (auto namedIter = namedLists.begin(); namedIter != namedLists.end(); namedIter++)
+  for (auto namedIter = namedLists.cbegin(); namedIter != namedLists.cend(); namedIter++)
   {
     std::cout << namedIter->first;
-    if (namedIter + 1 != namedLists.end())
+    if (namedIter + 1 != namedLists.cend())
     {
       std::cout << ' ';
     }
@@ -40,16 +40,16 @@ int main()
   List< List< size_t > > outList(maxSize, temp);
   for (size_t i = 0; i < maxSize; i++)
   {
-    for (auto iter = namedLists.begin(); iter != namedLists.end(); iter++)
+    for (auto iter = namedLists.cbegin(); iter != namedLists.cend(); iter++)
     {
       if (i < iter->second.size())
       {
-        outList[i].push_back(iter->second[i]);
+        outList[i].push_back(*(iter->second.cbegin() + i));
       }
     }
   }
 
-  for (auto outIter = outList.begin(); outIter != outList.end(); outIter++)
+  for (auto outIter = outList.cbegin(); outIter != outList.cend(); outIter++)
   {
     outputList(*outIter, std::cout);
     if (!outIter->empty())
@@ -61,7 +61,7 @@ int main()
   try
   {
     List< size_t > sumList;
-    for (auto outIter = outList.begin(); outIter != outList.end(); outIter++)
+    for (auto outIter = outList.cbegin(); outIter != outList.cend(); outIter++)
     {
       sumList.push_back(countSum(*outIter));
     }

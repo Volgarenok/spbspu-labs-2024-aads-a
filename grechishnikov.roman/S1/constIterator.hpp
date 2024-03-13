@@ -20,7 +20,6 @@ namespace grechishnikov
     const T* operator->();
 
     ConstIterator& operator=(const ConstIterator< T >& other) = default;
-//    ConstIterator& operator=(const Iterator< T >& other);
     ConstIterator& operator++();
     ConstIterator& operator--();
     ConstIterator operator++(int);
@@ -62,13 +61,6 @@ namespace grechishnikov
     return &node_->data_;
   }
 
-//  template< typename T >
-//  ConstIterator< T >& ConstIterator< T >::operator=(const Iterator< T >& other)
-//  {
-//    node_ = other.node_;
-//    return *this;
-//  }
-
   template< typename T >
   ConstIterator< T >& ConstIterator< T >::operator++()
   {
@@ -100,21 +92,31 @@ namespace grechishnikov
   }
 
   template< typename T >
-  ConstIterator< T > ConstIterator< T >::operator+(size_t)
+  ConstIterator< T > ConstIterator< T >::operator+(size_t pos)
   {
-    return node_->next_;
+    auto temp(*this);
+    for (size_t i = 0; i < pos; i++)
+    {
+      temp++;
+    }
+    return temp;
   }
 
   template< typename T >
-  ConstIterator< T > ConstIterator< T >::operator-(size_t)
+  ConstIterator< T > ConstIterator< T >::operator-(size_t pos)
   {
-    return node_->prev_;
+    auto temp(*this);
+    for (size_t i = 0; i < pos; i++)
+    {
+      temp--;
+    }
+    return temp;
   }
 
   template< typename T >
   ConstIterator< T >& ConstIterator< T >::operator[](size_t pos)
   {
-    for(size_t i = 0; i < pos; i++)
+    for (size_t i = 0; i < pos; i++)
     {
       operator++();
     }

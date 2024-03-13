@@ -92,21 +92,31 @@ namespace grechishnikov
   }
 
   template< typename T >
-  Iterator< T > Iterator< T >::operator+(size_t)
+  Iterator< T > Iterator< T >::operator+(size_t pos)
   {
-    return node_->next_;
+    auto temp(*this);
+    for (size_t i = 0; i < pos; i++)
+    {
+      temp++;
+    }
+    return temp;
   }
 
   template< typename T >
-  Iterator< T > Iterator< T >::operator-(size_t)
+  Iterator< T > Iterator< T >::operator-(size_t pos)
   {
-    return node_->prev_;
+    auto temp(*this);
+    for (size_t i = 0; i < pos; i++)
+    {
+      temp--;
+    }
+    return temp;
   }
 
   template< typename T >
   Iterator< T >& Iterator< T >::operator[](size_t pos)
   {
-    for(size_t i = 0; i < pos; i++)
+    for (size_t i = 0; i < pos; i++)
     {
       operator++();
     }

@@ -35,15 +35,15 @@ grechishnikov::List< grechishnikov::namedList > grechishnikov::inputLists(std::i
   return inputedLists;
 }
 
-size_t grechishnikov::countSum(List< size_t >& list)
+size_t grechishnikov::countSum(const List< size_t >& list)
 {
   if (list.empty())
   {
     return 0;
   }
   size_t sum = 0;
-  auto iter = list.begin();
-  while (iter != list.end())
+  auto iter = list.cbegin();
+  while (iter != list.cend())
   {
     sum = safeSum(sum, *iter);
     iter++;
@@ -51,13 +51,13 @@ size_t grechishnikov::countSum(List< size_t >& list)
   return sum;
 }
 
-void grechishnikov::outputList(List< size_t >& list, std::ostream& out)
+void grechishnikov::outputList(const List< size_t >& list, std::ostream& out)
 {
-  auto iter = list.begin();
-  while (iter != list.end())
+  auto iter = list.cbegin();
+  while (iter != list.cend())
   {
     out << *iter;
-    if (iter + 1 != list.end())
+    if (iter + 1 != list.cend())
     {
       out << ' ';
     }

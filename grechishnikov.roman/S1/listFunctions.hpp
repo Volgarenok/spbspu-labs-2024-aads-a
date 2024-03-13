@@ -11,8 +11,8 @@ namespace grechishnikov
 
   namedList inputList(std::istream& in);
   List< namedList > inputLists(std::istream& in);
-  size_t countSum(List< size_t >& list);
-  void outputList(List< size_t >& lisr, std::ostream& out);
+  size_t countSum(const List< size_t >& list);
+  void outputList(const List< size_t >& lisr, std::ostream& out);
 }
 
 #endif
