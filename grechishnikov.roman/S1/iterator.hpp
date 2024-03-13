@@ -29,8 +29,8 @@ namespace grechishnikov
 
     Iterator& operator[](size_t);
 
-    bool operator==(const Iterator< T >& other);
-    bool operator!=(const Iterator< T >& other);
+    bool operator==(const Iterator< T >& other) const;
+    bool operator!=(const Iterator< T >& other) const;
 
     Node< T >* getNode();
 
@@ -123,13 +123,13 @@ namespace grechishnikov
   }
 
   template< typename T >
-  bool Iterator< T >::operator==(const Iterator< T >& other)
+  bool Iterator< T >::operator==(const Iterator< T >& other) const
   {
     return node_ == other.node_;
   }
 
   template< typename T >
-  bool Iterator< T >::operator!=(const Iterator< T >& other)
+  bool Iterator< T >::operator!=(const Iterator< T >& other) const
   {
     return !(node_ == other.node_);
   }
