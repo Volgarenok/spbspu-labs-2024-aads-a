@@ -31,7 +31,7 @@ int main()
   }
 
   size_t maxSize = 1;
-  for (auto namedIter = namedLists.begin(); namedIter != namedLists.end(); namedIter++)
+  for (auto namedIter = namedLists.cbegin(); namedIter != namedLists.cend(); namedIter++)
   {
     maxSize = std::max(maxSize, namedIter->second.size());
   }
