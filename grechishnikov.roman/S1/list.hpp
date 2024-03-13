@@ -6,6 +6,7 @@
 #include <cstddef>
 #include "node.hpp"
 #include "iterator.hpp"
+#include "constIterator.hpp"
 
 namespace grechishnikov
 {
@@ -26,6 +27,9 @@ namespace grechishnikov
 
     Iterator< T > begin();
     Iterator< T > end();
+    ConstIterator< T > cbegin() const;
+    ConstIterator< T > cend() const;
+
 
     bool empty();
     size_t size();
@@ -46,13 +50,13 @@ namespace grechishnikov
     void remove(const T& data);
     void remove_if(bool (*)(T));
 
-    Iterator< T > erase(Iterator< T >);
+    Iterator< T > erase(ConstIterator< T >);
 
-    Iterator< T > insert(Iterator< T >, const T&);
-    Iterator< T > insert(Iterator< T >, T&&);
-    Iterator< T > insert(Iterator< T >, size_t, const T&);
-    Iterator< T > insert(Iterator< T >, Iterator< T >, Iterator< T >);
-    Iterator< T > insert(Iterator< T >, std::initializer_list< T >);
+    Iterator< T > insert(ConstIterator< T >, const T&);
+    Iterator< T > insert(ConstIterator< T >, T&&);
+    Iterator< T > insert(ConstIterator< T >, size_t, const T&);
+    Iterator< T > insert(ConstIterator< T >, ConstIterator< T >, ConstIterator< T >);
+    Iterator< T > insert(ConstIterator< T >, std::initializer_list< T >);
 
     void reverse();
 
@@ -139,9 +143,7 @@ namespace grechishnikov
   template< typename T >
   List< T >& List< T >::operator=(List< T >&& other)
   {
-    size_ = other.size_;
-    std::swap(head_, other.head_);
-    std::swap(tail_, other.tail_);
+    swap(other);
     return *this;
   }
 
@@ -162,6 +164,18 @@ namespace grechishnikov
   Iterator< T > List< T >::end()
   {
     return Iterator< T >(nullptr);
+  }
+
+  template< typename T >
+  ConstIterator< T > List< T >::cbegin() const
+  {
+    return ConstIterator< T >(head_);
+  }
+
+  template< typename T >
+  ConstIterator< T > List< T >::cend() const
+  {
+    return ConstIterator< T >(nullptr);
   }
 
   template< typename T >
@@ -307,75 +321,67 @@ namespace grechishnikov
   template< typename T >
   void List< T >::remove(const T& data)
   {
-    auto first = begin();
-    auto last = end();
-    while (first != last)
+    auto first = cbegin();
+    while (first != cend())
     {
       if (*first == data)
       {
-        first = erase(first);
+        erase(first);
       }
-      else
-      {
-        first++;
-      }
+      first++;
     }
   }
 
   template< typename T >
   void List< T >::remove_if(bool (*f)(T))
   {
-    auto first = begin();
-    auto last = end();
-    while (first != last)
+    auto first = cbegin();
+    while (first != cend())
     {
       if (f(*first))
       {
-        first = erase(first);
+        erase(first);
       }
-      else
-      {
-        first++;
-      }
+      first++;
     }
   }
 
   template< typename T >
-  Iterator< T > List< T >::erase(Iterator< T > iter)
+  Iterator< T > List< T >::erase(ConstIterator< T > iter)
   {
     Node< T >* prevPoi = iter.getNode()->prev_;
     Node< T >* nextPoi = iter.getNode()->next_;
     size_--;
-    auto temp = iter + 1;
+    auto ret = Iterator< T >(nextPoi);
     if (!prevPoi)
     {
       pop_front();
-      return temp;
+      return ret;
     }
     if (!nextPoi)
     {
       pop_back();
-      return end();
+      return ret;
     }
     prevPoi->next_ = nextPoi;
     nextPoi->prev_ = prevPoi;
     delete iter.getNode();
-    return temp;
+    return ret;
   }
 
   template< typename T >
-  Iterator< T > List< T >::insert(Iterator< T > where, const T& value)
+  Iterator< T > List< T >::insert(ConstIterator< T > where, const T& value)
   {
     auto mValue = value;
     return insert(where, std::move(mValue));
   }
 
   template< typename T >
-  Iterator< T > List< T >::insert(Iterator< T > where, T&& value)
+  Iterator< T > List< T >::insert(ConstIterator< T > where, T&& value)
   {
     auto temp = new Node< T > (value, nullptr, nullptr);
     auto nextNode = where + 1;
-    if (where == end())
+    if (where == cend())
     {
       push_back(value);
     }
@@ -384,40 +390,43 @@ namespace grechishnikov
     temp->prev_ = where.getNode();
     temp->next_ = nextNode.getNode();
     size_++;
-    return where + 1;
+    return Iterator< T >(temp);
   }
 
   template< typename T >
-  Iterator< T > List< T >::insert(Iterator< T > where, size_t count, const T& value)
+  Iterator< T > List< T >::insert(ConstIterator< T > where, size_t count, const T& value)
   {
     for (size_t i = 0; i < count; i++)
     {
-      where = insert(where, value);
+      insert(where, value);
+      where++;
     }
-    return where;
+    return Iterator< T >(where.getNode());
   }
 
   template< typename T >
-  Iterator< T > List< T >::insert(Iterator< T > where, Iterator< T > first, Iterator< T > last)
+  Iterator< T > List< T >::insert(ConstIterator< T > where, ConstIterator< T > first, ConstIterator< T > last)
   {
     while (first != last)
     {
-      where = insert(where, *first);
+      insert(where, *first);
+      where++;
       first++;
     }
-    return where;
+    return Iterator< T >(where.getNode());
   }
 
   template< typename T >
-  Iterator< T > List< T >::insert(Iterator< T > where, std::initializer_list< T > ilist)
+  Iterator< T > List< T >::insert(ConstIterator< T > where, std::initializer_list< T > ilist)
   {
     auto init = ilist.begin();
     while (init != ilist.end())
     {
-      where = insert(where, *init);
+      insert(where, *init);
+      where++;
       init++;
     }
-    return where;
+    return Iterator< T >(where.getNode());
   }
 
   template< typename T >
