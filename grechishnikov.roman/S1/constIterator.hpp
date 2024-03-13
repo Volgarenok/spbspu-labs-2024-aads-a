@@ -15,7 +15,6 @@ namespace grechishnikov
     ConstIterator(const ConstIterator< T >& other);
     ~ConstIterator() = default;
 
-
     const T& operator*();
     const T* operator->();
 
@@ -33,7 +32,7 @@ namespace grechishnikov
     bool operator==(const ConstIterator< T >& other) const;
     bool operator!=(const ConstIterator< T >& other) const;
 
-    Node< T >* getNode();
+    Node< T >* getNode() const;
 
   private:
     Node< T >* node_;
@@ -136,7 +135,7 @@ namespace grechishnikov
   }
 
   template< typename T >
-  Node< T >* ConstIterator< T >::getNode()
+  Node< T >* ConstIterator< T >::getNode() const
   {
     return this->node_;
   }
