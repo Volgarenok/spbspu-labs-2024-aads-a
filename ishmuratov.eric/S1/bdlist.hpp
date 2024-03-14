@@ -233,7 +233,10 @@ namespace ishmuratov
         {
           ptr->prev_ = nullptr;
         }
-        tail_ = nullptr;
+        else
+        {
+          tail_ = nullptr;
+        }
         delete head_;
         head_ = ptr;
         --size_;
@@ -250,7 +253,10 @@ namespace ishmuratov
         {
           ptr->next_ = nullptr;
         }
-        head_ = nullptr;
+        else
+        {
+          head_ = nullptr;
+        }
         delete tail_;
         tail_ = ptr;
         --size_;
