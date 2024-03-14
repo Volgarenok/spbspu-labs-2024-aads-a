@@ -685,46 +685,21 @@ namespace nikitov
   template< class T >
   ListIterator< T > List< T >::embed(constIterator position, Node< T >* newNode)
   {
+    Node< T >* node = position.node_;
+    newNode->prev_ = node->prev_;
+    newNode->next_ = node;
+    node->prev_ = newNode;
+    if (position == cend())
+    {
+      tail_ = newNode;
+    }
     if (position == cbegin())
     {
-      newNode->prev_ = nullptr;
-      newNode->next_ = head_;
-      head_->prev_ = newNode;
-      if (head_->next_ == nullptr)
-      {
-        newNode->next_ = head_;
-        tail_ = newNode;
-      }
       head_ = newNode;
-    }
-    else if (position == cend())
-    {
-      newNode->prev_ = tail_;
-      if (empty())
-      {
-        newNode->next_ = head_;
-        head_->prev_ = newNode;
-        head_ = newNode;
-      }
-      else
-      {
-        newNode->next_ = tail_->next_;
-        newNode->next_->prev_ = newNode;
-        tail_->next_ = newNode;
-      }
-      tail_ = newNode;
     }
     else
     {
-      Node< T >* node = head_;
-      for (auto i = cbegin(); i != position; ++i)
-      {
-        node = node->next_;
-      }
-      newNode->prev_ = node->prev_;
-      newNode->next_ = node;
       newNode->prev_->next_ = newNode;
-      node->prev_ = newNode;
     }
     ++size_;
     return ListIterator< T >(newNode);
