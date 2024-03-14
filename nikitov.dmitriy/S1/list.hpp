@@ -96,14 +96,14 @@ namespace nikitov
   template< class T >
   List< T >::List():
     head_(new Node< T >),
-    tail_(nullptr),
+    tail_(head_),
     size_(0)
   {}
 
   template< class T >
   List< T >::List(size_t n, const T& value):
     head_(new Node< T >),
-    tail_(nullptr),
+    tail_(head_),
     size_(0)
   {
     for (size_t i = 0; i != n; ++i)
@@ -115,7 +115,7 @@ namespace nikitov
   template< class T >
   List< T >::List(constIterator first, constIterator second):
     head_(new Node< T >),
-    tail_(nullptr),
+    tail_(head_),
     size_(0)
   {
     for (auto i = first; i != second; ++i)
@@ -127,7 +127,7 @@ namespace nikitov
   template< class T >
   List< T >::List(std::initializer_list< T > initList):
     head_(new Node< T >),
-    tail_(nullptr),
+    tail_(head_),
     size_(0)
   {
     for (T value : initList)
@@ -139,7 +139,7 @@ namespace nikitov
   template< class T >
   List< T >::List(const List< T >& other):
     head_(new Node< T >),
-    tail_(nullptr),
+    tail_(head_),
     size_(0)
   {
     Node< T >* node = other.head_;
@@ -274,9 +274,9 @@ namespace nikitov
   template< class T >
   ListIterator< T > List< T >::end()
   {
-    if (tail_ == nullptr)
+    if (tail_->next_ == nullptr)
     {
-      return iterator(head_);
+      return iterator(tail_);
     }
     else
     {
@@ -287,9 +287,9 @@ namespace nikitov
   template< class T >
   ConstListIterator< T > List< T >::cend() const
   {
-    if (tail_ == nullptr)
+    if (tail_->next_ == nullptr)
     {
-      return constIterator(head_);
+      return constIterator(tail_);
     }
     else
     {
@@ -708,45 +708,22 @@ namespace nikitov
   template< class T >
   ListIterator< T > List< T >::cut(constIterator position)
   {
-    Node< T >* nextNode = nullptr;
+    Node< T >* node = position.node_;
+    Node< T >* nextNode = node->next_;
+    nextNode->prev_ = node->prev_;
+    if (node == tail_)
+    {
+      tail_ = nextNode;
+    }
     if (position == cbegin())
     {
-      nextNode = head_->next_;
-      nextNode->prev_ = nullptr;
-      if (nextNode->next_ == nullptr)
-      {
-        tail_ = nullptr;
-      }
-      delete head_;
       head_ = nextNode;
-    }
-    else if (position == --cend())
-    {
-      nextNode = tail_->next_;
-      nextNode->prev_ = tail_->prev_;
-      if (tail_->prev_ != nullptr)
-      {
-        tail_->prev_->next_ = nextNode;
-      }
-      else
-      {
-        head_ = nextNode;
-      }
-      delete tail_;
-      tail_ = nextNode;
     }
     else
     {
-      Node< T >* node = head_;
-      for (auto i = cbegin(); i != position; ++i)
-      {
-        node = node->next_;
-      }
-      nextNode = node->next_;
-      node->prev_->next_ = nextNode;
-      nextNode->prev_ = node->prev_;
-      delete node;
+      nextNode->prev_->next_ = nextNode;
     }
+    delete node;
     --size_;
     return iterator(nextNode);
   }
