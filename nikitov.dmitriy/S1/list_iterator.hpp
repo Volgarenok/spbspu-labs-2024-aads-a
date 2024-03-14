@@ -6,11 +6,15 @@
 namespace nikitov
 {
   template< class T >
+  class List;
+
+  template< class T >
   class Node;
 
   template< class T >
   class ListIterator: public std::iterator< std::bidirectional_iterator_tag, T >
   {
+    friend class List< T >;
   public:
     ListIterator();
     ListIterator(Node< T >* node);

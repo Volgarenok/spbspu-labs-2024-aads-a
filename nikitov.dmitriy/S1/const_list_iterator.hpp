@@ -6,11 +6,15 @@
 namespace nikitov
 {
   template< class T >
+  class List;
+
+  template< class T >
   class Node;
 
   template< class T >
   class ConstListIterator: public std::iterator< std::bidirectional_iterator_tag, T >
   {
+    friend class List< T >;
   public:
     ConstListIterator(Node< T >* node);
     ConstListIterator(const ConstListIterator< T >&) = default;
@@ -32,7 +36,7 @@ namespace nikitov
     ConstListIterator< T >& advance(int n);
 
   private:
-    const Node< T >* node_;
+    Node< T >* node_;
   };
 
   template< class T >
