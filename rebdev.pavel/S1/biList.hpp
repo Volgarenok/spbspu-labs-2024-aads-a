@@ -247,8 +247,8 @@ namespace rebdev
 
       iter insert(c_iter position, const T& val)
       {
-        node* last = position.getNode();
-        node* next = position.getNode() -> next_;
+        node* last = position.node_;
+        node* next = position.node_ -> next_;
         node* newNode = new node(val, last, next);
         last.next_ = newNode;
         next.last_ = newNode;
@@ -293,7 +293,7 @@ namespace rebdev
 
       iter erase (c_iter position)
       {
-        node* deleteNode = position.getNode();
+        node* deleteNode = position.node_;
         node* last = deleteNode -> last_;
         node* next = deleteNode -> next_;
         last -> next_ = next;
@@ -319,8 +319,8 @@ namespace rebdev
 
         secondTail.headNode_ = headNode_;
         secondList.tailNode_ = tailNode_;
-        headNode_ = secondHead.getNode();
-        tailNode_ = secondTail.getNode();
+        headNode_ = secondHead.node_;
+        tailNode_ = secondTail.node_;
       }
 
       void clear() noexcept
@@ -339,7 +339,7 @@ namespace rebdev
       //Operations
       void splice (c_iter position, list& x)
       {
-        node* nodeNow = position.getNode();
+        node* nodeNow = position.node_;
 
         nodeNow -> next_ -> last_ = x.tailNode_;
         x.tailNode_ -> next_ = nodeNow -> next_;
@@ -356,8 +356,8 @@ namespace rebdev
       }
       void splice (c_iter position, list& x, c_iter i)
       {
-        node* nodeNow = position.getNode();
-        node* spliceNode = i.getNode();
+        node* nodeNow = position.node_;
+        node* spliceNode = i.node_;
         node* last = spliceNode -> last_;
         node* next = spliceNode -> next_;
 
@@ -396,11 +396,11 @@ namespace rebdev
         {
           if (*iterNow == val)
           {
-            node* lastNode = iterNow.getNode() -> last_;
-            node* nextNode = iterNow.getNode() -> next_;
+            node* lastNode = iterNow.node_ -> last_;
+            node* nextNode = iterNow.node_ -> next_;
             lastNode -> next_ = nextNode;
             nextNode -> last_ = lastNode;
-            delete iterNow.getNode();
+            delete iterNow.node_;
           }
         }
       }
@@ -413,11 +413,11 @@ namespace rebdev
         {
           if (pred(iterNow))
           {
-            node* lastNode = iterNow.getNode() -> last_;
-            node* nextNode = iterNow.getNode() -> next_;
+            node* lastNode = iterNow.node_ -> last_;
+            node* nextNode = iterNow.node_ -> next_;
             lastNode -> next_ = nextNode;
             nextNode -> last_ = lastNode;
-            delete iterNow.getNode();
+            delete iterNow.node_;
           }
         }
       }
@@ -428,7 +428,7 @@ namespace rebdev
         iter head = begin();
         while (tail != head)
         {
-          reverseTwoNode(*tail.getNode(), *head.getNode());
+          reverseTwoNode(*tail.node_, *head.node_);
           ++head;
           if(head == tail) break;
           --tail;

@@ -4,12 +4,17 @@
 #include <memory>
 
 #include "biListNode.hpp"
+#include "biList.hpp"
 
 namespace rebdev
 {
   template < class T >
+  class BiList;
+
+  template < class T >
   class biListC_Iterator
   {
+    friend BiList< T >;
     using c_iter = biListC_Iterator< T >;
     using node = biListNode< T >;
 
