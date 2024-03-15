@@ -142,11 +142,9 @@ namespace nikitov
     tail_(head_),
     size_(0)
   {
-    Node< T >* node = other.head_;
-    for (size_t i = 0; i != other.size_; ++i)
+    for (auto i = other.cbegin(); i != other.cend(); ++i)
     {
-      embed(cend(), new Node< T >(node->value_));
-      node = node->next_;
+      embed(cend(), new Node< T >(*i));
     }
   }
 
@@ -403,25 +401,23 @@ namespace nikitov
   template< class T >
   ListIterator< T > List< T >::insert(constIterator position, size_t n, const T& value)
   {
-    iterator iter;
     for (size_t i = 0; i != n; ++i)
     {
-      iter = embed(position, new Node< T >(value));
+      embed(position, new Node< T >(value));
     }
-    return iter.advance(-n + 1);
+    return iterator(position.node_).advance(-n);
   }
 
   template< class T >
   ListIterator< T > List< T >::insert(constIterator position, constIterator first, constIterator last)
   {
-    iterator iter;
     size_t countNewElements = 0;
     for (auto i = first; i != last; ++i)
     {
-      iter = embed(position, new Node< T >(*i));
+      embed(position, new Node< T >(*i));
       ++countNewElements;
     }
-    return iter.advance(-countNewElements + 1);
+    return iterator(position.node_).advance(-countNewElements);
   }
 
   template< class T >
@@ -433,14 +429,13 @@ namespace nikitov
   template< class T >
   ListIterator< T > List< T >::insert(constIterator position, std::initializer_list< T > initList)
   {
-    iterator iter;
     size_t countNewElements = 0;
     for (T value : initList)
     {
-      iter = embed(position, new Node< T >(value));
+      embed(position, new Node< T >(value));
       ++countNewElements;
     }
-    return iter.advance(-countNewElements + 1);
+    return iterator(position.node_).advance(-countNewElements);
   }
 
   template< class T >
@@ -452,13 +447,12 @@ namespace nikitov
   template< class T >
   ListIterator< T > List< T >::erase(constIterator first, constIterator second)
   {
-    iterator iter;
     auto i = first;
     while (i != second)
     {
-      iter = cut(i++);
+      cut(i++);
     }
-    return iter;
+    return iterator(second.node_);
   }
 
   template< class T >
@@ -481,11 +475,7 @@ namespace nikitov
   template< class T >
   void List< T >::splice(constIterator position, List< T >& other, constIterator otherPosition)
   {
-    Node< T >* otherNode = other.head_;
-    for (auto i = other.cbegin(); i != otherPosition; ++i)
-    {
-      otherNode = otherNode->next_;
-    }
+    Node< T >* otherNode = otherPosition.node_;
 
     if (otherPosition == other.cbegin())
     {
@@ -545,26 +535,7 @@ namespace nikitov
   template< class T >
   void List< T >::merge(List< T >&& other)
   {
-    if (std::addressof(other) == this)
-    {
-      return;
-    }
-    for (auto i = cbegin(); i != cend(); ++i)
-    {
-      auto j = other.cbegin();
-      while (j != other.cend())
-      {
-        if (*j <= *i)
-        {
-          splice(i, other, j++);
-        }
-        else
-        {
-          ++j;
-        }
-      }
-    }
-    splice(cend(), other);
+    merge(other);
   }
 
   template< class T >
@@ -618,7 +589,7 @@ namespace nikitov
     for (auto i = cbegin(); i != cend(); ++i)
     {
       auto j = cbegin();
-      while(j != cend())
+      while (j != cend())
       {
         if (i != j && *i == *j)
         {
@@ -635,13 +606,13 @@ namespace nikitov
   template< class T >
   void List< T >::reverse()
   {
-   if (size_ != 0)
+   if (!empty())
    {
      Node< T >* node = head_;
      node->prev_ = tail_->next_;
      node->next_->prev_ = node;
      tail_->next_ = nullptr;
-     while(node != nullptr)
+     while (node != nullptr)
      {
        Node< T >* temp = node->next_;
        std::swap(node->prev_, node->next_);
@@ -654,15 +625,17 @@ namespace nikitov
   template< class T >
   void List< T >::remove(const T& value)
   {
-    Node< T >* node = head_;
-    while (node->next_ != nullptr)
+    auto i = cbegin();
+    while (i != cend())
     {
-      Node< T >* temp = node->next_;
-      if (node->value_ == value)
+      if (*i == value)
       {
-        cut(constIterator(node));
+        cut(i++);
       }
-      node = temp;
+      else
+      {
+        ++i;
+      }
     }
   }
 
@@ -670,15 +643,17 @@ namespace nikitov
   template< class Predicate >
   void List< T >::remove_if(Predicate pred)
   {
-    Node< T >* node = head_;
-    while (node->next_ != nullptr)
+    auto i = cbegin();
+    while (i != cend())
     {
-      Node< T >* temp = node->next_;
-      if (pred(node->value_))
+      if (pred(*i))
       {
-        cut(constIterator(node));
+        cut(i++);
       }
-      node = temp;
+      else
+      {
+        ++i;
+      }
     }
   }
 
