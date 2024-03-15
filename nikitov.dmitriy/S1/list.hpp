@@ -74,6 +74,9 @@ namespace nikitov
     void splice(constIterator position, List< T >& other, constIterator otherPosition);
     void splice(constIterator position, List< T >& other);
     void splice(constIterator position, List< T >& other, constIterator first, constIterator last);
+    void splice(constIterator position, List< T >&& other, constIterator otherPosition);
+    void splice(constIterator position, List< T >&& other);
+    void splice(constIterator position, List< T >&& other, constIterator first, constIterator last);
 
     void merge(List< T >& other);
     void merge(List< T >&& other);
@@ -511,6 +514,24 @@ namespace nikitov
     {
       splice(position, other, first++);
     }
+  }
+
+  template< class T >
+  void List< T >::splice(constIterator position, List< T >&& other, constIterator otherPosition)
+  {
+    splice(position, other, otherPosition);
+  }
+
+  template< class T >
+  void List< T >::splice(constIterator position, List< T >&& other)
+  {
+    splice(position, other);
+  }
+
+  template< class T >
+  void List< T >::splice(constIterator position, List< T >&& other, constIterator first, constIterator last)
+  {
+    splice(position, other, first, last);
   }
 
   template< class T >
