@@ -16,7 +16,6 @@ namespace nikitov
   {
     friend class List< T >;
   public:
-    ListIterator();
     ListIterator(Node< T >* node);
     ListIterator(const ListIterator< T >&) = default;
     ~ListIterator() = default;
@@ -39,11 +38,6 @@ namespace nikitov
   private:
     Node< T >* node_;
   };
-
-  template< class T >
-  ListIterator< T >::ListIterator():
-    node_(nullptr)
-  {}
 
   template< class T >
   ListIterator< T >::ListIterator(Node< T >* node):
