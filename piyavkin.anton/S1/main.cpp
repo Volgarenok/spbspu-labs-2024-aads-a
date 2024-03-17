@@ -35,13 +35,13 @@ int main()
   List<int> list2({1,2,3,4,5});
   List<int> list(++list2.begin(), --list2.end());
   List<int> list3;
-  list3 = list2;
-  list3.remove(5);
-  auto it1 = --list3.cend();
-  list3.splice(--it1, list);
-  auto it = list3.begin();
-  for (; it != list3.end();)
+  list2.insert(list2.cend(), 6);
+  list2.insert(--list2.cend(), {10,20,30});
+  list2.insert(++list2.cbegin(), 2,2);
+  list2.insert(list2.cbegin(), ++list.begin(), --list.end());
+  auto it = list2.begin();
+  for (; it != list2.end(); ++it)
   {
-    std::cout << *it++ << ' ';
+    std::cout << *it << ' ';
   }
 }

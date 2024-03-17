@@ -40,8 +40,7 @@ namespace piyavkin
       {
         while (start != finish)
         {
-          push_back(*start);
-          ++start;
+          push_back(*start++);
         }
       }
       catch (const std::exception& e)
@@ -58,8 +57,7 @@ namespace piyavkin
         auto it = il.begin();
         while (it != il.end())
         {
-          push_back(*it);
-          ++it;
+          push_back(*it++);
         }
       }
       catch (const std::exception& e)
@@ -178,8 +176,7 @@ namespace piyavkin
         tail_ = nullptr;
         while (start != finish)
         {
-          push_back(*start);
-          ++start;
+          push_back(*start++);
         }
       }
       catch(const std::exception& e)
@@ -198,8 +195,7 @@ namespace piyavkin
         auto it = il.begin();
         while (it != il.end())
         {
-          push_back(*it);
-          ++it;
+          push_back(*it++);
         }
       }
       catch(const std::exception& e)
@@ -243,12 +239,12 @@ namespace piyavkin
       list.tail_ = nullptr;
       list.size_ = 0;
     }
-    void splice(ListIterator< T > it, List< T >& list, ConstListIterator< T > list_it)
+    void splice(ConstListIterator< T > it, List< T >& list, ConstListIterator< T > list_it)
     {
-      insert(it, *list_it);
+      insert(ListIterator< T >(it.node), *list_it);
       list.erase(list_it);
     }
-    void splice(ListIterator< T > it, List< T >& list, ConstListIterator< T > list_start, ConstListIterator< T > list_finish)
+    void splice(ConstListIterator< T > it, List< T >& list, ConstListIterator< T > list_start, ConstListIterator< T > list_finish)
     {
       while (list_start != list_finish)
       {
@@ -379,27 +375,19 @@ namespace piyavkin
     }
     ConstListIterator< T > erase(ConstListIterator< T > it)
     {
-      ConstListIterator< T > end(tail_);
       if (it == cbegin())
       {
         pop_front();
       }
-      else if (it == end)
+      else if (it == --cend())
       {
         pop_back();
       }
       else
       {
-        ConstListIterator< T > iterator(head_);
-        Node< T >* node = head_;
-        while (iterator != it)
-        {
-          node = node->next_;
-          ++iterator;
-        }
-        node->next_->prev_ = node->prev_;
-        node->prev_->next_ = node->next_;
-        delete node;
+        it.node->next_->prev_ = it.node->prev_;
+        it.node->prev_->next_ = it.node->next_;
+        delete it.node;
         --size_;
       }
       return it;
@@ -412,33 +400,27 @@ namespace piyavkin
       }
       return it_finish;
     }
-    ListIterator< T > insert(ListIterator< T > it, const T& value)
+    ListIterator< T > insert(ConstListIterator< T > it, const T& value)
     {
       try
       {
-        if (it == begin())
+        if (it == cbegin())
         {
           push_front(value);
         }
-        else if (it == end())
+        else if (it == cend())
         {
           push_back(value);
         }
         else
         {
-          ListIterator< T > iterator(head_);
-          Node< T >* node = head_;
-          while (iterator != it)
-          {
-            node = node->next_;
-            ++iterator;
-          }
-          Node< T >* new_node = new Node< T >(value, node, node->prev_);
-          node->prev_ = new_node;
+          Node< T >* new_node = new Node< T >(value, it.node, it.node->prev_);
+          it.node->prev_ = new_node;
           new_node->prev_->next_ = new_node;
           ++size_;
         }
-        return ++it;
+        ListIterator< T > iterator(it.node);
+        return iterator;
       }
       catch(const std::exception& e)
       {
@@ -446,17 +428,16 @@ namespace piyavkin
         throw;
       }
     }
-    ListIterator< T > insert(ListIterator< T > it, ListIterator< T > start, ListIterator< T > finish)
+    ListIterator< T > insert(ConstListIterator< T > it, ListIterator< T > start, ListIterator< T > finish)
     {
       try
       {
+        ListIterator< T > result(it.node);
         while (start != finish)
         {
-          insert(it, *start);
-          ++it;
-          ++start;
+          insert(it++, *start++);
         }
-        return it;
+        return ++result;
       }
       catch(const std::exception& e)
       {
@@ -464,23 +445,24 @@ namespace piyavkin
         throw;
       }
     }
-    ListIterator< T > insert(ListIterator< T > it, size_t n, const T& value)
+    ListIterator< T > insert(ConstListIterator< T > it, size_t n, const T& value)
     {
+      ListIterator< T > result(it.node);
       for (size_t i = 0; i < n; ++i)
       {
         insert(it++, value);
       }
-      return it;
+      return ++result;
     }
-    ListIterator< T > insert(ListIterator< T > it, std::initializer_list< T > il)
+    ListIterator< T > insert(ConstListIterator< T > it, std::initializer_list< T > il)
     {
         auto iterator = il.begin();
+        ListIterator< T > result(it.node);
         while (iterator != il.end())
         {
-          insert(it, *iterator);
-          ++iterator;
+          insert(it, *iterator++);
         }
-        return it;
+        return ++result;
     }
     bool empty() const
     {
