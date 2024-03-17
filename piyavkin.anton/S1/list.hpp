@@ -565,38 +565,7 @@ namespace piyavkin
     }
     void unique()
     {
-      ConstListIterator< T > it(head_);
-      ConstListIterator< T > end(tail_);
-      while (it != cend())
-      {
-        ConstListIterator< T > temp(it);
-        ++temp;
-        while (temp != cend())
-        {
-          ConstListIterator< T > temp_end(tail_);
-          end = temp_end;
-          if (temp == end)
-          {
-            if (*temp == *it)
-            {
-              erase(temp);
-            }
-            break;
-          }
-          if (*temp == *it)
-          {
-            ConstListIterator< T > temp2(temp);
-            ++temp2;
-            erase(temp);
-            temp = temp2;
-          }
-          else
-          {
-            ++temp;
-          }
-        }
-        ++it;
-      }
+      unique([](const T& lhs, const T& rhs){return lhs == rhs;});
     }
     template< class Pred >
     void unique(Pred p)
@@ -636,20 +605,7 @@ namespace piyavkin
     }
     void sort()
     {
-      Node< T >* node1 = head_;
-      for (size_t i = 0; i < size_; ++i)
-      {
-        Node< T >* node2 = node1;
-        for (size_t j = i; j < size_; ++j)
-        {
-          if (node1->value_ > node2->value_)
-          {
-            std::swap(node1->value_, node2->value_);
-          }
-          node2 = node2->next_;
-        }
-        node1 = node1->next_;
-      }
+      sort([](const T& lhs, const T& rhs){return lhs > rhs;});
     }
     template< class Compare >
     void sort(Compare comp)
@@ -672,27 +628,24 @@ namespace piyavkin
     template< class Compare >
     void merge(List< T >& list, Compare comp)
     {
-      ListIterator< T > start(head_);
-      ListIterator< T > list_start(list.head_);
+      ConstListIterator< T > start(head_);
+      ConstListIterator< T > list_start(list.head_);
       while (list_start != list.cend())
       {
         if (comp(*start, *list_start))
         {
-          insert(start, *list_start);
-          ++start;
-          ++list_start;
+          insert(start, *list_start++);
           if (start == cend())
           {
             while (list_start != list.cend())
             {
-              push_back(*list_start);
-              ++list_start;
+              push_back(*list_start++);
             }
           }
         }
         else
         {
-          ++list_start;
+          ++start;
         }
       }
       list.clear();
@@ -701,32 +654,7 @@ namespace piyavkin
     }
     void merge(List< T >& list)
     {
-      ListIterator< T > start(head_);
-      ListIterator< T > list_start(list.head_);
-      while (list_start != list.cend())
-      {
-        if (*start >= *list_start)
-        {
-          insert(start, *list_start);
-          ++start;
-          ++list_start;
-          if (start == cend())
-          {
-            while (list_start != list.cend())
-            {
-              push_back(*list_start);
-              ++list_start;
-            }
-          }
-        }
-        else
-        {
-          ++list_start;
-        }
-      }
-      list.clear();
-      list.head_ = nullptr;
-      list.tail_ = nullptr;
+      merge(list, [](const T& lhs, const T& rhs){return lhs >= rhs;});
     }
     void emplace(ConstListIterator< T >)
     {}
