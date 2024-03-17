@@ -221,10 +221,6 @@ namespace piyavkin
         list.tail_->next_ = head_;
         head_ = list.head_;
         size_ += list.size_;
-        list.head_ = nullptr;
-        list.tail_ = nullptr;
-        list.size_ = 0;
-        return;
       }
       else if (it == cend())
       {
@@ -233,24 +229,16 @@ namespace piyavkin
         tail_->next_ = list.head_;
         tail_ = list.tail_;
         size_ += list.size_;
-        list.head_ = nullptr;
-        list.tail_ = nullptr;
-        list.size_ = 0;
-        return;
       }
-      ConstListIterator< T > iterator(head_);
-      Node< T >* node = head_;
-      while (iterator != it)
+      else
       {
-        node = node->next_;
-        ++iterator;
+        delete list.tail_->next_;
+        it.node->prev_->next_ = list.head_;
+        list.tail_->next_ = it.node;
+        list.head_->prev_ = it.node->prev_;
+        it.node->prev_ = list.tail_;
+        size_ += list.size_;
       }
-      node->next_->prev_ = list.tail_;
-      delete list.tail_->next_;
-      list.tail_->next_ = node->next_;
-      list.head_->prev_ = node;
-      node->next_ = list.head_;
-      size_ += list.size_;
       list.head_ = nullptr;
       list.tail_ = nullptr;
       list.size_ = 0;

@@ -37,6 +37,8 @@ int main()
   List<int> list3;
   list3 = list2;
   list3.remove(5);
+  auto it1 = --list3.cend();
+  list3.splice(--it1, list);
   auto it = list3.begin();
   for (; it != list3.end();)
   {
