@@ -7,8 +7,11 @@
 namespace piyavkin
 {
   template< class D >
+  class List;
+  template< class D >
   class ListIterator: public std::iterator< std::bidirectional_iterator_tag, D >
   {
+    friend class List< D >;
   public:
     ListIterator():
       node(nullptr)
@@ -63,6 +66,7 @@ namespace piyavkin
   template< class D >
   class ConstListIterator: public std::iterator< std::bidirectional_iterator_tag, D >
   {
+    friend class List< D >;
   public:
     ConstListIterator():
       node(nullptr)

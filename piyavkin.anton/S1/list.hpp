@@ -89,7 +89,7 @@ namespace piyavkin
         throw;
       }
     }
-    List(const List< T >&& rhs)
+    List(List< T >&& rhs)
     {
       swap(rhs);
     }
@@ -129,7 +129,7 @@ namespace piyavkin
     {
       return !(rhs == *this);
     }
-    List< T >& operator=(const List< T >&& rhs)
+    List< T >& operator=(List< T >&& rhs)
     {
       if (this != std::addressof(rhs))
       {
