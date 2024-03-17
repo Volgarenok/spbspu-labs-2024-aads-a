@@ -32,42 +32,12 @@ int main()
   // }
   // std::cout << '\n';
   // freeMemory(pairs, size);
-  List<int> list2({1,2,3,4,5});
-  List<int> list(++list2.begin(), --list2.end());
-  List<int> list3;
-  list2.insert(list2.cend(), 6);
-  list2.insert(--list2.cend(), {10,20,30});
-  list2.insert(++list2.cbegin(), 2,2);
-  list2.insert(list2.cbegin(), ++list.begin(), --list.end());
-  auto it = list2.begin();
-  for (; it != list2.end(); ++it)
-  {
-    std::cout << *it << ' ';
-  }
+  List< std::pair<int,char> > mylist;
+  mylist.emplace( mylist.cbegin(), 100, 'x' );
+  mylist.emplace( mylist.cbegin(), 200, 'y' );
+  std::cout << "mylist contains:";
+  for (auto& x: mylist)
+    std::cout << " (" << x.first << "," << x.second << ")";
+
   std::cout << '\n';
-  list2.sort();
-  auto it2 = list2.begin();
-  for (; it2 != list2.end(); ++it2)
-  {
-    std::cout << *it2 << ' ';
-  }
-  std::cout << '\n';
-  list2.unique();
-  it2 = list2.begin();
-  for (; it2 != list2.end(); ++it2)
-  {
-    std::cout << *it2 << ' ';
-  }
-  std::cout << '\n';
-  list2.merge(list);
-  it2 = list2.begin();
-  for (; it2 != list2.end(); ++it2)
-  {
-    std::cout << *it2 << ' ';
-  }
-  // auto it3 = list.begin();
-  // for (; it3 != list.end(); ++it3)
-  // {
-  //   std::cout << *it3 << ' ';
-  // }
 }

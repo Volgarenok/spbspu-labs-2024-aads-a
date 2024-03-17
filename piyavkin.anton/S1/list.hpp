@@ -656,14 +656,10 @@ namespace piyavkin
     {
       merge(list, [](const T& lhs, const T& rhs){return lhs >= rhs;});
     }
-    void emplace(ConstListIterator< T >)
-    {}
     template< class... Args >
-    ListIterator< T > emplace(ListIterator< T > it, const T& val, Args&&... args)
+    ListIterator< T > emplace(ConstListIterator< T > it, Args&&... args)
     {
-      ListIterator< T > iterator = insert(it, val);
-      emplace(it, args...);
-      return iterator;
+      return insert(it, T(args...));
     }
   private:
     Node< T >* head_;
