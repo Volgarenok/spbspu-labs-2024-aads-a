@@ -210,26 +210,7 @@ namespace piyavkin
     }
     void remove(const T& value)
     {
-      Node< T >* node = head_;
-      while (node->value_ != value)
-      {
-        node = node->next_;
-      }
-      if (node == head_)
-      {
-        pop_front();
-      }
-      else if (node == tail_)
-      {
-        pop_back();
-      }
-      else
-      {
-        node->next_->prev_ = node->prev_;
-        node->prev_->next_ = node->next_;
-        delete node;
-        --size_;
-      }
+      remove_if([&](const T& n){return value == n;});
     }
     void splice(ConstListIterator< T > it, List< T >& list)
     {

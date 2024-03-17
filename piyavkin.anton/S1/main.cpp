@@ -35,7 +35,8 @@ int main()
   List<int> list2({1,2,3,4,5});
   List<int> list(++list2.begin(), --list2.end());
   List<int> list3;
-  list3 = List<int>(5, 5);
+  list3 = list2;
+  list3.remove(5);
   auto it = list3.begin();
   for (; it != list3.end();)
   {
