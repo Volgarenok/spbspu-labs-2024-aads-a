@@ -6,10 +6,6 @@ int main()
 {
   using namespace grechishnikov;
 
-  List< size_t > l {1, 2, 3, 4, 5, 6 };
-  l.erase(l.cbegin());
-  outputList(l, std::cout);
-
   List< namedList > namedLists;
   try
   {
