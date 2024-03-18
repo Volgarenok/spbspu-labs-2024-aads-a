@@ -27,7 +27,7 @@ namespace piyavkin
     {
       return list.size();
     }
-  // private:
+  private:
     List< T > list;
   };
 }

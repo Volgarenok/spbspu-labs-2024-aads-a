@@ -23,7 +23,7 @@ namespace piyavkin
     {
       return list.empty();
     }
-  // private:
+  private:
     List< T > list;
   };
 }

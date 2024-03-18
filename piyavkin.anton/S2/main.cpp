@@ -1,15 +1,20 @@
 #include <iostream>
+#include <fstream>
 #include "stack.hpp"
 #include "queue.hpp"
 
-int main()
+int main(int argc, char* argv[])
 {
   using namespace piyavkin;
-  Queue< char > stack;
+  Queue< char > queue;
+  if (argc != 2)
+  {
+    std::cerr << "The file is not specified correctly\n";
+    return 1;
+  }
+  std::ifstream input(argv[1]);
   char a = 0;
-  char b = 0;
-  std::cin >> a >> b;
-  stack.push(a);
-  stack.push(b);
-  std::cout << stack.list.front() << ' ' << stack.list.back() << ' ';
+  input >> a;
+  queue.push(a);
+  std::cout << queue.drop();
 }
