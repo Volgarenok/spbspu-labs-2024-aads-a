@@ -8,17 +8,55 @@ namespace chistyakov
   {
     public:
       Iterator():
-        biList_(nullptr)
+        node_(nullptr)
       {}
 
       Iterator(const Iterator & val):
-        biList_(val)
+        node_(val)
       {}
 
       ~Iterator() = default;
+      Iterator(const Iterator< T > & ) = default;
+      Iterator< T > & operator=(const Iterator< T > & ) = default;
 
+      Iterator< T > & operator++()
+      {
+        if (node_ != nullptr)
+        {
+          node_ = node_->next_;
+        }
+
+        return *this;
+      }
+
+      Iterator< T > & operator++(int)
+      {
+        Iterator now(*this);
+        ++(*this);
+        return now;
+      }
+
+      bool Iterator< T >::operator==(const Iterator< T > & rhs) const
+      {
+        return node_ == rhs.node_;
+      }
+
+      bool Iterator< T >::operator!=(const Iterator< T > & rhs) const
+      {
+        return !(rhs == *this);
+      }
+
+      T & Iterator< T >::operator*()
+      {
+        return node_->value;
+      }
+
+      T * Iterator< T >::operator->()
+      {
+        return addressof(node->value);
+      }
     private:
-      BiList< T > * biList_;
+      BiList< T > * node_;
   };
 }
 
