@@ -350,8 +350,8 @@ namespace grechishnikov
   template< typename T >
   Iterator< T > List< T >::erase(ConstIterator< T > iter)
   {
-    Node< T >* prevPoi = iter.getNode()->prev_;
-    Node< T >* nextPoi = iter.getNode()->next_;
+    Node< T >* prevPoi = iter.node_->prev_;
+    Node< T >* nextPoi = iter.node_->next_;
     size_--;
     auto ret = Iterator< T >(nextPoi);
     if (!prevPoi)
@@ -366,7 +366,7 @@ namespace grechishnikov
     }
     prevPoi->next_ = nextPoi;
     nextPoi->prev_ = prevPoi;
-    delete iter.getNode();
+    delete iter.node_;
     return ret;
   }
 
@@ -386,10 +386,10 @@ namespace grechishnikov
     {
       push_back(value);
     }
-    where.getNode()->next_ = temp;
-    nextNode.getNode()->prev_ = temp;
-    temp->prev_ = where.getNode();
-    temp->next_ = nextNode.getNode();
+    where.node_->next_ = temp;
+    nextNode.node_->prev_ = temp;
+    temp->prev_ = where.node_;
+    temp->next_ = nextNode.node_;
     size_++;
     return Iterator< T >(temp);
   }
@@ -402,7 +402,7 @@ namespace grechishnikov
       insert(where, value);
       where++;
     }
-    return Iterator< T >(where.getNode());
+    return Iterator< T >(where.node_);
   }
 
   template< typename T >
@@ -414,7 +414,7 @@ namespace grechishnikov
       where++;
       first++;
     }
-    return Iterator< T >(where.getNode());
+    return Iterator< T >(where.node_);
   }
 
   template< typename T >
@@ -427,7 +427,7 @@ namespace grechishnikov
       where++;
       init++;
     }
-    return Iterator< T >(where.getNode());
+    return Iterator< T >(where.node_);
   }
 
   template< typename T >

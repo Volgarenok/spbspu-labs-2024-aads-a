@@ -7,6 +7,9 @@
 namespace grechishnikov
 {
   template< typename T >
+  class List;
+
+  template< typename T >
   class ConstIterator
   {
   public:
@@ -32,7 +35,7 @@ namespace grechishnikov
     bool operator==(const ConstIterator< T >& other) const;
     bool operator!=(const ConstIterator< T >& other) const;
 
-    Node< T >* getNode() const;
+    friend List< T >;
 
   private:
     Node< T >* node_;
@@ -132,12 +135,6 @@ namespace grechishnikov
   bool ConstIterator< T >::operator!=(const ConstIterator< T >& other) const
   {
     return !(node_ == other.node_);
-  }
-
-  template< typename T >
-  Node< T >* ConstIterator< T >::getNode() const
-  {
-    return this->node_;
   }
 
 }
