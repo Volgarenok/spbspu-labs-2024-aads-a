@@ -1,6 +1,8 @@
 #ifndef ITERATOR_HPP
 #define ITERATOR_HPP
 
+#include "biList.hpp"
+
 namespace chistyakov
 {
   template< typename T >
@@ -36,6 +38,23 @@ namespace chistyakov
         return now;
       }
 
+      Iterator< T > & operator--()
+      {
+        if (node_ != nullptr)
+        {
+          node_ = node_->previous_;
+        }
+
+        return *this;
+      }
+
+      Iterator< T > & operator--(int)
+      {
+        Iterator now(*this);
+        --(*this);
+        return now;
+      }
+
       bool Iterator< T >::operator==(const Iterator< T > & rhs) const
       {
         return node_ == rhs.node_;
@@ -55,6 +74,8 @@ namespace chistyakov
       {
         return addressof(node->value);
       }
+
+
     private:
       BiList< T > * node_;
   };
