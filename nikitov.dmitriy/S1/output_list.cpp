@@ -1,5 +1,5 @@
 #include "output_list.hpp"
-#include <fstream>
+#include <ostream>
 #include <limits>
 #include "list_iterator.hpp"
 #include "const_list_iterator.hpp"
