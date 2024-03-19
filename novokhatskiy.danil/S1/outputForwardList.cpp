@@ -1,7 +1,7 @@
 #include "outputForwardList.hpp"
 #include <limits>
 
-void novokhatskiy::outputForwardList(std::ostream& out, ForwardList<std::pair<std::string, ForwardList< size_t  > > >& pairs)
+void novokhatskiy::outputForwardList(std::ostream& out, ForwardList< std::pair< std::string, ForwardList< size_t  > > >& pairs)
 {
   if (pairs.empty())
   {
@@ -44,7 +44,7 @@ void novokhatskiy::outputForwardList(std::ostream& out, ForwardList<std::pair<st
         out << ' ';
       }
       out << *numberIter;
-      if (std::numeric_limits< size_t>::max() - *numberIter < sum)
+      if (std::numeric_limits< size_t >::max() - *numberIter < sum)
       {
         overFlow = true;
       }

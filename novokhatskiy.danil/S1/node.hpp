@@ -8,7 +8,7 @@ namespace novokhatskiy
   {
     T value_;
     Node* next_;
-    Node(const T& value, Node* next = nullptr) :
+    Node(const T& value, Node* next = nullptr):
       value_(value),
       next_(next)
     {}

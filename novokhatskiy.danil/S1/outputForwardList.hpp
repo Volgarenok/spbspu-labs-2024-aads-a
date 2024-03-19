@@ -5,7 +5,7 @@
 
 namespace novokhatskiy
 {
-  void outputForwardList(std::ostream& out, ForwardList<std::pair<std::string, ForwardList< size_t > > >& pairs);
+  void outputForwardList(std::ostream& out, ForwardList< std::pair< std::string, ForwardList< size_t > > >& pairs);
 }
 
 #endif

@@ -7,22 +7,22 @@
 
 namespace novokhatskiy
 {
-  template <typename T>
+  template < typename T >
   class ForwardList;
 
-  template <typename T>
+  template < typename T >
   class Node;
 
-  template <typename T>
+  template < typename T >
   class ConstForwardIterator;
 
-  template <typename T>
-  class ForwardIterator : public std::iterator<std::forward_iterator_tag, T >
+  template < typename T >
+  class ForwardIterator: public std::iterator< std::forward_iterator_tag, T >
   {
-    friend class novokhatskiy::ForwardList<T>;
+    friend class novokhatskiy::ForwardList< T >;
   public:
-    using iter = ForwardIterator<T>;
-    ForwardIterator() :
+    using iter = ForwardIterator< T >;
+    ForwardIterator():
       node_(nullptr)
     {}
     ForwardIterator(Node< T >* node):

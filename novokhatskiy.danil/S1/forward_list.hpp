@@ -7,23 +7,23 @@
 
 namespace novokhatskiy
 {
-  template <typename T >
+  template < typename T >
   class ForwardIterator;
 
-  template <typename T >
+  template < typename T >
   class Node;
 
-  template <typename T >
+  template < typename T >
   class ConstForwardIterator;
 
-  template <typename T >
+  template < typename T >
   class ForwardList
   {
-    friend class novokhatskiy::ForwardIterator<T>;
-    friend class novokhatskiy::ConstForwardIterator<T>;
+    friend class novokhatskiy::ForwardIterator< T >;
+    friend class novokhatskiy::ConstForwardIterator< T >;
   public:
-    using iter = ForwardIterator<T>;
-    using constIter = ConstForwardIterator<T>;
+    using iter = ForwardIterator< T >;
+    using constIter = ConstForwardIterator< T >;
     ForwardList():
       head_(nullptr)
     {}
@@ -40,7 +40,7 @@ namespace novokhatskiy
     {
       other.head_ = nullptr;
     }
-    ForwardList(const ForwardList<T>& other):
+    ForwardList(const ForwardList< T >& other):
       head_(nullptr)
     {
       auto iter_begin = other.begin();
@@ -83,7 +83,7 @@ namespace novokhatskiy
       {
         try
         {
-          push_front(*(begin++)); //--end(), use to change the order
+          push_front(*(begin++));
         }
         catch (const std::bad_alloc&)
         {
@@ -285,13 +285,13 @@ namespace novokhatskiy
 
     void push_front(const T& value)
     {
-      Node<T>* ptr = new Node<T>(value);
+      Node< T >* ptr = new Node< T >(value);
       ptr->next_ = head_;
       head_ = ptr;
     }
     void push_front(T& value)
     {
-      Node<T>* ptr = new Node<T>(value);
+      Node< T >* ptr = new Node< T >(value);
       ptr->next_ = head_;
       head_ = ptr;
     }
@@ -302,7 +302,7 @@ namespace novokhatskiy
         std::cerr << "The forward_list is empty\n";
         return;
       }
-      Node<T>* temp = head_;
+      Node< T >* temp = head_;
       head_ = head_->next_;
       delete temp;
     }
@@ -380,7 +380,7 @@ namespace novokhatskiy
       reverse();
     }
 
-    void swap(ForwardList<T>& other)
+    void swap(ForwardList< T >& other)
     {
       std::swap(head_, other.head_);
     }
@@ -517,7 +517,7 @@ namespace novokhatskiy
       clear();
     }
   private:
-    Node<T>* head_;
+    Node< T >* head_;
   };
 }
 

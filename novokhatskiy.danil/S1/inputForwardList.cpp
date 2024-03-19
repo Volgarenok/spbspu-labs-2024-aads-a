@@ -1,6 +1,6 @@
 #include "inputForwardList.hpp"
 
-void novokhatskiy::inputForwardList(ForwardList<std::pair<std::string, ForwardList< size_t > > >& pairsOfList, std::istream& input)
+void novokhatskiy::inputForwardList(ForwardList< std::pair< std::string, ForwardList< size_t > > >& pairsOfList, std::istream& input)
 {
   std::string line = "";
   input >> line;
