@@ -73,6 +73,10 @@ namespace nikitov
 
     void splice(constIterator position, List< T >& other, constIterator otherPosition);
     void splice(constIterator position, List< T >& other);
+    void splice(constIterator position, List< T >& other, constIterator first, constIterator last);
+    void splice(constIterator position, List< T >&& other, constIterator otherPosition);
+    void splice(constIterator position, List< T >&& other);
+    void splice(constIterator position, List< T >&& other, constIterator first, constIterator last);
 
     void merge(List< T >& other);
     void merge(List< T >&& other);
@@ -476,22 +480,18 @@ namespace nikitov
   void List< T >::splice(constIterator position, List< T >& other, constIterator otherPosition)
   {
     Node< T >* otherNode = otherPosition.node_;
-
-    if (otherPosition == other.cbegin())
+    otherNode->next_->prev = otherNode->prev_;
+    if (otherNode == tail_)
     {
-      other.head_ = otherNode->next_;
-      otherNode->next_->prev_ = otherNode->prev_;
+      tail_ = otherNode->prev_;
     }
-    else if (otherPosition == --(other.cend()))
+    if (position == cbegin())
     {
-      other.tail_ = otherNode->prev_;
-      otherNode->next_->prev_ = other.tail_;
-      other.tail_->next_ = otherNode->next_;
+      head_ = otherNode->next_;
     }
     else
     {
-      otherNode->next_->prev_ = otherNode->prev_;
-      otherNode->prev_->next_ = otherNode->next_;
+      otherNode->prev_->next_ = otherNode;
     }
     --other.size_;
 
@@ -503,8 +503,35 @@ namespace nikitov
   {
     while (!other.empty())
     {
-       splice(position, other, other.cbegin());
+      splice(position, other, other.cbegin());
     }
+  }
+
+  template< class T >
+  void List< T >::splice(constIterator position, List< T >& other, constIterator first, constIterator last)
+  {
+    while (first != last)
+    {
+      splice(position, other, first++);
+    }
+  }
+
+  template< class T >
+  void List< T >::splice(constIterator position, List< T >&& other, constIterator otherPosition)
+  {
+    splice(position, other, otherPosition);
+  }
+
+  template< class T >
+  void List< T >::splice(constIterator position, List< T >&& other)
+  {
+    splice(position, other);
+  }
+
+  template< class T >
+  void List< T >::splice(constIterator position, List< T >&& other, constIterator first, constIterator last)
+  {
+    splice(position, other, first, last);
   }
 
   template< class T >
@@ -545,7 +572,6 @@ namespace nikitov
     {
       return;
     }
-
     bool isSorted = false;
     while (!isSorted)
     {
@@ -688,7 +714,7 @@ namespace nikitov
     nextNode->prev_ = node->prev_;
     if (node == tail_)
     {
-      tail_ = nextNode;
+      tail_ = node->prev_;
     }
     if (position == cbegin())
     {
