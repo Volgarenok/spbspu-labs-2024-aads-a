@@ -29,7 +29,8 @@ namespace piyavkin
     List< T >& operator=(const List< T >& rhs);
     ~List();
     void assign(const T& value, size_t count);
-    void assign(ListIterator< T > start, ListIterator< T > finish);
+    template< class Iterator >
+    void assign(Iterator start, Iterator finish);
     void assign(std::initializer_list< T > il);
     void remove(const T& value);
     void splice(ConstListIterator< T > it, List< T >& list);
@@ -219,24 +220,17 @@ namespace piyavkin
   template< class T >
   void List< T >::assign(const T& value, size_t count)
   {
-    try
+    clear();
+    head_ = nullptr;
+    tail_ = nullptr;
+    for (size_t i = 0; i < count; ++i)
     {
-      clear();
-      head_ = nullptr;
-      tail_ = nullptr;
-      for (size_t i = 0; i < count; ++i)
-      {
-        push_back(value);
-      }
-    }
-    catch (const std::exception& e)
-    {
-      clear();
-      throw;
+      push_back(value);
     }
   }
   template< class T >
-  void List< T >::assign(ListIterator< T > start, ListIterator< T > finish)
+  template< class Iterator >
+  void List< T >::assign(Iterator start, Iterator finish)
   {
     try
     {
@@ -257,27 +251,16 @@ namespace piyavkin
   template< class T >
   void List< T >::assign(std::initializer_list< T > il)
   {
-    try
-    {
-      clear();
-      head_ = nullptr;
-      tail_ = nullptr;
-      auto it = il.begin();
-      while (it != il.end())
-      {
-        push_back(*it++);
-      }
-    }
-    catch (const std::exception& e)
-    {
-      clear();
-      throw;
-    }
+    assign(il.begin(), il.end());
   }
   template< class T >
   void List< T >::remove(const T& value)
   {
-    remove_if([&](const T& n) {return value == n; });
+    auto functor = [&](const T& n) -> bool
+    {
+      return value == n;
+    }
+    remove_if(functor);
   }
   template< class T >
   void List< T >::splice(ConstListIterator< T > it, List< T >& list)
