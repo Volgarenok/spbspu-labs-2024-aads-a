@@ -23,7 +23,7 @@ namespace novokhatskiy
     friend class novokhatskiy::ForwardIterator< T >;
   public:
     using constIter = ConstForwardIterator< T >;
-    ConstForwardIterator() :
+    ConstForwardIterator():
       node_(nullptr)
     {}
     ConstForwardIterator(Node< T >* node):

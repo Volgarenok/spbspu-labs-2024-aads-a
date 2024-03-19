@@ -27,7 +27,7 @@ namespace novokhatskiy
     ForwardList():
       head_(nullptr)
     {}
-    ForwardList(const T& value) :
+    ForwardList(const T& value):
       head_(new Node< T >)
     {
       for (auto i = begin(); i < end(); i++)
@@ -35,7 +35,7 @@ namespace novokhatskiy
         push_front(value);
       }
     }
-    ForwardList(ForwardList&& other) noexcept :
+    ForwardList(ForwardList&& other) noexcept:
       head_(other.head_)
     {
       other.head_ = nullptr;
@@ -58,7 +58,7 @@ namespace novokhatskiy
         }
       }
     }
-    ForwardList(size_t size, const T& value) :
+    ForwardList(size_t size, const T& value):
       head_(nullptr)
     {
       try
@@ -74,7 +74,7 @@ namespace novokhatskiy
         throw;
       }
     }
-    ForwardList(std::initializer_list< T > list) :
+    ForwardList(std::initializer_list< T > list):
       head_(nullptr)
     {
       auto begin = list.begin();
@@ -335,7 +335,7 @@ namespace novokhatskiy
       {
         for (size_t i = 0; i < count; i++)
         {
-          Node< T >* temp = new Node<T>(value);
+          Node< T >* temp = new Node< T >(value);
           temp->next_ = otherHead;
           otherHead = temp;
         }
