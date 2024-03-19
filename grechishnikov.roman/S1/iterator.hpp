@@ -30,8 +30,6 @@ namespace grechishnikov
     Iterator operator+(size_t);
     Iterator operator-(size_t);
 
-    Iterator& operator[](size_t);
-
     bool operator==(const Iterator< T >& other) const;
     bool operator!=(const Iterator< T >& other) const;
 
@@ -113,16 +111,6 @@ namespace grechishnikov
       temp--;
     }
     return temp;
-  }
-
-  template< typename T >
-  Iterator< T >& Iterator< T >::operator[](size_t pos)
-  {
-    for (size_t i = 0; i < pos; i++)
-    {
-      operator++();
-    }
-    return *this;
   }
 
   template< typename T >

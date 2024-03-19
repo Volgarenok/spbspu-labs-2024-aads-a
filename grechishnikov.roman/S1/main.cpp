@@ -38,15 +38,17 @@ int main()
 
   List< size_t > temp;
   List< List< size_t > > outList(maxSize, temp);
+  auto outIter = outList.begin();
   for (size_t i = 0; i < maxSize; i++)
   {
     for (auto iter = namedLists.cbegin(); iter != namedLists.cend(); iter++)
     {
       if (i < iter->second.size())
       {
-        outList[i].push_back(*(iter->second.cbegin() + i));
+        outIter->push_back(*(iter->second.cbegin() + i));
       }
     }
+    outIter++;
   }
 
   for (auto outIter = outList.cbegin(); outIter != outList.cend(); outIter++)

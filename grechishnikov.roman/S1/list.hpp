@@ -24,13 +24,10 @@ namespace grechishnikov
     List< T >& operator=(const List< T >&);
     List< T >& operator=(List< T >&&);
 
-    T& operator[](size_t);
-
     Iterator< T > begin();
     Iterator< T > end();
     ConstIterator< T > cbegin() const;
     ConstIterator< T > cend() const;
-
 
     bool empty() const;
     size_t size() const;
@@ -146,13 +143,6 @@ namespace grechishnikov
   {
     swap(other);
     return *this;
-  }
-
-  template< typename T >
-  T& List< T >::operator[](size_t pos)
-  {
-    Iterator< T > iter(head_);
-    return *(iter[pos]);
   }
 
   template< typename T >
