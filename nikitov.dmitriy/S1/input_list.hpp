@@ -1,7 +1,7 @@
 #ifndef INPUT_LIST_HPP
 #define INPUT_LIST_HPP
 
-#include <fstream>
+#include <istream>
 #include <string>
 #include "list.hpp"
 

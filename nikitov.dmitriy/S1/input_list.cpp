@@ -1,5 +1,5 @@
 #include "input_list.hpp"
-#include <fstream>
+#include <istream>
 #include <string>
 
 void nikitov::inputList(List< std::pair< std::string, List< size_t > > >& pairsList, std::istream& input)
