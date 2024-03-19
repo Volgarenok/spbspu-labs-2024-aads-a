@@ -6,11 +6,22 @@ void baranov::inputList(std::istream & input, ds_t & list)
   input >> str;
   while (input)
   {
-    auto pair = std::make_pair(str, List< size_t >());
-    list.push_back(pair);
-    while (input >> str && std::isdigit(str[0]))
+    std::string name = "";
+    input >> name;
+    if (name == "")
     {
-      list.end()->second.push_back(std::stoull(str));
+      throw std::logic_error("No list name");
+    }
+    List< size_t > numList;
+    size_t number;
+    while (input >> number)
+    {
+      numList.push_back(number);
+    }
+    list.push_back(std::make_pair(name, numList));
+    if (!input.eof())
+    {
+      input.clear();
     }
   }
 }
