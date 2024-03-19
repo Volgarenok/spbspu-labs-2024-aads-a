@@ -56,6 +56,13 @@ namespace grechishnikov
     Iterator< T > insert(ConstIterator< T >, ConstIterator< T >, ConstIterator< T >);
     Iterator< T > insert(ConstIterator< T >, std::initializer_list< T >);
 
+    void splice(ConstIterator< T >, List< T >&);
+    void splice(ConstIterator< T >, List< T >&&);
+    void splice(ConstIterator< T >, List< T >&, ConstIterator< T >);
+    void splice(ConstIterator< T >, List< T >&&, ConstIterator< T >);
+    void splice(ConstIterator< T >, List< T >&, ConstIterator< T >, ConstIterator< T >);
+    void splice(ConstIterator< T >, List< T >&&, ConstIterator< T >, ConstIterator< T >);
+
     void reverse();
 
   private:
@@ -342,7 +349,6 @@ namespace grechishnikov
   {
     Node< T >* prevPoi = iter.node_->prev_;
     Node< T >* nextPoi = iter.node_->next_;
-    size_--;
     auto ret = Iterator< T >(nextPoi);
     if (!prevPoi)
     {
@@ -356,6 +362,7 @@ namespace grechishnikov
     }
     prevPoi->next_ = nextPoi;
     nextPoi->prev_ = prevPoi;
+    size_--;
     delete iter.node_;
     return ret;
   }
@@ -431,6 +438,50 @@ namespace grechishnikov
       iter--;
     }
     swap(temp);
+  }
+
+  template< typename T >
+  void List< T >::splice(ConstIterator< T > where, List< T >& other)
+  {
+    insert(where, other.cbegin(), other.cend());
+    other.clear();
+  }
+
+  template< typename T >
+  void List< T >::splice(ConstIterator< T > where, List< T >&& other)
+  {
+    insert(where, other.cbegin(), other.cend());
+  }
+
+  template< typename T >
+  void List< T >::splice(ConstIterator< T > where, List< T >& other, ConstIterator< T > iter)
+  {
+    insert(where, *iter);
+    other.erase(iter);
+  }
+
+  template< typename T >
+  void List< T >::splice(ConstIterator< T > where, List< T >&& other, ConstIterator< T > iter)
+  {
+    insert(where, *iter);
+  }
+
+  template< typename T >
+  void List< T >::splice(ConstIterator< T > where, List< T >& other, ConstIterator< T > first, ConstIterator< T > last)
+  {
+    insert(where, first, last);
+    auto temp = first;
+    while (first != last)
+    {
+      temp = first + 1;
+      other.erase(first);
+      first = temp;
+    }
+  }
+  template< typename T >
+  void List< T >::splice(ConstIterator< T > where, List< T >&& other, ConstIterator< T > first, ConstIterator< T > last)
+  {
+    splice(where, other, first, last);
   }
 }
 
