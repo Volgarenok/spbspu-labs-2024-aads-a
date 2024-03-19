@@ -85,7 +85,7 @@ namespace baranov
   Iterator< T > Iterator< T >::operator+(size_t rhs)
   {
     assert(node_ != nullptr);
-    for (size_t i; i < rhs; ++i)
+    for (size_t i = 0; i < rhs; ++i)
     {
       ++(*this);
     }
@@ -96,7 +96,7 @@ namespace baranov
   Iterator< T > Iterator< T >::operator-(size_t rhs)
   {
     assert(node_ != nullptr);
-    for (size_t i; i < rhs; ++i)
+    for (size_t i = 0; i < rhs; ++i)
     {
       --(*this);
     }

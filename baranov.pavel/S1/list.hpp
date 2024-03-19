@@ -143,7 +143,7 @@ namespace baranov
   template< class T >
   void List< T >::clear()
   {
-    while(head_)
+    while (!empty())
     {
       pop_front();
     }
