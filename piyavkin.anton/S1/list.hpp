@@ -14,7 +14,8 @@ namespace piyavkin
   public:
     List();
     List(const T& value, size_t count);
-    List(ListIterator< T > start, ListIterator< T > finish);
+    template< class Iterator >
+    List(Iterator start, Iterator finish);
     List(std::initializer_list< T > il);
     List(const List< T >& rhs);
     List(List< T >&& rhs);
@@ -87,83 +88,54 @@ namespace piyavkin
     size_(0)
   {}
   template< class T >
-  List< T >::List(const T& value, size_t count) :
+  List< T >::List(const T& value, size_t count):
     List()
   {
-    try
+    for (size_t i = 0; i < count; ++i)
     {
-      for (size_t i = 0; i < count; ++i)
-      {
-        push_back(value);
-      }
-    }
-    catch (const std::exception& e)
-    {
-      clear();
-      throw;
+      push_back(value);
     }
   }
   template< class T >
-  List< T >::List(ListIterator< T > start, ListIterator< T > finish) :
+  template< class Iterator >
+  List< T >::List(Iterator start, Iterator finish):
     List()
   {
-    try
+    while (start != finish)
     {
-      while (start != finish)
-      {
-        push_back(*start++);
-      }
-    }
-    catch (const std::exception& e)
-    {
-      clear();
-      throw;
+      push_back(*start++);
     }
   }
   template< class T >
-  List< T >::List(std::initializer_list< T > il) :
+  List< T >::List(std::initializer_list< T > il):
     List()
   {
-    try
+    auto it = il.begin();
+    while (it != il.end())
     {
-      auto it = il.begin();
-      while (it != il.end())
-      {
-        push_back(*it++);
-      }
-    }
-    catch (const std::exception& e)
-    {
-      clear();
-      throw;
+      push_back(*it++);
     }
   }
   template< class T >
-  List< T >::List(const List< T >& rhs) :
+  List< T >::List(const List< T >& rhs):
     List()
   {
-    try
+    Node< T >* node = rhs.head_;
+    while (size_ != rhs.size_)
     {
-      Node< T >* node = rhs.head_;
-      while (size_ != rhs.size_)
-      {
-        push_back(node->value_);
-        node = node->next_;
-      }
-    }
-    catch (const std::exception& e)
-    {
-      for (size_t j = 0; j < size_; ++j)
-      {
-        pop_front();
-      }
-      throw;
+      push_back(node->value_);
+      node = node->next_;
     }
   }
   template< class T >
-  List< T >::List(List< T >&& rhs)
+  List< T >::List(List< T >&& rhs):
+    head_(rhs.head_),
+    tail_(rhs.tail_),
+    size_(rhs.size_)
   {
-    swap(rhs);
+    rhs.head_ = nullptr;
+    rhs.tail_ = nullptr;
+    rhs.size_ = 0;
   }
   template< class T >
   bool List< T >::operator<(const List< T >& rhs) const
@@ -200,7 +172,19 @@ namespace piyavkin
   template< class T >
   bool List< T >::operator==(const List< T >& rhs) const
   {
-    return !(*this < rhs) && !(rhs < *this);
+    size_t min_size = std::min(rhs.size_, size_);
+    Node< T >* node = head_;
+    Node< T >* rhs_node = rhs.head_;
+    for (size_t i = 0; i < min_size; ++i)
+    {
+      if (node->value_ != rhs_node->value_)
+      {
+        return false;
+      }
+      node = node->next_;
+      rhs_node = rhs_node->next_;
+    }
+    return rhs.size_ == size_;
   }
   template< class T >
   bool List< T >::operator!=(const List< T >& rhs) const
