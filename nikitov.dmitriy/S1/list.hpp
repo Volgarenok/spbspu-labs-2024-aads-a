@@ -383,9 +383,9 @@ namespace nikitov
   void List< T >::assign(std::initializer_list< T > initList)
   {
     clear();
-    for (T value : initList)
+    for (auto i = initList.begin(); i != initList.end(); ++i)
     {
-      embed(cend(), new Node< T >(value));
+      embed(cend(), new Node< T >(*i));
     }
   }
 
@@ -727,7 +727,14 @@ namespace nikitov
     nextNode->prev_ = node->prev_;
     if (node == tail_)
     {
-      tail_ = node->prev_;
+      if (node->prev_ != nullptr)
+      {
+        tail_ = node->prev_;
+      }
+      else
+      {
+        tail_ = nextNode;
+      }
     }
     if (position == cbegin())
     {
