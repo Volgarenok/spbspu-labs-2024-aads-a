@@ -38,7 +38,9 @@ int main()
   {
     std::cout << *it++ << ' ';
   }
-  list.reverse();
+  List< int > list2({6,7,8,9});
+  list.merge(list2);
+  // list.reverse();
   it = list.begin();
   for (size_t i = 0; i < list.size(); ++i)
   {

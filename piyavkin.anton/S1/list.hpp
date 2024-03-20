@@ -36,23 +36,19 @@ namespace piyavkin
     void splice(ConstListIterator< T > it, List< T >& list);
     void splice(ConstListIterator< T > it, List< T >& list, ConstListIterator< T > list_it);
     void splice(ConstListIterator< T > it, List< T >& list, ConstListIterator< T > list_start, ConstListIterator< T > list_finish);
-    void reverse();
+    void reverse() noexcept;
     template< class Functor >
     void remove_if(Functor f);
     void swap(List< T >& list);
-    const T& at(size_t i) const;
-    T& at(size_t i);
-    T& operator[](size_t i);
-    const T& operator[](size_t i) const;
-    size_t size() const;
+    size_t size() const noexcept;
     T& back();
     T& front();
     const T& back() const;
     const T& front() const;
-    ListIterator< T > begin();
-    ListIterator< T > end();
-    ConstListIterator< T > cbegin() const;
-    ConstListIterator< T > cend() const;
+    ListIterator< T > begin() noexcept;
+    ListIterator< T > end() noexcept;
+    ConstListIterator< T > cbegin() const noexcept;
+    ConstListIterator< T > cend() const noexcept;
     ConstListIterator< T > erase(ConstListIterator< T > it);
     ConstListIterator< T > erase(ConstListIterator< T > it_start, ConstListIterator< T > it_finish);
     ListIterator< T > insert(ConstListIterator< T > it, const T& value);
@@ -60,12 +56,12 @@ namespace piyavkin
     ListIterator< T > insert(ConstListIterator< T > it, Iterator start, Iterator finish);
     ListIterator< T > insert(ConstListIterator< T > it, size_t n, const T& value);
     ListIterator< T > insert(ConstListIterator< T > it, std::initializer_list< T > il);
-    bool empty() const;
+    bool empty() const noexcept;
     void push_front(const T& value);
     void push_back(const T& value);
     void pop_back();
     void pop_front();
-    void clear();
+    void clear() noexcept;
     void unique();
     template< class Pred >
     void unique(Pred p);
@@ -305,8 +301,8 @@ namespace piyavkin
   template< class T >
   void List< T >::splice(ConstListIterator< T > it, List< T >& list, ConstListIterator< T > list_it)
   {
-    insert(ListIterator< T >(it.node), *list_it);
     list.erase(list_it);
+    insert(it, *list_it);
   }
   template< class T >
   void List< T >::splice(ConstListIterator< T > it, List< T >& list, ConstListIterator< T > list_start, ConstListIterator< T > list_finish)
@@ -317,7 +313,7 @@ namespace piyavkin
     }
   }
   template< class T >
-  void List< T >::reverse()
+  void List< T >::reverse() noexcept
   {
     std::swap(head_->prev_, tail_->next_);
     Node< T >* node = head_;
@@ -379,7 +375,7 @@ namespace piyavkin
     std::swap(list.size_, size_);
   }
   template< class T >
-  size_t List< T >::size() const
+  size_t List< T >::size() const noexcept
   {
     return size_;
   }
@@ -404,22 +400,22 @@ namespace piyavkin
     return head_->value_;
   }
   template< class T >
-  ListIterator< T > List< T >::begin()
+  ListIterator< T > List< T >::begin() noexcept
   {
     return ListIterator< T >(head_);
   }
   template< class T >
-  ListIterator< T > List< T >::end()
+  ListIterator< T > List< T >::end() noexcept
   {
     return ListIterator< T >(tail_->next_);
   }
   template< class T >
-  ConstListIterator< T > List< T >::cbegin() const
+  ConstListIterator< T > List< T >::cbegin() const noexcept
   {
     return ConstListIterator< T >(head_);
   }
   template< class T >
-  ConstListIterator< T > List< T >::cend() const
+  ConstListIterator< T > List< T >::cend() const noexcept
   {
     return ConstListIterator< T >(tail_->next_);
   }
@@ -555,7 +551,7 @@ namespace piyavkin
     return insert(it, il.begin(), il.end());
   }
   template< class T >
-  bool List< T >::empty() const
+  bool List< T >::empty() const noexcept
   {
     return size_ == 0;
   }
@@ -587,7 +583,7 @@ namespace piyavkin
     erase(cbegin());
   }
   template< class T >
-  void List< T >::clear()
+  void List< T >::clear() noexcept
   {
     while (!empty())
     {
@@ -678,23 +674,25 @@ namespace piyavkin
     {
       if (comp(*start, *list_start))
       {
-        insert(start, *list_start++);
-        if (start == cend())
-        {
-          while (list_start != list.cend())
-          {
-            push_back(*list_start++);
-          }
-        }
+        splice(start, list, list_start++);
       }
       else
       {
         ++start;
+        if (start == cend())
+        {
+          delete tail_->next_;
+          tail_->next_ = list_start.node;
+          list_start.node->prev_ = tail_;
+          tail_ = list.tail_;
+          break;
+        }
       }
     }
-    list.clear();
+    size_ += list.size_;
     list.head_ = nullptr;
     list.tail_ = nullptr;
+    list.size_ = 0;
   }
   template< class T >
   void List< T >::merge(List< T >& list)
