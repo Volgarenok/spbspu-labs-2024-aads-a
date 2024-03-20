@@ -16,7 +16,7 @@ namespace chistyakov
         tail_(nullptr)
       {}
 
-      List(biList < T > * head, biList < T > * tail)
+      List(biList < T > * head, BiList < T > * tail)
         head_(head),
         tail_(tail)
       {}
@@ -41,8 +41,51 @@ namespace chistyakov
         return constIterator < T >(nullptr);
       }
 
+      bool empty()
+      {
+        return head_ == nullptr;
+      }
+
+      void push_back(const T & value)
+      {
+        BiList < T > * newBiList = new BiList < T >(value);
+        newBiList->previous_ = tail_;
+
+        if (!head_)
+        {
+          head_ = newBiList;
+        }
+
+        if(tail_)
+        {
+          tail_->next_ = newBiList;
+        }
+
+        tail_ = newBiList;
+      }
+
+      void push_front(const T & value)
+      {
+        BiList < T > * newBiList = new BiList < T >(value);
+        newBiList->next = head_;
+
+        if (head_)
+        {
+          head_->previous = newBiList;
+        }
+
+        if (!tail_)
+        {
+          tail_ = newBiList;
+        }
+
+        head_ = newBiList;
+      }
+
+
+
     private:
-      biList < T > * head_;
-      biList < T > * tail_;
+      BiList < T > * head_;
+      BiList < T > * tail_;
   };
 }
