@@ -407,7 +407,7 @@ namespace nikitov
   template< class... Args >
   ListIterator< T > List< T >::emplace(constIterator position, Args&&... args)
   {
-    return embed(position, new Node< T >(T(args...)));
+    return embed(position, new Node< T >(T(std::forward< Args >(args)...)));
   }
 
   template< class T >
