@@ -21,11 +21,11 @@ namespace nikitov
     List(constIterator first, constIterator second);
     List(std::initializer_list< T > initList);
     List(const List< T >& other);
-    List(List< T >&& other);
+    List(List< T >&& other) noexcept;
     ~List();
 
     List< T >& operator=(const List< T >& other);
-    List< T >& operator=(List< T >&& other);
+    List< T >& operator=(List< T >&& other) noexcept;
 
     bool operator==(const List< T >& other) const;
     bool operator!=(const List< T >& other) const;
@@ -34,10 +34,10 @@ namespace nikitov
     bool operator<=(const List< T >& other) const;
     bool operator>=(const List< T >& other) const;
 
-    iterator begin();
-    constIterator cbegin() const;
-    iterator end();
-    constIterator cend() const;
+    iterator begin() noexcept;
+    constIterator cbegin() const noexcept;
+    iterator end() noexcept;
+    constIterator cend() const noexcept;
 
     T& front();
     const T& front() const;
@@ -49,10 +49,10 @@ namespace nikitov
 
     void push_front(const T& value);
     void push_front(T&& value);
-    void pop_front();
+    void pop_front() noexcept;
     void push_back(const T& value);
     void push_back(T&& value);
-    void pop_back();
+    void pop_back() noexcept;
 
     void assign(constIterator first, constIterator second);
     void assign(size_t n, const T& value);
@@ -67,11 +67,11 @@ namespace nikitov
     iterator insert(constIterator position, T&& value);
     iterator insert(constIterator position, std::initializer_list< T > initList);
 
-    iterator erase(constIterator position);
-    iterator erase(constIterator first, constIterator last);
+    iterator erase(constIterator position) noexcept;
+    iterator erase(constIterator first, constIterator last) noexcept;
 
-    void clear();
-    void swap(List< T >& other);
+    void clear() noexcept;
+    void swap(List< T >& other) noexcept;
 
     void splice(constIterator position, List< T >& other, constIterator otherPosition);
     void splice(constIterator position, List< T >& other);
@@ -142,7 +142,7 @@ namespace nikitov
   {}
 
   template< class T >
-  List< T >::List(List< T >&& other):
+  List< T >::List(List< T >&& other) noexcept:
     head_(other.head_),
     tail_(other.tail_),
     size_(other.size_)
@@ -171,7 +171,7 @@ namespace nikitov
   }
 
   template< class T >
-  List< T >& List< T >::operator=(List< T >&& other)
+  List< T >& List< T >::operator=(List< T >&& other) noexcept
   {
     List< T > temp(std::move(other));
     if (std::addressof(other) != this)
@@ -251,19 +251,19 @@ namespace nikitov
   }
 
   template< class T >
-  ListIterator< T > List< T >::begin()
+  ListIterator< T > List< T >::begin() noexcept
   {
     return ListIterator< T >(head_);
   }
 
   template< class T >
-  ConstListIterator< T > List< T >::cbegin() const
+  ConstListIterator< T > List< T >::cbegin() const noexcept
   {
     return ConstListIterator< T >(head_);
   }
 
   template< class T >
-  ListIterator< T > List< T >::end()
+  ListIterator< T > List< T >::end() noexcept
   {
     if (tail_->next_ == nullptr)
     {
@@ -276,7 +276,7 @@ namespace nikitov
   }
 
   template< class T >
-  ConstListIterator< T > List< T >::cend() const
+  ConstListIterator< T > List< T >::cend() const noexcept
   {
     if (tail_->next_ == nullptr)
     {
@@ -337,7 +337,7 @@ namespace nikitov
   }
 
   template< class T >
-  void List< T >::pop_front()
+  void List< T >::pop_front() noexcept
   {
     cut(cbegin());
   }
@@ -355,7 +355,7 @@ namespace nikitov
   }
 
   template< class T >
-  void List< T >::pop_back()
+  void List< T >::pop_back() noexcept
   {
     cut(--cend());
   }
@@ -489,13 +489,13 @@ namespace nikitov
   }
 
   template< class T >
-  ListIterator< T > List< T >::erase(constIterator position)
+  ListIterator< T > List< T >::erase(constIterator position) noexcept
   {
     return cut(position);
   }
 
   template< class T >
-  ListIterator< T > List< T >::erase(constIterator first, constIterator second)
+  ListIterator< T > List< T >::erase(constIterator first, constIterator second) noexcept
   {
     auto i = first;
     while (i != second)
@@ -506,7 +506,7 @@ namespace nikitov
   }
 
   template< class T >
-  void List< T >::clear()
+  void List< T >::clear() noexcept
   {
     while (size_ != 0)
     {
@@ -515,7 +515,7 @@ namespace nikitov
   }
 
   template< class T >
-  void List< T >::swap(List< T >& other)
+  void List< T >::swap(List< T >& other) noexcept
   {
     std::swap(head_, other.head_);
     std::swap(tail_, other.tail_);
