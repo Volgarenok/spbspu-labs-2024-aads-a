@@ -40,7 +40,9 @@ namespace nikitov
     constIterator cend() const;
 
     T& front();
+    const T& front() const;
     T& back();
+    const T& back() const;
 
     size_t size() const;
     bool empty() const;
@@ -306,7 +308,19 @@ namespace nikitov
   }
 
   template< class T >
+  const T& List< T >::front() const
+  {
+    return head_->value;
+  }
+
+  template< class T >
   T& List< T >::back()
+  {
+    return tail_->value_;
+  }
+
+  template< class T >
+  const T& List< T >::back() const
   {
     return tail_->value_;
   }
