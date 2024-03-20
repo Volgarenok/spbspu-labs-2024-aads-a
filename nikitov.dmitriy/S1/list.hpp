@@ -710,18 +710,11 @@ namespace nikitov
   template< class T >
   void List< T >::remove(const T& value)
   {
-    auto i = cbegin();
-    while (i != cend())
+    auto isEqual = [&value](const T& toCompare)
     {
-      if (*i == value)
-      {
-        cut(i++);
-      }
-      else
-      {
-        ++i;
-      }
-    }
+      return toCompare == value;
+    };
+    remove_if(isEqual);
   }
 
   template< class T >
