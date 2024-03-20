@@ -118,6 +118,15 @@ namespace chistyakov
         delete lastHead;
       }
 
+      void clear()
+      {
+        while (head_ != nullptr)
+        {
+          pop_front();
+        }
+
+        tail_ = nullptr;
+      }
 
     private:
       BiList < T > * head_;
