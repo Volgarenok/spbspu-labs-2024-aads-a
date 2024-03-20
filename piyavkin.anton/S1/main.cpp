@@ -46,4 +46,15 @@ int main()
   {
     std::cout << *it++ << ' ';
   }
+  List< std::pair<int,char> > mylist;
+
+  mylist.emplace ( mylist.cbegin(), 100, 'x' );
+  mylist.emplace ( mylist.cbegin(), 200, 'y' );
+
+  std::cout << "mylist contains:";
+  for (auto& x: mylist)
+    std::cout << " (" << x.first << "," << x.second << ")";
+
+  std::cout << '\n';
+  return 0;
 }

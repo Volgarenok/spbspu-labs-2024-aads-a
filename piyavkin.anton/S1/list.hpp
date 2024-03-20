@@ -707,7 +707,7 @@ namespace piyavkin
   template< class... Args >
   ListIterator< T > List< T >::emplace(ConstListIterator< T > it, Args&&... args)
   {
-    return insert(it, T(args...));
+    return insert(it, T(std::forward< Args >(args)...));
   }
 }
 #endif
