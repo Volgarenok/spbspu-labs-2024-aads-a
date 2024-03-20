@@ -11,7 +11,7 @@ namespace nikitov
     struct Node
     {
     public:
-      Node();
+      Node(): Node(T()){ };
       Node(const T& value);
       Node(T&& value);
       ~Node() = default;
@@ -19,13 +19,6 @@ namespace nikitov
       Node* prev_;
       Node* next_;
     };
-
-    template< class T >
-    Node< T >::Node():
-      value_(T()),
-      prev_(nullptr),
-      next_(nullptr)
-    {}
 
     template< class T >
     Node< T >::Node(const T& value):
