@@ -21,6 +21,11 @@ namespace chistyakov
         tail_(tail)
       {}
 
+      ~List()
+      {
+        clear();
+      }
+
       Iterator < T > begin()
       {
         return Iterator < T >(head_);
@@ -126,6 +131,13 @@ namespace chistyakov
         }
 
         tail_ = nullptr;
+      }
+
+      void swap(List & list)
+      {
+        BiList < T > * listHead = list.head_;
+        list.head_ = head_;
+        head_ = listHead;
       }
 
     private:
