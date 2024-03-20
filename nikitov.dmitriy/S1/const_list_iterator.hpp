@@ -15,8 +15,10 @@ namespace nikitov
   class ConstListIterator: public std::iterator< std::bidirectional_iterator_tag, T >
   {
     friend class List< T >;
-  public:
+  private:
     ConstListIterator(Node< T >* node);
+
+  public:
     ConstListIterator(const ConstListIterator< T >&) = default;
     ~ConstListIterator() = default;
 
