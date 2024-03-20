@@ -405,23 +405,31 @@ namespace nikitov
   template< class T >
   ListIterator< T > List< T >::insert(constIterator position, size_t n, const T& value)
   {
-    for (size_t i = 0; i != n; ++i)
+    auto firstNodeIterator = iterator(position.node_);
+    if (n != 0)
     {
-      embed(position, new Node< T >(value));
+      firstNodeIterator = embed(position, new Node< T >(value));
+      for (size_t i = 0; i != n - 1; ++i)
+      {
+        embed(position, new Node< T >(value));
+      }
     }
-    return iterator(position.node_).advance(-n);
+    return firstNodeIterator;
   }
 
   template< class T >
   ListIterator< T > List< T >::insert(constIterator position, constIterator first, constIterator last)
   {
-    size_t countNewElements = 0;
-    for (auto i = first; i != last; ++i)
+    auto firstNodeIterator = iterator(position.node_);
+    if (first != last)
     {
-      embed(position, new Node< T >(*i));
-      ++countNewElements;
+      firstNodeIterator = embed(position, new Node< T >(*first++));
+      while (first != last)
+      {
+        embed(position, new Node< T >(*first++));
+      }
     }
-    return iterator(position.node_).advance(-countNewElements);
+    return firstNodeIterator;
   }
 
   template< class T >
@@ -433,13 +441,18 @@ namespace nikitov
   template< class T >
   ListIterator< T > List< T >::insert(constIterator position, std::initializer_list< T > initList)
   {
-    size_t countNewElements = 0;
-    for (T value : initList)
+    auto firstNodeIterator = iterator(position.node_);
+    auto first = initList.begin();
+    auto last = initList.end();
+    if (first != last)
     {
-      embed(position, new Node< T >(value));
-      ++countNewElements;
+      firstNodeIterator = embed(position, new Node< T >(*first++));
+      while (first != last)
+      {
+        embed(position, new Node< T >(*first++));
+      }
     }
-    return iterator(position.node_).advance(-countNewElements);
+    return firstNodeIterator;
   }
 
   template< class T >
