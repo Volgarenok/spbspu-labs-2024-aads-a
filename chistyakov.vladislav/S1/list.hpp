@@ -82,6 +82,41 @@ namespace chistyakov
         head_ = newBiList;
       }
 
+      void pop_back()
+      {
+        if (!tail_)
+        {
+          return;
+        }
+
+        BiList < T > * lastTail = tail_;
+        tail_ = tail_->previous_;
+
+        if (tail_)
+        {
+          tail_->next_ = nullptr;
+        }
+
+        delete lastTail;
+      }
+
+      void pop_front()
+      {
+        if (!head_)
+        {
+          return;
+        }
+
+        BiList < T > * lastHead = head_;
+        head_ = head_->next_;
+
+        if (head_)
+        {
+          head_->previous_;
+        }
+
+        delete lastHead;
+      }
 
 
     private:
