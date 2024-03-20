@@ -4,14 +4,8 @@
 #include "list_iterator.hpp"
 #include "const_list_iterator.hpp"
 
-void nikitov::outputList(List< std::pair< std::string, List< size_t > > >& pairsList, std::ostream& output)
+void nikitov::outputSequenceNames(const List< std::pair< std::string, List< size_t > > >& pairsList, size_t& maxSize, std::ostream& output)
 {
-  if (pairsList.empty())
-  {
-    throw std::invalid_argument("Error: Empty list");
-  }
-
-  size_t maxSize = 1;
   for (auto pairsIterator = pairsList.cbegin(); pairsIterator != pairsList.cend(); ++pairsIterator)
   {
     maxSize = std::max(maxSize, pairsIterator->second.size());
@@ -22,9 +16,11 @@ void nikitov::outputList(List< std::pair< std::string, List< size_t > > >& pairs
     output << pairsIterator->first;
   }
   output << '\n';
+}
 
+bool nikitov::outputSequences(const List< std::pair< std::string, List< size_t > > >& pairsList, List< size_t >& sumsList, size_t maxSize, std::ostream& output)
+{
   bool isOverflow = false;
-  List< size_t > sumsList;
   for (size_t i = 0; i != maxSize; ++i)
   {
     size_t sum = 0;
@@ -63,12 +59,11 @@ void nikitov::outputList(List< std::pair< std::string, List< size_t > > >& pairs
     }
     sumsList.push_back(sum);
   }
+  return isOverflow;
+}
 
-  if (isOverflow)
-  {
-    throw std::out_of_range("Error: Sum is out of range");
-  }
-
+void nikitov::outputSums(const List< size_t >& sumsList, std::ostream& output)
+{
   for (auto sumsIterator = sumsList.cbegin(); sumsIterator != sumsList.cend(); ++sumsIterator)
   {
     if (sumsIterator != sumsList.cbegin())

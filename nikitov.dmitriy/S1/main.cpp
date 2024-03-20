@@ -11,7 +11,21 @@ int main()
   {
     List< std::pair< std::string, List< size_t > > > pairsList;
     inputList(pairsList, std::cin);
-    outputList(pairsList, std::cout);
+    if (pairsList.empty())
+    {
+      throw std::invalid_argument("Error: Empty list");
+    }
+
+    size_t maxSize = 1;
+    outputSequenceNames(pairsList, maxSize, std::cout);
+
+    List< size_t > sumsList;
+    bool isOverflow = outputSequences(pairsList, sumsList, maxSize, std::cout);
+    if (isOverflow)
+    {
+      throw std::out_of_range("Error: Sum is out of range");
+    }
+    outputSums(sumsList, std::cout);
   }
   catch (const std::invalid_argument& e)
   {
