@@ -220,12 +220,19 @@ namespace piyavkin
   template< class T >
   void List< T >::assign(const T& value, size_t count)
   {
-    clear();
-    head_ = nullptr;
-    tail_ = nullptr;
-    for (size_t i = 0; i < count; ++i)
+    ConstListIterator< T > old_end = --cend();
+    try
     {
-      push_back(value);
+      for (size_t i = 0; i < count; ++i)
+      {
+        push_back(value);
+      }
+      erase(cbegin(), old_end);
+    }
+    catch (const std::exception& e)
+    {
+      erase(cbegin(), old_end);
+      throw;
     }
   }
   template< class T >
@@ -259,7 +266,7 @@ namespace piyavkin
     auto functor = [&](const T& n) -> bool
     {
       return value == n;
-    }
+    };
     remove_if(functor);
   }
   template< class T >
@@ -449,22 +456,24 @@ namespace piyavkin
   template< class T >
   ConstListIterator< T > List< T >::erase(ConstListIterator< T > it)
   {
-    if (it == cbegin())
+    ConstListIterator< T > result(it.node->next_);
+    it.node->next_->prev_ = it.node->prev_;
+    if (it.node == head_)
     {
-      pop_front();
+      head_ = head_->next_;
     }
-    else if (it == --cend())
+    else if (it.node == tail_)
     {
-      pop_back();
+      tail_ = tail_->prev_;
     }
-    else
+    it.node->prev_->next_ = it.node->next_;
+    if (size() == 1)
     {
-      it.node->next_->prev_ = it.node->prev_;
-      it.node->prev_->next_ = it.node->next_;
-      delete it.node;
-      --size_;
+      delete tail_->next_;
     }
-    return it;
+    delete it.node;
+    --size_;
+    return result;
   }
   template< class T >
   ConstListIterator< T > List< T >::erase(ConstListIterator< T > it_start, ConstListIterator< T > it_finish)
@@ -651,7 +660,11 @@ namespace piyavkin
   template< class T >
   void List< T >::unique()
   {
-    unique([](const T& lhs, const T& rhs) {return lhs == rhs; });
+    auto comp = [](const T& lhs, const T& rhs)
+    {
+      return lhs == rhs;
+    };
+    unique(comp);
   }
   template< class T >
   template< class Pred >
@@ -745,7 +758,11 @@ namespace piyavkin
   template< class T >
   void List< T >::merge(List< T >& list)
   {
-    merge(list, [](const T& lhs, const T& rhs) {return lhs >= rhs; });
+    auto comp = [](const T& lhs, const T& rhs)
+    {
+      return lhs >= rhs;
+    };
+    merge(list, comp);
   }
   template< class T >
   template< class... Args >
