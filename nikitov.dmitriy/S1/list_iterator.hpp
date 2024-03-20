@@ -2,6 +2,7 @@
 #define LIST_ITERATOR_HPP
 
 #include <iterator>
+#include "node.hpp"
 
 namespace nikitov
 {
@@ -16,7 +17,7 @@ namespace nikitov
   {
     friend class List< T >;
   private:
-    ListIterator(Node< T >* node);
+    ListIterator(detail::Node< T >* node);
 
   public:
     ListIterator(const ListIterator< T >&) = default;
@@ -36,11 +37,11 @@ namespace nikitov
     bool operator!=(const ListIterator< T >& other) const;
 
   private:
-    Node< T >* node_;
+    detail::Node< T >* node_;
   };
 
   template< class T >
-  ListIterator< T >::ListIterator(Node< T >* node):
+  ListIterator< T >::ListIterator(detail::Node< T >* node):
     node_(node)
   {}
 

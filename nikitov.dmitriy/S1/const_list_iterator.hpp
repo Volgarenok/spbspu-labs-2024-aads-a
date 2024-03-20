@@ -2,6 +2,7 @@
 #define CONST_LIST_ITERATOR_HPP
 
 #include <iterator>
+#include "node.hpp"
 
 namespace nikitov
 {
@@ -16,7 +17,7 @@ namespace nikitov
   {
     friend class List< T >;
   private:
-    ConstListIterator(Node< T >* node);
+    ConstListIterator(detail::Node< T >* node);
 
   public:
     ConstListIterator(const ConstListIterator< T >&) = default;
@@ -36,11 +37,11 @@ namespace nikitov
     bool operator!=(const ConstListIterator< T >& other) const;
 
   private:
-    Node< T >* node_;
+    detail::Node< T >* node_;
   };
 
   template< class T >
-  ConstListIterator< T >::ConstListIterator(Node< T >* node):
+  ConstListIterator< T >::ConstListIterator(detail::Node< T >* node):
     node_(node)
   {}
 

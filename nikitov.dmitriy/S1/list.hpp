@@ -91,66 +91,66 @@ namespace nikitov
     void remove_if(Predicate pred);
 
   private:
-    iterator embed(constIterator position, Node< T >* newNode);
+    iterator embed(constIterator position, detail::Node< T >* newNode);
     iterator cut(constIterator position);
 
-    Node< T >* head_;
-    Node< T >* tail_;
+    detail::Node< T >* head_;
+    detail::Node< T >* tail_;
     size_t size_;
   };
 
   template< class T >
   List< T >::List():
-    head_(new Node< T >),
+    head_(new detail::Node< T >),
     tail_(head_),
     size_(0)
   {}
 
   template< class T >
   List< T >::List(size_t n, const T& value):
-    head_(new Node< T >),
+    head_(new detail::Node< T >),
     tail_(head_),
     size_(0)
   {
     for (size_t i = 0; i != n; ++i)
     {
-      embed(cend(), new Node< T >(value));
+      embed(cend(), new detail::Node< T >(value));
     }
   }
 
   template< class T >
   List< T >::List(constIterator first, constIterator second):
-    head_(new Node< T >),
+    head_(new detail::Node< T >),
     tail_(head_),
     size_(0)
   {
     for (auto i = first; i != second; ++i)
     {
-      embed(cend(), new Node< T >(*i));
+      embed(cend(), new detail::Node< T >(*i));
     }
   }
 
   template< class T >
   List< T >::List(std::initializer_list< T > initList):
-    head_(new Node< T >),
+    head_(new detail::Node< T >),
     tail_(head_),
     size_(0)
   {
     for (T value : initList)
     {
-      embed(cend(), new Node< T >(value));
+      embed(cend(), new detail::Node< T >(value));
     }
   }
 
   template< class T >
   List< T >::List(const List< T >& other):
-    head_(new Node< T >),
+    head_(new detail::Node< T >),
     tail_(head_),
     size_(0)
   {
     for (auto i = other.cbegin(); i != other.cend(); ++i)
     {
-      embed(cend(), new Node< T >(*i));
+      embed(cend(), new detail::Node< T >(*i));
     }
   }
 
@@ -340,13 +340,13 @@ namespace nikitov
   template< class T >
   void List< T >::push_front(const T& value)
   {
-    embed(cbegin(), new Node< T >(value));
+    embed(cbegin(), new detail::Node< T >(value));
   }
 
   template< class T >
   void List< T >::push_front(T&& value)
   {
-    embed(cbegin(), new Node< T >(std::move(value)));
+    embed(cbegin(), new detail::Node< T >(std::move(value)));
   }
 
   template< class T >
@@ -358,13 +358,13 @@ namespace nikitov
   template< class T >
   void List< T >::push_back(const T& value)
   {
-    embed(cend(), new Node< T >(value));
+    embed(cend(), new detail::Node< T >(value));
   }
 
   template< class T >
   void List< T >::push_back(T&& value)
   {
-    embed(cend(), new Node< T >(std::move(value)));
+    embed(cend(), new detail::Node< T >(std::move(value)));
   }
 
   template< class T >
@@ -379,7 +379,7 @@ namespace nikitov
     clear();
     for (auto i = first; i != second; ++i)
     {
-      embed(cend(), new Node< T >(*i));
+      embed(cend(), new detail::Node< T >(*i));
     }
   }
 
@@ -389,7 +389,7 @@ namespace nikitov
     clear();
     for (size_t i = 0; i != n; ++i)
     {
-      embed(cend(), new Node< T >(value));
+      embed(cend(), new detail::Node< T >(value));
     }
   }
 
@@ -399,7 +399,7 @@ namespace nikitov
     clear();
     for (auto i = initList.begin(); i != initList.end(); ++i)
     {
-      embed(cend(), new Node< T >(*i));
+      embed(cend(), new detail::Node< T >(*i));
     }
   }
 
@@ -407,13 +407,13 @@ namespace nikitov
   template< class... Args >
   ListIterator< T > List< T >::emplace(constIterator position, Args&&... args)
   {
-    return embed(position, new Node< T >(T(std::forward< Args >(args)...)));
+    return embed(position, new detail::Node< T >(T(std::forward< Args >(args)...)));
   }
 
   template< class T >
   ListIterator< T > List< T >::insert(constIterator position, const T& value)
   {
-    return embed(position, new Node< T >(value));
+    return embed(position, new detail::Node< T >(value));
   }
 
   template< class T >
@@ -422,10 +422,10 @@ namespace nikitov
     auto firstNodeIterator = iterator(position.node_);
     if (n != 0)
     {
-      firstNodeIterator = embed(position, new Node< T >(value));
+      firstNodeIterator = embed(position, new detail::Node< T >(value));
       for (size_t i = 0; i != n - 1; ++i)
       {
-        embed(position, new Node< T >(value));
+        embed(position, new detail::Node< T >(value));
       }
     }
     return firstNodeIterator;
@@ -437,10 +437,10 @@ namespace nikitov
     auto firstNodeIterator = iterator(position.node_);
     if (first != last)
     {
-      firstNodeIterator = embed(position, new Node< T >(*first++));
+      firstNodeIterator = embed(position, new detail::Node< T >(*first++));
       while (first != last)
       {
-        embed(position, new Node< T >(*first++));
+        embed(position, new detail::Node< T >(*first++));
       }
     }
     return firstNodeIterator;
@@ -449,7 +449,7 @@ namespace nikitov
   template< class T >
   ListIterator< T > List< T >::insert(constIterator position, T&& value)
   {
-    return embed(position, new Node< T >(std::move(value)));
+    return embed(position, new detail::Node< T >(std::move(value)));
   }
 
   template< class T >
@@ -460,10 +460,10 @@ namespace nikitov
     auto last = initList.end();
     if (first != last)
     {
-      firstNodeIterator = embed(position, new Node< T >(*first++));
+      firstNodeIterator = embed(position, new detail::Node< T >(*first++));
       while (first != last)
       {
-        embed(position, new Node< T >(*first++));
+        embed(position, new detail::Node< T >(*first++));
       }
     }
     return firstNodeIterator;
@@ -506,7 +506,7 @@ namespace nikitov
   template< class T >
   void List< T >::splice(constIterator position, List< T >& other, constIterator otherPosition)
   {
-    Node< T >* otherNode = otherPosition.node_;
+    detail::Node< T >* otherNode = otherPosition.node_;
     otherNode->next_->prev = otherNode->prev_;
     if (otherNode == tail_)
     {
@@ -603,7 +603,7 @@ namespace nikitov
     while (!isSorted)
     {
       isSorted = true;
-      Node< T >* node = head_;
+      detail::Node< T >* node = head_;
       while (node != tail_)
       {
         if (node->value_ > node->next_->value_)
@@ -619,7 +619,7 @@ namespace nikitov
             head_ = node->next_;
           }
           node->next_->prev_ = node->prev_;
-          Node< T >* temp = node->next_->next_;
+          detail::Node< T >* temp = node->next_->next_;
           node->prev_ = node->next_;
           node->next_ = temp;
           node->prev_->next_ = node;
@@ -661,13 +661,13 @@ namespace nikitov
   {
    if (!empty())
    {
-     Node< T >* node = head_;
+     detail::Node< T >* node = head_;
      node->prev_ = tail_->next_;
      node->next_->prev_ = node;
      tail_->next_ = nullptr;
      while (node != nullptr)
      {
-       Node< T >* temp = node->next_;
+       detail::Node< T >* temp = node->next_;
        std::swap(node->prev_, node->next_);
        node = temp;
      }
@@ -711,9 +711,9 @@ namespace nikitov
   }
 
   template< class T >
-  ListIterator< T > List< T >::embed(constIterator position, Node< T >* newNode)
+  ListIterator< T > List< T >::embed(constIterator position, detail::Node< T >* newNode)
   {
-    Node< T >* node = position.node_;
+    detail::Node< T >* node = position.node_;
     newNode->prev_ = node->prev_;
     newNode->next_ = node;
     node->prev_ = newNode;
@@ -736,8 +736,8 @@ namespace nikitov
   template< class T >
   ListIterator< T > List< T >::cut(constIterator position)
   {
-    Node< T >* node = position.node_;
-    Node< T >* nextNode = node->next_;
+    detail::Node< T >* node = position.node_;
+    detail::Node< T >* nextNode = node->next_;
     nextNode->prev_ = node->prev_;
     if (node == tail_)
     {
