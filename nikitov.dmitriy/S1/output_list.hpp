@@ -6,9 +6,11 @@
 
 namespace nikitov
 {
-  void outputSequenceNames(const List< std::pair< std::string, List< size_t > > >& pairsList, size_t& maxSize, std::ostream& output);
+  using listOfPairs = List< std::pair< std::string, List< size_t > > >;
 
-  bool outputSequences(const List< std::pair< std::string, List< size_t > > >& pairsList, List< size_t >& sumsList, size_t maxSize, std::ostream& output);
+  void outputSequenceNames(const listOfPairs& pairsList, size_t& maxSize, std::ostream& output);
+
+  bool outputSequences(const listOfPairs& pairsList, List< size_t >& sumsList, size_t maxSize, std::ostream& output);
 
   void outputSums(const List< size_t >& sumsList, std::ostream& output);
 }

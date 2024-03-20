@@ -4,7 +4,7 @@
 #include "list_iterator.hpp"
 #include "const_list_iterator.hpp"
 
-void nikitov::outputSequenceNames(const List< std::pair< std::string, List< size_t > > >& pairsList, size_t& maxSize, std::ostream& output)
+void nikitov::outputSequenceNames(const listOfPairs& pairsList, size_t& maxSize, std::ostream& output)
 {
   for (auto pairsIterator = pairsList.cbegin(); pairsIterator != pairsList.cend(); ++pairsIterator)
   {
@@ -18,7 +18,7 @@ void nikitov::outputSequenceNames(const List< std::pair< std::string, List< size
   output << '\n';
 }
 
-bool nikitov::outputSequences(const List< std::pair< std::string, List< size_t > > >& pairsList, List< size_t >& sumsList, size_t maxSize, std::ostream& output)
+bool nikitov::outputSequences(const listOfPairs& pairsList, List< size_t >& sumsList, size_t maxSize, std::ostream& output)
 {
   bool isOverflow = false;
   for (size_t i = 0; i != maxSize; ++i)
