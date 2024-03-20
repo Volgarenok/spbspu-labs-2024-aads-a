@@ -108,9 +108,7 @@ namespace nikitov
 
   template< class T >
   List< T >::List(size_t n, const T& value):
-    head_(new detail::Node< T >),
-    tail_(head_),
-    size_(0)
+    List()
   {
     for (size_t i = 0; i != n; ++i)
     {
@@ -120,9 +118,7 @@ namespace nikitov
 
   template< class T >
   List< T >::List(constIterator first, constIterator second):
-    head_(new detail::Node< T >),
-    tail_(head_),
-    size_(0)
+    List()
   {
     for (auto i = first; i != second; ++i)
     {
@@ -132,27 +128,18 @@ namespace nikitov
 
   template< class T >
   List< T >::List(std::initializer_list< T > initList):
-    head_(new detail::Node< T >),
-    tail_(head_),
-    size_(0)
+    List()
   {
-    for (T value : initList)
+    for (auto i = initList.begin(); i != initList.end(); ++i)
     {
-      embed(cend(), new detail::Node< T >(value));
+      embed(cend(), new detail::Node< T >(*i));
     }
   }
 
   template< class T >
   List< T >::List(const List< T >& other):
-    head_(new detail::Node< T >),
-    tail_(head_),
-    size_(0)
-  {
-    for (auto i = other.cbegin(); i != other.cend(); ++i)
-    {
-      embed(cend(), new detail::Node< T >(*i));
-    }
-  }
+    List(other.cbegin(), other.cend())
+  {}
 
   template< class T >
   List< T >::List(List< T >&& other):
