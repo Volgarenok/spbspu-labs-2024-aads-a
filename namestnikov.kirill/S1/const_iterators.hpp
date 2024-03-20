@@ -20,8 +20,8 @@ namespace namestnikov
   {
     friend class ForwardIterator<T>;
     friend class ForwardList<T>;
-    using const_it_t = ConstForwardIterator<T>;
-    using iterator_t = ForwardIterator<T>;
+    using const_iterator = ConstForwardIterator<T>;
+    using iterator = ForwardIterator<T>;
     using node_t = Node<T>;
   public:
     ConstForwardIterator():
@@ -30,32 +30,32 @@ namespace namestnikov
     ConstForwardIterator(node_t * node):
       node_(node)
     {}
-    ConstForwardIterator(const const_it_t &) = default;
-    const_it_t & operator=(const const_it_t &) = default;
-    const_it_t & operator++()
+    ConstForwardIterator(const const_iterator &) = default;
+    const_iterator & operator=(const const_iterator &) = default;
+    const_iterator & operator++()
     {
       node_ = node_->next_;
       return *this;
     }
-    const_it_t operator++(int)
+    const_iterator operator++(int)
     {
-      const_it_t temp(*this);
+      const_iterator temp(*this);
       ++(*this);
       return temp;
     }
-    bool operator!=(const const_it_t & other) const
+    bool operator!=(const const_iterator & other) const
     {
       return !(node_ == other.node_);
     }
-    bool operator==(const const_it_t & other) const
+    bool operator==(const const_iterator & other) const
     {
       return node_ == other.node_;
     }
-    bool operator!=(iterator_t & other) const
+    bool operator!=(iterator & other) const
     {
       return node_ != other.node_;
     }
-    bool operator==(iterator_t & other) const
+    bool operator==(iterator & other) const
     {
       return node_ == other.node_;
     }
@@ -66,14 +66,6 @@ namespace namestnikov
     const T * operator->() const
     {
       return std::addressof(node_->data_);
-    }
-    const_it_t & advance(size_t n)
-    {
-      for (size_t i = 0; i < n; ++i)
-      {
-        node_ = node_->next_;
-      }
-      return *this;
     }
     ~ConstForwardIterator() = default;
   private:

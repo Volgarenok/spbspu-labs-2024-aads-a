@@ -21,8 +21,8 @@ namespace namestnikov
   {
     friend class ForwardList<T>;
     friend class ConstForwardIterator<T>;
-    using iterator_t = ForwardIterator<T>;
-    using const_it_t = ConstForwardIterator<T>;
+    using iterator = ForwardIterator<T>;
+    using const_iterator = ConstForwardIterator<T>;
     using node_t = Node<T>;
   public:
     ForwardIterator() :
@@ -31,37 +31,37 @@ namespace namestnikov
     ForwardIterator(node_t * node):
       node_(node)
     {}
-    ForwardIterator(const iterator_t &) = default;
-    iterator_t & operator=(const iterator_t &) = default;
+    ForwardIterator(const iterator &) = default;
+    iterator & operator=(const iterator &) = default;
     ForwardIterator(ForwardIterator && other) noexcept:
       node_(other.node_)
     {
       other.node_ = nullptr;
     }
-    iterator_t & operator++()
+    iterator & operator++()
     {
       node_ = node_->next_;
       return *this;
     }
-    iterator_t operator++(int)
+    iterator operator++(int)
     {
-      iterator_t temp(*this);
+      iterator temp(*this);
       ++(*this);
       return temp;
     }
-    bool operator!=(const iterator_t & other) const
+    bool operator!=(const iterator & other) const
     {
       return !(node_ == other.node_);
     }
-    bool operator==(const iterator_t & other) const
+    bool operator==(const iterator & other) const
     {
       return (node_ == other.node_);
     }
-    bool operator!=(const_it_t & other) const
+    bool operator!=(const_iterator & other) const
     {
       return !(node_ == other.node_);
     }
-    bool operator==(const_it_t & other) const
+    bool operator==(const_iterator & other) const
     {
       return (node_ == other.node_);
     }
@@ -80,14 +80,6 @@ namespace namestnikov
     const T * operator->() const
     {
       return std::addressof(node_->data_);
-    }
-    iterator_t & advance(size_t n)
-    {
-      for (size_t i = 0; i < n; ++i)
-      {
-        node_ = node_->next_;
-      }
-      return *this;
     }
     ~ForwardIterator() = default;
   private:

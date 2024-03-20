@@ -15,7 +15,7 @@ int main()
     inputLists(std::cin, dataList);
     outputLists(std::cout, dataList);
   }
-  catch (std::invalid_argument &)
+  catch (const std::invalid_argument &)
   {
     std::cout << "0\n";
     return 0;

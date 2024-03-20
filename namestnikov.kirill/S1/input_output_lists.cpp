@@ -44,7 +44,8 @@ void namestnikov::outputNumsAndSums(std::ostream & out, ForwardList<pair_t> & da
       size_t currentListSize = it->second.max_size();
       if (i < currentListSize)
       {
-        unsigned long long number = *(numIt.advance(i));
+        std::advance(numIt, i);
+        unsigned long long number = *numIt;
         sum != 0 ? out << " " << number : out << number;
         if (MAX_SUM - sum < number)
         {
