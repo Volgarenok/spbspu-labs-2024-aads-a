@@ -380,35 +380,6 @@ namespace piyavkin
     std::swap(list.size_, size_);
   }
   template< class T >
-  const T& List< T >::at(size_t i) const
-  {
-    if (i >= size_)
-    {
-      throw std::logic_error("Element outside the list");
-    }
-    return operator[](i);
-  }
-  template< class T >
-  T& List< T >::at(size_t i)
-  {
-    return const_cast<T&>(static_cast<const List< T >&>(*this).at(i));
-  }
-  template< class T >
-  T& List< T >::operator[](size_t i)
-  {
-    return const_cast<T&>(static_cast<const List< T >&>(*this).operator[](i));
-  }
-  template< class T >
-  const T& List< T >::operator[](size_t i) const
-  {
-    ConstListIterator< T > iterator(head_);
-    for (size_t j = 0; j < i; ++j)
-    {
-      ++iterator;
-    }
-    return *iterator;
-  }
-  template< class T >
   size_t List< T >::size() const
   {
     return size_;
@@ -465,8 +436,12 @@ namespace piyavkin
     else if (it.node == tail_)
     {
       tail_ = tail_->prev_;
+      it.node->prev_->next_ = it.node->next_;
     }
-    it.node->prev_->next_ = it.node->next_;
+    else
+    {
+      it.node->prev_->next_ = it.node->next_;
+    }
     if (size() == 1)
     {
       delete tail_->next_;
@@ -617,45 +592,17 @@ namespace piyavkin
   template< class T >
   void List< T >::pop_back()
   {
-    if (size_ == 1)
-    {
-      delete tail_->next_;
-      delete tail_;
-      --size_;
-    }
-    else
-    {
-      Node< T >* temp = tail_;
-      tail_->next_->prev_ = tail_->prev_;
-      tail_->prev_->next_ = tail_->next_;
-      tail_ = tail_->prev_;
-      delete temp;
-      --size_;
-    }
+    erase(--cend());
   }
   template< class T >
   void List< T >::pop_front()
   {
-    if (size_ == 1)
-    {
-      delete tail_->next_;
-      delete head_;
-      --size_;
-    }
-    else
-    {
-      head_ = head_->next_;
-      delete head_->prev_;
-      --size_;
-    }
+    erase(cbegin());
   }
   template< class T >
   void List< T >::clear()
   {
-    while (!empty())
-    {
-      pop_back();
-    }
+    erase(cbegin(), cend());
   }
   template< class T >
   void List< T >::unique()
@@ -706,7 +653,11 @@ namespace piyavkin
   template< class T >
   void List< T >::sort()
   {
-    sort([](const T& lhs, const T& rhs) {return lhs > rhs; });
+    auto comp = [](const T& lhs, const T& rhs)
+    {
+      return lhs > rhs;
+    };
+    sort(comp);
   }
   template< class T >
   template< class Compare >
