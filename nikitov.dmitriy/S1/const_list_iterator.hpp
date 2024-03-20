@@ -17,7 +17,7 @@ namespace nikitov
   {
     friend class List< T >;
   private:
-    ConstListIterator(detail::Node< T >* node);
+    explicit ConstListIterator(detail::Node< T >* node);
 
   public:
     ConstListIterator(const ConstListIterator< T >&) = default;

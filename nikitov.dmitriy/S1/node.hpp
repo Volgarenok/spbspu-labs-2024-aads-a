@@ -12,7 +12,7 @@ namespace nikitov
     {
     public:
       Node(): Node(T()){ };
-      Node(const T& value);
+      explicit Node(const T& value);
       Node(T&& value);
       ~Node() = default;
       T value_;
