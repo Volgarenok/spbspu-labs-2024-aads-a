@@ -74,8 +74,8 @@ namespace piyavkin
     template< class... Args >
     ListIterator< T > emplace(ConstListIterator< T > it, Args&&... args);
   private:
-    Node< T >* head_;
-    Node< T >* tail_;
+    detail::Node< T >* head_;
+    detail::Node< T >* tail_;
     size_t size_;
   };
 
@@ -118,7 +118,7 @@ namespace piyavkin
   List< T >::List(const List< T >& rhs):
     List()
   {
-    Node< T >* node = rhs.head_;
+    detail::Node< T >* node = rhs.head_;
     while (size_ != rhs.size_)
     {
       push_back(node->value_);
@@ -139,8 +139,8 @@ namespace piyavkin
   bool List< T >::operator<(const List< T >& rhs) const
   {
     size_t min_size = std::min(rhs.size_, size_);
-    Node< T >* node = head_;
-    Node< T >* rhs_node = rhs.head_;
+    detail::Node< T >* node = head_;
+    detail::Node< T >* rhs_node = rhs.head_;
     for (size_t i = 0; i < min_size; ++i)
     {
       if (node->value_ != rhs_node->value_)
@@ -316,10 +316,10 @@ namespace piyavkin
   void List< T >::reverse() noexcept
   {
     std::swap(head_->prev_, tail_->next_);
-    Node< T >* node = head_;
+    detail::Node< T >* node = head_;
     while (node)
     {
-      Node< T >* next_node = node->next_;
+      detail::Node< T >* next_node = node->next_;
       std::swap(node->prev_, node->next_);
       node = next_node;
     }
@@ -329,7 +329,7 @@ namespace piyavkin
   template< class Functor >
   void List< T >::remove_if(Functor f)
   {
-    Node< T >* node = head_;
+    detail::Node< T >* node = head_;
     while (node)
     {
       if (f(node->value_))
@@ -346,7 +346,7 @@ namespace piyavkin
         }
         else
         {
-          Node< T >* temp = node;
+          detail::Node< T >* temp = node;
           node->next_->prev_ = node->prev_;
           node->prev_->next_ = node->next_;
           node = node->next_;
@@ -459,10 +459,10 @@ namespace piyavkin
   {
     if (size_ == 0)
     {
-      Node< T >* end_node = new Node< T >(value);
+      detail::Node< T >* end_node = new Node< T >(value);
       try
       {
-        Node< T >* node = new Node< T >(value, end_node);
+        detail::Node< T >* node = new Node< T >(value, end_node);
         end_node->prev_ = node;
         head_ = node;
         tail_ = node;
@@ -476,7 +476,7 @@ namespace piyavkin
       ListIterator< T > result(head_);
       return result;
     }
-    Node< T >* node = new Node< T >(value, it.node, it.node->prev_);
+    detail::Node< T >* node = new Node< T >(value, it.node, it.node->prev_);
     it.node->prev_ = node;
     if (it.node == head_)
     {
@@ -649,10 +649,10 @@ namespace piyavkin
   template< class Compare >
   void List< T >::sort(Compare comp)
   {
-    Node< T >* node1 = head_;
+    detail::Node< T >* node1 = head_;
     for (size_t i = 0; i < size_; ++i)
     {
-      Node< T >* node2 = node1;
+      detail::Node< T >* node2 = node1;
       for (size_t j = i; j < size_; ++j)
       {
         if (comp(node1->value_, node2->value_))

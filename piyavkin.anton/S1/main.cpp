@@ -1,60 +1,31 @@
 #include <iostream>
 #include "list.hpp"
-// #include "inputlist.hpp"
-// #include "output.hpp"
+#include "inputlist.hpp"
+#include "output.hpp"
 
 int main()
 {
   using namespace piyavkin;
-  // size_t size = 0;
-  // size_t max_size_list = 0;
-  // std::pair< std::string, piyavkin::List< unsigned long long >* >* pairs = nullptr;
-  // try
-  // {
-  //   pairs = inputList(std::cin, size, max_size_list);
-  //   output(std::cout, pairs, size, max_size_list);
-  // }
-  // catch (const std::invalid_argument& e)
-  // {
-  //   std::cerr << e.what() << '\n';
-  //   freeMemory(pairs, size);
-  //   return 1;
-  // }
-  // catch (const std::logic_error& e)
-  // {
-  //   std::cout << 0 << '\n';
-  //   return 0;
-  // }
-  // catch (const std::exception& e)
-  // {
-  //   std::cerr << e.what() << '\n';
-  //   return 1;
-  // }
-  // std::cout << '\n';
-  // freeMemory(pairs, size);
-  List< int > list({1,2,3,4,5});
-  ListIterator< int > it(list.begin());
-  for (size_t i = 0; i < list.size(); ++i)
+  List< std::pair< std::string, List< unsigned long long > > > list;
+  try
   {
-    std::cout << *it++ << ' ';
+    inputList(std::cin, list);
+    output(std::cout, pairs, size, max_size_list);
   }
-  List< int > list2({6,7,8,9});
-  list.merge(list2);
-  // list.reverse();
-  it = list.begin();
-  for (size_t i = 0; i < list.size(); ++i)
+  catch (const std::invalid_argument& e)
   {
-    std::cout << *it++ << ' ';
+    std::cout << 0 << '\n';
+    return 0;
   }
-  List< std::pair<int,char> > mylist;
-
-  mylist.emplace ( mylist.cbegin(), 100, 'x' );
-  mylist.emplace ( mylist.cbegin(), 200, 'y' );
-
-  std::cout << "mylist contains:";
-  for (auto& x: mylist)
-    std::cout << " (" << x.first << "," << x.second << ")";
-
+  catch (const std::logic_error& e)
+  {
+    std::cerr << e.what() << '\n';
+    return 1;
+  }
+  catch (const std::exception& e)
+  {
+    std::cerr << e.what() << '\n';
+    return 1;
+  }
   std::cout << '\n';
-  return 0;
 }
