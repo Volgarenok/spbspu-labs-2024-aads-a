@@ -254,13 +254,13 @@ namespace nikitov
   template< class T >
   bool List< T >::operator<=(const List< T >& other) const
   {
-    return (*this < other || *this == other);
+    return !(*this > other);
   }
 
   template< class T >
   bool List< T >::operator>=(const List< T >& other) const
   {
-    return (*this > other || *this == other);
+    return !(*this < other);
   }
 
   template< class T >
