@@ -1,7 +1,7 @@
 #include <iostream>
 #include "list.hpp"
-#include "inputlist.hpp"
-#include "output.hpp"
+// #include "inputlist.hpp"
+// #include "output.hpp"
 
 int main()
 {
@@ -34,9 +34,15 @@ int main()
   // freeMemory(pairs, size);
   List< int > list({1,2,3,4,5});
   list.erase(--list.cend());
+  list.insert(--list.cend(), 5);
   ListIterator< int > it(list.begin());
-  for (size_t i = 0; i < list.size(); ++i)
-  {
-    std::cout << *it++ << ' ';
-  }
+  List< int > list2;
+  list2.insert(list2.cbegin(), 1);
+  list2.clear();
+  std::cout << list2.size();
+  // ListIterator< int > it2(list2.begin());
+  // for (size_t i = 0; i < list2.size(); ++i)
+  // {
+  //   std::cout << *it++ << ' ';
+  // }
 }

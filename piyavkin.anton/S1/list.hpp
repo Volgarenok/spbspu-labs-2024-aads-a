@@ -462,31 +462,43 @@ namespace piyavkin
   template< class T >
   ListIterator< T > List< T >::insert(ConstListIterator< T > it, const T& value)
   {
-    try
+    if (size_ == 0)
     {
-      if (it == cbegin())
+      Node< T >* end_node = new Node< T >(value);
+      try
       {
-        push_front(value);
-      }
-      else if (it == cend())
-      {
-        push_back(value);
-      }
-      else
-      {
-        Node< T >* new_node = new Node< T >(value, it.node, it.node->prev_);
-        it.node->prev_ = new_node;
-        new_node->prev_->next_ = new_node;
+        Node< T >* node = new Node< T >(value, end_node);
+        end_node->prev_ = node;
+        head_ = node;
+        tail_ = node;
         ++size_;
       }
-      ListIterator< T > iterator(it.node);
-      return iterator;
+      catch (const std::exception& e)
+      {
+        delete end_node;
+        throw;
+      }
+      ListIterator< T > result(head_);
+      return result;
     }
-    catch (const std::exception& e)
+    Node< T >* node = new Node< T >(value, it.node, it.node->prev_);
+    it.node->prev_ = node;
+    if (it.node == head_)
     {
-      clear();
-      throw;
+      head_ = node;
     }
+    else if (it.node == tail_->next_)
+    {
+      tail_ = node;
+      node->prev_->next_ = node;
+    }
+    else
+    {
+      node->prev_->next_ = node;
+    }
+    ++size_;
+    ListIterator< T > result(node);
+    return result;
   }
   template< class T >
   ListIterator< T > List< T >::insert(ConstListIterator< T > it, ListIterator< T > start, ListIterator< T > finish)
@@ -602,7 +614,10 @@ namespace piyavkin
   template< class T >
   void List< T >::clear()
   {
-    erase(cbegin(), cend());
+    while (!empty())
+    {
+      pop_back();
+    }
   }
   template< class T >
   void List< T >::unique()
