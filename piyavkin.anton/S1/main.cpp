@@ -33,16 +33,15 @@ int main()
   // std::cout << '\n';
   // freeMemory(pairs, size);
   List< int > list({1,2,3,4,5});
-  list.erase(--list.cend());
-  list.insert(--list.cend(), 5);
   ListIterator< int > it(list.begin());
-  List< int > list2;
-  list2.insert(list2.cbegin(), 1);
-  list2.clear();
-  std::cout << list2.size();
-  // ListIterator< int > it2(list2.begin());
-  // for (size_t i = 0; i < list2.size(); ++i)
-  // {
-  //   std::cout << *it++ << ' ';
-  // }
+  for (size_t i = 0; i < list.size(); ++i)
+  {
+    std::cout << *it++ << ' ';
+  }
+  list.reverse();
+  it = list.begin();
+  for (size_t i = 0; i < list.size(); ++i)
+  {
+    std::cout << *it++ << ' ';
+  }
 }

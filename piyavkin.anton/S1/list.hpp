@@ -56,7 +56,8 @@ namespace piyavkin
     ConstListIterator< T > erase(ConstListIterator< T > it);
     ConstListIterator< T > erase(ConstListIterator< T > it_start, ConstListIterator< T > it_finish);
     ListIterator< T > insert(ConstListIterator< T > it, const T& value);
-    ListIterator< T > insert(ConstListIterator< T > it, ListIterator< T > start, ListIterator< T > finish);
+    template< class Iterator >
+    ListIterator< T > insert(ConstListIterator< T > it, Iterator start, Iterator finish);
     ListIterator< T > insert(ConstListIterator< T > it, size_t n, const T& value);
     ListIterator< T > insert(ConstListIterator< T > it, std::initializer_list< T > il);
     bool empty() const;
@@ -318,17 +319,15 @@ namespace piyavkin
   template< class T >
   void List< T >::reverse()
   {
-    Node< T >* start = head_;
-    Node< T >* finish = tail_;
-    while (start != finish)
+    std::swap(head_->prev_, tail_->next_);
+    Node< T >* node = head_;
+    while (node)
     {
-      std::swap(start->value_, finish->value_);
-      start = start->next_;
-      if (start != finish)
-      {
-        finish = finish->prev_;
-      }
+      Node< T >* next_node = node->next_;
+      std::swap(node->prev_, node->next_);
+      node = next_node;
     }
+    std::swap(head_, tail_);
   }
   template< class T >
   template< class Functor >
@@ -501,8 +500,11 @@ namespace piyavkin
     return result;
   }
   template< class T >
-  ListIterator< T > List< T >::insert(ConstListIterator< T > it, ListIterator< T > start, ListIterator< T > finish)
+  template< class Iterator >
+  ListIterator< T > List< T >::insert(ConstListIterator< T > it, Iterator start, Iterator finish)
   {
+    ConstListIterator< T > iterator(it);
+    size_t count = 0;
     try
     {
       ListIterator< T > result(it.node);
@@ -514,30 +516,43 @@ namespace piyavkin
     }
     catch (const std::exception& e)
     {
-      clear();
+      --iterator;
+      for (size_t i = 0; i < count; ++i)
+      {
+        erase(iterator--);
+      }
       throw;
     }
   }
   template< class T >
   ListIterator< T > List< T >::insert(ConstListIterator< T > it, size_t n, const T& value)
   {
-    ListIterator< T > result(it.node);
-    for (size_t i = 0; i < n; ++i)
+    ConstListIterator< T > iterator(it);
+    size_t count = 0;
+    try
     {
-      insert(it++, value);
+      ListIterator< T > result(it.node);
+      for (size_t i = 0; i < n; ++i)
+      {
+        insert(it++, value);
+        ++count;
+      }
+      return ++result;
     }
-    return ++result;
+    catch (const std::exception& e)
+    {
+      --iterator;
+      for (size_t i = 0; i < count; ++i)
+      {
+        erase(iterator--);
+      }
+      throw;
+    }
   }
   template< class T >
   ListIterator< T > List< T >::insert(ConstListIterator< T > it, std::initializer_list< T > il)
   {
-    auto iterator = il.begin();
-    ListIterator< T > result(it.node);
-    while (iterator != il.end())
-    {
-      insert(it, *iterator++);
-    }
-    return ++result;
+    return insert(it, il.begin(), il.end());
   }
   template< class T >
   bool List< T >::empty() const
@@ -547,59 +562,19 @@ namespace piyavkin
   template< class T >
   void List< T >::push_front(const T& value)
   {
-    Node< T >* new_node = new Node< T >(value, head_, nullptr);
-    if (head_)
-    {
-      head_->prev_ = new_node;
-    }
-    if (!tail_)
-    {
-      try
-      {
-        Node< T >* end_node = new Node< T >(value);
-        tail_ = new_node;
-        end_node->prev_ = tail_;
-        tail_->next_ = end_node;
-      }
-      catch (const std::exception& e)
-      {
-        delete new_node;
-        throw;
-      }
-    }
-    head_ = new_node;
-    ++size_;
+    insert(cbegin(), value);
   }
   template< class T >
   void List< T >::push_back(const T& value)
   {
-    Node< T >* new_node = new Node< T >(value, nullptr, tail_);
-    if (tail_)
+    if (!tail_)
     {
-      tail_->next_->prev_ = new_node;
-      new_node->next_ = tail_->next_;
-      tail_->next_ = new_node;
+      push_front(value);
     }
-    if (!head_)
+    else
     {
-      try
-      {
-        Node< T >* end_node = new Node< T >(value);
-        head_ = new_node;
-        tail_ = head_;
-        end_node->prev_ = tail_;
-        tail_->next_ = end_node;
-        ++size_;
-        return;
-      }
-      catch (const std::exception& e)
-      {
-        delete new_node;
-        throw;
-      }
+      insert(cend(), value);
     }
-    tail_ = new_node;
-    ++size_;
   }
   template< class T >
   void List< T >::pop_back()
@@ -616,7 +591,7 @@ namespace piyavkin
   {
     while (!empty())
     {
-      pop_back();
+      pop_front();
     }
   }
   template< class T >
