@@ -158,6 +158,32 @@ namespace chistyakov
         }
       }
 
+      template < class Predicate >
+      void remove_if(Predicate pred)
+      {
+        for (auto element = begin(); element != end(); ++element)
+        {
+          if (!pred(*element))
+          {
+            if (element == begin())
+            {
+              pop_front();
+              return;
+            }
+
+            if (element == end())
+            {
+              pop_back();
+              return;
+            }
+
+            element->previous_->next_ = element->next_;
+            element->next_->previous_ = element->previous_;
+            delete element;
+          }
+        }
+      }
+
       void swap(List & list)
       {
         BiList < T > * listHead = list.head_;
