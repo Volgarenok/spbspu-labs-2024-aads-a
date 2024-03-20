@@ -34,7 +34,8 @@ void nikitov::outputList(List< std::pair< std::string, List< size_t > > >& pairs
       auto numbersIterator = pairsIterator->second.cbegin();
       if (i < pairsIterator->second.size())
       {
-        size_t number = *(numbersIterator.advance(i));
+        std::advance(numbersIterator, i);
+        size_t number = *numbersIterator;
         if (isFirst)
         {
           isFirst = false;

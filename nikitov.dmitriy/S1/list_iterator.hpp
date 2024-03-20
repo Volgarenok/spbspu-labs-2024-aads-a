@@ -33,8 +33,6 @@ namespace nikitov
     bool operator==(const ListIterator< T >& other) const;
     bool operator!=(const ListIterator< T >& other) const;
 
-    ListIterator< T >& advance(int n);
-
   private:
     Node< T >* node_;
   };
@@ -104,26 +102,6 @@ namespace nikitov
   bool ListIterator< T >::operator!=(const ListIterator< T >& other) const
   {
     return node_ != other.node_;
-  }
-
-  template< class T >
-  ListIterator< T >& ListIterator< T >::advance(int n)
-  {
-    if (n > 0)
-    {
-      for (int i = 0; i != n; ++i)
-      {
-        node_ = node_->next_;
-      }
-    }
-    else if (n < 0)
-    {
-      for (int i = 0; i != -n; ++i)
-      {
-        node_ = node_->prev_;
-      }
-    }
-    return *this;
   }
 }
 #endif
