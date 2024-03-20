@@ -376,31 +376,63 @@ namespace nikitov
   template< class T >
   void List< T >::assign(constIterator first, constIterator second)
   {
-    clear();
-    for (auto i = first; i != second; ++i)
+    auto i = first;
+    auto firstNodeIterator = embed(cend(), new detail::Node< T >(*i++));
+    auto lastNodeIterator = firstNodeIterator;
+    try
     {
-      embed(cend(), new detail::Node< T >(*i));
+      while (i != second)
+      {
+        lastNodeIterator = embed(cend(), new detail::Node< T >(*i++));
+      }
     }
+    catch (std::exception& e)
+    {
+      erase(constIterator(firstNodeIterator.node_), constIterator(++lastNodeIterator.node_));
+      throw;
+    }
+    erase(cbegin(), constIterator(firstNodeIterator.node_));
   }
 
   template< class T >
   void List< T >::assign(size_t n, const T& value)
   {
-    clear();
-    for (size_t i = 0; i != n; ++i)
+    auto firstNodeIterator = embed(cend(), new detail::Node< T >(value));
+    auto lastNodeIterator = firstNodeIterator;
+    try
     {
-      embed(cend(), new detail::Node< T >(value));
+      for (size_t i = 0; i != n - 1; ++i)
+      {
+        lastNodeIterator = embed(cend(), new detail::Node< T >(value));
+      }
     }
+    catch (std::exception& e)
+    {
+      erase(constIterator(firstNodeIterator.node_), constIterator(++lastNodeIterator.node_));
+      throw;
+    }
+    erase(cbegin(), constIterator(firstNodeIterator.node_));
   }
 
   template< class T >
   void List< T >::assign(std::initializer_list< T > initList)
   {
-    clear();
-    for (auto i = initList.begin(); i != initList.end(); ++i)
+    auto i = initList.begin();
+    auto firstNodeIterator = embed(cend(), new detail::Node< T >(*i++));
+    auto lastNodeIterator = firstNodeIterator;
+    try
     {
-      embed(cend(), new detail::Node< T >(*i));
+      while (i != initList.end())
+      {
+        lastNodeIterator = embed(cend(), new detail::Node< T >(*i++));
+      }
     }
+    catch (std::exception& e)
+    {
+      erase(constIterator(firstNodeIterator.node_), constIterator(++lastNodeIterator.node_));
+      throw;
+    }
+    erase(cbegin(), constIterator(firstNodeIterator.node_));
   }
 
   template< class T >
