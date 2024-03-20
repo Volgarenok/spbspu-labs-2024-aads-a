@@ -47,6 +47,5 @@ namespace zaitsev
   {
     Deque< T >::clear();
   }
-
 }
 #endif

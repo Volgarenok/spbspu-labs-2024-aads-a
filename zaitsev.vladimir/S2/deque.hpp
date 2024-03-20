@@ -20,6 +20,7 @@ namespace zaitsev
     void pop_back();
     void push_front(const T& value);
     void pop_front();
+    void clear();
   private:
     size_t capacity_;
     size_t size_;
@@ -39,13 +40,13 @@ namespace zaitsev
   {}
 
   template<typename T>
-  Deque<T>::Deque(const Deque & other):
-     capacity_(other.capacity_),
-     size_(other.size_),
-     head_(other.head_),
-     tail_(other.tail_)
+  Deque<T>::Deque(const Deque& other):
+    capacity_(other.capacity_),
+    size_(other.size_),
+    head_(other.head_),
+    tail_(other.tail_),
+    data_(new T[capacity_])
   {
-     data_ = new T[capacity_];
      size_t i = 0;
      try
      {
@@ -59,35 +60,39 @@ namespace zaitsev
        delete[] data_;
      }
   }
-   template<typename T>
-   Deque<T>::Deque(Deque&& other):
+
+  template<typename T>
+  Deque<T>::Deque(Deque&& other):
      capacity_(other.capacity_),
      size_(other.size_),
      head_(other.head_),
      tail_(other.tail_),
      data_(other.data_)
-   {
+  {
      other.capacity_ = 0;
      other.size_ = 0;
      other.head_ = 0;
      other.tail_ = 0;
      other.data_ = nullptr;
-   }
-   template<typename T>
-   Deque<T>::~Deque()
-   {
-     delete[] data_;
-   }
-   template<typename T>
-   T& Deque<T>::front()
-   {
-     return data_[head_];
-   }
-   template<typename T>
-   T& Deque<T>::back()
-   {
-     return data_[tail_];
-   }
+  }
+  template<typename T>
+  Deque<T>::~Deque()
+  {
+    delete[] data_;
+  }
+
+  template<typename T>
+  T& Deque<T>::front()
+  {
+    return data_[head_];
+  }
+
+  template<typename T>
+  T& Deque<T>::back()
+  {
+    return data_[tail_];
+  }
+
   template<typename T>
   bool Deque<T>::empty() const
   {
@@ -151,6 +156,17 @@ namespace zaitsev
   {
     head_ = (head_ + 1) % capacity_;
     --size_;
+  }
+
+  template<typename T>
+  void Deque<T>::clear()
+  {
+    delete[] data_;
+    data_ = nullptr;
+    capacity_ = 0;
+    size_ = 0;
+    head_ = 0;
+    tail_ = 0;
   }
 
   template<typename T>
