@@ -46,6 +46,16 @@ namespace chistyakov
         return constIterator < T >(nullptr);
       }
 
+      T & front() const
+      {
+        return head_->value_;
+      }
+
+      T & back() const
+      {
+        return tail_->value_;
+      }
+
       bool empty()
       {
         return head_ == nullptr;
