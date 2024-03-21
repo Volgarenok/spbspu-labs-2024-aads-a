@@ -21,6 +21,20 @@ namespace chistyakov
         tail_(tail)
       {}
 
+      List(const List & list):
+        head_(nullptr),
+        tail_(nullptr)
+      {
+        for (auto element = list.head_; element != nullptr; element = element->next_)
+        {
+          push_back(element->value_);
+        }
+      }
+
+      List(List< T > && list):
+        head_(list.head_)
+      {}
+
       ~List()
       {
         clear();
