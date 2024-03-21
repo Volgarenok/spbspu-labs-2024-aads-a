@@ -3,6 +3,7 @@
 
 #include <cstddef>
 #include <utility>
+#include <cassert>
 #include <initializer_list>
 #include "node.hpp"
 #include "list_iterator.hpp"
@@ -102,7 +103,7 @@ namespace nikitov
 
   template< class T >
   List< T >::List():
-    dummyNode_(),
+    dummyNode_(T()),
     head_(std::addressof(dummyNode_)),
     tail_(head_),
     size_(0)
@@ -293,24 +294,28 @@ namespace nikitov
   template< class T >
   T& List< T >::front()
   {
+    assert(!empty());
     return head_->value_;
   }
 
   template< class T >
   const T& List< T >::front() const
   {
+    assert(!empty());
     return head_->value;
   }
 
   template< class T >
   T& List< T >::back()
   {
+    assert(!empty());
     return tail_->value_;
   }
 
   template< class T >
   const T& List< T >::back() const
   {
+    assert(!empty());
     return tail_->value_;
   }
 
@@ -750,6 +755,7 @@ namespace nikitov
   template< class T >
   ListIterator< T > List< T >::cut(constIterator position)
   {
+    assert(position != cend());
     detail::Node< T >* node = position.node_;
     detail::Node< T >* nextNode = node->next_;
     nextNode->prev_ = node->prev_;
