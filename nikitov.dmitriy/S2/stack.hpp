@@ -22,5 +22,11 @@ namespace nikitov
   private:
     List< T > data;
   };
+
+  template< class T >
+  void Stack< T >::push(const T& value)
+  {
+    data.push_front(value);
+  }
 }
 #endif
