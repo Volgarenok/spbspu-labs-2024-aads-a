@@ -3,8 +3,8 @@
 
 #include <initializer_list>
 
-#include "biListIterator.hpp"
-#include "biListC_Iterator.hpp"
+#include "BidirectionalIterator.hpp"
+#include "constBidirectionalIterator.hpp"
 #include "biListNode.hpp"
 
 namespace rebdev
@@ -14,8 +14,8 @@ namespace rebdev
   {
     using node = biListNode< T >;
     using list = BiList< T >;
-    using iter = biListIterator< T >;
-    using c_iter = biListC_Iterator< T >;
+    using iter = BidirectionalIterator< T >;
+    using const_iter = ConstBidirectionalIterator< T >;
 
 
     public:
@@ -81,7 +81,7 @@ namespace rebdev
 
 
       //Operators
-      list& operator = (const list& originalList)
+      list& operator=(const list& originalList)
       {
         clear();
 
@@ -105,7 +105,7 @@ namespace rebdev
 
         return *this;
       }
-      list& operator = (const list&& originalList)
+      list& operator=(const list&& originalList)
       {
         clear();
 
@@ -127,14 +127,14 @@ namespace rebdev
         return iter(*tailNode_);
       }
 
-      c_iter begin() const noexcept
+      const_iter begin() const noexcept
       {
-        return c_iter(*headNode_);
+        return const_iter(*headNode_);
       }
 
-      c_iter end() const noexcept
+      const_iter end() const noexcept
       {
-        return c_iter(*tailNode_);
+        return const_iter(*tailNode_);
       }
 
 
@@ -245,7 +245,7 @@ namespace rebdev
         headNode_ = newHead;
       }
 
-      iter insert(c_iter position, const T& val)
+      iter insert(const_iter position, const T& val)
       {
         node* last = position.node_;
         node* next = position.node_ -> next_;
@@ -256,10 +256,10 @@ namespace rebdev
         next = nullptr;
         return iter(newNode);
       }
-      iter insert(c_iter position, size_t n, const T& val)
+      iter insert(const_iter position, size_t n, const T& val)
       {
-        c_iter firstIter(insert(position, val));
-        c_iter iterNow = firstIter;
+        const_iter firstIter(insert(position, val));
+        const_iter iterNow = firstIter;
 
         for (size_t i = 1; i < n; ++i)
         {
@@ -269,10 +269,10 @@ namespace rebdev
         return firstIter;
       }
       template <class InputIterator>
-      iter insert(c_iter position, InputIterator first, InputIterator last)
+      iter insert(const_iter position, InputIterator first, InputIterator last)
       {
         iter firstIter(insert(position, *first));
-        c_iter iterNow = firstIter;
+        const_iter iterNow = firstIter;
 
         while (first != last)
         {
@@ -282,16 +282,16 @@ namespace rebdev
 
         return firstIter;
       }
-      iter insert(c_iter position, T&& val)
+      iter insert(const_iter position, T&& val)
       {
         return insert(position, val);
       }
-      iter insert(c_iter position, std::initializer_list< T > il)
+      iter insert(const_iter position, std::initializer_list< T > il)
       {
         return insert< decltype(il.begin()) >(position, il.begin(), il.end());
       }
 
-      iter erase (c_iter position)
+      iter erase (const_iter position)
       {
         node* deleteNode = position.node_;
         node* last = deleteNode -> last_;
@@ -301,7 +301,7 @@ namespace rebdev
         delete deleteNode;
         return iter(next);
       }
-      iter erase (c_iter first, c_iter last)
+      iter erase (const_iter first, const_iter last)
       {
         iter nextEl = erase(first);
         ++first;
@@ -337,7 +337,7 @@ namespace rebdev
 
 
       //Operations
-      void splice (c_iter position, list& x)
+      void splice (const_iter position, list& x)
       {
         node* nodeNow = position.node_;
 
@@ -350,11 +350,11 @@ namespace rebdev
         x.tailNode_ = nullptr;
         x.headNode_ = nullptr;
       }
-      void splice (c_iter position, list&& x)
+      void splice (const_iter position, list&& x)
       {
         splice(position, x);
       }
-      void splice (c_iter position, list& x, c_iter i)
+      void splice (const_iter position, list& x, const_iter i)
       {
         node* nodeNow = position.node_;
         node* spliceNode = i.node_;
@@ -371,20 +371,20 @@ namespace rebdev
         i -> last_ = nodeNow;
 
       }
-      void splice (c_iter position, list&& x, c_iter i)
+      void splice (const_iter position, list&& x, const_iter i)
       {
         splice(position, x, i);
       }
-      void splice (c_iter position, list& x, c_iter first, c_iter last)
+      void splice (const_iter position, list& x, const_iter first, const_iter last)
       {
-        c_iter iterNow = first;
+        const_iter iterNow = first;
         do
         {
           splice(position, x, iterNow);
           ++iterNow;
         } while (iterNow != last);
       }
-      void splice (c_iter position, list&& x, c_iter first, c_iter last)
+      void splice (const_iter position, list&& x, const_iter first, const_iter last)
       {
         splice(position, x, first, last);
       }
@@ -437,10 +437,10 @@ namespace rebdev
 
 
       //relational operators
-      bool operator > (const list& rhl) const
+      bool operator>(const list& rhl) const
       {
-        c_iter thisIterNow = begin();
-        c_iter rhlIterNow = rhl.begin();
+        const_iter thisIterNow = begin();
+        const_iter rhlIterNow = rhl.begin();
 
         while ((thisIterNow != end()) && (rhlIterNow != rhl.end()))
         {
@@ -449,10 +449,10 @@ namespace rebdev
 
         return !((thisIterNow == end()) && (rhlIterNow != rhl.end()));
       }
-      bool operator == (const list& rhl) const
+      bool operator==(const list& rhl) const
       {
-        c_iter thisIterNow = begin();
-        c_iter rhlIterNow = rhl.begin();
+        const_iter thisIterNow = begin();
+        const_iter rhlIterNow = rhl.begin();
 
         while ((thisIterNow != end()) && (rhlIterNow != rhl.end()))
         {
@@ -461,19 +461,19 @@ namespace rebdev
 
         return (thisIterNow != end()) && (rhlIterNow != rhl.end());
       }
-      bool operator < (const list& rhl) const
+      bool operator<(const list& rhl) const
       {
         return (rhl > *this);
       }
-      bool operator != (const list& rhl) const
+      bool operator!=(const list& rhl) const
       {
         return !(*this == rhl);
       }
-      bool operator >= (const list& rhl) const
+      bool operator>=(const list& rhl) const
       {
         return (*this > rhl) || (*this == rhl);
       }
-      bool operator <= (const list& rhl) const
+      bool operator<=(const list& rhl) const
       {
         return (*this < rhl) || (*this == rhl);
       }
