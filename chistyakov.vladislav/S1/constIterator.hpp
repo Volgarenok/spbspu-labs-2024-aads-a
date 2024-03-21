@@ -1,6 +1,7 @@
 #ifndef CONSTITERATOR_HPP
 #define CONSTITERATOR_HPP
 
+#include <memory>
 #include "biList.hpp"
 
 namespace chistyakov
