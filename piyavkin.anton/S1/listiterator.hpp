@@ -59,7 +59,7 @@ namespace piyavkin
     }
   private:
     detail::Node< D >* node;
-    explicit ListIterator(Node< D >* nd):
+    explicit ListIterator(detail::Node< D >* nd):
       node(nd)
     {}
   };
@@ -114,7 +114,7 @@ namespace piyavkin
     }
   private:
     detail::Node< D >* node;
-    explicit ConstListIterator(Node< D >* nd):
+    explicit ConstListIterator(detail::Node< D >* nd):
       node(nd)
     {}
   };

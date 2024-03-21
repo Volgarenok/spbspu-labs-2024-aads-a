@@ -171,8 +171,8 @@ namespace piyavkin
   bool List< T >::operator==(const List< T >& rhs) const
   {
     size_t min_size = std::min(rhs.size_, size_);
-    Node< T >* node = head_;
-    Node< T >* rhs_node = rhs.head_;
+    detail::Node< T >* node = head_;
+    detail::Node< T >* rhs_node = rhs.head_;
     for (size_t i = 0; i < min_size; ++i)
     {
       if (node->value_ != rhs_node->value_)
@@ -459,10 +459,10 @@ namespace piyavkin
   {
     if (size_ == 0)
     {
-      detail::Node< T >* end_node = new Node< T >(value);
+      detail::Node< T >* end_node = new detail::Node< T >(value);
       try
       {
-        detail::Node< T >* node = new Node< T >(value, end_node);
+        detail::Node< T >* node = new detail::Node< T >(value, end_node);
         end_node->prev_ = node;
         head_ = node;
         tail_ = node;
@@ -476,7 +476,7 @@ namespace piyavkin
       ListIterator< T > result(head_);
       return result;
     }
-    detail::Node< T >* node = new Node< T >(value, it.node, it.node->prev_);
+    detail::Node< T >* node = new detail::Node< T >(value, it.node, it.node->prev_);
     it.node->prev_ = node;
     if (it.node == head_)
     {

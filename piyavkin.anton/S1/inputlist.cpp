@@ -1,6 +1,6 @@
 #include "inputlist.hpp"
 
-void piyavkin::inputList(std::istream& in, List< std::pair< std::string, List< unsigned long long > > >& list)
+void piyavkin::inputList(std::istream& in, list_t& list)
 {
   std::string name = "";
   char symbol = 0;
