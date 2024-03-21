@@ -68,7 +68,7 @@ namespace baranov
   Iterator< T > & Iterator< T >::operator--()
   {
     assert(node_ != nullptr);
-    node_->prev_;
+    node_ = node_->prev_;
     return *this;
   }
 

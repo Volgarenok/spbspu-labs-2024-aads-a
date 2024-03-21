@@ -1,28 +1,21 @@
 #include "inputList.hpp"
 
-void baranov::inputList(std::istream & input, ds_t & list)
+void baranov::inputList(std::istream & input, ds_t & sequences)
 {
-  std::string str = "";
-  input >> str;
-  while (input)
+  std::string name = "";
+  while (input >> name)
   {
-    std::string name = "";
-    input >> name;
-    if (name == "")
+    size_t num = 0;
+    List< size_t > nums;
+    while (input >> num)
     {
-      throw std::logic_error("No list name");
+      nums.push_back(num);
+      if (input.peek() == '\n')
+      {
+        break;
+      }
     }
-    List< size_t > numList;
-    size_t number;
-    while (input >> number)
-    {
-      numList.push_back(number);
-    }
-    list.push_back(std::make_pair(name, numList));
-    if (!input.eof())
-    {
-      input.clear();
-    }
+    sequences.push_back({name, nums});
   }
 }
 

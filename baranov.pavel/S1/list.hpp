@@ -11,6 +11,7 @@ namespace baranov
   {
     public:
       List();
+      List(const List &);
       ~List();
       Iterator< T > begin();
       Iterator< T > end();
@@ -35,6 +36,20 @@ namespace baranov
     tail_(nullptr),
     size_(0)
   {}
+
+  template< class T >
+  List< T >::List(const List & other):
+    head_(nullptr),
+    tail_(nullptr),
+    size_(0)
+  {
+    Node< T > * current = other.head_;
+    while (current)
+    {
+      push_back(current->data_);
+      current = current->next_;
+    }
+  }
 
   template< class T >
   List< T >::~List()
@@ -143,11 +158,15 @@ namespace baranov
   template< class T >
   void List< T >::clear()
   {
-    while (!empty())
+    if (!empty())
     {
-      pop_front();
+      while (head_)
+      {
+        Node< T > * temp = head_;
+        head_ = head_->next_;
+        delete temp;
+      }
     }
-    size_ = 0;
   }
 
   template< class T >
@@ -155,6 +174,7 @@ namespace baranov
   {
     std::swap(rhs.head_, head_);
     std::swap(rhs.tail_, tail_);
+    std::swap(rhs.size_, size_);
   }
 }
 

@@ -7,12 +7,12 @@
 int main()
 {
   using namespace baranov;
-  List< std::pair< std::string, List< size_t > > > list;
-  inputList(std::cin, list);
-  printNames(std::cout, list);
+  List< std::pair< std::string, List< size_t > > > sequences;
+  inputList(std::cin, sequences);
+  printNames(std::cout, sequences);
 
   List< List < size_t > > numbers;
-  readByElement(numbers, list);
+  readByElement(numbers, sequences);
   printLists(std::cout, numbers);
 }
 
