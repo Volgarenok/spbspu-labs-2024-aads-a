@@ -36,7 +36,7 @@ namespace chistyakov
 
       Iterator< T > & operator++(int)
       {
-        Iterator now(*this);
+        Iterator< T > now(*this);
         ++(*this);
         return now;
       }

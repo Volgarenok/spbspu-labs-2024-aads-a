@@ -27,6 +27,11 @@ int main()
   for (auto element = list.begin(); element != list.end(); ++element)
   {
     std::cout << element->first;
+    auto next = element;
+    if (++next != list.end())
+    {
+      std::cout << " ";
+    }
   }
 
 }
