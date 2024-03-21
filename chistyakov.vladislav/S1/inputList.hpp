@@ -2,6 +2,8 @@
 #define INPUT_HPP
 
 #include <istream>
+#include <utility>
+#include <string>
 #include "list.hpp"
 
 namespace chistyakov
