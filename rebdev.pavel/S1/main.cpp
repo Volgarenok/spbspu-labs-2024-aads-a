@@ -111,6 +111,6 @@ int main()
 
   std::cout << sumOfNum[maxNumber - 1] << '\n';
 
-  delete[] sumOfNum
+  delete[] sumOfNum;
   return 0;
 }
