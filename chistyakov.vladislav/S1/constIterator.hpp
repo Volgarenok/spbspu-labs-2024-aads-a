@@ -27,7 +27,7 @@ namespace chistyakov
       {
         if (node_ != nullptr)
         {
-          node_ = node_->next;
+          node_ = node_->next_;
         }
 
         return *this;
@@ -44,7 +44,7 @@ namespace chistyakov
       {
         if (node_ != nullptr)
         {
-          node_ = node_->previous;
+          node_ = node_->previous_;
         }
 
         return *this;
@@ -81,24 +81,24 @@ namespace chistyakov
         return now;
       }
 
-      bool ConstIterator< T >::operator==(const ConstIterator< T > & rhs) const
+      bool operator==(const ConstIterator< T > & rhs) const
       {
         return node_ == rhs.node_;
       }
 
-      bool ConstIterator< T >::operator!=(const ConstIterator< T > & rhs) const
+      bool operator!=(const ConstIterator< T > & rhs) const
       {
         return !(rhs == *this);
       }
 
-      T & ConstIterator< T >::operator*()
+      T & operator*()
       {
-        return node_->value;
+        return node_->value_;
       }
 
-      T * ConstIterator< T >::operator->()
+      T * operator->()
       {
-        return addressof(node->value);
+        return addressof(node_->value_);
       }
 
       BiList< T > * get_BiList()

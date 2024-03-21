@@ -6,7 +6,7 @@
 
 namespace chistyakov
 {
-  void inputList(std::istreamI & input, List < std::pair < std::string, List < int > > > & list);
+  void inputList(std::istream & input, List < std::pair < std::string, List < int > > > & list);
 }
 
 #endif

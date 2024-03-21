@@ -16,7 +16,7 @@ namespace chistyakov
         tail_(nullptr)
       {}
 
-      List(biList < T > * head, BiList < T > * tail)
+      List(BiList< T > * head, BiList< T > * tail):
         head_(head),
         tail_(tail)
       {}
@@ -26,24 +26,24 @@ namespace chistyakov
         clear();
       }
 
-      Iterator < T > begin()
+      Iterator< T > begin()
       {
-        return Iterator < T >(head_);
+        return Iterator< T >(head_);
       }
 
-      Iterator < T > end()
+      Iterator< T > end()
       {
-        return Iterator < T >(nullptr);
+        return Iterator< T >(nullptr);
       }
 
-      constIterator < T > cbegin()
+      ConstIterator< T > cbegin()
       {
-        return constIterator < T >(head_);
+        return ConstIterator< T >(head_);
       }
 
-      constIterator < T > cend()
+      ConstIterator< T > cend()
       {
-        return constIterator < T >(nullptr);
+        return ConstIterator < T >(nullptr);
       }
 
       T & front() const
@@ -63,7 +63,7 @@ namespace chistyakov
 
       void push_back(const T & value)
       {
-        BiList < T > * newBiList = new BiList < T >(value);
+        BiList< T > * newBiList = new BiList< T >(value);
         newBiList->previous_ = tail_;
 
         if (!head_)
@@ -81,7 +81,7 @@ namespace chistyakov
 
       void push_front(const T & value)
       {
-        BiList < T > * newBiList = new BiList < T >(value);
+        BiList< T > * newBiList = new BiList< T >(value);
         newBiList->next = head_;
 
         if (head_)
@@ -104,7 +104,7 @@ namespace chistyakov
           return;
         }
 
-        BiList < T > * lastTail = tail_;
+        BiList< T > * lastTail = tail_;
         tail_ = tail_->previous_;
 
         if (tail_)
@@ -122,12 +122,12 @@ namespace chistyakov
           return;
         }
 
-        BiList < T > * lastHead = head_;
+        BiList< T > * lastHead = head_;
         head_ = head_->next_;
 
         if (head_)
         {
-          head_->previous_;
+          head_->previous_ = nullptr;
         }
 
         delete lastHead;
@@ -196,13 +196,16 @@ namespace chistyakov
 
       void swap(List & list)
       {
-        BiList < T > * listHead = list.head_;
+        BiList< T > * listHead = list.head_;
         list.head_ = head_;
         head_ = listHead;
       }
 
     private:
-      BiList < T > * head_;
-      BiList < T > * tail_;
+      BiList< T > * head_;
+      BiList< T > * tail_;
   };
 }
+
+#endif
+

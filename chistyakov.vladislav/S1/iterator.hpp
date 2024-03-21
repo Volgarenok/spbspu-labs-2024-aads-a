@@ -22,7 +22,6 @@ namespace chistyakov
       {}
 
       ~Iterator() = default;
-      Iterator(const Iterator< T > & ) = default;
       Iterator< T > & operator=(const Iterator< T > & ) = default;
 
       Iterator< T > & operator++()
@@ -63,7 +62,7 @@ namespace chistyakov
       {
          Iterator now(*this);
 
-         for (int i = 0; i < num, ++i)
+         for (int i = 0; i < num; ++i)
          {
            ++now;
          }
@@ -83,24 +82,24 @@ namespace chistyakov
         return now;
       }
 
-      bool Iterator< T >::operator==(const Iterator< T > & rhs) const
+      bool operator==(const Iterator< T > & rhs) const
       {
         return node_ == rhs.node_;
       }
 
-      bool Iterator< T >::operator!=(const Iterator< T > & rhs) const
+      bool operator!=(const Iterator< T > & rhs) const
       {
         return !(rhs == *this);
       }
 
-      T & Iterator< T >::operator*()
+      T & operator*()
       {
-        return node_->value;
+        return node_->value_;
       }
 
-      T * Iterator< T >::operator->()
+      T * operator->()
       {
-        return addressof(node->value);
+        return addressof(node_->value_);
       }
 
       BiList< T > * get_BiList()
