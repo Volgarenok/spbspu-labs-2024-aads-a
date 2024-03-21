@@ -2,6 +2,7 @@
 #define CONST_LIST_ITERATOR_HPP
 
 #include <iterator>
+#include <cassert>
 #include "node.hpp"
 
 namespace nikitov
@@ -48,6 +49,7 @@ namespace nikitov
   template< class T >
   ConstListIterator< T >& ConstListIterator< T >::operator++()
   {
+    assert(node_->next_ != nullptr);
     node_ = node_->next_;
     return *this;
   }
@@ -55,6 +57,7 @@ namespace nikitov
   template< class T >
   ConstListIterator< T > ConstListIterator< T >::operator++(int)
   {
+    assert(node_->next_ != nullptr);
     ConstListIterator< T > temp(*this);
     node_ = node_->next_;
     return temp;
@@ -63,6 +66,7 @@ namespace nikitov
   template< class T >
   ConstListIterator< T >& ConstListIterator< T >::operator--()
   {
+    assert(node_->prev_ != nullptr);
     node_ = node_->prev_;
     return *this;
   }
@@ -70,6 +74,7 @@ namespace nikitov
   template< class T >
   ConstListIterator< T > ConstListIterator< T >::operator--(int)
   {
+    assert(node_->prev_ != nullptr);
     ConstListIterator< T > temp(*this);
     node_ = node_->prev_;
     return temp;
@@ -78,12 +83,14 @@ namespace nikitov
   template< class T >
   const T& ConstListIterator< T >::operator*() const
   {
+    assert(node_->next_ != nullptr);
     return node_->value_;
   }
 
   template< class T >
   const T* ConstListIterator< T >::operator->() const
   {
+    assert(node_->next_ != nullptr);
     return std::addressof(node_->value_);
   }
 
