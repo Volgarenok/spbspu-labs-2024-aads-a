@@ -1,6 +1,7 @@
 #ifndef ITERATOR_HPP
 #define ITERATOR_HPP
 
+#include <memory>
 #include "biList.hpp"
 
 namespace chistyakov
@@ -99,7 +100,7 @@ namespace chistyakov
 
       T * operator->()
       {
-        return addressof(node_->value_);
+        return std::addressof(node_->value_);
       }
 
       BiList< T > * get_BiList()

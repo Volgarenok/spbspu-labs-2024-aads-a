@@ -98,7 +98,7 @@ namespace chistyakov
 
       T * operator->()
       {
-        return addressof(node_->value_);
+        return std::addressof(node_->value_);
       }
 
       BiList< T > * get_BiList()
