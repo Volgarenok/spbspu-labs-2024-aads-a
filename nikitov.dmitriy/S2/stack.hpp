@@ -28,5 +28,13 @@ namespace nikitov
   {
     data.push_front(value);
   }
+
+  template< class T >
+  T& Stack< T >::drop()
+  {
+    T value = data.front();
+    data.pop_front();
+    return value;
+  }
 }
 #endif
