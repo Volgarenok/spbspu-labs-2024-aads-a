@@ -23,33 +23,33 @@ namespace nikitov
     bool empty() const;
 
   private:
-    List< T > data;
+    List< T > data_;
   };
 
   template< class T >
   void Stack< T >::push(const T& value)
   {
-    data.push_front(value);
+    data_.push_front(value);
   }
 
   template< class T >
   T& Stack< T >::drop()
   {
-    T value = data.front();
-    data.pop_front();
+    T value = data_.front();
+    data_.pop_front();
     return value;
   }
 
   template< class T >
   size_t Stack< T >::size() const
   {
-    return data.size();
+    return data_.size();
   }
 
   template< class T >
   bool Stack< T >::empty() const
   {
-    return data.empty();
+    return data_.empty();
   }
 }
 #endif
