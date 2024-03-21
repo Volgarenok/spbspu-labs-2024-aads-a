@@ -1,5 +1,6 @@
 #include <iostream>
 #include <limits>
+#include <string>
 #include "list.hpp"
 #include "iterator.hpp"
 #include "constIterator.hpp"
