@@ -21,7 +21,7 @@ namespace zaitsev
   template<typename T>
   T& Stack<T>::top()
   {
-    return Deque< T >::front();
+    return Deque< T >::back();
   }
 
   template<typename T>
@@ -33,13 +33,13 @@ namespace zaitsev
   template<typename T>
   void Stack<T>::push(const T& value)
   {
-    Deque< T >::push_front(value);
+    Deque< T >::push_back(value);
   }
 
   template<typename T>
   void Stack<T>::pop()
   {
-    Deque< T >::pop_front();
+    Deque< T >::pop_back();
   }
 
   template<typename T>
