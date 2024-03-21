@@ -10,6 +10,12 @@ namespace nikitov
   class Stack
   {
   public:
+    Stack() = default;
+    Stack(const Stack< T >& other) = default;
+    ~Stack() = default;
+
+    Stack< T >& operator=(const Stack< T >&) = default;
+
     void push(const T& value);
     T& drop();
 
