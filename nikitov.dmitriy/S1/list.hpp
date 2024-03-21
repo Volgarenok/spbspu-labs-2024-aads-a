@@ -94,6 +94,7 @@ namespace nikitov
     iterator embed(constIterator position, detail::Node< T >* newNode);
     iterator cut(constIterator position);
 
+    detail::Node< T > dummyNode_;
     detail::Node< T >* head_;
     detail::Node< T >* tail_;
     size_t size_;
@@ -101,7 +102,8 @@ namespace nikitov
 
   template< class T >
   List< T >::List():
-    head_(new detail::Node< T >),
+    dummyNode_(),
+    head_(std::addressof(dummyNode_)),
     tail_(head_),
     size_(0)
   {}
@@ -143,6 +145,7 @@ namespace nikitov
 
   template< class T >
   List< T >::List(List< T >&& other) noexcept:
+    dummyNode_(other.dummyNode_),
     head_(other.head_),
     tail_(other.tail_),
     size_(other.size_)
@@ -156,7 +159,6 @@ namespace nikitov
   List< T >::~List()
   {
     clear();
-    delete head_;
   }
 
   template< class T >
