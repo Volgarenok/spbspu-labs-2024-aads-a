@@ -62,7 +62,7 @@ int main()
   }
   std::cout << pairArr[numOfPairs - 1].first << '\n';
 
-  size_t sumOfNum[maxNumber] = {};
+  size_t * sumOfNum = new size_t[maxNumber];
   bool overlowError = false;
 
   for (size_t i = 0; i < maxNumber; ++i)
@@ -111,5 +111,6 @@ int main()
 
   std::cout << sumOfNum[maxNumber - 1] << '\n';
 
+  delete[] sumOfNum
   return 0;
 }
