@@ -1,8 +1,9 @@
 #include "output_list.hpp"
 #include <ostream>
 #include <limits>
-#include "list_iterator.hpp"
-#include "const_list_iterator.hpp"
+#include <list.hpp>
+#include <list_iterator.hpp>
+#include <const_list_iterator.hpp>
 
 void nikitov::outputSequenceNames(const listOfPairs& pairsList, size_t& maxSize, std::ostream& output)
 {

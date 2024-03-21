@@ -3,7 +3,7 @@
 
 #include <istream>
 #include <string>
-#include "list.hpp"
+#include <list.hpp>
 
 namespace nikitov
 {

@@ -2,7 +2,7 @@
 #define OUTPUT_LIST_HPP
 
 #include <fstream>
-#include "list.hpp"
+#include <list.hpp>
 
 namespace nikitov
 {
