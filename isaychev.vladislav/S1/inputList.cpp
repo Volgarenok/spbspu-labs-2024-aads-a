@@ -7,12 +7,12 @@ void isaychev::inputList(std::istream & in, List< std::pair< std::string, ullLis
   in >> arg;
   while (!in.eof())
   {
-    list.push({arg, List< unsigned long long int >()});
+    list.push_front({arg, List< unsigned long long int >()});
     while (in >> arg)
     {
       try
       {
-        list.front().second.push(std::stoull(arg));
+        list.front().second.push_front(std::stoull(arg));
       }
       catch (const std::invalid_argument &)
       {

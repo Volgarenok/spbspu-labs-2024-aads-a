@@ -30,8 +30,8 @@ namespace isaychev
     T & front();
     const T & front() const;
     bool empty();
-    void push(const T & obj);
-    void pop();
+    void push_front(const T & obj);
+    void pop_front();
     void clear();
     void swap(List< T > & rhs);
     void reverse();
@@ -42,7 +42,7 @@ namespace isaychev
 
   template < typename T >
   List< T >::List():
-    head_(nullptr)
+   head_(nullptr)
   {}
 
   template < typename T >
@@ -53,17 +53,17 @@ namespace isaychev
 
   template < typename T >
   List< T >::List(const List< T > & rhs):
-    head_(nullptr)
+   head_(nullptr)
   {
     for (auto i = rhs.begin(); i != rhs.end(); ++i)
     {
-      this->push(*i);
+      this->push_front(*i);
     }
   }
 
   template < typename T >
   List< T >::List(List< T > && rhs):
-    head_(rhs.head_)
+   head_(rhs.head_)
   {
     rhs.head_ = nullptr;
   }
@@ -76,7 +76,7 @@ namespace isaychev
       this->clear();
       for (auto i = rhs.begin(); i != rhs.end(); ++i)
       {
-        this->push(*i);
+        this->push_front(*i);
       }
     }
   }
@@ -147,7 +147,7 @@ namespace isaychev
   }
 
   template < typename T >
-  void List< T >::push(const T & obj)
+  void List< T >::push_front(const T & obj)
   {
     node_t< T > * temp = new node_t< T >(obj);
     temp->next = head_;
@@ -155,7 +155,7 @@ namespace isaychev
   }
 
   template < typename T >
-  void List< T >::pop()
+  void List< T >::pop_front()
   {
     if (head_)
     {
@@ -170,7 +170,7 @@ namespace isaychev
   {
     while (head_)
     {
-      pop();
+      pop_front();
     }
   }
 

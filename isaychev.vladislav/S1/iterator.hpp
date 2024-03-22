@@ -20,6 +20,8 @@ namespace isaychev
     this_t operator++(int);
     T & operator*();
     T * operator->();
+    const T & operator*() const;
+    const T * operator->() const;
     bool operator==(const this_t & rhs) const;
     bool operator!=(const this_t & rhs) const;
 

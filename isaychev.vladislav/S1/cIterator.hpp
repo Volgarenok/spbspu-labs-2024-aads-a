@@ -18,8 +18,8 @@ namespace isaychev
 
     this_t operator++();
     this_t operator++(int);
-    const T & operator*();
-    const T * operator->();
+    const T & operator*() const;
+    const T * operator->() const;
     bool operator==(const this_t & rhs) const;
     bool operator!=(const this_t & rhs) const;
 
@@ -53,13 +53,13 @@ namespace isaychev
   }
 
   template < typename T >
-  const T & cFwdIterator< T >::operator*()
+  const T & cFwdIterator< T >::operator*() const
   {
     return currNode_->data;
   }
 
   template < typename T >
-  const T * cFwdIterator< T >::operator->()
+  const T * cFwdIterator< T >::operator->() const
   {
     return std::addressof(currNode_->data);
   }

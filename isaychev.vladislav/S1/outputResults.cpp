@@ -83,7 +83,7 @@ void isaychev::outputResults(std::ostream & out, List< std::pair< std::string, u
           continue;
         }
         iter = getElemOnPos(n, j->second);
-        nums.push(iter);
+        nums.push_front(iter);
       }
       nums.reverse();
       outputList(out, nums);
@@ -112,7 +112,7 @@ void isaychev::outputResults(std::ostream & out, List< std::pair< std::string, u
           sum += num;
         }
       }
-      sums.push(sum);
+      sums.push_front(sum);
       sum = 0;
     }
     sums.reverse();
