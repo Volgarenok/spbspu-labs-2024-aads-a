@@ -7,8 +7,12 @@
 namespace strelyaev
 {
   template< typename T >
+  class List;
+
+  template< typename T >
   class Iterator
   {
+    friend class List< T >;
     public:
      Iterator():
       node_(nullptr)
@@ -79,11 +83,6 @@ namespace strelyaev
         --temp;
       }
       return temp;
-     }
-
-     Node< T >* get_node()
-     {
-      return node_;
      }
 
      T& operator*()

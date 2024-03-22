@@ -7,8 +7,12 @@
 namespace strelyaev
 {
   template< typename T >
+  class List;
+
+  template< typename T >
   class ConstIterator
   {
+    friend class List< T >;
     public:
       ConstIterator():
       node_(nullptr)

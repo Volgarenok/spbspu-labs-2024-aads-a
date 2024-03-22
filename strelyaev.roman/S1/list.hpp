@@ -121,21 +121,31 @@ namespace strelyaev
 
       void splice(Iterator< T > pos, List< T >& other)
       {
-        if (&other == this)
+        if ((&other == this) || other.empty())
         {
           return;
         }
-        if (other.empty())
+        Node< T >* before = pos->prev;
+        if (pos == begin())
         {
+          head_->prev_ = other.tail_;
+          other.tail_ = head_;
+          head_ = other.head_;
           return;
         }
-        Node< T >* current = pos.get_node();
-        current->next_->last_ = other.tail_;
-        other.tail_->next_ = current->next_;
-        current->next_ = other.head_;
-        other.head_->last_ = current;
-        other.head_ = nullptr;
-        other.tail_ = nullptr;
+        if (pos == end())
+        {
+          tail_->next_ = other.head_;
+          other.head_->prev_ = tail_;
+          tail_ = other.tail_;
+          return;
+        }
+        pos.node_->prev_->next_ = other.head_;
+        other.tail_->next_ = pos.node_;
+        other.head_->prev_ = pos.node_->prev_;
+        pos.node_->prev_ = other.tail_;
+        other.clear();
+        return;
       }
 
       bool empty()
@@ -185,12 +195,9 @@ namespace strelyaev
           pop_back();
           return end();
         }
-        auto next_it = pos;
-        next_it++;
-        pos.get_node()->next_->prev_ = pos.get_node()->prev_;
-        pos.get_node()->prev_->next_ = pos.get_node()->next_;
-        delete pos.get_node();
-        return next_it;
+        pos->prev_->next_ = pos->next_;
+        pos->next_->prev_ = pos->prev_;
+        delete pos.node_;
       }
 
       void pop_front()
