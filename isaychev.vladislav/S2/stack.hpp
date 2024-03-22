@@ -3,12 +3,23 @@
 
 namespace isaychev
 {
-  template < typename T >
+  template < class T >
   class Stack
   {
    public:
     void push(T & rhs);
-    //etc
+    T drop();
+  };
+
+  template < class T >
+  void Stack< T >::push(T & rhs)
+  {}
+
+  template < class T >
+  T Stack< T >::drop()
+  {
+    T a;
+    return a;
   }
 }
 
