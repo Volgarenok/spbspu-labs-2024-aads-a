@@ -37,8 +37,6 @@ int main()
     }
   }
 
-  std::cout << "\n";
-
   List< std::pair< int, List< int > > > listSumAndNums;
   int nowSize = 0;
   while (true)
@@ -80,6 +78,8 @@ int main()
     std::cout << "0\n";
     return 0;
   }
+
+  std::cout << "\n";
 
   for (auto element = listSumAndNums.begin(); element != listSumAndNums.end(); ++element)
   {
