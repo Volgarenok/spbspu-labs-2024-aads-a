@@ -74,6 +74,7 @@ namespace piyavkin
     template< class... Args >
     ListIterator< T > emplace(ConstListIterator< T > it, Args&&... args);
   private:
+    detail::Node< T > imaginary_node_;
     detail::Node< T >* head_;
     detail::Node< T >* tail_;
     size_t size_;
@@ -81,6 +82,7 @@ namespace piyavkin
 
   template< class T >
   List< T >::List():
+    imaginary_node_(T()),
     head_(nullptr),
     tail_(nullptr),
     size_(0)
@@ -118,6 +120,7 @@ namespace piyavkin
   List< T >::List(const List< T >& rhs):
     List()
   {
+    imaginary_node_ = rhs.imaginary_node_;
     detail::Node< T >* node = rhs.head_;
     while (size_ != rhs.size_)
     {
@@ -127,6 +130,7 @@ namespace piyavkin
   }
   template< class T >
   List< T >::List(List< T >&& rhs):
+    imaginary_node_(rhs.imaginary_node_),
     head_(rhs.head_),
     tail_(rhs.tail_),
     size_(rhs.size_)
@@ -272,14 +276,12 @@ namespace piyavkin
     if (it == cbegin())
     {
       head_->prev_ = list.tail_;
-      delete list.tail_->next_;
       list.tail_->next_ = head_;
       head_ = list.head_;
       size_ += list.size_;
     }
     else if (it == cend())
     {
-      delete tail_->next_;
       list.head_->prev_ = tail_;
       tail_->next_ = list.head_;
       tail_ = list.tail_;
@@ -287,7 +289,6 @@ namespace piyavkin
     }
     else
     {
-      delete list.tail_->next_;
       it.node->prev_->next_ = list.head_;
       list.tail_->next_ = it.node;
       list.head_->prev_ = it.node->prev_;
@@ -437,10 +438,6 @@ namespace piyavkin
     {
       it.node->prev_->next_ = it.node->next_;
     }
-    if (size() == 1)
-    {
-      delete tail_->next_;
-    }
     delete it.node;
     --size_;
     return result;
@@ -458,21 +455,12 @@ namespace piyavkin
   ListIterator< T > List< T >::insert(ConstListIterator< T > it, const T& value)
   {
     if (size_ == 0)
-    {
-      detail::Node< T >* end_node = new detail::Node< T >(value);
-      try
-      {
-        detail::Node< T >* node = new detail::Node< T >(value, end_node);
-        end_node->prev_ = node;
-        head_ = node;
-        tail_ = node;
-        ++size_;
-      }
-      catch (const std::exception& e)
-      {
-        delete end_node;
-        throw;
-      }
+    {  
+      detail::Node< T >* node = new detail::Node< T >(value, std::addressof(imaginary_node_));
+      imaginary_node_.prev_ = node;
+      head_ = node;
+      tail_ = node;
+      ++size_;
       ListIterator< T > result(head_);
       return result;
     }
