@@ -83,11 +83,6 @@ piyavkin::List< unsigned long long > piyavkin::countSum(const list_t& list)
 
 void piyavkin::output(std::ostream& out, const list_t& list)
 {
-  if (list.empty())
-  {
-    out << 0;
-    return;
-  }
   auto start = list.cbegin();
   auto finish = list.cend();
   while (start != finish)
@@ -102,6 +97,11 @@ void piyavkin::output(std::ostream& out, const list_t& list)
   out << '\n';
   outputValue(out, list);
   auto sums = countSum(list);
+  if (sums.empty())
+  {
+    out << 0;
+    return;
+  }
   auto iterator = sums.cbegin();
   for (size_t i = 0; i < sums.size(); ++i)
   {
