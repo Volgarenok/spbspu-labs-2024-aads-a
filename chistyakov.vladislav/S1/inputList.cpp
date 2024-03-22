@@ -5,19 +5,12 @@
 void chistyakov::inputList(std::istream & input, List< std::pair< std::string, List < int > > > & list)
 {
   std::string name = "";
-  while (std::getline(input, name, ' '))
+  std::string line = "";
+  input >> line;
+
+  while (!input.eof())
   {
-    if (!input)
-    {
-      throw std::invalid_argument("Bad input!");
-    }
-
-    std::size_t c = name.find('\n');
-    if (c != std::string::npos)
-    {
-      name.replace(c, 1, " ");
-    }
-
+    name = line;
     List< int > nums;
     inputNums(input, nums);
     list.push_back({name, nums});
@@ -26,11 +19,13 @@ void chistyakov::inputList(std::istream & input, List< std::pair< std::string, L
 
 void chistyakov::inputNums(std::istream & input, List< int > & nums)
 {
-  int num = 0;
+  std::string digits = "";
 
-  while (input >> num)
+  while (input >> digits && std::isdigit(digits[0]))
   {
+    std::size_t num = std::stoull(digits);
     nums.push_back(num);
   }
+
   input.clear();
 }
