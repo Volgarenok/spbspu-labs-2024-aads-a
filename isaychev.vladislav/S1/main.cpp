@@ -6,8 +6,8 @@
 int main()
 {
   using namespace isaychev;
-  using myPair = std::pair< std::string, List< unsigned long long int > >;
-  List< myPair > mainList;
+  using stringListPair = std::pair< std::string, List< unsigned long long int > >;
+  List< stringListPair > mainList;
   try
   {
     inputList(std::cin, mainList);

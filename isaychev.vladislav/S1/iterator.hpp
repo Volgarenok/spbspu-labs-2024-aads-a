@@ -14,7 +14,7 @@ namespace isaychev
 
    public:
     fwdIterator();
-    fwdIterator(node_t< T > * pos);
+    fwdIterator(nodeNS::node_t< T > * pos);
 
     this_t operator++();
     this_t operator++(int);
@@ -26,17 +26,17 @@ namespace isaychev
     bool operator!=(const this_t & rhs) const;
 
    private:
-    node_t< T > * currNode_;
+    nodeNS::node_t< T > * currNode_;
   };
 
   template < typename T >
   fwdIterator< T >::fwdIterator():
-    currNode_(nullptr)
+   currNode_(nullptr)
   {}
 
   template < typename T >
-  fwdIterator< T >::fwdIterator(node_t< T > * pos):
-    currNode_(pos)
+  fwdIterator< T >::fwdIterator(nodeNS::node_t< T > * pos):
+   currNode_(pos)
   {}
 
   template < typename T >

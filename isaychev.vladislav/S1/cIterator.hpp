@@ -8,13 +8,13 @@
 namespace isaychev
 {
   template < typename T >
-  class cFwdIterator
+  class CFwdIterator
   {
-    using this_t = cFwdIterator< T >;
+    using this_t = CFwdIterator< T >;
 
    public:
-    cFwdIterator();
-    cFwdIterator(node_t< T > * pos);
+    CFwdIterator();
+    CFwdIterator(nodeNS::node_t< T > * pos);
 
     this_t operator++();
     this_t operator++(int);
@@ -24,28 +24,28 @@ namespace isaychev
     bool operator!=(const this_t & rhs) const;
 
    private:
-    node_t< T > * currNode_;
+    nodeNS::node_t< T > * currNode_;
   };
 
   template < typename T >
-  cFwdIterator< T >::cFwdIterator():
-    currNode_(nullptr)
+  CFwdIterator< T >::CFwdIterator():
+   currNode_(nullptr)
   {}
 
   template < typename T >
-  cFwdIterator< T >::cFwdIterator(node_t< T > * pos):
-    currNode_(pos)
+  CFwdIterator< T >::CFwdIterator(nodeNS::node_t< T > * pos):
+   currNode_(pos)
   {}
 
   template < typename T >
-  cFwdIterator< T >  cFwdIterator< T >::operator++()
+  CFwdIterator< T > CFwdIterator< T >::operator++()
   {
     currNode_ = currNode_->next;
     return *this;
   }
 
   template < typename T >
-  cFwdIterator< T >  cFwdIterator< T >::operator++(int)
+  CFwdIterator< T > CFwdIterator< T >::operator++(int)
   {
     this_t res(*this);
     ++(*this);
@@ -53,25 +53,25 @@ namespace isaychev
   }
 
   template < typename T >
-  const T & cFwdIterator< T >::operator*() const
+  const T & CFwdIterator< T >::operator*() const
   {
     return currNode_->data;
   }
 
   template < typename T >
-  const T * cFwdIterator< T >::operator->() const
+  const T * CFwdIterator< T >::operator->() const
   {
     return std::addressof(currNode_->data);
   }
 
   template < typename T >
-  bool cFwdIterator< T >::operator==(const this_t & rhs) const
+  bool CFwdIterator< T >::operator==(const this_t & rhs) const
   {
     return (currNode_ == rhs.currNode_);
   }
 
   template < typename T >
-  bool cFwdIterator< T >::operator!=(const this_t & rhs) const
+  bool CFwdIterator< T >::operator!=(const this_t & rhs) const
   {
     return !(currNode_ == rhs.currNode_);
   }

@@ -1,6 +1,7 @@
 #ifndef LIST_HPP
 #define LIST_HPP
 
+#include <stdexcept>
 #include "iterator.hpp"
 #include "cIterator.hpp"
 
@@ -10,7 +11,7 @@ namespace isaychev
   class List
   {
     using iter = fwdIterator< T >;
-    using cIter = cFwdIterator< T >;
+    using cIter = CFwdIterator< T >;
 
    public:
     List();
@@ -37,7 +38,7 @@ namespace isaychev
     void reverse();
 
    private:
-    node_t< T > * head_;
+    nodeNS::node_t< T > * head_;
   };
 
   template < typename T >
@@ -105,27 +106,27 @@ namespace isaychev
   }
 
   template < typename T >
-  cFwdIterator< T > List< T >::begin() const
+  CFwdIterator< T > List< T >::begin() const
   {
-    return cFwdIterator< T >(head_);
+    return CFwdIterator< T >(head_);
   }
 
   template < typename T >
-  cFwdIterator< T > List< T >::end() const
+  CFwdIterator< T > List< T >::end() const
   {
-    return cFwdIterator< T >(nullptr);
+    return CFwdIterator< T >(nullptr);
   }
 
   template < typename T >
-  cFwdIterator< T > List< T >::сbegin() const
+  CFwdIterator< T > List< T >::сbegin() const
   {
-    return cFwdIterator< T >(head_);
+    return CFwdIterator< T >(head_);
   }
 
   template < typename T >
-  cFwdIterator< T > List< T >::сend() const
+  CFwdIterator< T > List< T >::сend() const
   {
-    return cFwdIterator< T >(nullptr);
+    return CFwdIterator< T >(nullptr);
   }
 
   template < typename T >
@@ -149,7 +150,7 @@ namespace isaychev
   template < typename T >
   void List< T >::push_front(const T & obj)
   {
-    node_t< T > * temp = new node_t< T >(obj);
+    nodeNS::node_t< T > * temp = new nodeNS::node_t< T >(obj);
     temp->next = head_;
     head_ = temp;
   }
@@ -159,9 +160,13 @@ namespace isaychev
   {
     if (head_)
     {
-      node_t< T > * temp = head_->next;
+      nodeNS::node_t< T > * temp = head_->next;
       delete head_;
       head_ = temp;
+    }
+    else
+    {
+      throw std::out_of_range("no more elements in list");
     }
   }
 
@@ -185,9 +190,9 @@ namespace isaychev
   {
     if (head_)
     {
-      node_t< T > * currElem = head_;
-      node_t< T > * temp1 = nullptr;
-      node_t< T > * temp2 = head_;
+      nodeNS::node_t< T > * currElem = head_;
+      nodeNS::node_t< T > * temp1 = nullptr;
+      nodeNS::node_t< T > * temp2 = head_;
       while (currElem)
       {
         temp2 = currElem->next;
