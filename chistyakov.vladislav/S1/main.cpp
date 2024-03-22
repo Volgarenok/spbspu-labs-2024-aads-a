@@ -1,16 +1,16 @@
 #include <iostream>
-#include <limits>
+#include <climits>
 #include <string>
-#include <utility>
 #include "list.hpp"
 #include "iterator.hpp"
 #include "constIterator.hpp"
-#include "inputList.hpp"
+#include "inputOutputList.hpp"
 
 int main()
 {
   using namespace chistyakov;
   List< std::pair< std::string, List< int > > > list;
+  bool overflow = false;
 
   try
   {
@@ -28,20 +28,14 @@ int main()
     return 0;
   }
 
-  for (auto element = list.begin(); element != list.end(); ++element)
-  {
-    std::cout << element->first;
-    auto next = element;
-    if (++next != list.end())
-    {
-      std::cout << " ";
-    }
-  }
+  outPutNames(list);
+  int max_digit = maxDigit(list);
 
   std::cout << "\n";
 
   List< std::pair< int, List< int > > > listSumAndNums;
   int nowSize = 0;
+
   while (true)
   {
     List< int > nums;
@@ -54,11 +48,19 @@ int main()
 
       for (auto numList = (element->second).begin(); numList != (element->second).end(); ++numList)
       {
+        max_digit = std::max(max_digit, *numList);
         if (index == nowSize)
         {
-          sum += *numList;
-          nums.push_back(*numList);
-          break;
+          if (sum < INT_MAX - *numList)
+          {
+            sum += *numList;
+            nums.push_back(*numList);
+            break;
+          }
+          else
+          {
+            overflow = true;
+          }
         }
         index++;
       }
@@ -76,35 +78,20 @@ int main()
     nowSize++;
   }
 
+  if (overflow)
+  {
+    std::cerr << "Overflow\n";
+    return 1;
+  }
+
   if (listSumAndNums.empty())
   {
     std::cout << "0\n";
     return 0;
   }
 
-  for (auto element = listSumAndNums.begin(); element != listSumAndNums.end(); ++element)
-  {
-    for (auto num = (element->second).begin(); num != (element->second).end(); ++num)
-    {
-      std::cout << *num;
-      auto next = num;
-      if (next.get_BiList()->next_ != nullptr)
-      {
-        std::cout << " ";
-      }
-    }
-    std::cout << "\n";
-  }
-
-  for (auto element = listSumAndNums.begin(); element != listSumAndNums.end(); ++element)
-  {
-    std::cout << element->first;
-    auto next = element;
-    if (++next != listSumAndNums.end())
-    {
-      std::cout << " ";
-    }
-  }
+  outPutNums(listSumAndNums);
+  outPutSums(listSumAndNums);
 
   std::cout << "\n";
   return 0;
