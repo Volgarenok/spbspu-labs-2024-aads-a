@@ -2,6 +2,7 @@
 #define LIST_CONST_ITERATOR
 
 #include <utility>
+#include <iterator>
 #include "node.hpp"
 #include "list_iterator.hpp"
 
@@ -11,7 +12,7 @@ namespace erohin
   class List;
 
   template< class T >
-  class ListConstIterator
+  class ListConstIterator: public std::iterator< std::forward_iterator_tag, T >
   {
     friend class List< T >;
   public:
