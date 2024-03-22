@@ -77,8 +77,8 @@ int main()
 
   if (listSumAndNums.empty())
   {
-    std::cerr << "Can't count sum, list is empty\n";
-    return 1;
+    std::cout << "0\n";
+    return 0;
   }
 
   for (auto element = listSumAndNums.begin(); element != listSumAndNums.end(); ++element)
