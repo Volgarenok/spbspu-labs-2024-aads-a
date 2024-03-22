@@ -19,6 +19,7 @@ int main()
   catch (const std::exception & e)
   {
     std::cerr << e.what() << "\n";
+    return 1;
   }
 
   if (list.empty())
@@ -36,6 +37,8 @@ int main()
       std::cout << " ";
     }
   }
+
+  std::cout << "\n";
 
   List< std::pair< int, List< int > > > listSumAndNums;
   int nowSize = 0;
@@ -78,8 +81,6 @@ int main()
     std::cout << "0\n";
     return 0;
   }
-
-  std::cout << "\n";
 
   for (auto element = listSumAndNums.begin(); element != listSumAndNums.end(); ++element)
   {
