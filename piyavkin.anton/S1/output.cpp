@@ -95,13 +95,13 @@ void piyavkin::output(std::ostream& out, const list_t& list)
     ++start;
   }
   out << '\n';
-  if (list.empty())
+  outputValue(out, list);
+  auto sums = countSum(list);
+  if (sums.empty())
   {
     out << 0;
     return;
   }
-  outputValue(out, list);
-  auto sums = countSum(list);
   auto iterator = sums.cbegin();
   for (size_t i = 0; i < sums.size(); ++i)
   {
