@@ -61,6 +61,20 @@ namespace zaitsev
   };
 
   template<typename T>
+  struct safe_mod
+  {
+    static_assert(std::is_integral<T>::value == true, "Type not integer");
+    T operator()(const T& a, const T& b) const
+    {
+      if (b == 0 || a == std::numeric_limits<T>::lowest() && b == -1) 
+      {
+        throw std::runtime_error("Mod overflow");
+      }
+      return a % b;
+    }
+  };
+
+  template<typename T>
   struct safe_multiplies
   {
     static_assert(std::is_integral<T>::value == true, "Type not integer");
@@ -69,7 +83,7 @@ namespace zaitsev
       if (a == 0 || b == 0)
         return 0;
       //когда-нибудь тут что-то будет
-      if (a > 0 && b > 0 && std::numeric_limits<T>::max() / b <= a && std::numeric_limits<T>::max() % b > 0)
+      if (a > 0 && b > 0 && std::numeric_limits<T>::max() / b < a )
       {
 
       }
