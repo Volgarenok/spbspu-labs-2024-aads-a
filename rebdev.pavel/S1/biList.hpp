@@ -17,19 +17,16 @@ namespace rebdev
     using iter = BidirectionalIterator< T >;
     using const_iter = ConstBidirectionalIterator< T >;
 
-
     public:
-    //Constructors
       BiList():
-        headNode_(new node{0, nullptr, nullptr}),
-        tailNode_(new node{0, nullptr, nullptr})
+        headNode_(new node{T{}, nullptr, nullptr}),
+        tailNode_(new node{T{}, nullptr, nullptr})
       {
         headNode_ -> next_ = tailNode_;
         tailNode_ -> last_ = headNode_;
       }
 
-
-      BiList(size_t n): BiList(n, 0)
+      BiList(size_t n): BiList(n, T{})
       {}
 
       BiList(size_t n, const T& val):
@@ -60,27 +57,22 @@ namespace rebdev
       {}
 
       BiList(const T & firstElement):
-        headNode_(new node{0, nullptr, nullptr}),
-        tailNode_(new node{0, nullptr, nullptr})
+        headNode_(new node{T{}, nullptr, nullptr}),
+        tailNode_(new node{T{}, nullptr, nullptr})
       {
         node* newNode = new node{firstElement, headNode_, tailNode_};
         headNode_ -> next_ = newNode;
         tailNode_ -> last_ = newNode;
       }
 
-
       BiList(std::initializer_list< T > il): BiList< decltype(il.begin()) >(il.begin(), il.end())
       {}
-
 
       ~BiList() noexcept
       {
         clear();
       }
 
-
-
-      //Operators
       list& operator=(const list& originalList)
       {
         clear();
@@ -105,6 +97,7 @@ namespace rebdev
 
         return *this;
       }
+
       list& operator=(const list&& originalList)
       {
         clear();
@@ -114,9 +107,6 @@ namespace rebdev
         return *this;
       }
 
-
-
-      //Iterators
       iter begin() noexcept
       {
         return iter(*headNode_);
@@ -137,17 +127,11 @@ namespace rebdev
         return const_iter(*tailNode_);
       }
 
-
-
-      //Capacity
       bool empty() const noexcept
       {
         return ((headNode_ -> next_) == tailNode_);
       }
 
-
-
-      //Element access
       T front()
       {
         return headNode_ -> next_ -> data_;
@@ -161,14 +145,12 @@ namespace rebdev
       {
         return headNode_ -> next_ -> data_;
       }
+
       const T back() const
       {
         return tailNode_ -> last_ -> data_;
       }
 
-
-
-      //Modifiers
       template <class InputIterator>
       void assign (InputIterator first, InputIterator last)
       {
@@ -189,11 +171,12 @@ namespace rebdev
           tailNode_ = newNode;
         }
       }
+
       void assign (size_t n, const T& val)
       {
         clear();
-        headNode_ = new node{0, nullptr, nullptr};
-        tailNode_ = new node{0, headNode_, nullptr};
+        headNode_ = new node{T{}, nullptr, nullptr};
+        tailNode_ = new node{T{}, headNode_, nullptr};
         headNode_ -> next_ = tailNode_;
 
         for (size_t i = 0; i < n; ++i)
@@ -201,6 +184,7 @@ namespace rebdev
           push_back(val);
         }
       }
+
       void assign (std::initializer_list< T > il)
       {
         assign< decltype(il.begin()) >(il.begin(), il.end());
@@ -208,14 +192,15 @@ namespace rebdev
 
       void push_back(const T & newElement)
       {
-        node* newNode = new node{0, tailNode_, nullptr};
+        node* newNode = new node{T{}, tailNode_, nullptr};
         tailNode_ -> data_ = newElement;
         tailNode_ -> next_ = newNode;
         tailNode_ = newNode;
       }
+
       void push_front(const T & newElement)
       {
-        node* newNode = new node{0, nullptr, headNode_};
+        node* newNode = new node{T{}, nullptr, headNode_};
         headNode_ -> data_ = newElement;
         headNode_ -> last_ = newNode;
         headNode_ = newNode;
@@ -225,6 +210,7 @@ namespace rebdev
       {
         push_back(newElement);
       }
+
       void push_front(T && newElement)
       {
         pushFront(newElement);
@@ -237,6 +223,7 @@ namespace rebdev
         newTail -> next_ = nullptr;
         tailNode_ = newTail;
       }
+
       void pop_front()
       {
         node* newHead = headNode_ -> next_;
@@ -256,6 +243,7 @@ namespace rebdev
         next = nullptr;
         return iter(newNode);
       }
+
       iter insert(const_iter position, size_t n, const T& val)
       {
         const_iter firstIter(insert(position, val));
@@ -268,6 +256,7 @@ namespace rebdev
 
         return firstIter;
       }
+
       template <class InputIterator>
       iter insert(const_iter position, InputIterator first, InputIterator last)
       {
@@ -282,10 +271,12 @@ namespace rebdev
 
         return firstIter;
       }
+
       iter insert(const_iter position, T&& val)
       {
         return insert(position, val);
       }
+
       iter insert(const_iter position, std::initializer_list< T > il)
       {
         return insert< decltype(il.begin()) >(position, il.begin(), il.end());
@@ -301,6 +292,7 @@ namespace rebdev
         delete deleteNode;
         return iter(next);
       }
+
       iter erase (const_iter first, const_iter last)
       {
         iter nextEl = erase(first);
@@ -334,9 +326,6 @@ namespace rebdev
         delete headNode_;
       }
 
-
-
-      //Operations
       void splice (const_iter position, list& x)
       {
         node* nodeNow = position.node_;
@@ -350,10 +339,12 @@ namespace rebdev
         x.tailNode_ = nullptr;
         x.headNode_ = nullptr;
       }
+
       void splice (const_iter position, list&& x)
       {
         splice(position, x);
       }
+
       void splice (const_iter position, list& x, const_iter i)
       {
         node* nodeNow = position.node_;
@@ -369,12 +360,13 @@ namespace rebdev
 
         nodeNow -> next_ = i;
         i -> last_ = nodeNow;
-
       }
+
       void splice (const_iter position, list&& x, const_iter i)
       {
         splice(position, x, i);
       }
+
       void splice (const_iter position, list& x, const_iter first, const_iter last)
       {
         const_iter iterNow = first;
@@ -384,6 +376,7 @@ namespace rebdev
           ++iterNow;
         } while (iterNow != last);
       }
+
       void splice (const_iter position, list&& x, const_iter first, const_iter last)
       {
         splice(position, x, first, last);
@@ -435,8 +428,6 @@ namespace rebdev
         }
       }
 
-
-      //relational operators
       bool operator>(const list& rhl) const
       {
         const_iter thisIterNow = begin();
@@ -449,6 +440,7 @@ namespace rebdev
 
         return !((thisIterNow == end()) && (rhlIterNow != rhl.end()));
       }
+
       bool operator==(const list& rhl) const
       {
         const_iter thisIterNow = begin();
@@ -461,18 +453,22 @@ namespace rebdev
 
         return (thisIterNow != end()) && (rhlIterNow != rhl.end());
       }
+
       bool operator<(const list& rhl) const
       {
         return (rhl > *this);
       }
+
       bool operator!=(const list& rhl) const
       {
         return !(*this == rhl);
       }
+
       bool operator>=(const list& rhl) const
       {
         return (*this > rhl) || (*this == rhl);
       }
+
       bool operator<=(const list& rhl) const
       {
         return (*this < rhl) || (*this == rhl);
