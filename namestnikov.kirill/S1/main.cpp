@@ -9,9 +9,6 @@ int main()
 {
   using namespace namestnikov;
   using pair_t = std::pair<std::string, ForwardList<unsigned long long>>;
-  ForwardList<int> temp2({4, 5, 6, 7, 8});
-  ForwardList<int> temp = temp2;
-  std::cout << temp.max_size();
   ForwardList<pair_t> dataList;
   try
   {
