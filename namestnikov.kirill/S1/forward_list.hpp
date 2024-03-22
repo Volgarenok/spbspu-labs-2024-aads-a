@@ -51,13 +51,13 @@ namespace namestnikov
     ForwardList(const ForwardList<T> & other) :
       head_(nullptr)
     {
-      node_t * temp = other.head_;
       try
       {
-        while (temp)
+        iterator_t begin = other.begin();
+        iterator_t end = other.end();
+        for (; begin != end; ++begin)
         {
-          push_front(temp->data_);
-          temp = temp->next_;
+          push_front(begin.node_->data_);
         }
       }
       catch (const std::bad_alloc &)
