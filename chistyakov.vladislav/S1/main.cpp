@@ -28,7 +28,6 @@ int main()
     return 0;
   }
 
-  outPutNames(list);
   int max_digit = maxDigit(list);
 
   std::cout << "\n";
@@ -90,6 +89,7 @@ int main()
     return 0;
   }
 
+  outPutNames(list);
   outPutNums(listSumAndNums);
   outPutSums(listSumAndNums);
 
