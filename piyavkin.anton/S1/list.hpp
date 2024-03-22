@@ -455,7 +455,7 @@ namespace piyavkin
   ListIterator< T > List< T >::insert(ConstListIterator< T > it, const T& value)
   {
     if (size_ == 0)
-    {  
+    {
       detail::Node< T >* node = new detail::Node< T >(value, std::addressof(imaginary_node_));
       imaginary_node_.prev_ = node;
       head_ = node;
