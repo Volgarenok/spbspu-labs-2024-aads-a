@@ -28,6 +28,7 @@ int main()
     return 0;
   }
 
+  outPutNames(list);
   int max_digit = maxDigit(list);
 
   std::cout << "\n";
@@ -77,21 +78,20 @@ int main()
     nowSize++;
   }
 
-  if (overflow)
-  {
-    std::cerr << "Overflow\n";
-    return 1;
-  }
-
   if (listSumAndNums.empty())
   {
     std::cout << "0\n";
     return 0;
   }
 
-  outPutNames(list);
   outPutNums(listSumAndNums);
   outPutSums(listSumAndNums);
+
+  if (overflow)
+  {
+    std::cerr << "Overflow\n";
+    return 1;
+  }
 
   std::cout << "\n";
   return 0;
