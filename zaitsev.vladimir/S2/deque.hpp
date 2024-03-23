@@ -75,6 +75,7 @@ namespace zaitsev
      other.tail_ = 0;
      other.data_ = nullptr;
   }
+
   template<typename T>
   Deque<T>::~Deque()
   {
@@ -84,12 +85,20 @@ namespace zaitsev
   template<typename T>
   T& Deque<T>::front()
   {
+    if (size_ == 0)
+    {
+      throw std::out_of_range("Queue is empty");
+    }
     return data_[head_];
   }
 
   template<typename T>
   T& Deque<T>::back()
   {
+    if (size_ == 0)
+    {
+      throw std::out_of_range("Queue is empty");
+    }
     return data_[tail_];
   }
 
@@ -124,6 +133,10 @@ namespace zaitsev
   template<typename T>
   void Deque<T>::pop_back()
   {
+    if (size_ == 0)
+    {
+      throw std::out_of_range("Queue is empty");
+    }
     tail_ = (tail_ + capacity_ - 1) % capacity_;
     --size_;
     return;
@@ -154,6 +167,10 @@ namespace zaitsev
   template<typename T>
   void Deque<T>::pop_front()
   {
+    if (size_ == 0)
+    {
+      throw std::out_of_range("Queue is empty");
+    }
     head_ = (head_ + 1) % capacity_;
     --size_;
   }
