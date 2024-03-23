@@ -27,20 +27,5 @@ int main(int argc, char* argv[])
     std::cerr << e.what();
   }
 
-  for (auto i = expressionList.begin(); i != expressionList.end(); ++i)
-  {
-    while(!((*i).empty()))
-    {
-      auto value = (*i).drop();
-      if (value.storedType == 1)
-      {
-        std::cout << value.value.num;
-      }
-      else
-      {
-        std::cout << value.value.symb;
-      }
-    }
-    std::cout << '\n';
-  }
+  return 0;
 }
