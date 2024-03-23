@@ -25,7 +25,7 @@ long long nikitov::solveExpression(Queue< ExpressionType > expression)
           long long maxNum = std::numeric_limits< long long >::max();
           if (maxNum - first < second)
           {
-            throw std::out_of_range("Error: Number overflow");
+            throw std::out_of_range("Error: Addition overflow");
           }
           result = first + second;
         }
@@ -34,7 +34,7 @@ long long nikitov::solveExpression(Queue< ExpressionType > expression)
           long long minNum = std::numeric_limits< long long >::min();
           if (minNum + first > second)
           {
-            throw std::out_of_range("Error: Number overflow");
+            throw std::out_of_range("Error: Subtraction overflow");
           }
           result = first - second;
         }
@@ -43,7 +43,7 @@ long long nikitov::solveExpression(Queue< ExpressionType > expression)
           result = first * second;
           if (second != 0 && result / second != first)
           {
-            throw std::out_of_range("Error: Number overflow");
+            throw std::out_of_range("Error: Mulptiplication overflow");
           }
         }
         else if (symb == '/')
@@ -51,7 +51,7 @@ long long nikitov::solveExpression(Queue< ExpressionType > expression)
           long long minNum = std::numeric_limits< long long >::min();
           if (first == minNum && second == -1)
           {
-            throw std::out_of_range("Error: Number overflow");
+            throw std::out_of_range("Error: Division overflow");
           }
           result = first / second;
         }
