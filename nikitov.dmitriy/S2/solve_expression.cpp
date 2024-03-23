@@ -1,6 +1,5 @@
 #include "solve_expression.hpp"
 #include <exception>
-#include <iostream>
 #include <limits>
 #include "queue.hpp"
 #include "stack.hpp"
@@ -50,6 +49,10 @@ long long nikitov::solveExpression(Queue< ExpressionType > expression)
         else if (symb == '/')
         {
           long long minNum = std::numeric_limits< long long >::min();
+          if (second == 0)
+          {
+            throw std::logic_error("Error: Division by zero");
+          }
           if (first == minNum && second == -1)
           {
             throw std::out_of_range("Error: Division overflow");
@@ -59,6 +62,10 @@ long long nikitov::solveExpression(Queue< ExpressionType > expression)
         else if (symb == '%')
         {
           result = first % second;
+          if (result < 0)
+          {
+            result += second;
+          }
         }
         ExpressionType newType;
         newType.value.num = result;
