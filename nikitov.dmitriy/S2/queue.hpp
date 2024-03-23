@@ -18,6 +18,9 @@ namespace nikitov
     void push(const T& value);
     T& drop();
 
+    size_t size() const;
+    bool empty() const;
+
   private:
     List< T > data_;
   };
@@ -34,6 +37,18 @@ namespace nikitov
     T value = data_.back();
     data_.pop_back();
     return value;
+  }
+
+  template< class T >
+  size_t Queue< T >::size() const
+  {
+    return data_.size();
+  }
+
+  template< class T >
+  bool Queue< T >::empty() const
+  {
+    return data_.empty();
   }
 }
 #endif
