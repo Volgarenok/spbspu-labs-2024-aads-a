@@ -7,10 +7,12 @@ namespace nikitov
 {
   struct ExpressionType
   {
+    bool operator<(const ExpressionType& other) const;
+
     union ExpressionValue
     {
       char symb;
-      int num;
+      long long int num;
     } value;
 
     size_t storedType;
