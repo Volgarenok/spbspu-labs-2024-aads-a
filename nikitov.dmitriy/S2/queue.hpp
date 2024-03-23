@@ -11,15 +11,17 @@ namespace nikitov
   public:
     Queue() = default;
     Queue(const Queue< T >& other) = default;
+    Queue(Queue< T >&& other) noexcept;
     ~Queue() = default;
 
-    Queue< T >& operator=(const Queue< T >&) = default;
+    Queue< T >& operator=(const Queue< T >& other) = default;
+    Queue< T >& operator=(Queue< T >&& other) noexcept;
 
     void push(const T& value);
     T drop();
 
-    size_t size() const;
-    bool empty() const;
+    size_t size() const noexcept;
+    bool empty() const noexcept;
 
   private:
     List< T > data_;
@@ -40,13 +42,13 @@ namespace nikitov
   }
 
   template< class T >
-  size_t Queue< T >::size() const
+  size_t Queue< T >::size() const noexcept
   {
     return data_.size();
   }
 
   template< class T >
-  bool Queue< T >::empty() const
+  bool Queue< T >::empty() const noexcept
   {
     return data_.empty();
   }
