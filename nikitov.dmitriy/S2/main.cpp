@@ -1,49 +1,30 @@
 #include <iostream>
-#include <string>
+#include <fstream>
 #include <list.hpp>
 #include "queue.hpp"
 #include "expression_type.hpp"
+#include "input_list.hpp"
 
-int main()
+int main(int argc, char* argv[])
 {
   using namespace nikitov;
   List< Queue< ExpressionType > > expressionList;
 
-  std::cin >> std::noskipws >> std::fixed;
-  while (std::cin)
+  try
   {
-    Queue< ExpressionType > expression;
-    std::string line = {};
-    char symb = {};
-    while (std::cin >> symb)
+    if (argc == 2)
     {
-      ExpressionType type;
-      if (symb == ' ' || symb == '\n')
-      {
-        if (std::isdigit(line[0]))
-        {
-          type.value.num = std::stoi(line);
-          type.storedType = 1;
-        }
-        else
-        {
-          type.value.symb = line[0];
-          type.storedType = 2;
-        }
-        line = {};
-        expression.push(type);
-
-        if (symb == '\n')
-        {
-          expressionList.push_front(expression);
-          break;
-        }
-      }
-      else
-      {
-        line += symb;
-      }
+      std::ifstream input(argv[1]);
+      inputList(expressionList, input);
     }
+    else
+    {
+      inputList(expressionList, std::cin);
+    }
+  }
+  catch (std::exception& e)
+  {
+    std::cerr << e.what();
   }
 
   for (auto i = expressionList.begin(); i != expressionList.end(); ++i)
