@@ -32,7 +32,7 @@ int main(int argc, char* argv[])
   List< Queue< ExpressionType > > newExpressionList;
   for (auto i = expressionList.begin(); i != expressionList.end(); ++i)
   {
-    newExpressionList.push_front(convertExpression(*i));
+    newExpressionList.push_back(convertExpression(*i));
   }
 
   for (auto i = newExpressionList.begin(); i != newExpressionList.end(); ++i)
