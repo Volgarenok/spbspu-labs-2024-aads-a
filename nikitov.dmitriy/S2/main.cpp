@@ -23,25 +23,28 @@ int main(int argc, char* argv[])
     {
       inputList(expressionList, std::cin);
     }
+
+    List< Queue< ExpressionType > > newExpressionList;
+    for (auto i = expressionList.begin(); i != expressionList.end(); ++i)
+    {
+      newExpressionList.push_back(convertExpression(*i));
+    }
+
+    for (auto i = newExpressionList.begin(); i != newExpressionList.end(); ++i)
+    {
+      if (i != newExpressionList.begin())
+      {
+        std::cout << ' ';
+      }
+      std::cout << solveExpression(*i);
+    }
+    std::cout << '\n';
   }
-  catch (std::exception& e)
+  catch (const std::exception& e)
   {
     std::cerr << e.what();
+    return 1;
   }
 
-  List< Queue< ExpressionType > > newExpressionList;
-  for (auto i = expressionList.begin(); i != expressionList.end(); ++i)
-  {
-    newExpressionList.push_back(convertExpression(*i));
-  }
-
-  for (auto i = newExpressionList.begin(); i != newExpressionList.end(); ++i)
-  {
-    if (i != newExpressionList.begin())
-    {
-      std::cout << ' ';
-    }
-    std::cout << solveExpression(*i);
-  }
-  std::cout << '\n';
+  return 0;
 }
