@@ -16,7 +16,7 @@ namespace nikitov
     Queue< T >& operator=(const Queue< T >&) = default;
 
     void push(const T& value);
-    T& drop();
+    T drop();
 
     size_t size() const;
     bool empty() const;
@@ -32,7 +32,7 @@ namespace nikitov
   }
 
   template< class T >
-  T& Queue< T >::drop()
+  T Queue< T >::drop()
   {
     T value = data_.back();
     data_.pop_back();
