@@ -4,6 +4,8 @@
 #include "queue.hpp"
 #include "expression_type.hpp"
 #include "input_list.hpp"
+#include "solve_expression.hpp"
+#include "convert_expression.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -27,5 +29,14 @@ int main(int argc, char* argv[])
     std::cerr << e.what();
   }
 
-  return 0;
+  List< Queue< ExpressionType > > newExpressionList;
+  for (auto i = expressionList.begin(); i != expressionList.end(); ++i)
+  {
+    newExpressionList.push_front(convertExpression(*i));
+  }
+
+  for (auto i = newExpressionList.begin(); i != newExpressionList.end(); ++i)
+  {
+    std::cout << solveExpression(*i);
+  }
 }
