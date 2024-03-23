@@ -5,7 +5,7 @@ bool nikitov::ExpressionType::operator<=(const ExpressionType& other) const
   char otherSymb = other.value.symb;
   if (value.symb == '+' || value.symb == '-')
   {
-    return true;
+    return otherSymb != '(';
   }
   else
   {
