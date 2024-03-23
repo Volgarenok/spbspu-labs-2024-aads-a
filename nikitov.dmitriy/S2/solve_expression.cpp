@@ -23,7 +23,7 @@ long long nikitov::solveExpression(Queue< ExpressionType > expression)
         if (symb == '+')
         {
           long long maxNum = std::numeric_limits< long long >::max();
-          if (maxNum - first > second)
+          if (maxNum - first < second)
           {
             throw std::out_of_range("Error: Number overflow");
           }
