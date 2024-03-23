@@ -20,19 +20,19 @@ namespace rebdev
 
     public:
       BidirectionalIterator() = default;
-      BidirectionalIterator(const iter& iterator) = default;
+      BidirectionalIterator(const iter & iterator) = default;
       BidirectionalIterator(iter&& iterator) = default;
 
       ~BidirectionalIterator() noexcept = default;
 
-      iter& operator=(const iter& iterator) noexcept = default;
-      iter& operator=(iter&& iterator) noexcept = default;
+      iter & operator=(const iter & iterator) noexcept = default;
+      iter & operator=(iter && iterator) noexcept = default;
 
-      bool operator==(const iter& iterator) const noexcept
+      bool operator==(const iter & iterator) const noexcept
       {
         return (node_ == iterator.node_);
       }
-      bool operator!=(const iter& iterator) const noexcept
+      bool operator!=(const iter & iterator) const noexcept
       {
         return !(*this == iterator);
       }
@@ -46,7 +46,7 @@ namespace rebdev
         return std::addressof(node_ -> data_);
       }
 
-      iter& operator++()
+      iter & operator++()
       {
         node_ = node_ -> next_;
         return *this;
@@ -57,7 +57,7 @@ namespace rebdev
         ++node_;
         return oldIter;
       }
-      iter& operator--()
+      iter & operator--()
       {
         node_ = node_ -> last_;
         return *this;
@@ -68,13 +68,12 @@ namespace rebdev
         --node_;
         return oldIter;
       }
-      node* getNode () const
-      {
-        return node_;
-      }
 
     private:
-      node* node_;
+      node * node_;
+      BidirectionalIterator(node & originalNode):
+        node_(&originalNode)
+      {}
   };
 }
 #endif
