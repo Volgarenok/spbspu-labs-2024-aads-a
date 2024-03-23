@@ -78,20 +78,21 @@ int main()
     nowSize++;
   }
 
-  if (listSumAndNums.empty())
-  {
-    std::cout << "0\n";
-    return 0;
-  }
-
   outPutNums(listSumAndNums);
-  outPutSums(listSumAndNums);
 
   if (overflow)
   {
     std::cerr << "Overflow\n";
     return 1;
   }
+
+  if (listSumAndNums.empty())
+  {
+    std::cout << "0\n";
+    return 0;
+  }
+
+  outPutSums(listSumAndNums);
 
   std::cout << "\n";
   return 0;
