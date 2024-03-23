@@ -7,6 +7,6 @@
 
 namespace nikitov
 {
-  long long int solveExpression(Queue< ExpressionType > expression);
+  long long solveExpression(Queue< ExpressionType > expression);
 }
 #endif

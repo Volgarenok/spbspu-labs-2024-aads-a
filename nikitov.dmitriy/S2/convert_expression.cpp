@@ -19,7 +19,7 @@ nikitov::Queue< nikitov::ExpressionType > nikitov::convertExpression(Queue< Expr
         {
           if (operandsStack.empty())
           {
-            throw std::logic_error("Error: Wrong order of operations");
+            throw std::logic_error("Error: Wrong brackets");
           }
           newExpression.push(operandsStack.drop());
         }
@@ -48,7 +48,7 @@ nikitov::Queue< nikitov::ExpressionType > nikitov::convertExpression(Queue< Expr
     ExpressionType type = operandsStack.drop();
     if (type.value.symb == '(')
     {
-      throw std::logic_error("Error: Wrong order of operations");
+      throw std::logic_error("Error: Wrong brackets");
     }
     newExpression.push(type);
   }
