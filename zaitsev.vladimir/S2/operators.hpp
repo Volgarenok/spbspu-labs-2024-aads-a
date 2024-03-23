@@ -9,19 +9,19 @@ namespace zaitsev
   template<typename T>
   struct BinaryOperator
   {
-    constexpr size_t priority() const = 0;
-    T operator()(const T& a, const T& b) const = 0;
+    virtual size_t priority() const = 0;
+    virtual T operator()(const T& a, const T& b) const = 0;
   };
 
   template<typename T>
   struct SafePlus: public BinaryOperator<T>
   {
     static_assert(std::is_integral<T>::value == true, "Type not integer");
-    constexpr size_t priority()
+    virtual constexpr size_t priority() const
     {
       return 1;
     }
-    T operator()(const T& a, const T& b) const
+    virtual T operator()(const T& a, const T& b) const
     {
       if (a >= 0 && std::numeric_limits<T>::max() - a < b)
       {
@@ -39,11 +39,11 @@ namespace zaitsev
   struct SafeMinus: public BinaryOperator<T>
   {
     static_assert(std::is_integral<T>::value == true, "Type not integer");
-    constexpr size_t priority()
+    virtual constexpr size_t priority() const
     {
       return 1;
     }
-    T operator()(const T& a, const T& b) const
+    virtual T operator()(const T& a, const T& b) const
     {
       if (b < 0 && std::numeric_limits<T>::max() + b < a)
       {
@@ -61,11 +61,11 @@ namespace zaitsev
   struct SafeDivision: public BinaryOperator<T>
   {
     static_assert(std::is_integral<T>::value == true, "Type not integer");
-    constexpr size_t priority()
+    virtual constexpr size_t priority() const
     {
       return 2;
     }
-    T operator()(const T& a, const T& b) const
+    virtual T operator()(const T& a, const T& b) const
     {
       if (b == 0)
       {
@@ -83,11 +83,11 @@ namespace zaitsev
   struct SafeMod: public BinaryOperator<T>
   {
     static_assert(std::is_integral<T>::value == true, "Type not integer");
-    constexpr size_t priority()
+    virtual constexpr size_t priority() const
     {
       return 2;
     }
-    T operator()(const T& a, const T& b) const
+    virtual T operator()(const T& a, const T& b) const
     {
       if (b == 0 || a == std::numeric_limits<T>::lowest() && b == -1) 
       {
@@ -101,11 +101,11 @@ namespace zaitsev
   struct SafeMultiplication: public BinaryOperator<T>
   {
     static_assert(std::is_integral<T>::value == true, "Type not integer");
-    constexpr size_t priority()
+    virtual constexpr size_t priority() const
     {
       return 2;
     }
-    T operator()(const T& a, const T& b) const
+    virtual T operator()(const T& a, const T& b) const
     {
       if (a == 0 || b == 0)
         return 0;
