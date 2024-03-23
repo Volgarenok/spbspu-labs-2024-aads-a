@@ -11,7 +11,7 @@ namespace zaitsev
   union TokenValue
   {
     bracket_type bracket;
-    BinaryOperator<T> bin_operator;
+    BinaryOperator<T>* bin_operator;
     T value;
   };
 
