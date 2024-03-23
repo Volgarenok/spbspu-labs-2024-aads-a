@@ -21,5 +21,11 @@ namespace nikitov
   private:
     List< T > data_;
   };
+
+  template< class T >
+  void Queue< T >::push(const T& value)
+  {
+    data_.push_front(value);
+  }
 }
 #endif
