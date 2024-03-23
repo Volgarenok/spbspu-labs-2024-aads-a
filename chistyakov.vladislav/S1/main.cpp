@@ -10,7 +10,6 @@ int main()
 {
   using namespace chistyakov;
   List< std::pair< std::string, List< int > > > list;
-  bool overflow = false;
 
   try
   {
@@ -59,7 +58,8 @@ int main()
           }
           else
           {
-            overflow = true;
+            std::cerr << "Overflow\n";
+            return 1;
           }
         }
         index++;
@@ -79,12 +79,6 @@ int main()
   }
 
   outPutNums(listSumAndNums);
-
-  if (overflow)
-  {
-    std::cerr << "Overflow\n";
-    return 1;
-  }
 
   if (listSumAndNums.empty())
   {
