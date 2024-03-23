@@ -37,6 +37,11 @@ int main(int argc, char* argv[])
 
   for (auto i = newExpressionList.begin(); i != newExpressionList.end(); ++i)
   {
+    if (i != newExpressionList.begin())
+    {
+      std::cout << ' ';
+    }
     std::cout << solveExpression(*i);
   }
+  std::cout << '\n';
 }
