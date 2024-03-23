@@ -9,7 +9,7 @@ void inputExpressionType(nikitov::ExpressionType& type, std::string& line)
 {
   if (std::isdigit(line[0]))
   {
-    type.value.num = std::stoi(line);
+    type.value.num = std::stoll(line);
     type.storedType = 1;
   }
   else
