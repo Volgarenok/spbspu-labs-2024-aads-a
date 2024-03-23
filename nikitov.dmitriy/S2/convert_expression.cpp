@@ -1,4 +1,5 @@
 #include "convert_expression.hpp"
+#include <exception>
 #include "queue.hpp"
 #include "stack.hpp"
 
@@ -12,23 +13,26 @@ nikitov::Queue< nikitov::ExpressionType > nikitov::convertExpression(Queue< Expr
     if (type.storedType == 2)
     {
       char symb = type.value.symb;
-      if (symb == '(')
-      {
-        operandsStack.push(type);
-      }
-      else if (symb == ')')
+      if (symb == ')')
       {
         while (operandsStack.top().value.symb != '(')
         {
+          if (operandsStack.empty())
+          {
+            throw std::logic_error("Error: Wrong order of operations");
+          }
           newExpression.push(operandsStack.drop());
         }
         operandsStack.drop();
       }
       else
       {
-        while (!operandsStack.empty() && (type < operandsStack.top()))
+        if (symb != '(')
         {
-          newExpression.push(operandsStack.drop());
+          while (!operandsStack.empty() && (type < operandsStack.top()))
+          {
+            newExpression.push(operandsStack.drop());
+          }
         }
         operandsStack.push(type);
       }
@@ -38,9 +42,15 @@ nikitov::Queue< nikitov::ExpressionType > nikitov::convertExpression(Queue< Expr
       newExpression.push(type);
     }
   }
+
   while (!operandsStack.empty())
   {
-    newExpression.push(operandsStack.drop());
+    ExpressionType type = operandsStack.drop();
+    if (type.value.symb == '(')
+    {
+      throw std::logic_error("Error: Wrong order of operations");
+    }
+    newExpression.push(type);
   }
   return newExpression;
 }
