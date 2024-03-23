@@ -5,6 +5,21 @@
 #include "queue.hpp"
 #include "expression_type.hpp"
 
+void inputExpressionType(nikitov::ExpressionType& type, std::string& line)
+{
+  if (std::isdigit(line[0]))
+  {
+    type.value.num = std::stoi(line);
+    type.storedType = 1;
+  }
+  else
+  {
+    type.value.symb = line[0];
+    type.storedType = 2;
+  }
+  line = {};
+}
+
 void nikitov::inputList(List< Queue< ExpressionType > >& expressionList, std::istream& input)
 {
   input >> std::noskipws >> std::fixed;
@@ -16,26 +31,20 @@ void nikitov::inputList(List< Queue< ExpressionType > >& expressionList, std::is
     while (input >> symb)
     {
       ExpressionType type;
-      if (symb == ' ' || symb == '\n')
+      if (symb == ' ')
       {
-        if (std::isdigit(line[0]))
-        {
-          type.value.num = std::stoi(line);
-          type.storedType = 1;
-        }
-        else
-        {
-          type.value.symb = line[0];
-          type.storedType = 2;
-        }
-        line = {};
+        inputExpressionType(type, line);
         expression.push(type);
-
-        if (symb == '\n')
+      }
+      else if (symb == '\n')
+      {
+        if (!line.empty())
         {
+          inputExpressionType(type, line);
+          expression.push(type);
           expressionList.push_front(expression);
-          break;
         }
+        break;
       }
       else
       {
