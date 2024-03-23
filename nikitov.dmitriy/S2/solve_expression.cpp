@@ -15,7 +15,6 @@ long long nikitov::solveExpression(Queue< ExpressionType > expression)
     ExpressionType type = expression.drop();
     if (type.storedType == 2)
     {
-      std::cout << type.value.symb << ' ';
       if (countElem >= 2)
       {
         long long second = solverStack.drop().value.num;
@@ -74,7 +73,6 @@ long long nikitov::solveExpression(Queue< ExpressionType > expression)
     }
     else
     {
-      std::cout << type.value.num << ' ';
       solverStack.push(type);
       ++countElem;
     }
