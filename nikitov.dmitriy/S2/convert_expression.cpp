@@ -29,7 +29,7 @@ nikitov::Queue< nikitov::ExpressionType > nikitov::convertExpression(Queue< Expr
       {
         if (symb != '(')
         {
-          while (!operandsStack.empty() && (type < operandsStack.top()))
+          while (!operandsStack.empty() && (type <= operandsStack.top()))
           {
             newExpression.push(operandsStack.drop());
           }

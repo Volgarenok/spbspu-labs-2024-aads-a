@@ -7,7 +7,7 @@ namespace nikitov
 {
   struct ExpressionType
   {
-    bool operator<(const ExpressionType& other) const;
+    bool operator<=(const ExpressionType& other) const;
 
     union ExpressionValue
     {
