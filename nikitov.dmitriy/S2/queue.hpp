@@ -27,5 +27,13 @@ namespace nikitov
   {
     data_.push_front(value);
   }
+
+  template< class T >
+  T& Queue< T >::drop()
+  {
+    T value = data_.back();
+    data_.pop_back();
+    return value;
+  }
 }
 #endif
