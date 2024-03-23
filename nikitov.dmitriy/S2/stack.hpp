@@ -16,6 +16,7 @@ namespace nikitov
 
     Stack< T >& operator=(const Stack< T >&) = default;
 
+    const T& top() const;
     void push(const T& value);
     T drop();
 
@@ -25,6 +26,12 @@ namespace nikitov
   private:
     List< T > data_;
   };
+
+  template< class T >
+  const T& Stack< T >::top() const
+  {
+    return data_.front();
+  }
 
   template< class T >
   void Stack< T >::push(const T& value)
