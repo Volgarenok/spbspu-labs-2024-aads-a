@@ -8,6 +8,6 @@
 
 namespace nikitov
 {
-  void inputList(List< Queue< ExpressionType > >& expressionList, std::istream& input);
+  void inputList(List< Queue< InfixType > >& expressionList, std::istream& input);
 }
 #endif
