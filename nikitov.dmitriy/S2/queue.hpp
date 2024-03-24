@@ -28,6 +28,22 @@ namespace nikitov
   };
 
   template< class T >
+  Queue< T >::Queue(Queue< T >&& other) noexcept:
+    data_(std::move(other.data_))
+  {}
+
+  template< class T >
+  Queue< T >& Queue< T >::operator=(Queue< T >&& other) noexcept
+  {
+    if (std::addressof(other) != this)
+    {
+      std::swap(data_, other.data_);
+      other.data_.clear();
+    }
+    return *this;
+  }
+
+  template< class T >
   void Queue< T >::push(const T& value)
   {
     data_.push_front(value);
