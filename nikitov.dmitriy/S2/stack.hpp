@@ -12,20 +12,38 @@ namespace nikitov
   public:
     Stack() = default;
     Stack(const Stack< T >& other) = default;
+    Stack(Stack< T >&& other) noexcept;
     ~Stack() = default;
 
     Stack< T >& operator=(const Stack< T >&) = default;
+    Stack< T >& operator=(Stack< T >&& other) noexcept;
 
     T& top();
     void push(const T& value);
     T drop();
 
-    size_t size() const;
-    bool empty() const;
+    size_t size() const noexcept;
+    bool empty() const noexcept;
 
   private:
     List< T > data_;
   };
+
+  template< class T >
+  Stack< T >::Stack(Stack< T >&& other) noexcept:
+    data_(std::move(other.data_))
+  {}
+
+  template< class T >
+  Stack< T >& Stack< T >::operator=(Stack< T >&& other) noexcept
+  {
+    if (std::addressof(other) != this)
+    {
+      std::swap(data_, other.data_);
+      other.data_.clear();
+    }
+    return *this;
+  }
 
   template< class T >
   T& Stack< T >::top()
@@ -48,13 +66,13 @@ namespace nikitov
   }
 
   template< class T >
-  size_t Stack< T >::size() const
+  size_t Stack< T >::size() const noexcept
   {
     return data_.size();
   }
 
   template< class T >
-  bool Stack< T >::empty() const
+  bool Stack< T >::empty() const noexcept
   {
     return data_.empty();
   }
