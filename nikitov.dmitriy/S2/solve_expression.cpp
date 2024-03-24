@@ -5,21 +5,21 @@
 #include "stack.hpp"
 #include "expression_type.hpp"
 
-long long nikitov::solveExpression(Queue< ExpressionType > expression)
+long long nikitov::solveExpression(Queue< PostfixType > expression)
 {
-  Stack< ExpressionType > solverStack;
+  Stack< long long > solverStack;
   size_t countElem = 0;
   while (!expression.empty())
   {
-    ExpressionType type = expression.drop();
-    if (type.storedType == 2)
+    PostfixType type = expression.drop();
+    if (type.typeName == nikitov::TypeName::operation)
     {
       if (countElem >= 2)
       {
-        long long second = solverStack.drop().value.num;
-        long long first = solverStack.drop().value.num;
+        long long second = solverStack.drop();
+        long long first = solverStack.drop();
         long long result = 0;
-        char symb = type.value.symb;
+        char symb = type.value.operation.symb;
         if (symb == '+')
         {
           long long maxNum = std::numeric_limits< long long >::max();
@@ -67,10 +67,7 @@ long long nikitov::solveExpression(Queue< ExpressionType > expression)
             result += second;
           }
         }
-        ExpressionType newType;
-        newType.value.num = result;
-        newType.storedType = 1;
-        solverStack.push(newType);
+        solverStack.push(result);
         --countElem;
       }
       else
@@ -80,9 +77,9 @@ long long nikitov::solveExpression(Queue< ExpressionType > expression)
     }
     else
     {
-      solverStack.push(type);
+      solverStack.push(type.value.operand.num);
       ++countElem;
     }
   }
-  return solverStack.drop().value.num;
+  return solverStack.drop();
 }

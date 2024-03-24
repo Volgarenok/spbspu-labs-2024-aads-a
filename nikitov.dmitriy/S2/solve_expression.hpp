@@ -7,6 +7,6 @@
 
 namespace nikitov
 {
-  long long solveExpression(Queue< ExpressionType > expression);
+  long long solveExpression(Queue< PostfixType > expression);
 }
 #endif
