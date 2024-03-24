@@ -1,11 +1,11 @@
 #include "expression_type.hpp"
 
-bool nikitov::ExpressionType::operator<=(const ExpressionType& other) const
+bool nikitov::Operation::operator<=(const Operation& other) const
 {
-  char otherSymb = other.value.symb;
-  if (value.symb == '+' || value.symb == '-')
+  char otherSymb = other.symb;
+  if (symb == '+' || symb == '-')
   {
-    return otherSymb != '(';
+    return true;
   }
   else
   {

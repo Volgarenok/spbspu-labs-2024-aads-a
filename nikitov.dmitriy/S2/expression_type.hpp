@@ -3,19 +3,64 @@
 
 #include <cstddef>
 
+
 namespace nikitov
 {
-  struct ExpressionType
+  enum TypeName
   {
-    bool operator<=(const ExpressionType& other) const;
+    bracket,
+    operand,
+    operation
+  };
 
-    union ExpressionValue
+  struct Bracket
+  {
+    char symb;
+  };
+
+  struct Operand
+  {
+    long long num;
+  };
+
+  struct Operation
+  {
+    bool operator<=(const Operation& other) const;
+    char symb;
+  };
+
+  struct InfixType
+  {
+    union
     {
-      char symb;
-      long long int num;
+      Bracket bracket;
+      Operand operand;
+      Operation operation;
     } value;
 
-    size_t storedType;
+    TypeName typeName;
+  };
+
+  struct StackType
+  {
+    union
+    {
+      Bracket bracket;
+      Operation operation;
+    } value;
+
+    TypeName typeName;
+  };
+
+  struct PostfixType
+  {
+    union
+    {
+      Operand operand;
+      Operation operation;
+    } value;
+
+    TypeName typeName;
   };
 }
 #endif
