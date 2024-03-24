@@ -58,16 +58,16 @@ namespace zaitsev
     size_t i = 0;
     try
     {
-      for (; i < capacity_; ++i)
+      for (; i < size_; ++i)
       {
-        alloc_traits::construct(alloc, data_ + i, other.data_[i]);
+        alloc_traits::construct(alloc, data_ + (head_ + i) % capacity_, other.data_[(head_ + i) % capacity_]);
       }
     }
     catch (const std::bad_alloc&)
     {
       for (size_t j = 0; j < i; ++j)
       {
-        alloc_traits::destroy(alloc, data_ + j);
+        alloc_traits::destroy(alloc, data_ + (head_ + j) % capacity_);
       }
       alloc.deallocate(data_, capacity_);
       throw;
@@ -136,14 +136,14 @@ namespace zaitsev
     }
     if (size_ == 0)
     {
-      data_[0] = value;
+      alloc_traits::construct(alloc, data_, value);
       head_ = 0;
       tail_ = 0;
       size_ = 1;
     }
     else
     {
-      data_[(tail_ + 1) % capacity_] = value;
+      alloc_traits::construct(alloc, data_ + (tail_ + 1) % capacity_, value);
       tail_ = (tail_ + 1) % capacity_;
       ++size_;
     }
@@ -158,14 +158,14 @@ namespace zaitsev
     }
     if (size_ == 0)
     {
-      data_[0] = value;
+      alloc_traits::construct(alloc, data_, value);
       head_ = 0;
       tail_ = 0;
       size_ = 1;
     }
     else
     {
-      data_[(tail_ + 1) % capacity_] = value;
+      alloc_traits::construct(alloc, data_ + (tail_ + 1) % capacity_, value);
       tail_ = (tail_ + 1) % capacity_;
       ++size_;
     }
@@ -178,7 +178,7 @@ namespace zaitsev
     {
       throw std::out_of_range("Queue is empty");
     }
-    alloc_traits::destroy(alloc, data_ + (tail_ + capacity_ - 1) % capacity_);
+    alloc_traits::destroy(alloc, data_ + tail_);
     tail_ = (tail_ + capacity_ - 1) % capacity_;
     --size_;
     return;
@@ -234,7 +234,7 @@ namespace zaitsev
     {
       throw std::out_of_range("Queue is empty");
     }
-    alloc_traits::destroy(alloc, data_ + (head_ + 1) % capacity_);
+    alloc_traits::destroy(alloc, data_ + head_);
     head_ = (head_ + 1) % capacity_;
     --size_;
   }
@@ -272,7 +272,7 @@ namespace zaitsev
     }
     catch (const std::bad_alloc&)
     {
-      for (size_t i = 0; i < size_; ++i)
+      for (size_t j = 0; j < i; ++j)
       {
         alloc_traits::destroy(alloc, new_data + i);
       }
