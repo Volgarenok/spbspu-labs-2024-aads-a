@@ -10,7 +10,7 @@
 int main(int argc, char* argv[])
 {
   using namespace nikitov;
-  List< Queue< ExpressionType > > expressionList;
+  List< Queue< InfixType > > expressionList;
 
   try
   {
@@ -24,7 +24,7 @@ int main(int argc, char* argv[])
       inputList(expressionList, std::cin);
     }
 
-    List< Queue< ExpressionType > > newExpressionList;
+    List< Queue< PostfixType > > newExpressionList;
     for (auto i = expressionList.begin(); i != expressionList.end(); ++i)
     {
       newExpressionList.push_back(convertExpression(*i));
