@@ -3,9 +3,27 @@
 
 #include <cstddef>
 
-
 namespace nikitov
 {
+  namespace detail
+  {
+    struct Bracket
+    {
+      char symb;
+    };
+
+    struct Operand
+    {
+      long long num;
+    };
+
+    struct Operation
+    {
+      bool operator<=(const Operation& other) const;
+      char symb;
+    };
+  }
+
   enum TypeName
   {
     bracket,
@@ -13,29 +31,13 @@ namespace nikitov
     operation
   };
 
-  struct Bracket
-  {
-    char symb;
-  };
-
-  struct Operand
-  {
-    long long num;
-  };
-
-  struct Operation
-  {
-    bool operator<=(const Operation& other) const;
-    char symb;
-  };
-
   struct InfixType
   {
     union
     {
-      Bracket bracket;
-      Operand operand;
-      Operation operation;
+      detail::Bracket bracket;
+      detail::Operand operand;
+      detail::Operation operation;
     };
 
     TypeName typeName;
@@ -45,8 +47,8 @@ namespace nikitov
   {
     union
     {
-      Bracket bracket;
-      Operation operation;
+      detail::Bracket bracket;
+      detail::Operation operation;
     };
 
     TypeName typeName;
@@ -56,8 +58,8 @@ namespace nikitov
   {
     union
     {
-      Operand operand;
-      Operation operation;
+      detail::Operand operand;
+      detail::Operation operation;
     };
 
     TypeName typeName;
