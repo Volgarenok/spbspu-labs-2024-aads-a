@@ -10,17 +10,17 @@ void inputExpressionType(nikitov::InfixType& type, std::string& line)
   if (std::isdigit(line[0]))
   {
     type.typeName = nikitov::TypeName::operand;
-    type.value.operand.num = stoll(line);
+    type.operand.num = stoll(line);
   }
   else if (line[0] == '(' || line[0] == ')')
   {
     type.typeName = nikitov::TypeName::bracket;
-    type.value.bracket.symb = line[0];
+    type.bracket.symb = line[0];
   }
   else
   {
     type.typeName = nikitov::TypeName::operation;
-    type.value.operation.symb = line[0];
+    type.operation.symb = line[0];
   }
   line = {};
 }

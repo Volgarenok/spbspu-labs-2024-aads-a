@@ -36,7 +36,7 @@ namespace nikitov
       Bracket bracket;
       Operand operand;
       Operation operation;
-    } value;
+    };
 
     TypeName typeName;
   };
@@ -47,7 +47,7 @@ namespace nikitov
     {
       Bracket bracket;
       Operation operation;
-    } value;
+    };
 
     TypeName typeName;
   };
@@ -58,7 +58,7 @@ namespace nikitov
     {
       Operand operand;
       Operation operation;
-    } value;
+    };
 
     TypeName typeName;
   };

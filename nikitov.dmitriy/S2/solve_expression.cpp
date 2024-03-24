@@ -19,7 +19,7 @@ long long nikitov::solveExpression(Queue< PostfixType > expression)
         long long second = solverStack.drop();
         long long first = solverStack.drop();
         long long result = 0;
-        char symb = type.value.operation.symb;
+        char symb = type.operation.symb;
         if (symb == '+')
         {
           long long maxNum = std::numeric_limits< long long >::max();
@@ -77,7 +77,7 @@ long long nikitov::solveExpression(Queue< PostfixType > expression)
     }
     else
     {
-      solverStack.push(type.value.operand.num);
+      solverStack.push(type.operand.num);
       ++countElem;
     }
   }

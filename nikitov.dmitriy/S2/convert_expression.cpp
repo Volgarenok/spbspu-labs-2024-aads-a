@@ -15,13 +15,13 @@ nikitov::Queue< nikitov::PostfixType > nikitov::convertExpression(Queue< InfixTy
     {
       if (type.typeName == nikitov::TypeName::bracket)
       {
-        if (type.value.bracket.symb == ')')
+        if (type.bracket.symb == ')')
         {
           while (!operandsStack.empty() && operandsStack.top().typeName != nikitov::TypeName::bracket)
           {
             PostfixType newPostfixType;
             newPostfixType.typeName = nikitov::TypeName::operation;
-            newPostfixType.value.operation = operandsStack.drop().value.operation;
+            newPostfixType.operation = operandsStack.drop().operation;
             newExpression.push(newPostfixType);
           }
           if (operandsStack.empty())
@@ -34,7 +34,7 @@ nikitov::Queue< nikitov::PostfixType > nikitov::convertExpression(Queue< InfixTy
         {
           StackType newStackType;
           newStackType.typeName = nikitov::TypeName::bracket;
-          newStackType.value.bracket = type.value.bracket;
+          newStackType.bracket = type.bracket;
           operandsStack.push(newStackType);
         }
       }
@@ -42,17 +42,17 @@ nikitov::Queue< nikitov::PostfixType > nikitov::convertExpression(Queue< InfixTy
       {
         while (!operandsStack.empty() && operandsStack.top().typeName != nikitov::TypeName::bracket)
         {
-          if (type.value.operation <= operandsStack.top().value.operation)
+          if (type.operation <= operandsStack.top().operation)
           {
             PostfixType newPostfixType;
             newPostfixType.typeName = nikitov::TypeName::operation;
-            newPostfixType.value.operation = operandsStack.drop().value.operation;
+            newPostfixType.operation = operandsStack.drop().operation;
             newExpression.push(newPostfixType);
           }
         }
         StackType newStackType;
         newStackType.typeName = nikitov::TypeName::operation;
-        newStackType.value.operation = type.value.operation;
+        newStackType.operation = type.operation;
         operandsStack.push(newStackType);
       }
     }
@@ -60,7 +60,7 @@ nikitov::Queue< nikitov::PostfixType > nikitov::convertExpression(Queue< InfixTy
     {
       PostfixType newPostfixType;
       newPostfixType.typeName = nikitov::TypeName::operand;
-      newPostfixType.value.operand = type.value.operand;
+      newPostfixType.operand = type.operand;
       newExpression.push(newPostfixType);
     }
   }
@@ -74,7 +74,7 @@ nikitov::Queue< nikitov::PostfixType > nikitov::convertExpression(Queue< InfixTy
     }
     PostfixType newPostfixType;
     newPostfixType.typeName = nikitov::TypeName::operation;
-    newPostfixType.value.operation = type.value.operation;
+    newPostfixType.operation = type.operation;
     newExpression.push(newPostfixType);
   }
   return newExpression;
