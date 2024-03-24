@@ -12,659 +12,689 @@ namespace piyavkin
   class List
   {
   public:
-    List():
-      head_(nullptr),
-      tail_(nullptr),
-      size_(0)
-    {}
-    List(const T& value, size_t count):
-      List()
+    List();
+    List(const T& value, size_t count);
+    template< class Iterator >
+    List(Iterator start, Iterator finish);
+    List(std::initializer_list< T > il);
+    List(const List< T >& rhs);
+    List(List< T >&& rhs);
+    bool operator<(const List< T >& rhs) const;
+    bool operator>=(const List< T >& rhs) const;
+    bool operator<=(const List< T >& rhs) const;
+    bool operator>(const List< T >& rhs) const;
+    bool operator==(const List< T >& rhs) const;
+    bool operator!=(const List< T >& rhs) const;
+    List< T >& operator=(List< T >&& rhs);
+    List< T >& operator=(const List< T >& rhs);
+    ~List();
+    void assign(const T& value, size_t count);
+    template< class Iterator >
+    void assign(Iterator start, Iterator finish);
+    void assign(std::initializer_list< T > il);
+    void remove(const T& value);
+    void splice(ConstListIterator< T > it, List< T >& list);
+    void splice(ConstListIterator< T > it, List< T >& list, ConstListIterator< T > list_it);
+    void splice(ConstListIterator< T > it, List< T >& list, ConstListIterator< T > list_start, ConstListIterator< T > list_finish);
+    void reverse() noexcept;
+    template< class Functor >
+    void remove_if(Functor f);
+    void swap(List< T >& list);
+    size_t size() const noexcept;
+    T& back();
+    T& front();
+    const T& back() const;
+    const T& front() const;
+    ListIterator< T > begin() noexcept;
+    ListIterator< T > end() noexcept;
+    ConstListIterator< T > cbegin() const noexcept;
+    ConstListIterator< T > cend() const noexcept;
+    ConstListIterator< T > erase(ConstListIterator< T > it);
+    ConstListIterator< T > erase(ConstListIterator< T > it_start, ConstListIterator< T > it_finish);
+    ListIterator< T > insert(ConstListIterator< T > it, const T& value);
+    template< class Iterator >
+    ListIterator< T > insert(ConstListIterator< T > it, Iterator start, Iterator finish);
+    ListIterator< T > insert(ConstListIterator< T > it, size_t n, const T& value);
+    ListIterator< T > insert(ConstListIterator< T > it, std::initializer_list< T > il);
+    bool empty() const noexcept;
+    void push_front(const T& value);
+    void push_back(const T& value);
+    void pop_back();
+    void pop_front();
+    void clear() noexcept;
+    void unique();
+    template< class Pred >
+    void unique(Pred p);
+    void sort();
+    template< class Compare >
+    void sort(Compare comp);
+    template< class Compare >
+    void merge(List< T >& list, Compare comp);
+    void merge(List< T >& list);
+    template< class... Args >
+    ListIterator< T > emplace(ConstListIterator< T > it, Args&&... args);
+  private:
+    detail::Node< T > imaginary_node_;
+    detail::Node< T >* head_;
+    detail::Node< T >* tail_;
+    size_t size_;
+  };
+
+  template< class T >
+  List< T >::List():
+    imaginary_node_(T()),
+    head_(nullptr),
+    tail_(nullptr),
+    size_(0)
+  {}
+  template< class T >
+  List< T >::List(const T& value, size_t count):
+    List()
+  {
+    for (size_t i = 0; i < count; ++i)
     {
-      try
+      push_back(value);
+    }
+  }
+  template< class T >
+  template< class Iterator >
+  List< T >::List(Iterator start, Iterator finish):
+    List()
+  {
+    while (start != finish)
+    {
+      push_back(*start++);
+    }
+  }
+  template< class T >
+  List< T >::List(std::initializer_list< T > il):
+    List()
+  {
+    auto it = il.begin();
+    while (it != il.end())
+    {
+      push_back(*it++);
+    }
+  }
+  template< class T >
+  List< T >::List(const List< T >& rhs):
+    List()
+  {
+    imaginary_node_ = rhs.imaginary_node_;
+    detail::Node< T >* node = rhs.head_;
+    while (size_ != rhs.size_)
+    {
+      push_back(node->value_);
+      node = node->next_;
+    }
+  }
+  template< class T >
+  List< T >::List(List< T >&& rhs):
+    imaginary_node_(rhs.imaginary_node_),
+    head_(rhs.head_),
+    tail_(rhs.tail_),
+    size_(rhs.size_)
+  {
+    rhs.head_ = nullptr;
+    rhs.tail_ = nullptr;
+    rhs.size_ = 0;
+  }
+  template< class T >
+  bool List< T >::operator<(const List< T >& rhs) const
+  {
+    size_t min_size = std::min(rhs.size_, size_);
+    detail::Node< T >* node = head_;
+    detail::Node< T >* rhs_node = rhs.head_;
+    for (size_t i = 0; i < min_size; ++i)
+    {
+      if (node->value_ != rhs_node->value_)
       {
-        for (size_t i = 0; i < count; ++i)
-        {
-          push_back(value);
-        }
+        return node->value_ < rhs_node->value_;
       }
-      catch (const std::exception& e)
+      node = node->next_;
+      rhs_node = rhs_node->next_;
+    }
+    return false;
+  }
+  template< class T >
+  bool List< T >::operator>=(const List< T >& rhs) const
+  {
+    return !(*this < rhs);
+  }
+  template< class T >
+  bool List< T >::operator<=(const List< T >& rhs) const
+  {
+    return !(rhs < *this);
+  }
+  template< class T >
+  bool List< T >::operator>(const List< T >& rhs) const
+  {
+    return (rhs < *this);
+  }
+  template< class T >
+  bool List< T >::operator==(const List< T >& rhs) const
+  {
+    size_t min_size = std::min(rhs.size_, size_);
+    detail::Node< T >* node = head_;
+    detail::Node< T >* rhs_node = rhs.head_;
+    for (size_t i = 0; i < min_size; ++i)
+    {
+      if (node->value_ != rhs_node->value_)
       {
-        clear();
-        throw;
+        return false;
+      }
+      node = node->next_;
+      rhs_node = rhs_node->next_;
+    }
+    return rhs.size_ == size_;
+  }
+  template< class T >
+  bool List< T >::operator!=(const List< T >& rhs) const
+  {
+    return !(rhs == *this);
+  }
+  template< class T >
+  List< T >& List< T >::operator=(List< T >&& rhs)
+  {
+    if (this != std::addressof(rhs))
+    {
+      clear();
+      swap(rhs);
+    }
+    return *this;
+  }
+  template< class T >
+  List< T >& List< T >::operator=(const List< T >& rhs)
+  {
+    if (this != std::addressof(rhs))
+    {
+      List< T > temp(rhs);
+      temp.swap(*this);
+    }
+    return *this;
+  }
+  template< class T >
+  List< T >::~List()
+  {
+    clear();
+  }
+  template< class T >
+  void List< T >::assign(const T& value, size_t count)
+  {
+    ConstListIterator< T > old_end = --cend();
+    try
+    {
+      for (size_t i = 0; i < count; ++i)
+      {
+        push_back(value);
+      }
+      erase(cbegin(), old_end);
+    }
+    catch (const std::exception& e)
+    {
+      erase(cbegin(), old_end);
+      throw;
+    }
+  }
+  template< class T >
+  template< class Iterator >
+  void List< T >::assign(Iterator start, Iterator finish)
+  {
+    try
+    {
+      clear();
+      head_ = nullptr;
+      tail_ = nullptr;
+      while (start != finish)
+      {
+        push_back(*start++);
       }
     }
-    List(ListIterator< T > start, ListIterator< T > finish):
-      List()
+    catch (const std::exception& e)
     {
-      try
+      clear();
+      throw;
+    }
+  }
+  template< class T >
+  void List< T >::assign(std::initializer_list< T > il)
+  {
+    assign(il.begin(), il.end());
+  }
+  template< class T >
+  void List< T >::remove(const T& value)
+  {
+    auto functor = [&](const T& n) -> bool
+    {
+      return value == n;
+    };
+    remove_if(functor);
+  }
+  template< class T >
+  void List< T >::splice(ConstListIterator< T > it, List< T >& list)
+  {
+    if (it == cbegin())
+    {
+      head_->prev_ = list.tail_;
+      list.tail_->next_ = head_;
+      head_ = list.head_;
+      size_ += list.size_;
+    }
+    else if (it == cend())
+    {
+      list.head_->prev_ = tail_;
+      tail_->next_ = list.head_;
+      tail_ = list.tail_;
+      size_ += list.size_;
+    }
+    else
+    {
+      it.node->prev_->next_ = list.head_;
+      list.tail_->next_ = it.node;
+      list.head_->prev_ = it.node->prev_;
+      it.node->prev_ = list.tail_;
+      size_ += list.size_;
+    }
+    list.head_ = nullptr;
+    list.tail_ = nullptr;
+    list.size_ = 0;
+  }
+  template< class T >
+  void List< T >::splice(ConstListIterator< T > it, List< T >& list, ConstListIterator< T > list_it)
+  {
+    list.erase(list_it);
+    insert(it, *list_it);
+  }
+  template< class T >
+  void List< T >::splice(ConstListIterator< T > it, List< T >& list, ConstListIterator< T > list_start, ConstListIterator< T > list_finish)
+  {
+    while (list_start != list_finish)
+    {
+      splice(it, list, list_start++);
+    }
+  }
+  template< class T >
+  void List< T >::reverse() noexcept
+  {
+    std::swap(head_->prev_, tail_->next_);
+    detail::Node< T >* node = head_;
+    while (node)
+    {
+      detail::Node< T >* next_node = node->next_;
+      std::swap(node->prev_, node->next_);
+      node = next_node;
+    }
+    std::swap(head_, tail_);
+  }
+  template< class T >
+  template< class Functor >
+  void List< T >::remove_if(Functor f)
+  {
+    detail::Node< T >* node = head_;
+    while (node)
+    {
+      if (f(node->value_))
       {
-        while (start != finish)
+        if (node == head_)
         {
-          push_back(*start++);
+          pop_front();
+          node = head_;
+        }
+        else if (node == tail_)
+        {
+          pop_back();
+          node = nullptr;
+        }
+        else
+        {
+          detail::Node< T >* temp = node;
+          node->next_->prev_ = node->prev_;
+          node->prev_->next_ = node->next_;
+          node = node->next_;
+          delete temp;
+          --size_;
         }
       }
-      catch (const std::exception& e)
+      else
       {
-        clear();
-        throw;
-      }
-    }
-    List(std::initializer_list< T > il):
-      List()
-    {
-      try
-      {
-        auto it = il.begin();
-        while (it != il.end())
+        if (node == tail_)
         {
-          push_back(*it++);
+          node = nullptr;
         }
-      }
-      catch (const std::exception& e)
-      {
-        clear();
-        throw;
-      }
-    }
-    List(const List< T >& rhs):
-      List()
-    {
-      try
-      {
-        Node< T >* node = rhs.head_;
-        while (size_ != rhs.size_)
+        else
         {
-          push_back(node->value_);
           node = node->next_;
         }
       }
-      catch (const std::exception& e)
-      {
-        for (size_t j = 0; j < size_; ++j)
-        {
-          pop_front();
-        }
-        throw;
-      }
     }
-    List(List< T >&& rhs)
+  }
+  template< class T >
+  void List< T >::swap(List< T >& list)
+  {
+    std::swap(list.head_, head_);
+    std::swap(list.tail_, tail_);
+    std::swap(list.size_, size_);
+  }
+  template< class T >
+  size_t List< T >::size() const noexcept
+  {
+    return size_;
+  }
+  template< class T >
+  T& List< T >::back()
+  {
+    return tail_->value_;
+  }
+  template< class T >
+  T& List< T >::front()
+  {
+    return head_->value_;
+  }
+  template< class T >
+  const T& List< T >::back() const
+  {
+    return tail_->value_;
+  }
+  template< class T >
+  const T& List< T >::front() const
+  {
+    return head_->value_;
+  }
+  template< class T >
+  ListIterator< T > List< T >::begin() noexcept
+  {
+    return ListIterator< T >(head_);
+  }
+  template< class T >
+  ListIterator< T > List< T >::end() noexcept
+  {
+    return ListIterator< T >(std::addressof(imaginary_node_));
+  }
+  template< class T >
+  ConstListIterator< T > List< T >::cbegin() const noexcept
+  {
+    return ConstListIterator< T >(head_);
+  }
+  template< class T >
+  ConstListIterator< T > List< T >::cend() const noexcept
+  {
+    return ConstListIterator< T >(const_cast< detail::Node< T >* >(std::addressof(imaginary_node_)));
+  }
+  template< class T >
+  ConstListIterator< T > List< T >::erase(ConstListIterator< T > it)
+  {
+    ConstListIterator< T > result(it.node->next_);
+    it.node->next_->prev_ = it.node->prev_;
+    if (it.node == head_)
     {
-      swap(rhs);
+      head_ = head_->next_;
     }
-    bool operator<(const List< T >& rhs) const
+    else if (it.node == tail_)
     {
-      size_t min_size = std::min(rhs.size_, size_);
-      Node< T >* node = head_;
-      Node< T >* rhs_node = rhs.head_;
-      for (size_t i = 0; i < min_size; ++i)
-      {
-        if (node->value_ != rhs_node->value_)
-        {
-          return node->value_ < rhs_node->value_;
-        }
-        node = node->next_;
-        rhs_node = rhs_node->next_;
-      }
-      return false;
+      tail_ = tail_->prev_;
+      it.node->prev_->next_ = it.node->next_;
     }
-    bool operator>=(const List< T >& rhs) const
+    else
     {
-      return !(*this < rhs);
+      it.node->prev_->next_ = it.node->next_;
     }
-    bool operator<=(const List< T >& rhs) const
+    delete it.node;
+    --size_;
+    return result;
+  }
+  template< class T >
+  ConstListIterator< T > List< T >::erase(ConstListIterator< T > it_start, ConstListIterator< T > it_finish)
+  {
+    while (it_start != it_finish)
     {
-      return !(rhs < *this);
+      erase(it_start++);
     }
-    bool operator>(const List< T >& rhs) const
+    return it_finish;
+  }
+  template< class T >
+  ListIterator< T > List< T >::insert(ConstListIterator< T > it, const T& value)
+  {
+    if (size_ == 0)
     {
-      return (rhs < *this);
+      detail::Node< T >* node = new detail::Node< T >(value, std::addressof(imaginary_node_));
+      imaginary_node_.prev_ = node;
+      head_ = node;
+      tail_ = node;
+      ++size_;
+      ListIterator< T > result(head_);
+      return result;
     }
-    bool operator==(const List< T >& rhs) const
+    detail::Node< T >* node = new detail::Node< T >(value, it.node, it.node->prev_);
+    it.node->prev_ = node;
+    if (it.node == head_)
     {
-      return !(*this < rhs) && !(rhs < *this);
+      head_ = node;
     }
-    bool operator!=(const List< T >& rhs) const
+    else if (it.node == tail_->next_)
     {
-      return !(rhs == *this);
+      tail_ = node;
+      node->prev_->next_ = node;
     }
-    List< T >& operator=(List< T >&& rhs)
+    else
     {
-      if (this != std::addressof(rhs))
-      {
-        clear();
-        swap(rhs);
-      }
-      return *this;
+      node->prev_->next_ = node;
     }
-    List< T >& operator=(const List< T >& rhs)
+    ++size_;
+    ListIterator< T > result(node);
+    return result;
+  }
+  template< class T >
+  template< class Iterator >
+  ListIterator< T > List< T >::insert(ConstListIterator< T > it, Iterator start, Iterator finish)
+  {
+    ConstListIterator< T > iterator(it);
+    size_t count = 0;
+    try
     {
-      if (this != std::addressof(rhs))
-      {
-        List< T > temp(rhs);
-        temp.swap(*this);
-      }
-      return *this;
-    }
-    ~List()
-    {
-      clear();
-    }
-    void assign(const T& value, size_t count)
-    {
-      try
-      {
-        clear();
-        head_ = nullptr;
-        tail_ = nullptr;
-        for (size_t i = 0; i < count; ++i)
-        {
-          push_back(value);
-        }
-      }
-      catch(const std::exception& e)
-      {
-        clear();
-        throw;
-      }
-    }
-    void assign(ListIterator< T > start, ListIterator< T > finish)
-    {
-      try
-      {
-        clear();
-        head_ = nullptr;
-        tail_ = nullptr;
-        while (start != finish)
-        {
-          push_back(*start++);
-        }
-      }
-      catch(const std::exception& e)
-      {
-        clear();
-        throw;
-      }
-    }
-    void assign(std::initializer_list< T > il)
-    {
-      try
-      {
-        clear();
-        head_ = nullptr;
-        tail_ = nullptr;
-        auto it = il.begin();
-        while (it != il.end())
-        {
-          push_back(*it++);
-        }
-      }
-      catch(const std::exception& e)
-      {
-        clear();
-        throw;
-      }
-    }
-    void remove(const T& value)
-    {
-      remove_if([&](const T& n){return value == n;});
-    }
-    void splice(ConstListIterator< T > it, List< T >& list)
-    {
-      if (it == cbegin())
-      {
-        head_->prev_ = list.tail_;
-        delete list.tail_->next_;
-        list.tail_->next_ = head_;
-        head_ = list.head_;
-        size_ += list.size_;
-      }
-      else if (it == cend())
-      {
-        delete tail_->next_;
-        list.head_->prev_ = tail_;
-        tail_->next_ = list.head_;
-        tail_ = list.tail_;
-        size_ += list.size_;
-      }
-      else
-      {
-        delete list.tail_->next_;
-        it.node->prev_->next_ = list.head_;
-        list.tail_->next_ = it.node;
-        list.head_->prev_ = it.node->prev_;
-        it.node->prev_ = list.tail_;
-        size_ += list.size_;
-      }
-      list.head_ = nullptr;
-      list.tail_ = nullptr;
-      list.size_ = 0;
-    }
-    void splice(ConstListIterator< T > it, List< T >& list, ConstListIterator< T > list_it)
-    {
-      insert(ListIterator< T >(it.node), *list_it);
-      list.erase(list_it);
-    }
-    void splice(ConstListIterator< T > it, List< T >& list, ConstListIterator< T > list_start, ConstListIterator< T > list_finish)
-    {
-      while (list_start != list_finish)
-      {
-        splice(it, list, list_start++);
-      }
-    }
-    void reverse()
-    {
-      Node< T >* start = head_;
-      Node< T >* finish = tail_;
+      ListIterator< T > result(it.node);
       while (start != finish)
       {
-        std::swap(start->value_, finish->value_);
-        start = start->next_;
-        if (start != finish)
-        {
-          finish = finish->prev_;
-        }
+        insert(it++, *start++);
       }
+      return ++result;
     }
-    template< class Functor >
-    void remove_if(Functor f)
+    catch (const std::exception& e)
     {
-      Node< T >* node = head_;
-      while (node)
+      --iterator;
+      for (size_t i = 0; i < count; ++i)
       {
-        if (f(node->value_))
-        {
-          if (node == head_)
-          {
-            pop_front();
-            node = head_;
-          }
-          else if (node == tail_)
-          {
-            pop_back();
-            node = nullptr;
-          }
-          else
-          {
-            Node< T >* temp = node;
-            node->next_->prev_ = node->prev_;
-            node->prev_->next_ = node->next_;
-            node = node->next_;
-            delete temp;
-            --size_;
-          }
-        }
-        else
-        {
-          if (node == tail_)
-          {
-            node = nullptr;
-          }
-          else
-          {
-            node = node->next_;
-          }
-        }
+        erase(iterator--);
       }
+      throw;
     }
-    void swap(List< T >& list)
-    {
-      std::swap(list.head_, head_);
-      std::swap(list.tail_, tail_);
-      std::swap(list.size_, size_);
-    }
-    const T& at(size_t i) const
-    {
-      if (i >= size_)
-      {
-        throw std::logic_error("Element outside the list");
-      }
-      return operator[](i);
-    }
-    T& at(size_t i)
-    {
-      return const_cast< T& >(static_cast< const List< T >& >(*this).at(i));
-    }
-    T& operator[](size_t i)
-    {
-      return const_cast< T& >(static_cast< const List< T >& >(*this).operator[](i));
-    }
-    const T& operator[](size_t i) const
-    {
-      ConstListIterator< T > iterator(head_);
-      for (size_t j = 0; j < i; ++j)
-      {
-        ++iterator;
-      }
-      return *iterator;
-    }
-    size_t size() const
-    {
-      return size_;
-    }
-    T& back()
-    {
-      return tail_->value_;
-    }
-    T& front()
-    {
-      return head_->value_;
-    }
-    const T& back() const
-    {
-      return tail_->value_;
-    }
-    const T& front() const
-    {
-      return head_->value_;
-    }
-    ListIterator< T > begin()
-    {
-      return ListIterator< T >(head_);
-    }
-    ListIterator< T > end()
-    {
-      return ListIterator< T >(tail_->next_);
-    }
-    ConstListIterator< T > cbegin() const
-    {
-      return ConstListIterator< T >(head_);
-    }
-    ConstListIterator< T > cend() const
-    {
-      return ConstListIterator< T >(tail_->next_);
-    }
-    ConstListIterator< T > erase(ConstListIterator< T > it)
-    {
-      if (it == cbegin())
-      {
-        pop_front();
-      }
-      else if (it == --cend())
-      {
-        pop_back();
-      }
-      else
-      {
-        it.node->next_->prev_ = it.node->prev_;
-        it.node->prev_->next_ = it.node->next_;
-        delete it.node;
-        --size_;
-      }
-      return it;
-    }
-    ConstListIterator< T > erase(ConstListIterator< T > it_start, ConstListIterator< T > it_finish)
-    {
-      while (it_start != it_finish)
-      {
-        erase(it_start++);
-      }
-      return it_finish;
-    }
-    ListIterator< T > insert(ConstListIterator< T > it, const T& value)
-    {
-      try
-      {
-        if (it == cbegin())
-        {
-          push_front(value);
-        }
-        else if (it == cend())
-        {
-          push_back(value);
-        }
-        else
-        {
-          Node< T >* new_node = new Node< T >(value, it.node, it.node->prev_);
-          it.node->prev_ = new_node;
-          new_node->prev_->next_ = new_node;
-          ++size_;
-        }
-        ListIterator< T > iterator(it.node);
-        return iterator;
-      }
-      catch(const std::exception& e)
-      {
-        clear();
-        throw;
-      }
-    }
-    ListIterator< T > insert(ConstListIterator< T > it, ListIterator< T > start, ListIterator< T > finish)
-    {
-      try
-      {
-        ListIterator< T > result(it.node);
-        while (start != finish)
-        {
-          insert(it++, *start++);
-        }
-        return ++result;
-      }
-      catch(const std::exception& e)
-      {
-        clear();
-        throw;
-      }
-    }
-    ListIterator< T > insert(ConstListIterator< T > it, size_t n, const T& value)
+  }
+  template< class T >
+  ListIterator< T > List< T >::insert(ConstListIterator< T > it, size_t n, const T& value)
+  {
+    ConstListIterator< T > iterator(it);
+    size_t count = 0;
+    try
     {
       ListIterator< T > result(it.node);
       for (size_t i = 0; i < n; ++i)
       {
         insert(it++, value);
+        ++count;
       }
       return ++result;
     }
-    ListIterator< T > insert(ConstListIterator< T > it, std::initializer_list< T > il)
+    catch (const std::exception& e)
     {
-        auto iterator = il.begin();
-        ListIterator< T > result(it.node);
-        while (iterator != il.end())
+      --iterator;
+      for (size_t i = 0; i < count; ++i)
+      {
+        erase(iterator--);
+      }
+      throw;
+    }
+  }
+  template< class T >
+  ListIterator< T > List< T >::insert(ConstListIterator< T > it, std::initializer_list< T > il)
+  {
+    return insert(it, il.begin(), il.end());
+  }
+  template< class T >
+  bool List< T >::empty() const noexcept
+  {
+    return size_ == 0;
+  }
+  template< class T >
+  void List< T >::push_front(const T& value)
+  {
+    insert(cbegin(), value);
+  }
+  template< class T >
+  void List< T >::push_back(const T& value)
+  {
+    if (!tail_)
+    {
+      push_front(value);
+    }
+    else
+    {
+      insert(cend(), value);
+    }
+  }
+  template< class T >
+  void List< T >::pop_back()
+  {
+    erase(--cend());
+  }
+  template< class T >
+  void List< T >::pop_front()
+  {
+    erase(cbegin());
+  }
+  template< class T >
+  void List< T >::clear() noexcept
+  {
+    while (!empty())
+    {
+      pop_front();
+    }
+  }
+  template< class T >
+  void List< T >::unique()
+  {
+    auto comp = [](const T& lhs, const T& rhs)
+    {
+      return lhs == rhs;
+    };
+    unique(comp);
+  }
+  template< class T >
+  template< class Pred >
+  void List< T >::unique(Pred p)
+  {
+    ConstListIterator< T > it(head_);
+    ConstListIterator< T > end(tail_);
+    while (it != cend())
+    {
+      ConstListIterator< T > temp(it);
+      ++temp;
+      while (temp != cend())
+      {
+        ConstListIterator< T > temp_end(tail_);
+        end = temp_end;
+        if (temp == end)
         {
-          insert(it, *iterator++);
-        }
-        return ++result;
-    }
-    bool empty() const
-    {
-      return size_ == 0;
-    }
-    void push_front(const T& value)
-    {
-      Node< T >* new_node = new Node< T >(value, head_, nullptr);
-      if (head_)
-      {
-        head_->prev_ = new_node;
-      }
-      if (!tail_)
-      {
-        try
-        {
-          Node< T >* end_node = new Node< T >(value);
-          tail_ = new_node;
-          end_node->prev_ = tail_;
-          tail_->next_ = end_node;
-        }
-        catch(const std::exception& e)
-        {
-          delete new_node;
-          throw;
-        }
-      }
-      head_ = new_node;
-      ++size_;
-    }
-    void push_back(const T& value)
-    {
-      Node< T >* new_node = new Node< T >(value, nullptr, tail_);
-      if (tail_)
-      {
-        tail_->next_->prev_ = new_node;
-        new_node->next_ = tail_->next_;
-        tail_->next_ = new_node;
-      }
-      if (!head_)
-      {
-        try
-        {
-          Node< T >* end_node = new Node< T >(value);
-          head_ = new_node;
-          tail_ = head_;
-          end_node->prev_ = tail_;
-          tail_->next_ = end_node;
-          ++size_;
-          return;
-        }
-        catch(const std::exception& e)
-        {
-          delete new_node;
-          throw;
-        }
-      }
-      tail_ = new_node;
-      ++size_;
-    }
-    void pop_back()
-    {
-      if (size_ == 1)
-      {
-        delete tail_->next_;
-        delete tail_;
-        --size_;
-      }
-      else
-      {
-        Node< T >* temp = tail_;
-        tail_->next_->prev_ = tail_->prev_;
-        tail_->prev_->next_ = tail_->next_;
-        tail_ = tail_->prev_;
-        delete temp;
-        --size_;
-      }
-    }
-    void pop_front()
-    {
-      if (size_ == 1)
-      {
-        delete tail_->next_;
-        delete head_;
-        --size_;
-      }
-      else
-      {
-        head_ = head_->next_;
-        delete head_->prev_;
-        --size_;
-      }
-    }
-    void clear()
-    {
-      while (!empty())
-      {
-        pop_back();
-      }
-    }
-    void unique()
-    {
-      unique([](const T& lhs, const T& rhs){return lhs == rhs;});
-    }
-    template< class Pred >
-    void unique(Pred p)
-    {
-      ConstListIterator< T > it(head_);
-      ConstListIterator< T > end(tail_);
-      while (it != cend())
-      {
-        ConstListIterator< T > temp(it);
-        ++temp;
-        while (temp != cend())
-        {
-          ConstListIterator< T > temp_end(tail_);
-          end = temp_end;
-          if (temp == end)
-          {
-            if (p(*temp, *it))
-            {
-              erase(temp);
-            }
-            break;
-          }
           if (p(*temp, *it))
           {
-            ConstListIterator< T > temp2(temp);
-            ++temp2;
             erase(temp);
-            temp = temp2;
           }
-          else
-          {
-            ++temp;
-          }
+          break;
         }
-        ++it;
-      }
-    }
-    void sort()
-    {
-      sort([](const T& lhs, const T& rhs){return lhs > rhs;});
-    }
-    template< class Compare >
-    void sort(Compare comp)
-    {
-      Node< T >* node1 = head_;
-      for (size_t i = 0; i < size_; ++i)
-      {
-        Node< T >* node2 = node1;
-        for (size_t j = i; j < size_; ++j)
+        if (p(*temp, *it))
         {
-          if (comp(node1->value_, node2->value_))
-          {
-            std::swap(node1->value_, node2->value_);
-          }
-          node2 = node2->next_;
-        }
-        node1 = node1->next_;
-      }
-    }
-    template< class Compare >
-    void merge(List< T >& list, Compare comp)
-    {
-      ConstListIterator< T > start(head_);
-      ConstListIterator< T > list_start(list.head_);
-      while (list_start != list.cend())
-      {
-        if (comp(*start, *list_start))
-        {
-          insert(start, *list_start++);
-          if (start == cend())
-          {
-            while (list_start != list.cend())
-            {
-              push_back(*list_start++);
-            }
-          }
+          ConstListIterator< T > temp2(temp);
+          ++temp2;
+          erase(temp);
+          temp = temp2;
         }
         else
         {
-          ++start;
+          ++temp;
         }
       }
-      list.clear();
-      list.head_ = nullptr;
-      list.tail_ = nullptr;
+      ++it;
     }
-    void merge(List< T >& list)
+  }
+  template< class T >
+  void List< T >::sort()
+  {
+    auto comp = [](const T& lhs, const T& rhs)
     {
-      merge(list, [](const T& lhs, const T& rhs){return lhs >= rhs;});
-    }
-    template< class... Args >
-    ListIterator< T > emplace(ConstListIterator< T > it, Args&&... args)
+      return lhs > rhs;
+    };
+    sort(comp);
+  }
+  template< class T >
+  template< class Compare >
+  void List< T >::sort(Compare comp)
+  {
+    detail::Node< T >* node1 = head_;
+    for (size_t i = 0; i < size_; ++i)
     {
-      return insert(it, T(args...));
+      detail::Node< T >* node2 = node1;
+      for (size_t j = i; j < size_; ++j)
+      {
+        if (comp(node1->value_, node2->value_))
+        {
+          std::swap(node1->value_, node2->value_);
+        }
+        node2 = node2->next_;
+      }
+      node1 = node1->next_;
     }
-  private:
-    Node< T >* head_;
-    Node< T >* tail_;
-    size_t size_;
-  };
+  }
+  template< class T >
+  template< class Compare >
+  void List< T >::merge(List< T >& list, Compare comp)
+  {
+    ConstListIterator< T > start(head_);
+    ConstListIterator< T > list_start(list.head_);
+    while (list_start != list.cend())
+    {
+      if (comp(*start, *list_start))
+      {
+        splice(start, list, list_start++);
+      }
+      else
+      {
+        ++start;
+        if (start == cend())
+        {
+          tail_->next_ = list_start.node;
+          list_start.node->prev_ = tail_;
+          tail_ = list.tail_;
+          break;
+        }
+      }
+    }
+    size_ += list.size_;
+    list.head_ = nullptr;
+    list.tail_ = nullptr;
+    list.size_ = 0;
+  }
+  template< class T >
+  void List< T >::merge(List< T >& list)
+  {
+    auto comp = [](const T& lhs, const T& rhs)
+    {
+      return lhs >= rhs;
+    };
+    merge(list, comp);
+  }
+  template< class T >
+  template< class... Args >
+  ListIterator< T > List< T >::emplace(ConstListIterator< T > it, Args&&... args)
+  {
+    return insert(it, T(std::forward< Args >(args)...));
+  }
 }
 #endif

@@ -3,18 +3,21 @@
 
 namespace piyavkin
 {
-  template< class T >
-  struct Node
+  namespace detail
   {
-    Node(const T& value = T(), Node* next = nullptr, Node* prev = nullptr):
-      value_(value),
-      next_(next),
-      prev_(prev)
-    {}
-    ~Node() = default;
-    T value_;
-    Node* next_;
-    Node* prev_;
-  };
+    template< class T >
+    struct Node
+    {
+      Node(const T& value = T(), Node* next = nullptr, Node* prev = nullptr):
+        value_(value),
+        next_(next),
+        prev_(prev)
+      {}
+      ~Node() = default;
+      T value_;
+      Node* next_;
+      Node* prev_;
+    };
+  }
 }
 #endif

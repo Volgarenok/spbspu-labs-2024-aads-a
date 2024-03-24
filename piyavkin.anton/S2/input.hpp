@@ -6,6 +6,6 @@
 
 namespace piyavkin
 {
-  void input(std::istream& in, Queue< char >* queues, size_t& size); 
+  void input(std::istream& in, List< Queue< char > >& queues); 
 }
 #endif

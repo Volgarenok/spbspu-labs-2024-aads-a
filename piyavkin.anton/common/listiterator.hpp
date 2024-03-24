@@ -16,9 +16,6 @@ namespace piyavkin
     ListIterator():
       node(nullptr)
     {}
-    ListIterator(Node< D >* nd):
-      node(nd)
-    {}
     ListIterator(const ListIterator< D >&) = default;
     ListIterator< D >& operator=(const ListIterator< D >&) = default;
     ~ListIterator() = default;
@@ -61,7 +58,10 @@ namespace piyavkin
       return node->value_;
     }
   private:
-    Node< D >* node;
+    detail::Node< D >* node;
+    explicit ListIterator(detail::Node< D >* nd):
+      node(nd)
+    {}
   };
   template< class D >
   class ConstListIterator: public std::iterator< std::bidirectional_iterator_tag, D >
@@ -70,9 +70,6 @@ namespace piyavkin
   public:
     ConstListIterator():
       node(nullptr)
-    {}
-    ConstListIterator(Node< D >* nd):
-      node(nd)
     {}
     ConstListIterator(const ConstListIterator< D >&) = default;
     ConstListIterator< D >& operator=(const ConstListIterator< D >&) = default;
@@ -116,7 +113,10 @@ namespace piyavkin
       return node->value_;
     }
   private:
-    Node< D >* node;
+    detail::Node< D >* node;
+    explicit ConstListIterator(detail::Node< D >* nd):
+      node(nd)
+    {}
   };
 }
 #endif
