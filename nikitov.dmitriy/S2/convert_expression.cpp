@@ -1,56 +1,81 @@
 #include "convert_expression.hpp"
 #include <exception>
 #include "queue.hpp"
+#include <iostream>
 #include "stack.hpp"
 
-nikitov::Queue< nikitov::ExpressionType > nikitov::convertExpression(Queue< ExpressionType >& expression)
+nikitov::Queue< nikitov::PostfixType > nikitov::convertExpression(Queue< InfixType >& expression)
 {
-  Queue< ExpressionType > newExpression;
-  Stack< ExpressionType > operandsStack;
+  Queue< PostfixType > newExpression;
+  Stack< StackType > operandsStack;
   while (!expression.empty())
   {
-    ExpressionType type = expression.drop();
-    if (type.storedType == 2)
+    InfixType type = expression.drop();
+    if (type.typeName != nikitov::TypeName::operand)
     {
-      char symb = type.value.symb;
-      if (symb == ')')
+      if (type.typeName == nikitov::TypeName::bracket)
       {
-        while (operandsStack.top().value.symb != '(')
+        if (type.value.bracket.symb == ')')
         {
+          while (!operandsStack.empty() && operandsStack.top().typeName != nikitov::TypeName::bracket)
+          {
+            PostfixType newPostfixType;
+            newPostfixType.typeName = nikitov::TypeName::operation;
+            newPostfixType.value.operation = operandsStack.drop().value.operation;
+            newExpression.push(newPostfixType);
+          }
           if (operandsStack.empty())
           {
             throw std::logic_error("Error: Wrong brackets");
           }
-          newExpression.push(operandsStack.drop());
+          operandsStack.drop();
         }
-        operandsStack.drop();
+        else
+        {
+          StackType newStackType;
+          newStackType.typeName = nikitov::TypeName::bracket;
+          newStackType.value.bracket = type.value.bracket;
+          operandsStack.push(newStackType);
+        }
       }
       else
       {
-        if (symb != '(')
+        while (!operandsStack.empty() && operandsStack.top().typeName != nikitov::TypeName::bracket)
         {
-          while (!operandsStack.empty() && (type <= operandsStack.top()))
+          if (type.value.operation <= operandsStack.top().value.operation)
           {
-            newExpression.push(operandsStack.drop());
+            PostfixType newPostfixType;
+            newPostfixType.typeName = nikitov::TypeName::operation;
+            newPostfixType.value.operation = operandsStack.drop().value.operation;
+            newExpression.push(newPostfixType);
           }
         }
-        operandsStack.push(type);
+        StackType newStackType;
+        newStackType.typeName = nikitov::TypeName::operation;
+        newStackType.value.operation = type.value.operation;
+        operandsStack.push(newStackType);
       }
     }
     else
     {
-      newExpression.push(type);
+      PostfixType newPostfixType;
+      newPostfixType.typeName = nikitov::TypeName::operand;
+      newPostfixType.value.operand = type.value.operand;
+      newExpression.push(newPostfixType);
     }
   }
 
   while (!operandsStack.empty())
   {
-    ExpressionType type = operandsStack.drop();
-    if (type.value.symb == '(')
+    StackType type = operandsStack.drop();
+    if (type.typeName == nikitov::TypeName::bracket)
     {
       throw std::logic_error("Error: Wrong brackets");
     }
-    newExpression.push(type);
+    PostfixType newPostfixType;
+    newPostfixType.typeName = nikitov::TypeName::operation;
+    newPostfixType.value.operation = type.value.operation;
+    newExpression.push(newPostfixType);
   }
   return newExpression;
 }

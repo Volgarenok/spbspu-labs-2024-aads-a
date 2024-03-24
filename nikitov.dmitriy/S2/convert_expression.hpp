@@ -6,6 +6,6 @@
 
 namespace nikitov
 {
-  Queue< ExpressionType > convertExpression(Queue< ExpressionType >& expression);
+  Queue< PostfixType > convertExpression(Queue< InfixType >& expression);
 }
 #endif
