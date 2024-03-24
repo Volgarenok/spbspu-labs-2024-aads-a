@@ -1,6 +1,6 @@
 #include "expression_type.hpp"
 
-bool nikitov::Operation::operator<=(const Operation& other) const
+bool nikitov::detail::Operation::operator<=(const detail::Operation& other) const
 {
   char otherSymb = other.symb;
   if (symb == '+' || symb == '-')
