@@ -1,6 +1,8 @@
 #ifndef ITERATOR_HPP
 #define ITERATOR_HPP
 
+#include <iterator>
+
 #include "node.hpp"
 
 namespace zhalilov
@@ -9,7 +11,7 @@ namespace zhalilov
   class List;
 
   template < typename T >
-  class Iterator
+  class Iterator: public std::iterator< std::bidirectional_iterator_tag, T, T, T *, T >
   {
   public:
     ~Iterator() = default;

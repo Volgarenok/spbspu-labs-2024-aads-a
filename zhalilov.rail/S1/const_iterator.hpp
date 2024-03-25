@@ -1,6 +1,8 @@
 #ifndef CONST_ITERATOR_HPP
 #define CONST_ITERATOR_HPP
 
+#include <iterator>
+
 #include "node.hpp"
 
 namespace zhalilov
@@ -9,7 +11,7 @@ namespace zhalilov
   class List;
 
   template < typename T >
-  class ConstIterator
+  class ConstIterator: std::iterator< std::bidirectional_iterator_tag, const T, const T, const T *, const T >
   {
   public:
     ~ConstIterator() = default;
