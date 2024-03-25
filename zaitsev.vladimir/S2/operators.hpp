@@ -1,5 +1,6 @@
 #ifndef OPERATORS_HPP
 #define OPERATORS_HPP
+#include <iostream>
 #include <limits>
 #include <stdexcept>
 #include <type_traits>
@@ -11,13 +12,20 @@ namespace zaitsev
   {
     virtual size_t priority() const = 0;
     virtual T operator()(const T& a, const T& b) const = 0;
+    virtual BinaryOperator<T>* clone() const = 0;
+    virtual std::ostream& operator<<(std::ostream& output) = 0;
+    friend std::ostream& operator<<(std::ostream& output, const BinaryOperator<T>& object)
+    {
+      object.operator<<(output);
+      return output;
+    }
   };
 
   template<typename T>
   struct SafePlus: public BinaryOperator<T>
   {
     static_assert(std::is_integral<T>::value == true, "Type not integer");
-    virtual constexpr size_t priority() const
+    virtual size_t priority() const
     {
       return 1;
     }
@@ -33,13 +41,22 @@ namespace zaitsev
       }
       return a + b;
     }
+    virtual BinaryOperator<T>* clone() const
+    {
+      return new SafePlus<T>();
+    }
+    virtual std::ostream& operator<<(std::ostream& output)
+    {
+      output << '+';
+      return output;
+    }
   };
 
   template<typename T>
   struct SafeMinus: public BinaryOperator<T>
   {
     static_assert(std::is_integral<T>::value == true, "Type not integer");
-    virtual constexpr size_t priority() const
+    virtual size_t priority() const
     {
       return 1;
     }
@@ -55,13 +72,22 @@ namespace zaitsev
       }
       return a - b;
     }
+    virtual BinaryOperator<T>* clone() const
+    {
+      return new SafeMinus<T>();
+    }
+    virtual std::ostream&  operator<<(std::ostream& output)
+    {
+      output << '-';
+      return output;
+    }
   };
 
   template<typename T>
   struct SafeDivision: public BinaryOperator<T>
   {
     static_assert(std::is_integral<T>::value == true, "Type not integer");
-    virtual constexpr size_t priority() const
+    virtual size_t priority() const
     {
       return 2;
     }
@@ -77,23 +103,41 @@ namespace zaitsev
       }
       return a / b;
     }
+    virtual BinaryOperator<T>* clone() const
+    {
+      return new SafeDivision<T>();
+    }
+    virtual std::ostream& operator<<(std::ostream& output)
+    {
+      output << '/';
+      return output;
+    }
   };
 
   template<typename T>
   struct SafeMod: public BinaryOperator<T>
   {
     static_assert(std::is_integral<T>::value == true, "Type not integer");
-    virtual constexpr size_t priority() const
+    virtual size_t priority() const
     {
       return 2;
     }
     virtual T operator()(const T& a, const T& b) const
     {
-      if (b == 0 || a == std::numeric_limits<T>::lowest() && b == -1) 
+      if (b == 0 || a == std::numeric_limits<T>::lowest() && b == -1)
       {
         throw std::runtime_error("Mod overflow");
       }
       return a % b;
+    }
+    virtual BinaryOperator<T>* clone() const
+    {
+      return new SafeMod<T>;
+    }
+    virtual std::ostream& operator<<(std::ostream& output)
+    {
+      output << '%';
+      return output;
     }
   };
 
@@ -101,7 +145,7 @@ namespace zaitsev
   struct SafeMultiplication: public BinaryOperator<T>
   {
     static_assert(std::is_integral<T>::value == true, "Type not integer");
-    virtual constexpr size_t priority() const
+    virtual size_t priority() const
     {
       return 2;
     }
@@ -119,6 +163,15 @@ namespace zaitsev
 
       }
       return a * b;
+    }
+    virtual BinaryOperator<T>* clone() const
+    {
+      return new SafeMultiplication<T>();
+    }
+    virtual std::ostream& operator<<(std::ostream& output)
+    {
+      output << '*';
+      return output;
     }
   };
 }

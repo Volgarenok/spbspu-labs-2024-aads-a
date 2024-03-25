@@ -85,7 +85,7 @@ namespace zaitsev
       }
     }
   }
- 
+
 
   template<typename T>
   void InfixExpression<T>::add_non_value_token(char symbol)

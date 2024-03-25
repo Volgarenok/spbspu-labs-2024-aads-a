@@ -13,7 +13,7 @@ namespace zaitsev
     using alloc_traits = std::allocator_traits<std::allocator<T>>;
 
     template<bool IsConst>
-    class BaseIterator 
+    class BaseIterator
     {
     public:
       using prt_type = std::conditional_t< IsConst, const T*, T* >;
