@@ -13,9 +13,8 @@ void piyavkin::convertPostfix(infix_t& infix, postfix_t& postfix)
       {
         Postfix postfix_val;
         postfix_val.type = detail::operand;
-        postfix_val.symbol.operand = it->front().symbol.operand;
+        postfix_val.symbol.operand = it->drop().symbol.operand;
         q.push(postfix_val);
-        it->drop();
       }
       else
       {
@@ -23,9 +22,8 @@ void piyavkin::convertPostfix(infix_t& infix, postfix_t& postfix)
         {
           ConversionExpressionType stack_val;
           stack_val.type = detail::bracket;
-          stack_val.symbol.bracket = it->front().symbol.bracket;
+          stack_val.symbol.bracket = it->drop().symbol.bracket;
           stack.push(stack_val);
-          it->drop();
         }
         else if (it->front().symbol.bracket.bracket == ')')
         {
@@ -33,9 +31,8 @@ void piyavkin::convertPostfix(infix_t& infix, postfix_t& postfix)
           {
             Postfix postfix_val;
             postfix_val.type = detail::operation;
-            postfix_val.symbol.operation = stack.top().symbol.operation;
+            postfix_val.symbol.operation = stack.drop().symbol.operation;
             q.push(postfix_val);
-            stack.drop();
           }
           stack.drop();
           it->drop();
@@ -50,15 +47,13 @@ void piyavkin::convertPostfix(infix_t& infix, postfix_t& postfix)
             }
             Postfix postfix_val;
             postfix_val.type = detail::operation;
-            postfix_val.symbol.operation = it->front().symbol.operation;
+            postfix_val.symbol.operation = it->drop().symbol.operation;
             q.push(postfix_val);
-            it->drop();
           }
           ConversionExpressionType stack_val;
           stack_val.type = detail::operation;
-          stack_val.symbol.operation = it->front().symbol.operation;
+          stack_val.symbol.operation = it->drop().symbol.operation;
           stack.push(stack_val);
-          it->drop();
         }
       }
     }
@@ -66,9 +61,8 @@ void piyavkin::convertPostfix(infix_t& infix, postfix_t& postfix)
     {
       Postfix postfix_val;
       postfix_val.type = detail::operation;
-      postfix_val.symbol.operation = stack.top().symbol.operation;
+      postfix_val.symbol.operation = stack.drop().symbol.operation;
       q.push(postfix_val);
-      stack.drop();
     }
     postfix.push_back(q);
   }

@@ -27,11 +27,19 @@ namespace piyavkin
     {
       list.push_back(value);
     }
-    T back()
+    T& back()
     {
       return list.back();
     }
-    T front()
+    T& front()
+    {
+      return list.front();
+    }
+    const T& back() const
+    {
+      return list.back();
+    }
+    const T& front() const
     {
       return list.front();
     }
@@ -41,11 +49,11 @@ namespace piyavkin
       list.pop_front();
       return temp;
     }
-    bool empty() const
+    bool empty() const noexcept
     {
       return list.empty();
     }
-    size_t size() const
+    size_t size() const noexcept
     {
       return list.size();
     }

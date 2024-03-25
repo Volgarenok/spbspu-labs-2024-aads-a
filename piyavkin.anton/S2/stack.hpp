@@ -27,7 +27,11 @@ namespace piyavkin
     {
       list.push_back(value);
     }
-    T top()
+    T& top()
+    {
+      return list.back();
+    }
+    const T& top() const
     {
       return list.back();
     }
@@ -37,9 +41,13 @@ namespace piyavkin
       list.pop_back();
       return temp;
     }
-    bool empty() const
+    bool empty() const noexcept
     {
       return list.empty();
+    }
+    size_t size() const noexcept
+    {
+      return list.size();
     }
   private:
     List< T > list;
