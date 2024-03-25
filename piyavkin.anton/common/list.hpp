@@ -206,10 +206,10 @@ namespace piyavkin
   template< class T >
   List< T >& List< T >::operator=(const List< T >& rhs)
   {
-    if (this != std::addressof(rhs))
+    if (std::addressof(rhs) != this)
     {
       List< T > temp(rhs);
-      temp.swap(*this);
+      swap(temp);
     }
     return *this;
   }
@@ -228,11 +228,11 @@ namespace piyavkin
       {
         push_back(value);
       }
-      erase(cbegin(), old_end);
+      erase(cbegin(), ++old_end);
     }
     catch (const std::exception& e)
     {
-      erase(cbegin(), old_end);
+      erase(cbegin(), ++old_end);
       throw;
     }
   }
@@ -302,8 +302,8 @@ namespace piyavkin
   template< class T >
   void List< T >::splice(ConstListIterator< T > it, List< T >& list, ConstListIterator< T > list_it)
   {
-    list.erase(list_it);
     insert(it, *list_it);
+    list.erase(list_it);
   }
   template< class T >
   void List< T >::splice(ConstListIterator< T > it, List< T >& list, ConstListIterator< T > list_start, ConstListIterator< T > list_finish)
@@ -371,6 +371,7 @@ namespace piyavkin
   template< class T >
   void List< T >::swap(List< T >& list)
   {
+    std::swap(list.imaginary_node_, imaginary_node_);
     std::swap(list.head_, head_);
     std::swap(list.tail_, tail_);
     std::swap(list.size_, size_);
@@ -408,7 +409,7 @@ namespace piyavkin
   template< class T >
   ListIterator< T > List< T >::end() noexcept
   {
-    return ListIterator< T >(std::addressof(imaginary_node_));
+    return ListIterator< T >(tail_->next_);
   }
   template< class T >
   ConstListIterator< T > List< T >::cbegin() const noexcept
@@ -418,7 +419,7 @@ namespace piyavkin
   template< class T >
   ConstListIterator< T > List< T >::cend() const noexcept
   {
-    return ConstListIterator< T >(const_cast< detail::Node< T >* >(std::addressof(imaginary_node_)));
+    return ConstListIterator< T >(tail_->next_);
   }
   template< class T >
   ConstListIterator< T > List< T >::erase(ConstListIterator< T > it)
