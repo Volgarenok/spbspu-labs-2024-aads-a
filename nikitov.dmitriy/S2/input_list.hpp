@@ -2,7 +2,6 @@
 #define INPUT_LIST_HPP
 
 #include <istream>
-#include <list.hpp>
 #include "queue.hpp"
 #include "expression_type.hpp"
 

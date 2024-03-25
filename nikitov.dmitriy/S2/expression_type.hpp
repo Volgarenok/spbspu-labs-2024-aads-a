@@ -1,8 +1,6 @@
 #ifndef EXPRESSION_TYPE_HPP
 #define EXPRESSION_TYPE_HPP
 
-#include <cstddef>
-
 namespace nikitov
 {
   namespace detail

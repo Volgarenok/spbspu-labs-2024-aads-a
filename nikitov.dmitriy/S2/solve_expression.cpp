@@ -1,6 +1,6 @@
 #include "solve_expression.hpp"
-#include <exception>
 #include <limits>
+#include <exception>
 #include "queue.hpp"
 #include "stack.hpp"
 #include "expression_type.hpp"

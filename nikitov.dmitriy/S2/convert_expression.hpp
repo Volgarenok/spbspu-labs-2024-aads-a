@@ -1,8 +1,8 @@
 #ifndef CONVERT_EXPRESSION_HPP
 #define CONVERT_EXPRESSION_HPP
 
-#include "expression_type.hpp"
 #include "queue.hpp"
+#include "expression_type.hpp"
 
 namespace nikitov
 {

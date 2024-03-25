@@ -1,7 +1,6 @@
 #include "convert_expression.hpp"
 #include <exception>
 #include "queue.hpp"
-#include <iostream>
 #include "stack.hpp"
 
 nikitov::Queue< nikitov::PostfixType > nikitov::convertExpression(Queue< InfixType > expression)

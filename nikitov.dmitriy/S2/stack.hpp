@@ -1,7 +1,6 @@
 #ifndef STACK_HPP
 #define STACK_HPP
 
-#include <cstddef>
 #include <list.hpp>
 
 namespace nikitov
