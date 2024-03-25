@@ -4,6 +4,7 @@
 #include "queue.hpp"
 #include "input.hpp"
 #include "types.hpp"
+#include "convertpostfix.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -23,6 +24,8 @@ int main(int argc, char* argv[])
     std::cerr << "The file is not specified correctly\n";
     return 1;
   }
+  postfix_t postfix;
+  convertPostfix(queues, postfix);
   while (!queues.begin()->empty())
   {
     std::cout << queues.begin()->drop().symbol.operation.operation << ' ';

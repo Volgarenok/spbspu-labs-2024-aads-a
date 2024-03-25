@@ -27,6 +27,14 @@ namespace piyavkin
     {
       list.push_back(value);
     }
+    T back()
+    {
+      return list.back();
+    }
+    T front()
+    {
+      return list.front();
+    }
     T drop()
     {
       T temp = list.front();

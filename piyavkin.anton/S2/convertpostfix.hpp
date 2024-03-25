@@ -1,11 +1,13 @@
 #ifndef CONVERTPOSTFIX_HPP
 #define CONVERTPOSTFIX_HPP
+#include <list.hpp>
+#include "queue.hpp"
 #include "types.hpp"
 
 namespace piyavkin
 {
   using infix_t = List< Queue< InputType > >;
   using postfix_t = List< Queue< Postfix > >;
-  void convertPostfix(const infix_t& infix, postfix_t& postfix);
+  void convertPostfix(infix_t& infix, postfix_t& postfix);
 }
 #endif

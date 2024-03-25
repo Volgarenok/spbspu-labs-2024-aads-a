@@ -24,7 +24,7 @@ namespace piyavkin
     };
     postfix_t symbol;
     detail::TypesPartsExpression type;    
-  }
+  };
   struct ConversionExpressionType
   {
     union conversion_t
@@ -35,6 +35,5 @@ namespace piyavkin
     conversion_t symbol;
     detail::TypesPartsExpression type;
   };
-  
 }
 #endif
