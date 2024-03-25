@@ -29,18 +29,18 @@ namespace zhalilov
     List< T > &operator=(const List< T > &);
     List< T > &operator=(List< T > &&) noexcept;
 
-    bool operator==(const List< T > &) const;
-    bool operator!=(const List< T > &) const;
-    bool operator<(const List< T > &) const;
-    bool operator<=(const List< T > &) const;
-    bool operator>(const List< T > &) const;
-    bool operator>=(const List< T > &) const;
+    bool operator==(const List< T > &) const noexcept;
+    bool operator!=(const List< T > &) const noexcept;
+    bool operator<(const List< T > &) const noexcept;
+    bool operator<=(const List< T > &) const noexcept;
+    bool operator>(const List< T > &) const noexcept;
+    bool operator>=(const List< T > &) const noexcept;
 
     T &front();
     T &back();
 
-    size_t capacity();
-    bool empty() const;
+    size_t capacity() noexcept;
+    bool empty() const noexcept;
 
     void assign(size_t, const T &);
     void assign(iterator, iterator);
@@ -72,21 +72,21 @@ namespace zhalilov
     void push_front(T &&);
 
     template < typename Predicate >
-    void remove_if(Predicate);
-    void remove(const T &);
+    void remove_if(Predicate) noexcept;
+    void remove(const T &) noexcept;
 
-    iterator erase(const_iterator);
-    void pop_back();
-    void pop_front();
-    void clear();
+    iterator erase(const_iterator) noexcept;
+    void pop_back() noexcept;
+    void pop_front() noexcept;
+    void clear() noexcept;
     void swap(List< T > &other) noexcept;
 
     void reverse();
 
-    iterator begin();
-    iterator end();
-    const_iterator cbegin() const;
-    const_iterator cend() const;
+    iterator begin() noexcept;
+    iterator end() noexcept;
+    const_iterator cbegin() const noexcept;
+    const_iterator cend() const noexcept;
 
   private:
     size_t m_size;
@@ -184,7 +184,7 @@ namespace zhalilov
   }
 
   template < typename T >
-  bool List< T >::operator==(const List< T > &list) const
+  bool List< T >::operator==(const List< T > &list) const noexcept
   {
     if (m_size == list.m_size)
     {
@@ -194,13 +194,13 @@ namespace zhalilov
   }
 
   template < typename T >
-  bool List< T >::operator!=(const List< T > &list) const
+  bool List< T >::operator!=(const List< T > &list) const noexcept
   {
     return !(*this == list);
   }
 
   template < typename T >
-  bool List< T >::operator<(const List< T > &list) const
+  bool List< T >::operator<(const List< T > &list) const noexcept
   {
     if (m_size < list.m_size)
     {
@@ -210,19 +210,19 @@ namespace zhalilov
   }
 
   template < typename T >
-  bool List< T >::operator<=(const List< T > &list) const
+  bool List< T >::operator<=(const List< T > &list) const noexcept
   {
     return !(list < *this);
   }
 
   template < typename T >
-  bool List< T >::operator>(const List< T > &list) const
+  bool List< T >::operator>(const List< T > &list) const noexcept
   {
     return list < *this;
   }
 
   template < typename T >
-  bool List< T >::operator>=(const List< T > &list) const
+  bool List< T >::operator>=(const List< T > &list) const noexcept
   {
     return !(*this < list);
   }
@@ -240,13 +240,13 @@ namespace zhalilov
   }
 
   template < typename T >
-  size_t List< T >::capacity()
+  size_t List< T >::capacity() noexcept
   {
     return m_size;
   }
 
   template < typename T >
-  bool List< T >::empty() const
+  bool List< T >::empty() const noexcept
   {
     return m_size == 0;
   }
@@ -437,7 +437,7 @@ namespace zhalilov
 
   template < typename T >
   template < typename Predicate >
-  void List< T >::remove_if(Predicate pred)
+  void List< T >::remove_if(Predicate pred) noexcept
   {
     List< T >::const_iterator it = cbegin();
     while (it != cend())
@@ -452,14 +452,14 @@ namespace zhalilov
   }
 
   template < typename T >
-  void List< T >::remove(const T &value)
+  void List< T >::remove(const T &value) noexcept
   {
     auto predicate = [value](const T &listValue)-> bool { return listValue == value; };
     remove_if(predicate);
   }
 
   template < typename T >
-  typename List< T >::iterator List< T >::erase(const_iterator it)
+  typename List< T >::iterator List< T >::erase(const_iterator it) noexcept
   {
     Node< T > *prev = it.m_node->prev;
     Node< T > *next = it.m_node->next;
@@ -471,19 +471,19 @@ namespace zhalilov
   }
 
   template < typename T >
-  void List< T >::pop_back()
+  void List< T >::pop_back() noexcept
   {
     erase(--cend());
   }
 
   template < typename T >
-  void List< T >::pop_front()
+  void List< T >::pop_front() noexcept
   {
     erase(cbegin());
   }
 
   template < typename T >
-  void List< T >::clear()
+  void List< T >::clear() noexcept
   {
     while (!empty())
     {
@@ -512,25 +512,25 @@ namespace zhalilov
   }
 
   template < typename T >
-  typename List< T >::iterator List< T >::begin()
+  typename List< T >::iterator List< T >::begin() noexcept
   {
     return iterator(m_head->next);
   }
 
   template < typename T >
-  typename List< T >::iterator List< T >::end()
+  typename List< T >::iterator List< T >::end() noexcept
   {
     return iterator(m_head);
   }
 
   template < typename T >
-  typename List< T >::const_iterator List< T >::cbegin() const
+  typename List< T >::const_iterator List< T >::cbegin() const noexcept
   {
     return const_iterator(m_head->next);
   }
 
   template < typename T >
-  typename List< T >::const_iterator List< T >::cend() const
+  typename List< T >::const_iterator List< T >::cend() const noexcept
   {
     return const_iterator(m_head);
   }
