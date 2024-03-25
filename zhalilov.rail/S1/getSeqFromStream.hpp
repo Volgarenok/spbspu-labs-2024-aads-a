@@ -8,8 +8,8 @@
 
 namespace zhalilov
 {
-  using pair = std::pair< std::string, List< size_t > >;
-  void getSeqFromStream(List< pair > &sequences, std::istream &);
+  using strListPair = std::pair< std::string, List< size_t > >;
+  void getSeqFromStream(List< strListPair > &sequences, std::istream &);
 }
 
 #endif

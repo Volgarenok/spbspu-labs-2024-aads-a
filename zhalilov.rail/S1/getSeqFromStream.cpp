@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-void zhalilov::getSeqFromStream(List< pair > &sequences, std::istream &input)
+void zhalilov::getSeqFromStream(List< strListPair > &sequences, std::istream &input)
 {
   std::string seqName = "";
   size_t currNum = 0;
