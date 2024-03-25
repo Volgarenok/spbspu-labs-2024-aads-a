@@ -2,6 +2,7 @@
 #define DEQUE_HPP
 #include <cstddef>
 #include <memory>
+#include <iterator>
 #include <algorithm>
 
 namespace zaitsev
@@ -10,7 +11,77 @@ namespace zaitsev
   class Deque
   {
     using alloc_traits = std::allocator_traits<std::allocator<T>>;
+
+    template<bool IsConst>
+    class BaseIterator 
+    {
+    public:
+      using prt_type = std::conditional_t< IsConst, const T*, T* >;
+      using ref_type = std::conditional_t< IsConst, const T&, T& >;
+      using val_type = T;
+    private:
+      prt_type ptr_;
+      explicit BaseIterator(T* ptr):
+        ptr_(ptr)
+      {}
+
+    public:
+      BaseIterator() = default;
+      BaseIterator(const BaseIterator& other) = default;
+      BaseIterator(BaseIterator&& other) = default;
+      ~BaseIterator() = default;
+      BaseIterator& operator++()
+      {
+        ++ptr_;
+        return *this;
+      }
+      BaseIterator operator++(int)
+      {
+        BaseIterator copy = *this;
+        ++ptr_;
+        return copy;
+      }
+      BaseIterator& operator--()
+      {
+        --ptr_;
+        return *this;
+      }
+      BaseIterator operator--(int)
+      {
+        BaseIterator copy = *this;
+        --ptr_;
+        return copy;
+      }
+      ref_type operator*() const
+      {
+        return *ptr_;
+      }
+      prt_type operator->() const
+      {
+        return ptr_;
+      }
+      bool operator!=(const BaseIterator& other) const
+      {
+        return ptr_ != other.ptr_;
+      }
+      bool operator==(const BaseIterator& other) const
+      {
+        return ptr_ == other.ptr_;
+      }
+    };
+
+  private:
+    size_t capacity_;
+    size_t size_;
+    size_t head_;
+    size_t tail_;
+    T* data_;
+    std::allocator<T> alloc;
+    void extend(size_t new_size);
+
   public:
+    using iterator = BaseIterator<false>;
+    using const_iterator = BaseIterator<true>;
     Deque();
     Deque(const Deque& other);
     Deque(Deque&& other);
@@ -25,14 +96,30 @@ namespace zaitsev
     void push_front(T&& value);
     void pop_front();
     void clear();
-  private:
-    size_t capacity_;
-    size_t size_;
-    size_t head_;
-    size_t tail_;
-    T* data_;
-    std::allocator<T> alloc;
-    void extend(size_t new_size);
+    iterator begin()
+    {
+      return iterator(data_ + head_);
+    }
+    iterator end()
+    {
+      return iterator(data_ + head_ + size_);
+    }
+    const_iterator begin() const
+    {
+      return const_iterator(data_ + head_);
+    }
+    const_iterator end() const
+    {
+      return const_iterator(data_ + head_ + size_);
+    }
+    const_iterator cbegin() const
+    {
+      return const_iterator(data_ + head_);
+    }
+    const_iterator cend() const
+    {
+      return const_iterator(data_ + head_ + size_);
+    }
   };
 
   template<typename T>
