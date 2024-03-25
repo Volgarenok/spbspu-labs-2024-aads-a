@@ -348,8 +348,7 @@ namespace zhalilov
   }
 
   template < typename T >
-  void List< T >::splice(const_iterator pos, List< T > &&list, const_iterator otherPosFirst,
-                         const_iterator otherPosLast) noexcept
+  void List< T >::splice(const_iterator pos, List< T > &&list, const_iterator otherPosFirst, const_iterator otherPosLast) noexcept
   {
     splice(pos, list, otherPosFirst, otherPosLast);
   }
