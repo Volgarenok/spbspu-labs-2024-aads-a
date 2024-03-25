@@ -26,5 +26,7 @@ int main(int argc, char* argv[])
   }
   postfix_t postfix;
   convertPostfix(queues, postfix);
+  List< long long > result;
+  calculate(postfix, result);
   std::cout << '\n';
 }
