@@ -3,9 +3,10 @@
 
 #include "queue.hpp"
 #include "expression_type.hpp"
+#include "postfix_expression.hpp"
 
 namespace nikitov
 {
-  Queue< PostfixType > convertExpression(Queue< InfixType > infixExpression);
+  PostfixExpression convertExpression(Queue< InfixType > infixExpression);
 }
 #endif

@@ -3,9 +3,10 @@
 
 #include "queue.hpp"
 #include "expression_type.hpp"
+#include "postfix_expression.hpp"
 
 namespace nikitov
 {
-  long long solveExpression(Queue< PostfixType > expression);
+  long long solveExpression(PostfixExpression expression);
 }
 #endif

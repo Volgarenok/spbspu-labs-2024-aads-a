@@ -3,6 +3,7 @@
 #include "queue.hpp"
 #include "stack.hpp"
 #include "expression_type.hpp"
+#include "postfix_expression.hpp"
 #include "input_expressions.hpp"
 #include "convert_expression.hpp"
 #include "solve_expression.hpp"
@@ -24,7 +25,7 @@ int main(int argc, char* argv[])
       inputExpressions(infixQueue, std::cin);
     }
 
-    Stack< Queue< PostfixType > > postfixStack;
+    Stack< PostfixExpression > postfixStack;
     while (!infixQueue.empty())
     {
       postfixStack.push(convertExpression(infixQueue.drop()));

@@ -4,14 +4,15 @@
 #include "queue.hpp"
 #include "stack.hpp"
 #include "expression_type.hpp"
+#include "postfix_expression.hpp"
 
-long long nikitov::solveExpression(Queue< PostfixType > expression)
+long long nikitov::solveExpression(PostfixExpression expression)
 {
   Stack< long long > solverStack;
   size_t countElem = 0;
   while (!expression.empty())
   {
-    PostfixType type = expression.drop();
+    PostfixType type = expression.remove();
     if (type.typeName == nikitov::TypeName::operation)
     {
       if (countElem >= 2)

@@ -2,10 +2,12 @@
 #include <exception>
 #include "queue.hpp"
 #include "stack.hpp"
+#include "expression_type.hpp"
+#include "postfix_expression.hpp"
 
-nikitov::Queue< nikitov::PostfixType > nikitov::convertExpression(Queue< InfixType > infixExpression)
+nikitov::PostfixExpression nikitov::convertExpression(Queue< InfixType > infixExpression)
 {
-  Queue< PostfixType > postfixExpression;
+  PostfixExpression postfixExpression;
   Stack< StackType > operandsStack;
   while (!infixExpression.empty())
   {
@@ -21,7 +23,7 @@ nikitov::Queue< nikitov::PostfixType > nikitov::convertExpression(Queue< InfixTy
             PostfixType newPostfixType;
             newPostfixType.typeName = nikitov::TypeName::operation;
             newPostfixType.operation = operandsStack.drop().operation;
-            postfixExpression.push(newPostfixType);
+            postfixExpression.add(newPostfixType);
           }
           if (operandsStack.empty())
           {
@@ -46,7 +48,7 @@ nikitov::Queue< nikitov::PostfixType > nikitov::convertExpression(Queue< InfixTy
             PostfixType newPostfixType;
             newPostfixType.typeName = nikitov::TypeName::operation;
             newPostfixType.operation = operandsStack.drop().operation;
-            postfixExpression.push(newPostfixType);
+            postfixExpression.add(newPostfixType);
           }
           else
           {
@@ -64,7 +66,7 @@ nikitov::Queue< nikitov::PostfixType > nikitov::convertExpression(Queue< InfixTy
       PostfixType newPostfixType;
       newPostfixType.typeName = nikitov::TypeName::operand;
       newPostfixType.operand = type.operand;
-      postfixExpression.push(newPostfixType);
+      postfixExpression.add(newPostfixType);
     }
   }
 
@@ -78,7 +80,7 @@ nikitov::Queue< nikitov::PostfixType > nikitov::convertExpression(Queue< InfixTy
     PostfixType newPostfixType;
     newPostfixType.typeName = nikitov::TypeName::operation;
     newPostfixType.operation = type.operation;
-    postfixExpression.push(newPostfixType);
+    postfixExpression.add(newPostfixType);
   }
   return postfixExpression;
 }
