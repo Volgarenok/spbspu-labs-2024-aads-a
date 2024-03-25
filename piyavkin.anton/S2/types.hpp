@@ -15,5 +15,26 @@ namespace piyavkin
     input_t symbol;
     detail::TypesPartsExpression type;
   };
+  struct Postfix
+  {
+    union postfix_t
+    {
+      detail::Operand operand;
+      detail::Operation operation;
+    };
+    postfix_t symbol;
+    detail::TypesPartsExpression type;    
+  }
+  struct ConversionExpressionType
+  {
+    union conversion_t
+    {
+      detail::Bracket bracket;
+      detail::Operation operation; 
+    };
+    conversion_t symbol;
+    detail::TypesPartsExpression type;
+  };
+  
 }
 #endif
