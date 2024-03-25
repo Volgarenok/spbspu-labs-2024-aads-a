@@ -13,7 +13,7 @@ long long nikitov::solveExpression(PostfixExpression expression)
   while (!expression.empty())
   {
     PostfixType type = expression.remove();
-    if (type.typeName == nikitov::TypeName::operation)
+    if (type.typeName == TypeName::operation)
     {
       if (countElem >= 2)
       {
