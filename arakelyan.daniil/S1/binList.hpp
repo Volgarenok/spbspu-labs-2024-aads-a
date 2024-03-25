@@ -33,7 +33,7 @@ namespace arakelyan
     void splice(iterator it_this, BinList< T > &otherLs);
     void splice(iterator it_this, std::initializer_list< T > otherLs);
     void splice(iterator it_this, BinList< T > &otherLs, iterator it_other);
-    //reverse
+    void reverse();
 
     T getFirst() const;
     T getLast() const;

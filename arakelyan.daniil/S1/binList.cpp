@@ -1,4 +1,5 @@
 #include "binList.hpp"
+#include <__config>
 
 template < class T >
 arakelyan::BinList< T >::BinList():
@@ -201,6 +202,20 @@ void arakelyan::BinList< T >::splice(iterator it_this, BinList< T > &otherLs, it
     insert_after(it_this, *it_other);
     otherLs.erase(it_other);
   }
+}
+
+template < class T >
+void arakelyan::BinList< T >::reverse()
+{
+  BinList< T > tempReverseList;
+  auto it = begin();
+  while (it != end())
+  {
+    tempReverseList.push_front(*it);
+    ++it;
+  }
+  clear();
+  swap(tempReverseList);
 }
 
 template < class T >
