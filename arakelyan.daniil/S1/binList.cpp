@@ -1,5 +1,4 @@
 #include "binList.hpp"
-#include <__config>
 
 template < class T >
 arakelyan::BinList< T >::BinList():

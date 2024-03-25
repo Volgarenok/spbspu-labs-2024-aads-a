@@ -37,14 +37,14 @@ namespace arakelyan
       return res;
     }
 
-    Iterator< T > operator++() // ++a
+    Iterator< T > operator++()
     {
       assert(node != nullptr);
       node = node->nextNode;
       return *this;
     }
 
-    Iterator< T > operator++(int) // a++
+    Iterator< T > operator++(int)
     {
       assert(node != nullptr);
       Iterator< T > res(*this);
