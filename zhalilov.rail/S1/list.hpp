@@ -92,6 +92,7 @@ namespace zhalilov
     size_t m_size;
     Node< T > *m_head;
 
+    const_iterator comparator(const List< T > &) const;
     void inserter(const_iterator, Node< T > *);
     const_iterator splicer(const_iterator, const_iterator);
   };
@@ -187,20 +188,7 @@ namespace zhalilov
   {
     if (m_size == list.m_size)
     {
-      List< T >::const_iterator thisIt = cbegin();
-      List< T >::const_iterator thisEnd = cend();
-      List< T >::const_iterator otherIt = list.cbegin();
-      List< T >::const_iterator otherEnd = list.cend();
-      while (thisIt != thisEnd)
-      {
-        if (*thisIt != *otherIt)
-        {
-          return false;
-        }
-        thisIt++;
-        otherIt++;
-      }
-      return true;
+      return cend() == comparator(list);
     }
     return false;
   }
@@ -216,20 +204,7 @@ namespace zhalilov
   {
     if (m_size < list.m_size)
     {
-      List< T >::const_iterator thisIt = cbegin();
-      List< T >::const_iterator thisEnd = cend();
-      List< T >::const_iterator otherIt = list.cbegin();
-      List< T >::const_iterator otherEnd = list.cend();
-      while (thisIt != thisEnd)
-      {
-        if (*thisIt != *otherIt)
-        {
-          return false;
-        }
-        thisIt++;
-        otherIt++;
-      }
-      return true;
+      return cend() == comparator(list);
     }
     return false;
   }
@@ -237,34 +212,19 @@ namespace zhalilov
   template < typename T >
   bool List< T >::operator<=(const List< T > &list) const
   {
-    return *this == list || *this < list;
+    return !(list < *this);
   }
 
   template < typename T >
   bool List< T >::operator>(const List< T > &list) const
   {
-    if (m_size > list.m_size)
-    {
-      List< T >::const_iterator thisIt = cbegin();
-      List< T >::const_iterator thisEnd = cend();
-      List< T >::const_iterator otherIt = list.cbegin();
-      List< T >::const_iterator otherEnd = list.cend();
-      while (otherIt != otherEnd)
-      {
-        if (*thisIt != *otherIt)
-        {
-          return false;
-        }
-      }
-      return true;
-    }
-    return false;
+    return list < *this;
   }
 
   template < typename T >
   bool List< T >::operator>=(const List< T > &list) const
   {
-    return *this == list || *this > list;
+    return !(*this < list);
   }
 
   template < typename T >
@@ -325,7 +285,7 @@ namespace zhalilov
   }
 
   template < typename T >
-  void List< T >::splice(const_iterator pos, List< T > &list)
+  void List< T >::splice(const_iterator pos, List< T > &list) noexcept
   {
     while (!list.empty())
     {
@@ -336,13 +296,13 @@ namespace zhalilov
   }
 
   template < typename T >
-  void List< T >::splice(const_iterator pos, List< T > &&list)
+  void List< T >::splice(const_iterator pos, List< T > &&list) noexcept
   {
     splice(pos, list);
   }
 
   template < typename T >
-  void List< T >::splice(const_iterator pos, List< T > &list, const_iterator otherListPos)
+  void List< T >::splice(const_iterator pos, List< T > &list, const_iterator otherListPos) noexcept
   {
     splicer(pos, otherListPos);
     list.m_size--;
@@ -350,13 +310,14 @@ namespace zhalilov
   }
 
   template < typename T >
-  void List< T >::splice(const_iterator pos, List< T > &&list, const_iterator otherListPos)
+  void List< T >::splice(const_iterator pos, List< T > &&list, const_iterator otherListPos) noexcept
   {
     splice(pos, list, otherListPos);
   }
 
   template < typename T >
-  void List< T >::splice(const_iterator pos, List< T > &list, const_iterator otherPosFirst, const_iterator otherPosLast)
+  void List< T >::splice(const_iterator pos, List< T > &list, const_iterator otherPosFirst,
+                         const_iterator otherPosLast) noexcept
   {
     while (otherPosFirst != otherPosLast)
     {
@@ -371,7 +332,7 @@ namespace zhalilov
 
   template < typename T >
   void List< T >::splice(const_iterator pos, List< T > &&list, const_iterator otherPosFirst,
-                         const_iterator otherPosLast)
+                         const_iterator otherPosLast) noexcept
   {
     splice(pos, list, otherPosFirst, otherPosLast);
   }
@@ -572,6 +533,21 @@ namespace zhalilov
   typename List< T >::const_iterator List< T >::cend() const
   {
     return const_iterator(m_head);
+  }
+
+  template < typename T >
+  typename List< T >::const_iterator List< T >::comparator(const List< T > &list) const
+  {
+    const_iterator thisIt = cbegin();
+    const_iterator thisEnd = cend();
+    const_iterator otherIt = list.cbegin();
+    const_iterator otherEnd = list.cend();
+    while (thisIt != thisEnd && otherIt != otherEnd && *thisIt == *otherIt)
+    {
+      thisIt++;
+      otherIt++;
+    }
+    return thisIt;
   }
 
   template < typename T >
