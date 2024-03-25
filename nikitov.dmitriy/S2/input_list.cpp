@@ -25,7 +25,7 @@ void inputExpressionType(nikitov::InfixType& type, std::string& line)
   line = {};
 }
 
-void nikitov::inputList(List< Queue< InfixType > >& expressionList, std::istream& input)
+void nikitov::inputList(Queue< Queue< InfixType > >& expressionList, std::istream& input)
 {
   input >> std::noskipws >> std::fixed;
   while (input)
@@ -47,7 +47,7 @@ void nikitov::inputList(List< Queue< InfixType > >& expressionList, std::istream
         {
           inputExpressionType(type, line);
           expression.push(type);
-          expressionList.push_front(expression);
+          expressionList.push(expression);
         }
         break;
       }

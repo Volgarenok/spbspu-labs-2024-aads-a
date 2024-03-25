@@ -1,6 +1,5 @@
 #include <iostream>
 #include <fstream>
-#include <list.hpp>
 #include "queue.hpp"
 #include "expression_type.hpp"
 #include "input_list.hpp"
@@ -10,33 +9,35 @@
 int main(int argc, char* argv[])
 {
   using namespace nikitov;
-  List< Queue< InfixType > > expressionList;
+  Queue< Queue< InfixType > > expressionQueue;
 
   try
   {
     if (argc == 2)
     {
       std::ifstream input(argv[1]);
-      inputList(expressionList, input);
+      inputList(expressionQueue, input);
     }
     else
     {
-      inputList(expressionList, std::cin);
+      inputList(expressionQueue, std::cin);
     }
 
-    List< Queue< PostfixType > > newExpressionList;
-    for (auto i = expressionList.begin(); i != expressionList.end(); ++i)
+    Queue< Queue< PostfixType > > newExpressionQueue;
+    while (!expressionQueue.empty())
     {
-      newExpressionList.push_back(convertExpression(*i));
+      newExpressionQueue.push(convertExpression(expressionQueue.drop()));
     }
 
-    for (auto i = newExpressionList.begin(); i != newExpressionList.end(); ++i)
+    bool notFirst = false;
+    while (!newExpressionQueue.empty())
     {
-      if (i != newExpressionList.begin())
+      if (notFirst)
       {
         std::cout << ' ';
       }
-      std::cout << solveExpression(*i);
+      notFirst = true;
+      std::cout << solveExpression(newExpressionQueue.drop());
     }
     std::cout << '\n';
   }

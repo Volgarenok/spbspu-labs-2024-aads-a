@@ -4,7 +4,7 @@
 #include <iostream>
 #include "stack.hpp"
 
-nikitov::Queue< nikitov::PostfixType > nikitov::convertExpression(Queue< InfixType >& expression)
+nikitov::Queue< nikitov::PostfixType > nikitov::convertExpression(Queue< InfixType > expression)
 {
   Queue< PostfixType > newExpression;
   Stack< StackType > operandsStack;
