@@ -29,12 +29,12 @@ namespace zhalilov
     List< T > &operator=(const List< T > &);
     List< T > &operator=(List< T > &&) noexcept;
 
-    bool operator==(const List< T > &);
-    bool operator!=(const List< T > &);
-    bool operator<(const List< T > &);
-    bool operator<=(const List< T > &);
-    bool operator>(const List< T > &);
-    bool operator>=(const List< T > &);
+    bool operator==(const List< T > &) const;
+    bool operator!=(const List< T > &) const;
+    bool operator<(const List< T > &) const;
+    bool operator<=(const List< T > &) const;
+    bool operator>(const List< T > &) const;
+    bool operator>=(const List< T > &) const;
 
     T &front();
     T &back();
@@ -183,7 +183,7 @@ namespace zhalilov
   }
 
   template < typename T >
-  bool List< T >::operator==(const List< T > &list)
+  bool List< T >::operator==(const List< T > &list) const
   {
     if (m_size == list.m_size)
     {
@@ -206,13 +206,13 @@ namespace zhalilov
   }
 
   template < typename T >
-  bool List< T >::operator!=(const List< T > &list)
+  bool List< T >::operator!=(const List< T > &list) const
   {
     return !(*this == list);
   }
 
   template < typename T >
-  bool List< T >::operator<(const List< T > &list)
+  bool List< T >::operator<(const List< T > &list) const
   {
     if (m_size < list.m_size)
     {
@@ -235,13 +235,13 @@ namespace zhalilov
   }
 
   template < typename T >
-  bool List< T >::operator<=(const List< T > &list)
+  bool List< T >::operator<=(const List< T > &list) const
   {
     return *this == list || *this < list;
   }
 
   template < typename T >
-  bool List< T >::operator>(const List< T > &list)
+  bool List< T >::operator>(const List< T > &list) const
   {
     if (m_size > list.m_size)
     {
@@ -262,7 +262,7 @@ namespace zhalilov
   }
 
   template < typename T >
-  bool List< T >::operator>=(const List< T > &list)
+  bool List< T >::operator>=(const List< T > &list) const
   {
     return *this == list || *this > list;
   }
