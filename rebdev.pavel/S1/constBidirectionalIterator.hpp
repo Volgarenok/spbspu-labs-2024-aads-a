@@ -39,16 +39,16 @@ namespace rebdev
 
       const T & operator*() const
       {
-        return node_ -> data_;
+        return node_->data_;
       }
       const T * operator->() const
       {
-        return std::addressof(node_ -> data_);
+        return std::addressof(node_->data_);
       }
 
       const_iter & operator++()
       {
-        node_ = node_ -> next_;
+        node_ = node_->next_;
         return *this;
       }
       const_iter operator++(int)
@@ -59,7 +59,7 @@ namespace rebdev
       }
       const_iter & operator--()
       {
-        node_ = node_ -> last_;
+        node_ = node_->last_;
         return *this;
       }
       const_iter operator--(int)
@@ -72,8 +72,8 @@ namespace rebdev
     private:
       const node * node_;
 
-      ConstBidirectionalIterator(const node & originalNode):
-        node_(&originalNode)
+      ConstBidirectionalIterator(const node * originalNode):
+        node_(originalNode)
       {}
   };
 }
