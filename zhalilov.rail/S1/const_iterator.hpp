@@ -12,7 +12,6 @@ namespace zhalilov
   class ConstIterator
   {
   public:
-    ConstIterator(Node< T > *);
     ~ConstIterator() = default;
 
     ConstIterator &operator=(const ConstIterator &) = default;
@@ -32,6 +31,8 @@ namespace zhalilov
 
   private:
     Node< T > *m_node;
+
+    explicit ConstIterator(Node< T > *);
   };
 
   template < typename T >

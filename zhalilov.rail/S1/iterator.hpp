@@ -12,7 +12,6 @@ namespace zhalilov
   class Iterator
   {
   public:
-    Iterator(Node< T > *);
     ~Iterator() = default;
 
     Iterator &operator=(const Iterator &) = default;
@@ -32,6 +31,8 @@ namespace zhalilov
 
   private:
     Node< T > *m_node;
+
+    explicit Iterator(Node< T > *);
   };
 
   template < typename T >
