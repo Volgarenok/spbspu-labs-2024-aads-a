@@ -9,6 +9,20 @@ namespace piyavkin
   {
   public:
     Stack() = default;
+    Stack(const Stack< T >&) = default;
+    Stack(Stack&& stack):
+      list(std::move(stack.list))
+    {}
+    ~Stack() = default;
+    Stack< T >& operator=(const Stack&) = default;
+    Stack< T >& operator=(Stack&& stack)
+    {
+      if (this != std::addressof(stack))
+      {
+        list = std::move(stack.list);
+      }
+      return *this;
+    }
     void push(const T& value)
     {
       list.push_back(value);
