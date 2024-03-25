@@ -30,11 +30,14 @@ namespace arakelyan
     iterator end() const;
     const_iterator cend() const;
 
-    //spile
+    void splice(iterator it_this, BinList< T > &otherLs);
+    void splice(iterator it_this, std::initializer_list< T > otherLs);
     //reverse
 
     T getFirst() const;
     T getLast() const;
+    const T getCFirst() const;
+    const T getCLast() const;
 
     void push_back(const T &el);
     void push_front(const T &el);

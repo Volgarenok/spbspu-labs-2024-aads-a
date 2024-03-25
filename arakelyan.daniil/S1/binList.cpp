@@ -1,4 +1,5 @@
 #include "binList.hpp"
+#include <__config>
 
 template < class T >
 arakelyan::BinList< T >::BinList():
@@ -90,6 +91,99 @@ arakelyan::ConstIterator< T > arakelyan::BinList< T >::cend() const
 }
 
 template < class T >
+void arakelyan::BinList< T >::splice(iterator it_this, BinList<T> &otherLs)
+{
+  if (otherLs.isEmpty())
+  {
+    return;
+  }
+  if (it_this == end())
+  {
+    auto it = otherLs.begin();
+    while (it != otherLs.end())
+    {
+      push_back(*it);
+      ++it;
+    }
+  }
+  else if (it_this == begin())
+  {
+    auto it = otherLs.begin();
+    while (it != otherLs.end())
+    {
+      push_front(*it);
+      ++it;
+    }
+  }
+  else
+  {
+    Node< T > *node = head_;
+    auto it = begin();
+    while (it != it_this && node != nullptr)
+    {
+      ++it;
+      node = node->nextNode;
+    }
+
+    Node< T > *nextNode = node->nextNode;
+    otherLs.head_->prevNode = node;
+    node->nextNode = otherLs.head_;
+    otherLs.tail_->nextNode = nextNode;
+    if (nextNode != nullptr)
+    {
+      nextNode->prevNode = otherLs.tail_;
+    }
+    else
+    {
+      tail_ = otherLs.tail_;
+    }
+    size_ += otherLs.size_;
+  }
+  otherLs.head_ = nullptr;
+  otherLs.tail_ = nullptr;
+}
+
+template < class T >
+void arakelyan::BinList< T >::splice(iterator it_this, std::initializer_list< T > otherLs)
+{
+  // if (otherLs.empty())
+  // {
+  //   return;
+  // }
+  if (it_this == end())
+  {
+    auto it = otherLs.begin();
+    while (it != otherLs.end())
+    {
+      push_back(*it);
+      ++it;
+    }
+  }
+  else if (it_this == begin())
+  {
+    auto it = otherLs.end();
+    --it;
+    while (it != otherLs.begin())
+    {
+      push_front(*it);
+      --it;
+    }
+    push_front(*it);
+  }
+  else
+  {
+    auto it = it_this;
+    auto it_other = otherLs.begin();
+    while (it_other != otherLs.end())
+    {
+      insert_after(it, *it_other);
+      ++it;
+      ++it_other;
+    }
+  }
+}
+
+template < class T >
 T arakelyan::BinList< T >::getFirst() const
 {
   return head_->value;
@@ -97,6 +191,18 @@ T arakelyan::BinList< T >::getFirst() const
 
 template < class T >
 T arakelyan::BinList< T >::getLast() const
+{
+  return tail_->value;
+}
+
+template < class T >
+const T arakelyan::BinList< T >::getCFirst() const
+{
+  return head_->value;
+}
+
+template < class T >
+const T arakelyan::BinList< T >::getCLast() const
 {
   return tail_->value;
 }
@@ -260,7 +366,7 @@ void arakelyan::BinList< T >::remove_if(UnaryPredicate p)
   Node< T > *node = head_;
   while (node)
   {
-    if (p(node))
+    if (p(node->value))
     {
       if (node == head_)
       {
@@ -289,7 +395,7 @@ void arakelyan::BinList< T >::remove_if(UnaryPredicate p)
 }
 
 template < class T >
-void arakelyan::BinList< T >::swap(BinList<T> &otherLs)
+void arakelyan::BinList< T >::swap(BinList< T > &otherLs)
 {
   std::swap(head_, otherLs.head_);
   std::swap(tail_, otherLs.tail_);
@@ -384,7 +490,7 @@ void arakelyan::BinList< T >::assign(std::initializer_list< T > otherLs)
 }
 
 template < class T >
-void arakelyan::BinList< T >::assign(Iterator< T > it_start, Iterator< T > it_end)
+void arakelyan::BinList< T >::assign(iterator it_start, iterator it_end)
 {
   clear();
   head_ = nullptr;
@@ -412,7 +518,7 @@ arakelyan::BinList< T > &arakelyan::BinList< T >::operator=(const arakelyan::Bin
 }
 
 template < class T >
-arakelyan::BinList< T > &arakelyan::BinList< T >::operator=(arakelyan::BinList< T > &&otherLs)
+arakelyan::BinList< T > &arakelyan::BinList< T >::operator=(BinList< T > &&otherLs)
 {
   if (this != &otherLs)
   {
