@@ -8,8 +8,8 @@ namespace zaitsev
   class Queue: private Deque< T >
   {
   public:
-    using iterator = Deque<T>::iterator;
-    using const_iterator = Deque<T>::const_iterator;
+    using iterator = typename Deque<T>::iterator;
+    using const_iterator = typename Deque<T>::const_iterator;
 
     T& front()
     {

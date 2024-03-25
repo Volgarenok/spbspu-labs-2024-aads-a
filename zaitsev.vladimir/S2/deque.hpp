@@ -21,11 +21,11 @@ namespace zaitsev
       using val_type = T;
     private:
       prt_type ptr_;
-      explicit BaseIterator(T* ptr):
-        ptr_(ptr)
-      {}
 
     public:
+      explicit BaseIterator(prt_type ptr):
+        ptr_(ptr)
+      {}
       BaseIterator() = default;
       BaseIterator(const BaseIterator& other) = default;
       BaseIterator(BaseIterator&& other) = default;
