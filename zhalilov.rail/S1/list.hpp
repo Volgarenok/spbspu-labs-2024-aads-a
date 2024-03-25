@@ -38,6 +38,8 @@ namespace zhalilov
 
     T &front();
     T &back();
+    const T &front() const;
+    const T &back() const;
 
     size_t capacity() noexcept;
     bool empty() const noexcept;
@@ -175,12 +177,15 @@ namespace zhalilov
   template < typename T >
   List< T > &List< T >::operator=(List< T > &&other) noexcept
   {
-    clear();
-    m_size = other.m_size;
-    m_head = other.m_head;
-    other.m_size = 0;
-    other.m_head = nullptr;
-    return *this;
+    if (*this != other)
+    {
+      clear();
+      m_size = other.m_size;
+      m_head = other.m_head;
+      other.m_size = 0;
+      other.m_head = nullptr;
+      return *this;
+    }
   }
 
   template < typename T >
@@ -235,6 +240,18 @@ namespace zhalilov
 
   template < typename T >
   T &List< T >::back()
+  {
+    return m_head->prev->value;
+  }
+
+  template < typename T >
+  const T &List< T >::front() const
+  {
+    return m_head->next->value;
+  }
+
+  template < typename T >
+  const T &List< T >::back() const
   {
     return m_head->prev->value;
   }
