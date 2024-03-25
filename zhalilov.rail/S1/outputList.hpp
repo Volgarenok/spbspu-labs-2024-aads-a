@@ -8,7 +8,7 @@
 namespace zhalilov
 {
   template < typename T >
-  std::ostream &operator<<(std::ostream &os, const List< T > &list)
+  std::ostream &outputList(std::ostream &os, const List< T > &list)
   {
     auto it = list.cbegin();
     auto end = list.cend();

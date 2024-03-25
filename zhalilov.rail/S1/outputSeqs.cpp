@@ -35,7 +35,7 @@ std::ostream &zhalilov::outputSeqs(List< pair > sequences, std::ostream &output)
     names.push_back(currIt->first);
     currIt++;
   }
-  output << names;
+  outputList(output, names);
   output << '\n';
 
   if (longestList == 0)
@@ -66,7 +66,7 @@ std::ostream &zhalilov::outputSeqs(List< pair > sequences, std::ostream &output)
   auto listOfListsEnd = listOfNumbersList.cend();
   while (listOfListsIt != listOfListsEnd)
   {
-    output << *listOfListsIt;
+    outputList(output, *listOfListsIt);
     output << '\n';
     listOfListsIt++;
   }
@@ -78,6 +78,6 @@ std::ostream &zhalilov::outputSeqs(List< pair > sequences, std::ostream &output)
     sums.push_back(countSum(currNumList));
     listOfNumbersList.pop_front();
   }
-  output << sums;
+  outputList(output, sums);
   return output;
 }
