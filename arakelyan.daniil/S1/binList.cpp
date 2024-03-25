@@ -182,7 +182,7 @@ void arakelyan::BinList< T >::splice(iterator it_this, std::initializer_list< T 
   }
 }
 
-template < class T > 
+template < class T >
 void arakelyan::BinList< T >::splice(iterator it_this, BinList< T > &otherLs, iterator it_other)
 {
   if (it_this == begin())
