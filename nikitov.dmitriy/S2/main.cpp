@@ -3,7 +3,7 @@
 #include "queue.hpp"
 #include "stack.hpp"
 #include "expression_type.hpp"
-#include "input_list.hpp"
+#include "input_expressions.hpp"
 #include "convert_expression.hpp"
 #include "solve_expression.hpp"
 
@@ -17,11 +17,11 @@ int main(int argc, char* argv[])
     if (argc == 2)
     {
       std::ifstream input(argv[1]);
-      inputList(infixQueue, input);
+      inputExpressions(infixQueue, input);
     }
     else
     {
-      inputList(infixQueue, std::cin);
+      inputExpressions(infixQueue, std::cin);
     }
 
     Stack< Queue< PostfixType > > postfixStack;

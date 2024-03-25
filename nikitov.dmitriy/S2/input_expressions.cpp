@@ -1,10 +1,10 @@
-#include "input_list.hpp"
+#include "input_expressions.hpp"
 #include <istream>
 #include <string>
 #include "queue.hpp"
 #include "expression_type.hpp"
 
-void inputExpressionType(nikitov::InfixType& type, std::string& line)
+void recognizeType(nikitov::InfixType& type, std::string& line)
 {
   if (std::isdigit(line[0]))
   {
@@ -24,7 +24,7 @@ void inputExpressionType(nikitov::InfixType& type, std::string& line)
   line = {};
 }
 
-void nikitov::inputList(Queue< Queue< InfixType > >& expressionList, std::istream& input)
+void nikitov::inputExpressions(Queue< Queue< InfixType > >& infixQueue, std::istream& input)
 {
   input >> std::noskipws >> std::fixed;
   while (input)
@@ -37,16 +37,16 @@ void nikitov::inputList(Queue< Queue< InfixType > >& expressionList, std::istrea
       InfixType type;
       if (symb == ' ')
       {
-        inputExpressionType(type, line);
+        recognizeType(type, line);
         expression.push(type);
       }
       else if (symb == '\n')
       {
         if (!line.empty())
         {
-          inputExpressionType(type, line);
+          recognizeType(type, line);
           expression.push(type);
-          expressionList.push(expression);
+          infixQueue.push(expression);
         }
         break;
       }

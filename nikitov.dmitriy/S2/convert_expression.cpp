@@ -3,13 +3,13 @@
 #include "queue.hpp"
 #include "stack.hpp"
 
-nikitov::Queue< nikitov::PostfixType > nikitov::convertExpression(Queue< InfixType > expression)
+nikitov::Queue< nikitov::PostfixType > nikitov::convertExpression(Queue< InfixType > infixExpression)
 {
-  Queue< PostfixType > newExpression;
+  Queue< PostfixType > postfixExpression;
   Stack< StackType > operandsStack;
-  while (!expression.empty())
+  while (!infixExpression.empty())
   {
-    InfixType type = expression.drop();
+    InfixType type = infixExpression.drop();
     if (type.typeName != nikitov::TypeName::operand)
     {
       if (type.typeName == nikitov::TypeName::bracket)
@@ -21,7 +21,7 @@ nikitov::Queue< nikitov::PostfixType > nikitov::convertExpression(Queue< InfixTy
             PostfixType newPostfixType;
             newPostfixType.typeName = nikitov::TypeName::operation;
             newPostfixType.operation = operandsStack.drop().operation;
-            newExpression.push(newPostfixType);
+            postfixExpression.push(newPostfixType);
           }
           if (operandsStack.empty())
           {
@@ -46,7 +46,7 @@ nikitov::Queue< nikitov::PostfixType > nikitov::convertExpression(Queue< InfixTy
             PostfixType newPostfixType;
             newPostfixType.typeName = nikitov::TypeName::operation;
             newPostfixType.operation = operandsStack.drop().operation;
-            newExpression.push(newPostfixType);
+            postfixExpression.push(newPostfixType);
           }
           else
           {
@@ -64,7 +64,7 @@ nikitov::Queue< nikitov::PostfixType > nikitov::convertExpression(Queue< InfixTy
       PostfixType newPostfixType;
       newPostfixType.typeName = nikitov::TypeName::operand;
       newPostfixType.operand = type.operand;
-      newExpression.push(newPostfixType);
+      postfixExpression.push(newPostfixType);
     }
   }
 
@@ -78,7 +78,7 @@ nikitov::Queue< nikitov::PostfixType > nikitov::convertExpression(Queue< InfixTy
     PostfixType newPostfixType;
     newPostfixType.typeName = nikitov::TypeName::operation;
     newPostfixType.operation = type.operation;
-    newExpression.push(newPostfixType);
+    postfixExpression.push(newPostfixType);
   }
-  return newExpression;
+  return postfixExpression;
 }
