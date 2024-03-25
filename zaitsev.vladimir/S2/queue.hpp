@@ -5,48 +5,56 @@
 namespace zaitsev
 {
   template<typename T>
-  class Queue: protected Deque< T >
+  class Queue: private Deque< T >
   {
   public:
-    Queue() = default;
-    Queue(const Queue& other) = default;
-    Queue(Queue&& other) = default;
-    ~Queue() = default;
-    T& front();
-    bool empty() const;
-    void push(const T& value);
-    void pop();
-    void clear();
+    using iterator = Deque<T>::iterator;
+    using const_iterator = Deque<T>::const_iterator;
+
+    T& front()
+    {
+      return Deque< T >::front();
+    }
+    bool empty() const
+    {
+      return Deque<T>::empty();
+    }
+    void push(const T& value)
+    {
+      Deque< T >::push_back(value);
+    }
+    void pop()
+    {
+      Deque< T >::pop_front();
+    }
+    void clear()
+    {
+      Deque< T >::clear();
+    }
+    iterator begin()
+    {
+      return Deque<T>::begin();
+    }
+    iterator end()
+    {
+      return Deque<T>::end();
+    }
+    const_iterator begin() const
+    {
+      return Deque<T>::cbegin();
+    }
+    const_iterator end() const
+    {
+      return Deque<T>::cend();
+    }
+    const_iterator cbegin() const
+    {
+      return Deque<T>::cbegin();
+    }
+    const_iterator cend() const
+    {
+      return Deque<T>::cend();
+    }
   };
-
-  template<typename T>
-  T& Queue<T>::front()
-  {
-    return Deque< T >::front();
-  }
-
-  template<typename T>
-  bool Queue<T>::empty() const
-  {
-    return Deque<T>::empty();
-  }
-
-  template<typename T>
-  void Queue<T>::push(const T& value)
-  {
-    Deque< T >::push_back(value);
-  }
-
-  template<typename T>
-  void Queue<T>::pop()
-  {
-    Deque< T >::pop_front();
-  }
-
-  template<typename T>
-  void Queue<T>::clear()
-  {
-    Deque< T >::clear();
-  }
 }
 #endif
