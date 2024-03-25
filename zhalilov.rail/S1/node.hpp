@@ -5,38 +5,41 @@
 
 namespace zhalilov
 {
-  template < typename T >
-  struct Node
+  namespace detail
   {
-    T value;
-    Node *prev;
-    Node *next;
+    template < typename T >
+    struct Node
+    {
+      T value;
+      Node *prev;
+      Node *next;
 
-    Node():
-      value(T()),
-      prev(nullptr),
-      next(nullptr)
-    {}
+      Node():
+        value(T()),
+        prev(nullptr),
+        next(nullptr)
+      {}
 
-    explicit Node(const T &newValue, Node< T > *prev = nullptr, Node< T > *next = nullptr):
-      value(newValue),
-      prev(prev),
-      next(next)
-    {}
+      explicit Node(const T &newValue, Node< T > *prev = nullptr, Node< T > *next = nullptr):
+        value(newValue),
+        prev(prev),
+        next(next)
+      {}
 
-    explicit Node(T &&newValue, Node< T > *prev = nullptr, Node< T > *next = nullptr):
-      value(std::move(newValue)),
-      prev(prev),
-      next(next)
-    {}
+      explicit Node(T &&newValue, Node< T > *prev = nullptr, Node< T > *next = nullptr):
+        value(std::move(newValue)),
+        prev(prev),
+        next(next)
+      {}
 
-    template < typename... Args >
-    explicit Node(Args &&... args, Node< T > *prev = nullptr, Node< T > *next = nullptr):
-      value(std::forward< Args >(args)...),
-      prev(nullptr),
-      next(nullptr)
-    {}
-  };
+      template < typename... Args >
+      explicit Node(Args &&... args, Node< T > *prev = nullptr, Node< T > *next = nullptr):
+        value(std::forward< Args >(args)...),
+        prev(nullptr),
+        next(nullptr)
+      {}
+    };
+  }
 }
 
 #endif

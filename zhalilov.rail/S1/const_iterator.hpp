@@ -14,6 +14,8 @@ namespace zhalilov
   class ConstIterator: std::iterator< std::bidirectional_iterator_tag, const T, const T, const T *, const T >
   {
   public:
+    using Node = detail::Node< T >;
+
     ~ConstIterator() = default;
 
     ConstIterator &operator=(const ConstIterator &) = default;
@@ -32,13 +34,13 @@ namespace zhalilov
     friend List< T >;
 
   private:
-    Node< T > *m_node;
+    Node *m_node;
 
-    explicit ConstIterator(Node< T > *);
+    explicit ConstIterator(Node *);
   };
 
   template < typename T >
-  ConstIterator< T >::ConstIterator(Node< T > *node):
+  ConstIterator< T >::ConstIterator(Node *node):
     m_node(node)
   {}
 

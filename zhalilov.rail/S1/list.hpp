@@ -16,6 +16,7 @@ namespace zhalilov
   public:
     using iterator = Iterator< T >;
     using const_iterator = ConstIterator< T >;
+    using Node = detail::Node< T >;
 
     List();
     List(const List< T > &);
@@ -92,17 +93,17 @@ namespace zhalilov
 
   private:
     size_t m_size;
-    Node< T > *m_head;
+    Node *m_head;
 
     const_iterator comparator(const List< T > &) const;
-    void inserter(const_iterator, Node< T > *);
+    void inserter(const_iterator, Node *);
     const_iterator splicer(const_iterator, const_iterator);
   };
 
   template < typename T >
   List< T >::List():
     m_size(0),
-    m_head(new Node< T >)
+    m_head(new Node)
   {
     m_head->next = m_head;
     m_head->prev = m_head;
@@ -357,7 +358,7 @@ namespace zhalilov
   template < typename... Args >
   void List< T >::emplace(const_iterator pos, Args &&... args)
   {
-    Node< T > *newNode = new Node< T >(std::forward< Args >(args)...);
+    Node *newNode = new Node(std::forward< Args >(args)...);
     inserter(pos, newNode);
   }
 
@@ -378,7 +379,7 @@ namespace zhalilov
   template < typename T >
   typename List< T >::iterator List< T >::insert(const_iterator pos, const T &value)
   {
-    Node< T > *newNode = new Node< T >(value);
+    Node *newNode = new Node(value);
     inserter(pos, newNode);
     return iterator(newNode);
   }
@@ -386,7 +387,7 @@ namespace zhalilov
   template < typename T >
   typename List< T >::iterator List< T >::insert(const_iterator pos, T &&value)
   {
-    Node< T > *newNode = new Node< T >(std::move(value));
+    Node *newNode = new Node(std::move(value));
     inserter(pos, newNode);
     return iterator(newNode);
   }
@@ -480,8 +481,8 @@ namespace zhalilov
   template < typename T >
   typename List< T >::iterator List< T >::erase(const_iterator it) noexcept
   {
-    Node< T > *prev = it.m_node->prev;
-    Node< T > *next = it.m_node->next;
+    Node *prev = it.m_node->prev;
+    Node *next = it.m_node->next;
     delete it.m_node;
     prev->next = next;
     next->prev = prev;
@@ -570,9 +571,9 @@ namespace zhalilov
   }
 
   template < typename T >
-  void List< T >::inserter(const_iterator pos, Node< T > *newNode)
+  void List< T >::inserter(const_iterator pos, Node *newNode)
   {
-    Node< T > *prev = pos.m_node->prev;
+    Node *prev = pos.m_node->prev;
     newNode->next = pos.m_node;
     newNode->prev = prev;
     prev->next = newNode;
@@ -583,12 +584,12 @@ namespace zhalilov
   template < typename T >
   typename List< T >::const_iterator List< T >::splicer(const_iterator pos, const_iterator otherListPos)
   {
-    Node< T > *prev = pos.m_node->prev;
+    Node *prev = pos.m_node->prev;
     prev->next = otherListPos.m_node;
     pos.m_node->prev = otherListPos.m_node;
 
-    Node< T > *otherPrev = otherListPos.m_node->prev;
-    Node< T > *otherNext = otherListPos.m_node->next;
+    Node *otherPrev = otherListPos.m_node->prev;
+    Node *otherNext = otherListPos.m_node->next;
     otherPrev->next = otherNext;
     otherNext->prev = otherPrev;
 

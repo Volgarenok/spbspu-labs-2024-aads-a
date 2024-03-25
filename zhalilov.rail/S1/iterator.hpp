@@ -14,6 +14,8 @@ namespace zhalilov
   class Iterator: public std::iterator< std::bidirectional_iterator_tag, T, T, T *, T >
   {
   public:
+    using Node = detail::Node< T >;
+
     ~Iterator() = default;
 
     Iterator &operator=(const Iterator &) = default;
@@ -32,13 +34,13 @@ namespace zhalilov
     friend List< T >;
 
   private:
-    Node< T > *m_node;
+    Node *m_node;
 
-    explicit Iterator(Node< T > *);
+    explicit Iterator(Node *);
   };
 
   template < typename T >
-  Iterator< T >::Iterator(Node< T > *node):
+  Iterator< T >::Iterator(Node *node):
     m_node(node)
   {}
 
