@@ -4,7 +4,7 @@
 #include <iosfwd>
 #include <utility>
 
-#include "list.hpp"
+#include "../common/list/list.hpp"
 
 namespace zhalilov
 {
