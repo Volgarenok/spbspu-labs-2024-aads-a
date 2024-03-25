@@ -6,12 +6,13 @@ namespace piyavkin
 {
   struct InputType
   {
-    union InputType
+    union input_t
     {
       detail::Operand operand;
       detail::Operation operation;
       detail::Bracket bracket;      
     };
+    input_t symbol;
     detail::TypesPartsExpression type;
   };
 }

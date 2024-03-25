@@ -2,10 +2,10 @@
 #define INPUT_HPP
 #include <istream>
 #include "queue.hpp"
-#include "partexpression.hpp"
+#include "types.hpp"
 
 namespace piyavkin
 {
-  void input(std::istream& in, List< Queue< char > >& queues); 
+  void input(std::istream& in, List< Queue< InputType > >& queues); 
 }
 #endif
