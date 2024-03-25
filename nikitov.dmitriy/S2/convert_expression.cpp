@@ -49,6 +49,10 @@ nikitov::Queue< nikitov::PostfixType > nikitov::convertExpression(Queue< InfixTy
             newPostfixType.operation = operandsStack.drop().operation;
             newExpression.push(newPostfixType);
           }
+          else
+          {
+            break;
+          }
         }
         StackType newStackType;
         newStackType.typeName = nikitov::TypeName::operation;
