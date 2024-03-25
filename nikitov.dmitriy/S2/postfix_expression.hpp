@@ -8,11 +8,11 @@ namespace nikitov
 {
   struct PostfixExpression
   {
-    void operator+(long long value);
-    void operator-(long long value);
-    void operator/(long long value);
-    void operator*(long long value);
-    void operator%(long long value);
+    PostfixExpression operator+(long long value);
+    PostfixExpression operator-(long long value);
+    PostfixExpression operator/(long long value);
+    PostfixExpression operator*(long long value);
+    PostfixExpression operator%(long long value);
 
     Queue< PostfixType > data;
   };
