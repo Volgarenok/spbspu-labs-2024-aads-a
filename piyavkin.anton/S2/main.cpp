@@ -5,6 +5,7 @@
 #include "input.hpp"
 #include "types.hpp"
 #include "convertpostfix.hpp"
+#include "calculate.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -28,5 +29,9 @@ int main(int argc, char* argv[])
   convertPostfix(queues, postfix);
   List< long long > result;
   calculate(postfix, result);
+  for (auto it: result)
+  {
+    std::cout << it << ' ';
+  }
   std::cout << '\n';
 }
