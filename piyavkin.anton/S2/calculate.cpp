@@ -24,7 +24,7 @@ void piyavkin::calculate(List< Queue< Postfix > >& postfix, List< long long >& r
         else if (it.front().symbol.operation.operation == '-')
         {
           long long temp = stack.drop() - stack.drop();
-          stack.push(temp);
+          stack.push(-temp);
           it.drop();
         }
         else if (it.front().symbol.operation.operation == '*')
@@ -35,13 +35,15 @@ void piyavkin::calculate(List< Queue< Postfix > >& postfix, List< long long >& r
         }
         else if (it.front().symbol.operation.operation == '/')
         {
-          long long temp = stack.drop() / stack.drop();
+          long long div = stack.drop();
+          long long temp = stack.drop() / div;
           stack.push(temp);
           it.drop();
         }
         else if (it.front().symbol.operation.operation == '%')
         {
-          long long temp = stack.drop() * stack.drop();
+          long long div = stack.drop();
+          long long temp = stack.drop() % div;
           stack.push(temp);
           it.drop();
         }
@@ -51,6 +53,9 @@ void piyavkin::calculate(List< Queue< Postfix > >& postfix, List< long long >& r
         }
       }
     }
-    result.push_back(stack.drop());
+    if (!stack.empty())
+    {
+      result.push_back(stack.drop());
+    }
   }
 }

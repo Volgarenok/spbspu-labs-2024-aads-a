@@ -31,7 +31,6 @@ int main(int argc, char* argv[])
   calculate(postfix, result);
   for (auto it: result)
   {
-    std::cout << it << ' ';
+    std::cout << it << '\n';
   }
-  std::cout << '\n';
 }

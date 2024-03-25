@@ -8,13 +8,9 @@ void piyavkin::input(std::istream& in, List< Queue< InputType > >& queues)
   {
     Queue< InputType > q;
     InputType val;
-    while (in >> symbol)
+    while (in >> symbol && symbol != '\n')
     {
-      if (symbol == '\n')
-      {
-        break;
-      }
-      else if (symbol == ' ')
+      if (symbol == ' ')
       {
         continue;
       }
@@ -25,12 +21,19 @@ void piyavkin::input(std::istream& in, List< Queue< InputType > >& queues)
       }
       else if (std::isdigit(symbol))
       {
-        std::string str = "";
-        std::getline(in, str, ' ');
         std::string result = "";
-        result = symbol + str;
+        while (symbol != ' ' && symbol != '\n')
+        {
+          result += symbol;
+          in >> symbol;
+        }
         val.type = detail::operand;
         val.symbol.operand.number = std::stoll(result);
+        if (symbol == '\n')
+        {
+          q.push(val);
+          break;
+        }
       }
       else
       {
