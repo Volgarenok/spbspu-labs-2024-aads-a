@@ -1,5 +1,4 @@
 #include "binList.hpp"
-#include <__config>
 
 template < class T >
 arakelyan::BinList< T >::BinList():
@@ -147,7 +146,7 @@ template < class T >
 void arakelyan::BinList< T >::splice(iterator it_this, std::initializer_list< T > otherLs)
 {
   // if (otherLs.empty())
-  // {
+;  // {
   //   return;
   // }
   if (it_this == end())
@@ -180,6 +179,27 @@ void arakelyan::BinList< T >::splice(iterator it_this, std::initializer_list< T 
       ++it;
       ++it_other;
     }
+  }
+}
+
+template < class T > 
+void arakelyan::BinList< T >::splice(iterator it_this, BinList< T > &otherLs, iterator it_other)
+{
+  if (it_this == begin())
+  {
+    push_front(*it_other);
+    otherLs.erase(it_other);
+  }
+  else if (it_this == end())
+  {
+    push_back(*it_other);
+    otherLs.erase(it_other);
+  }
+  else
+  {
+    // erase(it_this);
+    insert_after(it_this, *it_other);
+    otherLs.erase(it_other);
   }
 }
 
