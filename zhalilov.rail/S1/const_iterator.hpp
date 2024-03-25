@@ -21,8 +21,8 @@ namespace zhalilov
     ConstIterator operator++(int);
     ConstIterator operator--(int);
 
-    const T &operator*();
-    const T *operator->();
+    const T &operator*() const;
+    const T *operator->() const;
 
     bool operator==(const ConstIterator< T > &) const;
     bool operator!=(const ConstIterator< T > &) const;
@@ -71,13 +71,13 @@ namespace zhalilov
   }
 
   template < typename T >
-  const T &ConstIterator< T >::operator*()
+  const T &ConstIterator< T >::operator*() const
   {
     return m_node->value;
   }
 
   template < typename T >
-  const T *ConstIterator< T >::operator->()
+  const T *ConstIterator< T >::operator->() const
   {
     return &m_node->value;
   }
