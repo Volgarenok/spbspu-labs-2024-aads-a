@@ -16,17 +16,18 @@ namespace zhalilov
   public:
     using iterator = Iterator< T >;
     using const_iterator = ConstIterator< T >;
+
     List();
     List(const List< T > &);
-    List(List< T > &&);
-    List(size_t);
+    List(List< T > &&) noexcept;
+    explicit List(size_t);
     List(size_t, const T &);
     List(iterator, iterator);
     List(std::initializer_list< T >);
     ~List();
 
     List< T > &operator=(const List< T > &);
-    List< T > &operator=(List< T > &&);
+    List< T > &operator=(List< T > &&) noexcept;
 
     bool operator==(const List< T > &);
     bool operator!=(const List< T > &);
@@ -45,12 +46,12 @@ namespace zhalilov
     void assign(iterator, iterator);
     void assign(std::initializer_list< T >);
 
-    void splice(const_iterator, List< T > &);
-    void splice(const_iterator, List< T > &&);
-    void splice(const_iterator, List< T > &, const_iterator);
-    void splice(const_iterator, List< T > &&, const_iterator);
-    void splice(const_iterator, List< T > &, const_iterator, const_iterator);
-    void splice(const_iterator, List< T > &&, const_iterator, const_iterator);
+    void splice(const_iterator, List< T > &) noexcept;
+    void splice(const_iterator, List< T > &&) noexcept;
+    void splice(const_iterator, List< T > &, const_iterator) noexcept;
+    void splice(const_iterator, List< T > &&, const_iterator) noexcept;
+    void splice(const_iterator, List< T > &, const_iterator, const_iterator) noexcept;
+    void splice(const_iterator, List< T > &&, const_iterator, const_iterator) noexcept;
 
     template < typename... Args >
     void emplace(const_iterator, Args &&...);
@@ -78,7 +79,7 @@ namespace zhalilov
     void pop_back();
     void pop_front();
     void clear();
-    void swap(List< T > &other);
+    void swap(List< T > &other) noexcept;
 
     void reverse();
 
@@ -98,9 +99,8 @@ namespace zhalilov
   template < typename T >
   List< T >::List():
     m_size(0),
-    m_head(nullptr)
+    m_head(new Node< T >)
   {
-    m_head = new Node< T >;
     m_head->next = m_head;
     m_head->prev = m_head;
   }
@@ -122,7 +122,7 @@ namespace zhalilov
   }
 
   template < typename T >
-  List< T >::List(List< T > &&other):
+  List< T >::List(List< T > &&other) noexcept:
     m_size(other.m_size),
     m_head(other.m_head)
   {
@@ -172,7 +172,7 @@ namespace zhalilov
   }
 
   template < typename T >
-  List< T > &List< T >::operator=(List< T > &&other)
+  List< T > &List< T >::operator=(List< T > &&other) noexcept
   {
     clear();
     m_size = other.m_size;
@@ -531,7 +531,7 @@ namespace zhalilov
   }
 
   template < typename T >
-  void List< T >::swap(List< T > &other)
+  void List< T >::swap(List< T > &other) noexcept
   {
     List< T > temp(std::move(*this));
     *this = std::move(other);
