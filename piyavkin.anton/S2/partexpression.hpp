@@ -17,11 +17,11 @@ namespace piyavkin
     {
       char bracket;
     };
-    enum Type
+    enum TypesPartsExpression
     {
-      operand = 0;
-      operation = 1;
-      bracket = 2;
+      operand = 0,
+      operation = 1,
+      bracket = 2
     };
   }
 }
