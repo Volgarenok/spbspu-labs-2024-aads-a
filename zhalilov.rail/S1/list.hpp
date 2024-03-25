@@ -334,8 +334,7 @@ namespace zhalilov
   }
 
   template < typename T >
-  void List< T >::splice(const_iterator pos, List< T > &list, const_iterator otherPosFirst,
-                         const_iterator otherPosLast) noexcept
+  void List< T >::splice(const_iterator pos, List< T > &list, const_iterator otherPosFirst, const_iterator otherPosLast) noexcept
   {
     while (otherPosFirst != otherPosLast)
     {
@@ -456,7 +455,7 @@ namespace zhalilov
   template < typename Predicate >
   void List< T >::remove_if(Predicate pred) noexcept
   {
-    List< T >::const_iterator it = cbegin();
+    const_iterator it = cbegin();
     while (it != cend())
     {
       if (pred(*it))
