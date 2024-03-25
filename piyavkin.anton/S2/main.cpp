@@ -26,9 +26,9 @@ int main(int argc, char* argv[])
   }
   postfix_t postfix;
   convertPostfix(queues, postfix);
-  while (!queues.begin()->empty())
+  while (!postfix.begin()->empty())
   {
-    std::cout << queues.begin()->drop().symbol.operation.operation << ' ';
+    std::cout << postfix.begin()->drop().symbol.operand.number << ' ';
   }
   std::cout << '\n';
 }

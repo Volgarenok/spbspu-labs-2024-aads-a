@@ -12,6 +12,7 @@ namespace piyavkin
     struct Operation
     {
       char operation;
+      bool operator>(const Operation& rhs);
     };
     struct Bracket
     {
