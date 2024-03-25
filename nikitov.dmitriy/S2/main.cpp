@@ -1,43 +1,44 @@
 #include <iostream>
 #include <fstream>
 #include "queue.hpp"
+#include "stack.hpp"
 #include "expression_type.hpp"
 #include "input_list.hpp"
-#include "solve_expression.hpp"
 #include "convert_expression.hpp"
+#include "solve_expression.hpp"
 
 int main(int argc, char* argv[])
 {
   using namespace nikitov;
-  Queue< Queue< InfixType > > expressionQueue;
+  Queue< Queue< InfixType > > infixQueue;
 
   try
   {
     if (argc == 2)
     {
       std::ifstream input(argv[1]);
-      inputList(expressionQueue, input);
+      inputList(infixQueue, input);
     }
     else
     {
-      inputList(expressionQueue, std::cin);
+      inputList(infixQueue, std::cin);
     }
 
-    Queue< Queue< PostfixType > > newExpressionQueue;
-    while (!expressionQueue.empty())
+    Stack< Queue< PostfixType > > postfixStack;
+    while (!infixQueue.empty())
     {
-      newExpressionQueue.push(convertExpression(expressionQueue.drop()));
+      postfixStack.push(convertExpression(infixQueue.drop()));
     }
 
-    bool notFirst = false;
-    while (!newExpressionQueue.empty())
+    bool isFirst = true;
+    while (!postfixStack.empty())
     {
-      if (notFirst)
+      if (!isFirst)
       {
         std::cout << ' ';
       }
-      notFirst = true;
-      std::cout << solveExpression(newExpressionQueue.drop());
+      isFirst = false;
+      std::cout << solveExpression(postfixStack.drop());
     }
     std::cout << '\n';
   }
