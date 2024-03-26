@@ -17,14 +17,41 @@ void piyavkin::calculate(List< Queue< Postfix > >& postfix, List< long long >& r
       {
         if (it.front().symbol.operation.operation == '+')
         {
-          long long temp = stack.drop() + stack.drop();
-          stack.push(temp);
+          long long lhs = stack.drop();
+          long long rhs = stack.drop();
+          if (std::numeric_limits< long long >::max() - lhs < rhs)
+          {
+            throw std::logic_error("Overflow");
+          }
+          lhs += rhs;
+          stack.push(lhs);
           it.drop();
         }
         else if (it.front().symbol.operation.operation == '-')
         {
-          long long temp = stack.drop() - stack.drop();
-          stack.push(-temp);
+          long long lhs = stack.drop();
+          long long rhs = stack.drop();
+          if (rhs != 0 && lhs != 0)
+          {
+            bool same_sign = true;
+            if (lhs / rhs == 0)
+            {
+              same_sign = (rhs / lhs) > 0 ? true : false;
+            }
+            else
+            {
+              same_sign = (lhs / rhs) > 0 ? true : false;
+            }
+            if (same_sign)
+            {
+              if (std::numeric_limits< long long >::max() - std::abs(rhs) < lhs)
+              {
+                throw std::logic_error("Overflow");
+              }
+            }
+          }
+          rhs -= lhs;
+          stack.push(lhs);
           it.drop();
         }
         else if (it.front().symbol.operation.operation == '*')
