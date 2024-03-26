@@ -29,8 +29,13 @@ int main(int argc, char* argv[])
   convertPostfix(queues, postfix);
   List< long long > result;
   calculate(postfix, result);
-  for (auto it: result)
+  for (auto it = result.cbegin(); it != result.cend(); ++it)
   {
-    std::cout << it << '\n';
+    if (it != result.cbegin())
+    {
+      std::cout << ' ';
+    }
+    std::cout << *it;
   }
+  std::cout << '\n';
 }

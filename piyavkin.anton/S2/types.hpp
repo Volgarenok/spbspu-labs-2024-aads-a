@@ -10,7 +10,7 @@ namespace piyavkin
     {
       detail::Operand operand;
       detail::Operation operation;
-      detail::Bracket bracket;      
+      detail::Bracket bracket;
     };
     input_t symbol;
     detail::TypesPartsExpression type;
@@ -23,14 +23,14 @@ namespace piyavkin
       detail::Operation operation;
     };
     postfix_t symbol;
-    detail::TypesPartsExpression type;    
+    detail::TypesPartsExpression type;
   };
   struct ConversionExpressionType
   {
     union conversion_t
     {
       detail::Bracket bracket;
-      detail::Operation operation; 
+      detail::Operation operation;
     };
     conversion_t symbol;
     detail::TypesPartsExpression type;
