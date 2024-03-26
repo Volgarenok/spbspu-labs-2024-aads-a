@@ -29,5 +29,42 @@ namespace sivkov
   private:
     List<T> list;
   };
+
+  template<typename T>
+  void Stack<T>::push(const T& value)
+  {
+    list.push_front(value);
+  }
+
+  template<typename T>
+  void Stack<T>::pop()
+  {
+    if (!list.empty())
+    {
+      list.pop_front();
+    }
+  }
+
+  template<typename T>
+  T& Stack<T>::top()
+  {
+    if (!list.empty())
+    {
+      return list.front();
+    }
+    throw std::out_of_range("Stack is empty");
+  }
+
+  template<typename T>
+  bool Stack<T>::empty() const
+  {
+    return list.empty();
+  }
+
+  template<typename T>
+  size_t Stack<T>::size() const
+  {
+    return list.getSize();
+  }
 }
 #endif
