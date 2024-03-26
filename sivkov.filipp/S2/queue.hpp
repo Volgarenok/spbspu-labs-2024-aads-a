@@ -29,4 +29,42 @@ namespace sivkov
   private:
     List<T> list;
   };
+
+  template<typename T>
+  void Queue<T>::push(const T& value)
+  {
+    list.push_back(value);
+  }
+
+  template<typename T>
+  void Queue<T>::pop()
+  {
+    if (!list.empty())
+    {
+      list.pop_front();
+    }
+  }
+
+  template<typename T>
+  T& Queue<T>::front()
+  {
+    if (!list.empty())
+    {
+      return list.front();
+    }
+    throw std::out_of_range("Queue is empty");
+  }
+
+  template<typename T>
+  bool Queue<T>::empty() const
+  {
+    return list.empty();
+  }
+
+  template<typename T>
+  size_t Queue<T>::size() const
+  {
+    return list.getSize();
+  }
 }
+#endif
