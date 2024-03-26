@@ -2,6 +2,7 @@
 #include <list.hpp>
 #include "stack.hpp"
 
+#include <iostream>
 void piyavkin::calculate(List< Queue< Postfix > >& postfix, List< long long >& result)
 {
   Stack< long long > stack;
@@ -15,87 +16,83 @@ void piyavkin::calculate(List< Queue< Postfix > >& postfix, List< long long >& r
       }
       else
       {
-        if (it.front().symbol.operation.operation == '+')
+        const long long min = std::numeric_limits< long long >::min();
+        if (stack.size() < 2)
         {
           long long rhs = stack.drop();
           long long lhs = stack.drop();
-          if (std::numeric_limits< long long >::max() - lhs < rhs)
+          if (it.front().symbol.operation.operation == '+')
           {
-            throw std::logic_error("Overflow");
-          }
-          lhs += rhs;
-          stack.push(lhs);
-          it.drop();
-        }
-        else if (it.front().symbol.operation.operation == '-')
-        {
-          long long rhs = stack.drop();
-          long long lhs = stack.drop();
-          if (rhs != 0 && lhs != 0)
-          {
-            const long long min = std::numeric_limits< long long >::min();
-            if ((rhs == -1 || lhs == -1) && (rhs == min || lhs == min))
+            if (std::numeric_limits< long long >::max() - lhs < rhs)
             {
               throw std::logic_error("Overflow");
             }
-            bool same_sign = true;
-            if (lhs / rhs == 0)
+            lhs += rhs;
+          }
+          else if (it.front().symbol.operation.operation == '-')
+          {
+            if (rhs != 0 && lhs != 0)
             {
-              same_sign = (rhs / lhs) > 0 ? true : false;
+              if ((rhs == -1 || lhs == -1) && (rhs == min || lhs == min))
+              {
+                throw std::logic_error("Overflow");
+              }
+              bool same_sign = true;
+              if (lhs / rhs == 0)
+              {
+                same_sign = (rhs / lhs) > 0 ? true : false;
+              }
+              else
+              {
+                same_sign = (lhs / rhs) > 0 ? true : false;
+              }
+              if (same_sign == true)
+              {
+                if (std::numeric_limits< long long >::max() - std::abs(rhs) < lhs)
+                {
+                  throw std::logic_error("Overflow");
+                }
+              }
             }
-            else
+            lhs -= rhs;
+          }
+          else if (it.front().symbol.operation.operation == '*')
+          {
+            if (rhs != 0 && lhs != 0)
             {
-              same_sign = (lhs / rhs) > 0 ? true : false;
-            }
-            if (same_sign == true)
-            {
-              if (std::numeric_limits< long long >::max() - std::abs(rhs) < lhs)
+              if ((rhs == -1 || lhs == -1) && (rhs == min || lhs == min))
+              {
+                throw std::logic_error("Overflow");
+              }
+              else if (std::numeric_limits< long long >::max() / rhs < lhs)
               {
                 throw std::logic_error("Overflow");
               }
             }
+            lhs *= rhs;
           }
-          rhs -= lhs;
-          stack.push(lhs);
-          it.drop();
-        }
-        else if (it.front().symbol.operation.operation == '*')
-        {
-          long long rhs = stack.drop();
-          long long lhs = stack.drop();
-          if (rhs != 0 && lhs != 0)
+          else if (it.front().symbol.operation.operation == '/')
           {
-            const long long min = std::numeric_limits< long long >::min();
             if ((rhs == -1 || lhs == -1) && (rhs == min || lhs == min))
             {
               throw std::logic_error("Overflow");
             }
-            else if (std::numeric_limits< long long >::max() / rhs < lhs)
-            {
-              throw std::logic_error("Overflow");
-            }
+            lhs /= rhs;
           }
-          rhs *= lhs;
-          stack.push(rhs);
-          it.drop();
-        }
-        else if (it.front().symbol.operation.operation == '/')
-        {
-          long long div = stack.drop();
-          long long temp = stack.drop() / div;
-          stack.push(temp);
-          it.drop();
-        }
-        else if (it.front().symbol.operation.operation == '%')
-        {
-          long long div = stack.drop();
-          long long temp = stack.drop() % div;
-          stack.push(temp);
+          else if (it.front().symbol.operation.operation == '%')
+          {
+            lhs %= rhs;
+          }
+          else
+          {
+            throw std::logic_error("Incorrect operation");
+          }
+          stack.push(lhs);
           it.drop();
         }
         else
         {
-          throw std::logic_error("Incorrect operation");
+          throw std::logic_error("Not enough operands");
         }
       }
     }
