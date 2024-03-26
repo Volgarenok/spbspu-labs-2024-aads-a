@@ -17,8 +17,8 @@ void piyavkin::calculate(List< Queue< Postfix > >& postfix, List< long long >& r
       {
         if (it.front().symbol.operation.operation == '+')
         {
-          long long lhs = stack.drop();
           long long rhs = stack.drop();
+          long long lhs = stack.drop();
           if (std::numeric_limits< long long >::max() - lhs < rhs)
           {
             throw std::logic_error("Overflow");
@@ -29,10 +29,15 @@ void piyavkin::calculate(List< Queue< Postfix > >& postfix, List< long long >& r
         }
         else if (it.front().symbol.operation.operation == '-')
         {
-          long long lhs = stack.drop();
           long long rhs = stack.drop();
+          long long lhs = stack.drop();
           if (rhs != 0 && lhs != 0)
           {
+            const long long min = std::numeric_limits< long long >::min();
+            if ((rhs == -1 || lhs == -1) && (rhs == min || lhs == min))
+            {
+              throw std::logic_error("Overflow");
+            }
             bool same_sign = true;
             if (lhs / rhs == 0)
             {
@@ -42,7 +47,7 @@ void piyavkin::calculate(List< Queue< Postfix > >& postfix, List< long long >& r
             {
               same_sign = (lhs / rhs) > 0 ? true : false;
             }
-            if (same_sign)
+            if (same_sign == true)
             {
               if (std::numeric_limits< long long >::max() - std::abs(rhs) < lhs)
               {
@@ -56,8 +61,22 @@ void piyavkin::calculate(List< Queue< Postfix > >& postfix, List< long long >& r
         }
         else if (it.front().symbol.operation.operation == '*')
         {
-          long long temp = stack.drop() * stack.drop();
-          stack.push(temp);
+          long long rhs = stack.drop();
+          long long lhs = stack.drop();
+          if (rhs != 0 && lhs != 0)
+          {
+            const long long min = std::numeric_limits< long long >::min();
+            if ((rhs == -1 || lhs == -1) && (rhs == min || lhs == min))
+            {
+              throw std::logic_error("Overflow");
+            }
+            else if (std::numeric_limits< long long >::max() / rhs < lhs)
+            {
+              throw std::logic_error("Overflow");
+            }
+          }
+          rhs *= lhs;
+          stack.push(rhs);
           it.drop();
         }
         else if (it.front().symbol.operation.operation == '/')
