@@ -3,7 +3,7 @@
 
 #include <ostream>
 
-#include <list.hpp>
+#include <list/list.hpp>
 
 namespace zhalilov
 {
