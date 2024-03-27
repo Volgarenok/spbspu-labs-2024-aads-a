@@ -2,7 +2,6 @@
 #include <list.hpp>
 #include "stack.hpp"
 
-#include <iostream>
 void piyavkin::calculate(List< Queue< Postfix > >& postfix, List< long long >& result)
 {
   Stack< long long > stack;
@@ -17,7 +16,8 @@ void piyavkin::calculate(List< Queue< Postfix > >& postfix, List< long long >& r
       else
       {
         const long long min = std::numeric_limits< long long >::min();
-        if (stack.size() < 2)
+        const size_t numbers_operand = 2;
+        if (stack.size() >= numbers_operand)
         {
           long long rhs = stack.drop();
           long long lhs = stack.drop();
@@ -25,7 +25,7 @@ void piyavkin::calculate(List< Queue< Postfix > >& postfix, List< long long >& r
           {
             if (std::numeric_limits< long long >::max() - lhs < rhs)
             {
-              throw std::logic_error("Overflow");
+              throw std::logic_error("Addition Overflow");
             }
             lhs += rhs;
           }
@@ -35,7 +35,7 @@ void piyavkin::calculate(List< Queue< Postfix > >& postfix, List< long long >& r
             {
               if ((rhs == -1 || lhs == -1) && (rhs == min || lhs == min))
               {
-                throw std::logic_error("Overflow");
+                throw std::logic_error("Subtraction overflow");
               }
               bool same_sign = true;
               if (lhs / rhs == 0)
@@ -50,7 +50,7 @@ void piyavkin::calculate(List< Queue< Postfix > >& postfix, List< long long >& r
               {
                 if (std::numeric_limits< long long >::max() - std::abs(rhs) < lhs)
                 {
-                  throw std::logic_error("Overflow");
+                  throw std::logic_error("Subtraction overflow");
                 }
               }
             }
@@ -62,25 +62,33 @@ void piyavkin::calculate(List< Queue< Postfix > >& postfix, List< long long >& r
             {
               if ((rhs == -1 || lhs == -1) && (rhs == min || lhs == min))
               {
-                throw std::logic_error("Overflow");
+                throw std::logic_error("Overflow when multiplying by -1");
               }
               else if (std::numeric_limits< long long >::max() / rhs < lhs)
               {
-                throw std::logic_error("Overflow");
+                throw std::logic_error("Multiplication overflow");
               }
             }
             lhs *= rhs;
           }
           else if (it.front().symbol.operation.operation == '/')
           {
-            if ((rhs == -1 || lhs == -1) && (rhs == min || lhs == min))
+            if (rhs == 0)
             {
-              throw std::logic_error("Overflow");
+              throw std::logic_error("Division by 0");
+            }
+            else if (rhs == -1 && lhs == min)
+            {
+              throw std::logic_error("Division overflow");
             }
             lhs /= rhs;
           }
           else if (it.front().symbol.operation.operation == '%')
           {
+            if (rhs == 0)
+            {
+              throw std::logic_error("Taking the remainder to 0");
+            }
             lhs %= rhs;
           }
           else
@@ -96,9 +104,16 @@ void piyavkin::calculate(List< Queue< Postfix > >& postfix, List< long long >& r
         }
       }
     }
-    if (!stack.empty())
+    if (stack.size() == 1)
     {
       result.push_back(stack.drop());
+    }
+    else
+    {
+      if (!stack.empty())
+      {
+        throw std::logic_error("There is no clear answer");
+      }
     }
   }
 }

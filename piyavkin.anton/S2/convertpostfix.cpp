@@ -29,6 +29,10 @@ void piyavkin::convertPostfix(infix_t& infix, postfix_t& postfix)
         {
           while (stack.top().symbol.bracket.bracket != '(')
           {
+            if (stack.empty())
+            {
+              throw std::logic_error("The parentheses are not placed correctly");
+            }
             Postfix postfix_val;
             postfix_val.type = detail::operation;
             postfix_val.symbol.operation = stack.drop().symbol.operation;
