@@ -1,34 +1,37 @@
 #include "output.hpp"
 
-void piyavkin::output(std::ostream& out, const pair_t pairs, size_t size, size_t max_size_list)
+size_t piyavkin::max_size_list(const list_t& list)
 {
-  for (size_t i = 0; i < size; ++i)
+  size_t max_size_list = 0;
+  auto it = list.cbegin();
+  for (size_t i = 0; i < list.size(); ++i)
   {
-    if (i != 0)
-    {
-      out << ' ';
-    }
-    out << pairs[i].first;
+    max_size_list = std::max(max_size_list, it->second.size());
+    ++it;
   }
-  out << '\n';
-  if (max_size_list == 0)
-  {
-    out << 0;
-    return;
-  }
+  return max_size_list;
+}
+
+void piyavkin::outputValue(std::ostream& out, const list_t& list)
+{
+  auto it = list.cbegin();
   size_t space = 0;
-  for (size_t i = 0; i < max_size_list; ++i)
+  for (size_t i = 0; i < max_size_list(list); ++i)
   {
-    for (size_t j = 0; j < size; ++j)
+    for (size_t j = 0; j < list.size(); ++j)
     {
-      if (i < pairs[j].second->size())
+      if (i < it->second.size())
       {
-        auto val = pairs[j].second->operator[](i);
+        auto val = it->second.cbegin();
+        for (size_t k = 0; k < i; ++k)
+        {
+          ++val;
+        }
         if (j != space)
         {
           out << ' ';
         }
-        out << val;
+        out << *val;
       }
       else
       {
@@ -37,41 +40,75 @@ void piyavkin::output(std::ostream& out, const pair_t pairs, size_t size, size_t
           ++space;
         }
       }
+      ++it;
     }
     out << '\n';
+    it = list.cbegin();
   }
-  size_t* sum = new size_t[max_size_list] {};
+}
+
+piyavkin::List< unsigned long long > piyavkin::countSum(const list_t& list)
+{
+  auto it = list.cbegin();
+  List< unsigned long long > sums;
   const unsigned long long max = std::numeric_limits< unsigned long long >::max();
-  for (size_t i = 0; i < max_size_list; ++i)
+  for (size_t i = 0; i < max_size_list(list); ++i)
   {
-    for (size_t j = 0; j < size; ++j)
+    size_t sum = 0;
+    for (size_t j = 0; j < list.size(); ++j)
     {
-      try
+      if (i < it->second.size())
       {
-        if (i < pairs[j].second->size())
+        auto val = it->second.cbegin();
+        for (size_t k = 0; k < i; ++k)
         {
-          auto val = pairs[j].second->operator[](i);
-          if (max - sum[i] < val)
-          {
-            throw std::invalid_argument("Overflow");
-          }
-          sum[i] += val;
+          ++val;
         }
+        if (i != 0)
+        {
+          if (max - sum < *val)
+          {
+            throw std::logic_error("Overflow");
+          }
+        }
+        sum += *val;
       }
-      catch (const std::invalid_argument& e)
-      {
-        delete[] sum;
-        throw;
-      }
+      ++it;
     }
+    sums.push_back(sum);
+    it = list.cbegin();
   }
-  for (size_t i = 0; i < max_size_list; ++i)
+  return sums;
+}
+
+void piyavkin::output(std::ostream& out, const list_t& list)
+{
+  auto start = list.cbegin();
+  auto finish = list.cend();
+  while (start != finish)
+  {
+    if (start != list.cbegin())
+    {
+      out << ' ';
+    }
+    out << start->first;
+    ++start;
+  }
+  out << '\n';
+  outputValue(out, list);
+  auto sums = countSum(list);
+  if (sums.empty())
+  {
+    out << 0;
+    return;
+  }
+  auto iterator = sums.cbegin();
+  for (size_t i = 0; i < sums.size(); ++i)
   {
     if (i != 0)
     {
       out << ' ';
     }
-    out << sum[i];
+    out << *iterator++;
   }
-  delete[] sum;
 }

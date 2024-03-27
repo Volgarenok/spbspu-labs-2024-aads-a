@@ -6,7 +6,10 @@
 
 namespace piyavkin
 {
-  using pair_t = std::pair< std::string, piyavkin::List< unsigned long long >* >*;
-  void output(std::ostream& out, const pair_t pairs, size_t size, size_t max_size_list);
+  using list_t = List< std::pair< std::string, List< unsigned long long > > >;
+  size_t max_size_list(const list_t& list);
+  List< unsigned long long > countSum(const list_t& list);
+  void outputValue(std::ostream& out, const list_t& list);
+  void output(std::ostream& out, const list_t& list);
 }
 #endif
