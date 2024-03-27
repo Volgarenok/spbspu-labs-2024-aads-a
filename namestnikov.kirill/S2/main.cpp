@@ -22,4 +22,16 @@ int main()
     //std::cin << ans;
     temp.pop();
   }
+  std::stack<int> temp2;
+  int num = 0;
+  while (true)
+  {
+    std::cin >> num;
+    if (num == 0)
+    {
+      break;
+    }
+    temp2.push(num);
+  }
+  std::cout << temp2.size();
 }
