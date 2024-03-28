@@ -133,7 +133,7 @@ namespace zaitsev
     }
     return true;
   }
- 
+
   template<typename T>
   T PostfixExpression<T>::calculate()
   {
