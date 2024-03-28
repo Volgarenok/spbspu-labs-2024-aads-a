@@ -31,16 +31,19 @@ int main(int argc, char* argv[])
     convertPostfix(queues, postfix);
     List< long long > result;
     calculate(postfix, result);
-    result.reverse();
-    for (auto it = result.cbegin(); it != result.cend(); ++it)
+    if (!result.empty())
     {
-      if (it != result.cbegin())
+      result.reverse();
+      for (auto it = result.cbegin(); it != result.cend(); ++it)
       {
-        std::cout << ' ';
+        if (it != result.cbegin())
+        {
+          std::cout << ' ';
+        }
+        std::cout << *it;
       }
-      std::cout << *it;
+      std::cout << '\n';
     }
-    std::cout << '\n';
   }
   catch (const std::exception& e)
   {
