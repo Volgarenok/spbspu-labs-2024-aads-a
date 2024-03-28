@@ -42,8 +42,8 @@ int main(int argc, char* argv[])
         }
         std::cout << *it;
       }
-      std::cout << '\n';
     }
+    std::cout << '\n';
   }
   catch (const std::exception& e)
   {
