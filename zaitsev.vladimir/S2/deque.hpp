@@ -312,7 +312,7 @@ namespace zaitsev
     {
       convert_index(size_, end_chunk, end_pos);
     }
-    if (chunks_nmb_ == 0 || end_chunk == chunks_nmb_ - 1 && end_pos == chunk_cap_ - 1)
+    if (chunks_nmb_ == 0 || (end_chunk == chunks_nmb_ - 1 && end_pos == chunk_cap_ - 1))
     {
       add_chunk(true);
     }

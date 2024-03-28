@@ -160,14 +160,14 @@ namespace zaitsev
     {
       T max_val = std::numeric_limits<T>::max();
       T min_val = std::numeric_limits<T>::lowest();
-      if (a < 0 && b == min_val || a == min_val && b < 0)
+      if ((a < 0 && b == min_val) || (a == min_val && b < 0))
       {
         throw std::runtime_error("Multiplication overflow");
       }
 
       if ((a > 0 && b > 0 || a < 0 && b < 0)
           && (max_val / std::abs(b) < std::abs(a)
-          || max_val / std::abs(b) == std::abs(a) && max_val / std::abs(b) != 0))
+          || (max_val / std::abs(b) == std::abs(a) && max_val / std::abs(b) != 0)))
       {
         throw std::runtime_error("Multiplication overflow");
       }
@@ -175,7 +175,7 @@ namespace zaitsev
       T max_mult = std::max(a, b);
       if ((a < 0 && b > 0 || a > 0 && b < 0)
           && (min_val / max_mult != min_mult
-          || min_val / max_mult == min_mult && min_val / max_mult != 0))
+          || (min_val / max_mult == min_mult && min_val / max_mult != 0)))
       {
         throw std::runtime_error("Multiplication overflow");
       }
