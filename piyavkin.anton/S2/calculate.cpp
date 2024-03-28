@@ -63,7 +63,7 @@ void piyavkin::calculate(List< Queue< Postfix > >& postfix, List< long long >& r
               {
                 throw std::logic_error("Overflow when multiplying by -1");
               }
-              else if (std::numeric_limits< long long >::max() / rhs < lhs)
+              else if (std::numeric_limits< long long >::max() / rhs < std::abs(lhs))
               {
                 throw std::logic_error("Multiplication overflow");
               }
@@ -89,6 +89,7 @@ void piyavkin::calculate(List< Queue< Postfix > >& postfix, List< long long >& r
               throw std::logic_error("Taking the remainder to 0");
             }
             lhs %= rhs;
+            lhs += rhs;
           }
           else
           {

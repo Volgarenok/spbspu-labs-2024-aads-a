@@ -31,6 +31,7 @@ int main(int argc, char* argv[])
     convertPostfix(queues, postfix);
     List< long long > result;
     calculate(postfix, result);
+    result.reverse();
     for (auto it = result.cbegin(); it != result.cend(); ++it)
     {
       if (it != result.cbegin())

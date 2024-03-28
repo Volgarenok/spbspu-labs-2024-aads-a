@@ -51,7 +51,7 @@ void piyavkin::convertPostfix(infix_t& infix, postfix_t& postfix)
             }
             Postfix postfix_val;
             postfix_val.type = detail::operation;
-            postfix_val.symbol.operation = it->drop().symbol.operation;
+            postfix_val.symbol.operation = stack.drop().symbol.operation;
             q.push(postfix_val);
           }
           ConversionExpressionType stack_val;
