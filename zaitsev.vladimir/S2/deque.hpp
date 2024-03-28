@@ -285,8 +285,8 @@ namespace zaitsev
     other.head_chunk_ = 0;
     other.head_pos_ = 0;
     other.chunk_heads_ = nullptr;
-    other.chunk_alloc_();
-    other.head_alloc_();
+    other.chunk_alloc_ = std::allocator<T>();
+    other.head_alloc_ = std::allocator<T*>();
   }
 
   template<typename T>
