@@ -1,5 +1,4 @@
 #include "calculate.hpp"
-#include <list.hpp>
 #include "stack.hpp"
 
 void piyavkin::calculate(List< Queue< Postfix > >& postfix, List< long long >& result)

@@ -1,6 +1,5 @@
 #ifndef CONVERTPOSTFIX_HPP
 #define CONVERTPOSTFIX_HPP
-#include <list.hpp>
 #include "queue.hpp"
 #include "types.hpp"
 
