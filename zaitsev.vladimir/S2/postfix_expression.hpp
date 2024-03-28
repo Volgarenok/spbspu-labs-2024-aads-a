@@ -52,7 +52,7 @@ namespace zaitsev
   bool PostfixExpression< T >::convert_from_infix(const InfixExpression<T>& expression)
   {
     Stack<Token<T>> internal_state;
-    InfixExpression<T>::template const_iterator expr_iterator = expression.cbegin();
+    typename InfixExpression<T>::const_iterator expr_iterator = expression.cbegin();
     try
     {
       while (expr_iterator!=expression.end())
@@ -138,7 +138,7 @@ namespace zaitsev
   T PostfixExpression<T>::calculate()
   {
     Stack<T> values;
-    Queue<Token<T>>::template const_iterator expr_iterator = tokens_.cbegin();
+    typename Queue<Token<T>>::const_iterator expr_iterator = tokens_.cbegin();
     while (expr_iterator != tokens_.cend())
     {
       T a, b;

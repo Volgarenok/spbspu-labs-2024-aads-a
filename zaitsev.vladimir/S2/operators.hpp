@@ -15,6 +15,7 @@ namespace zaitsev
     virtual T operator()(const T& a, const T& b) const = 0;
     virtual BinaryOperator<T>* clone() const = 0;
     virtual std::ostream& operator<<(std::ostream& output) const = 0;
+    virtual ~BinaryOperator() = default;
     friend std::ostream& operator<<(std::ostream& output, const BinaryOperator<T>& object)
     {
       object.operator<<(output);
@@ -26,6 +27,7 @@ namespace zaitsev
   struct SafePlus: public BinaryOperator<T>
   {
     static_assert(std::is_integral<T>::value, "Type not integer");
+    virtual ~SafePlus() = default;
     virtual size_t priority() const
     {
       return 1;
@@ -57,6 +59,7 @@ namespace zaitsev
   struct SafeMinus: public BinaryOperator<T>
   {
     static_assert(std::is_integral<T>::value, "Type not integer");
+    virtual ~SafeMinus() = default;
     virtual size_t priority() const
     {
       return 1;
@@ -88,6 +91,7 @@ namespace zaitsev
   struct SafeDivision: public BinaryOperator<T>
   {
     static_assert(std::is_integral<T>::value, "Type not integer");
+    virtual ~SafeDivision() = default;
     virtual size_t priority() const
     {
       return 2;
@@ -119,6 +123,7 @@ namespace zaitsev
   struct SafeMod: public BinaryOperator<T>
   {
     static_assert(std::is_integral<T>::value, "Type not integer");
+    virtual ~SafeMod() = default;
     virtual size_t priority() const
     {
       return 2;
@@ -146,6 +151,7 @@ namespace zaitsev
   struct SafeMultiplication: public BinaryOperator<T>
   {
     static_assert(std::is_integral<T>::value, "Type not integer");
+    virtual ~SafeMultiplication() = default;
     virtual size_t priority() const
     {
       return 2;
