@@ -165,7 +165,7 @@ namespace zaitsev
         throw std::runtime_error("Multiplication overflow");
       }
 
-      if ((a > 0 && b > 0) || (a < 0 && b < 0))
+      if (((a > 0 && b > 0) || (a < 0 && b < 0))
           && (max_val / std::abs(b) < std::abs(a)
           || (max_val / std::abs(b) == std::abs(a) && max_val / std::abs(b) != 0)))
       {
