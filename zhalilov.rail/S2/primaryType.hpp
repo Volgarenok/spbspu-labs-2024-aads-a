@@ -5,7 +5,7 @@ namespace zhalilov
 {
   enum class PrimaryType
   {
-    Operator,
+    BinOperator,
     Operand,
     Bracket
   };

@@ -21,7 +21,6 @@ namespace zhalilov
 
     explicit BinOperator(Type);
     Operand operator()(const Operand &, const Operand &) const;
-    PrimaryType getPrimaryType() const;
 
   private:
     Type type_;

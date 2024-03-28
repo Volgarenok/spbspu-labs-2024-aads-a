@@ -9,8 +9,8 @@ namespace zhalilov
   {
   public:
     explicit Operand(long long);
-    PrimaryType getPrimaryType() const;
     long long getNum() const;
+
   private:
     long long num_;
   };

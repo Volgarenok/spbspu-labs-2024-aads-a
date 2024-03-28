@@ -22,8 +22,3 @@ zhalilov::Operand zhalilov::BinOperator::operator()(const Operand &left, const O
     return Operand(left.getNum() % right.getNum());
   }
 }
-
-zhalilov::PrimaryType zhalilov::BinOperator::getPrimaryType() const
-{
-  return PrimaryType::Operator;
-}

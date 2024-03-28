@@ -15,7 +15,6 @@ namespace zhalilov
     };
 
     explicit Bracket(Type);
-    PrimaryType getPrimaryType() const;
     Type getBracketType() const;
 
   private:
