@@ -19,6 +19,10 @@ namespace zaitsev
     {
       return Deque<T>::empty();
     }
+    size_t size() const
+    {
+      return Deque< T >::size();
+    }
     void push(const T& value)
     {
       Deque< T >::push_back(value);

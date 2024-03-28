@@ -15,7 +15,7 @@ namespace zaitsev
     using iterator = typename Queue<Token<T>>::iterator;
     using const_iterator = typename Queue<Token<T>>::const_iterator;
   private:
-    Queue<Token<T>> tokens;
+    Queue<Token<T>> tokens_;
     void add_non_value_token(char symbol);
   public:
     InfixExpression() = default;
@@ -25,31 +25,31 @@ namespace zaitsev
     ~InfixExpression() = default;
     bool empty() const
     {
-      return tokens.empty();
+      return tokens_.empty();
     }
     iterator begin()
     {
-      return tokens.begin();
+      return tokens_.begin();
     }
     iterator end()
     {
-      return tokens.end();
+      return tokens_.end();
     }
     const_iterator begin() const
     {
-      return tokens.cbegin();
+      return tokens_.cbegin();
     }
     const_iterator end() const
     {
-      return tokens.cend();
+      return tokens_.cend();
     }
     const_iterator cbegin() const
     {
-      return tokens.cbegin();
+      return tokens_.cbegin();
     }
     const_iterator cend() const
     {
-      return tokens.cend();
+      return tokens_.cend();
     }
   };
 
@@ -71,7 +71,7 @@ namespace zaitsev
           Token<T> t;
           t.type_ = token_type::value;
           t.token_.value_ = nums_converter(s.substr(beg_pos, len), nullptr, 10);
-          tokens.push(t);
+          tokens_.push(t);
         }
         len = 0;
       }
@@ -96,37 +96,37 @@ namespace zaitsev
     case '(':
       t.type_ = token_type::bracket;
       t.token_.bracket_ = bracket_type::round_open;
-      tokens.push(t);
+      tokens_.push(t);
       break;
     case ')':
       t.type_ = token_type::bracket;
       t.token_.bracket_ = bracket_type::round_close;
-      tokens.push(t);
+      tokens_.push(t);
       break;
     case '+':
       t.type_ = token_type::binary_operator;
       t.token_.bin_operator_ = new SafePlus< T >();
-      tokens.push(t);
+      tokens_.push(t);
       break;
     case '-':
       t.type_ = token_type::binary_operator;
       t.token_.bin_operator_ = new SafeMinus< T >();
-      tokens.push(t);
+      tokens_.push(t);
       break;
     case '%':
       t.type_ = token_type::binary_operator;
-      t.token_.bin_operator_ = new SafeDivision<T>();
-      tokens.push(t);
+      t.token_.bin_operator_ = new SafeMod<T>();
+      tokens_.push(t);
       break;
     case '/':
       t.type_ = token_type::binary_operator;
       t.token_.bin_operator_ = new SafeDivision<T>();
-      tokens.push(t);
+      tokens_.push(t);
       break;
     case '*':
       t.type_ = token_type::binary_operator;
       t.token_.bin_operator_ = new SafeMultiplication< T >();
-      tokens.push(t);
+      tokens_.push(t);
       break;
     }
   }

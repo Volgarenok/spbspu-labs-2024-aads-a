@@ -12,19 +12,27 @@ namespace zaitsev
 
     T& top()
     {
-      return Deque< T >::back();
+      return Deque< T >::front();
+    }
+    const T& top() const
+    {
+      return Deque< T >::front();
     }
     bool empty() const
     {
       return Deque<T>::empty();
     }
+    size_t size() const
+    {
+      return Deque< T >::size();
+    }
     void push(const T& value)
     {
-      Deque< T >::push_back(value);
+      Deque< T >::push_front(value);
     }
     void pop()
     {
-      Deque< T >::pop_back();
+      Deque< T >::pop_front();
     }
     void clear()
     {

@@ -2,6 +2,7 @@
 #define OPERATORS_HPP
 #include <iostream>
 #include <limits>
+#include <cmath>
 #include <stdexcept>
 #include <type_traits>
 
@@ -13,7 +14,7 @@ namespace zaitsev
     virtual size_t priority() const = 0;
     virtual T operator()(const T& a, const T& b) const = 0;
     virtual BinaryOperator<T>* clone() const = 0;
-    virtual std::ostream& operator<<(std::ostream& output) = 0;
+    virtual std::ostream& operator<<(std::ostream& output) const = 0;
     friend std::ostream& operator<<(std::ostream& output, const BinaryOperator<T>& object)
     {
       object.operator<<(output);
@@ -24,7 +25,7 @@ namespace zaitsev
   template<typename T>
   struct SafePlus: public BinaryOperator<T>
   {
-    static_assert(std::is_integral<T>::value == true, "Type not integer");
+    static_assert(std::is_integral<T>::value, "Type not integer");
     virtual size_t priority() const
     {
       return 1;
@@ -45,7 +46,7 @@ namespace zaitsev
     {
       return new SafePlus<T>();
     }
-    virtual std::ostream& operator<<(std::ostream& output)
+    virtual std::ostream& operator<<(std::ostream& output) const
     {
       output << '+';
       return output;
@@ -55,7 +56,7 @@ namespace zaitsev
   template<typename T>
   struct SafeMinus: public BinaryOperator<T>
   {
-    static_assert(std::is_integral<T>::value == true, "Type not integer");
+    static_assert(std::is_integral<T>::value, "Type not integer");
     virtual size_t priority() const
     {
       return 1;
@@ -76,7 +77,7 @@ namespace zaitsev
     {
       return new SafeMinus<T>();
     }
-    virtual std::ostream&  operator<<(std::ostream& output)
+    virtual std::ostream&  operator<<(std::ostream& output) const
     {
       output << '-';
       return output;
@@ -86,7 +87,7 @@ namespace zaitsev
   template<typename T>
   struct SafeDivision: public BinaryOperator<T>
   {
-    static_assert(std::is_integral<T>::value == true, "Type not integer");
+    static_assert(std::is_integral<T>::value, "Type not integer");
     virtual size_t priority() const
     {
       return 2;
@@ -107,7 +108,7 @@ namespace zaitsev
     {
       return new SafeDivision<T>();
     }
-    virtual std::ostream& operator<<(std::ostream& output)
+    virtual std::ostream& operator<<(std::ostream& output) const
     {
       output << '/';
       return output;
@@ -117,7 +118,7 @@ namespace zaitsev
   template<typename T>
   struct SafeMod: public BinaryOperator<T>
   {
-    static_assert(std::is_integral<T>::value == true, "Type not integer");
+    static_assert(std::is_integral<T>::value, "Type not integer");
     virtual size_t priority() const
     {
       return 2;
@@ -128,13 +129,13 @@ namespace zaitsev
       {
         throw std::runtime_error("Mod overflow");
       }
-      return a % b;
+      return (a % b >= 0) ? a % b : a % b + b;
     }
     virtual BinaryOperator<T>* clone() const
     {
       return new SafeMod<T>;
     }
-    virtual std::ostream& operator<<(std::ostream& output)
+    virtual std::ostream& operator<<(std::ostream& output) const
     {
       output << '%';
       return output;
@@ -144,23 +145,33 @@ namespace zaitsev
   template<typename T>
   struct SafeMultiplication: public BinaryOperator<T>
   {
-    static_assert(std::is_integral<T>::value == true, "Type not integer");
+    static_assert(std::is_integral<T>::value, "Type not integer");
     virtual size_t priority() const
     {
       return 2;
     }
     virtual T operator()(const T& a, const T& b) const
     {
-      if (a == 0 || b == 0)
-        return 0;
-      //когда-нибудь тут что-то будет
-      if (a > 0 && b > 0 && std::numeric_limits<T>::max() / b < a )
+      T max_val = std::numeric_limits<T>::max();
+      T min_val = std::numeric_limits<T>::lowest();
+      if (a < 0 && b == min_val || a == min_val && b < 0)
       {
-
+        throw std::runtime_error("Multiplication overflow");
       }
-      if (a < 0 && b < 0 && std::numeric_limits<T>::max() / b <= a && std::numeric_limits<T>::max() % b > 0)
+      
+      if ((a > 0 && b > 0 || a < 0 && b < 0)
+          && (max_val / std::abs(b) < std::abs(a)
+          || max_val / std::abs(b) == std::abs(a) && max_val / std::abs(b) != 0))
       {
-
+        throw std::runtime_error("Multiplication overflow");
+      }
+      T min_mult = std::min(a, b);
+      T max_mult = std::max(a, b);
+      if ((a < 0 && b > 0 || a > 0 && b < 0)
+          && (min_val / max_mult != min_mult
+          || min_val / max_mult == min_mult && min_val / max_mult != 0))
+      {
+        throw std::runtime_error("Multiplication overflow");
       }
       return a * b;
     }
@@ -168,7 +179,7 @@ namespace zaitsev
     {
       return new SafeMultiplication<T>();
     }
-    virtual std::ostream& operator<<(std::ostream& output)
+    virtual std::ostream& operator<<(std::ostream& output) const
     {
       output << '*';
       return output;

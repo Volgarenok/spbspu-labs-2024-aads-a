@@ -2,6 +2,7 @@
 #define DEQUE_HPP
 #include <cstddef>
 #include <memory>
+#include <cstring>
 #include <iterator>
 #include <algorithm>
 
@@ -15,69 +16,93 @@ namespace zaitsev
     template<bool IsConst>
     class BaseIterator
     {
-    public:
-      using prt_type = std::conditional_t< IsConst, const T*, T* >;
-      using ref_type = std::conditional_t< IsConst, const T&, T& >;
-      using val_type = T;
+      using prt_t = std::conditional_t< IsConst, const T*, T* >;
+      using ref_t = std::conditional_t< IsConst, const T&, T& >;
+      using container_t = std::conditional_t< IsConst, const Deque<T>&, Deque<T>& >;
     private:
-      prt_type ptr_;
+      size_t chunk_nmb_;
+      size_t pos_;
+      container_t container_;
 
     public:
-      explicit BaseIterator(prt_type ptr):
-        ptr_(ptr)
+      BaseIterator(size_t chuck_nmb, size_t pos, container_t container):
+        chunk_nmb_(chuck_nmb),
+        pos_(pos),
+        container_(container)
       {}
-      BaseIterator() = default;
+      BaseIterator() = delete;
       BaseIterator(const BaseIterator& other) = default;
       BaseIterator(BaseIterator&& other) = default;
       ~BaseIterator() = default;
       BaseIterator& operator++()
       {
-        ++ptr_;
+        container_.next_pos(chunk_nmb_, pos_);
         return *this;
       }
       BaseIterator operator++(int)
       {
         BaseIterator copy = *this;
-        ++ptr_;
+        container_.next_pos(chunk_nmb_, pos_);
         return copy;
       }
       BaseIterator& operator--()
       {
-        --ptr_;
+        container_.prev_pos(chunk_nmb_, pos_);
         return *this;
       }
       BaseIterator operator--(int)
       {
         BaseIterator copy = *this;
-        --ptr_;
+        if (pos_ > 0)
+        {
+          --pos_;
+        }
+        else
+        {
+          --chunk_nmb_;
+          pos_ = container_.chunk_cap_ - 1;
+        }
         return copy;
       }
-      ref_type operator*() const
+      ref_t operator*() const
       {
-        return *ptr_;
+        return container_.chunk_heads_[chunk_nmb_][pos_];
       }
-      prt_type operator->() const
+      prt_t operator->() const
       {
-        return ptr_;
+        return container_.chunk_heads_[chunk_nmb_] + pos_;
       }
       bool operator!=(const BaseIterator& other) const
       {
-        return ptr_ != other.ptr_;
+        return pos_ != other.pos_ || chunk_nmb_ != other.chunk_nmb_;
       }
       bool operator==(const BaseIterator& other) const
       {
-        return ptr_ == other.ptr_;
+        return pos_ == other.pos_ && chunk_nmb_ == other.chunk_nmb_;
       }
     };
 
   private:
-    size_t capacity_;
+    const size_t chunk_cap_ = 20;
+    size_t chunks_nmb_;
     size_t size_;
-    size_t head_;
-    size_t tail_;
-    T* data_;
-    std::allocator<T> alloc;
-    void extend(size_t new_size);
+    size_t head_chunk_;
+    size_t head_pos_;
+    T** chunk_heads_;
+    std::allocator<T> chunk_alloc_;
+    std::allocator<T*> head_alloc_;
+    void add_chunk(bool to_end);
+    void next_pos(size_t& chunk_nmb, size_t& pos) const;
+    void prev_pos(size_t& chunk_nmb, size_t& pos) const;
+    void convert_index(size_t index, size_t& dest_chunk_nmb, size_t& dest_pos) const;
+    void reset_head()
+    {
+      if (!size_)
+      {
+        head_chunk_ = chunks_nmb_ / 2;
+        head_pos_ = 0;
+      }
+    }
 
   public:
     using iterator = BaseIterator<false>;
@@ -86,9 +111,6 @@ namespace zaitsev
     Deque(const Deque& other);
     Deque(Deque&& other);
     ~Deque();
-    T& front();
-    T& back();
-    bool empty() const;
     void push_back(const T& value);
     void push_back(T&& value);
     void pop_back();
@@ -96,166 +118,231 @@ namespace zaitsev
     void push_front(T&& value);
     void pop_front();
     void clear();
+    T& front()
+    {
+      if (size_ == 0)
+      {
+        throw std::out_of_range("Queue is empty");
+      }
+      return chunk_heads_[head_chunk_][head_pos_];
+    }
+    const T& front() const
+    {
+      if (size_ == 0)
+      {
+        throw std::out_of_range("Queue is empty");
+      }
+      return chunk_heads_[head_chunk_][head_pos_];
+    }
+    T& back()
+    {
+      if (size_ == 0)
+      {
+        throw std::out_of_range("Queue is empty");
+      }
+      size_t chunk = 0;
+      size_t pos = 0;
+      convert_index(size_, chunk, pos);
+      return chunk_heads_[chunk][pos];
+    }
+    const T& back() const
+    {
+      if (size_ == 0)
+      {
+        throw std::out_of_range("Queue is empty");
+      }
+      size_t chunk = 0;
+      size_t pos = 0;
+      convert_index(size_, chunk, pos);
+      return chunk_heads_[chunk][pos];
+    }
     iterator begin()
     {
-      return iterator(data_ + head_);
+      return iterator(head_chunk_, head_pos_, *this);
     }
     iterator end()
     {
-      return iterator(data_ + head_ + size_);
+      size_t end_chunk = head_chunk_;
+      size_t end_pos = head_pos_;
+      convert_index(size_ + 1, end_chunk, end_pos);
+      return iterator(end_chunk, end_pos, *this);
     }
     const_iterator begin() const
     {
-      return const_iterator(data_ + head_);
+      return const_iterator(head_chunk_, head_pos_, *this);
     }
     const_iterator end() const
     {
-      return const_iterator(data_ + head_ + size_);
+      size_t end_chunk = 0;
+      size_t end_pos = 0;
+      convert_index(size_ + 1, end_chunk, end_pos);
+      return const_iterator(end_chunk, end_pos, *this);
     }
     const_iterator cbegin() const
     {
-      return const_iterator(data_ + head_);
+      return const_iterator(head_chunk_, head_pos_, *this);
     }
     const_iterator cend() const
     {
-      return const_iterator(data_ + head_ + size_);
+      size_t end_chunk = 0;
+      size_t end_pos = 0;
+      convert_index(size_ + 1, end_chunk, end_pos);
+      return const_iterator(end_chunk, end_pos, *this);
+    }
+    bool empty() const
+    {
+      return !size_;
+    }
+    size_t size() const
+    {
+      return size_;
     }
   };
 
   template<typename T>
   Deque<T>::Deque():
-    capacity_(0),
+    chunks_nmb_(0),
     size_(0),
-    head_(0),
-    tail_(0),
-    data_(nullptr),
-    alloc()
+    head_chunk_(0),
+    head_pos_(0),
+    chunk_heads_(nullptr),
+    chunk_alloc_(),
+    head_alloc_()
   {}
 
   template<typename T>
   Deque<T>::Deque(const Deque& other):
-    capacity_(other.capacity_),
+    chunks_nmb_(other.chunks_nmb_),
     size_(other.size_),
-    head_(other.head_),
-    tail_(other.tail_),
-    data_(nullptr),
-    alloc()
+    head_pos_(0),
+    chunk_alloc_(),
+    head_alloc_()
   {
-    data_ = alloc.allocate(capacity_);
+    chunk_heads_ = head_alloc_.allocate(chunks_nmb_);
     size_t i = 0;
+    size_t j = 0;
     try
     {
-      for (; i < size_; ++i)
+      for (; j < chunks_nmb_; ++j)
       {
-        alloc_traits::construct(alloc, data_ + (head_ + i) % capacity_, other.data_[(head_ + i) % capacity_]);
+        chunk_heads_[j] = chunk_alloc_.allocate(chunk_cap_);
+      }
+      size_t chunk = other.head_chunk_;
+      size_t pos = other.head_pos_;
+      Deque<T>::iterator it = other.begin();
+      for (; i < size_; ++i, ++it)
+      {
+        alloc_traits::construct(chunk_alloc_, chunk_heads_[chunk] + pos, *it);
+        if (pos < chunk_cap_ - 1)
+        {
+          ++pos;
+        }
+        else
+        {
+          ++chunks_nmb_;
+          pos = 0;
+        }
       }
     }
     catch (const std::bad_alloc&)
     {
-      for (size_t j = 0; j < i; ++j)
+      size_t chunk = other.head_chunk_;
+      size_t pos = other.head_pos_;
+      for (size_t k = 0; k < i; ++k)
       {
-        alloc_traits::destroy(alloc, data_ + (head_ + j) % capacity_);
+        alloc_traits::destroy(chunk_alloc_, chunk_heads_[chunk] + pos);
+        if (pos < chunk_cap_ - 1)
+        {
+          ++pos;
+        }
+        else
+        {
+          ++chunks_nmb_;
+          pos = 0;
+        }
       }
-      alloc.deallocate(data_, capacity_);
+      for (size_t k = 0; k < j; ++k)
+      {
+        chunk_alloc_.deallocate(chunk_heads_[j], chunk_cap_);
+      }
+      head_alloc_.deallocate(chunk_heads_, chunks_nmb_);
       throw;
     }
   }
 
   template<typename T>
   Deque<T>::Deque(Deque&& other):
-    capacity_(other.capacity_),
+    chunks_nmb_(other.chunks_nmb_),
     size_(other.size_),
-    head_(other.head_),
-    tail_(other.tail_),
-    data_(other.data_),
-    alloc(other.alloc)
+    head_chunk_(other.head_chunk_),
+    head_pos_(other.head_pos_),
+    chunk_heads_(other.chunk_heads_),
+    chunk_alloc_(other.chunk_alloc_),
+    head_alloc_(other.head_alloc_)
   {
-    other.capacity_ = 0;
+    other.chunks_nmb_ = 0;
     other.size_ = 0;
-    other.head_ = 0;
-    other.tail_ = 0;
-    other.data_ = nullptr;
-    other.alloc();
+    other.head_chunk_ = 0;
+    other.head_pos_ = 0;
+    other.chunk_heads_ = nullptr;
+    other.chunk_alloc_();
+    other.head_alloc_();
   }
 
   template<typename T>
   Deque<T>::~Deque()
   {
-    for (size_t i = 0; i < size_; ++i)
+    for (Deque<T>::iterator i = begin(); i != end(); ++i)
     {
-      alloc_traits::destroy(alloc, data_ + (i + head_) % capacity_);
+      alloc_traits::destroy(chunk_alloc_, i.operator->());
     }
-    alloc.deallocate(data_, capacity_);
-  }
-
-  template<typename T>
-  T& Deque<T>::front()
-  {
-    if (size_ == 0)
+    for (size_t i = 0; i < chunks_nmb_; ++i)
     {
-      throw std::out_of_range("Queue is empty");
+      chunk_alloc_.deallocate(chunk_heads_[i], chunk_cap_);
     }
-    return data_[head_];
-  }
-
-  template<typename T>
-  T& Deque<T>::back()
-  {
-    if (size_ == 0)
-    {
-      throw std::out_of_range("Queue is empty");
-    }
-    return data_[tail_];
-  }
-
-  template<typename T>
-  bool Deque<T>::empty() const
-  {
-    return !size_;
+    head_alloc_.deallocate(chunk_heads_, chunks_nmb_);
   }
 
   template<typename T>
   void Deque<T>::push_back(const T& value)
   {
-    if (size_ == capacity_)
+    size_t end_chunk = head_chunk_;
+    size_t end_pos = head_pos_;
+    if (size_)
     {
-      extend(size_ == 0 ? 10 : capacity_ * 2);
+      convert_index(size_, end_chunk, end_pos);
     }
-    if (size_ == 0)
+    if (chunks_nmb_ == 0 || end_chunk == chunks_nmb_ - 1 && end_pos == chunk_cap_ - 1)
     {
-      alloc_traits::construct(alloc, data_, value);
-      head_ = 0;
-      tail_ = 0;
-      size_ = 1;
+      add_chunk(true);
     }
-    else
+    if (size_)
     {
-      alloc_traits::construct(alloc, data_ + (tail_ + 1) % capacity_, value);
-      tail_ = (tail_ + 1) % capacity_;
-      ++size_;
+      next_pos(end_chunk, end_pos);
     }
+    alloc_traits::construct(chunk_alloc_, chunk_heads_[end_chunk] + end_pos, value);
+    ++size_;
   }
 
   template<typename T>
   void Deque<T>::push_back(T&& value)
   {
-    if (size_ == capacity_)
+    size_t end_chunk = head_chunk_;
+    size_t end_pos = head_pos_;
+    if (size_)
     {
-      extend(size_ == 0 ? 10 : capacity_ * 2);
+      convert_index(size_, end_chunk, end_pos);
     }
-    if (size_ == 0)
+    if (chunks_nmb_ == 0 || end_chunk == chunks_nmb_ - 1 && end_pos == chunk_cap_ - 1)
     {
-      alloc_traits::construct(alloc, data_, value);
-      head_ = 0;
-      tail_ = 0;
-      size_ = 1;
+      add_chunk(true);
     }
-    else
+    if (size_)
     {
-      alloc_traits::construct(alloc, data_ + (tail_ + 1) % capacity_, value);
-      tail_ = (tail_ + 1) % capacity_;
-      ++size_;
+      next_pos(end_chunk, end_pos);
     }
+    alloc_traits::construct(chunk_alloc_, chunk_heads_[end_chunk] + end_pos, value);
+    ++size_;
   }
 
   template<typename T>
@@ -265,53 +352,45 @@ namespace zaitsev
     {
       throw std::out_of_range("Queue is empty");
     }
-    alloc_traits::destroy(alloc, data_ + tail_);
-    tail_ = (tail_ + capacity_ - 1) % capacity_;
+    size_t end_chunk = 0;
+    size_t end_pos = 0;
+    convert_index(size_, end_chunk, end_pos);
+    alloc_traits::destroy(chunk_alloc_, chunk_heads_[end_chunk] + end_pos);
     --size_;
-    return;
+    reset_head();
   }
 
   template<typename T>
   void Deque<T>::push_front(const T& value)
   {
-    if (size_ == capacity_)
+    if (head_chunk_ == 0 && head_pos_ == 0)
     {
-      extend(size_ == 0 ? 10 : capacity_ * 2);
+      add_chunk(false);
     }
-    if (size_ == 0)
+    prev_pos(head_chunk_, head_pos_);
+    try
     {
-      alloc_traits::construct(alloc, data_, value);
-      tail_ = 0;
-      size_ = 1;
-    }
-    else
-    {
-      alloc_traits::construct(alloc, data_ + (capacity_ - 1 + head_) % capacity_ , value);
-      head_ = (head_ + capacity_ - 1) % capacity_;
+      alloc_traits::construct(chunk_alloc_, chunk_heads_[head_chunk_] + head_pos_, value);
       ++size_;
     }
+    catch (const std::bad_alloc&)
+    {
+      next_pos(head_chunk_, head_pos_);
+      throw;
+    }
+
   }
 
   template<typename T>
   void Deque<T>::push_front(T&& value)
   {
-    if (size_ == capacity_)
+    if (head_chunk_ == 0 && head_pos_ == 0)
     {
-      extend(size_ == 0 ? 10 : capacity_ * 2);
+      add_chunk(false);
     }
-    if (size_ == 0)
-    {
-      alloc_traits::construct(alloc, data_, value);
-      head_ = 0;
-      tail_ = 0;
-      size_ = 1;
-    }
-    else
-    {
-      alloc_traits::construct(alloc, data_ + (capacity_ - 1 + head_) % capacity_, value);
-      head_ = (head_ + capacity_ - 1) % capacity_;
-      ++size_;
-    }
+    prev_pos(head_chunk_, head_pos_);
+    alloc_traits::construct(chunk_alloc_, chunk_heads_[head_chunk_] + head_pos_, value);
+    ++size_;
   }
 
   template<typename T>
@@ -321,60 +400,100 @@ namespace zaitsev
     {
       throw std::out_of_range("Queue is empty");
     }
-    alloc_traits::destroy(alloc, data_ + head_);
-    head_ = (head_ + 1) % capacity_;
+    alloc_traits::destroy(chunk_alloc_, chunk_heads_[head_chunk_] + head_pos_);
+    next_pos(head_chunk_, head_pos_);
     --size_;
+    reset_head();
   }
 
   template<typename T>
   void Deque<T>::clear()
   {
-    for (size_t i = 0; i < size_; ++i)
+    for (Deque<T>::iterator i = begin(); i != end(); ++i)
     {
-      alloc_traits::destroy(alloc, data_ + (i + head_) % capacity_);
+      alloc_traits::destroy(chunk_alloc_, i.operator->());
     }
-    alloc.deallocate(data_, capacity_);
-    data_ = nullptr;
-    capacity_ = 0;
+    for (size_t i = 0; i < chunks_nmb_; ++i)
+    {
+      chunk_alloc_.deallocate(chunk_heads_[i], chunk_cap_);
+    }
+    head_alloc_.deallocate(chunk_heads_, chunks_nmb_);
     size_ = 0;
-    head_ = 0;
-    tail_ = 0;
+    chunks_nmb_ = 0;
+    head_chunk_ = 0;
+    head_pos_ = 0;
+    chunk_heads_ = nullptr;
   }
 
   template<typename T>
-  void Deque<T>::extend(size_t new_capacity)
+  void Deque<T>::add_chunk(bool to_end)
   {
-    if (new_capacity < size_)
+    T** new_chunk_heads_ = head_alloc_.allocate(chunks_nmb_ + 1);
+    if (to_end)
+    {
+      std::memcpy(new_chunk_heads_, chunk_heads_, chunks_nmb_ * sizeof(T*));
+      new_chunk_heads_[chunks_nmb_] = chunk_alloc_.allocate(chunk_cap_);
+    }
+    else
+    {
+      std::memcpy(new_chunk_heads_ + 1, chunk_heads_, chunks_nmb_ * sizeof(T*));
+      new_chunk_heads_[0] = chunk_alloc_.allocate(chunk_cap_);
+    }
+    head_alloc_.deallocate(chunk_heads_, chunks_nmb_);
+    chunk_heads_ = new_chunk_heads_;
+    if (!to_end)
+    {
+      ++head_chunk_;
+    }
+    ++chunks_nmb_;
+  }
+
+  template<typename T>
+  void Deque<T>::next_pos(size_t& chunk_nmb, size_t& pos) const
+  {
+    if (pos < chunk_cap_ - 1)
+    {
+      ++pos;
+    }
+    else
+    {
+      ++chunk_nmb;
+      pos = 0;
+    }
+  }
+
+  template<typename T>
+  void Deque<T>::prev_pos(size_t& chunk_nmb, size_t& pos) const
+  {
+    if (pos > 0)
+    {
+      --pos;
+    }
+    else
+    {
+      --chunk_nmb;
+      pos = chunk_cap_ - 1;
+    }
+  }
+
+  template<typename T>
+  void Deque<T>::convert_index(size_t index, size_t& dest_chunk_nmb, size_t& dest_pos) const
+  {
+    if (index == 0)
     {
       return;
     }
-    T* new_data = alloc.allocate(new_capacity);
-    size_t i = 0;
-    try
+    if (chunk_cap_ - head_pos_ >= index)
     {
-      for (i = 0; i < size_; ++i)
-      {
-        alloc_traits::construct(alloc, new_data + i, data_[(i + head_) % capacity_]);
-      }
+      dest_chunk_nmb = head_chunk_;
+      dest_pos = head_pos_ + index - 1;
     }
-    catch (const std::bad_alloc&)
+    else
     {
-      for (size_t j = 0; j < i; ++j)
-      {
-        alloc_traits::destroy(alloc, new_data + i);
-      }
-      alloc.deallocate(new_data, new_capacity);
-      throw;
+      size_t sz_without_first_chunk = index - chunk_cap_ + head_pos_;
+      dest_chunk_nmb = (sz_without_first_chunk - 1) / chunk_cap_ + 1 + head_chunk_;
+      dest_pos = (sz_without_first_chunk - 1) % chunk_cap_;
     }
-    for (size_t i = 0; i < size_; ++i)
-    {
-      alloc_traits::destroy(alloc, data_ + (i + head_) % capacity_);
-    }
-    alloc.deallocate(data_, capacity_);
-    data_ = new_data;
-    head_ = 0;
-    tail_ = size_ > 0 ? size_ - 1 : 0;
-    capacity_ = new_capacity;
   }
 }
 #endif

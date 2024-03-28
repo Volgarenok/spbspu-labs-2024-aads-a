@@ -1,12 +1,47 @@
 #include <iostream>
+#include <string>
+#include <fstream>
+#include "token.hpp"
+#include "infix_expression.hpp"
+#include "postfix_expression.hpp"
 #include "stack.hpp"
 #include "queue.hpp"
+#include "operators.hpp"
 
-int main()
+int main(int argc, char** argv)
 {
+  std::ifstream finput;
+  if (argc == 2)
+  {
+    finput.open(argv[1]);
+  }
+  std::istream& input = argc == 2 ? finput : std::cin;
   using namespace zaitsev;
-  Queue<int>d;
-  Queue<int>d0;
-  for (int i = 0; i < 1000; ++i)
-    d.push(i);
+  try
+  {
+    Stack<long long>results;
+    while (input)
+    {
+      std::string s;
+      std::getline(input, s);
+      if (s == "")
+      {
+        continue;
+      }
+      InfixExpression<long long> expr(s, std::stoll);
+      PostfixExpression<long long> post;
+      post.convert_from_infix(expr);
+      results.push(post.calculate());
+    }
+    for (Stack<long long>::const_iterator i = results.cbegin(); i != results.cend(); ++i)
+    {
+      i == results.cbegin() ? std::cout << *i : std::cout << ' ' << *i;
+    }
+    std::cout << '\n';
+  }
+  catch (const std::exception& e)
+  {
+    std::cerr <<"Error: "<< e.what() << '\n';
+  }
+  return 0;
 }
