@@ -89,7 +89,10 @@ void piyavkin::calculate(List< Queue< Postfix > >& postfix, List< long long >& r
               throw std::logic_error("Taking the remainder to 0");
             }
             lhs %= rhs;
-            lhs += rhs;
+            if (lhs < 0)
+            {
+              lhs += rhs;
+            }
           }
           else
           {
