@@ -130,7 +130,7 @@ namespace zaitsev
     }
     virtual T operator()(const T& a, const T& b) const
     {
-      if (b == 0 || a == std::numeric_limits<T>::lowest() && b == -1)
+      if (b == 0 || (a == std::numeric_limits<T>::lowest() && b == -1))
       {
         throw std::runtime_error("Mod overflow");
       }
@@ -165,7 +165,7 @@ namespace zaitsev
         throw std::runtime_error("Multiplication overflow");
       }
 
-      if ((a > 0 && b > 0 || a < 0 && b < 0)
+      if ((a > 0 && b > 0) || (a < 0 && b < 0))
           && (max_val / std::abs(b) < std::abs(a)
           || (max_val / std::abs(b) == std::abs(a) && max_val / std::abs(b) != 0)))
       {
@@ -173,7 +173,7 @@ namespace zaitsev
       }
       T min_mult = std::min(a, b);
       T max_mult = std::max(a, b);
-      if ((a < 0 && b > 0 || a > 0 && b < 0)
+      if (((a < 0 && b > 0) || (a > 0 && b < 0))
           && (min_val / max_mult != min_mult
           || (min_val / max_mult == min_mult && min_val / max_mult != 0)))
       {
