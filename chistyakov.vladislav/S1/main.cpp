@@ -36,6 +36,8 @@ int main()
   List< std::pair< size_t, List< size_t > > > listSumAndNums;
   size_t nowSize = 0;
   size_t max_size = std::numeric_limits< size_t >::max();
+  bool overflow = false;
+
   while (true)
   {
     List< size_t > nums;
@@ -59,8 +61,7 @@ int main()
           }
           else
           {
-            std::cerr << "Overflow\n";
-            return 1;
+            overflow = true;
           }
         }
         index++;
@@ -85,6 +86,12 @@ int main()
   {
     std::cout << "0\n";
     return 0;
+  }
+
+  if (overflow)
+  {
+    std::cout << "Overflow\n";
+    return 1;
   }
 
   outPutSums(listSumAndNums);
