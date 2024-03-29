@@ -33,7 +33,6 @@ int main(int argc, char* argv[])
     calculate(postfix, result);
     if (!result.empty())
     {
-      result.reverse();
       for (auto it = result.cbegin(); it != result.cend(); ++it)
       {
         if (it != result.cbegin())

@@ -109,7 +109,7 @@ void piyavkin::calculate(List< Queue< Postfix > >& postfix, List< long long >& r
     }
     if (stack.size() == 1)
     {
-      result.push_back(stack.drop());
+      result.push_front(stack.drop());
     }
     else
     {
