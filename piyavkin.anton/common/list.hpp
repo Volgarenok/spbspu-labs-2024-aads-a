@@ -409,7 +409,7 @@ namespace piyavkin
   template< class T >
   ListIterator< T > List< T >::end() noexcept
   {
-    return ListIterator< T >(tail_->next_);
+    return ListIterator< T >(std::addressof(imaginary_node_));
   }
   template< class T >
   ConstListIterator< T > List< T >::cbegin() const noexcept
@@ -419,7 +419,7 @@ namespace piyavkin
   template< class T >
   ConstListIterator< T > List< T >::cend() const noexcept
   {
-    return ConstListIterator< T >(tail_->next_);
+    return ConstListIterator< T >(const_cast< detail::Node< T >* >(std::addressof(imaginary_node_)));
   }
   template< class T >
   ConstListIterator< T > List< T >::erase(ConstListIterator< T > it)
