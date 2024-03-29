@@ -16,8 +16,7 @@ void chistyakov::inputList(std::istream & input, List< std::pair< std::string, L
     List< std::size_t > nums;
     while (input >> line && std::isdigit(line[0]))
     {
-      std::size_t num = std::stoull(line);
-      nums.push_back(num);
+      nums.push_back(std::stoull(line));
     }
     list.push_back({name, nums});
   }

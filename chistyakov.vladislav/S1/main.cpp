@@ -90,7 +90,7 @@ int main()
 
   if (overflow)
   {
-    std::cout << "Overflow\n";
+    std::cerr << "Overflow\n";
     return 1;
   }
 
