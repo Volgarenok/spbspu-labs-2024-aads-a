@@ -1,6 +1,7 @@
 #include <iostream>
-#include <climits>
+#include <limits>
 #include <string>
+#include <cstddef>
 #include "list.hpp"
 #include "iterator.hpp"
 #include "constIterator.hpp"
@@ -9,7 +10,7 @@
 int main()
 {
   using namespace chistyakov;
-  List< std::pair< std::string, List< int > > > list;
+  List< std::pair< std::string, List< size_t > > > list;
 
   try
   {
@@ -28,29 +29,29 @@ int main()
   }
 
   outPutNames(list);
-  int max_digit = maxDigit(list);
+  size_t max_digit = maxDigit(list);
 
   std::cout << "\n";
 
-  List< std::pair< int, List< int > > > listSumAndNums;
-  int nowSize = 0;
-
+  List< std::pair< size_t, List< size_t > > > listSumAndNums;
+  size_t nowSize = 0;
+  size_t max_size = std::numeric_limits< size_t >::max();
   while (true)
   {
-    List< int > nums;
-    int sum = 0;
+    List< size_t > nums;
+    size_t sum = 0;
 
     for (auto element = list.begin(); element != list.end(); ++element)
     {
-      List< int > nowList = element->second;
-      int index = 0;
+      List< size_t > nowList = element->second;
+      size_t index = 0;
 
       for (auto numList = (element->second).begin(); numList != (element->second).end(); ++numList)
       {
         max_digit = std::max(max_digit, *numList);
         if (index == nowSize)
         {
-          if (sum < INT_MAX - *numList)
+          if (sum < max_size - *numList)
           {
             sum += *numList;
             nums.push_back(*numList);
