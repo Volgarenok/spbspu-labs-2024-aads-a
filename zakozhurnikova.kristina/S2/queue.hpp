@@ -18,7 +18,8 @@ namespace zakozhurnikova
     Queue< T >& operator=(Queue< T >&& rhs) noexcept;
 
     void push(const T& rhs);
-    T drop();
+    void drop();
+    T& pop();
 
 
   private:
@@ -45,6 +46,19 @@ namespace zakozhurnikova
   void Queue< T >::push(const T& rhs)
   {
     queue_.push_front(rhs);
+  }
+
+  template< class T >
+  void Queue< T >::drop()
+  {
+    queue_.pop_front();
+  }
+
+  template< class T>
+  T& Queue< T >::pop()
+  {
+    T data = queue_.head_->data_;
+    return data;
   }
 
 }

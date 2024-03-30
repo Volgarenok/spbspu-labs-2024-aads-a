@@ -17,7 +17,7 @@ namespace zakozhurnikova
     Stack< T >& operator=(Stack< T >&& rhs) noexcept;
 
     void push(const T& rhs);
-    T drop();
+    void drop();
     T& top();
 
   private:
@@ -46,9 +46,9 @@ namespace zakozhurnikova
   }
 
   template< class T >
-  void drop()
+  void Stack< T >::drop()
   {
-    stack.pop_front();
+    stack_.pop_front();
   }
 
   template< class T >
