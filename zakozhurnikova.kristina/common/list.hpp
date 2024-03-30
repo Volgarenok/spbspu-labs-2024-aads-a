@@ -96,7 +96,7 @@ namespace zakozhurnikova
       if (!tail_)
       {
         head_ = temp;
-        head_ = temp;
+        tail_ = temp;
       }
       else
       {
@@ -134,7 +134,7 @@ namespace zakozhurnikova
       }
       else
       {
-        head_ = head_.next;
+        head_ = head_->next;
       }
       delete toDelete;
       --size_;
