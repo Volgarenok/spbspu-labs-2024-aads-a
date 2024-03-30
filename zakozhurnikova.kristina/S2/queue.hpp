@@ -20,7 +20,8 @@ namespace zakozhurnikova
     void push(const T& rhs);
     void drop();
     T& pop();
-
+    size_t size() const noexcept;
+    bool empty() const noexcept;
 
   private:
   List< T > queue_;
@@ -59,6 +60,18 @@ namespace zakozhurnikova
   {
     T data = queue_.head_->data_;
     return data;
+  }
+
+  template< class T >
+  size_t Queue< T >::size() const noexcept
+  {
+    return queue_.size();
+  }
+
+  template< class T >
+  bool Queue< T >::empty() const noexcept
+  {
+    return queue_.empty();
   }
 
 }

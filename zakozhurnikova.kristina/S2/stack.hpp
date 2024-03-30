@@ -19,6 +19,8 @@ namespace zakozhurnikova
     void push(const T& rhs);
     void drop();
     T& top();
+    size_t size() const noexcept;
+    bool empty() const noexcept;
 
   private:
     List< T > stack_;
@@ -56,6 +58,18 @@ namespace zakozhurnikova
   {
     T data = stack_.head->data_;
     return data;
+  }
+
+  template< class T >
+  size_t Stack< T >::size() const noexcept
+  {
+    return stack_.size();
+  }
+
+  template< class T >
+  bool Stack< T >::empty() const noexcept
+  {
+    return stack_.empty();
   }
 }
 #endif
