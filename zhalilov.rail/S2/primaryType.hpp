@@ -7,7 +7,8 @@ namespace zhalilov
   {
     BinOperator,
     Operand,
-    Bracket
+    Bracket,
+    Undefined
   };
 }
 
