@@ -42,7 +42,7 @@ namespace zakozhurnikova
   template< class T >
   void Stack< T >::push(const T& rhs)
   {
-    stack_.push(rhs);
+    stack_.push_front(rhs);
   }
 
   template< class T >

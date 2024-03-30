@@ -44,7 +44,7 @@ namespace zakozhurnikova
   template< class T >
   void Queue< T >::push(const T& rhs)
   {
-    queue_.push(rhs);
+    queue_.push_front(rhs);
   }
 
 }
