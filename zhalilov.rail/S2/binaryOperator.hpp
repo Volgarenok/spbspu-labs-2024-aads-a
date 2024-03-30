@@ -21,6 +21,14 @@ namespace zhalilov
 
     explicit BinOperator(Type);
     Operand operator()(const Operand &, const Operand &) const;
+    unsigned short getPriority() const;
+
+    bool operator<(const BinOperator &other) const;
+    bool operator>(const BinOperator &other) const;
+    bool operator==(const BinOperator &other) const;
+    bool operator!=(const BinOperator &other) const;
+    bool operator<=(const BinOperator &other) const;
+    bool operator>=(const BinOperator &other) const;
 
   private:
     Type type_;
