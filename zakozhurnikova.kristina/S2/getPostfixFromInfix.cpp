@@ -38,7 +38,9 @@ void getPostfixFromInfix(std::istream &in, zakozhurnikova::Queue< std::string >&
     {
       while (!stack.empty() && hasMorePriority(stack.top(), ch))
       {
-        queue.push(stack.top());
+        std::string value;
+        value.push_back(stack.top());
+        queue.push(value);
         //res.push_back(stack.top());
         //res.push_back(' ');
         stack.drop();
@@ -53,7 +55,9 @@ void getPostfixFromInfix(std::istream &in, zakozhurnikova::Queue< std::string >&
     {
       while (stack.top() != '(')
       {
-        queue.push(stack.top());
+        std::string value;
+        value.push_back(stack.top());
+        queue.push(value);
         //res.push_back(stack.top());
         //res.push_back(' ');
         stack.drop();
@@ -68,7 +72,8 @@ void getPostfixFromInfix(std::istream &in, zakozhurnikova::Queue< std::string >&
     {
       throw std::logic_error("malo closing brackets");
     }
-    queue.push(stack.top());
+    std::string value;
+    queue.push(value);
     //res.push_back(stack.top());
     //res.push_back(' ');
     stack.drop();
