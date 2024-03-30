@@ -72,6 +72,11 @@ namespace zakozhurnikova
       clear();
     }
 
+  T& front()
+  {
+    return head_->data;
+  }
+
     void push_back(T data)
     {
       Node< T >* temp = new Node< T >{ data };
