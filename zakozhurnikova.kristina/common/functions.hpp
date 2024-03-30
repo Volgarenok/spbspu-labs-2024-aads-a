@@ -1,6 +1,6 @@
 #ifndef FUNCS_HPP
 #define FUNCS_HPP
-#include "iterator.hpp"
+#include <iterator.hpp>
 
 namespace zakozhurnikova
 {

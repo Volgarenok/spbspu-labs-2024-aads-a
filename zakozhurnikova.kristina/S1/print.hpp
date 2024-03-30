@@ -2,7 +2,7 @@
 #define PRINT_HPP
 #include <iostream>
 #include <limits>
-#include "list.hpp"
+#include <list.hpp>
 
 namespace zakozhurnikova
 {

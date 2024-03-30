@@ -10,22 +10,42 @@ namespace zakozhurnikova
   {
   public:
     Queue() = default;
-    Queue(const Queue< T >& other) = default;
-    Queue(Queue< T >&& other) noexcept;
+    Queue(const Queue< T >& rhs) = default;
+    Queue(Queue< T >&& rhs) noexcept;
     ~Queue() = default;
 
-    Queue< T >& operator=(const Queue< T >& other) = default;
-    Queue< T >& operator=(Queue< T >&& other) noexcept;
+    Queue< T >& operator=(const Queue< T >& rhs) = default;
+    Queue< T >& operator=(Queue< T >&& rhs) noexcept;
+
+    void push(const T& rhs);
+    T drop();
+
 
   private:
-  List< T > data_;
+  List< T > queue_;
+  };
+
+  template< class T >
+  Queue< T >::Queue(Queue< T >&& rhs) noexcept:
+    queue_(std::move(rhs.queue_))
+  {}
+
+
+  template< class T >
+  Queue< T >& Queue< T >::operator=(Queue< T >&& rhs) noexcept
+  {
+    if (std::addressof(rhs) != this)
+    {
+      queue_ = std::move(rhs.queue_);
+    }
+    return *this;
   }
 
   template< class T >
-  Queue< T >::Queue(Queue< T >&& other) noexcept;
-
-  template< class T >
-  Queue< T >& Queue< T >::operator=(Queue< T >&& other) noexcept;
+  void Queue< T >::push(const T& rhs)
+  {
+    queue_.push(rhs);
+  }
 
 }
 #endif
