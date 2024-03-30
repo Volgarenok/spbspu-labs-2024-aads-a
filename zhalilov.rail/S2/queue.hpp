@@ -123,7 +123,7 @@ namespace zhalilov
   template < typename... Args >
   void Queue< T, Container >::emplace(Args &&... args)
   {
-    container_.emplace(std::forward< Args >(args));
+    container_.emplace(std::forward< Args >(args)...);
   }
 
   template < typename T, typename Container >
