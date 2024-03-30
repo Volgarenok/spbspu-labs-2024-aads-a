@@ -17,7 +17,13 @@ namespace zhalilov
       Bracket bracket;
     };
 
-    PrimaryType type;
+    InfixToken();
+    explicit InfixToken(PrimaryType type);
+
+    PrimaryType getType() const;
+
+  private:
+    PrimaryType type_;
   };
 
   struct PostfixToken
@@ -28,7 +34,13 @@ namespace zhalilov
       Operand operand;
     };
 
-    PrimaryType type;
+    PostfixToken();
+    explicit PostfixToken(PrimaryType type);
+
+    PrimaryType getType() const;
+
+  private:
+    PrimaryType type_;
   };
 
   struct TransferToken
@@ -39,7 +51,13 @@ namespace zhalilov
       Bracket bracket;
     };
 
-    PrimaryType type;
+    TransferToken();
+    explicit TransferToken(PrimaryType type);
+
+    PrimaryType getType() const;
+
+  private:
+    PrimaryType type_;
   };
 }
 
