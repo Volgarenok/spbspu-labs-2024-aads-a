@@ -31,7 +31,7 @@ namespace zakozhurnikova
       Node< T >* temp = rhs.head_;
       while (temp)
       {
-        push(temp->data);
+        push_back(temp->data);
         temp = temp->next;
       }
     }
@@ -72,7 +72,7 @@ namespace zakozhurnikova
       clear();
     }
 
-    void push(T data)
+    void push_back(T data)
     {
       Node< T >* temp = new Node< T >{ data };
 
@@ -90,7 +90,24 @@ namespace zakozhurnikova
       ++size_;
     }
 
-    void pop() noexcept
+    void push_front(T data)
+    {
+      Node< T >* temp = new Node< T >{ data };
+      if (!tail_)
+      {
+        head_ = temp;
+        head_ = temp;
+      }
+      else
+      {
+        head_->prev = temp;
+        temp->next = head_;
+        head_ = temp;
+      }
+      ++size_;
+    }
+
+    void pop_back() noexcept
     {
       Node< T >* toDelete = tail_;
       tail_ = tail_->prev;
@@ -107,6 +124,22 @@ namespace zakozhurnikova
       --size_;
     }
 
+    void pop_front() noexcept
+    {
+      Node< T >* toDelete = head_;
+      if(!head_->next)
+      {
+        head_ = nullptr;
+        tail_ = nullptr;
+      }
+      else
+      {
+        head_ = head_.next;
+      }
+      delete toDelete;
+      --size_;
+    }
+
     size_t size() const
     {
       return size_;
@@ -116,7 +149,7 @@ namespace zakozhurnikova
     {
       while (tail_)
       {
-        pop();
+        pop_back();
       }
       head_ = nullptr;
     }
