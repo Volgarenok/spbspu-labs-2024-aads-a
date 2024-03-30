@@ -20,7 +20,7 @@ void getPostfixFromInfix(std::istream &in, zakozhurnikova::Queue< std::string >&
 {
   zakozhurnikova::Stack< char > stack;
   char ch = 0;
-  std::cin >> std::noskipws;
+  in >> std::noskipws;
   while (std::cin.peek() != '\n')
   {
     std::cin >> ch;
