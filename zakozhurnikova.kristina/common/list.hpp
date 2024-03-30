@@ -72,10 +72,10 @@ namespace zakozhurnikova
       clear();
     }
 
-  T& front()
-  {
-    return head_->data;
-  }
+    T& front()
+    {
+      return head_->data;
+    }
 
     void push_back(T data)
     {
@@ -159,7 +159,7 @@ namespace zakozhurnikova
       head_ = nullptr;
     }
 
-    bool empty() noexcept
+    bool empty() const noexcept
     {
       return size_ == 0;
     }
