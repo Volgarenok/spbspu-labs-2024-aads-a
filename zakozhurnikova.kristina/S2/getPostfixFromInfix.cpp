@@ -21,16 +21,16 @@ void getPostfixFromInfix(std::istream &in, zakozhurnikova::Queue< std::string >&
   zakozhurnikova::Stack< char > stack;
   char ch = 0;
   in >> std::noskipws;
-  while (std::cin.peek() != '\n')
+  while (in.peek() != '\n')
   {
-    std::cin >> ch;
+    in >> ch;
     if (std::isdigit(ch))
     {
       std::string value;
       value.push_back(ch);
-      while (std::isdigit(std::cin.peek()))
+      while (std::isdigit(in.peek()))
       {
-        value.push_back(std::cin.get());
+        value.push_back(in.get());
       }
       queue.push(value);
     }
