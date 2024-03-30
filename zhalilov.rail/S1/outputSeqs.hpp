@@ -8,9 +8,9 @@
 
 namespace zhalilov
 {
-  using pair = std::pair< std::string, List< size_t > >;
+  using strListPair = std::pair< std::string, List< size_t > >;
   size_t countSum(const List< size_t > &list);
-  std::ostream &outputSeqs(List< pair > sequences, std::ostream &output);
+  std::ostream &outputSeqs(List< strListPair > sequences, std::ostream &output);
 }
 
 #endif

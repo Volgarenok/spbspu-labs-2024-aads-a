@@ -9,7 +9,7 @@
 int main()
 {
   using namespace zhalilov;
-  List< pair > sequences;
+  List< strListPair > sequences;
   getSeqFromStream(sequences, std::cin);
   if (sequences.empty())
   {
