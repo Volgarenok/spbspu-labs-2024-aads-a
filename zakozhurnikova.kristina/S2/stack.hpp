@@ -56,8 +56,7 @@ namespace zakozhurnikova
   template< class T >
   T& Stack< T >::top()
   {
-    T data = stack_.head->data_;
-    return data;
+    return stack_.head_->data;
   }
 
   template< class T >
