@@ -27,11 +27,11 @@ namespace zakozhurnikova
       while (*str)
       {
         size_t k = std::stoull(str, &pos);
-        numbers.push(k);
+        numbers.push_back(k);
         str += pos;
       }
       auto pair = std::make_pair(stringName, numbers);
-      list.push(pair);
+      list.push_back(pair);
     }
   };
 }

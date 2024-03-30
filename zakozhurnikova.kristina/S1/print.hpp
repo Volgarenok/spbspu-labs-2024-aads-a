@@ -47,7 +47,7 @@ namespace zakozhurnikova
           overflow = true;
         }
       }
-      listSum.push(sum);
+      listSum.push_back(sum);
     }
     if (overflow)
     {
