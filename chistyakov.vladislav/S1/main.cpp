@@ -56,13 +56,13 @@ int main()
           if (sum < max_size - *numList)
           {
             sum += *numList;
-            nums.push_back(*numList);
-            break;
           }
           else
           {
             overflow = true;
+            sum = *numList;
           }
+          nums.push_back(*numList);
         }
         index++;
       }
@@ -81,7 +81,6 @@ int main()
   }
 
   outPutNums(listSumAndNums);
-
   if (listSumAndNums.empty())
   {
     std::cout << "0\n";

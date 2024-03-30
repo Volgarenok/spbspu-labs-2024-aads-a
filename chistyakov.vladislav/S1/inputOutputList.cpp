@@ -4,7 +4,7 @@
 #include "iterator.hpp"
 #include "constIterator.hpp"
 
-void chistyakov::inputList(std::istream & input, List< std::pair< std::string, List < std::size_t > > > & list)
+void chistyakov::inputList(std::istream & input, List< std::pair< std::string, List < size_t > > > & list)
 {
   std::string name = "";
   std::string line = "";
@@ -13,7 +13,7 @@ void chistyakov::inputList(std::istream & input, List< std::pair< std::string, L
   while (!input.eof())
   {
     name = line;
-    List< std::size_t > nums;
+    List< size_t > nums;
     while (input >> line && std::isdigit(line[0]))
     {
       nums.push_back(std::stoull(line));
@@ -22,13 +22,13 @@ void chistyakov::inputList(std::istream & input, List< std::pair< std::string, L
   }
 }
 
-std::size_t chistyakov::maxDigit(List< std::pair< std::string, List < std::size_t > > > & list)
+size_t chistyakov::maxDigit(List< std::pair< std::string, List < size_t > > > & list)
 {
-  std::size_t max_digit = 1;
+  size_t max_digit = 1;
 
   for (auto element = list.begin(); element != list.end(); ++element)
   {
-    std::size_t index = 0;
+    size_t index = 0;
 
     for (auto numList = element->second.begin(); numList != element->second.end(); ++numList)
     {
@@ -40,7 +40,7 @@ std::size_t chistyakov::maxDigit(List< std::pair< std::string, List < std::size_
   return max_digit;
 }
 
-void chistyakov::outPutNames(List < std::pair < std::string, List < std::size_t > > > & list)
+void chistyakov::outPutNames(List < std::pair < std::string, List < size_t > > > & list)
 {
   for (auto element = list.begin(); element != list.end(); ++element)
   {
@@ -53,7 +53,7 @@ void chistyakov::outPutNames(List < std::pair < std::string, List < std::size_t 
   }
 }
 
-void chistyakov::outPutNums(List < std::pair < std::size_t, List < std::size_t > > > & list)
+void chistyakov::outPutNums(List < std::pair < size_t, List < size_t > > > & list)
 {
   for (auto element = list.begin(); element != list.end(); ++element)
   {
@@ -72,7 +72,7 @@ void chistyakov::outPutNums(List < std::pair < std::size_t, List < std::size_t >
   }
 }
 
-void chistyakov::outPutSums(List < std::pair < std::size_t, List < std::size_t > > > & list)
+void chistyakov::outPutSums(List < std::pair < size_t, List < size_t > > > & list)
 {
   for (auto element = list.begin(); element != list.end(); ++element)
   {
