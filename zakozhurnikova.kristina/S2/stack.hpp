@@ -48,13 +48,14 @@ namespace zakozhurnikova
   template< class T >
   void drop()
   {
+    stack.pop_front();
   }
 
   template< class T >
   T& Stack< T >::top()
   {
-    T value =
-    return value;
+    T data = stack_.head->data_;
+    return data;
   }
 }
 #endif
