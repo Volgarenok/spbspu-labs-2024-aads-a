@@ -24,6 +24,22 @@ namespace namestnikov
       }
       return *this;
     }
+    T & front() const noexcept
+    {
+      return data_.front();
+    }
+    T & back() const noexcept
+    {
+      return data_.back();
+    }
+    size_t size() const noexcept
+    {
+      return data_.size();
+    }
+    bool empty() const noexcept
+    {
+      return data_.empty();
+    }
     ~Queue() = default;
   private:
     std::list< T > data_;
