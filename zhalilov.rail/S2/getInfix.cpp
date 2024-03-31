@@ -1,6 +1,7 @@
-#include "getInfixFromString.hpp"
+#include "getInfix.hpp"
 
 #include <string>
+#include <istream>
 
 void zhalilov::getInfixFromString(Queue< InfixToken > &queue, const std::string &str)
 {
@@ -53,5 +54,19 @@ void zhalilov::getInfixFromString(Queue< InfixToken > &queue, const std::string 
       queue.push(undefinedTkn);
     }
     i++;
+  }
+}
+
+void zhalilov::getInfixesFromStream(Stack< Queue< InfixToken > > &stack, std::istream &in)
+{
+  std::string str;
+  while (std::getline(in, str))
+  {
+    Queue< InfixToken > temp;
+    getInfixFromString(temp, str);
+    if (!str.empty())
+    {
+      stack.push(temp);
+    }
   }
 }
