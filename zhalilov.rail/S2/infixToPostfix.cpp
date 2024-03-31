@@ -22,7 +22,6 @@ void zhalilov::infixToPostfix(Queue< InfixToken > infix, Queue< PostfixToken > &
         {
           throw std::invalid_argument("Incorrect bracket position");
         }
-
         transfer.pop();
       }
     }

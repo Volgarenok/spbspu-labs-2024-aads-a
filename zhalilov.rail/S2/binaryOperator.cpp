@@ -52,6 +52,8 @@ zhalilov::Operand zhalilov::BinOperator::operator()(const Operand &left, const O
     return Operand(left.getNum() / right.getNum());
   case Type::Mod:
     return Operand(left.getNum() % right.getNum());
+  default:
+    return Operand(0);
   }
 }
 
@@ -69,6 +71,8 @@ unsigned short zhalilov::BinOperator::getPriority() const
     return 1;
   case Type::Mod:
     return 1;
+  default:
+    return 0;
   }
 }
 
