@@ -178,7 +178,7 @@ namespace zhalilov
   template < typename T >
   List< T > &List< T >::operator=(List< T > &&other) noexcept
   {
-    if (*this != other)
+    if (m_head != other.m_head)
     {
       clear();
       m_size = other.m_size;

@@ -23,10 +23,10 @@ size_t zhalilov::countSum(const List< size_t > &list)
   return sum;
 }
 
-std::ostream &zhalilov::outputSeqs(List< pair > sequences, std::ostream &output)
+std::ostream &zhalilov::outputSeqs(List< strListPair > sequences, std::ostream &output)
 {
-  List< pair >::iterator currIt = sequences.begin();
-  List< pair >::iterator lastIt = sequences.end();
+  List< strListPair >::iterator currIt = sequences.begin();
+  List< strListPair >::iterator lastIt = sequences.end();
   size_t longestList = 0;
   List< std::string > names;
   while (currIt != lastIt)
