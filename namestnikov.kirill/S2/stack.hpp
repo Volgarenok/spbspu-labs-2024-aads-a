@@ -19,12 +19,19 @@ namespace namestnikov
     {}
     stack_t & operator=(stack_t && other)
     {
-      std::cout << "IM HERE";
       if (std::addressof(other) != this)
       {
         std::swap(data_, other.data_);
       }
       return *this;
+    }
+    void push(const T & value)
+    {
+      data_.push_front(value)
+    }
+    void pop()
+    {
+      data_.pop_front();
     }
     ~Stack() = default;
   private:
