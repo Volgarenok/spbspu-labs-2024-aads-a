@@ -13,43 +13,19 @@ void zhalilov::getInfixFromString(Queue< InfixToken > &queue, const std::string 
     if (!std::isspace(str[i]))
     {
       InfixToken undefinedTkn;
-      switch (str[i])
+      try
       {
-      case '(':
-        undefinedTkn = InfixToken(PrimaryType::Bracket);
-        undefinedTkn.bracket = Bracket(Bracket::Type::OpenBracket);
-        break;
-      case ')':
-        undefinedTkn = InfixToken(PrimaryType::Bracket);
-        undefinedTkn.bracket = Bracket(Bracket::Type::CloseBracket);
-        break;
-      case '+':
-        undefinedTkn = InfixToken(PrimaryType::BinOperator);
-        undefinedTkn.binOperator = BinOperator(BinOperator::Type::Add);
-        break;
-      case '-':
-        undefinedTkn = InfixToken(PrimaryType::BinOperator);
-        undefinedTkn.binOperator = BinOperator(BinOperator::Type::Subtraction);
-        break;
-      case '*':
-        undefinedTkn = InfixToken(PrimaryType::BinOperator);
-        undefinedTkn.binOperator = BinOperator(BinOperator::Type::Multiply);
-        break;
-      case '/':
-        undefinedTkn = InfixToken(PrimaryType::BinOperator);
-        undefinedTkn.binOperator = BinOperator(BinOperator::Type::Division);
-        break;
-      case '%':
-        undefinedTkn = InfixToken(PrimaryType::BinOperator);
-        undefinedTkn.binOperator = BinOperator(BinOperator::Type::Mod);
-        break;
+        undefinedTkn = InfixToken(Bracket(str[i]));
+        undefinedTkn = InfixToken(BinOperator(str[i]));
       }
-      if (undefinedTkn.getType() == PrimaryType::Undefined)
+      catch (...)
       {
-        number = std::stoll(str.substr(i), &tmp);
-        undefinedTkn = InfixToken(PrimaryType::Operand);
-        undefinedTkn.operand = Operand(number);
-        i += tmp;
+        if (undefinedTkn.getType() == PrimaryType::Undefined)
+        {
+          number = std::stoll(str.substr(i), &tmp);
+          undefinedTkn = InfixToken(Operand(number));
+          i += tmp;
+        }
       }
       queue.push(undefinedTkn);
     }

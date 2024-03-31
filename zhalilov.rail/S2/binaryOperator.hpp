@@ -12,6 +12,7 @@ namespace zhalilov
   public:
     enum class Type
     {
+      Undefined,
       Add,
       Subtraction,
       Multiply,
@@ -19,9 +20,10 @@ namespace zhalilov
       Mod
     };
 
+    BinOperator();
     explicit BinOperator(Type);
+    explicit BinOperator(char symb);
     Operand operator()(const Operand &, const Operand &) const;
-    unsigned short getPriority() const;
 
     bool operator<(const BinOperator &other) const;
     bool operator>(const BinOperator &other) const;
@@ -29,6 +31,8 @@ namespace zhalilov
     bool operator!=(const BinOperator &other) const;
     bool operator<=(const BinOperator &other) const;
     bool operator>=(const BinOperator &other) const;
+
+    unsigned short getPriority() const;
 
   private:
     Type type_;

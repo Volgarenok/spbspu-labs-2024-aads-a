@@ -1,10 +1,42 @@
 #include "binaryOperator.hpp"
 
+#include <stdexcept>
+
 #include "operand.hpp"
+
+zhalilov::BinOperator::BinOperator():
+  type_(BinOperator::Type::Undefined)
+{}
 
 zhalilov::BinOperator::BinOperator(Type type):
   type_(type)
 {}
+
+zhalilov::BinOperator::BinOperator(char symb)
+{
+  switch (symb)
+  {
+  case '+':
+    type_ = BinOperator::Type::Add;
+    break;
+  case '-':
+    type_ = BinOperator::Type::Subtraction;
+    break;
+  case '*':
+    type_ = BinOperator::Type::Multiply;
+    break;
+  case '/':
+    type_ = BinOperator::Type::Division;
+    break;
+  case '%':
+    type_ = BinOperator::Type::Mod;
+    break;
+  }
+  if (type_ == BinOperator::Type::Undefined)
+  {
+    throw std::invalid_argument("symbol isn't binary operator");
+  }
+}
 
 zhalilov::Operand zhalilov::BinOperator::operator()(const Operand &left, const Operand &right) const
 {

@@ -8,17 +8,11 @@ namespace zhalilov
   class Bracket
   {
   public:
-    enum class Type
-    {
-      OpenBracket,
-      CloseBracket
-    };
-
-    explicit Bracket(Type);
-    Type getBracketType() const;
-
+    explicit Bracket(PrimaryType type);
+    explicit Bracket(char symb);
+    PrimaryType getType();
   private:
-    Type type_;
+    PrimaryType type_;
   };
 }
 
