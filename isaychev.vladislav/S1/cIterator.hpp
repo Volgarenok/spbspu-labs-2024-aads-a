@@ -8,13 +8,16 @@
 namespace isaychev
 {
   template < typename T >
+  class List;
+
+  template < typename T >
   class CFwdIterator
   {
     using this_t = CFwdIterator< T >;
+    friend class List< T >;
 
    public:
     CFwdIterator();
-    CFwdIterator(nodeNS::node_t< T > * pos);
 
     this_t operator++();
     this_t operator++(int);
@@ -25,6 +28,7 @@ namespace isaychev
 
    private:
     nodeNS::node_t< T > * currNode_;
+    explicit CFwdIterator(nodeNS::node_t< T > * pos);
   };
 
   template < typename T >
@@ -33,7 +37,7 @@ namespace isaychev
   {}
 
   template < typename T >
-  CFwdIterator< T >::CFwdIterator(nodeNS::node_t< T > * pos):
+  isaychev::CFwdIterator< T >::CFwdIterator(nodeNS::node_t< T > * pos):
    currNode_(pos)
   {}
 
