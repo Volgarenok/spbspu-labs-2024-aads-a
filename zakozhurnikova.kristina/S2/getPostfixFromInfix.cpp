@@ -12,16 +12,6 @@ bool hasMorePriority(char stack, char current)
   return ((current == '*' || current == '/') && (stack == '*' || stack == '/')) || (current == '+' || current == '-');
 }
 
-void getPostfixFromInfix(std::istream &in, zakozhurnikova::Queue< std::string >& queue)
-{
-  std::string buffer;
-  while(in)
-  {
-    queue.push(getPostfixFromInfix(in, buffer));
-    buffer.clear();
-  }
-}
-
 std::string& getPostfixFromInfix(std::istream &in, std::string& result)
 {
   zakozhurnikova::Stack< char > stack;
@@ -38,7 +28,7 @@ std::string& getPostfixFromInfix(std::istream &in, std::string& result)
       {
         value.push_back(in.get());
       }
-      result.push(value);
+      result.append(value);
     }
     else if (isBinaryOperator(ch))
     {
@@ -46,7 +36,7 @@ std::string& getPostfixFromInfix(std::istream &in, std::string& result)
       {
         std::string value;
         value.push_back(stack.top());
-        result.push(value);
+        result.append(value);
         stack.drop();
       }
       stack.push(ch);
@@ -61,7 +51,7 @@ std::string& getPostfixFromInfix(std::istream &in, std::string& result)
       {
         std::string value;
         value.push_back(stack.top());
-        result.push(value);
+        result.append(value);
         stack.drop();
       }
       stack.drop();
@@ -74,7 +64,18 @@ std::string& getPostfixFromInfix(std::istream &in, std::string& result)
       throw std::runtime_error("malo closing brackets");
     }
     std::string value;
-    result.push(value);
+    result.append(value);
     stack.drop();
+  }
+  return result;
+}
+
+void getPostfixFromInfix(std::istream &in, zakozhurnikova::Queue< std::string >& queue)
+{
+  std::string buffer;
+  while(in)
+  {
+    queue.push(getPostfixFromInfix(in, buffer));
+    buffer.clear();
   }
 }
