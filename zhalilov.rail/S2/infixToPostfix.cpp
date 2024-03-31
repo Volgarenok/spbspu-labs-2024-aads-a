@@ -10,20 +10,20 @@ void zhalilov::infixToPostfix(Queue< InfixToken > infix, Queue< PostfixToken > &
   while (!infix.empty())
   {
     InfixToken tempToken = infix.front();
-    if (tempToken.getType() == PrimaryType::Bracket)
+    if (tempToken.getType() == PrimaryType::OpenBracket)
     {
-      if (tempToken.bracket.getBracketType() == Bracket::Type::OpenBracket)
+      transfer.push(TransferToken(Bracket(PrimaryType::OpenBracket)));
+    }
+    else if (tempToken.getType() == PrimaryType::CloseBracket)
+    {
+      while (transfer.top().getType() != PrimaryType::OpenBracket)
       {
-        TransferToken bracketToken(PrimaryType::Bracket);
-        bracketToken.bracket = tempToken.bracket;
-        transfer.push(bracketToken);
-      }
-      else if (!transfer.empty())
-      {
-        while (transfer.top().getType() != PrimaryType::Bracket)
+        if (transfer.empty())
         {
-
+          throw std::invalid_argument("Incorrect bracket position");
         }
+
+        transfer.pop();
       }
     }
   }
