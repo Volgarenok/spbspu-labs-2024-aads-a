@@ -20,9 +20,14 @@ int main(int argc, char* argv[])
       std::ifstream input(argv[1]);
       inputExpressions(infixQueue, input);
     }
-    else
+    else if (argc == 1)
     {
       inputExpressions(infixQueue, std::cin);
+    }
+    else
+    {
+      std::cerr << "Error: Wrong input parameters" << '\n';
+      return 1;
     }
 
     Stack< PostfixExpression > postfixStack;
