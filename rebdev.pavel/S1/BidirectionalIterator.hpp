@@ -12,7 +12,7 @@ namespace rebdev
   class BiList;
 
   template < class T >
-  class BidirectionalIterator: public std::bidirectional_iterator_tag
+  class BidirectionalIterator: public std::iterator< std::bidirectional_iterator_tag, T >
   {
     friend BiList< T >;
     using iter = BidirectionalIterator< T >;

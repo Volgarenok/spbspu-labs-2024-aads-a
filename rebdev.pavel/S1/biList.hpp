@@ -22,7 +22,10 @@ namespace rebdev
       BiList():
         headNode_(nullptr),
         tailNode_(nullptr)
-      {}
+      {
+        createHeadTail();5
+      }
+
 
       BiList(size_t n): BiList(n, T{})
       {}
@@ -49,24 +52,25 @@ namespace rebdev
         *this = oldList;
       }
 
-      BiList(list && rList): BiList(rList)
-      {}
+      BiList(list && rList):
+        headNode_(nullptr),
+        tailNode_(nullptr);
+      {
+        *this = std::move(rList);
+      }
 
       BiList(const T & firstElement):
         headNode_(nullptr),
         tailNode_(nullptr)
       {
-        node * newNode = nullptr;
+        createHeadTail();
         try
         {
-          headNode_ = new node{T{}, nullptr, nullptr};
-          tailNode_ = new node{T{}, headNode_, nullptr};
-          headNode_->next_ = tailNode_;
           push_back(firstElement);
         }
         catch (...)
         {
-          delete headNode_;
+          if (headNode_ != tailNode_) delete headNode_;
           delete tailNode_;
           throw;
         }
@@ -88,7 +92,10 @@ namespace rebdev
 
       list & operator=(list && originalList)
       {
-        return (*this = originalList);
+        headNode_ = originalList.headNode_;
+        tailNode_ = originalList.tailNode_;
+        originalList.headNode_ = nullptr;
+        originalList.tailNode_ = nullptr;
       }
 
       iter begin() noexcept
@@ -113,13 +120,14 @@ namespace rebdev
 
       bool empty() const noexcept
       {
-        return ((headNode_->next_) == tailNode_);
+        return (headNode_ == tailNode_);
       }
 
       T & front()
       {
-        return headNode_->next_->data_;
+        return headNode_->data_;
       }
+
       T & back()
       {
         return tailNode_->last_->data_;
@@ -127,7 +135,7 @@ namespace rebdev
 
       const T & front() const
       {
-        const T & ref = headNode_->next_->data_;
+        const T & ref = headNode_->data_;
         return ref;
       }
 
@@ -148,15 +156,11 @@ namespace rebdev
 
         try
         {
-          headNode_ = new node{*first, nullptr, nullptr};
-          ++first;
-          tailNode_ = new node{*first, headNode_, nullptr};
+          createHeadTail();
         }
         catch (...)
         {
-          delete headNode_;
           headNode_ = headCopy;
-          delete tailNode_;
           tailNode_ = tailCopy;
           throw;
         }
@@ -188,14 +192,11 @@ namespace rebdev
 
         try
         {
-          headNode_ = new node{T{}, nullptr, nullptr};
-          tailNode_ = new node{T{}, headNode_, nullptr};
+          createHeadTail();
         }
         catch (...)
         {
-          delete headNode_;
           headNode_ = headCopy;
-          delete tailNode_;
           tailNode_ = tailCopy;
           throw;
         }
@@ -224,6 +225,8 @@ namespace rebdev
 
       void push_back(const T & newElement)
       {
+        if (empty()) createHeadTail();
+
         node * newNode = new node{T{}, tailNode_, nullptr};
         try
         {
@@ -240,6 +243,8 @@ namespace rebdev
 
       void push_front(const T & newElement)
       {
+        if (empty()) createHeadTail();
+
         node * newNode = new node{T{}, nullptr, headNode_};
         try
         {
@@ -532,6 +537,12 @@ namespace rebdev
         nodePointer = first.last_;
         first.last_ = second.last_;
         second.last_ = nodePointer;
+      }
+
+      void createHeadTail()
+      {
+        headNode_ = new node{T{}, nullptr, nullptr};
+        tailNode_ = headNode_;
       }
   };
 }
