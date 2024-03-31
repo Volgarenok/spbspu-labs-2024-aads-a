@@ -1,37 +1,28 @@
 #include <iostream>
 #include <stack>
 #include <queue>
+#include <string>
 
 int main()
 {
-  std::queue<int> temp;
-  int number = 0;
-  while (true)
+  std::queue<std::string> prefixExpression;
+  std::queue<std::string> postfixExpression;
+  std::stack<std::string> operationStack;
+  std::string inString = "";
+  while (std::cin >> inString)
   {
-    std::cin >> number;
-    if (number == 0)
+    if (std::isdigit(inString[0]))
     {
-      break;
+      postfixExpression.push(inString);      
     }
-    temp.push(number);
-  }
-  std::cout << temp.size();
-  while (!temp.empty())
-  {
-    //int ans = temp.front();
-    //std::cin << ans;
-    temp.pop();
-  }
-  std::stack<int> temp2;
-  int num = 0;
-  while (true)
-  {
-    std::cin >> num;
-    if (num == 0)
+    else
     {
-      break;
+      if (!operationStack.empty())
+      {
+        postfixExpression.push(operationStack.top());
+        operationStack.pop();
+      }
+      operationStack.push(inString);
     }
-    temp2.push(num);
   }
-  std::cout << temp2.size();
 }
