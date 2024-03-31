@@ -2,6 +2,7 @@
 #include <stack>
 #include <queue>
 #include <string>
+#include "stack.hpp"
 
 int main()
 {
