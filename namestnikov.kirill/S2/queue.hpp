@@ -32,6 +32,14 @@ namespace namestnikov
     {
       return data_.back();
     }
+    void push(const T & value)
+    {
+      data_.push_back(value);
+    }
+    void pop()
+    {
+      data_.pop_front();
+    }
     size_t size() const noexcept
     {
       return data_.size();
