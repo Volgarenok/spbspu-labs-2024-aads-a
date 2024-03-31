@@ -16,26 +16,26 @@ namespace isaychev
    public:
     List();
     ~List();
-    List(List< T > && rhs);
+    List(List< T > && rhs) noexcept;
     List(const List< T > & rhs);
-    List< T > & operator=(List< T >&& rhs);
+    List< T > & operator=(List< T >&& rhs) noexcept;
     List< T > & operator=(const List< T > & rhs);
 
-    iter begin();
-    iter end();
-    cIter begin() const;
-    cIter end() const;
-    cIter сbegin() const;
-    cIter сend() const;
+    iter begin() noexcept;
+    iter end() noexcept;
+    cIter begin() const noexcept;
+    cIter end() const noexcept;
+    cIter сbegin() const noexcept;
+    cIter сend() const noexcept;
 
-    T & front();
-    const T & front() const;
-    bool empty();
+    T & front() noexcept;
+    const T & front() const noexcept;
+    bool empty() noexcept;
     void push_front(const T & obj);
     void pop_front();
     void clear();
-    void swap(List< T > & rhs);
-    void reverse();
+    void swap(List< T > & rhs) noexcept;
+    void reverse() noexcept;
 
    private:
     nodeNS::node_t< T > * head_;
@@ -63,7 +63,7 @@ namespace isaychev
   }
 
   template < typename T >
-  List< T >::List(List< T > && rhs):
+  List< T >::List(List< T > && rhs) noexcept:
    head_(rhs.head_)
   {
     rhs.head_ = nullptr;
@@ -83,7 +83,7 @@ namespace isaychev
   }
 
   template < typename T >
-  List< T > & List< T >::operator=(List< T > && rhs)
+  List< T > & List< T >::operator=(List< T > && rhs) noexcept
   {
     if (this != std::addressof(rhs))
     {
@@ -94,55 +94,55 @@ namespace isaychev
   }
 
   template < typename T >
-  fwdIterator< T > List< T >::begin()
+  fwdIterator< T > List< T >::begin() noexcept
   {
     return fwdIterator< T >(head_);
   }
 
   template < typename T >
-  fwdIterator< T > List< T >::end()
+  fwdIterator< T > List< T >::end() noexcept
   {
     return fwdIterator< T >(nullptr);
   }
 
   template < typename T >
-  CFwdIterator< T > List< T >::begin() const
+  CFwdIterator< T > List< T >::begin() const noexcept
   {
     return CFwdIterator< T >(head_);
   }
 
   template < typename T >
-  CFwdIterator< T > List< T >::end() const
+  CFwdIterator< T > List< T >::end() const noexcept
   {
     return CFwdIterator< T >(nullptr);
   }
 
   template < typename T >
-  CFwdIterator< T > List< T >::сbegin() const
+  CFwdIterator< T > List< T >::сbegin() const noexcept
   {
     return CFwdIterator< T >(head_);
   }
 
   template < typename T >
-  CFwdIterator< T > List< T >::сend() const
+  CFwdIterator< T > List< T >::сend() const noexcept
   {
     return CFwdIterator< T >(nullptr);
   }
 
   template < typename T >
-  T & List< T >::front()
+  T & List< T >::front() noexcept
   {
     return head_->data;
   }
 
   template < typename T >
-  const T & List< T >::front() const
+  const T & List< T >::front() const noexcept
   {
     return head_->data;
   }
 
   template < typename T >
-  bool List< T >::empty()
+  bool List< T >::empty() noexcept
   {
     return (head_ == nullptr);
   }
@@ -180,13 +180,13 @@ namespace isaychev
   }
 
   template < typename T >
-  void List< T >::swap(List< T > & rhs)
+  void List< T >::swap(List< T > & rhs) noexcept
   {
     std::swap(head_, rhs.head);
   }
 
   template < typename T >
-  void List< T >::reverse()
+  void List< T >::reverse() noexcept
   {
     if (head_)
     {
