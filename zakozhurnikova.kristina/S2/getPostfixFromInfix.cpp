@@ -41,8 +41,6 @@ void getPostfixFromInfix(std::istream &in, zakozhurnikova::Queue< std::string >&
         std::string value;
         value.push_back(stack.top());
         queue.push(value);
-        //res.push_back(stack.top());
-        //res.push_back(' ');
         stack.drop();
       }
       stack.push(ch);
@@ -58,8 +56,6 @@ void getPostfixFromInfix(std::istream &in, zakozhurnikova::Queue< std::string >&
         std::string value;
         value.push_back(stack.top());
         queue.push(value);
-        //res.push_back(stack.top());
-        //res.push_back(' ');
         stack.drop();
       }
       stack.drop();
@@ -74,8 +70,6 @@ void getPostfixFromInfix(std::istream &in, zakozhurnikova::Queue< std::string >&
     }
     std::string value;
     queue.push(value);
-    //res.push_back(stack.top());
-    //res.push_back(' ');
     stack.drop();
   }
 }
