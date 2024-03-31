@@ -16,19 +16,16 @@ int main(int argc, char* argv[])
     using ull = unsigned long long;
     Queue< std::string > queue;
     Stack < ull > result;
-    while(std::cin)
+    if (argc == 2)
     {
-      if (argc == 2)
-      {
-        std::ifstream input(argv[1]);
-        getPostfixFromInfix(input, queue);
-        evaluatePostfix(result, queue);
-      }
-      else
-      {
-        getPostfixFromInfix(std::cin, queue);
-        evaluatePostfix(result, queue);
-      }
+      std::ifstream input(argv[1]);
+      getPostfixFromInfix(input, queue);
+      evaluatePostfix(result, queue);
+    }
+    else
+    {
+      getPostfixFromInfix(std::cin, queue);
+      evaluatePostfix(result, queue);
     }
     outputResult(result);
   }
