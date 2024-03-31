@@ -33,6 +33,18 @@ namespace namestnikov
     {
       data_.pop_front();
     }
+    T & top() const noexcept
+    {
+      return data_.front()
+    }
+    size_t size() const noexcept
+    {
+      return data_.size();
+    }
+    bool empty() const noexcept
+    {
+      return data_.empty();
+    }
     ~Stack() = default;
   private:
     std::list< T > data_;
