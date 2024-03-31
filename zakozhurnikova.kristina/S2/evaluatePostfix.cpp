@@ -75,7 +75,7 @@ ull evaluatePostfix(const char* postfix)
   return result;
 }
 
-zakozhurnikova::Queue< ull >& evaluatePostfix(zakozhurnikova::Queue< ull >& result, zakozhurnikova::Queue< std::string >& queue)
+zakozhurnikova::Stack< ull >& evaluatePostfix(zakozhurnikova::Stack< ull >& result, zakozhurnikova::Queue< std::string >& queue)
 {
   while (!queue.empty())
   {
