@@ -38,15 +38,12 @@ int calculate(int first, int second, char operation)
   return result;
 }
 
-int evaluatePostfix(zakozhurnikova::Queue< std::string >& queue)
+using ull = unsigned long long;
+ull evaluatePostfix(const char* postfix)
 {
-  zakozhurnikova::Stack< int > stack;
-
-//пока очередь не пуста, перемещаемся по ней на одну единицу
-  while(!queue.empty())
+  zakozhurnikova::Stack< ull > stack;
+  while (*postfix)
   {
-//    char ch = *postfix;
-    std::string st = queue.top();
     if (std::isdigit(ch))
     {
       std::string value;
@@ -56,24 +53,34 @@ int evaluatePostfix(zakozhurnikova::Queue< std::string >& queue)
         ++postfix;
         value.push_back(*postfix);
       }
-      stack.push(std::stoi(value));
+      stack.push(std::stoll(value));
     }
     else
     {
-      int second = stack.top();
+      ull second = stack.top();
       stack.pop();
-      int first = stack.top();
+      ull first = stack.top();
       stack.pop();
       stack.push(calculate(first, second, ch));
     }
     ++postfix;
   }
-
-  int result = stack.top();
+  ull result = stack.top();
   stack.pop();
   if (!stack.empty())
   {
     throw std::logic_error("Too much numbers!");
+  }
+  return result;
+}
+
+zakozhurnikova::Queue< ull >& evaluatePostfix(zakozhurnikova::Queue< ull > result, zakozhurnikova::Queue< std::string >& queue)
+{
+  while (!queue.empty())
+  {
+    const char* postfix = queue.top().c_str();
+    result.push(evaluatePostfix(postfix));
+    queue.pop();
   }
   return result;
 }
