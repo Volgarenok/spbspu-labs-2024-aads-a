@@ -66,7 +66,7 @@ void getPostfixFromInfix(std::istream &in, zakozhurnikova::Queue< std::string >&
   {
     if (isOpeningBracket(stack.top()))
     {
-      throw std::logic_error("malo closing brackets");
+      throw std::runtime_error("malo closing brackets");
     }
     std::string value;
     queue.push(value);

@@ -44,6 +44,7 @@ ull evaluatePostfix(const char* postfix)
   zakozhurnikova::Stack< ull > stack;
   while (*postfix)
   {
+    char ch = *postfix;
     if (std::isdigit(ch))
     {
       std::string value;
@@ -58,15 +59,15 @@ ull evaluatePostfix(const char* postfix)
     else
     {
       ull second = stack.top();
-      stack.pop();
+      stack.drop();
       ull first = stack.top();
-      stack.pop();
+      stack.drop();
       stack.push(calculate(first, second, ch));
     }
     ++postfix;
   }
   ull result = stack.top();
-  stack.pop();
+  stack.drop();
   if (!stack.empty())
   {
     throw std::logic_error("Too much numbers!");
@@ -74,13 +75,13 @@ ull evaluatePostfix(const char* postfix)
   return result;
 }
 
-zakozhurnikova::Queue< ull >& evaluatePostfix(zakozhurnikova::Queue< ull > result, zakozhurnikova::Queue< std::string >& queue)
+zakozhurnikova::Queue< ull >& evaluatePostfix(zakozhurnikova::Queue< ull >& result, zakozhurnikova::Queue< std::string >& queue)
 {
   while (!queue.empty())
   {
     const char* postfix = queue.top().c_str();
     result.push(evaluatePostfix(postfix));
-    queue.pop();
+    queue.drop();
   }
   return result;
 }
