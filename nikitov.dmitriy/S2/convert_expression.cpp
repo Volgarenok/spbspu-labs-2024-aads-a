@@ -12,13 +12,23 @@ nikitov::PostfixExpression nikitov::convertExpression(Queue< InfixType > infixEx
   while (!infixExpression.empty())
   {
     InfixType type = infixExpression.drop();
-    if (type.typeName != TypeName::operand)
+    if (type.typeName == TypeName::operand)
+    {
+      long long value = type.data.operand.num;
+      postfixExpression.add(PostfixType(TypeName::operand, value));
+    }
+    else
     {
       if (type.typeName == TypeName::bracket)
       {
-        if (!type.data.bracket.isOpen)
+        if (type.data.bracket.isOpen)
         {
-          while (!operandsStack.empty() && operandsStack.top().typeName != TypeName::bracket)
+          bool value = type.data.bracket.isOpen;
+          operandsStack.push(StackType(TypeName::bracket, value));
+        }
+        else
+        {
+          while (!operandsStack.empty() && !operandsStack.top().typeName == nikitov::bracket)
           {
             char value = operandsStack.drop().data.operation.symb;
             postfixExpression.add(PostfixType(TypeName::operation, value));
@@ -28,11 +38,6 @@ nikitov::PostfixExpression nikitov::convertExpression(Queue< InfixType > infixEx
             throw std::logic_error("Error: Wrong brackets");
           }
           operandsStack.drop();
-        }
-        else
-        {
-          bool value = type.data.bracket.isOpen;
-          operandsStack.push(StackType(TypeName::bracket, value));
         }
       }
       else
@@ -52,11 +57,6 @@ nikitov::PostfixExpression nikitov::convertExpression(Queue< InfixType > infixEx
         char value = type.data.operation.symb;
         operandsStack.push(StackType(TypeName::operation, value));
       }
-    }
-    else
-    {
-      long long value = type.data.operand.num;
-      postfixExpression.add(PostfixType(TypeName::operand, value));
     }
   }
 
