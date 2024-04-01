@@ -7,7 +7,7 @@
 using ll = long long;
 ll calculate(ll first, ll second, char operation)
 {
-  int result = 0;
+  ll result = 0;
   switch (operation)
   {
   case '+':
@@ -61,6 +61,7 @@ ll calculate(ll first, ll second, char operation)
     break;
   }
   default:
+  {
     throw std::logic_error("Error: Wrong operation");
   }
   return result;
