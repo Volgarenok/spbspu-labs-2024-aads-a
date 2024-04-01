@@ -75,10 +75,10 @@ void getPostfixFromInfix(std::istream &in, zakozhurnikova::Queue< std::string >&
   std::string buffer;
   while(!in.eof())
   {
-    queue.push(getPostfixFromInfix(in, buffer));
-    if (buffer.empty())
+    std::string postfix = getPostfixFromInfix(in, buffer);
+    if (!postfix.empty())
     {
-      queue.drop();
+      queue.push(postfix);
      }
     else
     {
