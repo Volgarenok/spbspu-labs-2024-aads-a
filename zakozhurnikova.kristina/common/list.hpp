@@ -152,11 +152,11 @@ namespace zakozhurnikova
 
     void clear() noexcept
     {
-      while (tail_)
+      while (head_)
       {
-        pop_back();
+        pop_front();
       }
-      head_ = nullptr;
+      tail_ = nullptr;
     }
 
     bool empty() const noexcept
