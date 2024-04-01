@@ -21,7 +21,9 @@ long long nikitov::solveExpression(PostfixExpression expression)
         long long first = solverStack.drop();
         long long result = 0;
         char symb = type.data.operation.symb;
-        if (symb == '+')
+        switch (symb)
+        {
+        case '+':
         {
           long long maxNum = std::numeric_limits< long long >::max();
           if (maxNum - first < second)
@@ -29,8 +31,9 @@ long long nikitov::solveExpression(PostfixExpression expression)
             throw std::out_of_range("Error: Addition overflow");
           }
           result = first + second;
+          break;
         }
-        else if (symb == '-')
+        case '-':
         {
           long long minNum = std::numeric_limits< long long >::min();
           if (minNum + first > second)
@@ -38,16 +41,18 @@ long long nikitov::solveExpression(PostfixExpression expression)
             throw std::out_of_range("Error: Subtraction overflow");
           }
           result = first - second;
+          break;
         }
-        else if (symb == '*')
+        case '*':
         {
           result = first * second;
           if (second != 0 && result / second != first)
           {
             throw std::out_of_range("Error: Mulptiplication overflow");
           }
+          break;
         }
-        else if (symb == '/')
+        case '/':
         {
           long long minNum = std::numeric_limits< long long >::min();
           if (second == 0)
@@ -59,14 +64,20 @@ long long nikitov::solveExpression(PostfixExpression expression)
             throw std::out_of_range("Error: Division overflow");
           }
           result = first / second;
+          break;
         }
-        else if (symb == '%')
+        case '%':
         {
           result = first % second;
           if (result < 0)
           {
             result += second;
           }
+          break;
+        }
+        default:
+          throw std::logic_error("Error: Wrong operation");
+          break;
         }
         solverStack.push(result);
         --countElem;
