@@ -16,6 +16,7 @@ namespace namestnikov
     char bracket;
     bool isOpen;
   };
+  enum ExpressionTypes {operand, operation, bracket};
 }
 
 #endif
