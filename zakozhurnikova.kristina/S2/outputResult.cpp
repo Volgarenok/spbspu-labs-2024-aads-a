@@ -14,4 +14,5 @@ void outputResult(zakozhurnikova::Stack< ll >& result)
     result.drop();
     ++quantity;
   }
+  std::cout << '\n';
 }
