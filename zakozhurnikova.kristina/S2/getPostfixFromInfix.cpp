@@ -1,6 +1,8 @@
 #include "getPostfixFromInfix.hpp"
+#include <cctype>
 #include "stack.hpp"
 #include "queue.hpp"
+#include "scopeGuard.hpp"
 
 bool isBinaryOperator(char ch)
 {
@@ -9,13 +11,13 @@ bool isBinaryOperator(char ch)
 
 bool hasMorePriority(char stack, char current)
 {
-  return ((current == '*' || current == '/') && (stack == '*' || stack == '/')) || (current == '+' || current == '-');
+  return (stack != '(') && (((current == '*' || current == '/') && (stack == '*' || stack == '/')) || (current == '+' || current == '-'));
 }
 
 std::string& getPostfixFromInfix(std::istream &in, std::string& result)
 {
   const char WHITE_SPACE = ' ';
-  zakozhurnikova::Stack<char> stack;
+  zakozhurnikova::Stack< char > stack;
   std::string buff;
   std::getline(in, buff, '\n');
   for (auto it = buff.cbegin(); it != buff.cend(); ++it)
