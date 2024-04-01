@@ -13,7 +13,7 @@ int main(int argc, char* argv[])
   using namespace zakozhurnikova;
   try
   {
-    using ull = unsigned long long;
+    using ull = long long;
     Queue< std::string > queue;
     Stack < ull > result;
     if (argc == 2)

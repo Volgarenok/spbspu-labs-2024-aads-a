@@ -1,9 +1,9 @@
 #include "outputResult.hpp"
 #include "iostream"
 
-void outputResult(zakozhurnikova::Stack< ull >& result)
+void outputResult(zakozhurnikova::Stack< ll >& result)
 {
-  unsigned long long quantity = 0;
+  long long quantity = 0;
   while(!result.empty())
   {
     std::cout << result.top();

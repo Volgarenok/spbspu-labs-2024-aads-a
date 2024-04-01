@@ -14,44 +14,43 @@ bool hasMorePriority(char stack, char current)
 
 std::string& getPostfixFromInfix(std::istream &in, std::string& result)
 {
-  zakozhurnikova::Stack< char > stack;
-  char ch = 0;
-  in >> std::noskipws;
-  while (in.peek() != '\n')
+  const char WHITE_SPACE = ' ';
+  zakozhurnikova::Stack<char> stack;
+  std::string buff;
+  std::getline(in, buff, '\n');
+  for (auto it = buff.cbegin(); it != buff.cend(); ++it)
   {
-    in >> ch;
-    if (std::isdigit(ch))
+    if (std::isdigit(*it))
     {
-      std::string value;
-      value.push_back(ch);
-      while (std::isdigit(in.peek()))
+      auto cpy = it;
+      while (std::isdigit(*cpy))
       {
-        value.push_back(in.get());
+        result.push_back(*cpy);
+        ++cpy;
       }
-      result.append(value);
+      it = --cpy;
+      result.push_back(WHITE_SPACE);
     }
-    else if (isBinaryOperator(ch))
+    else if (isBinaryOperator(*it))
     {
-      while (!stack.empty() && hasMorePriority(stack.top(), ch))
+      while (!stack.empty() && hasMorePriority(stack.top(), *it))
       {
-        std::string value;
-        value.push_back(stack.top());
-        result.append(value);
+        result.push_back(stack.top());
+        result.push_back(WHITE_SPACE);
         stack.drop();
       }
-      stack.push(ch);
+      stack.push(*it);
     }
-    else if (ch == '(')
+    else if (*it == '(')
     {
-      stack.push(ch);
+      stack.push(*it);
     }
-    else if (ch == ')')
+    else if (*it == ')')
     {
       while (stack.top() != '(')
       {
-        std::string value;
-        value.push_back(stack.top());
-        result.append(value);
+        result.push_back(stack.top());
+        result.push_back(WHITE_SPACE);
         stack.drop();
       }
       stack.drop();
@@ -61,10 +60,10 @@ std::string& getPostfixFromInfix(std::istream &in, std::string& result)
   {
     if (stack.top() == '(')
     {
-      throw std::runtime_error("malo closing brackets");
+      throw std::runtime_error("incorrect brackets");
     }
-    std::string value;
-    result.append(value);
+    result.push_back(stack.top());
+    result.push_back(WHITE_SPACE);
     stack.drop();
   }
   return result;
@@ -73,9 +72,16 @@ std::string& getPostfixFromInfix(std::istream &in, std::string& result)
 void getPostfixFromInfix(std::istream &in, zakozhurnikova::Queue< std::string >& queue)
 {
   std::string buffer;
-  while(in)
+  while(!in.eof())
   {
     queue.push(getPostfixFromInfix(in, buffer));
-    buffer.clear();
+    if (buffer.empty())
+    {
+      queue.drop();
+     }
+    else
+    {
+      buffer.clear();
+    }
   }
 }

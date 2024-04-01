@@ -1,47 +1,75 @@
 #include "evaluatePostfix.hpp"
 #include <stdexcept>
+#include <limits>
 #include "stack.hpp"
 #include "queue.hpp"
 
-int calculate(int first, int second, char operation)
+using ll = long long;
+ll calculate(ll first, ll second, char operation)
 {
   int result = 0;
   switch (operation)
   {
   case '+':
+  {
+    ll maxNum = std::numeric_limits<ll>::max();
+    if (maxNum - first < second)
+    {
+      throw std::out_of_range("Error: Addition overflow");
+    }
     result = first + second;
     break;
+  }
   case '-':
+  {
+    ll minNum = std::numeric_limits<ll>::min();
+    if (minNum + first > second)
+    {
+      throw std::out_of_range("Error: Subtraction overflow");
+    }
     result = first - second;
     break;
+  }
   case '*':
     result = first * second;
+    if (second != 0 && result / second != first)
+    {
+      throw std::out_of_range("Error: Mulptiplication overflow");
+    }
     break;
   case '/':
+  {
+    ll minNum = std::numeric_limits<ll>::min();
     if (second == 0)
     {
-      throw std::logic_error("LOGIC_ERROR: Division by zero!");
+      throw std::logic_error("Error: Division by zero");
+    }
+    if (first == minNum && second == -1)
+    {
+      throw std::out_of_range("Error: Division overflow");
     }
     result = first / second;
     break;
+  }
   case '%':
-    if (second == 0)
-    {
-      throw std::logic_error("LOGIC_ERROR: Division by zero!");
-    }
+  {
     result = first % second;
+    if (result < 0)
+    {
+      result += second;
+    }
     break;
+  }
   default:
-    throw std::logic_error("LOGIC_ERROR: Wrong operation!");
-    break;
+    throw std::logic_error("Error: Wrong operation");
   }
   return result;
 }
 
-using ull = unsigned long long;
-ull evaluatePostfix(const std::string& postfix)
+
+ll evaluatePostfix(const std::string& postfix)
 {
-  zakozhurnikova::Stack< ull > stack;
+  zakozhurnikova::Stack< ll > stack;
   for(auto it = postfix.cbegin(); it != postfix.cend(); ++it)
   {
     if (std::isdigit(*it))
@@ -54,6 +82,7 @@ ull evaluatePostfix(const std::string& postfix)
         ++cpy;
         value.push_back(*cpy);
       }
+      it = --cpy;
       stack.push(std::stoll(value));
     }
     else if (std::isspace(*it))
@@ -62,18 +91,18 @@ ull evaluatePostfix(const std::string& postfix)
     }
     else
     {
-      ull second = stack.top();
+      ll second = stack.top();
       stack.drop();
       if (stack.empty())
       {
         return second;
       }
-      ull first = stack.top();
+      ll first = stack.top();
       stack.drop();
       stack.push(calculate(first, second, *it));
     }
   }
-  ull result = stack.top();
+  ll result = stack.top();
   stack.drop();
   if (!stack.empty())
   {
@@ -82,7 +111,7 @@ ull evaluatePostfix(const std::string& postfix)
   return result;
 }
 
-zakozhurnikova::Stack< ull >& evaluatePostfix(zakozhurnikova::Stack< ull >& result, zakozhurnikova::Queue< std::string >& queue)
+zakozhurnikova::Stack< ll >& evaluatePostfix(zakozhurnikova::Stack< ll >& result, zakozhurnikova::Queue< std::string >& queue)
 {
   while (!queue.empty())
   {

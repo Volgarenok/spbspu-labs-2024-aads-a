@@ -3,7 +3,7 @@
 #include "queue.hpp"
 #include "stack.hpp"
 
-using ull = unsigned long long;
-zakozhurnikova::Stack< ull >& evaluatePostfix(zakozhurnikova::Stack< ull >& result, zakozhurnikova::Queue< std::string >& queue);
+using ll = long long;
+zakozhurnikova::Stack< ll >& evaluatePostfix(zakozhurnikova::Stack< ll >& result, zakozhurnikova::Queue< std::string >& queue);
 
 #endif
