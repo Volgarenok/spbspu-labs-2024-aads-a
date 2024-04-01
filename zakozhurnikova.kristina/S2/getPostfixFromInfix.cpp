@@ -2,7 +2,6 @@
 #include <cctype>
 #include "stack.hpp"
 #include "queue.hpp"
-#include "scopeGuard.hpp"
 
 bool isBinaryOperator(char ch)
 {

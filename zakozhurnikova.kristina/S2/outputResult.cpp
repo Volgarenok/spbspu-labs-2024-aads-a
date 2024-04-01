@@ -3,7 +3,7 @@
 
 void outputResult(zakozhurnikova::Stack< ll >& result)
 {
-  long long quantity = 0;
+  unsigned long long quantity = 0;
   while(!result.empty())
   {
     std::cout << result.top();
