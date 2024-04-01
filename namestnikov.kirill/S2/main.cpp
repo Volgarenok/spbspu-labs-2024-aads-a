@@ -123,5 +123,35 @@ int main()
     resultQueue.push(processStack.top());
     processStack.pop();
   }
-  std::cout << resultQueue.size();
+  int res = 0;
+  size_t countOperands = 0;
+  std::stack< int > operandsStack;
+  while (!resultQueue.empty())
+  {
+    if (std::isdigit(resultQueue.front()[0]))
+    {
+      operandsStack.push(std::stoi(resultQueue.front()));
+      resultQueue.pop();
+      ++countOperands;
+    }
+    else
+    {
+      if (countOperands > 1)
+      {
+        int num1 = operandsStack.top();
+        operandsStack.pop();
+        int num2 = operandsStack.top();
+        operandsStack.pop();
+        std::string op = resultQueue.front();
+        std::cout << op;
+        resultQueue.pop();
+        res += calculateExpression(num1, num2, op);
+      }
+      else
+      {
+        std::cerr << "Wrong expression\n";
+      }
+    }
+  }
+  std::cout << res;
 }
