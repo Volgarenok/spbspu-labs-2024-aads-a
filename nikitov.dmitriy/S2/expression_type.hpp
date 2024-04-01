@@ -54,11 +54,17 @@ namespace nikitov
 
   struct StackType
   {
-    union
+    StackType(TypeName type, bool value);
+    StackType(TypeName type, char value);
+
+    union Data
     {
+      Data(bool value);
+      Data(char value);
+
       detail::Bracket bracket;
       detail::Operation operation;
-    };
+    } data;
 
     TypeName typeName;
   };

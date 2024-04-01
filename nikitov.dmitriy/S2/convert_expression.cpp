@@ -16,7 +16,7 @@ nikitov::PostfixExpression nikitov::convertExpression(Queue< InfixType > infixEx
     {
       if (type.typeName == TypeName::bracket)
       {
-        if (type.bracket.symb == ')')
+        if (!type.data.bracket.isOpen)
         {
           while (!operandsStack.empty() && operandsStack.top().typeName != TypeName::bracket)
           {
@@ -33,10 +33,7 @@ nikitov::PostfixExpression nikitov::convertExpression(Queue< InfixType > infixEx
         }
         else
         {
-          StackType newStackType;
-          newStackType.typeName = TypeName::bracket;
-          newStackType.bracket = type.bracket;
-          operandsStack.push(newStackType);
+          operandsStack.push(StackType(TypeName::bracket, type.data.bracket.isOpen));
         }
       }
       else
@@ -55,10 +52,7 @@ nikitov::PostfixExpression nikitov::convertExpression(Queue< InfixType > infixEx
             break;
           }
         }
-        StackType newStackType;
-        newStackType.typeName = TypeName::operation;
-        newStackType.operation = type.operation;
-        operandsStack.push(newStackType);
+        operandsStack.push(StackType(TypeName::bracket, type.data.bracket.isOpen));
       }
     }
     else
