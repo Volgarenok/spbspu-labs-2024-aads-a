@@ -1,8 +1,8 @@
 #ifndef OUTPUT_RESULT_HPP
 #define OUTPUT_RESULT_HPP
-#include "stack.hpp"
+#include "queue.hpp"
 
 using ll = long long;
-void outputResult(zakozhurnikova::Stack< ll >& result);
+void outputResult(zakozhurnikova::Queue< ll >& result);
 
 #endif

@@ -13,9 +13,9 @@ int main(int argc, char* argv[])
   using namespace zakozhurnikova;
   try
   {
-    using ull = long long;
+    using ll = long long;
     Queue< std::string > queue;
-    Stack < ull > result;
+    Queue< ll > result;
     if (argc == 2)
     {
       std::ifstream input(argv[1]);

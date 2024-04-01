@@ -1,7 +1,7 @@
 #include "outputResult.hpp"
 #include "iostream"
 
-void outputResult(zakozhurnikova::Stack< ll >& result)
+void outputResult(zakozhurnikova::Queue< ll >& result)
 {
   unsigned long long quantity = 0;
   while(!result.empty())
