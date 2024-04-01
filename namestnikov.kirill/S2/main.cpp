@@ -62,21 +62,23 @@ int main()
   std::string inputString = "";
   while ((!std::cin.eof()) && (std::cin >> inputString))
   {
+    std::cout << inputString << "|";
     currentQueue.push(inputString);
   }
   while (!currentQueue.empty())
   {
     std::string temp = currentQueue.front();
+    std::cout << temp;
     currentQueue.pop();
     if (std::isdigit(temp[0]))
     {
       resultQueue.push(temp);
     }
-    else if (temp[0] == '(')
+    else if (temp == "(")
     {
       processStack.push(temp);
     }
-    else if (temp[0] == ')')
+    else if (temp == ")")
     {
       while (processStack.top() != "(")
       {
@@ -123,7 +125,15 @@ int main()
     resultQueue.push(processStack.top());
     processStack.pop();
   }
-  int res = 0;
+  std::string result = "";
+  while (!resultQueue.empty())
+  {
+    //std::cout << resultQueue.front() << "\t";
+    result += resultQueue.front();
+    resultQueue.pop();
+  }
+  std::cout << result << "\n";
+  /*int res = 0;
   size_t countOperands = 0;
   std::stack< int > operandsStack;
   while (!resultQueue.empty())
@@ -153,5 +163,5 @@ int main()
       }
     }
   }
-  std::cout << res;
+  std::cout << res;*/
 }
