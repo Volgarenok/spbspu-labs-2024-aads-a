@@ -61,7 +61,6 @@ ll calculate(ll first, ll second, char operation)
     break;
   }
   default:
-  {
     throw std::logic_error("Error: Wrong operation");
   }
   return result;
