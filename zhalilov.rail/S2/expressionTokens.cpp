@@ -4,9 +4,10 @@ zhalilov::InfixToken::InfixToken():
   type_(PrimaryType::Undefined)
 {}
 
-zhalilov::InfixToken::InfixToken(const InfixToken &tkn):
-  type_(PrimaryType::Undefined)
-{}
+zhalilov::InfixToken::InfixToken(const InfixToken &tkn)
+{
+  assigner(tkn);
+}
 
 zhalilov::InfixToken::InfixToken(BinOperator aBinOperator):
   type_(PrimaryType::BinOperator),
