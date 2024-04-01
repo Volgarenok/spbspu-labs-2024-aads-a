@@ -19,8 +19,16 @@ int main(int argc, char* argv[])
     if (argc == 2)
     {
       std::ifstream input(argv[1]);
-      getPostfixFromInfix(input, queue);
-      evaluatePostfix(result, queue);
+      if(input.is_open())
+      {
+        getPostfixFromInfix(input, queue);
+        evaluatePostfix(result, queue);
+      }
+      else
+      {
+        std::cerr << "Cannot open file\n";
+        return 1;
+      }
     }
     else
     {
