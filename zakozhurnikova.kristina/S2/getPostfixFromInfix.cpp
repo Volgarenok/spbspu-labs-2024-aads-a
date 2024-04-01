@@ -13,7 +13,7 @@ bool hasMorePriority(char stack, char current)
   return (stack != '(') && (((current == '*' || current == '/') && (stack == '*' || stack == '/')) || (current == '+' || current == '-'));
 }
 
-std::string& getPostfixFromInfix(std::istream &in, std::string& result)
+std::string& getPostfixFromInfixPart(std::istream &in, std::string& result)
 {
   const char WHITE_SPACE = ' ';
   zakozhurnikova::Stack< char > stack;
@@ -70,12 +70,12 @@ std::string& getPostfixFromInfix(std::istream &in, std::string& result)
   return result;
 }
 
-void getPostfixFromInfix(std::istream &in, zakozhurnikova::Queue< std::string >& queue)
+void zakozhurnikova::getPostfixFromInfix(std::istream &in, zakozhurnikova::Queue< std::string >& queue)
 {
   std::string buffer;
   while(!in.eof())
   {
-    std::string postfix = getPostfixFromInfix(in, buffer);
+    std::string postfix = getPostfixFromInfixPart(in, buffer);
     if (!postfix.empty())
     {
       queue.push(postfix);

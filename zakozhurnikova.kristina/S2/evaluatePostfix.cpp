@@ -67,7 +67,7 @@ ll calculate(ll first, ll second, char operation)
 }
 
 
-ll evaluatePostfix(const std::string& postfix)
+ll evaluatePostfixPart(const std::string& postfix)
 {
   zakozhurnikova::Stack< ll > stack;
   for(auto it = postfix.cbegin(); it != postfix.cend(); ++it)
@@ -111,11 +111,11 @@ ll evaluatePostfix(const std::string& postfix)
   return result;
 }
 
-zakozhurnikova::Stack< ll >& evaluatePostfix(zakozhurnikova::Stack< ll >& result, zakozhurnikova::Queue< std::string >& queue)
+zakozhurnikova::Stack< ll >& zakozhurnikova::evaluatePostfix(zakozhurnikova::Stack< ll >& result, zakozhurnikova::Queue< std::string >& queue)
 {
   while (!queue.empty())
   {
-    result.push(evaluatePostfix(queue.top()));
+    result.push(evaluatePostfixPart(queue.top()));
     queue.drop();
   }
   return result;

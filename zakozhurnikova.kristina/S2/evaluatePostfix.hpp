@@ -3,7 +3,9 @@
 #include "queue.hpp"
 #include "stack.hpp"
 
-using ll = long long;
-zakozhurnikova::Stack< ll >& evaluatePostfix(zakozhurnikova::Stack< ll >& result, zakozhurnikova::Queue< std::string >& queue);
-
+namespace zakozhurnikova
+{
+  using ll = long long;
+  zakozhurnikova::Stack< ll >& evaluatePostfix(zakozhurnikova::Stack< ll >& result, zakozhurnikova::Queue< std::string >& queue);
+}
 #endif

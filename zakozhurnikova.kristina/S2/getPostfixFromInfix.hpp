@@ -4,6 +4,8 @@
 #include <string>
 #include "queue.hpp"
 
-void getPostfixFromInfix(std::istream &in, zakozhurnikova::Queue< std::string >& queue);
-
+namespace zakozhurnikova
+{
+  void getPostfixFromInfix(std::istream &in, zakozhurnikova::Queue< std::string >& queue);
+}
 #endif
