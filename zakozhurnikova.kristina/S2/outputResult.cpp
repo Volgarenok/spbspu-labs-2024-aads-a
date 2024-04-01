@@ -12,5 +12,6 @@ void outputResult(zakozhurnikova::Stack< ull >& result)
     {
       std::cout << " ";
     }
+    ++quantity;
   }
 }

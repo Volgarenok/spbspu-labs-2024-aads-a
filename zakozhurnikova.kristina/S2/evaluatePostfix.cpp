@@ -39,32 +39,39 @@ int calculate(int first, int second, char operation)
 }
 
 using ull = unsigned long long;
-ull evaluatePostfix(const char* postfix)
+ull evaluatePostfix(const std::string& postfix)
 {
   zakozhurnikova::Stack< ull > stack;
-  while (*postfix)
+  for(auto it = postfix.cbegin(); it != postfix.cend(); ++it)
   {
-    char ch = *postfix;
-    if (std::isdigit(ch))
+    if (std::isdigit(*it))
     {
+      auto cpy = it;
       std::string value;
-      value.push_back(ch);
-      while (std::isdigit(*postfix))
+      value.push_back(*cpy);
+      while (std::isdigit(*cpy))
       {
-        ++postfix;
-        value.push_back(*postfix);
+        ++cpy;
+        value.push_back(*cpy);
       }
       stack.push(std::stoll(value));
+    }
+    else if (std::isspace(*it))
+    {
+      continue;
     }
     else
     {
       ull second = stack.top();
       stack.drop();
+      if (stack.empty())
+      {
+        return second;
+      }
       ull first = stack.top();
       stack.drop();
-      stack.push(calculate(first, second, ch));
+      stack.push(calculate(first, second, *it));
     }
-    ++postfix;
   }
   ull result = stack.top();
   stack.drop();
@@ -79,8 +86,7 @@ zakozhurnikova::Stack< ull >& evaluatePostfix(zakozhurnikova::Stack< ull >& resu
 {
   while (!queue.empty())
   {
-    const char* postfix = queue.top().c_str();
-    result.push(evaluatePostfix(postfix));
+    result.push(evaluatePostfix(queue.top()));
     queue.drop();
   }
   return result;
