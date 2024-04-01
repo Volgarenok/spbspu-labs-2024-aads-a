@@ -4,22 +4,19 @@
 #include "queue.hpp"
 #include "expression_type.hpp"
 
-void recognizeType(nikitov::InfixType& type, std::string& line)
+nikitov::InfixType recognizeType(std::string& line)
 {
   if (std::isdigit(line[0]))
   {
-    type.typeName = nikitov::TypeName::operand;
-    type.operand.num = stoll(line);
+    return nikitov::InfixType(nikitov::TypeName::operand, stoll(line));
   }
   else if (line[0] == '(' || line[0] == ')')
   {
-    type.typeName = nikitov::TypeName::bracket;
-    type.bracket.symb = line[0];
+    return nikitov::InfixType(nikitov::TypeName::bracket, line[0] == '(');
   }
   else
   {
-    type.typeName = nikitov::TypeName::operation;
-    type.operation.symb = line[0];
+    return nikitov::InfixType(nikitov::TypeName::operation, line[0]);
   }
   line = {};
 }
@@ -34,18 +31,15 @@ void nikitov::inputExpressions(Queue< Queue< InfixType > >& infixQueue, std::ist
     char symb = {};
     while (input >> symb)
     {
-      InfixType type;
       if (symb == ' ')
       {
-        recognizeType(type, line);
-        expression.push(type);
+        expression.push(recognizeType(line));
       }
       else if (symb == '\n')
       {
         if (!line.empty())
         {
-          recognizeType(type, line);
-          expression.push(type);
+          expression.push(recognizeType(line));
           infixQueue.push(expression);
         }
         break;
