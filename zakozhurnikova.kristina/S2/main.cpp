@@ -15,7 +15,7 @@ int main(int argc, char* argv[])
   {
     using ll = long long;
     Queue< std::string > queue;
-    Queue< ll > result;
+    Stack< ll > result;
     if (argc == 2)
     {
       std::ifstream input(argv[1]);

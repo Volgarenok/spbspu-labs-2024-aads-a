@@ -4,6 +4,6 @@
 #include "stack.hpp"
 
 using ll = long long;
-zakozhurnikova::Queue< ll >& evaluatePostfix(zakozhurnikova::Queue< ll >& result, zakozhurnikova::Queue< std::string >& queue);
+zakozhurnikova::Stack< ll >& evaluatePostfix(zakozhurnikova::Stack< ll >& result, zakozhurnikova::Queue< std::string >& queue);
 
 #endif
