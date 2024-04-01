@@ -6,6 +6,6 @@
 namespace zakozhurnikova
 {
   using ll = long long;
-  zakozhurnikova::Stack< ll >& evaluatePostfix(zakozhurnikova::Stack< ll >& result, zakozhurnikova::Queue< std::string >& queue);
+  Stack< ll >& evaluatePostfix(Stack< ll >& result, Queue< std::string >& queue);
 }
 #endif

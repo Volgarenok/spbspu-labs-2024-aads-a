@@ -5,6 +5,6 @@
 namespace zakozhurnikova
 {
   using ll = long long;
-  void outputResult(zakozhurnikova::Stack< ll >& result);
+  void outputResult(Stack< ll >& result);
 }
 #endif

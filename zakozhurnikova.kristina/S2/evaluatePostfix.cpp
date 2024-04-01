@@ -111,7 +111,8 @@ ll evaluatePostfixPart(const std::string& postfix)
   return result;
 }
 
-zakozhurnikova::Stack< ll >& zakozhurnikova::evaluatePostfix(zakozhurnikova::Stack< ll >& result, zakozhurnikova::Queue< std::string >& queue)
+namespace zak = zakozhurnikova;
+zak::Stack< ll >& zak::evaluatePostfix(zak::Stack< ll >& result, zak::Queue< std::string >& queue)
 {
   while (!queue.empty())
   {
