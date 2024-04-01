@@ -10,18 +10,18 @@ zhalilov::InfixToken::InfixToken(const InfixToken &tkn)
 }
 
 zhalilov::InfixToken::InfixToken(BinOperator aBinOperator):
-  type_(PrimaryType::BinOperator),
-  binOperator(aBinOperator)
+  binOperator(aBinOperator),
+  type_(PrimaryType::BinOperator)
 {}
 
 zhalilov::InfixToken::InfixToken(Operand aOperand):
-  type_(PrimaryType::Operand),
-  operand(aOperand)
+  operand(aOperand),
+  type_(PrimaryType::Operand)
 {}
 
 zhalilov::InfixToken::InfixToken(Bracket aBracket):
-  type_(bracket.getType()),
-  bracket(aBracket)
+  bracket(aBracket),
+  type_(bracket.getType())
 {}
 
 zhalilov::InfixToken &zhalilov::InfixToken::operator=(const InfixToken &tkn)
@@ -64,13 +64,13 @@ zhalilov::PostfixToken::PostfixToken(const PostfixToken &tkn)
 }
 
 zhalilov::PostfixToken::PostfixToken(BinOperator aBinOperator):
-  type_(PrimaryType::BinOperator),
-  binOperator(aBinOperator)
+  binOperator(aBinOperator),
+  type_(PrimaryType::BinOperator)
 {}
 
 zhalilov::PostfixToken::PostfixToken(Operand aOperand):
-  type_(PrimaryType::Operand),
-  operand(aOperand)
+  operand(aOperand),
+  type_(PrimaryType::Operand)
 {}
 
 zhalilov::PostfixToken &zhalilov::PostfixToken::operator=(const PostfixToken &tkn)
@@ -107,13 +107,13 @@ zhalilov::TransferToken::TransferToken(const TransferToken &tkn)
 }
 
 zhalilov::TransferToken::TransferToken(BinOperator aBinOperator):
-  type_(PrimaryType::BinOperator),
-  binOperator(aBinOperator)
+  binOperator(aBinOperator),
+  type_(PrimaryType::BinOperator)
 {}
 
 zhalilov::TransferToken::TransferToken(Bracket aBracket):
-  type_(aBracket.getType()),
-  bracket(aBracket)
+  bracket(aBracket),
+  type_(aBracket.getType())
 {}
 
 zhalilov::TransferToken &zhalilov::TransferToken::operator=(const TransferToken &tkn)
