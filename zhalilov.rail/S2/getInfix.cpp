@@ -13,7 +13,13 @@ void zhalilov::getInfixFromString(Queue< InfixToken > &queue, const std::string 
     if (!std::isspace(str[i]))
     {
       InfixToken undefinedTkn;
-      if (std::isspace(str[i + 1]))
+      try
+      {
+        number = std::stoll(str.substr(i), &tmp);
+        undefinedTkn = InfixToken(Operand(number));
+        i += tmp;
+      }
+      catch (...)
       {
         try
         {
@@ -23,12 +29,6 @@ void zhalilov::getInfixFromString(Queue< InfixToken > &queue, const std::string 
         {
           undefinedTkn = InfixToken(BinOperator(str[i]));
         }
-      }
-      else
-      {
-        number = std::stoll(str.substr(i), &tmp);
-        undefinedTkn = InfixToken(Operand(number));
-        i += tmp;
       }
       queue.push(undefinedTkn);
     }
