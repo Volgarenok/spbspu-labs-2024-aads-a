@@ -35,7 +35,7 @@ zhalilov::PrimaryType zhalilov::InfixToken::getType() const
   return type_;
 }
 
-void zhalilov::InfixToken::assigner(InfixToken tkn)
+void zhalilov::InfixToken::assigner(const InfixToken &tkn)
 {
   switch (tkn.type_)
   {
@@ -86,7 +86,7 @@ zhalilov::PrimaryType zhalilov::PostfixToken::getType() const
   return type_;
 }
 
-void zhalilov::PostfixToken::assigner(PostfixToken tkn)
+void zhalilov::PostfixToken::assigner(const PostfixToken &tkn)
 {
   switch (tkn.type_)
   {
@@ -131,7 +131,7 @@ zhalilov::PrimaryType zhalilov::TransferToken::getType() const
   return type_;
 }
 
-void zhalilov::TransferToken::assigner(TransferToken tkn)
+void zhalilov::TransferToken::assigner(const TransferToken &tkn)
 {
   switch (tkn.type_)
   {

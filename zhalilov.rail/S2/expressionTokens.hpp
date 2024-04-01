@@ -30,7 +30,7 @@ namespace zhalilov
   private:
     PrimaryType type_;
 
-    void assigner(InfixToken tkn);
+    void assigner(const InfixToken &tkn);
   };
 
   struct PostfixToken
@@ -53,7 +53,7 @@ namespace zhalilov
   private:
     PrimaryType type_;
 
-    void assigner(PostfixToken tkn);
+    void assigner(const PostfixToken &tkn);
   };
 
   struct TransferToken
@@ -76,7 +76,7 @@ namespace zhalilov
   private:
     PrimaryType type_;
 
-    void assigner(TransferToken tkn);
+    void assigner(const TransferToken &tkn);
   };
 }
 
