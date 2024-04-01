@@ -43,15 +43,21 @@ namespace isaychev
   }
 
   template < class T >
+  void copy_array(T * arr, T * source_arr, size_t elem_num)
+  {
+    for(size_t i = 0; i < elem_num; ++i)
+    {
+      arr[i] = source_arr[i];
+    }
+  }
+
+  template < class T >
   DataArray< T >::DataArray(const DataArray< T > & rhs):
    capacity(rhs.capacity),
    size(rhs.size),
    data(new T[rhs.capacity]{})
   {
-    for(size_t i = 0; i < rhs.size; ++i)
-    {
-      data[i] = rhs.data[i];
-    }
+    copy_array(data, rhs.data, rhs.size);
   }
 
   template < class T >
@@ -68,10 +74,7 @@ namespace isaychev
   DataArray< T > & DataArray< T >::operator=(const DataArray< T > & rhs)
   {
     data = new T[rhs.capacity]{};
-    for(size_t i = 0; i < rhs.size; ++i)
-    {
-      data[i] = rhs.data[i];
-    }
+    copy_array(data, rhs.data, rhs.size);
     capacity = rhs.capacity;
     size = rhs.size;
   }
@@ -104,7 +107,7 @@ namespace isaychev
     {
       throw std::out_of_range("No more data to pop");
     }
-    // can't pop object of unknown type
+    // can't pop object of unknown type without resizing array
     --size;
   }
 
@@ -135,10 +138,7 @@ namespace isaychev
   {
     T * temp_data = new T[capacity * 2]{};
     capacity *= 2;
-    for(size_t i = 0; i < size; ++i)
-    {
-      temp_data[i] = data[i];
-    }
+    copy_array(data, temp_data);
     delete [] data;
     data = temp_data;
   }
