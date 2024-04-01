@@ -18,7 +18,6 @@ nikitov::InfixType recognizeType(std::string& line)
   {
     return nikitov::InfixType(nikitov::TypeName::operation, line[0]);
   }
-  line = {};
 }
 
 void nikitov::inputExpressions(Queue< Queue< InfixType > >& infixQueue, std::istream& input)
@@ -34,6 +33,7 @@ void nikitov::inputExpressions(Queue< Queue< InfixType > >& infixQueue, std::ist
       if (symb == ' ')
       {
         expression.push(recognizeType(line));
+        line = {};
       }
       else if (symb == '\n')
       {
@@ -41,6 +41,7 @@ void nikitov::inputExpressions(Queue< Queue< InfixType > >& infixQueue, std::ist
         {
           expression.push(recognizeType(line));
           infixQueue.push(expression);
+          line = {};
         }
         break;
       }

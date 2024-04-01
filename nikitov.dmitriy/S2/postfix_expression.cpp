@@ -2,15 +2,8 @@
 
 void inputOperator(nikitov::PostfixExpression& expression, char symb, long long value)
 {
-  nikitov::PostfixType operation;
-  operation.typeName = nikitov::TypeName::operation;
-  operation.operation.symb = symb;
-  expression.add(operation);
-
-  nikitov::PostfixType operand;
-  operand.typeName = nikitov::TypeName::operand;
-  operand.operand.num = value;
-  expression.add(operand);
+  expression.add(nikitov::PostfixType(nikitov::TypeName::operation, symb));
+  expression.add(nikitov::PostfixType(nikitov::TypeName::operand, value));
 }
 
 nikitov::PostfixExpression nikitov::PostfixExpression::operator+(long long value) const
@@ -51,6 +44,11 @@ nikitov::PostfixExpression nikitov::PostfixExpression::operator%(long long value
 void nikitov::PostfixExpression::add(PostfixType& value)
 {
   data.push(value);
+}
+
+void nikitov::PostfixExpression::add(PostfixType&& value)
+{
+  data.push(std::move(value));
 }
 
 nikitov::PostfixType nikitov::PostfixExpression::remove()

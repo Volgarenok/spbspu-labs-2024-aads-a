@@ -1,12 +1,15 @@
 #include "expression_type.hpp"
 
-nikitov::detail::Bracket::Bracket(bool value)
+nikitov::detail::Bracket::Bracket(bool value):
+  isOpen(value)
 {}
 
-nikitov::detail::Operand::Operand(long long value)
+nikitov::detail::Operand::Operand(long long value):
+  num(value)
 {}
 
-nikitov::detail::Operation::Operation(char value)
+nikitov::detail::Operation::Operation(char value):
+  symb(value)
 {}
 
 nikitov::InfixType::InfixType(TypeName type, bool value):
@@ -41,7 +44,6 @@ nikitov::StackType::StackType(TypeName type, bool value):
   typeName(type)
 {}
 
-
 nikitov::StackType::StackType(TypeName type, char value):
   data(value),
   typeName(type)
@@ -53,6 +55,25 @@ nikitov::StackType::Data::Data(bool value):
 
 
 nikitov::StackType::Data::Data(char value):
+  operation(value)
+{}
+
+nikitov::PostfixType::PostfixType(TypeName type, long long value):
+  data(value),
+  typeName(type)
+{}
+
+nikitov::PostfixType::PostfixType(TypeName type, char value):
+  data(value),
+  typeName(type)
+{}
+
+nikitov::PostfixType::Data::Data(long long value):
+  operand(value)
+{}
+
+
+nikitov::PostfixType::Data::Data(char value):
   operation(value)
 {}
 

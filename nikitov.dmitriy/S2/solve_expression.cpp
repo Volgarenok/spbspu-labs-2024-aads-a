@@ -20,7 +20,7 @@ long long nikitov::solveExpression(PostfixExpression expression)
         long long second = solverStack.drop();
         long long first = solverStack.drop();
         long long result = 0;
-        char symb = type.operation.symb;
+        char symb = type.data.operation.symb;
         if (symb == '+')
         {
           long long maxNum = std::numeric_limits< long long >::max();
@@ -78,7 +78,7 @@ long long nikitov::solveExpression(PostfixExpression expression)
     }
     else
     {
-      solverStack.push(type.operand.num);
+      solverStack.push(type.data.operand.num);
       ++countElem;
     }
   }
