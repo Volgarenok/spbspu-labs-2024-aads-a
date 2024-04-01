@@ -65,10 +65,11 @@ int main()
     std::cout << inputString << "|";
     currentQueue.push(inputString);
   }
+  std::cout << currentQueue.size();
   while (!currentQueue.empty())
   {
+    //std::cout << processStack.top();
     std::string temp = currentQueue.front();
-    std::cout << temp;
     currentQueue.pop();
     if (std::isdigit(temp[0]))
     {
@@ -82,7 +83,8 @@ int main()
     {
       while (processStack.top() != "(")
       {
-        resultQueue.push(processStack.top());
+        std::string temp = processStack.top();
+        resultQueue.push(temp);
         processStack.pop();
       }
       processStack.pop();
@@ -95,7 +97,7 @@ int main()
       }
       else
       {
-        while ((!processStack.empty()) && (!highPriority(processStack.top())))
+        while ((!processStack.empty()) && (!highPriority(processStack.top())) && (processStack.top() != "("))
         {
           resultQueue.push(processStack.top());
           processStack.pop();
@@ -111,7 +113,7 @@ int main()
       }
       else
       {
-        while ((!processStack.empty()) && (highPriority(processStack.top())))
+        while ((!processStack.empty()) && (highPriority(processStack.top()))&& (processStack.top() != "("))
         {
           resultQueue.push(processStack.top());
           processStack.pop();
