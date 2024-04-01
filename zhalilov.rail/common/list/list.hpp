@@ -42,7 +42,7 @@ namespace zhalilov
     const T &front() const;
     const T &back() const;
 
-    size_t capacity() noexcept;
+    size_t capacity() const noexcept;
     bool empty() const noexcept;
 
     void assign(size_t, const T &);
@@ -258,7 +258,7 @@ namespace zhalilov
   }
 
   template < typename T >
-  size_t List< T >::capacity() noexcept
+  size_t List< T >::capacity() const noexcept
   {
     return m_size;
   }
