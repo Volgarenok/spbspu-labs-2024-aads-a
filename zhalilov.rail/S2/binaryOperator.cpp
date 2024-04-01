@@ -4,6 +4,8 @@
 
 #include "operand.hpp"
 
+#include <limits>
+
 zhalilov::BinOperator::BinOperator():
   type_(BinOperator::Type::Undefined)
 {}
@@ -17,13 +19,13 @@ zhalilov::BinOperator::BinOperator(char symb)
   switch (symb)
   {
   case '+':
-    type_ = BinOperator::Type::Add;
+    type_ = BinOperator::Type::Addition;
     break;
   case '-':
     type_ = BinOperator::Type::Subtraction;
     break;
   case '*':
-    type_ = BinOperator::Type::Multiply;
+    type_ = BinOperator::Type::Multiplication;
     break;
   case '/':
     type_ = BinOperator::Type::Division;
@@ -42,11 +44,11 @@ zhalilov::Operand zhalilov::BinOperator::operator()(const Operand &left, const O
 {
   switch (type_)
   {
-  case Type::Add:
+  case Type::Addition:
     return Operand(left.getNum() + right.getNum());
   case Type::Subtraction:
     return Operand(left.getNum() - right.getNum());
-  case Type::Multiply:
+  case Type::Multiplication:
     return Operand(left.getNum() * right.getNum());
   case Type::Division:
     return Operand(left.getNum() / right.getNum());
@@ -61,11 +63,11 @@ unsigned short zhalilov::BinOperator::getPriority() const
 {
   switch (type_)
   {
-  case Type::Add:
+  case Type::Addition:
     return 2;
   case Type::Subtraction:
     return 2;
-  case Type::Multiply:
+  case Type::Multiplication:
     return 1;
   case Type::Division:
     return 1;
@@ -104,4 +106,33 @@ bool zhalilov::BinOperator::operator<=(const BinOperator &other) const
 bool zhalilov::BinOperator::operator>=(const BinOperator &other) const
 {
   return getPriority() >= other.getPriority();
+}
+
+zhalilov::Operand zhalilov::BinOperator::doAddition(const Operand &a, const Operand &b) const
+{
+  long long max = std::numeric_limits< long long >::max();
+  if (max - a.getNum() < b.getNum())
+  {
+    throw std::overflow_error("addition overflow");
+  }
+  return Operand(a.getNum() + b.getNum());
+}
+
+zhalilov::Operand zhalilov::BinOperator::doSubstraction(const Operand &a, const Operand &b) const
+{
+  long long min = std::numeric_limits< long long >::min();
+  if (min + a.getNum() > b.getNum())
+  {
+    throw std::overflow_error("addition overflow");
+  }
+  return Operand(a.getNum() + b.getNum());
+}
+
+zhalilov::Operand zhalilov::BinOperator::doMultiplication(const Operand &a, const Operand &b) const
+{
+  long long max = std::numeric_limits< long long >::max();
+  if (max / b.getNum())
+  {
+
+  }
 }

@@ -13,9 +13,9 @@ namespace zhalilov
     enum class Type
     {
       Undefined,
-      Add,
+      Addition,
       Subtraction,
-      Multiply,
+      Multiplication,
       Division,
       Mod
     };
@@ -36,6 +36,12 @@ namespace zhalilov
 
   private:
     Type type_;
+
+    Operand doAddition(const Operand &, const Operand &) const;
+    Operand doSubstraction(const Operand &, const Operand &) const;
+    Operand doMultiplication(const Operand &, const Operand &) const;
+    Operand doDivision(const Operand &, const Operand &) const;
+    Operand doMod(const Operand &, const Operand &) const;
   };
 }
 
