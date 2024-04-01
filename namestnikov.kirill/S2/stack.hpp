@@ -27,7 +27,7 @@ namespace namestnikov
     }
     void push(const T & value)
     {
-      data_.push_front(value)
+      data_.push_front(value);
     }
     void pop()
     {
@@ -35,7 +35,7 @@ namespace namestnikov
     }
     T & top() const noexcept
     {
-      return data_.front()
+      return data_.front();
     }
     size_t size() const noexcept
     {
