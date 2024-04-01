@@ -8,6 +8,7 @@ namespace zhalilov
   class Operand
   {
   public:
+    Operand();
     explicit Operand(long long);
     long long getNum() const;
 
