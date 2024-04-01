@@ -79,10 +79,7 @@ void getPostfixFromInfix(std::istream &in, zakozhurnikova::Queue< std::string >&
     if (!postfix.empty())
     {
       queue.push(postfix);
-     }
-    else
-    {
-      buffer.clear();
     }
+    buffer.clear();
   }
 }
