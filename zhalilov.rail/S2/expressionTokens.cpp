@@ -115,6 +115,12 @@ zhalilov::TransferToken::TransferToken(Bracket aBracket):
   bracket(aBracket)
 {}
 
+zhalilov::TransferToken &zhalilov::TransferToken::operator=(const TransferToken &tkn)
+{
+  assigner(tkn);
+  return *this;
+}
+
 zhalilov::PrimaryType zhalilov::TransferToken::getType() const
 {
   return type_;

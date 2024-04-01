@@ -8,8 +8,6 @@
 
 namespace zhalilov
 {
-  struct TransferToken;
-
   struct InfixToken
   {
     union
