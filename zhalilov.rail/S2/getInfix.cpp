@@ -8,7 +8,7 @@ void zhalilov::getInfixFromString(Queue< InfixToken > &queue, const std::string 
   size_t i = 0;
   size_t tmp = 0;
   long long number = 0;
-  while (i != str.size())
+  while (i < str.size())
   {
     if (!std::isspace(str[i]))
     {
@@ -32,8 +32,8 @@ void zhalilov::getInfixFromString(Queue< InfixToken > &queue, const std::string 
       }
       queue.push(undefinedTkn);
     }
+    i++;
   }
-  i++;
 }
 
 void zhalilov::getInfixesFromStream(Stack< Queue< InfixToken > > &stack, std::istream &in)

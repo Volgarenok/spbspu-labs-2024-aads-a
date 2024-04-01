@@ -42,15 +42,19 @@ void zhalilov::InfixToken::assigner(const InfixToken &tkn)
   case PrimaryType::Operand:
     type_ = PrimaryType::Operand;
     operand = tkn.operand;
+    return;
   case PrimaryType::BinOperator:
     type_ = PrimaryType::BinOperator;
     binOperator = tkn.binOperator;
+    return;
   case PrimaryType::CloseBracket:
     type_ = PrimaryType::CloseBracket;
     bracket = Bracket(PrimaryType::CloseBracket);
+    return;
   case PrimaryType::OpenBracket:
     type_ = PrimaryType::OpenBracket;
-    bracket = Bracket(PrimaryType::CloseBracket);
+    bracket = Bracket(PrimaryType::OpenBracket);
+    return;
   default:
     return;
   }
@@ -93,9 +97,11 @@ void zhalilov::PostfixToken::assigner(const PostfixToken &tkn)
   case PrimaryType::Operand:
     type_ = PrimaryType::Operand;
     operand = tkn.operand;
+    return;
   case PrimaryType::BinOperator:
     type_ = PrimaryType::BinOperator;
     binOperator = tkn.binOperator;
+    return;
   default:
     return;
   }
@@ -138,12 +144,15 @@ void zhalilov::TransferToken::assigner(const TransferToken &tkn)
   case PrimaryType::BinOperator:
     type_ = PrimaryType::BinOperator;
     binOperator = tkn.binOperator;
+    return;
   case PrimaryType::CloseBracket:
     type_ = PrimaryType::CloseBracket;
     bracket = Bracket(PrimaryType::CloseBracket);
+    return;
   case PrimaryType::OpenBracket:
     type_ = PrimaryType::OpenBracket;
     bracket = Bracket(PrimaryType::CloseBracket);
+    return;
   default:
     return;
   }

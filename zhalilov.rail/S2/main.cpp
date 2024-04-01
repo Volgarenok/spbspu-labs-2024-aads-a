@@ -34,6 +34,7 @@ int main(int argc, char *argv[])
     while (!postfixes.empty())
     {
       results.push(calculateExpr(postfixes.top()));
+      postfixes.pop();
     }
   }
   catch (const std::invalid_argument &e)
@@ -44,5 +45,6 @@ int main(int argc, char *argv[])
   while (!results.empty())
   {
     std::cout << results.front() << '\n';
+    results.pop();
   }
 }
