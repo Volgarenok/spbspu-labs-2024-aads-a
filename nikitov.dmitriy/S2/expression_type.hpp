@@ -28,6 +28,18 @@ namespace nikitov
     };
   }
 
+  union Data
+  {
+    Data() = default;
+    Data(bool value);
+    Data(long long value);
+    Data(char value);
+
+    detail::Bracket bracket;
+    detail::Operand operand;
+    detail::Operation operation;
+  };
+
   enum TypeName
   {
     bracket,
@@ -42,56 +54,27 @@ namespace nikitov
     InfixType(TypeName type, long long value);
     InfixType(TypeName type, char value);
 
-    union Data
-    {
-      Data() = default;
-      Data(bool value);
-      Data(long long value);
-      Data(char value);
-
-      detail::Bracket bracket;
-      detail::Operand operand;
-      detail::Operation operation;
-    } data;
-
+    Data data;
     TypeName typeName;
   };
 
   struct StackType
   {
     StackType() = default;
-    StackType(TypeName type, bool value);
-    StackType(TypeName type, char value);
+    explicit StackType(TypeName type, bool value);
+    explicit StackType(TypeName type, char value);
 
-    union Data
-    {
-      Data() = default;
-      Data(bool value);
-      Data(char value);
-
-      detail::Bracket bracket;
-      detail::Operation operation;
-    } data;
-
+    Data data;
     TypeName typeName;
   };
 
   struct PostfixType
   {
     PostfixType() = default;
-    PostfixType(TypeName type, long long value);
-    PostfixType(TypeName type, char value);
+    explicit PostfixType(TypeName type, long long value);
+    explicit PostfixType(TypeName type, char value);
 
-    union Data
-    {
-      Data() = default;
-      Data(long long value);
-      Data(char value);
-
-      detail::Operand operand;
-      detail::Operation operation;
-    } data;
-
+    Data data;
     TypeName typeName;
   };
 }

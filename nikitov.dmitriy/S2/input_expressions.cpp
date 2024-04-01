@@ -41,7 +41,6 @@ void nikitov::inputExpressions(Queue< Queue< InfixType > >& infixQueue, std::ist
         {
           expression.push(recognizeType(line));
           infixQueue.push(expression);
-          line = {};
         }
         break;
       }

@@ -12,6 +12,18 @@ nikitov::detail::Operation::Operation(char value):
   symb(value)
 {}
 
+nikitov::Data::Data(bool value):
+  bracket(value)
+{}
+
+nikitov::Data::Data(long long value):
+  operand(value)
+{}
+
+nikitov::Data::Data(char value):
+  operation(value)
+{}
+
 nikitov::InfixType::InfixType(TypeName type, bool value):
   data(value),
   typeName(type)
@@ -27,18 +39,6 @@ nikitov::InfixType::InfixType(TypeName type, char value):
   typeName(type)
 {}
 
-nikitov::InfixType::Data::Data(bool value):
-  bracket(value)
-{}
-
-nikitov::InfixType::Data::Data(long long value):
-  operand(value)
-{}
-
-nikitov::InfixType::Data::Data(char value):
-  operation(value)
-{}
-
 nikitov::StackType::StackType(TypeName type, bool value):
   data(value),
   typeName(type)
@@ -49,15 +49,6 @@ nikitov::StackType::StackType(TypeName type, char value):
   typeName(type)
 {}
 
-nikitov::StackType::Data::Data(bool value):
-  bracket(value)
-{}
-
-
-nikitov::StackType::Data::Data(char value):
-  operation(value)
-{}
-
 nikitov::PostfixType::PostfixType(TypeName type, long long value):
   data(value),
   typeName(type)
@@ -66,15 +57,6 @@ nikitov::PostfixType::PostfixType(TypeName type, long long value):
 nikitov::PostfixType::PostfixType(TypeName type, char value):
   data(value),
   typeName(type)
-{}
-
-nikitov::PostfixType::Data::Data(long long value):
-  operand(value)
-{}
-
-
-nikitov::PostfixType::Data::Data(char value):
-  operation(value)
 {}
 
 bool nikitov::detail::Operation::operator<=(const detail::Operation& other) const
