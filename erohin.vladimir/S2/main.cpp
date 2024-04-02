@@ -2,16 +2,13 @@
 
 int main()
 {
-  long long operand = 0ll;
+  long long operand = 0;
   char operation = 0;
   while (!std::cin.eof())
   {
-    if (std::cin)
-    {
-      std::cin.clear();
-      std::cin >> operation;
-    }
     std::cin >> operand;
+    std::cin.clear();
+    std::cin >> operation;
   }
   std::cout << operation << " " << operand << "\n";
 }
