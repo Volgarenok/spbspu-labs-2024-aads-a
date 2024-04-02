@@ -141,10 +141,23 @@ zhalilov::Operand zhalilov::BinOperator::doMultiplication(const Operand &a, cons
   }
   else
   {
-    if (a.getNum() < min / b.getNum())
+    if (b.getNum() != 0 && a.getNum() < min / b.getNum())
     {
       throw std::underflow_error("mulptiplication underflow");
     }
   }
   return Operand(a.getNum() * b.getNum());
+}
+
+zhalilov::Operand zhalilov::BinOperator::doMod(const Operand &a, const Operand &b) const
+{
+  if (b.getNum() < 0)
+  {
+    throw std::invalid_argument("module can't be less than zero");
+  }
+  if (a.getNum() < 0)
+  {
+    return Operand(a.getNum() % b.getNum() + b.getNum());
+  }
+  return Operand(a.getNum() % b.getNum());
 }
