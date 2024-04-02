@@ -51,9 +51,9 @@ zhalilov::Operand zhalilov::BinOperator::operator()(const Operand &a, const Oper
   case Type::Multiplication:
     return doMultiplication(a, b);
   case Type::Division:
-    return Operand(a.getNum() / b.getNum());
+    return doDivision(a, b);
   case Type::Mod:
-    return Operand(a.getNum() % b.getNum());
+    return doMod(a, b);
   default:
     return Operand(0);
   }
@@ -147,6 +147,16 @@ zhalilov::Operand zhalilov::BinOperator::doMultiplication(const Operand &a, cons
     }
   }
   return Operand(a.getNum() * b.getNum());
+}
+
+zhalilov::Operand zhalilov::BinOperator::doDivision(const Operand &a, const Operand &b) const
+{
+  long long min = std::numeric_limits< long long >::min();
+  if (a.getNum() == min && b.getNum() == -1)
+  {
+    throw std::overflow_error("division overflow");
+  }
+  return Operand(a.getNum() / b.getNum());
 }
 
 zhalilov::Operand zhalilov::BinOperator::doMod(const Operand &a, const Operand &b) const
