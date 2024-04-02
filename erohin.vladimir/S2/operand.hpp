@@ -9,7 +9,7 @@ namespace erohin
     Operand();
     Operand(long long number);
     ~Operand() = default;
-    long long operator()();
+    long long operator()() const;
   private:
     long long numeric_;
   };

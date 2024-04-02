@@ -8,7 +8,7 @@ erohin::Operand::Operand(long long number):
   numeric_(number)
 {}
 
-long long erohin::Operand::operator()()
+long long erohin::Operand::operator()() const
 {
   return numeric_;
 }

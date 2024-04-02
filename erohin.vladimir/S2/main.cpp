@@ -13,5 +13,7 @@ int main()
   {
     std::cout << string_token << " ";
   }
-  Operand(0ull);
+  Operator oper('+');
+  Operand res = oper.evaluate(Operand(2), Operand(3));
+  std::cout << res();
 }

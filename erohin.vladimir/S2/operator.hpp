@@ -24,6 +24,13 @@ namespace erohin
   private:
     operator_t type_;
   };
+
+  Operand subtract(const Operand & lhs, const Operand & rhs);
+  Operand add(const Operand & lhs, const Operand & rhs);
+  Operand multiply(const Operand & lhs, const Operand & rhs);
+  Operand divide(const Operand & lhs, const Operand & rhs);
+  Operand mod(const Operand & lhs, const Operand & rhs);
+
 }
 
 #endif
