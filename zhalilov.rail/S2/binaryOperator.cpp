@@ -141,7 +141,7 @@ zhalilov::Operand zhalilov::BinOperator::doMultiplication(const Operand &a, cons
   }
   else
   {
-    if (a.getNum() > min / b.getNum())
+    if (a.getNum() < min / b.getNum())
     {
       throw std::underflow_error("mulptiplication underflow");
     }
