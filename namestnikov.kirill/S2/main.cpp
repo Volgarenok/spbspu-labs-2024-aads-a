@@ -3,11 +3,7 @@
 #include <queue>
 #include <string>
 #include "stack.hpp"
-
-bool highPriority(std::string op)
-{
-  return ((op == "*") || (op == "/") || (op == "%"));
-}
+#include "convert_to_postfix.hpp"
 
 int calculateExpression(int num1, int num2, std::string op)
 {
@@ -66,67 +62,7 @@ int main()
     currentQueue.push(inputString);
   }
   std::cout << currentQueue.size();
-  while (!currentQueue.empty())
-  {
-    //std::cout << processStack.top();
-    std::string temp = currentQueue.front();
-    currentQueue.pop();
-    if (std::isdigit(temp[0]))
-    {
-      resultQueue.push(temp);
-    }
-    else if (temp == "(")
-    {
-      processStack.push(temp);
-    }
-    else if (temp == ")")
-    {
-      while (processStack.top() != "(")
-      {
-        std::string temp = processStack.top();
-        resultQueue.push(temp);
-        processStack.pop();
-      }
-      processStack.pop();
-    }
-    else if ((temp == "+") || (temp == "-"))
-    {
-      if (processStack.empty())
-      {
-        processStack.push(temp);
-      }
-      else
-      {
-        while ((!processStack.empty()) && (!highPriority(processStack.top())) && (processStack.top() != "("))
-        {
-          resultQueue.push(processStack.top());
-          processStack.pop();
-        }
-        processStack.push(temp);
-      }
-    }
-    else if ((temp == "*") || (temp == "/") || (temp == "%"))
-    {
-      if (processStack.empty())
-      {
-        processStack.push(temp);
-      }
-      else
-      {
-        while ((!processStack.empty()) && (highPriority(processStack.top()))&& (processStack.top() != "("))
-        {
-          resultQueue.push(processStack.top());
-          processStack.pop();
-        }
-        processStack.push(temp);
-      }
-    }
-  }
-  while (!processStack.empty())
-  {
-    resultQueue.push(processStack.top());
-    processStack.pop();
-  }
+  namestnikov::convertToPostfix(currentQueue, resultQueue);
   /*std::string result = "";
   while (!resultQueue.empty())
   {
