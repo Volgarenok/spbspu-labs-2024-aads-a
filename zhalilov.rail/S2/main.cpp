@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
       postfixes.pop();
     }
   }
-  catch (const std::invalid_argument &e)
+  catch (const std::exception &e)
   {
     std::cerr << e.what();
     return 1;
