@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
 {
   using namespace zhalilov;
   Stack< Queue< InfixToken > > infixes;
-  Queue< long long > results;
+  Stack< long long > results;
   try
   {
     if (argc == 2)
@@ -42,9 +42,16 @@ int main(int argc, char *argv[])
     std::cerr << e.what();
     return 1;
   }
-  while (!results.empty())
+
+  if (!results.empty())
   {
-    std::cout << results.front() << '\n';
+    while (results.size() > 1)
+    {
+      std::cout << results.top() << ' ';
+      results.pop();
+    }
+    std::cout << results.top();
     results.pop();
   }
+  std::cout << '\n';
 }
