@@ -3,7 +3,7 @@
 #include <forward_list>
 #include <string>
 #include <utility>
-
+#include <assert.h>
 
 template<typename T>
 struct Node
@@ -14,7 +14,59 @@ struct Node
   Node(T _data):
     data(_data),
     next(nullptr)
-    {}
+  {}
+};
+
+template <typename T>
+struct ListIterator: public std::iterator<std::forward_iterator_tag,T>
+{
+public:
+  using this_t = ListIterator<T>;
+  ListIterator():
+    node(nullptr)
+  {}
+  ListIterator(Node<T> * node):
+    node(node)
+  {}
+  ~ListIterator() = default;
+
+//  ListIterator(const this_t &) = default;
+  this_t & operator=(const this_t &) = default;
+  this_t & operator++()
+  {
+    assert(node != nullptr);
+    node = node->next;
+    return *this;
+  }
+  this_t operator++(int)
+  {
+    assert(node != nullptr);
+    this_t result(*this);
+    ++(*this);
+    return result;
+  }
+  T & operator*()
+  {
+    assert(node != nullptr);
+    return node->data;
+  }
+  T * operator->()
+  {
+    assert(node != nullptr);
+    return std::addressof(node->data);
+  }
+
+  bool operator!=(const this_t & rhs) const
+  {
+    return node == rhs.node;
+  }
+  bool operator==(const this_t & rhs) const
+  {
+    return !(rhs == *this);
+  }
+
+private:
+  Node<T> * node;
 };
 
 template <typename T>
@@ -26,7 +78,7 @@ struct List
   List():
     head(nullptr),
     tail(nullptr)
-    {}
+  {}
 
   bool empty()
   {
@@ -83,27 +135,36 @@ struct List
     std::cout << '\n';
   }
 
- // std::iterator< std::forward_iterator_tag, T> begin() noexcept
-//	{
-//		return head;
-//	}
+  ListIterator<T> begin()
+  {
+    return ListIterator<T>(head);
+  }
 };
 
 
-//template <typename T>
-//struct ListIterator:
-//	public std::iterator<
-//	std::forward_iterator_tag,
-//	int
-//	>
-//{
-//public:
+/*
+template <typename T>
+struct List::ListIterator:
+  public std::iterator<
+  std::forward_iterator_tag,
+  T
+  >
+{
+  friend class List<T>;
+public:
+  using this_t = ListIterator<T>;
+  ListIterator():
+    node(nullptr)
+  {}
+  ListIterator(Node<T> * node):
+    node(node)
+  {}
 //	ListIterator() :
 //		node(nullptr)
 //	{}
 //	~ListIterator() = default;
 //	ListIterator(const this_t &) = default;
-//	this_t & operator=(const this_t &) = default;
+  this_t & operator=(const this_t &) = default;
 //
 //	this_t & operator++()
 //	{
@@ -118,11 +179,11 @@ struct List
 //		++(*this);
 //		return result;
 //	}
-//	T & operator*()
-//	{
-//		assert(node != nullptr);
-//		return node->data;
-//	}
+  T & operator*();
+//  {
+//    assert(node != nullptr);
+//    return node->data;
+//  }
 //	T * operator->()
 //	{
 //		assert(node != nullptr);
@@ -149,39 +210,46 @@ struct List
 //		return !(rhs == *this);
 //	}
 //
-//private:
-//	List<T> * node;
-//	using this_t = ListIterator<T>;
-//};
+private:
+  Node<T> * node;
+//  using this_t = ListIterator<T>;
+};
 
-
+template <typename T>
+T & ListIterator<T>::operator*()
+{
+  assert(node != nullptr);
+  return node->data;
+}
+*/
 int main()
 {
-	List<int> list;
-	std::cout << list.empty() << '\n';
-	list.push_back(60);
-	list.push_back(89);
-	list.push_back(3);
-	std::cout << list.empty() << '\n';
-	std::cout << list.head->data << '\n';
-	list.pop_front();
-	std::cout << list.head->data << '\n';
-	list.clear();
-	std::cout << list.empty() << '\n';
-	list.push_back(1);
+  List<int> list;
+  std::cout << list.empty() << '\n';
+  list.push_back(60);
+  list.push_back(89);
+  list.push_back(3);
+  std::cout << list.empty() << '\n';
+  std::cout << list.head->data << '\n';
+  list.pop_front();
+  std::cout << list.head->data << '\n';
+  list.clear();
+  std::cout << list.empty() << '\n';
+  list.push_back(1);
 
-	List<int> first;
-	first.push_back(1);
-	first.push_back(2);
-	//first.push_back(3);
-	List<int> second;
-	second.push_back(11);
-	second.push_back(22);
-	second.push_back(33);
-	first.print();
-	first.swap(second);
-	first.print();
-	second.print();
-	std::cout << "O: " << first.empty() << ' ' << second.empty() << '\n';
-//	std::cout << *(first.begin()) << '\n';
+  List<int> first;
+  first.push_back(1);
+  first.push_back(2);
+  //first.push_back(3);
+  List<int> second;
+  second.push_back(11);
+  second.push_back(22);
+  second.push_back(33);
+  first.print();
+  first.swap(second);
+  first.print();
+  second.print();
+  std::cout << "O: " << first.empty() << ' ' << second.empty() << '\n';
+  ListIterator<int> ptr = first.begin();
+  std::cout << *ptr << '\n';
 }
