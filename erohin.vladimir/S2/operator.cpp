@@ -25,7 +25,7 @@ erohin::Operator::Operator(char sign)
   }
 }
 
-unsigned short erohin::Operator::priority()
+unsigned short erohin::Operator::priority() const
 {
   unsigned short priority_number = 0;
   switch (type_)
@@ -49,7 +49,7 @@ unsigned short erohin::Operator::priority()
   return priority_number;
 }
 
-erohin::Operand erohin::Operator::evaluate(const Operand & lhs, const Operand & rhs)
+erohin::Operand erohin::Operator::evaluate(const Operand & lhs, const Operand & rhs) const
 {
   Operand result;
   switch (type_)

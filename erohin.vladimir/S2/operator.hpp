@@ -19,8 +19,8 @@ namespace erohin
   public:
     Operator(char sign);
     ~Operator() = default;
-    unsigned short priority();
-    Operand evaluate(const Operand & lhs, const Operand & rhs);
+    unsigned short priority() const;
+    Operand evaluate(const Operand & lhs, const Operand & rhs) const;
   private:
     operator_t type_;
   };
