@@ -1,14 +1,14 @@
 #include <iostream>
+#include <sstream>
+#include <string>
+#include <stdexcept>
 
 int main()
 {
-  long long operand = 0;
-  char operation = 0;
-  while (!std::cin.eof())
+  std::string string_token;
+  std::istringstream input("23 - 98 * ( 9 - 2 )");
+  while (input >> string_token)
   {
-    std::cin >> operand;
-    std::cin.clear();
-    std::cin >> operation;
+    std::cout << string_token << " ";
   }
-  std::cout << operation << " " << operand << "\n";
 }
