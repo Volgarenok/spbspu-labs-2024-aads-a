@@ -20,10 +20,17 @@ namespace isaychev
     void pop_front();
     void push_back(const T & rhs);
     void pop_back();
+    T & front();
+    const T & front() const;
+    T & back();
+    const T & back() const;
+
+    size_t size() const;
+    bool empty() const;
 
    private:
     size_t capacity;
-    size_t size;
+    size_t elem_count;
     T * data;
 
     void double_capacity();
@@ -32,7 +39,7 @@ namespace isaychev
   template < class T >
   DataArray< T >::DataArray():
    capacity(100),
-   size(0),
+   elem_count(0),
    data(new T[capacity]{})
   {}
 
@@ -54,29 +61,29 @@ namespace isaychev
   template < class T >
   DataArray< T >::DataArray(const DataArray< T > & rhs):
    capacity(rhs.capacity),
-   size(rhs.size),
+   elem_count(rhs.elem_count),
    data(new T[rhs.capacity]{})
   {
-    copy_array(data, rhs.data, rhs.size);
+    copy_array(data, rhs.data, rhs.elem_count);
   }
 
   template < class T >
   DataArray< T >::DataArray(DataArray< T > && rhs):
    capacity(rhs.capacity),
-   size(rhs.size),
+   elem_count(rhs.elem_count),
    data(rhs.data)
   {
     rhs.data = nullptr;
-    rhs.size = 0;
+    rhs.elem_count = 0;
   }
 
   template < class T >
   DataArray< T > & DataArray< T >::operator=(const DataArray< T > & rhs)
   {
     data = new T[rhs.capacity]{};
-    copy_array(data, rhs.data, rhs.size);
+    copy_array(data, rhs.data, rhs.elem_count);
     capacity = rhs.capacity;
-    size = rhs.size;
+    elem_count = rhs.elem_count;
   }
 
   template < class T >
@@ -85,8 +92,8 @@ namespace isaychev
     if (std::addressof(rhs) != this)
     {
       capacity = rhs.capacity;
-      size = rhs.size;
-      rhs.size = 0;
+      elem_count = rhs.elem_count;
+      rhs.elem_count = 0;
       data = rhs.data;
       rhs.data = nullptr;
     }
@@ -96,11 +103,11 @@ namespace isaychev
   template < class T >
   void DataArray< T >::push_front(const T & rhs)
   {
-    if (size == capacity)
+    if (elem_count == capacity)
     {
       double_capacity();
     }
-    for (size_t i = size; i > 0; --i)
+    for (size_t i = elem_count; i > 0; --i)
     {
       data[i] = data[i - 1];
     }
@@ -110,36 +117,36 @@ namespace isaychev
   template < class T >
   void DataArray< T >::pop_front()
   {
-    if (size == 0)
+    if (elem_count == 0)
     {
       throw std::out_of_range("No more data to pop");
     }
-    for (size_t i = 0; i < size - 1; ++i)
+    for (size_t i = 0; i < elem_count - 1; ++i)
     {
       data[i] = data[i + 1];
     }
-    --size;
+    --elem_count;
   }
 
   template < class T >
   void DataArray< T >::push_back(const T & rhs)
   {
-    if (size == capacity)
+    if (elem_count == capacity)
     {
       double_capacity();
     }
-    data[size] = rhs;
-    ++size;
+    data[elem_count] = rhs;
+    ++elem_count;
   }
 
   template < class T >
   void DataArray< T >::pop_back()
   {
-    if (size == 0)
+    if (elem_count == 0)
     {
       throw std::out_of_range("No more data to pop");
     }
-    --size;
+    --elem_count;
   }
 
   template < class T >
@@ -147,9 +154,45 @@ namespace isaychev
   {
     T * temp_data = new T[capacity * 2]{};
     capacity *= 2;
-    copy_array(data, temp_data);
+    copy_array(temp_data, data, elem_count);
     delete [] data;
     data = temp_data;
+  }
+
+  template < class T >
+  T & DataArray< T >::front()
+  {
+    return data[0];
+  }
+
+  template < class T >
+  const T & DataArray< T >::front() const
+  {
+    return data[0];
+  }
+
+  template < class T >
+  T & DataArray< T >::back()
+  {
+    return data[elem_count - 1];
+  }
+
+  template < class T >
+  const T & DataArray< T >::back() const
+  {
+    return data[elem_count - 1];
+  }
+
+  template < class T >
+  size_t DataArray< T >::size() const
+  {
+    return elem_count;
+  }
+
+  template < class T >
+  bool DataArray< T >::empty() const
+  {
+    return (elem_count == 0);
   }
 }
 
