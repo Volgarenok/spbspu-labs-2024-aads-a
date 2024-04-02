@@ -127,15 +127,14 @@ int main()
     resultQueue.push(processStack.top());
     processStack.pop();
   }
-  std::string result = "";
+  /*std::string result = "";
   while (!resultQueue.empty())
   {
     //std::cout << resultQueue.front() << "\t";
     result += resultQueue.front();
     resultQueue.pop();
   }
-  std::cout << result << "\n";
-  /*int res = 0;
+  std::cout << result << "\n";*/
   size_t countOperands = 0;
   std::stack< int > operandsStack;
   while (!resultQueue.empty())
@@ -155,9 +154,8 @@ int main()
         int num2 = operandsStack.top();
         operandsStack.pop();
         std::string op = resultQueue.front();
-        std::cout << op;
         resultQueue.pop();
-        res += calculateExpression(num1, num2, op);
+        operandsStack.push(calculateExpression(num1, num2, op));
       }
       else
       {
@@ -165,5 +163,5 @@ int main()
       }
     }
   }
-  std::cout << res;*/
+  std::cout << operandsStack.top();
 }
