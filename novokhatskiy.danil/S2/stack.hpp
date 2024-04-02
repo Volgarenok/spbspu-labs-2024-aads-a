@@ -6,7 +6,7 @@
 
 namespace novokhatskiy
 {
-  template < class T > 
+  template < class T >
   class Stack
   {
   public:
