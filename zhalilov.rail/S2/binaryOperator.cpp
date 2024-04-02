@@ -40,20 +40,20 @@ zhalilov::BinOperator::BinOperator(char symb)
   }
 }
 
-zhalilov::Operand zhalilov::BinOperator::operator()(const Operand &left, const Operand &right) const
+zhalilov::Operand zhalilov::BinOperator::operator()(const Operand &a, const Operand &b) const
 {
   switch (type_)
   {
   case Type::Addition:
-    return Operand(left.getNum() + right.getNum());
+    return doAddition(a, b);
   case Type::Subtraction:
-    return Operand(left.getNum() - right.getNum());
+    return doSubstraction(a, b);
   case Type::Multiplication:
-    return Operand(left.getNum() * right.getNum());
+    return doMultiplication(a, b);
   case Type::Division:
-    return Operand(left.getNum() / right.getNum());
+    return Operand(a.getNum() / b.getNum());
   case Type::Mod:
-    return Operand(left.getNum() % right.getNum());
+    return Operand(a.getNum() % b.getNum());
   default:
     return Operand(0);
   }
@@ -123,7 +123,7 @@ zhalilov::Operand zhalilov::BinOperator::doSubstraction(const Operand &a, const 
   long long min = std::numeric_limits< long long >::min();
   if (min + a.getNum() > b.getNum())
   {
-    throw std::overflow_error("addition overflow");
+    throw std::underflow_error("addition underflow");
   }
   return Operand(a.getNum() + b.getNum());
 }
@@ -131,8 +131,9 @@ zhalilov::Operand zhalilov::BinOperator::doSubstraction(const Operand &a, const 
 zhalilov::Operand zhalilov::BinOperator::doMultiplication(const Operand &a, const Operand &b) const
 {
   long long max = std::numeric_limits< long long >::max();
-  if (max / b.getNum())
+  if (b.getNum() != 0 && a.getNum() > max / b.getNum())
   {
-
+    throw std::overflow_error("mulptiplication overflow");
   }
+  return Operand(a.getNum() * b.getNum());
 }
