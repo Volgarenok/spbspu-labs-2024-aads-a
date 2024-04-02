@@ -9,11 +9,11 @@ namespace zakozhurnikova
   {
   public:
     Stack() = default;
-    Stack(const Stack< T >& rhs) = default;
+    Stack(const Stack< T >& rhs);
     Stack(Stack< T >&& rhs) noexcept;
     ~Stack() = default;
 
-    Stack< T >& operator=(const Stack< T >&) = default;
+    Stack< T >& operator=(const Stack< T >&);
     Stack< T >& operator=(Stack< T >&& rhs) noexcept;
 
     void push(const T& rhs);
@@ -27,9 +27,23 @@ namespace zakozhurnikova
   };
 
   template< class T >
- Stack< T >::Stack(Stack< T >&& rhs) noexcept:
+  Stack< T >::Stack(const Stack< T >& rhs) :
+    stack_(rhs.stack_)
+  {}
+
+  template< class T >
+  Stack< T >::Stack(Stack< T >&& rhs) noexcept :
     stack_(std::move(rhs.stack_))
   {}
+
+  template< class T >
+  Stack< T >& Stack< T >::operator=(const Stack< T >& rhs)
+  {
+    if (std::addressof(rhs) != this)
+    {
+      stack_(rhs.stack_);
+    }
+  }
 
   template< class T >
   Stack< T >& Stack< T >::operator=(Stack< T >&& rhs) noexcept
