@@ -4,31 +4,7 @@
 #include <string>
 #include "stack.hpp"
 #include "convert_to_postfix.hpp"
-
-int calculateExpression(int num1, int num2, std::string op)
-{
-  if (op == "+")
-  {
-    return num1 + num2;
-  }
-  else if (op == "-")
-  {
-    return num1 - num2;
-  }
-  else if (op == "*")
-  {
-    return num1 * num2;
-  }
-  else if (op == "/")
-  {
-    return num1 / num2;
-  }
-  else if (op == "%")
-  {
-    return num1 % num2;
-  }
-  return 0;
-}
+#include "calculate_postfix_expression.hpp"
 
 int main()
 {
@@ -71,33 +47,5 @@ int main()
     resultQueue.pop();
   }
   std::cout << result << "\n";*/
-  size_t countOperands = 0;
-  std::stack< int > operandsStack;
-  while (!resultQueue.empty())
-  {
-    if (std::isdigit(resultQueue.front()[0]))
-    {
-      operandsStack.push(std::stoi(resultQueue.front()));
-      resultQueue.pop();
-      ++countOperands;
-    }
-    else
-    {
-      if (countOperands > 1)
-      {
-        int num1 = operandsStack.top();
-        operandsStack.pop();
-        int num2 = operandsStack.top();
-        operandsStack.pop();
-        std::string op = resultQueue.front();
-        resultQueue.pop();
-        operandsStack.push(calculateExpression(num1, num2, op));
-      }
-      else
-      {
-        std::cerr << "Wrong expression\n";
-      }
-    }
-  }
-  std::cout << operandsStack.top();
+  std::cout << namestnikov::calculatePostfixExpression(resultQueue);
 }
