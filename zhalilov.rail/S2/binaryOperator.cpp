@@ -131,9 +131,20 @@ zhalilov::Operand zhalilov::BinOperator::doSubstraction(const Operand &a, const 
 zhalilov::Operand zhalilov::BinOperator::doMultiplication(const Operand &a, const Operand &b) const
 {
   long long max = std::numeric_limits< long long >::max();
-  if (b.getNum() != 0 && a.getNum() > max / b.getNum())
+  long long min = std::numeric_limits< long long >::min();
+  if ((a.getNum() > 0 && b.getNum() > 0) || (a.getNum() < 0 && b.getNum() < 0))
   {
-    throw std::overflow_error("mulptiplication overflow");
+    if (a.getNum() > max / b.getNum())
+    {
+      throw std::overflow_error("mulptiplication overflow");
+    }
+  }
+  else
+  {
+    if (a.getNum() > min / b.getNum())
+    {
+      throw std::underflow_error("mulptiplication underflow");
+    }
   }
   return Operand(a.getNum() * b.getNum());
 }
