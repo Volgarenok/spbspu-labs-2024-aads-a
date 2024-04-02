@@ -82,11 +82,15 @@ namespace isaychev
   template < class T >
   DataArray< T > & DataArray< T >::operator=(DataArray< T > && rhs)
   {
-    capacity = rhs.capacity;
-    size = rhs.size;
-    rhs.size = 0;
-    data = rhs.data;
-    rhs.data = nullptr;
+    if (std::addressof(rhs) != this)
+    {
+      capacity = rhs.capacity;
+      size = rhs.size;
+      rhs.size = 0;
+      data = rhs.data;
+      rhs.data = nullptr;
+    }
+    return *this;
   }
 
   template < class T >
@@ -96,8 +100,11 @@ namespace isaychev
     {
       double_capacity();
     }
-    data[size] = rhs;
-    ++size;
+    for (size_t i = size; i > 0; --i)
+    {
+      data[i] = data[i - 1];
+    }
+    data[0] = rhs;
   }
 
   template < class T >
@@ -107,7 +114,10 @@ namespace isaychev
     {
       throw std::out_of_range("No more data to pop");
     }
-    // can't pop object of unknown type without resizing array
+    for (size_t i = 0; i < size - 1; ++i)
+    {
+      data[i] = data[i + 1];
+    }
     --size;
   }
 
@@ -118,7 +128,7 @@ namespace isaychev
     {
       double_capacity();
     }
-    data[capacity - size - 1] = rhs;
+    data[size] = rhs;
     ++size;
   }
 
@@ -129,7 +139,6 @@ namespace isaychev
     {
       throw std::out_of_range("No more data to pop");
     }
-    // can't pop object of unknown type
     --size;
   }
 
@@ -145,3 +154,4 @@ namespace isaychev
 }
 
 #endif
+
