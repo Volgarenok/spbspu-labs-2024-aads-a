@@ -14,11 +14,15 @@ namespace erohin
     OPERATOR_MOD
   };
 
-  struct Operator
+  class Operator
   {
-    operator_t operation;
-    unsigned short int priority;
-    Operand (*evaluate)(const Operand &, const Operand &);
+  public:
+    Operator(char sign);
+    ~Operator() = default;
+    unsigned short priority();
+    Operand evaluate(const Operand & lhs, const Operand & rhs);
+  private:
+    operator_t type_;
   };
 }
 
