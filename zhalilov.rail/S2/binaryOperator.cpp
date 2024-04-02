@@ -125,7 +125,7 @@ zhalilov::Operand zhalilov::BinOperator::doSubstraction(const Operand &a, const 
   {
     throw std::underflow_error("addition underflow");
   }
-  return Operand(a.getNum() + b.getNum());
+  return Operand(a.getNum() - b.getNum());
 }
 
 zhalilov::Operand zhalilov::BinOperator::doMultiplication(const Operand &a, const Operand &b) const
