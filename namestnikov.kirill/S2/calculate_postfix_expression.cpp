@@ -28,7 +28,7 @@ long long calculateExpression(long long num1, long long num2, std::string op)
   return 0;
 }
 
-int namestnikov::calculatePostfixExpression(std::queue< std::string > & resultQueue)
+long long namestnikov::calculatePostfixExpression(std::queue< std::string > & resultQueue)
 {
   size_t countOperands = 0;
   std::stack< long long > operandsStack;

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <stack>
 #include <queue>
 #include <string>
@@ -7,13 +8,33 @@
 #include "calculate_postfix_expression.hpp"
 #include "input_expressions.hpp"
 
-int main()
+int main(int argc, char * argv[])
 {
   using namespace namestnikov;
   std::stack< std::queue< std::string > > infixes;
-  std::stack< int > results;
+  std::stack< long long > results;
   inputExpressions(std::cin, infixes);
   std::stack< std::queue< std::string > > postfixes;
+  if (argc == 1)
+  {
+    inputExpressions(std::cin, infixes);
+  }
+  else if (argc == 2)
+  {
+    std::ifstream in(argv[1]);
+    if (!in.is_open())
+    {
+      std::cerr << "Can not open file\n";
+      return 1;
+    }
+    inputExpressions(in, infixes);
+    in.close();
+  }
+  else
+  {
+    std::cerr << "Wrong count of parameters\n";
+    return 1;
+  }
   while (!infixes.empty())
   {
     std::queue< std::string > expression;
