@@ -44,9 +44,9 @@ int namestnikov::calculatePostfixExpression(std::queue< std::string > & resultQu
     {
       if (countOperands > 1)
       {
-        int num1 = operandsStack.top();
-        operandsStack.pop();
         int num2 = operandsStack.top();
+        operandsStack.pop();
+        int num1 = operandsStack.top();
         operandsStack.pop();
         std::string op = resultQueue.front();
         resultQueue.pop();
