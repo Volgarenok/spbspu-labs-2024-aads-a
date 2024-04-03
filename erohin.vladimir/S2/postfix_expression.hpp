@@ -9,13 +9,13 @@ namespace erohin
   struct PostfixExpression
   {
     PostfixExpression() = default;
-    PostfixExpression(InfixExpression & inf_expr);
+    PostfixExpression(const InfixExpression & inf_expr);
     ~PostfixExpression() = default;
     Operand evaluate() const;
     std::queue< Token > expression;
   };
 
-  void InfixToPostfix(std::queue< Token > & post_expr, std::stack< Token > & inf_expr);
+  void InfixToPostfix(std::queue< Token > & post_expr, std::queue< Token > inf_expr);
 }
 
 #endif

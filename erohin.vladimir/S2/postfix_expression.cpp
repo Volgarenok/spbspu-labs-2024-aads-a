@@ -1,7 +1,9 @@
 #include "postfix_expression.hpp"
 #include <stdexcept>
 
-erohin::PostfixExpression::PostfixExpression(InfixExpression & inf_expr)
+#include <stack>
+
+erohin::PostfixExpression::PostfixExpression(const InfixExpression & inf_expr)
 {
   InfixToPostfix(expression, inf_expr);
 }
@@ -11,7 +13,7 @@ erohin::Operand erohin::PostfixExpression::evaluate() const
   return Operand();
 }
 
-void erohin::InfixToPostfix(std::queue< Token > & post_expr, std::stack< Token > & inf_expr)
+void erohin::InfixToPostfix(std::queue< Token > & post_expr, std::queue< Token > inf_expr)
 {
   constexpr auto close_bt = bracket_t::CLOSE_BRACKET;
   constexpr auto open_bt = bracket_t::OPEN_BRACKET;
@@ -21,7 +23,7 @@ void erohin::InfixToPostfix(std::queue< Token > & post_expr, std::stack< Token >
   std::stack< Token > temp_stack;
   while (!inf_expr.empty())
   {
-    Token & current = inf_expr.top();
+    Token & current = inf_expr.front();
     switch (current.id)
     {
       case operand_token:

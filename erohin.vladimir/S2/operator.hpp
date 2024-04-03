@@ -31,7 +31,6 @@ namespace erohin
   Operand multiply(const Operand & lhs, const Operand & rhs);
   Operand divide(const Operand & lhs, const Operand & rhs);
   Operand mod(const Operand & lhs, const Operand & rhs);
-
 }
 
 #endif
