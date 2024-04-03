@@ -7,9 +7,7 @@
 
 namespace erohin
 {
-  using InfixExpression = std::queue< Token >;
-
-  std::istream & inputInfixExpression(std::istream & input, InfixExpression & inf_expr);
+  std::istream & inputInfixExpression(std::istream & input, std::queue< Token > & inf_expr);
 }
 
 #endif

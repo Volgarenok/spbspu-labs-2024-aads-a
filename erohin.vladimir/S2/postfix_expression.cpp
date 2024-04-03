@@ -3,23 +3,44 @@
 
 #include <stack>
 
-erohin::PostfixExpression::PostfixExpression(const InfixExpression & inf_expr)
+erohin::PostfixExpression::PostfixExpression(const std::queue< Token > & inf_expr)
 {
   InfixToPostfix(expression, inf_expr);
 }
 
 erohin::Operand erohin::PostfixExpression::evaluate() const
 {
-  return Operand();
+  std::stack< Token > temp_stack;
+  std::queue< Token > init_queue(expression);
+  while (!init_queue.empty())
+  {
+    Token & current = init_queue.front();
+    if (current.id == operand_token)
+    {
+      temp_stack.push(current);
+    }
+    else if (current.id == operator_token)
+    {
+      Operand top_operand[2];
+      for (int i = 0; i < 2; ++i)
+      {
+        if (temp_stack.empty())
+        {
+          throw std::runtime_error("Error in postfix expression evaluating");
+        }
+        top_operand[i] = temp_stack.top().token.operand;
+        temp_stack.pop();
+      }
+      Operand result = current.token.operation.evaluate(top_operand[0], top_operand[1]);
+      temp_stack.push(Token{ token_identifier_t::OPERAND_TYPE, result });
+    }
+    init_queue.pop();
+  }
+  return temp_stack.top().token.operand;
 }
 
 void erohin::InfixToPostfix(std::queue< Token > & post_expr, std::queue< Token > inf_expr)
 {
-  constexpr auto close_bt = bracket_t::CLOSE_BRACKET;
-  constexpr auto open_bt = bracket_t::OPEN_BRACKET;
-  constexpr auto bracket_token = token_identifier_t::BRACKET_TYPE;
-  constexpr auto operand_token = token_identifier_t::OPERAND_TYPE;
-  constexpr auto operator_token = token_identifier_t::OPERATOR_TYPE;
   std::stack< Token > temp_stack;
   while (!inf_expr.empty())
   {
@@ -62,5 +83,6 @@ void erohin::InfixToPostfix(std::queue< Token > & post_expr, std::queue< Token >
         inf_expr.pop();
         break;
     }
+    inf_expr.pop();
   }
 }

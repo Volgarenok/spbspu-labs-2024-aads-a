@@ -3,7 +3,7 @@
 #include <string>
 #include <stdexcept>
 
-std::istream & erohin::inputInfixExpression(std::istream & input, InfixExpression & inf_expr)
+std::istream & erohin::inputInfixExpression(std::istream & input, std::queue< Token > & inf_expr)
 {
   std::istream::sentry sentry(input);
   if (!sentry)
@@ -43,6 +43,7 @@ std::istream & erohin::inputInfixExpression(std::istream & input, InfixExpressio
       }
     }
     inf_expr.push(Token{ temp_id, temp_token });
+    std::cout << string_token;
   }
   return input;
 }
