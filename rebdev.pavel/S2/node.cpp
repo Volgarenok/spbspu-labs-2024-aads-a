@@ -108,5 +108,5 @@ long long rebdev::node::getPriority() const noexcept
 
 bool rebdev::node::isSignSame(long long f, long long s) const noexcept
 {
-  return (((f > 0) && (s > 0)) || (f < 0) && (s < 0));
+  return (((f > 0) && (s > 0)) || ((f < 0) && (s < 0)));
 }
