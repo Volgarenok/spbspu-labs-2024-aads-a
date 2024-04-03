@@ -24,6 +24,7 @@ namespace erohin
   private:
     operator_t type_;
   };
+  bool operator>=(const Operator & lhs, const Operator & rhs);
 
   Operand subtract(const Operand & lhs, const Operand & rhs);
   Operand add(const Operand & lhs, const Operand & rhs);

@@ -49,7 +49,15 @@ void erohin::InfixToPostfix(std::queue< Token > & post_expr, std::stack< Token >
         }
         break;
       case operator_token:
-
+        Token & top = temp_stack.top();
+        while (top.id == operator_token && current.token.operation >= top.token.operation && !temp_stack.empty())
+        {
+          top = temp_stack.top();
+          post_expr.push(top);
+          temp_stack.pop();
+        }
+        temp_stack.push(current);
+        inf_expr.pop();
         break;
     }
   }

@@ -73,6 +73,11 @@ erohin::Operand erohin::Operator::evaluate(const Operand & lhs, const Operand & 
   return result;
 }
 
+bool erohin::operator>=(const Operator & lhs, const Operator & rhs)
+{
+  return lhs.priority() <= rhs.priority();
+}
+
 erohin::Operand erohin::subtract(const Operand & lhs, const Operand & rhs)
 {
   return Operand(lhs() - rhs());
