@@ -25,12 +25,15 @@ void namestnikov::inputExpression(std::string s, std::queue< std::string > & exp
     expression.push(value);
     s.erase(0, pos + delimeter.length());
   }*/
+  //std::cout << s.size();
   size_t i = 0;
   while (i < s.size())
   {
     if (!std::isspace(s[i]))
     {
-      expression.push(std::to_string(s[i]));
+      std::string value(1, s[i]);
+      expression.push(value);
     }
+    ++i;
   }
 }

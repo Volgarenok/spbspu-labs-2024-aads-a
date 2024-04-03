@@ -1,6 +1,7 @@
 #include "calculate_postfix_expression.hpp"
 #include <stack>
 #include <stdexcept>
+#include <iostream>
 
 int calculateExpression(int num1, int num2, std::string op)
 {
