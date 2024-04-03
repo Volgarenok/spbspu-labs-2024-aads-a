@@ -2,30 +2,55 @@
 #include <stack>
 #include <stdexcept>
 #include <iostream>
+#include <limits>
 
 long long calculateExpression(long long num1, long long num2, std::string op)
 {
+  long long result = 0ll;
   if (op == "+")
   {
-    return num1 + num2;
+    long long maxLong = std::numeric_limits< long long >::max();
+    if (maxLong - num2 < num1)
+    {
+      throw std::out_of_range("Overflow error");
+    }
+    result = num1 + num2;
   }
   else if (op == "-")
   {
-    return num1 - num2;
+    long long minLong = std::numeric_limits< long long >::min();
+    if (minLong + num1 > num1)
+    {
+      throw std::out_of_range("Overflow error");
+    }
+    result = num1 - num2;
   }
   else if (op == "*")
   {
-    return num1 * num2;
+    result = num1 * num2;
   }
   else if (op == "/")
   {
-    return num1 / num2;
+    if (num2 == 0)
+    {
+      throw std::logic_error("Division by zero error");
+    }
+    long long minLong = std::numeric_limits< long long >::min();
+    if ((num1 == minLong) && (num2 == -1))
+    {
+      throw std::out_of_range("Overflow error");
+    }
+    result = num1 / num2;
   }
   else if (op == "%")
   {
-    return num1 % num2;
+    (num1 % num2 < 0) ? result = num1 % num2 + num2 : result = num1 % num2;
   }
-  return 0;
+  else
+  {
+    throw std::invalid_argument("Wrong operator");
+  }
+  return result;
 }
 
 long long namestnikov::calculatePostfixExpression(std::queue< std::string > & resultQueue)
