@@ -3,7 +3,7 @@
 #include <string>
 #include <stdexcept>
 
-std::istream & erohin::inputInfixExpression(std::istream & input, infix_expression & inf_expr)
+std::istream & erohin::inputInfixExpression(std::istream & input, InfixExpression & inf_expr)
 {
   std::istream::sentry sentry(input);
   if (!sentry)
