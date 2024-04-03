@@ -31,8 +31,21 @@ void namestnikov::inputExpression(std::string s, std::queue< std::string > & exp
   {
     if (!std::isspace(s[i]))
     {
-      std::string value(1, s[i]);
-      expression.push(value);
+      if (std::isdigit(s[i]))
+      {
+        std::string temp = "";
+        while ((s[i] != ' ') && (s[i] != '\n'))
+        {
+          temp += s[i];
+          ++i;
+        }
+        expression.push(temp);
+      }
+      else
+      {
+        std::string value(1, s[i]);
+        expression.push(value);
+      }
     }
     ++i;
   }
