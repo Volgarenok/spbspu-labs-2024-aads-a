@@ -34,35 +34,21 @@ void namestnikov::convertToPostfix(std::queue< std::string > & currentQueue, std
     }
     else if ((temp == "+") || (temp == "-"))
     {
-      if (processStack.empty())
+      while ((!processStack.empty()) && (!highPriority(processStack.top())) && (processStack.top() != "("))
       {
-        processStack.push(temp);
+        resultQueue.push(processStack.top());
+        processStack.pop();
       }
-      else
-      {
-        while ((!processStack.empty()) && (!highPriority(processStack.top())) && (processStack.top() != "("))
-        {
-          resultQueue.push(processStack.top());
-          processStack.pop();
-        }
-        processStack.push(temp);
-      }
+      processStack.push(temp);
     }
     else if ((temp == "*") || (temp == "/") || (temp == "%"))
     {
-      if (processStack.empty())
+      while ((!processStack.empty()) && (highPriority(processStack.top())) && (processStack.top() != "("))
       {
-        processStack.push(temp);
+        resultQueue.push(processStack.top());
+        processStack.pop();
       }
-      else
-      {
-        while ((!processStack.empty()) && (highPriority(processStack.top()))&& (processStack.top() != "("))
-        {
-          resultQueue.push(processStack.top());
-          processStack.pop();
-        }
-        processStack.push(temp);
-      }
+      processStack.push(temp);
     }
   }
   while (!processStack.empty())
