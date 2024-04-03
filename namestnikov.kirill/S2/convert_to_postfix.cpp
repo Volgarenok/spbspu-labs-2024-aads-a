@@ -1,10 +1,28 @@
 #include "convert_to_postfix.hpp"
 #include <queue>
 #include <stack>
+#include <stdexcept>
 
-bool highPriority(std::string op)
+
+int getPrecedence(std::string op)
 {
-  return ((op == "*") || (op == "/") || (op == "%"));
+  if ((op == "/") || (op == "*"))
+  {
+    return 2;
+  }
+  else if ((op == "+") || (op == "-"))
+  {
+    return 1;
+  }
+  else
+  {
+    throw std::invalid_argument("Wrong operator");
+  }
+}
+
+bool hasHigherPriority(std::string op1, std::string op2)
+{
+  return ((op1 != "(") && (((getPrecedence(op1) == 2) && getPrecedence(op2) == 2) || getPrecedence(op2) == 1));
 }
 
 void namestnikov::convertToPostfix(std::queue< std::string > & currentQueue, std::queue< std::string > & resultQueue)
@@ -34,7 +52,7 @@ void namestnikov::convertToPostfix(std::queue< std::string > & currentQueue, std
     }
     else if ((temp == "+") || (temp == "-"))
     {
-      while ((!processStack.empty()) && (!highPriority(processStack.top())) && (processStack.top() != "("))
+      while ((!processStack.empty()) && (hasHigherPriority(processStack.top(), temp)) && (processStack.top() != "("))
       {
         resultQueue.push(processStack.top());
         processStack.pop();
@@ -43,7 +61,7 @@ void namestnikov::convertToPostfix(std::queue< std::string > & currentQueue, std
     }
     else if ((temp == "*") || (temp == "/") || (temp == "%"))
     {
-      while ((!processStack.empty()) && (highPriority(processStack.top())) && (processStack.top() != "("))
+      while ((!processStack.empty()) && (hasHigherPriority(processStack.top(), temp)) && (processStack.top() != "("))
       {
         resultQueue.push(processStack.top());
         processStack.pop();
