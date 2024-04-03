@@ -53,8 +53,6 @@ namespace strelyaev
       bool operator<=(const List< T >& other) const;
       bool operator>=(const List< T >& other) const;
 
-
-
     private:
       Node< T >* head_;
       Node< T >* tail_;
