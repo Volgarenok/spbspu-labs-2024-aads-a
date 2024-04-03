@@ -2,10 +2,22 @@
 #include <stdexcept>
 
 #include <stack>
+#include <iostream>
 
 erohin::PostfixExpression::PostfixExpression(const std::queue< Token > & inf_expr)
 {
-  InfixToPostfix(expression, inf_expr);
+  try
+  {
+    InfixToPostfix(expression, inf_expr);
+  }
+  catch (...)
+  {
+    while (!expression.empty())
+    {
+      expression.pop();
+    }
+    throw;
+  }
 }
 
 erohin::Operand erohin::PostfixExpression::evaluate() const
@@ -48,32 +60,45 @@ void erohin::InfixToPostfix(std::queue< Token > & post_expr, std::queue< Token >
     switch (current.id)
     {
       case operand_token:
+        std::cout << "operand = " << current.token.operand() << std::endl;
         post_expr.push(current);
         inf_expr.pop();
         break;
       case bracket_token:
+        std::cout << "bracket" << std::endl;
         if (current.token.bracket.bracket_type == open_bt)
         {
           temp_stack.push(current);
-          inf_expr.pop();
         }
         else if (current.token.bracket.bracket_type == close_bt)
         {
-          Token & top = temp_stack.top();
-          while (top.id != bracket_token && top.token.bracket.bracket_type == open_bt)
+          if (temp_stack.empty())
           {
-            if ((top.id != bracket_token && top.token.bracket.bracket_type == close_bt) || temp_stack.empty())
-            {
-              throw std::runtime_error("Error in postfix expression record");
-            }
+            throw std::runtime_error("One extra bracket in postfix expression record");
+          }
+          Token & top = temp_stack.top();
+          if ((top.id == bracket_token && top.token.bracket.bracket_type == open_bt))
+          {
+            throw std::runtime_error("Empty brackets in postfix expression record");
+          }
+          while (!(top.id == bracket_token && top.token.bracket.bracket_type == open_bt))
+          {
             post_expr.push(top);
             temp_stack.pop();
+            if (temp_stack.empty())
+            {
+              throw std::runtime_error("One extra bracket in postfix expression record");
+            }
+            top = temp_stack.top();
           }
+          temp_stack.pop();
         }
+        inf_expr.pop();
         break;
       case operator_token:
+        std::cout << "operator" << std::endl;
         Token & top = temp_stack.top();
-        while (top.id == operator_token && current.token.operation >= top.token.operation && !temp_stack.empty())
+        while ((!temp_stack.empty()) && (top.id == operator_token) && (current.token.operation >= top.token.operation))
         {
           top = temp_stack.top();
           post_expr.push(top);
@@ -83,6 +108,14 @@ void erohin::InfixToPostfix(std::queue< Token > & post_expr, std::queue< Token >
         inf_expr.pop();
         break;
     }
-    inf_expr.pop();
+  }
+  if (!temp_stack.empty() && temp_stack.top().id == operator_token)
+  {
+    post_expr.push(temp_stack.top());
+    temp_stack.pop();
+  }
+  if (!temp_stack.empty())
+  {
+    throw std::runtime_error("One extra bracket in postfix expression record");
   }
 }

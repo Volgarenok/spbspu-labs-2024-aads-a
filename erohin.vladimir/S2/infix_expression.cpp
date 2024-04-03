@@ -17,7 +17,7 @@ std::istream & erohin::inputInfixExpression(std::istream & input, std::queue< To
   {
     try
     {
-      temp_token.operand = Operand(stoll(string_token));
+      temp_token.operand = Operand(std::stoll(string_token));
       temp_id = token_identifier_t::OPERAND_TYPE;
     }
     catch (const std::invalid_argument &)
@@ -45,6 +45,7 @@ std::istream & erohin::inputInfixExpression(std::istream & input, std::queue< To
     inf_expr.push(Token{ temp_id, temp_token });
     std::cout << string_token;
   }
+  std::cout << "\n";
   return input;
 }
 
