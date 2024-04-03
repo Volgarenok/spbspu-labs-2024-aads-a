@@ -11,7 +11,7 @@ namespace erohin
 
   struct Bracket
   {
-    bracket_t bracket;
+    bracket_t bracket_type;
   };
 }
 

@@ -3,7 +3,9 @@
 #include <stdexcept>
 #include "token.hpp"
 #include "infix_expression.hpp"
+
 #include <queue>
+#include <stack>
 
 int main()
 {

@@ -3,11 +3,12 @@
 
 #include <iosfwd>
 #include <queue>
+#include <stack>
 #include "token.hpp"
 
 namespace erohin
 {
-  using InfixExpression = std::queue< Token >;
+  using InfixExpression = std::stack< Token >;
 
   std::istream & inputInfixExpression(std::istream & input, InfixExpression & inf_expr);
 }

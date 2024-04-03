@@ -15,7 +15,7 @@ namespace erohin
     std::queue< Token > expression;
   };
 
-  void InfixToPostfix(std::queue< Token > & post_expr, std::queue< Token > & inf_expr);
+  void InfixToPostfix(std::queue< Token > & post_expr, std::stack< Token > & inf_expr);
 }
 
 #endif
