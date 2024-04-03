@@ -3,7 +3,7 @@
 #include <exception>
 #include "queue.hpp"
 #include "stack.hpp"
-#include "expression_type.hpp"
+#include "expression_types.hpp"
 #include "postfix_expression.hpp"
 
 long long nikitov::solveExpression(PostfixExpression expression)

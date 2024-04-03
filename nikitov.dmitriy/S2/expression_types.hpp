@@ -1,5 +1,5 @@
-#ifndef EXPRESSION_TYPE_HPP
-#define EXPRESSION_TYPE_HPP
+#ifndef EXPRESSION_TYPES_HPP
+#define EXPRESSION_TYPES_HPP
 
 namespace nikitov
 {
