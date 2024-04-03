@@ -10,7 +10,7 @@ int getPrecedence(std::string op)
   {
     return 2;
   }
-  else if ((op == "+") || (op == "-"))
+  else if ((op == "+") || (op == "-") || (op == "%"))
   {
     return 1;
   }
@@ -50,18 +50,9 @@ void namestnikov::convertToPostfix(std::queue< std::string > & currentQueue, std
       }
       processStack.pop();
     }
-    else if ((temp == "+") || (temp == "-"))
+    else if ((temp == "+") || (temp == "-") || (temp == "*") || (temp == "/") || (temp == "%"))
     {
-      while ((!processStack.empty()) && (hasHigherPriority(processStack.top(), temp)) && (processStack.top() != "("))
-      {
-        resultQueue.push(processStack.top());
-        processStack.pop();
-      }
-      processStack.push(temp);
-    }
-    else if ((temp == "*") || (temp == "/") || (temp == "%"))
-    {
-      while ((!processStack.empty()) && (hasHigherPriority(processStack.top(), temp)) && (processStack.top() != "("))
+      while ((!processStack.empty()) && (hasHigherPriority(processStack.top(), temp)))
       {
         resultQueue.push(processStack.top());
         processStack.pop();
