@@ -3,7 +3,7 @@
 #include <stdexcept>
 #include <iostream>
 
-int calculateExpression(int num1, int num2, std::string op)
+long long calculateExpression(long long num1, long long num2, std::string op)
 {
   if (op == "+")
   {
@@ -31,12 +31,12 @@ int calculateExpression(int num1, int num2, std::string op)
 int namestnikov::calculatePostfixExpression(std::queue< std::string > & resultQueue)
 {
   size_t countOperands = 0;
-  std::stack< int > operandsStack;
+  std::stack< long long > operandsStack;
   while (!resultQueue.empty())
   {
     if (std::isdigit(resultQueue.front()[0]))
     {
-      operandsStack.push(std::stoi(resultQueue.front()));
+      operandsStack.push(std::stoll(resultQueue.front()));
       resultQueue.pop();
       ++countOperands;
     }
@@ -44,9 +44,9 @@ int namestnikov::calculatePostfixExpression(std::queue< std::string > & resultQu
     {
       if (countOperands > 1)
       {
-        int num2 = operandsStack.top();
+        long long num2 = operandsStack.top();
         operandsStack.pop();
-        int num1 = operandsStack.top();
+        long long num1 = operandsStack.top();
         operandsStack.pop();
         std::string op = resultQueue.front();
         resultQueue.pop();

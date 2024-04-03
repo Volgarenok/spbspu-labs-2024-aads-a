@@ -6,7 +6,7 @@
 
 namespace namestnikov
 {
-  int calculatePostfixExpression(std::queue< std::string > & resultQueue);
+  long long calculatePostfixExpression(std::queue< std::string > & resultQueue);
 }
 
 #endif
