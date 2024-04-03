@@ -11,25 +11,28 @@
 int main(int argc, char ** argv)
 {
   using namespace erohin;
-  std::queue< Token > input_queue;
-  if (argc == 1)
-  {
-    inputInfixExpression(std::cin, input_queue);
-  }
-  else if (argc == 2)
-  {
-    std::ifstream file(argv[0]);
-    inputInfixExpression(file, input_queue);
-  }
-  else
-  {
-    std::cerr << "Wrong number of CLA\n";
-    return 1;
-  }
   try
   {
+    std::queue< Token > input_queue;
+    if (argc == 1)
+    {
+      inputInfixExpression(std::cin, input_queue);
+    }
+    else if (argc == 2)
+    {
+      std::ifstream file(argv[0]);
+      inputInfixExpression(file, input_queue);
+    }
+    else
+    {
+      std::cerr << "Wrong number of CLA\n";
+      return 1;
+    }
     PostfixExpression expr(input_queue);
-    std::cout << expr.evaluate()() << "\n";
+    if (!input_queue.empty())
+    {
+      std::cout << expr.evaluate()() << "\n";
+    }
   }
   catch (const std::exception & e)
   {

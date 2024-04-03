@@ -1,6 +1,8 @@
 #include "operator.hpp"
 #include "stdexcept"
 
+#include <iostream>
+
 erohin::Operator::Operator(char sign)
 {
   switch (sign)
@@ -80,21 +82,25 @@ bool erohin::operator>=(const Operator & lhs, const Operator & rhs)
 
 erohin::Operand erohin::subtract(const Operand & lhs, const Operand & rhs)
 {
+  std::cout << lhs() << " - " << rhs() << std::endl;
   return Operand(lhs() - rhs());
 }
 
 erohin::Operand erohin::add(const Operand & lhs, const Operand & rhs)
 {
+  std::cout << lhs() << " + " << rhs() << std::endl;
   return Operand(lhs() + rhs());
 }
 
 erohin::Operand erohin::multiply(const Operand & lhs, const Operand & rhs)
 {
+  std::cout << lhs() << " * " << rhs() << std::endl;
   return Operand(lhs() * rhs());
 }
 
 erohin::Operand erohin::divide(const Operand & lhs, const Operand & rhs)
 {
+  std::cout << lhs() << " / " << rhs() << std::endl;
   if (rhs() == 0)
   {
     throw std::invalid_argument("Division by 0");
@@ -104,6 +110,7 @@ erohin::Operand erohin::divide(const Operand & lhs, const Operand & rhs)
 
 erohin::Operand erohin::mod(const Operand & lhs, const Operand & rhs)
 {
+  std::cout << lhs() << " % " << rhs() << std::endl;
   if (rhs() == 0)
   {
     throw std::invalid_argument("Division by 0");

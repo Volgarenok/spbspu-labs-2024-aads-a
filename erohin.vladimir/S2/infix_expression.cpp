@@ -13,7 +13,7 @@ std::istream & erohin::inputInfixExpression(std::istream & input, std::queue< To
   std::string string_token;
   token_identifier_t temp_id = token_identifier_t::OPERAND_TYPE;
   token_t temp_token{ Operand() };
-  while (input >> string_token)
+  while (input.peek() != '\n' && input >> string_token)
   {
     try
     {
