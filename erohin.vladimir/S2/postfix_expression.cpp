@@ -1,12 +1,12 @@
 #include "postfix_expression.hpp"
 #include <stdexcept>
+#include <iostream>
 
 #include <stack>
-#include <iostream>
 
 erohin::PostfixExpression::PostfixExpression(const std::queue< Token > & inf_expr)
 {
-  InfixToPostfix(expression, inf_expr);
+  convertInfixToPostfix(expression, inf_expr);
 }
 
 erohin::Operand erohin::PostfixExpression::evaluate() const
@@ -46,7 +46,7 @@ erohin::Operand erohin::PostfixExpression::evaluate() const
   return result;
 }
 
-void erohin::InfixToPostfix(std::queue< Token > & post_expr, std::queue< Token > inf_expr)
+void erohin::convertInfixToPostfix(std::queue< Token > & post_expr, std::queue< Token > inf_expr)
 {
   std::stack< Token > temp_stack;
   while (!inf_expr.empty())
@@ -55,12 +55,10 @@ void erohin::InfixToPostfix(std::queue< Token > & post_expr, std::queue< Token >
     switch (current.id)
     {
       case operand_token:
-        std::cout << "operand = " << current.token.operand() << std::endl;
         post_expr.push(current);
         inf_expr.pop();
         break;
       case bracket_token:
-        std::cout << "bracket" << std::endl;
         if (current.token.bracket.bracket_type == open_bt)
         {
           temp_stack.push(current);
@@ -91,7 +89,6 @@ void erohin::InfixToPostfix(std::queue< Token > & post_expr, std::queue< Token >
         inf_expr.pop();
         break;
       case operator_token:
-        std::cout << "operator" << std::endl;
         if (temp_stack.empty())
         {
           temp_stack.push(current);
@@ -126,4 +123,34 @@ void erohin::InfixToPostfix(std::queue< Token > & post_expr, std::queue< Token >
   {
     throw std::runtime_error("One extra bracket in postfix expression record");
   }
+}
+
+void erohin::inputPostfixExpressionLines(std::istream & input, std::queue< PostfixExpression > & expr_lines)
+{
+  bool isAnyExpressionCorrect = true;
+  while (!input.eof())
+  {
+    try
+    {
+      expression current_expr;
+      inputInfixExpression(input, current_expr);
+      if (!current_expr.empty())
+      {
+        expr_lines.push(PostfixExpression(current_expr));
+      }
+    }
+    catch (...)
+    {
+      isAnyExpressionCorrect = false;
+    }
+  }
+  if (!isAnyExpressionCorrect)
+  {
+    throw std::runtime_error("Wrong input or evaluating of expression");
+  }
+}
+
+void erohin::calculatePostfixExpressions(std::stack< long long > results, std::queue< PostfixExpression > expr_lines)
+{
+
 }

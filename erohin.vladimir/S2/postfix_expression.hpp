@@ -2,6 +2,8 @@
 #define POSTFIC_EXPRESSION_HPP
 
 #include <queue>
+#include <stack>
+#include <iosfwd>
 #include "infix_expression.hpp"
 
 namespace erohin
@@ -22,7 +24,9 @@ namespace erohin
     std::queue< Token > expression;
   };
 
-  void InfixToPostfix(std::queue< Token > & post_expr, std::queue< Token > inf_expr);
+  void convertInfixToPostfix(std::queue< Token > & post_expr, std::queue< Token > inf_expr);
+  void inputPostfixExpressionLines(std::istream & input, std::queue< PostfixExpression > & expr_lines);
+  void calculatePostfixExpressions(std::stack< long long > results, std::queue< PostfixExpression > expr_lines);
 }
 
 #endif

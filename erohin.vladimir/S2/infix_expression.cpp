@@ -3,17 +3,14 @@
 #include <string>
 #include <stdexcept>
 
-std::istream & erohin::inputInfixExpression(std::istream & input, std::queue< Token > & inf_expr)
+void erohin::inputInfixExpression(std::istream & input, expression & inf_expr)
 {
-  std::istream::sentry sentry(input);
-  if (!sentry)
-  {
-    return input;
-  }
   std::string string_token;
   token_identifier_t temp_id = token_identifier_t::OPERAND_TYPE;
   token_t temp_token{ Operand() };
-  while (input.peek() != '\n' && input >> string_token)
+  bool isUnidentifiedTokenFound = false;
+  input >> string_token;
+  while (input)
   {
     try
     {
@@ -39,11 +36,18 @@ std::istream & erohin::inputInfixExpression(std::istream & input, std::queue< To
       }
       else
       {
-        throw std::logic_error("Unidentified token");
+        throw;
       }
     }
     inf_expr.push(Token{ temp_id, temp_token });
+    if (input.peek() == '\n')
+    {
+      break;
+    }
+    input >> string_token;
   }
-  return input;
+  if (isUnidentifiedTokenFound)
+  {
+    throw std::logic_error("Unidentified token is found");
+  }
 }
-
