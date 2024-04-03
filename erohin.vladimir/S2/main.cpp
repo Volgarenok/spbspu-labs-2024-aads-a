@@ -29,12 +29,12 @@ int main(int argc, char ** argv)
   try
   {
     PostfixExpression expr(input_queue);
+    std::cout << expr.evaluate()() << "\n";
   }
   catch (const std::exception & e)
   {
     std::cerr << e.what() << "\n";
+    return 2;
   }
-  Operator oper('+');
-  Operand res = oper.evaluate(Operand(2), Operand(3));
-  std::cout << res();
+  return 0;
 }

@@ -43,9 +43,7 @@ std::istream & erohin::inputInfixExpression(std::istream & input, std::queue< To
       }
     }
     inf_expr.push(Token{ temp_id, temp_token });
-    std::cout << string_token;
   }
-  std::cout << "\n";
   return input;
 }
 

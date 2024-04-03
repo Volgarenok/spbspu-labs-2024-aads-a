@@ -6,18 +6,7 @@
 
 erohin::PostfixExpression::PostfixExpression(const std::queue< Token > & inf_expr)
 {
-  try
-  {
-    InfixToPostfix(expression, inf_expr);
-  }
-  catch (...)
-  {
-    while (!expression.empty())
-    {
-      expression.pop();
-    }
-    throw;
-  }
+  InfixToPostfix(expression, inf_expr);
 }
 
 erohin::Operand erohin::PostfixExpression::evaluate() const
@@ -43,7 +32,7 @@ erohin::Operand erohin::PostfixExpression::evaluate() const
         top_operand[i] = temp_stack.top().token.operand;
         temp_stack.pop();
       }
-      Operand result = current.token.operation.evaluate(top_operand[0], top_operand[1]);
+      Operand result = current.token.operation.evaluate(top_operand[1], top_operand[0]);
       temp_stack.push(Token{ token_identifier_t::OPERAND_TYPE, result });
     }
     init_queue.pop();
@@ -109,7 +98,7 @@ void erohin::InfixToPostfix(std::queue< Token > & post_expr, std::queue< Token >
         break;
     }
   }
-  if (!temp_stack.empty() && temp_stack.top().id == operator_token)
+  while (!temp_stack.empty() && temp_stack.top().id == operator_token)
   {
     post_expr.push(temp_stack.top());
     temp_stack.pop();
