@@ -11,27 +11,27 @@ nikitov::PostfixExpression nikitov::convertExpression(Queue< InfixType > infixEx
   Stack< StackType > operandsStack;
   while (!infixExpression.empty())
   {
-    InfixType type = infixExpression.drop();
-    if (type.typeName == TypeName::operand)
+    InfixType infixValue = infixExpression.drop();
+    if (infixValue.type == ExprTypeName::operand)
     {
-      long long value = type.data.operand.num;
-      postfixExpression.add(PostfixType(TypeName::operand, value));
+      long long value = infixValue.data.operand.num;
+      postfixExpression.add(PostfixType(ExprTypeName::operand, value));
     }
     else
     {
-      if (type.typeName == TypeName::bracket)
+      if (infixValue.type == ExprTypeName::bracket)
       {
-        if (type.data.bracket.isOpen)
+        if (infixValue.data.bracket.isOpen)
         {
-          bool value = type.data.bracket.isOpen;
-          operandsStack.push(StackType(TypeName::bracket, value));
+          bool value = infixValue.data.bracket.isOpen;
+          operandsStack.push(StackType(ExprTypeName::bracket, value));
         }
         else
         {
-          while (!operandsStack.empty() && !operandsStack.top().typeName == nikitov::bracket)
+          while (!operandsStack.empty() && !operandsStack.top().type == nikitov::bracket)
           {
             char value = operandsStack.drop().data.operation.symb;
-            postfixExpression.add(PostfixType(TypeName::operation, value));
+            postfixExpression.add(PostfixType(ExprTypeName::operation, value));
           }
           if (operandsStack.empty())
           {
@@ -42,33 +42,33 @@ nikitov::PostfixExpression nikitov::convertExpression(Queue< InfixType > infixEx
       }
       else
       {
-        while (!operandsStack.empty() && operandsStack.top().typeName != TypeName::bracket)
+        while (!operandsStack.empty() && operandsStack.top().type != ExprTypeName::bracket)
         {
-          if (type.data.operation <= operandsStack.top().data.operation)
+          if (infixValue.data.operation <= operandsStack.top().data.operation)
           {
             char value = operandsStack.drop().data.operation.symb;
-            postfixExpression.add(PostfixType(TypeName::operation, value));
+            postfixExpression.add(PostfixType(ExprTypeName::operation, value));
           }
           else
           {
             break;
           }
         }
-        char value = type.data.operation.symb;
-        operandsStack.push(StackType(TypeName::operation, value));
+        char value = infixValue.data.operation.symb;
+        operandsStack.push(StackType(ExprTypeName::operation, value));
       }
     }
   }
 
   while (!operandsStack.empty())
   {
-    StackType type = operandsStack.drop();
-    if (type.typeName == TypeName::bracket)
+    StackType stackValue = operandsStack.drop();
+    if (stackValue.type == ExprTypeName::bracket)
     {
       throw std::logic_error("Error: Wrong brackets");
     }
-    char value = type.data.operation.symb;
-    postfixExpression.add(PostfixType(TypeName::operation, value));
+    char value = stackValue.data.operation.symb;
+    postfixExpression.add(PostfixType(ExprTypeName::operation, value));
   }
   return postfixExpression;
 }

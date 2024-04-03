@@ -12,15 +12,15 @@ long long nikitov::solveExpression(PostfixExpression expression)
   size_t countElem = 0;
   while (!expression.empty())
   {
-    PostfixType type = expression.remove();
-    if (type.typeName == TypeName::operation)
+    PostfixType postfixValue = expression.remove();
+    if (postfixValue.type == ExprTypeName::operation)
     {
       if (countElem >= 2)
       {
         long long second = solverStack.drop();
         long long first = solverStack.drop();
         long long result = 0;
-        char symb = type.data.operation.symb;
+        char symb = postfixValue.data.operation.symb;
         switch (symb)
         {
         case '+':
@@ -89,7 +89,7 @@ long long nikitov::solveExpression(PostfixExpression expression)
     }
     else
     {
-      solverStack.push(type.data.operand.num);
+      solverStack.push(postfixValue.data.operand.num);
       ++countElem;
     }
   }

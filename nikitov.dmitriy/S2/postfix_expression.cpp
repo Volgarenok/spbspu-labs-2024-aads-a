@@ -2,8 +2,8 @@
 
 void inputOperator(nikitov::PostfixExpression& expression, char symb, long long value)
 {
-  expression.add(nikitov::PostfixType(nikitov::TypeName::operation, symb));
-  expression.add(nikitov::PostfixType(nikitov::TypeName::operand, value));
+  expression.add(nikitov::PostfixType(nikitov::ExprTypeName::operation, symb));
+  expression.add(nikitov::PostfixType(nikitov::ExprTypeName::operand, value));
 }
 
 nikitov::PostfixExpression nikitov::PostfixExpression::operator+(long long value) const

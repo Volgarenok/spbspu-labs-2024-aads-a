@@ -24,39 +24,39 @@ nikitov::Data::Data(char value):
   operation(value)
 {}
 
-nikitov::InfixType::InfixType(TypeName type, bool value):
+nikitov::InfixType::InfixType(ExprTypeName name, bool value):
   data(value),
-  typeName(type)
+  type(name)
 {}
 
-nikitov::InfixType::InfixType(TypeName type, long long value):
+nikitov::InfixType::InfixType(ExprTypeName name, long long value):
   data(value),
-  typeName(type)
+  type(name)
 {}
 
-nikitov::InfixType::InfixType(TypeName type, char value):
+nikitov::InfixType::InfixType(ExprTypeName name, char value):
   data(value),
-  typeName(type)
+  type(name)
 {}
 
-nikitov::StackType::StackType(TypeName type, bool value):
+nikitov::StackType::StackType(ExprTypeName name, bool value):
   data(value),
-  typeName(type)
+  type(name)
 {}
 
-nikitov::StackType::StackType(TypeName type, char value):
+nikitov::StackType::StackType(ExprTypeName name, char value):
   data(value),
-  typeName(type)
+  type(name)
 {}
 
-nikitov::PostfixType::PostfixType(TypeName type, long long value):
+nikitov::PostfixType::PostfixType(ExprTypeName name, long long value):
   data(value),
-  typeName(type)
+  type(name)
 {}
 
-nikitov::PostfixType::PostfixType(TypeName type, char value):
+nikitov::PostfixType::PostfixType(ExprTypeName type, char value):
   data(value),
-  typeName(type)
+  type(type)
 {}
 
 bool nikitov::detail::Operation::operator<=(const detail::Operation& other) const

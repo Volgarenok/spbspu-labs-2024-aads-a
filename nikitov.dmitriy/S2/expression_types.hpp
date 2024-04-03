@@ -40,7 +40,7 @@ namespace nikitov
     detail::Operation operation;
   };
 
-  enum TypeName
+  enum ExprTypeName
   {
     bracket,
     operand,
@@ -50,32 +50,32 @@ namespace nikitov
   struct InfixType
   {
     InfixType() = default;
-    InfixType(TypeName type, bool value);
-    InfixType(TypeName type, long long value);
-    InfixType(TypeName type, char value);
+    InfixType(ExprTypeName type, bool value);
+    InfixType(ExprTypeName type, long long value);
+    InfixType(ExprTypeName type, char value);
 
     Data data;
-    TypeName typeName;
+    ExprTypeName type;
   };
 
   struct StackType
   {
     StackType() = default;
-    explicit StackType(TypeName type, bool value);
-    explicit StackType(TypeName type, char value);
+    explicit StackType(ExprTypeName type, bool value);
+    explicit StackType(ExprTypeName type, char value);
 
     Data data;
-    TypeName typeName;
+    ExprTypeName type;
   };
 
   struct PostfixType
   {
     PostfixType() = default;
-    explicit PostfixType(TypeName type, long long value);
-    explicit PostfixType(TypeName type, char value);
+    explicit PostfixType(ExprTypeName type, long long value);
+    explicit PostfixType(ExprTypeName type, char value);
 
     Data data;
-    TypeName typeName;
+    ExprTypeName type;
   };
 }
 #endif
