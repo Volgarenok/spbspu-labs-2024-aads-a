@@ -30,7 +30,11 @@ int main(int argc, char ** argv)
       std::cerr << "Wrong number of CLA\n";
       return 1;
     }
-    calculatePostfixExpressions(results, expr_lines);
+    while (!expr_lines.empty())
+    {
+      results.push(expr_lines.front().evaluate()());
+      expr_lines.pop();
+    }
   }
   catch (...)
   {

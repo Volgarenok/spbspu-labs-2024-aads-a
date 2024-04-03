@@ -149,8 +149,3 @@ void erohin::inputPostfixExpressionLines(std::istream & input, std::queue< Postf
     throw std::runtime_error("Wrong input or evaluating of expression");
   }
 }
-
-void erohin::calculatePostfixExpressions(std::stack< long long > results, std::queue< PostfixExpression > expr_lines)
-{
-
-}

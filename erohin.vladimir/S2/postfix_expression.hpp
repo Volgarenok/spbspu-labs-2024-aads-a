@@ -26,7 +26,6 @@ namespace erohin
 
   void convertInfixToPostfix(std::queue< Token > & post_expr, std::queue< Token > inf_expr);
   void inputPostfixExpressionLines(std::istream & input, std::queue< PostfixExpression > & expr_lines);
-  void calculatePostfixExpressions(std::stack< long long > results, std::queue< PostfixExpression > expr_lines);
 }
 
 #endif
