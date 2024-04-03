@@ -46,3 +46,23 @@ novokhatskiy::PartsOfExpression novokhatskiy::Bracket::getBracket() const noexce
 {
   return type_;
 }
+
+novokhatskiy::Expression::Expression(size_t value):
+  operand(value)
+{}
+
+
+novokhatskiy::Expression::Expression(char scope):
+  bracket(scope)
+{}
+
+novokhatskiy::InfixType::InfixType(PartsOfExpression type, char scope):
+  type_(type),
+  data_(scope)
+{}
+
+novokhatskiy::InfixType::InfixType(PartsOfExpression type, size_t value):
+  data_(value),
+  type_(type)
+{}
+

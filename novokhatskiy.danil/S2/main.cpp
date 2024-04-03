@@ -5,45 +5,23 @@
 #include "queue.hpp"
 #include "stack.hpp"
 #include "tokens.hpp"
+#include "input_infix.hpp"
 
 int main(int argc, char** argv)
 {
   using namespace novokhatskiy;
-  std::list< Queue< ExpressionType > > expressionList;
-
-  std::cin >> std::noskipws >> std::fixed;
-  while (std::cin)
-  {
-    Queue< ExpressionType > expression;
-    std::string line = {};
-    char symb = {};
-    while (std::cin >> symb)
-    {
-      ExpressionType type;
-      if (symb == ' ' || symb == '\n')
-      {
-        if (std::isdigit(line[0]))
-        {
-          type.value.num = std::stoi(line);
-          type.part = 0;
-        }
-        else
-        {
-          type.value.symb = line[0];
-          type.part = 1;
-        }
-        line = {};
-        expression.push(type);
-        if (symb == '\n')
-        {
-          expressionList.push_front(expression);
-          break;
-        }
-      }
-      else
-      {
-        line += symb;
-      }
-    }
-  }
+  std::list< Queue< Expression > > expressionList;
+	try
+	{
+		std::string str = "4 + 3";
+		checkType(str);
+		InfixType inf(PartsOfExpression::operation, '+');
+		Bracket b('(');
+		b.getBracket();
+	}
+	catch (const std::exception& e)
+	{
+		std::cerr << e.what() << '\n';
+		return 1;
+	}
 }

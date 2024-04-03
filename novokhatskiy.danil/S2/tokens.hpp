@@ -5,16 +5,7 @@
 
 namespace novokhatskiy
 {
-  struct ExpressionType
-  {
-    union ExpressionValue
-    {
-      char symb;
-      size_t num;
-    }
-    value;
-    //PartsOfExpression part_;
-  };
+  
   enum class PartsOfExpression
   {
     operand = 0,
@@ -52,6 +43,27 @@ namespace novokhatskiy
     explicit Bracket(char symb);
     PartsOfExpression getBracket() const noexcept;
   private:
+    PartsOfExpression type_;
+  };
+  union Expression
+  {
+    Expression() = default;
+    Expression(size_t value);
+    Expression(char scope);
+    //Expression(char symb);
+
+    Operand operand;
+    Bracket bracket;
+    Operation operation;
+  };
+
+  struct InfixType
+  {
+    InfixType() = default;
+    InfixType(PartsOfExpression type, char scope);
+    InfixType(PartsOfExpression type, size_t value);
+    
+    Expression data_;
     PartsOfExpression type_;
   };
 }
