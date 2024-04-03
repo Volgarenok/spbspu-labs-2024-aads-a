@@ -10,18 +10,18 @@
 int main(int argc, char** argv)
 {
   using namespace novokhatskiy;
-  std::list< Queue< Expression > > expressionList;
-	try
+  Queue< Queue< InfixType > > infixList;
+	inputInfix(infixList, std::cin);
+	/*try
 	{
 		std::string str = "4 + 3";
 		checkType(str);
 		InfixType inf(PartsOfExpression::operation, '+');
-		Bracket b('(');
-		b.getBracket();
+		Bracket b('(');		b.getBracket();
 	}
 	catch (const std::exception& e)
 	{
 		std::cerr << e.what() << '\n';
 		return 1;
-	}
+	}*/
 }
