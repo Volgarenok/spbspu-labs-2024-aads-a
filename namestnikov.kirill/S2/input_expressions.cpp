@@ -16,16 +16,6 @@ void namestnikov::inputExpressions(std::istream & in, std::stack< std::queue< st
 
 void namestnikov::inputExpression(std::string s, std::queue< std::string > & expression)
 {
-  /*std::string delimeter = " ";
-  std::string value = "";
-  size_t pos = 0;
-  while ((pos = s.find(delimeter)) != std::string::npos)
-  {
-    value = s.substr(0, pos);
-    expression.push(value);
-    s.erase(0, pos + delimeter.length());
-  }*/
-  //std::cout << s.size();
   size_t i = 0;
   while (i < s.size())
   {

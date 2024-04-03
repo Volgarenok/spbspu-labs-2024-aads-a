@@ -12,7 +12,6 @@ void namestnikov::convertToPostfix(std::queue< std::string > & currentQueue, std
   std::stack< std::string > processStack;
   while (!currentQueue.empty())
   {
-    //std::cout << processStack.top();
     std::string temp = currentQueue.front();
     currentQueue.pop();
     if (std::isdigit(temp[0]))
