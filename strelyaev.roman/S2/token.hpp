@@ -18,9 +18,9 @@ namespace strelyaev
     char operation;
   };
 
-  struct infixType
+  struct infixUnit
   {
-    infixType() = delete;
+    infixUnit() = delete;
     Token token;
     typeOfExpression type;
   };
