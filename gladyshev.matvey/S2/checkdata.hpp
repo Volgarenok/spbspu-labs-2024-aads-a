@@ -2,6 +2,7 @@
 #define CHECKDATA_HPP
 
 #include <string>
+
 namespace gladyshev
 {
   bool isNumber(const std::string& s);

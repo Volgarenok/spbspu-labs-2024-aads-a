@@ -36,12 +36,13 @@ int main(int argc, char* argv[])
         while (i < in.length() && !std::isspace(in[i]))
         {
           token += in[i];
-          i++;
+          ++i;
         }
-        if (!token.empty()) {
+        if (!token.empty())
+        {
           queuecheck.push(token);
         }
-        i++;
+        ++i;
       }
       Queue<std::string> postfix = infixToPostfix(queuecheck);
       long long int result = evaluatePostfix(postfix);
@@ -54,9 +55,13 @@ int main(int argc, char* argv[])
     return 1;
   }
   results.reverse();
+  if (!results.empty())
+  {
+    std::cout << results.drop();
+  }
   while (!results.empty())
   {
-    std::cout << results.drop() << " ";
+    std::cout << " " << results.drop();
   }
   std::cout << "\n";
 }
