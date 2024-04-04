@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <cctype>
 
 #include "myStack.hpp"
@@ -7,30 +8,48 @@
 #include "postfixFunction.hpp"
 #include "infixFunction.hpp"
 
-int main()
+int main(int argc, char ** argv)
 {
+  std::istream * istreamPointer = &std::cin;
+  std::ifstream finput;
+  if (argc > 1)
+  {
+    finput.open(argv[1]);
+    istreamPointer = &finput;
+    if (finput.peek() == EOF)
+    {
+      std::cout << '\n';
+      return 1;
+    }
+  }
+  std::istream & input = *istreamPointer;
+
   rebdev::stack< rebdev::node > operationStack;
   rebdev::queue< rebdev::node > postfixQueue;
-
-  while (!std::cin.eof())
+  while (!input.eof())
   {
-    char nextOperator = std::cin.peek();
+    char nextOperator = input.peek();
 
     if (std::isdigit(nextOperator) && (nextOperator != '-') && (nextOperator != '+'))
     {
       long long num = 0;
-      std::cin >> num;
+      input >> num;
+      if (!input)
+      {
+        std::cerr << "bad number input!\n";
+        return 1;
+      }
       postfixQueue.push(num);
     }
     else if ((nextOperator == ' ') || (nextOperator == '\n') || (nextOperator == EOF))
     {
-      std::cin >> std::noskipws;
-      std::cin >> nextOperator;
-      std::cin >> std::skipws;
+      input >> std::noskipws;
+      input >> nextOperator;
+      input >> std::skipws;
     }
     else
     {
-      std::cin >> nextOperator;
+      input >> nextOperator;
       try
       {
         rebdev::pushOperation(operationStack, postfixQueue, nextOperator);

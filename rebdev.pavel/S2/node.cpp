@@ -86,6 +86,11 @@ long long rebdev::node::getResult(long long first, long long second) const
       break;
 
     case '/':
+      if (second < 0)
+        lowOverflow = (first == llMin);
+
+      if (upOverflow || lowOverflow)
+        throw std::logic_error("overlow as a result of operation /");
 
       result = first / second;
       break;
