@@ -8,19 +8,20 @@
 #include <queue>
 #include <stack>
 #include "stack.hpp"
+#include "queue.hpp"
 
 int main(int argc, char ** argv)
 {
   using namespace erohin;
 
-  Stack< int > stack(std::list< int >({ 0, 1, 2, 3 }));
+  Queue< int > stack(std::list< int >({ 0, 1, 2, 3 }));
   for (int i = 4; i < 10; ++i)
   {
     stack.push(i);
   }
   while (!stack.empty())
   {
-    std::cout << stack.top();
+    std::cout << stack.back();
     stack.pop();
   }
 
