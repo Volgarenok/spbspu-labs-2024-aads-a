@@ -1,8 +1,9 @@
 #ifndef STACK_HPP
 #define STACK_HPP
 
-#include <list>
 #include <cstddef>
+#include <list>
+#include <utility>
 
 namespace
 {
@@ -20,6 +21,8 @@ namespace
     ~Stack();
     Stack & operator=(const Stack & other);
     Stack & operator=(Stack && other);
+    T & top();
+    const T & top() const;
     bool empty();
     size_t size();
     void push(const T & value);
@@ -81,6 +84,55 @@ namespace
       swap(temp);
     }
     return *this;
+  }
+
+  template< class T, class Container >
+  T & Stack< T, Container >::top()
+  {
+    return container_.back();
+  }
+
+  template< class T, class Container >
+  const T & Stack< T, Container >::top() const
+  {
+    return container_.back();
+  }
+
+  template< class T, class Container >
+  bool Stack< T, Container >::empty()
+  {
+    return container_.empty();
+  }
+
+  template< class T, class Container >
+  size_t Stack< T, Container >::size()
+  {
+    return container_.size();
+  }
+
+  template< class T, class Container >
+  void Stack< T, Container >::push(const T & value)
+  {
+    container_.push_back(value);
+  }
+
+  template< class T, class Container >
+  void Stack< T, Container >::push(T && value)
+  {
+    container_.push_back(std::move(value));
+  }
+
+  template< class T, class Container >
+  template< class... Args >
+  void Stack< T, Container >::emplace(Args &&... args)
+  {
+    container_.emplace_back(std::forward< Args... >(args...));
+  }
+
+  template< class T, class Container >
+  void Stack<T, Container>::pop()
+  {
+    container_.pop_back();
   }
 
   template< class T, class Container >

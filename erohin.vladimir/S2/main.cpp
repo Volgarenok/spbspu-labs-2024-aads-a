@@ -7,10 +7,24 @@
 
 #include <queue>
 #include <stack>
+#include "stack.hpp"
 
 int main(int argc, char ** argv)
 {
   using namespace erohin;
+
+  Stack< int > stack(std::list< int >({ 0, 1, 2, 3 }));
+  for (int i = 4; i < 10; ++i)
+  {
+    stack.push(i);
+  }
+  while (!stack.empty())
+  {
+    std::cout << stack.top();
+    stack.pop();
+  }
+
+
   std::queue< PostfixExpression > expr_lines;
   std::stack< long long > results;
   bool isAnyExpressionCorrect = true;
