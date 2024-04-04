@@ -6,7 +6,6 @@
 
 namespace novokhatskiy
 {
-  Postfix convertInfixToPostfix(InfixType& inf);
   Queue< Postfix > convertExpression(Queue< InfixType > infixQueue);
 }
 

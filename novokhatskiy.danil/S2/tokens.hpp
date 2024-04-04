@@ -14,43 +14,35 @@ namespace novokhatskiy
   
   struct Operand
   {
-    Operand() = default;
-    Operand(long long value);
     long long value;
+    Operand() = default;
   };
 
   struct Operation
   {
-    Operation() = default;
-    Operation(char value);
-    bool operator<(const Operation& other) const;
     char operation;
+    Operation() = default;
+    bool operator<(const Operation& other) const;
   };
 
   struct Bracket
   {
     Bracket() = default;
-    Bracket(char32_t bracket);
-    char32_t scope;
-  };
-  union Expression
-  {
-    Expression() = default;
-    Expression(long long data);
-    Expression(PartsOfExpression type, char data);
-    Operand operand;
-    Bracket bracket;
-    Operation operation;
-    PartsOfExpression type;
+    char scope;
   };
 
   struct InfixType
   {
-    InfixType() = default;
-    InfixType(PartsOfExpression type, long long data);
-    InfixType(PartsOfExpression type, char data);
-    Expression data;
+    union infix_t
+    {
+      Operand operand;
+      Operation operation;
+      Bracket bracket;
+    };
+    infix_t data;
     PartsOfExpression type;
+    void print();
+    InfixType() = default;
   };
 
   struct Postfix
@@ -59,15 +51,11 @@ namespace novokhatskiy
     {
       Operand operand;
       Operation operation;
-      postfix_t(long long value);
-      postfix_t(char value);
-      postfix_t(InfixType& inf);
     };
-    Postfix() = default;
-    Postfix(PartsOfExpression type, long long data);
-    Postfix(PartsOfExpression type, char data);
     postfix_t data;
     PartsOfExpression type;
+    Postfix() = default;
+    Postfix convertToPostfix(const InfixType& inf);
   }; 
 }
 

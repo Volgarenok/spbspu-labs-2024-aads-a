@@ -3,6 +3,7 @@
 
 #include <list>
 #include <iostream>
+#include "tokens.hpp"
 
 namespace novokhatskiy
 {
@@ -19,7 +20,8 @@ namespace novokhatskiy
     void push(const T& value);
     bool empty() const noexcept;
     size_t size() const noexcept;
-    void print();
+    void printInfix();
+    T& front();
     T drop();
     ~Queue() = default;
 
@@ -33,6 +35,12 @@ namespace novokhatskiy
   {}
 
   template < class T >
+  T& Queue< T >::front()
+  {
+    return data_.front();
+  }
+
+  template < class T >
   Queue< T >& Queue< T >::operator=(Queue< T >&& other) noexcept
   {
     if (std::addressof(other) != this)
@@ -44,12 +52,9 @@ namespace novokhatskiy
   }
 
   template < class T >
-  void Queue< T >::print()
+  void Queue< T >::printInfix()
   {
-    for (auto i = data_.begin(); i != data_.end(); i++)
-    {
-      std::cout << *i << '\t';
-    }
+    
   }
 
   template< class T >

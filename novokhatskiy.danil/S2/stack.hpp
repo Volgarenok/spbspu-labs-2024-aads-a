@@ -31,7 +31,7 @@ namespace novokhatskiy
   template < class T >
   T& Stack< T >::top() const
   {
-    return data_.front();
+    return data_.back();
   }
 
   template < class T >
