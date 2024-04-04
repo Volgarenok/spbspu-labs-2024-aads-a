@@ -9,6 +9,7 @@ void rebdev::pushOperation(stack< node > & operationStack, queue< node > & postf
       postfixQueue.push(operationStack.top());
       operationStack.pop();
     }
+    operationStack.pop();
   }
   else if (operation == '(')
   {
