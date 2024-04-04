@@ -51,7 +51,7 @@ int main()
 
   try
   {
-    std::cout << rebdev::convertPostfixToNum(postfixQueue);
+    std::cout << rebdev::convertPostfixToNum(postfixQueue) << '\n';
   }
   catch (const std::exception & e)
   {
