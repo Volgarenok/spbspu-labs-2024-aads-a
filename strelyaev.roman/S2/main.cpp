@@ -5,9 +5,14 @@
 #include <string> // TO_DEL
 #include "stack.hpp"
 
-bool isOperator(std::string& c)
+bool isOperation(std::string& c)
 {
   return ((c == "+") || (c == "-") || (c == "/") || (c == "*") || (c == "%"));
+}
+
+bool isBracket(std::string& c)
+{
+  return ((c == "(") || (c == ")"));
 }
 
 strelyaev::Queue< strelyaev::infixUnit > makeQueue(std::istream& in)
@@ -16,13 +21,22 @@ strelyaev::Queue< strelyaev::infixUnit > makeQueue(std::istream& in)
   std::string str = "";
   while (in >> str)
   {
-    if (isOperator(str))
+    if (isOperation(str))
     {
       char ch = str[0];
       strelyaev::Token new_token(ch);
       strelyaev::infixUnit new_unit{new_token, strelyaev::typeOfExpression::OPERATION};
       token_queue.push(new_unit);
-      std::cout << "{" << new_unit.token.operation << "}\n";
+      std::cout << "{" << new_unit.token.operation.operation << "}\n";
+      continue;
+    }
+    if (isBracket(str))
+    {
+      char ch = str[0];
+      strelyaev::Token new_token(ch);
+      strelyaev::infixUnit new_unit{new_token, strelyaev::typeOfExpression::BRACKET};
+      token_queue.push(new_unit);
+      std::cout << "{" << new_unit.token.bracket.bracket << "}\n";
       continue;
     }
     long long operand = 0;
@@ -37,7 +51,7 @@ strelyaev::Queue< strelyaev::infixUnit > makeQueue(std::istream& in)
     strelyaev::Token new_token(operand);
     strelyaev::infixUnit new_unit{new_token, strelyaev::typeOfExpression::OPERAND};
     token_queue.push(new_unit);
-    std::cout << "{" << new_unit.token.operand << "}\n";
+    std::cout << "{" << new_unit.token.operand.operand << "}\n";
   }
   return token_queue;
 }
@@ -45,7 +59,7 @@ strelyaev::Queue< strelyaev::infixUnit > makeQueue(std::istream& in)
 int main()
 {
   using namespace strelyaev;
-  std::string infix = "12 + 4";
+  std::string infix = "( 12 + 14 ) / 7";
   std::stringstream ss(infix);
-  Queue< infixUnit > a = makeQueue(ss);
+  Queue< infixUnit > infix_units_queue = makeQueue(ss);
 }

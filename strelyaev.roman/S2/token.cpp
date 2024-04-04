@@ -5,5 +5,16 @@ strelyaev::Token::Token(long long value):
 {}
 
 strelyaev::Token::Token(char value):
-  operation(value)
-{}
+  operand(0)
+{
+  if (value == '(' || value == ')')
+  {
+    bracket = value;
+  }
+  else
+  {
+    operation = value;
+  }
+}
+
+

@@ -1,12 +1,14 @@
 #ifndef TOKEN_HPP
 #define TOKEN_HPP
+#include "types.hpp"
 
 namespace strelyaev
 {
   enum class typeOfExpression
   {
     OPERAND = 0,
-    OPERATION = 1
+    OPERATION = 1,
+    BRACKET = 2
   };
 
   union Token
@@ -14,8 +16,10 @@ namespace strelyaev
     Token() = delete;
     Token(long long);
     Token(char);
-    long long operand;
-    char operation;
+    
+    Operand operand;
+    Operation operation;
+    Bracket bracket;
   };
 
   struct infixUnit
