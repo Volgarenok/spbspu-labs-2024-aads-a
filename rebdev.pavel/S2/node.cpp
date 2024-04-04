@@ -26,7 +26,6 @@ rebdev::node::node(char operationName):
   }
   else
   {
-    std::cerr << int(operationName) << " " << operationName << '\n';
     throw std::logic_error("unknown type of operation");
   }
 }
