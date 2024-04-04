@@ -3,7 +3,6 @@
 
 #include <cstddef>
 #include <list>
-#include <utility>
 
 namespace
 {
@@ -148,10 +147,40 @@ namespace
   }
 
   template< class T, class Container >
-  bool operator==(const Stack<T, Container> & lhs, const Stack<T, Container> & rhs);
+  bool operator==(const Stack<T, Container> & lhs, const Stack<T, Container> & rhs)
+  {
+    return (lhs.container_ == rhs.container_);
+  }
 
   template< class T, class Container >
-  bool operator<(const Stack<T, Container> & lhs, const Stack<T, Container> & rhs);
+  bool operator!=(const Stack<T, Container> & lhs, const Stack<T, Container> & rhs)
+  {
+    return (lhs.container_ != rhs.container_);
+  }
+
+  template< class T, class Container >
+  bool operator<(const Stack<T, Container> & lhs, const Stack<T, Container> & rhs)
+  {
+    return (lhs.container_ < rhs.container_);
+  }
+
+  template< class T, class Container >
+  bool operator<=(const Stack<T, Container> & lhs, const Stack<T, Container> & rhs)
+  {
+    return (lhs.container_ <= rhs.container_);
+  }
+
+  template< class T, class Container >
+  bool operator>(const Stack<T, Container> & lhs, const Stack<T, Container> & rhs)
+  {
+    return (lhs.container_ > rhs.container_);
+  }
+
+  template< class T, class Container >
+  bool operator>=(const Stack<T, Container> & lhs, const Stack<T, Container> & rhs)
+  {
+    return (lhs.container_ >= rhs.container_);
+  }
 }
 
 #endif
