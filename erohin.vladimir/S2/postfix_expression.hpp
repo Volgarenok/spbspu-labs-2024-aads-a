@@ -17,11 +17,11 @@ namespace erohin
 
   struct PostfixExpression
   {
+    std::queue< Token > expression;
     PostfixExpression() = default;
     PostfixExpression(const std::queue< Token > & inf_expr);
     ~PostfixExpression() = default;
     Operand evaluate() const;
-    std::queue< Token > expression;
   };
 
   void convertInfixToPostfix(std::queue< Token > & post_expr, std::queue< Token > inf_expr);
