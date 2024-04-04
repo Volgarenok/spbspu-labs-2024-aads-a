@@ -1,5 +1,4 @@
 #include "infixFunction.hpp"
-#include <iostream>
 
 void rebdev::pushOperation(stack< node > & operationStack, queue< node > & postfixQueue, char operation)
 {
@@ -20,7 +19,7 @@ void rebdev::pushOperation(stack< node > & operationStack, queue< node > & postf
     node newNode(operation);
     if (operationStack.size() > 0)
     {
-      while (!(newNode >= operationStack.top()))
+      while (newNode >= operationStack.top())
       {
         postfixQueue.push(operationStack.top());
         operationStack.pop();

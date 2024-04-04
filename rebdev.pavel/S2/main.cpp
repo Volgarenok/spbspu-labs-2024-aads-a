@@ -22,7 +22,7 @@ int main()
       std::cin >> num;
       postfixQueue.push(num);
     }
-    else if ((nextOperator == ' ') || (nextOperator == '\n'))
+    else if ((nextOperator == ' ') || (nextOperator == '\n') || (nextOperator == EOF))
     {
       std::cin >> std::noskipws;
       std::cin >> nextOperator;

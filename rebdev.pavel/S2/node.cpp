@@ -2,7 +2,6 @@
 
 #include <stdexcept>
 #include <limits>
-#include <iostream>
 
 rebdev::node::node(long long number) noexcept:
   number_(number),
@@ -27,6 +26,7 @@ rebdev::node::node(char operationName):
   }
   else
   {
+    std::cerr << int(operationName) << " " << operationName << '\n';
     throw std::logic_error("unknown type of operation");
   }
 }
