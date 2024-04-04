@@ -7,43 +7,50 @@ namespace novokhatskiy
 {
   enum class PartsOfExpression
   {
-    operand = 0,
-    operation = 1,
-    bracket = 2
+    OPERAND = 0,
+    OPERATION = 1,
+    BRACKET = 2
   };
   
   struct Operand
   {
     Operand() = default;
-    size_t value_;
+    Operand(long long value);
+    long long value;
   };
 
   struct Operation
   {
     Operation() = default;
+    Operation(char value);
     bool operator<(const Operation& other) const;
-    char operation_;
+    char operation;
   };
 
   struct Bracket
   {
-  public:
     Bracket() = default;
-    char scope;
+    Bracket(char32_t bracket);
+    char32_t scope;
   };
   union Expression
   {
     Expression() = default;
+    Expression(long long data);
+    Expression(PartsOfExpression type, char data);
     Operand operand;
     Bracket bracket;
     Operation operation;
+    PartsOfExpression type;
   };
 
   struct InfixType
   {
     InfixType() = default;
-    Expression data_;
-    PartsOfExpression type_;
+    InfixType(PartsOfExpression type, long long data);
+    InfixType(PartsOfExpression type, char data);
+    Expression data;
+    PartsOfExpression type;
   };
 
   struct Postfix
@@ -52,10 +59,16 @@ namespace novokhatskiy
     {
       Operand operand;
       Operation operation;
+      postfix_t(long long value);
+      postfix_t(char value);
+      postfix_t(InfixType& inf);
     };
-    postfix_t data_;
-    PartsOfExpression type_;
-  };  
+    Postfix() = default;
+    Postfix(PartsOfExpression type, long long data);
+    Postfix(PartsOfExpression type, char data);
+    postfix_t data;
+    PartsOfExpression type;
+  }; 
 }
 
 #endif
