@@ -1,14 +1,13 @@
 #ifndef POSTFIX_EXPRESSION_HPP
 #define POSTFIC_EXPRESSION_HPP
 
-#include <queue>
-#include <stack>
 #include <iosfwd>
+#include "queue.hpp"
+#include "stack.hpp"
 #include "infix_expression.hpp"
 
 namespace erohin
 {
-
   constexpr auto close_bt = bracket_t::CLOSE_BRACKET;
   constexpr auto open_bt = bracket_t::OPEN_BRACKET;
   constexpr auto bracket_token = token_identifier_t::BRACKET_TYPE;
@@ -17,15 +16,15 @@ namespace erohin
 
   struct PostfixExpression
   {
-    std::queue< Token > expression;
+    expression_t expression;
     PostfixExpression() = default;
-    PostfixExpression(const std::queue< Token > & inf_expr);
+    PostfixExpression(const expression_t & inf_expr);
     ~PostfixExpression() = default;
     Operand evaluate() const;
   };
 
-  void convertInfixToPostfix(std::queue< Token > & post_expr, std::queue< Token > inf_expr);
-  void inputPostfixExpressionLines(std::istream & input, std::queue< PostfixExpression > & expr_lines);
+  void convertInfixToPostfix(expression_t & post_expr, expression_t inf_expr);
+  void inputPostfixExpressionLines(std::istream & input, Queue< PostfixExpression > & expr_lines);
 }
 
 #endif

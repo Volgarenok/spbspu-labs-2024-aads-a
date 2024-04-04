@@ -4,7 +4,7 @@
 #include <cstddef>
 #include <list>
 
-namespace
+namespace erohin
 {
   template< class T, class Container = std::list< T > >
   class Queue
@@ -35,6 +35,11 @@ namespace
   private:
     Container container_;
   };
+
+  template< class T, class Container >
+  Queue< T, Container >::Queue():
+    container_(Container())
+  {}
 
   template< class T, class Container >
   Queue< T, Container >::Queue(const Queue & stack):
@@ -145,7 +150,7 @@ namespace
   template< class T, class Container >
   void Queue<T, Container>::pop()
   {
-    container_.pop_back();
+    container_.pop_front();
   }
 
   template< class T, class Container >

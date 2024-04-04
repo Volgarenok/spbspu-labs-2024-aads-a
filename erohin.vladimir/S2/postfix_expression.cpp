@@ -1,18 +1,17 @@
 #include "postfix_expression.hpp"
 #include <stdexcept>
 #include <iostream>
+#include "stack.hpp"
 
-#include <stack>
-
-erohin::PostfixExpression::PostfixExpression(const std::queue< Token > & inf_expr)
+erohin::PostfixExpression::PostfixExpression(const expression_t & inf_expr)
 {
   convertInfixToPostfix(expression, inf_expr);
 }
 
 erohin::Operand erohin::PostfixExpression::evaluate() const
 {
-  std::stack< Token > temp_stack;
-  std::queue< Token > init_queue(expression);
+  Stack< Token > temp_stack;
+  Queue< Token > init_queue(expression);
   while (!init_queue.empty())
   {
     Token & current = init_queue.front();
@@ -46,9 +45,9 @@ erohin::Operand erohin::PostfixExpression::evaluate() const
   return result;
 }
 
-void erohin::convertInfixToPostfix(std::queue< Token > & post_expr, std::queue< Token > inf_expr)
+void erohin::convertInfixToPostfix(Queue< Token > & post_expr, Queue< Token > inf_expr)
 {
-  std::stack< Token > temp_stack;
+  Stack< Token > temp_stack;
   while (!inf_expr.empty())
   {
     Token & current = inf_expr.front();
@@ -125,14 +124,14 @@ void erohin::convertInfixToPostfix(std::queue< Token > & post_expr, std::queue< 
   }
 }
 
-void erohin::inputPostfixExpressionLines(std::istream & input, std::queue< PostfixExpression > & expr_lines)
+void erohin::inputPostfixExpressionLines(std::istream & input, Queue< PostfixExpression > & expr_lines)
 {
   bool isAnyExpressionCorrect = true;
   while (!input.eof())
   {
     try
     {
-      expression current_expr;
+      expression_t current_expr;
       inputInfixExpression(input, current_expr);
       if (!current_expr.empty())
       {

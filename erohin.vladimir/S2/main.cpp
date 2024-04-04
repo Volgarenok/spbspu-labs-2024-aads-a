@@ -2,32 +2,15 @@
 #include <fstream>
 #include <stdexcept>
 #include "token.hpp"
-#include "infix_expression.hpp"
 #include "postfix_expression.hpp"
-
-#include <queue>
-#include <stack>
-#include "stack.hpp"
 #include "queue.hpp"
+#include "stack.hpp"
 
 int main(int argc, char ** argv)
 {
   using namespace erohin;
-
-  Queue< int > stack(std::list< int >({ 0, 1, 2, 3 }));
-  for (int i = 4; i < 10; ++i)
-  {
-    stack.push(i);
-  }
-  while (!stack.empty())
-  {
-    std::cout << stack.back();
-    stack.pop();
-  }
-
-
-  std::queue< PostfixExpression > expr_lines;
-  std::stack< long long > results;
+  Queue< PostfixExpression > expr_lines;
+  Stack< long long > results;
   bool isAnyExpressionCorrect = true;
   try
   {

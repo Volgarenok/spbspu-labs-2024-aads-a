@@ -1,15 +1,15 @@
-#ifndef INFIX_EXPRESSION
-#define INFIX_EXPRESSION
+#ifndef INFIX_EXPRESSION_HPP
+#define INFIX_EXPRESSION_HPP
 
 #include <iosfwd>
-#include <queue>
+#include "queue.hpp"
 #include "token.hpp"
 
 namespace erohin
 {
-  using expression = std::queue< Token >;
+  using expression_t = Queue< Token >;
 
-  void inputInfixExpression(std::istream & input, expression & inf_expr);
+  void inputInfixExpression(std::istream & input, expression_t & inf_expr);
 }
 
 #endif

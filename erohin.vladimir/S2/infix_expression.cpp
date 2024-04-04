@@ -3,7 +3,7 @@
 #include <string>
 #include <stdexcept>
 
-void erohin::inputInfixExpression(std::istream & input, expression & inf_expr)
+void erohin::inputInfixExpression(std::istream & input, expression_t & inf_expr)
 {
   std::string string_token;
   token_identifier_t temp_id = token_identifier_t::OPERAND_TYPE;

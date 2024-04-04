@@ -4,7 +4,7 @@
 #include <cstddef>
 #include <list>
 
-namespace
+namespace erohin
 {
   template< class T, class Container = std::list< T > >
   class Stack
@@ -33,6 +33,11 @@ namespace
   private:
     Container container_;
   };
+
+  template< class T, class Container >
+  Stack< T, Container >::Stack():
+    container_(Container())
+  {}
 
   template< class T, class Container >
   Stack< T, Container >::Stack(const Stack & stack):

@@ -1,5 +1,5 @@
 #include "operator.hpp"
-#include "stdexcept"
+#include <stdexcept>
 
 erohin::Operator::Operator(char sign)
 {
