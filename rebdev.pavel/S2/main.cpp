@@ -12,37 +12,34 @@ int main()
   rebdev::stack< rebdev::node > operationStack;
   rebdev::queue< rebdev::node > postfixQueue;
 
-  char nextOperator = std::cin.peek();
-  if (!(std::isdigit(nextOperator)))
-  {
-    rebdev::pushOperation(operationStack, postfixQueue, nextOperator);
-  }
-
   while (!std::cin.eof())
   {
-    long long inputNum = 0;
-    std::cin >> inputNum;
-    postfixQueue.push(rebdev::node(inputNum));
+    char nextOperator = std::cin.peek();
 
-    if ((!std::cin) && (!std::cin.eof()))
+    if (std::isdigit(nextOperator) && (nextOperator != '-') && (nextOperator != '+'))
     {
-      std::cerr << "input error!\n";
-      return 1;
+      long long num = 0;
+      std::cin >> num;
+      postfixQueue.push(num);
     }
-    else if (std::cin.eof())
+    else if ((nextOperator == ' ') || (nextOperator == '\n'))
     {
-      break;
+      std::cin >> std::noskipws;
+      std::cin >> nextOperator;
+      std::cin >> std::skipws;
     }
-
-    std::cin >> nextOperator;
-    try
+    else
     {
-      rebdev::pushOperation(operationStack, postfixQueue, nextOperator);
-    }
-    catch (const std::exception & e)
-    {
-      std::cerr << e.what() << '\n';
-      return 1;
+      std::cin >> nextOperator;
+      try
+      {
+        rebdev::pushOperation(operationStack, postfixQueue, nextOperator);
+      }
+      catch (const std::exception & e)
+      {
+        std::cerr << e.what() << '\n';
+        return 1;
+      }
     }
   }
 
