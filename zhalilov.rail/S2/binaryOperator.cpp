@@ -1,10 +1,9 @@
 #include "binaryOperator.hpp"
 
 #include <stdexcept>
+#include <limits>
 
 #include "operand.hpp"
-
-#include <limits>
 
 zhalilov::BinOperator::BinOperator():
   type_(BinOperator::Type::Undefined)

@@ -1,7 +1,6 @@
 #ifndef BINARYOPERATOR_HPP
 #define BINARYOPERATOR_HPP
 
-#include "primaryType.hpp"
 
 namespace zhalilov
 {
