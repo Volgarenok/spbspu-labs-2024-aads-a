@@ -360,8 +360,7 @@ namespace zhalilov
   template < typename... Args >
   void List< T >::emplace(const_iterator pos, Args &&... args)
   {
-    Node *newNode = new Node(std::forward< Args >(args)..., nullptr, nullptr);
-    doInsert(pos, newNode);
+    doInsert(pos, std::forward< Args >(args)...);
   }
 
   template < typename T >
@@ -506,7 +505,6 @@ namespace zhalilov
     {
       pop_back();
     }
-    delete m_head;
   }
 
   template < typename T >
