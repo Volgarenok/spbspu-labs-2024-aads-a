@@ -27,6 +27,8 @@ namespace zhalilov
 
     T &operator*();
     T *operator->();
+    const T &operator*() const;
+    const T *operator->() const;
 
     bool operator==(const Iterator< T > &) const;
     bool operator!=(const Iterator< T > &) const;
@@ -82,6 +84,18 @@ namespace zhalilov
 
   template < typename T >
   T *Iterator< T >::operator->()
+  {
+    return &m_node->value;
+  }
+
+  template < typename T >
+  const T &Iterator< T >::operator*() const
+  {
+    return m_node->value;
+  }
+
+  template < typename T >
+  const T *Iterator< T >::operator->() const
   {
     return &m_node->value;
   }
