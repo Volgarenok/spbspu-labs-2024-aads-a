@@ -30,12 +30,12 @@ namespace zhalilov
     List< T > &operator=(const List< T > &);
     List< T > &operator=(List< T > &&) noexcept;
 
-    bool operator==(const List< T > &) const noexcept;
-    bool operator!=(const List< T > &) const noexcept;
-    bool operator<(const List< T > &) const noexcept;
-    bool operator<=(const List< T > &) const noexcept;
-    bool operator>(const List< T > &) const noexcept;
-    bool operator>=(const List< T > &) const noexcept;
+    bool operator==(const List< T > &) const;
+    bool operator!=(const List< T > &) const;
+    bool operator<(const List< T > &) const;
+    bool operator<=(const List< T > &) const;
+    bool operator>(const List< T > &) const;
+    bool operator>=(const List< T > &) const;
 
     T &front();
     T &back();
