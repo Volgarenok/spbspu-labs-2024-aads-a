@@ -97,18 +97,16 @@ namespace zhalilov
     Node *m_head;
 
     template < typename... Args >
-    Node *getNode(Args &&..., Node *, Node *);
-    Node *getNode(const T &, Node *, Node *);
-    Node *getNode(T &&, Node *prev, Node *next);
-    const_iterator compare(const List< T > &) const;
-    iterator doInsert(const_iterator, Node *);
+    iterator doInsert(const_iterator, Args &&...);
+
+    const_iterator compare(const List &) const;
     const_iterator doSplice(const_iterator, const_iterator);
   };
 
   template < typename T >
   List< T >::List():
     m_size(0),
-    m_head(nullptr)
+    m_head(new Node(T(), nullptr, nullptr))
   {
     m_head->next = m_head;
     m_head->prev = m_head;
@@ -383,15 +381,13 @@ namespace zhalilov
   template < typename T >
   typename List< T >::iterator List< T >::insert(const_iterator pos, const T &value)
   {
-    return iterator(doInsert(pos, getNode(value, pos.m_node->prev, pos.m_node)));
+    return doInsert(pos, value);
   }
 
   template < typename T >
   typename List< T >::iterator List< T >::insert(const_iterator pos, T &&value)
   {
-    Node *newNode = new Node(std::move(value), nullptr, nullptr);
-    doInsert(pos, newNode);
-    return iterator(newNode);
+    return doInsert(pos, std::move(value));
   }
 
   template < typename T >
@@ -463,7 +459,6 @@ namespace zhalilov
     {
       if (pred(*it))
       {
-        ~(it.m_node->value);
         erase(it);
         break;
       }
@@ -574,26 +569,9 @@ namespace zhalilov
 
   template < typename T >
   template < typename... Args >
-  typename List< T >::Node *List< T >::getNode(Args &&... args, Node *prev, Node *next)
+  typename List< T >::iterator List< T >::doInsert(const_iterator pos, Args &&... args)
   {
-    return new Node(std::forward< Args >(args)..., prev, next);
-  }
-
-  template < typename T >
-  typename List< T >::Node *List< T >::getNode(const T &value, Node *prev, Node *next)
-  {
-    return new Node(value, prev, next);
-  }
-
-  template < typename T >
-  typename List< T >::Node *List< T >::getNode(T &&value, Node *prev, Node *next)
-  {
-    return new Node(std::move(value), prev, next);
-  }
-
-  template < typename T >
-  typename List< T >::iterator List< T >::doInsert(const_iterator pos, Node *newNode)
-  {
+    Node *newNode = new Node(std::forward< Args >(args)..., pos.m_node->prev, pos.m_node);
     Node *prev = pos.m_node->prev;
     prev->next = newNode;
     pos.m_node->prev = newNode;
