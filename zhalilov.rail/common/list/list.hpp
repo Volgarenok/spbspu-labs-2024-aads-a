@@ -16,7 +16,6 @@ namespace zhalilov
   public:
     using iterator = Iterator< T >;
     using const_iterator = ConstIterator< T >;
-    using Node = detail::Node< T >;
 
     List();
     List(const List< T > &);
@@ -30,12 +29,12 @@ namespace zhalilov
     List< T > &operator=(const List< T > &);
     List< T > &operator=(List< T > &&) noexcept;
 
-    bool operator==(const List< T > &) const noexcept;
-    bool operator!=(const List< T > &) const noexcept;
-    bool operator<(const List< T > &) const noexcept;
-    bool operator<=(const List< T > &) const noexcept;
-    bool operator>(const List< T > &) const noexcept;
-    bool operator>=(const List< T > &) const noexcept;
+    bool operator==(const List< T > &) const;
+    bool operator!=(const List< T > &) const;
+    bool operator<(const List< T > &) const;
+    bool operator<=(const List< T > &) const;
+    bool operator>(const List< T > &) const;
+    bool operator>=(const List< T > &) const;
 
     T &front();
     T &back();
@@ -92,18 +91,22 @@ namespace zhalilov
     const_iterator cend() const noexcept;
 
   private:
+    using Node = detail::Node< T >;
+
     size_t m_size;
     Node *m_head;
 
-    const_iterator comparator(const List< T > &) const;
-    void inserter(const_iterator, Node *);
-    const_iterator splicer(const_iterator, const_iterator);
+    template < typename... Args >
+    iterator doInsert(const_iterator, Args &&...);
+
+    const_iterator compare(const List &) const;
+    const_iterator doSplice(const_iterator, const_iterator);
   };
 
   template < typename T >
   List< T >::List():
     m_size(0),
-    m_head(new Node)
+    m_head(new Node(T(), nullptr, nullptr))
   {
     m_head->next = m_head;
     m_head->prev = m_head;
@@ -190,45 +193,45 @@ namespace zhalilov
   }
 
   template < typename T >
-  bool List< T >::operator==(const List< T > &list) const noexcept
+  bool List< T >::operator==(const List< T > &list) const
   {
     if (m_size == list.m_size)
     {
-      return cend() == comparator(list);
+      return cend() == compare(list);
     }
     return false;
   }
 
   template < typename T >
-  bool List< T >::operator!=(const List< T > &list) const noexcept
+  bool List< T >::operator!=(const List< T > &list) const
   {
     return !(*this == list);
   }
 
   template < typename T >
-  bool List< T >::operator<(const List< T > &list) const noexcept
+  bool List< T >::operator<(const List< T > &list) const
   {
     if (m_size < list.m_size)
     {
-      return cend() == comparator(list);
+      return cend() == compare(list);
     }
     return false;
   }
 
   template < typename T >
-  bool List< T >::operator<=(const List< T > &list) const noexcept
+  bool List< T >::operator<=(const List< T > &list) const
   {
     return !(list < *this);
   }
 
   template < typename T >
-  bool List< T >::operator>(const List< T > &list) const noexcept
+  bool List< T >::operator>(const List< T > &list) const
   {
     return list < *this;
   }
 
   template < typename T >
-  bool List< T >::operator>=(const List< T > &list) const noexcept
+  bool List< T >::operator>=(const List< T > &list) const
   {
     return !(*this < list);
   }
@@ -307,7 +310,7 @@ namespace zhalilov
   {
     while (!list.empty())
     {
-      splicer(pos, list.cbegin());
+      doSplice(pos, list.cbegin());
       list.m_size--;
       m_size++;
     }
@@ -322,7 +325,7 @@ namespace zhalilov
   template < typename T >
   void List< T >::splice(const_iterator pos, List< T > &list, const_iterator otherListPos) noexcept
   {
-    splicer(pos, otherListPos);
+    doSplice(pos, otherListPos);
     list.m_size--;
     m_size++;
   }
@@ -340,7 +343,7 @@ namespace zhalilov
     {
       const_iterator nextPos = otherPosFirst;
       nextPos++;
-      splicer(pos, otherPosFirst);
+      doSplice(pos, otherPosFirst);
       otherPosFirst = nextPos;
       list.m_size--;
       m_size++;
@@ -357,8 +360,8 @@ namespace zhalilov
   template < typename... Args >
   void List< T >::emplace(const_iterator pos, Args &&... args)
   {
-    Node *newNode = new Node(std::forward< Args >(args)...);
-    inserter(pos, newNode);
+    Node *newNode = new Node(std::forward< Args >(args)..., nullptr, nullptr);
+    doInsert(pos, newNode);
   }
 
   template < typename T >
@@ -378,17 +381,13 @@ namespace zhalilov
   template < typename T >
   typename List< T >::iterator List< T >::insert(const_iterator pos, const T &value)
   {
-    Node *newNode = new Node(value);
-    inserter(pos, newNode);
-    return iterator(newNode);
+    return doInsert(pos, value);
   }
 
   template < typename T >
   typename List< T >::iterator List< T >::insert(const_iterator pos, T &&value)
   {
-    Node *newNode = new Node(std::move(value));
-    inserter(pos, newNode);
-    return iterator(newNode);
+    return doInsert(pos, std::move(value));
   }
 
   template < typename T >
@@ -460,7 +459,6 @@ namespace zhalilov
     {
       if (pred(*it))
       {
-        ~(it.m_node->value);
         erase(it);
         break;
       }
@@ -555,7 +553,7 @@ namespace zhalilov
   }
 
   template < typename T >
-  typename List< T >::const_iterator List< T >::comparator(const List< T > &list) const
+  typename List< T >::const_iterator List< T >::compare(const List< T > &list) const
   {
     const_iterator thisIt = cbegin();
     const_iterator thisEnd = cend();
@@ -570,18 +568,19 @@ namespace zhalilov
   }
 
   template < typename T >
-  void List< T >::inserter(const_iterator pos, Node *newNode)
+  template < typename... Args >
+  typename List< T >::iterator List< T >::doInsert(const_iterator pos, Args &&... args)
   {
+    Node *newNode = new Node(std::forward< Args >(args)..., pos.m_node->prev, pos.m_node);
     Node *prev = pos.m_node->prev;
-    newNode->next = pos.m_node;
-    newNode->prev = prev;
     prev->next = newNode;
     pos.m_node->prev = newNode;
     m_size++;
+    return iterator(newNode);
   }
 
   template < typename T >
-  typename List< T >::const_iterator List< T >::splicer(const_iterator pos, const_iterator otherListPos)
+  typename List< T >::const_iterator List< T >::doSplice(const_iterator pos, const_iterator otherListPos)
   {
     Node *prev = pos.m_node->prev;
     prev->next = otherListPos.m_node;
