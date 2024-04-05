@@ -9,8 +9,8 @@
 
 namespace rebdev
 {
-  void makePostfixQueue(queue< node > & postfixQueue, std::istream & in);
-  void pushOperation(Stack< node > & operationStack, queue< node > & postfixQueue, char operation);
+  void makePostfixQueue(Queue< node > & postfixQueue, std::istream & in);
+  void pushOperation(Stack< node > & operationStack, Queue< node > & postfixQueue, char operation);
 }
 
 #endif

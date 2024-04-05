@@ -6,7 +6,7 @@
 
 namespace rebdev
 {
-  long long convertPostfixToNum(queue< node > & postfixQueue);
+  long long convertPostfixToNum(Queue< node > & postfixQueue);
 }
 
 #endif

@@ -5,15 +5,14 @@
 #include "myStack.hpp"
 #include "node.hpp"
 
-long long rebdev::convertPostfixToNum(queue< node > & postfixQueue)
+long long rebdev::convertPostfixToNum(Queue< node > & postfixQueue)
 {
   long long result = 0;
   Stack< node > mathStack;
 
   while (postfixQueue.size() > 0)
   {
-    node element = postfixQueue.front();
-    postfixQueue.pop();
+    node element = postfixQueue.drop();
 
     if (element.getPriority() == 0)
     {

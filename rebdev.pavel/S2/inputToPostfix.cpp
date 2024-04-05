@@ -3,7 +3,7 @@
 #include <string>
 #include <sstream>
 
-void rebdev::makePostfixQueue(queue< node > & postfixQueue, std::istream & in)
+void rebdev::makePostfixQueue(Queue< node > & postfixQueue, std::istream & in)
 {
   Stack< node > operationStack;
 
@@ -39,7 +39,7 @@ void rebdev::makePostfixQueue(queue< node > & postfixQueue, std::istream & in)
   }
 }
 
-void rebdev::pushOperation(Stack< node > & operationStack, queue< node > & postfixQueue, char operation)
+void rebdev::pushOperation(Stack< node > & operationStack, Queue< node > & postfixQueue, char operation)
 {
   if  (operation == ')')
   {
