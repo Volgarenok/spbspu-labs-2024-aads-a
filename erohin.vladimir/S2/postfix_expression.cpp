@@ -48,6 +48,7 @@ erohin::Operand erohin::PostfixExpression::evaluate() const
 void erohin::convertInfixToPostfix(Queue< Token > & post_expr, Queue< Token > inf_expr)
 {
   Stack< Token > temp_stack;
+  bool isOpenBracketPrevious = false;
   while (!inf_expr.empty())
   {
     Token & current = inf_expr.front();
@@ -56,17 +57,23 @@ void erohin::convertInfixToPostfix(Queue< Token > & post_expr, Queue< Token > in
     case operand_token:
       post_expr.push(current);
       inf_expr.pop();
+      isOpenBracketPrevious = false;
       break;
     case bracket_token:
       if (current.token.bracket.bracket_type == open_bt)
       {
         temp_stack.push(current);
+        isOpenBracketPrevious = true;
       }
       else if (current.token.bracket.bracket_type == close_bt)
       {
         if (temp_stack.empty())
         {
           throw std::runtime_error("An extra bracket in postfix expression record");
+        }
+        if (isOpenBracketPrevious)
+        {
+          throw std::runtime_error("Empty brackets were found");
         }
         Token & top = temp_stack.top();
         while (!(top.id == bracket_token && top.token.bracket.bracket_type == open_bt))
