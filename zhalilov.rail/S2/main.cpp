@@ -9,6 +9,9 @@
 
 int main(int argc, char *argv[])
 {
+  zhalilov::List<int> aboba;
+  aboba.empty();
+  aboba.push_back(10);
   using namespace zhalilov;
   Stack< Queue< InfixToken > > infixes;
   Stack< long long > results;
