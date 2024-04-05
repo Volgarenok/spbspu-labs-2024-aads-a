@@ -21,16 +21,22 @@ namespace erohin
     DynArrayConstIterator< T > & operator=(const DynArrayConstIterator< T > &) = default;
     DynArrayConstIterator< T > & operator+=(size_t number);
     DynArrayConstIterator< T > & operator++();
-    DynArrayConstIterator< T > operator++(size_t);
+    DynArrayConstIterator< T > operator++(int);
     DynArrayConstIterator< T > operator+(size_t number);
     DynArrayConstIterator< T > & operator-=(size_t number);
     DynArrayConstIterator< T > & operator--();
-    DynArrayConstIterator< T > operator--(size_t);
+    DynArrayConstIterator< T > operator--(int);
     DynArrayConstIterator< T > operator-(size_t number);
     size_t operator-(const DynArrayConstIterator< T > & rhs);
     const T & operator*() const;
     const T * operator->() const;
     const T & operator[](size_t index) const;
+    bool operator==(const DynArrayConstIterator< T > & rhs);
+    bool operator!=(const DynArrayConstIterator< T > & rhs);
+    bool operator<(const DynArrayConstIterator< T > & rhs);
+    bool operator<=(const DynArrayConstIterator< T > & rhs);
+    bool operator>(const DynArrayConstIterator< T > & rhs);
+    bool operator>=(const DynArrayConstIterator< T > & rhs);
   private:
     const T * ptr_;
   };
@@ -48,17 +54,19 @@ namespace erohin
   template< class T >
   DynArrayConstIterator< T > & DynArrayConstIterator< T >::operator+=(size_t number)
   {
-    return DynArrayConstIterator< T >(ptr_ += number);
+    ptr_ += number;
+    return *this;
   }
 
   template< class T >
   DynArrayConstIterator< T > & DynArrayConstIterator< T >::operator++()
   {
-    return DynArrayConstIterator< T >(++ptr_);
+    ++ptr_;
+    return *this;
   }
 
   template< class T >
-  DynArrayConstIterator< T > DynArrayConstIterator< T >::operator++(size_t)
+  DynArrayConstIterator< T > DynArrayConstIterator< T >::operator++(int)
   {
     DynArrayConstIterator< T > temp = DynArrayConstIterator< T >(ptr_++);
     return temp;
@@ -67,17 +75,19 @@ namespace erohin
   template< class T >
   DynArrayConstIterator< T > & DynArrayConstIterator< T >::operator-=(size_t number)
   {
-    return DynArrayConstIterator< T >(ptr_ -= number);
+    ptr_ -= number;
+    return *this;
   }
 
   template< class T >
   DynArrayConstIterator< T > & DynArrayConstIterator< T >::operator--()
   {
-    return DynArrayConstIterator< T >(--ptr_);
+    --ptr_;
+    return *this;
   }
 
   template< class T >
-  DynArrayConstIterator< T > DynArrayConstIterator< T >::operator--(size_t)
+  DynArrayConstIterator< T > DynArrayConstIterator< T >::operator--(int)
   {
     DynArrayConstIterator< T > temp = DynArrayConstIterator< T >(ptr_--);
     return temp;
@@ -92,13 +102,13 @@ namespace erohin
   template< class T >
   const T & DynArrayConstIterator< T >::operator*() const
   {
-    return ptr_[0];
+    return *ptr_;
   }
 
   template< class T >
   const T * DynArrayConstIterator< T >::operator->() const
   {
-    return std::addressof(ptr_[0]);
+    return std::addressof(*ptr_);
   }
 
   template< class T >
@@ -108,39 +118,75 @@ namespace erohin
   }
 
   template< class T >
+  bool DynArrayConstIterator< T >::operator==(const DynArrayConstIterator< T > & rhs)
+  {
+    return (ptr_ == rhs.ptr_);
+  }
+
+  template< class T >
+  bool DynArrayConstIterator< T >::operator!=(const DynArrayConstIterator< T > & rhs)
+  {
+    return (ptr_ != rhs.ptr_);
+  }
+
+  template< class T >
+  bool DynArrayConstIterator< T >::operator<(const DynArrayConstIterator< T > & rhs)
+  {
+    return (ptr_ < rhs.ptr_);
+  }
+
+  template< class T >
+  bool DynArrayConstIterator< T >::operator<=(const DynArrayConstIterator< T > & rhs)
+  {
+    return (ptr_ <= rhs.ptr_);
+  }
+
+  template< class T >
+  bool DynArrayConstIterator< T >::operator>(const DynArrayConstIterator< T > & rhs)
+  {
+    return (ptr_ > rhs.ptr_);
+  }
+
+  template< class T >
+  bool DynArrayConstIterator< T >::operator>=(const DynArrayConstIterator< T > & rhs)
+  {
+    return !(ptr_ >= rhs.ptr_);
+  }
+
+  template< class T >
   bool operator==(const DynArrayConstIterator< T > & lhs, const DynArrayConstIterator< T > & rhs)
   {
-    return (lhs.ptr_ == rhs.ptr_);
+    return (lhs.operator==(rhs));
   }
 
   template< class T >
   bool operator!=(const DynArrayConstIterator< T > & lhs, const DynArrayConstIterator< T > & rhs)
   {
-    return !(lhs == rhs);
+    return (lhs.operator!=(rhs));
   }
 
   template< class T >
   bool operator<(const DynArrayConstIterator< T > & lhs, const DynArrayConstIterator< T > & rhs)
   {
-    return (lhs.ptr_ < rhs.ptr_);
+    return (lhs.operator<(rhs));
   }
 
   template< class T >
   bool operator<=(const DynArrayConstIterator< T > & lhs, const DynArrayConstIterator< T > & rhs)
   {
-    return (lhs.ptr_ <= rhs.ptr_);
+    return (lhs.operator<=(rhs));
   }
 
   template< class T >
   bool operator>(const DynArrayConstIterator< T > & lhs, const DynArrayConstIterator< T > & rhs)
   {
-    return (lhs.ptr_ > rhs.ptr_);
+    return (lhs.operator>(rhs));
   }
 
   template< class T >
   bool operator>=(const DynArrayConstIterator< T > & lhs, const DynArrayConstIterator< T > & rhs)
   {
-    return (lhs.ptr_ >= rhs.ptr_);
+    return (lhs.operator>=(rhs));
   }
 }
 
