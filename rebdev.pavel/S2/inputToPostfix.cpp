@@ -28,8 +28,15 @@ void rebdev::makePostfixQueue(queue< node > & postfixQueue, std::istream & in)
 
   while (operationStack.size() > 0)
   {
-    postfixQueue.push(operationStack.top());
+    node topNode = operationStack.top();
     operationStack.pop();
+
+    if (topNode.getPriority() == 3)
+    {
+      throw std::logic_error("Error with ( or )");
+    }
+
+    postfixQueue.push(topNode);
   }
 }
 
@@ -57,6 +64,7 @@ void rebdev::pushOperation(stack< node > & operationStack, queue< node > & postf
       {
         postfixQueue.push(operationStack.top());
         operationStack.pop();
+        if (operationStack.size() == 0) break;
       }
     }
     operationStack.push(newNode);

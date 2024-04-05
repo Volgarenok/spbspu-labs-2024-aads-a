@@ -96,7 +96,8 @@ long long rebdev::node::getResult(long long first, long long second) const
       break;
 
     case '%':
-      result = first % second;
+      if (first >= 0) result = first % second;
+      else result = second + (first % second);
       break;
 
     default:
