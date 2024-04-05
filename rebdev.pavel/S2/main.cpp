@@ -19,6 +19,7 @@ int main(int argc, char ** argv)
   }
   std::istream & inputLink = *inputPointer;
 
+  rebdev::stack< long long > resultStack;
   while (!inputLink.eof())
   {
     rebdev::queue< rebdev::node > postfixQueue;
@@ -33,7 +34,7 @@ int main(int argc, char ** argv)
       try
       {
         rebdev::makePostfixQueue(postfixQueue, inputStr);
-        std::cout << rebdev::convertPostfixToNum(postfixQueue) << '\n';
+        resultStack.push(rebdev::convertPostfixToNum(postfixQueue));
       }
       catch (const std::exception & e)
       {
@@ -42,5 +43,16 @@ int main(int argc, char ** argv)
       }
     }
   }
+
+  if (resultStack.size() > 0)
+  {
+    while (resultStack.size() > 1)
+    {
+      std::cout << resultStack.top() << ' ';
+      resultStack.pop();
+    }
+    std::cout << resultStack.top();
+  }
+  std::cout << '\n';
   return 0;
 }
