@@ -5,7 +5,7 @@
 
 void rebdev::makePostfixQueue(queue< node > & postfixQueue, std::istream & in)
 {
-  stack< node > operationStack;
+  Stack< node > operationStack;
 
   while (!in.eof())
   {
@@ -28,8 +28,7 @@ void rebdev::makePostfixQueue(queue< node > & postfixQueue, std::istream & in)
 
   while (operationStack.size() > 0)
   {
-    node topNode = operationStack.top();
-    operationStack.pop();
+    node topNode = operationStack.drop();
 
     if (topNode.getPriority() == 3)
     {
@@ -40,16 +39,16 @@ void rebdev::makePostfixQueue(queue< node > & postfixQueue, std::istream & in)
   }
 }
 
-void rebdev::pushOperation(stack< node > & operationStack, queue< node > & postfixQueue, char operation)
+void rebdev::pushOperation(Stack< node > & operationStack, queue< node > & postfixQueue, char operation)
 {
   if  (operation == ')')
   {
-    while (operationStack.top() != '(')
+    node topNode = operationStack.drop();
+    while (topNode != '(')
     {
-      postfixQueue.push(operationStack.top());
-      operationStack.pop();
+      postfixQueue.push(topNode);
+      topNode = operationStack.drop();
     }
-    operationStack.pop();
   }
   else if (operation == '(')
   {
@@ -60,10 +59,11 @@ void rebdev::pushOperation(stack< node > & operationStack, queue< node > & postf
     node newNode(operation);
     if (operationStack.size() > 0)
     {
-      while (newNode >= operationStack.top())
+      node topNode = operationStack.drop();
+      while (newNode >= topNode)
       {
-        postfixQueue.push(operationStack.top());
-        operationStack.pop();
+        postfixQueue.push(topNode);
+        topNode = operationStack.drop();
         if (operationStack.size() == 0) break;
       }
     }

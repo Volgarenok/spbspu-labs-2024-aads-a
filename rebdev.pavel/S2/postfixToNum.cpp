@@ -8,7 +8,7 @@
 long long rebdev::convertPostfixToNum(queue< node > & postfixQueue)
 {
   long long result = 0;
-  rebdev::stack< node > mathStack;
+  Stack< node > mathStack;
 
   while (postfixQueue.size() > 0)
   {
@@ -24,15 +24,15 @@ long long rebdev::convertPostfixToNum(queue< node > & postfixQueue)
       long long numArr[2]{};
       for (size_t i = 0; i < 2; ++i)
       {
-        node ok = mathStack.top();
+        node ok = mathStack.drop();
         numArr[i] = ok.getResult();
-        mathStack.pop();
       }
       mathStack.push(element.getResult(numArr[1], numArr[0]));
     }
   }
 
-  node ok = mathStack.top();
+  node ok = mathStack.drop();
   result = ok.getResult();
+
   return result;
 }

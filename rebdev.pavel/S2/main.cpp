@@ -19,7 +19,7 @@ int main(int argc, char ** argv)
   }
   std::istream & inputLink = *inputPointer;
 
-  rebdev::stack< long long > resultStack;
+  rebdev::Stack< long long > resultStack;
   while (!inputLink.eof())
   {
     rebdev::queue< rebdev::node > postfixQueue;
@@ -48,10 +48,9 @@ int main(int argc, char ** argv)
   {
     while (resultStack.size() > 1)
     {
-      std::cout << resultStack.top() << ' ';
-      resultStack.pop();
+      std::cout << resultStack.drop() << ' ';
     }
-    std::cout << resultStack.top();
+    std::cout << resultStack.drop();
   }
   std::cout << '\n';
   return 0;
