@@ -21,12 +21,18 @@ int main(int argc, char ** argv)
     else if (argc == 2)
     {
       std::ifstream file(argv[1]);
+      if (!file)
+      {
+        std::cerr << "Wrong input from file\n";
+        return 1;
+      }
       inputPostfixExpressionLines(file, expr_lines);
+      file.close();
     }
     else
     {
       std::cerr << "Wrong number of CLA\n";
-      return 1;
+      return 2;
     }
     while (!expr_lines.empty())
     {
@@ -54,7 +60,7 @@ int main(int argc, char ** argv)
     }
     else
     {
-      return 2;
+      return 3;
     }
   }
   catch (const std::exception & e)
