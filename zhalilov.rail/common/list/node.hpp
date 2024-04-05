@@ -14,11 +14,21 @@ namespace zhalilov
       Node *prev;
       Node *next;
 
+      Node(const T &avalue, Node *aprev, Node *anext):
+        value(avalue),
+        prev(aprev),
+        next(anext)
+      {}
+
+      Node(T &&avalue, Node *aprev, Node *anext):
+        value(std::move(avalue)),
+        prev(aprev),
+        next(anext)
+      {}
+
       template < typename... Args >
-      explicit Node(Args &&... args, Node< T > *prev, Node< T > *next):
-        value(std::forward< Args >(args)...),
-        prev(prev),
-        next(next)
+      explicit Node(Args &&... args, Node *aprev, Node *anext):
+        Node(Node(std::forward< Args >(args)..., aprev, anext))
       {}
     };
   }
