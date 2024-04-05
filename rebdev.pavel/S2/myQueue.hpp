@@ -3,6 +3,7 @@
 
 #include <list>
 #include <cstddef>
+#include <stdexcept>
 
 namespace rebdev
 {
@@ -25,7 +26,7 @@ namespace rebdev
       }
       T drop()
       {
-        if (dataBase_.size() > 0)
+        if (dataBase_.size() == 0)
         {
           throw std::logic_error("Try to take and delete element from empty queue!");
         }
