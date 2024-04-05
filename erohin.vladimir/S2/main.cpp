@@ -33,33 +33,34 @@ int main(int argc, char ** argv)
       results.push(expr_lines.front().evaluate()());
       expr_lines.pop();
     }
-  }
-  catch (...)
-  {
-    isAnyExpressionCorrect = false;
-  }
-  if (isAnyExpressionCorrect)
-  {
-    if (!results.empty())
+    if (isAnyExpressionCorrect)
     {
-      std::cout << results.top();
-      results.pop();
+      if (!results.empty())
+      {
+        std::cout << results.top();
+        results.pop();
+      }
+      else
+      {
+        return 0;
+      }
+      while (!results.empty())
+      {
+        std::cout << " " << results.top();
+        results.pop();
+      }
+      std::cout << "\n";
+      return 0;
     }
     else
     {
-      return 0;
+      return 2;
     }
-    while (!results.empty())
-    {
-      std::cout << " " << results.top();
-      results.pop();
-    }
-    std::cout << "\n";
-    return 0;
   }
-  else
+  catch (const std::exception & e)
   {
-    std::cerr << "Some errors in expressions were found\n";
-    return 2;
+    std::cerr << e.what() << "\n";
+    isAnyExpressionCorrect = false;
   }
+
 }

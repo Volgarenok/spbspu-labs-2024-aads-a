@@ -69,10 +69,6 @@ void erohin::convertInfixToPostfix(Queue< Token > & post_expr, Queue< Token > in
             throw std::runtime_error("An extra bracket in postfix expression record");
           }
           Token & top = temp_stack.top();
-          if ((top.id == bracket_token && top.token.bracket.bracket_type == open_bt))
-          {
-            throw std::runtime_error("Empty brackets in postfix expression record");
-          }
           while (!(top.id == bracket_token && top.token.bracket.bracket_type == open_bt))
           {
             post_expr.push(top);
@@ -126,25 +122,13 @@ void erohin::convertInfixToPostfix(Queue< Token > & post_expr, Queue< Token > in
 
 void erohin::inputPostfixExpressionLines(std::istream & input, Queue< PostfixExpression > & expr_lines)
 {
-  bool isAnyExpressionCorrect = true;
   while (!input.eof())
   {
-    try
+    expression_t current_expr;
+    inputInfixExpression(input, current_expr);
+    if (!current_expr.empty())
     {
-      expression_t current_expr;
-      inputInfixExpression(input, current_expr);
-      if (!current_expr.empty())
-      {
-        expr_lines.push(PostfixExpression(current_expr));
-      }
+      expr_lines.push(PostfixExpression(current_expr));
     }
-    catch (...)
-    {
-      isAnyExpressionCorrect = false;
-    }
-  }
-  if (!isAnyExpressionCorrect)
-  {
-    throw std::runtime_error("Wrong input or evaluating of expression");
   }
 }

@@ -1,5 +1,6 @@
 #include "operator.hpp"
 #include <stdexcept>
+#include <limits>
 
 erohin::Operator::Operator(char sign)
 {
@@ -80,16 +81,48 @@ bool erohin::operator>=(const Operator & lhs, const Operator & rhs)
 
 erohin::Operand erohin::subtract(const Operand & lhs, const Operand & rhs)
 {
+  if (rhs() > 0 && lhs() < std::numeric_limits< long long >::min() + rhs())
+  {
+    throw std::underflow_error("Substraction caused underflow");
+  }
+  else if (rhs() < 0 && lhs() > std::numeric_limits< long long >::max() + rhs())
+  {
+    throw std::overflow_error("Substraction caused overflow");
+  }
   return Operand(lhs() - rhs());
 }
 
 erohin::Operand erohin::add(const Operand & lhs, const Operand & rhs)
 {
+  if (rhs() < 0 && lhs() < std::numeric_limits< long long >::min() - rhs())
+  {
+    throw std::underflow_error("Addition caused underflow");
+  }
+  else if (rhs() > 0 && lhs() > std::numeric_limits< long long >::max() - rhs())
+  {
+    throw std::overflow_error("Addition caused overflow");
+  }
   return Operand(lhs() + rhs());
 }
 
 erohin::Operand erohin::multiply(const Operand & lhs, const Operand & rhs)
 {
+  if (rhs() > 0 && lhs() > 0 && lhs() > std::numeric_limits< long long >::max() / rhs())
+  {
+    throw std::overflow_error("Multiplication caused overflow");
+  }
+  else if (rhs() < 0 && lhs() < 0 && lhs() < std::numeric_limits< long long >::max() / rhs())
+  {
+    throw std::overflow_error("Multiplication caused overflow");
+  }
+  else if (rhs() > 0 && lhs() < 0 && lhs() < std::numeric_limits< long long >::min() / rhs())
+  {
+    throw std::underflow_error("Multiplication caused underflow");
+  }
+  else if (rhs() < 0 && lhs() > 0 && lhs() > std::numeric_limits< long long >::min() / rhs())
+  {
+    throw std::underflow_error("Multiplication caused underflow");
+  }
   return Operand(lhs() * rhs());
 }
 
@@ -98,6 +131,10 @@ erohin::Operand erohin::divide(const Operand & lhs, const Operand & rhs)
   if (rhs() == 0)
   {
     throw std::invalid_argument("Division by 0");
+  }
+  else if (lhs() == std::numeric_limits< long long >::min() && rhs() == -1)
+  {
+    throw std::overflow_error("Division caused overflow");
   }
   return Operand(lhs() / rhs());
 }
@@ -108,5 +145,6 @@ erohin::Operand erohin::mod(const Operand & lhs, const Operand & rhs)
   {
     throw std::invalid_argument("Division by 0");
   }
-  return Operand(lhs() % rhs());
+  long long res = lhs() % rhs();
+  return (res < 0) ? Operand(rhs() - res) : Operand(res);
 }
