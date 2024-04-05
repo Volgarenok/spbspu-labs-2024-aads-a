@@ -17,15 +17,19 @@ baranov::Token::Token(const std::string & str)
       {
         case '+':
           value.operation.type = OperationType::ADDITION;
+          value.operation.priority = 2;
           break;
         case '-':
           value.operation.type = OperationType::SUBTRACTION;
+          value.operation.priority = 2;
           break;
         case '*':
           value.operation.type = OperationType::MULTIPLICATION;
+          value.operation.priority = 1;
           break;
         case '/':
           value.operation.type = OperationType::DIVISION;
+          value.operation.priority = 1;
           break;
       }
     }

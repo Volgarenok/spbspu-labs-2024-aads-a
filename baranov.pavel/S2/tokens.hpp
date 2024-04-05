@@ -17,6 +17,7 @@ namespace baranov
   struct Operation
   {
     OperationType type;
+    unsigned char priority;
   };
 
   struct Operand
