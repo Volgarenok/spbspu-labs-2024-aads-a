@@ -3,6 +3,8 @@
 
 #include <algorithm>
 #include <utility>
+#include "dyn_array_iterator.hpp"
+#include "dyn_array_const_iterator.hpp"
 
 namespace erohin
 {
@@ -10,14 +12,21 @@ namespace erohin
   class DynamicArray
   {
   public:
+    using iterator = DynArrayIterator< T >;
+    using const_iterator = DynArrayConstIterator< T >;
     DynamicArray();
     DynamicArray(const DynamicArray & other);
     DynamicArray(DynamicArray && other) noexcept;
+    DynamicArray(size_t capacity);
     template< class InputIt >
     DynamicArray(InputIt first, InputIt last);
     ~DynamicArray();
     DynamicArray & operator=(const DynamicArray & other);
     DynamicArray & operator=(DynamicArray && other) noexcept;
+    iterator begin();
+    iterator end();
+    const_iterator cbegin();
+    const_iterator cend();
     T & operator[](size_t index);
     const T & operator[](size_t index) const;
     T & front();
@@ -38,7 +47,7 @@ namespace erohin
     size_t size_;
     size_t begin_index_;
     T * data_;
-    void reallocate(size_t new_size);
+    void reallocate();
     void clear();
   };
 
@@ -66,7 +75,7 @@ namespace erohin
     }
     catch (...)
     {
-      delete [] reinterpret_cast< char * >(data_);
+      clear();
       throw;
     }
     begin_index_ = 0;
@@ -86,6 +95,14 @@ namespace erohin
   }
 
   template< class T >
+  DynamicArray< T >::DynamicArray(size_t capacity):
+    capacity_(capacity),
+    size_(0),
+    begin_index_(0),
+    data_(reinterpret_cast< T * >(new char[capacity * sizeof(T)]))
+  {}
+
+  template< class T >
   template< class InputIt >
   DynamicArray< T >::DynamicArray(InputIt first, InputIt last):
     capacity_(8),
@@ -102,7 +119,7 @@ namespace erohin
     }
     catch (...)
     {
-      delete [] reinterpret_cast< char * >(data_);
+      clear();
       throw;
     }
   }
@@ -133,6 +150,30 @@ namespace erohin
       swap(temp);
     }
     return *this;
+  }
+
+  template< class T >
+  DynArrayIterator< T > DynamicArray< T >::begin()
+  {
+    return DynArrayIterator< T >(data_ + begin_index_);
+  }
+
+  template< class T >
+  DynArrayIterator< T > DynamicArray< T >::end()
+  {
+    return DynArrayIterator< T >(data_ + begin_index_ + size_);
+  }
+
+  template< class T >
+  DynArrayConstIterator< T > DynamicArray< T >::cbegin()
+  {
+    return DynArrayConstIterator< T >(data_ + begin_index_);
+  }
+
+  template< class T >
+  DynArrayConstIterator< T > DynamicArray< T >::cend()
+  {
+    return DynArrayConstIterator< T >(data_ + begin_index_ + size_);
   }
 
   template< class T >
@@ -188,7 +229,7 @@ namespace erohin
   {
     if (begin_index_ + size_ == capacity_)
     {
-      reallocate(2 * capacity_);
+      reallocate();
     }
     new (data_ + begin_index_ + size_) T(value);
     ++size_;
@@ -199,7 +240,7 @@ namespace erohin
   {
     if (begin_index_ + size_ == capacity_)
     {
-      reallocate(2 * capacity_);
+      reallocate();
     }
     new (data_ + begin_index_ + size_) T(std::move(value));
     ++size_;
@@ -211,9 +252,9 @@ namespace erohin
   {
     if (begin_index_ + size_ == capacity_)
     {
-      reallocate(2 * capacity_);
+      reallocate();
     }
-    data_[begin_index_ + size_] = std::move(T(std::forward< Args... >(args...)));
+    new (data_ + begin_index_ + size_) T(std::forward< Args... >(args...));
     ++size_;
   }
 
@@ -308,12 +349,9 @@ namespace erohin
   }
 
   template< class T >
-  void DynamicArray< T >::reallocate(size_t new_capacity)
+  void DynamicArray< T >::reallocate()
   {
-    if (new_capacity == 0)
-    {
-      new_capacity = 8;
-    }
+    size_t new_capacity = (capacity_ > 0) ? (2 * capacity_) : 0;
     T * new_data = reinterpret_cast< T * >(new char[new_capacity * sizeof(T)]);
     for (size_t i = 0; i < size_; ++i)
     {
