@@ -22,7 +22,7 @@ int main(int argc, char ** argv)
   rebdev::Stack< long long > resultStack;
   while (!inputLink.eof())
   {
-    rebdev::queue< rebdev::node > postfixQueue;
+    rebdev::Queue< rebdev::node > postfixQueue;
 
     std::string nextLine;
     std::getline(inputLink, nextLine);

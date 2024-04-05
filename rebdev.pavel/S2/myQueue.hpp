@@ -2,6 +2,7 @@
 #define MYQUEUE_HPP
 
 #include <list>
+#include <cstddef>
 
 namespace rebdev
 {

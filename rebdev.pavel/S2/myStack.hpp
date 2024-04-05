@@ -2,6 +2,7 @@
 #define MYSTACH_HPP
 
 #include <list>
+#include <cstddef>
 
 namespace rebdev
 {
