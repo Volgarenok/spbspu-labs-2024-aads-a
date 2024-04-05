@@ -51,7 +51,7 @@ int main(int argc, char **argv)
 		qI.push(inf1);
 		qI.push(inf2);
 		qI.push(inf3);
-		convertExpression(qI);
+		convertExpression(qI).printInfix();
 	}
 	catch (const std::exception &e)
 	{

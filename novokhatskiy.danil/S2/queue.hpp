@@ -25,7 +25,7 @@ namespace novokhatskiy
     T drop();
     ~Queue() = default;
 
-  private:
+    // private:
     std::list<T> data_;
   };
 
@@ -58,6 +58,11 @@ namespace novokhatskiy
   template <class T>
   void Queue<T>::printInfix()
   {
+    for (auto i = data_.begin(); i != data_.end(); i++)
+    {
+      Postfix q = *i;
+      q.printPost();
+    }
   }
 
   template <class T>

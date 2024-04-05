@@ -70,7 +70,7 @@ void novokhatskiy::InfixType::print()
 {
   if (type == PartsOfExpression::OPERAND)
   {
-    std::cout << data.operand.value << '\t';
+    std::cout << data.operand.value;
   }
   else if (type == PartsOfExpression::OPERATION)
   {
@@ -78,6 +78,18 @@ void novokhatskiy::InfixType::print()
   }
   else
   {
-    std::cout << data.bracket.scope << '\t';
+    std::cout << data.bracket.scope;
+  }
+}
+
+void novokhatskiy::Postfix::printPost()
+{
+  if (type == PartsOfExpression::OPERAND)
+  {
+    std::cout << data.operand.value;
+  }
+  else if (type == PartsOfExpression::OPERATION)
+  {
+    std::cout << data.operation.operation;
   }
 }

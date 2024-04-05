@@ -63,6 +63,7 @@ namespace novokhatskiy
     PartsOfExpression type;
     Postfix() = default;
     Postfix convertToPostfix(const InfixType &inf);
+    void printPost();
   };
 }
 

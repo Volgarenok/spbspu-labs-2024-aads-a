@@ -27,11 +27,14 @@ novokhatskiy::Queue<novokhatskiy::Postfix> novokhatskiy::convertExpression(Queue
 				}
 				else if (currObj.type == PartsOfExpression::OPERATION)
 				{
-					InfixType newOp = stack.top();
-					if (newOp.getPriority() >= currObj.getPriority())
+					if (!stack.empty())
 					{
-						postixExp.convertToPostfix(currObj);
-						resultQueue.push(postixExp);
+						InfixType newOp = infixQueue.front();
+						if (newOp.getPriority() >= currObj.getPriority())
+						{
+							postixExp.convertToPostfix(currObj);
+							resultQueue.push(postixExp);
+						}
 					}
 					stack.push(currObj);
 				}
@@ -47,9 +50,9 @@ novokhatskiy::Queue<novokhatskiy::Postfix> novokhatskiy::convertExpression(Queue
 			}
 			else if (currObj.type == PartsOfExpression::OPERATION)
 			{
-				InfixType newOp = infixQueue.front();
-				if (newOp.type == PartsOfExpression::OPERATION)
+				if (!stack.empty())
 				{
+					InfixType newOp = infixQueue.front();
 					if (newOp.getPriority() >= currObj.getPriority())
 					{
 						postixExp.convertToPostfix(currObj);
