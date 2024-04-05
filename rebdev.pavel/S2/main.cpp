@@ -25,17 +25,21 @@ int main(int argc, char ** argv)
 
     std::string nextLine;
     std::getline(inputLink, nextLine);
-    std::istringstream inputStr(nextLine);
 
-    try
+    if (!nextLine.empty())
     {
-      rebdev::makePostfixQueue(postfixQueue, inputStr);
-      std::cout << rebdev::convertPostfixToNum(postfixQueue) << '\n';
-    }
-    catch (const std::exception & e)
-    {
-      std::cerr << e.what() << '\n';
-      return 1;
+      std::istringstream inputStr(nextLine);
+
+      try
+      {
+        rebdev::makePostfixQueue(postfixQueue, inputStr);
+        std::cout << rebdev::convertPostfixToNum(postfixQueue) << '\n';
+      }
+      catch (const std::exception & e)
+      {
+        std::cerr << e.what() << '\n';
+        return 1;
+      }
     }
   }
   return 0;
