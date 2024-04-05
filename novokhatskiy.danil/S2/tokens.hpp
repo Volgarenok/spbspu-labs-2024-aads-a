@@ -11,7 +11,13 @@ namespace novokhatskiy
     OPERATION = 1,
     BRACKET = 2
   };
-  
+
+  enum class PriorityOfOperation
+  {
+    plus = 1,
+    minus = 1
+  };
+
   struct Operand
   {
     long long value;
@@ -22,7 +28,7 @@ namespace novokhatskiy
   {
     char operation;
     Operation() = default;
-    bool operator<(const Operation& other) const;
+    bool operator<(const Operation &other) const;
   };
 
   struct Bracket
@@ -41,8 +47,9 @@ namespace novokhatskiy
     };
     infix_t data;
     PartsOfExpression type;
-    void print();
     InfixType() = default;
+    void print();
+    size_t getPriority();
   };
 
   struct Postfix
@@ -55,8 +62,8 @@ namespace novokhatskiy
     postfix_t data;
     PartsOfExpression type;
     Postfix() = default;
-    Postfix convertToPostfix(const InfixType& inf);
-  }; 
+    Postfix convertToPostfix(const InfixType &inf);
+  };
 }
 
 #endif

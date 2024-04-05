@@ -1,22 +1,23 @@
 #include "tokens.hpp"
+#include <cassert>
 #include <stdexcept>
 #include <iostream>
 
-//novokhatskiy::Expression::Expression(char symb):
-//  operation(symb)
+// novokhatskiy::Expression::Expression(char symb):
+//   operation(symb)
 //{}
 
-//novokhatskiy::InfixType::InfixType(PartsOfExpression type, char scope):
-//  type_(type),
-//  data_(scope)
+// novokhatskiy::InfixType::InfixType(PartsOfExpression type, char scope):
+//   type_(type),
+//   data_(scope)
 //{}
 //
-//novokhatskiy::InfixType::InfixType(PartsOfExpression type, size_t value):
-//  data_(value),
-//  type_(type)
+// novokhatskiy::InfixType::InfixType(PartsOfExpression type, size_t value):
+//   data_(value),
+//   type_(type)
 //{}
 
-bool novokhatskiy::Operation::operator<(const Operation& other) const
+bool novokhatskiy::Operation::operator<(const Operation &other) const
 {
   if (operation == '+' || operation == '-')
   {
@@ -28,10 +29,29 @@ bool novokhatskiy::Operation::operator<(const Operation& other) const
   }
 }
 
-//novokhatskiy::Postfix::Postfix(const InfixType& inf) :
-//  data_(inf.data_),
+size_t novokhatskiy::InfixType::getPriority()
+{
+  assert(type == PartsOfExpression::OPERATION);
+  switch (data.operation.operation)
+  {
+  case '-':
+  case '+':
+    return 1;
 
-novokhatskiy::Postfix novokhatskiy::Postfix::convertToPostfix(const InfixType& inf)
+  case '*':
+  case '/':
+  case '%':
+    return 2;
+
+  default:
+    throw std::invalid_argument("It's not an operation");
+  }
+}
+
+// novokhatskiy::Postfix::Postfix(const InfixType& inf) :
+//   data_(inf.data_),
+
+novokhatskiy::Postfix novokhatskiy::Postfix::convertToPostfix(const InfixType &inf)
 {
   if (inf.type == PartsOfExpression::OPERAND)
   {

@@ -2,31 +2,63 @@
 #include "stack.hpp"
 #include <stdexcept>
 
-novokhatskiy::Queue< novokhatskiy::Postfix> novokhatskiy::convertExpression(Queue< InfixType > infixQueue)
+novokhatskiy::Queue<novokhatskiy::Postfix> novokhatskiy::convertExpression(Queue<InfixType> infixQueue)
 {
-	novokhatskiy::Queue< Postfix > resultQueue;
+	novokhatskiy::Queue<Postfix> resultQueue;
 	while (!infixQueue.empty())
 	{
-		novokhatskiy::Stack< InfixType > stack;
+		novokhatskiy::Stack<InfixType> stack;
 		InfixType currObj = infixQueue.drop();
-		//if (currObj.type == PartsOfExpression::OPERATION)
+		// if (currObj.type == PartsOfExpression::OPERATION)
 		//{
-		//	throw 
-		//}
-		while (currObj.data.bracket.scope != ')')
-		{
-
-		}
+		//	throw
+		// }
 		if (currObj.type == PartsOfExpression::BRACKET)
 		{
-			if (currObj.data.bracket.scope == '(')
+			stack.push(currObj);
+			while (currObj.data.bracket.scope != ')')
 			{
+				currObj = infixQueue.drop();
+				Postfix postixExp;
+				if (currObj.type == PartsOfExpression::OPERAND)
+				{
+					postixExp.convertToPostfix(currObj);
+					resultQueue.push(postixExp);
+				}
+				else if (currObj.type == PartsOfExpression::OPERATION)
+				{
+					InfixType newOp = stack.top();
+					if (newOp.getPriority() >= currObj.getPriority())
+					{
+						postixExp.convertToPostfix(currObj);
+						resultQueue.push(postixExp);
+					}
+					stack.push(currObj);
+				}
+			}
+		}
+		else
+		{
+			Postfix postixExp;
+			if (currObj.type == PartsOfExpression::OPERAND)
+			{
+				postixExp.convertToPostfix(currObj);
+				resultQueue.push(postixExp);
+			}
+			else if (currObj.type == PartsOfExpression::OPERATION)
+			{
+				InfixType newOp = infixQueue.front();
+				if (newOp.type == PartsOfExpression::OPERATION)
+				{
+					if (newOp.getPriority() >= currObj.getPriority())
+					{
+						postixExp.convertToPostfix(currObj);
+						resultQueue.push(postixExp);
+					}
+				}
 				stack.push(currObj);
 			}
 		}
-		else if (currObj.type == PartsOfExpression::OPERAND)
-		{
-			size_t ;
-		}
 	}
+	return resultQueue;
 }
