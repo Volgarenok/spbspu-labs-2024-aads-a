@@ -6,9 +6,25 @@
 #include "queue.hpp"
 #include "stack.hpp"
 
+#include "dynamic_array.hpp"
+
 int main(int argc, char ** argv)
 {
   using namespace erohin;
+
+  Stack< int, DynamicArray< int > > stack;
+  for (int i = 0; i < 10; ++i)
+  {
+    stack.push(i);
+  }
+  for (int i = 0; i < 10; ++i)
+  {
+    std::cout << stack.top();
+    for (int i = 0; i < 10; ++i)
+    stack.pop();
+  }
+  std::cout << "\n" << stack.empty() << "\n";
+
   Queue< PostfixExpression > expr_lines;
   Stack< long long > results;
   bool isAnyExpressionCorrect = true;
