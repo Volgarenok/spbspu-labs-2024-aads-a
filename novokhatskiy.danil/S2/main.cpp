@@ -37,21 +37,28 @@ int main(int argc, char **argv)
 	}*/
 	try
 	{
-		InfixType inf1;
-		inf1.data.operand.value = 4;
-		inf1.type = PartsOfExpression::OPERAND;
-		InfixType inf2;
-		inf2.data.operation.operation = '-';
-		inf2.type = PartsOfExpression::OPERATION;
-		InfixType inf3;
-		inf3.data.operand.value = 5;
-		inf3.type = PartsOfExpression::OPERAND;
-		Postfix pos;
-		Queue<InfixType> qI;
-		qI.push(inf1);
-		qI.push(inf2);
-		qI.push(inf3);
-		convertExpression(qI).printInfix();
+		// InfixType inf1;
+		// inf1.data.operand.value = 4;
+		// inf1.type = PartsOfExpression::OPERAND;
+		// InfixType inf2;
+		// inf2.data.operation.operation = '-';
+		// inf2.type = PartsOfExpression::OPERATION;
+		// InfixType inf3;
+		// inf3.data.operand.value = 5;
+		// inf3.type = PartsOfExpression::OPERAND;
+		// Postfix pos;
+		// Queue<InfixType> qI;
+		// qI.push(inf1);
+		// qI.push(inf2);
+		// qI.push(inf3);
+		// convertExpression(qI).printInfix();
+		Queue<Queue<InfixType>> qu;
+		inputInfix(qu, std::cin);
+		while (!qu.empty())
+		{
+			Queue<InfixType> res = qu.drop();
+			convertExpression(res).printInfix();
+		}
 	}
 	catch (const std::exception &e)
 	{

@@ -2,7 +2,7 @@
 #include "stack.hpp"
 #include <stdexcept>
 
-novokhatskiy::Queue<novokhatskiy::Postfix> novokhatskiy::convertExpression(Queue<InfixType> infixQueue)
+novokhatskiy::Queue<novokhatskiy::Postfix> novokhatskiy::convertExpression(Queue<InfixType> &infixQueue)
 {
 	novokhatskiy::Queue<Postfix> resultQueue;
 	novokhatskiy::Stack<InfixType> stack;
@@ -45,9 +45,9 @@ novokhatskiy::Queue<novokhatskiy::Postfix> novokhatskiy::convertExpression(Queue
 			break;
 		}
 	}
-	while (!stack.empty() && stack.top().type != PartsOfExpression::BRACKET)
-	{
-		}
+	// while (!stack.empty() && stack.top().type != PartsOfExpression::BRACKET)
+	// {
+	// 	}
 
 	resultQueue.push(stack.drop());
 	return resultQueue;
