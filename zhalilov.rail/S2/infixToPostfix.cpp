@@ -29,18 +29,20 @@ void zhalilov::infixToPostfix(Queue< InfixToken > infix, Queue< PostfixToken > &
     }
     else if (tempToken.getType() == PrimaryType::BinOperator)
     {
-      bool condition = transfer.top().getType() != PrimaryType::OpenBracket;
-      condition = condition && !transfer.empty();
-      while (condition)
+      if (!transfer.empty())
       {
-        if (transfer.top().getBinOperator() > tempToken.getBinOperator())
+        bool condition = transfer.top().getType() == PrimaryType::BinOperator;
+        while (condition)
         {
-          break;
+          if (transfer.top().getBinOperator() > tempToken.getBinOperator())
+          {
+            break;
+          }
+          postfix.push(PostfixToken(transfer.top().getBinOperator()));
+          transfer.pop();
+          condition = transfer.top().getType() == PrimaryType::BinOperator;
+          condition = condition && !transfer.empty();
         }
-        postfix.push(PostfixToken(transfer.top().getBinOperator()));
-        transfer.pop();
-        condition = transfer.top().getType() != PrimaryType::OpenBracket;
-        condition = condition && !transfer.empty();
       }
       transfer.push(TransferToken(tempToken.getBinOperator()));
     }
