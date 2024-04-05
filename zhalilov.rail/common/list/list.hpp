@@ -506,6 +506,7 @@ namespace zhalilov
     {
       pop_back();
     }
+    delete m_head;
   }
 
   template < typename T >
