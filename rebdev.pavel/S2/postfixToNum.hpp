@@ -1,5 +1,5 @@
-#ifndef POSTFIXFUNCTION_HPP
-#define POSTFIXFUNCTION_HPP
+#ifndef POSTFIXTONUM_HPP
+#define POSTFIXTONUM_HPP
 
 #include "myQueue.hpp"
 #include "node.hpp"

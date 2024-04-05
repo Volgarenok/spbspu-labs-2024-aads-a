@@ -1,5 +1,7 @@
-#ifndef INFIXFUNCTION_HPP
-#define INFIXFUNCTION_HPP
+#ifndef INPUTTOPOSTFIX_HPP
+#define INPUTTOPOSTFIX_HPP
+
+#include <iostream>
 
 #include "myStack.hpp"
 #include "myQueue.hpp"
@@ -7,6 +9,7 @@
 
 namespace rebdev
 {
+  void makePostfixQueue(queue< node > & postfixQueue, std::istream & in);
   void pushOperation(stack< node > & operationStack, queue< node > & postfixQueue, char operation);
 }
 
