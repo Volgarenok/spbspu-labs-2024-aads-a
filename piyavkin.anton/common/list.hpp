@@ -179,7 +179,7 @@ namespace piyavkin
     detail::Node< T >* rhs_node = rhs.head_;
     for (size_t i = 0; i < min_size; ++i)
     {
-      if (node->value_ != rhs_node->value_)
+      if (!(node->value_ == rhs_node->value_))
       {
         return false;
       }
@@ -221,18 +221,32 @@ namespace piyavkin
   template< class T >
   void List< T >::assign(const T& value, size_t count)
   {
-    ConstListIterator< T > old_end = --cend();
+    ConstListIterator< T > old_end;
+    if (!empty())
+    {
+      old_end = --cend();
+    }
     try
     {
       for (size_t i = 0; i < count; ++i)
       {
         push_back(value);
       }
-      erase(cbegin(), ++old_end);
+      if (old_end.node)
+      {
+        erase(cbegin(), ++old_end);
+      }
     }
     catch (const std::exception& e)
     {
-      erase(cbegin(), ++old_end);
+      if (old_end.node)
+      {
+        erase(cbegin(), ++old_end);
+      }
+      else
+      {
+        clear();
+      }
       throw;
     }
   }
@@ -330,40 +344,37 @@ namespace piyavkin
   template< class Functor >
   void List< T >::remove_if(Functor f)
   {
-    detail::Node< T >* node = head_;
-    while (node)
+    ConstListIterator< T > it(head_);
+    if (!empty())
     {
-      if (f(node->value_))
+      while (it != cend())
       {
-        if (node == head_)
+        if (f(it.node->value_))
         {
-          pop_front();
-          node = head_;
-        }
-        else if (node == tail_)
-        {
-          pop_back();
-          node = nullptr;
+          if (it == cbegin())
+          {
+            pop_front();
+            it.node = head_;
+          }
+          else if (it == --cend())
+          {
+            pop_back();
+            it.node = nullptr;
+            break;
+          }
+          else
+          {
+            detail::Node< T >* temp = it.node;
+            it.node->next_->prev_ = it.node->prev_;
+            it.node->prev_->next_ = it.node->next_;
+            ++it;
+            delete temp;
+            --size_;
+          }
         }
         else
         {
-          detail::Node< T >* temp = node;
-          node->next_->prev_ = node->prev_;
-          node->prev_->next_ = node->next_;
-          node = node->next_;
-          delete temp;
-          --size_;
-        }
-      }
-      else
-      {
-        if (node == tail_)
-        {
-          node = nullptr;
-        }
-        else
-        {
-          node = node->next_;
+          ++it;
         }
       }
     }
@@ -594,7 +605,7 @@ namespace piyavkin
   {
     ConstListIterator< T > it(head_);
     ConstListIterator< T > end(tail_);
-    while (it != cend())
+    while (it != cend() && it.node)
     {
       ConstListIterator< T > temp(it);
       ++temp;
@@ -659,23 +670,30 @@ namespace piyavkin
   {
     ConstListIterator< T > start(head_);
     ConstListIterator< T > list_start(list.head_);
-    while (list_start != list.cend())
+    if (size_ != 0)
     {
-      if (comp(*start, *list_start))
+      while (list_start != list.cend() && list.size_ != 0)
       {
-        splice(start, list, list_start++);
-      }
-      else
-      {
-        ++start;
-        if (start == cend())
+        if (comp(*start, *list_start))
         {
-          tail_->next_ = list_start.node;
-          list_start.node->prev_ = tail_;
-          tail_ = list.tail_;
-          break;
+          splice(start, list, list_start++);
+        }
+        else
+        {
+          ++start;
+          if (start == cend())
+          {
+            tail_->next_ = list_start.node;
+            list_start.node->prev_ = tail_;
+            tail_ = list.tail_;
+            break;
+          }
         }
       }
+    }
+    else
+    {
+      *this = std::move(list);
     }
     size_ += list.size_;
     list.head_ = nullptr;
