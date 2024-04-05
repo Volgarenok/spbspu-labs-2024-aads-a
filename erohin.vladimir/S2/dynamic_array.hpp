@@ -1,9 +1,8 @@
 #ifndef DYNAMIC_ARRAY_HPP
 #define DYNAMIC_ARRAY_HPP
 
-#include <cstddef>
+#include <algorithm>
 #include <utility>
-#include <iterator>
 
 namespace erohin
 {
@@ -69,6 +68,19 @@ namespace erohin
       delete [] data_;
     }
     begin_index_ = 0;
+  }
+
+  template< class T >
+  DynamicArray< T >::DynamicArray(DynamicArray && other) noexcept:
+    capacity_(other.capacity_),
+    size_(other.size_),
+    begin_index_(other.begin_index_),
+    data_(other.data_)
+  {
+    capacity_ = 0;
+    size_ = 0;
+    begin_index_ = 0;
+    data_ = nullptr;
   }
 
   template< class T >
@@ -171,28 +183,30 @@ namespace erohin
   template< class T >
   void DynamicArray< T >::push_back(const T & value)
   {
-    if (size_ == capacity_)
+    if (begin_index_ + size_ == capacity_)
     {
       reallocate(2 * capacity_);
     }
     data_[begin_index_ + size_] = value;
+    ++size_;
   }
 
   template< class T >
   void DynamicArray< T >::push_back(T && value)
   {
-    if (size_ == capacity_)
+    if (begin_index_ + size_ == capacity_)
     {
       reallocate(2 * capacity_);
     }
     data_[begin_index_ + size_] = std::move(value);
+    ++size_;
   }
 
   template< class T >
   template< class... Args >
   void DynamicArray< T >::emplace_back(Args&&... args)
   {
-    if (size_ == capacity_)
+    if (begin_index_ + size_ == capacity_)
     {
       reallocate(2 * capacity_);
     }
@@ -287,16 +301,16 @@ namespace erohin
   }
 
   template< class T >
-  void DynamicArray< T >::reallocate(size_t new_size)
+  void DynamicArray< T >::reallocate(size_t new_capacity)
   {
-    T * new_data = new T[new_size];
+    T * new_data = new T[new_capacity];
     for (size_t i = 0; i < size_; ++i)
     {
-      new_data[i] = std::move(data_[begin_index_]);
+      new_data[i] = std::move(data_[begin_index_ + i]);
     }
     delete [] data_;
     data_ = new_data;
-    capacity_ = size_;
+    capacity_ = new_capacity;
     begin_index_ = 0;
   }
 }
