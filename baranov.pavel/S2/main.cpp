@@ -3,24 +3,30 @@
 #include "stack.hpp"
 #include "queue.hpp"
 #include "tokens.hpp"
+#include "inputPostfix.hpp"
 
 int main()
 {
   using namespace baranov;
-  std::string str = "";
-  std::cin >> str;
-  Token token(str);
-  if (token.type == TokenType::OPERAND)
+  Queue< Token > postfixExp;
+  inputPostfix(std::cin, postfixExp);
+
+  while(!postfixExp.empty())
   {
-    std::cout << "operand: " << token.value.operand.value;
-  }
-  if (token.type == TokenType::OPERATION)
-  {
-    std::cout << "operation";
-  }
-  if (token.type == TokenType::BRACKET)
-  {
-    std::cout << "bracket";
+    Token token = postfixExp.front();
+    postfixExp.pop();
+    if (token.type == TokenType::OPERAND)
+    {
+      std::cout << "operand: " << token.value.operand.value << '\n';
+    }
+    if (token.type == TokenType::OPERATION)
+    {
+      std::cout << "operation" << '\n';
+    }
+    if (token.type == TokenType::BRACKET)
+    {
+      std::cout << "bracket" << '\n';
+    }
   }
 }
 

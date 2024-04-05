@@ -2,7 +2,7 @@
 
 baranov::Token::Token(const std::string & str)
 {
-  if (str.size() == 1)
+  if (str.size() == 1 && !isdigit(str[0]))
   {
     char c = str[0];
     if (c == '(' || c == ')')
