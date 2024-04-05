@@ -11,7 +11,7 @@ namespace zhalilov
   class List;
 
   template < typename T >
-  class ConstIterator: std::iterator< std::bidirectional_iterator_tag, const T, const T, const T *, const T >
+  class ConstIterator: std::iterator< std::bidirectional_iterator_tag, const T >
   {
   public:
     using Node = detail::Node< T >;
