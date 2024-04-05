@@ -68,8 +68,8 @@ namespace novokhatskiy
   template <class T>
   T Queue<T>::drop()
   {
-    T value = data_.back();
-    data_.pop_back();
+    T value = data_.front();
+    data_.pop_front();
     return value;
   }
 

@@ -48,6 +48,23 @@ size_t novokhatskiy::InfixType::getPriority()
   }
 }
 
+novokhatskiy::Postfix::Postfix(InfixType &&inf)
+{
+  switch (inf.type)
+  {
+  case PartsOfExpression::OPERAND:
+    data.operand = inf.data.operand;
+    break;
+  case PartsOfExpression::OPERATION:
+    data.operation = inf.data.operation;
+    break;
+  default:
+    throw std::invalid_argument("Constuctor doesn't work");
+    break;
+  }
+  type = inf.type;
+}
+
 // novokhatskiy::Postfix::Postfix(const InfixType& inf) :
 //   data_(inf.data_),
 
