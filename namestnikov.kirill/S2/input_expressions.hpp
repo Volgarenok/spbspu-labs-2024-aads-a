@@ -5,11 +5,13 @@
 #include <queue>
 #include <string>
 #include <iostream>
+#include "stack.hpp"
+#include "queue.hpp"
 
 namespace namestnikov
 {
-  void inputExpressions(std::istream & in, std::stack< std::queue< std::string > > & expressionsStack);
-  void inputExpression(std::string s, std::queue< std::string > & expression);
+  void inputExpressions(std::istream & in, Stack< Queue< std::string > > & expressionsStack);
+  void inputExpression(std::string s, Queue< std::string > & expression);
 }
 
 #endif

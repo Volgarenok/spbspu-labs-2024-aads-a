@@ -3,10 +3,11 @@
 
 #include <queue>
 #include <string>
+#include "queue.hpp"
 
 namespace namestnikov
 {
-  void convertToPostfix(std::queue< std::string > & currentQueue, std::queue< std::string > & resultQueue);
+  void convertToPostfix(Queue< std::string > & currentQueue, Queue< std::string > & resultQueue);
 }
 
 #endif

@@ -1,20 +1,20 @@
 #include "input_expressions.hpp"
 
-void namestnikov::inputExpressions(std::istream & in, std::stack< std::queue< std::string > > & expressionsStack)
+void namestnikov::inputExpressions(std::istream & in, Stack< Queue< std::string > > & expressionsStack)
 {
   std::string s = "";
   while (std::getline(in, s, '\n'))
   {
     if (s.size() != 0)
     {
-      std::queue< std::string > expression;
+      Queue< std::string > expression;
       inputExpression(s, expression);
       expressionsStack.push(expression);
     }
   }
 }
 
-void namestnikov::inputExpression(std::string s, std::queue< std::string > & expression)
+void namestnikov::inputExpression(std::string s, Queue< std::string > & expression)
 {
   size_t i = 0;
   while (i < s.size())

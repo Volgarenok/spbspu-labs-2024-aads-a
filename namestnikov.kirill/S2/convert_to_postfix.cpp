@@ -2,6 +2,7 @@
 #include <queue>
 #include <stack>
 #include <stdexcept>
+#include "stack.hpp"
 
 
 int getPrecedence(std::string op)
@@ -25,9 +26,9 @@ bool hasHigherPriority(std::string op1, std::string op2)
   return ((op1 != "(") && (((getPrecedence(op1) == 2) && getPrecedence(op2) == 2) || getPrecedence(op2) == 1));
 }
 
-void namestnikov::convertToPostfix(std::queue< std::string > & currentQueue, std::queue< std::string > & resultQueue)
+void namestnikov::convertToPostfix(Queue< std::string > & currentQueue, Queue< std::string > & resultQueue)
 {
-  std::stack< std::string > processStack;
+  Stack< std::string > processStack;
   while (!currentQueue.empty())
   {
     std::string temp = currentQueue.front();

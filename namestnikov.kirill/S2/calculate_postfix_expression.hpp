@@ -3,10 +3,11 @@
 
 #include <queue>
 #include <string>
+#include "queue.hpp"
 
 namespace namestnikov
 {
-  long long calculatePostfixExpression(std::queue< std::string > & resultQueue);
+  long long calculatePostfixExpression(Queue< std::string > & resultQueue);
 }
 
 #endif

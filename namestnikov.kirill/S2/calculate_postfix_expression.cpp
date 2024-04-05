@@ -3,6 +3,8 @@
 #include <stdexcept>
 #include <iostream>
 #include <limits>
+#include "queue.hpp"
+#include "stack.hpp"
 
 long long calculateExpression(long long num1, long long num2, std::string op)
 {
@@ -58,10 +60,10 @@ long long calculateExpression(long long num1, long long num2, std::string op)
   return result;
 }
 
-long long namestnikov::calculatePostfixExpression(std::queue< std::string > & resultQueue)
+long long namestnikov::calculatePostfixExpression(Queue< std::string > & resultQueue)
 {
   size_t countOperands = 0;
-  std::stack< long long > operandsStack;
+  Stack< long long > operandsStack;
   while (!resultQueue.empty())
   {
     if (std::isdigit(resultQueue.front()[0]))

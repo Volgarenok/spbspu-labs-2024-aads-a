@@ -4,6 +4,7 @@
 #include <queue>
 #include <string>
 #include "stack.hpp"
+#include "queue.hpp"
 #include "convert_to_postfix.hpp"
 #include "calculate_postfix_expression.hpp"
 #include "input_expressions.hpp"
@@ -11,9 +12,9 @@
 int main(int argc, char * argv[])
 {
   using namespace namestnikov;
-  std::stack< std::queue< std::string > > infixes;
-  std::stack< long long > results;
-  std::stack< std::queue< std::string > > postfixes;
+  Stack < Queue< std::string > > infixes;
+  Stack< long long > results;
+  Stack< Queue< std::string > > postfixes;
   try
   {
     if (argc == 1)
@@ -38,7 +39,7 @@ int main(int argc, char * argv[])
     }
     while (!infixes.empty())
     {
-      std::queue< std::string > expression;
+      Queue< std::string > expression;
       convertToPostfix(infixes.top(), expression);
       postfixes.push(expression);
       infixes.pop();
