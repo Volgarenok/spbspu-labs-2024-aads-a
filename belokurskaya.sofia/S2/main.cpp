@@ -1,6 +1,7 @@
 ﻿#include <iostream>
 
 #include "stack.hpp"
+#include "queue.hpp"
 
 int main()
 {
