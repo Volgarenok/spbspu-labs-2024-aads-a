@@ -31,9 +31,11 @@ void zhalilov::infixToPostfix(Queue< InfixToken > infix, Queue< PostfixToken > &
     {
       while (!transfer.empty())
       {
-        bool conditionToStop = transfer.top().getType() != PrimaryType::BinOperator;
-        conditionToStop = conditionToStop && transfer.top().getBinOperator() > tempToken.getBinOperator();
-        if (conditionToStop)
+        if (transfer.top().getType() != PrimaryType::BinOperator)
+        {
+          break;
+        }
+        if (transfer.top().getBinOperator() > tempToken.getBinOperator())
         {
           break;
         }
