@@ -4,9 +4,11 @@
 #include <cstddef>
 #include <list>
 
+#include "dynamic_array.hpp"
+
 namespace erohin
 {
-  template< class T, class Container = std::list< T > >
+  template< class T, class Container = DynamicArray< T > >
   class Stack
   {
   public:
@@ -19,7 +21,7 @@ namespace erohin
     explicit Stack(Container && cont);
     ~Stack();
     Stack & operator=(const Stack & other);
-    Stack & operator=(Stack && other);
+    Stack & operator=(Stack && other) noexcept;
     T & top();
     const T & top() const;
     bool empty();
@@ -46,7 +48,7 @@ namespace erohin
 
   template< class T, class Container >
   Stack< T, Container >::Stack(Stack && stack):
-    container_(stack.container_)
+    container_(std::move(stack.container_))
   {}
 
   template< class T, class Container >
@@ -71,7 +73,7 @@ namespace erohin
   template< class T, class Container >
   Stack< T, Container > & Stack< T, Container >::operator=(const Stack & other)
   {
-    if (*this != &other)
+    if (this != &other)
     {
       Stack< T, Container > temp(other);
       swap(temp);
@@ -80,9 +82,9 @@ namespace erohin
   }
 
   template< class T, class Container >
-  Stack< T, Container > & Stack< T, Container >::operator=(Stack && other)
+  Stack< T, Container > & Stack< T, Container >::operator=(Stack && other) noexcept
   {
-    if (*this != &other)
+    if (this != &other)
     {
       Stack< T, Container > temp(std::move(other));
       swap(temp);
@@ -142,7 +144,7 @@ namespace erohin
   template< class T, class Container >
   void Stack<T, Container>::swap(Stack<T, Container> & rhs) noexcept
   {
-    container_.swap(rhs);
+    container_.swap(rhs.container_);
   }
 
   template< class T, class Container >

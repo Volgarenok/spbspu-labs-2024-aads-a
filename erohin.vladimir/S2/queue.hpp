@@ -4,9 +4,11 @@
 #include <cstddef>
 #include <list>
 
+#include "dynamic_array.hpp"
+
 namespace erohin
 {
-  template< class T, class Container = std::list< T > >
+  template< class T, class Container = DynamicArray< T > >
   class Queue
   {
   public:
@@ -19,7 +21,7 @@ namespace erohin
     explicit Queue(Container && cont);
     ~Queue();
     Queue & operator=(const Queue & other);
-    Queue & operator=(Queue && other);
+    Queue & operator=(Queue && other) noexcept;
     T & front();
     const T & front() const;
     T & back();
@@ -42,13 +44,13 @@ namespace erohin
   {}
 
   template< class T, class Container >
-  Queue< T, Container >::Queue(const Queue & stack):
-    container_(stack.container_)
+  Queue< T, Container >::Queue(const Queue & queue):
+    container_(queue.container_)
   {}
 
   template< class T, class Container >
-  Queue< T, Container >::Queue(Queue && stack):
-    container_(stack.container_)
+  Queue< T, Container >::Queue(Queue && queue):
+    container_(std::move(queue.container_))
   {}
 
   template< class T, class Container >
@@ -73,7 +75,7 @@ namespace erohin
   template< class T, class Container >
   Queue< T, Container > & Queue< T, Container >::operator=(const Queue & other)
   {
-    if (*this != &other)
+    if (this != &other)
     {
       Queue< T, Container > temp(other);
       swap(temp);
@@ -82,9 +84,9 @@ namespace erohin
   }
 
   template< class T, class Container >
-  Queue< T, Container > & Queue< T, Container >::operator=(Queue && other)
+  Queue< T, Container > & Queue< T, Container >::operator=(Queue && other) noexcept
   {
-    if (*this != &other)
+    if (this != &other)
     {
       Queue< T, Container > temp(std::move(other));
       swap(temp);
@@ -156,7 +158,7 @@ namespace erohin
   template< class T, class Container >
   void Queue<T, Container>::swap(Queue<T, Container> & rhs) noexcept
   {
-    container_.swap(rhs);
+    container_.swap(rhs.container_);
   }
 
   template< class T, class Container >
