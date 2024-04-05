@@ -103,7 +103,7 @@ namespace zhalilov
   template < typename T >
   List< T >::List():
     m_size(0),
-    m_head(new Node)
+    m_head(nullptr)
   {
     m_head->next = m_head;
     m_head->prev = m_head;
@@ -190,7 +190,7 @@ namespace zhalilov
   }
 
   template < typename T >
-  bool List< T >::operator==(const List< T > &list) const noexcept
+  bool List< T >::operator==(const List< T > &list) const
   {
     if (m_size == list.m_size)
     {
@@ -200,13 +200,13 @@ namespace zhalilov
   }
 
   template < typename T >
-  bool List< T >::operator!=(const List< T > &list) const noexcept
+  bool List< T >::operator!=(const List< T > &list) const
   {
     return !(*this == list);
   }
 
   template < typename T >
-  bool List< T >::operator<(const List< T > &list) const noexcept
+  bool List< T >::operator<(const List< T > &list) const
   {
     if (m_size < list.m_size)
     {
@@ -216,19 +216,19 @@ namespace zhalilov
   }
 
   template < typename T >
-  bool List< T >::operator<=(const List< T > &list) const noexcept
+  bool List< T >::operator<=(const List< T > &list) const
   {
     return !(list < *this);
   }
 
   template < typename T >
-  bool List< T >::operator>(const List< T > &list) const noexcept
+  bool List< T >::operator>(const List< T > &list) const
   {
     return list < *this;
   }
 
   template < typename T >
-  bool List< T >::operator>=(const List< T > &list) const noexcept
+  bool List< T >::operator>=(const List< T > &list) const
   {
     return !(*this < list);
   }
