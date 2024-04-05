@@ -40,7 +40,8 @@ void zhalilov::infixToPostfix(Queue< InfixToken > infix, Queue< PostfixToken > &
         postfix.push(PostfixToken(transfer.top().getBinOperator()));
         transfer.pop();
         condition = transfer.top().getType() != PrimaryType::OpenBracket;
-        condition = condition && !transfer.empty();
+        condition = condition;
+        //&& !transfer.empty();
       }
       transfer.push(TransferToken(tempToken.getBinOperator()));
     }
