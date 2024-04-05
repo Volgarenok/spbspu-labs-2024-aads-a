@@ -4,29 +4,25 @@
 #include "queue.hpp"
 #include "tokens.hpp"
 #include "inputPostfix.hpp"
+#include "calculatePostfix.hpp"
 
 int main()
 {
   using namespace baranov;
   Queue< Token > postfixExp;
-  inputPostfix(std::cin, postfixExp);
+  long long int result = 0;
 
-  while(!postfixExp.empty())
+  try
   {
-    Token token = postfixExp.front();
-    postfixExp.pop();
-    if (token.type == TokenType::OPERAND)
-    {
-      std::cout << "operand: " << token.value.operand.value << '\n';
-    }
-    if (token.type == TokenType::OPERATION)
-    {
-      std::cout << "operation" << '\n';
-    }
-    if (token.type == TokenType::BRACKET)
-    {
-      std::cout << "bracket" << '\n';
-    }
+    inputPostfix(std::cin, postfixExp);
+    result = calculatePostfix(postfixExp);
   }
+  catch (const std::exception & e)
+  {
+    std::cerr << e.what();
+    return 1;
+  }
+
+  std::cout << result;
 }
 
