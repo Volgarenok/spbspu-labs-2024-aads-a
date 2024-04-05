@@ -53,60 +53,60 @@ void erohin::convertInfixToPostfix(Queue< Token > & post_expr, Queue< Token > in
     Token & current = inf_expr.front();
     switch (current.id)
     {
-      case operand_token:
-        post_expr.push(current);
-        inf_expr.pop();
-        break;
-      case bracket_token:
-        if (current.token.bracket.bracket_type == open_bt)
+    case operand_token:
+      post_expr.push(current);
+      inf_expr.pop();
+      break;
+    case bracket_token:
+      if (current.token.bracket.bracket_type == open_bt)
+      {
+        temp_stack.push(current);
+      }
+      else if (current.token.bracket.bracket_type == close_bt)
+      {
+        if (temp_stack.empty())
         {
-          temp_stack.push(current);
+          throw std::runtime_error("An extra bracket in postfix expression record");
         }
-        else if (current.token.bracket.bracket_type == close_bt)
+        Token & top = temp_stack.top();
+        while (!(top.id == bracket_token && top.token.bracket.bracket_type == open_bt))
         {
+          post_expr.push(top);
+          temp_stack.pop();
           if (temp_stack.empty())
           {
             throw std::runtime_error("An extra bracket in postfix expression record");
           }
-          Token & top = temp_stack.top();
-          while (!(top.id == bracket_token && top.token.bracket.bracket_type == open_bt))
-          {
-            post_expr.push(top);
-            temp_stack.pop();
-            if (temp_stack.empty())
-            {
-              throw std::runtime_error("An extra bracket in postfix expression record");
-            }
-            top = temp_stack.top();
-          }
-          temp_stack.pop();
+          top = temp_stack.top();
         }
-        inf_expr.pop();
-        break;
-      case operator_token:
-        if (temp_stack.empty())
-        {
-          temp_stack.push(current);
-          inf_expr.pop();
-          break;
-        }
-        Token & top = temp_stack.top();
-        while ((top.id == operator_token) && (current.token.operation >= top.token.operation))
-        {
-          post_expr.push(top);
-          temp_stack.pop();
-          if (!temp_stack.empty())
-          {
-            top = temp_stack.top();
-          }
-          else
-          {
-            break;
-          }
-        }
+        temp_stack.pop();
+      }
+      inf_expr.pop();
+      break;
+    case operator_token:
+      if (temp_stack.empty())
+      {
         temp_stack.push(current);
         inf_expr.pop();
         break;
+      }
+      Token & top = temp_stack.top();
+      while ((top.id == operator_token) && (current.token.operation >= top.token.operation))
+      {
+        post_expr.push(top);
+        temp_stack.pop();
+        if (!temp_stack.empty())
+        {
+          top = temp_stack.top();
+        }
+        else
+        {
+          break;
+        }
+      }
+      temp_stack.push(current);
+      inf_expr.pop();
+      break;
     }
   }
   while (!temp_stack.empty() && temp_stack.top().id == operator_token)

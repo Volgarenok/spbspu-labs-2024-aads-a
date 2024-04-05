@@ -2,9 +2,16 @@
 #define OPERATOR_HPP
 
 #include "operand.hpp"
+#include <limits>
 
 namespace erohin
 {
+  enum limit_t
+  {
+    MIN = std::numeric_limits< long long >::min(),
+    MAX = std::numeric_limits< long long >::max()
+  };
+
   enum operator_t
   {
     OPERATOR_SUBTRACT,
