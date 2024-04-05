@@ -10,10 +10,15 @@ namespace erohin
   class DynamicArray;
 
   template< class T >
-  class DynArrayIterator: public std::iterator< std::random_access_iterator_tag, T >
+  class DynArrayIterator
   {
     friend class DynamicArray< T >;
   public:
+    using iterator_category = std::forward_iterator_tag;
+    using value_type = T;
+    using difference_type = size_t;
+    using pointer = T *;
+    using reference = T &;
     DynArrayIterator();
     DynArrayIterator(T * ptr);
     DynArrayIterator(const DynArrayIterator< T > &) = default;
