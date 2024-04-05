@@ -11,7 +11,7 @@ namespace zhalilov
   class List;
 
   template < typename T >
-  class Iterator: public std::iterator< std::bidirectional_iterator_tag, T >
+  class Iterator: public std::iterator< std::bidirectional_iterator_tag, T, T, T *, T >
   {
   public:
     using Node = detail::Node< T >;
@@ -27,8 +27,6 @@ namespace zhalilov
 
     T &operator*();
     T *operator->();
-    const T &operator*() const;
-    const T *operator->() const;
 
     bool operator==(const Iterator< T > &) const;
     bool operator!=(const Iterator< T > &) const;
@@ -84,18 +82,6 @@ namespace zhalilov
 
   template < typename T >
   T *Iterator< T >::operator->()
-  {
-    return &m_node->value;
-  }
-
-  template < typename T >
-  const T &Iterator< T >::operator*() const
-  {
-    return m_node->value;
-  }
-
-  template < typename T >
-  const T *Iterator< T >::operator->() const
   {
     return &m_node->value;
   }
