@@ -1,31 +1,26 @@
 #include <iostream>
+#include <string>
 #include "stack.hpp"
 #include "queue.hpp"
+#include "tokens.hpp"
 
 int main()
 {
   using namespace baranov;
-  int a = 0;
-
-  Stack< int > stack;
-  Queue< int > queue;
-
-  while (std::cin >> a)
+  std::string str = "";
+  std::cin >> str;
+  Token token(str);
+  if (token.type == TokenType::OPERAND)
   {
-    stack.push(a);
-    queue.push(a);
+    std::cout << "operand: " << token.value.operand.value;
   }
-
-  while (!stack.empty())
+  if (token.type == TokenType::OPERATION)
   {
-  std::cout << stack.top() << '\n';
-  stack.pop();
+    std::cout << "operation";
   }
-
-  while (!queue.empty())
+  if (token.type == TokenType::BRACKET)
   {
-  std::cout << queue.front() << '\n';
-  queue.pop();
+    std::cout << "bracket";
   }
 }
 
