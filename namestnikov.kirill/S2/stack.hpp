@@ -33,7 +33,11 @@ namespace namestnikov
     {
       data_.pop_front();
     }
-    T & top() const noexcept
+    T & top()
+    {
+      return data_.front();
+    }
+    const T & top() const
     {
       return data_.front();
     }

@@ -24,11 +24,19 @@ namespace namestnikov
       }
       return *this;
     }
-    T & front() const noexcept
+    T & front()
     {
       return data_.front();
     }
-    T & back() const noexcept
+    const T & front() const
+    {
+      return data_.front();
+    }
+    T & back()
+    {
+      return data_.back();
+    }
+    const T & back() const
     {
       return data_.back();
     }
