@@ -27,6 +27,11 @@ long long calculateExpression(long long num1, long long num2, std::string op)
   }
   else if (op == "*")
   {
+    long long maxLong = std::numeric_limits< long long >::max();
+    if (maxLong / num1 < num1)
+    {
+      throw std::out_of_range("Overflow error");
+    }
     result = num1 * num2;
   }
   else if (op == "/")
