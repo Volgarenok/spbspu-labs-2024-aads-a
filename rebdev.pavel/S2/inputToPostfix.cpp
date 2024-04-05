@@ -44,6 +44,7 @@ void rebdev::pushOperation(Stack< node > & operationStack, queue< node > & postf
   if  (operation == ')')
   {
     node topNode = operationStack.drop();
+
     while (topNode != '(')
     {
       postfixQueue.push(topNode);
@@ -60,11 +61,12 @@ void rebdev::pushOperation(Stack< node > & operationStack, queue< node > & postf
     if (operationStack.size() > 0)
     {
       node topNode = operationStack.drop();
+      if (!(newNode >= topNode)) operationStack.push(topNode);
       while (newNode >= topNode)
       {
         postfixQueue.push(topNode);
-        topNode = operationStack.drop();
         if (operationStack.size() == 0) break;
+        topNode = operationStack.drop();
       }
     }
     operationStack.push(newNode);
