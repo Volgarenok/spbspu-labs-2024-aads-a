@@ -22,11 +22,11 @@ long long zhalilov::calculateExpr(Queue< PostfixToken > expr)
       operands.pop();
       Operand nextToLast = operands.top();
       operands.pop();
-      operands.push(tempToken.binOperator(nextToLast, last));
+      operands.push(tempToken.getBinOperator()(nextToLast, last));
     }
     else
     {
-      operands.push(tempToken.operand);
+      operands.push(tempToken.getOperand());
     }
     expr.pop();
   }

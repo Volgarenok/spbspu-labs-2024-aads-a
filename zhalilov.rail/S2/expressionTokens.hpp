@@ -10,13 +10,6 @@ namespace zhalilov
 {
   struct InfixToken
   {
-    union
-    {
-      BinOperator binOperator;
-      Operand operand;
-      Bracket bracket;
-    };
-
     InfixToken();
     InfixToken(const InfixToken &tkn);
     explicit InfixToken(BinOperator aBinOperator);
@@ -27,7 +20,18 @@ namespace zhalilov
 
     PrimaryType getType() const;
 
+    BinOperator getBinOperator();
+    Operand getOperand();
+    Bracket getBracket();
+
   private:
+    union
+    {
+      BinOperator binOperator_;
+      Operand operand_;
+      Bracket bracket_;
+    };
+
     PrimaryType type_;
 
     void assigner(const InfixToken &tkn);
@@ -35,12 +39,6 @@ namespace zhalilov
 
   struct PostfixToken
   {
-    union
-    {
-      BinOperator binOperator;
-      Operand operand;
-    };
-
     PostfixToken();
     PostfixToken(const PostfixToken &tkn);
     explicit PostfixToken(BinOperator aBinOperator);
@@ -50,7 +48,16 @@ namespace zhalilov
 
     PrimaryType getType() const;
 
+    BinOperator getBinOperator();
+    Operand getOperand();
+
   private:
+    union
+    {
+      BinOperator binOperator_;
+      Operand operand_;
+    };
+
     PrimaryType type_;
 
     void assigner(const PostfixToken &tkn);
@@ -58,12 +65,6 @@ namespace zhalilov
 
   struct TransferToken
   {
-    union
-    {
-      BinOperator binOperator;
-      Bracket bracket;
-    };
-
     TransferToken();
     TransferToken(const TransferToken &tkn);
     explicit TransferToken(BinOperator aBinOperator);
@@ -73,7 +74,16 @@ namespace zhalilov
 
     PrimaryType getType() const;
 
+    BinOperator getBinOperator();
+    Bracket getBracket();
+
   private:
+    union
+    {
+      BinOperator binOperator_;
+      Bracket bracket_;
+    };
+
     PrimaryType type_;
 
     void assigner(const TransferToken &tkn);

@@ -22,7 +22,7 @@ void zhalilov::infixToPostfix(Queue< InfixToken > infix, Queue< PostfixToken > &
         {
           throw std::invalid_argument("incorrect bracket position");
         }
-        postfix.push(PostfixToken(transfer.top().binOperator));
+        postfix.push(PostfixToken(transfer.top().getBinOperator()));
         transfer.pop();
       }
       transfer.pop();
@@ -33,20 +33,20 @@ void zhalilov::infixToPostfix(Queue< InfixToken > infix, Queue< PostfixToken > &
       condition = condition && !transfer.empty();
       while (condition)
       {
-        if (transfer.top().binOperator > tempToken.binOperator)
+        if (transfer.top().getBinOperator() > tempToken.getBinOperator())
         {
           break;
         }
-        postfix.push(PostfixToken(transfer.top().binOperator));
+        postfix.push(PostfixToken(transfer.top().getBinOperator()));
         transfer.pop();
         condition = transfer.top().getType() != PrimaryType::OpenBracket;
         condition = condition && !transfer.empty();
       }
-      transfer.push(TransferToken(tempToken.binOperator));
+      transfer.push(TransferToken(tempToken.getBinOperator()));
     }
     else
     {
-      postfix.push(PostfixToken(tempToken.operand));
+      postfix.push(PostfixToken(tempToken.getOperand()));
     }
     infix.pop();
   }
@@ -56,7 +56,7 @@ void zhalilov::infixToPostfix(Queue< InfixToken > infix, Queue< PostfixToken > &
     {
       throw std::invalid_argument("incorrect bracket position");
     }
-    postfix.push(PostfixToken(transfer.top().binOperator));
+    postfix.push(PostfixToken(transfer.top().getBinOperator()));
     transfer.pop();
   }
 }
