@@ -4,8 +4,6 @@
 #include <algorithm>
 #include <utility>
 
-#include <iostream>
-
 namespace erohin
 {
   template< class T >
@@ -63,7 +61,6 @@ namespace erohin
     {
       for (size_t i = 0; i < size_; ++i)
       {
-        //data_[i] = other.data_[i + begin_index_];
         new (data_ + i) T(other.data_[i + begin_index_]);
       }
     }
@@ -73,8 +70,6 @@ namespace erohin
       throw;
     }
     begin_index_ = 0;
-
-    std::cout << "DynamicArray(const DynamicArray & other) " << typeid(T).name() << std::endl;
   }
 
   template< class T >
@@ -88,7 +83,6 @@ namespace erohin
     other.size_ = 0;
     other.begin_index_ = 0;
     other.data_ = nullptr;
-    std::cout << "DynamicArray(DynamicArray && other) " << typeid(T).name() << std::endl;
   }
 
   template< class T >
@@ -117,7 +111,6 @@ namespace erohin
   DynamicArray< T >::~DynamicArray()
   {
     clear();
-    std::cout << "Destructor " << typeid(T).name() << std::endl;
   }
 
   template< class T >
@@ -317,7 +310,6 @@ namespace erohin
   template< class T >
   void DynamicArray< T >::reallocate(size_t new_capacity)
   {
-    std::cout << "reallocate(size_t new_capacity)" << std::endl;
     if (new_capacity == 0)
     {
       new_capacity = 8;

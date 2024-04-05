@@ -6,8 +6,6 @@
 #include "queue.hpp"
 #include "stack.hpp"
 
-#include "dynamic_array.hpp"
-
 int main(int argc, char ** argv)
 {
   using namespace erohin;

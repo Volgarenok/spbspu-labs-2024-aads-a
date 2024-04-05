@@ -2,8 +2,6 @@
 #define QUEUE_HPP
 
 #include <cstddef>
-#include <list>
-
 #include "dynamic_array.hpp"
 
 namespace erohin
