@@ -3,7 +3,7 @@
 
 namespace strelyaev
 {
-  enum class typeOfExpression
+  enum class TokenType
   {
     OPERAND = 0,
     OPERATION = 1,
@@ -21,11 +21,15 @@ namespace strelyaev
     ~Token() = default;
   };
 
-  struct infixUnit
+  struct ExpressionUnit
   {
-    infixUnit() = delete;
+    ExpressionUnit() = delete;
+    ExpressionUnit(const ExpressionUnit& other) = default;
+    ~ExpressionUnit() = default;
+    ExpressionUnit& operator=(const ExpressionUnit&);
+
     Token token;
-    typeOfExpression type;
+    TokenType type;
   };
 }
 
