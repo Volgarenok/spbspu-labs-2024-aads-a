@@ -1,6 +1,7 @@
 #ifndef FORWARD_LIST_HPP
 #define FORWARD_LIST_HPP
 #include <stdexcept>
+#include <limits>
 #include <list>
 #include "node.hpp"
 #include "iterator.hpp"
@@ -121,6 +122,7 @@ namespace spiridonov
   template <typename T>
   void List<T>::push_back(const T& value)
   {
+
     Node<T>* newNode = new Node<T>(value, nullptr);
     if (head == nullptr)
     {
@@ -163,7 +165,9 @@ namespace spiridonov
   T List<T>::pop_back()
   {
     if (is_empty())
+    {
       throw std::out_of_range("Trying to pop from an empty sequence");
+    }
 
     T value;
     if (head == tail)
@@ -193,7 +197,9 @@ namespace spiridonov
   T List<T>::pop_front()
   {
     if (is_empty())
+    {
       throw std::out_of_range("Trying to pop from an empty sequence");
+    }
 
     T value = head->data;
     Node<T>* temp = head;
