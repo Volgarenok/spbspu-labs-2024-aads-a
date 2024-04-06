@@ -33,8 +33,11 @@ int precedence(char c)
   return -1;
 }
 
-strelyaev::Queue< strelyaev::ExpressionUnit > makeQueue(std::istream& in)
+strelyaev::Queue< strelyaev::ExpressionUnit > makeQueue(std::istream& input)
 {
+  std::string temp_string = "";
+  std::getline(input, temp_string);
+  std::istringstream in(temp_string);
   strelyaev::Queue< strelyaev::ExpressionUnit > token_queue;
   std::string str = "";
   while (in >> str)
@@ -97,7 +100,7 @@ void printQueue(strelyaev::Queue< strelyaev::ExpressionUnit > queue)
   }
 }
 
-strelyaev::Queue< strelyaev::ExpressionUnit > makePostfix(strelyaev::Queue< strelyaev::ExpressionUnit > queue)
+strelyaev::Queue< strelyaev::ExpressionUnit > makePostfix(strelyaev::Queue< strelyaev::ExpressionUnit >& queue)
 {
   strelyaev::Stack< strelyaev::ExpressionUnit > temp_stack;
   strelyaev::Queue< strelyaev::ExpressionUnit > postfix_queue;
@@ -164,11 +167,119 @@ strelyaev::Queue< strelyaev::ExpressionUnit > makePostfix(strelyaev::Queue< stre
   return postfix_queue;
 }
 
+long long calculateOperation(long long first, long long second, char operation)
+{
+  switch (operation)
+  {
+  case '+':
+    return first + second;
+  case '-':
+    return first - second;
+  case '*':
+    return first * second;
+  case '/':
+    return first / second;
+  case '%':
+    return first % second;
+  }
+  throw std::logic_error("Invalid operation");
+}
+
+long long calculatePostfix(strelyaev::Queue< strelyaev::ExpressionUnit > queue)
+{
+  strelyaev::Stack< long long > processing_stack;
+  while (!queue.empty())
+  {
+    strelyaev::ExpressionUnit unit = queue.drop();
+    if (unit.type == strelyaev::TokenType::OPERAND)
+    {
+      processing_stack.push(unit.token.operand);
+    }
+    if (unit.type == strelyaev::TokenType::OPERATION)
+    {
+      long long second = processing_stack.drop();
+      if (processing_stack.empty())
+      {
+        throw std::logic_error("Something is wrong with postfix expression");
+      }
+      long long first = processing_stack.drop();
+      long long result = calculateOperation(first, second, unit.token.operation);
+      processing_stack.push(result);
+    }
+  }
+  long long result = processing_stack.drop();
+  if (!processing_stack.empty())
+  {
+    throw std::logic_error("Something is wrong with postfix expression");
+  }
+  return result;
+}
+
+long long calculateInfixExpression(std::istream& in)
+{
+  strelyaev::Queue< strelyaev::ExpressionUnit > infix_units_queue = makeQueue(in);
+  strelyaev::Queue< strelyaev::ExpressionUnit > postfix_units_queue = makePostfix(infix_units_queue);
+  long long result = calculatePostfix(postfix_units_queue);
+  return result;
+}
+
+void printResults(strelyaev::Stack< long long >& results, std::ostream& out)
+{
+  while (!results.empty())
+  {
+    out << results.drop();
+    if (!results.empty())
+    {
+      out << " ";
+    }
+  }
+}
+
 int main(int argc, char * argv[])
 {
   using namespace strelyaev;
-  std::fstream input(argv[1]);
-  Queue< ExpressionUnit > infix_units_queue = makeQueue(input);
-  Queue< ExpressionUnit > postfix_units_queue = makePostfix(infix_units_queue);
-  printQueue(postfix_units_queue);
+  Stack< long long > results;
+  if (argc == 1)
+  {
+    while (std::cin.good())
+    {
+      long long result = 0;
+      try
+      {
+        result = calculateInfixExpression(std::cin);
+      }
+      catch (const std::exception& e)
+      {
+        std::cerr << e.what() << "\n";
+        return 1;
+      }
+      results.push(result);
+    }
+    printResults(results, std::cout);
+  }
+  else if (argc == 3)
+  {
+    std::ifstream input_file(argv[1]);
+    std::ofstream output_file(argv[2]);
+    while (input_file.good())
+    {
+      long long result = 0;
+      try
+      {
+        result = calculateInfixExpression(input_file);
+      }
+      catch (const std::exception& e)
+      {
+        std::cerr << e.what() << "\n";
+        return 1;
+      }
+      results.push(result);
+    }
+    printResults(results, output_file);
+  }
+  else
+  {
+    std::cerr << "Invalid cmd parameters\n";
+    return 1;
+  }
 }

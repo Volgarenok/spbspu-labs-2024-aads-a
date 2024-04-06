@@ -21,8 +21,8 @@ namespace strelyaev
       bool empty();
       T drop();
 
-      Queue< T >& operator=(const Queue< T >&) = default;
-      Queue< T >& operator=(const Queue< T >&&);
+      Queue< T >& operator=(const Queue< T >&);
+      Queue< T >& operator=(Queue< T >&&);
     private:
       std::list< T > data;
   };
@@ -33,15 +33,24 @@ namespace strelyaev
   {}
 
   template< typename T >
-  Queue< T >& Queue< T >::operator=(const Queue< T >&& other)
+Queue< T >& Queue< T >::operator=(const Queue< T >& other)
+{
+  if (std::addressof(other) != this)
   {
-    if (std::addressof(other) != this)
-    {
-      std::swap(data, other.data);
-      other.data.clear();
-    }
-    return *this;
+    data = other.data;
   }
+  return *this;
+}
+
+template< typename T >
+Queue< T >& Queue< T >::operator=(Queue< T >&& other)
+{
+  if (std::addressof(other) != this)
+  {
+    data = std::move(other.data);
+  }
+  return *this;
+}
 
   template< typename T >
   void Queue< T >::push(const T& value)
