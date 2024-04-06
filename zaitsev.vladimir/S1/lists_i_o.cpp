@@ -8,7 +8,7 @@
 
 namespace zaitsev
 {
-  void input_lists(ForwardList< std::pair< std::string, ForwardList< ull > > >& list)
+  void input_lists(named_ullList& list)
   {
     using List_t = ForwardList< unsigned long long >;
     std::string input;
@@ -30,13 +30,12 @@ namespace zaitsev
     }
   }
 
-  ForwardList< unsigned long long >* print_lists(ForwardList< std::pair< std::string, ForwardList< ull > > >& list)
+  ullList* print_lists(named_ullList& list)
   {
-    using ullList = ForwardList< ull >;
-    using ullListIt = ForwardListIterator< ull >;
+    using ullListIt = ullList::iterator;
 
     ForwardList< std::pair< ullListIt, ullListIt > > beg_end_it;
-    for (ForwardListIterator< std::pair < std::string, ullList > > i = list.begin(); i != list.end(); ++i)
+    for (named_ullList::iterator i = list.begin(); i != list.end(); ++i)
     {
       i->second.reverse();
       if (i != list.begin())
@@ -56,20 +55,20 @@ namespace zaitsev
     {
       sum = 0;
       size_t elements_nmb = 0;
-      for (ForwardListIterator< std::pair< ullListIt, ullListIt > > i = beg_end_it.begin(); i != beg_end_it.end(); ++i)
+      for (std::pair < ullListIt, ullListIt >& i : beg_end_it)
       {
-        if (i->first != i->second)
+        if (i.first != i.second)
         {
-          std::cout << (elements_nmb++ ? " " : "") << *(i->first);
-          if (std::numeric_limits< ull >::max() - sum >= *(i->first) && !overflow)
+          std::cout << (elements_nmb++ ? " " : "") << *(i.first);
+          if (std::numeric_limits< ull >::max() - sum >= *(i.first) && !overflow)
           {
-            sum += *(i->first);
+            sum += *(i.first);
           }
           else
           {
             overflow = true;
           }
-          ++(i->first);
+          ++(i.first);
         }
       }
       if (sum)
@@ -86,7 +85,7 @@ namespace zaitsev
     return sums;
   }
 
-  void print_sums(ForwardList< ull >& sums)
+  void print_sums(ullList& sums)
   {
     if (sums.empty())
     {
