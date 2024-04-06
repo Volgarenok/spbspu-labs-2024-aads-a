@@ -3,12 +3,12 @@
 #include "deque.hpp"
 namespace zaitsev
 {
-  template<typename T>
+  template< typename T >
   class Stack: private Deque< T >
   {
   public:
-    using iterator = typename Deque<T>::iterator;
-    using const_iterator = typename Deque<T>::const_iterator;
+    using iterator = typename Deque< T >::iterator;
+    using const_iterator = typename Deque< T >::const_iterator;
 
     T& top()
     {
@@ -20,7 +20,7 @@ namespace zaitsev
     }
     bool empty() const
     {
-      return Deque<T>::empty();
+      return Deque< T >::empty();
     }
     size_t size() const
     {
@@ -40,27 +40,27 @@ namespace zaitsev
     }
     iterator begin()
     {
-      return Deque<T>::begin();
+      return Deque< T >::begin();
     }
     iterator end()
     {
-      return Deque<T>::end();
+      return Deque< T >::end();
     }
     const_iterator begin() const
     {
-      return Deque<T>::cbegin();
+      return Deque< T >::cbegin();
     }
     const_iterator end() const
     {
-      return Deque<T>::cend();
+      return Deque< T >::cend();
     }
     const_iterator cbegin() const
     {
-      return Deque<T>::cbegin();
+      return Deque< T >::cbegin();
     }
     const_iterator cend() const
     {
-      return Deque<T>::cend();
+      return Deque< T >::cend();
     }
   };
 }

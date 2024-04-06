@@ -9,32 +9,32 @@ namespace zaitsev
   enum struct token_type { undefined = -1, bracket = 0, binary_operator, value };
   enum struct bracket_type { empty = 0, round_open = 1, round_close = -1 };
 
-  template<typename T>
+  template< typename T >
   union TokenValue
   {
     bracket_type bracket_;
-    BinaryOperator<T>* bin_operator_;
+    BinaryOperator< T >* bin_operator_;
     T value_;
   };
 
-  template<typename T>
+  template< typename T >
   struct Token
   {
     token_type type_;
-    TokenValue<T> token_;
+    TokenValue< T > token_;
     Token() = default;
-    Token(const Token<T>& other):
+    Token(const Token< T >& other):
       type_(other.type_)
     {
       token_ = copy_other_value(other);
     }
-    Token(Token<T>&& other):
+    Token(Token< T >&& other):
       type_(other.type_),
       token_(other.token_)
     {
       reset_other_value(other);
     }
-    Token<T>& operator=(const Token<T>& other)
+    Token< T >& operator=(const Token< T >& other)
     {
       if (type_ == token_type::binary_operator)
       {
@@ -44,7 +44,7 @@ namespace zaitsev
       token_ = copy_other_value(other);
       return *this;
     }
-    Token<T>& operator=(Token<T>&& other)
+    Token< T >& operator=(Token< T >&& other)
     {
       type_ = other.type_;
       token_ = other.token_;
@@ -55,7 +55,7 @@ namespace zaitsev
       if (type_ == token_type::binary_operator)
         delete token_.bin_operator_;
     }
-    friend std::ostream& operator<<(std::ostream& output, const Token<T>& token)
+    friend std::ostream& operator<<(std::ostream& output, const Token< T >& token)
     {
       switch (token.type_)
       {
@@ -93,9 +93,9 @@ namespace zaitsev
       return output;
     }
   private:
-    TokenValue<T> copy_other_value(const Token<T>& other)
+    TokenValue< T > copy_other_value(const Token< T >& other)
     {
-      TokenValue<T> return_value;
+      TokenValue< T > return_value;
       switch (other.type_)
       {
       case token_type::bracket:
@@ -112,7 +112,7 @@ namespace zaitsev
       }
       return return_value;
     }
-    void reset_other_value(Token<T>&& other)
+    void reset_other_value(Token< T >&& other)
     {
       switch (other.type_)
       {

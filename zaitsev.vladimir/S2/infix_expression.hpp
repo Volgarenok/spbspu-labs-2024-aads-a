@@ -8,14 +8,14 @@
 
 namespace zaitsev
 {
-  template<typename T>
+  template< typename T >
   class InfixExpression
   {
   public:
-    using iterator = typename Queue<Token<T>>::iterator;
-    using const_iterator = typename Queue<Token<T>>::const_iterator;
+    using iterator = typename Queue< Token< T > >::iterator;
+    using const_iterator = typename Queue< Token< T > >::const_iterator;
   private:
-    Queue<Token<T>> tokens_;
+    Queue< Token< T > > tokens_;
     void add_non_value_token(char symbol);
   public:
     InfixExpression() = default;
@@ -53,8 +53,8 @@ namespace zaitsev
     }
   };
 
-  template<typename T>
-  InfixExpression<T>::InfixExpression(const std::string& s, T(*nums_converter)(const std::string&, size_t*, int))
+  template< typename T >
+  InfixExpression< T >::InfixExpression(const std::string& s, T(*nums_converter)(const std::string&, size_t*, int))
   {
     size_t beg_pos = 0;
     size_t len = 0;
@@ -68,7 +68,7 @@ namespace zaitsev
         }
         else
         {
-          Token<T> t;
+          Token< T > t;
           t.type_ = token_type::value;
           t.token_.value_ = nums_converter(s.substr(beg_pos, len), nullptr, 10);
           tokens_.push(t);
@@ -87,10 +87,10 @@ namespace zaitsev
   }
 
 
-  template<typename T>
-  void InfixExpression<T>::add_non_value_token(char symbol)
+  template< typename T >
+  void InfixExpression< T >::add_non_value_token(char symbol)
   {
-    Token<T> t;
+    Token< T > t;
     switch (symbol)
     {
     case '(':
@@ -115,12 +115,12 @@ namespace zaitsev
       break;
     case '%':
       t.type_ = token_type::binary_operator;
-      t.token_.bin_operator_ = new SafeMod<T>();
+      t.token_.bin_operator_ = new SafeMod< T >();
       tokens_.push(t);
       break;
     case '/':
       t.type_ = token_type::binary_operator;
-      t.token_.bin_operator_ = new SafeDivision<T>();
+      t.token_.bin_operator_ = new SafeDivision< T >();
       tokens_.push(t);
       break;
     case '*':

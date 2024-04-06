@@ -8,17 +8,17 @@
 
 namespace zaitsev
 {
-  template<typename T>
+  template< typename T >
   class Deque
   {
-    using alloc_traits = std::allocator_traits<std::allocator<T>>;
+    using alloc_traits = std::allocator_traits<std::allocator< T >>;
 
     template<bool IsConst>
     class BaseIterator
     {
       using prt_t = std::conditional_t< IsConst, const T*, T* >;
       using ref_t = std::conditional_t< IsConst, const T&, T& >;
-      using container_t = std::conditional_t< IsConst, const Deque<T>&, Deque<T>& >;
+      using container_t = std::conditional_t< IsConst, const Deque< T >&, Deque< T >& >;
     private:
       size_t chunk_nmb_;
       size_t pos_;
@@ -89,8 +89,8 @@ namespace zaitsev
     size_t head_chunk_;
     size_t head_pos_;
     T** chunk_heads_;
-    std::allocator<T> chunk_alloc_;
-    std::allocator<T*> head_alloc_;
+    std::allocator< T > chunk_alloc_;
+    std::allocator< T* > head_alloc_;
     void add_chunk(bool to_end);
     void next_pos(size_t& chunk_nmb, size_t& pos) const;
     void prev_pos(size_t& chunk_nmb, size_t& pos) const;
@@ -199,8 +199,8 @@ namespace zaitsev
     }
   };
 
-  template<typename T>
-  Deque<T>::Deque():
+  template< typename T >
+  Deque< T >::Deque():
     chunks_nmb_(0),
     size_(0),
     head_chunk_(0),
@@ -210,8 +210,8 @@ namespace zaitsev
     head_alloc_()
   {}
 
-  template<typename T>
-  Deque<T>::Deque(const Deque& other):
+  template< typename T >
+  Deque< T >::Deque(const Deque& other):
     chunks_nmb_(other.chunks_nmb_),
     size_(other.size_),
     head_pos_(0),
@@ -229,7 +229,7 @@ namespace zaitsev
       }
       size_t chunk = other.head_chunk_;
       size_t pos = other.head_pos_;
-      Deque<T>::iterator it = other.begin();
+      Deque< T >::iterator it = other.begin();
       for (; i < size_; ++i, ++it)
       {
         alloc_traits::construct(chunk_alloc_, chunk_heads_[chunk] + pos, *it);
@@ -270,8 +270,8 @@ namespace zaitsev
     }
   }
 
-  template<typename T>
-  Deque<T>::Deque(Deque&& other):
+  template< typename T >
+  Deque< T >::Deque(Deque&& other):
     chunks_nmb_(other.chunks_nmb_),
     size_(other.size_),
     head_chunk_(other.head_chunk_),
@@ -285,14 +285,14 @@ namespace zaitsev
     other.head_chunk_ = 0;
     other.head_pos_ = 0;
     other.chunk_heads_ = nullptr;
-    other.chunk_alloc_ = std::allocator<T>();
-    other.head_alloc_ = std::allocator<T*>();
+    other.chunk_alloc_ = std::allocator< T >();
+    other.head_alloc_ = std::allocator< T* >();
   }
 
-  template<typename T>
-  Deque<T>::~Deque()
+  template< typename T >
+  Deque< T >::~Deque()
   {
-    for (Deque<T>::iterator i = begin(); i != end(); ++i)
+    for (Deque< T >::iterator i = begin(); i != end(); ++i)
     {
       alloc_traits::destroy(chunk_alloc_, i.operator->());
     }
@@ -303,8 +303,8 @@ namespace zaitsev
     head_alloc_.deallocate(chunk_heads_, chunks_nmb_);
   }
 
-  template<typename T>
-  void Deque<T>::push_back(const T& value)
+  template< typename T >
+  void Deque< T >::push_back(const T& value)
   {
     size_t end_chunk = head_chunk_;
     size_t end_pos = head_pos_;
@@ -324,8 +324,8 @@ namespace zaitsev
     ++size_;
   }
 
-  template<typename T>
-  void Deque<T>::push_back(T&& value)
+  template< typename T >
+  void Deque< T >::push_back(T&& value)
   {
     size_t end_chunk = head_chunk_;
     size_t end_pos = head_pos_;
@@ -345,8 +345,8 @@ namespace zaitsev
     ++size_;
   }
 
-  template<typename T>
-  void Deque<T>::pop_back()
+  template< typename T >
+  void Deque< T >::pop_back()
   {
     if (size_ == 0)
     {
@@ -360,8 +360,8 @@ namespace zaitsev
     reset_head();
   }
 
-  template<typename T>
-  void Deque<T>::push_front(const T& value)
+  template< typename T >
+  void Deque< T >::push_front(const T& value)
   {
     if (head_chunk_ == 0 && head_pos_ == 0)
     {
@@ -381,8 +381,8 @@ namespace zaitsev
 
   }
 
-  template<typename T>
-  void Deque<T>::push_front(T&& value)
+  template< typename T >
+  void Deque< T >::push_front(T&& value)
   {
     if (head_chunk_ == 0 && head_pos_ == 0)
     {
@@ -393,8 +393,8 @@ namespace zaitsev
     ++size_;
   }
 
-  template<typename T>
-  void Deque<T>::pop_front()
+  template< typename T >
+  void Deque< T >::pop_front()
   {
     if (size_ == 0)
     {
@@ -406,10 +406,10 @@ namespace zaitsev
     reset_head();
   }
 
-  template<typename T>
-  void Deque<T>::clear()
+  template< typename T >
+  void Deque< T >::clear()
   {
-    for (Deque<T>::iterator i = begin(); i != end(); ++i)
+    for (Deque< T >::iterator i = begin(); i != end(); ++i)
     {
       alloc_traits::destroy(chunk_alloc_, i.operator->());
     }
@@ -425,8 +425,8 @@ namespace zaitsev
     chunk_heads_ = nullptr;
   }
 
-  template<typename T>
-  void Deque<T>::add_chunk(bool to_end)
+  template< typename T >
+  void Deque< T >::add_chunk(bool to_end)
   {
     T** new_chunk_heads_ = head_alloc_.allocate(chunks_nmb_ + 1);
     if (to_end)
@@ -448,8 +448,8 @@ namespace zaitsev
     ++chunks_nmb_;
   }
 
-  template<typename T>
-  void Deque<T>::next_pos(size_t& chunk_nmb, size_t& pos) const
+  template< typename T >
+  void Deque< T >::next_pos(size_t& chunk_nmb, size_t& pos) const
   {
     if (pos < chunk_cap_ - 1)
     {
@@ -462,8 +462,8 @@ namespace zaitsev
     }
   }
 
-  template<typename T>
-  void Deque<T>::prev_pos(size_t& chunk_nmb, size_t& pos) const
+  template< typename T >
+  void Deque< T >::prev_pos(size_t& chunk_nmb, size_t& pos) const
   {
     if (pos > 0)
     {
@@ -476,8 +476,8 @@ namespace zaitsev
     }
   }
 
-  template<typename T>
-  void Deque<T>::convert_index(size_t index, size_t& dest_chunk_nmb, size_t& dest_pos) const
+  template< typename T >
+  void Deque< T >::convert_index(size_t index, size_t& dest_chunk_nmb, size_t& dest_pos) const
   {
     if (index == 0)
     {

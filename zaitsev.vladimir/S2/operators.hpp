@@ -13,10 +13,10 @@ namespace zaitsev
   {
     virtual size_t priority() const = 0;
     virtual T operator()(const T& a, const T& b) const = 0;
-    virtual BinaryOperator<T>* clone() const = 0;
+    virtual BinaryOperator< T >* clone() const = 0;
     virtual std::ostream& operator<<(std::ostream& output) const = 0;
     virtual ~BinaryOperator() = default;
-    friend std::ostream& operator<<(std::ostream& output, const BinaryOperator<T>& object)
+    friend std::ostream& operator<<(std::ostream& output, const BinaryOperator< T >& object)
     {
       object.operator<<(output);
       return output;
@@ -24,9 +24,9 @@ namespace zaitsev
   };
 
   template<typename T>
-  struct SafePlus: public BinaryOperator<T>
+  struct SafePlus: public BinaryOperator< T >
   {
-    static_assert(std::is_integral<T>::value, "Type not integer");
+    static_assert(std::is_integral< T >::value, "Type not integer");
     virtual ~SafePlus() = default;
     virtual size_t priority() const
     {
@@ -34,19 +34,19 @@ namespace zaitsev
     }
     virtual T operator()(const T& a, const T& b) const
     {
-      if (a >= 0 && std::numeric_limits<T>::max() - a < b)
+      if (a >= 0 && std::numeric_limits< T >::max() - a < b)
       {
         throw std::runtime_error("Sum overflow");
       }
-      if (a < 0 && std::numeric_limits<T>::lowest() - a < b)
+      if (a < 0 && std::numeric_limits< T >::lowest() - a < b)
       {
         throw std::runtime_error("Sum underflow");
       }
       return a + b;
     }
-    virtual BinaryOperator<T>* clone() const
+    virtual BinaryOperator< T >* clone() const
     {
-      return new SafePlus<T>();
+      return new SafePlus< T >();
     }
     virtual std::ostream& operator<<(std::ostream& output) const
     {
@@ -56,9 +56,9 @@ namespace zaitsev
   };
 
   template<typename T>
-  struct SafeMinus: public BinaryOperator<T>
+  struct SafeMinus: public BinaryOperator< T >
   {
-    static_assert(std::is_integral<T>::value, "Type not integer");
+    static_assert(std::is_integral< T >::value, "Type not integer");
     virtual ~SafeMinus() = default;
     virtual size_t priority() const
     {
@@ -66,19 +66,19 @@ namespace zaitsev
     }
     virtual T operator()(const T& a, const T& b) const
     {
-      if (b < 0 && std::numeric_limits<T>::max() + b < a)
+      if (b < 0 && std::numeric_limits< T >::max() + b < a)
       {
         throw std::runtime_error("Difference overflow");
       }
-      if (b >= 0 && std::numeric_limits<T>::lowest() + b > a)
+      if (b >= 0 && std::numeric_limits< T >::lowest() + b > a)
       {
         throw std::runtime_error("Difference underflow");
       }
       return a - b;
     }
-    virtual BinaryOperator<T>* clone() const
+    virtual BinaryOperator< T >* clone() const
     {
-      return new SafeMinus<T>();
+      return new SafeMinus< T >();
     }
     virtual std::ostream&  operator<<(std::ostream& output) const
     {
@@ -88,9 +88,9 @@ namespace zaitsev
   };
 
   template<typename T>
-  struct SafeDivision: public BinaryOperator<T>
+  struct SafeDivision: public BinaryOperator< T >
   {
-    static_assert(std::is_integral<T>::value, "Type not integer");
+    static_assert(std::is_integral< T >::value, "Type not integer");
     virtual ~SafeDivision() = default;
     virtual size_t priority() const
     {
@@ -102,15 +102,15 @@ namespace zaitsev
       {
         throw std::runtime_error("Zero division");
       }
-      if (b < 0 && a < 0 && a == std::numeric_limits<T>::lowest() && b == -1)
+      if (b < 0 && a < 0 && a == std::numeric_limits< T >::lowest() && b == -1)
       {
         throw std::runtime_error("Division overflow");
       }
       return a / b;
     }
-    virtual BinaryOperator<T>* clone() const
+    virtual BinaryOperator< T >* clone() const
     {
-      return new SafeDivision<T>();
+      return new SafeDivision< T >();
     }
     virtual std::ostream& operator<<(std::ostream& output) const
     {
@@ -120,9 +120,9 @@ namespace zaitsev
   };
 
   template<typename T>
-  struct SafeMod: public BinaryOperator<T>
+  struct SafeMod: public BinaryOperator< T >
   {
-    static_assert(std::is_integral<T>::value, "Type not integer");
+    static_assert(std::is_integral< T >::value, "Type not integer");
     virtual ~SafeMod() = default;
     virtual size_t priority() const
     {
@@ -130,15 +130,15 @@ namespace zaitsev
     }
     virtual T operator()(const T& a, const T& b) const
     {
-      if (b == 0 || (a == std::numeric_limits<T>::lowest() && b == -1))
+      if (b == 0 || (a == std::numeric_limits< T >::lowest() && b == -1))
       {
         throw std::runtime_error("Mod overflow");
       }
       return (a % b >= 0) ? a % b : a % b + b;
     }
-    virtual BinaryOperator<T>* clone() const
+    virtual BinaryOperator< T >* clone() const
     {
-      return new SafeMod<T>;
+      return new SafeMod< T >;
     }
     virtual std::ostream& operator<<(std::ostream& output) const
     {
@@ -148,9 +148,9 @@ namespace zaitsev
   };
 
   template<typename T>
-  struct SafeMultiplication: public BinaryOperator<T>
+  struct SafeMultiplication: public BinaryOperator< T >
   {
-    static_assert(std::is_integral<T>::value, "Type not integer");
+    static_assert(std::is_integral< T >::value, "Type not integer");
     virtual ~SafeMultiplication() = default;
     virtual size_t priority() const
     {
@@ -158,8 +158,8 @@ namespace zaitsev
     }
     virtual T operator()(const T& a, const T& b) const
     {
-      T max_val = std::numeric_limits<T>::max();
-      T min_val = std::numeric_limits<T>::lowest();
+      T max_val = std::numeric_limits< T >::max();
+      T min_val = std::numeric_limits< T >::lowest();
       if ((a < 0 && b == min_val) || (a == min_val && b < 0))
       {
         throw std::runtime_error("Multiplication overflow");
@@ -181,9 +181,9 @@ namespace zaitsev
       }
       return a * b;
     }
-    virtual BinaryOperator<T>* clone() const
+    virtual BinaryOperator< T >* clone() const
     {
-      return new SafeMultiplication<T>();
+      return new SafeMultiplication< T >();
     }
     virtual std::ostream& operator<<(std::ostream& output) const
     {

@@ -19,7 +19,7 @@ int main(int argc, char** argv)
   using namespace zaitsev;
   try
   {
-    Stack<long long>results;
+    Stack< long long >results;
     while (input)
     {
       std::string s;
@@ -28,12 +28,12 @@ int main(int argc, char** argv)
       {
         continue;
       }
-      InfixExpression<long long> expr(s, std::stoll);
-      PostfixExpression<long long> post;
+      InfixExpression< long long > expr(s, std::stoll);
+      PostfixExpression< long long > post;
       post.convert_from_infix(expr);
       results.push(post.calculate());
     }
-    for (Stack<long long>::const_iterator i = results.cbegin(); i != results.cend(); ++i)
+    for (Stack< long long >::const_iterator i = results.cbegin(); i != results.cend(); ++i)
     {
       i == results.cbegin() ? std::cout << *i : std::cout << ' ' << *i;
     }

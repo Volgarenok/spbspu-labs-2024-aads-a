@@ -12,10 +12,10 @@ namespace zaitsev
   class PostfixExpression
   {
   private:
-    Queue<Token<T>> tokens_;
+    Queue< Token< T > > tokens_;
   public:
-    using iterator = typename Queue<Token<T>>::iterator;
-    using const_iterator = typename Queue<Token<T>>::const_iterator;
+    using iterator = typename Queue< Token< T > >::iterator;
+    using const_iterator = typename Queue< Token< T > >::const_iterator;
 
     bool convert_from_infix(const InfixExpression< T >& expression);
     T calculate();
@@ -49,10 +49,10 @@ namespace zaitsev
   };
 
   template<typename T>
-  bool PostfixExpression< T >::convert_from_infix(const InfixExpression<T>& expression)
+  bool PostfixExpression< T >::convert_from_infix(const InfixExpression< T >& expression)
   {
-    Stack<Token<T>> internal_state;
-    typename InfixExpression<T>::const_iterator expr_iterator = expression.cbegin();
+    Stack< Token< T > > internal_state;
+    typename InfixExpression< T >::const_iterator expr_iterator = expression.cbegin();
     try
     {
       while (expr_iterator!=expression.end())
@@ -134,11 +134,11 @@ namespace zaitsev
     return true;
   }
 
-  template<typename T>
-  T PostfixExpression<T>::calculate()
+  template< typename T >
+  T PostfixExpression< T >::calculate()
   {
-    Stack<T> values;
-    typename Queue<Token<T>>::const_iterator expr_iterator = tokens_.cbegin();
+    Stack< T > values;
+    typename Queue< Token< T > >::const_iterator expr_iterator = tokens_.cbegin();
     while (expr_iterator != tokens_.cend())
     {
       T a, b;
@@ -165,19 +165,19 @@ namespace zaitsev
     }
     return values.top();
   }
-  template<typename T>
+  template< typename T >
 
-  bool PostfixExpression<T>::empty() const
+  bool PostfixExpression< T >::empty() const
   {
     return tokens_.empty();
   }
-  template<typename T>
-  Token<T>& PostfixExpression<T>::get_token()
+  template< typename T >
+  Token< T >& PostfixExpression< T >::get_token()
   {
     return tokens_.front();
   }
-  template<typename T>
-  void PostfixExpression<T>::pop_token()
+  template< typename T >
+  void PostfixExpression< T >::pop_token()
   {
     tokens_.pop();
   }
