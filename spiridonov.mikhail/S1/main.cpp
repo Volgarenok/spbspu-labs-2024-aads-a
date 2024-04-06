@@ -20,10 +20,31 @@ int main()
     return 0;
   }
 
+  bool hasNumbers = false;
+  for (const auto& sequence : sequences)
+  {
+    if (!sequence.second.is_empty())
+    {
+      hasNumbers = true;
+      break;
+    }
+  }
+
+  if (!hasNumbers)
+  {
+    for (const auto& sequence : sequences)
+    {
+      if (sequence.second.is_empty())
+      {
+        std::cout << sequence.first << "\n" << '0' << "\n";
+      }
+    }
+    return 0;
+  }
   if (!sequences.is_empty())
   {
     auto it = sequences.begin();
-    if(it != sequences.end())
+    if (it != sequences.end())
     {
       std::cout << it->first;
       ++it;
