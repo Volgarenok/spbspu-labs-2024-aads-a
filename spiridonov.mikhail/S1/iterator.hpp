@@ -18,8 +18,8 @@ namespace spiridonov
 
     iterator& operator++();
     iterator& operator--();
-    iterator& operator+(size_t n);
-    iterator& operator-(size_t n);
+    iterator operator+(size_t n);
+    iterator operator-(size_t n);
 
     bool operator==(const iterator& other) const;
     bool operator!=(const iterator& other) const;
@@ -58,7 +58,7 @@ namespace spiridonov
   }
 
   template <typename T>
-  iterator<T>& iterator<T>::operator+(size_t n)
+  iterator<T> iterator<T>::operator+(size_t n)
   {
     iterator temp = *this;
     for (size_t i = 0; i < n; ++i)
@@ -69,7 +69,7 @@ namespace spiridonov
   }
 
   template <typename T>
-  iterator<T>& iterator<T>::operator-(size_t n)
+  iterator<T> iterator<T>::operator-(size_t n)
   {
     iterator temp = *this;
     for (size_t i = 0; i < n; ++i)
