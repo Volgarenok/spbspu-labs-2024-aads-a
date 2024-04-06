@@ -42,7 +42,11 @@ namespace spiridonov
   {
     for (auto it = list.begin(); it != list.end(); ++it)
     {
-      std::cout << *it << " ";
+      std::cout << *it;
+      if (it + 1 != list.end())
+      {
+        std::cout << " ";
+      }
     }
     std::cout << '\n';
   }
