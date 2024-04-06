@@ -8,8 +8,9 @@
 #include "tokens.hpp"
 #include "input_infix.hpp"
 #include "convert_expression.hpp"
+#include "calculate_expression.hpp"
 
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
 	using namespace novokhatskiy;
 	/*Queue< Queue< InfixType > > infixQueue;
@@ -57,10 +58,11 @@ int main(int argc, char **argv)
 		while (!qu.empty())
 		{
 			Queue<InfixType> res = qu.drop();
-			convertExpression(res).printInfix();
+			Queue< Postfix> res1 = convertExpression(res);
+			std::cout << calculatePostExp(res1);
 		}
 	}
-	catch (const std::exception &e)
+	catch (const std::exception& e)
 	{
 		std::cerr << e.what() << '\n';
 	}

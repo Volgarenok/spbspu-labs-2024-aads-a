@@ -2,7 +2,7 @@
 #include "stack.hpp"
 #include <stdexcept>
 
-novokhatskiy::Queue<novokhatskiy::Postfix> novokhatskiy::convertExpression(Queue<InfixType> &infixQueue)
+novokhatskiy::Queue<novokhatskiy::Postfix> novokhatskiy::convertExpression(Queue<InfixType>& infixQueue)
 {
 	novokhatskiy::Queue<Postfix> resultQueue;
 	novokhatskiy::Stack<InfixType> stack;
@@ -15,7 +15,11 @@ novokhatskiy::Queue<novokhatskiy::Postfix> novokhatskiy::convertExpression(Queue
 			resultQueue.push(Postfix(std::move(curr)));
 			break;
 		case PartsOfExpression::OPERATION:
-			while (!stack.empty() && stack.top().type != PartsOfExpression::BRACKET && stack.top().getPriority() >= curr.getPriority())
+			/*if (stack.top().type == PartsOfExpression::BRACKET)
+			{
+				stack.pop();
+			}*/
+			while (!stack.empty() && stack.top().type != PartsOfExpression::BRACKET && stack.top().getPriority() <= curr.getPriority())
 			{
 				resultQueue.push(Postfix(stack.drop()));
 				// InfixType currOp = stack.drop();
@@ -27,6 +31,7 @@ novokhatskiy::Queue<novokhatskiy::Postfix> novokhatskiy::convertExpression(Queue
 			if (curr.data.bracket.scope == '(')
 			{
 				stack.push(curr);
+				break;
 			}
 			else
 			{
@@ -39,6 +44,7 @@ novokhatskiy::Queue<novokhatskiy::Postfix> novokhatskiy::convertExpression(Queue
 					throw std::logic_error("Stack is empty");
 				}
 				stack.drop();
+				break;
 			}
 		default:
 			throw std::invalid_argument("It can't be parsed");
