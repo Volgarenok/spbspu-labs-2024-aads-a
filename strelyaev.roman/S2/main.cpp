@@ -21,45 +21,69 @@ strelyaev::Queue< strelyaev::infixUnit > makeQueue(std::istream& in)
   std::string str = "";
   while (in >> str)
   {
+    strelyaev::typeOfExpression type = strelyaev::typeOfExpression::NONE;
+    strelyaev::Token new_token;
+    char ch = 0;
     if (isOperation(str))
     {
-      char ch = str[0];
-      strelyaev::Token new_token(ch);
-      strelyaev::infixUnit new_unit{new_token, strelyaev::typeOfExpression::OPERATION};
-      token_queue.push(new_unit);
-      std::cout << "{" << new_unit.token.operation.operation << "}\n";
-      continue;
+      ch = str[0];
+      new_token = strelyaev::Token(ch);
+      type = strelyaev::typeOfExpression::OPERATION;
     }
-    if (isBracket(str))
+    else if (isBracket(str))
     {
-      char ch = str[0];
-      strelyaev::Token new_token(ch);
-      strelyaev::infixUnit new_unit{new_token, strelyaev::typeOfExpression::BRACKET};
-      token_queue.push(new_unit);
-      std::cout << "{" << new_unit.token.bracket.bracket << "}\n";
-      continue;
+      ch = str[0];
+      new_token = strelyaev::Token(ch);
+      type = strelyaev::typeOfExpression::BRACKET;
     }
-    long long operand = 0;
-    try
+    else
     {
-      operand = std::stoll(str);
+      long long operand = 0;
+      try
+      {
+        operand = std::stoll(str);
+      }
+      catch (const std::exception& e)
+      {
+        continue;
+      }
+      new_token = strelyaev::Token(operand);
+      type = strelyaev::typeOfExpression::OPERAND;
     }
-    catch (const std::exception& e)
-    {
-      continue;
-    }
-    strelyaev::Token new_token(operand);
-    strelyaev::infixUnit new_unit{new_token, strelyaev::typeOfExpression::OPERAND};
+    strelyaev::infixUnit new_unit{new_token, type};
     token_queue.push(new_unit);
-    std::cout << "{" << new_unit.token.operand.operand << "}\n";
   }
   return token_queue;
+}
+
+void printQueue(strelyaev::Queue< strelyaev::infixUnit > queue)
+{
+  while (!queue.empty())
+  {
+    strelyaev::infixUnit a = queue.drop();
+    switch (a.type)
+    {
+    case strelyaev::typeOfExpression::BRACKET:
+      std::cout << "{" << a.token.operation << "}\n";
+      break;
+    case strelyaev::typeOfExpression::OPERATION:
+      std::cout << "{" << a.token.operation <<"}\n";
+      break;
+    case strelyaev::typeOfExpression::OPERAND:
+      std::cout << "{" << a.token.operand << "}\n";
+      break;
+    default:
+      std::cerr << "Something went wrong\n";
+      break;
+    }
+  }
 }
 
 int main()
 {
   using namespace strelyaev;
-  std::string infix = "( 12 + 14 ) / 7";
+  std::string infix = "( -2 + 3 ) / 5";
   std::stringstream ss(infix);
   Queue< infixUnit > infix_units_queue = makeQueue(ss);
+  printQueue(infix_units_queue);
 }

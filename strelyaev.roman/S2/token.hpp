@@ -1,6 +1,5 @@
 #ifndef TOKEN_HPP
 #define TOKEN_HPP
-#include "types.hpp"
 
 namespace strelyaev
 {
@@ -8,18 +7,18 @@ namespace strelyaev
   {
     OPERAND = 0,
     OPERATION = 1,
-    BRACKET = 2
+    BRACKET = 2,
+    NONE = 3
   };
 
   union Token
   {
-    Token() = delete;
+    long long operand;
+    char operation;
+    Token();
     Token(long long);
     Token(char);
-    
-    Operand operand;
-    Operation operation;
-    Bracket bracket;
+    ~Token() = default;
   };
 
   struct infixUnit
