@@ -46,16 +46,3 @@ long long strelyaev::calculateOperation(long long first, long long second, char 
   }
   throw std::logic_error("Invalid operation");
 }
-
-void strelyaev::printResults(strelyaev::Stack< long long >& results, std::ostream& out)
-{
-  while (!results.empty())
-  {
-    out << results.drop();
-    if (!results.empty())
-    {
-      out << " ";
-    }
-  }
-  out << "\n";
-}

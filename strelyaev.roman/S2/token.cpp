@@ -1,19 +1,19 @@
 #include "token.hpp"
 #include <memory>
 
-strelyaev::Token::Token():
+strelyaev::detail::Token::Token():
   operand(0)
 {}
 
-strelyaev::Token::Token(long long value):
+strelyaev::detail::Token::Token(long long value):
   operand(value)
 {}
 
-strelyaev::Token::Token(char value):
+strelyaev::detail::Token::Token(char value):
   operation(value)
 {}
 
-strelyaev::ExpressionUnit& strelyaev::ExpressionUnit::operator=(const ExpressionUnit& other)
+strelyaev::detail::ExpressionUnit& strelyaev::detail::ExpressionUnit::operator=(const ExpressionUnit& other)
 {
   if (this != std::addressof(other))
   {

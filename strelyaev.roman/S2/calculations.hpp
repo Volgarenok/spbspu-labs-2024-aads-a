@@ -9,6 +9,5 @@ namespace strelyaev
   bool isBracket(std::string& c);
   int getPrecedence(char);
   long long calculateOperation(long long, long long, char);
-  void printResults(strelyaev::Stack< long long >& results, std::ostream& out);
 }
 #endif

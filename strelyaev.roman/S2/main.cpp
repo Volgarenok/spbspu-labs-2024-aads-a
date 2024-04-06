@@ -29,12 +29,10 @@ int main(int argc, char * argv[])
       }
       results.push(result);
     }
-    printResults(results, std::cout);
   }
-  else if (argc == 3)
+  else if (argc == 2)
   {
     std::ifstream input_file(argv[1]);
-    std::ofstream output_file(argv[2]);
     while (input_file.good())
     {
       long long result = 0;
@@ -53,11 +51,19 @@ int main(int argc, char * argv[])
       }
       results.push(result);
     }
-    printResults(results, output_file);
   }
   else
   {
     std::cerr << "Invalid cmd parameters\n";
     return 1;
   }
+  while (!results.empty())
+  {
+    std::cout << results.drop();
+    if (!results.empty())
+    {
+      std::cout << " ";
+    }
+  }
+  std::cout << "\n";
 }

@@ -5,9 +5,9 @@
 #include "token.hpp"
 namespace strelyaev
 {
-  Queue< ExpressionUnit > makeQueue(std::istream&);
-  Queue< ExpressionUnit > makePostfix(Queue< ExpressionUnit >&);
-  long long calculatePostfix(strelyaev::Queue< strelyaev::ExpressionUnit >&);
+  Queue< detail::ExpressionUnit > makeQueue(std::istream&);
+  Queue< detail::ExpressionUnit > makePostfix(Queue< detail::ExpressionUnit >&);
+  long long calculatePostfix(strelyaev::Queue< strelyaev::detail::ExpressionUnit >&);
   long long calculateInfixExpression(std::istream& in);
 }
 #endif
