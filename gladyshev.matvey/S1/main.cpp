@@ -33,6 +33,10 @@ int main()
   size_t counter = 0;
   bool moreData = true;
   List< size_t > listOfNums;
+  for (auto it = sequences.begin(); it != sequences.end(); ++it)
+  {
+    it->second.reverse();
+  }
   while (moreData)
   {
     moreData = false;
