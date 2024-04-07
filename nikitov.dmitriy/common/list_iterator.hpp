@@ -29,7 +29,9 @@ namespace nikitov
     ListIterator< T > operator--(int);
 
     T& operator*();
+    const T& operator*() const;
     T* operator->();
+    const T* operator->() const;
 
     bool operator==(const ListIterator< T >& other) const;
     bool operator!=(const ListIterator< T >& other) const;
@@ -85,7 +87,21 @@ namespace nikitov
   }
 
   template< class T >
+  const T& ListIterator< T >::operator*() const
+  {
+    assert(node_->next_ != nullptr);
+    return node_->value_;
+  }
+
+  template< class T >
   T* ListIterator< T >::operator->()
+  {
+    assert(node_->next_ != nullptr);
+    return std::addressof(node_->value_);
+  }
+
+  template< class T >
+  const T* ListIterator< T >::operator->() const
   {
     assert(node_->next_ != nullptr);
     return std::addressof(node_->value_);

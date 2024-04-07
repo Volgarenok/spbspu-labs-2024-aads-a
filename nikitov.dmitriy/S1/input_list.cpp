@@ -11,6 +11,10 @@ void nikitov::inputList(List< std::pair< std::string, List< size_t > > >& pairsL
 
     std::pair< std::string, List< size_t > > pair = {};
     input >> pair.first;
+    if (pair.first.empty())
+    {
+      break;
+    }
 
     size_t number = {};
     while (input >> number)
