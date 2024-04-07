@@ -468,7 +468,7 @@ namespace piyavkin
   {
     if (size_ == 0)
     {
-      detail::Node< T >* node = new detail::Node< T >(value, std::addressof(imaginary_node_));
+      detail::Node< T >* node = new detail::Node< T >{value, std::addressof(imaginary_node_), nullptr};
       imaginary_node_.prev_ = node;
       head_ = node;
       tail_ = node;
@@ -476,7 +476,7 @@ namespace piyavkin
       ListIterator< T > result(head_);
       return result;
     }
-    detail::Node< T >* node = new detail::Node< T >(value, it.node, it.node->prev_);
+    detail::Node< T >* node = new detail::Node< T >{value, it.node, it.node->prev_};
     it.node->prev_ = node;
     if (it.node == head_)
     {

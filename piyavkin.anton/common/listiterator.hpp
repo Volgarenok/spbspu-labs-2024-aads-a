@@ -57,6 +57,14 @@ namespace piyavkin
     {
       return node->value_;
     }
+    const D* operator->() const
+    {
+      return std::addressof(node->value_);
+    }
+    const D& operator*() const
+    {
+      return node->value_;
+    }
   private:
     detail::Node< D >* node;
     explicit ListIterator(detail::Node< D >* nd):

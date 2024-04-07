@@ -13,6 +13,11 @@ namespace piyavkin
         next_(next),
         prev_(prev)
       {}
+      explicit Node(T&& value):
+        value_(value),
+        next_(nullptr),
+        prev_(nullptr)
+      {}
       ~Node() = default;
       T value_;
       Node* next_;
