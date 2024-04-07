@@ -370,63 +370,22 @@ namespace nikitov
   template< class T >
   void List< T >::assign(constIterator first, constIterator second)
   {
-    auto i = first;
-    auto firstNodeIterator = embed(cend(), new detail::Node< T >(*i++));
-    auto lastNodeIterator = firstNodeIterator;
-    try
-    {
-      while (i != second)
-      {
-        lastNodeIterator = embed(cend(), new detail::Node< T >(*i++));
-      }
-    }
-    catch (std::exception& e)
-    {
-      erase(constIterator(firstNodeIterator.node_), constIterator(++lastNodeIterator.node_));
-      throw;
-    }
-    erase(cbegin(), constIterator(firstNodeIterator.node_));
+   List< T > newList(first, second);
+   swap(newList);
   }
 
   template< class T >
   void List< T >::assign(size_t n, const T& value)
   {
-    auto firstNodeIterator = embed(cend(), new detail::Node< T >(value));
-    auto lastNodeIterator = firstNodeIterator;
-    try
-    {
-      for (size_t i = 0; i != n - 1; ++i)
-      {
-        lastNodeIterator = embed(cend(), new detail::Node< T >(value));
-      }
-    }
-    catch (std::exception& e)
-    {
-      erase(constIterator(firstNodeIterator.node_), constIterator(++lastNodeIterator.node_));
-      throw;
-    }
-    erase(cbegin(), constIterator(firstNodeIterator.node_));
+   List< T > newList(n, value);
+   swap(newList);
   }
 
   template< class T >
   void List< T >::assign(std::initializer_list< T > initList)
   {
-    auto i = initList.begin();
-    auto firstNodeIterator = embed(cend(), new detail::Node< T >(*i++));
-    auto lastNodeIterator = firstNodeIterator;
-    try
-    {
-      while (i != initList.end())
-      {
-        lastNodeIterator = embed(cend(), new detail::Node< T >(*i++));
-      }
-    }
-    catch (std::exception& e)
-    {
-      erase(constIterator(firstNodeIterator.node_), constIterator(++lastNodeIterator.node_));
-      throw;
-    }
-    erase(cbegin(), constIterator(firstNodeIterator.node_));
+   List< T > newList(initList);
+   swap(newList);
   }
 
   template< class T >
@@ -524,9 +483,28 @@ namespace nikitov
   template< class T >
   void List< T >::swap(List< T >& other) noexcept
   {
+    dummyNode_.swap(other.dummyNode_);
     std::swap(head_, other.head_);
     std::swap(tail_, other.tail_);
     std::swap(size_, other.size_);
+    if (!empty())
+    {
+      tail_->next_ = std::addressof(dummyNode_);
+    }
+    else
+    {
+      head_ = std::addressof(dummyNode_);
+      tail_ = std::addressof(dummyNode_);
+    }
+    if (!other.empty())
+    {
+      other.tail_->next_ = std::addressof(other.dummyNode_);
+    }
+    else
+    {
+      other.head_ = std::addressof(other.dummyNode_);
+      other.tail_ = std::addressof(other.dummyNode_);
+    }
   }
 
   template< class T >
