@@ -14,7 +14,6 @@ void nikitov::outputSequenceNames(const listOfPairs& pairsList, size_t& maxSize,
     }
     output << pairsIterator->first;
   }
-  output << '\n';
 }
 
 bool nikitov::outputSequences(const listOfPairs& pairsList, List< size_t >& sumsList, size_t maxSize, std::ostream& output)
@@ -71,6 +70,5 @@ void nikitov::outputSums(const List< size_t >& sumsList, std::ostream& output)
     }
     output << *sumsIterator;
   }
-  output << '\n';
 }
 

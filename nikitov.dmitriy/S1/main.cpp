@@ -18,6 +18,7 @@ int main()
 
     size_t maxSize = 1;
     outputSequenceNames(pairsList, maxSize, std::cout);
+    std::cout << '\n';
 
     List< size_t > sumsList;
     bool isOverflow = outputSequences(pairsList, sumsList, maxSize, std::cout);
@@ -25,7 +26,9 @@ int main()
     {
       throw std::out_of_range("Error: Sum is out of range");
     }
+
     outputSums(sumsList, std::cout);
+    std::cout << '\n';
   }
   catch (const std::invalid_argument& e)
   {
