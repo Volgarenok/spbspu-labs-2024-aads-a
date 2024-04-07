@@ -8,7 +8,7 @@
 
 namespace zaitsev
 {
-  void input_lists(named_ullList& list)
+  void input_lists(ForwardList< named_ullList >& list)
   {
     using List_t = ForwardList< unsigned long long >;
     std::string input;
@@ -30,12 +30,12 @@ namespace zaitsev
     }
   }
 
-  ullList* print_lists(named_ullList& list)
+  ullList* print_lists(ForwardList< named_ullList >& list)
   {
     using ullListIt = ullList::iterator;
 
-    ForwardList< std::pair< ullListIt, ullListIt > > beg_end_it;
-    for (named_ullList::iterator i = list.begin(); i != list.end(); ++i)
+    ForwardList< std::pair< ullListIt, ullListIt > > list_of_iterators;
+    for (ForwardList< named_ullList >::iterator i = list.begin(); i != list.end(); ++i)
     {
       i->second.reverse();
       if (i != list.begin())
@@ -43,9 +43,9 @@ namespace zaitsev
         std::cout << " ";
       }
       std::cout << i->first;
-      beg_end_it.push_front({ i->second.begin(), i->second.end() });
+      list_of_iterators.push_front({ i->second.begin(), i->second.end() });
     }
-    beg_end_it.reverse();
+    list_of_iterators.reverse();
     std::cout << '\n';
 
     ullList* sums = new ullList();
@@ -55,7 +55,7 @@ namespace zaitsev
     {
       sum = 0;
       size_t elements_nmb = 0;
-      for (std::pair < ullListIt, ullListIt >& i : beg_end_it)
+      for (std::pair < ullListIt, ullListIt >& i : list_of_iterators)
       {
         if (i.first != i.second)
         {

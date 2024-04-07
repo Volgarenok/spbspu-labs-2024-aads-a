@@ -7,9 +7,9 @@ namespace zaitsev
 {
   using ull = unsigned long long;
   using ullList = ForwardList< ull >;
-  using named_ullList = ForwardList< std::pair< std::string, ullList > >;
-  void input_lists(named_ullList& list);
-  ullList* print_lists(named_ullList& list);
+  using named_ullList = std::pair< std::string, ullList >;
+  void input_lists(ForwardList< named_ullList >& list);
+  ullList* print_lists(ForwardList< named_ullList >& list);
   void print_sums(ullList& sums);
 }
 #endif

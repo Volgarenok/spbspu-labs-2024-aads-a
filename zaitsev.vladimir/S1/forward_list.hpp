@@ -14,7 +14,6 @@ namespace zaitsev
     {
       T value_;
       Node* next_;
-      Node() = default;
       Node(const Node& other):
         value_(other.value_),
         next_(nullptr)
@@ -27,7 +26,6 @@ namespace zaitsev
         value_(value),
         next_(nullptr)
       {}
-      ~Node() = default;
     };
     static void freeNodes(Node* head_node)
     {
@@ -55,9 +53,6 @@ namespace zaitsev
       BaseIterator(node_t node):
         node_(node)
       {}
-      BaseIterator(const BaseIterator& other) = default;
-      BaseIterator(BaseIterator&& other) = default;
-      ~BaseIterator() = default;
       BaseIterator& operator++()
       {
         node_ = node_->next_;

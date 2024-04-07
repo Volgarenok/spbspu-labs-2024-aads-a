@@ -1,12 +1,11 @@
 #include <iostream>
-#include "forward_list.hpp"
 #include "lists_i_o.hpp"
 
 int main()
 {
   using namespace zaitsev;
 
-  named_ullList list;
+  ForwardList< named_ullList > list;
   try
   {
     input_lists(list);
