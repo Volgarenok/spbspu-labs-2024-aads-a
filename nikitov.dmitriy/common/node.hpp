@@ -10,15 +10,16 @@ namespace nikitov
     template< class T >
     struct Node
     {
-    public:
-      Node();
-      explicit Node(const T& value);
-      Node(T&& value);
-      void swap(Node< T >& other) noexcept;
-      ~Node() = default;
       T value_;
       Node* prev_;
       Node* next_;
+
+      Node();
+      explicit Node(const T& value);
+      Node(T&& value) noexcept;
+      ~Node() = default;
+
+      void swap(Node< T >& other) noexcept;
     };
 
     template< class T >
@@ -34,7 +35,7 @@ namespace nikitov
     {}
 
     template< class T >
-    Node< T >::Node(T&& value):
+    Node< T >::Node(T&& value) noexcept:
       value_(std::move(value)),
       prev_(nullptr),
       next_(nullptr)

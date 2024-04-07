@@ -92,13 +92,13 @@ namespace nikitov
     void remove_if(Predicate pred);
 
   private:
-    iterator embed(constIterator position, detail::Node< T >* newNode);
-    iterator cut(constIterator position);
-
     detail::Node< T > dummyNode_;
     detail::Node< T >* head_;
     detail::Node< T >* tail_;
     size_t size_;
+
+    iterator embed(constIterator position, detail::Node< T >* newNode);
+    iterator cut(constIterator position);
   };
 
   template< class T >
