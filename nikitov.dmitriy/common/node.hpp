@@ -14,6 +14,7 @@ namespace nikitov
       Node();
       explicit Node(const T& value);
       Node(T&& value);
+      void swap(Node< T >& other) noexcept;
       ~Node() = default;
       T value_;
       Node* prev_;
@@ -38,6 +39,14 @@ namespace nikitov
       prev_(nullptr),
       next_(nullptr)
     {}
+
+    template< class T >
+    void Node< T >::swap(Node< T >& other) noexcept
+    {
+      std::swap(value_, other.value_);
+      std::swap(prev_, other.prev_);
+      std::swap(next_, other.next_);
+    }
   }
 }
 #endif
