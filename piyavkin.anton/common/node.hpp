@@ -1,5 +1,6 @@
 #ifndef NODE_HPP
 #define NODE_HPP
+#include <utility>
 
 namespace piyavkin
 {
@@ -14,7 +15,7 @@ namespace piyavkin
         prev_(prev)
       {}
       explicit Node(T&& value):
-        value_(value),
+        value_(std::move(value)),
         next_(nullptr),
         prev_(nullptr)
       {}
