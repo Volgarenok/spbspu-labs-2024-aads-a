@@ -31,14 +31,14 @@ namespace erohin
     const_iterator cend() const;
     T & front();
     const T & front() const;
-    bool empty() const;
+    bool empty() const noexcept;
     void push_front(const T & value);
-    void push_front(T && value);
+    void push_front(T && value) noexcept;
     void pop_front();
-    void clear();
-    void swap(List< T > & list);
+    void clear() noexcept;
+    void swap(List< T > & list) noexcept;
     iterator insert_after(const_iterator pos, const T & value);
-    iterator insert_after(const_iterator pos, T && value);
+    iterator insert_after(const_iterator pos, T && value) noexcept;
     iterator insert_after(const_iterator pos, size_t count, const T & value);
     iterator erase_after(const_iterator pos);
     iterator erase_after(const_iterator first, const_iterator last);
@@ -50,12 +50,12 @@ namespace erohin
     void assign(InputIt first, InputIt last);
     void assign(std::initializer_list< T > init_list);
     void splice_after(const_iterator pos, List< T > & other);
-    void splice_after(const_iterator pos, List< T > && other);
+    void splice_after(const_iterator pos, List< T > && other) noexcept;
     void splice_after(const_iterator pos, List< T > & other, const_iterator it);
-    void splice_after(const_iterator pos, List< T > && other, const_iterator it);
+    void splice_after(const_iterator pos, List< T > && other, const_iterator it) noexcept;
     void splice_after(const_iterator pos, List< T > & other, const_iterator first, const_iterator last);
-    void splice_after(const_iterator pos, List< T > && other, const_iterator first, const_iterator last);
-    void reverse();
+    void splice_after(const_iterator pos, List< T > && other, const_iterator first, const_iterator last) noexcept;
+    void reverse() noexcept;
   private:
     Node< T > * head_;
   };
@@ -66,7 +66,8 @@ namespace erohin
   {}
 
   template< class T >
-  List< T >::List(const List< T > & list): List(list.cbegin(), list.cend())
+  List< T >::List(const List< T > & list):
+    List(list.cbegin(), list.cend())
   {}
 
   template< class T >
@@ -105,7 +106,7 @@ namespace erohin
       {
         push_front(*(first++));
       }
-      catch (const std::bad_alloc &)
+      catch (...)
       {
         clear();
         throw;
@@ -115,7 +116,8 @@ namespace erohin
   }
 
   template< class T >
-  List< T >::List(std::initializer_list< T > init_list): List(init_list.begin(), init_list.end())
+  List< T >::List(std::initializer_list< T > init_list):
+    List(init_list.begin(), init_list.end())
   {}
 
   template< class T >
@@ -173,7 +175,7 @@ namespace erohin
   }
 
   template< class T >
-  bool List< T >::empty() const
+  bool List< T >::empty() const noexcept
   {
     return !head_;
   }
@@ -181,12 +183,11 @@ namespace erohin
   template< class T >
   void List< T >::push_front(const T & value)
   {
-    Node< T > * elem = new Node< T >(value, head_);
-    head_ = elem;
+    push_front(T(value));
   }
 
   template< class T >
-  void List< T >::push_front(T && value)
+  void List< T >::push_front(T && value) noexcept
   {
     Node< T > * elem = new Node< T >(std::move(value), head_);
     head_ = elem;
@@ -201,7 +202,7 @@ namespace erohin
   }
 
   template< class T >
-  void List< T >::clear()
+  void List< T >::clear() noexcept
   {
     while (head_)
     {
@@ -210,7 +211,7 @@ namespace erohin
   }
 
   template< class T >
-  void List< T >::swap(List< T > & list)
+  void List< T >::swap(List< T > & list) noexcept
   {
     std::swap(head_, list.head_);
   }
@@ -218,14 +219,11 @@ namespace erohin
   template< class T >
   ListIterator< T > List< T >::insert_after(ListConstIterator< T > pos, const T & value)
   {
-    ListIterator< T > iter_result(pos.node_);
-    Node< T > * new_node = new Node< T >(value, iter_result.node_->next_);
-    iter_result.node_->next_ = new_node;
-    return (++iter_result);
+    insert_after(ListIterator< T >(pos.node_), T(value));
   }
 
   template< class T >
-  ListIterator< T > List< T >::insert_after(ListConstIterator< T > pos, T && value)
+  ListIterator< T > List< T >::insert_after(ListConstIterator< T > pos, T && value) noexcept
   {
     ListIterator< T > iter_result(pos.node_);
     Node< T > * new_node = new Node< T >(std::move(value), iter_result.node_->next_);
@@ -322,7 +320,7 @@ namespace erohin
       {
         push_front(*(first++));
       }
-      catch (const std::bad_alloc &)
+      catch (...)
       {
         clear();
         throw;
@@ -340,19 +338,11 @@ namespace erohin
   template< class T >
   void List< T >::splice_after(ListConstIterator< T > pos, List< T > & other)
   {
-    auto iter_current = other.cbegin();
-    auto iter_end = other.cend();
-    while (iter_current != iter_end)
-    {
-      insert_after(pos, std::move(*iter_current));
-      ++iter_current;
-      ++pos;
-    }
-    other.clear();
+    splice_after(pos, List< T >(other));
   }
 
   template< class T >
-  void List< T >::splice_after(ListConstIterator< T > pos, List< T > && other)
+  void List< T >::splice_after(ListConstIterator< T > pos, List< T > && other) noexcept
   {
     auto iter_current = other.cbegin();
     auto iter_end = other.cend();
@@ -368,15 +358,11 @@ namespace erohin
   template< class T >
   void List< T >::splice_after(ListConstIterator< T > pos, List< T > & other, ListConstIterator< T > it)
   {
-    if (pos == it || pos == std::next(it))
-    {
-      return;
-    }
-    splice_after(pos, other, it, other.cend());
+    splice_after(pos, List< T >(other), it);
   }
 
   template< class T >
-  void List< T >::splice_after(ListConstIterator< T > pos, List< T > && other, ListConstIterator< T > it)
+  void List< T >::splice_after(ListConstIterator< T > pos, List< T > && other, ListConstIterator< T > it) noexcept
   {
     if (pos == it || pos == std::next(it))
     {
@@ -388,18 +374,11 @@ namespace erohin
   template< class T >
   void List< T >::splice_after(ListConstIterator< T > pos, List< T > & other, ListConstIterator< T > first, ListConstIterator< T > last)
   {
-    auto iter_current = first;
-    auto iter_end = last;
-    while (std::next(iter_current) != iter_end)
-    {
-      insert_after(pos, std::move(*(iter_current + 1)));
-      other.erase_after(iter_current);
-      ++pos;
-    }
+    splice_after(pos, T(other), first, last);
   }
 
   template< class T >
-  void List< T >::splice_after(ListConstIterator< T > pos, List< T > && other, ListConstIterator< T > first, ListConstIterator< T > last)
+  void List< T >::splice_after(ListConstIterator< T > pos, List< T > && other, ListConstIterator< T > first, ListConstIterator< T > last) noexcept
   {
     auto iter_current = first;
     auto iter_end = last;
@@ -412,7 +391,7 @@ namespace erohin
   }
 
   template< class T >
-  void List< T >::reverse()
+  void List< T >::reverse() noexcept
   {
     if (empty())
     {
@@ -430,44 +409,47 @@ namespace erohin
     erase_after(iter_begin, iter_end);
   }
 
-  template< class T >
-  int compare(const List< T > & lhs, const List< T > & rhs)
+  namespace detail
   {
-    auto lbegin = lhs.cbegin();
-    auto lend = lhs.cend();
-    auto rbegin = rhs.cbegin();
-    auto rend = rhs.cend();
-    bool is_rhs_end_earlier = false;
-    bool is_lhs_end_earlier = false;
-    bool is_lhs_less = false;
-    bool is_unequal_found = false;
-    while (lbegin != lend || rbegin != rend)
+    template< class T >
+    int compare(const List< T > & lhs, const List< T > & rhs)
     {
-      is_lhs_end_earlier = (lbegin == lend) && (rbegin != rend);
-      is_rhs_end_earlier = (lbegin != lend) && (rbegin == rend);
-      if (is_lhs_end_earlier && !is_rhs_end_earlier)
+      auto lbegin = lhs.cbegin();
+      auto lend = lhs.cend();
+      auto rbegin = rhs.cbegin();
+      auto rend = rhs.cend();
+      bool is_rhs_end_earlier = false;
+      bool is_lhs_end_earlier = false;
+      bool is_lhs_less = false;
+      bool is_unequal_found = false;
+      while (lbegin != lend || rbegin != rend)
       {
-        return -1;
+        is_lhs_end_earlier = (lbegin == lend) && (rbegin != rend);
+        is_rhs_end_earlier = (lbegin != lend) && (rbegin == rend);
+        if (is_lhs_end_earlier && !is_rhs_end_earlier)
+        {
+          return -1;
+        }
+        else if (!is_lhs_end_earlier && is_rhs_end_earlier)
+        {
+          return 1;
+        }
+        else if (*lbegin != *rbegin && !is_unequal_found)
+        {
+          is_lhs_less = (*lbegin < *rbegin);
+          is_unequal_found = true;
+        }
+        ++lbegin;
+        ++rbegin;
       }
-      else if (!is_lhs_end_earlier && is_rhs_end_earlier)
-      {
-        return 1;
-      }
-      else if (*lbegin != *rbegin && !is_unequal_found)
-      {
-        is_lhs_less = (*lbegin < *rbegin);
-        is_unequal_found = true;
-      }
-      ++lbegin;
-      ++rbegin;
+      return (!is_unequal_found) ? 0 : (1 - 2 * is_lhs_less);
     }
-    return (!is_unequal_found) ? 0 : (1 - 2 * is_lhs_less);
   }
 
   template< class T >
   bool operator==(const List< T > & lhs, const List< T > & rhs)
   {
-    return (compare(lhs, rhs) == 0);
+    return (detail::compare(lhs, rhs) == 0);
   }
 
   template< class T >
@@ -479,13 +461,13 @@ namespace erohin
   template< class T >
   bool operator<(const List< T > & lhs, const List< T > & rhs)
   {
-    return (compare(lhs, rhs) < 0);
+    return (detail::compare(lhs, rhs) < 0);
   }
 
   template< class T >
   bool operator<=(const List< T > & lhs, const List< T > & rhs)
   {
-    return (compare(lhs, rhs) <= 0);
+    return (detail::compare(lhs, rhs) <= 0);
   }
 
   template< class T >
