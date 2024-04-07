@@ -32,7 +32,7 @@ namespace gladyshev
           push_front(data);
         }
       }
-      catch (const std::bad_alloc& e)
+      catch (...)
       {
         clear();
       }
