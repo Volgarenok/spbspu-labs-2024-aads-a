@@ -3,6 +3,7 @@
 #include <stdexcept>
 #include <algorithm>
 #include <type_traits>
+#include <initializer_list>
 #include <cstddef>
 
 namespace zaitsev
@@ -140,7 +141,8 @@ namespace zaitsev
     ForwardList():
       head_(nullptr)
     {}
-    ForwardList(const ForwardList& other)
+    ForwardList(const ForwardList& other):
+      head_(nullptr)
     {
       if (!other.head_)
       {
@@ -169,6 +171,33 @@ namespace zaitsev
       head_(other.head_)
     {
       other.head_ = nullptr;
+    }
+    ForwardList(std::initializer_list<T> init_list):
+      head_(nullptr)
+    {
+      try
+      {
+        typename std::initializer_list<T>::iterator it = init_list.begin();
+        Node* tail = head_;
+        while (it != init_list.end())
+        {
+          if(!tail)
+          {
+            head_ = new Node(*it);
+            tail = head_;
+          }
+          else
+          {
+            tail->next_ = new Node(*it);
+            tail = tail->next_;
+          }
+        }
+      }
+      catch (const std::exception&)
+      {
+        freeNodes(head_);
+        throw;
+      }
     }
     ForwardList(size_t count, const T& value):
       head_(new Node(value))
@@ -534,7 +563,7 @@ namespace zaitsev
     }
     void sort()
     {
-      if (!head_ || !head->next_)
+      if (!head_ || !head_->next_)
         return;
       size_t sz = 0;
       const Node* cur = head_;
