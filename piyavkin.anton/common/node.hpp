@@ -1,5 +1,6 @@
 #ifndef NODE_HPP
 #define NODE_HPP
+#include <utility>
 
 namespace piyavkin
 {
@@ -8,8 +9,9 @@ namespace piyavkin
     template< class T >
     struct Node
     {
-      Node(const T& value = T(), Node* next = nullptr, Node* prev = nullptr):
-        value_(value),
+      template< class... Args >
+      Node(Node* next, Node* prev, Args&& ...args):
+        value_(std::forward< Args >(args)...),
         next_(next),
         prev_(prev)
       {}
