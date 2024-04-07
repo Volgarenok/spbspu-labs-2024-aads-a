@@ -129,37 +129,37 @@ namespace erohin
   template< class T >
   ListIterator< T > List< T >::begin()
   {
-    return ListIterator< T >(head_);
+    return iterator(head_);
   }
 
   template< class T >
   ListIterator< T > List< T >::end()
   {
-    return ListIterator< T >(nullptr);
+    return iterator(nullptr);
   }
 
   template< class T >
   ListConstIterator< T > List< T >::begin() const
   {
-    return ListConstIterator< T >(head_);
+    return const_iterator(head_);
   }
 
   template< class T >
   ListConstIterator< T > List< T >::end() const
   {
-    return ListConstIterator< T >(nullptr);
+    return const_iterator(nullptr);
   }
 
   template< class T >
   ListConstIterator< T > List< T >::cbegin() const
   {
-    return ListConstIterator< T >(head_);
+    return const_iterator(head_);
   }
 
   template< class T >
   ListConstIterator< T > List< T >::cend() const
   {
-    return ListConstIterator< T >(nullptr);
+    return const_iterator(nullptr);
   }
 
   template< class T >
@@ -217,22 +217,22 @@ namespace erohin
   }
 
   template< class T >
-  ListIterator< T > List< T >::insert_after(ListConstIterator< T > pos, const T & value)
+  ListIterator< T > List< T >::insert_after(const_iterator pos, const T & value)
   {
-    insert_after(ListIterator< T >(pos.node_), T(value));
+    insert_after(iterator(pos.node_), T(value));
   }
 
   template< class T >
-  ListIterator< T > List< T >::insert_after(ListConstIterator< T > pos, T && value) noexcept
+  ListIterator< T > List< T >::insert_after(const_iterator pos, T && value) noexcept
   {
-    ListIterator< T > iter_result(pos.node_);
+    iterator iter_result(pos.node_);
     detail::Node< T > * new_node = new detail::Node< T >(std::move(value), iter_result.node_->next_);
     iter_result.node_->next_ = new_node;
     return (++iter_result);
   }
 
   template< class T >
-  ListIterator< T > List< T >::insert_after(ListConstIterator< T > pos, size_t count, const T & value)
+  ListIterator< T > List< T >::insert_after(const_iterator pos, size_t count, const T & value)
   {
     for (size_t i = 0; i < count; ++i)
     {
@@ -242,24 +242,24 @@ namespace erohin
   }
 
   template< class T >
-  ListIterator< T > List< T >::erase_after(ListConstIterator< T > pos)
+  ListIterator< T > List< T >::erase_after(const_iterator pos)
   {
-    ListIterator< T > iter_result(pos.node_);
+    iterator iter_result(pos.node_);
     detail::Node< T > * to_delete = iter_result.node_->next_;
     detail::Node< T > * to_become_next = to_delete->next_;
     delete to_delete;
     iter_result.node_->next_ = to_become_next;
-    return ListIterator< T >(to_become_next);
+    return iterator(to_become_next);
   }
 
   template< class T >
-  ListIterator< T > List< T >::erase_after(ListConstIterator< T > first, ListConstIterator< T > last)
+  ListIterator< T > List< T >::erase_after(const_iterator first, const_iterator last)
   {
     while (std::next(first) != last)
     {
       erase_after(first);
     }
-    return ListIterator< T >(last.node_);
+    return iterator(last.node_);
   }
 
   template< class T >
@@ -336,13 +336,13 @@ namespace erohin
   }
 
   template< class T >
-  void List< T >::splice_after(ListConstIterator< T > pos, List< T > & other)
+  void List< T >::splice_after(const_iterator pos, List< T > & other)
   {
     splice_after(pos, List< T >(other));
   }
 
   template< class T >
-  void List< T >::splice_after(ListConstIterator< T > pos, List< T > && other) noexcept
+  void List< T >::splice_after(const_iterator pos, List< T > && other) noexcept
   {
     auto iter_current = other.cbegin();
     auto iter_end = other.cend();
@@ -356,13 +356,13 @@ namespace erohin
   }
 
   template< class T >
-  void List< T >::splice_after(ListConstIterator< T > pos, List< T > & other, ListConstIterator< T > it)
+  void List< T >::splice_after(const_iterator pos, List< T > & other, const_iterator it)
   {
     splice_after(pos, List< T >(other), it);
   }
 
   template< class T >
-  void List< T >::splice_after(ListConstIterator< T > pos, List< T > && other, ListConstIterator< T > it) noexcept
+  void List< T >::splice_after(const_iterator pos, List< T > && other, const_iterator it) noexcept
   {
     if (pos == it || pos == std::next(it))
     {
@@ -372,13 +372,13 @@ namespace erohin
   }
 
   template< class T >
-  void List< T >::splice_after(ListConstIterator< T > pos, List< T > & other, ListConstIterator< T > first, ListConstIterator< T > last)
+  void List< T >::splice_after(const_iterator pos, List< T > & other, const_iterator first, const_iterator last)
   {
     splice_after(pos, T(other), first, last);
   }
 
   template< class T >
-  void List< T >::splice_after(const_iterator pos, List< T > && other, ListConstIterator< T > first, ListConstIterator< T > last) noexcept
+  void List< T >::splice_after(const_iterator pos, List< T > && other, const_iterator first, const_iterator last) noexcept
   {
     auto iter_current = first;
     auto iter_end = last;
@@ -397,9 +397,9 @@ namespace erohin
     {
       return;
     }
-    ListConstIterator< T > iter_begin = cbegin();
-    ListConstIterator< T > iter_end = cend();
-    ListConstIterator< T > iter_current = iter_begin;
+    const_iterator iter_begin = cbegin();
+    const_iterator iter_end = cend();
+    const_iterator iter_current = iter_begin;
     ++iter_current;
     while(iter_current != iter_end)
     {
