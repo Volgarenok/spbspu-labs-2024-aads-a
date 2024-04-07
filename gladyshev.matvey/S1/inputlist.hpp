@@ -8,7 +8,7 @@
 
 namespace gladyshev
 {
-  void readSequence(std::istream& in, List<std::pair<std::string, List<size_t>>>& list);
+  void readSequence(std::istream& in, List< std::pair < std::string, List< size_t > > >& list);
 }
 
 #endif
