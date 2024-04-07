@@ -57,7 +57,7 @@ namespace erohin
     void splice_after(const_iterator pos, List< T > && other, const_iterator first, const_iterator last) noexcept;
     void reverse() noexcept;
   private:
-    Node< T > * head_;
+    detail::Node< T > * head_;
   };
 
   template< class T >
@@ -189,14 +189,14 @@ namespace erohin
   template< class T >
   void List< T >::push_front(T && value) noexcept
   {
-    Node< T > * elem = new Node< T >(std::move(value), head_);
+    detail::Node< T > * elem = new detail::Node< T >(std::move(value), head_);
     head_ = elem;
   }
 
   template< class T >
   void List< T >::pop_front()
   {
-    Node< T > * new_head = head_->next_;
+    detail::Node< T > * new_head = head_->next_;
     delete head_;
     head_ = new_head;
   }
@@ -226,7 +226,7 @@ namespace erohin
   ListIterator< T > List< T >::insert_after(ListConstIterator< T > pos, T && value) noexcept
   {
     ListIterator< T > iter_result(pos.node_);
-    Node< T > * new_node = new Node< T >(std::move(value), iter_result.node_->next_);
+    detail::Node< T > * new_node = new detail::Node< T >(std::move(value), iter_result.node_->next_);
     iter_result.node_->next_ = new_node;
     return (++iter_result);
   }
@@ -245,8 +245,8 @@ namespace erohin
   ListIterator< T > List< T >::erase_after(ListConstIterator< T > pos)
   {
     ListIterator< T > iter_result(pos.node_);
-    Node< T > * to_delete = iter_result.node_->next_;
-    Node< T > * to_become_next = to_delete->next_;
+    detail::Node< T > * to_delete = iter_result.node_->next_;
+    detail::Node< T > * to_become_next = to_delete->next_;
     delete to_delete;
     iter_result.node_->next_ = to_become_next;
     return ListIterator< T >(to_become_next);
@@ -378,7 +378,7 @@ namespace erohin
   }
 
   template< class T >
-  void List< T >::splice_after(ListConstIterator< T > pos, List< T > && other, ListConstIterator< T > first, ListConstIterator< T > last) noexcept
+  void List< T >::splice_after(const_iterator pos, List< T > && other, ListConstIterator< T > first, ListConstIterator< T > last) noexcept
   {
     auto iter_current = first;
     auto iter_end = last;

@@ -17,7 +17,7 @@ namespace erohin
     friend class List< T >;
   public:
     ListConstIterator();
-    ListConstIterator(const Node< T > * node_ptr);
+    ListConstIterator(const detail::Node< T > * node_ptr);
     ListConstIterator(const ListConstIterator< T > &) = default;
     ~ListConstIterator() = default;
     ListConstIterator< T > & operator=(const ListConstIterator< T > &) = default;
@@ -28,7 +28,7 @@ namespace erohin
     bool operator==(const ListConstIterator< T > & rhs);
     bool operator!=(const ListConstIterator< T > & rhs);
   private:
-    const Node< T > * node_;
+    const detail::Node< T > * node_;
   };
 
   template< class T >
@@ -37,7 +37,7 @@ namespace erohin
   {}
 
   template< class T >
-  ListConstIterator< T >::ListConstIterator(const Node< T > * node_ptr):
+  ListConstIterator< T >::ListConstIterator(const detail::Node< T > * node_ptr):
     node_(node_ptr)
   {}
 
