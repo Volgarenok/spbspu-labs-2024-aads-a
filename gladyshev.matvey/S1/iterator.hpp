@@ -47,6 +47,14 @@ namespace gladyshev
     {
       return std::addressof(node_->data);
     }
+    const T& operator*() const
+    {
+      return node_->data;
+    }
+    const T* operator->() const
+    {
+      return std::addressof(node_->data);
+    }
   private:
     detail::Node< T >* node_;
   };
