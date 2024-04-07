@@ -12,7 +12,7 @@ void gladyshev::readSequence(std::istream& in, List<std::pair<std::string, List<
       try
       {
         size_t number = std::stoull(line);
-        list.front().second.push_back(number);
+        list.front().second.push_front(number);
       }
       catch (const std::invalid_argument&)
       {

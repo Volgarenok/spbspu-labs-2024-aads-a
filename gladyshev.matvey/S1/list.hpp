@@ -138,23 +138,6 @@ namespace gladyshev
         }
       }
     }
-    void push_back(const T& data)
-    {
-      detail::Node< T >* newNode = new detail::Node< T >(data);
-      if (empty())
-      {
-        head_ = newNode;
-      }
-      else
-      {
-        detail::Node< T >* temp = head_;
-        while (temp->next)
-        {
-          temp = temp->next;
-        }
-        temp->next = newNode;
-      }
-    }
     void push_front(const T& data)
     {
       detail::Node< T >* temp = new detail::Node< T >(data);
