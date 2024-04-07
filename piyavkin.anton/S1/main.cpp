@@ -38,22 +38,21 @@ void output(std::ostream& out, const piyavkin::list_t& list)
 int main()
 {
   using namespace piyavkin;
-  // list_t list;
-  // try
-  // {
-  //   inputList(std::cin, list);
-  //   output(std::cout, list);
-  // }
-  // catch (const std::invalid_argument& e)
-  // {
-  //   std::cout << 0 << '\n';
-  //   return 0;
-  // }
-  // catch (const std::exception& e)
-  // {
-  //   std::cerr << e.what() << '\n';
-  //   return 1;
-  // }
-  // std::cout << '\n';
-  detail::Node<int> node{1,nullptr,nullptr};
+  list_t list;
+  try
+  {
+    inputList(std::cin, list);
+    output(std::cout, list);
+  }
+  catch (const std::invalid_argument& e)
+  {
+    std::cout << 0 << '\n';
+    return 0;
+  }
+  catch (const std::exception& e)
+  {
+    std::cerr << e.what() << '\n';
+    return 1;
+  }
+  std::cout << '\n';
 }
