@@ -14,29 +14,17 @@ namespace nikitov
       Node* prev_;
       Node* next_;
 
-      Node();
-      explicit Node(const T& value);
-      Node(T&& value) noexcept;
+      template< class... Args >
+      Node(Args&&... args);
       ~Node() = default;
 
       void swap(Node< T >& other) noexcept;
     };
 
     template< class T >
-    Node< T >::Node():
-      Node(T())
-    {};
-
-    template< class T >
-    Node< T >::Node(const T& value):
-      value_(value),
-      prev_(nullptr),
-      next_(nullptr)
-    {}
-
-    template< class T >
-    Node< T >::Node(T&& value) noexcept:
-      value_(std::move(value)),
+    template< class... Args >
+    Node< T >::Node(Args&&... args):
+      value_(std::forward< Args >(args)...),
       prev_(nullptr),
       next_(nullptr)
     {}
