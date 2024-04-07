@@ -21,7 +21,10 @@ void erohin::inputNamedListList(std::istream & input, List< named_list > & resul
     input.clear();
     named_list current_line;
     inputNamedList(input, current_line);
-    result.push_front(current_line);
+    if (current_line.first != "")
+    {
+      result.push_front(current_line);
+    }
   }
   result.reverse();
 }

@@ -81,7 +81,6 @@ void erohin::formOrderedNumLists(List < List< uint64_t > > & result, const List<
 
 void erohin::formSumList(List< uint64_t > & result, const List < List< uint64_t > > & list)
 {
-  result.clear();
   if (list.empty())
   {
     result.push_front(0);
