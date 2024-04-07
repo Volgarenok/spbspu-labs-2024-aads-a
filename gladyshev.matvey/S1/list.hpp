@@ -157,7 +157,7 @@ namespace gladyshev
       detail::Node< T >* temp = head_;
       while (temp->next)
       {
-         temp = temp->next;
+        temp = temp->next;
       }
       return temp->data;
     }
@@ -166,7 +166,7 @@ namespace gladyshev
       detail::Node< T >* temp = head_;
       while (temp->next)
       {
-         temp = temp->next;
+        temp = temp->next;
       }
       return temp->data;
     }
