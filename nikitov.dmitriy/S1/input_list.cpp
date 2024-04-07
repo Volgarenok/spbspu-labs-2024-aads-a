@@ -5,10 +5,10 @@
 
 void nikitov::inputList(List< std::pair< std::string, List< size_t > > >& pairsList, std::istream& input)
 {
-  std::string line = "";
-  input >> line;
   while (input)
   {
+    std::string line = "";
+    input >> line;
     if (!input)
     {
       throw std::logic_error("Error: Wrong input");
@@ -16,10 +16,17 @@ void nikitov::inputList(List< std::pair< std::string, List< size_t > > >& pairsL
 
     std::pair< std::string, List< size_t > > pair = {};
     pair.first = line;
-    while (input >> line && !std::isalpha(line[0]))
+
+    size_t number = 0;
+    while (input >> number)
     {
-      pair.second.push_back(std::stoull(line));
+      pair.second.push_back(number);
     }
     pairsList.push_back(pair);
+
+    if (!input.eof())
+    {
+      input.clear();
+    }
   }
 }
