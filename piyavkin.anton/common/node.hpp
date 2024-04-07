@@ -9,15 +9,11 @@ namespace piyavkin
     template< class T >
     struct Node
     {
-      Node(const T& value = T(), Node* next = nullptr, Node* prev = nullptr):
-        value_(value),
+      template< class... Args >
+      Node(Node* next, Node* prev, Args&& ...args):
+        value_(std::forward< Args >(args)...),
         next_(next),
         prev_(prev)
-      {}
-      explicit Node(T&& value):
-        value_(std::move(value)),
-        next_(nullptr),
-        prev_(nullptr)
       {}
       ~Node() = default;
       T value_;

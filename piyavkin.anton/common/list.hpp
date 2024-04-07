@@ -82,7 +82,7 @@ namespace piyavkin
 
   template< class T >
   List< T >::List():
-    imaginary_node_(T()),
+    imaginary_node_(nullptr, nullptr, T()),
     head_(nullptr),
     tail_(nullptr),
     size_(0)
@@ -468,7 +468,7 @@ namespace piyavkin
   {
     if (size_ == 0)
     {
-      detail::Node< T >* node = new detail::Node< T >{value, std::addressof(imaginary_node_), nullptr};
+      detail::Node< T >* node = new detail::Node< T >{std::addressof(imaginary_node_), nullptr, value};
       imaginary_node_.prev_ = node;
       head_ = node;
       tail_ = node;
@@ -476,7 +476,7 @@ namespace piyavkin
       ListIterator< T > result(head_);
       return result;
     }
-    detail::Node< T >* node = new detail::Node< T >{value, it.node, it.node->prev_};
+    detail::Node< T >* node = new detail::Node< T >{it.node, it.node->prev_, value};
     it.node->prev_ = node;
     if (it.node == head_)
     {
