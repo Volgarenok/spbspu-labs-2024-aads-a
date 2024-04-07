@@ -23,7 +23,6 @@ namespace erohin
     ListConstIterator< T > & operator=(const ListConstIterator< T > &) = default;
     ListConstIterator< T > & operator++();
     ListConstIterator< T > operator++(int);
-    ListConstIterator< T > operator+(int number);
     const T & operator*() const;
     const T * operator->() const;
     bool operator==(const ListConstIterator< T > & rhs);
@@ -55,17 +54,6 @@ namespace erohin
     ListConstIterator< T > prev = *this;
     node_ = node_->next_;
     return prev;
-  }
-
-  template< class T >
-  ListConstIterator< T > ListConstIterator< T >::operator+(int number)
-  {
-    ListConstIterator< T > result = *this;
-    for (int i = 0; i < number; ++i)
-    {
-      ++result;
-    }
-    return result;
   }
 
   template< class T >

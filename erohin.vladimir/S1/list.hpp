@@ -86,7 +86,7 @@ namespace erohin
       {
         push_front(value);
       }
-      catch (const std::bad_alloc &)
+      catch (...)
       {
         clear();
         throw;
@@ -257,7 +257,7 @@ namespace erohin
   template< class T >
   ListIterator< T > List< T >::erase_after(ListConstIterator< T > first, ListConstIterator< T > last)
   {
-    while (first + 1 != last)
+    while (std::next(first) != last)
     {
       erase_after(first);
     }
@@ -267,7 +267,10 @@ namespace erohin
   template< class T >
   void List< T >::remove(const T & value)
   {
-    remove_if([&](T elem){ return (elem == value); });
+    remove_if([&](T elem)
+    {
+      return (elem == value);
+    });
   }
 
   template< class T >
@@ -281,9 +284,9 @@ namespace erohin
     bool is_front_equal_value = p(front());
     auto iter_begin = cbegin();
     auto iter_end = cend();
-    while (iter_begin + 1 != iter_end)
+    while (std::next(iter_begin) != iter_end)
     {
-      if (p(*(iter_begin + 1)))
+      if (p(*std::next(iter_begin)))
       {
         erase_after(iter_begin);
       }
@@ -365,7 +368,7 @@ namespace erohin
   template< class T >
   void List< T >::splice_after(ListConstIterator< T > pos, List< T > & other, ListConstIterator< T > it)
   {
-    if (pos == it || pos == (it + 1))
+    if (pos == it || pos == std::next(it))
     {
       return;
     }
@@ -375,7 +378,7 @@ namespace erohin
   template< class T >
   void List< T >::splice_after(ListConstIterator< T > pos, List< T > && other, ListConstIterator< T > it)
   {
-    if (pos == it || pos == (it + 1))
+    if (pos == it || pos == std::next(it))
     {
       return;
     }
@@ -387,7 +390,7 @@ namespace erohin
   {
     auto iter_current = first;
     auto iter_end = last;
-    while (iter_current + 1 != iter_end)
+    while (std::next(iter_current) != iter_end)
     {
       insert_after(pos, std::move(*(iter_current + 1)));
       other.erase_after(iter_current);
@@ -400,9 +403,9 @@ namespace erohin
   {
     auto iter_current = first;
     auto iter_end = last;
-    while (iter_current + 1 != iter_end)
+    while (std::next(iter_current) != iter_end)
     {
-      insert_after(pos, std::move(*(iter_current + 1)));
+      insert_after(pos, std::move(*std::next(iter_current)));
       other.erase_after(iter_current);
       ++pos;
     }
