@@ -2,13 +2,14 @@
 #define CONSTITERATOR_HPP
 
 #include <memory>
+#include <iterator>
 
 #include "node.hpp"
 
 namespace gladyshev
 {
   template < typename T >
-  class ConstIterator
+  class ConstIterator: public std::iterator< std::forward_iterator_tag, T >
   {
   public:
     ConstIterator():

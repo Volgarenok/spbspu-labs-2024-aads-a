@@ -2,13 +2,14 @@
 #define ITERATOR_HPP
 
 #include <memory>
+#include <iterator>
 
 #include "node.hpp"
 
 namespace gladyshev
 {
   template < typename T >
-  class Iterator
+  class Iterator: public std::iterator< std::forward_iterator_tag, T >
   {
   public:
     Iterator():
