@@ -1,7 +1,7 @@
 #ifndef CONSTITERATOR_HPP
 #define CONSTITERATOR_HPP
 
-#include <iostream>
+#include <memory>
 
 #include "node.hpp"
 
