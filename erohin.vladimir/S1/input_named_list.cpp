@@ -6,7 +6,7 @@
 void erohin::inputNamedList(std::istream & input, named_list & result)
 {
   input >> result.first;
-  int_t number;
+  uint64_t number;
   while (input >> number)
   {
     result.second.push_front(number);

@@ -8,8 +8,8 @@ int main()
 {
   using namespace erohin;
   List< named_list > lines;
-  List< List< int_t > > reformed_lines;
-  List< int_t > sums;
+  List< List< uint64_t > > reformed_lines;
+  List< uint64_t > sums;
   try
   {
     inputNamedListList(std::cin, lines);
@@ -33,7 +33,7 @@ int main()
     printNames(std::cout, lines);
     std::cout << "\n";
     formOrderedNumLists(reformed_lines, lines);
-    for (auto cur_line: reformed_lines)
+    for (auto & cur_line: reformed_lines)
     {
       printList(std::cout, cur_line);
       std::cout << "\n";

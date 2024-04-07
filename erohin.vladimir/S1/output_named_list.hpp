@@ -8,9 +8,9 @@
 namespace erohin
 {
   std::ostream & printNames(std::ostream & output, const List< named_list > & list);
-  std::ostream & printList(std::ostream & output, const List< int_t > & list);
-  void formOrderedNumLists(List < List< int_t > > & result, const List< named_list > & list);
-  void formSumList(List< int_t > & result, const List < List< int_t > > & list);
+  std::ostream & printList(std::ostream & output, const List< uint64_t > & list);
+  void formOrderedNumLists(List < List< uint64_t > > & result, const List< named_list > & list);
+  void formSumList(List< uint64_t > & result, const List < List< uint64_t > > & list);
 }
 #endif
 
