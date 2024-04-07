@@ -106,7 +106,7 @@ namespace zhalilov
   template < typename T >
   List< T >::List():
     m_size(0),
-    m_head(new Node(T(), nullptr, nullptr))
+    m_head(new Node(nullptr, nullptr, T()))
   {
     m_head->next = m_head;
     m_head->prev = m_head;
@@ -570,7 +570,7 @@ namespace zhalilov
   template < typename... Args >
   typename List< T >::iterator List< T >::doInsert(const_iterator pos, Args &&... args)
   {
-    Node *newNode = new Node(std::forward< Args >(args)..., pos.m_node->prev, pos.m_node);
+    Node *newNode = new Node(pos.m_node->prev, pos.m_node, std::forward< Args >(args)...);
     Node *prev = pos.m_node->prev;
     prev->next = newNode;
     pos.m_node->prev = newNode;
