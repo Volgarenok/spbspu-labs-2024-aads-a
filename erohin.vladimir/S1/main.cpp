@@ -12,7 +12,7 @@ int main()
   List< int_t > sums;
   try
   {
-    inputNamedList(std::cin, lines);
+    inputNamedListList(std::cin, lines);
     if (lines.empty())
     {
       std::cout << 0 << "\n";;
