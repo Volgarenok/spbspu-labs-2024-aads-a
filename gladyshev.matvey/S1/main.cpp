@@ -9,7 +9,7 @@
 int main()
 {
   using namespace gladyshev;
-  List<std::pair<std::string, List<size_t>>> sequences;
+  List< std::pair< std::string, List< size_t > > > sequences;
   readSequence(std::cin, sequences);
   if (sequences.empty())
   {
@@ -17,12 +17,12 @@ int main()
     return 0;
   }
   sequences.reverse();
-  for (auto it = sequences.begin(); it != sequences.end(); ++it)
+  for (auto it = sequences.cbegin(); it != sequences.cend(); ++it)
   {
     std::cout << it->first;
     auto temp = it;
     ++temp;
-    if (temp != sequences.end())
+    if (temp != sequences.cend())
     {
       std::cout << " ";
     }
@@ -32,27 +32,27 @@ int main()
   size_t sum = 0;
   size_t counter = 0;
   bool moreData = true;
-  List<size_t> listOfNums;
+  List< size_t > listOfNums;
   while (moreData)
   {
     moreData = false;
-    for (auto it = sequences.begin(); it != sequences.end(); ++it)
+    for (auto it = sequences.cbegin(); it != sequences.cend(); ++it)
     {
-      auto itr = it->second.begin();
+      auto itr = it->second.cbegin();
       for (size_t i = 0; i < counter; ++i)
       {
-        if (itr != it->second.end())
+        if (itr != it->second.cend())
         {
           ++itr;
         }
       }
-      if (itr != it->second.end())
+      if (itr != it->second.cend())
       {
          if (moreData)
          {
            std::cout << " ";
          }
-         if (std::numeric_limits<size_t>::max() - sum >= *itr)
+         if (std::numeric_limits< size_t >::max() - sum >= *itr)
          {
            sum += *itr;
          }
@@ -83,12 +83,12 @@ int main()
     return 0;
   }
   listOfNums.reverse();
-  for (auto it = listOfNums.begin(); it != listOfNums.end(); ++it)
+  for (auto it = listOfNums.cbegin(); it != listOfNums.cend(); ++it)
   {
     std::cout << *it;
     auto temp = it;
     ++temp;
-    if (temp != listOfNums.end())
+    if (temp != listOfNums.cend())
     {
       std::cout << " ";
     }
