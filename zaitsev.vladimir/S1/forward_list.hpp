@@ -36,6 +36,54 @@ namespace zaitsev
         head_node = temp;
       }
     }
+    Node* merge(Node* first, Node* second)
+    {
+      if (!first || !second)
+      {
+        return first ? first : second;
+      }
+      Node* res = nullptr;
+      Node* list1_cur = first;
+      Node* list2_cur = second;
+      if (list1_cur->value_ < list2_cur->value_)
+      {
+        res = list2_cur;
+        list2_cur = list2_cur->next_;
+      }
+      else
+      {
+        res = list1_cur;
+        list1_cur = list1_cur->next_;
+      }
+
+      while (list1_cur || list2_cur)
+      {
+        if (list1_cur && list2_cur)
+        {
+          if (list1_cur->value_ < list2_cur->value_)
+          {
+            res->next_ = list2_cur;
+            list2_cur = list2_cur->next_;
+          }
+          else
+          {
+            res->next_ = list1_cur;
+            list1_cur = list1_cur->next_;
+          }
+        }
+        else if (list1_cur)
+        {
+          res->next_ = list1_cur;
+          break;
+        }
+        else
+        {
+          res->next_ = list2_cur;
+          break;
+        }
+      }
+      return  res;
+    }
 
     template< bool IsConst >
     class BaseIterator
@@ -81,6 +129,9 @@ namespace zaitsev
         return node_ == other.node_;
       }
     };
+
+  private:
+    Node* head_;
 
   public:
     using iterator = BaseIterator< false >;
@@ -457,56 +508,7 @@ namespace zaitsev
 
     void merge(ForwardList& other)
     {
-      if (!other.head_)
-      {
-        return;
-      }
-      if (!head_)
-      {
-        head_ = other.head_;
-        other.head_ = nullptr;
-      }
-      Node* res = nullptr;
-      Node* list1_cur = head_;
-      Node* list2_cur = other.head_;
-      if (list1_cur->value_ < list2_cur->value_)
-      {
-        res = list2_cur;
-        list2_cur = list2_cur->next_;
-      }
-      else
-      {
-        res = list1_cur;
-        list1_cur = list1_cur->next_;
-      }
-
-      while (list1_cur || list2_cur)
-      {
-        if (list1_cur && list2_cur)
-        {
-          if (list1_cur->value_ < list2_cur->value_)
-          {
-            res->next_ = list2_cur;
-            list2_cur = list2_cur->next_;
-          }
-          else
-          {
-            res->next_ = list1_cur;
-            list1_cur = list1_cur->next_;
-          }
-        }
-        else if (list1_cur)
-        {
-          res->next_ = list1_cur;
-          list1_cur = nullptr;
-        }
-        else
-        {
-          res->next_ = list2_cur;
-          list2_cur = nullptr;
-        }
-      }
-      head_ = res;
+      head_ = merge(head_, other.head_);
       other.head_ = nullptr;
     }
     size_t unique()
@@ -530,8 +532,58 @@ namespace zaitsev
       }
       return removed;
     }
-  private:
-    Node* head_;
+    void sort()
+    {
+      if (!head_ || !head->next_)
+        return;
+      size_t sz = 0;
+      const Node* cur = head_;
+      while (cur)
+      {
+        ++sz;
+        cur = cur->next_;
+      }
+      for (size_t ord_sec_sz = 1; ord_sec_sz < sz; ord_sec_sz *= 2)
+      {
+        Node* global_head = nullptr;
+        Node* head_tail = nullptr;
+        Node* global_tail = head_;
+        while (global_tail)
+        {
+          Node* sec1_head = global_tail;
+          Node* sec1_tail = global_tail;
+          global_tail = global_tail->next_;
+          for (size_t j = 1; j < ord_sec_sz && global_tail; ++j)
+          {
+            sec1_tail = global_tail;
+            global_tail = global_tail->next_;
+          }
+          if (!global_tail)
+          {
+            head_tail->next_ = sec1_head;
+            break;
+          }
+          Node* sec2_head = global_tail;
+          Node* sec2_tail = global_tail;
+          global_tail = global_tail->next_;
+          for (size_t j = 1; j < ord_sec_sz && global_tail; ++j)
+          {
+            sec2_tail = global_tail;
+            global_tail = global_tail->next_;
+          }
+          if (!global_head)
+          {
+            global_head = merge(sec1_head, sec2_head);
+          }
+          else
+          {
+            head_tail->next_ = merge(sec1_head, sec2_head);
+          }
+          head_tail = (sec2_tail->next_ == global_tail ? sec2_tail : sec1_tail);
+        }
+        head_ = global_head;
+      }
+    }
   };
 }
 #endif
