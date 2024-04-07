@@ -178,7 +178,6 @@ namespace gladyshev
           temp = temp->next;
         }
         delete temp->next;
-        temp->next = nullptr;
       }
     }
     void swap(List& other)
