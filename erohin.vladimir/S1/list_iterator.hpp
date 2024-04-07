@@ -17,7 +17,7 @@ namespace erohin
   public:
     ListIterator();
     ListIterator(const ListIterator< T > &) = default;
-    ListIterator(const detail::Node< T > * node_ptr);
+    ListIterator(detail::Node< T > * node_ptr);
     ~ListIterator() = default;
     ListIterator< T > & operator=(const ListIterator< T > &) = default;
     ListIterator< T > & operator++();
@@ -38,8 +38,8 @@ namespace erohin
   {}
 
   template< class T >
-  ListIterator< T >::ListIterator(const detail::Node< T > * node_ptr):
-    node_(const_cast< detail::Node< T > * >(node_ptr))
+  ListIterator< T >::ListIterator(detail::Node< T > * node_ptr):
+    node_(node_ptr)
   {}
 
   template< class T >

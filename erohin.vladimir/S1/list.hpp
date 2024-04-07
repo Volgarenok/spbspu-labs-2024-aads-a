@@ -244,7 +244,7 @@ namespace erohin
   template< class T >
   ListIterator< T > List< T >::erase_after(const_iterator pos)
   {
-    iterator iter_result(pos.node_);
+    iterator iter_result(const_cast< detail::Node< T > * >(pos.node_));
     detail::Node< T > * to_delete = iter_result.node_->next_;
     detail::Node< T > * to_become_next = to_delete->next_;
     delete to_delete;
@@ -259,7 +259,7 @@ namespace erohin
     {
       erase_after(first);
     }
-    return iterator(last.node_);
+    return iterator(const_cast< detail::Node< T > * >(last.node_));
   }
 
   template< class T >
