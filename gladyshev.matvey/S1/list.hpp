@@ -87,28 +87,7 @@ namespace gladyshev
     }
     void remove(const T& value)
     {
-      if (empty())
-      {
-        return;
-      }
-      if (head_->data = value)
-      {
-        pop_front();
-        return;
-      }
-      detail::Node< T >* firstTemp = head_;
-      detail::Node< T >* secondTemp = head_->next;
-      while (secondTemp && secondTemp->data != value)
-      {
-        firstTemp = firstTemp->next;
-        secondTemp = secondTemp->next;
-      }
-      if (!secondTemp)
-      {
-        return;
-      }
-      firstTemp->next = secondTemp->next;
-      delete secondTemp;
+      remove_if([&value](const T& data){ return data == value; });
     }
     template < typename UnaryPredicate >
     void remove_if(UnaryPredicate p)
