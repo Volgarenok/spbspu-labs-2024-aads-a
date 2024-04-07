@@ -9,12 +9,12 @@
 
 namespace gladyshev
 {
-  template <typename T>
+  template < typename T >
   class List
   {
   public:
-    typedef Iterator<T> iterator;
-    typedef ConstIterator<T> constIterator;
+    using iterator = Iterator< T >;
+    using constIterator = ConstIterator< T >;
     List():
       head_(nullptr)
     {}
@@ -40,7 +40,7 @@ namespace gladyshev
     List(const List& other):
       head_(nullptr)
     {
-      Node<T> * curr = other.head_;
+      detail::Node< T > * curr = other.head_;
       while (curr != nullptr)
       {
         push_back(curr->data);
@@ -73,10 +73,10 @@ namespace gladyshev
     }
     void reverse()
     {
-      Node<T>* prev = nullptr;
-      Node<T>* current = head_;
-      Node<T>* temp = nullptr;
-      while (current != nullptr)
+      detail::Node< T >* prev = nullptr;
+      detail::Node< T >* current = head_;
+      detail::Node< T >* temp = nullptr;
+      while (current)
       {
         temp = current->next;
         current->next = prev;
@@ -96,8 +96,8 @@ namespace gladyshev
         pop_front();
         return;
       }
-      Node<T>* firstTemp = head_;
-      Node<T>* secondTemp = head_->next;
+      detail::Node< T >* firstTemp = head_;
+      detail::Node< T >* secondTemp = head_->next;
       while (secondTemp && secondTemp->data != value)
       {
         firstTemp = firstTemp->next;
@@ -110,11 +110,11 @@ namespace gladyshev
       firstTemp->next = secondTemp->next;
       delete secondTemp;
     }
-    template <typename UnaryPredicate>
+    template < typename UnaryPredicate >
     void remove_if(UnaryPredicate p)
     {
-      Node<T>* curr = head_;
-      Node<T>* temp = nullptr;
+      detail::Node< T >* curr = head_;
+      detail::Node< T >* temp = nullptr;
       while (curr)
       {
         if (p(curr->data))
@@ -140,14 +140,14 @@ namespace gladyshev
     }
     void push_back(const T& data)
     {
-      Node<T>* newNode = new Node<T>(data);
+      detail::Node< T >* newNode = new detail::Node< T >(data);
       if (empty())
       {
         head_ = newNode;
       }
       else
       {
-        Node<T>* temp = head_;
+        detail::Node< T >* temp = head_;
         while (temp->next)
         {
           temp = temp->next;
@@ -157,7 +157,7 @@ namespace gladyshev
     }
     void push_front(const T& data)
     {
-      Node<T>* temp = new Node<T>(data);
+      detail::Node< T >* temp = new detail::Node< T >(data);
       temp->next = head_;
       head_ = temp;
     }
@@ -171,7 +171,7 @@ namespace gladyshev
       {
         return;
       }
-      Node<T>* temp = head_;
+      detail::Node< T >* temp = head_;
       head_ = head_->next;
       delete temp;
     }
@@ -188,7 +188,7 @@ namespace gladyshev
       }
       else
       {
-        Node<T>* temp = head_;
+        detail::Node< T >* temp = head_;
         while (temp->next->next)
         {
           temp = temp->next;
@@ -218,7 +218,7 @@ namespace gladyshev
       return iterator(nullptr);
     }
   private:
-    Node<T>* head_;
+    detail::Node< T >* head_;
   };
 }
 

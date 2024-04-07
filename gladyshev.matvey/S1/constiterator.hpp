@@ -7,35 +7,35 @@
 
 namespace gladyshev
 {
-  template <typename T>
+  template < typename T >
   class ConstIterator
   {
   public:
     ConstIterator():
       node_(nullptr)
     {}
-    ConstIterator(Node<T>* node):
+    ConstIterator(detail::Node< T >* node):
       node_(node)
     {}
-    ConstIterator(const ConstIterator<T>&) = default;
-    ConstIterator<T>& operator=(const ConstIterator<T>&) = default;
+    ConstIterator(const ConstIterator< T >&) = default;
+    ConstIterator< T >& operator=(const ConstIterator< T >&) = default;
     ~ConstIterator() = default;
-    ConstIterator<T>& operator++()
+    ConstIterator< T >& operator++()
     {
       node_ = node_->next;
       return *this;
     }
-    ConstIterator<T> operator++(int)
+    ConstIterator< T > operator++(int)
     {
-      ConstIterator<T> result(*this);
+      ConstIterator< T > result(*this);
       ++(*this);
       return result;
     }
-    bool operator!=(const ConstIterator<T>& other) const
+    bool operator!=(const ConstIterator< T >& other) const
     {
       return !(node_ == other.node_);
     }
-    bool operator==(const ConstIterator<T>& other) const
+    bool operator==(const ConstIterator< T >& other) const
     {
       return (node_ == other.node_);
     }
@@ -48,7 +48,7 @@ namespace gladyshev
       return std::addressof(node_->data);
     }
   private:
-    Node<T>* node_;
+    detail::Node< T >* node_;
   };
 }
 
