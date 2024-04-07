@@ -1,6 +1,7 @@
 #ifndef FORWARD_LIST_HPP
 #define FORWARD_LIST_HPP
 #include <stdexcept>
+#include <algorithm>
 #include <type_traits>
 #include <cstddef>
 
@@ -145,6 +146,32 @@ namespace zaitsev
     {
       freeNodes(head_);
     }
+
+    bool operator==(const ForwardList& other)
+    {
+      return std::equal(cbegin(), cend(), other.cbegin(), other.cend());
+    }
+    bool operator!=(const ForwardList& other)
+    {
+      return !std::equal(cbegin(), cend(), other.cbegin(), other.cend());
+    }
+    bool operator<(const ForwardList& other)
+    {
+      return std::lexicographical_compare(cbegin(), cend(), other.cbegin(), other.cend());
+    }
+    bool operator>=(const ForwardList& other)
+    {
+      return !std::lexicographical_compare(cbegin(), cend(), other.cbegin(), other.cend());
+    }
+    bool operator>(const ForwardList& other)
+    {
+      return std::lexicographical_compare(other.cbegin(), other.cend(), cbegin(), cend());
+    }
+    bool operator<=(const ForwardList& other)
+    {
+      return !std::lexicographical_compare(other.cbegin(), other.cend(), cbegin(), cend());
+    }
+
 
     iterator begin()
     {

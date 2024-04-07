@@ -5,11 +5,8 @@
 int main()
 {
   using namespace zaitsev;
-  using ull = unsigned long long;
-  using ullList = ForwardList< ull >;
-  using namedList = std::pair< std::string, ullList >;
 
-  ForwardList< namedList > list;
+  named_ullList list;
   try
   {
     input_lists(list);
