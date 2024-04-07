@@ -6,7 +6,7 @@ void gladyshev::readSequence(std::istream& in, List<std::pair<std::string, List<
   in >> line;
   while (in)
   {
-    list.push_front({line, List<size_t>{}});
+    list.push_front({line, List< size_t >{}});
     while (in >> line)
     {
       try
