@@ -41,9 +41,9 @@ namespace gladyshev
       head_(nullptr)
     {
       detail::Node< T > * curr = other.head_;
-      while (curr != nullptr)
+      while (curr)
       {
-        push_back(curr->data);
+        push_front(curr->data);
         curr = curr->next;
       }
     }
