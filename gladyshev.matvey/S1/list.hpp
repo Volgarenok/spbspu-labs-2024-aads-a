@@ -148,6 +148,28 @@ namespace gladyshev
     {
       return head_->data;
     }
+    const T& front() const
+    {
+      return head_->data;
+    }
+    T& back()
+    {
+      detail::Node< T >* temp = head_;
+      while (temp->next)
+      {
+         temp = temp->next;
+      }
+      return temp->data;
+    }
+    const T& back() const
+    {
+      detail::Node< T >* temp = head_;
+      while (temp->next)
+      {
+         temp = temp->next;
+      }
+      return temp->data;
+    }
     void pop_front()
     {
       if (empty())
