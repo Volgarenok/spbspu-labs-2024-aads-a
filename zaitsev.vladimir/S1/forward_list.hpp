@@ -37,7 +37,9 @@ namespace zaitsev
         head_node = temp;
       }
     }
-    Node* merge(Node* first, Node* second) noexcept
+
+    template <class Compare >
+    Node* merge(Node* first, Node* second, Compare cmp) noexcept
     {
       if (!first || !second)
       {
@@ -45,43 +47,36 @@ namespace zaitsev
       }
       Node* res = nullptr;
       Node* res_tail = nullptr;
-      Node* list1_cur = first;
-      Node* list2_cur = second;
-      if (list1_cur->value_ < list2_cur->value_)
+      if (cmp(first->value_, second->value_))
       {
-        res = list1_cur;
-        list1_cur = list1_cur->next_;
+        res = first;
+        first = first->next_;
       }
       else
       {
-        res = list2_cur;
-        list2_cur = list2_cur->next_;
+        res = second;
+        second = second->next_;
       }
       res_tail = res;
 
-      while (list1_cur || list2_cur)
+      while (first || second)
       {
-        if (list1_cur && list2_cur)
+        if (first && second)
         {
-          if (list1_cur->value_ < list2_cur->value_)
+          if (cmp(first->value_, second->value_))
           {
-            res_tail->next_ = list1_cur;
-            list1_cur = list1_cur->next_;
+            res_tail->next_ = first;
+            first = first->next_;
           }
           else
           {
-            res_tail->next_ = list2_cur;
-            list2_cur = list2_cur->next_;
+            res_tail->next_ = second;
+            second = second->next_;
           }
-        }
-        else if (list1_cur)
-        {
-          res_tail->next_ = list1_cur;
-          break;
         }
         else
         {
-          res_tail->next_ = list2_cur;
+          res_tail->next_ = first ? first : second;
           break;
         }
         res_tail = res_tail->next_;
@@ -93,7 +88,7 @@ namespace zaitsev
     class BaseIterator
     {
       template< bool U > friend class BaseIterator;
-      template< typename V > friend class ForwardList;
+      template< typename U > friend class ForwardList;
       using prt_t = std::conditional_t< IsConst, const T*, T* >;
       using ref_t = std::conditional_t< IsConst, const T&, T& >;
       using node_t = Node*;
@@ -145,7 +140,6 @@ namespace zaitsev
         return node_ == other.node_;
       }
     };
-
 
   public:
     using iterator = BaseIterator< false >;
@@ -253,25 +247,49 @@ namespace zaitsev
     {
       return std::equal(cbegin(), cend(), other.cbegin(), other.cend());
     }
+    friend bool operator==(const ForwardList& first, const ForwardList& second)
+    {
+      return first == second;
+    }
     bool operator!=(const ForwardList& other)
     {
       return !std::equal(cbegin(), cend(), other.cbegin(), other.cend());
+    }
+    friend bool operator!=(const ForwardList& first, const ForwardList& second)
+    {
+      return first != second;
     }
     bool operator<(const ForwardList& other)
     {
       return std::lexicographical_compare(cbegin(), cend(), other.cbegin(), other.cend());
     }
+    friend bool operator<(const ForwardList& first, const ForwardList& second)
+    {
+      return first < second;
+    }
     bool operator>=(const ForwardList& other)
     {
       return !std::lexicographical_compare(cbegin(), cend(), other.cbegin(), other.cend());
+    }
+    friend bool operator>=(const ForwardList& first, const ForwardList& second)
+    {
+      return first >= second;
     }
     bool operator>(const ForwardList& other)
     {
       return std::lexicographical_compare(other.cbegin(), other.cend(), cbegin(), cend());
     }
+    friend bool operator>(const ForwardList& first, const ForwardList& second)
+    {
+      return first > second;
+    }
     bool operator<=(const ForwardList& other)
     {
       return !std::lexicographical_compare(other.cbegin(), other.cend(), cbegin(), cend());
+    }
+    friend bool operator<=(const ForwardList& first, const ForwardList& second)
+    {
+      return first <= second;
     }
 
     iterator begin()
@@ -553,11 +571,17 @@ namespace zaitsev
       head_ = new_head;
     }
 
-    void merge(ForwardList& other)
+    template<class Compare>
+    void merge(ForwardList& other, Compare cmp)
     {
-      head_ = merge(head_, other.head_);
+      head_ = merge(head_, other.head_, cmp);
       other.head_ = nullptr;
     }
+    void merge(ForwardList& other)
+    {
+      merge(other, std::less<T>());
+    }
+
     size_t unique()
     {
       if (!head_)
@@ -579,7 +603,9 @@ namespace zaitsev
       }
       return removed;
     }
-    void sort()
+
+    template<class Compare>
+    void sort(Compare cmp)
     {
       if (!head_ || !head_->next_)
         return;
@@ -626,16 +652,20 @@ namespace zaitsev
           }
           if (!global_head)
           {
-            global_head = merge(sec1_head, sec2_head);
+            global_head = merge(sec1_head, sec2_head, cmp);
           }
           else
           {
-            head_tail->next_ = merge(sec1_head, sec2_head);
+            head_tail->next_ = merge(sec1_head, sec2_head, cmp);
           }
-          head_tail = (sec1_tail->value_ < sec2_tail->value_ ? sec2_tail : sec1_tail);
+          head_tail = (cmp(sec1_tail->value_, sec2_tail->value_) ? sec2_tail : sec1_tail);
         }
         head_ = global_head;
       }
+    }
+    void sort()
+    {
+      sort(std::less<T>());
     }
   };
 }
