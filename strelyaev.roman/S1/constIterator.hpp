@@ -15,18 +15,18 @@ namespace strelyaev
     friend class List< T >;
     public:
       ConstIterator():
-      node_(nullptr)
-     {}
+        node_(nullptr)
+       {}
 
-     ConstIterator(const ConstIterator& val):
-      node_(val.node_)
-     {}
+      ConstIterator(const ConstIterator& val):
+        node_(val.node_)
+       {}
 
-     ConstIterator(Node< T >* val):
-      node_(val)
-     {}
+      ConstIterator(detail::Node< T >* val):
+       node_(val)
+      {}
 
-     ~ConstIterator() = default;
+      ~ConstIterator() = default;
 
       ConstIterator< T >& operator++()
       {
@@ -84,8 +84,8 @@ namespace strelyaev
         return !(*this == val);
       }
 
-     private:
-       Node< T >* node_;
+    private:
+      detail::Node< T >* node_;
   };
 }
 #endif

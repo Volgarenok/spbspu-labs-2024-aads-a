@@ -22,7 +22,7 @@ namespace strelyaev
       node_(val.node_)
      {}
 
-     Iterator(Node< T >* val):
+     Iterator(detail::Node< T >* val):
       node_(val)
      {}
 
@@ -106,7 +106,7 @@ namespace strelyaev
      }
 
     private:
-     Node< T >* node_;
+     detail::Node< T >* node_;
   };
 }
 
