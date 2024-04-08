@@ -12,39 +12,39 @@ nikitov::detail::Operation::Operation(char value):
   symb(value)
 {}
 
-nikitov::InfixType::InfixType(ExprTypeName name, bool value):
+nikitov::InfixType::InfixType(bool value):
   bracket(value),
-  type(name)
+  type(ExprTypeName::bracket)
 {}
 
-nikitov::InfixType::InfixType(ExprTypeName name, long long value):
+nikitov::InfixType::InfixType(long long value):
   operand(value),
-  type(name)
+  type(ExprTypeName::operand)
 {}
 
-nikitov::InfixType::InfixType(ExprTypeName name, char value):
+nikitov::InfixType::InfixType(char value):
   operation(value),
-  type(name)
+  type(ExprTypeName::operation)
 {}
 
-nikitov::StackType::StackType(ExprTypeName name, bool value):
+nikitov::StackType::StackType(bool value):
   bracket(value),
-  type(name)
+  type(ExprTypeName::bracket)
 {}
 
-nikitov::StackType::StackType(ExprTypeName name, char value):
+nikitov::StackType::StackType(char value):
   operation(value),
-  type(name)
+  type(ExprTypeName::operation)
 {}
 
-nikitov::PostfixType::PostfixType(ExprTypeName name, long long value):
+nikitov::PostfixType::PostfixType(long long value):
   operand(value),
-  type(name)
+  type(ExprTypeName::operand)
 {}
 
-nikitov::PostfixType::PostfixType(ExprTypeName type, char value):
+nikitov::PostfixType::PostfixType(char value):
   operation(value),
-  type(type)
+  type(ExprTypeName::operation)
 {}
 
 bool nikitov::detail::Operation::operator<=(const detail::Operation& other) const

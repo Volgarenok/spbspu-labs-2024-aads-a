@@ -15,7 +15,7 @@ nikitov::PostfixExpression nikitov::convertExpression(Queue< InfixType > infixEx
     if (infixValue.type == ExprTypeName::operand)
     {
       long long value = infixValue.operand.num;
-      postfixExpression.add(PostfixType(ExprTypeName::operand, value));
+      postfixExpression.add(PostfixType(value));
     }
     else
     {
@@ -24,14 +24,14 @@ nikitov::PostfixExpression nikitov::convertExpression(Queue< InfixType > infixEx
         if (infixValue.bracket.isOpen)
         {
           bool value = infixValue.bracket.isOpen;
-          operandsStack.push(StackType(ExprTypeName::bracket, value));
+          operandsStack.push(StackType(value));
         }
         else
         {
           while (!operandsStack.empty() && !operandsStack.top().type == nikitov::bracket)
           {
             char value = operandsStack.drop().operation.symb;
-            postfixExpression.add(PostfixType(ExprTypeName::operation, value));
+            postfixExpression.add(PostfixType(value));
           }
           if (operandsStack.empty())
           {
@@ -47,7 +47,7 @@ nikitov::PostfixExpression nikitov::convertExpression(Queue< InfixType > infixEx
           if (infixValue.operation <= operandsStack.top().operation)
           {
             char value = operandsStack.drop().operation.symb;
-            postfixExpression.add(PostfixType(ExprTypeName::operation, value));
+            postfixExpression.add(PostfixType(value));
           }
           else
           {
@@ -55,7 +55,7 @@ nikitov::PostfixExpression nikitov::convertExpression(Queue< InfixType > infixEx
           }
         }
         char value = infixValue.operation.symb;
-        operandsStack.push(StackType(ExprTypeName::operation, value));
+        operandsStack.push(StackType(value));
       }
     }
   }
@@ -68,7 +68,7 @@ nikitov::PostfixExpression nikitov::convertExpression(Queue< InfixType > infixEx
       throw std::logic_error("Error: Wrong brackets");
     }
     char value = stackValue.operation.symb;
-    postfixExpression.add(PostfixType(ExprTypeName::operation, value));
+    postfixExpression.add(PostfixType(value));
   }
   return postfixExpression;
 }

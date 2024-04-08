@@ -38,9 +38,9 @@ namespace nikitov
   struct InfixType
   {
     InfixType() = default;
-    InfixType(ExprTypeName type, bool value);
-    InfixType(ExprTypeName type, long long value);
-    InfixType(ExprTypeName type, char value);
+    explicit InfixType(bool value);
+    explicit InfixType(long long value);
+    explicit InfixType(char value);
 
     union
     {
@@ -54,8 +54,8 @@ namespace nikitov
   struct StackType
   {
     StackType() = default;
-    explicit StackType(ExprTypeName type, bool value);
-    explicit StackType(ExprTypeName type, char value);
+    explicit StackType(bool value);
+    explicit StackType(char value);
 
     union
     {
@@ -68,8 +68,8 @@ namespace nikitov
   struct PostfixType
   {
     PostfixType() = default;
-    explicit PostfixType(ExprTypeName type, long long value);
-    explicit PostfixType(ExprTypeName type, char value);
+    explicit PostfixType(long long value);
+    explicit PostfixType(char value);
 
     union
     {

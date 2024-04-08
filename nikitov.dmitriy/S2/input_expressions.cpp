@@ -8,15 +8,15 @@ nikitov::InfixType recognizeType(std::string& line)
 {
   if (std::isdigit(line[0]))
   {
-    return nikitov::InfixType(nikitov::ExprTypeName::operand, stoll(line));
+    return nikitov::InfixType(stoll(line));
   }
   else if (line[0] == '(' || line[0] == ')')
   {
-    return nikitov::InfixType(nikitov::ExprTypeName::bracket, line[0] == '(');
+    return nikitov::InfixType(line[0] == '(');
   }
   else
   {
-    return nikitov::InfixType(nikitov::ExprTypeName::operation, line[0]);
+    return nikitov::InfixType(line[0]);
   }
 }
 
