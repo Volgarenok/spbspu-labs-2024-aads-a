@@ -96,6 +96,12 @@ namespace zaitsev
     private:
       node_t node_;
     public:
+      using iterator_category = std::forward_iterator_tag;
+      using value_type = std::conditional_t< IsConst, const T, T >;
+      using difference_type = std::ptrdiff_t;
+      using pointer = std::conditional_t< IsConst, const T*, T* >;
+      using reference = std::conditional_t< IsConst, const T&, T& >;
+
       BaseIterator():
         node_(nullptr)
       {}
