@@ -8,7 +8,6 @@
 int main()
 {
   using namespace strelyaev;
-  bool overflow = false;
   List< std::pair< std::string, List < size_t > > > list;
   try
   {
@@ -50,6 +49,7 @@ int main()
   }
 
   List< size_t > sums;
+  bool overflow = false;
   size_t max_sizet = std::numeric_limits< size_t >::max();
   size_t sums_i = 0;
   if (max_element != 1)
@@ -87,12 +87,16 @@ int main()
       std::cerr << "Overflow\n";
       return 1;
     }
-
     if (sums_i != max_element)
     {
       sums_i++;
       sums.push_back(sum);
     }
+  }
+
+  if (sums.empty())
+  {
+    sums.push_front(0);
   }
 
   for (auto it = sums.begin(); it != sums.end(); it++)
