@@ -7,7 +7,7 @@
 
 namespace sivkov
 {
-  template <typename T>
+  template < typename T >
   class List
   {
   public:
@@ -67,7 +67,7 @@ namespace sivkov
       Node<T>* head_;
     };
 
-  template<typename T>
+  template< typename T >
   void List<T>::push_front(const T& data)
   {
     Node<T>* temp = new Node<T>(data);
@@ -76,7 +76,7 @@ namespace sivkov
     ++size;
   }
 
-  template<typename T>
+  template< typename T >
   void List<T>::push_back(T data)
   {
     Node<T>* newNode = new Node<T>(data);
@@ -96,7 +96,7 @@ namespace sivkov
    ++size;
   }
 
-  template<typename T>
+  template< typename T >
   void List<T>::clear()
   {
     while (!(empty()))
@@ -106,7 +106,7 @@ namespace sivkov
     size = 0;
   }
 
-  template<typename T>
+  template< typename T >
   void List<T>::pop_front()
   {
     if (empty())
@@ -119,7 +119,7 @@ namespace sivkov
     --size;
   }
 
-  template<typename T>
+  template< typename T >
   void List<T>::pop_back()
   {
     if (empty())
@@ -144,13 +144,13 @@ namespace sivkov
     --size;
   }
 
-  template<typename T>
+  template< typename T >
   void List<T>::swap(List& other)
   {
     std::swap(head_, other.head_);
   }
 
-  template<typename T>
+  template< typename T >
   void List<T>::reverse()
   {
     if (!head_)
@@ -170,7 +170,7 @@ namespace sivkov
     head_ = result;
   }
 
-  template<typename T>
+  template< typename T >
   void List<T>::remove(const T& value)
   {
     Node<T>* current = head_;
@@ -200,8 +200,8 @@ namespace sivkov
     }
   }
 
-  template<typename T>
-  void List<T>::assign(std::size_t count, const T& value)
+  template< typename T >
+  void List<T>::assign(size_t count, const T& value)
   {
     clear();
 
@@ -211,13 +211,13 @@ namespace sivkov
     }
   }
 
-  template<typename T>
+  template< typename T >
   size_t List<T>::getSize()
   {
     return size;
   }
 
-  template<typename T>
+  template< typename T >
   T& List<T>::operator[](const int index)
   {
     int counter = 0;

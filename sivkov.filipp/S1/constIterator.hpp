@@ -6,7 +6,7 @@
 
 namespace sivkov
 {
-  template <typename T>
+  template < typename T >
   class ConstIterator
   {
   public:
@@ -36,43 +36,43 @@ namespace sivkov
     Node<T>* node_;
   };
 
-  template<typename T>
+  template< typename T >
   T& ConstIterator<T>::operator*()
   {
     return node_->data;
   }
 
-  template<typename T>
+  template< typename T >
   T* ConstIterator<T>::operator->()
   {
     return std::addressof(node_->data);
   }
 
-  template<typename T>
+  template< typename T >
   bool ConstIterator<T>::operator!=(const ConstIterator<T>& other) const
   {
     return !(node_ == other.node_);
   }
 
-  template<typename T>
+  template< typename T >
   bool ConstIterator<T>::operator==(const ConstIterator<T>& other) const
   {
     return (node_ == other.node_);
   }
 
-  template<typename T>
+  template< typename T >
   const T& ConstIterator<T>::operator*() const
   {
     return node_->data;
   }
 
-  template<typename T>
+  template< typename T >
   const T* ConstIterator<T>::operator->() const
   {
     return std::addressof(node_->data);
   }
 
-  template<typename T>
+  template< typename T >
   void ConstIterator<T>::advance(size_t n)
   {
     for (size_t i = 0; i < n; ++i)
@@ -85,14 +85,14 @@ namespace sivkov
     }
   }
 
-  template<typename T>
+  template< typename T >
   ConstIterator<T>& ConstIterator<T>::operator++()
   {
     node_ = node_->next;
     return *this;
  }
 
-  template<typename T>
+  template< typename T >
   ConstIterator<T> ConstIterator<T>::operator++(int)
   {
     ConstIterator<T> result(*this);
