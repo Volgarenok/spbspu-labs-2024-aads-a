@@ -184,14 +184,47 @@ struct List
 //2
   void remove(const T & val)
   {
+    if (head == nullptr)
+    {
+      return;
+    }
+    if (head == tail)
+    {
+      if (head->data == val)
+      {
+        pop_back();
+      }
+      return;
+    }
     Node<T> * subhead = head;
+    Node<T> * todelete = head;
     while (subhead)
     {
-      if (subhead->data == val)
+      if ((subhead == head) && (subhead->data == val))
       {
+        subhead = subhead->next;
+        pop_front();
       }
-      subhead = subhead->next;
-      //
+      else
+      {
+        if (subhead->next)
+        {
+          todelete = subhead->next;
+          if (todelete->data == val)
+          {
+            subhead->next = todelete->next;
+            delete todelete;
+          }
+          else
+          {
+            subhead = subhead->next;
+          }
+        }
+        else
+        {
+          subhead = subhead->next;
+        }
+      }
     }
   }
 
@@ -286,4 +319,30 @@ int main()
 //------
   List<int> fill_list(3, 77);
   fill_list.print();
+  fill_list.push_front(78);
+  fill_list.print();
+  fill_list.remove(77);
+  fill_list.print();
+  List<int> list2(2, 55);
+  list2.print();
+  list2.remove(55);
+  list2.print();
+  list2.push_back(1);
+  list2.print();
+  list2.remove(1);
+  list2.print();
+  list2.push_back(3);
+  list2.push_front(2);
+  list2.push_back(1);
+  list2.push_back(2);
+  list2.print();
+  list2.remove(2);
+  list2.print();
+  list2.remove(1);
+  list2.remove(9999);
+  list2.print();
+  list2.remove(3);
+  list2.print();
+  list2.remove(1);
+  list2.print();
 }
