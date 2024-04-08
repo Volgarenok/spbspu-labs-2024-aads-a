@@ -25,8 +25,8 @@ namespace namestnikov
   {
     friend class ForwardIterator<T>;
     friend class ConstForwardIterator<T>;
-    using iterator_t = ForwardIterator<T>;
-    using const_it_t = ConstForwardIterator<T>;
+    using iterator = ForwardIterator<T>;
+    using const_iterator = ConstForwardIterator<T>;
     using node_t = Node<T>;
   public:
     ForwardList() :
@@ -53,8 +53,8 @@ namespace namestnikov
     {
       try
       {
-        iterator_t begin = other.begin();
-        iterator_t end = other.end();
+        iterator begin = other.begin();
+        iterator end = other.end();
         for (; begin != end; ++begin)
         {
           push_front(begin.node_->data_);
@@ -111,7 +111,7 @@ namespace namestnikov
     }
     void clear()
     {
-      while (!(empty()))
+      while (!empty())
       {
         pop_front();
       }
@@ -264,7 +264,7 @@ namespace namestnikov
       }
       reverse();
     }
-    void assign(iterator_t begin, iterator_t end)
+    void assign(iterator begin, iterator end)
     {
       clear();
       try
@@ -282,7 +282,7 @@ namespace namestnikov
       }
       reverse();
     }
-    iterator_t insert_after(const_it_t pos, const T & value)
+    iterator insert_after(const_iterator pos, const T & value)
     {
       if (pos == cend())
       {
@@ -302,7 +302,7 @@ namespace namestnikov
         return position;
       }
     }
-    iterator_t insert_after(const_it_t pos, T && value)
+    iterator insert_after(const_iterator pos, T && value)
     {
       if (pos == cend())
       {
@@ -322,7 +322,7 @@ namespace namestnikov
         return position;
       }
     }
-    iterator_t insert_after(const_it_t pos, size_t count, const T & value)
+    iterator insert_after(const_iterator pos, size_t count, const T & value)
     {
       if (pos == cend())
       {
@@ -357,7 +357,7 @@ namespace namestnikov
         return position;
       }
     }
-    iterator_t insert_after(const_it_t pos, std::initializer_list<T> list)
+    iterator insert_after(const_iterator pos, std::initializer_list<T> list)
     {
       if (pos == cend())
       {
@@ -390,7 +390,7 @@ namespace namestnikov
         return position;
       }
     }
-    iterator_t erase_after(const_it_t pos)
+    iterator erase_after(const_iterator pos)
     {
       if (pos == cend())
       {
@@ -405,7 +405,7 @@ namespace namestnikov
         }
         if (position.node_->next_)
         {
-          iterator_t temp = position.node_->next_->next_;
+          iterator temp = position.node_->next_->next_;
           auto todel = position.node_->next_;
           delete todel;
           position.node_->next_ = temp.node_;
@@ -417,7 +417,7 @@ namespace namestnikov
         }
       }
     }
-    iterator_t erase_after(const_it_t first, const_it_t last)
+    iterator erase_after(const_iterator first, const_iterator last)
     {
       if (first == cend())
       {
@@ -430,12 +430,12 @@ namespace namestnikov
         {
           ++position;
         }
-        iterator_t res = position;
+        iterator res = position;
         for (; position != last; ++position)
         {
           if (position.node_->next_)
           {
-            iterator_t temp = position.node_->next_->next_;
+            iterator temp = position.node_->next_->next_;
             auto todel = position.node_->next_;
             delete todel;
             position.node_->next_ = temp.node_;
@@ -448,7 +448,7 @@ namespace namestnikov
         return res;
       }
     }
-    void splice_after(const_it_t pos, ForwardList & other)
+    void splice_after(const_iterator pos, ForwardList & other)
     {
       if (pos == cend())
       {
@@ -548,21 +548,21 @@ namespace namestnikov
     {
       return !(*this < other);
     }
-    iterator_t begin() const
+    iterator begin() const
     {
-      return iterator_t(head_);
+      return iterator(head_);
     }
-    const_it_t cbegin() const
+    const_iterator cbegin() const
     {
-      return const_it_t(head_);
+      return const_iterator(head_);
     }
-    iterator_t end() const
+    iterator end() const
     {
-      return iterator_t(nullptr);
+      return iterator(nullptr);
     }
-    const_it_t cend() const
+    const_iterator cend() const
     {
-      return const_it_t(nullptr);
+      return const_iterator(nullptr);
     }
     ~ForwardList()
     {
