@@ -2,7 +2,9 @@
 #include <exception>
 #include "queue.hpp"
 #include "stack.hpp"
-#include "expression_types.hpp"
+#include "infix_type.hpp"
+#include "stack_type.hpp"
+#include "postfix_type.hpp"
 #include "postfix_expression.hpp"
 
 bool isLessPriority(char left, char right)

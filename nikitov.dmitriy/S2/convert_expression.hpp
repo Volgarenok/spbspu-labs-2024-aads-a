@@ -2,7 +2,7 @@
 #define CONVERT_EXPRESSION_HPP
 
 #include "queue.hpp"
-#include "expression_types.hpp"
+#include "infix_type.hpp"
 #include "postfix_expression.hpp"
 
 namespace nikitov

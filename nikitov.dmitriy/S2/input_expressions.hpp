@@ -3,7 +3,7 @@
 
 #include <istream>
 #include "queue.hpp"
-#include "expression_types.hpp"
+#include "infix_type.hpp"
 
 namespace nikitov
 {

@@ -2,7 +2,7 @@
 #include <istream>
 #include <string>
 #include "queue.hpp"
-#include "expression_types.hpp"
+#include "infix_type.hpp"
 
 nikitov::InfixType recognizeType(std::string& line)
 {
