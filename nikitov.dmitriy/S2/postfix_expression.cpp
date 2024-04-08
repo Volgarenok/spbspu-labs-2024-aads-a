@@ -107,7 +107,6 @@ long long nikitov::PostfixExpression::solve()
         }
         case '*':
         {
-          result = first * second;
           if (((first > 0 && second > 0) && maxNum / first < second) ||
             ((first < 0 && second < 0) && maxNum / first > second) ||
             ((first > 0 && second < 0) && minNum / first > second) ||
@@ -115,6 +114,7 @@ long long nikitov::PostfixExpression::solve()
           {
             throw std::out_of_range("Error: Mulptiplication overflow");
           }
+          result = first * second;
           break;
         }
         case '/':
