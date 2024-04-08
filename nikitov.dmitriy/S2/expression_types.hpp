@@ -42,6 +42,8 @@ namespace nikitov
     explicit InfixType(long long value);
     explicit InfixType(char value);
 
+    ExprTypeName getType() const;
+
     union
     {
       detail::Bracket bracket;
@@ -57,6 +59,7 @@ namespace nikitov
     explicit StackType(bool value);
     explicit StackType(char value);
 
+    ExprTypeName getType() const;
     union
     {
       detail::Bracket bracket;
@@ -71,6 +74,7 @@ namespace nikitov
     explicit PostfixType(long long value);
     explicit PostfixType(char value);
 
+    ExprTypeName getType() const;
     union
     {
       detail::Operand operand;

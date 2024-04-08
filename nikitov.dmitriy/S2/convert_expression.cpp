@@ -12,14 +12,14 @@ nikitov::PostfixExpression nikitov::convertExpression(Queue< InfixType > infixEx
   while (!infixExpression.empty())
   {
     InfixType infixValue = infixExpression.drop();
-    if (infixValue.type == ExprTypeName::operand)
+    if (infixValue.getType() == ExprTypeName::operand)
     {
       long long value = infixValue.operand.num;
       postfixExpression.add(PostfixType(value));
     }
     else
     {
-      if (infixValue.type == ExprTypeName::bracket)
+      if (infixValue.getType() == ExprTypeName::bracket)
       {
         if (infixValue.bracket.isOpen)
         {
@@ -28,7 +28,7 @@ nikitov::PostfixExpression nikitov::convertExpression(Queue< InfixType > infixEx
         }
         else
         {
-          while (!operandsStack.empty() && !operandsStack.top().type == nikitov::bracket)
+          while (!operandsStack.empty() && !operandsStack.top().getType() == nikitov::bracket)
           {
             char value = operandsStack.drop().operation.symb;
             postfixExpression.add(PostfixType(value));
