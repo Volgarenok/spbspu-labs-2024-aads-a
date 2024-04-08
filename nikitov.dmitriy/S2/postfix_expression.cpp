@@ -1,6 +1,6 @@
-#include "stack.hpp"
 #include "postfix_expression.hpp"
 #include <limits>
+#include "stack.hpp"
 
 void inputOperator(nikitov::PostfixExpression& expression, char symb, long long value)
 {

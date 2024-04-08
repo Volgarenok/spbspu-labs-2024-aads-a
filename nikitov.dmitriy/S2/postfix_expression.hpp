@@ -8,6 +8,7 @@ namespace nikitov
 {
   struct PostfixExpression
   {
+  public:
     PostfixExpression operator+(long long value) const;
     PostfixExpression operator-(long long value) const;
     PostfixExpression operator/(long long value) const;
@@ -23,6 +24,7 @@ namespace nikitov
 
     long long solve();
 
+  private:
     Queue< PostfixType > data;
   };
 }
