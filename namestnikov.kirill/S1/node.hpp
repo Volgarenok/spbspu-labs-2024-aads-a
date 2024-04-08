@@ -3,7 +3,7 @@
 
 namespace namestnikov
 {
-  template<class T>
+  template< class T >
   struct Node
   {
     Node() = default;

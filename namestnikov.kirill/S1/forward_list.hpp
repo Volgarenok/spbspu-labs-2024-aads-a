@@ -147,6 +147,10 @@ namespace namestnikov
     {
       return head_->data_;
     }
+    const T & front() const
+    {
+      return head_->data_;
+    }
     void swap(ForwardList< T > & other)
     {
       std::swap(head_, other.head_);

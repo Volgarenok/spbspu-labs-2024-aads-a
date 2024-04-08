@@ -25,7 +25,7 @@ namespace namestnikov
     using const_iterator = ConstForwardIterator< T >;
     using node_t = Node< T >;
   public:
-    ForwardIterator() :
+    ForwardIterator():
       node_(nullptr)
     {}
     ForwardIterator(node_t * node):
