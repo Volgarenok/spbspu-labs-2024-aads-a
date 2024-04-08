@@ -1,7 +1,7 @@
 #ifndef STACK_HPP
 #define STACK_HPP
 
-#include "list.hpp"
+#include <list.hpp>
 
 namespace sivkov
 {
@@ -25,6 +25,8 @@ namespace sivkov
     T& top();
     bool empty() const;
     size_t size() const;
+    Stack< T >& operator=(const Stack< T >&);
+    Stack< T >& operator=(Stack< T >&& other) noexcept;
 
   private:
     List<T> list;

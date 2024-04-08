@@ -1,7 +1,7 @@
 #ifndef QUEUE_HPP
 #define QUEUE_HPP
 
-#include "list.hpp"
+#include <list.hpp>
 
 namespace sivkov
 {
@@ -25,6 +25,9 @@ namespace sivkov
     T& front();
     bool empty() const;
     size_t size() const;
+
+    Queue< T >& operator=(const Queue< T >& other);
+    Queue< T >& operator=(Queue< T >&& other) noexcept;
 
   private:
     List<T> list;
