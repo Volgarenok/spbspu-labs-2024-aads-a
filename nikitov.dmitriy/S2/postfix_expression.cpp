@@ -79,6 +79,8 @@ long long nikitov::PostfixExpression::solve()
     {
       if (countElem >= 2)
       {
+        long long maxNum = std::numeric_limits< long long >::max();
+        long long minNum = std::numeric_limits< long long >::min();
         long long second = solverStack.drop();
         long long first = solverStack.drop();
         long long result = 0;
@@ -87,8 +89,7 @@ long long nikitov::PostfixExpression::solve()
         {
         case '+':
         {
-          long long maxNum = std::numeric_limits< long long >::max();
-          if (maxNum - first < second)
+          if ((first > 0 && maxNum - first < second) || (first < 0 && minNum - first > second))
           {
             throw std::out_of_range("Error: Addition overflow");
           }
@@ -97,8 +98,7 @@ long long nikitov::PostfixExpression::solve()
         }
         case '-':
         {
-          long long minNum = std::numeric_limits< long long >::min();
-          if (minNum + first > second)
+          if ((first > 0 && minNum + first > second) || (first < 0 && maxNum + first < second))
           {
             throw std::out_of_range("Error: Subtraction overflow");
           }
@@ -108,7 +108,10 @@ long long nikitov::PostfixExpression::solve()
         case '*':
         {
           result = first * second;
-          if (second != 0 && result / second != first)
+          if (((first > 0 && second > 0) && maxNum / first < second) ||
+            ((first < 0 && second < 0) && maxNum / first > second) ||
+            ((first > 0 && second < 0) && minNum / first > second) ||
+            ((first < 0 && second > 0) && minNum / first < second))
           {
             throw std::out_of_range("Error: Mulptiplication overflow");
           }
@@ -116,7 +119,6 @@ long long nikitov::PostfixExpression::solve()
         }
         case '/':
         {
-          long long minNum = std::numeric_limits< long long >::min();
           if (second == 0)
           {
             throw std::logic_error("Error: Division by zero");
@@ -130,6 +132,10 @@ long long nikitov::PostfixExpression::solve()
         }
         case '%':
         {
+          if (second == 0)
+          {
+            throw std::logic_error("Error: Division by zero");
+          }
           result = first % second;
           if (result < 0)
           {
