@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstddef>
 #include <iterator>
 #include <forward_list>
 #include <string>
@@ -30,7 +31,7 @@ public:
   {}
   ~ListIterator() = default;
 
-//  ListIterator(const this_t &) = default;
+  ListIterator(const this_t &) = default;
   this_t & operator=(const this_t &) = default;
   this_t & operator++()
   {
@@ -80,6 +81,18 @@ struct List
     tail(nullptr)
   {}
 
+  explicit List(size_t n, const T & val):
+    head(nullptr),
+    tail(nullptr)
+  {
+    for (size_t i = 0; i < n; ++i)
+    {
+      push_back(val);
+    }
+  }
+
+
+//1
   T & front()
   {
     return head->data;
@@ -135,7 +148,13 @@ struct List
     list2.head = subhead;
     list2.tail = subtail;
   }
+//2
 
+  void assign(size_t n, const T & val)
+  {
+  }
+
+//
   void print()
   {
     std::cout << "PRINT LIST: ";
@@ -211,4 +230,7 @@ int main()
     std::cout << *iter << '\n';
     ++iter;
   }
+//------
+  List<int> fill_list(3, 77);
+  fill_list.print();
 }
