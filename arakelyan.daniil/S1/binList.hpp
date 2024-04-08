@@ -21,7 +21,7 @@ namespace arakelyan
     BinList(const BinList< T > &otherLs);
     BinList(std::initializer_list< T > otherLs);
     BinList(iterator it_start, iterator it_end);
-    ~BinList(); 
+    ~BinList();
 
     BinList< T > &operator=(const BinList< T > &otherLs);
     BinList< T > &operator=(BinList< T > &&otherLs);
@@ -65,7 +65,7 @@ namespace arakelyan
 
     void splice(iterator it_this, BinList< T > &otherLs);
     void splice(iterator it_this, std::initializer_list< T > otherLs);
-    void splice(iterator it_this, BinList< T > &otherLs, iterator it_other); // ne to
+    void splice(iterator it_this, BinList< T > &otherLs, iterator it_other);
 
     void reverse() noexcept;
 
@@ -131,7 +131,7 @@ arakelyan::BinList< T >::BinList(iterator it_start, iterator it_end)
 }
 
 template < class T >
-size_t arakelyan::BinList< T >::get_size() const noexcept
+size_t arakelyan::BinList< T >::get_size() const
 {
   return size_;
 }
@@ -265,11 +265,11 @@ void arakelyan::BinList< T >::splice(iterator it_this, BinList< T > &otherLs, it
   }
 }
 
-template < class T >
-void arakelyan::BinList< T >::reverse() noexcept
-{
-
-}
+// template < class T >
+// void arakelyan::BinList< T >::reverse() noexcept
+// {
+//
+// }
 
 template < class T >
 T &arakelyan::BinList< T >::front()
