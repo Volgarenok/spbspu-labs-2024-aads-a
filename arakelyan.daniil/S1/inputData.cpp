@@ -1,5 +1,5 @@
 #include "inputData.hpp"
-#include "binList.hpp"
+#include <binList.hpp>
 
 #include <cctype>
 #include <string>

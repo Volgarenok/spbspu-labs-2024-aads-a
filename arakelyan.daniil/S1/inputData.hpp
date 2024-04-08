@@ -2,7 +2,7 @@
 #define INPUTDATA_HPP
 
 #include <iostream>
-#include "binList.hpp"
+#include <binList.hpp>
 
 namespace arakelyan
 {

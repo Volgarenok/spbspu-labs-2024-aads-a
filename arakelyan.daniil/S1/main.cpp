@@ -4,6 +4,7 @@
 #include <stdexcept>
 
 #include "inputData.hpp"
+#include <binList.hpp>
 #include "outputData.hpp"
 #include "iterator.hpp"
 #include "node.hpp"
