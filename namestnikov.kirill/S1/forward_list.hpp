@@ -522,21 +522,31 @@ namespace namestnikov
       }
       return check;
     }
-    bool operator!=(ForwardList<T> & other) const
+    bool operator!=(ForwardList<T> & other)
     {
       return !(*this == other);
     }
-    bool operator>(ForwardList<T> & other) const
+    bool operator>(ForwardList<T> & other)
     {
-      return !(*this <= other);
+      bool check = true;
+      size_t size = std::min(max_size(), other.max_size());
+      node_t * ourNode = head_;
+      node_t * otherNode = other.head_;
+      for (size_t i = 0; i < size; ++i)
+      {
+        check = check && (ourNode->data_ > otherNode->data_);
+        ourNode = ourNode->next_;
+        otherNode = otherNode->next_;
+      }
+      return check;
     }
-    bool operator<=(ForwardList<T> & other) const
+    bool operator<=(ForwardList<T> & other)
     {
-      return ((*this < other) || (*this == other));
+      return !(*this > other);
     }
-    bool operator>=(ForwardList<T> & other) const
+    bool operator>=(ForwardList<T> & other)
     {
-      return ((*this > other) || (*this == other));
+      return !(*this < other);
     }
     iterator_t begin() const
     {
