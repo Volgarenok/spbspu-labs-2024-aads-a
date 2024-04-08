@@ -57,7 +57,7 @@ namespace gladyshev
     }
   private:
     friend List< T >;
-    Iterator(detail::Node< T >* node):
+    explicit Iterator(detail::Node< T >* node):
       node_(node)
     {}
     detail::Node< T >* node_;

@@ -49,7 +49,7 @@ namespace gladyshev
     }
   private:
     friend List< T >;
-    ConstIterator(detail::Node< T >* node):
+    explicit ConstIterator(detail::Node< T >* node):
       node_(node)
     {}
     detail::Node< T >* node_;
