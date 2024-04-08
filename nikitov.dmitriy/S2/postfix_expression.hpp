@@ -21,6 +21,8 @@ namespace nikitov
     size_t size() const;
     bool empty() const;
 
+    long long solve();
+
     Queue< PostfixType > data;
   };
 }

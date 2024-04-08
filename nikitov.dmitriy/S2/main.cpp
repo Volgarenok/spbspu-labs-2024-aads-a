@@ -6,7 +6,6 @@
 #include "postfix_expression.hpp"
 #include "input_expressions.hpp"
 #include "convert_expression.hpp"
-#include "solve_expression.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -44,7 +43,7 @@ int main(int argc, char* argv[])
         std::cout << ' ';
       }
       isFirst = false;
-      std::cout << solveExpression(postfixStack.drop());
+      std::cout << postfixStack.drop().solve();
     }
     std::cout << '\n';
   }
