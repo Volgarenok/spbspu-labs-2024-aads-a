@@ -89,7 +89,7 @@ long long nikitov::PostfixExpression::solve()
         {
         case '+':
         {
-          if ((first > 0 && maxNum - first < second) || (first < 0 && minNum - first > second))
+          if ((first > 0 && maxNum - first < second - 1) || (first < 0 && minNum - first > second))
           {
             throw std::out_of_range("Error: Addition overflow");
           }
@@ -98,7 +98,7 @@ long long nikitov::PostfixExpression::solve()
         }
         case '-':
         {
-          if ((first > 0 && minNum + first > second) || (first < 0 && maxNum + first < second))
+          if ((first > 0 && minNum + first > second) || (first < 0 && maxNum + first < second - 1))
           {
             throw std::out_of_range("Error: Subtraction overflow");
           }
