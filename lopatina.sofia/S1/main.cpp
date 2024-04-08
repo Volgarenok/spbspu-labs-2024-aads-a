@@ -80,11 +80,24 @@ struct List
     tail(nullptr)
   {}
 
-  bool empty()
+  T & front()
+  {
+    return head->data;
+  }
+  bool empty() const noexcept
   {
     return head == nullptr;
   }
-
+  void push_front(T value)
+  {
+    Node<T> * newptr = new Node<T>(value);
+    newptr->next = head;
+    head = newptr;
+    if (empty())
+    {
+      tail = newptr;
+    }
+  }
   void push_back(T value)
   {
     Node<T> * newptr = new Node<T>(value);
@@ -139,94 +152,19 @@ struct List
   {
     return ListIterator<T>(head);
   }
+  ListIterator<T> end()
+  {
+    return ListIterator<T>();
+  }
 };
 
 
-/*
-template <typename T>
-struct List::ListIterator:
-  public std::iterator<
-  std::forward_iterator_tag,
-  T
-  >
-{
-  friend class List<T>;
-public:
-  using this_t = ListIterator<T>;
-  ListIterator():
-    node(nullptr)
-  {}
-  ListIterator(Node<T> * node):
-    node(node)
-  {}
-//	ListIterator() :
-//		node(nullptr)
-//	{}
-//	~ListIterator() = default;
-//	ListIterator(const this_t &) = default;
-  this_t & operator=(const this_t &) = default;
-//
-//	this_t & operator++()
-//	{
-//		assert(node != nullptr);
-//		node = node->next;
-//		return *this;
-//	}
-//	this_t operator++(int)
-//	{
-//		assert(node != nullptr);
-//		this_t result(*this);
-//		++(*this);
-//		return result;
-//	}
-  T & operator*();
-//  {
-//    assert(node != nullptr);
-//    return node->data;
-//  }
-//	T * operator->()
-//	{
-//		assert(node != nullptr);
-//		return std::addressof(node->data);
-//	}
-//
-//	T & operator*()
-//	{
-//		assert(node != nullptr);
-//		return node->data;
-//	}
-//	T * operator->()
-//	{
-//		assert(node != nullptr);
-//		return std::addressof(node->data);
-//	}
-//
-//	bool operator!=(const this_t & rhs) const
-//	{
-//		return node == rhs.node;
-//	}
-//	bool operator==(const this_t & rhs) const
-//	{
-//		return !(rhs == *this);
-//	}
-//
-private:
-  Node<T> * node;
-//  using this_t = ListIterator<T>;
-};
-
-template <typename T>
-T & ListIterator<T>::operator*()
-{
-  assert(node != nullptr);
-  return node->data;
-}
-*/
 int main()
 {
   List<int> list;
   std::cout << list.empty() << '\n';
   list.push_back(60);
+  list.print();
   list.push_back(89);
   list.push_back(3);
   std::cout << list.empty() << '\n';
@@ -235,7 +173,14 @@ int main()
   std::cout << list.head->data << '\n';
   list.clear();
   std::cout << list.empty() << '\n';
+  list.push_front(-1);
+  list.print();
   list.push_back(1);
+  list.push_front(-2);
+  list.print();
+  std::cout << "FRONT: " << list.front() << '\n';
+  //list.clear();
+  //std::cout << "Empty FRONT: " << list.front() << '\n';
 
   List<int> first;
   first.push_back(1);
@@ -252,4 +197,18 @@ int main()
   std::cout << "O: " << first.empty() << ' ' << second.empty() << '\n';
   ListIterator<int> ptr = first.begin();
   std::cout << *ptr << '\n';
+  std::cout << *(second.begin()) << '\n';
+  std::cout << *(++(second.begin())) << '\n';
+  std::cout << "TEST FOR ITER: \n";
+  for (ListIterator<int> it = second.begin(); it != nullptr; ++it)
+  {
+    std::cout << *it << '\n';
+  }
+  ListIterator<int> iter = second.begin();
+  std::cout << *(++iter) << '\n';
+  while (iter != nullptr)
+  {
+    std::cout << *iter << '\n';
+    ++iter;
+  }
 }
