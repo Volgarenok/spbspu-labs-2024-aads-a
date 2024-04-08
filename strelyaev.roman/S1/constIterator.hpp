@@ -44,25 +44,21 @@ namespace strelyaev
         return result;
       }
 
-      ConstIterator< T >& operator+(int n)
-      {
-       ConstIterator< T > temp(*this);
-       for (int a = 0; a < n; a++)
-       {
-         ++temp;
-       }
-       return temp;
-      }
+     ConstIterator< T > operator--(int)
+     {
+       ConstIterator< T > result = *this;
+       --(*this);
+       return result;
+     }
 
-      ConstIterator< T >& operator-(int n)
-      {
-       ConstIterator< T > temp(*this);
-       for (int a = 0; a < n; a--)
+     ConstIterator< T >& operator--()
+     {
+       if (node_ != nullptr)
        {
-         --temp;
+         node_ = node_->prev_;
        }
-       return temp;
-      }
+       return *this;
+     }
 
       T& operator*()
       {

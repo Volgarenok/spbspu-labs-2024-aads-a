@@ -7,11 +7,6 @@
 
 int main()
 {
-  strelyaev::List< int > a;
-  int b = 5;
-  a.push_back(b);
-  std::cout << a.front();
-  /*
   using namespace strelyaev;
   bool overflow = false;
   List< std::pair< std::string, List < size_t > > > list;
@@ -107,5 +102,4 @@ int main()
     }
   }
   std::cout << "\n";
-  */
 }

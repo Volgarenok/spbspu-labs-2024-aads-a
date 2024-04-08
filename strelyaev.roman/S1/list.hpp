@@ -11,38 +11,38 @@ namespace strelyaev
   class List
   {
     public:
-      List(); //!
-      //List(const List&);
-      //List(List< T >&&) noexcept;
-      //List(size_t n, const T&);
-      //~List();
+      List();
+      List(const List&);
+      List(List< T >&&);
+      List(size_t n, const T&);
+      ~List();
 
-      //List< T >& operator=(const List< T >&) noexcept;
-      //List< T >& operator=(List< T >&&) noexcept;
+      List< T >& operator=(const List< T >&);
+      List< T >& operator=(List< T >&&);
 
-      //void assign(size_t n, const T& value);
-      //void swap(List& other) noexcept;
+      void assign(size_t n, const T& value);
+      void swap(List< T >& other) noexcept;
 
-      Iterator< T > insert(ConstIterator< T >, const T&); //!
-      ConstIterator< T > erase(Iterator< T >); //!
+      Iterator< T > insert(ConstIterator< T >, const T&);
+      ConstIterator< T > erase(ConstIterator< T >);
 
-      bool empty() noexcept; //!
+      bool empty() noexcept;
       void push_back(const T&);
-      void push_front(const T&); //!
-      //void pop_front() noexcept;
-      //void pop_back() noexcept;
-      //void clear() noexcept;
-      //void remove(const T& value);
-      //template< class Predicate >
-      //void remove_if (Predicate) noexcept;
+      void push_front(const T&);
+      void pop_front();
+      void pop_back();
+      void clear() noexcept;
+      void remove(const T& value);
+      template< class Predicate >
+      void remove_if (Predicate);
 
-      size_t size() noexcept; //!
-      T& back() const; //!
-      T& front() const; //!
-      Iterator< T > begin() noexcept; //!
-      Iterator< T > end() noexcept; //!
-      ConstIterator< T > cbegin() const noexcept; //!
-      ConstIterator< T > cend() const noexcept; //!
+      size_t size() noexcept;
+      T& back() const;
+      T& front() const;
+      Iterator< T > begin() noexcept;
+      Iterator< T > end() noexcept;
+      ConstIterator< T > cbegin() const noexcept;
+      ConstIterator< T > cend() const noexcept;
 
     private:
       detail::Node< T > imaginary_node;
@@ -58,6 +58,74 @@ namespace strelyaev
     tail_(nullptr),
     size_(0)
   {}
+
+  template< typename T >
+  List< T >::List(const List& other):
+    List()
+  {
+    imaginary_node = other.imaginary_node;
+    detail::Node< T >* node = other.head_;
+    while (size_ != other.size_)
+    {
+      push_back(node->value_);
+      node = node->next_;
+    }
+  }
+
+  template< typename T >
+  List< T >::List(List< T >&& other):
+    imaginary_node(other.imaginary_node),
+    head_(other.head_),
+    tail_(other.tail_),
+    size_(other.size_)
+  {
+    other.head_ = nullptr;
+    other.tail_ = nullptr;
+    other.size_ = 0;
+  }
+
+  template< typename T >
+  List< T >::List(size_t n, const T& value):
+    List()
+  {
+    assign(n, value);
+  }
+
+  template< typename T >
+  List< T >::~List()
+  {
+    clear();
+  }
+
+  template< typename T >
+  List< T >& List< T >::operator=(const List< T >& other)
+  {
+    if (this != std::addressof(other))
+    {
+      clear();
+      swap(other);
+    }
+    return *this;
+  }
+
+  template< typename T >
+  void List< T >::assign(size_t n, const T& value)
+  {
+    clear();
+    for (size_t i = 0; i < n; i++)
+    {
+      push_front(value);
+    }
+  }
+
+  template< typename T >
+  void List< T >::swap(List< T >& other) noexcept
+  {
+    std::swap(other.imaginary_node, imaginary_node);
+    std::swap(other.head_, head_);
+    std::swap(other.tail_, tail_);
+    std::swap(other.size_, size_);
+  }
 
   template< typename T >
   Iterator< T > List< T >::insert(ConstIterator< T > it, const T& value)
@@ -91,7 +159,7 @@ namespace strelyaev
   }
 
   template< typename T >
-  ConstIterator< T > List< T >::erase(Iterator< T > it)
+  ConstIterator< T > List< T >::erase(ConstIterator< T > it)
   {
     ConstIterator< T > result(it.node_->next_);
     it.node_->next_->prev_ = it.node_->prev_;
@@ -105,7 +173,7 @@ namespace strelyaev
     }
     else
     {
-      it.node->prev_->next_ = it.node_->next_;
+      it.node_->prev_->next_ = it.node_->next_;
     }
     delete it.node_;
     size_--;
@@ -137,6 +205,54 @@ namespace strelyaev
     insert(cbegin(), value);
   }
 
+  template< typename T >
+  void List< T >::pop_front()
+  {
+    erase(cbegin());
+  }
+
+  template< typename T >
+  void List< T >::pop_back()
+  {
+    erase(--cend());
+  }
+
+  template< typename T >
+  void List< T >::clear() noexcept
+  {
+    while (!empty())
+    {
+      pop_front();
+    }
+  }
+
+  template< typename T >
+  void List< T >::remove(const T& value)
+  {
+    for (auto it = cbegin(); it != cend(); it++)
+    {
+      if (*it == value)
+      {
+        auto prev_it = it;
+        prev_it--;
+        erase(it);
+        it = prev_it;
+      }
+    }
+  }
+
+  template< typename T >
+  template< typename P >
+  void List< T >::remove_if (P predicate)
+  {
+    for (auto it = cbegin(); it != cend(); it++)
+    {
+      if (predicate(*it))
+      {
+        erase(it);
+      }
+    }
+  }
 
   template< typename T >
   size_t List< T >::size() noexcept
