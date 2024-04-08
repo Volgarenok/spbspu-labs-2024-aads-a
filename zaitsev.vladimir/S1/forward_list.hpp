@@ -28,7 +28,7 @@ namespace zaitsev
         next_(nullptr)
       {}
     };
-    static void freeNodes(Node* head_node)
+    void freeNodes(Node* head_node) noexcept
     {
       while (head_node)
       {
@@ -37,7 +37,7 @@ namespace zaitsev
         head_node = temp;
       }
     }
-    Node* merge(Node* first, Node* second)
+    Node* merge(Node* first, Node* second) noexcept
     {
       if (!first || !second)
       {
@@ -89,18 +89,22 @@ namespace zaitsev
     template< bool IsConst >
     class BaseIterator
     {
+      template< bool IsConst1 = false > friend class BaseIterator;
       using prt_t = std::conditional_t< IsConst, const T*, T* >;
       using ref_t = std::conditional_t< IsConst, const T&, T& >;
       using node_t = std::conditional_t< IsConst, const Node*, Node* >;
     private:
       node_t node_;
-
     public:
       BaseIterator():
         node_(nullptr)
       {}
       BaseIterator(node_t node):
         node_(node)
+      {}
+      template<bool cond = IsConst>
+      BaseIterator(const BaseIterator<!cond>& other, std::enable_if_t<cond>* = nullptr) :
+        node_(other.node_)
       {}
       BaseIterator& operator++()
       {
@@ -131,13 +135,73 @@ namespace zaitsev
       }
     };
 
-  private:
-    Node* head_;
-
   public:
     using iterator = BaseIterator< false >;
     using const_iterator = BaseIterator< true >;
 
+  private:
+    Node* new_list(size_t count, const T& value)
+    {
+      Node* new_head = nullptr;
+      try
+      {
+        for (size_t i = 0; i < count; ++i)
+        {
+          Node* temp = new Node(value);
+          temp->next_ = new_head;
+          new_head = temp;
+        }
+      }
+      catch (const std::bad_alloc&)
+      {
+        freeNodes(new_head);
+      }
+      return new_head;
+    }
+    Node* new_list(const_iterator begin, const_iterator end)
+    {
+      Node* new_head = nullptr;
+      try
+      {
+        new_head = new Node(*(begin++));
+        Node* new_tail = new_head;
+        for (; begin != end; ++begin)
+        {
+          new_tail->next_ = new Node(*begin);
+          new_tail = new_tail->next_;
+        }
+      }
+      catch (const std::bad_alloc&)
+      {
+        freeNodes(new_head);
+      }
+      return new_head;
+    }
+    Node* new_list(std::initializer_list<T> init_list)
+    {
+      Node* new_head = nullptr;
+      try
+      {
+        using iList_it = typename std::initializer_list<T>::iterator;
+        iList_it begin = init_list.begin();
+        new_head = new Node(*(begin++));
+        Node* new_tail = new_head;
+        for (; begin != init_list.end(); ++begin)
+        {
+            new_tail->next_ = new Node(*begin);
+            new_tail = new_tail->next_;
+        }
+      }
+      catch (const std::bad_alloc&)
+      {
+        freeNodes(new_head);
+      }
+      return new_head;
+    }
+  private:
+    Node* head_;
+
+  public:
     ForwardList():
       head_(nullptr)
     {}
@@ -172,50 +236,20 @@ namespace zaitsev
     {
       other.head_ = nullptr;
     }
+    ForwardList(const_iterator begin, const_iterator end):
+      head_(nullptr)
+    {
+      head_ = new_list(begin, end);
+    }
     ForwardList(std::initializer_list<T> init_list):
       head_(nullptr)
     {
-      try
-      {
-        typename std::initializer_list<T>::iterator it = init_list.begin();
-        Node* tail = head_;
-        while (it != init_list.end())
-        {
-          if(!tail)
-          {
-            head_ = new Node(*it);
-            tail = head_;
-          }
-          else
-          {
-            tail->next_ = new Node(*it);
-            tail = tail->next_;
-          }
-        }
-      }
-      catch (const std::exception&)
-      {
-        freeNodes(head_);
-        throw;
-      }
+      head_ = new_list(init_list);
     }
     ForwardList(size_t count, const T& value):
-      head_(new Node(value))
+      head_(nullptr)
     {
-      Node* head = head_;
-      try
-      {
-        for (size_t i = 1; i < count; ++i)
-        {
-          head->next_ = new Node(value);
-          head = head->next_;
-        }
-      }
-      catch (const std::bad_alloc&)
-      {
-        freeNodes(head_);
-        throw;
-      }
+      head_ = new_list(count, value);
     }
     ~ForwardList()
     {
@@ -300,20 +334,13 @@ namespace zaitsev
     }
     void assign(size_t count, const T& value)
     {
-      Node* new_head = nullptr;
-      try
-      {
-        for (size_t i = 0; i < count; ++i)
-        {
-          Node* temp = new Node(value);
-          temp->next_ = new_head;
-          new_head = temp;
-        }
-      }
-      catch (const std::bad_alloc&)
-      {
-        freeNodes(new_head);
-      }
+      Node* new_head = new_list(count, value);
+      freeNodes(head_);
+      head_ = new_head;
+    }
+    void assign(const_iterator begin, const_iterator end)
+    {
+      Node* new_head = new_list(begin, end);
       freeNodes(head_);
       head_ = new_head;
     }
