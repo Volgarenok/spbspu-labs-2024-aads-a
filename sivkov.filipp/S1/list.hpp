@@ -60,7 +60,6 @@ namespace sivkov
     T& front() { return head_->data; }
     ConstIterator<T> cbegin() const { return ConstIterator<T>(head_); }
     ConstIterator<T> cend() const { return ConstIterator<T>(nullptr); }
-    T& operator[](const int index);
 
     private:
       size_t size;
@@ -215,27 +214,6 @@ namespace sivkov
   size_t List<T>::getSize()
   {
     return size;
-  }
-
-  template< typename T >
-  T& List<T>::operator[](const int index)
-  {
-    int counter = 0;
-    Node<T>* current = this->head;
-    if (size <= index || index < 0)
-    {
-      throw std::out_of_range("Index out of range");
-    }
-    while (current != nullptr)
-    {
-      if (counter == index)
-      {
-        return current->data;
-      }
-      current = current->pNext;
-      counter++;
-    }
-    throw std::logic_error("Index not found");
   }
 }
 #endif
