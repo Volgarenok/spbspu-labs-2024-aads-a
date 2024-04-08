@@ -91,7 +91,6 @@ struct List
     }
   }
 
-
 //1
   T & front()
   {
@@ -106,7 +105,7 @@ struct List
     Node<T> * newptr = new Node<T>(value);
     newptr->next = head;
     head = newptr;
-    if (empty())
+    if (tail == nullptr)
     {
       tail = newptr;
     }
@@ -125,9 +124,42 @@ struct List
   }
   void pop_front()
   {
+    if (head == nullptr)
+    {
+      return;
+    }
+    if (head == tail)
+    {
+      delete tail;
+      head = nullptr;
+      tail = nullptr;
+      return;
+    }
     Node<T> * newhead = head->next;
     delete head;
     head = newhead;
+  }
+  void pop_back()
+  {
+    if (tail == nullptr)
+    {
+      return;
+    }
+    if (head == tail)
+    {
+      delete tail;
+      head = nullptr;
+      head = nullptr;
+      return;
+    }
+    Node<T> * newptr = head;
+    while (newptr->next != tail)
+    {
+      newptr = newptr->next;
+    }
+    newptr->next = nullptr;
+    delete tail;
+    tail = newptr;
   }
   void clear() noexcept
   {
@@ -148,7 +180,20 @@ struct List
     list2.head = subhead;
     list2.tail = subtail;
   }
+
 //2
+  void remove(const T & val)
+  {
+    Node<T> * subhead = head;
+    while (subhead)
+    {
+      if (subhead->data == val)
+      {
+      }
+      subhead = subhead->next;
+      //
+    }
+  }
 
   void assign(size_t n, const T & val)
   {
@@ -198,8 +243,16 @@ int main()
   list.push_front(-2);
   list.print();
   std::cout << "FRONT: " << list.front() << '\n';
-  //list.clear();
+  list.clear();
   //std::cout << "Empty FRONT: " << list.front() << '\n';
+  list.push_front(1);
+  list.pop_front();
+  list.push_front(11);
+  list.push_front(111);
+  list.print();
+  list.pop_back();
+  list.print();
+  std::cout << "LIST EMPTY: " << list.empty() << '\n';
 
   List<int> first;
   first.push_back(1);
