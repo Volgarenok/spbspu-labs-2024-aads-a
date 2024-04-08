@@ -12,50 +12,38 @@ nikitov::detail::Operation::Operation(char value):
   symb(value)
 {}
 
-nikitov::Data::Data(bool value):
-  bracket(value)
-{}
-
-nikitov::Data::Data(long long value):
-  operand(value)
-{}
-
-nikitov::Data::Data(char value):
-  operation(value)
-{}
-
 nikitov::InfixType::InfixType(ExprTypeName name, bool value):
-  data(value),
+  bracket(value),
   type(name)
 {}
 
 nikitov::InfixType::InfixType(ExprTypeName name, long long value):
-  data(value),
+  operand(value),
   type(name)
 {}
 
 nikitov::InfixType::InfixType(ExprTypeName name, char value):
-  data(value),
+  operation(value),
   type(name)
 {}
 
 nikitov::StackType::StackType(ExprTypeName name, bool value):
-  data(value),
+  bracket(value),
   type(name)
 {}
 
 nikitov::StackType::StackType(ExprTypeName name, char value):
-  data(value),
+  operation(value),
   type(name)
 {}
 
 nikitov::PostfixType::PostfixType(ExprTypeName name, long long value):
-  data(value),
+  operand(value),
   type(name)
 {}
 
 nikitov::PostfixType::PostfixType(ExprTypeName type, char value):
-  data(value),
+  operation(value),
   type(type)
 {}
 

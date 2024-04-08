@@ -82,7 +82,7 @@ long long nikitov::PostfixExpression::solve()
         long long second = solverStack.drop();
         long long first = solverStack.drop();
         long long result = 0;
-        char symb = postfixValue.data.operation.symb;
+        char symb = postfixValue.operation.symb;
         switch (symb)
         {
         case '+':
@@ -151,7 +151,7 @@ long long nikitov::PostfixExpression::solve()
     }
     else
     {
-      solverStack.push(postfixValue.data.operand.num);
+      solverStack.push(postfixValue.operand.num);
       ++countElem;
     }
   }

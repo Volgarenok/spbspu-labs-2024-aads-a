@@ -14,23 +14,23 @@ nikitov::PostfixExpression nikitov::convertExpression(Queue< InfixType > infixEx
     InfixType infixValue = infixExpression.drop();
     if (infixValue.type == ExprTypeName::operand)
     {
-      long long value = infixValue.data.operand.num;
+      long long value = infixValue.operand.num;
       postfixExpression.add(PostfixType(ExprTypeName::operand, value));
     }
     else
     {
       if (infixValue.type == ExprTypeName::bracket)
       {
-        if (infixValue.data.bracket.isOpen)
+        if (infixValue.bracket.isOpen)
         {
-          bool value = infixValue.data.bracket.isOpen;
+          bool value = infixValue.bracket.isOpen;
           operandsStack.push(StackType(ExprTypeName::bracket, value));
         }
         else
         {
           while (!operandsStack.empty() && !operandsStack.top().type == nikitov::bracket)
           {
-            char value = operandsStack.drop().data.operation.symb;
+            char value = operandsStack.drop().operation.symb;
             postfixExpression.add(PostfixType(ExprTypeName::operation, value));
           }
           if (operandsStack.empty())
@@ -44,9 +44,9 @@ nikitov::PostfixExpression nikitov::convertExpression(Queue< InfixType > infixEx
       {
         while (!operandsStack.empty() && operandsStack.top().type != ExprTypeName::bracket)
         {
-          if (infixValue.data.operation <= operandsStack.top().data.operation)
+          if (infixValue.operation <= operandsStack.top().operation)
           {
-            char value = operandsStack.drop().data.operation.symb;
+            char value = operandsStack.drop().operation.symb;
             postfixExpression.add(PostfixType(ExprTypeName::operation, value));
           }
           else
@@ -54,7 +54,7 @@ nikitov::PostfixExpression nikitov::convertExpression(Queue< InfixType > infixEx
             break;
           }
         }
-        char value = infixValue.data.operation.symb;
+        char value = infixValue.operation.symb;
         operandsStack.push(StackType(ExprTypeName::operation, value));
       }
     }
@@ -67,7 +67,7 @@ nikitov::PostfixExpression nikitov::convertExpression(Queue< InfixType > infixEx
     {
       throw std::logic_error("Error: Wrong brackets");
     }
-    char value = stackValue.data.operation.symb;
+    char value = stackValue.operation.symb;
     postfixExpression.add(PostfixType(ExprTypeName::operation, value));
   }
   return postfixExpression;

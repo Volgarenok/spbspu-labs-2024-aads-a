@@ -28,18 +28,6 @@ namespace nikitov
     };
   }
 
-  union Data
-  {
-    Data() = default;
-    Data(bool value);
-    Data(long long value);
-    Data(char value);
-
-    detail::Bracket bracket;
-    detail::Operand operand;
-    detail::Operation operation;
-  };
-
   enum ExprTypeName
   {
     bracket,
@@ -54,7 +42,12 @@ namespace nikitov
     InfixType(ExprTypeName type, long long value);
     InfixType(ExprTypeName type, char value);
 
-    Data data;
+    union
+    {
+      detail::Bracket bracket;
+      detail::Operand operand;
+      detail::Operation operation;
+    };
     ExprTypeName type;
   };
 
@@ -64,7 +57,11 @@ namespace nikitov
     explicit StackType(ExprTypeName type, bool value);
     explicit StackType(ExprTypeName type, char value);
 
-    Data data;
+    union
+    {
+      detail::Bracket bracket;
+      detail::Operation operation;
+    };
     ExprTypeName type;
   };
 
@@ -74,7 +71,11 @@ namespace nikitov
     explicit PostfixType(ExprTypeName type, long long value);
     explicit PostfixType(ExprTypeName type, char value);
 
-    Data data;
+    union
+    {
+      detail::Operand operand;
+      detail::Operation operation;
+    };
     ExprTypeName type;
   };
 }
