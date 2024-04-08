@@ -13,21 +13,21 @@ namespace sivkov
   public:
     ConstIterator<T> cIterator;
     List():
-      size(0),
+      size_(0),
       head_(nullptr)
     {}
-    List(std::size_t count, const T& value) :
-      size(0),
+    List(size_t count, const T& value) :
+      size_(0),
       head_(nullptr)
     {
-      for (std::size_t i = 0; i < count; ++i)
+      for (size_t i = 0; i < count; ++i)
       {
         push_back(value);
       }
     }
 
     List(const List& other) :
-      size(0),
+      size_(0),
       head_(nullptr)
     {
       Node<T>* current = other.head_;
@@ -39,7 +39,7 @@ namespace sivkov
     }
 
     List(List&& other) noexcept:
-      size(0),
+      size_(0),
       head_(other.head_)
     {
       other.head_ = nullptr;
@@ -55,14 +55,14 @@ namespace sivkov
     void swap(List& other);
     void reverse();
     void remove(const T& value);
-    void assign(std::size_t count, const T& value);
+    void assign(size_t count, const T& value);
     size_t getSize();
     T& front() { return head_->data; }
     ConstIterator<T> cbegin() const { return ConstIterator<T>(head_); }
     ConstIterator<T> cend() const { return ConstIterator<T>(nullptr); }
 
     private:
-      size_t size;
+      size_t size_;
       Node<T>* head_;
     };
 
@@ -72,7 +72,7 @@ namespace sivkov
     Node<T>* temp = new Node<T>(data);
     temp->next = head_;
     head_ = temp;
-    ++size;
+    ++size_;
   }
 
   template< typename T >
@@ -92,7 +92,7 @@ namespace sivkov
       }
       head->next = newNode;
     }
-   ++size;
+   ++size_;
   }
 
   template< typename T >
@@ -102,7 +102,7 @@ namespace sivkov
     {
       pop_front();
     }
-    size = 0;
+    size_ = 0;
   }
 
   template< typename T >
@@ -115,7 +115,7 @@ namespace sivkov
     Node<T>* head = head_;
     head_ = head_->next;
     delete head;
-    --size;
+    --size_;
   }
 
   template< typename T >
@@ -140,7 +140,7 @@ namespace sivkov
       delete head->next;
       head->next = nullptr;
     }
-    --size;
+    --size_;
   }
 
   template< typename T >
@@ -188,7 +188,7 @@ namespace sivkov
           prev->next = current->next;
         }
         delete current;
-        --size;
+        --size_;
         current = (prev == nullptr) ? head_ : prev->next;
       }
       else
@@ -204,7 +204,7 @@ namespace sivkov
   {
     clear();
 
-    for (std::size_t i = 0; i < count; ++i)
+    for (size_t i = 0; i < count; ++i)
     {
       push_back(value);
     }
@@ -213,7 +213,7 @@ namespace sivkov
   template< typename T >
   size_t List<T>::getSize()
   {
-    return size;
+    return size_;
   }
 }
 #endif
