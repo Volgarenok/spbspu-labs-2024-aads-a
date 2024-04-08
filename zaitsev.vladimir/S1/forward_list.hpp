@@ -44,18 +44,20 @@ namespace zaitsev
         return first ? first : second;
       }
       Node* res = nullptr;
+      Node* res_tail = nullptr;
       Node* list1_cur = first;
       Node* list2_cur = second;
       if (list1_cur->value_ < list2_cur->value_)
       {
-        res = list2_cur;
-        list2_cur = list2_cur->next_;
-      }
-      else
-      {
         res = list1_cur;
         list1_cur = list1_cur->next_;
       }
+      else
+      {
+        res = list2_cur;
+        list2_cur = list2_cur->next_;
+      }
+      res_tail = res;
 
       while (list1_cur || list2_cur)
       {
@@ -63,25 +65,26 @@ namespace zaitsev
         {
           if (list1_cur->value_ < list2_cur->value_)
           {
-            res->next_ = list2_cur;
-            list2_cur = list2_cur->next_;
+            res_tail->next_ = list1_cur;
+            list1_cur = list1_cur->next_;
           }
           else
           {
-            res->next_ = list1_cur;
-            list1_cur = list1_cur->next_;
+            res_tail->next_ = list2_cur;
+            list2_cur = list2_cur->next_;
           }
         }
         else if (list1_cur)
         {
-          res->next_ = list1_cur;
+          res_tail->next_ = list1_cur;
           break;
         }
         else
         {
-          res->next_ = list2_cur;
+          res_tail->next_ = list2_cur;
           break;
         }
+        res_tail = res_tail->next_;
       }
       return  res;
     }
@@ -89,15 +92,17 @@ namespace zaitsev
     template< bool IsConst >
     class BaseIterator
     {
-      template< bool IsConst1 > friend class BaseIterator;
+      template< bool U > friend class BaseIterator;
+      template< typename V > friend class ForwardList;
       using prt_t = std::conditional_t< IsConst, const T*, T* >;
       using ref_t = std::conditional_t< IsConst, const T&, T& >;
-      using node_t = std::conditional_t< IsConst, const Node*, Node* >;
+      using node_t = Node*;
     private:
       node_t node_;
+
     public:
       using iterator_category = std::forward_iterator_tag;
-      using value_type = std::conditional_t< IsConst, const T, T >;
+      using value_type = T;
       using difference_type = std::ptrdiff_t;
       using pointer = std::conditional_t< IsConst, const T*, T* >;
       using reference = std::conditional_t< IsConst, const T&, T& >;
@@ -141,6 +146,7 @@ namespace zaitsev
       }
     };
 
+
   public:
     using iterator = BaseIterator< false >;
     using const_iterator = BaseIterator< true >;
@@ -164,8 +170,8 @@ namespace zaitsev
       }
       return new_head;
     }
-    template<class InutIt>
-    Node* new_list(InutIt begin, InutIt end)
+    template<class InputIt>
+    Node* new_list(InputIt begin, InputIt end)
     {
       Node* new_head = nullptr;
       try
@@ -267,7 +273,6 @@ namespace zaitsev
     {
       return !std::lexicographical_compare(other.cbegin(), other.cend(), cbegin(), cend());
     }
-
 
     iterator begin()
     {
@@ -466,38 +471,31 @@ namespace zaitsev
 
       return ++pos;
     }
-    iterator insert_after(const_iterator pos, const_iterator first, const_iterator last)
+    template<class InputIt>
+    iterator insert_after(const_iterator pos, InputIt first, InputIt last)
     {
       if (pos == cend())
       {
         throw std::out_of_range("Iterator is out of range");
       }
-      if (begin == end)
+      if (first == last)
       {
-        return pos;
+        return iterator(pos.node_);
       }
       Node* next = pos.node_->next_;
-      Node* new_range(*first.node_);
-      iterator new_end(new_range);
-      ++first;
-      try
+      Node* new_range = new_list(first, last);
+      pos.node_->next_ = new_range;
+      iterator last_added(new_range);
+      while (last_added.node_->next_ != nullptr)
       {
-        for (; first != last; ++first)
-        {
-          Node* new_node(*first.node_);
-          new_end.node_->next_ = new_node;
-          ++new_end;
-        }
-        pos.node_->next_ = new_range;
-        new_end.node_->next_ = next;
+        ++last_added;
       }
-      catch (const std::bad_alloc&)
-      {
-        freeNodes(new_range);
-        throw;
-      }
-
-      return new_end;
+      last_added.node_->next_ = next;
+      return last_added;
+    }
+    iterator insert_after(const_iterator pos, std::initializer_list<T> init_list)
+    {
+      return insert_after(pos,init_list.begin(),init_list.end());
     }
 
     iterator erase_after(const_iterator pos)
@@ -602,23 +600,29 @@ namespace zaitsev
           Node* sec1_head = global_tail;
           Node* sec1_tail = global_tail;
           global_tail = global_tail->next_;
+          sec1_tail->next_ = nullptr;
           for (size_t j = 1; j < ord_sec_sz && global_tail; ++j)
           {
-            sec1_tail = global_tail;
+            sec1_tail->next_ = global_tail;
+            sec1_tail = sec1_tail->next_;
             global_tail = global_tail->next_;
+            sec1_tail->next_ = nullptr;
           }
           if (!global_tail)
           {
-            head_tail->next_ = sec1_head;
+            !head_tail ? global_head = sec1_head : head_tail->next_ = sec1_head;
             break;
           }
           Node* sec2_head = global_tail;
           Node* sec2_tail = global_tail;
           global_tail = global_tail->next_;
+          sec2_tail->next_ = nullptr;
           for (size_t j = 1; j < ord_sec_sz && global_tail; ++j)
           {
-            sec2_tail = global_tail;
+            sec2_tail->next_ = global_tail;
+            sec2_tail = sec2_tail->next_;
             global_tail = global_tail->next_;
+            sec2_tail->next_ = nullptr;
           }
           if (!global_head)
           {
@@ -628,9 +632,12 @@ namespace zaitsev
           {
             head_tail->next_ = merge(sec1_head, sec2_head);
           }
-          head_tail = (sec2_tail->next_ == global_tail ? sec2_tail : sec1_tail);
+          head_tail = (sec1_tail->value_ < sec2_tail->value_ ? sec2_tail : sec1_tail);
         }
         head_ = global_head;
+        for (auto i : *this)
+          std::cout << i << " ";
+        std::cout << std::endl;
       }
     }
   };
