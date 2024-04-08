@@ -26,12 +26,12 @@ void zakozhurnikova::printByIndex(const List< pair > &l)
     size_t printed = 0;
     for (auto it = l.cbegin(); it != l.cend(); ++it)
     {
-      auto temp = it->second.cbegin();
-      std::advance(temp, i);
       if (i >= it->second.size())
       {
         continue;
       }
+      auto temp = it->second.cbegin();
+      std::advance(temp, i);
       std::cout << (printed++ == 0 ? "" : " ") << *(temp);
     }
     std::cout << '\n';
