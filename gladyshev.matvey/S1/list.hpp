@@ -40,11 +40,18 @@ namespace gladyshev
     List(const List& other):
       head_(nullptr)
     {
-      detail::Node< T > * curr = other.head_;
-      while (curr)
+      try
       {
-        push_front(curr->data);
-        curr = curr->next;
+        detail::Node< T > * curr = other.head_;
+        while (curr)
+        {
+          push_front(curr->data);
+          curr = curr->next;
+        }
+      }
+      catch (...)
+      {
+        clear();
       }
     }
     List(List&& other):
