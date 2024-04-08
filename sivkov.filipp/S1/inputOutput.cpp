@@ -85,7 +85,7 @@ void sivkov::outputNums(List<std::pair<std::string, List<size_t>>>& list, List<s
     for (auto iteratorForPair = list.cbegin(); iteratorForPair != list.cend(); ++iteratorForPair)
     {
       auto iteratorForNums = iteratorForPair->second.cbegin();
-      iteratorForNums.advance(i);
+      std::advance(iteratorForNums, i);
 
       if (iteratorForNums != iteratorForPair->second.cend())
       {
