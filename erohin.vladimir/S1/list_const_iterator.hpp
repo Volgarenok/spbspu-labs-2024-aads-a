@@ -37,7 +37,7 @@ namespace erohin
   {}
 
   template< class T >
-  explicit ListConstIterator< T >::ListConstIterator(const detail::Node< T > * node_ptr):
+  ListConstIterator< T >::ListConstIterator(const detail::Node< T > * node_ptr):
     node_(node_ptr)
   {}
 

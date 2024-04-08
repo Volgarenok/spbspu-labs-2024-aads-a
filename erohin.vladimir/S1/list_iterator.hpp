@@ -38,7 +38,7 @@ namespace erohin
   {}
 
   template< class T >
-  explicit ListIterator< T >::ListIterator(detail::Node< T > * node_ptr):
+  ListIterator< T >::ListIterator(detail::Node< T > * node_ptr):
     node_(node_ptr)
   {}
 

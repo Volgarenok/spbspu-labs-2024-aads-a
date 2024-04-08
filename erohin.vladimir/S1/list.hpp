@@ -234,11 +234,27 @@ namespace erohin
   template< class T >
   ListIterator< T > List< T >::insert_after(const_iterator pos, size_t count, const T & value)
   {
-    for (size_t i = 0; i < count; ++i)
+    if (count == 0)
     {
-      pos = insert_after(pos, value);
+      return iterator(pos.node_);
     }
-    return pos;
+    List< T > temp;
+    try
+    {
+      for (size_t i = 0; i < count; ++i)
+      {
+        temp.push_front(value);
+      }
+      push_front(temp.front());
+      temp.pop_front();
+      splice_after(cbegin(), std::move(temp));
+    }
+    catch (...)
+    {
+      temp.clear();
+      throw;
+    }
+    return iterator(pos.node_);
   }
 
   template< class T >
@@ -304,10 +320,21 @@ namespace erohin
   template< class T >
   void List< T >::assign(size_t count, const T & value)
   {
-    clear();
-    for (size_t i = 0; i < count; ++i)
+    if (count == 0)
     {
-      push_front(value);
+      return;
+    }
+    List< T > temp;
+    try
+    {
+      temp.push_front(value);
+      temp.insert_after(cbegin(), count - 1, value);
+      assign(temp.begin(), temp.end());
+    }
+    catch (...)
+    {
+      temp.clear();
+      throw;
     }
   }
 
@@ -315,20 +342,24 @@ namespace erohin
   template< class InputIt >
   void List< T >::assign(InputIt first, InputIt last)
   {
-    clear();
+    List< T > temp;
     while (first != last)
     {
       try
       {
-        push_front(*(first++));
+        temp.push_front(*(first++));
       }
       catch (...)
       {
-        clear();
+        temp.clear();
         throw;
       }
     }
-    reverse();
+    temp.reverse();
+    clear();
+    push_front(std::move(temp.front()));
+    temp.pop_front();
+    splice_after(cbegin(), std::move(temp));
   }
 
   template< class T >
