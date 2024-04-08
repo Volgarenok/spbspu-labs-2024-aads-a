@@ -42,9 +42,9 @@ namespace nikitov
     explicit InfixType(long long value);
     explicit InfixType(char value);
 
-    bool getBracket() const;
-    long long getOperand() const;
-    char getOperation() const;
+    bool& getBracket();
+    long long& getOperand();
+    char& getOperation();
     ExprTypeName getType() const;
 
   private:
@@ -64,8 +64,8 @@ namespace nikitov
     explicit StackType(bool value);
     explicit StackType(char value);
 
-    bool getBracket() const;
-    char getOperation() const;
+    bool& getBracket();
+    char& getOperation();
     ExprTypeName getType() const;
 
   private:
@@ -84,8 +84,8 @@ namespace nikitov
     explicit PostfixType(long long value);
     explicit PostfixType(char value);
 
-    long long getOperand() const;
-    char getOperation() const;
+    long long& getOperand();
+    char& getOperation();
     ExprTypeName getType() const;
 
   private:

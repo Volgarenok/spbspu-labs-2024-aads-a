@@ -27,17 +27,17 @@ nikitov::InfixType::InfixType(char value):
   type(ExprTypeName::operation)
 {}
 
-bool nikitov::InfixType::getBracket() const
+bool& nikitov::InfixType::getBracket()
 {
   return bracket.isOpen;
 }
 
-long long nikitov::InfixType::getOperand() const
+long long& nikitov::InfixType::getOperand()
 {
   return operand.num;
 }
 
-char nikitov::InfixType::getOperation() const
+char& nikitov::InfixType::getOperation()
 {
   return operation.symb;
 }
@@ -57,12 +57,12 @@ nikitov::StackType::StackType(char value):
   type(ExprTypeName::operation)
 {}
 
-bool nikitov::StackType::getBracket() const
+bool& nikitov::StackType::getBracket()
 {
   return bracket.isOpen;
 }
 
-char nikitov::StackType::getOperation() const
+char& nikitov::StackType::getOperation()
 {
   return operation.symb;
 }
@@ -82,12 +82,12 @@ nikitov::PostfixType::PostfixType(char value):
   type(ExprTypeName::operation)
 {}
 
-long long nikitov::PostfixType::getOperand() const
+long long& nikitov::PostfixType::getOperand()
 {
   return operand.num;
 }
 
-char nikitov::PostfixType::getOperation() const
+char& nikitov::PostfixType::getOperation()
 {
   return operation.symb;
 }
