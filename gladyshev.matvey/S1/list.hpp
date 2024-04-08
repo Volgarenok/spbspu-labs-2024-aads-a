@@ -153,7 +153,7 @@ namespace gladyshev
     {
       if (empty())
       {
-        return;
+        throw std::logic_error("empty list");
       }
       detail::Node< T >* temp = head_;
       head_ = head_->next;
@@ -163,7 +163,7 @@ namespace gladyshev
     {
       if (empty())
       {
-        return;
+        throw std::logic_error("empty list");
       }
       if (!head_->next)
       {
