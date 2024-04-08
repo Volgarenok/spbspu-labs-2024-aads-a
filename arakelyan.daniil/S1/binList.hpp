@@ -199,7 +199,7 @@ void arakelyan::BinList< T >::splice(iterator it_this, BinList<T> &otherLs)
     {
       it_next.node->prevNode = otherLs.tail_;
     }
-    else 
+    else
     {
       tail_ = otherLs.tail_;
     }
