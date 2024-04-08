@@ -57,11 +57,6 @@ nikitov::StackType::StackType(char value):
   type(ExprTypeName::operation)
 {}
 
-nikitov::ExprTypeName nikitov::StackType::getType() const
-{
-  return type;
-}
-
 bool nikitov::StackType::getBracket() const
 {
   return bracket.isOpen;
@@ -70,6 +65,11 @@ bool nikitov::StackType::getBracket() const
 char nikitov::StackType::getOperation() const
 {
   return operation.symb;
+}
+
+nikitov::ExprTypeName nikitov::StackType::getType() const
+{
+  return type;
 }
 
 nikitov::PostfixType::PostfixType(long long value):
@@ -95,16 +95,4 @@ char nikitov::PostfixType::getOperation() const
 nikitov::ExprTypeName nikitov::PostfixType::getType() const
 {
   return type;
-}
-
-bool nikitov::detail::Operation::operator<=(const detail::Operation& other) const
-{
-  if (symb == '+' || symb == '-')
-  {
-    return true;
-  }
-  else
-  {
-    return other.symb == '*' || other.symb == '/' || other.symb == '%';
-  }
 }

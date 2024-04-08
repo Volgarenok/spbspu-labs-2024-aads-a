@@ -7,24 +7,23 @@ namespace nikitov
   {
     struct Bracket
     {
+      bool isOpen;
       Bracket() = default;
       Bracket(bool value);
-      bool isOpen;
     };
 
     struct Operand
     {
+      long long num;
       Operand() = default;
       Operand(long long value);
-      long long num;
     };
 
     struct Operation
     {
+      char symb;
       Operation() = default;
       Operation(char value);
-      bool operator<=(const Operation& other) const;
-      char symb;
     };
   }
 
@@ -37,6 +36,7 @@ namespace nikitov
 
   struct InfixType
   {
+  public:
     InfixType() = default;
     explicit InfixType(bool value);
     explicit InfixType(long long value);
@@ -47,6 +47,7 @@ namespace nikitov
     char getOperation() const;
     ExprTypeName getType() const;
 
+  private:
     union
     {
       detail::Bracket bracket;
@@ -58,6 +59,7 @@ namespace nikitov
 
   struct StackType
   {
+  public:
     StackType() = default;
     explicit StackType(bool value);
     explicit StackType(char value);
@@ -66,6 +68,7 @@ namespace nikitov
     char getOperation() const;
     ExprTypeName getType() const;
 
+  private:
     union
     {
       detail::Bracket bracket;
@@ -76,6 +79,7 @@ namespace nikitov
 
   struct PostfixType
   {
+  public:
     PostfixType() = default;
     explicit PostfixType(long long value);
     explicit PostfixType(char value);
@@ -84,6 +88,7 @@ namespace nikitov
     char getOperation() const;
     ExprTypeName getType() const;
 
+  private:
     union
     {
       detail::Operand operand;

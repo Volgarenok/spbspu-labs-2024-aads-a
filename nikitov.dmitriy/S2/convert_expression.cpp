@@ -5,6 +5,18 @@
 #include "expression_types.hpp"
 #include "postfix_expression.hpp"
 
+bool isLessPriority(char left, char right)
+{
+  if (left == '+' || left == '-')
+  {
+    return true;
+  }
+  else
+  {
+    return right == '*' || right == '/' || right == '%';
+  }
+}
+
 nikitov::PostfixExpression nikitov::convertExpression(Queue< InfixType > infixExpression)
 {
   PostfixExpression postfixExpression;
@@ -44,7 +56,7 @@ nikitov::PostfixExpression nikitov::convertExpression(Queue< InfixType > infixEx
       {
         while (!operandsStack.empty() && operandsStack.top().getType() != ExprTypeName::bracket)
         {
-          if (infixValue.operation <= operandsStack.top().operation)
+          if (isLessPriority(infixValue.getOperation(), operandsStack.top().getOperation()))
           {
             char value = operandsStack.drop().getOperation();
             postfixExpression.add(PostfixType(value));
