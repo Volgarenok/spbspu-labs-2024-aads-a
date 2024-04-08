@@ -265,10 +265,12 @@ namespace erohin
   template< class T >
   void List< T >::remove(const T & value)
   {
-    remove_if([&](T elem)
-    {
-      return (elem == value);
-    });
+    remove_if(
+      [&](T elem)
+      {
+        return (elem == value);
+      }
+    );
   }
 
   template< class T >
@@ -314,7 +316,7 @@ namespace erohin
   void List< T >::assign(InputIt first, InputIt last)
   {
     clear();
-    while(first != last)
+    while (first != last)
     {
       try
       {

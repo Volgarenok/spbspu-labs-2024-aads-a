@@ -28,7 +28,7 @@ namespace erohin
     bool operator!=(const ListConstIterator< T > & rhs);
   private:
     const detail::Node< T > * node_;
-    ListConstIterator(const detail::Node< T > * node_ptr);
+    explicit ListConstIterator(const detail::Node< T > * node_ptr);
   };
 
   template< class T >
@@ -37,7 +37,7 @@ namespace erohin
   {}
 
   template< class T >
-  ListConstIterator< T >::ListConstIterator(const detail::Node< T > * node_ptr):
+  explicit ListConstIterator< T >::ListConstIterator(const detail::Node< T > * node_ptr):
     node_(node_ptr)
   {}
 
