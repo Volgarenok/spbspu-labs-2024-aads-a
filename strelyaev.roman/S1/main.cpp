@@ -18,7 +18,6 @@ int main()
   {
     std::cerr << e.what() << "\n";
   }
-
   if (list.empty())
   {
     std::cout << "0\n";
@@ -35,20 +34,24 @@ int main()
     }
   }
 
-  size_t sums_i = 0;
-  List< size_t > sums;
-  size_t max_element = 1;
-  size_t max_sizet = std::numeric_limits< size_t >::max();
-  for (auto it = list.begin(); it != list.end(); it++)
+  size_t max_element = 0;
+  for (auto it = list.cbegin(); it != list.cend(); it++)
   {
     size_t i = 0;
-    for (auto inner_it = it->second.begin(); inner_it != it->second.end(); inner_it++)
+    if (it->second.empty())
+    {
+      continue;
+    }
+    for (auto inner_it = it->second.cbegin(); inner_it != it->second.cend(); inner_it++)
     {
       i++;
       max_element = std::max(max_element, i);
     }
   }
 
+  List< size_t > sums;
+  size_t max_sizet = std::numeric_limits< size_t >::max();
+  size_t sums_i = 0;
   if (max_element != 1)
   {
     std::cout << "\n";

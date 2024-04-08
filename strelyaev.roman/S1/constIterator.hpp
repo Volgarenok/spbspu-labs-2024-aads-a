@@ -37,7 +37,7 @@ namespace strelyaev
         return *this;
       }
 
-      ConstIterator< T >& operator++(int)
+      ConstIterator< T > operator++(int)
       {
         ConstIterator< T > result(*this);
         ++(*this);
