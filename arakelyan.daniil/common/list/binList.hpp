@@ -17,58 +17,58 @@ namespace arakelyan
     using iterator = Iterator< T >;
     using const_iterator =  ConstIterator< T >;
 
-    BinList();//fine
-    BinList(const T &val, size_t size);//fine
-    BinList(const BinList< T > &otherLs);//fine
-    BinList(std::initializer_list< T > otherLs);//fine
-    BinList(iterator it_start, iterator it_end);//fine
+    BinList();
+    BinList(const T &val, size_t size);
+    BinList(const BinList< T > &otherLs);
+    BinList(std::initializer_list< T > otherLs);
+    BinList(iterator it_start, iterator it_end);
     ~BinList();
 
-    BinList< T > &operator=(const BinList< T > &otherLs);//fine
-    BinList< T > &operator=(BinList< T > &&otherLs);//fine
-    BinList< T > &operator=(std::initializer_list< T > otherLs);//fine
+    BinList< T > &operator=(const BinList< T > &otherLs);
+    BinList< T > &operator=(BinList< T > &&otherLs);
+    BinList< T > &operator=(std::initializer_list< T > otherLs);
 
-    size_t get_size() const noexcept;//fine
-    bool empty() const noexcept;//fine
+    size_t get_size() const noexcept;
+    bool empty() const noexcept;
 
-    iterator begin() noexcept;//fine
-    const_iterator cbegin() const noexcept;//fine
-    iterator end() noexcept;//fine
-    const_iterator cend() const noexcept;//fine
+    iterator begin() noexcept;
+    const_iterator cbegin() const noexcept;
+    iterator end() noexcept;
+    const_iterator cend() const noexcept;
 
-    T &front();//fine
-    T &back();//fine
-    const T &front() const;//fine
-    const T &back() const;//fine
+    T &front();
+    T &back();
+    const T &front() const;
+    const T &back() const;
 
-    void push_back(const T &el);//fine
-    void push_front(const T &el);//fine
+    void push_back(const T &el);
+    void push_front(const T &el);
 
-    void pop_front();//fine
-    void pop_back();//fine
+    void pop_front();
+    void pop_back();
 
-    void assign(const T &val, size_t size);//fine
-    void assign(iterator it_start, iterator it_end);//fine
-    void assign(std::initializer_list< T > otherLs);//fine
+    void assign(const T &val, size_t size);
+    void assign(iterator it_start, iterator it_end);
+    void assign(std::initializer_list< T > otherLs);
 
-    void clear() noexcept;//fine
+    void clear() noexcept;
 
-    void swap(BinList &ls) noexcept;//fine
+    void swap(BinList &ls) noexcept;
 
-    void remove(const T &val);//fine
+    void remove(const T &val);
     template < class Unarypredicate >
     void remove_if(Unarypredicate p);
 
-    iterator insert(const_iterator it_pos, const T &val);//fine
+    iterator insert(const_iterator it_pos, const T &val);
 
-    iterator erase(iterator it_pos);//fine
-    iterator erase(iterator it_start, iterator it_end);//fine
+    iterator erase(iterator it_pos);
+    iterator erase(iterator it_start, iterator it_end);
 
-    void splice(iterator it_this, BinList< T > &otherLs);//fine
-    void splice(const_iterator it_this, std::initializer_list< T > otherLs);//fine
-    void splice(const_iterator it_this, BinList< T > &otherLs, const_iterator it_other);//fine
+    void splice(iterator it_this, BinList< T > &otherLs);
+    void splice(const_iterator it_this, std::initializer_list< T > otherLs);
+    void splice(const_iterator it_this, BinList< T > &otherLs, const_iterator it_other);
 
-    void reverse() noexcept;//fine
+    void reverse() noexcept;
 
     bool operator==(const BinList< T > &otherLs) const;
     bool operator!=(const BinList< T > &otherLs) const;
@@ -247,7 +247,7 @@ void arakelyan::BinList< T >::splice(const_iterator it_this, std::initializer_li
 }
 
 template < class T >
-void arakelyan::BinList< T >::splice(const_iterator it_this, BinList< T > &otherLs, const_iterator it_other) //ne to
+void arakelyan::BinList< T >::splice(const_iterator it_this, BinList< T > &otherLs, const_iterator it_other)
 {
   details::Node< T > *nodeOtherLs = it_other.node;
   nodeOtherLs->nextNode->prevNode = nodeOtherLs->prevNode;
