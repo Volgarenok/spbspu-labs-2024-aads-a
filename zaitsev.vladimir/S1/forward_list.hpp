@@ -24,7 +24,7 @@ namespace zaitsev
         next_(nullptr)
       {}
       Node(T&& value):
-        value_(value),
+        value_(std::move(value)),
         next_(nullptr)
       {}
     };
@@ -204,6 +204,7 @@ namespace zaitsev
       }
       return new_head;
     }
+
   private:
     Node* head_;
 
@@ -324,7 +325,7 @@ namespace zaitsev
     }
     void push_front(T&& value)
     {
-      Node* new_head = new Node(value);
+      Node* new_head = new Node(std::move(value));
       new_head->next_ = head_;
       head_ = new_head;
     }
@@ -473,7 +474,7 @@ namespace zaitsev
       {
         throw std::out_of_range("Iterator is out of range");
       }
-      Node* new_node(value);
+      Node* new_node(std::move(value));
       new_node->next_ = pos.node_->next_;
       pos.node_->next_ = new_node;
 
