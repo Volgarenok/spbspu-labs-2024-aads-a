@@ -164,7 +164,8 @@ namespace zaitsev
       }
       return new_head;
     }
-    Node* new_list(const_iterator begin, const_iterator end)
+    template<class InutIt>
+    Node* new_list(InutIt begin, InutIt end)
     {
       Node* new_head = nullptr;
       try
@@ -175,27 +176,6 @@ namespace zaitsev
         {
           new_tail->next_ = new Node(*begin);
           new_tail = new_tail->next_;
-        }
-      }
-      catch (const std::bad_alloc&)
-      {
-        freeNodes(new_head);
-      }
-      return new_head;
-    }
-    Node* new_list(std::initializer_list<T> init_list)
-    {
-      Node* new_head = nullptr;
-      try
-      {
-        using iList_it = typename std::initializer_list<T>::iterator;
-        iList_it begin = init_list.begin();
-        new_head = new Node(*(begin++));
-        Node* new_tail = new_head;
-        for (; begin != init_list.end(); ++begin)
-        {
-            new_tail->next_ = new Node(*begin);
-            new_tail = new_tail->next_;
         }
       }
       catch (const std::bad_alloc&)
@@ -251,7 +231,7 @@ namespace zaitsev
     ForwardList(std::initializer_list<T> init_list):
       head_(nullptr)
     {
-      head_ = new_list(init_list);
+      head_ = new_list(init_list.begin(), init_list.end());
     }
     ForwardList(size_t count, const T& value):
       head_(nullptr)
@@ -348,6 +328,12 @@ namespace zaitsev
     void assign(const_iterator begin, const_iterator end)
     {
       Node* new_head = new_list(begin, end);
+      freeNodes(head_);
+      head_ = new_head;
+    }
+    void assign(std::initializer_list<T> init_list)
+    {
+      Node* new_head = new_list(init_list.begin(), init_list.end());
       freeNodes(head_);
       head_ = new_head;
     }
