@@ -7,7 +7,7 @@
 namespace zhalilov
 {
   using primaryMap = std::map < int, std::string >;
-  void GetMaps(std::map < std::string, primaryMap > &maps, std::istream);
+  void getMaps(std::map < std::string, primaryMap > &maps, std::istream &input);
 }
 
 #endif

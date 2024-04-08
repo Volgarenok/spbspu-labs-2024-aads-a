@@ -2,7 +2,7 @@
 
 #include <istream>
 
-void zhalilov::GetMaps(std::map < std::string, primaryMap > &maps, std::istream input)
+void zhalilov::getMaps(std::map < std::string, primaryMap > &maps, std::istream &input)
 {
   int key = 0;
   std::string value;
