@@ -59,14 +59,14 @@ namespace gladyshev
     {
       other.head_ = nullptr;
     }
-    void clear()
+    void clear() noexcept
     {
       while (!(empty()))
       {
         pop_front();
       }
     }
-    bool empty() const
+    bool empty() const noexcept
     {
       return head_ == nullptr;
     }
@@ -89,7 +89,7 @@ namespace gladyshev
         throw;
       }
     }
-    void reverse()
+    void reverse() noexcept
     {
       detail::Node< T >* prev = nullptr;
       detail::Node< T >* current = head_;
@@ -201,19 +201,19 @@ namespace gladyshev
     {
       std::swap(head_, other.head_);
     }
-    constIterator cbegin() const
+    constIterator cbegin() const noexcept
     {
       return constIterator(head_);
     }
-    constIterator cend() const
+    constIterator cend() const noexcept
     {
       return constIterator(nullptr);
     }
-    iterator begin()
+    iterator begin() noexcept
     {
       return iterator(head_);
     }
-    iterator end()
+    iterator end() noexcept
     {
       return iterator(nullptr);
     }
