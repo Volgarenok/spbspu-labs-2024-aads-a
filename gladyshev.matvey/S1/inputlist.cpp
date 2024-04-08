@@ -1,6 +1,6 @@
 #include "inputlist.hpp"
 
-void gladyshev::readSequence(std::istream& in, List<std::pair<std::string, List<size_t>>>& list)
+void gladyshev::readSequence(std::istream& in, List< std::pair< std::string, List< size_t > > >& list)
 {
   std::string line = "";
   in >> line;
