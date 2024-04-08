@@ -65,10 +65,21 @@ namespace gladyshev
     }
     void assign(size_t size, const T& value)
     {
-      clear();
-      for (size_t i = 0; i < size; ++i)
+      List< T > temp;
+      try
       {
-        push_front(value);
+        for (size_t i = 0; i < size; ++i)
+        {
+          temp.push_front(value);
+        }
+        clear();
+        temp.reverse();
+        swap(temp);
+      }
+      catch (...)
+      {
+        temp.clear();
+        throw;
       }
     }
     void reverse()
