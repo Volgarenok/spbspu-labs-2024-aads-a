@@ -635,9 +635,6 @@ namespace zaitsev
           head_tail = (sec1_tail->value_ < sec2_tail->value_ ? sec2_tail : sec1_tail);
         }
         head_ = global_head;
-        for (auto i : *this)
-          std::cout << i << " ";
-        std::cout << std::endl;
       }
     }
   };
