@@ -3,7 +3,6 @@
 #include <limits>
 #include <stdexcept>
 
-#include "binList.cpp"
 #include "binList.hpp"
 
 using BinList_t = arakelyan::BinList< std::pair< std::string, arakelyan::BinList< size_t > > >;
@@ -20,10 +19,9 @@ void arakelyan::outputPairsNames(BinList_t listOfPairs, std::ostream & out)
   }
 }
 
-
 void arakelyan::outputPairsLists(BinList_t &listOfPairs, arakelyan::BinList< size_t > &sumList, std::ostream & out)
 {
-  if ((listOfPairs.getSize() != 1) && !(listOfPairs.begin()->second.isEmpty()))
+  if ((listOfPairs.get_size() != 1) && !(listOfPairs.begin()->second.empty()))
   {
     out << "\n";
   }
@@ -31,14 +29,13 @@ void arakelyan::outputPairsLists(BinList_t &listOfPairs, arakelyan::BinList< siz
   size_t maxSize = std::numeric_limits< size_t >::max();
   bool overflow = false;
 
-  //elements
-  for (size_t i = 0; i < listOfPairs.getSize(); ++i)
+  for (size_t i = 0; i < listOfPairs.get_size(); ++i)
   {
     size_t outed = 0;
     size_t sum = 0;
     for (auto iter = listOfPairs.begin(); iter != listOfPairs.end(); ++iter)
     {
-      if (!iter->second.isEmpty())
+      if (!iter->second.empty())
       {
         if (outed == 0)
         {
@@ -47,11 +44,11 @@ void arakelyan::outputPairsLists(BinList_t &listOfPairs, arakelyan::BinList< siz
         else {
           out << " ";
         }
-        out << iter->second.getFirst();
+        out << iter->second.front();
         ++outed;
-        if (sum < (maxSize - iter->second.isEmpty()))
+        if (sum < (maxSize - iter->second.empty()))
         {
-          sum += iter->second.getFirst();
+          sum += iter->second.front();
         }
         else
         {
@@ -68,7 +65,6 @@ void arakelyan::outputPairsLists(BinList_t &listOfPairs, arakelyan::BinList< siz
     throw std::overflow_error("overflow error!");
   }
 }
-
 
 void arakelyan::outputPairListsSums(arakelyan::BinList< size_t > sumList, std::ostream & out)
 {

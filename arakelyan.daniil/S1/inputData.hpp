@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include "binList.hpp"
-#include "binList.cpp"
 
 namespace arakelyan
 {

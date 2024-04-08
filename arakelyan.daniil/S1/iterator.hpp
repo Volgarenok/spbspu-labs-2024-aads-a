@@ -8,18 +8,18 @@
 namespace arakelyan
 {
   template < class T >
+  struct BinList;
+
+  template < class T >
   struct Iterator
   {
     Iterator< T >(const Iterator< T > &val) = default;
+    ~Iterator() = default;
 
     Iterator< T > &operator=(const Iterator< T > &val) = default;
 
     Iterator< T >():
       node(nullptr)
-    {}
-
-    Iterator< T >(Node< T > *val):
-      node(val)
     {}
 
     Iterator< T > &operator--()
@@ -74,9 +74,13 @@ namespace arakelyan
       return node == val.node;
     }
 
-    ~Iterator() = default;
+    friend struct BinList< T >;
 
   private:
+    Iterator< T >(Node< T > *val):
+      node(val)
+    {}
+
     Node< T > *node;
   };
 }
