@@ -2,15 +2,16 @@
 #define ITERATOR_HPP
 #include <memory>
 #include "node.hpp"
+#include <iterator>
 
 namespace zakozhurnikova
 {
   template < typename T >
-  struct Iterator
+  struct Iterator: public std::iterator < std::bidirectional_iterator_tag, T >
   {
     using this_t = Iterator< T >;
     Iterator();
-    Iterator(Node< T >* node);
+    Iterator(detail::Node< T >* node);
     Iterator(const this_t&) = default;
     ~Iterator() = default;
 
@@ -26,34 +27,9 @@ namespace zakozhurnikova
     T& operator*() const;
     T* operator->() const;
 
-    this_t operator+(size_t);
-    this_t operator-(size_t);
-
   private:
-    Node< T >* node_;
+    detail::Node< T >* node_;
   };
-
-  template < typename T >
-  Iterator< T > Iterator< T >::operator+(size_t k)
-  {
-    Iterator< T > result(*this);
-    for (size_t i = 0; i < k; ++i)
-    {
-      ++result;
-    }
-    return result;
-  }
-
-  template < typename T >
-  Iterator< T > Iterator< T >::operator-(size_t k)
-  {
-    Iterator< T > result(*this);
-    for (size_t i = 0; i < k; ++i)
-    {
-      --result;
-    }
-    return result;
-  }
 
   template < typename T >
   Iterator< T >::Iterator() :
@@ -61,7 +37,7 @@ namespace zakozhurnikova
   {}
 
   template < typename T >
-  Iterator< T >::Iterator(Node< T >* node) :
+  Iterator< T >::Iterator(detail::Node< T >* node) :
     node_(node)
   {}
 

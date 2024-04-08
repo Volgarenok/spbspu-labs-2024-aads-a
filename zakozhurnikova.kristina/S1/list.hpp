@@ -28,7 +28,7 @@ namespace zakozhurnikova
       tail_(nullptr),
       size_(0)
     {
-      Node< T >* temp = rhs.head_;
+      detail::Node< T >* temp = rhs.head_;
       while (temp)
       {
         push_back(temp->data);
@@ -79,7 +79,7 @@ namespace zakozhurnikova
 
     void push_back(T data)
     {
-      Node< T >* temp = new Node< T >{ data };
+      detail::Node< T >* temp = new detail::Node< T >{ data };
 
       if (!tail_)
       {
@@ -97,7 +97,7 @@ namespace zakozhurnikova
 
     void push_front(T data)
     {
-      Node< T >* temp = new Node< T >{ data };
+      detail::Node< T >* temp = new detail::Node< T >{ data };
       if (!tail_)
       {
         head_ = temp;
@@ -114,7 +114,7 @@ namespace zakozhurnikova
 
     void pop_back() noexcept
     {
-      Node< T >* toDelete = tail_;
+      detail::Node< T >* toDelete = tail_;
       tail_ = tail_->prev;
       if (!tail_)
       {
@@ -131,7 +131,7 @@ namespace zakozhurnikova
 
     void pop_front() noexcept
     {
-      Node< T >* toDelete = head_;
+      detail::Node< T >* toDelete = head_;
       if(!head_->next)
       {
         head_ = nullptr;
@@ -223,8 +223,8 @@ namespace zakozhurnikova
     }
 
   private:
-    Node< T >* head_;
-    Node< T >* tail_;
+    detail::Node< T >* head_;
+    detail::Node< T >* tail_;
     size_t size_;
   };
 }

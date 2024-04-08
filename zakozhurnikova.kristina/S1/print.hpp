@@ -38,9 +38,11 @@ namespace zakozhurnikova
         {
           continue;
         }
-        if (max - sum > *(p.second.cbegin() + i))
+        auto temp = p.second.cbegin();
+        std::advance(temp, i);
+        if (max - sum > *(temp))
         {
-          sum += *(p.second.cbegin() + i);
+          sum += *(temp);
         }
         else
         {
@@ -53,10 +55,12 @@ namespace zakozhurnikova
     {
       throw std::range_error("Failed input numbers with overflow");
     }
+    auto temp = listSum.end();
+    std::advance(temp, -1);
     for (auto it = listSum.begin(); it != listSum.end(); ++it)
     {
       std::cout << *(it);
-      if (it + 1 != listSum.end())
+      if (it != temp)
       {
         std::cout << ' ';
       }

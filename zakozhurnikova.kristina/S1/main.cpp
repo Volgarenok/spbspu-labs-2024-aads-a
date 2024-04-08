@@ -9,7 +9,8 @@ int main()
 {
   using namespace zakozhurnikova;
   using pair = std::pair< std::string, List< size_t > >;
-  try {
+  try
+  {
     List<pair> list;
     readList(list, std::cin);
     printNames(list);

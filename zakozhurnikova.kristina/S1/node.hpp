@@ -3,13 +3,16 @@
 
 namespace zakozhurnikova
 {
-  template < typename T >
-  struct Node
+  namespace detail
   {
-    T data;
-    Node* next;
-    Node* prev;
-  };
+    template < typename T >
+    struct Node
+    {
+      T data;
+      Node* next;
+      Node* prev;
+    };
+  }
 }
 
 #endif
