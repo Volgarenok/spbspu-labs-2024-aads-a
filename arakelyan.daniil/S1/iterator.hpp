@@ -77,11 +77,11 @@ namespace arakelyan
     friend struct BinList< T >;
 
   private:
-    Iterator< T >(Node< T > *val):
+    Iterator< T >(details::Node< T > *val):
       node(val)
     {}
-
-    Node< T > *node;
+    using Node = details::Node< T >;
+    Node *node;
   };
 }
 #endif

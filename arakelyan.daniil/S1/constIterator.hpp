@@ -19,7 +19,7 @@ namespace arakelyan
       node(nullptr)
     {}
 
-    ConstIterator< T >(const Node< T > *val):
+    ConstIterator< T >(const details::Node< T > *val):
       node(val)
     {}
 
@@ -38,14 +38,14 @@ namespace arakelyan
       return res;
     }
 
-    ConstIterator< T > operator++() // ++a
+    ConstIterator< T > operator++()
     {
       assert(node != nullptr);
       node = node->nextNode;
       return *this;
     }
 
-    ConstIterator< T > operator++(int) // a++
+    ConstIterator< T > operator++(int)
     {
       assert(node != nullptr);
       ConstIterator< T > res(*this);
@@ -78,7 +78,8 @@ namespace arakelyan
     ~ConstIterator() = default;
 
   private:
-    const Node< T > *node;
+    using Node = details::Node< T >;
+    const Node *node;
   };
 }
 

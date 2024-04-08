@@ -77,8 +77,9 @@ namespace arakelyan
     bool operator>=(const BinList< T > &otherLs) const;
 
   private:
-    Node< T > *head_;
-    Node< T > *tail_;
+    using Node = details::Node< T >;
+    Node *head_;
+    Node *tail_;
     size_t size_;
   };
 }
@@ -298,7 +299,7 @@ const T &arakelyan::BinList< T >::back() const
 template < class T >
 void arakelyan::BinList< T >::push_back(const T &el)
 {
-  Node< T > *node = new Node< T >(el);
+  details::Node< T > *node = new details::Node< T >(el);
   if ((head_ == nullptr) && (tail_ == nullptr))
   {
     head_ = node;
@@ -316,7 +317,7 @@ void arakelyan::BinList< T >::push_back(const T &el)
 template < class T >
 void arakelyan::BinList< T >::push_front(const T &el)
 {
-  Node< T > *node = new Node< T >(el);
+  details::Node< T > *node = new details::Node< T >(el);
 
   node->nextNode = head_;
   if (head_ == nullptr && tail_ == nullptr)
@@ -344,14 +345,14 @@ arakelyan::Iterator< T > arakelyan::BinList< T >::insert(const_iterator it_pos, 
   else
   {
     auto it = begin();
-    Node< T > *prevNode = head_;
+    details::Node< T > *prevNode = head_;
     while (it != it_pos)
     {
       ++it;
       prevNode = prevNode->nextNode;
     }
-    Node< T > *newNode = new Node< T >(val);
-    Node< T > *nextNode = prevNode->nextNode;
+    details::Node< T > *newNode = new details::Node< T >(val);
+    details::Node< T > *nextNode = prevNode->nextNode;
     prevNode->nextNode = newNode;
     newNode->prevNode = prevNode;
     newNode->nextNode = nextNode;
@@ -368,17 +369,13 @@ void arakelyan::BinList< T >::clear() noexcept
   {
     pop_front();
   }
-  tail_ = nullptr;
 }
 
 template < class T >
 void arakelyan::BinList< T >::pop_front()
 {
-  if (head_ == nullptr)
-  {
-    return;
-  }
-  Node< T > *node = head_->nextNode;
+  assert(!empty());
+  details::Node< T > *node = head_->nextNode;
   if (node != nullptr)
   {
     node->prevNode = nullptr;
@@ -395,11 +392,8 @@ void arakelyan::BinList< T >::pop_front()
 template < class T >
 void arakelyan::BinList< T >::pop_back()
 {
-  if (tail_ == nullptr)
-  {
-    return;
-  }
-  Node< T > *node = tail_->prevNode;
+  assert(!empty());
+  details::Node< T > *node = tail_->prevNode;
   if (node != nullptr)
   {
     node->nextNode = nullptr;
@@ -416,7 +410,7 @@ void arakelyan::BinList< T >::pop_back()
 template < class T >
 void arakelyan::BinList< T >::remove(const T &val)
 {
-  Node< T > *node = head_;
+  details::Node< T > *node = head_;
   while (node)
   {
     if (node->value == val)
@@ -431,9 +425,9 @@ void arakelyan::BinList< T >::remove(const T &val)
       }
       else
       {
-        Node< T > *prevNode = node->prevNode;
-        Node< T > *nextNode = node->nextNode;
-        Node< T > *nodeToDel = node;
+        details::Node< T > *prevNode = node->prevNode;
+        details::Node< T > *nextNode = node->nextNode;
+        details::Node< T > *nodeToDel = node;
         delete nodeToDel;
         node = nextNode;
         nextNode->prevNode = prevNode;
@@ -451,7 +445,7 @@ template < class T >
 template < class UnaryPredicate >
 void arakelyan::BinList< T >::remove_if(UnaryPredicate p)
 {
-  Node< T > *node = head_;
+  details::Node< T > *node = head_;
   while (node)
   {
     if (p(node->value))
@@ -466,9 +460,9 @@ void arakelyan::BinList< T >::remove_if(UnaryPredicate p)
       }
       else
       {
-        Node< T > *prevNode = node->prevNode;
-        Node< T > *nextNode = node->nextNode;
-        Node< T > *nodeToDel = node;
+        details::Node< T > *prevNode = node->prevNode;
+        details::Node< T > *nextNode = node->nextNode;
+        details::Node< T > *nodeToDel = node;
         delete nodeToDel;
         node = nextNode;
         nextNode->prevNode = prevNode;
@@ -493,7 +487,7 @@ void arakelyan::BinList< T >::swap(BinList< T > &otherLs)
 template < class T >
 arakelyan::Iterator< T > arakelyan::BinList< T >::erase(iterator it_pos)
 {
-  Node< T > *nodeToDel = head_;
+  details::Node< T > *nodeToDel = head_;
   if (it_pos == begin())
   {
     pop_front();
@@ -512,8 +506,8 @@ arakelyan::Iterator< T > arakelyan::BinList< T >::erase(iterator it_pos)
       ++it;
       nodeToDel = nodeToDel->nextNode;
     }
-    Node< T > *prevNode = nodeToDel->prevNode;
-    Node< T > *nextNode = nodeToDel->nextNode;
+    details::Node< T > *prevNode = nodeToDel->prevNode;
+    details::Node< T > *nextNode = nodeToDel->nextNode;
     prevNode->nextNode = nextNode;
     nextNode->prevNode = prevNode;
     delete nodeToDel;
