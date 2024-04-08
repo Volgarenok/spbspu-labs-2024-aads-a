@@ -131,7 +131,7 @@ arakelyan::BinList< T >::BinList(iterator it_start, iterator it_end)
 }
 
 template < class T >
-size_t arakelyan::BinList< T >::get_size() const
+size_t arakelyan::BinList< T >::get_size() const noexcept
 {
   return size_;
 }
