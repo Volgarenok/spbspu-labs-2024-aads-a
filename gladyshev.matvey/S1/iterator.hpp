@@ -9,14 +9,13 @@
 namespace gladyshev
 {
   template < typename T >
+  class List;
+  template < typename T >
   class Iterator: public std::iterator< std::forward_iterator_tag, T >
   {
   public:
     Iterator():
       node_(nullptr)
-    {}
-    Iterator(detail::Node< T >* node):
-      node_(node)
     {}
     Iterator(const Iterator< T >&) = default;
     Iterator< T >& operator=(const Iterator< T >&) = default;
@@ -57,6 +56,10 @@ namespace gladyshev
       return std::addressof(node_->data);
     }
   private:
+    friend List< T >;
+    Iterator(detail::Node< T >* node):
+      node_(node)
+    {}
     detail::Node< T >* node_;
   };
 }

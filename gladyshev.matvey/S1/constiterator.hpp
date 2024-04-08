@@ -9,14 +9,13 @@
 namespace gladyshev
 {
   template < typename T >
+  class List;
+  template < typename T >
   class ConstIterator: public std::iterator< std::forward_iterator_tag, T >
   {
   public:
     ConstIterator():
       node_(nullptr)
-    {}
-    ConstIterator(detail::Node< T >* node):
-      node_(node)
     {}
     ConstIterator(const ConstIterator< T >&) = default;
     ConstIterator< T >& operator=(const ConstIterator< T >&) = default;
@@ -49,6 +48,10 @@ namespace gladyshev
       return std::addressof(node_->data);
     }
   private:
+    friend List< T >;
+    ConstIterator(detail::Node< T >* node):
+      node_(node)
+    {}
     detail::Node< T >* node_;
   };
 }
