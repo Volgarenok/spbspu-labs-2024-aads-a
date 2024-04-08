@@ -55,12 +55,12 @@ namespace zakozhurnikova
     {
       throw std::range_error("Failed input numbers with overflow");
     }
-    auto temp = listSum.end();
-    std::advance(temp, -1);
     for (auto it = listSum.begin(); it != listSum.end(); ++it)
     {
       std::cout << *(it);
-      if (it != temp)
+      auto temp = it;
+      ++temp;
+      if (temp != listSum.end())
       {
         std::cout << ' ';
       }
