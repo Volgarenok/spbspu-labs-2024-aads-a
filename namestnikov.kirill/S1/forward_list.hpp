@@ -42,10 +42,10 @@ namespace namestnikov
           push_front(value);
         }
       }
-      catch (const std::bad_alloc &)
+      catch (...)
       {
         clear();
-        throw std::invalid_argument("Too many args for a list");
+        throw;
       }
     }
     ForwardList(const ForwardList<T> & other) :
@@ -60,10 +60,10 @@ namespace namestnikov
           push_front(begin.node_->data_);
         }
       }
-      catch (const std::bad_alloc &)
+      catch (...)
       {
         clear();
-        throw std::invalid_argument("Too many args for a list");
+        throw;
       }
     }
     ForwardList(std::initializer_list<T> list) :
@@ -78,10 +78,10 @@ namespace namestnikov
           push_front(*begin);
           ++begin;
         }
-        catch (const std::bad_alloc &)
+        catch (...)
         {
           clear();
-          throw std::invalid_argument("Too many args for a list");
+          throw;
         }
       }
       reverse();
@@ -238,10 +238,10 @@ namespace namestnikov
           push_front(value);
         }
       }
-      catch (const std::bad_alloc &)
+      catch (...)
       {
         clear();
-        throw std::invalid_argument("Too many args for a list");
+        throw;
       }
     }
     void assign(std::initializer_list<T> list)
@@ -257,10 +257,10 @@ namespace namestnikov
           ++begin;
         }
       }
-      catch (const std::bad_alloc &)
+      catch (...)
       {
         clear();
-        throw std::invalid_argument("Too many args for a list");
+        throw;
       }
       reverse();
     }
@@ -275,10 +275,10 @@ namespace namestnikov
           ++begin;
         }
       }
-      catch (const std::bad_alloc &)
+      catch (...)
       {
         clear();
-        throw std::invalid_argument("Too many args for a list");
+        throw;
       }
       reverse();
     }
@@ -349,10 +349,10 @@ namespace namestnikov
             ++position;
           }
         }
-        catch (const std::bad_alloc &)
+        catch (...)
         {
           clear();
-          throw std::invalid_argument("Too many args for a list");
+          throw;
         }
         return position;
       }
@@ -382,10 +382,10 @@ namespace namestnikov
             ++position;
           }
         }
-        catch (const std::bad_alloc &)
+        catch (...)
         {
           clear();
-          throw std::invalid_argument("Too many args for a list");
+          throw;
         }
         return position;
       }
