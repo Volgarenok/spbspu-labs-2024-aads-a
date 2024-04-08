@@ -89,7 +89,7 @@ namespace zaitsev
     template< bool IsConst >
     class BaseIterator
     {
-      template< bool IsConst1 = false > friend class BaseIterator;
+      template< bool IsConst1 > friend class BaseIterator;
       using prt_t = std::conditional_t< IsConst, const T*, T* >;
       using ref_t = std::conditional_t< IsConst, const T&, T& >;
       using node_t = std::conditional_t< IsConst, const Node*, Node* >;
