@@ -11,23 +11,23 @@
 
 namespace namestnikov
 {
-  template <class T>
+  template < class T >
   class ForwardIterator;
 
-  template <class T>
+  template < class T >
   class ConstForwardIterator;
 
-  template <class T>
+  template < class T >
   class Node;
 
-  template <class T>
+  template < class T >
   class ForwardList
   {
-    friend class ForwardIterator<T>;
-    friend class ConstForwardIterator<T>;
-    using iterator = ForwardIterator<T>;
-    using const_iterator = ConstForwardIterator<T>;
-    using node_t = Node<T>;
+    friend class ForwardIterator< T >;
+    friend class ConstForwardIterator< T >;
+    using iterator = ForwardIterator< T >;
+    using const_iterator = ConstForwardIterator< T >;
+    using node_t = Node< T >;
   public:
     ForwardList() :
       head_(nullptr)
@@ -48,7 +48,7 @@ namespace namestnikov
         throw;
       }
     }
-    ForwardList(const ForwardList<T> & other) :
+    ForwardList(const ForwardList< T > & other) :
       head_(nullptr)
     {
       try
@@ -66,7 +66,7 @@ namespace namestnikov
         throw;
       }
     }
-    ForwardList(std::initializer_list<T> list) :
+    ForwardList(std::initializer_list< T > list) :
       head_(nullptr)
     {
       auto begin = list.begin();
@@ -86,7 +86,7 @@ namespace namestnikov
       }
       reverse();
     }
-    ForwardList<T> & operator=(const ForwardList<T> & other)
+    ForwardList<T> & operator=(const ForwardList< T > & other)
     {
       ForwardList<T> temp(other);
       if (std::addressof(other) != this)
@@ -95,12 +95,12 @@ namespace namestnikov
       }
       return *this;
     }
-    ForwardList(ForwardList<T> && other) :
+    ForwardList(ForwardList< T > && other) :
       head_(other.head_)
     {
       other.head_ = nullptr;
     }
-    ForwardList<T> & operator=(ForwardList<T> && other)
+    ForwardList<T> & operator=(ForwardList< T > && other)
     {
       ForwardList<T> temp(std::move(other));
       if (std::addressof(other) != this)
@@ -147,7 +147,7 @@ namespace namestnikov
     {
       return head_->data_;
     }
-    void swap(ForwardList & other)
+    void swap(ForwardList< T > & other)
     {
       std::swap(head_, other.head_);
     }
@@ -200,7 +200,7 @@ namespace namestnikov
         }
       }
     }
-    template <class Predicate>
+    template < class Predicate >
     void remove_if(Predicate p)
     {
       node_t * prev = nullptr;
@@ -244,7 +244,7 @@ namespace namestnikov
         throw;
       }
     }
-    void assign(std::initializer_list<T> list)
+    void assign(std::initializer_list< T > list)
     {
       clear();
       try
@@ -357,7 +357,7 @@ namespace namestnikov
         return position;
       }
     }
-    iterator insert_after(const_iterator pos, std::initializer_list<T> list)
+    iterator insert_after(const_iterator pos, std::initializer_list< T > list)
     {
       if (pos == cend())
       {
@@ -448,7 +448,7 @@ namespace namestnikov
         return res;
       }
     }
-    void splice_after(const_iterator pos, ForwardList & other)
+    void splice_after(const_iterator pos, ForwardList< T > & other)
     {
       if (pos == cend())
       {
@@ -494,7 +494,7 @@ namespace namestnikov
       }
       return operator[](index);
     }
-    bool operator==(ForwardList<T> & other)
+    bool operator==(ForwardList< T > & other)
     {
       bool check = true;
       size_t size = std::min(max_size(), other.max_size());
@@ -508,7 +508,7 @@ namespace namestnikov
       }
       return check;
     }
-    bool operator<(ForwardList<T> & other)
+    bool operator<(ForwardList< T > & other)
     {
       bool check = true;
       size_t size = std::min(max_size(), other.max_size());
@@ -522,11 +522,11 @@ namespace namestnikov
       }
       return check;
     }
-    bool operator!=(ForwardList<T> & other)
+    bool operator!=(ForwardList< T > & other)
     {
       return !(*this == other);
     }
-    bool operator>(ForwardList<T> & other)
+    bool operator>(ForwardList< T > & other)
     {
       bool check = true;
       size_t size = std::min(max_size(), other.max_size());
@@ -540,11 +540,11 @@ namespace namestnikov
       }
       return check;
     }
-    bool operator<=(ForwardList<T> & other)
+    bool operator<=(ForwardList< T > & other)
     {
       return !(*this > other);
     }
-    bool operator>=(ForwardList<T> & other)
+    bool operator>=(ForwardList< T > & other)
     {
       return !(*this < other);
     }

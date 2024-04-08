@@ -3,13 +3,13 @@
 #include <limits>
 #include <iostream>
 
-void namestnikov::inputLists(std::istream & in, ForwardList<pair_t> & dataList)
+void namestnikov::inputLists(std::istream & in, ForwardList< pair_t > & dataList)
 {
   std::string listParameters = "";
   in >> listParameters;
   while (in)
   {
-    dataList.push_front({listParameters, ForwardList<unsigned long long>{}});
+    dataList.push_front({listParameters, ForwardList< unsigned long long >{}});
     while ((in >> listParameters) && (std::isdigit(listParameters[0])))
     {
       unsigned long long number = std::stoull(listParameters);
@@ -18,10 +18,10 @@ void namestnikov::inputLists(std::istream & in, ForwardList<pair_t> & dataList)
   }
 }
 
-void namestnikov::outputNames(std::ostream & out, ForwardList<pair_t> & dataList, size_t & maxSize)
+void namestnikov::outputNames(std::ostream & out, ForwardList< pair_t > & dataList, size_t & maxSize)
 {
   dataList.reverse();
-  for (ForwardIterator<pair_t> fwdIt = dataList.begin(); fwdIt != dataList.end(); ++fwdIt)
+  for (ForwardIterator< pair_t > fwdIt = dataList.begin(); fwdIt != dataList.end(); ++fwdIt)
   {
     maxSize = std::max(maxSize, fwdIt->second.max_size());
     fwdIt->second.reverse();
@@ -30,12 +30,12 @@ void namestnikov::outputNames(std::ostream & out, ForwardList<pair_t> & dataList
   out << "\n";
 }
 
-void namestnikov::outputNumsAndSums(std::ostream & out, ForwardList<pair_t> & dataList, size_t maxSize)
+void namestnikov::outputNumsAndSums(std::ostream & out, ForwardList< pair_t > & dataList, size_t maxSize)
 {
-  ForwardList<unsigned long long> sumsList;
+  ForwardList< unsigned long long > sumsList;
   unsigned long long sum = 0;
   bool gotOverflow = false;
-  const unsigned long long MAX_SUM = std::numeric_limits<unsigned long long>::max();
+  const unsigned long long MAX_SUM = std::numeric_limits< unsigned long long >::max();
   for (size_t i = 0; i < maxSize; ++i)
   {
     for (auto it = dataList.begin(); it != dataList.end(); ++it)
@@ -66,14 +66,14 @@ void namestnikov::outputNumsAndSums(std::ostream & out, ForwardList<pair_t> & da
     throw std::overflow_error("The number is too big");
   }
   sumsList.reverse();
-  for (ConstForwardIterator<unsigned long long> sumIt = sumsList.cbegin(); sumIt != sumsList.cend(); ++sumIt)
+  for (ConstForwardIterator< unsigned long long > sumIt = sumsList.cbegin(); sumIt != sumsList.cend(); ++sumIt)
   {
     sumIt != sumsList.cbegin() ? out << " " << *sumIt : out << *sumIt;
   }
   out << "\n";
 }
 
-bool namestnikov::haveNumbers(ForwardList<pair_t> & dataList)
+bool namestnikov::haveNumbers(ForwardList< pair_t > & dataList)
 {
   bool gotNumbers = false;
   for (auto it = dataList.cbegin(); it != dataList.cend(); ++it)
@@ -83,7 +83,7 @@ bool namestnikov::haveNumbers(ForwardList<pair_t> & dataList)
   return gotNumbers;
 }
 
-void namestnikov::outputLists(std::ostream & out, ForwardList<pair_t> & dataList)
+void namestnikov::outputLists(std::ostream & out, ForwardList< pair_t > & dataList)
 {
   if (dataList.empty())
   {

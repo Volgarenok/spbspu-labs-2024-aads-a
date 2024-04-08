@@ -7,23 +7,23 @@
 
 namespace namestnikov
 {
-  template <class T>
+  template < class T >
   class ForwardList;
 
-  template <class T>
+  template < class T >
   class Node;
 
-  template <class T>
+  template < class T >
   class ConstForwardIterator;
 
-  template <class T>
-  class ForwardIterator: public std::iterator<std::forward_iterator_tag, T>
+  template < class T >
+  class ForwardIterator: public std::iterator< std::forward_iterator_tag, T >
   {
-    friend class ForwardList<T>;
-    friend class ConstForwardIterator<T>;
-    using iterator = ForwardIterator<T>;
-    using const_iterator = ConstForwardIterator<T>;
-    using node_t = Node<T>;
+    friend class ForwardList< T >;
+    friend class ConstForwardIterator< T >;
+    using iterator = ForwardIterator< T >;
+    using const_iterator = ConstForwardIterator< T >;
+    using node_t = Node< T >;
   public:
     ForwardIterator() :
       node_(nullptr)
