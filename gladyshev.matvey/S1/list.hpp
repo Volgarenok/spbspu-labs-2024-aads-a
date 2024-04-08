@@ -186,7 +186,6 @@ namespace gladyshev
       if (!head_->next)
       {
         delete head_;
-        head_ = nullptr;
       }
       else
       {
