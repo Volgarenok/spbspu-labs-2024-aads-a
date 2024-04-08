@@ -1,7 +1,6 @@
 #ifndef BINLIST_HPP
 #define BINLIST_HPP
 
-#include <__config>
 #include <iostream>
 #include <initializer_list>
 #include <memory>
