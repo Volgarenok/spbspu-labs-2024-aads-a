@@ -24,14 +24,15 @@ void zakozhurnikova::printByIndex(const List< pair > &l)
   for (size_t i = 0; i < maxSize; ++i)
   {
     size_t printed = 0;
-    auto temp = l.cbegin()->second.cbegin();
     for (auto it = l.cbegin(); it != l.cend(); ++it)
     {
+      auto temp = it->second.cbegin();
+      std::advance(temp, i);
       if (i >= it->second.size())
       {
         continue;
       }
-      std::cout << (printed++ == 0 ? "" : " ") << *(++temp);
+      std::cout << (printed++ == 0 ? "" : " ") << *(temp);
     }
     std::cout << '\n';
   }
