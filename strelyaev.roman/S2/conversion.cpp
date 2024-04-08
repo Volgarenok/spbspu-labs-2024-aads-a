@@ -1,7 +1,7 @@
 #include "conversion.hpp"
 #include <iostream>
 #include <string>
-#include <sstream>
+#include <iomanip>
 #include "calculations.hpp"
 #include "queue.hpp"
 #include "stack.hpp"
@@ -9,49 +9,31 @@
 
 strelyaev::Queue< strelyaev::detail::ExpressionUnit > strelyaev::makeQueue(std::istream& input)
 {
-  std::string temp_string = "";
-  std::getline(input, temp_string);
-  if (temp_string.size() < 2)
-  {
-    throw std::length_error("New line is met");
-  }
-  std::istringstream in(temp_string);
   strelyaev::Queue< strelyaev::detail::ExpressionUnit > token_queue;
-  std::string str = "";
-  while (in >> str)
+  strelyaev::Queue< char > raw_data;
+  char c = 0;
+  std::cout << "============MAKE=============\n";
+  input >> std::noskipws;
+  while (input >> c)
   {
-    strelyaev::detail::TokenType type = strelyaev::detail::TokenType::NONE;
-    strelyaev::detail::Token new_token;
-    char ch = 0;
-    if (strelyaev::isOperation(str))
+    if (c == '\n')
     {
-      ch = str[0];
-      new_token = strelyaev::detail::Token(ch);
-      type = strelyaev::detail::TokenType::OPERATION;
-    }
-    else if (strelyaev::isBracket(str))
-    {
-      ch = str[0];
-      new_token = strelyaev::detail::Token(ch);
-      type = strelyaev::detail::TokenType::BRACKET;
+      break;
     }
     else
     {
-      long long operand = 0;
-      try
-      {
-        operand = std::stoll(str);
-      }
-      catch (const std::exception& e)
-      {
-        continue;
-      }
-      new_token = strelyaev::detail::Token(operand);
-      type = strelyaev::detail::TokenType::OPERAND;
+      std::cout << "ПУШУ:(" << c << ")\n";
+      raw_data.push(c);
     }
-    strelyaev::detail::ExpressionUnit new_unit{new_token, type};
-    token_queue.push(new_unit);
   }
+  input >> std::skipws;
+  int i = 0; // TO DEL
+  while (!raw_data.empty())
+  {
+    i++;
+    std::cout << i << ":" << raw_data.drop() << ":\n";
+  }
+  std::cout << "\n============END_MAKE=============\n";
   return token_queue;
 }
 
@@ -155,7 +137,7 @@ long long strelyaev::calculatePostfix(strelyaev::Queue< strelyaev::detail::Expre
 long long strelyaev::calculateInfixExpression(std::istream& in)
 {
   strelyaev::Queue< strelyaev::detail::ExpressionUnit > infix_units_queue = strelyaev::makeQueue(in);
-  strelyaev::Queue< strelyaev::detail::ExpressionUnit > postfix_units_queue = strelyaev::makePostfix(infix_units_queue);
-  long long result = calculatePostfix(postfix_units_queue);
-  return result;
+  //strelyaev::Queue< strelyaev::detail::ExpressionUnit > postfix_units_queue = strelyaev::makePostfix(infix_units_queue);
+  //long long result = calculatePostfix(postfix_units_queue);
+  //return result;
 }

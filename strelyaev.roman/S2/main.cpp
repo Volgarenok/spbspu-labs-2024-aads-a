@@ -33,7 +33,8 @@ int main(int argc, char * argv[])
   else if (argc == 2)
   {
     std::ifstream input_file(argv[1]);
-    while (input_file.good())
+    long long result = calculateInfixExpression(input_file);
+    /*while (input_file.good())
     {
       long long result = 0;
       try
@@ -50,14 +51,14 @@ int main(int argc, char * argv[])
         return 1;
       }
       results.push(result);
-    }
+    }*/
   }
   else
   {
     std::cerr << "Invalid cmd parameters\n";
     return 1;
   }
-  while (!results.empty())
+  while (false) //(!results.empty())
   {
     std::cout << results.drop();
     if (!results.empty())
