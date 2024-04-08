@@ -2,7 +2,7 @@
 #define OUTPUTPROC_HPP
 
 #include <iostream>
-#include <binList.hpp>
+#include <list/binList.hpp>
 
 namespace arakelyan
 {

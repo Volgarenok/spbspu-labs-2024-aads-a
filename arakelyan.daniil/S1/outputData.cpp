@@ -3,7 +3,7 @@
 #include <limits>
 #include <stdexcept>
 
-#include <binList.hpp>
+#include <list/binList.hpp>
 
 using BinList_t = arakelyan::BinList< std::pair< std::string, arakelyan::BinList< size_t > > >;
 

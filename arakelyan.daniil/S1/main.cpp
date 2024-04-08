@@ -4,10 +4,9 @@
 #include <stdexcept>
 
 #include "inputData.hpp"
-#include <binList.hpp>
 #include "outputData.hpp"
-#include "iterator.hpp"
-#include "node.hpp"
+#include <list/binList.hpp>
+#include <list/iterator.hpp>
 
 int main()
 {
