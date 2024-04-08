@@ -75,14 +75,14 @@ long long nikitov::PostfixExpression::solve()
   while (!data.empty())
   {
     PostfixType postfixValue = data.drop();
-    if (postfixValue.type == ExprTypeName::operation)
+    if (postfixValue.getType() == ExprTypeName::operation)
     {
       if (countElem >= 2)
       {
         long long second = solverStack.drop();
         long long first = solverStack.drop();
         long long result = 0;
-        char symb = postfixValue.operation.symb;
+        char symb = postfixValue.getOperation();
         switch (symb)
         {
         case '+':
@@ -151,7 +151,7 @@ long long nikitov::PostfixExpression::solve()
     }
     else
     {
-      solverStack.push(postfixValue.operand.num);
+      solverStack.push(postfixValue.getOperand());
       ++countElem;
     }
   }

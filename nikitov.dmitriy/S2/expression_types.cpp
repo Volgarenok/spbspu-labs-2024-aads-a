@@ -27,6 +27,21 @@ nikitov::InfixType::InfixType(char value):
   type(ExprTypeName::operation)
 {}
 
+bool nikitov::InfixType::getBracket() const
+{
+  return bracket.isOpen;
+}
+
+long long nikitov::InfixType::getOperand() const
+{
+  return operand.num;
+}
+
+char nikitov::InfixType::getOperation() const
+{
+  return operation.symb;
+}
+
 nikitov::ExprTypeName nikitov::InfixType::getType() const
 {
   return type;
@@ -47,6 +62,16 @@ nikitov::ExprTypeName nikitov::StackType::getType() const
   return type;
 }
 
+bool nikitov::StackType::getBracket() const
+{
+  return bracket.isOpen;
+}
+
+char nikitov::StackType::getOperation() const
+{
+  return operation.symb;
+}
+
 nikitov::PostfixType::PostfixType(long long value):
   operand(value),
   type(ExprTypeName::operand)
@@ -56,6 +81,16 @@ nikitov::PostfixType::PostfixType(char value):
   operation(value),
   type(ExprTypeName::operation)
 {}
+
+long long nikitov::PostfixType::getOperand() const
+{
+  return operand.num;
+}
+
+char nikitov::PostfixType::getOperation() const
+{
+  return operation.symb;
+}
 
 nikitov::ExprTypeName nikitov::PostfixType::getType() const
 {
