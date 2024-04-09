@@ -234,7 +234,7 @@ namespace novokhatskiy
         return end();
       }
     }
-    
+
     iter erase_after(constIter first, constIter last)
     {
       while (std::next(first) != last)
@@ -261,7 +261,7 @@ namespace novokhatskiy
       pos.node_->next_ = next;
       other.head_ = nullptr;
     }
-    
+
     void splice_after(constIter pos, ForwardList< T >&& other)
     {
       auto iter_curr = other.cbegin();
@@ -274,12 +274,12 @@ namespace novokhatskiy
       }
       other.clear();
     }
-    
+
     void splice_after(constIter pos, ForwardList< T >& other, constIter iter)
     {
       splice_after(pos, ForwardList< T >(other), iter);
     }
-    
+
     void splice_after(constIter pos, ForwardList< T >&& other, constIter iter)
     {
       if (pos == std::next(iter) || pos == iter)
@@ -288,12 +288,12 @@ namespace novokhatskiy
       }
       splice_after(pos, std::move(other), other.cend());
     }
-    
+
     void splice_after(constIter pos, ForwardList< T >& other, constIter first, constIter last)
     {
       splice_after(pos, T(other), first, last);
     }
-    
+
     void splice_after(constIter pos, ForwardList< T >&& other, constIter first, constIter last)
     {
       auto curr_iter = first;
