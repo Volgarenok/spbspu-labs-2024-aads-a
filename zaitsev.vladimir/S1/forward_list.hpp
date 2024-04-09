@@ -325,33 +325,10 @@ namespace zaitsev
 
     size_t remove(const T& value)
     {
-      size_t removed = 0;
-      Node* prev = nullptr;
-      Node* cur = head_;
-      while (cur)
-      {
-        if (cur->value_ == value)
+      return remove_if([&value](const T& val)
         {
-          Node* temp = cur;
-          if (prev)
-          {
-            prev->next_ = cur->next_;
-          }
-          else
-          {
-            head_ = cur->next_;
-          }
-          cur = cur->next_;
-          delete temp;
-          ++removed;
-        }
-        else
-        {
-          prev = cur;
-          cur = cur->next_;
-        }
-      }
-      return removed;
+          return val == value;
+        });
     }
     template< class UnaryPredicate >
     size_t remove_if(UnaryPredicate p)

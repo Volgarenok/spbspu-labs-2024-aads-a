@@ -28,7 +28,6 @@ namespace zaitsev
   ullList print_lists(std::ostream& out, ForwardList< named_ullList >& list)
   {
     using ullListIt = ullList::iterator;
-
     if (list.empty())
     {
       return ullList(1,0);
@@ -89,11 +88,6 @@ namespace zaitsev
 
   std::ostream& print_sums(std::ostream& out, ullList& sums)
   {
-    if (sums.empty())
-    {
-      out << "0\n";
-      return out;
-    }
     sums.reverse();
     auto i = sums.begin();
     out << *(i++);
