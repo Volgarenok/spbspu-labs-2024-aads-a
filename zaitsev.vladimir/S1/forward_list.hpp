@@ -19,12 +19,9 @@ namespace zaitsev
         value_(other.value_),
         next_(nullptr)
       {}
-      Node(const T& value):
-        value_(value),
-        next_(nullptr)
-      {}
-      Node(T&& value):
-        value_(std::move(value)),
+      template< class ... Args >
+      explicit Node(Args&&... args):
+        value_(std::forward< Args >(args)...),
         next_(nullptr)
       {}
     };
@@ -38,7 +35,7 @@ namespace zaitsev
       }
     }
 
-    template <class Compare >
+    template < class Compare >
     Node* merge(Node* first, Node* second, Compare cmp) noexcept
     {
       if (!first || !second)
@@ -165,7 +162,7 @@ namespace zaitsev
       }
       return new_head;
     }
-    template<class InputIt>
+    template< class InputIt >
     Node* new_list(InputIt begin, InputIt end)
     {
       if (begin == end)
@@ -212,7 +209,7 @@ namespace zaitsev
     {
       head_ = new_list(begin, end);
     }
-    ForwardList(std::initializer_list<T> init_list):
+    ForwardList(std::initializer_list< T > init_list):
       head_(nullptr)
     {
       head_ = new_list(init_list.begin(), init_list.end());
@@ -268,6 +265,7 @@ namespace zaitsev
     {
       return const_iterator();
     }
+
     bool empty() const noexcept
     {
       return !head_;
@@ -314,7 +312,7 @@ namespace zaitsev
       freeNodes(head_);
       head_ = new_head;
     }
-    void assign(std::initializer_list<T> init_list)
+    void assign(std::initializer_list< T > init_list)
     {
       Node* new_head = new_list(init_list.begin(), init_list.end());
       freeNodes(head_);
@@ -391,7 +389,6 @@ namespace zaitsev
       }
       return removed;
     }
-
     iterator insert_after(const_iterator pos, const T& value)
     {
       if (pos == cend())
@@ -461,7 +458,6 @@ namespace zaitsev
     {
       return insert_after(pos,init_list.begin(),init_list.end());
     }
-
     iterator erase_after(const_iterator pos)
     {
       if (pos == cend())
@@ -511,6 +507,23 @@ namespace zaitsev
       pos.node_->next_ = temp;
       other.head_ = nullptr;
     }
+    template< class... Args >
+    void emplace_front(Args&&... args)
+    {
+      Node* new_head = new Node(std::forward< Args >(args)...);
+      new_head->next_ = head_;
+      head_ = new_head;
+    }
+    template< class... Args >
+    iterator emplace_after(const_iterator pos, Args&&... args)
+    {
+      Node* tail = pos.node_->next_;
+      pos.node_->next_ = new Node(std::forward< Args >(args)...);
+      ++pos;
+      pos.node_->next_ = tail;
+      return iterator(pos.node_);
+    }
+
     void reverse()
     {
       if (!head_)
@@ -529,8 +542,7 @@ namespace zaitsev
       }
       head_ = new_head;
     }
-
-    template<class Compare>
+    template< class Compare >
     void merge(ForwardList& other, Compare cmp)
     {
       head_ = merge(head_, other.head_, cmp);
@@ -538,7 +550,7 @@ namespace zaitsev
     }
     void merge(ForwardList& other)
     {
-      merge(other, std::less<T>());
+      merge(other, std::less< T >());
     }
     size_t unique()
     {
@@ -564,7 +576,7 @@ namespace zaitsev
       }
       return removed;
     }
-    template<class Compare>
+    template< class Compare >
     void sort(Compare cmp)
     {
       if (!head_ || !head_->next_)
@@ -625,7 +637,7 @@ namespace zaitsev
     }
     void sort()
     {
-      sort(std::less<T>());
+      sort(std::less< T >());
     }
   };
 }
