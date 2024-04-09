@@ -23,30 +23,29 @@ namespace zaitsev
         std::cin >> input;
       }
     }
-    if (list.empty())
-    {
-      std::cout << "0\n";
-      throw std::underflow_error("No lists");
-    }
   }
 
-  ullList print_lists(ForwardList< named_ullList >& list)
+  ullList print_lists(std::ostream& out, ForwardList< named_ullList >& list)
   {
     using ullListIt = ullList::iterator;
 
+    if (list.empty())
+    {
+      return ullList(1,0);
+    }
     ForwardList< std::pair< ullListIt, ullListIt > > list_of_iterators;
     for (ForwardList< named_ullList >::iterator i = list.begin(); i != list.end(); ++i)
     {
       i->second.reverse();
       if (i != list.begin())
       {
-        std::cout << " ";
+        out << " ";
       }
-      std::cout << i->first;
+      out << i->first;
       list_of_iterators.push_front({ i->second.begin(), i->second.end() });
     }
     list_of_iterators.reverse();
-    std::cout << '\n';
+    out << '\n';
 
     ullList sums;
     ull sum = 1;
@@ -59,7 +58,7 @@ namespace zaitsev
       {
         if (i.first != i.second)
         {
-          std::cout << (elements_nmb++ ? " " : "") << *(i.first);
+          out << (elements_nmb++ ? " " : "") << *(i.first);
           if (std::numeric_limits< ull >::max() - sum >= *(i.first) && !overflow)
           {
             sum += *(i.first);
@@ -73,7 +72,7 @@ namespace zaitsev
       }
       if (sum)
       {
-        std::cout << "\n";
+        out << "\n";
         sums.push_front(sum);
       }
     }
