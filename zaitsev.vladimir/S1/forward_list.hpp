@@ -475,7 +475,8 @@ namespace zaitsev
       return ++iterator(pos.node_);
     }
     template<class InputIt,
-        std::enable_if_t< std::is_same_v<typename std::iterator_traits<InputIt>::value_type, T >, bool> = true >
+        std::enable_if_t< std::is_same<typename std::iterator_traits<InputIt>::value_type, T >::value, bool>
+        = true >
     iterator insert_after(const_iterator pos, InputIt first, InputIt last)
     {
       if (pos == cend())
