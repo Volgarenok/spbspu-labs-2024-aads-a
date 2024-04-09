@@ -1,25 +1,35 @@
 #ifndef STACK_HPP
 #define STACK_HPP
 
+#include "dataArray.hpp"
+
 namespace isaychev
 {
-  template < class T >
+  template < class T, class Container = DataArray< T > >
   class Stack
   {
    public:
-    void push(T & rhs);
+    void push(const T & rhs);
     T drop();
+
+    size_t size() const ;
+
+   private:
+    Container con;
   };
 
-  template < class T >
-  void Stack< T >::push(T & rhs)
-  {}
-
-  template < class T >
-  T Stack< T >::drop()
+  template < class T, class Container >
+  void Stack< T, Container >::push(const T & rhs)
   {
-    T a;
-    return a;
+    con.push_back(rhs);
+  }
+
+  template < class T, class Container >
+  T Stack< T, Container >::drop()
+  {
+    T obj = con.back();
+    con.pop_back();
+    return obj;
   }
 }
 
