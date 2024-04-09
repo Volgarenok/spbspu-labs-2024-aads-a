@@ -44,32 +44,15 @@ namespace zaitsev
       }
       Node* res = nullptr;
       Node* res_tail = nullptr;
-      if (cmp(first->value_, second->value_))
-      {
-        res = first;
-        first = first->next_;
-      }
-      else
-      {
-        res = second;
-        second = second->next_;
-      }
-      res_tail = res;
+      res_tail = res = cmp(first->value_, second->value_) ? first : second;
+      res == first ? (first = first->next_) : (second = second->next_);
 
       while (first || second)
       {
         if (first && second)
         {
-          if (cmp(first->value_, second->value_))
-          {
-            res_tail->next_ = first;
-            first = first->next_;
-          }
-          else
-          {
-            res_tail->next_ = second;
-            second = second->next_;
-          }
+          res_tail->next_ = cmp(first->value_, second->value_) ? first : second;
+          res_tail->next_ == first ? (first = first->next_) : (second = second->next_);
         }
         else
         {
