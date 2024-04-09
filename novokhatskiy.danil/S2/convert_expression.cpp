@@ -2,7 +2,7 @@
 #include "stack.hpp"
 #include <stdexcept>
 
-novokhatskiy::Queue<novokhatskiy::Postfix> novokhatskiy::convertExpression(Queue<InfixType>& infixQueue)
+novokhatskiy::Queue<novokhatskiy::Postfix> novokhatskiy::convertExpression(Queue<InfixType> &infixQueue)
 {
 	novokhatskiy::Queue<Postfix> resultQueue;
 	novokhatskiy::Stack<InfixType> stack;
@@ -31,7 +31,6 @@ novokhatskiy::Queue<novokhatskiy::Postfix> novokhatskiy::convertExpression(Queue
 			if (curr.data.bracket.scope == '(')
 			{
 				stack.push(curr);
-				break;
 			}
 			else
 			{
@@ -44,8 +43,8 @@ novokhatskiy::Queue<novokhatskiy::Postfix> novokhatskiy::convertExpression(Queue
 					throw std::logic_error("Stack is empty");
 				}
 				stack.drop();
-				break;
 			}
+			break;
 		default:
 			throw std::invalid_argument("It can't be parsed");
 			break;

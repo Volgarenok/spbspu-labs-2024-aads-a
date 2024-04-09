@@ -22,6 +22,7 @@ namespace novokhatskiy
     size_t size() const noexcept;
     void printInfix();
     T &front();
+    T &back();
     T drop();
     ~Queue() = default;
 
@@ -63,6 +64,12 @@ namespace novokhatskiy
       Postfix q = *i;
       q.printPost();
     }
+  }
+
+  template <class T>
+  T &Queue<T>::back()
+  {
+    return data_.back();
   }
 
   template <class T>

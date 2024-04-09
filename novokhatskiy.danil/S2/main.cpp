@@ -10,7 +10,7 @@
 #include "convert_expression.hpp"
 #include "calculate_expression.hpp"
 
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
 	using namespace novokhatskiy;
 	/*Queue< Queue< InfixType > > infixQueue;
@@ -54,15 +54,16 @@ int main(int argc, char** argv)
 		// qI.push(inf3);
 		// convertExpression(qI).printInfix();
 		Queue<Queue<InfixType>> qu;
+
 		inputInfix(qu, std::cin);
 		while (!qu.empty())
 		{
 			Queue<InfixType> res = qu.drop();
-			Queue< Postfix> res1 = convertExpression(res);
+			Queue<Postfix> res1 = convertExpression(res);
 			std::cout << calculatePostExp(res1);
 		}
 	}
-	catch (const std::exception& e)
+	catch (const std::exception &e)
 	{
 		std::cerr << e.what() << '\n';
 	}
