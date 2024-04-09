@@ -227,9 +227,24 @@ struct List
       }
     }
   }
-
+/*
+  template <class Predicate>
+  void remove_if (Predicate pred)
+  {
+    Node<T> * newptr = head;
+    while (newptr)
+    {
+      Node<T> * 
+    }
+  }
+*/
   void assign(size_t n, const T & val)
   {
+    clear();
+    for (size_t i = 0; i < n; ++i)
+    {
+      push_back(val);
+    }
   }
 
 //
@@ -258,6 +273,7 @@ struct List
 
 int main()
 {
+/*
   List<int> list;
   std::cout << list.empty() << '\n';
   list.push_back(60);
@@ -345,4 +361,28 @@ int main()
   list2.print();
   list2.remove(1);
   list2.print();
+  list2.assign(8, 44);
+  list2.print();
+  list2.assign(4, 88);
+  list2.print();
+*/
+
+  List<size_t> list_num;
+//  List<std::pair<std::string,List<size_t>>> list;
+  std::string name = "";
+  std::string num_str = "";
+  size_t number = 0;
+  while (std::cin >> name)
+  {
+    std::getline(std::cin,num_str);
+    size_t sz = 0;
+    while (!num_str.empty())
+    {
+      number = 0;
+      number = std::stoull(num_str,&sz);
+      num_str = num_str.substr(sz);
+      list_num.push_front(number);
+    }
+  }
+  list_num.print();
 }
