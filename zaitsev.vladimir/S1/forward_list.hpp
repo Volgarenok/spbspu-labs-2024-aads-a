@@ -108,8 +108,8 @@ namespace zaitsev
       BaseIterator(node_t node):
         node_(node)
       {}
-      template<bool cond = IsConst>
-      BaseIterator(const BaseIterator<!cond>& other, std::enable_if_t<cond>* = nullptr) :
+      template<bool cond = IsConst, std::enable_if_t<cond, bool> = true >
+      BaseIterator(const BaseIterator<!cond>& other) :
         node_(other.node_)
       {}
       BaseIterator& operator++()
@@ -439,10 +439,10 @@ namespace zaitsev
       {
         throw std::out_of_range("Iterator is out of range");
       }
-      Node* new_node(value);
+      Node* new_node = new Node(value);
       new_node->next_ = pos.node_->next_;
       pos.node_->next_ = new_node;
-      return ++pos;
+      return ++iterator(pos.node_);
     }
     iterator insert_after(const_iterator pos, size_t count, const T& value)
     {
@@ -452,30 +452,15 @@ namespace zaitsev
       }
       if (!count)
       {
-        return pos;
+        return iterator(pos.node_);
       }
       Node* next = pos.node_->next_;
-      Node* new_range(value);
-      iterator new_end(new_range);
+      Node* new_range = new_list(count, value);
+      pos.node_->next_ = new_range;
+      std::advance(pos, count);
+      pos.node_->next_ = next;
 
-      try
-      {
-        for (size_t i = 0; i < count - 1; ++i)
-        {
-          Node* new_node(value);
-          new_end.node_->next_ = new_node;
-          ++new_end;
-        }
-        pos.node_->next_ = new_range;
-        new_end.node_->next_ = next;
-      }
-      catch (const std::bad_alloc&)
-      {
-        freeNodes(new_range);
-        throw;
-      }
-
-      return new_end;
+      return iterator(pos.node_);
     }
     iterator insert_after(const_iterator pos, T&& value)
     {
@@ -483,13 +468,14 @@ namespace zaitsev
       {
         throw std::out_of_range("Iterator is out of range");
       }
-      Node* new_node(std::move(value));
+      Node* new_node = new Node(std::move(value));
       new_node->next_ = pos.node_->next_;
       pos.node_->next_ = new_node;
 
-      return ++pos;
+      return ++iterator(pos.node_);
     }
-    template<class InputIt>
+    template<class InputIt,
+        std::enable_if_t< std::is_same_v<typename std::iterator_traits<InputIt>::value_type, T >, bool> = true >
     iterator insert_after(const_iterator pos, InputIt first, InputIt last)
     {
       if (pos == cend())
@@ -581,7 +567,6 @@ namespace zaitsev
     {
       merge(other, std::less<T>());
     }
-
     size_t unique()
     {
       if (!head_)
@@ -599,11 +584,13 @@ namespace zaitsev
           delete temp;
           ++removed;
         }
-        cur = cur->next_;
+        else
+        {
+          cur = cur->next_;
+        }
       }
       return removed;
     }
-
     template<class Compare>
     void sort(Compare cmp)
     {
