@@ -1,6 +1,7 @@
 #ifndef LISTS_I_O_HPP
 #define LISTS_I_O_HPP
 #include <string>
+#include <iostream>
 #include "forward_list.hpp"
 
 namespace zaitsev
