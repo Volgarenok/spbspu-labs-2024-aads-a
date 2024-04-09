@@ -1,11 +1,15 @@
 #ifndef TYPES_HPP
 #define TYPES_HPP
+#include <cstddef>
 #include "partexpression.hpp"
 
 namespace piyavkin
 {
   struct InputType
   {
+    InputType();
+    InputType(long long val);
+    InputType(char val, size_t num);
     union input_t
     {
       detail::Operand operand;
@@ -17,6 +21,8 @@ namespace piyavkin
   };
   struct Postfix
   {
+    Postfix(long long val);
+    Postfix(char val);
     union postfix_t
     {
       detail::Operand operand;
@@ -27,6 +33,7 @@ namespace piyavkin
   };
   struct ConversionExpressionType
   {
+    ConversionExpressionType(char val, size_t num);
     union conversion_t
     {
       detail::Bracket bracket;
