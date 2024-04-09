@@ -5,12 +5,15 @@
 
 namespace zakozhurnikova
 {
+  template < class T >
+  class List;
+
   template < typename T >
   struct ConstIterator: public std::iterator< std::bidirectional_iterator_tag, T >
   {
+    friend class List< T >;
     using this_t = ConstIterator< T >;
     ConstIterator();
-    ConstIterator(detail::Node< T >* node);
     ConstIterator(const this_t&) = default;
     ~ConstIterator() = default;
 
@@ -26,6 +29,7 @@ namespace zakozhurnikova
 
   private:
     detail::Node< T >* node_;
+    explicit ConstIterator(detail::Node< T > * node);
   };
 
   template < typename T >
