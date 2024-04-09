@@ -158,19 +158,23 @@ namespace zaitsev
           new_head = temp;
         }
       }
-      catch (const std::bad_alloc&)
+      catch (const std::exception&)
       {
         freeNodes(new_head);
+        throw;
       }
       return new_head;
     }
     template<class InputIt>
     Node* new_list(InputIt begin, InputIt end)
     {
-      Node* new_head = nullptr;
+      if (begin == end)
+      {
+        return nullptr;
+      }
+      Node* new_head = new Node(*(begin++));
       try
       {
-        new_head = new Node(*(begin++));
         Node* new_tail = new_head;
         for (; begin != end; ++begin)
         {
@@ -178,9 +182,10 @@ namespace zaitsev
           new_tail = new_tail->next_;
         }
       }
-      catch (const std::bad_alloc&)
+      catch (const std::exception&)
       {
         freeNodes(new_head);
+        throw;
       }
       return new_head;
     }
@@ -195,28 +200,7 @@ namespace zaitsev
     ForwardList(const ForwardList& other):
       head_(nullptr)
     {
-      if (!other.head_)
-      {
-        head_ = nullptr;
-        return;
-      }
-      head_ = new Node(other.head_->value_);
-      Node* head = head_;
-      Node* cur = other.head_->next_;
-      try
-      {
-        while (cur)
-        {
-          head->next_ = new Node(cur->value_);
-          head = head->next_;
-          cur = cur->next_;
-        }
-      }
-      catch (const std::bad_alloc&)
-      {
-        freeNodes(head_);
-        throw;
-      }
+      head_ = new_list(other.cbegin(), other.cend());
     }
     ForwardList(ForwardList&& other):
       head_(other.head_)
@@ -367,9 +351,7 @@ namespace zaitsev
     }
     void swap(ForwardList& other)
     {
-      Node* temp = other.head_;
-      other.head_ = head_;
-      head_ = temp;
+      std::swap(head_, other.head_);
     }
 
     size_t remove(const T& value)
