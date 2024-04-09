@@ -24,20 +24,20 @@ namespace zakozhurnikova
     bool operator==(const this_t&) const;
     T& operator*();
     T* operator->();
-    T& operator*() const;
-    T* operator->() const;
+    const T& operator*() const;
+    const T* operator->() const;
 
   private:
     detail::Node< T >* node_;
   };
 
   template < typename T >
-  Iterator< T >::Iterator() :
+  Iterator< T >::Iterator():
     node_(nullptr)
   {}
 
   template < typename T >
-  Iterator< T >::Iterator(detail::Node< T >* node) :
+  Iterator< T >::Iterator(detail::Node< T >* node):
     node_(node)
   {}
 
@@ -91,7 +91,7 @@ namespace zakozhurnikova
   }
 
   template < typename T >
-  T& Iterator< T >::operator*() const
+  const T& Iterator< T >::operator*() const
   {
     return node_->data;
   }
@@ -103,7 +103,7 @@ namespace zakozhurnikova
   }
 
   template < typename T >
-  T* Iterator< T >::operator->() const
+  const T* Iterator< T >::operator->() const
   {
     return std::addressof(node_->data);
   }

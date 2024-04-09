@@ -29,12 +29,12 @@ namespace zakozhurnikova
   };
 
   template < typename T >
-  ConstIterator<T>::ConstIterator() :
+  ConstIterator<T>::ConstIterator():
     node_(nullptr)
   {}
 
   template < typename T >
-  ConstIterator< T >::ConstIterator(detail::Node< T >* node) :
+  ConstIterator< T >::ConstIterator(detail::Node< T >* node):
     node_(node)
   {}
 

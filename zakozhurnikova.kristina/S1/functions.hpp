@@ -1,16 +1,14 @@
 #ifndef FUNCS_HPP
 #define FUNCS_HPP
 #include "iterator.hpp"
+#include <algorithm>
 
 namespace zakozhurnikova
 {
-  template < typename T >
-  void fill(Iterator< T > first, Iterator< T > last, const T& value)
+  template < typename It, typename T >
+  void fill(It first, It last, const T& value)
   {
-    for (Iterator< T > it = first; it != last; ++it)
-    {
-      *it = value;
-    }
+    std::fill(first, last, value);
   }
 }
 

@@ -11,9 +11,6 @@
 namespace zakozhurnikova
 {
   template < typename T >
-  using predicateFunction = bool (*)(T);
-
-  template < typename T >
   class List
   {
   public:
@@ -31,8 +28,16 @@ namespace zakozhurnikova
       detail::Node< T >* temp = rhs.head_;
       while (temp)
       {
-        push_back(temp->data);
-        temp = temp->next;
+        try
+        {
+          push_back(temp->data);
+          temp = temp->next;
+        }
+        catch (...)
+        {
+          clear();
+          throw;
+        }
       }
     }
 
@@ -48,23 +53,24 @@ namespace zakozhurnikova
 
     List& operator=(const List& rhs)
     {
-      if (this != &rhs)
+      if (this != std::addressof(rhs))
       {
         List temp(rhs);
-        clear();
-        head_ = temp.head_;
-        tail_ = temp.tail_;
+        swap(rhs);
       }
       return *this;
     }
 
-    List operator=(List&& rhs) noexcept
+    List& operator=(List&& rhs) noexcept
     {
-      if (this != &rhs)
+      if (this != std::addressof(rhs))
       {
         swap(rhs);
       }
-      return this;
+      rhs.head_ = nullptr;
+      rhs.tail_ = nullptr;
+      rhs.size_ = 0;
+      return *this;
     }
 
     ~List()
@@ -73,6 +79,11 @@ namespace zakozhurnikova
     }
 
     T& front()
+    {
+      return head_->data;
+    }
+
+    T& front() const
     {
       return head_->data;
     }
@@ -132,7 +143,7 @@ namespace zakozhurnikova
     void pop_front() noexcept
     {
       detail::Node< T >* toDelete = head_;
-      if(!head_->next)
+      if (!head_->next)
       {
         head_ = nullptr;
         tail_ = nullptr;
@@ -193,33 +204,64 @@ namespace zakozhurnikova
 
     void remove(const T& value)
     {
-      Iterator< T > first = begin();
-      Iterator< T > last = end();
-      for (Iterator< T > it = first; it != last; ++it)
-      {
-        if (*it != value)
+      remove_if(
+        [&](const T& item)
         {
-          *first++ = std::move(*it);
+          return (item == value);
         }
-      }
+      );
     }
 
-    void remove_if(predicateFunction< T > p)
+    template < class UnaryPredicate >
+    void remove_if(UnaryPredicate p)
     {
-      auto first = begin();
+      if (empty())
+      {
+        return;
+      }
       auto last = end();
-      for (auto it = first; it != last; ++it)
+      auto it = begin();
+      if(p(*begin()))
       {
-        if (!p(*(it)))
+        pop_front();
+      }
+      while (it != last)
+      {
+        if (p(*it))
         {
-          *first++ = std::move(*it);
+          detail::Node< T >* toDelete = it;
+          it->prev->next = it->next;
+          if (it->next != nullptr)
+          {
+            it->next->prev = it->prev;
+          }
+          ++it;
+          delete toDelete;
         }
       }
     }
 
-    void assign(Iterator< T > first, Iterator< T > last, const T& value)
+    void assign(size_t count, const T& value)
     {
-      fill(first, last, value);
+      List< T > temp;
+      try
+      {
+        for(size_t i = 0; i < count; i++)
+        {
+          temp.push_front(value);
+        }
+      }
+      catch (...)
+      {
+        temp.clear();
+        throw;
+      }
+      clear();
+      for (auto it = temp.begin(); it != temp.end(); ++it)
+      {
+        push_back(std::move(temp.front()));
+        temp.pop_front();
+      }
     }
 
   private:
