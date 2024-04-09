@@ -495,10 +495,7 @@ namespace zaitsev
 
       Node* temp = pos.node_->next_;
       pos.node_->next_ = other.head_;
-      while (pos.node_->next_)
-      {
-        ++pos;
-      }
+      for (; pos.node_->next_; ++pos);
       pos.node_->next_ = temp;
       other.head_ = nullptr;
     }
@@ -512,8 +509,7 @@ namespace zaitsev
     iterator emplace_after(const_iterator pos, Args&&... args)
     {
       pos.node_->next_ = new Node(pos.node_->next_, std::forward< Args >(args)...);
-      ++pos;
-      return iterator(pos.node_);
+      return iterator((++pos).node_);
     }
 
     void reverse()
