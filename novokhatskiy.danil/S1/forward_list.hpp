@@ -234,33 +234,14 @@ namespace novokhatskiy
         return end();
       }
     }
-
+    
     iter erase_after(constIter first, constIter last)
     {
-      if (first == cend())
+      while (std::next(first) != last)
       {
-        throw std::out_of_range("Can not insert");
+        erase_after(first);
       }
-      auto goToPos = begin();
-      while (goToPos.operator!=(first))
-      {
-        goToPos++;
-      }
-      while (goToPos != last)
-      {
-        if (goToPos.node_->next_)
-        {
-          ForwardIterator< T > next(goToPos.node_->next_->next_);
-          delete goToPos.node_->next_;
-          goToPos.node_->next_ = next.node_;
-          return next;
-        }
-        else
-        {
-          return end();
-        }
-      }
-      return goToPos++;
+      return iter(const_cast<detail::Node< T > *>(last.node_));
     }
 
     void splice_after(constIter& pos, ForwardList< T >& other)
@@ -280,12 +261,54 @@ namespace novokhatskiy
       pos.node_->next_ = next;
       other.head_ = nullptr;
     }
+    
+    void splice_after(constIter pos, ForwardList< T >&& other)
+    {
+      auto iter_curr = other.cbegin();
+      auto iter_end = other.cend();
+      while (iter_curr != iter_end)
+      {
+        insert_after(pos, std::move(*iter_curr));
+        ++iter_curr;
+        ++pos;
+      }
+      other.clear();
+    }
+    
+    void splice_after(constIter pos, ForwardList< T >& other, constIter iter)
+    {
+      splice_after(pos, ForwardList< T >(other), iter);
+    }
+    
+    void splice_after(constIter pos, ForwardList< T >&& other, constIter iter)
+    {
+      if (pos == std::next(iter) || pos == iter)
+      {
+        return;
+      }
+      splice_after(pos, std::move(other), other.cend());
+    }
+    
+    void splice_after(constIter pos, ForwardList< T >& other, constIter first, constIter last)
+    {
+      splice_after(pos, T(other), first, last);
+    }
+    
+    void splice_after(constIter pos, ForwardList< T >&& other, constIter first, constIter last)
+    {
+      auto curr_iter = first;
+      auto iter_end = last;
+      while (std::next(first) != iter_end)
+      {
+        insert_after(pos, std::move(*std::next(curr_iter)));
+        other.erase_after(curr_iter);
+        ++pos;
+      }
+    }
 
     void push_front(const T& value)
     {
-      detail::Node< T >* ptr = new detail::Node< T >(value);
-      ptr->next_ = head_;
-      head_ = ptr;
+      push_front(T(value));
     }
     void push_front(T& value)
     {
