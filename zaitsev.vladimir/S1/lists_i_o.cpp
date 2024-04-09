@@ -80,6 +80,10 @@ namespace zaitsev
     {
       sums.clear();
     }
+    else if(sums.empty() && !list.empty())
+    {
+      sums.push_front(0);
+    }
     return sums;
   }
 

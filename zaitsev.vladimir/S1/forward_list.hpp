@@ -363,6 +363,7 @@ namespace zaitsev
     void clear()
     {
       freeNodes(head_);
+      head_ = nullptr;
     }
     void swap(ForwardList& other)
     {
