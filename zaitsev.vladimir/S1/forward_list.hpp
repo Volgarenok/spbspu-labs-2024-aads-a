@@ -478,6 +478,19 @@ namespace zaitsev
       else
         return end();
     }
+    iterator erase_after(const_iterator first, const_iterator last)
+    {
+      if (first == end())
+      {
+        return end();
+      }
+      const_iterator temp = first;
+      for (; temp.node_->next_ != last.node_; ++temp);
+      temp.node_->next_ = nullptr;
+      freeNodes(first.node_->next_);
+      first.node_->next_ = last.node_;
+      return iterator(last.node_);
+    }
     void splice_after(const_iterator pos, ForwardList& other)
     {
       if (pos == cend())
@@ -491,11 +504,11 @@ namespace zaitsev
 
       Node* temp = pos.node_->next_;
       pos.node_->next_ = other.head_;
-      while (other.head_->next_)
+      while (pos.node_->next_)
       {
-        other.head_ = other.head_->next_;
+        ++pos;
       }
-      other.head_->next_ = temp;
+      pos.node_->next_ = temp;
       other.head_ = nullptr;
     }
     void reverse()
