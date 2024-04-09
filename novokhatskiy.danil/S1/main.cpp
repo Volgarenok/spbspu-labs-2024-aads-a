@@ -5,7 +5,9 @@
 #include "forward_list.hpp"
 #include "forward_list_iterators.hpp"
 
-void inputForwardList(novokhatskiy::ForwardList< std::pair< std::string, novokhatskiy::ForwardList< size_t > > >& pairsOfList, std::istream& input)
+using pairsOfList = novokhatskiy::ForwardList< std::pair< std::string, novokhatskiy::ForwardList< size_t > > >;
+
+void inputForwardList(pairsOfList& pairsList, std::istream& input)
 {
   while (!input.eof())
   {
@@ -22,13 +24,13 @@ void inputForwardList(novokhatskiy::ForwardList< std::pair< std::string, novokha
     {
       pair.second.push_front(num);
     }
-    pairsOfList.push_front(pair);
+    pairsList.push_front(pair);
   }
-  pairsOfList.reverse();
+  pairsList.reverse();
 }
 
 
-void outputForwardList(std::ostream& out, novokhatskiy::ForwardList< std::pair< std::string, novokhatskiy::ForwardList< size_t  > > >& pairs)
+void outputForwardList(std::ostream& out, pairsOfList& pairs)
 {
   if (pairs.empty())
   {

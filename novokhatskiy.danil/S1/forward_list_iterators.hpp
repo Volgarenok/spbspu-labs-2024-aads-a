@@ -6,7 +6,7 @@
 #include "node.hpp"
 
 namespace novokhatskiy
-{ 
+{
   template < typename T >
   class ForwardList;
 
