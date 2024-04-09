@@ -63,9 +63,9 @@ void zakozhurnikova::printSums(const List< pair >& l, bool& overflow)
       {
         continue;
       }
-      if (max - sum > *(p.second.cbegin() + i))
+      if (max - sum > *(std::next(p.second.cbegin(), i)))
       {
-        sum += *(p.second.cbegin() + i);
+        sum += *(std::next(p.second.cbegin(), i));
       }
       else
       {
@@ -81,7 +81,7 @@ void zakozhurnikova::printSums(const List< pair >& l, bool& overflow)
   for (auto it = listSum.begin(); it != listSum.end(); ++it)
   {
     std::cout << *(it);
-    if (it + 1 != listSum.end())
+    if (std::next(it, 1) != listSum.end())
     {
       std::cout << ' ';
     }
