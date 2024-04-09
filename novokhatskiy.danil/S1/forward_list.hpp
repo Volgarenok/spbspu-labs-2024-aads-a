@@ -11,9 +11,6 @@ namespace novokhatskiy
   class ForwardIterator;
 
   template < typename T >
-  class Node;
-
-  template < typename T >
   class ConstForwardIterator;
 
   template < typename T >
@@ -21,6 +18,7 @@ namespace novokhatskiy
   {
     friend class novokhatskiy::ForwardIterator< T >;
     friend class novokhatskiy::ConstForwardIterator< T >;
+
   public:
     using iter = ForwardIterator< T >;
     using constIter = ConstForwardIterator< T >;
@@ -28,7 +26,7 @@ namespace novokhatskiy
       head_(nullptr)
     {}
     ForwardList(const T& value):
-      head_(new Node< T >)
+      head_(new detail::Node< T >)
     {
       for (auto i = begin(); i < end(); i++)
       {
@@ -103,7 +101,7 @@ namespace novokhatskiy
       return *this;
     }
 
-    ForwardList< T >& operator=(ForwardList < T >&& other)
+    ForwardList< T >& operator=(ForwardList< T >&& other)
     {
       ForwardList< T > tmp(std::move(other));
       if (std::addressof(other) != this)
@@ -167,7 +165,7 @@ namespace novokhatskiy
       {
         goToPos++;
       }
-      Node< T >* node = new Node< T >(value);
+      detail::Node< T >* node = new detail::Node< T >(value);
       node->next_ = goToPos.node_->next_;
       goToPos.node_->next_ = node;
       return goToPos++;
@@ -186,7 +184,7 @@ namespace novokhatskiy
       }
       for (size_t i = 0; i < count; i++)
       {
-        Node< T >* node = new Node< T >(value);
+        detail::Node< T >* node = new detail::Node< T >(value);
         node->next_ = goToPos.node_->next_;
         goToPos.node_->next_ = node;
       }
@@ -206,7 +204,7 @@ namespace novokhatskiy
       }
       for (T value : list)
       {
-        Node< T >* node = new Node< T >(value);
+        detail::Node< T >* node = new detail::Node< T >(value);
         node->next_ = goToPos.node_->next_;
         goToPos.node_->next_ = node;
       }
@@ -271,7 +269,7 @@ namespace novokhatskiy
       {
         throw std::out_of_range("Can not insert");
       }
-      Node< T >* next = pos.node_->next_;
+      detail::Node< T >* next = pos.node_->next_;
       pos.node_->next_ = other.head_;
       while (other.head_)
       {
@@ -285,16 +283,24 @@ namespace novokhatskiy
 
     void push_front(const T& value)
     {
-      Node< T >* ptr = new Node< T >(value);
+      detail::Node< T >* ptr = new detail::Node< T >(value);
       ptr->next_ = head_;
       head_ = ptr;
     }
     void push_front(T& value)
     {
-      Node< T >* ptr = new Node< T >(value);
+      detail::Node< T >* ptr = new detail::Node< T >(value);
       ptr->next_ = head_;
       head_ = ptr;
     }
+
+    void push_front(T&& value)
+    {
+      detail::Node< T >* ptr = new detail::Node< T >(std::move(value));
+      ptr->next_ = head_;
+      head_ = ptr;
+    }
+
     void pop_front()
     {
       if (empty())
@@ -302,7 +308,7 @@ namespace novokhatskiy
         std::cerr << "The forward_list is empty\n";
         return;
       }
-      Node< T >* temp = head_;
+      detail::Node< T >* temp = head_;
       head_ = head_->next_;
       delete temp;
     }
@@ -313,7 +319,7 @@ namespace novokhatskiy
       {
         return 0;
       }
-      Node< T >* curr = head_;
+      detail::Node< T >* curr = head_;
       while (curr)
       {
         count++;
@@ -330,12 +336,12 @@ namespace novokhatskiy
     }
     void assign(size_t count, const T& value)
     {
-      Node< T >* otherHead = nullptr;
+      detail::Node< T >* otherHead = nullptr;
       try
       {
         for (size_t i = 0; i < count; i++)
         {
-          Node< T >* temp = new Node< T >(value);
+          detail::Node< T >* temp = new detail::Node< T >(value);
           temp->next_ = otherHead;
           otherHead = temp;
         }
@@ -344,7 +350,7 @@ namespace novokhatskiy
       {
         while (head_)
         {
-          Node< T >* temp = head_->next_;
+          detail::Node< T >* temp = head_->next_;
           delete head_;
           head_ = temp;
         }
@@ -390,12 +396,12 @@ namespace novokhatskiy
       {
         return;
       }
-      Node< T >* result = head_;
-      Node< T >* temp = head_->next_;
+      detail::Node< T >* result = head_;
+      detail::Node< T >* temp = head_->next_;
       result->next_ = nullptr;
       while (temp)
       {
-        Node< T >* prev = temp->next_;
+        detail::Node< T >* prev = temp->next_;
         temp->next_ = result;
         result = temp;
         temp = prev;
@@ -404,8 +410,8 @@ namespace novokhatskiy
     }
     void remove(const T& value)
     {
-      Node< T >* curr = head_;
-      Node< T >* firstStep = head_;
+      detail::Node< T >* curr = head_;
+      detail::Node< T >* firstStep = head_;
       while (curr != nullptr)
       {
         if (curr->value_ == value)
@@ -422,12 +428,12 @@ namespace novokhatskiy
       }
       head_ = firstStep;
     }
-    template< typename P >
+    template < typename P >
     size_t remove_if(P predicate)
     {
       size_t removedElement{};
-      Node< T >* curr = head_;
-      Node< T >* prev = nullptr;
+      detail::Node< T >* curr = head_;
+      detail::Node< T >* prev = nullptr;
       while (curr)
       {
         if (predicate(curr->value_))
@@ -441,7 +447,7 @@ namespace novokhatskiy
           {
             head_ = curr->next_;
           }
-          Node< T >* temp = curr;
+          detail::Node< T >* temp = curr;
           curr = curr->next_;
           ++removedElement;
           delete temp;
@@ -458,8 +464,8 @@ namespace novokhatskiy
     bool operator==(ForwardList< T >& other) const
     {
       size_t maxPossibleSize = std::min(this->max_size(), other.max_size());
-      Node< T >* curr = head_;
-      Node< T >* otherHead = other.head_;
+      detail::Node< T >* curr = head_;
+      detail::Node< T >* otherHead = other.head_;
       for (size_t i = 0; i < maxPossibleSize; i++)
       {
         if (curr->value_ != otherHead->value_)
@@ -478,8 +484,8 @@ namespace novokhatskiy
     bool operator<(const ForwardList< T >& other) const
     {
       size_t maxPossibleSize = std::min(this->max_size(), other.max_size());
-      Node< T >* curr = head_;
-      Node< T >* otherHead = other.head_;
+      detail::Node< T >* curr = head_;
+      detail::Node< T >* otherHead = other.head_;
       for (size_t i = 0; i < maxPossibleSize; i++)
       {
         if (curr->value_ != otherHead->value_)
@@ -506,7 +512,8 @@ namespace novokhatskiy
     }
     void print()
     {
-      while (head_ != nullptr) {
+      while (head_ != nullptr)
+      {
         std::cout << head_->value_ << " ";
         head_ = head_->next_;
       }
@@ -516,8 +523,9 @@ namespace novokhatskiy
     {
       clear();
     }
+
   private:
-    Node< T >* head_;
+    detail::Node< T >* head_;
   };
 }
 

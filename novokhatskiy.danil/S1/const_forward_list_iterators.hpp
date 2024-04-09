@@ -4,14 +4,12 @@
 #include <iterator>
 #include <assert.h>
 #include "forward_list_iterators.hpp"
+#include "node.hpp"
 
 namespace novokhatskiy
 {
   template < typename T >
   class ForwardList;
-
-  template < typename T >
-  class Node;
 
   template < typename T >
   class ForwardIterator;
@@ -26,7 +24,7 @@ namespace novokhatskiy
     ConstForwardIterator():
       node_(nullptr)
     {}
-    ConstForwardIterator(Node< T >* node):
+    ConstForwardIterator(detail::Node< T >* node):
       node_(node)
     {}
     ConstForwardIterator(const constIter&) = default;
@@ -78,7 +76,7 @@ namespace novokhatskiy
     }
     ~ConstForwardIterator() = default;
   private:
-    const Node< T >* node_;
+    const detail::Node< T >* node_;
   };
 }
 
