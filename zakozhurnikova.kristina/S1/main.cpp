@@ -16,7 +16,7 @@ int main()
     printNames(list);
     printByIndex(list);
     bool overflow = false;
-    printSums< size_t >(list, overflow);
+    printSums(list, overflow);
     std::cout << '\n';
   }
   catch (const std::range_error& e)
