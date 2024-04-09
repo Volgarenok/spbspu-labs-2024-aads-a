@@ -9,7 +9,7 @@ namespace zaitsev
   using ullList = ForwardList< ull >;
   using named_ullList = std::pair< std::string, ullList >;
   void input_lists(ForwardList< named_ullList >& list);
-  ullList* print_lists(ForwardList< named_ullList >& list);
-  void print_sums(ullList& sums);
+  ullList print_lists(ForwardList< named_ullList >& list);
+  std::ostream& print_sums(std::ostream& out, ullList& sums);
 }
 #endif

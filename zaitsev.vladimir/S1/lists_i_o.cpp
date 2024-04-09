@@ -30,7 +30,7 @@ namespace zaitsev
     }
   }
 
-  ullList* print_lists(ForwardList< named_ullList >& list)
+  ullList print_lists(ForwardList< named_ullList >& list)
   {
     using ullListIt = ullList::iterator;
 
@@ -48,7 +48,7 @@ namespace zaitsev
     list_of_iterators.reverse();
     std::cout << '\n';
 
-    ullList* sums = new ullList();
+    ullList sums;
     ull sum = 1;
     bool overflow = false;
     while (sum)
@@ -74,31 +74,30 @@ namespace zaitsev
       if (sum)
       {
         std::cout << "\n";
-        sums->push_front(sum);
+        sums.push_front(sum);
       }
     }
     if (overflow)
     {
-      delete sums;
-      sums = nullptr;
+      sums.clear();
     }
     return sums;
   }
 
-  void print_sums(ullList& sums)
+  std::ostream& print_sums(std::ostream& out, ullList& sums)
   {
     if (sums.empty())
     {
-      std::cout << "0\n";
-      return;
+      out << "0\n";
+      return out;
     }
     sums.reverse();
     auto i = sums.begin();
-    std::cout << *(i++);
+    out << *(i++);
     for (; i != sums.end(); ++i)
     {
-      std::cout << " " << *i;
+      out << " " << *i;
     }
-    std::cout << "\n";
+    return out;
   }
 }

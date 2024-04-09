@@ -16,15 +16,12 @@ int main()
   }
   list.reverse();
 
-  ullList* sums = nullptr;
-  sums = print_lists(list);
-
-  if (!sums)
+  ullList sums(print_lists(list));
+  if (sums.empty())
   {
     std::cerr << "Sequence sum cannot be calculated due to variable overflow\n";
     return 1;
   }
-  print_sums(*sums);
-  delete sums;
+  print_sums(std::cout, sums) << '\n';
   return 0;
 }

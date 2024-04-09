@@ -474,8 +474,8 @@ namespace zaitsev
 
       return ++iterator(pos.node_);
     }
-    template<class InputIt,
-        std::enable_if_t< std::is_same<typename std::iterator_traits<InputIt>::value_type, T >::value, bool>
+    template< class InputIt,
+        std::enable_if_t< std::is_same< typename std::iterator_traits< InputIt >::value_type, T >::value, bool >
         = true >
     iterator insert_after(const_iterator pos, InputIt first, InputIt last)
     {
@@ -498,7 +498,7 @@ namespace zaitsev
       last_added.node_->next_ = next;
       return last_added;
     }
-    iterator insert_after(const_iterator pos, std::initializer_list<T> init_list)
+    iterator insert_after(const_iterator pos, std::initializer_list< T > init_list)
     {
       return insert_after(pos,init_list.begin(),init_list.end());
     }
