@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <limits>
+#include <iterator>
 #include "list.hpp"
 #include "exception"
 
@@ -85,8 +86,10 @@ void sivkov::outputNums(List<std::pair<std::string, List<size_t>>>& list, List<s
     for (auto iteratorForPair = list.cbegin(); iteratorForPair != list.cend(); ++iteratorForPair)
     {
       auto iteratorForNums = iteratorForPair->second.cbegin();
-      std::advance(iteratorForNums, i);
-
+      for (size_t j = 0; j < i; ++j)
+      {
+        ++iteratorForNums;
+      }
       if (iteratorForNums != iteratorForPair->second.cend())
       {
         if (allData)
