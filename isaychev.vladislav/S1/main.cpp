@@ -1,6 +1,7 @@
 #include <iostream>
 #include <stdexcept>
 #include "outputResults.hpp"
+#include "listManipulations.hpp"
 #include "inputList.hpp"
 
 int main()
@@ -11,7 +12,28 @@ int main()
   try
   {
     inputList(std::cin, mainList);
-    outputResults(std::cout, mainList);
+    reverseAll(mainList);
+
+    size_t upperBorder = getMaxFwdElemNum(mainList) + 1;
+    size_t numOfPairs = getElemNum(mainList);
+
+    if (upperBorder > 1)
+    {
+      outputNames(std::cout, mainList);
+      outputNumbers(std::cout, mainList);
+      outputSums(std::cout, mainList);
+    }
+    else if (upperBorder == 1 && numOfPairs == 1)
+    {
+      std::cout << mainList.front().first << "\n" << 0 << "\n";
+    }
+    else if (numOfPairs == 0)
+    {
+      std::cout << 0 << "\n";
+    }
+
+    reverseAll(mainList);
+//    outputResults(std::cout, mainList);
   }
   catch (const std::bad_alloc & e)
   {

@@ -2,47 +2,7 @@
 #include <limits>
 #include <iostream>
 #include <stdexcept>
-
-size_t getElemOnPos(size_t pos, isaychev::ullList & l)
-{
-  isaychev::fwdIterator< unsigned long long int > it = l.begin();
-  for (size_t i = 1; i < pos; ++i)
-  {
-    ++it;
-  }
-  return *it;
-}
-
-template < typename T >
-size_t getElemNum(isaychev::List < T > & list)
-{
-  size_t num = 0;
-  for (auto i = list.begin(); i != list.end(); i++)
-  {
-    num++;
-  }
-  return num;
-}
-
-size_t getMaxFwdElemNum(isaychev::List< std::pair< std::string, isaychev::ullList > > & list)
-{
-  size_t maxSize = 0;
-  for (auto i = list.begin(); i != list.end(); ++i)
-  {
-    size_t temp = getElemNum(i->second);
-    maxSize = std::max(maxSize, temp);
-  }
-  return maxSize;
-}
-
-void reverseAll(isaychev::List< std::pair< std::string, isaychev::ullList > > & list)
-{
-  for (auto i = list.begin(); i != list.end(); ++i)
-  {
-    i->second.reverse();
-  }
-  list.reverse();
-}
+#include "listManipulations.hpp"
 
 template < typename T >
 void outputList(std::ostream & out, isaychev::List< T > & list)
