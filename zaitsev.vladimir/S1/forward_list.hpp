@@ -109,7 +109,7 @@ namespace zaitsev
         node_(node)
       {}
       template<bool cond = IsConst, std::enable_if_t<cond, bool> = true >
-      BaseIterator(const BaseIterator<!cond>& other) :
+      BaseIterator(const BaseIterator<!cond>& other):
         node_(other.node_)
       {}
       BaseIterator& operator++()
@@ -227,53 +227,29 @@ namespace zaitsev
       freeNodes(head_);
     }
 
-    bool operator==(const ForwardList& other)
-    {
-      return std::equal(cbegin(), cend(), other.cbegin(), other.cend());
-    }
     friend bool operator==(const ForwardList& first, const ForwardList& second)
     {
-      return first == second;
-    }
-    bool operator!=(const ForwardList& other)
-    {
-      return !std::equal(cbegin(), cend(), other.cbegin(), other.cend());
+      return std::equal(first.cbegin(), first.cend(), second.cbegin(), second.cend());
     }
     friend bool operator!=(const ForwardList& first, const ForwardList& second)
     {
-      return first != second;
-    }
-    bool operator<(const ForwardList& other)
-    {
-      return std::lexicographical_compare(cbegin(), cend(), other.cbegin(), other.cend());
+      return !std::equal(first.cbegin(), first.cend(), second.cbegin(), second.cend());
     }
     friend bool operator<(const ForwardList& first, const ForwardList& second)
     {
-      return first < second;
-    }
-    bool operator>=(const ForwardList& other)
-    {
-      return !std::lexicographical_compare(cbegin(), cend(), other.cbegin(), other.cend());
+      return std::lexicographical_compare(first.cbegin(), first.cend(), second.cbegin(), second.cend());
     }
     friend bool operator>=(const ForwardList& first, const ForwardList& second)
     {
-      return first >= second;
-    }
-    bool operator>(const ForwardList& other)
-    {
-      return std::lexicographical_compare(other.cbegin(), other.cend(), cbegin(), cend());
+      return !std::lexicographical_compare(first.cbegin(), first.cend(), second.cbegin(), second.cend());
     }
     friend bool operator>(const ForwardList& first, const ForwardList& second)
     {
-      return first > second;
-    }
-    bool operator<=(const ForwardList& other)
-    {
-      return !std::lexicographical_compare(other.cbegin(), other.cend(), cbegin(), cend());
+      return std::lexicographical_compare(second.cbegin(), second.cend(), first.cbegin(), first.cend());
     }
     friend bool operator<=(const ForwardList& first, const ForwardList& second)
     {
-      return first <= second;
+      return !std::lexicographical_compare(second.cbegin(), second.cend(), first.cbegin(), first.cend());
     }
 
     iterator begin()
@@ -292,7 +268,7 @@ namespace zaitsev
     {
       return const_iterator();
     }
-    bool empty() const
+    bool empty() const noexcept
     {
       return !head_;
     }
@@ -344,7 +320,7 @@ namespace zaitsev
       freeNodes(head_);
       head_ = new_head;
     }
-    void clear()
+    void clear() noexcept
     {
       freeNodes(head_);
       head_ = nullptr;
