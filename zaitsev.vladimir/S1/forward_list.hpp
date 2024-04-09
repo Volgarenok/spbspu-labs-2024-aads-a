@@ -20,9 +20,9 @@ namespace zaitsev
         next_(nullptr)
       {}
       template< class ... Args >
-      explicit Node(Args&&... args):
+      explicit Node(Node* next, Args&&... args):
         value_(std::forward< Args >(args)...),
-        next_(nullptr)
+        next_(next)
       {}
     };
     void freeNodes(Node* head_node) noexcept
@@ -150,8 +150,7 @@ namespace zaitsev
       {
         for (size_t i = 0; i < count; ++i)
         {
-          Node* temp = new Node(value);
-          temp->next_ = new_head;
+          Node* temp = new Node(new_head, value);
           new_head = temp;
         }
       }
@@ -169,13 +168,13 @@ namespace zaitsev
       {
         return nullptr;
       }
-      Node* new_head = new Node(*(begin++));
+      Node* new_head = new Node(nullptr, *(begin++));
       try
       {
         Node* new_tail = new_head;
         for (; begin != end; ++begin)
         {
-          new_tail->next_ = new Node(*begin);
+          new_tail->next_ = new Node(nullptr, *begin);
           new_tail = new_tail->next_;
         }
       }
@@ -280,15 +279,11 @@ namespace zaitsev
     }
     void push_front(const T& value)
     {
-      Node* new_head = new Node(value);
-      new_head->next_ = head_;
-      head_ = new_head;
+      emplace_front(value);
     }
     void push_front(T&& value)
     {
-      Node* new_head = new Node(std::move(value));
-      new_head->next_ = head_;
-      head_ = new_head;
+      emplace_front(std::move(value));
     }
     void pop_front()
     {
@@ -510,17 +505,14 @@ namespace zaitsev
     template< class... Args >
     void emplace_front(Args&&... args)
     {
-      Node* new_head = new Node(std::forward< Args >(args)...);
-      new_head->next_ = head_;
+      Node* new_head = new Node(head_, std::forward< Args >(args)...);
       head_ = new_head;
     }
     template< class... Args >
     iterator emplace_after(const_iterator pos, Args&&... args)
     {
-      Node* tail = pos.node_->next_;
-      pos.node_->next_ = new Node(std::forward< Args >(args)...);
+      pos.node_->next_ = new Node(pos.node_->next_, std::forward< Args >(args)...);
       ++pos;
-      pos.node_->next_ = tail;
       return iterator(pos.node_);
     }
 
