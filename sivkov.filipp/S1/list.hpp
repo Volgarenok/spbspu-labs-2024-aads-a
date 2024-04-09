@@ -27,8 +27,8 @@ namespace sivkov
     }
 
     List(const List& other) :
-      size_(0),
-      head_(nullptr)
+      size_(other.size_),
+      head_(other.head_)
     {
       Node<T>* current = other.head_;
       while (current != nullptr)
@@ -39,10 +39,11 @@ namespace sivkov
     }
 
     List(List&& other) noexcept:
-      size_(0),
+      size_(other.size_),
       head_(other.head_)
     {
       other.head_ = nullptr;
+      other.size_ = 0;
     }
 
     ~List() { clear(); }
@@ -202,12 +203,8 @@ namespace sivkov
   template< typename T >
   void List<T>::assign(size_t count, const T& value)
   {
-    clear();
-
-    for (size_t i = 0; i < count; ++i)
-    {
-      push_back(value);
-    }
+    List< T > assignList(count, value);
+    swap(assignList);
   }
 
   template< typename T >
