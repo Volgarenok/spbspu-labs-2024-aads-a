@@ -62,7 +62,7 @@ void sivkov::input(std::istream& input, List<std::pair<std::string, List<size_t>
   }
 }
 
-void sivkov::outputNums(List<std::pair<std::string, List<size_t>>>& list, List<size_t>& numbers, bool &overflowFlag)
+void sivkov::outputNums(List<std::pair<std::string, List<size_t>>>& list, List<size_t>& numbers, bool& overflowFlag)
 {
   bool allData = true;
   size_t maxNums = 0;
@@ -86,10 +86,12 @@ void sivkov::outputNums(List<std::pair<std::string, List<size_t>>>& list, List<s
     for (auto iteratorForPair = list.cbegin(); iteratorForPair != list.cend(); ++iteratorForPair)
     {
       auto iteratorForNums = iteratorForPair->second.cbegin();
-      for (size_t j = 0; j < i; ++j)
-      {
-        ++iteratorForNums;
+      for (size_t j = 0; j < i; ++j) {
+        if (iteratorForNums != iteratorForPair->second.cend()) {
+          ++iteratorForNums;
+        }
       }
+
       if (iteratorForNums != iteratorForPair->second.cend())
       {
         if (allData)
@@ -120,4 +122,3 @@ void sivkov::outputNums(List<std::pair<std::string, List<size_t>>>& list, List<s
     numbers.push_front(sum);
   }
 }
-
