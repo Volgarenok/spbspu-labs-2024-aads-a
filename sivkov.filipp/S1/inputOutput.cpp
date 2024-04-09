@@ -6,7 +6,7 @@
 #include "list.hpp"
 #include "exception"
 
-void sivkov::outputNames(List<std::pair<std::string, List<size_t>>>& list)
+void sivkov::outputNames(List< std::pair< std::string, List< size_t > > >& list)
 {
   if (list.empty())
   {
@@ -25,7 +25,7 @@ void sivkov::outputNames(List<std::pair<std::string, List<size_t>>>& list)
   std::cout << "\n";
 }
 
-void sivkov::outputSums(List<size_t> &numbers)
+void sivkov::outputSums(List< size_t > &numbers)
 {
   for (auto it = numbers.cbegin(); it != numbers.cend(); ++it)
   {
@@ -40,13 +40,13 @@ void sivkov::outputSums(List<size_t> &numbers)
   std::cout << "\n";
 }
 
-void sivkov::input(std::istream& input, List<std::pair<std::string, List<size_t>>>& list)
+void sivkov::input(std::istream& input, List< std::pair< std::string, List< size_t > > >& list)
 {
   std::string line = "";
   input >> line;
   while (input)
   {
-    list.push_front({ line, List<size_t>{} });
+    list.push_front({ line, List< size_t >{} });
     while (input >> line)
     {
       try
@@ -62,7 +62,7 @@ void sivkov::input(std::istream& input, List<std::pair<std::string, List<size_t>
   }
 }
 
-void sivkov::outputNums(List<std::pair<std::string, List<size_t>>>& list, List<size_t>& numbers, bool& overflowFlag)
+void sivkov::outputNums(List< std::pair< std::string, List< size_t > > >& list, List< size_t >& numbers, bool& overflowFlag)
 {
   bool allData = true;
   size_t maxNums = 0;
