@@ -85,7 +85,7 @@ namespace zaitsev
       BaseIterator():
         node_(nullptr)
       {}
-      BaseIterator(node_t node):
+      explicit BaseIterator(node_t node):
         node_(node)
       {}
       template<bool cond = IsConst, std::enable_if_t<cond, bool> = true >
