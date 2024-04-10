@@ -21,6 +21,22 @@ piyavkin::InputType::InputType(char val, size_t num)
     type = detail::operation;
   }
 }
+piyavkin::detail::TypesPartsExpression piyavkin::InputType::getType()
+{
+  return type;
+}
+char piyavkin::InputType::getBraket()
+{
+  return bracket.bracket;
+}
+char piyavkin::InputType::getOperation()
+{
+  return operation.operation;
+}
+unsigned long long piyavkin::InputType::getOperand()
+{
+  return operand.number;
+}
 
 piyavkin::Postfix::Postfix():
   operand(0),
@@ -51,4 +67,16 @@ piyavkin::ConversionExpressionType::ConversionExpressionType(char val, size_t nu
     operation = val;
     type = detail::operation;
   }
+}
+char piyavkin::ConversionExpressionType::getBraket()
+{
+  return bracket.bracket;
+}
+char piyavkin::ConversionExpressionType::getOperation()
+{
+  return operation.operation;
+}
+piyavkin::detail::TypesPartsExpression piyavkin::ConversionExpressionType::getType()
+{
+  return type;
 }

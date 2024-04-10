@@ -5,47 +5,55 @@
 
 namespace piyavkin
 {
+  using namespace detail;
   struct InputType
   {
   public:
     InputType();
     explicit InputType(unsigned long long val);
     InputType(char val, size_t num);
-  // private:
+    TypesPartsExpression getType();
+    char getBraket();
+    char getOperation();
+    unsigned long long getOperand();
+  private:
     union
     {
-      detail::Operand operand;
-      detail::Operation operation;
-      detail::Bracket bracket;
+      Operand operand;
+      Operation operation;
+      Bracket bracket;
     };
-    detail::TypesPartsExpression type;
+    TypesPartsExpression type;
   };
   struct Postfix
   {
   public:
     Postfix();
-    Postfix(unsigned long long val);
-    Postfix(char val);
-  private:
+    explicit Postfix(unsigned long long val);
+    explicit Postfix(char val);
+  // private:
     union
     {
-      detail::Operand operand;
-      detail::Operation operation;
+      Operand operand;
+      Operation operation;
     };
-    detail::TypesPartsExpression type;
+    TypesPartsExpression type;
   };
   struct ConversionExpressionType
   {
   public:
     ConversionExpressionType();
     ConversionExpressionType(char val, size_t num);
+    TypesPartsExpression getType();
+    char getBraket();
+    char getOperation();
   private:
     union
     {
-      detail::Bracket bracket;
-      detail::Operation operation;
+      Bracket bracket;
+      Operation operation;
     };
-    detail::TypesPartsExpression type;
+    TypesPartsExpression type;
   };
 }
 #endif

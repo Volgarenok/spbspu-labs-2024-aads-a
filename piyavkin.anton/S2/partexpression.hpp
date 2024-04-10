@@ -7,27 +7,21 @@ namespace piyavkin
   {
     struct Operand
     {
-    public:
       Operand();
       Operand(unsigned long long val);
-    // private:
       unsigned long long number;
     };
     struct Operation
     {
-    public:
       Operation();
       Operation(char val);
       bool operator>(const Operation& rhs);
-    // private:
       char operation;
     };
     struct Bracket
     {
-    public:
       Bracket();
       Bracket(char val);
-    // private:
       char bracket;
     };
     enum TypesPartsExpression
