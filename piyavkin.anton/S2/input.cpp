@@ -7,7 +7,6 @@ void piyavkin::input(std::istream& in, List< Queue< InputType > >& queues)
   while (in)
   {
     Queue< InputType > q;
-    InputType val;
     while (in >> symbol && symbol != '\n')
     {
       if (symbol == ' ')
@@ -16,8 +15,8 @@ void piyavkin::input(std::istream& in, List< Queue< InputType > >& queues)
       }
       else if (symbol == '(' || symbol == ')')
       {
-        val.type = detail::bracket;
-        val.symbol.bracket.bracket = symbol;
+        InputType val(symbol, detail::bracket);
+        q.push(val);
       }
       else if (std::isdigit(symbol))
       {
@@ -27,20 +26,18 @@ void piyavkin::input(std::istream& in, List< Queue< InputType > >& queues)
           result += symbol;
           in >> symbol;
         }
-        val.type = detail::operand;
-        val.symbol.operand.number = std::stoll(result);
+        InputType val(std::stoll(result));
+        q.push(val);
         if (symbol == '\n')
         {
-          q.push(val);
           break;
         }
       }
       else
       {
-        val.type = detail::operation;
-        val.symbol.operation.operation = symbol;
+        InputType val(symbol, detail::operation);
+        q.push(val);
       }
-      q.push(val);
     }
     queues.push_back(q);
   }

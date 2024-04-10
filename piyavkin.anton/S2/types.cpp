@@ -1,44 +1,54 @@
 #include "types.hpp"
 
 piyavkin::InputType::InputType():
-  symbol(0),
+  operand(),
   type(detail::operand)
 {}
-piyavkin::InputType::InputType(long long val):
-  symbol(val),
+piyavkin::InputType::InputType(unsigned long long val):
+  operand(val),
   type(detail::operand)
 {}
-piyavkin::InputType::InputType(char val, size_t num):
-  symbol(val)
+piyavkin::InputType::InputType(char val, size_t num)
 {
   if (num == detail::bracket)
   {
+    bracket = val;
     type = detail::bracket;
   }
   else
   {
+    operation = val;
     type = detail::operation;
   }
 }
 
 piyavkin::Postfix::Postfix():
-  symbol(0),
-  type(0)
+  operand(0),
+  type(detail::operand)
 {}
-piyavkin::Postfix::Postfix(long long val):
-  symbol(val),
+piyavkin::Postfix::Postfix(unsigned long long val):
+  operand(val),
   type(detail::operand)
 {}
 piyavkin::Postfix::Postfix(char val):
-  symbol(val),
+  operation(val),
   type(detail::operation)
 {}
 
 piyavkin::ConversionExpressionType::ConversionExpressionType():
-  symbol(0),
-  type(0)
+  operation(0),
+  type(detail::operation)
 {}
-piyavkin::ConversionExpressionType::ConversionExpressionType(char val, size_t num):
-  symbol(val),
-  type(num)
-{}
+piyavkin::ConversionExpressionType::ConversionExpressionType(char val, size_t num)
+{
+  if (num == detail::bracket)
+  {
+    bracket = val;
+    type = detail::bracket;
+  }
+  else
+  {
+    operation = val;
+    type = detail::operation;
+  }
+}

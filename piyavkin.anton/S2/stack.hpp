@@ -35,11 +35,9 @@ namespace piyavkin
     {
       return list.back();
     }
-    T drop()
+    void pop()
     {
-      T temp = list.back();
       list.pop_back();
-      return temp;
     }
     bool empty() const noexcept
     {

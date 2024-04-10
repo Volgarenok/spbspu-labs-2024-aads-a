@@ -7,39 +7,44 @@ namespace piyavkin
 {
   struct InputType
   {
+  public:
     InputType();
-    InputType(long long val);
+    explicit InputType(unsigned long long val);
     InputType(char val, size_t num);
-    union input_t
+  // private:
+    union
     {
       detail::Operand operand;
       detail::Operation operation;
       detail::Bracket bracket;
     };
-    input_t symbol;
     detail::TypesPartsExpression type;
   };
   struct Postfix
   {
-    Postfix(long long val);
+  public:
+    Postfix();
+    Postfix(unsigned long long val);
     Postfix(char val);
-    union postfix_t
+  private:
+    union
     {
       detail::Operand operand;
       detail::Operation operation;
     };
-    postfix_t symbol;
     detail::TypesPartsExpression type;
   };
   struct ConversionExpressionType
   {
+  public:
+    ConversionExpressionType();
     ConversionExpressionType(char val, size_t num);
-    union conversion_t
+  private:
+    union
     {
       detail::Bracket bracket;
       detail::Operation operation;
     };
-    conversion_t symbol;
     detail::TypesPartsExpression type;
   };
 }
