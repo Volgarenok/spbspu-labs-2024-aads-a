@@ -254,14 +254,12 @@ struct List
 //
   void print()
   {
-    std::cout << "PRINT LIST: ";
     Node<T> * subhead = head;
     while (subhead)
     {
       std::cout << subhead->data << ' ';
       subhead = subhead->next;
     }
-    std::cout << '\n';
   }
 
   ListIterator<T> begin()
@@ -301,21 +299,18 @@ int main()
     {
       max_size = loc_size;
     }
-//    std::cout << std::get<0>(list.back()) << '\n';
-//    std::get<1>(list.back()).print();
   }
 
   for (auto iter = list.begin(); iter != list.end(); ++iter)
   {
     std::cout << (*iter).first << ' ';
-//    (*iter).second.print();
   }
   std::cout << '\n';
-  std::cout << "MAX SIZE: " << max_size << '\n';
 
+  List<size_t> list_sum;
   for (size_t i = 0; i < max_size; ++i)
   {
-    //size_t sum = 0;
+    size_t sum = 0;
     for (auto iter = list.begin(); iter != list.end(); ++iter)
     {
       List<size_t> sub_list = (*iter).second;
@@ -324,12 +319,15 @@ int main()
       {
         if (size == i)
         {
-          //sum += *sub_iter;
+          sum += *sub_iter;
           std::cout << *sub_iter << ' ';
         }
         ++size;
       }
     }
     std::cout << '\n';
+    list_sum.push_back(sum);
   }
+  list_sum.print();
+  std::cout << '\n';
 }
