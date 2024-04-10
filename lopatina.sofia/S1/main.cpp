@@ -251,7 +251,7 @@ struct List
     }
   }
 
-//
+/*
   void print()
   {
     Node<T> * subhead = head;
@@ -261,6 +261,7 @@ struct List
       subhead = subhead->next;
     }
   }
+*/
 
   ListIterator<T> begin()
   {
@@ -300,14 +301,30 @@ int main()
       max_size = loc_size;
     }
   }
-
+  if (list.empty())
+  {
+    std::cout << "0\n";
+    return 0;
+  }
   for (auto iter = list.begin(); iter != list.end(); ++iter)
   {
-    std::cout << (*iter).first << ' ';
+    if (iter == list.tail)
+    {
+      std::cout << (*iter).first;
+    }
+    else
+    {
+      std::cout << (*iter).first << ' ';
+    }
   }
   std::cout << '\n';
 
   List<size_t> list_sum;
+  if (max_size == 0)
+  {
+    list_sum.push_back(0);
+  }
+  int space_flag = 0;
   for (size_t i = 0; i < max_size; ++i)
   {
     size_t sum = 0;
@@ -315,12 +332,24 @@ int main()
     {
       List<size_t> sub_list = (*iter).second;
       size_t size = 0;
+      if (iter == list.tail)
+      {
+        space_flag = 1;
+      }
       for (auto sub_iter = sub_list.begin(); sub_iter != sub_list.end(); ++sub_iter)
       {
         if (size == i)
         {
           sum += *sub_iter;
-          std::cout << *sub_iter << ' ';
+          if (space_flag)
+          {
+            std::cout << *sub_iter;
+            space_flag = 0;
+          }
+          else
+          {
+            std::cout << *sub_iter << ' ';
+          }
         }
         ++size;
       }
@@ -328,6 +357,16 @@ int main()
     std::cout << '\n';
     list_sum.push_back(sum);
   }
-  list_sum.print();
+  for (auto iter = list_sum.begin(); iter != list_sum.end(); ++iter)
+    {
+      if (iter == list_sum.tail)
+      {
+        std::cout << *iter;
+      }
+      else
+      {
+        std::cout << *iter << ' ';
+      }
+    }
   std::cout << '\n';
 }
