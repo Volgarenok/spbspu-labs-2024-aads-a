@@ -13,14 +13,15 @@ void zakozhurnikova::readList(List< pair >& list, std::istream& in)
     std::string input;
     std::getline(std::cin, input);
 
-    size_t pos = 0;
-    const char* str = input.c_str();
+    size_t number = 0;
     List< size_t > numbers;
-    while (*str)
+    while (in >> number)
     {
-      size_t k = std::stoull(str, &pos);
-      numbers.push_back(k);
-      str += pos;
+      numbers.push_back(number);
+    }
+    if (!in.eof())
+    {
+      in.clear();
     }
     auto pair = std::make_pair(stringName, numbers);
     list.push_back(pair);
