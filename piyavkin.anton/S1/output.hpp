@@ -10,6 +10,5 @@ namespace piyavkin
   size_t max_size_list(const list_t& list);
   List< unsigned long long > countSum(const list_t& list);
   void outputValue(std::ostream& out, const list_t& list);
-  void output(std::ostream& out, const list_t& list);
 }
 #endif
