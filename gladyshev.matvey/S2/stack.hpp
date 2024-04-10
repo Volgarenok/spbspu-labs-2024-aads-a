@@ -12,6 +12,12 @@ namespace gladyshev
     Stack():
       list_(Container())
     {}
+    Stack(const Stack& other):
+      list_(other.list_)
+    {}
+    Stack(Stack&& other):
+      list_(std::move(other.list_))
+    {}
     T& top()
     {
       return list_.front();

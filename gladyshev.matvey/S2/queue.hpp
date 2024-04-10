@@ -12,9 +12,15 @@ namespace gladyshev
     Queue():
       list_(Container())
     {}
+    Queue(const Queue& other):
+      list_(other.list_)
+    {}
+    Queue(Queue&& other):
+      list_(std::move(other.list_))
+    {}
     T& front()
     {
-      return list_.back();
+      return list_.front();
     }
     T& back()
     {
