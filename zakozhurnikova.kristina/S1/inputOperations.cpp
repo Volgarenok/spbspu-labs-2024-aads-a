@@ -2,10 +2,14 @@
 
 void zakozhurnikova::readList(List< pair >& list, std::istream& in)
 {
-  std::string stringName;
+  std::string stringName = "";
   while (in)
   {
     in >> stringName;
+    if (stringName.empty())
+    {
+      break;
+    }
     size_t number = 0;
     List< size_t > numbers;
     while (in >> number)
