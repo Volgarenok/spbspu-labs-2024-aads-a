@@ -25,16 +25,9 @@ namespace ishmuratov
       List(const T & data, size_t size):
         List()
       {
-        try
+        for (size_t i = 0; i < size; ++i)
         {
-          for (size_t i = 0; i < size; ++i)
-          {
-            pushBack(data);
-          }
-        }
-        catch(const std::exception & e)
-        {
-          clear();
+          pushBack(data);
         }
       }
 
@@ -68,22 +61,36 @@ namespace ishmuratov
         other.size_ = 0;
       }
 
-      Iterator< T > begin()
+      List & operator=(const List & other)
+      {
+        List temp(other);
+        swap(temp);
+        return *this;
+      }
+
+      List & operator=(List && other)
+      {
+        clear();
+        swap(other);
+        return *this;
+      }
+
+      Iterator< T > begin() noexcept
       {
         return Iterator< T >(head_);
       }
 
-      const Iterator< T > cbegin() const
+      const Iterator< T > cbegin() const noexcept
       {
         return Iterator< T >(head_);
       }
 
-      Iterator< T > end()
+      Iterator< T > end() noexcept
       {
         return Iterator< T >(tail_);
       }
 
-      const Iterator< T > cend() const
+      const Iterator< T > cend() const noexcept
       {
         return Iterator< T >(tail_);
       }
@@ -98,32 +105,32 @@ namespace ishmuratov
         return tail_->data_;
       }
 
-      bool empty() const
+      bool empty() const noexcept
       {
         return head_ == nullptr && tail_ == nullptr;
       }
 
-      size_t size() const
+      size_t size() const noexcept
       {
-        return size();
+        return size_;
       }
 
       void assign(size_t count, const T & value)
       {
-        clear();
-        for (size_t i = 0; i < size; ++i)
+        List temp;
+        try
         {
-          pushBack(value);
+          clear();
+          for (size_t i = 0; i < count; ++i)
+          {
+            temp.pushBack(value);
+          }
+          swap(temp);
         }
-      }
-
-      void assign(Iterator< T > first, Iterator< T > last)
-      {
-        clear();
-        while (first != last)
+        catch (const std::exception & e)
         {
-          pushBack(*first);
-          ++first;
+          temp.clear();
+          throw;
         }
       }
 
@@ -262,7 +269,7 @@ namespace ishmuratov
         --size_;
       }
 
-      void clear()
+      void clear() noexcept
       {
         while (!empty())
         {
@@ -271,7 +278,7 @@ namespace ishmuratov
         size_ = 0;
       }
 
-      void swap(List< T > & other)
+      void swap(List & other)
       {
         std::swap(other.head_, head_);
         std::swap(other.tail_, tail_);

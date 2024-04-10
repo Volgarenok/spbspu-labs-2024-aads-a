@@ -4,7 +4,7 @@ void ishmuratov::inputList(List< std::pair< std::string, List< size_t > > > & pa
 {
   std::string str;
   input >> str;
-  while(input)
+  while (input)
   {
     pairs.pushBack({ str, List< size_t >() });
     input >> str;
