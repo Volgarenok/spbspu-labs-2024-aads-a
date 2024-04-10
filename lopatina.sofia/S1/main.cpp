@@ -234,7 +234,7 @@ struct List
     Node<T> * newptr = head;
     while (newptr)
     {
-      Node<T> * 
+      Node<T> *
     }
   }
 */
@@ -368,12 +368,13 @@ int main()
 */
 
   List<size_t> list_num;
-//  List<std::pair<std::string,List<size_t>>> list;
+  List<std::pair<std::string,List<size_t>>> list;
   std::string name = "";
   std::string num_str = "";
   size_t number = 0;
   while (std::cin >> name)
   {
+    //std::pair<std::string,List<size_t>> pair = {};
     std::getline(std::cin,num_str);
     size_t sz = 0;
     while (!num_str.empty())
@@ -383,6 +384,8 @@ int main()
       num_str = num_str.substr(sz);
       list_num.push_front(number);
     }
+    list.push_front(std::make_pair(name, list_num));
+    std::cout << std::get<0>(list.front()) << '\n';
+    std::cout << std::get<1>(list.front()).front() << '\n';
   }
-  list_num.print();
 }
