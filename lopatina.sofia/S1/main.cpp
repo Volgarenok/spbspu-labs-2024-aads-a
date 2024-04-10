@@ -57,11 +57,11 @@ public:
     return std::addressof(node->data);
   }
 
-  bool operator!=(const this_t & rhs) const
+  bool operator==(const this_t & rhs) const
   {
     return node == rhs.node;
   }
-  bool operator==(const this_t & rhs) const
+  bool operator!=(const this_t & rhs) const
   {
     return !(rhs == *this);
   }
@@ -95,6 +95,10 @@ struct List
   T & front()
   {
     return head->data;
+  }
+  T & back()
+  {
+    return tail->data;
   }
   bool empty() const noexcept
   {
@@ -273,108 +277,15 @@ struct List
 
 int main()
 {
-/*
-  List<int> list;
-  std::cout << list.empty() << '\n';
-  list.push_back(60);
-  list.print();
-  list.push_back(89);
-  list.push_back(3);
-  std::cout << list.empty() << '\n';
-  std::cout << list.head->data << '\n';
-  list.pop_front();
-  std::cout << list.head->data << '\n';
-  list.clear();
-  std::cout << list.empty() << '\n';
-  list.push_front(-1);
-  list.print();
-  list.push_back(1);
-  list.push_front(-2);
-  list.print();
-  std::cout << "FRONT: " << list.front() << '\n';
-  list.clear();
-  //std::cout << "Empty FRONT: " << list.front() << '\n';
-  list.push_front(1);
-  list.pop_front();
-  list.push_front(11);
-  list.push_front(111);
-  list.print();
-  list.pop_back();
-  list.print();
-  std::cout << "LIST EMPTY: " << list.empty() << '\n';
-
-  List<int> first;
-  first.push_back(1);
-  first.push_back(2);
-  //first.push_back(3);
-  List<int> second;
-  second.push_back(11);
-  second.push_back(22);
-  second.push_back(33);
-  first.print();
-  first.swap(second);
-  first.print();
-  second.print();
-  std::cout << "O: " << first.empty() << ' ' << second.empty() << '\n';
-  ListIterator<int> ptr = first.begin();
-  std::cout << *ptr << '\n';
-  std::cout << *(second.begin()) << '\n';
-  std::cout << *(++(second.begin())) << '\n';
-  std::cout << "TEST FOR ITER: \n";
-  for (ListIterator<int> it = second.begin(); it != nullptr; ++it)
-  {
-    std::cout << *it << '\n';
-  }
-  ListIterator<int> iter = second.begin();
-  std::cout << *(++iter) << '\n';
-  while (iter != nullptr)
-  {
-    std::cout << *iter << '\n';
-    ++iter;
-  }
-//------
-  List<int> fill_list(3, 77);
-  fill_list.print();
-  fill_list.push_front(78);
-  fill_list.print();
-  fill_list.remove(77);
-  fill_list.print();
-  List<int> list2(2, 55);
-  list2.print();
-  list2.remove(55);
-  list2.print();
-  list2.push_back(1);
-  list2.print();
-  list2.remove(1);
-  list2.print();
-  list2.push_back(3);
-  list2.push_front(2);
-  list2.push_back(1);
-  list2.push_back(2);
-  list2.print();
-  list2.remove(2);
-  list2.print();
-  list2.remove(1);
-  list2.remove(9999);
-  list2.print();
-  list2.remove(3);
-  list2.print();
-  list2.remove(1);
-  list2.print();
-  list2.assign(8, 44);
-  list2.print();
-  list2.assign(4, 88);
-  list2.print();
-*/
-
-  List<size_t> list_num;
   List<std::pair<std::string,List<size_t>>> list;
   std::string name = "";
   std::string num_str = "";
   size_t number = 0;
+  size_t max_size = 0;
   while (std::cin >> name)
   {
-    //std::pair<std::string,List<size_t>> pair = {};
+    size_t loc_size = 0;
+    List<size_t> list_num;
     std::getline(std::cin,num_str);
     size_t sz = 0;
     while (!num_str.empty())
@@ -382,10 +293,43 @@ int main()
       number = 0;
       number = std::stoull(num_str,&sz);
       num_str = num_str.substr(sz);
-      list_num.push_front(number);
+      list_num.push_back(number);
+      loc_size += 1;
     }
-    list.push_front(std::make_pair(name, list_num));
-    std::cout << std::get<0>(list.front()) << '\n';
-    std::cout << std::get<1>(list.front()).front() << '\n';
+    list.push_back(std::make_pair(name, list_num));
+    if (loc_size > max_size)
+    {
+      max_size = loc_size;
+    }
+//    std::cout << std::get<0>(list.back()) << '\n';
+//    std::get<1>(list.back()).print();
+  }
+
+  for (auto iter = list.begin(); iter != list.end(); ++iter)
+  {
+    std::cout << (*iter).first << ' ';
+//    (*iter).second.print();
+  }
+  std::cout << '\n';
+  std::cout << "MAX SIZE: " << max_size << '\n';
+
+  for (size_t i = 0; i < max_size; ++i)
+  {
+    //size_t sum = 0;
+    for (auto iter = list.begin(); iter != list.end(); ++iter)
+    {
+      List<size_t> sub_list = (*iter).second;
+      size_t size = 0;
+      for (auto sub_iter = sub_list.begin(); sub_iter != sub_list.end(); ++sub_iter)
+      {
+        if (size == i)
+        {
+          //sum += *sub_iter;
+          std::cout << *sub_iter << ' ';
+        }
+        ++size;
+      }
+    }
+    std::cout << '\n';
   }
 }
