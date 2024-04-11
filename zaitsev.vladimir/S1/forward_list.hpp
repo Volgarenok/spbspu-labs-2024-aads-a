@@ -121,11 +121,6 @@ namespace zaitsev
       }
     };
 
-  public:
-    using iterator = BaseIterator< false >;
-    using const_iterator = BaseIterator< true >;
-
-  private:
     Node* new_list(size_t count, const T& value)
     {
       Node* new_head = nullptr;
@@ -169,10 +164,11 @@ namespace zaitsev
       return new_head;
     }
 
-  private:
     Node* head_;
 
   public:
+    using iterator = BaseIterator< false >;
+    using const_iterator = BaseIterator< true >;
     ForwardList():
       head_(nullptr)
     {}
@@ -308,10 +304,12 @@ namespace zaitsev
 
     size_t remove(const T& value)
     {
-      return remove_if([&value](const T& val)
+      return remove_if(
+        [&value](const T& val) -> bool
         {
           return val == value;
-        });
+        }
+      );
     }
     template< class UnaryPredicate >
     size_t remove_if(UnaryPredicate p)
@@ -427,7 +425,9 @@ namespace zaitsev
         return ret;
       }
       else
+      {
         return end();
+      }
     }
     iterator erase_after(const_iterator first, const_iterator last)
     {
@@ -450,7 +450,7 @@ namespace zaitsev
       }
       if (!other.head_)
       {
-        return;
+        return{};
       }
 
       Node* temp = pos.node_->next_;
@@ -528,7 +528,7 @@ namespace zaitsev
     void sort(Compare cmp)
     {
       if (!head_ || !head_->next_)
-        return;
+        return{};
       size_t sz = 0;
       const Node* cur = head_;
       while (cur)
