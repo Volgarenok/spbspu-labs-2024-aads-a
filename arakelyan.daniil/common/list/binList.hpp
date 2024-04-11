@@ -173,7 +173,7 @@ template < class T >
 arakelyan::BinList< T > &arakelyan::BinList< T >::operator=(std::initializer_list< T > otherLs)
 {
   clear();
-  copyFromRange(it_start, it_end);
+  copyFromRange(otherLs.begin(), otherLs.end());
   return *this;
 }
 
