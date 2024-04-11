@@ -28,6 +28,10 @@ int main(int argc, char* argv[])
   {
     while (std::getline(*input, in))
     {
+      if (in == "")
+      {
+        continue;
+      }
       Queue< std::string > queuecheck;
       size_t i = 0;
       while (i < in.length())
