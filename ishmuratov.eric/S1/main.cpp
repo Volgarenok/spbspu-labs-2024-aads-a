@@ -10,7 +10,6 @@ int main()
 {
   using namespace ishmuratov;
   size_t maxvalue = std::numeric_limits<size_t>::max();
-
   List< std::pair< std::string, List< size_t > > > pairs;
   inputList(pairs, std::cin);
 

@@ -118,19 +118,12 @@ namespace ishmuratov
       void assign(size_t count, const T & value)
       {
         List temp;
-        try
+        clear();
+        for (size_t i = 0; i < count; ++i)
         {
-          clear();
-          for (size_t i = 0; i < count; ++i)
-          {
-            temp.pushBack(value);
-          }
-          swap(temp);
+          temp.pushBack(value);
         }
-        catch (const std::exception & e)
-        {
-          throw;
-        }
+        swap(temp);
       }
 
       void pushFront(const T & data)
@@ -167,7 +160,11 @@ namespace ishmuratov
 
       void remove(const T & value)
       {
-        auto predicate = [& value](const T & data_){ return data_ == value; };
+        auto predicate =
+          [& value](const T & data_)
+          {
+            return data_ == value;
+          };
         remove_if(predicate);
       }
 
