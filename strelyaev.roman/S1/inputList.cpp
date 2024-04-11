@@ -7,19 +7,20 @@
 void strelyaev::makeSequence(std::istream& in, List < std::pair < std::string, List< size_t > > >& list_of_lists)
 {
   std::string line = "";
-  in >> line;
-  while (in)
+  size_t current = 0;
+  while (!in.eof())
   {
     if (!in.good())
     {
-      throw std::logic_error("Something went wrong with the input");
+      in.clear();
+      in.setstate(std::ios::goodbit);
     }
-    std::string name = line;
-    List < size_t > list_of_nums{};
-    while (in >> line && !std::isalpha(line[0]))
+    List< size_t > list_of_nums{};
+    in >> line;
+    while (in >> current)
     {
-      list_of_nums.push_back(std::stoull(line));
+      list_of_nums.push_back(current);
     }
-    list_of_lists.push_back({name, list_of_nums});
+    list_of_lists.push_back({line, list_of_nums});
   }
 }
