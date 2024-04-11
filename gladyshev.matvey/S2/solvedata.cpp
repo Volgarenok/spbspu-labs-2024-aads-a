@@ -52,7 +52,7 @@ long long int gladyshev::evaluatePostfix(Queue< std::string > postfix)
       {
         if (right == 0)
         {
-          throw std::logic_error("no 0");
+          throw std::logic_error("division by 0");
         }
         left %= right;
         if (left < 0)
