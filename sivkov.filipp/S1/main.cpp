@@ -31,7 +31,7 @@ int main()
   {
     outputNums(list, sums);
   }
-  catch (const std::overflow_error)
+  catch (const std::overflow_error & e)
   {
     std::cerr << "Overflow\n";
     return 1;
