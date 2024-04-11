@@ -22,13 +22,9 @@ namespace strelyaev
       node_(val.node_)
      {}
 
-     Iterator(detail::Node< T >* val):
-      node_(val)
-     {}
-
      ~Iterator() = default;
 
-     Iterator< T >& operator=(const Iterator& val)
+     Iterator< T >& operator=(Iterator val)
      {
        this->node_ = val.node_;
      }
@@ -42,10 +38,7 @@ namespace strelyaev
 
      Iterator< T >& operator++()
      {
-       if (node_ != nullptr)
-       {
-        node_ = node_->next_;
-       }
+       node_ = node_->next_;
        return *this;
      }
 
@@ -58,11 +51,8 @@ namespace strelyaev
 
      Iterator< T >& operator--()
      {
-       if (node_ != nullptr)
-       {
-         node_ = node_->prev_;
-       }
-       return *this;
+      node_ = node_->prev_;
+      return *this;
      }
 
      Iterator< T >& operator+(int n)
@@ -95,18 +85,22 @@ namespace strelyaev
        return std::addressof(node_->value_);
      }
 
-     bool operator==(const Iterator< T >& val)
+     bool operator==(Iterator< T > val)
      {
        return node_ == val.node_;
      }
 
-     bool operator!=(const Iterator< T >& val)
+     bool operator!=(Iterator< T > val)
      {
        return !(*this == val);
      }
 
     private:
      detail::Node< T >* node_;
+
+     explicit Iterator(detail::Node< T >* val):
+      node_(val)
+     {}
   };
 }
 

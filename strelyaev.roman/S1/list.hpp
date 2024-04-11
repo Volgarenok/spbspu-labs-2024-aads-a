@@ -34,11 +34,13 @@ namespace strelyaev
       void clear() noexcept;
       void remove(const T& value);
       template< class Predicate >
-      void remove_if (Predicate);
+      void remove_if(Predicate);
 
       size_t size() noexcept;
-      T& back() const;
-      T& front() const;
+      T& back();
+      T& front();
+      const T& back() const;
+      const T& front() const;
       Iterator< T > begin() noexcept;
       Iterator< T > end() noexcept;
       ConstIterator< T > cbegin() const noexcept;
@@ -102,7 +104,6 @@ namespace strelyaev
   {
     if (this != std::addressof(other))
     {
-      clear();
       swap(other);
     }
     return *this;
@@ -243,7 +244,7 @@ namespace strelyaev
 
   template< typename T >
   template< typename P >
-  void List< T >::remove_if (P predicate)
+  void List< T >::remove_if(P predicate)
   {
     for (auto it = cbegin(); it != cend(); it++)
     {
@@ -261,13 +262,25 @@ namespace strelyaev
   }
 
   template< typename T >
-  T& List< T >::back() const
+  T& List< T >::back()
   {
     return tail_->value_;
   }
 
   template< typename T >
-  T& List< T >::front() const
+  const T& List< T >::back() const
+  {
+    return tail_->value_;
+  }
+
+  template< typename T >
+  T& List< T >::front()
+  {
+    return head_->value_;
+  }
+
+  template< typename T >
+  const T& List< T >::front() const
   {
     return head_->value_;
   }
