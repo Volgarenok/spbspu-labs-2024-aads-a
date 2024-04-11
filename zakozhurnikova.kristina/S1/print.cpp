@@ -35,11 +35,8 @@ void zakozhurnikova::printByIndex(const List< pair > &l)
   size_t maxSize = getMaxSize(l);
   for (size_t i = 0; i < maxSize; ++i)
   {
-    if (i < l.cbegin()->second.size())
-    {
-      std::cout << *(std::next(l.cbegin(), i)->second.cbegin());
-    }
-    for (auto it = std::next(l.cbegin(), 1); it != l.cend(); ++it)
+    size_t printed = 0;
+    for (auto it = l.cbegin(); it != l.cend(); ++it)
     {
       if (i >= it->second.size())
       {
@@ -47,7 +44,7 @@ void zakozhurnikova::printByIndex(const List< pair > &l)
       }
       auto temp = it->second.cbegin();
       std::advance(temp, i);
-      std::cout << " " << *(temp);
+      std::cout << (printed++ == 0 ? "" : " ") << *(temp);
     }
     std::cout << '\n';
   }
