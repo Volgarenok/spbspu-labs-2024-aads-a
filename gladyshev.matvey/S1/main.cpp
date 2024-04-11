@@ -17,15 +17,10 @@ int main()
     return 0;
   }
   sequences.reverse();
-  for (auto it = sequences.cbegin(); it != sequences.cend(); ++it)
+  std::cout << sequences.front().first;
+  for (auto it = ++sequences.cbegin(); it != sequences.cend(); ++it)
   {
-    std::cout << it->first;
-    auto temp = it;
-    ++temp;
-    if (temp != sequences.cend())
-    {
-      std::cout << " ";
-    }
+    std::cout << " " << it->first;
   }
   std::cout << "\n";
   bool overflow = false;
