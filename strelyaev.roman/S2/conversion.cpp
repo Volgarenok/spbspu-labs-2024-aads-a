@@ -7,33 +7,41 @@
 #include "stack.hpp"
 #include "token.hpp"
 
-strelyaev::Queue< strelyaev::detail::ExpressionUnit > strelyaev::makeQueue(std::istream& input)
+strelyaev::Queue< strelyaev::detail::ExpressionUnit > strelyaev::parseString(std::istream& input)
 {
   strelyaev::Queue< strelyaev::detail::ExpressionUnit > token_queue;
-  strelyaev::Queue< char > raw_data;
-  char c = 0;
-  std::cout << "============MAKE=============\n";
-  input >> std::noskipws;
-  while (input >> c)
+  strelyaev::detail::Token new_token;
+  strelyaev::detail::TokenType type = strelyaev::detail::TokenType::NONE;
+  std::string line = "";
+  while (input)
   {
-    if (c == '\n')
+    input >> line;
+    try
+    {
+      long long operand = std::stoll(line);
+      new_token = strelyaev::detail::Token(operand);
+      type = strelyaev::detail::TokenType::OPERAND;
+    }
+    catch (...)
+    {
+      char c = line[0];
+      new_token = strelyaev::detail::Token(c);
+      if (strelyaev::isBracket(line))
+      {
+        type = strelyaev::detail::TokenType::BRACKET;
+      }
+      if (strelyaev::isOperation(line))
+      {
+        type = strelyaev::detail::TokenType::OPERATION;
+      }
+    }
+    strelyaev::detail::ExpressionUnit new_unit{new_token, type};
+    token_queue.push(new_unit);
+    if (input.peek() == '\n')
     {
       break;
     }
-    else
-    {
-      std::cout << "ПУШУ:(" << c << ")\n";
-      raw_data.push(c);
-    }
   }
-  input >> std::skipws;
-  int i = 0; // TO DEL
-  while (!raw_data.empty())
-  {
-    i++;
-    std::cout << i << ":" << raw_data.drop() << ":\n";
-  }
-  std::cout << "\n============END_MAKE=============\n";
   return token_queue;
 }
 
@@ -107,6 +115,10 @@ strelyaev::Queue< strelyaev::detail::ExpressionUnit > strelyaev::makePostfix(Que
 long long strelyaev::calculatePostfix(strelyaev::Queue< strelyaev::detail::ExpressionUnit >& queue)
 {
   strelyaev::Stack< long long > processing_stack;
+  if (queue.empty())
+  {
+    throw std::out_of_range("Empty queue is met");
+  }
   while (!queue.empty())
   {
     strelyaev::detail::ExpressionUnit unit = queue.drop();
@@ -119,7 +131,7 @@ long long strelyaev::calculatePostfix(strelyaev::Queue< strelyaev::detail::Expre
       long long second = processing_stack.drop();
       if (processing_stack.empty())
       {
-        throw std::logic_error("Something is wrong with postfix expression");
+        throw std::invalid_argument("Something is wrong with postfix expression");
       }
       long long first = processing_stack.drop();
       long long result = calculateOperation(first, second, unit.token.operation);
@@ -129,15 +141,7 @@ long long strelyaev::calculatePostfix(strelyaev::Queue< strelyaev::detail::Expre
   long long result = processing_stack.drop();
   if (!processing_stack.empty())
   {
-    throw std::logic_error("Something is wrong with postfix expression");
+    throw std::invalid_argument("Something is wrong with postfix expression");
   }
   return result;
-}
-
-long long strelyaev::calculateInfixExpression(std::istream& in)
-{
-  strelyaev::Queue< strelyaev::detail::ExpressionUnit > infix_units_queue = strelyaev::makeQueue(in);
-  //strelyaev::Queue< strelyaev::detail::ExpressionUnit > postfix_units_queue = strelyaev::makePostfix(infix_units_queue);
-  //long long result = calculatePostfix(postfix_units_queue);
-  //return result;
 }
