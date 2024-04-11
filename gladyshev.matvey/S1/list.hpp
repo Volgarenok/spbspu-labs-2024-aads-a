@@ -82,11 +82,12 @@ namespace gladyshev
     }
     void remove(const T& value)
     {
-      remove_if(
+      auto checkPred = 
         [&value](const T& data)
         {
           return data == value;
-        });
+        };
+      remove_if(checkPred);
     }
     template < typename UnaryPredicate >
     void remove_if(UnaryPredicate p)
