@@ -46,7 +46,8 @@ namespace grechishnikov
     void assign(std::initializer_list< T >);
 
     void remove(const T& data);
-    void remove_if(bool (*)(T));
+    template< typename Predicate >
+    void remove_if(Predicate);
 
     Iterator< T > erase(ConstIterator< T >);
 
@@ -331,12 +332,13 @@ namespace grechishnikov
   }
 
   template< typename T >
-  void List< T >::remove_if(bool (*f)(T))
+  template< typename Predicate >
+  void List< T >::remove_if(Predicate p)
   {
     auto first = cbegin();
     while (first != cend())
     {
-      if (f(*first))
+      if (p(*first))
       {
         erase(first);
       }
