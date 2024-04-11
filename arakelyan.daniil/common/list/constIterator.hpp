@@ -61,7 +61,7 @@ namespace arakelyan
   ConstIterator< T > ConstIterator< T >::operator--(int)
   {
     assert(node != nullptr);
-  ConstIterator< T > res(*this);
+    ConstIterator< T > res(*this);
     --(*this);
     return res;
   }
