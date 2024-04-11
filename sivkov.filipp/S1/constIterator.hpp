@@ -1,7 +1,6 @@
 #ifndef CONSTITERATOR_HPP
 #define CONSTITERATOR_HPP
 
-#include <iostream>
 #include "node.hpp"
 
 namespace sivkov
@@ -9,13 +8,9 @@ namespace sivkov
   template < typename T >
   class ConstIterator
   {
+    template<typename T> friend class List;
   public:
-    ConstIterator():
-      node_(nullptr)
-    {}
-    ConstIterator(Node< T >* node):
-      node_(node)
-    {}
+    ConstIterator();
 
     ConstIterator< T >& operator=(const ConstIterator< T >&) = default;
     ConstIterator(const ConstIterator< T >&) = default;
@@ -32,8 +27,19 @@ namespace sivkov
     ConstIterator<T> operator++(int);
 
   private:
-    Node< T >* node_;
+    detail::Node< T >* node_;
+    ConstIterator(detail::Node< T >* node);
   };
+
+  template< typename T >
+  ConstIterator< T >::ConstIterator(detail::Node< T >* node):
+  node_(node)
+  {}
+
+  template<typename T>
+  ConstIterator<T>::ConstIterator():
+    node_(nullptr)
+  {}
 
   template< typename T >
   T& ConstIterator< T >::operator*()
@@ -76,7 +82,7 @@ namespace sivkov
   {
     node_ = node_->next;
     return *this;
- }
+  }
 
   template< typename T >
   ConstIterator< T > ConstIterator< T >::operator++(int)
