@@ -107,4 +107,8 @@ void marishin::printResults(const LinkedList< size_t >& lst, bool overflow)
       }
     }
   }
+  if (lst.empty())
+  {
+    std::cout << '0';
+  }
 }
