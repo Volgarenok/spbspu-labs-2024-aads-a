@@ -65,7 +65,6 @@ void arakelyan::outputPairsLists(std::ostream &out, BinList_t &listOfPairs, arak
 
 void arakelyan::outputPairListsSums(std::ostream &out, arakelyan::BinList< size_t > sumList)
 {
-
   for (auto it = sumList.begin(); it != sumList.end(); ++it)
   {
     if (it != sumList.begin())

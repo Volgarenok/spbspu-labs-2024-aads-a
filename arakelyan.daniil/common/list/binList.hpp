@@ -1,6 +1,7 @@
 #ifndef BINLIST_HPP
 #define BINLIST_HPP
 
+#include <cassert>
 #include <initializer_list>
 #include <memory>
 #include <stdexcept>
@@ -26,7 +27,6 @@ namespace arakelyan
     ~BinList();
 
     BinList< T > &operator=(const BinList< T > &otherLs);
-    BinList< T > &operator=(BinList< T > otherLs);
     BinList< T > &operator=(BinList< T > &&otherLs) noexcept;
     BinList< T > &operator=(std::initializer_list< T > otherLs);
 
@@ -79,7 +79,11 @@ namespace arakelyan
     bool operator<=(const BinList< T > &otherLs) const;
     bool operator>=(const BinList< T > &otherLs) const;
 
+    void copyForConstr(arakelyan::ConstIterator< T > it_start, arakelyan::ConstIterator< T > it_end);
+
   private:
+    template < class Iterator_t >
+    void copyFromRange(Iterator_t it_start, Iterator_t it_end);
     using Node = details::Node< T >;
     Node *head_;
     Node *tail_;
@@ -106,14 +110,12 @@ arakelyan::BinList< T >::BinList(const T &val, size_t size):
 
 template < class T >
 arakelyan::BinList< T >::BinList(const BinList<T> &otherLs):
-  BinList(otherLs.cbegin(), otherLs.cend())
-{}
-
-template < class T >
-arakelyan::BinList< T >::BinList(BinList< T > &&otherLs) noexcept:
   BinList()
 {
-  swap(otherLs);
+  if (!otherLs.empty())
+  {
+    copyFromRange(otherLs.cbegin(), otherLs.cend());
+  }
 }
 
 template < class T >
@@ -126,9 +128,16 @@ template < class Iterator_t >
 arakelyan::BinList< T >::BinList(Iterator_t it_start, Iterator_t it_end):
   BinList()
 {
-  for (; it_start != it_end; ++it_start)
+  copyFromRange(it_start, it_end);
+}
+
+template < class T >
+template < class Iterator_t >
+void arakelyan::BinList< T >::copyFromRange(Iterator_t it_start, Iterator_t it_end)
+{
+  for (auto it = it_start; it != it_end; ++it)
   {
-    push_back(*it_start);
+    push_back(*it);
   }
 }
 
