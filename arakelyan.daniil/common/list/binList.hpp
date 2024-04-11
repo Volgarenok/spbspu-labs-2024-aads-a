@@ -585,17 +585,22 @@ void arakelyan::BinList< T >::splice(const_iterator it_this, std::initializer_li
 template < class T >
 void arakelyan::BinList< T >::splice(const_iterator it_this, BinList< T > &otherLs, const_iterator it_other)
 {
-  details::Node< T > *nodeOtherLs = it_other.node;
-  nodeOtherLs->nextNode->prevNode = nodeOtherLs->prevNode;
-  nodeOtherLs->prevNode->nextNode = nodeOtherLs->nextNode;
-  --otherLs.size_;
-  if (it_this == cend())
+  insert(it_this, *it_other);
+
+  if (it_other == otherLs.cbegin())
   {
-    push_back(*it_other);
+    otherLs.pop_front();
+  }
+  else if (it_other == otherLs.cend())
+  {
+    otherLs.pop_back();
   }
   else
   {
-    insert(it_this, *it_other);
+    details::Node< T > *nodeOtherLs = it_other.node;
+    nodeOtherLs->nextNode->prevNode = nodeOtherLs->prevNode;
+    nodeOtherLs->prevNode->nextNode = nodeOtherLs->nextNode;
+    --otherLs.size_;
   }
 }
 
