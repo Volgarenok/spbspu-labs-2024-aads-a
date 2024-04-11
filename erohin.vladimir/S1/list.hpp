@@ -100,7 +100,7 @@ namespace erohin
   List< T >::List(InputIt first, InputIt last):
     head_(nullptr)
   {
-    while(first != last)
+    while (first != last)
     {
       try
       {
@@ -239,21 +239,13 @@ namespace erohin
       return iterator(pos.node_);
     }
     List< T > temp;
-    try
+    for (size_t i = 0; i < count; ++i)
     {
-      for (size_t i = 0; i < count; ++i)
-      {
-        temp.push_front(value);
-      }
-      push_front(temp.front());
-      temp.pop_front();
-      splice_after(cbegin(), std::move(temp));
+      temp.push_front(value);
     }
-    catch (...)
-    {
-      temp.clear();
-      throw;
-    }
+    push_front(temp.front());
+    temp.pop_front();
+    splice_after(cbegin(), std::move(temp));
     return iterator(pos.node_);
   }
 
@@ -282,7 +274,7 @@ namespace erohin
   void List< T >::remove(const T & value)
   {
     remove_if(
-      [&](T elem)
+      [](const T & elem)
       {
         return (elem == value);
       }
@@ -325,17 +317,9 @@ namespace erohin
       return;
     }
     List< T > temp;
-    try
-    {
-      temp.push_front(value);
-      temp.insert_after(cbegin(), count - 1, value);
-      assign(temp.begin(), temp.end());
-    }
-    catch (...)
-    {
-      temp.clear();
-      throw;
-    }
+    temp.push_front(value);
+    temp.insert_after(cbegin(), count - 1, value);
+    assign(temp.begin(), temp.end());
   }
 
   template< class T >
@@ -345,15 +329,7 @@ namespace erohin
     List< T > temp;
     while (first != last)
     {
-      try
-      {
-        temp.push_front(*(first++));
-      }
-      catch (...)
-      {
-        temp.clear();
-        throw;
-      }
+      temp.push_front(*(first++));
     }
     temp.reverse();
     clear();
@@ -434,7 +410,7 @@ namespace erohin
     const_iterator iter_end = cend();
     const_iterator iter_current = iter_begin;
     ++iter_current;
-    while(iter_current != iter_end)
+    while (iter_current != iter_end)
     {
       push_front(std::move(iter_current.node_->data_));
       ++iter_current;
