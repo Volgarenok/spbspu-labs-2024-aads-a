@@ -6,7 +6,7 @@
 
 namespace arakelyan
 {
-  using BinList_t = arakelyan::BinList< std::pair< std::string, arakelyan::BinList< size_t > > >;
+  using BinList_t = BinList< std::pair< std::string, BinList< size_t > > >;
   void outputPairsNames(std::ostream &out, BinList_t listOfPairs);
   void outputPairsLists(std::ostream &out, BinList_t &listOfPairs, arakelyan::BinList< size_t > &sumList);
   void outputPairListsSums(std::ostream &out, BinList< size_t > sumList);
