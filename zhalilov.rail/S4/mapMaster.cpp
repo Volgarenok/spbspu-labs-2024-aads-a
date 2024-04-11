@@ -59,13 +59,14 @@ void zhalilov::MapMaster::complementCmd(List < std::string > &cmdSource, std::st
   {
     throw std::invalid_argument("incorrect command");
   }
+
   primaryMap &secondMap = maps_.at(cmdSource.back());
   cmdSource.pop_back();
   primaryMap &firstMap = maps_.at(cmdSource.back());
-  result = cmdSource.front();
+  primaryMap resultMap;
+
   auto firstIt = firstMap.cbegin();
   auto firstEnd = firstMap.cend();
-  primaryMap resultMap;
   while (firstIt != firstEnd)
   {
     if (secondMap.find(firstIt->first) == secondMap.end())
@@ -74,14 +75,63 @@ void zhalilov::MapMaster::complementCmd(List < std::string > &cmdSource, std::st
       std::string currValue = firstIt->second;
       resultMap.insert(std::pair < int, std::string >(currKey, currValue));
     }
+    firstIt++;
   }
+
+  std::string mapName = cmdSource.front();
+  maps_.insert(std::pair < std::string, primaryMap >(mapName, resultMap));
+  getMapSource(mapName, result);
 }
 
 void zhalilov::MapMaster::intersectCmd(List < std::string > &cmdSource, std::string &result)
-{}
+{
+  if (cmdSource.capacity() != 3)
+  {
+    throw std::invalid_argument("incorrect command");
+  }
+
+  primaryMap &secondMap = maps_.at(cmdSource.back());
+  cmdSource.pop_back();
+  primaryMap &firstMap = maps_.at(cmdSource.back());
+  primaryMap resultMap;
+
+  auto firstIt = firstMap.cbegin();
+  auto firstEnd = firstMap.cend();
+  while (firstIt != firstEnd)
+  {
+    if (secondMap.find(firstIt->first) != secondMap.end())
+    {
+      int currKey = firstIt->first;
+      std::string currValue = firstIt->second;
+      resultMap.insert(std::pair < int, std::string >(currKey, currValue));
+    }
+    firstIt++;
+  }
+
+  std::string mapName = cmdSource.front();
+  maps_.insert(std::pair < std::string, primaryMap >(mapName, resultMap));
+  getMapSource(mapName, result);
+}
 
 void zhalilov::MapMaster::unionCmd(List < std::string > &cmdSource, std::string &result)
-{}
+{
+  complementCmd(cmdSource, result);
+
+  primaryMap &secondMap = maps_.at(cmdSource.back());
+  primaryMap resultMap;
+
+  auto secondIt = secondMap.cbegin();
+  auto secondEnd = secondMap.cend();
+  while (secondIt != secondEnd)
+  {
+    resultMap.insert(std::pair < int, std::string >(secondIt->first, secondIt->second));
+    secondIt++;
+  }
+
+  std::string mapName = cmdSource.front();
+  maps_.insert(std::pair < std::string, primaryMap >(mapName, resultMap));
+  getMapSource(mapName, result);
+}
 
 void zhalilov::MapMaster::getMapSource(const std::string &mapName, std::string &source)
 {
@@ -92,5 +142,6 @@ void zhalilov::MapMaster::getMapSource(const std::string &mapName, std::string &
   {
     source += std::to_string(it->first);
     source += it->second;
+    it++;
   }
 }
