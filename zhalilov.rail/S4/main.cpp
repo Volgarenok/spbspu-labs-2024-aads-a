@@ -20,12 +20,15 @@ int main(int argc, char *argv[])
 
   zhalilov::MapMaster master(maps);
   std::string cmdOutput;
-  while (std::cin)
+  while (!std::cin.eof())
   {
     try
     {
       master.doCommandLine(std::cin, cmdOutput);
-      std::cout << cmdOutput << '\n';
+      if (!cmdOutput.empty())
+      {
+        std::cout << cmdOutput << '\n';
+      }
     }
     catch (const std::invalid_argument &e)
     {
