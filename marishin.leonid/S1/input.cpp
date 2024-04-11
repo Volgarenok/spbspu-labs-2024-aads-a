@@ -43,7 +43,6 @@ void marishin::calculateSums(
   LinkedList< size_t >& lst
 )
 {
-  constexpr size_t maxvalue = std::numeric_limits< size_t >::max();
   while (!pairs.empty())
   {
     size_t sum = 0;
@@ -61,6 +60,7 @@ void marishin::calculateSums(
         emptyList = true;
         auto frontValue = pair.second.front();
         std::cout << frontValue;
+        constexpr size_t maxvalue = std::numeric_limits< size_t >::max();
         if (maxvalue - sum > frontValue)
         {
           sum += frontValue;
@@ -105,10 +105,5 @@ void marishin::printResults(const LinkedList< size_t >& lst, bool overflow)
         std::cout << "\n";
       }
     }
-  }
-
-  if (lst.empty())
-  {
-    std::cout << "0\n";
   }
 }
