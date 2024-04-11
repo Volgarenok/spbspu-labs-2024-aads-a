@@ -16,11 +16,11 @@ int main()
 
   for (auto list = pairs.begin(); list != pairs.end(); ++list)
   {
-    std::cout << list->first;
-    if (list != pairs.cend())
+    if (list != pairs.begin())
     {
       std::cout << " ";
     }
+    std::cout << list->first;
   }
   if (!pairs.empty())
   {
@@ -79,7 +79,7 @@ int main()
   for (auto sum = lsums.begin(); sum != lsums.end(); ++sum)
   {
     std::cout << *sum;
-    if (sum != lsums.end())
+    if (*sum != lsums.back())
     {
       std::cout << " ";
     }
