@@ -13,8 +13,8 @@ int main()
   {
     List<pair> list;
     readList(list, std::cin);
-    printNames(list);
-    printByIndex(list);
+    printNames(list, std::cout);
+    printByIndex(list, std::cout);
     printSums(list, std::cout);
     std::cout << '\n';
   }

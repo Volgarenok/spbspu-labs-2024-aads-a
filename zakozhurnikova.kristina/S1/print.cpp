@@ -12,25 +12,25 @@ size_t zakozhurnikova::getMaxSize(const List< pair >& l)
   return max;
 }
 
-void zakozhurnikova::printNames(const List< pair >& l)
+void zakozhurnikova::printNames(const List< pair >& l, std::ostream& out)
 {
   for (auto it = l.begin(); it != l.end(); ++it)
   {
-    std::cout << it->first;
+    out << it->first;
     auto temp = it;
     std::advance(temp, 1);
     if (temp != l.end())
     {
-      std::cout << ' ';
+      out << ' ';
     }
   }
   if (l.size() != 0)
   {
-    std::cout << '\n';
+    out << '\n';
   }
 }
 
-void zakozhurnikova::printByIndex(const List< pair > &l)
+void zakozhurnikova::printByIndex(const List< pair > &l, std::ostream& out)
 {
   size_t maxSize = getMaxSize(l);
   for (size_t i = 0; i < maxSize; ++i)
@@ -44,9 +44,9 @@ void zakozhurnikova::printByIndex(const List< pair > &l)
       }
       auto temp = it->second.cbegin();
       std::advance(temp, i);
-      std::cout << (printed++ == 0 ? "" : " ") << *(temp);
+      out << (printed++ == 0 ? "" : " ") << *(temp);
     }
-    std::cout << '\n';
+    out << '\n';
   }
 }
 

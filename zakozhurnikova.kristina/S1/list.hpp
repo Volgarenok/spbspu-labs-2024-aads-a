@@ -80,7 +80,7 @@ namespace zakozhurnikova
       return head_->data;
     }
 
-    T& front() const
+    const T& front() const
     {
       return head_->data;
     }
@@ -240,7 +240,7 @@ namespace zakozhurnikova
     void assign (size_t count, const T& value)
     {
       List< T > temp;
-      for(size_t i = 0; i < count; i++)
+      for (size_t i = 0; i < count; i++)
       {
         temp.push_front(value);
       }

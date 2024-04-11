@@ -10,8 +10,8 @@ namespace zakozhurnikova
 
   size_t getMaxSize(const List< pair >& l);
 
-  void printNames(const List< pair >& l);
-  void printByIndex(const List< pair >& l);
+  void printNames(const List< pair >& l, std::ostream& out);
+  void printByIndex(const List< pair >& l, std::ostream& out);
 
   void printSums(const List< pair >& l, std::ostream& out);
 }
