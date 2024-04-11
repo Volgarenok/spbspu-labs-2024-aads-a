@@ -11,7 +11,7 @@ namespace nikitov
   public:
     T& top();
     void push(const T& value);
-    T drop();
+    void pop();
 
     size_t size() const noexcept;
     bool empty() const noexcept;
@@ -33,11 +33,9 @@ namespace nikitov
   }
 
   template< class T >
-  T Stack< T >::drop()
+  void Stack< T >::pop()
   {
-    T value = data_.front();
     data_.pop_front();
-    return value;
   }
 
   template< class T >

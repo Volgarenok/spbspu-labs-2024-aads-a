@@ -32,7 +32,8 @@ int main(int argc, char* argv[])
     Stack< PostfixExpression > postfixStack;
     while (!infixQueue.empty())
     {
-      postfixStack.push(convertExpression(infixQueue.drop()));
+      postfixStack.push(convertExpression(infixQueue.top()));
+      infixQueue.pop();
     }
 
     bool isFirst = true;
@@ -43,7 +44,8 @@ int main(int argc, char* argv[])
         std::cout << ' ';
       }
       isFirst = false;
-      std::cout << postfixStack.drop().solve();
+      std::cout << postfixStack.top().solve();
+      postfixStack.pop();
     }
     std::cout << '\n';
   }

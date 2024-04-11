@@ -53,9 +53,9 @@ void nikitov::PostfixExpression::add(PostfixType&& value)
   data.push(std::move(value));
 }
 
-nikitov::PostfixType nikitov::PostfixExpression::remove()
+void nikitov::PostfixExpression::remove()
 {
-  return data.drop();
+  data.pop();
 }
 
 size_t nikitov::PostfixExpression::size() const
@@ -74,15 +74,18 @@ long long nikitov::PostfixExpression::solve()
   size_t countElem = 0;
   while (!data.empty())
   {
-    PostfixType postfixValue = data.drop();
+    PostfixType postfixValue = data.top();
+    data.pop();
     if (postfixValue.getType() == ExprTypeName::operation)
     {
       if (countElem >= 2)
       {
         long long maxNum = std::numeric_limits< long long >::max();
         long long minNum = std::numeric_limits< long long >::min();
-        long long second = solverStack.drop();
-        long long first = solverStack.drop();
+        long long second = solverStack.top();
+        solverStack.pop();
+        long long first = solverStack.top();
+        solverStack.pop();
         long long result = 0;
         char symb = postfixValue.getOperation();
         switch (symb)
@@ -161,5 +164,7 @@ long long nikitov::PostfixExpression::solve()
       ++countElem;
     }
   }
-  return solverStack.drop();
+  long long result = solverStack.top();
+  solverStack.pop();
+  return result;
 }

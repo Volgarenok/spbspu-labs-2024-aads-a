@@ -17,7 +17,7 @@ namespace nikitov
 
     void add(PostfixType& value);
     void add(PostfixType&& value);
-    PostfixType remove();
+    void remove();
 
     size_t size() const;
     bool empty() const;

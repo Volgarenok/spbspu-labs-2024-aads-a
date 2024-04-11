@@ -9,8 +9,9 @@ namespace nikitov
   class Queue
   {
   public:
+    T& top();
     void push(const T& value);
-    T drop();
+    void pop();
 
     size_t size() const noexcept;
     bool empty() const noexcept;
@@ -20,17 +21,21 @@ namespace nikitov
   };
 
   template< class T >
+  T& Queue< T >::top()
+  {
+    return data_.back();
+  }
+
+  template< class T >
   void Queue< T >::push(const T& value)
   {
     data_.push_front(value);
   }
 
   template< class T >
-  T Queue< T >::drop()
+  void Queue< T >::pop()
   {
-    T value = data_.back();
     data_.pop_back();
-    return value;
   }
 
   template< class T >

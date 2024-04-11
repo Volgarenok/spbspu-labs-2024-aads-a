@@ -25,7 +25,8 @@ nikitov::PostfixExpression nikitov::convertExpression(Queue< InfixType > infixEx
   Stack< StackType > operandsStack;
   while (!infixExpression.empty())
   {
-    InfixType infixValue = infixExpression.drop();
+    InfixType infixValue = infixExpression.top();
+    infixExpression.pop();
     if (infixValue.getType() == ExprTypeName::operand)
     {
       long long value = infixValue.getOperand();
@@ -44,14 +45,15 @@ nikitov::PostfixExpression nikitov::convertExpression(Queue< InfixType > infixEx
         {
           while (!operandsStack.empty() && !operandsStack.top().getType() == nikitov::bracket)
           {
-            char value = operandsStack.drop().getOperation();
+            char value = operandsStack.top().getOperation();
+            operandsStack.pop();
             postfixExpression.add(PostfixType(value));
           }
           if (operandsStack.empty())
           {
             throw std::logic_error("Error: Wrong brackets");
           }
-          operandsStack.drop();
+          operandsStack.pop();
         }
       }
       else
@@ -60,7 +62,8 @@ nikitov::PostfixExpression nikitov::convertExpression(Queue< InfixType > infixEx
         {
           if (isLessPriority(infixValue.getOperation(), operandsStack.top().getOperation()))
           {
-            char value = operandsStack.drop().getOperation();
+            char value = operandsStack.top().getOperation();
+            operandsStack.pop();
             postfixExpression.add(PostfixType(value));
           }
           else
@@ -76,7 +79,8 @@ nikitov::PostfixExpression nikitov::convertExpression(Queue< InfixType > infixEx
 
   while (!operandsStack.empty())
   {
-    StackType stackValue = operandsStack.drop();
+    StackType stackValue = operandsStack.top();
+    operandsStack.pop();
     if (stackValue.getType() == ExprTypeName::bracket)
     {
       throw std::logic_error("Error: Wrong brackets");
