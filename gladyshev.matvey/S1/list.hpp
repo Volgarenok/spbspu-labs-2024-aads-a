@@ -83,10 +83,10 @@ namespace gladyshev
     void remove(const T& value)
     {
       auto checkPred = 
-        [&value](const T& data)
+        [&value](const T& data_)
         {
-          return data == value;
-        };
+          return value == data_
+        }
       remove_if(checkPred);
     }
     template < typename UnaryPredicate >
