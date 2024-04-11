@@ -87,12 +87,12 @@ namespace ishmuratov
 
       Iterator< T > end() noexcept
       {
-        return Iterator< T >(tail_);
+        return Iterator< T >(nullptr);
       }
 
       const Iterator< T > cend() const noexcept
       {
-        return Iterator< T >(tail_);
+        return Iterator< T >(nullptr);
       }
 
       T & front()

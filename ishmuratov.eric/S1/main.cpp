@@ -14,7 +14,7 @@ int main()
   List< std::pair< std::string, List< size_t > > > pairs;
   inputList(pairs, std::cin);
 
-  for (auto list = pairs.begin(); list != ++pairs.end(); ++list)
+  for (auto list = pairs.begin(); list != pairs.end(); ++list)
   {
     std::cout << list->first;
     if (list != pairs.cend())
@@ -33,7 +33,7 @@ int main()
   {
     size_t lsum = 0;
     anotherList = false;
-    for (auto pair = pairs.begin(); pair != ++pairs.end(); ++pair)
+    for (auto pair = pairs.begin(); pair != pairs.end(); ++pair)
     {
       if (!pair->second.empty())
       {
@@ -58,7 +58,7 @@ int main()
        lsums.pushBack(lsum);
        std::cout << "\n";
     }
-    for (auto pair = pairs.begin(); pair != ++pairs.end(); ++pair)
+    for (auto pair = pairs.begin(); pair != pairs.end(); ++pair)
     {
       if (!pair->second.empty())
       {
@@ -76,7 +76,7 @@ int main()
     std::cerr << "Overflow!\n";
     return 1;
   }
-  for (auto sum = lsums.begin(); sum != ++lsums.end(); ++sum)
+  for (auto sum = lsums.begin(); sum != lsums.end(); ++sum)
   {
     std::cout << *sum;
     if (sum != lsums.end())
