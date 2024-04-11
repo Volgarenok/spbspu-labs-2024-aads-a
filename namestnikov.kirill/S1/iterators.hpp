@@ -30,11 +30,7 @@ namespace namestnikov
     {}
     ForwardIterator(const iterator &) = default;
     iterator & operator=(const iterator &) = default;
-    ForwardIterator(ForwardIterator && other) noexcept:
-      node_(other.node_)
-    {
-      other.node_ = nullptr;
-    }
+    ForwardIterator(ForwardIterator && other) noexcept = default;
     iterator & operator++()
     {
       node_ = node_->next_;

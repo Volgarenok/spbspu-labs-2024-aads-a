@@ -29,6 +29,7 @@ namespace namestnikov
     {}
     ConstForwardIterator(const const_iterator &) = default;
     const_iterator & operator=(const const_iterator &) = default;
+    ConstForwardIterator(ConstForwardIterator && other) noexcept = default;
     const_iterator & operator++()
     {
       node_ = node_->next_;
