@@ -1,7 +1,7 @@
 #include "topostfix.hpp"
 
 #include <map>
-
+#include <stdexcept>
 #include "stack.hpp"
 #include "checkdata.hpp"
 
