@@ -52,7 +52,7 @@ gladyshev::Queue< std::string > gladyshev::infixToPostfix(Queue< std::string > e
     }
   }
   if (!ops.empty())
-  { 
+  {
     output.push(ops.drop());
   }
   return output;
