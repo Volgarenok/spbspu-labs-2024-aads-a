@@ -18,26 +18,26 @@ namespace grechishnikov
     List(const List< T >&);
     List(std::initializer_list< T >);
     List(size_t, const T&);
-    List(List< T >&& other);
+    List(List< T >&& other) noexcept;
     ~List();
 
     List< T >& operator=(const List< T >&);
-    List< T >& operator=(List< T >&&);
+    List< T >& operator=(List< T >&&) noexcept;
 
-    Iterator< T > begin();
-    Iterator< T > end();
-    ConstIterator< T > cbegin() const;
-    ConstIterator< T > cend() const;
+    Iterator< T > begin() noexcept;
+    Iterator< T > end() noexcept;
+    ConstIterator< T > cbegin() const noexcept;
+    ConstIterator< T > cend() const noexcept;
 
-    bool empty() const;
-    size_t size() const;
+    bool empty() const noexcept;
+    size_t size() const noexcept;
 
-    void clear();
+    void clear() noexcept;
 
     void push_back(const T&);
     void push_front(const T&);
-    void pop_back();
-    void pop_front();
+    void pop_back() noexcept;
+    void pop_front() noexcept;
 
     void swap(List< T >&);
 
@@ -63,7 +63,7 @@ namespace grechishnikov
     void splice(ConstIterator< T >, List< T >&, ConstIterator< T >, ConstIterator< T >);
     void splice(ConstIterator< T >, List< T >&&, ConstIterator< T >, ConstIterator< T >);
 
-    void reverse();
+    void reverse() noexcept;
 
   private:
     size_t size_;
