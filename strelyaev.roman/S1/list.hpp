@@ -117,7 +117,6 @@ namespace strelyaev
     {
       temp.push_front(value);
     }
-    clear();
     swap(temp);
   }
 
