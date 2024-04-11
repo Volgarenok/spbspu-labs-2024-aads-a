@@ -7,6 +7,11 @@ namespace strelyaev
     template< typename T >
     struct Node
     {
+      Node(Node* prev, Node* next):
+        value_(T()),
+        next_(next),
+        prev_(prev)
+      {}
       Node(const T& value):
         value_(value),
         next_(nullptr),

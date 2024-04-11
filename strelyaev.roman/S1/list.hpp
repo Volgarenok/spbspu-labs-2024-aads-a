@@ -47,7 +47,7 @@ namespace strelyaev
       ConstIterator< T > cend() const noexcept;
 
     private:
-      detail::Node< T > imaginary_node;
+      detail::Node< T >* imaginary_node;
       detail::Node< T >* head_;
       detail::Node< T >* tail_;
       size_t size_;
@@ -55,7 +55,7 @@ namespace strelyaev
 
   template< typename T >
   List< T >::List():
-    imaginary_node(nullptr, nullptr, T()),
+    imaginary_node(new detail::Node< T >(nullptr, nullptr, T())),
     head_(nullptr),
     tail_(nullptr),
     size_(0)
@@ -65,7 +65,7 @@ namespace strelyaev
   List< T >::List(const List& other):
     List()
   {
-    imaginary_node = other.imaginary_node;
+    imaginary_node = new detail::Node< T >(tail_, nullptr, T());
     detail::Node< T >* node = other.head_;
     while (size_ != other.size_)
     {
@@ -76,7 +76,7 @@ namespace strelyaev
 
   template< typename T >
   List< T >::List(List< T >&& other):
-    imaginary_node(other.imaginary_node),
+    imaginary_node(new detail::Node< T >(tail_, nullptr, T())),
     head_(other.head_),
     tail_(other.tail_),
     size_(other.size_)
@@ -97,6 +97,7 @@ namespace strelyaev
   List< T >::~List()
   {
     clear();
+    delete imaginary_node;
   }
 
   template< typename T >
@@ -134,8 +135,8 @@ namespace strelyaev
   {
     if (size_ == 0)
     {
-      detail::Node< T >* node = new detail::Node< T >{nullptr, std::addressof(imaginary_node), value};
-      imaginary_node.prev_ = node;
+      detail::Node< T >* node = new detail::Node< T >{nullptr, imaginary_node, value};
+      imaginary_node->prev_ = node;
       head_ = node;
       tail_ = node;
       size_++;
@@ -298,7 +299,7 @@ namespace strelyaev
   template< typename T >
   Iterator< T > List< T >::end() noexcept
   {
-    return Iterator< T >(std::addressof(imaginary_node));
+    return Iterator< T >(imaginary_node);
   }
 
   template< typename T >
@@ -310,7 +311,7 @@ namespace strelyaev
   template< typename T >
   ConstIterator< T > List< T >::cend() const noexcept
   {
-    return ConstIterator< T >(const_cast< detail::Node< T >* >(std::addressof(imaginary_node)));
+    return ConstIterator< T >(const_cast< detail::Node< T >* >(imaginary_node));
   }
 }
 #endif
