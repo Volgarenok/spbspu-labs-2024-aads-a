@@ -1,8 +1,12 @@
 #ifndef LIST_HPP
 #define LIST_HPP
 
+#include <utility>
+#include <memory>
+#include <stdexcept>
 #include "node.hpp"
 #include "constIterator.hpp"
+
 
 namespace sivkov
 {

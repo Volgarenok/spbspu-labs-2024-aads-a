@@ -1,14 +1,17 @@
 #ifndef CONSTITERATOR_HPP
 #define CONSTITERATOR_HPP
 
+#include <memory>
 #include "node.hpp"
 
 namespace sivkov
 {
   template < typename T >
+  class List;
+  template < typename T >
   class ConstIterator
   {
-    template<typename T> friend class List;
+    friend class List< T >;
   public:
     ConstIterator();
 
