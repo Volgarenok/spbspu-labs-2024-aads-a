@@ -48,6 +48,7 @@ namespace gladyshev
           push_front(curr->data);
           curr = curr->next;
         }
+      }
       catch (...)
       {
         throw;
