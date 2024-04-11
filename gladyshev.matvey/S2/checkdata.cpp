@@ -14,5 +14,5 @@ bool gladyshev::isNumber(const std::string& s)
 
 bool gladyshev::isOperator(const std::string& s)
 {
-  return s ==  "+" || s == "-" || s == "*" || s == "/" || s == "%";
+  return s ==  "-" || s == "+" || s == "*" || s == "/" || s == "%";
 }
