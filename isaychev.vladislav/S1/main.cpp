@@ -12,6 +12,7 @@ int main()
   try
   {
     inputList(std::cin, mainList);
+
     reverseAll(mainList);
 
     size_t upperBorder = getMaxFwdElemNum(mainList) + 1;
@@ -33,7 +34,6 @@ int main()
     }
 
     reverseAll(mainList);
-//    outputResults(std::cout, mainList);
   }
   catch (const std::bad_alloc & e)
   {
