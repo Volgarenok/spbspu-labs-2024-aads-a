@@ -14,7 +14,7 @@ namespace grechishnikov
   {
   public:
     ConstIterator();
-    ConstIterator(Node< T >* node);
+    ConstIterator(detail::Node< T >* node);
     ConstIterator(const ConstIterator< T >& other);
     ~ConstIterator() = default;
 
@@ -38,11 +38,11 @@ namespace grechishnikov
     friend List< T >;
 
   private:
-    Node< T >* node_;
+    detail::Node< T >* node_;
   };
 
   template< typename T >
-  ConstIterator< T >::ConstIterator(Node< T >* node):
+  ConstIterator< T >::ConstIterator(detail::Node< T >* node):
     node_(node)
   {}
 

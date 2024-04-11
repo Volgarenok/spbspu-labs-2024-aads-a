@@ -67,8 +67,8 @@ namespace grechishnikov
 
   private:
     size_t size_;
-    Node< T >* head_;
-    Node< T >* tail_;
+    detail::Node< T >* head_;
+    detail::Node< T >* tail_;
   };
 
   template< typename T >
@@ -84,7 +84,7 @@ namespace grechishnikov
     head_(nullptr),
     tail_(nullptr)
   {
-    Node< T >* node = other.head_;
+    detail::Node< T >* node = other.head_;
     while(node)
     {
       push_back(node->data_);
@@ -136,7 +136,7 @@ namespace grechishnikov
   List< T >& List< T >::operator=(const List< T >& other)
   {
     clear();
-    Node< T >* temp = other.head_;
+    detail::Node< T >* temp = other.head_;
     while (!temp)
     {
       push_back(temp->data_);
@@ -193,7 +193,7 @@ namespace grechishnikov
   {
     while (head_)
     {
-      Node< T >* temp = head_->next_;
+      detail::Node< T >* temp = head_->next_;
       delete head_;
       head_ = temp;
     }
@@ -205,7 +205,7 @@ namespace grechishnikov
   template< typename T >
   void List< T >::push_back(const T& data)
   {
-    Node< T >* pushNode = new Node< T >(data, tail_, nullptr);
+    detail::Node< T >* pushNode = new detail::Node< T >(data, tail_, nullptr);
     if (!head_)
     {
       head_ = pushNode;
@@ -222,7 +222,7 @@ namespace grechishnikov
   template< typename T >
   void List< T >::push_front(const T& data)
   {
-    Node< T >* pushNode = new Node< T >(data, nullptr, head_);
+    detail::Node< T >* pushNode = new detail::Node< T >(data, nullptr, head_);
     if (!head_)
     {
       head_ = pushNode;
@@ -247,7 +247,7 @@ namespace grechishnikov
     }
     else
     {
-      Node< T >* temp = tail_->prev_;
+      detail::Node< T >* temp = tail_->prev_;
       delete tail_;
       tail_ = temp;
       tail_->next_ = nullptr;
@@ -266,7 +266,7 @@ namespace grechishnikov
     }
     else
     {
-      Node< T >* temp = head_->next_;
+      detail::Node< T >* temp = head_->next_;
       delete head_;
       head_ = temp;
       head_->prev_ = nullptr;
@@ -347,8 +347,8 @@ namespace grechishnikov
   template< typename T >
   Iterator< T > List< T >::erase(ConstIterator< T > iter)
   {
-    Node< T >* prevPoi = iter.node_->prev_;
-    Node< T >* nextPoi = iter.node_->next_;
+    detail::Node< T >* prevPoi = iter.node_->prev_;
+    detail::Node< T >* nextPoi = iter.node_->next_;
     auto ret = Iterator< T >(nextPoi);
     if (!prevPoi)
     {
@@ -377,7 +377,7 @@ namespace grechishnikov
   template< typename T >
   Iterator< T > List< T >::insert(ConstIterator< T > where, T&& value)
   {
-    auto temp = new Node< T > (value, nullptr, nullptr);
+    auto temp = new detail::Node< T > (value, nullptr, nullptr);
     auto nextNode = where + 1;
     if (where == cend())
     {
