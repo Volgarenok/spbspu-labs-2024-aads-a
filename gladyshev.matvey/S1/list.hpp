@@ -42,7 +42,7 @@ namespace gladyshev
     {
       try
       {
-        detail::Node< T > * curr = other.head_;
+        detail::Node< T >* curr = other.head_;
         while (curr)
         {
           push_front(curr->data);
