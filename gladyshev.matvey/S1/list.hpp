@@ -25,33 +25,19 @@ namespace gladyshev
     List(const T& data, size_t size):
       List()
     {
-      try
+      for (size_t i = 0; i < size; ++i)
       {
-        for (size_t i = 0; i < size; ++i)
-        {
-          push_front(data);
-        }
-      }
-      catch (...)
-      {
-        throw;
+        push_front(data);
       }
     }
     List(const List& other):
-      head_(nullptr)
+      List()
     {
-      try
+      detail::Node< T >* curr = other.head_;
+      while (curr)
       {
-        detail::Node< T >* curr = other.head_;
-        while (curr)
-        {
-          push_front(curr->data);
-          curr = curr->next;
-        }
-      }
-      catch (...)
-      {
-        throw;
+        push_front(curr->data);
+        curr = curr->next;
       }
     }
     List(List&& other) noexcept:
@@ -73,19 +59,12 @@ namespace gladyshev
     void assign(size_t size, const T& value)
     {
       List< T > temp;
-      try
+      for (size_t i = 0; i < size; ++i)
       {
-        for (size_t i = 0; i < size; ++i)
-        {
-          temp.push_front(value);
-        }
-        temp.reverse();
-        swap(temp);
+        temp.push_front(value);
       }
-      catch (...)
-      {
-        throw;
-      }
+      temp.reverse();
+      swap(temp);
     }
     void reverse() noexcept
     {
@@ -103,7 +82,8 @@ namespace gladyshev
     }
     void remove(const T& value)
     {
-      auto checkPred = remove_if([&value](const T& data)
+      auto checkPred = remove_if(
+        [&value](const T& data)
       {
         return data == value;
       });
