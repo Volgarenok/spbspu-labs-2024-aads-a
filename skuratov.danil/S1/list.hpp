@@ -6,7 +6,7 @@
 
 namespace skuratov
 {
-  template <typename T>
+  template < typename T >
   class List
   {
   public:
@@ -23,9 +23,45 @@ namespace skuratov
       }
     }
 
-    Node<T>* push_front(T value)
+    List(size_t n, const T& value):
+      head(nullptr),
+      tail(nullptr),
+      size(0)
     {
-      Node<T>* ptr = new Node<T>(value);
+      for (size_t i = 0; i < n; ++i)
+      {
+        push_back(value);
+      }
+    }
+
+    iterator< T > begin() noexcept
+    {
+      return iteraror< T >(head);
+    }
+
+    iterator< T > end() noexcept
+    {
+      return iterator< T >(nullptr);
+    }
+
+    T & front()
+    {
+      return head -> value;
+    }
+
+    T & back()
+    {
+      return tail -> value;
+    }
+
+    bool empty() const
+    {
+      return !size;
+    }
+
+    Node< T >* push_front(T value)
+    {
+      Node< T >* ptr = new Node< T >(value);
       ptr->next = head;
       if (head != nullptr)
       {
@@ -40,9 +76,9 @@ namespace skuratov
       return ptr;
     }
 
-    Node<T>* push_back(T value)
+    Node< T >* push_back(T value)
     {
-      Node<T>* ptr = new Node<T>(value);
+      Node< T >* ptr = new Node< T >(value);
       ptr->prev = tail;
       if (tail != nullptr)
       {
@@ -63,7 +99,7 @@ namespace skuratov
       {
         return;
       }
-      Node<T>* ptr = head->next;
+      Node< T >* ptr = head->next;
       if (ptr != nullptr)
       {
         ptr->prev = nullptr;
@@ -83,7 +119,7 @@ namespace skuratov
       {
         return;
       }
-      Node<T>* ptr = tail->prev;
+      Node< T >* ptr = tail->prev;
       if (ptr != nullptr)
       {
         ptr->next = nullptr;
@@ -97,9 +133,24 @@ namespace skuratov
       --size;
     }
 
-    Node<T>* getAt(size_t index)
+    void assign(size_t n, const T& value)
+    {}
+
+    void clear() noexcept
+    {}
+
+    void swap() noexcept
+    {}
+
+    void remove()
+    {}
+
+    void remove_if()
+    {}
+
+    Node< T >* getAt(size_t index)
     {
-      Node<T>* ptr = head;
+      Node< T >* ptr = head;
       for (size_t j = 0; j != index; j++)
       {
         if (ptr == nullptr)
@@ -111,24 +162,24 @@ namespace skuratov
       return ptr;
     }
 
-    Node<T>* operator [] (int index)
+    Node< T >* operator [] (int index)
     {
       return getAt(index);
     }
 
-    Node<T>* insert(int index, double value)
+    Node< T >* insert(int index, double value)
     {
-      Node<T>* right = getAt(index);
+      Node< T >* right = getAt(index);
       if (right == nullptr)
       {
         return push_back(value);
       }
-      Node<T>* left = right->prev;
+      Node< T >* left = right->prev;
       if (left == nullptr)
       {
         return push_front(value);
       }
-      Node<T>* ptr = new Node<T>(value);
+      Node< T >* ptr = new Node< T >(value);
       ptr->prev = left;
       ptr->next = right;
       left->prev = ptr;
@@ -139,7 +190,7 @@ namespace skuratov
 
     void erase(int index)
     {
-      Node<T>* ptr = getAt(index);
+      Node< T >* ptr = getAt(index);
       if (ptr == nullptr)
       {
         return;
@@ -154,8 +205,8 @@ namespace skuratov
         pop_back();
         return;
       }
-      Node<T>* left = ptr->prev;
-      Node<T>* right = ptr->next;
+      Node< T >* left = ptr->prev;
+      Node< T >* right = ptr->next;
       left->next = right;
       right->prev = left;
       delete ptr;
@@ -167,14 +218,9 @@ namespace skuratov
       return size;
     }
 
-    bool empty() const
-    {
-      return !size;
-    }
-
   private:
-    Node<T>* head;
-    Node<T>* tail;
+    Node< T >* head;
+    Node< T >* tail;
     size_t size;
   };
 }
