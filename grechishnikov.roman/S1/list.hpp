@@ -36,10 +36,10 @@ namespace grechishnikov
 
     void push_back(const T&);
     void push_front(const T&);
-    void pop_back() noexcept;
-    void pop_front() noexcept;
+    void pop_back();
+    void pop_front();
 
-    void swap(List< T >&);
+    void swap(List< T >&) noexcept;
 
     void assign(size_t, const T&);
     void assign(Iterator< T >, Iterator< T >);
@@ -118,7 +118,7 @@ namespace grechishnikov
   }
 
   template< typename T >
-  List< T >::List(List< T >&& other):
+  List< T >::List(List< T >&& other) noexcept:
     size_(0),
     head_(nullptr),
     tail_(nullptr)
@@ -146,50 +146,50 @@ namespace grechishnikov
   }
 
   template< typename T >
-  List< T >& List< T >::operator=(List< T >&& other)
+  List< T >& List< T >::operator=(List< T >&& other) noexcept
   {
     swap(other);
     return *this;
   }
 
   template< typename T >
-  Iterator< T > List< T >::begin()
+  Iterator< T > List< T >::begin() noexcept
   {
     return Iterator< T >(head_);
   }
 
   template< typename T >
-  Iterator< T > List< T >::end()
+  Iterator< T > List< T >::end() noexcept
   {
     return Iterator< T >(nullptr);
   }
 
   template< typename T >
-  ConstIterator< T > List< T >::cbegin() const
+  ConstIterator< T > List< T >::cbegin() const noexcept
   {
     return ConstIterator< T >(head_);
   }
 
   template< typename T >
-  ConstIterator< T > List< T >::cend() const
+  ConstIterator< T > List< T >::cend() const noexcept
   {
     return ConstIterator< T >(nullptr);
   }
 
   template< typename T >
-  bool List< T >::empty() const
+  bool List< T >::empty() const noexcept
   {
     return !head_;
   }
 
   template< typename T >
-  size_t List< T >::size() const
+  size_t List< T >::size() const noexcept
   {
     return size_;
   }
 
   template< typename T >
-  void List< T >::clear()
+  void List< T >::clear() noexcept
   {
     while (head_)
     {
@@ -275,7 +275,7 @@ namespace grechishnikov
   }
 
   template< typename T >
-  void List< T >::swap(List< T >& other)
+  void List< T >::swap(List< T >& other) noexcept
   {
     std::swap(size_, other.size_);
     std::swap(head_, other.head_);
@@ -428,7 +428,7 @@ namespace grechishnikov
   }
 
   template< typename T >
-  void List< T >::reverse()
+  void List< T >::reverse() noexcept
   {
     List< T > temp;
     auto iter = Iterator< T >(tail_);
