@@ -528,7 +528,9 @@ namespace zaitsev
     void sort(Compare cmp)
     {
       if (!head_ || !head_->next_)
+      {
         return;
+      }
       size_t sz = 0;
       const Node* cur = head_;
       while (cur)
@@ -585,7 +587,7 @@ namespace zaitsev
     }
     void sort()
     {
-      sort(std::less< T >());
+      sort(std::less< T >{});
     }
   };
 }
