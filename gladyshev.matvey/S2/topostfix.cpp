@@ -19,7 +19,7 @@ gladyshev::Queue< std::string > gladyshev::infixToPostfix(Queue< std::string > e
     {"/", 2},
     {"%", 2}
   };
-  while(!expression.empty())
+  while (!expression.empty())
   {
     std::string value = expression.drop();
     if (isNumber(value))
@@ -40,12 +40,8 @@ gladyshev::Queue< std::string > gladyshev::infixToPostfix(Queue< std::string > e
     }
     else if (value == ")")
     {
-      while (ops.top() != "(")
+      while (!ops.empty() && ops.top() != "(")
       {
-        if (!isOperator(ops.top()))
-        {
-          throw std::logic_error("what is that");
-        }
         output.push(ops.drop());
       }
       ops.drop();
@@ -57,6 +53,10 @@ gladyshev::Queue< std::string > gladyshev::infixToPostfix(Queue< std::string > e
   }
   if (!ops.empty())
   {
+    if (ops.top() == "(")
+    {
+      throw std::logic_error("bad brasket");
+    }
     output.push(ops.drop());
   }
   return output;
