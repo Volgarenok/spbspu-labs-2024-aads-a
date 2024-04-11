@@ -48,6 +48,7 @@ namespace ishmuratov
         catch (const std::exception & e)
         {
           clear();
+          throw;
         }
       }
 

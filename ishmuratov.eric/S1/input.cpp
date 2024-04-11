@@ -7,6 +7,10 @@ void ishmuratov::inputList(List< std::pair< std::string, List< size_t > > > & pa
   while (input)
   {
     input >> str;
+    if (str.empty())
+    {
+      break;
+    }
     pairs.pushBack({ str, List< size_t >() });
     while (input >> num)
     {
