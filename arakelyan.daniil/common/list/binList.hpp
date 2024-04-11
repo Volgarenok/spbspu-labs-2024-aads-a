@@ -20,11 +20,13 @@ namespace arakelyan
     BinList();
     BinList(const T &val, size_t size);
     BinList(const BinList< T > &otherLs);
+    BinList(BinList< T > &&otherLs);
     BinList(std::initializer_list< T > otherLs);
     BinList(iterator it_start, iterator it_end);
     ~BinList();
 
     BinList< T > &operator=(const BinList< T > &otherLs);
+    BinList< T > &operator=(BinList< T > otherLs);
     BinList< T > &operator=(BinList< T > &&otherLs);
     BinList< T > &operator=(std::initializer_list< T > otherLs);
 
@@ -115,6 +117,13 @@ arakelyan::BinList< T >::BinList(const BinList<T> &otherLs):
 }
 
 template < class T >
+arakelyan::BinList< T >::BinList(BinList< T > &&otherLs):
+  BinList()
+{
+  swap(otherLs);
+}
+
+template < class T >
 arakelyan::BinList< T >::BinList(std::initializer_list< T > otherLs):
   BinList()
 {
@@ -148,6 +157,13 @@ arakelyan::BinList< T > &arakelyan::BinList< T >::operator=(const arakelyan::Bin
   {
     swap(tempList);
   }
+  return *this;
+}
+
+template < class T >
+arakelyan::BinList< T > &arakelyan::BinList< T >::operator=(BinList< T > otherLs)
+{
+  swap(otherLs);
   return *this;
 }
 
@@ -238,6 +254,7 @@ const T &arakelyan::BinList< T >::back() const
   return tail_->value;
 }
 
+template < class T >
 void arakelyan::BinList< T >::push_back(const T &el)
 {
   details::Node< T > *node = new details::Node< T >(el);

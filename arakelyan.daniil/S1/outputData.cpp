@@ -37,11 +37,8 @@ void arakelyan::outputPairsLists(BinList_t &listOfPairs, arakelyan::BinList< siz
     {
       if (!iter->second.empty())
       {
-        if (outed == 0)
+        if (outed != 0)
         {
-          out << "";
-        }
-        else {
           out << " ";
         }
         out << iter->second.front();
