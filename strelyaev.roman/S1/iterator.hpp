@@ -55,26 +55,6 @@ namespace strelyaev
       return *this;
      }
 
-     Iterator< T >& operator+(int n)
-     {
-      Iterator< T > temp(*this);
-      for (int a = 0; a < n; a++)
-      {
-        ++temp;
-      }
-      return temp;
-     }
-
-     Iterator< T >& operator-(int n)
-     {
-      Iterator< T > temp(*this);
-      for (int a = 0; a < n; a--)
-      {
-        --temp;
-      }
-      return temp;
-     }
-
      T& operator*()
      {
        return node_->value_;
