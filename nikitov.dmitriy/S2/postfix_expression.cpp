@@ -68,6 +68,41 @@ bool nikitov::PostfixExpression::empty() const
   return data.empty();
 }
 
+bool isAdditionOverflow(long long first, long long second)
+{
+  long long maxNum = std::numeric_limits< long long >::max();
+  long long minNum = std::numeric_limits< long long >::min();
+  bool isOverflow = first > 0 && maxNum - first < second;
+  isOverflow = isOverflow || (first < 0 && minNum - first > second);
+  return isOverflow;
+}
+
+bool isSubstractionOverflow(long long first, long long second)
+{
+  long long maxNum = std::numeric_limits< long long >::max();
+  long long minNum = std::numeric_limits< long long >::min();
+  bool isOverflow = first > 0 && minNum + first > second;
+  isOverflow = isOverflow || (first < 0 && maxNum + first < second - 1);
+  return isOverflow;
+}
+
+bool isMultiplicationOverflow(long long first, long long second)
+{
+  long long maxNum = std::numeric_limits< long long >::max();
+  long long minNum = std::numeric_limits< long long >::min();
+  bool isOverflow = (first > 0 && second > 0) && maxNum / first < second;
+  isOverflow = isOverflow || ((first < 0 && second < 0) && maxNum / first > second);
+  isOverflow = isOverflow || ((first > 0 && second < 0) && minNum / first > second);
+  isOverflow = isOverflow || ((first < 0 && second > 0) && minNum / first < second);
+  return isOverflow;
+}
+
+bool isDivisionOverflow(long long first, long long second)
+{
+  long long minNum = std::numeric_limits< long long >::min();
+  return first == minNum && second == -1;
+}
+
 long long nikitov::PostfixExpression::solve()
 {
   Stack< long long > solverStack;
@@ -80,8 +115,6 @@ long long nikitov::PostfixExpression::solve()
     {
       if (countElem >= 2)
       {
-        long long maxNum = std::numeric_limits< long long >::max();
-        long long minNum = std::numeric_limits< long long >::min();
         long long second = solverStack.top();
         solverStack.pop();
         long long first = solverStack.top();
@@ -92,7 +125,7 @@ long long nikitov::PostfixExpression::solve()
         {
         case '+':
         {
-          if ((first > 0 && maxNum - first < second) || (first < 0 && minNum - first > second))
+          if (isAdditionOverflow(first, second))
           {
             throw std::out_of_range("Error: Addition overflow");
           }
@@ -101,7 +134,7 @@ long long nikitov::PostfixExpression::solve()
         }
         case '-':
         {
-          if ((first > 0 && minNum + first > second) || (first < 0 && maxNum + first < second - 1))
+          if (isSubstractionOverflow(first, second))
           {
             throw std::out_of_range("Error: Subtraction overflow");
           }
@@ -110,10 +143,7 @@ long long nikitov::PostfixExpression::solve()
         }
         case '*':
         {
-          if (((first > 0 && second > 0) && maxNum / first < second) ||
-            ((first < 0 && second < 0) && maxNum / first > second) ||
-            ((first > 0 && second < 0) && minNum / first > second) ||
-            ((first < 0 && second > 0) && minNum / first < second))
+          if (isMultiplicationOverflow(first, second))
           {
             throw std::out_of_range("Error: Mulptiplication overflow");
           }
@@ -126,7 +156,7 @@ long long nikitov::PostfixExpression::solve()
           {
             throw std::logic_error("Error: Division by zero");
           }
-          if (first == minNum && second == -1)
+          if (isDivisionOverflow(first, second))
           {
             throw std::out_of_range("Error: Division overflow");
           }
