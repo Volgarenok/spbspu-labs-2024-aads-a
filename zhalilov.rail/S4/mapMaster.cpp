@@ -87,6 +87,7 @@ void zhalilov::MapMaster::complementCmd(List < std::string > &cmdSource, std::st
 
   std::string mapName = cmdSource.front();
   maps_.insert(std::pair < std::string, primaryMap >(mapName, resultMap));
+  result = std::string();
 }
 
 void zhalilov::MapMaster::intersectCmd(List < std::string > &cmdSource, std::string &result)
@@ -116,6 +117,7 @@ void zhalilov::MapMaster::intersectCmd(List < std::string > &cmdSource, std::str
 
   std::string mapName = cmdSource.front();
   maps_.insert(std::pair < std::string, primaryMap >(mapName, resultMap));
+  result = std::string();
 }
 
 void zhalilov::MapMaster::unionCmd(List < std::string > &cmdSource, std::string &result)
@@ -135,6 +137,7 @@ void zhalilov::MapMaster::unionCmd(List < std::string > &cmdSource, std::string 
 
   std::string mapName = cmdSource.front();
   maps_.insert(std::pair < std::string, primaryMap >(mapName, resultMap));
+  result = std::string();
 }
 
 void zhalilov::MapMaster::getMapSource(const std::string &mapName, std::string &source)
