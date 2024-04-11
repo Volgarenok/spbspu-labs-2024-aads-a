@@ -135,6 +135,46 @@ arakelyan::BinList< T >::BinList(iterator it_start, iterator it_end):
 }
 
 template < class T >
+arakelyan::BinList< T >::~BinList()
+{
+  clear();
+}
+
+template < class T >
+arakelyan::BinList< T > &arakelyan::BinList< T >::operator=(const arakelyan::BinList< T > &otherLs)
+{
+  BinList< T > tempList(otherLs);
+  if (this != std::addressof(tempList))
+  {
+    swap(tempList);
+  }
+  return *this;
+}
+
+template < class T >
+arakelyan::BinList< T > &arakelyan::BinList< T >::operator=(BinList< T > &&otherLs)
+{
+  if (this != &otherLs)
+  {
+    clear();
+    swap(std::move(otherLs));
+  }
+  return *this;
+}
+
+template < class T >
+arakelyan::BinList< T > &arakelyan::BinList< T >::operator=(std::initializer_list< T > otherLs)
+{
+  clear();
+  auto otherIt = otherLs.begin();
+  while (otherIt != otherLs.end())
+  {
+    push_back(*otherIt++);
+  }
+  return *this;
+}
+
+template < class T >
 size_t arakelyan::BinList< T >::get_size() const noexcept
 {
   return size_;
@@ -168,6 +208,302 @@ template < class T >
 arakelyan::ConstIterator< T > arakelyan::BinList< T >::cend() const noexcept
 {
   return ConstIterator< T >(tail_->nextNode);
+}
+
+template < class T >
+T &arakelyan::BinList< T >::front()
+{
+  assert(!empty());
+  return head_->value;
+}
+
+template < class T >
+T &arakelyan::BinList< T >::back()
+{
+  assert(!empty());
+  return tail_->value;
+}
+
+template < class T >
+const T &arakelyan::BinList< T >::front() const
+{
+  assert(!empty());
+  return head_->value;
+}
+
+template < class T >
+const T &arakelyan::BinList< T >::back() const
+{
+  assert(!empty());
+  return tail_->value;
+}
+
+void arakelyan::BinList< T >::push_back(const T &el)
+{
+  details::Node< T > *node = new details::Node< T >(el);
+  if ((head_ == nullptr) && (tail_ == nullptr))
+  {
+    head_ = node;
+    tail_ = node;
+  }
+  else
+  {
+    tail_->nextNode = node;
+    node->prevNode = tail_;
+    tail_ = node;
+  }
+  ++size_;
+}
+
+template < class T >
+void arakelyan::BinList< T >::push_front(const T &el)
+{
+  details::Node< T > *node = new details::Node< T >(el);
+  node->nextNode = head_;
+  if (head_ == nullptr && tail_ == nullptr)
+  {
+    head_ = node;
+    tail_ = node;
+  }
+  head_ = node;
+  ++size_;
+}
+
+template < class T >
+void arakelyan::BinList< T >::pop_front()
+{
+  assert(!empty());
+  details::Node< T > *node = head_->nextNode;
+  if (node != nullptr)
+  {
+    node->prevNode = nullptr;
+  }
+  else
+  {
+    tail_ = nullptr;
+  }
+  delete head_;
+  head_ = node;
+  --size_;
+}
+
+template < class T >
+void arakelyan::BinList< T >::pop_back()
+{
+  assert(!empty());
+  details::Node< T > *node = tail_->prevNode;
+  if (node != nullptr)
+  {
+    node->nextNode = nullptr;
+  }
+  else
+  {
+    head_ = nullptr;
+  }
+  delete tail_;
+  tail_ = node;
+  --size_;
+}
+
+template < class T >
+void arakelyan::BinList< T >::assign(const T &val, const size_t size)
+{
+  clear();
+  for (size_t i = 0; i < size; ++i)
+  {
+    push_back(val);
+  }
+}
+
+template < class T >
+void arakelyan::BinList< T >::assign(std::initializer_list< T > otherLs)
+{
+  clear();
+  for (auto it = otherLs.begin(); it != otherLs.end(); ++it)
+  {
+    push_back(*it);
+  }
+}
+
+template < class T >
+void arakelyan::BinList< T >::assign(iterator it_start, iterator it_end)
+{
+  clear();
+  for (auto it = it_start; it != it_end; ++it)
+  {
+    push_back(*it);
+  }
+}
+
+template < class T >
+void arakelyan::BinList< T >::clear() noexcept
+{
+  while (head_)
+  {
+    pop_front();
+  }
+}
+
+template < class T >
+void arakelyan::BinList< T >::swap(BinList< T > &otherLs) noexcept
+{
+  std::swap(head_, otherLs.head_);
+  std::swap(tail_, otherLs.tail_);
+  std::swap(size_, otherLs.size_);
+}
+
+template < class T >
+void arakelyan::BinList< T >::remove(const T &val)
+{
+  assert(!empty());
+  details::Node< T > *node = head_;
+  while (node)
+  {
+    if (node->value == val)
+    {
+      if (node == head_)
+      {
+        pop_front();
+        node = head_->nextNode;
+      }
+      else if (node == tail_)
+      {
+        pop_back();
+        return;
+      }
+      else
+      {
+        details::Node< T > *prevNode = node->prevNode;
+        details::Node< T > *nextNode = node->nextNode;
+        details::Node< T > *nodeToDel = node;
+        delete nodeToDel;
+        node = nextNode;
+        nextNode->prevNode = prevNode;
+        prevNode->nextNode = nextNode;
+      }
+    }
+    else
+    {
+      node = node->nextNode;
+    }
+  }
+}
+
+template < class T >
+template < class UnaryPredicate >
+void arakelyan::BinList< T >::remove_if(UnaryPredicate p)
+{
+  details::Node< T > *node = head_;
+  while (node)
+  {
+    if (p(node->value))
+    {
+      if (node == head_)
+      {
+        pop_front();
+      }
+      else if (node == tail_)
+      {
+        pop_back();
+      }
+      else
+      {
+        details::Node< T > *prevNode = node->prevNode;
+        details::Node< T > *nextNode = node->nextNode;
+        details::Node< T > *nodeToDel = node;
+        delete nodeToDel;
+        node = nextNode;
+        nextNode->prevNode = prevNode;
+        prevNode->nextNode = nextNode;
+      }
+    }
+    else
+    {
+      node = node->nextNode;
+    }
+  }
+}
+
+template < class T >
+arakelyan::Iterator< T > arakelyan::BinList< T >::insert(const_iterator it_pos, const T &val)
+{
+  if (it_pos == cbegin())
+  {
+    push_front(val);
+    return begin();
+  }
+  else if (it_pos == cend())
+  {
+    push_back(val);
+    return begin();
+  }
+  else
+  {
+    details::Node< T > *newNode = new details::Node< T >(val);
+    details::Node< T > *nextNode = it_pos.node->nextNode;
+    it_pos.node->nextNode = newNode;
+    newNode->prevNode = it_pos.node;
+    newNode->nextNode = nextNode;
+    nextNode->prevNode = newNode;
+    ++size_;
+    return Iterator< T >(newNode);
+  }
+}
+
+template < class T >
+arakelyan::Iterator< T > arakelyan::BinList< T >::erase(iterator it_pos)
+{
+  if (it_pos == begin())
+  {
+    pop_front();
+    return begin();
+  }
+  else if (it_pos == end())
+  {
+    pop_back();
+    return end();
+  }
+  else
+  {
+    details::Node< T > *prevNode = it_pos.node->prevNode;
+    details::Node< T > *nextNode = it_pos.node->nextNode;
+    prevNode->nextNode = nextNode;
+    nextNode->prevNode = prevNode;
+    delete it_pos.node;
+    return Iterator< T >(nextNode);
+  }
+}
+
+template < class T >
+arakelyan::Iterator< T > arakelyan::BinList< T >::erase(iterator it_start, iterator it_end)
+{
+  if (it_start == begin() && it_end == end())
+  {
+    clear();
+    return end();
+  }
+  else if (it_start == begin() && it_end != end())
+  {
+    while (it_start != it_end && it_start != end())
+    {
+      ++it_start;
+      pop_front();
+    }
+    return it_start;
+  }
+  else if (it_start != begin() && it_end == end())
+  {
+    while (it_start != it_end)
+    {
+      erase(it_start);
+    }
+    return it_start;
+  }
+  while (it_start != it_end && it_start != end())
+  {
+    erase(it_start);
+  }
+  return it_end;
 }
 
 template < class T >
@@ -280,336 +616,7 @@ void arakelyan::BinList< T >::reverse() noexcept
   std::swap(head_, tail_);
 }
 
-template < class T >
-T &arakelyan::BinList< T >::front()
-{
-  assert(!empty());
-  return head_->value;
-}
 
-template < class T >
-T &arakelyan::BinList< T >::back()
-{
-  assert(!empty());
-  return tail_->value;
-}
-
-template < class T >
-const T &arakelyan::BinList< T >::front() const
-{
-  assert(!empty());
-  return head_->value;
-}
-
-template < class T >
-const T &arakelyan::BinList< T >::back() const
-{
-  assert(!empty());
-  return tail_->value;
-}
-
-template < class T >
-void arakelyan::BinList< T >::push_back(const T &el)
-{
-  details::Node< T > *node = new details::Node< T >(el);
-  if ((head_ == nullptr) && (tail_ == nullptr))
-  {
-    head_ = node;
-    tail_ = node;
-  }
-  else
-  {
-    tail_->nextNode = node;
-    node->prevNode = tail_;
-    tail_ = node;
-  }
-  ++size_;
-}
-
-template < class T >
-void arakelyan::BinList< T >::push_front(const T &el)
-{
-  details::Node< T > *node = new details::Node< T >(el);
-  node->nextNode = head_;
-  if (head_ == nullptr && tail_ == nullptr)
-  {
-    head_ = node;
-    tail_ = node;
-  }
-  head_ = node;
-  ++size_;
-}
-
-template < class T >
-arakelyan::Iterator< T > arakelyan::BinList< T >::insert(const_iterator it_pos, const T &val)
-{
-  if (it_pos == cbegin())
-  {
-    push_front(val);
-    return begin();
-  }
-  else if (it_pos == cend())
-  {
-    push_back(val);
-    return begin();
-  }
-  else
-  {
-    details::Node< T > *newNode = new details::Node< T >(val);
-    details::Node< T > *nextNode = it_pos.node->nextNode;
-    it_pos.node->nextNode = newNode;
-    newNode->prevNode = it_pos.node;
-    newNode->nextNode = nextNode;
-    nextNode->prevNode = newNode;
-    ++size_;
-    return Iterator< T >(newNode);
-  }
-}
-
-template < class T >
-void arakelyan::BinList< T >::clear() noexcept
-{
-  while (head_)
-  {
-    pop_front();
-  }
-}
-
-template < class T >
-void arakelyan::BinList< T >::pop_front()
-{
-  assert(!empty());
-  details::Node< T > *node = head_->nextNode;
-  if (node != nullptr)
-  {
-    node->prevNode = nullptr;
-  }
-  else
-  {
-    tail_ = nullptr;
-  }
-  delete head_;
-  head_ = node;
-  --size_;
-}
-
-template < class T >
-void arakelyan::BinList< T >::pop_back()
-{
-  assert(!empty());
-  details::Node< T > *node = tail_->prevNode;
-  if (node != nullptr)
-  {
-    node->nextNode = nullptr;
-  }
-  else
-  {
-    head_ = nullptr;
-  }
-  delete tail_;
-  tail_ = node;
-  --size_;
-}
-
-template < class T >
-void arakelyan::BinList< T >::remove(const T &val)
-{
-  assert(!empty());
-  details::Node< T > *node = head_;
-  while (node)
-  {
-    if (node->value == val)
-    {
-      if (node == head_)
-      {
-        pop_front();
-        node = head_->nextNode;
-      }
-      else if (node == tail_)
-      {
-        pop_back();
-        return;
-      }
-      else
-      {
-        details::Node< T > *prevNode = node->prevNode;
-        details::Node< T > *nextNode = node->nextNode;
-        details::Node< T > *nodeToDel = node;
-        delete nodeToDel;
-        node = nextNode;
-        nextNode->prevNode = prevNode;
-        prevNode->nextNode = nextNode;
-      }
-    }
-    else
-    {
-      node = node->nextNode;
-    }
-  }
-}
-
-template < class T >
-template < class UnaryPredicate >
-void arakelyan::BinList< T >::remove_if(UnaryPredicate p)
-{
-  details::Node< T > *node = head_;
-  while (node)
-  {
-    if (p(node->value))
-    {
-      if (node == head_)
-      {
-        pop_front();
-      }
-      else if (node == tail_)
-      {
-        pop_back();
-      }
-      else
-      {
-        details::Node< T > *prevNode = node->prevNode;
-        details::Node< T > *nextNode = node->nextNode;
-        details::Node< T > *nodeToDel = node;
-        delete nodeToDel;
-        node = nextNode;
-        nextNode->prevNode = prevNode;
-        prevNode->nextNode = nextNode;
-      }
-    }
-    else
-    {
-      node = node->nextNode;
-    }
-  }
-}
-
-template < class T >
-void arakelyan::BinList< T >::swap(BinList< T > &otherLs) noexcept
-{
-  std::swap(head_, otherLs.head_);
-  std::swap(tail_, otherLs.tail_);
-  std::swap(size_, otherLs.size_);
-}
-
-template < class T >
-arakelyan::Iterator< T > arakelyan::BinList< T >::erase(iterator it_pos)
-{
-  if (it_pos == begin())
-  {
-    pop_front();
-    return begin();
-  }
-  else if (it_pos == end())
-  {
-    pop_back();
-    return end();
-  }
-  else
-  {
-    details::Node< T > *prevNode = it_pos.node->prevNode;
-    details::Node< T > *nextNode = it_pos.node->nextNode;
-    prevNode->nextNode = nextNode;
-    nextNode->prevNode = prevNode;
-    delete it_pos.node;
-    return Iterator< T >(nextNode);
-  }
-}
-
-template < class T >
-arakelyan::Iterator< T > arakelyan::BinList< T >::erase(iterator it_start, iterator it_end)
-{
-  if (it_start == begin() && it_end == end())
-  {
-    clear();
-    return end();
-  }
-  else if (it_start == begin() && it_end != end())
-  {
-    while (it_start != it_end && it_start != end())
-    {
-      ++it_start;
-      pop_front();
-    }
-    return it_start;
-  }
-  else if (it_start != begin() && it_end == end())
-  {
-    while (it_start != it_end)
-    {
-      erase(it_start);
-    }
-    return it_start;
-  }
-  while (it_start != it_end && it_start != end())
-  {
-    erase(it_start);
-  }
-  return it_end;
-}
-
-template < class T >
-void arakelyan::BinList< T >::assign(const T &val, const size_t size)
-{
-  clear();
-  for (size_t i = 0; i < size; ++i)
-  {
-    push_back(val);
-  }
-}
-
-template < class T >
-void arakelyan::BinList< T >::assign(std::initializer_list< T > otherLs)
-{
-  clear();
-  for (auto it = otherLs.begin(); it != otherLs.end(); ++it)
-  {
-    push_back(*it);
-  }
-}
-
-template < class T >
-void arakelyan::BinList< T >::assign(iterator it_start, iterator it_end)
-{
-  clear();
-  for (auto it = it_start; it != it_end; ++it)
-  {
-    push_back(*it);
-  }
-}
-
-template < class T >
-arakelyan::BinList< T > &arakelyan::BinList< T >::operator=(const arakelyan::BinList< T > &otherLs)
-{
-  BinList< T > tempList(otherLs);
-  if (this != std::addressof(tempList))
-  {
-    swap(tempList);
-  }
-  return *this;
-}
-
-template < class T >
-arakelyan::BinList< T > &arakelyan::BinList< T >::operator=(BinList< T > &&otherLs)
-{
-  if (this != &otherLs)
-  {
-    clear();
-    swap(std::move(otherLs));
-  }
-  return *this;
-}
-
-template < class T >
-arakelyan::BinList< T > &arakelyan::BinList< T >::operator=(std::initializer_list< T > otherLs)
-{
-  clear();
-  auto otherIt = otherLs.begin();
-  while (otherIt != otherLs.end())
-  {
-    push_back(*otherIt++);
-  }
-  return *this;
-}
 
 template < class T >
 bool arakelyan::BinList< T >::operator==(const BinList< T > &otherLs) const
@@ -675,12 +682,6 @@ template < class T >
 bool arakelyan::BinList< T >::operator>=(const BinList< T > &otherLs) const
 {
   return !(*this < otherLs);
-}
-
-template < class T >
-arakelyan::BinList< T >::~BinList()
-{
-  clear();
 }
 
 #endif
