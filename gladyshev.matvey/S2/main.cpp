@@ -21,14 +21,14 @@ int main(int argc, char* argv[])
   {
     input = &std::cin;
   }
-  Queue<long long int> results;
+  Queue< long long int > results;
   std::string in = "";
   std::string token = "";
   try
   {
     while (std::getline(*input, in))
     {
-      Queue<std::string> queuecheck;
+      Queue< std::string > queuecheck;
       size_t i = 0;
       while (i < in.length())
       {
@@ -44,7 +44,7 @@ int main(int argc, char* argv[])
         }
         ++i;
       }
-      Queue<std::string> postfix = infixToPostfix(queuecheck);
+      Queue< std::string > postfix = infixToPostfix(queuecheck);
       long long int result = evaluatePostfix(postfix);
       results.push(result);
     }
