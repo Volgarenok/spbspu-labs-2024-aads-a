@@ -112,11 +112,13 @@ namespace strelyaev
   template< typename T >
   void List< T >::assign(size_t n, const T& value)
   {
-    clear();
+    List< T > temp{};
     for (size_t i = 0; i < n; i++)
     {
-      push_front(value);
+      temp.push_front(value);
     }
+    clear();
+    swap(temp);
   }
 
   template< typename T >
