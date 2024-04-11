@@ -55,7 +55,7 @@ namespace zakozhurnikova
       if (this != std::addressof(rhs))
       {
         List temp(rhs);
-        swap(rhs);
+        swap(temp);
       }
       return *this;
     }
@@ -64,11 +64,9 @@ namespace zakozhurnikova
     {
       if (this != std::addressof(rhs))
       {
+        clear();
         swap(rhs);
       }
-      rhs.head_ = nullptr;
-      rhs.tail_ = nullptr;
-      rhs.size_ = 0;
       return *this;
     }
 
@@ -87,7 +85,7 @@ namespace zakozhurnikova
       return head_->data;
     }
 
-    void push_back(T data)
+    void push_back(T& data)
     {
       detail::Node< T >* temp = new detail::Node< T >{ data };
 
@@ -105,7 +103,7 @@ namespace zakozhurnikova
       ++size_;
     }
 
-    void push_front(T data)
+    void push_front(T& data)
     {
       detail::Node< T >* temp = new detail::Node< T >{ data };
       if (!tail_)
@@ -166,7 +164,6 @@ namespace zakozhurnikova
       {
         pop_front();
       }
-      tail_ = nullptr;
     }
 
     bool empty() const noexcept
@@ -181,22 +178,22 @@ namespace zakozhurnikova
       std::swap(size_, rhs.size_);
     }
 
-    Iterator< T > begin() const
+    Iterator< T > begin() const noexcept
     {
       return Iterator< T >(head_);
     }
 
-    Iterator< T > end() const
+    Iterator< T > end() const noexcept
     {
       return Iterator< T >();
     }
 
-    ConstIterator< T > cbegin() const
+    ConstIterator< T > cbegin() const noexcept
     {
       return ConstIterator< T >(head_);
     }
 
-    ConstIterator< T > cend() const
+    ConstIterator< T > cend() const noexcept
     {
       return ConstIterator< T >();
     }
@@ -247,14 +244,8 @@ namespace zakozhurnikova
       {
         temp.push_front(value);
       }
-      temp.clear();
-      throw;
       clear();
-      for (auto it = temp.begin(); it != temp.end(); ++it)
-      {
-        push_back(std::move(temp.front()));
-        temp.pop_front();
-      }
+      swap(temp);
     }
 
   private:
