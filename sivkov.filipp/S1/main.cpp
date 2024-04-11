@@ -5,32 +5,40 @@
 int main()
 {
   using namespace sivkov;
-  List< std::pair < std::string, List< size_t > > > list;
-  input(std::cin, list);
-  list.reverse();
-  List<size_t> sums;
-  bool overflowFlag = false;
+  using pair = std::pair< std::string, List< size_t > >;
+  List< pair > list;
+
   try
   {
-    outputNames(list);
-    outputNums(list, sums, overflowFlag);
-    if (overflowFlag)
-    {
-      std::cerr << "overflow \n";
-      return 1;
-    }
-    sums.reverse();
-    outputSums(sums);
+    input(std::cin, list);
   }
-  catch (std::invalid_argument& e)
+  catch (const std::exception& e)
+  {
+    std::cerr << e.what() << "\n";
+  }
+
+  if (list.empty())
   {
     std::cout << "0\n";
     return 0;
   }
-  catch (std::exception&e)
+  list.reverse();
+
+  outputNames(list);
+
+  List< size_t > sums;
+  try
   {
-    std::cerr << e.what();
+    outputNums(list, sums);
+  }
+  catch (const std::overflow_error)
+  {
+    std::cerr << "Overflow\n";
     return 1;
   }
+
+  sums.reverse();
+  outputSums(sums);
+
   return 0;
 }

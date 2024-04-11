@@ -3,15 +3,11 @@
 #include <string>
 #include <limits>
 #include <iterator>
+#include <stdexcept>
 #include "list.hpp"
-#include "exception"
 
-void sivkov::outputNames(List< std::pair< std::string, List< size_t > > >& list)
+void sivkov::outputNames(const List< std::pair< std::string, List< size_t > > >& list)
 {
-  if (list.empty())
-  {
-    throw std::invalid_argument("Empty list");
-  }
   for (auto it = list.cbegin(); it != list.cend(); ++it)
   {
     std::cout << it->first;
@@ -25,7 +21,7 @@ void sivkov::outputNames(List< std::pair< std::string, List< size_t > > >& list)
   std::cout << "\n";
 }
 
-void sivkov::outputSums(List< size_t > &numbers)
+void sivkov::outputSums(const List< size_t > &numbers)
 {
   for (auto it = numbers.cbegin(); it != numbers.cend(); ++it)
   {
@@ -62,8 +58,9 @@ void sivkov::input(std::istream& input, List< std::pair< std::string, List< size
   }
 }
 
-void sivkov::outputNums(List< std::pair< std::string, List< size_t > > >& list, List< size_t >& numbers, bool& overflowFlag)
+void sivkov::outputNums(const List< std::pair< std::string, List< size_t > > >& list, List< size_t >& numbers)
 {
+  bool overflowFlag = false;
   bool allData = true;
   size_t maxNums = 0;
   size_t sum = 0;
@@ -121,4 +118,9 @@ void sivkov::outputNums(List< std::pair< std::string, List< size_t > > >& list, 
   {
     numbers.push_front(sum);
   }
+  if (overflowFlag == true)
+  {
+    throw (std::overflow_error("overflow"));
+  }
 }
+
