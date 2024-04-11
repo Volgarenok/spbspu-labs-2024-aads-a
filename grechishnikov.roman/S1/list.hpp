@@ -168,7 +168,11 @@ namespace grechishnikov
   template< typename T >
   List< T >& List< T >::operator=(List< T >&& other) noexcept
   {
-    swap(other);
+    if (head_ != other.head_)
+    {
+      clear();
+      swap(other);
+    }
     return *this;
   }
 
