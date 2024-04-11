@@ -34,7 +34,7 @@ namespace gladyshev
       }
       catch (...)
       {
-        clear();
+        throw;
       }
     }
     List(const List& other):
@@ -48,10 +48,9 @@ namespace gladyshev
           push_front(curr->data);
           curr = curr->next;
         }
-      }
       catch (...)
       {
-        clear();
+        throw;
       }
     }
     List(List&& other):
@@ -79,13 +78,11 @@ namespace gladyshev
         {
           temp.push_front(value);
         }
-        clear();
         temp.reverse();
         swap(temp);
       }
       catch (...)
       {
-        temp.clear();
         throw;
       }
     }
