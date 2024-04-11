@@ -124,7 +124,7 @@ namespace sivkov
   {
     if (empty())
     {
-      throw;
+      throw std::logic_error("empty");
     }
     Node< T >* head = head_;
     head_ = head_->next;
