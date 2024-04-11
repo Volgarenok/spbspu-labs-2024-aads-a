@@ -24,10 +24,7 @@ namespace strelyaev
 
      ~Iterator() = default;
 
-     Iterator< T >& operator=(Iterator val)
-     {
-       this->node_ = val.node_;
-     }
+     Iterator< T >& operator=(Iterator& val) = default;
 
      Iterator< T > operator++(int)
      {
