@@ -7,7 +7,7 @@
 
 namespace gladyshev
 {
-  long long int evaluatePostfix(Queue<std::string> postfix);
+  long long int evaluatePostfix(Queue< std::string > postfix);
 }
 
 #endif
