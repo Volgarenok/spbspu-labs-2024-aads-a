@@ -26,7 +26,8 @@ int main()
 
   if (listOfPairs.empty())
   {
-    std::cout << "0\n";
+    std::cout << 0 << "\n";
+    // std::cout << "\n";
     return 0;
   }
 

@@ -25,11 +25,6 @@ void arakelyan::outputPairsLists(BinList_t &listOfPairs, arakelyan::BinList< siz
   {
     out << "\n";
   }
-  if (listOfPairs.empty())
-  {
-    out << 0;
-    return;
-  }
 
   size_t maxSize = std::numeric_limits< size_t >::max();
   bool overflow = false;
