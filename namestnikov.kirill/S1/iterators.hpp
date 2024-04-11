@@ -81,7 +81,7 @@ namespace namestnikov
     ~ForwardIterator() = default;
   private:
     node_t * node_;
-    ForwardIterator(node_t * node):
+    explicit ForwardIterator(node_t * node):
       node_(node)
     {}
   };

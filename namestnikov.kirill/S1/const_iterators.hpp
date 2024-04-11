@@ -67,7 +67,7 @@ namespace namestnikov
     ~ConstForwardIterator() = default;
   private:
     const node_t * node_;
-    ConstForwardIterator(node_t * node):
+    explicit ConstForwardIterator(node_t * node):
       node_(node)
     {}
   };
