@@ -15,7 +15,7 @@ namespace sivkov
       size_(0),
       head_(nullptr)
     {}
-    List(size_t count, const T& value) :
+    List(size_t count, const T& value):
       size_(0),
       head_(nullptr)
     {

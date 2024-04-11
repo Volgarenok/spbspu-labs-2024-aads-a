@@ -10,10 +10,10 @@ namespace sivkov
   class ConstIterator
   {
   public:
-    ConstIterator() :
+    ConstIterator():
       node_(nullptr)
     {}
-    ConstIterator(Node< T >* node) :
+    ConstIterator(Node< T >* node):
       node_(node)
     {}
 
