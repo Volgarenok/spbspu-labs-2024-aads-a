@@ -24,69 +24,85 @@ namespace zaitsev
     template<bool IsConst>
     class BaseIterator
     {
+      using diff_t = std::ptrdiff_t;
       using prt_t = std::conditional_t< IsConst, const T*, T* >;
       using ref_t = std::conditional_t< IsConst, const T&, T& >;
-      using container_t = std::conditional_t< IsConst, const Deque< T >&, Deque< T >& >;
-    private:
-      size_t chunk_nmb_;
-      size_t pos_;
-      container_t container_;
-
+      T** chunk_head_;
+      T* pos_;
+      void shift(diff_t shift_sz)
+      {
+        if (pos_ + shift_sz < *chunk_head_ + chunk_cap_ && pos_ + shift_sz >= *chunk_head_)
+        {
+            pos_ += shift_sz;
+        }
+        else
+        {
+          diff_t shift_in_cur_chunk = (shift_sz > 0) ? (*chunk_head_ + chunk_cap_ - 1 - pos_) : (pos_ - *chunk_head_);
+          diff_t shift_out_of_chunk = std::abs(shift_sz) - shift_in_cur_chunk;
+          diff_t shift_chunks = 1 + shift_out_of_chunk / chunk_cap_;
+          diff_t shift_in_new_chunk = (shift_out_of_chunk - 1) % chunk_cap_;
+          if (shift_sz > 0)
+          {
+            chunk_head_ += shift_chunks;
+            pos_ = *chunk_head_ + shift_in_new_chunk;
+          }
+          else
+          {
+            chunk_head_ -= shift_chunks;
+            pos_ = *chunk_head_ + chunk_cap_ - 1 - shift_in_new_chunk;
+          }
+        }
+      }
     public:
-      BaseIterator(size_t chuck_nmb, size_t pos, container_t container):
-        chunk_nmb_(chuck_nmb),
-        pos_(pos),
-        container_(container)
-      {}
-      BaseIterator() = delete;
+      using difference_type = diff_t;
+      using value_type = T;
+      using pointer = prt_t;
+      using reference = ref_t;
+      using iterator_category = std::random_access_iterator_tag;
       BaseIterator(const BaseIterator& other) = default;
       BaseIterator(BaseIterator&& other) = default;
+      BaseIterator(T** chunk_head, T* pos):
+        chunk_head_(chunk_head),
+        pos_(pos)
+      {}
       ~BaseIterator() = default;
       BaseIterator& operator++()
       {
-        container_.next_pos(chunk_nmb_, pos_);
+        shift(1);
         return *this;
       }
       BaseIterator operator++(int)
       {
         BaseIterator copy = *this;
-        container_.next_pos(chunk_nmb_, pos_);
+        shift(1);
         return copy;
       }
       BaseIterator& operator--()
       {
-        container_.prev_pos(chunk_nmb_, pos_);
+        shift(-1);
         return *this;
       }
       BaseIterator operator--(int)
       {
         BaseIterator copy = *this;
-        if (pos_ > 0)
-        {
-          --pos_;
-        }
-        else
-        {
-          --chunk_nmb_;
-          pos_ = container_.chunk_cap_ - 1;
-        }
+        shift(-1);
         return copy;
       }
       ref_t operator*() const
       {
-        return container_.chunk_heads_[chunk_nmb_][pos_];
+        return *pos_;
       }
       prt_t operator->() const
       {
-        return container_.chunk_heads_[chunk_nmb_] + pos_;
+        return pos_;
       }
       bool operator!=(const BaseIterator& other) const
       {
-        return pos_ != other.pos_ || chunk_nmb_ != other.chunk_nmb_;
+        return pos_ != other.pos_;
       }
       bool operator==(const BaseIterator& other) const
       {
-        return pos_ == other.pos_ && chunk_nmb_ == other.chunk_nmb_;
+        return pos_ == other.pos_;
       }
     };
 
@@ -277,8 +293,11 @@ namespace zaitsev
     }
     ~Deque()
     {
+      std::cout << "!!!" << size_ << "!!!\n";
+      int counter = 0;
       for (Deque< T >::iterator i = begin(); i != end(); ++i)
       {
+        std::cout << counter++<<"\n";
         alloc_traits::destroy(chunk_alloc_, i.operator->());
       }
       for (size_t i = 0; i < chunks_nmb_; ++i)
@@ -434,36 +453,43 @@ namespace zaitsev
     }
     iterator begin()
     {
-      return iterator(head_chunk_, head_pos_, *this);
+      return chunks_nmb_ ? iterator(chunk_heads_ + head_chunk_, chunk_heads_[head_chunk_] + head_pos_) :
+        iterator(nullptr, nullptr);
     }
     iterator end()
     {
+      if (!chunks_nmb_)
+      {
+        return iterator(nullptr, nullptr);
+      }
       size_t end_chunk = head_chunk_;
       size_t end_pos = head_pos_;
       convert_index(size_ + 1, end_chunk, end_pos);
-      return iterator(end_chunk, end_pos, *this);
+      return iterator(chunk_heads_ + end_chunk, chunk_heads_[end_chunk] + end_pos);
     }
     const_iterator begin() const
     {
-      return const_iterator(head_chunk_, head_pos_, *this);
+      return cbegin();
     }
     const_iterator end() const
     {
-      size_t end_chunk = 0;
-      size_t end_pos = 0;
-      convert_index(size_ + 1, end_chunk, end_pos);
-      return const_iterator(end_chunk, end_pos, *this);
+      return cend();
     }
     const_iterator cbegin() const
     {
-      return const_iterator(head_chunk_, head_pos_, *this);
+      return chunks_nmb_ ? const_iterator(chunk_heads_ + head_chunk_, chunk_heads_[head_chunk_] + head_pos_) :
+        const_iterator(nullptr, nullptr);
     }
     const_iterator cend() const
     {
+      if (!chunks_nmb_)
+      {
+        return const_iterator(nullptr, nullptr);
+      }
       size_t end_chunk = 0;
       size_t end_pos = 0;
       convert_index(size_ + 1, end_chunk, end_pos);
-      return const_iterator(end_chunk, end_pos, *this);
+      return const_iterator(chunk_heads_ + end_chunk, chunk_heads_ ? chunk_heads_[end_chunk] + end_pos : nullptr);
     }
     bool empty() const
     {
