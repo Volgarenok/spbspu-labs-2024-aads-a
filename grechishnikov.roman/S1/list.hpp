@@ -215,15 +215,10 @@ namespace grechishnikov
   template< typename T >
   void List< T >::clear() noexcept
   {
-    while (head_)
+    while (!empty())
     {
-      detail::Node< T >* temp = head_->next_;
-      delete head_;
-      head_ = temp;
+      pop_back();
     }
-    size_ = 0;
-    head_ = nullptr;
-    tail_ = nullptr;
   }
 
   template< typename T >
