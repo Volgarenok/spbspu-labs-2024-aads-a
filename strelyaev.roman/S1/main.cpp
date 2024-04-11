@@ -23,6 +23,8 @@ int main()
     return 0;
   }
 
+  std::cout << "empty: " << list.empty() << "\n";
+
   for (auto it = list.begin(); it != list.end(); it++)
   {
     std::cout << it->first;

@@ -21,6 +21,9 @@ void strelyaev::makeSequence(std::istream& in, List < std::pair < std::string, L
     {
       list_of_nums.push_back(current);
     }
-    list_of_lists.push_back({line, list_of_nums});
+    if (!list_of_nums.empty())
+    {
+      list_of_lists.push_back({line, list_of_nums});
+    }
   }
 }
