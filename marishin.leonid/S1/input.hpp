@@ -2,7 +2,6 @@
 #define INPUT_HPP
 
 #include "linkedList.hpp"
-#include <limits>
 
 namespace marishin
 {
