@@ -33,7 +33,7 @@ size_t chistyakov::maxDigit(List< std::pair< std::string, List < size_t > > > & 
     for (auto numList = element->second.begin(); numList != element->second.end(); ++numList)
     {
       index++;
-      std::max(max_digit, index);
+      max_digit = std::max(max_digit, index);
     }
   }
 

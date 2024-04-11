@@ -28,7 +28,6 @@ int main()
 
   outPutNames(list);
   size_t max_digit = maxDigit(list);
-
   std::cout << "\n";
 
   List< std::pair< size_t, List< size_t > > > listSumAndNums;
@@ -36,7 +35,7 @@ int main()
   size_t max_size = std::numeric_limits< size_t >::max();
   bool overflow = false;
 
-  while (true)
+  for (size_t i = 0; i < max_digit; ++i)
   {
     List< size_t > nums;
     size_t sum = 0;
@@ -48,7 +47,6 @@ int main()
 
       for (auto numList = (element->second).begin(); numList != (element->second).end(); ++numList)
       {
-        max_digit = std::max(max_digit, *numList);
         if (index == nowSize)
         {
           if (sum < max_size - *numList)
