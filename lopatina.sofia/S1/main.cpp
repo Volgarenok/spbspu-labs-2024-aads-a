@@ -2,6 +2,7 @@
 #include <cstddef>
 #include <string>
 #include <utility>
+#include <limits>
 #include "node.hpp"
 #include "iterator.hpp"
 #include "list.hpp"
@@ -39,67 +40,74 @@ int main()
     std::cout << "0\n";
     return 0;
   }
+  List<std::string> list_names;
   for (auto iter = list.begin(); iter != list.end(); ++iter)
   {
-    if (iter == list.tail)
-    {
-      std::cout << (*iter).first;
-    }
-    else
-    {
-      std::cout << (*iter).first << ' ';
-    }
+    list_names.push_back((*iter).first);
   }
-  std::cout << '\n';
 
   List<size_t> list_sum;
   if (max_size == 0)
   {
     list_sum.push_back(0);
   }
-  int space_flag = 0;
+
+  List<List<size_t>> list_nums;
   for (size_t i = 0; i < max_size; ++i)
   {
     size_t sum = 0;
+    List<size_t> list_num;
     for (auto iter = list.begin(); iter != list.end(); ++iter)
     {
       List<size_t> sub_list = (*iter).second;
       size_t size = 0;
-      if (iter == list.tail)
-      {
-        space_flag = 1;
-      }
       for (auto sub_iter = sub_list.begin(); sub_iter != sub_list.end(); ++sub_iter)
       {
         if (size == i)
         {
-          sum += *sub_iter;
-          if (space_flag)
+          if ((std::numeric_limits<unsigned long long>::max() - sum) >= *sub_iter)
           {
-            std::cout << *sub_iter;
-            space_flag = 0;
+            sum += *sub_iter;
           }
           else
           {
-            std::cout << *sub_iter << ' ';
+            std::cerr << "Overflow\n";
+            return 1;
           }
+          list_num.push_back(*sub_iter);
         }
         ++size;
       }
     }
-    std::cout << '\n';
     list_sum.push_back(sum);
+    list_nums.push_back(list_num);
+  }
+  std::cout << list_names.front();
+  for (auto iter0 = ++(list_names.begin()); iter0 != list_names.end(); ++iter0)
+  {
+    std::cout << ' ' << *iter0;
+  }
+  std::cout << '\n';
+  for (auto iter1 = list_nums.begin(); iter1 != list_nums.end(); ++iter1)
+  {
+    std::cout << (*iter1).front();
+    for (auto iter2 = ++((*iter1).begin()); iter2 != (*iter1).end(); ++iter2)
+    {
+      std::cout << ' ' << *iter2;
+    }
+    std::cout << '\n';
   }
   for (auto iter = list_sum.begin(); iter != list_sum.end(); ++iter)
+  {
+    if (iter == list_sum.tail)
     {
-      if (iter == list_sum.tail)
-      {
-        std::cout << *iter;
-      }
-      else
-      {
-        std::cout << *iter << ' ';
-      }
+      std::cout << *iter;
     }
+    else
+    {
+      std::cout << *iter << ' ';
+    }
+  }
   std::cout << '\n';
+  return 0;
 }
