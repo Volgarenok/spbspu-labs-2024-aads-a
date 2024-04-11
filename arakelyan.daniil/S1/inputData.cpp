@@ -36,6 +36,9 @@ void arakelyan::inputData(std::istream &input, BinList < std::pair < std::string
     {
       temp.push_back(nums);
     }
-    listOfLists.push_back({name, temp});
+    if (!temp.empty())
+    {
+      listOfLists.push_back({name, temp});
+    }
   }
 }
