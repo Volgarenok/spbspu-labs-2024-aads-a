@@ -16,7 +16,7 @@ zhalilov::MapMaster::MapMaster(std::map < std::string, primaryMap > &maps):
   commands_.insert(cmdPair);
 }
 
-std::string zhalilov::MapMaster::doCommandLine(std::istream &input)
+void zhalilov::MapMaster::doCommandLine(std::istream &input, std::string &result)
 {
   std::ios_base::fmtflags ff(input.flags());
   input >> std::noskipws;
@@ -32,16 +32,18 @@ std::string zhalilov::MapMaster::doCommandLine(std::istream &input)
     }
     input >> delim;
   }
+  input.flags(ff);
+
   if (cmdSource.empty())
   {
-    return {};
+    return;
   }
   std::string cmdName = cmdSource.front();
   cmdSource.pop_front();
-  return (this->*commands_[cmdName])(cmdSource);
+  (this->*commands_[cmdName])(cmdSource, result);
 }
 
-std::string zhalilov::MapMaster::printCmd(const List < std::string > &cmdSource)
+void zhalilov::MapMaster::printCmd(const List < std::string > &cmdSource, std::string &result)
 {
   if (cmdSource.capacity() != 1)
   {
@@ -49,7 +51,7 @@ std::string zhalilov::MapMaster::printCmd(const List < std::string > &cmdSource)
   }
   auto it = maps_.at(cmdSource.front()).begin();
   auto end = maps_.at(cmdSource.front()).end();
-  std::string result = cmdSource.front();
+  result = cmdSource.front();
   while (it != end)
   {
     result += std::to_string(it->first);
@@ -57,13 +59,11 @@ std::string zhalilov::MapMaster::printCmd(const List < std::string > &cmdSource)
   }
 }
 
-std::string zhalilov::MapMaster::complementCmd(const List < std::string > &cmdSource)
-{
-
-}
-
-std::string zhalilov::MapMaster::intersectCmd(const List < std::string > &cmdSource)
+void zhalilov::MapMaster::complementCmd(const List < std::string > &cmdSource, std::string &result)
 {}
 
-std::string zhalilov::MapMaster::unionCmd(const List < std::string > &cmdSource)
+void zhalilov::MapMaster::intersectCmd(const List < std::string > &cmdSource, std::string &result)
+{}
+
+void zhalilov::MapMaster::unionCmd(const List < std::string > &cmdSource, std::string &result)
 {}
