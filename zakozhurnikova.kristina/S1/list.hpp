@@ -160,7 +160,7 @@ namespace zakozhurnikova
 
     void clear() noexcept
     {
-      while (head_)
+      while (!empty())
       {
         pop_front();
       }
