@@ -22,6 +22,7 @@ namespace zaitsev
         list.front().second.push_front(std::stoull(input));
         std::cin >> input;
       }
+      list.front().second.reverse();
     }
   }
 
@@ -32,15 +33,12 @@ namespace zaitsev
     {
       return ullList(1,0);
     }
-    ForwardList< std::pair< ullListIt, ullListIt > > list_of_iterators;
-    for (ForwardList< named_ullList >::iterator i = list.begin(); i != list.end(); ++i)
+    ForwardList< std::pair< ullListIt, ullListIt > > list_of_iterators = 
+      { {list.begin()->second.begin(), (list.begin())->second.end()} };
+    out << list.begin()->first;
+    for (ForwardList< named_ullList >::iterator i = ++(list.begin()); i != list.end(); ++i)
     {
-      i->second.reverse();
-      if (i != list.begin())
-      {
-        out << " ";
-      }
-      out << i->first;
+      out << " " << i->first;
       list_of_iterators.push_front({ i->second.begin(), i->second.end() });
     }
     list_of_iterators.reverse();

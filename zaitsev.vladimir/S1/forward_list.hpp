@@ -137,7 +137,7 @@ namespace zaitsev
           new_head = temp;
         }
       }
-      catch (const std::exception&)
+      catch (...)
       {
         freeNodes(new_head);
         throw;
@@ -161,7 +161,7 @@ namespace zaitsev
           new_tail = new_tail->next_;
         }
       }
-      catch (const std::exception&)
+      catch (...)
       {
         freeNodes(new_head);
         throw;
