@@ -59,9 +59,22 @@ void zhalilov::MapMaster::complementCmd(List < std::string > &cmdSource, std::st
   {
     throw std::invalid_argument("incorrect command");
   }
-  primaryMap &firstMap = maps_.at(cmdSource.front());
   primaryMap &secondMap = maps_.at(cmdSource.back());
-
+  cmdSource.pop_back();
+  primaryMap &firstMap = maps_.at(cmdSource.back());
+  result = cmdSource.front();
+  auto firstIt = firstMap.cbegin();
+  auto firstEnd = firstMap.cend();
+  primaryMap resultMap;
+  while (firstIt != firstEnd)
+  {
+    if (secondMap.find(firstIt->first) == secondMap.end())
+    {
+      int currKey = firstIt->first;
+      std::string currValue = firstIt->second;
+      resultMap.insert(std::pair < int, std::string >(currKey, currValue));
+    }
+  }
 }
 
 void zhalilov::MapMaster::intersectCmd(List < std::string > &cmdSource, std::string &result)
@@ -72,8 +85,8 @@ void zhalilov::MapMaster::unionCmd(List < std::string > &cmdSource, std::string 
 
 void zhalilov::MapMaster::getMapSource(const std::string &mapName, std::string &source)
 {
-  auto it = maps_.at(mapName).begin();
-  auto end = maps_.at(mapName).end();
+  auto it = maps_.at(mapName).cbegin();
+  auto end = maps_.at(mapName).cend();
   source = mapName;
   while (it != end)
   {
