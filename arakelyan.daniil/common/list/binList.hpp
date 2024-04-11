@@ -3,6 +3,7 @@
 
 #include <cassert>
 #include <initializer_list>
+#include <iterator>
 #include <memory>
 #include <stdexcept>
 #include "iterator.hpp"
@@ -172,11 +173,7 @@ template < class T >
 arakelyan::BinList< T > &arakelyan::BinList< T >::operator=(std::initializer_list< T > otherLs)
 {
   clear();
-  auto otherIt = otherLs.begin();
-  while (otherIt != otherLs.end())
-  {
-    push_back(*otherIt++);
-  }
+  copyFromRange(it_start, it_end);
   return *this;
 }
 
@@ -326,20 +323,13 @@ template < class T >
 void arakelyan::BinList< T >::assign(std::initializer_list< T > otherLs)
 {
   clear();
-  for (auto it = otherLs.begin(); it != otherLs.end(); ++it)
-  {
-    push_back(*it);
-  }
+  copyFromRange(otherLs.begin(), otherLs.end());
 }
 
 template < class T >
 void arakelyan::BinList< T >::assign(iterator it_start, iterator it_end)
 {
-  clear();
-  for (auto it = it_start; it != it_end; ++it)
-  {
-    push_back(*it);
-  }
+  copyFromRange(it_start, it_end);
 }
 
 template < class T >
