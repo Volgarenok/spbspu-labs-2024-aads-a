@@ -18,16 +18,13 @@ namespace namestnikov
   class ConstForwardIterator;
 
   template < class T >
-  class Node;
-
-  template < class T >
   class ForwardList
   {
     friend class ForwardIterator< T >;
     friend class ConstForwardIterator< T >;
     using iterator = ForwardIterator< T >;
     using const_iterator = ConstForwardIterator< T >;
-    using node_t = Node< T >;
+    using node_t = detail::Node< T >;
   public:
     ForwardList() :
       head_(nullptr)
