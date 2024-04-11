@@ -10,6 +10,7 @@ namespace nikitov
   {
   public:
     T& top();
+    const T& top() const;
     void push(const T& value);
     void pop();
 
@@ -25,6 +26,13 @@ namespace nikitov
   {
     return data_.back();
   }
+
+  template< class T >
+  const T& Queue< T >::top() const
+  {
+    return data_.back();
+  }
+
 
   template< class T >
   void Queue< T >::push(const T& value)

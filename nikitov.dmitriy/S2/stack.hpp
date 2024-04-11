@@ -10,6 +10,7 @@ namespace nikitov
   {
   public:
     T& top();
+    const T& top() const;
     void push(const T& value);
     void pop();
 
@@ -22,6 +23,12 @@ namespace nikitov
 
   template< class T >
   T& Stack< T >::top()
+  {
+    return data_.front();
+  }
+
+  template< class T >
+  const T& Stack< T >::top() const
   {
     return data_.front();
   }
