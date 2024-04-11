@@ -42,6 +42,10 @@ gladyshev::Queue< std::string > gladyshev::infixToPostfix(Queue< std::string > e
     {
       while (ops.top() != "(")
       {
+        if (!isOperator(ops.top()))
+        {
+          throw std::logic_error("what is that");
+        }
         output.push(ops.drop());
       }
       ops.drop();
