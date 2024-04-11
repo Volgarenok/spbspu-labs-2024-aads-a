@@ -8,9 +8,10 @@ void piyavkin::calculate(List< Queue< Postfix > >& postfix, List< long long >& r
   {
     while (!it.empty())
     {
-      if (it.front().type == detail::operand)
+      if (it.front().getType() == detail::operand)
       {
-        stack.push(it.drop().symbol.operand.number);
+        stack.push(it.front().getOperand());
+        it.pop();
       }
       else
       {
@@ -18,9 +19,11 @@ void piyavkin::calculate(List< Queue< Postfix > >& postfix, List< long long >& r
         const size_t numbers_operand = 2;
         if (stack.size() >= numbers_operand)
         {
-          long long rhs = stack.drop();
-          long long lhs = stack.drop();
-          if (it.front().symbol.operation.operation == '+')
+          long long rhs = stack.top();
+          stack.pop();
+          long long lhs = stack.top();
+          stack.pop();
+          if (it.front().getOperation() == '+')
           {
             if (std::numeric_limits< long long >::max() - lhs < rhs)
             {
@@ -28,7 +31,7 @@ void piyavkin::calculate(List< Queue< Postfix > >& postfix, List< long long >& r
             }
             lhs += rhs;
           }
-          else if (it.front().symbol.operation.operation == '-')
+          else if (it.front().getOperation() == '-')
           {
             if (rhs != 0 && lhs != 0)
             {
@@ -55,7 +58,7 @@ void piyavkin::calculate(List< Queue< Postfix > >& postfix, List< long long >& r
             }
             lhs -= rhs;
           }
-          else if (it.front().symbol.operation.operation == '*')
+          else if (it.front().getOperation() == '*')
           {
             if (rhs != 0 && lhs != 0)
             {
@@ -70,7 +73,7 @@ void piyavkin::calculate(List< Queue< Postfix > >& postfix, List< long long >& r
             }
             lhs *= rhs;
           }
-          else if (it.front().symbol.operation.operation == '/')
+          else if (it.front().getOperation() == '/')
           {
             if (rhs == 0)
             {
@@ -82,7 +85,7 @@ void piyavkin::calculate(List< Queue< Postfix > >& postfix, List< long long >& r
             }
             lhs /= rhs;
           }
-          else if (it.front().symbol.operation.operation == '%')
+          else if (it.front().getOperation() == '%')
           {
             if (rhs == 0)
             {
@@ -99,7 +102,7 @@ void piyavkin::calculate(List< Queue< Postfix > >& postfix, List< long long >& r
             throw std::logic_error("Incorrect operation");
           }
           stack.push(lhs);
-          it.drop();
+          it.pop();
         }
         else
         {
@@ -109,7 +112,8 @@ void piyavkin::calculate(List< Queue< Postfix > >& postfix, List< long long >& r
     }
     if (stack.size() == 1)
     {
-      result.push_front(stack.drop());
+      result.push_front(stack.top());
+      stack.pop();
     }
     else
     {
