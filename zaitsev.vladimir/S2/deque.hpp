@@ -293,11 +293,8 @@ namespace zaitsev
     }
     ~Deque()
     {
-      std::cout << "!!!" << size_ << "!!!\n";
-      int counter = 0;
       for (Deque< T >::iterator i = begin(); i != end(); ++i)
       {
-        std::cout << counter++<<"\n";
         alloc_traits::destroy(chunk_alloc_, i.operator->());
       }
       for (size_t i = 0; i < chunks_nmb_; ++i)
