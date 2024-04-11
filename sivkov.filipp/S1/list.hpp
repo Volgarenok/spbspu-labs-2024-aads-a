@@ -223,6 +223,26 @@ namespace sivkov
       }
     }
   }
+
+  template<typename T>
+  void List<T>::assign(size_t count, const T& value)
+  {
+    List< T > prev;
+    try
+    {
+      for (size_t i = 0; i < count; ++i)
+      {
+        prev.push_front(value);
+      }
+      prev.reverse();
+      swap(prev);
+    }
+    catch (...)
+    {
+      throw;
+    }
+  }
+
   template< typename T >
   size_t List< T >::getSize()
   {
