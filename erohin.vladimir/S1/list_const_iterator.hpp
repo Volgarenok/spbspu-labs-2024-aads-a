@@ -24,8 +24,8 @@ namespace erohin
     ListConstIterator< T > operator++(int);
     const T & operator*() const;
     const T * operator->() const;
-    bool operator==(const ListConstIterator< T > & rhs);
-    bool operator!=(const ListConstIterator< T > & rhs);
+    bool operator==(const ListConstIterator< T > & rhs) const;
+    bool operator!=(const ListConstIterator< T > & rhs) const;
   private:
     const detail::Node< T > * node_;
     explicit ListConstIterator(const detail::Node< T > * node_ptr);
@@ -69,27 +69,15 @@ namespace erohin
   }
 
   template< class T >
-  bool ListConstIterator< T >::operator==(const ListConstIterator< T > & rhs)
+  bool ListConstIterator< T >::operator==(const ListConstIterator< T > & rhs) const
   {
     return (node_ == rhs.node_);
   }
 
   template< class T >
-  bool ListConstIterator< T >::operator!=(const ListConstIterator< T > & rhs)
+  bool ListConstIterator< T >::operator!=(const ListConstIterator< T > & rhs) const
   {
-    return !(operator==(rhs));
-  }
-
-  template< class T >
-  bool operator==(const ListConstIterator< T > & lhs, const ListConstIterator< T > & rhs)
-  {
-    return (lhs.node_ == rhs.node_);
-  }
-
-  template< class T >
-  bool operator!=(const ListConstIterator< T > & lhs, const ListConstIterator< T > & rhs)
-  {
-    return !(lhs == rhs);
+    return !(*this == rhs);
   }
 }
 

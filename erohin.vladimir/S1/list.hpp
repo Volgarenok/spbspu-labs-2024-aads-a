@@ -274,7 +274,7 @@ namespace erohin
   void List< T >::remove(const T & value)
   {
     remove_if(
-      [](const T & elem)
+      [&](const T & elem)
       {
         return (elem == value);
       }
