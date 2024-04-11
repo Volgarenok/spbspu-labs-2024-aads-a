@@ -3,15 +3,18 @@
 void ishmuratov::inputList(List< std::pair< std::string, List< size_t > > > & pairs, std::istream & input)
 {
   std::string str;
-  input >> str;
+  size_t num = 0;
   while (input)
   {
-    pairs.pushBack({ str, List< size_t >() });
     input >> str;
-    while (input && std::isdigit(str[0]))
+    pairs.pushBack({ str, List< size_t >() });
+    while (input >> num)
     {
-      pairs.back().second.pushBack(std::stoull(str));
-      input >> str;
+      pairs.back().second.pushBack(num);
+    }
+    if (!input.eof())
+    {
+      input.clear();
     }
   }
 }
