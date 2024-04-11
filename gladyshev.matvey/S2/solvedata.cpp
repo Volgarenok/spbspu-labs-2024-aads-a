@@ -39,7 +39,7 @@ long long int gladyshev::evaluatePostfix(Queue< std::string > postfix)
       else if (token == "*")
       {
         long long int calc = left * right;
-        if (left != 0 && right / left != calc)
+        if ((left != 0) && (calc / left) != right)
         {
           throw std::logic_error("overflow detected");
         }
