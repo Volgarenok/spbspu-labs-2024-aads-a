@@ -10,61 +10,28 @@ namespace sivkov
   class List
   {
   public:
-    ConstIterator< T > cIterator;
-    List():
-      size_(0),
-      head_(nullptr)
-    {}
-    List(size_t count, const T& value):
-      size_(0),
-      head_(nullptr)
-    {
-      for (size_t i = 0; i < count; ++i)
-      {
-        push_back(value);
-      }
-    }
+    List();
+    List(size_t count, const T& value);
+    List(const List& other);
+    List(List&& other) noexcept;
+    ~List();
 
-    List(const List& other) :
-      size_(other.size_),
-      head_(other.head_)
-    {
-      Node< T >* current = other.head_;
-      while (current != nullptr)
-      {
-        push_back(current->data);
-        current = current->next;
-      }
-    }
-
-    List(List&& other) noexcept:
-      size_(other.size_),
-      head_(other.head_)
-    {
-      other.head_ = nullptr;
-      other.size_ = 0;
-    }
-
-    ~List()
-    {
-      clear();
-    }
+    List< T >& operator=(const List< T >& other);
+    List< T >& operator=(List< T >&& other) noexcept;
 
     void push_front(const T& data);
     void push_back(T data);
-    void clear();
-    bool empty() const;
     void pop_front();
     void pop_back();
+    void clear();
+    bool empty() const;
     void swap(List& other);
     void reverse();
+    size_t getSize();
     void remove(const T& value);
-
     template< class Predicate >
     void remove_if(Predicate p);
-
     void assign(size_t count, const T& value);
-    size_t getSize();
     T& front();
     ConstIterator< T > cbegin() const;
     ConstIterator< T > cend() const;
@@ -73,6 +40,73 @@ namespace sivkov
       size_t size_;
       Node< T >* head_;
     };
+
+  template< typename T >
+  List< T >::List():
+    size_(0),
+    head_(nullptr)
+  {}
+
+  template< typename T >
+  List< T >::List(size_t count, const T& value):
+    size_(0),
+    head_(nullptr)
+  {
+    for (size_t i = 0; i < count; ++i)
+    {
+      push_back(value);
+    }
+  }
+
+  template< typename T >
+  List< T >::List(const List& other):
+    size_(other.size_),
+    head_(other.head_)
+  {
+    Node< T >* current = other.head_;
+    while (current != nullptr)
+    {
+      push_back(current->data);
+      current = current->next;
+    }
+  }
+
+  template< typename T >
+  List< T >::List(List&& other) noexcept:
+    size_(other.size_),
+    head_(other.head_)
+  {
+    other.head_ = nullptr;
+    other.size_ = 0;
+  }
+
+  template< typename T >
+  List< T >::~List()
+  {
+    clear();
+  }
+
+  template< typename T >
+  List< T >& List< T >::operator=(const List< T >& other)
+  {
+    List< T > prev(other);
+    if (std::addressof(other) != this)
+    {
+      swap(prev);
+    }
+    return *this;
+  }
+
+  template< typename T >
+  List< T >& List< T >::operator=(List< T >&& other) noexcept
+  {
+    List< T > prev(std::move(other));
+    if (std::addressof(other) != this)
+    {
+      swap(prev);
+    }
+    return *this;
+  }
 
   template< typename T >
   void List< T >::push_front(const T& data)
@@ -195,7 +229,7 @@ namespace sivkov
 
   template< typename T >
   template< class Predicate >
-  void List<T>::remove_if(Predicate p)
+  void List< T >::remove_if(Predicate p)
   {
     Node< T >* current = head_;
     Node< T >* prev = nullptr;
@@ -224,8 +258,8 @@ namespace sivkov
     }
   }
 
-  template<typename T>
-  void List<T>::assign(size_t count, const T& value)
+  template< typename T >
+  void List< T >::assign(size_t count, const T& value)
   {
     List< T > prev;
     try
