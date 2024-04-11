@@ -1,7 +1,5 @@
 #include "checkdata.hpp"
 
-#include <string>
-
 bool gladyshev::isNumber(const std::string& s)
 {
   try
