@@ -23,9 +23,9 @@ namespace sivkov
     void push_back(T data);
     void pop_front();
     void pop_back();
-    void clear();
+    void clear() noexcept;
     bool empty() const;
-    void swap(List& other);
+    void swap(List& other) noexcept;
     void reverse();
     size_t getSize();
     void remove(const T& value);
@@ -138,7 +138,7 @@ namespace sivkov
   }
 
   template< typename T >
-  void List< T >::clear()
+  void List< T >::clear() noexcept
   {
     while (!(empty()))
     {
@@ -192,9 +192,10 @@ namespace sivkov
   }
 
   template< typename T >
-  void List< T >::swap(List& other)
+  void List< T >::swap(List& other) noexcept
   {
     std::swap(head_, other.head_);
+    std::swap(size_, other.size_);
   }
 
   template< typename T >
@@ -261,19 +262,10 @@ namespace sivkov
   template< typename T >
   void List< T >::assign(size_t count, const T& value)
   {
-    List< T > prev;
-    try
+    clear();
+    for (size_t i = 0; i < count; ++i)
     {
-      for (size_t i = 0; i < count; ++i)
-      {
-        prev.push_front(value);
-      }
-      prev.reverse();
-      swap(prev);
-    }
-    catch (...)
-    {
-      throw;
+      push_back(value);
     }
   }
 
@@ -302,3 +294,4 @@ namespace sivkov
   }
 }
 #endif
+
