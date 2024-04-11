@@ -10,7 +10,6 @@ namespace isaychev
   using ull = unsigned long long int;
   using ullList = List< unsigned long long int >;
   using pairList = List< std::pair< std::string, ullList > >;
-  void outputResults(std::ostream & out, pairList & list);
   void outputNames(std::ostream & out, pairList & list);
   void outputNumbers(std::ostream & out, pairList & list);
   void outputSums(std::ostream & out, pairList & list);
@@ -24,9 +23,7 @@ namespace isaychev
       out << *k;
       for (++k; k != list.end(); ++k)
       {
-        std::string s = " " + *k;
-        //out << " " << *k;
-        out << s;
+        out << std::string(" ") << *k;
       }
       out << std::string("\n");
     }
