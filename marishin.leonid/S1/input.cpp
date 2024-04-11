@@ -1,4 +1,5 @@
 #include "input.hpp"
+#include <limits>
 
 void marishin::readInput(LinkedList< std::pair< std::string, LinkedList< size_t >>>& pairs)
 {
