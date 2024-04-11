@@ -39,16 +39,23 @@ void zhalilov::MapMaster::doCommandLine(std::istream &input, std::string &result
     result = std::string();
     return;
   }
-  std::string cmdName = cmdSource.front();
-  cmdSource.pop_front();
-  (this->*commands_[cmdName])(cmdSource, result);
+  try
+  {
+    std::string cmdName = cmdSource.front();
+    cmdSource.pop_front();
+    (this->*commands_.at(cmdName))(cmdSource, result);
+  }
+  catch (const std::out_of_range &e)
+  {
+    throw std::invalid_argument("invalid command name");
+  }
 }
 
 void zhalilov::MapMaster::printCmd(List < std::string > &cmdSource, std::string &result)
 {
   if (cmdSource.capacity() != 1)
   {
-    throw std::invalid_argument("incorrect command");
+    throw std::invalid_argument("incorrect command source");
   }
   getMapSource(cmdSource.back(), result);
 }
@@ -57,7 +64,7 @@ void zhalilov::MapMaster::complementCmd(List < std::string > &cmdSource, std::st
 {
   if (cmdSource.capacity() != 3)
   {
-    throw std::invalid_argument("incorrect command");
+    throw std::invalid_argument("incorrect command source");
   }
 
   primaryMap &secondMap = maps_.at(cmdSource.back());
@@ -87,7 +94,7 @@ void zhalilov::MapMaster::intersectCmd(List < std::string > &cmdSource, std::str
 {
   if (cmdSource.capacity() != 3)
   {
-    throw std::invalid_argument("incorrect command");
+    throw std::invalid_argument("incorrect command source");
   }
 
   primaryMap &secondMap = maps_.at(cmdSource.back());
@@ -137,11 +144,14 @@ void zhalilov::MapMaster::getMapSource(const std::string &mapName, std::string &
 {
   auto it = maps_.at(mapName).cbegin();
   auto end = maps_.at(mapName).cend();
-  source = mapName;
+  end--;
+  source = mapName + ' ';
   while (it != end)
   {
-    source += std::to_string(it->first);
-    source += it->second;
+    source += std::to_string(it->first) + ' ';
+    source += it->second + ' ';
     it++;
   }
+  source += std::to_string(it->first) + ' ';
+  source += it->second;
 }
