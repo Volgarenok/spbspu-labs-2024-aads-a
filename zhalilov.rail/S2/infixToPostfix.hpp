@@ -7,7 +7,7 @@ namespace zhalilov
 {
   class InfixToken;
   class PostfixToken;
-  void infixToPostfix(Queue <InfixToken> infix, Queue <PostfixToken> &postfix);
+  void infixToPostfix(Queue< InfixToken > infix, Queue< PostfixToken > &postfix);
 }
 
 #endif
