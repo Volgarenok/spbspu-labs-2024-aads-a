@@ -87,15 +87,10 @@ int main()
     return 0;
   }
   listOfNums.reverse();
-  for (auto it = listOfNums.cbegin(); it != listOfNums.cend(); ++it)
+  std::cout << listOfNums.front();
+  for (auto it = ++listOfNums.cbegin(); it != listOfNums.cend(); ++it)
   {
-    std::cout << *it;
-    auto temp = it;
-    ++temp;
-    if (temp != listOfNums.cend())
-    {
-      std::cout << " ";
-    }
+    std::cout << " " << *it;
   }
   std::cout << "\n";
   return 0;
