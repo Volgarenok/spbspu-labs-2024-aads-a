@@ -28,9 +28,6 @@ namespace namestnikov
     ForwardIterator():
       node_(nullptr)
     {}
-    ForwardIterator(node_t * node):
-      node_(node)
-    {}
     ForwardIterator(const iterator &) = default;
     iterator & operator=(const iterator &) = default;
     ForwardIterator(ForwardIterator && other) noexcept:
@@ -84,6 +81,9 @@ namespace namestnikov
     ~ForwardIterator() = default;
   private:
     node_t * node_;
+    ForwardIterator(node_t * node):
+      node_(node)
+    {}
   };
 }
 #endif

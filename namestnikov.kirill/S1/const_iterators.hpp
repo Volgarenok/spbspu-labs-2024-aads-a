@@ -27,9 +27,6 @@ namespace namestnikov
     ConstForwardIterator():
       node_(nullptr)
     {}
-    ConstForwardIterator(node_t * node):
-      node_(node)
-    {}
     ConstForwardIterator(const const_iterator &) = default;
     const_iterator & operator=(const const_iterator &) = default;
     const_iterator & operator++()
@@ -70,6 +67,9 @@ namespace namestnikov
     ~ConstForwardIterator() = default;
   private:
     const node_t * node_;
+    ConstForwardIterator(node_t * node):
+      node_(node)
+    {}
   };
 }
 
