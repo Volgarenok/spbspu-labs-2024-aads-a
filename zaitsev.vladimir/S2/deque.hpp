@@ -110,6 +110,33 @@ namespace zaitsev
     Deque();
     Deque(const Deque& other);
     Deque(Deque&& other);
+    Deque& operator=(const Deque& other)
+    {
+      Deque& other_cp(other);
+      *this = std::move(other.cp);
+
+      return *this;
+    }
+    Deque& operator=(Deque&& other)
+    {
+      clear();
+      chunks_nmb_ = other.chunks_nmb_;
+      size_ = other.size_;
+      head_chunk_ = other.head_chunk_;
+      head_pos_ = other.head_pos_;
+      chunk_heads_ = other.chunk_heads_;
+      chunk_alloc_=other.chunk_alloc_;
+      head_alloc_=other.head_alloc_;
+      other.chunks_nmb_ = 0;
+      other.size_ = 0;
+      other.head_chunk_ = 0;
+      other.head_pos_ = 0;
+      other.chunk_heads_ = nullptr;
+      other.chunk_alloc_ = std::allocator< T >();
+      other.head_alloc_ = std::allocator< T* >();
+
+      return *this;
+    }
     ~Deque();
     void push_back(const T& value);
     void push_back(T&& value);

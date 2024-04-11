@@ -17,6 +17,14 @@ namespace zaitsev
     using iterator = typename Queue< Token< T > >::iterator;
     using const_iterator = typename Queue< Token< T > >::const_iterator;
 
+    PostfixExpression() = default;
+    PostfixExpression(const PostfixExpression& other) = default;
+    PostfixExpression(PostfixExpression&& other) = default;
+    PostfixExpression(const InfixExpression< T >& expression):
+      tokens_()
+    {
+      convert_from_infix(expression);
+    }
     bool convert_from_infix(const InfixExpression< T >& expression);
     T calculate();
     bool empty() const;
@@ -52,85 +60,80 @@ namespace zaitsev
   bool PostfixExpression< T >::convert_from_infix(const InfixExpression< T >& expression)
   {
     Stack< Token< T > > internal_state;
+    Queue< Token< T > > new_tokens;
     typename InfixExpression< T >::const_iterator expr_iterator = expression.cbegin();
-    try
+
+    while (expr_iterator != expression.end())
     {
-      while (expr_iterator!=expression.end())
+      switch ((*expr_iterator).type_)
       {
-        switch ((*expr_iterator).type_)
+      case token_type::bracket:
+      {
+        switch ((*expr_iterator).token_.bracket_)
         {
-        case token_type::bracket:
-        {
-          switch ((*expr_iterator).token_.bracket_)
-          {
-          case bracket_type::round_open:
-            internal_state.push(*expr_iterator);
-            break;
-
-          case bracket_type::round_close:
-            while (!internal_state.empty() && internal_state.top().type_ != token_type::bracket)
-            {
-              tokens_.push(internal_state.top());
-              internal_state.pop();
-            }
-            if (internal_state.empty() ||
-              static_cast<int>(internal_state.top().token_.bracket_)
-              + static_cast<int>((*expr_iterator).token_.bracket_) != 0)
-            {
-              throw std::runtime_error("Incorrect expression");
-            }
-            else
-            {
-              internal_state.pop();
-            }
-            break;
-
-          default:
-            throw std::runtime_error("Unknown bracket");
-          }
-          break;
-        }
-        case token_type::binary_operator:
-        {
-          size_t top_token_priority = (*expr_iterator).token_.bin_operator_->priority();
-          while (!internal_state.empty()
-            && internal_state.top().type_ == token_type::binary_operator
-            && internal_state.top().token_.bin_operator_->priority() >= top_token_priority)
-          {
-            tokens_.push(internal_state.top());
-            internal_state.pop();
-          }
+        case bracket_type::round_open:
           internal_state.push(*expr_iterator);
           break;
-        }
-        case token_type::value:
-        {
-          tokens_.push(*expr_iterator);
+
+        case bracket_type::round_close:
+          while (!internal_state.empty() && internal_state.top().type_ != token_type::bracket)
+          {
+            new_tokens.push(internal_state.top());
+            internal_state.pop();
+          }
+          if (internal_state.empty() ||
+            static_cast<int>(internal_state.top().token_.bracket_)
+            + static_cast<int>((*expr_iterator).token_.bracket_) != 0)
+          {
+            throw std::runtime_error("Incorrect expression");
+          }
+          else
+          {
+            internal_state.pop();
+          }
           break;
-        }
+
         default:
-          throw std::runtime_error("Unknown token");
+          throw std::runtime_error("Unknown bracket");
         }
-        ++expr_iterator;
+        break;
       }
-      while (!internal_state.empty())
+      case token_type::binary_operator:
       {
-        if (internal_state.top().type_ == token_type::binary_operator)
+        size_t top_token_priority = (*expr_iterator).token_.bin_operator_->priority();
+        while (!internal_state.empty()
+          && internal_state.top().type_ == token_type::binary_operator
+          && internal_state.top().token_.bin_operator_->priority() >= top_token_priority)
         {
-          tokens_.push(internal_state.top());
+          new_tokens.push(internal_state.top());
           internal_state.pop();
         }
-        else
-        {
-          throw std::runtime_error("Incorrect expression");
-        }
+        internal_state.push(*expr_iterator);
+        break;
+      }
+      case token_type::value:
+      {
+        new_tokens.push(*expr_iterator);
+        break;
+      }
+      default:
+        throw std::runtime_error("Unknown token");
+      }
+      ++expr_iterator;
+    }
+    while (!internal_state.empty())
+    {
+      if (internal_state.top().type_ == token_type::binary_operator)
+      {
+        new_tokens.push(internal_state.top());
+        internal_state.pop();
+      }
+      else
+      {
+        throw std::runtime_error("Incorrect expression");
       }
     }
-    catch (const std::exception&)
-    {
-      tokens_.clear();
-      throw;
-    }
+    tokens_ = std::move(new_tokens);
     return true;
   }
 

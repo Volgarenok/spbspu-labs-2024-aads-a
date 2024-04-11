@@ -28,9 +28,7 @@ int main(int argc, char** argv)
       {
         continue;
       }
-      InfixExpression< long long > expr(s, std::stoll);
-      PostfixExpression< long long > post;
-      post.convert_from_infix(expr);
+      PostfixExpression< long long > post(InfixExpression< long long >(s, std::stoll));
       results.push(post.calculate());
     }
     for (Stack< long long >::const_iterator i = results.cbegin(); i != results.cend(); ++i)
