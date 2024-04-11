@@ -34,9 +34,9 @@ int main()
 
   try
   {
-    outputPairsNames(listOfPairs, std::cout);
-    outputPairsLists(listOfPairs, sumList, std::cout);
-    outputPairListsSums(sumList, std::cout);
+    outputPairsNames(std::cout, listOfPairs);
+    outputPairsLists(std::cout, listOfPairs, sumList);
+    outputPairListsSums(std::cout, sumList);
     std::cout << "\n";
   }
   catch (const std::overflow_error & e)

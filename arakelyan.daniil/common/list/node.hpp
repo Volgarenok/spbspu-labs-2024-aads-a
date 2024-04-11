@@ -16,7 +16,7 @@ namespace arakelyan
         prevNode(nullptr)
       {}
 
-      Node(const Node &anotherNode) = default;
+      Node(const Node &anotherNode) = delete;
       ~Node() = default;
 
       T value;

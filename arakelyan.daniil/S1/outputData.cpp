@@ -7,7 +7,7 @@
 
 using BinList_t = arakelyan::BinList< std::pair< std::string, arakelyan::BinList< size_t > > >;
 
-void arakelyan::outputPairsNames(BinList_t listOfPairs, std::ostream & out)
+void arakelyan::outputPairsNames(std::ostream &out, BinList_t listOfPairs)
 {
   for (auto iter = listOfPairs.begin(); iter != listOfPairs.end(); ++iter)
   {
@@ -19,7 +19,7 @@ void arakelyan::outputPairsNames(BinList_t listOfPairs, std::ostream & out)
   }
 }
 
-void arakelyan::outputPairsLists(BinList_t &listOfPairs, arakelyan::BinList< size_t > &sumList, std::ostream & out)
+void arakelyan::outputPairsLists(std::ostream &out, BinList_t &listOfPairs, arakelyan::BinList< size_t > &sumList)
 {
   if ((listOfPairs.get_size() != 1) && !(listOfPairs.begin()->second.empty()))
   {
@@ -63,7 +63,7 @@ void arakelyan::outputPairsLists(BinList_t &listOfPairs, arakelyan::BinList< siz
   }
 }
 
-void arakelyan::outputPairListsSums(arakelyan::BinList< size_t > sumList, std::ostream & out)
+void arakelyan::outputPairListsSums(std::ostream &out, arakelyan::BinList< size_t > sumList)
 {
 
   for (auto it = sumList.begin(); it != sumList.end(); ++it)

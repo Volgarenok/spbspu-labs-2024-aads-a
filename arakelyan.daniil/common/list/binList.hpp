@@ -1,7 +1,6 @@
 #ifndef BINLIST_HPP
 #define BINLIST_HPP
 
-#include <iostream>
 #include <initializer_list>
 #include <memory>
 #include <stdexcept>
@@ -20,14 +19,15 @@ namespace arakelyan
     BinList();
     BinList(const T &val, size_t size);
     BinList(const BinList< T > &otherLs);
-    BinList(BinList< T > &&otherLs);
+    BinList(BinList< T > &&otherLs) noexcept;
     BinList(std::initializer_list< T > otherLs);
-    BinList(iterator it_start, iterator it_end);
+    template < class Iterator_t >
+    BinList(Iterator_t it_start, Iterator_t it_end);
     ~BinList();
 
     BinList< T > &operator=(const BinList< T > &otherLs);
     BinList< T > &operator=(BinList< T > otherLs);
-    BinList< T > &operator=(BinList< T > &&otherLs);
+    BinList< T > &operator=(BinList< T > &&otherLs) noexcept;
     BinList< T > &operator=(std::initializer_list< T > otherLs);
 
     size_t get_size() const noexcept;
@@ -106,18 +106,11 @@ arakelyan::BinList< T >::BinList(const T &val, size_t size):
 
 template < class T >
 arakelyan::BinList< T >::BinList(const BinList<T> &otherLs):
-  BinList()
-{
-  auto it = otherLs.cbegin();
-  while (size_ != otherLs.size_)
-  {
-    push_back(*it);
-    ++it;
-  }
-}
+  BinList(otherLs.cbegin(), otherLs.cend())
+{}
 
 template < class T >
-arakelyan::BinList< T >::BinList(BinList< T > &&otherLs):
+arakelyan::BinList< T >::BinList(BinList< T > &&otherLs) noexcept:
   BinList()
 {
   swap(otherLs);
@@ -125,16 +118,12 @@ arakelyan::BinList< T >::BinList(BinList< T > &&otherLs):
 
 template < class T >
 arakelyan::BinList< T >::BinList(std::initializer_list< T > otherLs):
-  BinList()
-{
-  for (auto it = otherLs.begin(); it != otherLs.end(); ++it)
-  {
-    push_back(*it);
-  }
-}
+  BinList(otherLs.begin(), otherLs.end())
+{}
 
 template < class T >
-arakelyan::BinList< T >::BinList(iterator it_start, iterator it_end):
+template < class Iterator_t >
+arakelyan::BinList< T >::BinList(Iterator_t it_start, Iterator_t it_end):
   BinList()
 {
   for (; it_start != it_end; ++it_start)
@@ -161,19 +150,13 @@ arakelyan::BinList< T > &arakelyan::BinList< T >::operator=(const arakelyan::Bin
 }
 
 template < class T >
-arakelyan::BinList< T > &arakelyan::BinList< T >::operator=(BinList< T > otherLs)
+arakelyan::BinList< T > &arakelyan::BinList< T >::operator=(BinList< T > &&otherLs) noexcept
 {
-  swap(otherLs);
-  return *this;
-}
-
-template < class T >
-arakelyan::BinList< T > &arakelyan::BinList< T >::operator=(BinList< T > &&otherLs)
-{
+  BinList< T > temp(std::move(otherLs));
   if (this != &otherLs)
   {
     clear();
-    swap(std::move(otherLs));
+    swap(otherLs);
   }
   return *this;
 }
@@ -372,9 +355,10 @@ void arakelyan::BinList< T >::swap(BinList< T > &otherLs) noexcept
 template < class T >
 arakelyan::details::Node< T > *delete_node(arakelyan::details::Node< T > *node)
 {
-  arakelyan::details::Node< T > *prevNode = node->prevNode;
-  arakelyan::details::Node< T > *nextNode = node->nextNode;
-  arakelyan::details::Node< T > *nodeToDel = node;
+  using Node = arakelyan::details::Node< T >;
+  Node *prevNode = node->prevNode;
+  Node *nextNode = node->nextNode;
+  Node *nodeToDel = node;
   delete nodeToDel;
   nextNode->prevNode = prevNode;
   prevNode->nextNode = nextNode;
@@ -624,7 +608,10 @@ void arakelyan::BinList< T >::splice(const_iterator it_this, BinList< T > &other
 template < class T >
 void arakelyan::BinList< T >::reverse() noexcept
 {
-  assert(!empty());
+  if (empty())
+  {
+    return;
+  }
   details::Node< T > *node = head_;
   node->prevNode = tail_->nextNode;
   node->nextNode->prevNode = node;

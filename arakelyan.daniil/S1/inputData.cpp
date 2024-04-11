@@ -1,10 +1,7 @@
 #include "inputData.hpp"
 #include <limits>
-#include <list/binList.hpp>
-
-#include <cctype>
-#include <list>
 #include <string>
+#include <list/binList.hpp>
 
 void arakelyan::inputData(std::istream &input, BinList < std::pair < std::string, BinList< size_t > > > &listOfLists)
 {

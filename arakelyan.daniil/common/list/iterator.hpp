@@ -31,8 +31,8 @@ namespace arakelyan
     const T *operator->() const;
     T *operator->();
 
-    bool operator!=(const Iterator< T > &val) const;
-    bool operator==(const Iterator< T > &val) const;
+    bool operator!=(Iterator< T > val) const;
+    bool operator==(Iterator< T > val) const;
 
   private:
     explicit Iterator(details::Node< T > *val);
@@ -114,13 +114,13 @@ namespace arakelyan
   }
 
   template < class T >
-  bool Iterator< T >::operator!=(const Iterator< T > &val) const
+  bool Iterator< T >::operator!=(Iterator< T > val) const
   {
     return !(*this == val);
   }
 
   template < class T >
-  bool Iterator< T >::operator==(const Iterator< T > &val) const
+  bool Iterator< T >::operator==(Iterator< T > val) const
   {
     return node == val.node;
   }
