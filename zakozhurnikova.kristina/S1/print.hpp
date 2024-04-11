@@ -1,6 +1,6 @@
 #ifndef PRINT_HPP
 #define PRINT_HPP
-#include <iostream>
+#include <iosfwd>
 #include <limits>
 #include "list.hpp"
 

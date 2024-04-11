@@ -1,4 +1,5 @@
 #include "print.hpp"
+#include <iostream>
 
 size_t zakozhurnikova::getMaxSize(const List< pair >& l)
 {
@@ -11,7 +12,7 @@ size_t zakozhurnikova::getMaxSize(const List< pair >& l)
   return max;
 }
 
-void zakozhurnikova::printNames(const List<pair>& l)
+void zakozhurnikova::printNames(const List< pair >& l)
 {
   for (auto it = l.begin(); it != l.end(); ++it)
   {
