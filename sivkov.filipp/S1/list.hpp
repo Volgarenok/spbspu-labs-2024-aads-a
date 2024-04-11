@@ -45,7 +45,11 @@ namespace sivkov
       other.size_ = 0;
     }
 
-    ~List() { clear(); }
+    ~List()
+    {
+      clear();
+    }
+
     void push_front(const T& data);
     void push_back(T data);
     void clear();
@@ -61,7 +65,7 @@ namespace sivkov
 
     void assign(size_t count, const T& value);
     size_t getSize();
-    T& front() { return head_->data; }
+    T& front();
     ConstIterator< T > cbegin() const;
     ConstIterator< T > cend() const;
 
@@ -223,6 +227,12 @@ namespace sivkov
   size_t List< T >::getSize()
   {
     return size_;
+  }
+
+  template< typename T >
+  T& List< T >::front()
+  {
+    return head_->data;
   }
 
   template< typename T >
