@@ -49,12 +49,16 @@ namespace sivkov
     void push_front(const T& data);
     void push_back(T data);
     void clear();
-    bool empty() const {return head_ == nullptr;}
+    bool empty() const;
     void pop_front();
     void pop_back();
     void swap(List& other);
     void reverse();
     void remove(const T& value);
+
+    template< class Predicate >
+    void remove_if(Predicate p);
+
     void assign(size_t count, const T& value);
     size_t getSize();
     T& front() { return head_->data; }
