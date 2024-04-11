@@ -86,7 +86,7 @@ namespace gladyshev
         [&value](const T& data_)
         {
           return value == data_;
-        }
+        };
       remove_if(checkPred);
     }
     template < typename UnaryPredicate >
