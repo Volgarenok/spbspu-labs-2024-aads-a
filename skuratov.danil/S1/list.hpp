@@ -34,14 +34,14 @@ namespace skuratov
       }
     }
 
-    iterator< T > begin() noexcept
+    List< T > begin() noexcept
     {
-      return iteraror< T >(head);
+      return List< T >(head);
     }
 
-    iterator< T > end() noexcept
+    List< T > end() noexcept
     {
-      return iterator< T >(nullptr);
+      return List< T >(nullptr);
     }
 
     T & front()
