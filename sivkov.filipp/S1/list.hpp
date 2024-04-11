@@ -58,8 +58,8 @@ namespace sivkov
     void assign(size_t count, const T& value);
     size_t getSize();
     T& front() { return head_->data; }
-    ConstIterator< T > cbegin() const { return ConstIterator< T >(head_); }
-    ConstIterator< T > cend() const { return ConstIterator< T >(nullptr); }
+    ConstIterator< T > cbegin() const;
+    ConstIterator< T > cend() const;
 
     private:
       size_t size_;
@@ -210,6 +210,18 @@ namespace sivkov
   size_t List< T >::getSize()
   {
     return size_;
+  }
+
+  template< typename T >
+  ConstIterator< T > List< T >::cbegin() const
+  {
+    return ConstIterator< T >(head_);
+  }
+
+  template< typename T >
+  ConstIterator< T > List< T >::cend() const
+  {
+    return ConstIterator< T >(nullptr);
   }
 }
 #endif
