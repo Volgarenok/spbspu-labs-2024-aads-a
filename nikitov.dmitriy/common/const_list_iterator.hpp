@@ -11,9 +11,6 @@ namespace nikitov
   class List;
 
   template< class T >
-  class Node;
-
-  template< class T >
   class ConstListIterator: public std::iterator< std::bidirectional_iterator_tag, T >
   {
     friend class List< T >;
