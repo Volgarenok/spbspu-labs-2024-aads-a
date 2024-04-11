@@ -54,7 +54,7 @@ namespace gladyshev
         throw;
       }
     }
-    List(List&& other):
+    List(List&& other) noexcept:
       head_(other.head_)
     {
       other.head_ = nullptr;
