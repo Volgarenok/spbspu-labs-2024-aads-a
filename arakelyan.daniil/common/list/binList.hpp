@@ -79,8 +79,6 @@ namespace arakelyan
     bool operator<=(const BinList< T > &otherLs) const;
     bool operator>=(const BinList< T > &otherLs) const;
 
-    void copyForConstr(arakelyan::ConstIterator< T > it_start, arakelyan::ConstIterator< T > it_end);
-
   private:
     template < class Iterator_t >
     void copyFromRange(Iterator_t it_start, Iterator_t it_end);
