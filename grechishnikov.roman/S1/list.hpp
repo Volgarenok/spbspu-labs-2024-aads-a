@@ -86,10 +86,18 @@ namespace grechishnikov
     tail_(nullptr)
   {
     detail::Node< T >* node = other.head_;
-    while(node)
+    try
     {
-      push_back(node->data_);
-      node = node->next_;
+      while(node)
+      {
+        push_back(node->data_);
+        node = node->next_;
+      }
+    }
+    catch (...)
+    {
+      clear();
+      throw;
     }
   }
 
@@ -100,10 +108,18 @@ namespace grechishnikov
     tail_(nullptr)
   {
     auto init = ilist.begin();
-    while (init != ilist.end())
+    try
     {
-      push_back(*init);
-      init++;
+      while (init != ilist.end())
+      {
+        push_back(*init);
+        init++;
+      }
+    }
+    catch (...)
+    {
+      clear();
+      throw;
     }
   }
   template< typename T >
@@ -112,9 +128,17 @@ namespace grechishnikov
     head_(nullptr),
     tail_(nullptr)
   {
-    for (size_t i = 0; i < count; i++)
+    try
     {
-      push_back(value);
+      for (size_t i = 0; i < count; i++)
+      {
+        push_back(value);
+      }
+    }
+    catch (...)
+    {
+      clear();
+      throw;
     }
   }
 
@@ -136,13 +160,8 @@ namespace grechishnikov
   template< typename T >
   List< T >& List< T >::operator=(const List< T >& other)
   {
-    clear();
-    detail::Node< T >* temp = other.head_;
-    while (!temp)
-    {
-      push_back(temp->data_);
-      temp = temp->next_;
-    }
+    List< T > temp(other);
+    swap(temp);
     return *this;
   }
 
