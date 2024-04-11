@@ -29,6 +29,8 @@ namespace zaitsev
       using ref_t = std::conditional_t< IsConst, const T&, T& >;
       T** chunk_head_;
       T* pos_;
+      T** before_begin_chunk_;
+      T** end_chunk_;
       void shift(diff_t shift_sz)
       {
         if (pos_ + shift_sz < *chunk_head_ + chunk_cap_ && pos_ + shift_sz >= *chunk_head_)
@@ -44,12 +46,12 @@ namespace zaitsev
           if (shift_sz > 0)
           {
             chunk_head_ += shift_chunks;
-            pos_ = *chunk_head_ + shift_in_new_chunk;
+            pos_ = (chunk_head_ < end_chunk_) ? *chunk_head_ + shift_in_new_chunk : nullptr;
           }
           else
           {
             chunk_head_ -= shift_chunks;
-            pos_ = *chunk_head_ + chunk_cap_ - 1 - shift_in_new_chunk;
+            pos_ = (chunk_head_ > before_begin_chunk_) ? *chunk_head_ + chunk_cap_ - 1 - shift_in_new_chunk : nullptr;
           }
         }
       }
@@ -462,7 +464,8 @@ namespace zaitsev
       size_t end_chunk = head_chunk_;
       size_t end_pos = head_pos_;
       convert_index(size_ + 1, end_chunk, end_pos);
-      return iterator(chunk_heads_ + end_chunk, chunk_heads_[end_chunk] + end_pos);
+      bool out_of_data = (end_chunk == chunks_nmb_);
+      return iterator(chunk_heads_ + end_chunk, out_of_data ? chunk_heads_[end_chunk] + end_pos : nullptr);
     }
     const_iterator begin() const
     {
@@ -486,7 +489,8 @@ namespace zaitsev
       size_t end_chunk = 0;
       size_t end_pos = 0;
       convert_index(size_ + 1, end_chunk, end_pos);
-      return const_iterator(chunk_heads_ + end_chunk, chunk_heads_ ? chunk_heads_[end_chunk] + end_pos : nullptr);
+      bool out_of_data = (end_chunk == chunks_nmb_);
+      return const_iterator(chunk_heads_ + end_chunk, out_of_data ? chunk_heads_[end_chunk] + end_pos : nullptr);
     }
     bool empty() const
     {
