@@ -1,34 +1,32 @@
 #ifndef FORWARD_LIST_ITERATORS_HPP
 #define FORWARD_LIST_ITERATORS_HPP
-#include <assert.h>
+#include <cassert>
 #include "forward_list.hpp"
 #include "const_forward_list_iterators.hpp"
 #include "node.hpp"
 
 namespace novokhatskiy
 {
-  template < typename T >
+  template <typename T>
   class ForwardList;
 
-  template < typename T >
+  template <typename T>
   class ConstForwardIterator;
 
-  template < typename T >
-  class ForwardIterator: public std::iterator< std::forward_iterator_tag, T >
+  template <typename T>
+  class ForwardIterator : public std::iterator<std::forward_iterator_tag, T>
   {
-    friend class novokhatskiy::ForwardList< T >;
-  public:
-    using iter = ForwardIterator< T >;
-    ForwardIterator():
-      node_(nullptr)
-    {}
-    ForwardIterator(detail::Node< T >* node):
-      node_(node)
-    {}
-    ForwardIterator(const iter&) = default;
-    iter& operator=(const iter&) = default;
+    friend class novokhatskiy::ForwardList<T>;
 
-    iter& operator++()
+  public:
+    using iter = ForwardIterator<T>;
+    ForwardIterator() : node_(nullptr)
+    {
+    }
+    ForwardIterator(const iter &) = default;
+    iter &operator=(const iter &) = default;
+
+    iter &operator++()
     {
       assert(node_ != nullptr);
       node_ = node_->next_;
@@ -41,21 +39,21 @@ namespace novokhatskiy
       ++(*this);
       return temp;
     };
-    bool operator==(const iter& other) const
+    bool operator==(const iter &other) const
     {
       return node_ == other.node_;
     }
-    bool operator!=(const iter& other) const
+    bool operator!=(const iter &other) const
     {
       return !(node_ == other.node_);
     }
 
-    bool operator!=(ConstForwardIterator< T >& constIt) const
+    bool operator!=(ConstForwardIterator<T> &constIt) const
     {
       return !(node_ == constIt.node_);
     }
 
-    iter& moveIterator(size_t size)
+    iter &moveIterator(size_t size)
     {
       for (size_t i = 0; i != size; i++)
       {
@@ -63,28 +61,32 @@ namespace novokhatskiy
       }
       return *this;
     }
-    T& operator*()
+    T &operator*()
     {
       assert(node_ != nullptr);
       return node_->value_;
     }
-    const T& operator*() const
+    const T &operator*() const
     {
-      return node_.value_;
+      return node_->value_;
     }
-    T* operator->()
+    T *operator->()
     {
       assert(this->node_ != nullptr);
       return std::addressof(this->node_->value_);
     }
-    const T* operator->() const
+    const T *operator->() const
     {
       assert(this->node_ != nullptr);
       return std::addressof(this->node_.value_);
     }
     ~ForwardIterator() = default;
+
   private:
-    detail::Node< T >* node_;
+    detail::Node<T> *node_;
+    explicit ForwardIterator(detail::Node<T> *node) : node_(node)
+    {
+    }
   };
 }
 #endif
