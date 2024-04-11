@@ -82,7 +82,7 @@ namespace gladyshev
     }
     void remove(const T& value)
     {
-      auto checkPred = 
+      auto checkPred =
         [&value](const T& data_)
         {
           return value == data_;
