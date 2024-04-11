@@ -110,6 +110,12 @@ namespace sivkov
   }
 
   template< typename T >
+  bool List< T >::empty() const
+  {
+    return head_ == nullptr;
+  }
+
+  template< typename T >
   void List< T >::pop_front()
   {
     if (empty())
@@ -179,8 +185,8 @@ namespace sivkov
     auto pred = [&value](const T& elem)
     {
      return elem == value;
-     };
-     remove_if(pred);
+    };
+    remove_if(pred);
   }
 
   template< typename T >
