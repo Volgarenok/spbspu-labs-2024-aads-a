@@ -450,7 +450,7 @@ namespace zaitsev
       }
       if (!other.head_)
       {
-        return{};
+        return;
       }
 
       Node* temp = pos.node_->next_;
@@ -528,7 +528,7 @@ namespace zaitsev
     void sort(Compare cmp)
     {
       if (!head_ || !head_->next_)
-        return{};
+        return;
       size_t sz = 0;
       const Node* cur = head_;
       while (cur)
