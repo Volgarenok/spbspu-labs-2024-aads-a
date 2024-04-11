@@ -2,6 +2,7 @@
 #define CONST_ITERATOR_HPP
 
 #include <cstddef>
+#include <iterator>
 #include "node.hpp"
 
 namespace grechishnikov
@@ -10,7 +11,7 @@ namespace grechishnikov
   class List;
 
   template< typename T >
-  class ConstIterator
+  class ConstIterator: public std::iterator< std::bidirectional_iterator_tag, const T >
   {
   public:
     ConstIterator();
