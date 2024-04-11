@@ -2,8 +2,6 @@
 #define PAIRSFUNCTION
 
 #include <iostream>
-#include <utility>
-#include <string>
 
 #include "biList.hpp"
 

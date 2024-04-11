@@ -72,7 +72,7 @@ namespace rebdev
     private:
       const node * node_;
 
-      ConstBidirectionalIterator(const node * originalNode):
+      ConstBidirectionalIterator(const node * originalNode) noexcept:
         node_(originalNode)
       {}
   };

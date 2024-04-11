@@ -35,13 +35,14 @@ int main()
     }
 
     listName.clear();
+
   }
 
   rebdev::BidirectionalIterator< stringAndList > beg = listOfPairs.begin();
+
   while (beg != listOfPairs.end())
   {
     iter readIter = (*beg).second.begin();
-    //++readIter;
     std::cout << (*beg).first << ' ';
     while (readIter != (*beg).second.end())
     {
@@ -50,5 +51,6 @@ int main()
     }
     ++beg;
   }
+
   return 0;
 }
