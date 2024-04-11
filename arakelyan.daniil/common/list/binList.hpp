@@ -353,6 +353,18 @@ void arakelyan::BinList< T >::swap(BinList< T > &otherLs) noexcept
 }
 
 template < class T >
+arakelyan::details::Node< T > *delete_node(arakelyan::details::Node< T > *node)
+{
+  arakelyan::details::Node< T > *prevNode = node->prevNode;
+  arakelyan::details::Node< T > *nextNode = node->nextNode;
+  arakelyan::details::Node< T > *nodeToDel = node;
+  delete nodeToDel;
+  nextNode->prevNode = prevNode;
+  prevNode->nextNode = nextNode;
+  return nextNode;
+}
+
+template < class T >
 void arakelyan::BinList< T >::remove(const T &val)
 {
   assert(!empty());
@@ -373,13 +385,7 @@ void arakelyan::BinList< T >::remove(const T &val)
       }
       else
       {
-        details::Node< T > *prevNode = node->prevNode;
-        details::Node< T > *nextNode = node->nextNode;
-        details::Node< T > *nodeToDel = node;
-        delete nodeToDel;
-        node = nextNode;
-        nextNode->prevNode = prevNode;
-        prevNode->nextNode = nextNode;
+        node = delte_node(node);
       }
     }
     else
@@ -408,13 +414,7 @@ void arakelyan::BinList< T >::remove_if(UnaryPredicate p)
       }
       else
       {
-        details::Node< T > *prevNode = node->prevNode;
-        details::Node< T > *nextNode = node->nextNode;
-        details::Node< T > *nodeToDel = node;
-        delete nodeToDel;
-        node = nextNode;
-        nextNode->prevNode = prevNode;
-        prevNode->nextNode = nextNode;
+        node = delete_node(node);
       }
     }
     else
@@ -615,8 +615,6 @@ void arakelyan::BinList< T >::reverse() noexcept
   }
   std::swap(head_, tail_);
 }
-
-
 
 template < class T >
 bool arakelyan::BinList< T >::operator==(const BinList< T > &otherLs) const

@@ -10,13 +10,7 @@ namespace arakelyan
     {
       Node() = default;
 
-      Node(const T &val, Node *nextPtr, Node *prevPtr):
-        value(val),
-        nextNode(nextPtr),
-        prevNode(prevPtr)
-      {}
-
-      Node(const T &el):
+      explicit Node(const T &el):
         value(el),
         nextNode(nullptr),
         prevNode(nullptr)

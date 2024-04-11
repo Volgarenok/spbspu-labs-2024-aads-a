@@ -35,7 +35,7 @@ namespace arakelyan
     bool operator==(const Iterator< T > &val) const;
 
   private:
-    Iterator(details::Node< T > *val);
+    explicit Iterator(details::Node< T > *val);
 
     using Node = details::Node< T >;
     Node *node;
