@@ -1,6 +1,5 @@
 #ifndef INPUT_OPERATIONS_HPP
 #define INPUT_OPERATIONS_HPP
-#include <iostream>
 #include <iosfwd>
 #include <utility>
 #include "list.hpp"

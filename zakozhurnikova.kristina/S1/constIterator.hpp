@@ -50,7 +50,7 @@ namespace zakozhurnikova
   }
 
   template < typename T >
-  ConstIterator< T > ConstIterator< T >::operator++(int rhs)
+  ConstIterator< T > ConstIterator< T >::operator++(int)
   {
     ConstIterator< T > result(*this);
     ++(*this);
@@ -66,7 +66,7 @@ namespace zakozhurnikova
 
 
   template < typename T >
-  ConstIterator< T > ConstIterator< T >::operator--(int rhs)
+  ConstIterator< T > ConstIterator< T >::operator--(int)
   {
     ConstIterator< T > result(*this);
     --(*this);

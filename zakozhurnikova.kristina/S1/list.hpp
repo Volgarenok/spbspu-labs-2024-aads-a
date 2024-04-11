@@ -5,7 +5,6 @@
 #include <string>
 #include "node.hpp"
 #include "iterator.hpp"
-#include "functions.hpp"
 #include "constIterator.hpp"
 
 namespace zakozhurnikova
@@ -20,7 +19,7 @@ namespace zakozhurnikova
       size_(0)
     {}
 
-    List(const List& rhs) :
+    List(const List& rhs):
       head_(nullptr),
       tail_(nullptr),
       size_(0)
@@ -41,7 +40,7 @@ namespace zakozhurnikova
       }
     }
 
-    List(List&& rhs) noexcept :
+    List (List&& rhs) noexcept:
       head_(rhs.head_),
       tail_(rhs.tail_),
       size_(rhs.size_)
@@ -221,7 +220,7 @@ namespace zakozhurnikova
       }
       auto last = end();
       auto it = begin();
-      if(p(*begin()))
+      if (p(*begin()))
       {
         pop_front();
       }
@@ -241,21 +240,15 @@ namespace zakozhurnikova
       }
     }
 
-    void assign(size_t count, const T& value)
+    void assign (size_t count, const T& value)
     {
       List< T > temp;
-      try
+      for(size_t i = 0; i < count; i++)
       {
-        for(size_t i = 0; i < count; i++)
-        {
-          temp.push_front(value);
-        }
+        temp.push_front(value);
       }
-      catch (...)
-      {
-        temp.clear();
-        throw;
-      }
+      temp.clear();
+      throw;
       clear();
       for (auto it = temp.begin(); it != temp.end(); ++it)
       {

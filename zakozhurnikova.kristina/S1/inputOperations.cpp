@@ -1,4 +1,5 @@
 #include "inputOperations.hpp"
+#include <iostream>
 
 void zakozhurnikova::readList(List< pair >& list, std::istream& in)
 {

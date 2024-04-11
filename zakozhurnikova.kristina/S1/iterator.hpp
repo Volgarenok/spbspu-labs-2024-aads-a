@@ -1,8 +1,8 @@
 #ifndef ITERATOR_HPP
 #define ITERATOR_HPP
 #include <memory>
-#include "node.hpp"
 #include <iterator>
+#include "node.hpp"
 
 namespace zakozhurnikova
 {
@@ -53,7 +53,7 @@ namespace zakozhurnikova
   }
 
   template < typename T >
-  Iterator< T > Iterator< T >::operator++(int rhs)
+  Iterator< T > Iterator< T >::operator++(int)
   {
     Iterator< T > result(*this);
     ++(*this);
@@ -69,7 +69,7 @@ namespace zakozhurnikova
 
 
   template < typename T >
-  Iterator< T > Iterator< T >::operator--(int rhs)
+  Iterator< T > Iterator< T >::operator--(int)
   {
     Iterator< T > result(*this);
     --(*this);

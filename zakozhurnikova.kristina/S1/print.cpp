@@ -13,7 +13,7 @@ size_t zakozhurnikova::getMaxSize(const List< pair >& l)
 
 void zakozhurnikova::printNames(const List<pair>& l)
 {
-  for(auto it = l.begin(); it != l.end(); ++it)
+  for (auto it = l.begin(); it != l.end(); ++it)
   {
     std::cout << it->first;
     auto temp = it;
