@@ -50,6 +50,18 @@ piyavkin::Postfix::Postfix(char val):
   operation(val),
   type(detail::operation)
 {}
+piyavkin::detail::TypesPartsExpression piyavkin::Postfix::getType()
+{
+  return type;
+}
+char piyavkin::Postfix::getOperation()
+{
+  return operation.operation;
+}
+unsigned long long piyavkin::Postfix::getOperand()
+{
+  return operand.number;
+}
 
 piyavkin::ConversionExpressionType::ConversionExpressionType():
   operation(0),

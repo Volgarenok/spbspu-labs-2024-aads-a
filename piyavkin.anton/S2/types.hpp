@@ -31,7 +31,10 @@ namespace piyavkin
     Postfix();
     explicit Postfix(unsigned long long val);
     explicit Postfix(char val);
-  // private:
+    TypesPartsExpression getType();
+    char getOperation();
+    unsigned long long getOperand();
+  private:
     union
     {
       Operand operand;
