@@ -22,7 +22,6 @@ namespace sivkov
     void push_front(const T& data);
     void push_back(T data);
     void pop_front();
-    void pop_back();
     void clear() noexcept;
     bool empty() const;
     void swap(List& other) noexcept;
@@ -38,7 +37,7 @@ namespace sivkov
 
     private:
       size_t size_;
-      Node< T >* head_;
+      detail::Node< T >* head_;
     };
 
   template< typename T >
@@ -52,21 +51,17 @@ namespace sivkov
     size_(0),
     head_(nullptr)
   {
-    for (size_t i = 0; i < count; ++i)
-    {
-      push_back(value);
-    }
+    assign(count,value);
   }
 
   template< typename T >
-  List< T >::List(const List& other):
-    size_(other.size_),
-    head_(other.head_)
+  List< T >::List(const List& other) :
+    List()
   {
-    Node< T >* current = other.head_;
-    while (current != nullptr)
+    detail::Node< T >* current = other.head_;
+    while (current)
     {
-      push_back(current->data);
+      push_front(current->data);
       current = current->next;
     }
   }
@@ -111,7 +106,7 @@ namespace sivkov
   template< typename T >
   void List< T >::push_front(const T& data)
   {
-    Node< T >* temp = new Node< T >(data);
+    detail::Node< T >* temp = new detail::Node< T >(data);
     temp->next = head_;
     head_ = temp;
     ++size_;
@@ -120,14 +115,14 @@ namespace sivkov
   template< typename T >
   void List< T >::push_back(T data)
   {
-    Node< T >* newNode = new Node< T >(data);
+    detail::Node< T >* newNode = new detail::Node< T >(data);
     if (empty())
     {
       head_ = newNode;
     }
     else
     {
-      Node< T >* head = head_;
+      detail::Node< T >* head = head_;
       while (head->next)
       {
           head = head->next;
@@ -160,34 +155,9 @@ namespace sivkov
     {
       throw std::logic_error("empty");
     }
-    Node< T >* head = head_;
+    detail::Node< T >* head = head_;
     head_ = head_->next;
     delete head;
-    --size_;
-  }
-
-  template< typename T >
-  void List< T >::pop_back()
-  {
-    if (empty())
-    {
-      throw;
-    }
-    if (head_->next == nullptr)
-    {
-      delete head_;
-      head_ = nullptr;
-    }
-    else
-    {
-      Node< T >* head = head_;
-      while (head->next->next != nullptr)
-      {
-        head = head->next;
-      }
-      delete head->next;
-      head->next = nullptr;
-    }
     --size_;
   }
 
@@ -205,12 +175,12 @@ namespace sivkov
     {
       return;
     }
-    Node< T >* result = head_;
-    Node< T >* temp = head_->next;
+    detail::Node< T >* result = head_;
+    detail::Node< T >* temp = head_->next;
     result->next = nullptr;
     while (temp)
     {
-      Node< T >* rofl = temp->next;
+      detail::Node< T >* rofl = temp->next;
       temp->next = result;
       result = temp;
       temp = rofl;
@@ -232,8 +202,8 @@ namespace sivkov
   template< class Predicate >
   void List< T >::remove_if(Predicate p)
   {
-    Node< T >* current = head_;
-    Node< T >* prev = nullptr;
+    detail::Node< T >* current = head_;
+    detail::Node< T >* prev = nullptr;
 
     while (current != nullptr)
     {
