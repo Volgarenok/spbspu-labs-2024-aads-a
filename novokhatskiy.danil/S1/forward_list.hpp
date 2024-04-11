@@ -7,29 +7,33 @@
 
 namespace novokhatskiy
 {
-  template <typename T>
+  template < typename T >
   class ForwardIterator;
 
-  template <typename T>
+  template < typename T >
   class ConstForwardIterator;
 
-  template <typename T>
+  template < typename T >
   class ForwardList
   {
-    friend class novokhatskiy::ForwardIterator<T>;
-    friend class novokhatskiy::ConstForwardIterator<T>;
+    friend class novokhatskiy::ForwardIterator< T >;
+    friend class novokhatskiy::ConstForwardIterator< T >;
 
   public:
-    using iter = ForwardIterator<T>;
-    using constIter = ConstForwardIterator<T>;
-    ForwardList() : head_(nullptr)
-    {
-    }
-    ForwardList(ForwardList &&other) noexcept : head_(other.head_)
+    using iter = ForwardIterator< T >;
+    using constIter = ConstForwardIterator< T >;
+    using node_t = novokhatskiy::detail::Node< T >;
+    ForwardList() :
+      head_(nullptr)
+    {}
+    
+    ForwardList(ForwardList&& other) noexcept :
+      head_(other.head_)
     {
       other.head_ = nullptr;
     }
-    ForwardList(const ForwardList<T> &other) : head_(nullptr)
+    ForwardList(const ForwardList< T >& other) :
+      head_(nullptr)
     {
       auto iter_begin = other.begin();
       auto iter_end = other.end();
@@ -39,20 +43,62 @@ namespace novokhatskiy
         {
           push_front(*(iter_begin++));
         }
-        catch (...)
+        catch (const std::bad_alloc&)
         {
           clear();
           throw;
         }
       }
     }
-    ForwardList(size_t size, const T &value) : head_(nullptr)
+    ForwardList(size_t size, const T& value):
+      head_(nullptr)
     {
       try
       {
-        for (size_t i = 0; i != size; i++)
+        for (size_t i = 0; i < size; i++)
         {
           push_front(value);
+        }
+      }
+      catch (const std::bad_alloc&)
+      {
+        clear();
+        throw;
+      }
+    }
+    ForwardList(std::initializer_list< T > list):
+      ForwardList(list.begin(), list.end())
+    {}
+
+    ForwardList< T >& operator=(const ForwardList< T >& other)
+    {
+      ForwardList< T > tmp(other);
+      if (std::addressof(other) != this)
+      {
+        swap(tmp);
+      }
+      return *this;
+    }
+
+    ForwardList< T >& operator=(ForwardList< T >&& other)
+    {
+      ForwardList< T > tmp(std::move(other));
+      if (std::addressof(other) != this)
+      {
+        swap(tmp);
+      }
+      return *this;
+    }
+
+    node_t* new_list(size_t count, const T& value)
+    {
+      node_t* new_node = nullptr;
+      try
+      {
+        for (size_t i = 0; i < count; i++)
+        {
+          node_t* tmp = new node_t(new_node, value);
+          new_node = tmp;
         }
       }
       catch (...)
@@ -60,44 +106,30 @@ namespace novokhatskiy
         clear();
         throw;
       }
-    }
-    // сделать reverse не через метод
-    ForwardList(std::initializer_list<T> list) : head_(nullptr)
-    {
-      auto begin = list.begin();
-      auto end = list.end();
-      while (begin != end)
-      {
-        try
-        {
-          push_front(*(begin++));
-        }
-        catch (...)
-        {
-          clear();
-          throw;
-        }
-      }
+      return new_node;
     }
 
-    ForwardList<T> &operator=(const ForwardList<T> &other)
+    node_t* new_list(T first, T last)
     {
-      ForwardList<T> tmp(other);
-      if (std::addressof(other) != this)
+      if (first == last)
       {
-        swap(tmp);
+        return nullptr;
       }
-      return *this;
-    }
-
-    ForwardList<T> &operator=(ForwardList<T> &&other)
-    {
-      ForwardList<T> tmp(std::move(other));
-      if (std::addressof(other) != this)
+      node_t* new_head = new node_t(nullptr, *(first++));
+      try
       {
-        swap(tmp);
+        for (; first != last; ++first)
+        {
+          node_t* new_node = *first;
+          new_head->next_ = new_node;
+        }
       }
-      return *this;
+      catch (...)
+      {
+        clear();
+        throw;
+      }
+      return new_head;
     }
 
     iter begin()
@@ -105,9 +137,9 @@ namespace novokhatskiy
       return iter(head_);
     }
 
-    iter begin() const
+    constIter begin() const
     {
-      return iter(head_);
+      return constIter(head_);
     }
 
     constIter cbegin() const
@@ -120,9 +152,9 @@ namespace novokhatskiy
       return iter();
     }
 
-    iter end() const
+    constIter end() const
     {
-      return iter();
+      return constIter();
     }
 
     constIter cend() const
@@ -130,20 +162,20 @@ namespace novokhatskiy
       return constIter();
     }
 
-    bool empty() const
+    bool empty() const noexcept
     {
-      return (head_ == nullptr);
+      return !head_;
     }
-    const T &front() const
+    const T& front() const
     {
       return head_->value_;
     }
-    T &front()
+    T& front()
     {
       return head_->value_;
     }
 
-    iter insert_after(constIter pos, const T &value)
+    iter insert_after(constIter pos, const T& value)
     {
       if (pos == cend())
       {
@@ -154,26 +186,58 @@ namespace novokhatskiy
       {
         goToPos++;
       }
-      detail::Node<T> *node = new detail::Node<T>(value);
+      node_t* node = new node_t(value);
       node->next_ = goToPos.node_->next_;
       goToPos.node_->next_ = node;
       return goToPos++;
     }
 
-    iter insert_after(constIter pos, size_t count, const T &value)
+    iter insert_after(constIter pos, size_t count, const T& value)
     {
+      if (pos == cend())
+      {
+        throw std::out_of_range("Can not insert");
+      }
+      auto goToPos = this->begin();
+      while (pos.operator!=(goToPos))
+      {
+        goToPos++;
+      }
       for (size_t i = 0; i < count; i++)
       {
-        insert_after(pos, value);
+        node_t* node = new node_t(value);
+        node->next_ = goToPos.node_->next_;
+        goToPos.node_->next_ = node;
       }
+      return goToPos++;
     }
 
-    iter insert_after(constIter pos, std::initializer_list<T> list)
+    iter insert_after(constIter pos, T&& value) noexcept
     {
+      iter iter_res(pos.node_);
+      node_t* new_node = new node_t(std::move(value), iter_res.node_->next_);
+      iter_res.node_->next_ = new_node;
+      return (++iter_res);
+    }
+
+    iter insert_after(constIter pos, std::initializer_list< T > list)
+    {
+      if (pos == cend())
+      {
+        throw std::out_of_range("Can not insert");
+      }
+      auto goToPos = this->begin();
+      while (pos.operator!=(goToPos))
+      {
+        goToPos++;
+      }
       for (T value : list)
       {
-        insert_after(pos, value);
+        node_t* node = new node_t(value);
+        node->next_ = goToPos.node_->next_;
+        goToPos.node_->next_ = node;
       }
+      return goToPos++;
     }
 
     iter erase_after(constIter pos)
@@ -189,7 +253,7 @@ namespace novokhatskiy
       }
       if (goToPos.node_->next_)
       {
-        ForwardIterator<T> next(goToPos.node_->next_->next_);
+        ForwardIterator< T > next(goToPos.node_->next_->next_);
         delete goToPos.node_->next_;
         goToPos.node_->next_ = next.node_;
         return next;
@@ -206,16 +270,16 @@ namespace novokhatskiy
       {
         erase_after(first);
       }
-      return iter(const_cast<detail::Node<T> *>(last.node_));
+      return iter(const_cast<detail::Node< T > *>(last.node_));
     }
 
-    void splice_after(constIter &pos, ForwardList<T> &other)
+    void splice_after(constIter& pos, ForwardList< T >& other)
     {
       if (pos == cend())
       {
         throw std::out_of_range("Can not insert");
       }
-      detail::Node<T> *next = pos.node_->next_;
+      node_t* next = pos.node_->next_;
       pos.node_->next_ = other.head_;
       while (other.head_)
       {
@@ -227,7 +291,7 @@ namespace novokhatskiy
       other.head_ = nullptr;
     }
 
-    void splice_after(constIter pos, ForwardList<T> &&other)
+    void splice_after(constIter pos, ForwardList< T >&& other)
     {
       auto iter_curr = other.cbegin();
       auto iter_end = other.cend();
@@ -240,12 +304,12 @@ namespace novokhatskiy
       other.clear();
     }
 
-    void splice_after(constIter pos, ForwardList<T> &other, constIter iter)
+    void splice_after(constIter pos, ForwardList< T >& other, constIter iter)
     {
-      splice_after(pos, ForwardList<T>(other), iter);
+      splice_after(pos, ForwardList< T >(other), iter);
     }
 
-    void splice_after(constIter pos, ForwardList<T> &&other, constIter iter)
+    void splice_after(constIter pos, ForwardList< T >&& other, constIter iter)
     {
       if (pos == std::next(iter) || pos == iter)
       {
@@ -254,12 +318,12 @@ namespace novokhatskiy
       splice_after(pos, std::move(other), other.cend());
     }
 
-    void splice_after(constIter pos, ForwardList<T> &other, constIter first, constIter last)
+    void splice_after(constIter pos, ForwardList< T >& other, constIter first, constIter last)
     {
       splice_after(pos, T(other), first, last);
     }
 
-    void splice_after(constIter pos, ForwardList<T> &&other, constIter first, constIter last)
+    void splice_after(constIter pos, ForwardList< T >&& other, constIter first, constIter last)
     {
       auto curr_iter = first;
       auto iter_end = last;
@@ -270,22 +334,22 @@ namespace novokhatskiy
         ++pos;
       }
     }
-
-    // переделать
-    void push_front(const T &value)
+    void push_front(const T& value)
     {
-      push_front(T(value));
+      node_t* ptr = new node_t(value);
+      ptr->next_ = head_;
+      head_ = ptr;
     }
-    void push_front(T &value)
+    void push_front(T& value)
     {
-      detail::Node<T> *ptr = new detail::Node<T>(value);
+      node_t* ptr = new node_t(value);
       ptr->next_ = head_;
       head_ = ptr;
     }
 
-    void push_front(T &&value)
+    void push_front(T&& value)
     {
-      detail::Node<T> *ptr = new detail::Node<T>(std::move(value));
+      node_t* ptr = new node_t(std::move(value));
       ptr->next_ = head_;
       head_ = ptr;
     }
@@ -297,7 +361,7 @@ namespace novokhatskiy
         std::cerr << "The forward_list is empty\n";
         return;
       }
-      detail::Node<T> *temp = head_;
+      node_t* temp = head_;
       head_ = head_->next_;
       delete temp;
     }
@@ -308,7 +372,7 @@ namespace novokhatskiy
       {
         return 0;
       }
-      detail::Node<T> *curr = head_;
+      node_t* curr = head_;
       while (curr)
       {
         count++;
@@ -323,23 +387,23 @@ namespace novokhatskiy
         pop_front();
       }
     }
-    void assign(size_t count, const T &value)
+    void assign(size_t count, const T& value)
     {
-      detail::Node<T> *otherHead = nullptr;
+      node_t* otherHead = nullptr;
       try
       {
         for (size_t i = 0; i < count; i++)
         {
-          detail::Node<T> *temp = new detail::Node<T>(value);
+          node_t* temp = new node_t(value);
           temp->next_ = otherHead;
           otherHead = temp;
         }
       }
-      catch (...)
+      catch (const std::bad_alloc&)
       {
         while (head_)
         {
-          detail::Node<T> *temp = head_->next_;
+          node_t* temp = head_->next_;
           delete head_;
           head_ = temp;
         }
@@ -347,7 +411,7 @@ namespace novokhatskiy
       head_ = otherHead;
     }
 
-    void assign(std::initializer_list<T> list)
+    void assign(std::initializer_list< T > list)
     {
       try
       {
@@ -358,7 +422,7 @@ namespace novokhatskiy
         }
         reverse();
       }
-      catch (...)
+      catch (const std::bad_alloc&)
       {
         clear();
         throw;
@@ -375,7 +439,7 @@ namespace novokhatskiy
       reverse();
     }
 
-    void swap(ForwardList<T> &other)
+    void swap(ForwardList< T >& other)
     {
       std::swap(head_, other.head_);
     }
@@ -385,22 +449,22 @@ namespace novokhatskiy
       {
         return;
       }
-      detail::Node<T> *result = head_;
-      detail::Node<T> *temp = head_->next_;
+      node_t* result = head_;
+      node_t* temp = head_->next_;
       result->next_ = nullptr;
       while (temp)
       {
-        detail::Node<T> *prev = temp->next_;
+        node_t* prev = temp->next_;
         temp->next_ = result;
         result = temp;
         temp = prev;
       }
       head_ = result;
     }
-    void remove(const T &value)
+    void remove(const T& value)
     {
-      detail::Node<T> *curr = head_;
-      detail::Node<T> *firstStep = head_;
+      node_t* curr = head_;
+      node_t* firstStep = head_;
       while (curr != nullptr)
       {
         if (curr->value_ == value)
@@ -417,13 +481,12 @@ namespace novokhatskiy
       }
       head_ = firstStep;
     }
-    template <typename P>
-    // реализовать remove через remove_if
+    template < typename P >
     size_t remove_if(P predicate)
     {
       size_t removedElement{};
-      detail::Node<T> *curr = head_;
-      detail::Node<T> *prev = nullptr;
+      node_t* curr = head_;
+      node_t* prev = nullptr;
       while (curr)
       {
         if (predicate(curr->value_))
@@ -437,7 +500,7 @@ namespace novokhatskiy
           {
             head_ = curr->next_;
           }
-          detail::Node<T> *temp = curr;
+          node_t* temp = curr;
           curr = curr->next_;
           ++removedElement;
           delete temp;
@@ -451,11 +514,11 @@ namespace novokhatskiy
       return removedElement;
     }
 
-    bool operator==(ForwardList<T> &other) const
+    bool operator==(ForwardList< T >& other) const
     {
-      size_t maxPossibleSize = std::min(this->max_size(), other.max_size());
-      detail::Node<T> *curr = head_;
-      detail::Node<T> *otherHead = other.head_;
+      size_t maxPossibleSize = std::min(this->size(), other.size());
+      node_t* curr = head_;
+      node_t* otherHead = other.head_;
       for (size_t i = 0; i < maxPossibleSize; i++)
       {
         if (curr->value_ != otherHead->value_)
@@ -467,16 +530,15 @@ namespace novokhatskiy
       }
       return true;
     }
-    bool operator!=(ForwardList<T> &other) const
+    bool operator!=(ForwardList< T >& other) const
     {
       return !(*this == other);
     }
-    // реализовать третью функцию
-    bool operator<(const ForwardList<T> &other) const
+    bool operator<(const ForwardList< T >& other) const
     {
-      size_t maxPossibleSize = std::min(this->max_size(), other.max_size());
-      detail::Node<T> *curr = head_;
-      detail::Node<T> *otherHead = other.head_;
+      size_t maxPossibleSize = std::min(this->size(), other.size());
+      node_t* curr = head_;
+      node_t* otherHead = other.head_;
       for (size_t i = 0; i < maxPossibleSize; i++)
       {
         if (curr->value_ != otherHead->value_)
@@ -489,15 +551,15 @@ namespace novokhatskiy
       return false;
     }
 
-    bool operator>(const ForwardList<T> &other) const
+    bool operator>(const ForwardList< T >& other) const
     {
       return (other < *this);
     }
-    bool operator<=(const ForwardList<T> &other) const
+    bool operator<=(const ForwardList< T >& other) const
     {
       return (*this < other || *this == other);
     }
-    bool operator>=(const ForwardList<T> &other) const
+    bool operator>=(const ForwardList< T >& other) const
     {
       return (other < *this || *this == other);
     }
@@ -516,8 +578,9 @@ namespace novokhatskiy
     }
 
   private:
-    detail::Node<T> *head_;
-    ForwardList(const T &value) : head_(new detail::Node<T>)
+    detail::Node< T >* head_;
+    ForwardList(const T& value):
+      head_(new detail::Node< T >)
     {
       for (auto i = begin(); i < end(); i++)
       {

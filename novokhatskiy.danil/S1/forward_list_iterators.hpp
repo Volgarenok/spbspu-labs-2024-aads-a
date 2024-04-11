@@ -5,8 +5,6 @@
 #include "const_forward_list_iterators.hpp"
 #include "node.hpp"
 
-// передавать операторы по значению
-
 namespace novokhatskiy
 {
   template <typename T>
@@ -16,19 +14,18 @@ namespace novokhatskiy
   class ConstForwardIterator;
 
   template <typename T>
-  class ForwardIterator : public std::iterator<std::forward_iterator_tag, T>
+  class ForwardIterator: public std::iterator< std::forward_iterator_tag, T >
   {
     friend class novokhatskiy::ForwardList<T>;
 
   public:
     using iter = ForwardIterator<T>;
-    ForwardIterator() : node_(nullptr)
-    {
-    }
-    ForwardIterator(const iter &) = default;
-    iter &operator=(const iter &) = default;
+    ForwardIterator(): node_(nullptr)
+    {}
+    ForwardIterator(const iter&) = default;
+    iter& operator=(const iter&) = default;
 
-    iter &operator++()
+    iter& operator++()
     {
       assert(node_ != nullptr);
       node_ = node_->next_;
@@ -41,21 +38,21 @@ namespace novokhatskiy
       ++(*this);
       return temp;
     };
-    bool operator==(const iter &other) const
+    bool operator==(const iter other) const
     {
       return node_ == other.node_;
     }
-    bool operator!=(const iter &other) const
+    bool operator!=(const iter other) const
     {
       return !(node_ == other.node_);
     }
 
-    bool operator!=(ConstForwardIterator<T> &constIt) const
+    bool operator!=(ConstForwardIterator<T> constIt) const
     {
       return !(node_ == constIt.node_);
     }
 
-    iter &moveIterator(size_t size)
+    iter& moveIterator(size_t size)
     {
       for (size_t i = 0; i != size; i++)
       {
@@ -63,21 +60,22 @@ namespace novokhatskiy
       }
       return *this;
     }
-    T &operator*()
+
+    T& operator*()
     {
       assert(node_ != nullptr);
       return node_->value_;
     }
-    const T &operator*() const
+    const T& operator*() const
     {
       return node_->value_;
     }
-    T *operator->()
+    T* operator->()
     {
       assert(this->node_ != nullptr);
       return std::addressof(this->node_->value_);
     }
-    const T *operator->() const
+    const T* operator->() const
     {
       assert(this->node_ != nullptr);
       return std::addressof(this->node_.value_);
@@ -85,10 +83,9 @@ namespace novokhatskiy
     ~ForwardIterator() = default;
 
   private:
-    detail::Node<T> *node_;
-    explicit ForwardIterator(detail::Node<T> *node) : node_(node)
-    {
-    }
+    detail::Node<T>* node_;
+    explicit ForwardIterator(detail::Node<T>* node): node_(node)
+    {}
   };
 }
 #endif
