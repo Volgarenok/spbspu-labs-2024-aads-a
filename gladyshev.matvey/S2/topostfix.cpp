@@ -51,6 +51,9 @@ gladyshev::Queue< std::string > gladyshev::infixToPostfix(Queue< std::string > e
       throw std::logic_error("what is that");
     }
   }
-  output.push(ops.drop());
+  if (!ops.empty())
+  { 
+    output.push(ops.drop());
+  }
   return output;
 }
