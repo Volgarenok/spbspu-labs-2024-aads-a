@@ -3,16 +3,20 @@
 
 namespace sivkov
 {
-  template < typename T >
-  struct Node
+  namespace detail
   {
-    T data;
-    Node* next;
-    Node(const T& data_):
-      data(data_),
-      next(nullptr)
-    {}
-  };
+    template < typename T >
+    struct Node
+    {
+      T data;
+      Node* next;
+      Node(const T& data_) :
+        data(data_),
+        next(nullptr)
+      {}
+    };
+  }
 }
 
 #endif
+
