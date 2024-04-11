@@ -5,6 +5,10 @@
 #include "iterator.hpp"
 #include "constIterator.hpp"
 
+
+
+#include <iostream>
+
 namespace strelyaev
 {
   template< typename T >
@@ -55,7 +59,7 @@ namespace strelyaev
 
   template< typename T >
   List< T >::List():
-    imaginary_node(new detail::Node< T >(nullptr, nullptr, T())),
+    imaginary_node(new detail::Node< T >(tail_, nullptr, T())),
     head_(nullptr),
     tail_(nullptr),
     size_(0)
@@ -65,7 +69,6 @@ namespace strelyaev
   List< T >::List(const List& other):
     List()
   {
-    imaginary_node = new detail::Node< T >(tail_, nullptr, T());
     detail::Node< T >* node = other.head_;
     while (size_ != other.size_)
     {
