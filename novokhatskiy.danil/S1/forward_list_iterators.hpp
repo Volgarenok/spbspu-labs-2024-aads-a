@@ -5,6 +5,8 @@
 #include "const_forward_list_iterators.hpp"
 #include "node.hpp"
 
+// передавать операторы по значению
+
 namespace novokhatskiy
 {
   template <typename T>
