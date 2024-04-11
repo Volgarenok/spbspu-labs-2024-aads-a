@@ -172,24 +172,35 @@ namespace sivkov
   template< typename T >
   void List< T >::remove(const T& value)
   {
+    auto pred = [&value](const T& elem)
+    {
+     return elem == value;
+     };
+     remove_if(pred);
+  }
+
+  template< typename T >
+  template< class Predicate >
+  void List<T>::remove_if(Predicate p)
+  {
     Node< T >* current = head_;
     Node< T >* prev = nullptr;
 
     while (current != nullptr)
     {
-      if (current->data == value)
+      if (p(current->data))
       {
-        if (prev == nullptr)
+        if (prev == head_)
         {
-          head_ = current->next;
+          pop_front();
+          current = head_;
         }
         else
         {
           prev->next = current->next;
+          delete current;
+          current = prev->next;
         }
-        delete current;
-        --size_;
-        current = (prev == nullptr) ? head_ : prev->next;
       }
       else
       {
@@ -198,14 +209,6 @@ namespace sivkov
       }
     }
   }
-
-  template< typename T >
-  void List< T >::assign(size_t count, const T& value)
-  {
-    List< T > assignList(count, value);
-    swap(assignList);
-  }
-
   template< typename T >
   size_t List< T >::getSize()
   {
