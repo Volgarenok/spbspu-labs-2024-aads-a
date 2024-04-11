@@ -250,7 +250,10 @@ namespace strelyaev
     {
       if (predicate(*it))
       {
+        auto temp_it = it;
+        temp_it--;
         erase(it);
+        it = temp_it;
       }
     }
   }
