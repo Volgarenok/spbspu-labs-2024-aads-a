@@ -12,10 +12,10 @@ namespace piyavkin
     InputType();
     explicit InputType(unsigned long long val);
     InputType(char val, size_t num);
-    TypesPartsExpression getType();
-    char getBraket();
-    char getOperation();
-    unsigned long long getOperand();
+    TypesPartsExpression getType() const;
+    char getBraket() const;
+    char getOperation() const;
+    unsigned long long getOperand() const;
   private:
     union
     {
@@ -31,9 +31,9 @@ namespace piyavkin
     Postfix();
     explicit Postfix(unsigned long long val);
     explicit Postfix(char val);
-    TypesPartsExpression getType();
-    char getOperation();
-    unsigned long long getOperand();
+    TypesPartsExpression getType() const;
+    char getOperation() const;
+    unsigned long long getOperand() const;
   private:
     union
     {
@@ -47,9 +47,9 @@ namespace piyavkin
   public:
     ConversionExpressionType();
     ConversionExpressionType(char val, size_t num);
-    TypesPartsExpression getType();
-    char getBraket();
-    char getOperation();
+    TypesPartsExpression getType() const;
+    char getBraket() const;
+    char getOperation() const;
   private:
     union
     {

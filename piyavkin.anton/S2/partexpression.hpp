@@ -26,9 +26,9 @@ namespace piyavkin
     };
     enum TypesPartsExpression
     {
-      operand = 0,
-      operation = 1,
-      bracket = 2
+      operand,
+      operation,
+      bracket
     };
   }
 }

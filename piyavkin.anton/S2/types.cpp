@@ -21,19 +21,19 @@ piyavkin::InputType::InputType(char val, size_t num)
     type = detail::operation;
   }
 }
-piyavkin::detail::TypesPartsExpression piyavkin::InputType::getType()
+piyavkin::detail::TypesPartsExpression piyavkin::InputType::getType() const
 {
   return type;
 }
-char piyavkin::InputType::getBraket()
+char piyavkin::InputType::getBraket() const
 {
   return bracket.bracket;
 }
-char piyavkin::InputType::getOperation()
+char piyavkin::InputType::getOperation() const
 {
   return operation.operation;
 }
-unsigned long long piyavkin::InputType::getOperand()
+unsigned long long piyavkin::InputType::getOperand() const
 {
   return operand.number;
 }
@@ -50,15 +50,15 @@ piyavkin::Postfix::Postfix(char val):
   operation(val),
   type(detail::operation)
 {}
-piyavkin::detail::TypesPartsExpression piyavkin::Postfix::getType()
+piyavkin::detail::TypesPartsExpression piyavkin::Postfix::getType() const
 {
   return type;
 }
-char piyavkin::Postfix::getOperation()
+char piyavkin::Postfix::getOperation() const
 {
   return operation.operation;
 }
-unsigned long long piyavkin::Postfix::getOperand()
+unsigned long long piyavkin::Postfix::getOperand() const
 {
   return operand.number;
 }
@@ -80,15 +80,15 @@ piyavkin::ConversionExpressionType::ConversionExpressionType(char val, size_t nu
     type = detail::operation;
   }
 }
-char piyavkin::ConversionExpressionType::getBraket()
+char piyavkin::ConversionExpressionType::getBraket() const
 {
   return bracket.bracket;
 }
-char piyavkin::ConversionExpressionType::getOperation()
+char piyavkin::ConversionExpressionType::getOperation() const
 {
   return operation.operation;
 }
-piyavkin::detail::TypesPartsExpression piyavkin::ConversionExpressionType::getType()
+piyavkin::detail::TypesPartsExpression piyavkin::ConversionExpressionType::getType() const
 {
   return type;
 }

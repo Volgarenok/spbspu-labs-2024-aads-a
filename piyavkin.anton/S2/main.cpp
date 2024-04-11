@@ -1,9 +1,6 @@
 #include <iostream>
 #include <fstream>
-#include "stack.hpp"
-#include "queue.hpp"
 #include "input.hpp"
-#include "types.hpp"
 #include "convertpostfix.hpp"
 #include "calculate.hpp"
 

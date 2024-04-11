@@ -55,6 +55,15 @@ namespace piyavkin
     {
       return list.size();
     }
+    void swap(Queue< T >& queue) noexcept
+    {
+      list.swap(queue.list);
+    }
+    template< class... Args >
+    void emplace(Args&&... args)
+    {
+      list.emplace(std::forward< Args >(args)...);
+    }
   private:
     List< T > list;
   };
