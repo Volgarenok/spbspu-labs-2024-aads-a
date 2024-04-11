@@ -13,7 +13,7 @@ namespace zakozhurnikova
   void printNames(const List< pair >& l);
   void printByIndex(const List< pair >& l);
 
-  void printSums(const List< pair >& l, bool& overflow);
+  void printSums(const List< pair >& l, std::ostream& out);
 }
 
 #endif

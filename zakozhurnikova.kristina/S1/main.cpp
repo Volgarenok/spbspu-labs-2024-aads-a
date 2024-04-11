@@ -15,8 +15,7 @@ int main()
     readList(list, std::cin);
     printNames(list);
     printByIndex(list);
-    bool overflow = false;
-    printSums(list, overflow);
+    printSums(list, std::cout);
     std::cout << '\n';
   }
   catch (const std::range_error& e)

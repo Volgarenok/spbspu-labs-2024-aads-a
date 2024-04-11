@@ -49,8 +49,9 @@ void zakozhurnikova::printByIndex(const List< pair > &l)
   }
 }
 
-void zakozhurnikova::printSums(const List< pair >& l, bool& overflow)
+void zakozhurnikova::printSums(const List< pair >& l, std::ostream& out)
 {
+  bool overflow = false;
   constexpr size_t max = std::numeric_limits< size_t >::max();
   size_t maxSize = getMaxSize(l);
   List < size_t > listSum;
@@ -80,14 +81,14 @@ void zakozhurnikova::printSums(const List< pair >& l, bool& overflow)
   }
   for (auto it = listSum.begin(); it != listSum.end(); ++it)
   {
-    std::cout << *(it);
+    out << *(it);
     if (std::next(it, 1) != listSum.end())
     {
-      std::cout << ' ';
+      out << ' ';
     }
   }
   if (maxSize == 0)
   {
-    std::cout << "0";
+    out << "0";
   }
 }
