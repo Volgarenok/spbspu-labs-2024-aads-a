@@ -18,15 +18,15 @@ namespace zhalilov
     std::string doCommandLine(std::istream &input);
 
   private:
-    using commandFunc = std::string (MapMaster::*)(const std::string &);
+    using commandFunc = std::string (MapMaster::*)(const List<std::string> &cmdSource);
 
     std::map < std::string, primaryMap > &maps_;
     std::map < std::string, commandFunc > commands_;
 
-    std::string printCmd(const std::string &cmdLine);
-    std::string complementCmd(const std::string &cmdLine);
-    std::string intersectCmd(const std::string &cmdLine);
-    std::string unionCmd(const std::string &cmdLine);
+    std::string printCmd(const List<std::string> &cmdSource);
+    std::string complementCmd(const List<std::string> &cmdSource);
+    std::string intersectCmd(const List<std::string> &cmdSource);
+    std::string unionCmd(const List<std::string> &cmdSource);
   };
 }
 
