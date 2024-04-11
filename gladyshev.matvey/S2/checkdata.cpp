@@ -5,7 +5,7 @@ bool gladyshev::isNumber(const std::string& s)
   for (char c: s)
   {
     if (!std::isdigit(c))
-    {  
+    {
       return false;
     }
   }
