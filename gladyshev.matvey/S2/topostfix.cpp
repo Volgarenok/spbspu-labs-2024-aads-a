@@ -1,6 +1,5 @@
 #include "topostfix.hpp"
 
-#include <map>
 #include <stdexcept>
 #include "stack.hpp"
 #include "checkdata.hpp"
@@ -10,15 +9,6 @@ gladyshev::Queue< std::string > gladyshev::infixToPostfix(Queue< std::string > e
   Stack< std::string > ops;
   Queue< std::string > output;
   std::string token = "";
-
-  std::map< std::string, int > quality =
-  {
-    {"+", 1},
-    {"-", 1},
-    {"*", 2},
-    {"/", 2},
-    {"%", 2}
-  };
   while (!expression.empty())
   {
     std::string value = expression.drop();
@@ -28,7 +18,7 @@ gladyshev::Queue< std::string > gladyshev::infixToPostfix(Queue< std::string > e
     }
     else if (isOperator(value))
     {
-      while (!ops.empty() && isOperator(ops.top()) && quality[ops.top()] >= quality[value])
+      while (!ops.empty() && isOperator(ops.top()) && checkQuality(ops.top(), value))
       {
         output.push(ops.drop());
       }
@@ -51,7 +41,7 @@ gladyshev::Queue< std::string > gladyshev::infixToPostfix(Queue< std::string > e
       throw std::logic_error("what is that");
     }
   }
-  if (!ops.empty())
+  while (!ops.empty())
   {
     if (ops.top() == "(")
     {
