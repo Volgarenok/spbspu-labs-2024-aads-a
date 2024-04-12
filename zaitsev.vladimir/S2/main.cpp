@@ -31,9 +31,10 @@ int main(int argc, char** argv)
       PostfixExpression< long long > post(InfixExpression< long long >(s, std::stoll));
       results.push(post.calculate());
     }
-    for (Stack< long long >::const_iterator i = results.cbegin(); i != results.cend(); ++i)
+    std::cout << results.top();
+    for (Stack< long long >::const_iterator i = ++results.cbegin(); i != results.cend(); ++i)
     {
-      i == results.cbegin() ? std::cout << *i : std::cout << ' ' << *i;
+      std::cout << ' ' << *i;
     }
     std::cout << '\n';
   }

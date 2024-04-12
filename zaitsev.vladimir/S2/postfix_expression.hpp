@@ -62,7 +62,6 @@ namespace zaitsev
     Stack< Token< T > > internal_state;
     Queue< Token< T > > new_tokens;
     typename InfixExpression< T >::const_iterator expr_iterator = expression.cbegin();
-
     while (expr_iterator != expression.end())
     {
       switch ((*expr_iterator).type_)

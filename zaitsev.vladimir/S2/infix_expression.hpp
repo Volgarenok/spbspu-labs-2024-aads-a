@@ -54,7 +54,8 @@ namespace zaitsev
   };
 
   template< typename T >
-  InfixExpression< T >::InfixExpression(const std::string& s, T(*nums_converter)(const std::string&, size_t*, int))
+  InfixExpression< T >::InfixExpression(const std::string& s, T(*nums_converter)(const std::string&, size_t*, int)):
+    tokens_()
   {
     size_t beg_pos = 0;
     size_t len = 0;
@@ -105,27 +106,27 @@ namespace zaitsev
       break;
     case '+':
       t.type_ = token_type::binary_operator;
-      t.token_.bin_operator_ = new SafePlus< T >();
+      t.token_.bin_operator_ = new SafePlus< T >{};
       tokens_.push(t);
       break;
     case '-':
       t.type_ = token_type::binary_operator;
-      t.token_.bin_operator_ = new SafeMinus< T >();
+      t.token_.bin_operator_ = new SafeMinus< T >{};
       tokens_.push(t);
       break;
     case '%':
       t.type_ = token_type::binary_operator;
-      t.token_.bin_operator_ = new SafeMod< T >();
+      t.token_.bin_operator_ = new SafeMod< T >{};
       tokens_.push(t);
       break;
     case '/':
       t.type_ = token_type::binary_operator;
-      t.token_.bin_operator_ = new SafeDivision< T >();
+      t.token_.bin_operator_ = new SafeDivision< T >{};
       tokens_.push(t);
       break;
     case '*':
       t.type_ = token_type::binary_operator;
-      t.token_.bin_operator_ = new SafeMultiplication< T >();
+      t.token_.bin_operator_ = new SafeMultiplication< T >{};
       tokens_.push(t);
       break;
     }
