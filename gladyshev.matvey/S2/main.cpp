@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
   {
     input = &std::cin;
   }
-  Queue< long long > results;
+  Queue< long long int > results;
   std::string in = "";
   std::string token = "";
   try
