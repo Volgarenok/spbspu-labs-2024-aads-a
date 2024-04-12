@@ -77,7 +77,7 @@ namespace piyavkin
     unsigned long long getOperand() const;
   private:
     PartsExpression value;
-    TypesPartsExpression type; 
+    TypesPartsExpression type;
   };
   struct Postfix
   {
