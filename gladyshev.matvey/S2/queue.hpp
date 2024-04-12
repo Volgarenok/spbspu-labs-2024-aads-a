@@ -1,7 +1,7 @@
 #ifndef QUEUE_HPP
 #define QUEUE_HPP
 
-#include "/home/cock/spbspu-labs-2024-aads-a/gladyshev.matvey/common/list.hpp"
+#include "../common/list.hpp"
 
 namespace gladyshev
 {
