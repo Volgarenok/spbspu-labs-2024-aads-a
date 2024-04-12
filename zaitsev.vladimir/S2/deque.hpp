@@ -31,7 +31,7 @@ namespace zaitsev
       size_t pos_;
       void shift(diff_t shift_sz)
       {
-        if (shift_sz > 0 && size_t(pos_) + shift_sz < chunk_cap_ || shift_sz < 0 && pos_ >= size_t(-shift_sz))
+        if ((shift_sz > 0 && pos_ + size_t(shift_sz) < chunk_cap_) || shift_sz < 0 && pos_ >= size_t(-shift_sz))
         {
           pos_ += shift_sz;
         }
