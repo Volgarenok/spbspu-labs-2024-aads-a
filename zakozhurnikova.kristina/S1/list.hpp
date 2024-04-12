@@ -85,7 +85,7 @@ namespace zakozhurnikova
       return head_->data;
     }
 
-    void push_back(T& data)
+    void push_back(const T& data)
     {
       detail::Node< T >* temp = new detail::Node< T >{ data };
 
@@ -103,7 +103,7 @@ namespace zakozhurnikova
       ++size_;
     }
 
-    void push_front(T& data)
+    void push_front(const T& data)
     {
       detail::Node< T >* temp = new detail::Node< T >{ data };
       if (!tail_)
