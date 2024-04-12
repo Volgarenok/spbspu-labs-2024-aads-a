@@ -24,6 +24,7 @@ namespace zaitsev
     template<bool IsConst>
     class BaseIterator
     {
+      template< bool U > friend class BaseIterator;
       using diff_t = std::ptrdiff_t;
       using prt_t = std::conditional_t< IsConst, const T*, T* >;
       using ref_t = std::conditional_t< IsConst, const T&, T& >;
@@ -65,7 +66,11 @@ namespace zaitsev
         chunk_head_(chunk_head),
         pos_(pos)
       {}
-      ~BaseIterator() = default;
+      template<bool cond = IsConst, std::enable_if_t<cond, bool> = true >
+      BaseIterator(const BaseIterator<!cond>& other):
+        chunk_head_(other.chunk_head_),
+        pos_(other.pos_)
+      {}
       BaseIterator& operator++()
       {
         shift(1);
