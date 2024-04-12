@@ -1,11 +1,11 @@
 #ifndef STACK_HPP
 #define STACK_HPP
 
-#include <list.hpp>
+#include <list>
 
 namespace gladyshev
 {
-  template < class T, class Container = List< T > >
+  template < class T, class Container = std::list< T > >
   class Stack
   {
   public:
