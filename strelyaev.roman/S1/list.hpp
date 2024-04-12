@@ -113,9 +113,11 @@ namespace strelyaev
   template< typename T >
   List< T >& List< T >::operator=(List< T >&& other)
   {
+    List< T > temp(std::move(other));
     if (this != std::addressof(other))
     {
-      swap(other);
+      clear;
+      swap(temp);
     }
     return *this;
   }
