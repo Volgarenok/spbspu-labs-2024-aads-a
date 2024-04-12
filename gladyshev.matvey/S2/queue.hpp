@@ -5,7 +5,7 @@
 
 namespace gladyshev
 {
-  template < class T, class Container = std::list< T > >
+  template < class T, class Container = List< T > >
   class Queue
   {
   public:
