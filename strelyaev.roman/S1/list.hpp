@@ -84,6 +84,7 @@ namespace strelyaev
     tail_(other.tail_),
     size_(other.size_)
   {
+    other.imaginary_node = nullptr;
     other.head_ = nullptr;
     other.tail_ = nullptr;
     other.size_ = 0;
@@ -105,6 +106,16 @@ namespace strelyaev
 
   template< typename T >
   List< T >& List< T >::operator=(const List< T >& other)
+  {
+    if (this != std::addressof(other))
+    {
+      swap(other);
+    }
+    return *this;
+  }
+
+  template< typename T >
+  List< T >& List< T >::operator=(const List< T >&& other)
   {
     if (this != std::addressof(other))
     {
