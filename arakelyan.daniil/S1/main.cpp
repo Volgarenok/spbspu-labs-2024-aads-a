@@ -18,7 +18,7 @@ int main()
   {
     inputData(std::cin, listOfPairs);
   }
-  catch (const std::exception& e)
+  catch (const std::exception &e)
   {
     std::cerr << e.what() << "\n";
     return 1;
@@ -39,7 +39,7 @@ int main()
     outputPairListsSums(std::cout, sumList);
     std::cout << "\n";
   }
-  catch (const std::overflow_error & e)
+  catch (const std::overflow_error &e)
   {
     std::cerr << "Error: " << e.what() << "\n";
     return 1;
