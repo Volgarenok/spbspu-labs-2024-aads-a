@@ -1,23 +1,58 @@
 #include "types.hpp"
 
-piyavkin::InputType::InputType():
-  operand(),
-  type(detail::operand)
-{}
-piyavkin::InputType::InputType(unsigned long long val):
-  operand(val),
-  type(detail::operand)
-{}
-piyavkin::InputType::InputType(char val, size_t num)
+bool piyavkin::PartsExpression::Operation::operator>(const Operation& rhs)
+{
+  return ((operation == '*' || operation == '/' || operation == '%') && (rhs.operation == '+' || rhs.operation == '-'));
+}
+
+piyavkin::PartsExpression::PartsExpression(char val, size_t num)
 {
   if (num == detail::bracket)
   {
-    bracket = val;
+    part.bracket.bracket = val;
+  }
+  else
+  {
+    part.operation.operation = val;
+  }
+}
+piyavkin::PartsExpression::PartsExpression(unsigned long long val)
+{
+  part.operand.number = val;
+}
+
+piyavkin::PartsExpression::Bracket::Bracket(char val):
+  bracket(val)
+{}
+
+piyavkin::PartsExpression::Operation::Operation(char val):
+  operation(val)
+{}
+
+piyavkin::PartsExpression::Operand::Operand(unsigned long long val):
+  number(val)
+{}
+
+piyavkin::PartsExpression::InputT::InputT()
+{}
+
+piyavkin::InputType::InputType():
+  value(0),
+  type(detail::operand)
+{}
+piyavkin::InputType::InputType(unsigned long long val):
+  value(val),
+  type(detail::operand)
+{}
+piyavkin::InputType::InputType(char val, size_t num):
+  value(val)
+{
+  if (num == detail::bracket)
+  {
     type = detail::bracket;
   }
   else
   {
-    operation = val;
     type = detail::operation;
   }
 }
@@ -27,68 +62,68 @@ piyavkin::detail::TypesPartsExpression piyavkin::InputType::getType() const
 }
 char piyavkin::InputType::getBraket() const
 {
-  return bracket.bracket;
+  return value.part.bracket.bracket;
 }
 char piyavkin::InputType::getOperation() const
 {
-  return operation.operation;
+  return value.part.operation.operation;
 }
 unsigned long long piyavkin::InputType::getOperand() const
 {
-  return operand.number;
+  return value.part.operand.number;
 }
 
-piyavkin::Postfix::Postfix():
-  operand(0),
-  type(detail::operand)
-{}
-piyavkin::Postfix::Postfix(unsigned long long val):
-  operand(val),
-  type(detail::operand)
-{}
-piyavkin::Postfix::Postfix(char val):
-  operation(val),
-  type(detail::operation)
-{}
-piyavkin::detail::TypesPartsExpression piyavkin::Postfix::getType() const
-{
-  return type;
-}
-char piyavkin::Postfix::getOperation() const
-{
-  return operation.operation;
-}
-unsigned long long piyavkin::Postfix::getOperand() const
-{
-  return operand.number;
-}
+// piyavkin::Postfix::Postfix():
+//   operand(0),
+//   type(detail::operand)
+// {}
+// piyavkin::Postfix::Postfix(unsigned long long val):
+//   operand(val),
+//   type(detail::operand)
+// {}
+// piyavkin::Postfix::Postfix(char val):
+//   operation(val),
+//   type(detail::operation)
+// {}
+// piyavkin::detail::TypesPartsExpression piyavkin::Postfix::getType() const
+// {
+//   return type;
+// }
+// char piyavkin::Postfix::getOperation() const
+// {
+//   return operation.operation;
+// }
+// unsigned long long piyavkin::Postfix::getOperand() const
+// {
+//   return operand.number;
+// }
 
-piyavkin::ConversionExpressionType::ConversionExpressionType():
-  operation(0),
-  type(detail::operation)
-{}
-piyavkin::ConversionExpressionType::ConversionExpressionType(char val, size_t num)
-{
-  if (num == detail::bracket)
-  {
-    bracket = val;
-    type = detail::bracket;
-  }
-  else
-  {
-    operation = val;
-    type = detail::operation;
-  }
-}
-char piyavkin::ConversionExpressionType::getBraket() const
-{
-  return bracket.bracket;
-}
-char piyavkin::ConversionExpressionType::getOperation() const
-{
-  return operation.operation;
-}
-piyavkin::detail::TypesPartsExpression piyavkin::ConversionExpressionType::getType() const
-{
-  return type;
-}
+// piyavkin::ConversionExpressionType::ConversionExpressionType():
+//   operation(0),
+//   type(detail::operation)
+// {}
+// piyavkin::ConversionExpressionType::ConversionExpressionType(char val, size_t num)
+// {
+//   if (num == detail::bracket)
+//   {
+//     bracket = val;
+//     type = detail::bracket;
+//   }
+//   else
+//   {
+//     operation = val;
+//     type = detail::operation;
+//   }
+// }
+// char piyavkin::ConversionExpressionType::getBraket() const
+// {
+//   return bracket.bracket;
+// }
+// char piyavkin::ConversionExpressionType::getOperation() const
+// {
+//   return operation.operation;
+// }
+// piyavkin::detail::TypesPartsExpression piyavkin::ConversionExpressionType::getType() const
+// {
+//   return type;
+// }

@@ -1,10 +1,57 @@
 #ifndef TYPES_HPP
 #define TYPES_HPP
 #include <cstddef>
-#include "partexpression.hpp"
 
 namespace piyavkin
 {
+  namespace detail
+  {
+    enum TypesPartsExpression
+    {
+      operand,
+      operation,
+      bracket
+    };
+  }
+  class PartsExpression
+  {
+    friend struct InputType;
+    friend struct Postfix;
+    friend struct ConversionExpressionType;
+  public:
+    PartsExpression(unsigned long long val);
+    PartsExpression(char val, size_t num);
+  private:
+    struct Operand
+    {
+      Operand(unsigned long long val);
+      unsigned long long number;
+    };
+    struct Operation
+    {
+      Operation(char val);
+      bool operator>(const Operation& rhs);
+      char operation;
+    };
+    struct Bracket
+    {
+      Bracket(char val);
+      char bracket;
+    };
+    union InputT
+    {
+      InputT();
+      Operand operand;
+      Operation operation;
+      Bracket bracket;
+    };
+    union PostfixT
+    {
+      Operand operand;
+      Operation operation;
+    };
+    InputT part;
+  };
   using namespace detail;
   struct InputType
   {
@@ -17,46 +64,37 @@ namespace piyavkin
     char getOperation() const;
     unsigned long long getOperand() const;
   private:
-    union
-    {
-      Operand operand;
-      Operation operation;
-      Bracket bracket;
-    };
-    TypesPartsExpression type;
+    PartsExpression value;
+    TypesPartsExpression type; 
   };
-  struct Postfix
-  {
-  public:
-    Postfix();
-    explicit Postfix(unsigned long long val);
-    explicit Postfix(char val);
-    TypesPartsExpression getType() const;
-    char getOperation() const;
-    unsigned long long getOperand() const;
-  private:
-    union
-    {
-      Operand operand;
-      Operation operation;
-    };
-    TypesPartsExpression type;
-  };
-  struct ConversionExpressionType
-  {
-  public:
-    ConversionExpressionType();
-    ConversionExpressionType(char val, size_t num);
-    TypesPartsExpression getType() const;
-    char getBraket() const;
-    char getOperation() const;
-  private:
-    union
-    {
-      Bracket bracket;
-      Operation operation;
-    };
-    TypesPartsExpression type;
-  };
+  // struct Postfix
+  // {
+  // public:
+  //   Postfix();
+  //   explicit Postfix(unsigned long long val);
+  //   explicit Postfix(char val);
+  //   TypesPartsExpression getType() const;
+  //   char getOperation() const;
+  //   unsigned long long getOperand() const;
+  // private:
+    
+  //   TypesPartsExpression type;
+  // };
+//   struct ConversionExpressionType
+//   {
+//   public:
+//     ConversionExpressionType();
+//     ConversionExpressionType(char val, size_t num);
+//     TypesPartsExpression getType() const;
+//     char getBraket() const;
+//     char getOperation() const;
+//   private:
+//     union
+//     {
+//       Bracket bracket;
+//       Operation operation;
+//     };
+//     TypesPartsExpression type;
+//   };
 }
 #endif
