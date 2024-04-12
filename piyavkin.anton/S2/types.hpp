@@ -47,10 +47,22 @@ namespace piyavkin
     };
     union PostfixT
     {
+      PostfixT();
       Operand operand;
       Operation operation;
     };
-    InputT part;
+    union ConversionT
+    {
+      ConversionT();
+      Operation operation;
+      Bracket bracket;
+    };
+    union
+    {
+      ConversionT conversionPart;
+      PostfixT postfixPart;
+      InputT part;
+    };
   };
   using namespace detail;
   struct InputType
@@ -67,34 +79,30 @@ namespace piyavkin
     PartsExpression value;
     TypesPartsExpression type; 
   };
-  // struct Postfix
-  // {
-  // public:
-  //   Postfix();
-  //   explicit Postfix(unsigned long long val);
-  //   explicit Postfix(char val);
-  //   TypesPartsExpression getType() const;
-  //   char getOperation() const;
-  //   unsigned long long getOperand() const;
-  // private:
-    
-  //   TypesPartsExpression type;
-  // };
-//   struct ConversionExpressionType
-//   {
-//   public:
-//     ConversionExpressionType();
-//     ConversionExpressionType(char val, size_t num);
-//     TypesPartsExpression getType() const;
-//     char getBraket() const;
-//     char getOperation() const;
-//   private:
-//     union
-//     {
-//       Bracket bracket;
-//       Operation operation;
-//     };
-//     TypesPartsExpression type;
-//   };
+  struct Postfix
+  {
+  public:
+    Postfix();
+    explicit Postfix(unsigned long long val);
+    explicit Postfix(char val);
+    TypesPartsExpression getType() const;
+    char getOperation() const;
+    unsigned long long getOperand() const;
+  private:
+    PartsExpression value;
+    TypesPartsExpression type;
+  };
+  struct ConversionExpressionType
+  {
+  public:
+    ConversionExpressionType();
+    ConversionExpressionType(char val, size_t num);
+    TypesPartsExpression getType() const;
+    char getBraket() const;
+    char getOperation() const;
+  private:
+    PartsExpression value;
+    TypesPartsExpression type;
+  };
 }
 #endif
