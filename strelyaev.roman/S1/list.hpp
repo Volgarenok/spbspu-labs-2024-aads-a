@@ -116,7 +116,7 @@ namespace strelyaev
     List< T > temp(std::move(other));
     if (this != std::addressof(other))
     {
-      clear;
+      clear();
       swap(temp);
     }
     return *this;
