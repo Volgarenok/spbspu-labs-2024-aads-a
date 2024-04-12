@@ -104,5 +104,7 @@ namespace piyavkin
     PartsExpression value;
     TypesPartsExpression type;
   };
+  TypesPartsExpression getType(char symbol);
+  TypesPartsExpression getType(unsigned long long);
 }
 #endif

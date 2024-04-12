@@ -130,3 +130,11 @@ piyavkin::TypesPartsExpression piyavkin::ConversionExpressionType::getType() con
 {
   return type;
 }
+piyavkin::detail::TypesPartsExpression piyavkin::getType(char symbol)
+{
+  return (symbol == '(' || symbol == ')') ? detail::bracket : detail::operation;
+}
+piyavkin::detail::TypesPartsExpression piyavkin::getType(unsigned long long)
+{
+  return detail::operand;
+}

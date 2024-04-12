@@ -8,7 +8,7 @@ void piyavkin::calculate(List< Queue< Postfix > >& postfix, List< long long >& r
   {
     while (!it.empty())
     {
-      if (it.front().getType() == detail::operand)
+      if (it.front().getType() == getType(0ull))
       {
         stack.push(it.front().getOperand());
         it.pop();

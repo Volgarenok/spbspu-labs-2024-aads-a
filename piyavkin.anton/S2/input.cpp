@@ -15,7 +15,7 @@ void piyavkin::input(std::istream& in, List< Queue< InputType > >& queues)
       }
       else if (symbol == '(' || symbol == ')')
       {
-        InputType val(symbol, detail::bracket);
+        InputType val(symbol, getType(symbol));
         q.push(val);
       }
       else if (std::isdigit(symbol))
@@ -35,7 +35,7 @@ void piyavkin::input(std::istream& in, List< Queue< InputType > >& queues)
       }
       else
       {
-        InputType val(symbol, detail::operation);
+        InputType val(symbol, getType(symbol));
         q.push(val);
       }
     }

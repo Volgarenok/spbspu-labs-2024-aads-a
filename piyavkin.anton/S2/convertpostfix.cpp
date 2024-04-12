@@ -9,7 +9,7 @@ void piyavkin::convertPostfix(infix_t& infix, postfix_t& postfix)
     Queue< Postfix > q;
     while (!it->empty())
     {
-      if (it->front().getType() == detail::operand)
+      if (it->front().getType() == getType(0ull))
       {
         Postfix postfix_val(it->front().getOperand());
         q.push(postfix_val);
@@ -18,7 +18,7 @@ void piyavkin::convertPostfix(infix_t& infix, postfix_t& postfix)
       {
         if (it->front().getBraket() == '(')
         {
-          ConversionExpressionType stack_val(it->front().getBraket(), detail::bracket);
+          ConversionExpressionType stack_val(it->front().getBraket(), getType('('));
           stack.push(stack_val);
         }
         else if (it->front().getBraket() == ')')
@@ -39,7 +39,7 @@ void piyavkin::convertPostfix(infix_t& infix, postfix_t& postfix)
         {
           while (!stack.empty() && !(it->front().getOperation() > stack.top().getOperation()))
           {
-            if (stack.top().getType() == detail::bracket)
+            if (stack.top().getType() == getType('('))
             {
               break;
             }
@@ -47,7 +47,7 @@ void piyavkin::convertPostfix(infix_t& infix, postfix_t& postfix)
             stack.pop();
             q.push(postfix_val);
           }
-          ConversionExpressionType stack_val(it->front().getOperation(), detail::operation);
+          ConversionExpressionType stack_val(it->front().getOperation(), getType('+'));
           stack.push(stack_val);
         }
       }
