@@ -79,7 +79,7 @@ namespace strelyaev
 
   template< typename T >
   List< T >::List(List< T >&& other):
-    imaginary_node(new detail::Node< T >(tail_, nullptr, T())),
+    imaginary_node(other.imaginary_node),
     head_(other.head_),
     tail_(other.tail_),
     size_(other.size_)
