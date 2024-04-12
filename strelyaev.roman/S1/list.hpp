@@ -5,10 +5,6 @@
 #include "iterator.hpp"
 #include "constIterator.hpp"
 
-
-
-#include <iostream>
-
 namespace strelyaev
 {
   template< typename T >
@@ -115,7 +111,7 @@ namespace strelyaev
   }
 
   template< typename T >
-  List< T >& List< T >::operator=(const List< T >&& other)
+  List< T >& List< T >::operator=(List< T >&& other)
   {
     if (this != std::addressof(other))
     {
