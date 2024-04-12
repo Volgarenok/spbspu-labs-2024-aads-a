@@ -13,7 +13,7 @@ namespace zakozhurnikova
   class List
   {
   public:
-    List() :
+    List():
       head_(nullptr),
       tail_(nullptr),
       size_(0)
