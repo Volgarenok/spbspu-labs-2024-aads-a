@@ -1,7 +1,7 @@
 #ifndef STACK_HPP
 #define STACK_HPP
 
-#include <list>
+#include "common/list"
 
 namespace gladyshev
 {
