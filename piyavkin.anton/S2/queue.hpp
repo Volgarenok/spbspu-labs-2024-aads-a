@@ -8,21 +8,6 @@ namespace piyavkin
   class Queue
   {
   public:
-    Queue() = default;
-    Queue(const Queue< T >&) = default;
-    Queue(Queue&& queue):
-      list(std::move(queue.list))
-    {}
-    ~Queue() = default;
-    Queue< T >& operator=(const Queue&) = default;
-    Queue< T >& operator=(Queue&& queue)
-    {
-      if (this != std::addressof(queue))
-      {
-        list = std::move(queue.list);
-      }
-      return *this;
-    }
     void push(const T& value)
     {
       list.push_back(value);
