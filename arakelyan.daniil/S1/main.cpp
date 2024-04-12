@@ -3,10 +3,10 @@
 #include <string>
 #include <stdexcept>
 
-#include "inputData.hpp"
-#include "outputData.hpp"
 #include <list/binList.hpp>
 #include <list/iterator.hpp>
+#include "inputData.hpp"
+#include "outputData.hpp"
 
 int main()
 {
