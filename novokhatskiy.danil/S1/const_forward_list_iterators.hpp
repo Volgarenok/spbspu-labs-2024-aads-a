@@ -1,27 +1,28 @@
 #ifndef CONST_FORWARD_LIST_ITERATORS
 #define CONST_FORWARD_LIST_ITERATORS
 
+#include <cassert>
 #include <iterator>
-#include <assert.h>
-#include "node.hpp"
 #include "forward_list_iterators.hpp"
+#include "node.hpp"
 
 namespace novokhatskiy
 {
-  template <typename T>
+  template < typename T >
   class ForwardList;
 
-  template <typename T>
+  template < typename T >
   class ForwardIterator;
 
-  template <typename T>
-  class ConstForwardIterator: public std::iterator<std::forward_iterator_tag, T >
+  template < typename T >
+  class ConstForwardIterator: public std::iterator< std::forward_iterator_tag, T >
   {
     friend class novokhatskiy::ForwardList< T >;
     friend class novokhatskiy::ForwardIterator< T >;
+
   public:
     using constIter = ConstForwardIterator< T >;
-    ConstForwardIterator() :
+    ConstForwardIterator():
       node_(nullptr)
     {}
     ConstForwardIterator(const constIter&) = default;
@@ -63,7 +64,7 @@ namespace novokhatskiy
     }
     const T& operator*() const
     {
-      return node_.value_;
+      return node_->value_;
     }
     const T* operator->() const
     {
@@ -71,11 +72,12 @@ namespace novokhatskiy
       return std::addressof(this->node_->value_);
     }
     ~ConstForwardIterator() = default;
+
   private:
-     detail::Node< T >* node_;
-     ConstForwardIterator(detail::Node< T >* node):
-       node_(node)
-     {}
+    detail::Node< T >* node_;
+    ConstForwardIterator(detail::Node< T >* node):
+      node_(node)
+    {}
   };
 }
 
