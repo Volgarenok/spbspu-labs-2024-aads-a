@@ -66,7 +66,13 @@ namespace baranov
   template< class T >
   Iterator< T > List< T >::end()
   {
-    return Iterator< T >(tail_);
+    if (tail_->next_ == nullptr)
+    {
+      Node< T > * imagNode = new Node< T >{ tail_->data_ };
+      imagNode->prev_ = tail_;
+      tail_->next_ = imagNode;
+    }
+    return tail_->next_;
   }
 
   template< class T >
@@ -94,6 +100,7 @@ namespace baranov
     {
       tail_->next_ = topush;
       tail_ = topush;
+      tail_->prev_ = topush;
     }
     ++size_;
   }
@@ -131,6 +138,7 @@ namespace baranov
     {
       head_->prev_ = topush;
       head_ = topush;
+      head_->next_ = topush;
     }
     ++size_;
   }
