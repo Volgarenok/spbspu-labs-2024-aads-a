@@ -217,21 +217,24 @@ namespace namestnikov
     }
     void assign(iterator begin, iterator end)
     {
-      clear();
       try
       {
-        while (begin != end)
+        ForwardList< T > temp;
+        for (; begin != end; ++begin)
         {
-          push_front(*begin);
-          ++begin;
+          temp.push_front(*begin);
         }
+        clear();
+        temp.reverse();
+        push_front(temp.front());
+        temp.pop_front();
+        splice_after(cbegin(), temp);
       }
       catch (...)
       {
         clear();
         throw;
       }
-      reverse();
     }
     iterator insert_after(const_iterator pos, const T & value)
     {
