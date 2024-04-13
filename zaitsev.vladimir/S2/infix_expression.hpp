@@ -72,8 +72,11 @@ namespace zaitsev
           Token< T > t;
           t.type_ = token_type::value;
           t.token_.value_ = nums_converter(s.substr(beg_pos, len), nullptr, 10);
-          tokens_.push(t);
+          tokens_.push(std::move(t));
         }
+    /*    for (auto i : tokens_)
+          std::cout <<"!"<< i;
+        std::cout << '\n';*/
         len = 0;
       }
       else
@@ -97,39 +100,35 @@ namespace zaitsev
     case '(':
       t.type_ = token_type::bracket;
       t.token_.bracket_ = bracket_type::round_open;
-      tokens_.push(t);
       break;
     case ')':
       t.type_ = token_type::bracket;
       t.token_.bracket_ = bracket_type::round_close;
-      tokens_.push(t);
       break;
     case '+':
       t.type_ = token_type::binary_operator;
       t.token_.bin_operator_ = new SafePlus< T >{};
-      tokens_.push(t);
       break;
     case '-':
       t.type_ = token_type::binary_operator;
       t.token_.bin_operator_ = new SafeMinus< T >{};
-      tokens_.push(t);
       break;
     case '%':
       t.type_ = token_type::binary_operator;
       t.token_.bin_operator_ = new SafeMod< T >{};
-      tokens_.push(t);
       break;
     case '/':
       t.type_ = token_type::binary_operator;
       t.token_.bin_operator_ = new SafeDivision< T >{};
-      tokens_.push(t);
       break;
     case '*':
       t.type_ = token_type::binary_operator;
       t.token_.bin_operator_ = new SafeMultiplication< T >{};
-      tokens_.push(t);
       break;
+    default:
+      return;
     }
+    tokens_.push(std::move(t));
   }
 }
 #endif

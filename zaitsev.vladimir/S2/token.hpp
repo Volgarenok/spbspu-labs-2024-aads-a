@@ -32,28 +32,31 @@ namespace zaitsev
       type_(other.type_),
       token_(other.token_)
     {
-      reset_other_value(other);
+      reset_other_value(std::move(other));
     }
     Token< T >& operator=(const Token< T >& other)
     {
+      TokenValue< T > new_token= copy_other_value(other);
       if (type_ == token_type::binary_operator)
       {
         delete token_.bin_operator_;
       }
       type_ = other.type_;
-      token_ = copy_other_value(other);
+      token_ = new_token;
       return *this;
     }
     Token< T >& operator=(Token< T >&& other)
     {
       type_ = other.type_;
       token_ = other.token_;
-      reset_other_value(other);
+      reset_other_value(std::move(other));
     }
     ~Token()
     {
       if (type_ == token_type::binary_operator)
+      {
         delete token_.bin_operator_;
+      }
     }
     friend std::ostream& operator<<(std::ostream& output, const Token< T >& token)
     {
@@ -117,13 +120,13 @@ namespace zaitsev
       switch (other.type_)
       {
       case token_type::bracket:
-        token_.bracket_ = bracket_type::empty;
+        other.token_.bracket_ = bracket_type::empty;
         break;
       case token_type::binary_operator:
-        token_.bin_operator_ = nullptr;
+        other.token_.bin_operator_ = nullptr;
         break;
       case token_type::value:
-        token_.value_ = 0;
+        other.token_.value_ = 0;
       }
       other.type_ = token_type::undefined;
     }

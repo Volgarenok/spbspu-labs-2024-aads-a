@@ -59,7 +59,7 @@ namespace zaitsev
       using value_type = T;
       using pointer = prt_t;
       using reference = ref_t;
-      using iterator_category = std::random_access_iterator_tag;
+      using iterator_category = std::bidirectional_iterator_tag;
       BaseIterator(const BaseIterator& other) = default;
       BaseIterator(BaseIterator&& other) = default;
       BaseIterator(T** chunk_head, size_t pos):
@@ -308,7 +308,8 @@ namespace zaitsev
       }
       head_alloc_.deallocate(chunk_heads_, chunks_nmb_);
     }
-    void push_back(const T& value)
+    template<class ... Args>
+    void push_back(Args&&... args)
     {
       size_t end_chunk = head_chunk_;
       size_t end_pos = head_pos_;
@@ -320,28 +321,24 @@ namespace zaitsev
       {
         add_chunk(true);
       }
-      alloc_traits::construct(chunk_alloc_, chunk_heads_[end_chunk] + end_pos, value);
+      alloc_traits::construct(chunk_alloc_, chunk_heads_[end_chunk] + end_pos, std::forward< Args >(args)...);
       ++size_;
     }
-    void push_back(T&& value)
-    {
-      size_t end_chunk = head_chunk_;
-      size_t end_pos = head_pos_;
-      if (size_)
-      {
-        convert_index(size_, end_chunk, end_pos);
-      }
-      if (chunks_nmb_ == 0 || end_chunk == chunks_nmb_ - 1 && end_pos == chunk_cap_ - 1)
-      {
-        add_chunk(true);
-      }
-      if (size_)
-      {
-        next_pos(end_chunk, end_pos);
-      }
-      alloc_traits::construct(chunk_alloc_, chunk_heads_[end_chunk] + end_pos, std::move(value));
-      ++size_;
-    }
+    //void push_back(T&& value)
+    //{
+    //  size_t end_chunk = head_chunk_;
+    //  size_t end_pos = head_pos_;
+    //  if (size_)
+    //  {
+    //    convert_index(size_, end_chunk, end_pos);
+    //  }
+    //  if (chunks_nmb_ == 0 || end_chunk == chunks_nmb_ - 1 && end_pos == chunk_cap_ - 1)
+    //  {
+    //    add_chunk(true);
+    //  }
+    //  alloc_traits::construct(chunk_alloc_, chunk_heads_[end_chunk] + end_pos, std::move(value));
+    //  ++size_;
+    //}
     void pop_back()
     {
       if (size_ == 0)
@@ -380,7 +377,7 @@ namespace zaitsev
         add_chunk(false);
       }
       prev_pos(head_chunk_, head_pos_);
-      alloc_traits::construct(chunk_alloc_, chunk_heads_[head_chunk_] + head_pos_, value);
+      alloc_traits::construct(chunk_alloc_, chunk_heads_[head_chunk_] + head_pos_, std::move(value));
       ++size_;
     }
     void pop_front()

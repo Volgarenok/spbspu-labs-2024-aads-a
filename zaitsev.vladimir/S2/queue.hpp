@@ -27,6 +27,10 @@ namespace zaitsev
     {
       Deque< T >::push_back(value);
     }
+    void push(T&& value)
+    {
+      Deque< T >::push_back(std::move(value));
+    }
     void pop()
     {
       Deque< T >::pop_front();
