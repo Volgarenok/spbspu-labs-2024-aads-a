@@ -1,11 +1,11 @@
 #ifndef QUEUE_HPP
 #define QUEUE_HPP
 
-#include "../common/list.hpp"
+#include <list>
 
 namespace gladyshev
 {
-  template < class T, class Container = List< T > >
+  template < class T, class Container = std::list< T > >
   class Queue
   {
   public:
