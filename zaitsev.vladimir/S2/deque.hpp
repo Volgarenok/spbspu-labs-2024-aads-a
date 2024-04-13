@@ -273,7 +273,7 @@ namespace zaitsev
     Deque& operator=(const Deque& other)
     {
       Deque& other_cp(other);
-      *this = std::move(other.cp);
+      *this = std::move(other_cp);
       return *this;
     }
     Deque& operator=(Deque&& other)

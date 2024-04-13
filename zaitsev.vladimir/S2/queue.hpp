@@ -1,68 +1,70 @@
 #ifndef QUEUE_HPP
 #define QUEUE_HPP
 #include "deque.hpp"
-
+#include <deque>
 namespace zaitsev
 {
-  template< typename T >
-  class Queue: private Deque< T >
+  template< typename T, typename Container = Deque< T > >
+  class Queue
   {
   public:
-    using iterator = typename Deque< T >::iterator;
-    using const_iterator = typename Deque< T >::const_iterator;
+    using iterator = typename Container::iterator;
+    using const_iterator = typename Container::const_iterator;
 
     T& front()
     {
-      return Deque< T >::front();
+      return container.front();
     }
     bool empty() const
     {
-      return Deque< T >::empty();
+      return container.empty();
     }
     size_t size() const
     {
-      return Deque< T >::size();
+      return container.size();
     }
     void push(const T& value)
     {
-      Deque< T >::push_back(value);
+      container.push_back(value);
     }
     void push(T&& value)
     {
-      Deque< T >::push_back(std::move(value));
+      container.push_back(std::move(value));
     }
     void pop()
     {
-      Deque< T >::pop_front();
+      container.pop_front();
     }
     void clear()
     {
-      Deque< T >::clear();
+      container.clear();
     }
     iterator begin()
     {
-      return Deque< T >::begin();
+      return container.begin();
     }
     iterator end()
     {
-      return Deque< T >::end();
+      return container.end();
     }
     const_iterator begin() const
     {
-      return Deque< T >::cbegin();
+      return container.cbegin();
     }
     const_iterator end() const
     {
-      return Deque< T >::cend();
+      return container.cend();
     }
     const_iterator cbegin() const
     {
-      return Deque< T >::cbegin();
+      return container.cbegin();
     }
     const_iterator cend() const
     {
-      return Deque< T >::cend();
+      return container.cend();
     }
+  protected:
+    Container container;
   };
 }
 #endif

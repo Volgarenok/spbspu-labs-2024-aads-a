@@ -63,13 +63,13 @@ namespace zaitsev
       switch (token.type_)
       {
       case zaitsev::token_type::undefined:
-        output << "T";
+        output << "U";
         break;
       case zaitsev::token_type::bracket:
         switch (token.token_.bracket_)
         {
         case bracket_type::empty:
-          output << "OO";
+          output << "E";
           break;
         case bracket_type::round_open:
           output << '(';
@@ -82,7 +82,7 @@ namespace zaitsev
       case zaitsev::token_type::binary_operator:
         if (!token.token_.bin_operator_)
         {
-          output << "Op";
+          output << "U_BO";
         }
         else
         {
