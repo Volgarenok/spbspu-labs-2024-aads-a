@@ -324,21 +324,6 @@ namespace zaitsev
       alloc_traits::construct(chunk_alloc_, chunk_heads_[end_chunk] + end_pos, std::forward< Args >(args)...);
       ++size_;
     }
-    //void push_back(T&& value)
-    //{
-    //  size_t end_chunk = head_chunk_;
-    //  size_t end_pos = head_pos_;
-    //  if (size_)
-    //  {
-    //    convert_index(size_, end_chunk, end_pos);
-    //  }
-    //  if (chunks_nmb_ == 0 || end_chunk == chunks_nmb_ - 1 && end_pos == chunk_cap_ - 1)
-    //  {
-    //    add_chunk(true);
-    //  }
-    //  alloc_traits::construct(chunk_alloc_, chunk_heads_[end_chunk] + end_pos, std::move(value));
-    //  ++size_;
-    //}
     void pop_back()
     {
       if (size_ == 0)

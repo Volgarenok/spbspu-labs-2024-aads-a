@@ -74,9 +74,6 @@ namespace zaitsev
           t.token_.value_ = nums_converter(s.substr(beg_pos, len), nullptr, 10);
           tokens_.push(std::move(t));
         }
-    /*    for (auto i : tokens_)
-          std::cout <<"!"<< i;
-        std::cout << '\n';*/
         len = 0;
       }
       else
