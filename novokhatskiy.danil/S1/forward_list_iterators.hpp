@@ -15,8 +15,6 @@ namespace novokhatskiy
 
   template < typename T >
   class ForwardIterator: public std::iterator< std::forward_iterator_tag, T >
-  template <typename T>
-  class ForwardIterator : public std::iterator<std::forward_iterator_tag, T>
   {
     friend class novokhatskiy::ForwardList< T >;
 
@@ -101,5 +99,5 @@ namespace novokhatskiy
     {}
   };
 }
-}
+
 #endif

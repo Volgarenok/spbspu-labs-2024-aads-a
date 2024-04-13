@@ -27,7 +27,7 @@ namespace novokhatskiy
       head_(nullptr)
     {}
     ForwardList(const T& value):
-      head_(new Node< T >)
+      head_(new node_t)
     {
       for (auto i = begin(); i < end(); i++)
       {
@@ -50,7 +50,7 @@ namespace novokhatskiy
         {
           push_front(*(iter_begin++));
         }
-        catch (const std::bad_alloc&)
+        catch (...)
         {
           clear();
           throw;
@@ -67,7 +67,7 @@ namespace novokhatskiy
           push_front(value);
         }
       }
-      catch (const std::bad_alloc&)
+      catch (...)
       {
         clear();
         throw;
