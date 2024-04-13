@@ -127,6 +127,9 @@ namespace zaitsev
         break;
       case token_type::value:
         other.token_.value_ = 0;
+        break;
+      default:
+        break;
       }
       other.type_ = token_type::undefined;
     }
