@@ -6,15 +6,9 @@ void baranov::printNames(std::ostream & output, ds_t & list)
   for (auto i = list.begin(); i != end; ++i)
   {
     output << i->first;
-    if (i + 1 == end)
-    {
-      output << '\n';
-    }
-    else
-    {
-      output << ' ';
-    }
+    output << ' ';
   }
+  output << '\n';
 }
 
 void baranov::printLists(std::ostream & output, listOfLists & lists)
@@ -23,10 +17,11 @@ void baranov::printLists(std::ostream & output, listOfLists & lists)
   for (auto i = lists.begin(); i != listsEnd; ++i)
   {
     auto listEnd = (*i).end();
-    for (auto j = (*i).begin(); j != listEnd; ++i)
+    for (auto j = (*i).begin(); j != listEnd; ++j)
     {
-      output << *j;
+      output << *j << ' ';
     }
+    output << '\n';
   }
 }
 
