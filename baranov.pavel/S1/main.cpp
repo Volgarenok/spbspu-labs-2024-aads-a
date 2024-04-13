@@ -14,5 +14,6 @@ int main()
   List< List < size_t > > numbers;
   readByElement(numbers, sequences);
   printLists(std::cout, numbers);
+  printSums(std::cout, numbers);
 }
 

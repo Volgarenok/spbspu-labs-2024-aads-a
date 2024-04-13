@@ -15,6 +15,10 @@ void baranov::inputList(std::istream & input, ds_t & sequences)
         break;
       }
     }
+    if (!input.eof())
+    {
+      input.clear();
+    }
     sequences.push_back({name, nums});
   }
 }
