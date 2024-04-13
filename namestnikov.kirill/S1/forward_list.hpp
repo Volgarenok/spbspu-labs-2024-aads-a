@@ -436,6 +436,14 @@ namespace namestnikov
         other.head_ = nullptr;
       }
     }
+    void splice_after(const_iterator pos, ForwardList< T > & other, const_iterator it)
+    {
+      splice_after(pos, std::move(other), it);
+    }
+    void splice_after(const_iterator pos, ForwardList< T > && other, const_iterator it)
+    {
+      splice_after(pos, std::move(other), it, other.cend());
+    }
     void splice_after(const_iterator pos, ForwardList< T > & other, const_iterator first, const_iterator last)
     {
       splice_after(pos, std::move(other), first, last);
