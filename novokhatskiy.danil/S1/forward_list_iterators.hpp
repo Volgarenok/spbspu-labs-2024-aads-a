@@ -25,12 +25,6 @@ namespace novokhatskiy
     {}
     ForwardIterator(const iter&) = default;
     iter& operator=(const iter&) = default;
-    using iter = ForwardIterator<T>;
-    ForwardIterator() : node_(nullptr)
-    {
-    }
-    ForwardIterator(const iter &) = default;
-    iter &operator=(const iter &) = default;
 
     iter &operator++()
     {
@@ -93,9 +87,6 @@ namespace novokhatskiy
     detail::Node< T >* node_;
     explicit ForwardIterator(detail::Node< T >* node):
       node_(node)
-    {}
-    detail::Node<T> *node_;
-    explicit ForwardIterator(detail::Node<T> *node) : node_(node)
     {}
   };
 }
