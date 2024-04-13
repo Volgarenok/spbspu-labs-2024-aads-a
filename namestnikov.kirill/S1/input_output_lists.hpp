@@ -6,12 +6,12 @@
 
 namespace namestnikov
 {
-  using pair_t = std::pair< std::string, ForwardList< unsigned long long > >;
-  void inputLists(std::istream & in, ForwardList< pair_t > & dataList);
-  void outputNames(std::ostream & out, ForwardList< pair_t > & dataList, size_t & maxSize);
-  void outputNumsAndSums(std::ostream & out, ForwardList< pair_t > & dataList, size_t maxSize);
-  bool haveNumbers(ForwardList< pair_t > & dataList);
-  void outputLists(std::ostream & out, ForwardList< pair_t > & dataList);
+  using namedLists = std::pair< std::string, ForwardList< unsigned long long > >;
+  void inputLists(std::istream & in, ForwardList< namedLists > & dataList);
+  void outputNames(std::ostream & out, ForwardList< namedLists > & dataList, size_t & maxSize);
+  void outputNumsAndSums(std::ostream & out, ForwardList< namedLists > & dataList, size_t maxSize);
+  bool haveNumbers(ForwardList< namedLists > & dataList);
+  void outputLists(std::ostream & out, ForwardList< namedLists > & dataList);
 }
 
 #endif

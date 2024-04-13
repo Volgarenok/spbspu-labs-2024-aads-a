@@ -3,7 +3,7 @@
 #include <limits>
 #include <iostream>
 
-void namestnikov::inputLists(std::istream & in, ForwardList< pair_t > & dataList)
+void namestnikov::inputLists(std::istream & in, ForwardList< namedLists > & dataList)
 {
   std::string listParameters = "";
   in >> listParameters;
@@ -18,10 +18,10 @@ void namestnikov::inputLists(std::istream & in, ForwardList< pair_t > & dataList
   }
 }
 
-void namestnikov::outputNames(std::ostream & out, ForwardList< pair_t > & dataList, size_t & maxSize)
+void namestnikov::outputNames(std::ostream & out, ForwardList< namedLists > & dataList, size_t & maxSize)
 {
   dataList.reverse();
-  for (ForwardIterator< pair_t > fwdIt = dataList.begin(); fwdIt != dataList.end(); ++fwdIt)
+  for (ForwardIterator< namedLists > fwdIt = dataList.begin(); fwdIt != dataList.end(); ++fwdIt)
   {
     maxSize = std::max(maxSize, fwdIt->second.max_size());
     fwdIt->second.reverse();
@@ -30,7 +30,7 @@ void namestnikov::outputNames(std::ostream & out, ForwardList< pair_t > & dataLi
   out << "\n";
 }
 
-void namestnikov::outputNumsAndSums(std::ostream & out, ForwardList< pair_t > & dataList, size_t maxSize)
+void namestnikov::outputNumsAndSums(std::ostream & out, ForwardList< namedLists > & dataList, size_t maxSize)
 {
   ForwardList< unsigned long long > sumsList;
   unsigned long long sum = 0;
@@ -73,7 +73,7 @@ void namestnikov::outputNumsAndSums(std::ostream & out, ForwardList< pair_t > & 
   out << "\n";
 }
 
-bool namestnikov::haveNumbers(ForwardList< pair_t > & dataList)
+bool namestnikov::haveNumbers(ForwardList< namedLists > & dataList)
 {
   bool gotNumbers = false;
   for (auto it = dataList.cbegin(); it != dataList.cend(); ++it)
@@ -83,7 +83,7 @@ bool namestnikov::haveNumbers(ForwardList< pair_t > & dataList)
   return gotNumbers;
 }
 
-void namestnikov::outputLists(std::ostream & out, ForwardList< pair_t > & dataList)
+void namestnikov::outputLists(std::ostream & out, ForwardList< namedLists > & dataList)
 {
   if (dataList.empty())
   {

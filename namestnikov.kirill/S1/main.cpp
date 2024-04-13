@@ -8,8 +8,8 @@
 int main()
 {
   using namespace namestnikov;
-  using pair_t = std::pair< std::string, ForwardList< unsigned long long > >;
-  ForwardList< pair_t > dataList;
+  using namedLists = std::pair< std::string, ForwardList< unsigned long long > >;
+  ForwardList< namedLists > dataList;
   try
   {
     inputLists(std::cin, dataList);
