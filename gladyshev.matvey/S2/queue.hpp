@@ -15,24 +15,12 @@ namespace gladyshev
     Queue(const Queue& other):
       list_(other.list_)
     {}
-    Queue(Queue&& other):
+    Queue(Queue&& other) noexcept:
       list_(std::move(other.list_))
     {}
-    T& front()
-    {
-      return list_.front();
-    }
-    T& back()
-    {
-      return list_.back();
-    }
-    bool empty() const
+    bool empty() const noexcept
     {
       return list_.empty();
-    }
-    size_t size()
-    {
-      return list_.size();
     }
     T drop()
     {
@@ -44,7 +32,7 @@ namespace gladyshev
     {
       list_.push_front(other);
     }
-    void reverse()
+    void reverse() noexcept
     {
       list_.reverse();
     }

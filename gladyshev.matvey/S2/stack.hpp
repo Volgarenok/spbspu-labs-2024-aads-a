@@ -15,20 +15,20 @@ namespace gladyshev
     Stack(const Stack& other):
       list_(other.list_)
     {}
-    Stack(Stack&& other):
+    Stack(Stack&& other) noexcept:
       list_(std::move(other.list_))
     {}
     T& top()
     {
       return list_.front();
     }
-    bool empty()
+    const T& top() const
+    {
+      return list_.front();
+    }
+    bool empty() const noexcept
     {
       return list_.empty();
-    }
-    size_t size()
-    {
-      return list_.size();
     }
     T drop()
     {
