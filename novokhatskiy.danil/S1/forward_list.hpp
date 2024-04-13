@@ -560,7 +560,6 @@ namespace novokhatskiy
     ~ForwardList()
     {
       clear();
-      std::cout << "sp";
     }
 
   private:
