@@ -209,6 +209,7 @@ namespace namestnikov
     {
       ForwardList< T > temp(count, value);
       assign(temp.begin(), temp.end());
+      temp.clear();
     }
     void assign(std::initializer_list< T > list)
     {
