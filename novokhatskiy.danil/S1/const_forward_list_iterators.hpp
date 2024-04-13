@@ -14,7 +14,6 @@ namespace novokhatskiy
   template < typename T >
   class ForwardIterator;
 
-<<<<<<< HEAD
   template < typename T >
   class ConstForwardIterator: public std::iterator< std::forward_iterator_tag, T >
   {
@@ -28,13 +27,11 @@ namespace novokhatskiy
     {}
     ConstForwardIterator(const constIter&) = default;
     constIter& operator=(const constIter&) = default;
-=======
   template <typename T>
   class ConstForwardIterator : public std::iterator<std::forward_iterator_tag, T>
   {
     friend class novokhatskiy::ForwardList<T>;
     friend class novokhatskiy::ForwardIterator<T>;
->>>>>>> 167fa0909d1f65d8c7181a7dd9315ca0daba22bc
 
   public:
     using constIter = ConstForwardIterator<T>;
@@ -90,17 +87,13 @@ namespace novokhatskiy
     ~ConstForwardIterator() = default;
 
   private:
-<<<<<<< HEAD
     detail::Node< T >* node_;
     ConstForwardIterator(detail::Node< T >* node):
       node_(node)
     {}
-=======
     detail::Node<T> *node_;
     ConstForwardIterator(detail::Node<T> *node) : node_(node)
-    {
-    }
->>>>>>> 167fa0909d1f65d8c7181a7dd9315ca0daba22bc
+    {}
   };
 }
 
