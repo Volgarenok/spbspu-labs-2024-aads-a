@@ -254,7 +254,6 @@ namespace namestnikov
         clear();
         throw;
       }
-      
     }
     iterator insert_after(const_iterator pos, const T & value)
     {
