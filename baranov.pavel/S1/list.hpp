@@ -66,7 +66,7 @@ namespace baranov
   template< class T >
   Iterator< T > List< T >::end()
   {
-    if (empty)
+    if (empty())
     {
       return begin();
     }
