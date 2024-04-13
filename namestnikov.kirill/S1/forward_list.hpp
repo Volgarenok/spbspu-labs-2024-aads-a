@@ -29,7 +29,7 @@ namespace namestnikov
     ForwardList() :
       head_(nullptr)
     {}
-    ForwardList(size_t count, const T & value) :
+    ForwardList(size_t count, const T & value):
       head_(nullptr)
     {
       try
@@ -45,7 +45,7 @@ namespace namestnikov
         throw;
       }
     }
-    ForwardList(const ForwardList< T > & other) :
+    ForwardList(const ForwardList< T > & other):
       head_(nullptr)
     {
       try
@@ -63,17 +63,17 @@ namespace namestnikov
         throw;
       }
     }
-    ForwardList(std::initializer_list< T > list) :
+    ForwardList(std::initializer_list< T > list):
       head_(nullptr)
     {
-      auto begin = list.begin();
-      auto end = list.end();
-      while (begin != end)
+      auto rbegin = list.end() - 1;
+      auto rend = list.begin() - 1;
+      while (rbegin != rend)
       {
         try
         {
-          push_front(*begin);
-          ++begin;
+          push_front(*rbegin);
+          --rbegin;
         }
         catch (...)
         {
@@ -81,7 +81,6 @@ namespace namestnikov
           throw;
         }
       }
-      reverse();
     }
     ForwardList<T> & operator=(const ForwardList< T > & other)
     {
@@ -224,23 +223,7 @@ namespace namestnikov
     }
     void assign(std::initializer_list< T > list)
     {
-      clear();
-      try
-      {
-        auto begin = list.begin();
-        auto end = list.end();
-        while (begin != end)
-        {
-          push_front(*begin);
-          ++begin;
-        }
-      }
-      catch (...)
-      {
-        clear();
-        throw;
-      }
-      reverse();
+      assign(list.begin(), list.end());
     }
     void assign(iterator begin, iterator end)
     {
