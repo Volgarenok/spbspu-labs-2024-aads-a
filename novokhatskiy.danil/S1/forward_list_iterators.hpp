@@ -13,20 +13,34 @@ namespace novokhatskiy
   template < typename T >
   class ConstForwardIterator;
 
+<<<<<<< HEAD
   template < typename T >
   class ForwardIterator: public std::iterator< std::forward_iterator_tag, T >
+=======
+  template <typename T>
+  class ForwardIterator : public std::iterator<std::forward_iterator_tag, T>
+>>>>>>> 167fa0909d1f65d8c7181a7dd9315ca0daba22bc
   {
     friend class novokhatskiy::ForwardList< T >;
 
   public:
+<<<<<<< HEAD
     using iter = ForwardIterator< T >;
     ForwardIterator():
       node_(nullptr)
     {}
     ForwardIterator(const iter&) = default;
     iter& operator=(const iter&) = default;
+=======
+    using iter = ForwardIterator<T>;
+    ForwardIterator() : node_(nullptr)
+    {
+    }
+    ForwardIterator(const iter &) = default;
+    iter &operator=(const iter &) = default;
+>>>>>>> 167fa0909d1f65d8c7181a7dd9315ca0daba22bc
 
-    iter& operator++()
+    iter &operator++()
     {
       assert(node_ != nullptr);
       node_ = node_->next_;
@@ -53,7 +67,7 @@ namespace novokhatskiy
       return !(node_ == constIt.node_);
     }
 
-    iter& moveIterator(size_t size)
+    iter &moveIterator(size_t size)
     {
       for (size_t i = 0; i != size; i++)
       {
@@ -62,21 +76,21 @@ namespace novokhatskiy
       return *this;
     }
 
-    T& operator*()
+    T &operator*()
     {
       assert(node_ != nullptr);
       return node_->value_;
     }
-    const T& operator*() const
+    const T &operator*() const
     {
       return node_->value_;
     }
-    T* operator->()
+    T *operator->()
     {
       assert(this->node_ != nullptr);
       return std::addressof(this->node_->value_);
     }
-    const T* operator->() const
+    const T *operator->() const
     {
       assert(this->node_ != nullptr);
       return std::addressof(this->node_.value_);
@@ -84,10 +98,17 @@ namespace novokhatskiy
     ~ForwardIterator() = default;
 
   private:
+<<<<<<< HEAD
     detail::Node< T >* node_;
     explicit ForwardIterator(detail::Node< T >* node):
       node_(node)
     {}
+=======
+    detail::Node<T> *node_;
+    explicit ForwardIterator(detail::Node<T> *node) : node_(node)
+    {
+    }
+>>>>>>> 167fa0909d1f65d8c7181a7dd9315ca0daba22bc
   };
 }
 #endif

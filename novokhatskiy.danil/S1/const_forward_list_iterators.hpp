@@ -14,6 +14,7 @@ namespace novokhatskiy
   template < typename T >
   class ForwardIterator;
 
+<<<<<<< HEAD
   template < typename T >
   class ConstForwardIterator: public std::iterator< std::forward_iterator_tag, T >
   {
@@ -27,8 +28,23 @@ namespace novokhatskiy
     {}
     ConstForwardIterator(const constIter&) = default;
     constIter& operator=(const constIter&) = default;
+=======
+  template <typename T>
+  class ConstForwardIterator : public std::iterator<std::forward_iterator_tag, T>
+  {
+    friend class novokhatskiy::ForwardList<T>;
+    friend class novokhatskiy::ForwardIterator<T>;
+>>>>>>> 167fa0909d1f65d8c7181a7dd9315ca0daba22bc
 
-    constIter& operator++()
+  public:
+    using constIter = ConstForwardIterator<T>;
+    ConstForwardIterator() : node_(nullptr)
+    {
+    }
+    ConstForwardIterator(const constIter &) = default;
+    constIter &operator=(const constIter &) = default;
+
+    constIter &operator++()
     {
       assert(node_ != nullptr);
       node_ = node_->next_;
@@ -50,11 +66,11 @@ namespace novokhatskiy
       return !(node_ == other.node_);
     }
 
-    bool operator!=(ForwardIterator< T >& other) const
+    bool operator!=(ForwardIterator<T> &other) const
     {
       return node_ != other.node_;
     }
-    constIter& moveIterator(size_t size)
+    constIter &moveIterator(size_t size)
     {
       for (size_t i = 0; i != size; i++)
       {
@@ -62,11 +78,11 @@ namespace novokhatskiy
       }
       return *this;
     }
-    const T& operator*() const
+    const T &operator*() const
     {
       return node_->value_;
     }
-    const T* operator->() const
+    const T *operator->() const
     {
       assert(this->node_ != nullptr);
       return std::addressof(this->node_->value_);
@@ -74,10 +90,17 @@ namespace novokhatskiy
     ~ConstForwardIterator() = default;
 
   private:
+<<<<<<< HEAD
     detail::Node< T >* node_;
     ConstForwardIterator(detail::Node< T >* node):
       node_(node)
     {}
+=======
+    detail::Node<T> *node_;
+    ConstForwardIterator(detail::Node<T> *node) : node_(node)
+    {
+    }
+>>>>>>> 167fa0909d1f65d8c7181a7dd9315ca0daba22bc
   };
 }
 
