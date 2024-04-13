@@ -10,15 +10,22 @@ int main()
   using namespace namestnikov;
   using namedLists = std::pair< std::string, ForwardList< unsigned long long > >;
   ForwardList< namedLists > dataList;
-  try
-  {
-    inputLists(std::cin, dataList);
-    outputLists(std::cout, dataList);
-  }
-  catch (const std::invalid_argument &)
+  inputLists(std::cin, dataList);
+  if (dataList.empty())
   {
     std::cout << "0\n";
     return 0;
+  }
+  size_t maxSize = 0;
+  outputNames(std::cout, dataList, maxSize);
+  if (!haveNumbers(dataList))
+  {
+    std::cout << "0\n";
+    return 0;
+  }
+  try
+  {
+    outputNumsAndSums(std::cout, dataList, maxSize);
   }
   catch (const std::exception & e)
   {

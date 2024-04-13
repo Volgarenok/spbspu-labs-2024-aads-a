@@ -11,7 +11,6 @@ namespace namestnikov
   void outputNames(std::ostream & out, ForwardList< namedLists > & dataList, size_t & maxSize);
   void outputNumsAndSums(std::ostream & out, ForwardList< namedLists > & dataList, size_t maxSize);
   bool haveNumbers(ForwardList< namedLists > & dataList);
-  void outputLists(std::ostream & out, ForwardList< namedLists > & dataList);
 }
 
 #endif

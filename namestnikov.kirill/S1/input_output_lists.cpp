@@ -82,18 +82,3 @@ bool namestnikov::haveNumbers(ForwardList< namedLists > & dataList)
   }
   return gotNumbers;
 }
-
-void namestnikov::outputLists(std::ostream & out, ForwardList< namedLists > & dataList)
-{
-  if (dataList.empty())
-  {
-    throw std::invalid_argument("List is empty");
-  }
-  size_t maxSize = 0;
-  outputNames(out, dataList, maxSize);
-  if (!haveNumbers(dataList))
-  {
-    throw std::invalid_argument("Got no numbers");
-  }
-  outputNumsAndSums(out, dataList, maxSize);
-}
