@@ -436,6 +436,25 @@ namespace namestnikov
         other.head_ = nullptr;
       }
     }
+    void splice_after(const_iterator pos, ForwardList< T > && other, const_iterator first, const_iterator last)
+    {
+      if (pos == cend())
+      {
+        throw std::out_of_range("Can not splice here");
+      }
+      else
+      {
+        auto start = first;
+        auto end = last;
+        while (start != end)
+        {
+          insert_after(pos, std::move(*start));
+          ++start;
+          ++pos;
+        }
+        other.clear();
+      }
+    }
     const T & operator[](size_t index)
     {
       size_t counter = 0;
