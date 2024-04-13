@@ -30,7 +30,7 @@ void namestnikov::outputNames(std::ostream & out, ForwardList< namedLists > & da
   out << "\n";
 }
 
-void namestnikov::outputNumsAndSums(std::ostream & out, ForwardList< namedLists > & dataList, size_t maxSize)
+void namestnikov::outputNumsAndSums(std::ostream & out, const ForwardList< namedLists > & dataList, size_t maxSize)
 {
   ForwardList< unsigned long long > sumsList;
   unsigned long long sum = 0;
@@ -73,7 +73,7 @@ void namestnikov::outputNumsAndSums(std::ostream & out, ForwardList< namedLists 
   out << "\n";
 }
 
-bool namestnikov::haveNumbers(ForwardList< namedLists > & dataList)
+bool namestnikov::haveNumbers(const ForwardList< namedLists > & dataList)
 {
   bool gotNumbers = false;
   for (auto it = dataList.cbegin(); it != dataList.cend(); ++it)

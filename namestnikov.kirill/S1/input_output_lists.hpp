@@ -9,8 +9,8 @@ namespace namestnikov
   using namedLists = std::pair< std::string, ForwardList< unsigned long long > >;
   void inputLists(std::istream & in, ForwardList< namedLists > & dataList);
   void outputNames(std::ostream & out, ForwardList< namedLists > & dataList, size_t & maxSize);
-  void outputNumsAndSums(std::ostream & out, ForwardList< namedLists > & dataList, size_t maxSize);
-  bool haveNumbers(ForwardList< namedLists > & dataList);
+  void outputNumsAndSums(std::ostream & out, const ForwardList< namedLists > & dataList, size_t maxSize);
+  bool haveNumbers(const ForwardList< namedLists > & dataList);
 }
 
 #endif
