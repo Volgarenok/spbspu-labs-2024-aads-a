@@ -151,7 +151,7 @@ namespace namestnikov
     {
       std::swap(head_, other.head_);
     }
-    size_t max_size()
+    size_t get_size()
     {
       size_t size = 0;
       node_t * temp = head_;
@@ -497,7 +497,7 @@ namespace namestnikov
     }
     const T & at(size_t index)
     {
-      if ((index < 0) || (index >= max_size()))
+      if ((index < 0) || (index >= get_size()))
       {
         throw std::out_of_range("Can not give you access to this element");
       }
@@ -506,7 +506,7 @@ namespace namestnikov
     bool operator==(ForwardList< T > & other)
     {
       bool check = true;
-      size_t size = std::min(max_size(), other.max_size());
+      size_t size = std::min(get_size(), other.get_size());
       node_t * ourNode = head_;
       node_t * otherNode = other.head_;
       for (size_t i = 0; i < size; ++i)
@@ -520,7 +520,7 @@ namespace namestnikov
     bool operator<(ForwardList< T > & other)
     {
       bool check = true;
-      size_t size = std::min(max_size(), other.max_size());
+      size_t size = std::min(get_size(), other.get_size());
       node_t * ourNode = head_;
       node_t * otherNode = other.head_;
       for (size_t i = 0; i < size; ++i)
@@ -538,7 +538,7 @@ namespace namestnikov
     bool operator>(ForwardList< T > & other)
     {
       bool check = true;
-      size_t size = std::min(max_size(), other.max_size());
+      size_t size = std::min(get_size(), other.get_size());
       node_t * ourNode = head_;
       node_t * otherNode = other.head_;
       for (size_t i = 0; i < size; ++i)
