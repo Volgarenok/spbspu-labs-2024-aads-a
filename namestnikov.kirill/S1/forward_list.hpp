@@ -211,10 +211,6 @@ namespace namestnikov
       assign(temp.begin(), temp.end());
       temp.clear();
     }
-    void assign(std::initializer_list< T > list)
-    {
-      assign(list.begin(), list.end());
-    }
     void assign(iterator begin, iterator end)
     {
       try
@@ -235,6 +231,30 @@ namespace namestnikov
         clear();
         throw;
       }
+    }
+    void assign(std::initializer_list< T > list)
+    {
+      try
+      {
+        ForwardList< T > temp;
+        auto start = list.begin();
+        auto end = list.end();
+        for (; start != end; ++start)
+        {
+          temp.push_front(*start);
+        }
+        clear();
+        temp.reverse();
+        push_front(temp.front());
+        temp.pop_front();
+        splice_after(cbegin(), temp);
+      }
+      catch(...)
+      {
+        clear();
+        throw;
+      }
+      
     }
     iterator insert_after(const_iterator pos, const T & value)
     {
