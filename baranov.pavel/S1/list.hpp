@@ -66,6 +66,10 @@ namespace baranov
   template< class T >
   Iterator< T > List< T >::end()
   {
+    if (empty)
+    {
+      return begin();
+    }
     if (tail_->next_ == nullptr)
     {
       Node< T > * imagNode = new Node< T >{ tail_->data_ };
