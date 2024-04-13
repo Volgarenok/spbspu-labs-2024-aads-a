@@ -5,12 +5,15 @@
 
 namespace zakozhurnikova
 {
+  template < class T >
+  class List;
+
   template < typename T >
-  struct ConstIterator
+  struct ConstIterator: public std::iterator< std::bidirectional_iterator_tag, T >
   {
+    friend class List< T >;
     using this_t = ConstIterator< T >;
     ConstIterator();
-    ConstIterator(Node< T >* node);
     ConstIterator(const this_t&) = default;
     ~ConstIterator() = default;
 
@@ -24,42 +27,18 @@ namespace zakozhurnikova
     const T& operator*() const;
     const T* operator->() const;
 
-    this_t operator+(size_t);
-    this_t operator-(size_t);
-
   private:
-    Node< T >* node_;
+    detail::Node< T >* node_;
+    explicit ConstIterator(detail::Node< T > * node);
   };
 
   template < typename T >
-  ConstIterator< T > ConstIterator< T >::operator+(size_t k)
-  {
-    ConstIterator< T > result(*this);
-    for (size_t i = 0; i < k; ++i)
-    {
-      ++result;
-    }
-    return result;
-  }
-
-  template < typename T >
-  ConstIterator< T > ConstIterator< T >::operator-(size_t k)
-  {
-    ConstIterator< T > result(*this);
-    for (size_t i = 0; i < k; ++i)
-    {
-      --result;
-    }
-    return result;
-  }
-
-  template < typename T >
-  ConstIterator<T>::ConstIterator() :
+  ConstIterator<T>::ConstIterator():
     node_(nullptr)
   {}
 
   template < typename T >
-  ConstIterator< T >::ConstIterator(Node< T >* node) :
+  ConstIterator< T >::ConstIterator(detail::Node< T >* node):
     node_(node)
   {}
 
@@ -71,7 +50,7 @@ namespace zakozhurnikova
   }
 
   template < typename T >
-  ConstIterator< T > ConstIterator< T >::operator++(int rhs)
+  ConstIterator< T > ConstIterator< T >::operator++(int)
   {
     ConstIterator< T > result(*this);
     ++(*this);
@@ -87,7 +66,7 @@ namespace zakozhurnikova
 
 
   template < typename T >
-  ConstIterator< T > ConstIterator< T >::operator--(int rhs)
+  ConstIterator< T > ConstIterator< T >::operator--(int)
   {
     ConstIterator< T > result(*this);
     --(*this);

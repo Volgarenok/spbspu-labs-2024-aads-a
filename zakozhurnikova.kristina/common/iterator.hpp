@@ -1,16 +1,20 @@
 #ifndef ITERATOR_HPP
 #define ITERATOR_HPP
 #include <memory>
+#include <iterator>
 #include "node.hpp"
 
 namespace zakozhurnikova
 {
+  template < class T >
+  class List;
+
   template < typename T >
-  struct Iterator
+  struct Iterator: public std::iterator < std::bidirectional_iterator_tag, T >
   {
+    friend struct List< T >;
     using this_t = Iterator< T >;
     Iterator();
-    Iterator(Node< T >* node);
     Iterator(const this_t&) = default;
     ~Iterator() = default;
 
@@ -23,45 +27,21 @@ namespace zakozhurnikova
     bool operator==(const this_t&) const;
     T& operator*();
     T* operator->();
-    T& operator*() const;
-    T* operator->() const;
-
-    this_t operator+(size_t);
-    this_t operator-(size_t);
+    const T& operator*() const;
+    const T* operator->() const;
 
   private:
-    Node< T >* node_;
+    detail::Node< T >* node_;
+    explicit Iterator(detail::Node< T > * node_ptr);
   };
 
   template < typename T >
-  Iterator< T > Iterator< T >::operator+(size_t k)
-  {
-    Iterator< T > result(*this);
-    for (size_t i = 0; i < k; ++i)
-    {
-      ++result;
-    }
-    return result;
-  }
-
-  template < typename T >
-  Iterator< T > Iterator< T >::operator-(size_t k)
-  {
-    Iterator< T > result(*this);
-    for (size_t i = 0; i < k; ++i)
-    {
-      --result;
-    }
-    return result;
-  }
-
-  template < typename T >
-  Iterator< T >::Iterator() :
+  Iterator< T >::Iterator():
     node_(nullptr)
   {}
 
   template < typename T >
-  Iterator< T >::Iterator(Node< T >* node) :
+  Iterator< T >::Iterator(detail::Node< T >* node):
     node_(node)
   {}
 
@@ -73,7 +53,7 @@ namespace zakozhurnikova
   }
 
   template < typename T >
-  Iterator< T > Iterator< T >::operator++(int rhs)
+  Iterator< T > Iterator< T >::operator++(int)
   {
     Iterator< T > result(*this);
     ++(*this);
@@ -89,7 +69,7 @@ namespace zakozhurnikova
 
 
   template < typename T >
-  Iterator< T > Iterator< T >::operator--(int rhs)
+  Iterator< T > Iterator< T >::operator--(int)
   {
     Iterator< T > result(*this);
     --(*this);
@@ -115,7 +95,7 @@ namespace zakozhurnikova
   }
 
   template < typename T >
-  T& Iterator< T >::operator*() const
+  const T& Iterator< T >::operator*() const
   {
     return node_->data;
   }
@@ -127,7 +107,7 @@ namespace zakozhurnikova
   }
 
   template < typename T >
-  T* Iterator< T >::operator->() const
+  const T* Iterator< T >::operator->() const
   {
     return std::addressof(node_->data);
   }
