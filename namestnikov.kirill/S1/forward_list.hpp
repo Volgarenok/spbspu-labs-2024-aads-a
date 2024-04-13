@@ -411,6 +411,10 @@ namespace namestnikov
     }
     void splice_after(const_iterator pos, ForwardList< T > & other)
     {
+      splice_after(pos, std::move(other));
+    }
+    void splice_after(const_iterator pos, ForwardList< T > && other)
+    {
       if (pos == cend())
       {
         throw std::out_of_range("Can not splice here");
