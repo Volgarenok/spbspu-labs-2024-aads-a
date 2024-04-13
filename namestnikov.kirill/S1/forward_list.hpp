@@ -139,6 +139,10 @@ namespace namestnikov
       newHead->next_ = head_;
       head_ = newHead;
     }
+    void push_front(T && data)
+    {
+      push_front(data);
+    }
     T & front()
     {
       return head_->data_;
