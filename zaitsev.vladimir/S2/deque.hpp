@@ -337,7 +337,8 @@ namespace zaitsev
       --size_;
       reset_head();
     }
-    void push_front(const T& value)
+    template<class ... Args>
+    void push_front(Args&&... args)
     {
       if (head_chunk_ == 0 && head_pos_ == 0)
       {
@@ -346,7 +347,7 @@ namespace zaitsev
       prev_pos(head_chunk_, head_pos_);
       try
       {
-        alloc_traits::construct(chunk_alloc_, chunk_heads_[head_chunk_] + head_pos_, value);
+        alloc_traits::construct(chunk_alloc_, chunk_heads_[head_chunk_] + head_pos_, std::forward< Args >(args)...);
         ++size_;
       }
       catch (const std::bad_alloc&)
@@ -354,16 +355,6 @@ namespace zaitsev
         next_pos(head_chunk_, head_pos_);
         throw;
       }
-    }
-    void push_front(T&& value)
-    {
-      if (head_chunk_ == 0 && head_pos_ == 0)
-      {
-        add_chunk(false);
-      }
-      prev_pos(head_chunk_, head_pos_);
-      alloc_traits::construct(chunk_alloc_, chunk_heads_[head_chunk_] + head_pos_, std::move(value));
-      ++size_;
     }
     void pop_front()
     {
