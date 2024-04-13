@@ -91,7 +91,7 @@ namespace namestnikov
       }
       return *this;
     }
-    ForwardList(ForwardList< T > && other) :
+    ForwardList(ForwardList< T > && other) noexcept:
       head_(other.head_)
     {
       other.head_ = nullptr;
@@ -112,7 +112,7 @@ namespace namestnikov
         pop_front();
       }
     }
-    bool empty() const
+    bool empty() const noexcept
     {
       return head_ == nullptr;
     }
@@ -207,19 +207,8 @@ namespace namestnikov
     }
     void assign(size_t count, const T & value)
     {
-      clear();
-      try
-      {
-        for (size_t i = 0; i < count; ++i)
-        {
-          push_front(value);
-        }
-      }
-      catch (...)
-      {
-        clear();
-        throw;
-      }
+      ForwardList< T > temp(count, value);
+      assign(temp.begin(), temp.end());
     }
     void assign(std::initializer_list< T > list)
     {
