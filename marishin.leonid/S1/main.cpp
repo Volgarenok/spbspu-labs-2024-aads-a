@@ -31,7 +31,7 @@ int main()
   while (emptyList)
   {
     size_t sum = 0;
-    bool emptyList = false;
+    emptyList = false;
     for (auto pair = pairs.begin(); pair != pairs.end(); ++pair)
     {
       if (!pair->second.empty())
