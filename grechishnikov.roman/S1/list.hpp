@@ -330,15 +330,11 @@ namespace grechishnikov
   template< typename T >
   void List< T >::remove(const T& data)
   {
-    auto first = cbegin();
-    while (first != cend())
+    auto ifEqual = [&data](const T& remData)
     {
-      if (*first == data)
-      {
-        erase(first);
-      }
-      first++;
-    }
+      return remData == data;
+    };
+    remove_if(ifEqual);
   }
 
   template< typename T >
@@ -429,13 +425,8 @@ namespace grechishnikov
   template< typename T >
   Iterator< T > List< T >::insert(ConstIterator< T > where, std::initializer_list< T > ilist)
   {
-    auto init = ilist.begin();
-    while (init != ilist.end())
-    {
-      insert(where, *init);
-      where++;
-      init++;
-    }
+    List< T > temp(ilist);
+    insert(where, temp.cbegin(), temp.cend());
     return Iterator< T >(where.node_);
   }
 
