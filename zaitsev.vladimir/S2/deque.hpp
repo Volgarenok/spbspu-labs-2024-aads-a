@@ -11,7 +11,8 @@ namespace zaitsev
   template< typename T >
   class Deque
   {
-    using alloc_traits = std::allocator_traits<std::allocator< T >>;
+    using val_alloc_traits = std::allocator_traits< std::allocator< T > >;
+    using chunk_alloc_traits = std::allocator_traits< std::allocator< T* > >;
     static const size_t chunk_cap_ = 20;
     size_t chunks_nmb_;
     size_t size_;
@@ -113,18 +114,18 @@ namespace zaitsev
 
     void add_chunk(bool to_end)
     {
-      T** new_chunk_heads_ = head_alloc_.allocate(chunks_nmb_ + 1);
+      T** new_chunk_heads_ = chunk_alloc_traits::allocate(head_alloc_, chunks_nmb_ + 1);
       if (to_end)
       {
         std::memcpy(new_chunk_heads_, chunk_heads_, chunks_nmb_ * sizeof(T*));
-        new_chunk_heads_[chunks_nmb_] = chunk_alloc_.allocate(chunk_cap_);
+        new_chunk_heads_[chunks_nmb_] = val_alloc_traits::allocate(chunk_alloc_, chunk_cap_);
       }
       else
       {
         std::memcpy(new_chunk_heads_ + 1, chunk_heads_, chunks_nmb_ * sizeof(T*));
-        new_chunk_heads_[0] = chunk_alloc_.allocate(chunk_cap_);
+        new_chunk_heads_[0] = val_alloc_traits::allocate(chunk_alloc_, chunk_cap_);
       }
-      head_alloc_.deallocate(chunk_heads_, chunks_nmb_);
+      chunk_alloc_traits::deallocate(head_alloc_, chunk_heads_, chunks_nmb_);
       chunk_heads_ = new_chunk_heads_;
       if (!to_end)
       {
@@ -202,21 +203,21 @@ namespace zaitsev
       chunk_alloc_(),
       head_alloc_()
     {
-      chunk_heads_ = head_alloc_.allocate(chunks_nmb_);
+      chunk_heads_ = chunk_alloc_traits::allocate(head_alloc_,chunks_nmb_);
       size_t i = 0;
       size_t j = 0;
       try
       {
         for (; j < chunks_nmb_; ++j)
         {
-          chunk_heads_[j] = chunk_alloc_.allocate(chunk_cap_);
+          chunk_heads_[j] = val_alloc_traits::allocate(chunk_alloc_, chunk_cap_);
         }
         size_t chunk = other.head_chunk_;
         size_t pos = other.head_pos_;
         Deque< T >::iterator it = other.begin();
         for (; i < size_; ++i, ++it)
         {
-          alloc_traits::construct(chunk_alloc_, chunk_heads_[chunk] + pos, *it);
+          val_alloc_traits::construct(chunk_alloc_, chunk_heads_[chunk] + pos, *it);
           if (pos < chunk_cap_ - 1)
           {
             ++pos;
@@ -228,13 +229,13 @@ namespace zaitsev
           }
         }
       }
-      catch (const std::bad_alloc&)
+      catch (...)
       {
         size_t chunk = other.head_chunk_;
         size_t pos = other.head_pos_;
         for (size_t k = 0; k < i; ++k)
         {
-          alloc_traits::destroy(chunk_alloc_, chunk_heads_[chunk] + pos);
+          val_alloc_traits::destroy(chunk_alloc_, chunk_heads_[chunk] + pos);
           if (pos < chunk_cap_ - 1)
           {
             ++pos;
@@ -247,9 +248,9 @@ namespace zaitsev
         }
         for (size_t k = 0; k < j; ++k)
         {
-          chunk_alloc_.deallocate(chunk_heads_[j], chunk_cap_);
+          val_alloc_traits::deallocate(chunk_alloc_, chunk_heads_[j], chunk_cap_);
         }
-        head_alloc_.deallocate(chunk_heads_, chunks_nmb_);
+        chunk_alloc_traits::deallocate(head_alloc_, chunk_heads_, chunks_nmb_);
         throw;
       }
     }
@@ -259,16 +260,14 @@ namespace zaitsev
       head_chunk_(other.head_chunk_),
       head_pos_(other.head_pos_),
       chunk_heads_(other.chunk_heads_),
-      chunk_alloc_(other.chunk_alloc_),
-      head_alloc_(other.head_alloc_)
+      chunk_alloc_(),
+      head_alloc_()
     {
       other.chunks_nmb_ = 0;
       other.size_ = 0;
       other.head_chunk_ = 0;
       other.head_pos_ = 0;
       other.chunk_heads_ = nullptr;
-      other.chunk_alloc_ = std::allocator< T >();
-      other.head_alloc_ = std::allocator< T* >();
     }
     Deque& operator=(const Deque& other)
     {
@@ -284,15 +283,12 @@ namespace zaitsev
       head_chunk_ = other.head_chunk_;
       head_pos_ = other.head_pos_;
       chunk_heads_ = other.chunk_heads_;
-      chunk_alloc_=other.chunk_alloc_;
-      head_alloc_=other.head_alloc_;
+
       other.chunks_nmb_ = 0;
       other.size_ = 0;
       other.head_chunk_ = 0;
       other.head_pos_ = 0;
       other.chunk_heads_ = nullptr;
-      other.chunk_alloc_ = std::allocator< T >();
-      other.head_alloc_ = std::allocator< T* >();
 
       return *this;
     }
@@ -300,7 +296,7 @@ namespace zaitsev
     {
       for (Deque< T >::iterator i = begin(); i != end(); ++i)
       {
-        alloc_traits::destroy(chunk_alloc_, i.operator->());
+        val_alloc_traits::destroy(chunk_alloc_, i.operator->());
       }
       for (size_t i = 0; i < chunks_nmb_; ++i)
       {
@@ -321,7 +317,7 @@ namespace zaitsev
       {
         add_chunk(true);
       }
-      alloc_traits::construct(chunk_alloc_, chunk_heads_[end_chunk] + end_pos, std::forward< Args >(args)...);
+      val_alloc_traits::construct(chunk_alloc_, chunk_heads_[end_chunk] + end_pos, std::forward< Args >(args)...);
       ++size_;
     }
     void pop_back()
@@ -333,7 +329,7 @@ namespace zaitsev
       size_t end_chunk = 0;
       size_t end_pos = 0;
       convert_index(size_, end_chunk, end_pos);
-      alloc_traits::destroy(chunk_alloc_, chunk_heads_[end_chunk] + end_pos);
+      val_alloc_traits::destroy(chunk_alloc_, chunk_heads_[end_chunk] + end_pos);
       --size_;
       reset_head();
     }
@@ -347,7 +343,7 @@ namespace zaitsev
       prev_pos(head_chunk_, head_pos_);
       try
       {
-        alloc_traits::construct(chunk_alloc_, chunk_heads_[head_chunk_] + head_pos_, std::forward< Args >(args)...);
+        val_alloc_traits::construct(chunk_alloc_, chunk_heads_[head_chunk_] + head_pos_, std::forward< Args >(args)...);
         ++size_;
       }
       catch (const std::bad_alloc&)
@@ -362,7 +358,7 @@ namespace zaitsev
       {
         throw std::out_of_range("Queue is empty");
       }
-      alloc_traits::destroy(chunk_alloc_, chunk_heads_[head_chunk_] + head_pos_);
+      val_alloc_traits::destroy(chunk_alloc_, chunk_heads_[head_chunk_] + head_pos_);
       next_pos(head_chunk_, head_pos_);
       --size_;
       reset_head();
@@ -371,13 +367,13 @@ namespace zaitsev
     {
       for (Deque< T >::iterator i = begin(); i != end(); ++i)
       {
-        alloc_traits::destroy(chunk_alloc_, i.operator->());
+        val_alloc_traits::destroy(chunk_alloc_, i.operator->());
       }
       for (size_t i = 0; i < chunks_nmb_; ++i)
       {
-        chunk_alloc_.deallocate(chunk_heads_[i], chunk_cap_);
+        val_alloc_traits::deallocate(chunk_alloc_, chunk_heads_[i], chunk_cap_);
       }
-      head_alloc_.deallocate(chunk_heads_, chunks_nmb_);
+      chunk_alloc_traits::deallocate(head_alloc_, chunk_heads_, chunks_nmb_);
       size_ = 0;
       chunks_nmb_ = 0;
       head_chunk_ = 0;
