@@ -114,9 +114,9 @@ namespace gladyshev
       data_ = moreData;
     }
   private:
-    size_t capacity_;
-    size_t size_;
     T* data_;
+    size_t size_;
+    size_t capacity_;
   };
 }
 
