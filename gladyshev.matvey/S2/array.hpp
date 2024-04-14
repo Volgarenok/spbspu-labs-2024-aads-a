@@ -26,8 +26,8 @@ namespace gladyshev
     }
     DynArray(DynArray&& other) noexcept:
       data_(other.data_),
-      capacity_(other.capacity_),
-      size_(other.size_)
+      size_(other.size_),
+      capacity_(other.capacity_)
     {
       other.data_ = nullptr;
       other.size_ = 0;
