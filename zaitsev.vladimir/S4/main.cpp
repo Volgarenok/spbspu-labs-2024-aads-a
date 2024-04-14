@@ -32,9 +32,13 @@ public:
     {
       string command;
       in >> command;
-      if (in)
+      if (!in)
       {
-        try
+        break;
+      }
+      try
+      {
+        if (commands.count(command))
         {
           string arg1, arg2, arg3;
           switch (commands[command])
@@ -43,7 +47,6 @@ public:
             in >> arg1;
             if (!lib.count(arg1) || in.peek() != '\n')
             {
-              in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
               throw std::invalid_argument("");
             }
             else
@@ -53,9 +56,8 @@ public:
             break;
           case com_nmb::intersect_c:
             in >> arg1 >> arg2 >> arg3;
-            if (arg1 == arg2 || arg2 == arg3 || arg3 == arg1)
+            if (!lib.count(arg2) || !lib.count(arg3))
             {
-              in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
               throw std::invalid_argument("");
             }
             else
@@ -65,9 +67,8 @@ public:
             break;
           case com_nmb::complement_c:
             in >> arg1 >> arg2 >> arg3;
-            if (arg1 == arg2 || arg2 == arg3 || arg3 == arg1)
+            if (!lib.count(arg2) || !lib.count(arg3))
             {
-              in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
               throw std::invalid_argument("");
             }
             else
@@ -77,25 +78,26 @@ public:
             break;
           case com_nmb::union_c:
             in >> arg1 >> arg2 >> arg3;
-            if (arg1 == arg2 || arg2 == arg3 || arg3 == arg1)
+            if (!lib.count(arg2) || !lib.count(arg3))
             {
-              in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
               throw std::invalid_argument("");
             }
             else
             {
               union_ds(arg1, arg2, arg3);
             }
-            break;
-          default:
-            out << "<INVALID COMMAND>\n";
           }
         }
-        catch (std::invalid_argument&)
+        else
         {
-          out << "<INVALID COMMAND>\n";
+          throw std::invalid_argument("<INVALID COMMAND>");
         }
       }
+      catch (const std::invalid_argument& e)
+      {
+        out << e.what() << '\n';
+      }
+      in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
   }
 private:
