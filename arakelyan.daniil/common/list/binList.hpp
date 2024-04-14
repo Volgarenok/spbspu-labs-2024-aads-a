@@ -160,7 +160,7 @@ template < class T >
 arakelyan::BinList< T > &arakelyan::BinList< T >::operator=(BinList< T > &&otherLs) noexcept
 {
   BinList< T > temp(std::move(otherLs));
-  if (this != &otherLs)
+  if (this != std::addressof(otherLs))
   {
     clear();
     swap(otherLs);
