@@ -8,8 +8,8 @@ namespace marishin
   {
     Node(const T & value):
       data_(value),
-      prev_(nullptr),
-      next_(nullptr)
+      next_(nullptr),
+      prev_(nullptr)
     {}
     T data_;
     Node * next_;
