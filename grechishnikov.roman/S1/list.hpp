@@ -304,11 +304,8 @@ namespace grechishnikov
   template< typename T >
   void List< T >::assign(size_t count, const T& value)
   {
-    clear();
-    for (size_t i = 0; i < count; i++)
-    {
-      push_back(value);
-    }
+    List< T > temp(count, value);
+    swap(temp);
   }
 
   template< typename T >
@@ -326,13 +323,8 @@ namespace grechishnikov
   template< typename T >
   void List< T >::assign(std::initializer_list< T > ilist)
   {
-    clear();
-    auto init = ilist.begin();
-    while (init != ilist.end())
-    {
-      push_back(*init);
-      init++;
-    }
+    List< T > temp(ilist);
+    swap(temp);
   }
 
   template< typename T >
