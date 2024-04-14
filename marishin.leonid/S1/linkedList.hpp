@@ -1,34 +1,14 @@
 #ifndef LINKEDLIST_HPP
 #define LINKEDLIST_HPP
 
-#include <iostream>
-#include <sstream>
+#include "node.hpp"
+#include "iterator.hpp"
 
 namespace marishin
 {
-  template < typename T >
-  class Node
-  {
-  public:
-    T data_;
-    Node* prev_;
-    Node* next_;
-
-    Node(const T& value):
-      data_(value),
-      prev_(nullptr),
-      next_(nullptr)
-    {}
-    ~Node() {}
-  };
-
-  template < typename T >
+  template < class T >
   class LinkedList
   {
-  private:
-    Node< T >* head_;
-    Node< T >* tail_;
-    size_t size_;
   public:
     LinkedList():
       head_(nullptr),
@@ -40,203 +20,125 @@ namespace marishin
       clear();
     }
 
-    LinkedList& operator=(const LinkedList& other)
+    LinkedList(const T & data, size_t size):
+      LinkedList()
     {
-      if (this == &other)
+      for (size_t i = 0; i < size; ++i)
       {
-        return *this;
+        push_back(data);
       }
-      clear();
-      Node< T >* curr = other.head_;
-      while (curr)
+    }
+
+    LinkedList(const LinkedList & other):
+      head_(nullptr),
+      tail_(nullptr),
+      size_(0)
+    {
+      try
       {
-        push_back(curr -> data_);
-        curr = curr -> next_;
+        Node< T > * curr = other.head_;
+        while (size_ != other.size_)
+        {
+          push_back(curr->data_);
+          curr = curr->next_;
+        }
       }
+      catch (const std::exception & e)
+      {
+        clear();
+        throw;
+      }
+    }
+
+    LinkedList(LinkedList && other):
+      head_(other.head_),
+      tail_(other.tail_),
+      size_(other.size_)
+    {
+      other.head_ = nullptr;
+      other.tail_ = nullptr;
+      other.size_ = 0;
+    }
+
+    LinkedList & operator=(const LinkedList & other)
+    {
+      LinkedList temp(other);
+      swap(temp);
       return *this;
     }
 
-    bool operator==(const LinkedList& other) const
+    LinkedList & operator=(LinkedList && other)
     {
-      if (size_ != other.size_)
-      {
-        return false;
-      }
-
-      auto this_iter = begin();
-      auto other_iter = other.begin();
-
-      while (this_iter != end() && other_iter != other.end())
-      {
-        if (*this_iter != *other_iter)
-        {
-          return false;
-        }
-        ++this_iter;
-        ++other_iter;
-      }
-      return true;
+      clear();
+      swap(other);
+      return *this;
     }
 
-    bool operator!=(const LinkedList& other) const
+    Iterator< T > begin() noexcept
     {
-      return !(*this == other);
+      return Iterator< T >(head_);
     }
 
-    bool operator<(const LinkedList& other) const
+    Iterator< T > end() noexcept
     {
-      auto this_iter = begin();
-      auto other_iter = other.begin();
-
-      while (this_iter != end() && other_iter != other.end())
-      {
-        if (*this_iter < *other_iter)
-        {
-          return true;
-        }
-        else if (*other_iter < *this_iter)
-        {
-          return false;
-        }
-        ++this_iter;
-        ++other_iter;
-      }
-      return size_ < other.size_;
+      return Iterator< T >(nullptr);
     }
 
-    bool operator>(const LinkedList& other) const
+    const Iterator< T > cbegin() const noexcept
     {
-      return other < *this;
+      return Iterator< T >(head_);
     }
 
-    bool operator<=(const LinkedList& other) const
+    const Iterator< T > cend() const noexcept
     {
-      return !(other < *this);
+      return Iterator< T >(nullptr);
     }
 
-    bool operator>=(const LinkedList& other) const
+    bool empty() const noexcept
     {
-      return !(*this < other);
+      return (head_ == nullptr) && (tail_ == nullptr);
     }
 
-    class Iterator
+    T & front()
     {
-    private:
-      Node< T >* ptr_;
-
-    public:
-      Iterator(Node< T >* node):
-        ptr_(node)
-      {}
-
-      Iterator& operator++()
-      {
-        ptr_ = ptr_ -> next_;
-        return *this;
-      }
-
-      bool operator!=(const Iterator& other) const
-      {
-        return ptr_ != other.ptr_;
-      }
-
-      T& operator*() const
-      {
-        return ptr_ -> data_;
-      }
-
-      };
-
-    class ConstIterator
-    {
-    private:
-      Node< T >* ptr_;
-
-    public:
-      ConstIterator(Node< T >* node):
-        ptr_(node)
-      {}
-
-      ConstIterator& operator++()
-      {
-        ptr_ = ptr_ -> next_;
-        return *this;
-      }
-
-      bool operator!=(const ConstIterator& other) const
-      {
-        return ptr_ != other.ptr_;
-      }
-
-      const T& operator*() const
-      {
-        return ptr_ -> data_;
-      }
-    };
-
-    Iterator begin() const
-    {
-      return Iterator(head_);
+      return head_->data_;
     }
 
-    Iterator end() const
+    T & back()
     {
-      return Iterator(nullptr);
+      return tail_->data_;
     }
 
-    ConstIterator cbegin() const
+    size_t size() const noexcept
     {
-      return ConstIterator(head_);
+      return size_;
     }
 
-    ConstIterator cend() const
+    void assign(size_t count, const T & value)
     {
-      return ConstIterator(nullptr);
-    }
-
-    bool empty() const
-    {
-      return size_ == 0;
-    }
-
-    T& front() const
-    {
-      return head_ -> data_;
-    }
-
-    T& back() const
-    {
-      return tail_ -> data_;
-    }
-
-    void assign(size_t count, const T& value)
-    {
+      LinkedList ls;
       clear();
       for (size_t i = 0; i < count; ++i)
       {
-        push_back(value);
+        ls.push_back(value);
       }
+      swap(ls);
     }
 
-    void emplace_front(const T& value)
+    void push_front(const T & value)
     {
-      Node< T >* newNode = new Node< T >(value);
+      Node< T > * newNode = new Node< T >(value);
       if (empty())
       {
         head_ = tail_ = newNode;
       }
       else
       {
-        newNode -> next_ = head_;
-        head_ -> prev_ = newNode;
+        newNode->next_ = head_;
+        head_->prev_ = newNode;
         head_ = newNode;
       }
       ++size_;
-    }
-
-    void push_front(const T& value)
-    {
-      emplace_front(value);
     }
 
     void pop_front()
@@ -245,39 +147,34 @@ namespace marishin
       {
         return;
       }
-      Node< T >* temp = head_;
-      head_ = head_ -> next_;
-      if (head_)
+      Node< T > * temp = head_->next_;
+      if (temp != nullptr)
       {
-        head_ -> prev_ = nullptr;
+        temp->prev_ = nullptr;
       }
-      delete temp;
-      --size_;
-      if (size_ == 0)
+      else
       {
         tail_ = nullptr;
       }
+      delete head_;
+      head_ = temp;
+      --size_;
     }
 
-    void emplace_back(const T& value)
+    void push_back(const T & value)
     {
-      Node< T >* newNode = new Node< T >(value);
+      Node< T > * newNode = new Node< T >(value);
       if (empty())
       {
         head_ = tail_ = newNode;
       }
       else
       {
-        tail_ -> next_ = newNode;
-        newNode -> prev_ = tail_;
+        tail_->next_ = newNode;
+        newNode->prev_ = tail_;
         tail_ = newNode;
       }
       ++size_;
-    }
-
-    void push_back(const T& value)
-    {
-      emplace_back(value);
     }
 
     void pop_back()
@@ -286,286 +183,79 @@ namespace marishin
       {
         return;
       }
-      Node< T >* temp = tail_;
-      tail_ = tail_ -> prev_;
-      if (tail_)
+      Node< T > * temp = tail_->prev_;
+      if (temp != nullptr)
       {
-        tail_ -> next_ = nullptr;
+        temp->next_ = nullptr;
       }
-      delete temp;
-      --size_;
-      if (size_ == 0)
+      else
       {
         head_ = nullptr;
       }
-    }
-
-    void emplace(const Iterator& pos, const T& value)
-    {
-      if (pos.ptr_ == nullptr)
-      {
-        emplace_back(value);
-        return;
-      }
-
-      Node< T >* newNode = new Node< T >(value);
-      newNode -> next_ = pos.ptr_;
-      newNode -> prev_ = pos.ptr_ -> prev_;
-      if (pos.ptr_ -> prev_)
-      {
-        pos.ptr_ -> prev_ -> next_ = newNode;
-      }
-      else
-      {
-        head_ = newNode;
-      }
-      pos.ptr_ -> prev_ = newNode;
-      ++size_;
-    }
-
-    void insert(const Iterator& pos, size_t count, const T& value)
-    {
-      for (size_t i = 0; i < count; ++i)
-      {
-        emplace(pos, value);
-      }
-    }
-
-    Iterator erase(const Iterator& pos)
-    {
-      if (pos.ptr_ == nullptr)
-      {
-        return end();
-      }
-
-      Node< T >* toDelete = pos.ptr_;
-      Iterator nextIter(toDelete -> next_);
-      if (toDelete -> prev_)
-      {
-        toDelete -> prev_ -> next_ = toDelete -> next_;
-      }
-      else
-      {
-        head_ = toDelete -> next_;
-      }
-      if (toDelete -> next_)
-      {
-        toDelete -> next_ -> prev_ = toDelete -> prev_;
-      }
-      else
-      {
-        tail_ = toDelete -> prev_;
-      }
-      delete toDelete;
+      delete tail_;
+      tail_ = temp;
       --size_;
-      return nextIter;
     }
 
-    void swap(LinkedList& other)
+    void swap(LinkedList & other)
     {
-      std::swap(head_, other.head_);
-      std::swap(tail_, other.tail_);
-      std::swap(size_, other.size_);
+      std::swap(other.head_, head_);
+      std::swap(other.tail_, tail_);
     }
 
-    void clear()
+    void clear() noexcept
     {
       while (!empty())
       {
         pop_back();
       }
+      size_ = 0;
     }
 
-    void splice(const Iterator& pos, LinkedList& other)
+    void remove(const T & value)
     {
-      if (other.empty())
-      {
-        return;
-      }
-
-      if (pos.ptr_ == nullptr)
-      {
-        tail_ -> next_ = other.head_;
-        other.head_ -> prev_ = tail_;
-        tail_ = other.tail_;
-      }
-      else
-      {
-        Node< T >* posNode = pos.ptr_;
-        Node< T >* beforePos = posNode -> prev_;
-
-        if (beforePos)
-        {
-          beforePos -> next_ = other.head_;
-        }
-        other.head_ -> prev_ = beforePos;
-
-        posNode -> prev_ = other.tail_;
-        other.tail_ -> next_ = posNode;
-
-        if (pos.ptr_ == head_)
-        {
-          head_ = other.head_;
-        }
-      }
-
-      size_ += other.size_;
-      other.head_ = other.tail_ = nullptr;
-      other.size_ = 0;
-    }
-
-    void remove(const T& value)
-    {
-      Node< T >* curr = head_;
-      while (curr)
-      {
-        if (curr -> data_ == value)
-        {
-          Node< T >* toDelete = curr;
-          curr = curr -> next_;
-          erase(Iterator(toDelete));
-        }
-        else
-        {
-          curr = curr -> next_;
-        }
-      }
+      remove_if([value](const T & data) { return data == value; });
     }
 
     template < typename Predicate >
     void remove_if(Predicate pred)
     {
-      Node< T >* curr = head_;
+      Node< T > * curr = head_;
+      Node< T > * prev = nullptr;
       while (curr)
       {
-        if (pred(curr -> data_))
+        if (pred(curr->data_))
         {
-          Node< T >* toDelete = curr;
-          curr = curr -> next_;
-          erase(Iterator(toDelete));
+          if (curr == head_)
+          {
+            pop_front();
+            curr = head_;
+          }
+          else if (curr == tail_)
+          {
+            pop_back();
+            curr = tail_;
+          }
+          else
+          {
+            prev->next_ = curr->next_;
+            delete curr;
+            curr = prev->next_;
+            --size_;
+          }
         }
         else
         {
-          curr = curr -> next_;
+          prev = curr;
+          curr = curr->next_;
         }
       }
     }
 
-    void unique()
-    {
-      Node< T >* curr = head_;
-      while (curr && curr -> next_)
-      {
-        if (curr -> data_ == curr -> next_ -> data_)
-        {
-          Node< T >* toDelete = curr -> next_;
-          curr -> next_ = curr -> next_ -> next_;
-          if (curr -> next_)
-          {
-            curr -> next_ -> prev_ = curr;
-          }
-          delete toDelete;
-          --size_;
-        }
-        else
-        {
-          curr = curr -> next_;
-        }
-      }
-    }
-
-    void merge(LinkedList& other)
-    {
-      if (this == &other)
-      {
-        return;
-      }
-
-      Node< T >* thisCurr = head_;
-      Node< T >* otherCurr = other.head_;
-
-      while (thisCurr && otherCurr)
-      {
-        if (thisCurr -> data_ > otherCurr -> data_)
-        {
-          Node< T >* temp = otherCurr;
-          otherCurr = otherCurr -> next_;
-          temp -> next_ = thisCurr;
-          temp -> prev_ = thisCurr -> prev_;
-          if (thisCurr -> prev_)
-          {
-            thisCurr -> prev_ -> next_ = temp;
-          }
-          thisCurr -> prev_ = temp;
-          if (thisCurr == head_)
-          {
-             head_ = temp;
-          }
-          ++size_;
-        }
-        else
-        {
-          thisCurr = thisCurr -> next_;
-        }
-      }
-
-      if (otherCurr)
-      {
-        if (!head_)
-        {
-          head_ = other.head_;
-        }
-        if (tail_)
-        {
-          tail_ -> next_ = other.head_;
-        }
-        other.head_ -> prev_ = tail_;
-        tail_ = other.tail_;
-        size_ += other.size_;
-      }
-
-      other.head_ = other.tail_ = nullptr;
-      other.size_ = 0;
-    }
-
-    void sort()
-    {
-      if (size_ < 2)
-      {
-        return;
-      }
-
-      bool swapped = true;
-      while (swapped)
-      {
-        swapped = false;
-        Node< T >* curr = head_;
-        while (curr -> next_)
-        {
-          if (curr -> data_ > curr -> next_ -> data_)
-          {
-            std::swap(curr -> data_, curr -> next_ -> data_);
-            swapped = true;
-          }
-          curr = curr -> next_;
-        }
-      }
-    }
-
-    void reverse()
-    {
-      Node<T>* curr = head_;
-      while (curr)
-      {
-        std::swap(curr->prev_, curr->next_);
-        curr = curr->prev_;
-        if (curr && curr->prev_ == nullptr)
-        {
-          head_ = curr;
-        }
-      }
-      std::swap(head_, tail_);
-    }
+  private:
+    Node< T >* head_;
+    Node< T >* tail_;
+    size_t size_;
   };
 }
 
