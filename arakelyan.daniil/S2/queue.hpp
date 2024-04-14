@@ -1,6 +1,7 @@
 #ifndef QUEUE_HPP
 #define QUEUE_HPP
 
+#include <memory>
 #include <utility>
 #include <list/binList.hpp>
 
@@ -15,7 +16,8 @@ namespace arakelyan
     Queue(Queue &&otherQ) noexcept;
     ~Queue() = default;
 
-    //operators?
+    Queue &operator=(const Queue &otherQ);
+    Queue &operator=(Queue &&otherQ) noexcept;
 
     bool empty() const;
     size_t size() const;
@@ -53,6 +55,30 @@ namespace arakelyan
   Queue< T, Container>::Queue(Queue &&otherQ) noexcept:
     data_(std::move(otherQ.data_))
   {}
+
+  template < class T, class Container >
+  Queue< T, Container > &Queue< T, Container >::operator=(const Queue &otherQ)
+  {
+    Queue< T, Container > tempQ(otherQ);
+    if (*this != std::addressof(otherQ))
+    {
+      data_.clear();
+      swap(tempQ);
+    }
+    return *this;
+  }
+
+  template < class T, class Container >
+  Queue< T, Container > &Queue< T, Container >::operator=(Queue &&otherQ) noexcept
+  {
+    Queue< T, Container > tempQ(std::move(otherQ));
+    if (*this != std::addressof(otherQ))
+    {
+      data_.clear();
+      swap(tempQ);
+    }
+    return *this;
+  }
 
   template < class T, class Container >
   bool Queue< T, Container>::empty() const

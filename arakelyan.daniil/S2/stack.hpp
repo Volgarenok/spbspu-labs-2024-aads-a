@@ -15,7 +15,8 @@ namespace arakelyan
     Stack(Stack &&otherS) noexcept;
     ~Stack() = default;
 
-    //operators= ??
+    Stack &operator=(const Stack &otherS);
+    Stack &operator=(Stack &&otherS) noexcept;
 
     bool empty() const;
     size_t size() const;
