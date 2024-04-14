@@ -45,9 +45,9 @@ public:
           {
           case com_nmb::print_c:
             in >> arg1;
-            if (!lib.count(arg1) || in.peek() != '\n')
+            if (!lib.count(arg1))
             {
-              throw std::invalid_argument("");
+              throw std::invalid_argument("<INVALID COMMAND>");
             }
             else
             {
@@ -58,7 +58,7 @@ public:
             in >> arg1 >> arg2 >> arg3;
             if (!lib.count(arg2) || !lib.count(arg3))
             {
-              throw std::invalid_argument("");
+              throw std::invalid_argument("<INVALID COMMAND>");
             }
             else
             {
@@ -69,7 +69,7 @@ public:
             in >> arg1 >> arg2 >> arg3;
             if (!lib.count(arg2) || !lib.count(arg3))
             {
-              throw std::invalid_argument("");
+              throw std::invalid_argument("<INVALID COMMAND>");
             }
             else
             {
@@ -80,7 +80,7 @@ public:
             in >> arg1 >> arg2 >> arg3;
             if (!lib.count(arg2) || !lib.count(arg3))
             {
-              throw std::invalid_argument("");
+              throw std::invalid_argument("<INVALID COMMAND>");
             }
             else
             {
