@@ -56,8 +56,35 @@ namespace piyavkin
       --(*this);
       return result;
     }
+    bool operator==(const TreeIterator< Key, T, Compare >& rhs) const
+    {
+      return node_ == rhs.node_;
+    }
+    bool operator!=(const TreeIterator< Key, T, Compare >& rhs) const
+    {
+      return !(*this == rhs);
+    }
+    T* operator->()
+    {
+      return std::addressof(node_->data_);
+    }
+    T& operator*()
+    {
+      return node_->data_;
+    }
+    const T* operator->() const
+    {
+      return std::addressof(node_->data_);
+    }
+    const T& operator*() const
+    {
+      return node_->data_;
+    }
   private:
-    detail::Node< Key, T >* node_; 
+    detail::Node< Key, T >* node_;
+    explicit TreeIterator(detail::Node< Key, T >* node):
+      node_(node)
+    {}
   };
 }
 #endif
