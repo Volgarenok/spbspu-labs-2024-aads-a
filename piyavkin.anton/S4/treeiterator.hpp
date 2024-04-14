@@ -5,7 +5,7 @@
 
 namespace piyavkin
 {
-  template< class Key, class T, class Compare = std::less< Key > >
+  template< class Key, class T, class Compare >
   class Tree;
   template< class Key, class T, class Compare = std::less< Key > >
   class TreeIterator: public std::iterator< std::bidirectional_iterator_tag, T >

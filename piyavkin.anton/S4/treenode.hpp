@@ -7,21 +7,19 @@ namespace piyavkin
 {
   namespace detail
   {
-    template< class Key, class T, class Compare = std::less< Key > >
+    template< class Key, class T >
     struct Node
     {
       template< class... Args >
-      Node(const Key& key, Compare cmp, Node* right, Node* left, Node* parent, Args&& ...args):
+      Node(const Key& key, Node* right, Node* left, Node* parent, Args&& ...args):
         key_(key),
         data_(std::forward< Args >(args)...),
-        cmp_(cmp),
-        right_(right_),
+        right_(right),
         left_(left),
         parent_(parent)
       {}
       Key key_;
       T data_;
-      Compare cmp_;
       Node* right_;
       Node* left_;
       Node* parent_;
