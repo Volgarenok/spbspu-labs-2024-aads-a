@@ -6,15 +6,17 @@
 int main()
 {
   using namespace arakelyan;
-  using stack_struct = Stack< size_t, BinList< size_t > >;
-  stack_struct myStack;
-  myStack.push(5);
-  std::cout << myStack.top() << "\n";
-  myStack.push(10);
-  std::cout << myStack.top() << "\n";
-  std::cout << myStack.size() << " - size \n";
-  std::cout << myStack.empty() << " empty\n";
-  stack_struct otherStack(myStack);
-  std::cout << "otherStack size = " << otherStack.size() << "\n";
+  using myQueue = Queue< size_t, BinList< size_t > >;
+  myQueue mainQ;
+  mainQ.push(5);
+  mainQ.push(10);
+  mainQ.push(15);
+  std::cout << mainQ.front() << "\n";
+  std::cout << mainQ.back() << "\n";
+  mainQ.pop();
+  std::cout << mainQ.front() << "\n";
+  myQueue otherQ(mainQ);
+  std::cout << otherQ.size() << "\n";
+  std::cout << otherQ.empty() << "\n";
   return 0;
 }
