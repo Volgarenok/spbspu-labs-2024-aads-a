@@ -32,66 +32,69 @@ public:
     {
       string command;
       in >> command;
-      try
+      if (in)
       {
-        string arg1, arg2, arg3;
-        switch (commands[command])
+        try
         {
-        case com_nmb::print_c:
-          in >> arg1;
-          if (!lib.count(arg1) || in.peek() != '\n')
+          string arg1, arg2, arg3;
+          switch (commands[command])
           {
-            in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            throw std::invalid_argument("");
+          case com_nmb::print_c:
+            in >> arg1;
+            if (!lib.count(arg1) || in.peek() != '\n')
+            {
+              in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+              throw std::invalid_argument("");
+            }
+            else
+            {
+              print_ds(arg1, out) << '\n';
+            }
+            break;
+          case com_nmb::intersect_c:
+            in >> arg1 >> arg2 >> arg3;
+            if (arg1 == arg2 || arg2 == arg3 || arg3 == arg1)
+            {
+              in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+              throw std::invalid_argument("");
+            }
+            else
+            {
+              intersect_ds(arg1, arg2, arg3);
+            }
+            break;
+          case com_nmb::complement_c:
+            in >> arg1 >> arg2 >> arg3;
+            if (arg1 == arg2 || arg2 == arg3 || arg3 == arg1)
+            {
+              in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+              throw std::invalid_argument("");
+            }
+            else
+            {
+              complement_ds(arg1, arg2, arg3);
+            }
+            break;
+          case com_nmb::union_c:
+            in >> arg1 >> arg2 >> arg3;
+            if (arg1 == arg2 || arg2 == arg3 || arg3 == arg1)
+            {
+              in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+              throw std::invalid_argument("");
+            }
+            else
+            {
+              union_ds(arg1, arg2, arg3);
+            }
+            break;
+          default:
+            out << "<INVALID COMMAND>\n";
           }
-          else
-          {
-            print_ds(arg1, out) << '\n';
-          }
-          break;
-        case com_nmb::intersect_c:
-          cin >> arg1 >> arg2 >> arg3;
-          if (arg1 == arg2 || arg2 == arg3 || arg3 == arg1)
-          {
-            in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            throw std::invalid_argument("");
-          }
-          else
-          {
-            intersect_ds(arg1, arg2, arg3);
-          }
-          break;
-        case com_nmb::complement_c:
-          cin >> arg1 >> arg2 >> arg3;
-          if (arg1 == arg2 || arg2 == arg3 || arg3 == arg1)
-          {
-            in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            throw std::invalid_argument("");
-          }
-          else
-          {
-            complement_ds(arg1, arg2, arg3);
-          }
-          break;
-        case com_nmb::union_c:
-          cin >> arg1 >> arg2 >> arg3;
-          if (arg1 == arg2 || arg2 == arg3 || arg3 == arg1)
-          {
-            in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            throw std::invalid_argument("");
-          }
-          else
-          {
-            union_ds(arg1, arg2, arg3);
-          }
-          break;
-        default:
+        }
+        catch (std::invalid_argument&)
+        {
           out << "<INVALID COMMAND>\n";
         }
-      }
-      catch (std::invalid_argument&)
-      {
-        out << "<INVALID COMMAND>\n";
       }
     }
   }
