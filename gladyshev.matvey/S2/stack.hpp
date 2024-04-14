@@ -1,11 +1,11 @@
 #ifndef STACK_HPP
 #define STACK_HPP
 
-#include <list>
+#include "array.hpp"
 
 namespace gladyshev
 {
-  template < class T, class Container = std::list< T > >
+  template < class T, class Container = DynArray< T > >
   class Stack
   {
   public:

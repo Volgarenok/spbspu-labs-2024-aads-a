@@ -1,11 +1,11 @@
 #ifndef QUEUE_HPP
 #define QUEUE_HPP
 
-#include <list>
+#include "array.hpp"
 
 namespace gladyshev
 {
-  template < class T, class Container = std::list< T > >
+  template < class T, class Container = DynArray< T > >
   class Queue
   {
   public:
