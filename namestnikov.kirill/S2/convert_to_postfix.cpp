@@ -3,15 +3,16 @@
 #include <stack>
 #include <stdexcept>
 #include "stack.hpp"
+#include "data_types.hpp"
 
 
-int getPrecedence(std::string op)
+int getPrecedence(char op)
 {
-  if ((op == "/") || (op == "*"))
+  if ((op == '/') || (op == '*'))
   {
     return 2;
   }
-  else if ((op == "+") || (op == "-") || (op == "%"))
+  else if ((op == '+') || (op == '-') || (op == '%'))
   {
     return 1;
   }
@@ -21,39 +22,39 @@ int getPrecedence(std::string op)
   }
 }
 
-bool hasHigherPriority(std::string op1, std::string op2)
+bool hasHigherPriority(char op1, char op2)
 {
-  return ((op1 != "(") && (((getPrecedence(op1) == 2) && getPrecedence(op2) == 2) || getPrecedence(op2) == 1));
+  return ((op1 != '(') && (((getPrecedence(op1) == 2) && getPrecedence(op2) == 2) || getPrecedence(op2) == 1));
 }
 
-void namestnikov::convertToPostfix(Queue< std::string > & currentQueue, Queue< std::string > & resultQueue)
+void namestnikov::convertToPostfix(Queue< namestnikov::Key > & currentQueue, Queue< namestnikov::Key > & resultQueue)
 {
-  Stack< std::string > processStack;
+  Stack< namestnikov::Key > processStack;
   while (!currentQueue.empty())
   {
-    std::string temp = currentQueue.front();
+    namestnikov::Key temp = currentQueue.front();
     currentQueue.pop();
-    if (std::isdigit(temp[0]))
+    if (temp.type == namestnikov::PartType::OPERAND)
     {
       resultQueue.push(temp);
     }
-    else if (temp == "(")
+    else if (temp.type == namestnikov::PartType::CLOSE_BRACKET)
     {
       processStack.push(temp);
     }
-    else if (temp == ")")
+    else if (temp.type == namestnikov::PartType::OPEN_BRACKET)
     {
-      while (processStack.top() != "(")
+      while (processStack.top().type != namestnikov::PartType::OPEN_BRACKET)
       {
-        std::string temp = processStack.top();
+        namestnikov::Key temp = processStack.top();
         resultQueue.push(temp);
         processStack.pop();
       }
       processStack.pop();
     }
-    else if ((temp == "+") || (temp == "-") || (temp == "*") || (temp == "/") || (temp == "%"))
+    else if (temp.type == namestnikov::PartType::OPERATION)
     {
-      while ((!processStack.empty()) && (hasHigherPriority(processStack.top(), temp)))
+      while ((!processStack.empty()) && (hasHigherPriority(processStack.top().value.operation, temp.value.operation)))
       {
         resultQueue.push(processStack.top());
         processStack.pop();

@@ -3,40 +3,29 @@
 
 namespace namestnikov
 {
-  struct Operand
+  union PartValue
   {
-    long long number;
-    explicit Operand(long long data);
-  };
-  struct Operation
-  {
+    long long operand;
     char operation;
-    explicit Operation(char operation);
-    int getPrecedence() const;
+    PartValue();
+    explicit PartValue(long long number);
+    explicit PartValue(char symbol);
   };
-  bool operator>(const Operation & lhs, const Operation & rhs);
-  struct Bracket
+  enum PartType: char
   {
-    char bracket;
-    bool isOpen;
-    explicit Bracket(char data);
-  };
-  enum key_type: char
-  {
-    operand,
-    operation,
-    bracket
-  };
-  union key_value
-  {
-    Operation operation;
-    Operand operand;
-    Bracket bracket;
+    OPERAND,
+    OPERATION,
+    OPEN_BRACKET,
+    CLOSE_BRACKET,
+    DEFAULT
   };
   struct Key
   {
-    key_type type;
-    key_value value;
+    PartType type;
+    PartValue value;
+    Key(const Key & other) = default;
+    Key & operator=(const Key & other);
   };
 }
+
 #endif

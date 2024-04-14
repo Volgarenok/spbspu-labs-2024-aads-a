@@ -8,13 +8,14 @@
 #include "convert_to_postfix.hpp"
 #include "calculate_postfix_expression.hpp"
 #include "input_expressions.hpp"
+#include "data_types.hpp"
 
 int main(int argc, char * argv[])
 {
   using namespace namestnikov;
-  Stack < Queue< std::string > > infixes;
+  Stack < Queue< namestnikov::Key > > infixes;
   Stack< long long > results;
-  Stack< Queue< std::string > > postfixes;
+  Stack< Queue< namestnikov::Key > > postfixes;
   try
   {
     if (argc == 1)
@@ -39,7 +40,7 @@ int main(int argc, char * argv[])
     }
     while (!infixes.empty())
     {
-      Queue< std::string > expression;
+      Queue< namestnikov::Key > expression;
       convertToPostfix(infixes.top(), expression);
       postfixes.push(expression);
       infixes.pop();

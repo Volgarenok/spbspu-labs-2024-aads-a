@@ -1,22 +1,30 @@
 #include "input_expressions.hpp"
+#include "data_types.hpp"
 
-void namestnikov::inputExpressions(std::istream & in, Stack< Queue< std::string > > & expressionsStack)
+void namestnikov::inputExpressions(std::istream & in, Stack< Queue< namestnikov::Key > > & expressionsStack)
 {
   std::string s = "";
   while (std::getline(in, s, '\n'))
   {
     if (s.size() != 0)
     {
-      Queue< std::string > expression;
+      Queue< namestnikov::Key > expression;
       inputExpression(s, expression);
       expressionsStack.push(expression);
     }
   }
 }
 
-void namestnikov::inputExpression(std::string s, Queue< std::string > & expression)
+bool isOperation(char sym)
+{
+  return ((sym == '+') || (sym == '-') || (sym == '*') || (sym == '/') || (sym == '%'));
+}
+
+void namestnikov::inputExpression(std::string s, Queue< namestnikov::Key > & expression)
 {
   size_t i = 0;
+  namestnikov::PartValue value;
+  namestnikov::PartType type = namestnikov::PartType::DEFAULT;
   while (i < s.size())
   {
     if (!std::isspace(s[i]))
@@ -29,12 +37,27 @@ void namestnikov::inputExpression(std::string s, Queue< std::string > & expressi
           temp += s[i];
           ++i;
         }
-        expression.push(temp);
+        long long operand = std::stoll(temp);
+        value = namestnikov::PartValue(operand);
+        type = namestnikov::PartType::OPERAND;
+        namestnikov::Key key{type, value};
+        expression.push(key);
       }
       else
       {
-        std::string value(1, s[i]);
-        expression.push(value);
+        char sym = s[i];
+        if (isOperation(sym))
+        {
+          type = namestnikov::PartType::OPERATION;
+          value = namestnikov::PartValue(sym);
+        }
+        else
+        {
+          sym == '(' ? type = namestnikov::PartType::OPEN_BRACKET : type = namestnikov::PartType::CLOSE_BRACKET;
+          value = namestnikov::PartValue(sym);
+        }
+        namestnikov::Key key{type, value};
+        expression.push(key);
       }
     }
     ++i;

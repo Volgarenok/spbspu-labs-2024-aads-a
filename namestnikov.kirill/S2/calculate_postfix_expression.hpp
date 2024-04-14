@@ -4,10 +4,11 @@
 #include <queue>
 #include <string>
 #include "queue.hpp"
+#include "data_types.hpp"
 
 namespace namestnikov
 {
-  long long calculatePostfixExpression(Queue< std::string > & resultQueue);
+  long long calculatePostfixExpression(Queue< namestnikov::Key > & resultQueue);
 }
 
 #endif

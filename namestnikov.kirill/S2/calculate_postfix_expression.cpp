@@ -5,11 +5,12 @@
 #include <limits>
 #include "queue.hpp"
 #include "stack.hpp"
+#include "data_types.hpp"
 
-long long calculateExpression(long long num1, long long num2, std::string op)
+long long calculateExpression(long long num1, long long num2, char op)
 {
   long long result = 0ll;
-  if (op == "+")
+  if (op == '+')
   {
     long long maxLong = std::numeric_limits< long long >::max();
     if (maxLong - num2 < num1)
@@ -18,7 +19,7 @@ long long calculateExpression(long long num1, long long num2, std::string op)
     }
     result = num1 + num2;
   }
-  else if (op == "-")
+  else if (op == '-')
   {
     long long minLong = std::numeric_limits< long long >::min();
     if (minLong + num1 > num1)
@@ -27,7 +28,7 @@ long long calculateExpression(long long num1, long long num2, std::string op)
     }
     result = num1 - num2;
   }
-  else if (op == "*")
+  else if (op == '*')
   {
     long long maxLong = std::numeric_limits< long long >::max();
     if (maxLong / num1 < num1)
@@ -36,7 +37,7 @@ long long calculateExpression(long long num1, long long num2, std::string op)
     }
     result = num1 * num2;
   }
-  else if (op == "/")
+  else if (op == '/')
   {
     if (num2 == 0)
     {
@@ -49,7 +50,7 @@ long long calculateExpression(long long num1, long long num2, std::string op)
     }
     result = num1 / num2;
   }
-  else if (op == "%")
+  else if (op == '%')
   {
     (num1 % num2 < 0) ? result = num1 % num2 + num2 : result = num1 % num2;
   }
@@ -60,15 +61,15 @@ long long calculateExpression(long long num1, long long num2, std::string op)
   return result;
 }
 
-long long namestnikov::calculatePostfixExpression(Queue< std::string > & resultQueue)
+long long namestnikov::calculatePostfixExpression(Queue< namestnikov::Key > & resultQueue)
 {
   size_t countOperands = 0;
   Stack< long long > operandsStack;
   while (!resultQueue.empty())
   {
-    if (std::isdigit(resultQueue.front()[0]))
+    if (resultQueue.front().type == namestnikov::PartType::OPERAND)
     {
-      operandsStack.push(std::stoll(resultQueue.front()));
+      operandsStack.push(resultQueue.front().value.operand);
       resultQueue.pop();
       ++countOperands;
     }
@@ -80,7 +81,7 @@ long long namestnikov::calculatePostfixExpression(Queue< std::string > & resultQ
         operandsStack.pop();
         long long num1 = operandsStack.top();
         operandsStack.pop();
-        std::string op = resultQueue.front();
+        char op = resultQueue.front().value.operation;
         resultQueue.pop();
         operandsStack.push(calculateExpression(num1, num2, op));
       }
