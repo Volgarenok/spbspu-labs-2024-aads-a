@@ -15,10 +15,7 @@ namestnikov::PartValue::PartValue(char symbol):
 
 namestnikov::Key & namestnikov::Key::operator=(const Key & other)
 {
-  if (this != std::addressof(other))
-  {
-    type = other.type;
-    value = other.value;
-  }
+  type = other.type;
+  value = other.value;
   return *this;
 }
