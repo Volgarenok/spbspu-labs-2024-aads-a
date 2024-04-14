@@ -12,8 +12,9 @@ namespace namestnikov
   {
     char operation;
     explicit Operation(char operation);
-    bool operator>(const Operation & other);
+    int getPrecedence() const;
   };
+  bool operator>(const Operation & lhs, const Operation & rhs);
   struct Bracket
   {
     char bracket;
