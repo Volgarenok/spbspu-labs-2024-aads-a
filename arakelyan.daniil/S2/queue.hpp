@@ -1,10 +1,8 @@
 #ifndef QUEUE_HPP
 #define QUEUE_HPP
 
-#include <list/binList.hpp>
-#include <queue>
 #include <utility>
-#include <iosfwd>
+#include <list/binList.hpp>
 
 namespace arakelyan
 {
@@ -15,7 +13,6 @@ namespace arakelyan
     Queue();
     Queue(const Queue &otherQ);
     Queue(Queue &&otherQ) noexcept;
-
     ~Queue() = default;
 
     //operators?
