@@ -2,6 +2,7 @@
 #define DATAARRAY_HPP
 
 #include <stdexcept>
+#include <utility>
 
 namespace isaychev
 {
@@ -17,16 +18,20 @@ namespace isaychev
     DataArray & operator=(DataArray && rhs);
 
     void push_front(const T & rhs);
-    void pop_front();
     void push_back(const T & rhs);
+    void pop_front();
     void pop_back();
     T & front();
     const T & front() const;
     T & back();
     const T & back() const;
 
+    template < class... Args >
+    void emplace_back(Args &&... args);
+
     size_t size() const;
     bool empty() const;
+    void swap(DataArray & rhs);
 
    private:
     size_t capacity;
@@ -184,6 +189,14 @@ namespace isaychev
   }
 
   template < class T >
+  template < class... Args >
+  void DataArray< T >::emplace_back(Args &&... args)
+  {
+    T obj(args...);
+    this->push_back(obj);
+  }
+
+  template < class T >
   size_t DataArray< T >::size() const
   {
     return elem_count;
@@ -194,7 +207,14 @@ namespace isaychev
   {
     return (elem_count == 0);
   }
+
+  template < class T >
+  void DataArray< T >::swap(DataArray & rhs)
+  {
+    std::swap(capacity, rhs.capacity);
+    std::swap(elem_count, rhs.elem_count);
+    std::swap(data, rhs.data);
+  }
 }
 
 #endif
-
