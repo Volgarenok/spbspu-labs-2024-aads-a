@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <map>
+#include <limits>
 #include <string>
 
 using namespace std;
@@ -60,7 +61,7 @@ public:
             intersect_ds(arg1, arg2, arg3);
           }
           break;
-        case com_nmb::complement_ñ:
+        case com_nmb::complement_c:
           cin >> arg1 >> arg2 >> arg3;
           if (arg1 == arg2 || arg2 == arg3 || arg3 == arg1)
           {
@@ -100,11 +101,11 @@ private:
   using library = map< string, dictionary>;
   library lib;
 
-  enum struct com_nmb { print_c, complement_ñ, intersect_c, union_c };
+  enum struct com_nmb { print_c, complement_c, intersect_c, union_c };
   map<string, com_nmb> commands = {
     {"print",com_nmb::print_c},
     {"intersect", com_nmb::intersect_c },
-    {"complement", com_nmb::complement_ñ},
+    {"complement", com_nmb::complement_c},
     { "union", com_nmb::union_c } };
 
   bool check_args(const string& arg1, const string& arg2, const string& arg3)
