@@ -13,6 +13,14 @@ namespace piyavkin
       root_(nullptr),
       size_(0)
     {}
+    size_t size() const noexcept
+    {
+      return size_;
+    }
+    bool empty() const noexcept
+    {
+      return size_ == 0;
+    }
   private:
     detail::Node< Key, T, Compare >* root_;
     size_t size_;

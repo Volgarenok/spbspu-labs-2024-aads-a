@@ -4,5 +4,5 @@
 int main()
 {
   piyavkin::Tree< int, int > tree;
-  std::cout << tree.data;
+  std::cout << tree.size() << ' ' << tree.empty();
 }
