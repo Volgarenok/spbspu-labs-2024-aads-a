@@ -1,6 +1,7 @@
 #ifndef TREE_HPP
 #define TREE_HPP
-#include <functional>
+#include <cstddef>
+#include "treenode.hpp"
 
 namespace piyavkin
 {
@@ -9,18 +10,12 @@ namespace piyavkin
   {
   public:
     Tree():
-      data(T()),
-      right(nullptr),
-      left(nullptr),
-      parent(nullptr),
-      cmp(Compare())
+      root_(nullptr),
+      size_(0)
     {}
   private:
-    T data;
-    Tree< Key, T, Compare >* right;
-    Tree< Key, T, Compare >* left;
-    Tree< Key, T, Compare >* parent;
-    Compare cmp;
+    detail::Node< Key, T, Compare >* root_;
+    size_t size_;
   };
 }
 #endif
