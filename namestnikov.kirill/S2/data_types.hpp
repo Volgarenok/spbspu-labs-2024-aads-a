@@ -24,7 +24,7 @@ namespace namestnikov
     PartType type;
     PartValue value;
     Key(const Key & other) = default;
-    Key & operator=(const Key & other);
+    Key & operator=(const Key & other) = default;
   };
 }
 

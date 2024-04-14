@@ -12,10 +12,3 @@ namestnikov::PartValue::PartValue(long long number):
 namestnikov::PartValue::PartValue(char symbol):
   operation(symbol)
 {}
-
-namestnikov::Key & namestnikov::Key::operator=(const Key & other)
-{
-  type = other.type;
-  value = other.value;
-  return *this;
-}
