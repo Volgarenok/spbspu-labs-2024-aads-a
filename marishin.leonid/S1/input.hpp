@@ -1,8 +1,8 @@
 #ifndef INPUT_HPP
 #define INPUT_HPP
 
-#include <string>
 #include <istream>
+#include <string>
 #include "linkedList.hpp"
 
 namespace marishin

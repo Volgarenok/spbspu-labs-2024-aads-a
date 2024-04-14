@@ -217,7 +217,7 @@ namespace marishin
       remove_if([value](const T & data) { return data == value; });
     }
 
-    template < typename Predicate >
+    template < class Predicate >
     void remove_if(Predicate pred)
     {
       Node< T > * curr = head_;

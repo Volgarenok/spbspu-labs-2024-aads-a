@@ -3,7 +3,7 @@
 
 namespace marishin
 {
-  template < typename T >
+  template < class T >
   struct Node
   {
     Node(const T & value):
