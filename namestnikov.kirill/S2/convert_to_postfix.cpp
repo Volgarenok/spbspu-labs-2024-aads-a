@@ -2,12 +2,14 @@
 #include <queue>
 #include <stack>
 #include <stdexcept>
+#include <iostream>
 #include "stack.hpp"
 #include "data_types.hpp"
 
 
 int getPrecedence(char op)
 {
+  std::cout << op;
   if ((op == '/') || (op == '*'))
   {
     return 2;
@@ -24,7 +26,7 @@ int getPrecedence(char op)
 
 bool hasHigherPriority(char op1, char op2)
 {
-  return ((op1 != '(') && (((getPrecedence(op1) == 2) && getPrecedence(op2) == 2) || getPrecedence(op2) == 1));
+  return (((getPrecedence(op1) == 2) && getPrecedence(op2) == 2) || getPrecedence(op2) == 1);
 }
 
 void namestnikov::convertToPostfix(Queue< namestnikov::Key > & currentQueue, Queue< namestnikov::Key > & resultQueue)
@@ -38,11 +40,11 @@ void namestnikov::convertToPostfix(Queue< namestnikov::Key > & currentQueue, Que
     {
       resultQueue.push(temp);
     }
-    else if (temp.type == namestnikov::PartType::CLOSE_BRACKET)
+    else if (temp.type == namestnikov::PartType::OPEN_BRACKET)
     {
       processStack.push(temp);
     }
-    else if (temp.type == namestnikov::PartType::OPEN_BRACKET)
+    else if (temp.type == namestnikov::PartType::CLOSE_BRACKET)
     {
       while (processStack.top().type != namestnikov::PartType::OPEN_BRACKET)
       {
@@ -54,7 +56,7 @@ void namestnikov::convertToPostfix(Queue< namestnikov::Key > & currentQueue, Que
     }
     else if (temp.type == namestnikov::PartType::OPERATION)
     {
-      while ((!processStack.empty()) && (hasHigherPriority(processStack.top().value.operation, temp.value.operation)))
+      while ((!processStack.empty()) && (hasHigherPriority(processStack.top().value.operation, temp.value.operation)) && (processStack.top().type != namestnikov::PartType::OPEN_BRACKET))
       {
         resultQueue.push(processStack.top());
         processStack.pop();

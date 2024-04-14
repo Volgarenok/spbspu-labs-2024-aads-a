@@ -53,7 +53,14 @@ void namestnikov::inputExpression(std::string s, Queue< namestnikov::Key > & exp
         }
         else
         {
-          sym == '(' ? type = namestnikov::PartType::OPEN_BRACKET : type = namestnikov::PartType::CLOSE_BRACKET;
+          if (sym == '(')
+          {
+            type = namestnikov::PartType::OPEN_BRACKET;
+          }
+          else
+          {
+            type = namestnikov::PartType::CLOSE_BRACKET;
+          }
           value = namestnikov::PartValue(sym);
         }
         namestnikov::Key key{type, value};
