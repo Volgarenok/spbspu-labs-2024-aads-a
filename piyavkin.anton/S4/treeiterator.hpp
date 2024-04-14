@@ -31,10 +31,29 @@ namespace piyavkin
       }
       return *this;
     }
+    TreeIterator< Key, T, Compare >& operator--()
+    {
+      if (node_->left_)
+      {
+        node_ = node_->left_;
+        return *this;
+      }
+      while (!node_->left_ && node_->parent_->left_ == node_)
+      {
+        node_ = node_->parent_;
+      }
+      return *this;
+    }
     TreeIterator< Key, T, Compare > operator++(int)
     {
       TreeIterator< Key, T, Compare > result(*this);
       ++(*this);
+      return result;
+    }
+    TreeIterator< Key, T, Compare > operator--(int)
+    {
+      TreeIterator< Key, T, Compare > result(*this);
+      --(*this);
       return result;
     }
   private:
