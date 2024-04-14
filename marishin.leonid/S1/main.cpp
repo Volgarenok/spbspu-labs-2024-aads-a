@@ -67,7 +67,7 @@ int main()
   }
   if (lst.empty())
   {
-    std::cout << "0\n";
+    std::cout << '0';
   }
   if (overflow)
   {
