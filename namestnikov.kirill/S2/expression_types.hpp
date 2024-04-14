@@ -5,16 +5,20 @@ namespace namestnikov
 {
   struct Operand
   {
-    unsigned long long number;
+    long long number;
+    explicit Operand(long long data);
   };
   struct Operation
   {
     char operation;
+    explicit Operation(char operation);
+    bool operator>(const Operation & other);
   };
   struct Bracket
   {
     char bracket;
     bool isOpen;
+    Bracket(char bracket, bool isOpen);
   };
   enum ExpressionTypes {operand, operation, bracket};
 }
