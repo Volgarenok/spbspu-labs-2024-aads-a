@@ -9,7 +9,6 @@
 
 int getPrecedence(char op)
 {
-  std::cout << op;
   if ((op == '/') || (op == '*'))
   {
     return 2;
@@ -56,7 +55,7 @@ void namestnikov::convertToPostfix(Queue< namestnikov::Key > & currentQueue, Que
     }
     else if (temp.type == namestnikov::PartType::OPERATION)
     {
-      while ((!processStack.empty()) && (hasHigherPriority(processStack.top().value.operation, temp.value.operation)) && (processStack.top().type != namestnikov::PartType::OPEN_BRACKET))
+      while ((!processStack.empty()) && (processStack.top().type != namestnikov::PartType::OPEN_BRACKET))
       {
         resultQueue.push(processStack.top());
         processStack.pop();
