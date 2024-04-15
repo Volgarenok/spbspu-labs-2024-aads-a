@@ -42,7 +42,7 @@ void novokhatskiy::inputInfix(Queue< Queue< InfixType > >& infixQueue, std::istr
         }
         break;
       }
-      if (symb != ' ')
+      if (symb != ' ' && symb != '\n')
       {
         currQ.push(res);
       }
