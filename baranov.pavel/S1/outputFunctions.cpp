@@ -3,10 +3,11 @@
 void baranov::printNames(std::ostream & output, ds_t & list)
 {
   auto end = list.end();
-  for (auto i = list.begin(); i != end; ++i)
+  auto i = list.begin();
+  output << i++->first;
+  for (; i != end; ++i)
   {
-    output << i->first;
-    output << ' ';
+    output << ' ' << i->first;
   }
   output << '\n';
 }
@@ -17,26 +18,40 @@ void baranov::printLists(std::ostream & output, listOfLists & lists)
   for (auto i = lists.begin(); i != listsEnd; ++i)
   {
     auto listEnd = (*i).end();
-    for (auto j = (*i).begin(); j != listEnd; ++j)
+    auto j = (*i).begin();
+    output << *(j++);
+    for (; j != listEnd; ++j)
     {
-      output << *j << ' ';
+      output << ' ' << *j;
     }
     output << '\n';
   }
 }
 
+size_t baranov::getSum(List< size_t > & list)
+{
+  size_t result = 0;
+  auto listEnd = list.end();
+  for (auto i = list.begin(); i != listEnd; ++i)
+  {
+    result += *i;
+  }
+  return result;
+}
+
 void baranov::printSums(std::ostream & output, listOfLists & lists)
 {
   auto listsEnd = lists.end();
-  for (auto i = lists.begin(); i != listsEnd; ++i)
+  auto i = lists.begin();
+  if (lists.empty())
   {
-    size_t result = 0;
-    auto listEnd = (*i).end();
-    for (auto j = (*i).begin(); j != listEnd; ++j)
-    {
-      result += *j;
-    }
-    output << result << ' ';
+    output << 0 << '\n';
+    return;
+  }
+  output << getSum(*(i++));
+  for (; i != listsEnd; ++i)
+  {
+      output << ' ' << getSum(*i);
   }
   output << '\n';
 }
