@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
     }
     catch (const std::invalid_argument &e)
     {
-      std::cout << "<INVALID COMMAND>";
+      std::cout << "<INVALID COMMAND>\n";
     }
     catch (const std::exception &e)
     {
