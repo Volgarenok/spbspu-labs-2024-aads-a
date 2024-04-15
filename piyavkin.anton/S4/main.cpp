@@ -55,4 +55,11 @@ int main()
     std::cout << ' ' << *it3++;
   }
   std::cout << '\n';
+  piyavkin::Tree< int, int > tree4(std::move(tree3));
+  auto it4 = tree4.begin();
+  for (size_t i = 0; i < tree4.size(); ++i)
+  {
+    std::cout << ' ' << *it4++;
+  }
+  std::cout << '\n';
 }

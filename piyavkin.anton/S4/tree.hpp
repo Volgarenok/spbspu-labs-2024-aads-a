@@ -32,12 +32,31 @@ namespace piyavkin
         ++it_right;
       }
     }
+    Tree(Tree&& rhs):
+      root_(rhs.root_),
+      cmp_(rhs.cmp_),
+      size_(rhs.size_),
+      before_min_(rhs.before_min_),
+      end_node_(rhs.end_node_)
+    {
+      rhs.root_ = nullptr;
+      rhs.size_ = 0;
+    }
     Tree< Key, T, Compare >& operator=(const Tree& rhs)
     {
       if (std::addressof(rhs) != this)
       {
         Tree< Key, T, Compare > temp(rhs);
         swap(temp);
+      }
+      return *this;
+    }
+    Tree< Key, T, Compare >& operator=(Tree&& rhs)
+    {
+      if (this != std::addressof(rhs))
+      {
+        // clear();
+        swap(rhs);
       }
       return *this;
     }
