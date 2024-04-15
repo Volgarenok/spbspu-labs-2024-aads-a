@@ -1,17 +1,20 @@
 #ifndef BASIC_TYPES_HPP
 #define BASIC_TYPES_HPP
 
-enum class TokenType {
+enum class TokenType
+{
   OPERATION,
   OPERAND,
   BRACKET,
 };
 
-struct Operand {
+struct Operand
+{
   long long num;
 };
 
-enum class Operation {
+enum class Operation
+{
   ADD = '+',
   SUB = '-',
   MUL = '*',
@@ -19,7 +22,8 @@ enum class Operation {
   MOD = '%',
 };
 
-enum class Bracket {
+enum class Bracket
+{
   OPEN = '(',
   CLOSE = ')',
 };

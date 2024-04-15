@@ -9,8 +9,7 @@ namespace novokhatskiy
   struct InfixType
   {
     TokenType type;
-    union
-    {
+    union {
       Operand operand;
       Operation operation;
       Bracket bracket;
@@ -20,8 +19,7 @@ namespace novokhatskiy
   struct Postfix
   {
     TokenType type;
-    union
-    {
+    union {
       Operand operand;
       Operation operation;
     };

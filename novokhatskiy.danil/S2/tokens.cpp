@@ -1,6 +1,6 @@
-#include "tokens.hpp"
-#include <stdexcept>
 #include <iostream>
+#include <stdexcept>
+#include "tokens.hpp"
 
 novokhatskiy::Postfix::Postfix(InfixType&& inf)
 {
