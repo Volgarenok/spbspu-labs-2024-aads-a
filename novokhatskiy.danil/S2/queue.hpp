@@ -20,7 +20,6 @@ namespace novokhatskiy
     void push(const T& value);
     bool empty() const noexcept;
     size_t size() const noexcept;
-    void printInfix();
 
     void pop();
 
@@ -58,16 +57,6 @@ namespace novokhatskiy
       other.data_.clear;
     }
     return *this;
-  }
-
-  template <class T>
-  void Queue<T>::printInfix()
-  {
-    for (auto i = data_.begin(); i != data_.end(); i++)
-    {
-      Postfix q = *i;
-      q.printPost();
-    }
   }
 
   template <class T>
