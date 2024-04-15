@@ -68,6 +68,8 @@ namespace grechishnikov
     void reverse() noexcept;
 
   private:
+    void safe_push_back(const T&);
+
     size_t size_;
     detail::Node< T >* head_;
     detail::Node< T >* tail_;
@@ -87,18 +89,10 @@ namespace grechishnikov
     tail_(nullptr)
   {
     detail::Node< T >* node = other.head_;
-    try
+    while(node)
     {
-      while(node)
-      {
-        push_back(node->data_);
-        node = node->next_;
-      }
-    }
-    catch (...)
-    {
-      clear();
-      throw;
+      safe_push_back(node->data_);
+      node = node->next_;
     }
   }
 
@@ -108,19 +102,11 @@ namespace grechishnikov
     head_(nullptr),
     tail_(nullptr)
   {
-    try
+    auto init = ilist.begin();
+    while (init != ilist.end())
     {
-      auto init = ilist.begin();
-      while (init != ilist.end())
-      {
-        push_back(*init);
-        init++;
-      }
-    }
-    catch (...)
-    {
-      clear();
-      throw;
+      safe_push_back(*init);
+      init++;
     }
   }
 
@@ -130,17 +116,9 @@ namespace grechishnikov
     head_(nullptr),
     tail_(nullptr)
   {
-    try
+    for (size_t i = 0; i < count; i++)
     {
-      for (size_t i = 0; i < count; i++)
-      {
-        push_back(value);
-      }
-    }
-    catch (...)
-    {
-      clear();
-      throw;
+      safe_push_back(value);
     }
   }
 
@@ -150,18 +128,10 @@ namespace grechishnikov
     head_(nullptr),
     tail_(nullptr)
   {
-    try
+    while (first != last)
     {
-      while (first != last)
-      {
-        push_back(*first);
-        first++;
-      }
-    }
-    catch (...)
-    {
-      clear();
-      throw;
+      safe_push_back(*first);
+      first++;
     }
   }
 
@@ -497,11 +467,27 @@ namespace grechishnikov
       first = temp;
     }
   }
+
   template< typename T >
   void List< T >::splice(ConstIterator< T > where, List< T >&& other, ConstIterator< T > first, ConstIterator< T > last)
   {
     splice(where, other, first, last);
   }
+
+  template< typename T >
+  void List< T >::safe_push_back(const T& data)
+  {
+    try
+    {
+      push_back(data);
+    }
+    catch (...)
+    {
+      clear();
+      throw;
+    }
+  }
+
 }
 
 #endif
