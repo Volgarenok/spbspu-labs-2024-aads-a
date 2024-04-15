@@ -40,5 +40,19 @@ int main()
     std::cout << ' ' << *it++;
   }
   std::cout << '\n';
-  std::cout << tree.at(1);
+  piyavkin::Tree< int, int > tree2 = tree;
+  auto it2 = tree2.begin();
+  for (size_t i = 0; i < tree2.size(); ++i)
+  {
+    std::cout << ' ' << *it2++;
+  }
+  std::cout << '\n';
+  piyavkin::Tree< int, int > tree3;
+  tree3 = tree2;
+  auto it3 = tree3.begin();
+  for (size_t i = 0; i < tree3.size(); ++i)
+  {
+    std::cout << ' ' << *it3++;
+  }
+  std::cout << '\n';
 }

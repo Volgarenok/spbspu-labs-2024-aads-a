@@ -18,6 +18,29 @@ namespace piyavkin
       before_min_(Key(), nullptr, nullptr, nullptr, T()),
       end_node_(Key(), nullptr, nullptr, nullptr, T())
     {}
+    Tree(const Tree& rhs):
+      Tree()
+    {
+      cmp_ = rhs.cmp_;
+      TreeIterator< Key, T, Compare > it_right(rhs.root_);
+      TreeIterator< Key, T, Compare > it_left(rhs.root_);
+      while (it_left.node_ != std::addressof(rhs.before_min_) && it_right.node_ != std::addressof(rhs.end_node_))
+      {
+        insert(std::make_pair< Key, T >(std::move(it_right.node_->key_), std::move(it_right.node_->data_)));
+        insert(std::make_pair< Key, T >(std::move(it_left.node_->key_), std::move(it_left.node_->data_)));
+        --it_left;
+        ++it_right;
+      }
+    }
+    Tree< Key, T, Compare >& operator=(const Tree& rhs)
+    {
+      if (std::addressof(rhs) != this)
+      {
+        Tree< Key, T, Compare > temp(rhs);
+        swap(temp);
+      }
+      return *this;
+    }
     size_t size() const noexcept
     {
       return size_;
@@ -31,6 +54,8 @@ namespace piyavkin
       std::swap(root_, mp.root_);
       std::swap(cmp_, mp.cmp_);
       std::swap(size_, mp.size_);
+      std::swap(before_min_, mp.before_min_);
+      std::swap(end_node_, mp.end_node_);
     }
     std::pair< TreeIterator< Key, T, Compare >, bool > insert(const val_type& val)
     {
