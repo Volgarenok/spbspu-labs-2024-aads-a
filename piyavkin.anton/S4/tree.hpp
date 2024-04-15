@@ -120,6 +120,18 @@ namespace piyavkin
       }
       return end();
     }
+    T& operator[](const Key& key)
+    {
+      return (*((this->insert(std::make_pair(key, T()))).first));
+    }
+    T& at(const Key& key)
+    {
+      if (find(key) == end())
+      {
+        throw std::out_of_range("No data with this key");
+      }
+      return operator[](key);
+    }
   private:
     detail::Node< Key, T >* root_;
     Compare cmp_;

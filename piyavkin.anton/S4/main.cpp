@@ -32,4 +32,13 @@ int main()
     std::cout << ' ' << *it++;
   }
   std::cout << *tree.find(3);
+  std::cout << '\n';
+  tree[1] = 1;
+  it = tree.begin();
+  for (size_t i = 0; i < tree.size(); ++i)
+  {
+    std::cout << ' ' << *it++;
+  }
+  std::cout << '\n';
+  std::cout << tree.at(1);
 }
