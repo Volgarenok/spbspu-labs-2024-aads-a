@@ -31,4 +31,5 @@ int main()
   {
     std::cout << ' ' << *it++;
   }
+  std::cout << *tree.find(3);
 }
