@@ -21,8 +21,13 @@ namespace novokhatskiy
     bool empty() const noexcept;
     size_t size() const noexcept;
     void printInfix();
+<<<<<<< HEAD
     void pop();
     T& front();
+=======
+    T &front();
+    T &back();
+>>>>>>> a63320e6c4a0cfc20924a8f70a77566f0c76741f
     T drop();
     ~Queue() = default;
 
@@ -64,6 +69,12 @@ namespace novokhatskiy
       Postfix q = *i;
       q.printPost();
     }
+  }
+
+  template <class T>
+  T &Queue<T>::back()
+  {
+    return data_.back();
   }
 
   template <class T>
