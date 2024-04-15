@@ -6,7 +6,7 @@
 
 namespace arakelyan
 {
-  template < class T, class Container = BinList< T > >
+  template < class T >
   class Stack
   {
   public:
@@ -27,75 +27,86 @@ namespace arakelyan
     void push(const T &val);
     void push(T &&val);
 
-    // template <class... Args >
-    // void emplace(Args&&... args); // no emplace in my BiList =(
-
     void pop();
 
     void swap(Stack &otherS) noexcept;
   private:
-    Container data_;
+    BinList< T > data_;
   };
 
-  template < class T, class Container >
-  Stack< T, Container >::Stack():
+  template < class T >
+  Stack< T >::Stack():
     data_()
   {}
 
-  template < class T, class Container >
-  Stack< T, Container >::Stack(const Stack &otherS):
+  template < class T >
+  Stack< T >::Stack(const Stack &otherS):
     data_(otherS.data_)
   {}
 
-  template < class T, class Container >
-  Stack< T, Container >::Stack(Stack &&otherS) noexcept:
+  template < class T >
+  Stack< T >::Stack(Stack &&otherS) noexcept:
     data_(std::move(otherS.data_))
   {}
 
-  template < class T, class Container >
-  bool Stack< T, Container >::empty() const
+  template < class T >
+  Stack< T > &Stack< T >::operator=(const Stack &otherS)
+  {
+    data_ = otherS.data_;
+    return *this;
+  }
+
+  template < class T >
+  Stack< T > &Stack< T >::operator=(Stack &&otherS) noexcept
+  {
+    data_ = std::move(otherS.data_);
+    return *this;
+  }
+
+  template < class T >
+  bool Stack< T >::empty() const
   {
     return data_.empty();
   }
 
-  template < class T, class Container >
-  size_t Stack< T, Container >::size() const
+  template < class T >
+  size_t Stack< T >::size() const
   {
     return data_.get_size();
   }
 
-  template < class T, class Container >
-  T &Stack< T, Container >::top()
+  template < class T >
+  T &Stack< T >::top()
   {
     return data_.front();
   }
 
-  template < class T, class Container >
-  const T &Stack< T, Container >::top() const
+  template < class T >
+  const T &Stack< T >::top() const
   {
     return data_.front();
   }
 
-  template < class T, class Container >
-  void Stack< T, Container >::push(const T &val)
+  template < class T >
+  void Stack< T >::push(const T &val)
   {
     data_.push_front(val);
   }
 
-  template < class T, class Container >
-  void Stack< T, Container >::push(T &&val)
+  template < class T >
+  void Stack< T >::push(T &&val)
   {
     data_.push_front(std::move(val));
   }
 
-  template < class T, class Container >
-  void Stack< T, Container >::pop()
+  template < class T >
+  void Stack< T >::pop()
   {
     data_.pop_front();
   }
 
-  template < class T, class Container >
-  void Stack< T, Container >::swap(Stack &otherS) noexcept
+  template < class T >
+  void Stack< T >::swap(Stack &otherS) noexcept
   {
     std::swap(data_, otherS.data_);
   }

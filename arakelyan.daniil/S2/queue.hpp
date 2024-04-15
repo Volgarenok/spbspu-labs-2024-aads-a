@@ -7,7 +7,7 @@
 
 namespace arakelyan
 {
-  template < class T, class Container = BinList< T > >
+  template < class T >
   class Queue
   {
   public:
@@ -31,111 +31,98 @@ namespace arakelyan
     void push(const T &val);
     void push(T &&val);
 
-    // template < class... Args >
-    // void emplase(Args&&... args); // надо реализовать emplace для своего списка:(
-
     void pop();
 
     void swap(Queue &otherQ) noexcept;
   private:
-    Container data_;
+    BinList< T > data_;
   };
 
-  template < class T, class Container >
-  Queue< T, Container >::Queue():
+  template < class T >
+  Queue< T >::Queue():
     data_()
   {}
 
-  template < class T, class Container >
-  Queue< T, Container >::Queue(const Queue &otherQ):
+  template < class T >
+  Queue< T >::Queue(const Queue &otherQ):
     data_(otherQ.data_)
   {}
 
-  template < class T, class Container >
-  Queue< T, Container>::Queue(Queue &&otherQ) noexcept:
+  template < class T >
+  Queue< T >::Queue(Queue &&otherQ) noexcept:
     data_(std::move(otherQ.data_))
   {}
 
-  template < class T, class Container >
-  Queue< T, Container > &Queue< T, Container >::operator=(const Queue &otherQ)
+  template < class T >
+  Queue< T > &Queue< T >::operator=(const Queue &otherQ)
   {
-    Queue< T, Container > tempQ(otherQ);
-    if (*this != std::addressof(otherQ))
-    {
-      data_.clear();
-      swap(tempQ);
-    }
+    data_ = otherQ.data_;
     return *this;
   }
 
-  template < class T, class Container >
-  Queue< T, Container > &Queue< T, Container >::operator=(Queue &&otherQ) noexcept
+  template < class T >
+  Queue< T > &Queue< T >::operator=(Queue &&otherQ) noexcept
   {
-    Queue< T, Container > tempQ(std::move(otherQ));
-    if (*this != std::addressof(otherQ))
-    {
-      data_.clear();
-      swap(tempQ);
-    }
+    data_ = otherQ.data_;
     return *this;
   }
 
-  template < class T, class Container >
-  bool Queue< T, Container>::empty() const
+  template < class T >
+  bool Queue< T >::empty() const
   {
     return data_.empty();
   }
 
-  template < class T, class Container >
-  size_t Queue< T, Container >::size() const
+  template < class T >
+  size_t Queue< T >::size() const
   {
     return data_.get_size();
   }
 
-  template < class T, class Container >
-  T &Queue< T, Container >::front()
+  template < class T >
+  T &Queue< T >::front()
   {
     return data_.front();
   }
 
-  template < class T, class Container >
-  const T &Queue< T, Container >::front() const
+  template < class T >
+  const T &Queue< T >::front() const
   {
     return data_.front();
   }
 
-  template < class T, class Container >
-  T &Queue< T, Container >::back()
+  template < class T >
+  T &Queue< T >::back()
   {
     return data_.back();
   }
 
-  template < class T, class Container >
-  const T &Queue< T, Container >::back() const
+  template < class T >
+  const T &Queue< T >::back() const
   {
     return data_.back();
   }
 
-  template < class T, class Container >
-  void Queue< T, Container >::push(const T &val)
+  template < class T >
+  void Queue< T >::push(const T &val)
   {
     data_.push_back(val);
   }
 
-  template < class T, class Container >
-  void Queue< T, Container >::push(T &&val)
+  template < class T >
+  void Queue< T >::push(T &&val)
   {
     data_.push_back(std::move(val));
   }
 
-  template < class T, class Container >
-  void Queue< T, Container >::pop()
+  template < class T >
+  void Queue< T >::pop()
   {
     data_.pop_front();
   }
 
-  template < class T, class Container >
-  void Queue< T, Container >::swap(Queue &otherQ) noexcept
+  template < class T >
+  void Queue< T >::swap(Queue &otherQ) noexcept
   {
     std::swap(data_, otherQ.data_);
   }
