@@ -18,7 +18,8 @@ namespace grechishnikov
     List(const List< T >&);
     List(std::initializer_list< T >);
     List(size_t, const T&);
-    List(Iterator< T >, Iterator< T >);
+    template< class InputIterator >
+    List(InputIterator, InputIterator);
     List(List< T >&& other) noexcept;
     ~List();
 
@@ -98,17 +99,8 @@ namespace grechishnikov
 
   template< typename T >
   List< T >::List(std::initializer_list< T > ilist):
-    size_(0),
-    head_(nullptr),
-    tail_(nullptr)
-  {
-    auto init = ilist.begin();
-    while (init != ilist.end())
-    {
-      safe_push_back(*init);
-      init++;
-    }
-  }
+    List(ilist.begin(), ilist.end())
+  {}
 
   template< typename T >
   List< T >::List(size_t count, const T& value):
@@ -123,7 +115,8 @@ namespace grechishnikov
   }
 
   template< typename T >
-  List< T >::List(Iterator< T > first, Iterator< T > last):
+  template< class InputIterator >
+  List< T >::List(InputIterator first, InputIterator last):
     size_(0),
     head_(nullptr),
     tail_(nullptr)
