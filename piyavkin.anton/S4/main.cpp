@@ -4,12 +4,31 @@
 int main()
 {
   piyavkin::Tree< int, int > tree;
-  std::cout << tree.size() << ' ' << tree.empty();
   tree.insert(std::make_pair< int, int >(5, 5));
-  std::cout << tree.size() << ' ' << tree.empty();
-  std::cout << tree.root_->data_;
-  tree.insert(std::make_pair< int, int >(6, 6));
-  tree.insert(std::make_pair< int, int >(4, 4));
-  std::cout << tree.root_->left_->data_;
-  std::cout << ' ' << tree.root_->right_->data_;
+  auto it = tree.begin();
+  for (size_t i = 0; i < tree.size(); ++i)
+  {
+    std::cout << ' ' << *it++;
+  }
+  std::cout << '\n';
+  tree.insert(std::make_pair< int, int >(8, 8));
+  it = tree.begin();
+  for (size_t i = 0; i < tree.size(); ++i)
+  {
+    std::cout << ' ' << *it++;
+  }
+  std::cout << '\n';
+  tree.insert(std::make_pair< int, int >(3, 3));
+  it = tree.begin();
+  for (size_t i = 0; i < tree.size(); ++i)
+  {
+    std::cout << ' ' << *it++;
+  }
+  std::cout << '\n';
+  tree.insert(std::make_pair< int, int >(9,9));
+  it = tree.begin();
+  for (size_t i = 0; i < tree.size(); ++i)
+  {
+    std::cout << ' ' << *it++;
+  }
 }
