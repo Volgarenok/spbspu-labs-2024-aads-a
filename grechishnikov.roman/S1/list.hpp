@@ -385,12 +385,13 @@ namespace grechishnikov
   template< typename T >
   Iterator< T > List< T >::insert(ConstIterator< T > where, T&& value)
   {
-    auto temp = new detail::Node< T > (value, nullptr, nullptr);
     auto nextNode = where + 1;
-    if (where == cend())
+    if (nextNode == cend())
     {
       push_back(value);
+      return Iterator< T >(tail_);
     }
+    auto temp = new detail::Node< T > (value, nullptr, nullptr);
     where.node_->next_ = temp;
     nextNode.node_->prev_ = temp;
     temp->prev_ = where.node_;
@@ -402,11 +403,8 @@ namespace grechishnikov
   template< typename T >
   Iterator< T > List< T >::insert(ConstIterator< T > where, size_t count, const T& value)
   {
-    for (size_t i = 0; i < count; i++)
-    {
-      insert(where, value);
-      where++;
-    }
+    List< T > temp(count, value);
+    insert(where, temp.cbegin(), temp.cend());
     return Iterator< T >(where.node_);
   }
 
