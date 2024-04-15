@@ -53,6 +53,10 @@ size_t grechishnikov::countSum(const List< size_t >& list)
 
 void grechishnikov::outputList(const List< size_t >& list, std::ostream& out)
 {
+  if (list.empty())
+  {
+    return;
+  }
   auto iter = list.cbegin();
   out << *iter;
   iter++;
