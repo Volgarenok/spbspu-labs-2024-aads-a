@@ -10,6 +10,7 @@ namespace baranov
   using listOfLists = List< List< size_t > >;
 
   void printNames(std::ostream &, ds_t &);
+  void printList(std::ostream &, List< size_t > &);
   void printLists(std::ostream &, listOfLists &);
 
   size_t getSum(List< size_t > &);

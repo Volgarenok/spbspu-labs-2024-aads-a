@@ -1,4 +1,5 @@
 #include "outputFunctions.hpp"
+#include "list.hpp"
 #include <limits>
 
 void baranov::printNames(std::ostream & output, ds_t & list)
@@ -13,19 +14,24 @@ void baranov::printNames(std::ostream & output, ds_t & list)
   output << '\n';
 }
 
+void baranov::printList(std::ostream & output, List< size_t > & list)
+{
+  auto listEnd = list.end();
+  auto i = list.begin();
+  output << *(i++);
+  for (; i != listEnd; ++i)
+  {
+    output << ' ' << *i;
+  }
+  output << '\n';
+}
+
 void baranov::printLists(std::ostream & output, listOfLists & lists)
 {
   auto listsEnd = lists.end();
   for (auto i = lists.begin(); i != listsEnd; ++i)
   {
-    auto listEnd = (*i).end();
-    auto j = (*i).begin();
-    output << *(j++);
-    for (; j != listEnd; ++j)
-    {
-      output << ' ' << *j;
-    }
-    output << '\n';
+    printList(output, *i);
   }
 }
 
@@ -48,17 +54,16 @@ size_t baranov::getSum(List< size_t > & list)
 void baranov::printSums(std::ostream & output, listOfLists & lists)
 {
   auto listsEnd = lists.end();
-  auto i = lists.begin();
   if (lists.empty())
   {
     output << 0 << '\n';
     return;
   }
-  output << getSum(*(i++));
-  for (; i != listsEnd; ++i)
+  List< size_t > sums;
+  for (auto i = lists.begin(); i != listsEnd; ++i)
   {
-      output << ' ' << getSum(*i);
+    sums.push_back(getSum(*i));
   }
-  output << '\n';
+  printList(output, sums);
 }
 
