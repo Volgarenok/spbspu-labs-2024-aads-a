@@ -37,11 +37,11 @@ long long novokhatskiy::calculatePostExp(novokhatskiy::Queue< Postfix >&& inQueu
         stack.top() -= secondOperand;
         break;
       case Operation::MUL:
-        if (stack.top() * secondOperand > maxSize)
+        if (stack.top() > maxSize / secondOperand)
         {
           throw std::out_of_range("Multiplication overflow");
         }
-        else if ((stack.top() == -1 || secondOperand == 1) && (stack.top() == minSize || secondOperand == minSize))
+        else if (secondOperand != 0 && stack.top() < minSize / secondOperand)
         {
           throw std::out_of_range("Multiplication underflow");
         }
