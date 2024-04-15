@@ -7,7 +7,6 @@ namespace namestnikov
   {
     long long operand;
     char operation;
-    PartValue();
     explicit PartValue(long long number);
     explicit PartValue(char symbol);
   };
