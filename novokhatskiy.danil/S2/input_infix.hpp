@@ -8,8 +8,7 @@
 
 namespace novokhatskiy
 {
-  // InfixType checkType(std::string& str);
-  void inputInfix(Queue<Queue<InfixType>> &infixQueue, std::istream &in);
+  void inputInfix(Queue<Queue<InfixType>>& infixQueue, std::istream& in);
 }
 
 #endif

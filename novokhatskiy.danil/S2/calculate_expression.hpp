@@ -6,8 +6,7 @@
 
 namespace novokhatskiy
 {
-  long long calculateExp(long long& val1, long long& val2, char oper);
-  long long calculatePostExp(Queue< Postfix >& postQ);
+  long long calculatePostExp(Queue< Postfix >&& inQueue);
 }
 
 #endif

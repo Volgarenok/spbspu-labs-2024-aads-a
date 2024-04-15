@@ -37,7 +37,7 @@ namespace novokhatskiy
     {
       throw std::invalid_argument("Stack is empty");
     }
-    return data_.back();
+    return data_.front();
   }
 
   template <class T>
@@ -64,8 +64,8 @@ namespace novokhatskiy
   template <class T>
   T Stack<T>::drop()
   {
-    T value = data_.back();
-    data_.pop_back();
+    T value = data_.front();
+    data_.pop_front();
     return value;
   }
 
@@ -78,7 +78,7 @@ namespace novokhatskiy
   template<class T>
   void Stack<T>::pop()
   {
-    data_.pop_back();
+    data_.pop_front();
   }
 
   template <class T>
