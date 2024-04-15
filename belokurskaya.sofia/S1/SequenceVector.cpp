@@ -1,6 +1,9 @@
 #include "SequenceVector.hpp"
 
-belokurskaya::SequenceVector::SequenceVector(): pairs(new SequencePair[10000]), size(0), capacity(10000) {}
+belokurskaya::SequenceVector::SequenceVector():
+  pairs(new SequencePair[10000]),
+  size(0),
+  capacity(10000) {}
 
 belokurskaya::SequenceVector::~SequenceVector()
 {
