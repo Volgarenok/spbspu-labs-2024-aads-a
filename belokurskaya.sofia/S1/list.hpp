@@ -6,22 +6,25 @@
 
 namespace belokurskaya
 {
-  template< typename T >
+  template< class T >
   class List
   {
     struct Node
     {
       T value;
       Node * next;
-      Node(T value) : value(value), next(nullptr) {}
+      Node(T value):
+        value(value),
+        next(nullptr) {}
     };
     Node * head;
-    Node * tail;
 
     public:
-      List(): head(nullptr), tail(nullptr) {}
+      List():
+        head(nullptr) {}
 
-      List(size_t count, const T & value): head(nullptr), tail(nullptr)
+      List(size_t count, const T & value):
+        head(nullptr)
       {
         for (size_t i = 0; i < count; ++i)
         {
@@ -29,7 +32,19 @@ namespace belokurskaya
         }
       }
 
-      List(const std::initializer_list< T > & ilist): head(nullptr), tail(nullptr)
+      List(const List< T > & other):
+        head(nullptr)
+      {
+        Node * current = other.head;
+        while (current)
+        {
+          push_back(current->value);
+          current = current->next;
+        }
+      }
+
+      List(const std::initializer_list< T > & ilist):
+        head(nullptr)
       {
         for (const T & value: ilist)
         {
@@ -45,7 +60,6 @@ namespace belokurskaya
           head = head->next;
           delete temp;
         }
-        head = tail = nullptr;
       }
 
       bool empty() const
@@ -58,27 +72,24 @@ namespace belokurskaya
         Node * newNode = new Node(value);
         if (!head)
         {
-          head = tail = newNode;
+          head = newNode;
         }
         else
         {
-          tail->next = newNode;
-          tail = newNode;
+          Node* current = head;
+          while (current->next)
+          {
+            current = current->next;
+          }
+          current->next = newNode;
         }
       }
 
       void push_front(T value)
       {
         Node * newNode = new Node(value);
-        if (!head)
-        {
-          head = tail = newNode;
-        }
-        else
-        {
-          newNode->next = head;
-          head = newNode;
-        }
+        newNode->next = head;
+        head = newNode;
       }
 
       void pop_back()
@@ -87,22 +98,19 @@ namespace belokurskaya
         {
           throw std::out_of_range("List is empty");
         }
-        else if (head == tail)
+        if (!head->next)
         {
           delete head;
-          head = tail = nullptr;
+          head = nullptr;
+          return;
         }
-        else
+        Node * current = head;
+        while (current->next->next)
         {
-          Node * current = head;
-          while (current->next != tail)
-          {
-            current = current->next;
-          }
-          delete tail;
-          tail = current;
-          tail->next = nullptr;
+          current = current->next;
         }
+        delete current->next;
+        current->next = nullptr;
       }
 
       void pop_front()
@@ -116,10 +124,6 @@ namespace belokurskaya
           Node * temp = head;
           head = head->next;
           delete temp;
-          if (!head)
-          {
-            tail = nullptr;
-          }
         }
       }
 
@@ -129,29 +133,18 @@ namespace belokurskaya
         {
           push_front(value);
         }
-        else
+        Node * newNode = new Node(value);
+        Node * current = head;
+        for (size_t i = 0; i < index - 1 && current; ++i)
         {
-          Node * newNode = new Node(value);
-          Node * current = head;
-          for (size_t i = 0; i < index - 1; ++i)
-          {
-            if (!current)
-            {
-              throw std::out_of_range("Index out of range");
-            }
-            current = current->next;
-          }
-          if (!current)
-          {
-            throw std::out_of_range("Index out of range");
-          }
-          newNode->next = current->next;
-          current->next = newNode;
-          if (!newNode->next)
-          {
-            tail = newNode;
-          }
+          current = current->next;
         }
+        if (!current)
+        {
+          throw std::out_of_range("Index out of range");
+        }
+        newNode->next = current->next;
+        current->next = newNode;
       }
 
       void erase(size_t index)
@@ -160,62 +153,44 @@ namespace belokurskaya
         {
           pop_front();
         }
-        else
+        Node * current = head;
+        for (size_t i = 0; i < index - 1 && current; ++i)
         {
-          Node * current = head;
-          for (size_t i = 0; i < index - 1; ++i)
-          {
-            if (!current)
-            {
-              throw std::out_of_range("Index out of range");
-            }
-            current = current->next;
-          }
-          if (!current || !current->next)
-          {
-            throw std::out_of_range("Index out of range");
-          }
-          Node * temp = current->next;
-          current->next = current->next->next;
-          delete temp;
-          if (!current->next)
-          {
-            tail = current;
-          }
+          current = current->next;
         }
+        if (!current || !current->next)
+        {
+          throw std::out_of_range("Index out of range");
+        }
+        Node * temp = current->next;
+        current->next = current->next->next;
+        delete temp;
       }
 
       void remove(T value)
       {
-        while (head && head->value == value)
+        Node * current = head;
+        Node * prev = nullptr;
+        while (current)
         {
-          Node * temp = head;
-          head = head->next;
-          delete temp;
-        }
-        if (!head)
-        {
-          tail = nullptr;
-        }
-        else
-        {
-          Node * current = head;
-          while (current->next)
+          if (current->value == value)
           {
-            if (current->next->value == value)
+            if (current == head)
             {
-              Node * temp = current->next;
-              current->next = current->next->next;
-              delete temp;
-              if (!current->next)
-              {
-                tail = current;
-              }
+              pop_front();
+              current = head;
             }
             else
             {
-              current = current->next;
+              prev->next = current->next;
+              delete current;
+              current = prev->next;
             }
+          }
+          else
+          {
+            prev = current;
+            current = current->next;
           }
         }
       }
@@ -223,12 +198,8 @@ namespace belokurskaya
       T & at(size_t index) const
       {
         Node * current = head;
-        for (size_t i = 0; i < index; ++i)
+        for (size_t i = 0; i < index && current; ++i)
         {
-          if (!current)
-          {
-            throw std::out_of_range("Index out of range");
-          }
           current = current->next;
         }
         if (!current)
@@ -250,7 +221,7 @@ namespace belokurskaya
         return count;
       }
 
-      bool operator==(const List< T >& other) const
+      bool operator==(const List< T > & other) const
       {
         Node * current1 = head;
         Node * current2 = other.head;
@@ -266,12 +237,12 @@ namespace belokurskaya
         return !current1 && !current2;
       }
 
-      bool operator!=(const List< T >& other) const
+      bool operator!=(const List< T > & other) const
       {
         return !(* this == other);
       }
 
-      bool operator<(const List< T >& other) const
+      bool operator<(const List< T > & other) const
       {
         Node * current1 = head;
         Node * current2 = other.head;
@@ -287,18 +258,18 @@ namespace belokurskaya
         return current2 != nullptr;
       }
 
-      bool operator<=(const List< T >& other) const
+      bool operator<=(const List< T > & other) const
       {
         return * this < other || * this == other;
       }
 
-      bool operator>(const List< T >& other) const
+      bool operator>(const List< T > & other) const
       {
         return !(* this <= other);
       }
 
 
-      bool operator>=(const List< T >& other) const
+      bool operator>=(const List< T > & other) const
       {
         return * this > other || * this == other;
       }

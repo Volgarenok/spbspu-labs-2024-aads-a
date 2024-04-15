@@ -1,4 +1,5 @@
 #include "readSequences.hpp"
+
 #include <iostream>
 
 belokurskaya::SequenceVector belokurskaya::readSequences()

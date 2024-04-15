@@ -1,8 +1,9 @@
 #ifndef SEQUENCE_VECTOR_HPP
 #define SEQUENCE_VECTOR_HPP
 
-#include "list.hpp"
 #include <stdexcept>
+
+#include "list.hpp"
 
 namespace belokurskaya
 {
@@ -14,15 +15,16 @@ namespace belokurskaya
     public:
       SequencePair() {}
 
-      SequencePair(const std::string & name, const List< int >& sequence):
-        name(name), sequence(sequence) {}
+      SequencePair(const std::string & name, const List< int > & sequence):
+        name(name),
+        sequence(sequence) {}
 
       const std::string & getName() const
       {
         return name;
       }
 
-      const List< int >& getSequence() const
+      const List< int > & getSequence() const
       {
         return sequence;
       }
