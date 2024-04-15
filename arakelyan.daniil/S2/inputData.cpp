@@ -20,8 +20,17 @@ void arakelyan::readDataInfixForm(std::istream &input, Queue< ExpressionObj > &s
       tokenType = token_t::operand;
     }
     catch (...)
-    {
-      std::cerr << "not ll\n";
+    { // пока только для +
+      if (exp == "+")
+      {
+        char expCh = '+';
+        token = Token(expCh);
+        tokenType = token_t::operation;
+      }
+      else
+      {
+        std::cerr << "idc what is that0_0\n";
+      }
     }
     ExpressionObj expObj{token, tokenType};
     someQ.push(expObj);

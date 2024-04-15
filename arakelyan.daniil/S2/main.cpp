@@ -35,7 +35,20 @@ int main()
   //   readData(std::cin, infixInputQ);
   // }
   readDataInfixForm(std::cin, infixQ);
-  std::cout << infixQ.back().val_.operand_ << "\n";
+  std::cout << "\n";
+  while (!infixQ.empty())
+  {
+    if (infixQ.front().type_ == token_t::operand)
+    {
+      std::cout << infixQ.front().val_.operand_ << " ";
+    }
+    else
+    {
+      std::cout << infixQ.front().val_.oper_ << " ";
+    }
+    infixQ.pop();
+  }
+  std::cout << "\n";
 
   // std::cout << infixInputQ.front() << "\n";
   return 0;

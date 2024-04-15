@@ -1,6 +1,8 @@
 #ifndef TOKEN_HPP
 #define TOKEN_HPP
 
+#include <string>
+
 namespace arakelyan
 {
   enum class token_t
