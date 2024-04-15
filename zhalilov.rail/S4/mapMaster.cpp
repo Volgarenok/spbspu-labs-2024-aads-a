@@ -23,14 +23,22 @@ void zhalilov::MapMaster::doCommandLine(std::istream &input, std::string &result
   List < std::string > cmdSource;
   std::string tmp;
   char delim = 0;
-  while (input && delim != '\n')
+  try
   {
-    input >> tmp;
-    if (input)
+    while (input && delim != '\n')
     {
-      cmdSource.push_back(tmp);
+      input >> tmp;
+      if (input)
+      {
+        cmdSource.push_back(tmp);
+      }
+      input >> delim;
     }
-    input >> delim;
+  }
+  catch (...)
+  {
+    input.flags(ff);
+    throw;
   }
   input.flags(ff);
 
@@ -39,6 +47,7 @@ void zhalilov::MapMaster::doCommandLine(std::istream &input, std::string &result
     result = std::string();
     return;
   }
+
   try
   {
     std::string cmdName = cmdSource.front();
