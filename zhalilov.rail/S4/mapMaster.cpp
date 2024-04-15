@@ -74,7 +74,10 @@ void zhalilov::MapMaster::printCmd(List < std::string > &cmdSource, std::string 
     result += std::to_string(it->first) + ' ';
     result += it->second;
   }
-  result = std::string();
+  else
+  {
+    result = std::string();
+  }
 }
 
 void zhalilov::MapMaster::complementCmd(List < std::string > &cmdSource, std::string &result)
