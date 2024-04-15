@@ -76,7 +76,7 @@ void zhalilov::MapMaster::printCmd(List < std::string > &cmdSource, std::string 
   }
   else
   {
-    result = std::string();
+    result = "<EMPTY>";
   }
 }
 
