@@ -27,9 +27,8 @@ int main(int argc, char *argv[])
       master.doCommandLine(std::cin, cmdOutput);
       if (!cmdOutput.empty())
       {
-        std::cout << cmdOutput;
+        std::cout << cmdOutput << '\n';
       }
-      std::cout << '\n';
     }
     catch (const std::invalid_argument &e)
     {
