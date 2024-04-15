@@ -1,168 +1,190 @@
 #ifndef LIST_HPP
 #define LIST_HPP
 
-#include <iostream>
+#include <utility>
+#include <memory>
+#include <stdexcept>
 #include "node.hpp"
 #include "constIterator.hpp"
 
+
 namespace sivkov
 {
-  template <typename T>
+  template < typename T >
   class List
   {
   public:
-    ConstIterator<T> cIterator;
-    List():
-      size(0),
-      head_(nullptr)
-    {}
-    List(std::size_t count, const T& value) :
-      size(0),
-      head_(nullptr)
-    {
-      for (std::size_t i = 0; i < count; ++i)
-      {
-        push_back(value);
-      }
-    }
+    List();
+    List(size_t count, const T& value);
+    List(const List& other);
+    List(List&& other) noexcept;
+    ~List();
 
-    List(const List& other) :
-      size(0),
-      head_(nullptr)
-    {
-      Node<T>* current = other.head_;
-      while (current != nullptr)
-      {
-        push_back(current->data);
-        current = current->next;
-      }
-    }
+    List< T >& operator=(const List< T >& other);
+    List< T >& operator=(List< T >&& other) noexcept;
 
-    List(List&& other) noexcept:
-      size(0),
-      head_(other.head_)
-    {
-      other.head_ = nullptr;
-    }
-
-    ~List() { clear(); }
     void push_front(const T& data);
     void push_back(T data);
-    void clear();
-    bool empty() const {return head_ == nullptr;}
     void pop_front();
-    void pop_back();
-    void swap(List& other);
+    void clear() noexcept;
+    bool empty() const;
+    void swap(List& other) noexcept;
     void reverse();
-    void remove(const T& value);
-    void assign(std::size_t count, const T& value);
     size_t getSize();
-    T& front() { return head_->data; }
-    ConstIterator<T> cbegin() const { return ConstIterator<T>(head_); }
-    ConstIterator<T> cend() const { return ConstIterator<T>(nullptr); }
-    T& operator[](const int index);
+    void remove(const T& value);
+    template< class Predicate >
+    void remove_if(Predicate p);
+    void assign(size_t count, const T& value);
+    T& front();
+    ConstIterator< T > cbegin() const;
+    ConstIterator< T > cend() const;
 
-    private:
-      size_t size;
-      Node<T>* head_;
-    };
+  private:
+    size_t size_;
+    detail::Node< T >* head_;
+  };
 
-  template<typename T>
-  void List<T>::push_front(const T& data)
+  template< typename T >
+  List< T >::List() :
+    size_(0),
+    head_(nullptr)
+  {}
+
+  template< typename T >
+  List< T >::List(size_t count, const T& value) :
+    size_(0),
+    head_(nullptr)
   {
-    Node<T>* temp = new Node<T>(data);
-    temp->next = head_;
-    head_ = temp;
-    ++size;
+    assign(count, value);
   }
 
-  template<typename T>
-  void List<T>::push_back(T data)
+  template< typename T >
+  List< T >::List(const List& other) :
+    List()
   {
-    Node<T>* newNode = new Node<T>(data);
+    detail::Node< T >* current = other.head_;
+    while (current)
+    {
+      push_front(current->data);
+      current = current->next;
+    }
+  }
+
+  template< typename T >
+  List< T >::List(List&& other) noexcept :
+    size_(other.size_),
+    head_(other.head_)
+  {
+    other.head_ = nullptr;
+    other.size_ = 0;
+  }
+
+  template< typename T >
+  List< T >::~List()
+  {
+    clear();
+  }
+
+  template< typename T >
+  List< T >& List< T >::operator=(const List< T >& other)
+  {
+    List< T > prev(other);
+    if (std::addressof(other) != this)
+    {
+      swap(prev);
+    }
+    return *this;
+  }
+
+  template< typename T >
+  List< T >& List< T >::operator=(List< T >&& other) noexcept
+  {
+    List< T > prev(std::move(other));
+    if (std::addressof(other) != this)
+    {
+      swap(prev);
+    }
+    return *this;
+  }
+
+  template< typename T >
+  void List< T >::push_front(const T& data)
+  {
+    detail::Node< T >* temp = new detail::Node< T >(data);
+    temp->next = head_;
+    head_ = temp;
+    ++size_;
+  }
+
+  template< typename T >
+  void List< T >::push_back(T data)
+  {
+    detail::Node< T >* newNode = new detail::Node< T >(data);
     if (empty())
     {
       head_ = newNode;
     }
     else
     {
-      Node<T>* head = head_;
+      detail::Node< T >* head = head_;
       while (head->next)
       {
-          head = head->next;
+        head = head->next;
       }
       head->next = newNode;
     }
-   ++size;
+    ++size_;
   }
 
-  template<typename T>
-  void List<T>::clear()
+  template< typename T >
+  void List< T >::clear() noexcept
   {
     while (!(empty()))
     {
       pop_front();
     }
-    size = 0;
+    size_ = 0;
   }
 
-  template<typename T>
-  void List<T>::pop_front()
+  template< typename T >
+  bool List< T >::empty() const
+  {
+    return head_ == nullptr;
+  }
+
+  template< typename T >
+  void List< T >::pop_front()
   {
     if (empty())
     {
-      throw;
+      throw std::logic_error("empty");
     }
-    Node<T>* head = head_;
+    detail::Node< T >* head = head_;
     head_ = head_->next;
     delete head;
-    --size;
+    --size_;
   }
 
-  template<typename T>
-  void List<T>::pop_back()
-  {
-    if (empty())
-    {
-      throw;
-    }
-    if (head_->next == nullptr)
-    {
-      delete head_;
-      head_ = nullptr;
-    }
-    else
-    {
-      Node<T>* head = head_;
-      while (head->next->next != nullptr)
-      {
-        head = head->next;
-      }
-      delete head->next;
-      head->next = nullptr;
-    }
-    --size;
-  }
-
-  template<typename T>
-  void List<T>::swap(List& other)
+  template< typename T >
+  void List< T >::swap(List& other) noexcept
   {
     std::swap(head_, other.head_);
+    std::swap(size_, other.size_);
   }
 
-  template<typename T>
-  void List<T>::reverse()
+  template< typename T >
+  void List< T >::reverse()
   {
     if (!head_)
     {
       return;
     }
-    Node< T >* result = head_;
-    Node< T >* temp = head_->next;
+    detail::Node< T >* result = head_;
+    detail::Node< T >* temp = head_->next;
     result->next = nullptr;
     while (temp)
     {
-      Node< T >* rofl = temp->next;
+      detail::Node< T >* rofl = temp->next;
       temp->next = result;
       result = temp;
       temp = rofl;
@@ -170,27 +192,38 @@ namespace sivkov
     head_ = result;
   }
 
-  template<typename T>
-  void List<T>::remove(const T& value)
+  template< typename T >
+  void List< T >::remove(const T& value)
   {
-    Node<T>* current = head_;
-    Node<T>* prev = nullptr;
+    auto pred = [&value](const T& elem)
+      {
+        return elem == value;
+      };
+    remove_if(pred);
+  }
+
+  template< typename T >
+  template< class Predicate >
+  void List< T >::remove_if(Predicate p)
+  {
+    detail::Node< T >* current = head_;
+    detail::Node< T >* prev = nullptr;
 
     while (current != nullptr)
     {
-      if (current->data == value)
+      if (p(current->data))
       {
-        if (prev == nullptr)
+        if (prev == head_)
         {
-          head_ = current->next;
+          pop_front();
+          current = head_;
         }
         else
         {
           prev->next = current->next;
+          delete current;
+          current = prev->next;
         }
-        delete current;
-        --size;
-        current = (prev == nullptr) ? head_ : prev->next;
       }
       else
       {
@@ -200,42 +233,38 @@ namespace sivkov
     }
   }
 
-  template<typename T>
-  void List<T>::assign(std::size_t count, const T& value)
+  template< typename T >
+  void List< T >::assign(size_t count, const T& value)
   {
     clear();
-
-    for (std::size_t i = 0; i < count; ++i)
+    for (size_t i = 0; i < count; ++i)
     {
       push_back(value);
     }
   }
 
-  template<typename T>
-  size_t List<T>::getSize()
+  template< typename T >
+  size_t List< T >::getSize()
   {
-    return size;
+    return size_;
   }
 
-  template<typename T>
-  T& List<T>::operator[](const int index)
+  template< typename T >
+  T& List< T >::front()
   {
-    int counter = 0;
-    Node<T>* current = this->head;
-    if (size <= index || index < 0)
-    {
-      throw std::out_of_range("Index out of range");
-    }
-    while (current != nullptr)
-    {
-      if (counter == index)
-      {
-        return current->data;
-      }
-      current = current->pNext;
-      counter++;
-    }
-    throw std::logic_error("Index not found");
+    return head_->data;
+  }
+
+  template< typename T >
+  ConstIterator< T > List< T >::cbegin() const
+  {
+    return ConstIterator< T >(head_);
+  }
+
+  template< typename T >
+  ConstIterator< T > List< T >::cend() const
+  {
+    return ConstIterator< T >(nullptr);
   }
 }
 #endif
