@@ -11,32 +11,33 @@ namespace skuratov
   {
   public:
     List():
-      head(nullptr),
-      tail(nullptr),
-      size(0)
+      head_(nullptr),
+      tail_(nullptr),
+      size_(0)
     {}
+
     ~List()
     {
-      while (head != nullptr)
+      while (head_ != nullptr)
       {
-        pop_front();
+        popFront();
       }
     }
 
     List(size_t n, const T& value):
-      head(nullptr),
-      tail(nullptr),
-      size(0)
+      head_(nullptr),
+      tail_(nullptr),
+      size_(0)
     {
       for (size_t i = 0; i < n; ++i)
       {
-        push_back(value);
+        pushBack(value);
       }
     }
 
     List< T > begin() noexcept
     {
-      return List< T >(head);
+      return List< T >(head_);
     }
 
     List< T > end() noexcept
@@ -46,182 +47,129 @@ namespace skuratov
 
     T & front()
     {
-      return head -> value;
+      return head_ -> value_;
     }
 
     T & back()
     {
-      return tail -> value;
+      return tail_ -> value_;
     }
 
     bool empty() const
     {
-      return !size;
+      return !size_;
     }
 
-    Node< T >* push_front(T value)
+    Node< T >* pushFront(T value)
     {
       Node< T >* ptr = new Node< T >(value);
-      ptr->next = head;
-      if (head != nullptr)
+      ptr->next_ = head_;
+      if (head_ != nullptr)
       {
-        head->prev = ptr;
+        head_->prev_ = ptr;
       }
-      if (tail == nullptr)
+      if (tail_ == nullptr)
       {
-        tail = ptr;
+        tail_ = ptr;
       }
-      head = ptr;
-      ++size;
+      head_ = ptr;
+      ++size_;
       return ptr;
     }
 
-    Node< T >* push_back(T value)
+    Node< T >* pushBack(T value)
     {
       Node< T >* ptr = new Node< T >(value);
-      ptr->prev = tail;
-      if (tail != nullptr)
+      ptr->prev_ = tail_;
+      if (tail_ != nullptr)
       {
-        tail->next = ptr;
+        tail_->next_ = ptr;
       }
-      if (head == nullptr)
+      if (head_ == nullptr)
       {
-        head = ptr;
+        head_ = ptr;
       }
-      tail = ptr;
-      ++size;
+      tail_ = ptr;
+      ++size_;
       return ptr;
     }
 
-    void pop_front()
+    void popFront()
     {
-      if (head == nullptr)
+      if (head_ == nullptr)
       {
         return;
       }
-      Node< T >* ptr = head->next;
+      Node< T >* ptr = head_->next_;
       if (ptr != nullptr)
       {
-        ptr->prev = nullptr;
+        ptr->prev_ = nullptr;
       }
       else
       {
-        tail = nullptr;
+        tail_ = nullptr;
       }
-      delete head;
-      head = ptr;
-      --size;
+      delete head_;
+      head_ = ptr;
+      --size_;
     }
 
-    void pop_back()
+    void popBack()
     {
-      if (tail == nullptr)
+      if (tail_ == nullptr)
       {
         return;
       }
-      Node< T >* ptr = tail->prev;
+      Node< T >* ptr = tail_->prev_;
       if (ptr != nullptr)
       {
-        ptr->next = nullptr;
+        ptr->next_ = nullptr;
       }
       else
       {
-        head = nullptr;
+        head_ = nullptr;
       }
-      delete tail;
-      tail = ptr;
-      --size;
+      delete tail_;
+      tail_ = ptr;
+      --size_;
+    }
+
+    void clear() noexcept
+    {
+      while (!empty())
+      {
+        popBack();
+      }
+      size_ = 0;
     }
 
     void assign(size_t n, const T& value)
-    {}
-
-    void clear() noexcept
-    {}
+    {
+      clear();
+      for (size_t i = 0; i < n; ++i)
+      {
+        push_back(value);
+      }
+    }
 
     void swap() noexcept
     {}
 
-    void remove()
+    void remove(const T& value)
     {}
 
     void remove_if()
     {}
 
-    Node< T >* getAt(size_t index)
-    {
-      Node< T >* ptr = head;
-      for (size_t j = 0; j != index; j++)
-      {
-        if (ptr == nullptr)
-        {
-          return ptr;
-        }
-        ptr = ptr->next;
-      }
-      return ptr;
-    }
-
-    Node< T >* operator [] (int index)
-    {
-      return getAt(index);
-    }
-
-    Node< T >* insert(int index, double value)
-    {
-      Node< T >* right = getAt(index);
-      if (right == nullptr)
-      {
-        return push_back(value);
-      }
-      Node< T >* left = right->prev;
-      if (left == nullptr)
-      {
-        return push_front(value);
-      }
-      Node< T >* ptr = new Node< T >(value);
-      ptr->prev = left;
-      ptr->next = right;
-      left->prev = ptr;
-      right->next = ptr;
-      ++size;
-      return ptr;
-    }
-
-    void erase(int index)
-    {
-      Node< T >* ptr = getAt(index);
-      if (ptr == nullptr)
-      {
-        return;
-      }
-      if (ptr->prev == nullptr)
-      {
-        pop_front();
-        return;
-      }
-      if (ptr->next == nullptr)
-      {
-        pop_back();
-        return;
-      }
-      Node< T >* left = ptr->prev;
-      Node< T >* right = ptr->next;
-      left->next = right;
-      right->prev = left;
-      delete ptr;
-      --size;
-    }
-
     size_t getSize() const
     {
-      return size;
+      return size_;
     }
 
   private:
-    Node< T >* head;
-    Node< T >* tail;
-    size_t size;
+    Node< T >* head_;
+    Node< T >* tail_;
+    size_t size_;
   };
 }
 
