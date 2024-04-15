@@ -57,7 +57,20 @@ void zhalilov::MapMaster::printCmd(List < std::string > &cmdSource, std::string 
   {
     throw std::invalid_argument("incorrect command source");
   }
-  getMapSource(cmdSource.back(), result);
+
+  std::string mapName = cmdSource.back();
+  auto it = maps_.at(mapName).cbegin();
+  auto end = maps_.at(mapName).cend();
+  end--;
+  result = mapName + ' ';
+  while (it != end)
+  {
+    result += std::to_string(it->first) + ' ';
+    result += it->second + ' ';
+    it++;
+  }
+  result += std::to_string(it->first) + ' ';
+  result += it->second;
 }
 
 void zhalilov::MapMaster::complementCmd(List < std::string > &cmdSource, std::string &result)
@@ -122,10 +135,23 @@ void zhalilov::MapMaster::intersectCmd(List < std::string > &cmdSource, std::str
 
 void zhalilov::MapMaster::unionCmd(List < std::string > &cmdSource, std::string &result)
 {
-  complementCmd(cmdSource, result);
+  if (cmdSource.capacity() != 3)
+  {
+    throw std::invalid_argument("incorrect command source");
+  }
 
   primaryMap &secondMap = maps_.at(cmdSource.back());
+  cmdSource.pop_back();
+  primaryMap &firstMap = maps_.at(cmdSource.back());
   primaryMap resultMap;
+
+  auto firstIt = firstMap.cbegin();
+  auto firstEnd = firstMap.cend();
+  while (firstIt != firstEnd)
+  {
+    resultMap.insert(std::pair < int, std::string >(firstIt->first, firstIt->second));
+    firstIt++;
+  }
 
   auto secondIt = secondMap.cbegin();
   auto secondEnd = secondMap.cend();
@@ -138,20 +164,4 @@ void zhalilov::MapMaster::unionCmd(List < std::string > &cmdSource, std::string 
   std::string mapName = cmdSource.front();
   maps_.insert(std::pair < std::string, primaryMap >(mapName, resultMap));
   result = std::string();
-}
-
-void zhalilov::MapMaster::getMapSource(const std::string &mapName, std::string &source)
-{
-  auto it = maps_.at(mapName).cbegin();
-  auto end = maps_.at(mapName).cend();
-  end--;
-  source = mapName + ' ';
-  while (it != end)
-  {
-    source += std::to_string(it->first) + ' ';
-    source += it->second + ' ';
-    it++;
-  }
-  source += std::to_string(it->first) + ' ';
-  source += it->second;
 }

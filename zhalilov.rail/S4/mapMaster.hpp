@@ -27,8 +27,6 @@ namespace zhalilov
     void complementCmd(List < std::string > &cmdSource, std::string &result);
     void intersectCmd(List < std::string > &cmdSource, std::string &result);
     void unionCmd(List < std::string > &cmdSource, std::string &result);
-
-    void getMapSource(const std::string &mapName, std::string &source);
   };
 }
 
