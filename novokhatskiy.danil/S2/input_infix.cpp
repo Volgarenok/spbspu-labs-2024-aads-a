@@ -32,8 +32,13 @@ void novokhatskiy::inputInfix(Queue< Queue< InfixType > >& infixQueue, std::istr
         {
           res.type = TokenType::OPERAND;
           std::string str = {};
-          str += symb;
+          while (symb != ' ' && symb != '\n')
+          {
+            str += symb;
+            in >> symb;
+          }
           res.operand.num = std::stoll(str);
+          currQ.push(res);
         }
         break;
       }
