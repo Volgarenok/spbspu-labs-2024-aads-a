@@ -21,17 +21,16 @@ namespace novokhatskiy
     bool empty() const noexcept;
     size_t size() const noexcept;
     void printInfix();
-<<<<<<< HEAD
+
     void pop();
-    T& front();
-=======
+
     T &front();
     T &back();
->>>>>>> a63320e6c4a0cfc20924a8f70a77566f0c76741f
+
     T drop();
     ~Queue() = default;
 
-    // private:
+    private:
     std::list<T> data_;
   };
 
