@@ -59,18 +59,21 @@ void zhalilov::MapMaster::printCmd(List < std::string > &cmdSource, std::string 
   }
 
   std::string mapName = cmdSource.back();
-  auto it = maps_.at(mapName).cbegin();
-  auto end = maps_.at(mapName).cend();
-  end--;
-  result = mapName + ' ';
-  while (it != end)
+  if (!maps_.at(mapName).empty())
   {
+    auto it = maps_[mapName].cbegin();
+    auto end = maps_[mapName].cend();
+    end--;
+    result = mapName + ' ';
+    while (it != end)
+    {
+      result += std::to_string(it->first) + ' ';
+      result += it->second + ' ';
+      it++;
+    }
     result += std::to_string(it->first) + ' ';
-    result += it->second + ' ';
-    it++;
+    result += it->second;
   }
-  result += std::to_string(it->first) + ' ';
-  result += it->second;
 }
 
 void zhalilov::MapMaster::complementCmd(List < std::string > &cmdSource, std::string &result)
