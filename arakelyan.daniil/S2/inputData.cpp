@@ -15,11 +15,11 @@ bool isBracket(const std::string line)
   return line == "(" || line == ")";
 }
 
-arakelyan::Queue< arakelyan::ExpressionObj > arakelyan::readDataInfixForm(std::istream &input)
+arakelyan::Queue< arakelyan::ExpressionObj > arakelyan::readDataInInfixForm(std::istream &input)
 {
   Queue< ExpressionObj > someQ;
   Token token;
-  token_t tokenType = token_t::smthk;
+  token_t tokenType = token_t::undef;
 
   std::string exp;
   while (input)

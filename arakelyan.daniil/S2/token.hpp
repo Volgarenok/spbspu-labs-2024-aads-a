@@ -10,7 +10,7 @@ namespace arakelyan
     operand = 0,
     operation = 1,
     bracket = 2,
-    smthk = 3
+    undef = 3
   };
 
   union Token

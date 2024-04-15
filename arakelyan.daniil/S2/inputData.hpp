@@ -7,6 +7,6 @@
 
 namespace arakelyan
 {
-  Queue< ExpressionObj > readDataInfixForm(std::istream &input);
+  Queue< ExpressionObj > readDataInInfixForm(std::istream &input);
 }
 #endif
