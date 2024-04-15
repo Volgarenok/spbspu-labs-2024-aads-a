@@ -30,7 +30,7 @@ namespace arakelyan
     ExpressionObj() = delete;
     ExpressionObj(const ExpressionObj &obj) = default;
     ~ExpressionObj() = default;
-    ExpressionObj &operator=(const ExpressionObj &obj);
+    ExpressionObj &operator=(const ExpressionObj &obj) = default;
   };
 }
 #endif

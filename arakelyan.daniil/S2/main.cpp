@@ -15,13 +15,14 @@ int main()
   Token newT;
   token_t typeT = token_t::smthk;
 
-  long long num = 5;
+  // long long num = 5;
+  char num = '+';
   newT = Token(num);
-  typeT = token_t::operand;
+  typeT = token_t::operation;
 
   ExpressionObj obj{newT, typeT};
   tokenQ.push(obj);
-  std::cout << tokenQ.front().val_.operand_ << "\n";
+  std::cout << tokenQ.front().val_.oper_ << "\n";
 
 
   // if (argc == 1)
