@@ -17,16 +17,13 @@ int main()
     return 0;
   }
 
-  for (auto namedIter = namedLists.cbegin(); namedIter != namedLists.cend(); namedIter++)
-  {
-    std::cout << namedIter->first;
-    if (namedIter + 1 != namedLists.cend())
-    {
-      std::cout << ' ';
-    }
-  }
   if (!namedLists.empty())
   {
+    std::cout << namedLists.cbegin()->first;
+    for (auto namedIter = namedLists.cbegin() + 1; namedIter != namedLists.cend(); namedIter++)
+    {
+      std::cout << ' ' << namedIter->first;
+    }
     std::cout << '\n';
   }
 
