@@ -5,14 +5,26 @@
 #include <iostream>
 #include <string>
 
-void arakelyan::readDataInfixForm(std::istream &input, Queue< ExpressionObj > &someQ)
+bool isOperation(const std::string line)
 {
+  return line == "+" || line == "-" || line == "/" || line == "*" || line == "%";
+}
+
+bool isBracket(const std::string line)
+{
+  return line == "(" || line == ")";
+}
+
+arakelyan::Queue< arakelyan::ExpressionObj > arakelyan::readDataInfixForm(std::istream &input)
+{
+  Queue< ExpressionObj > someQ;
   Token token;
   token_t tokenType = token_t::smthk;
 
-  std::string exp = "";
-  while (input >> exp && exp != "\n")
+  std::string exp;
+  while (input)
   {
+    input >> exp;
     try
     {
       long long expLl = std::stoll(exp);
@@ -20,19 +32,25 @@ void arakelyan::readDataInfixForm(std::istream &input, Queue< ExpressionObj > &s
       tokenType = token_t::operand;
     }
     catch (...)
-    { // пока только для +
-      if (exp == "+")
+    {
+      char expCh = exp[0];
+      token = Token(expCh);
+      if (isOperation(exp))
       {
-        char expCh = '+';
-        token = Token(expCh);
         tokenType = token_t::operation;
       }
-      else
+      else if (isBracket(exp))
       {
-        std::cerr << "idc what is that0_0\n";
+        tokenType = token_t::bracket;
       }
     }
+
     ExpressionObj expObj{token, tokenType};
     someQ.push(expObj);
+    if (input.peek() == '\n')
+    {
+      break;
+    }
   }
+  return someQ;
 }

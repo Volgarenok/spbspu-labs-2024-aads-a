@@ -10,46 +10,35 @@
 int main()
 {
   using namespace arakelyan;
-  Queue< ExpressionObj > infixQ;
+  Queue < Queue< ExpressionObj > > queueOfInfixQueues;
 
-  // Token newT;
-  // token_t typeT = token_t::smthk;
-
-  // long long num = 5;
-  // char num = '+';
-  // newT = Token(num);
-  // typeT = token_t::operation;
-  //
-  // ExpressionObj obj{newT, typeT};
-  // tokenQ.push(obj);
-  // std::cout << tokenQ.front().val_.oper_ << "\n";
-
-
-  // if (argc == 1)
-  // {
-  //   std::ifstream input(argv[2]);
-  //   readData(input, infixInputQ);
-  // }
-  // else
-  // {
-  //   readData(std::cin, infixInputQ);
-  // }
-  readDataInfixForm(std::cin, infixQ);
-  std::cout << "\n";
-  while (!infixQ.empty())
+  while (!std::cin.eof())
   {
-    if (infixQ.front().type_ == token_t::operand)
-    {
-      std::cout << infixQ.front().val_.operand_ << " ";
-    }
-    else
-    {
-      std::cout << infixQ.front().val_.oper_ << " ";
-    }
-    infixQ.pop();
+    Queue< ExpressionObj > infixQueue = readDataInfixForm(std::cin);
+    queueOfInfixQueues.push(infixQueue);
+    std::cout << "read one q\n";
   }
-  std::cout << "\n";
 
-  // std::cout << infixInputQ.front() << "\n";
+  std::cout << queueOfInfixQueues.size() << " - size of qOfQs\n";
+
+  while (!queueOfInfixQueues.empty())
+  {
+    while (!queueOfInfixQueues.front().empty())
+    {
+      if (queueOfInfixQueues.front().front().type_ == token_t::operand)
+      {
+        std::cout << queueOfInfixQueues.front().front().val_.operand_ << " ";
+      }
+      else
+      {
+        std::cout << queueOfInfixQueues.front().front().val_.oper_ << " ";
+      }
+      queueOfInfixQueues.front().pop();
+    }
+    std::cout << "\n";
+
+    queueOfInfixQueues.pop();
+  }
+
   return 0;
 }
