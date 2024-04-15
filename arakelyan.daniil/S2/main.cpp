@@ -10,19 +10,19 @@
 int main()
 {
   using namespace arakelyan;
-  Queue< ExpressionObj > tokenQ;
+  Queue< ExpressionObj > infixQ;
 
-  Token newT;
-  token_t typeT = token_t::smthk;
+  // Token newT;
+  // token_t typeT = token_t::smthk;
 
   // long long num = 5;
-  char num = '+';
-  newT = Token(num);
-  typeT = token_t::operation;
-
-  ExpressionObj obj{newT, typeT};
-  tokenQ.push(obj);
-  std::cout << tokenQ.front().val_.oper_ << "\n";
+  // char num = '+';
+  // newT = Token(num);
+  // typeT = token_t::operation;
+  //
+  // ExpressionObj obj{newT, typeT};
+  // tokenQ.push(obj);
+  // std::cout << tokenQ.front().val_.oper_ << "\n";
 
 
   // if (argc == 1)
@@ -34,6 +34,8 @@ int main()
   // {
   //   readData(std::cin, infixInputQ);
   // }
+  readDataInfixForm(std::cin, infixQ);
+  std::cout << infixQ.back().val_.operand_ << "\n";
 
   // std::cout << infixInputQ.front() << "\n";
   return 0;

@@ -3,9 +3,10 @@
 
 #include <iosfwd>
 #include "queue.hpp"
+#include "token.hpp"
 
 namespace arakelyan
 {
-  void readData(std::istream &input, Queue< long long > &someQ);
+  void readDataInfixForm(std::istream &input, Queue< ExpressionObj > &someQ);
 }
 #endif
