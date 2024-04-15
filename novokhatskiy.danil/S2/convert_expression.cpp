@@ -2,7 +2,6 @@
 #include "convert_expression.hpp"
 #include "stack.hpp"
 
-
 unsigned novokhatskiy::getPriority(Operation operation)
 {
   switch (operation)
@@ -15,6 +14,7 @@ unsigned novokhatskiy::getPriority(Operation operation)
   case Operation::MOD:
     return 2;
   }
+  return 0;
 }
 
 novokhatskiy::Queue< novokhatskiy::Postfix > novokhatskiy::convertExpression(Queue< InfixType >&& infixQueue)
@@ -76,4 +76,3 @@ novokhatskiy::Queue< novokhatskiy::Postfix > novokhatskiy::convertExpression(Que
   }
   return resultQueue;
 }
-
