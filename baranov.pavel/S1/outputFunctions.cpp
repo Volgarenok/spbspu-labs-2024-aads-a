@@ -1,4 +1,5 @@
 #include "outputFunctions.hpp"
+#include <limits>
 
 void baranov::printNames(std::ostream & output, ds_t & list)
 {
@@ -30,10 +31,15 @@ void baranov::printLists(std::ostream & output, listOfLists & lists)
 
 size_t baranov::getSum(List< size_t > & list)
 {
+  size_t maxNum = std::numeric_limits< size_t >::max();
   size_t result = 0;
   auto listEnd = list.end();
   for (auto i = list.begin(); i != listEnd; ++i)
   {
+    if (maxNum - result < *i)
+    {
+      throw std::overflow_error("Overflow");
+    }
     result += *i;
   }
   return result;
