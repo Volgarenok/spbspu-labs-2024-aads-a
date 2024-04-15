@@ -6,13 +6,13 @@ zhalilov::MapMaster::MapMaster(std::map < std::string, primaryMap > &maps):
   maps_(maps)
 {
   std::pair < std::string, commandFunc > cmdPair;
-  cmdPair = std::make_pair < std::string, commandFunc >("print", &MapMaster::printCmd);
+  cmdPair = std::make_pair("print", &MapMaster::printCmd);
   commands_.insert(cmdPair);
-  cmdPair = std::make_pair < std::string, commandFunc >("complement", &MapMaster::complementCmd);
+  cmdPair = std::make_pair("complement", &MapMaster::complementCmd);
   commands_.insert(cmdPair);
-  cmdPair = std::make_pair < std::string, commandFunc >("intersect", &MapMaster::intersectCmd);
+  cmdPair = std::make_pair("intersect", &MapMaster::intersectCmd);
   commands_.insert(cmdPair);
-  cmdPair = std::make_pair < std::string, commandFunc >("union", &MapMaster::unionCmd);
+  cmdPair = std::make_pair("union", &MapMaster::unionCmd);
   commands_.insert(cmdPair);
 }
 
@@ -74,6 +74,7 @@ void zhalilov::MapMaster::printCmd(List < std::string > &cmdSource, std::string 
     result += std::to_string(it->first) + ' ';
     result += it->second;
   }
+  result = std::string();
 }
 
 void zhalilov::MapMaster::complementCmd(List < std::string > &cmdSource, std::string &result)
