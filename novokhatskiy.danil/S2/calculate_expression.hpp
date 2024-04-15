@@ -6,7 +6,6 @@
 
 namespace novokhatskiy
 {
-
   long long calculatePostExp(Queue< Postfix >&& inQueue);
 }
 
