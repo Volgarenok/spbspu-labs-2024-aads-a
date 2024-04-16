@@ -1,7 +1,7 @@
 #include <string>
 #include "input_infix.hpp"
 
-void novokhatskiy::inputInfix(Queue<Queue<InfixType>> &infixQueue, std::istream &in)
+void novokhatskiy::inputInfix(Queue<Queue<InfixType>>& infixQueue, std::istream& in)
 {
   in >> std::noskipws;
   while (in)
@@ -44,6 +44,10 @@ void novokhatskiy::inputInfix(Queue<Queue<InfixType>> &infixQueue, std::istream 
       if (symb != ' ' && symb != '\n')
       {
         currQ.push(res);
+      }
+      if (symb == '\n')
+      {
+        break;
       }
     }
     if (!currQ.empty())
