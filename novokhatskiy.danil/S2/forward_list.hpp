@@ -530,7 +530,7 @@ namespace novokhatskiy
         curr->next_ = new_node;
       }
     }
-    
+
     ~ForwardList()
     {
       clear();
