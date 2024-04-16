@@ -7,10 +7,19 @@ namespace zakozhurnikova
   struct TreeNode {
 
     Key key;
-    Value payload;
+    Value value;
     TreeNode *leftChild;
     TreeNode *rightChild;
     TreeNode *parent;
+
+    TreeNode(Key key, Value val, TreeNode *parent = nullptr, TreeNode *left = nullptr, TreeNode *right = nullptr)
+    {
+      this->key = key;
+      this->value = val;
+      this->leftChild = left;
+      this->rightChild = right;
+      this->parent = parent;
+    }
 
     TreeNode* hasLeftChild()
     {

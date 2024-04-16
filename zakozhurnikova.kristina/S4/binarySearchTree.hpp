@@ -5,14 +5,12 @@
 
 namespace zakozhurnikova
 {
-  template< typename Key, typename Value, typename Compare >
-  class BinarySearchTree {
-    BinarySearchTree() {
-      this->root = nullptr;
-      this->size = 0;
-    }
+  template< typename Key, typename Value >
+  struct BinarySearchTree {
+    BinarySearchTree() = default;
 
-    int length() {
+    int length()
+    {
       return this->size;
     }
 
@@ -45,7 +43,7 @@ namespace zakozhurnikova
       else
       {
         if (currentNode->hasRightChild()){
-            this->_put(key, val, currentNode->rightChild);
+            this->put(key, val, currentNode->rightChild);
         }
         else
         {
@@ -53,6 +51,47 @@ namespace zakozhurnikova
         }
       }
     }
+
+    Value get(Key key)
+    {
+      if (this->root)
+      {
+        TreeNode< Key, Value >* res = this->get(key, this->root);
+        if (res)
+        {
+          return res->value;
+        }
+        else
+        {
+          return 0;
+        }
+      }
+      else
+      {
+        return 0;
+      }
+    }
+
+    TreeNode< Key, Value >* get(Key key, TreeNode< Key, Value >* currentNode)
+    {
+      if (!currentNode)
+      {
+        return nullptr;
+      }
+      else if (currentNode->key == key)
+      {
+        return currentNode;
+      }
+      else if (key < currentNode->key)
+      {
+        return this->get(key, currentNode->leftChild);
+      }
+      else
+      {
+        return this->get(key, currentNode->rightChild);
+      }
+    }
+
   private:
     TreeNode< Key, Value >* root;
     size_t size;
