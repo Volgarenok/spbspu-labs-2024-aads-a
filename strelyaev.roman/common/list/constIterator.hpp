@@ -15,54 +15,40 @@ namespace strelyaev
     friend class List< T >;
     public:
       ConstIterator():
-      node_(nullptr)
-     {}
+        node_(nullptr)
+       {}
 
-     ConstIterator(const ConstIterator& val):
-      node_(val.node_)
-     {}
+      ConstIterator(const ConstIterator& val):
+        node_(val.node_)
+       {}
 
-     ConstIterator(Node< T >* val):
-      node_(val)
-     {}
-
-     ~ConstIterator() = default;
+      ~ConstIterator() = default;
 
       ConstIterator< T >& operator++()
       {
-        if (node_ != nullptr)
-        {
-          node_ = node_->next_;
-        }
+        node_ = node_->next_;
         return *this;
       }
 
-      ConstIterator< T >& operator++(int)
+      ConstIterator< T > operator++(int)
       {
         ConstIterator< T > result(*this);
         ++(*this);
         return result;
       }
 
-      ConstIterator< T >& operator+(int n)
-      {
-       ConstIterator< T > temp(*this);
-       for (int a = 0; a < n; a++)
-       {
-         ++temp;
-       }
-       return temp;
-      }
+     ConstIterator< T > operator--(int)
+     {
+       ConstIterator< T > result = *this;
+       --(*this);
+       return result;
+     }
 
-      ConstIterator< T >& operator-(int n)
-      {
-       ConstIterator< T > temp(*this);
-       for (int a = 0; a < n; a--)
-       {
-         --temp;
-       }
-       return temp;
-      }
+     ConstIterator< T >& operator--()
+     {
+       node_ = node_->prev_;
+       return *this;
+     }
 
       T& operator*()
       {
@@ -74,18 +60,22 @@ namespace strelyaev
         return std::addressof(node_->value_);
       }
 
-      bool operator==(const ConstIterator< T >& val) const
+      bool operator==(ConstIterator< T > val) const
       {
         return node_ == val.node_;
       }
 
-      bool operator!=(const ConstIterator< T >& val) const
+      bool operator!=(ConstIterator< T > val) const
       {
         return !(*this == val);
       }
 
-     private:
-       Node< T >* node_;
+    private:
+      detail::Node< T >* node_;
+
+      explicit ConstIterator(detail::Node< T >* val):
+       node_(val)
+      {}
   };
 }
 #endif
