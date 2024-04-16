@@ -62,4 +62,11 @@ int main()
     std::cout << ' ' << *it4++;
   }
   std::cout << '\n';
+  tree.erase(tree.begin());
+  it4 = tree.begin();
+  for (size_t i = 0; i < tree.size(); ++i)
+  {
+    std::cout << ' ' << *it4++;
+  }
+  std::cout << '\n';
 }

@@ -208,6 +208,70 @@ namespace piyavkin
       }
       return operator[](key);
     }
+    TreeIterator< Key, T, Compare > erase(TreeIterator< Key, T, Compare> pos)
+    {
+      TreeIterator< Key, T, Compare > delete_node = find(pos.node_->key_);
+      TreeIterator< Key, T, Compare > result = delete_node;
+      ++result;
+      detail::Node< Key, T >* node = delete_node.node_->right_;
+      if (!node || delete_node.node_->right_ == std::addressof(end_node_))
+      {
+        if ((size_ == 1) || !delete_node.node_->parent_->left_)
+        {
+          delete delete_node.node_;
+          --size_;
+          return result;
+        }
+        delete_node.node_->left_->parent_ = delete_node.node_->parent_;
+        delete_node.node_->left_->right_ = delete_node.node_->right_;
+        if (delete_node.node_->parent_)
+        {
+          if (delete_node.node_->parent_->left_ == delete_node.node_)
+          {
+            delete_node.node_->parent_->left_ = delete_node.node_->left_;
+          }
+          else
+          {
+            delete_node.node_->parent_->right_ = delete_node.node_->left_;
+          }
+        }
+        delete delete_node.node_;
+        --size_;
+        return result;
+      }
+      while (node && !node->left_)
+      {
+        node = node->left_;
+      }
+      if (node)
+      {
+        node->left_ = delete_node.node_->left_;
+        node->right_ = delete_node.node_->right_;
+        node->parent_ = delete_node.node_->parent_;
+      }
+      if (delete_node.node_->left_)
+      {
+        delete_node.node_->left_->parent_ = node;
+      }
+      if (delete_node.node_->right_)
+      {
+        delete_node.node_->right_->parent_ = node;
+      }
+      if (delete_node.node_->parent_)
+      {
+        if (delete_node.node_->parent_->left_ == delete_node.node_)
+        {
+          delete_node.node_->parent_->left_ = node;
+        }
+        else
+        {
+          delete_node.node_->parent_->right_ = node;
+        }
+      }
+      delete delete_node.node_;
+      --size_;
+      return result;
+    }
   private:
     detail::Node< Key, T >* root_;
     Compare cmp_;
