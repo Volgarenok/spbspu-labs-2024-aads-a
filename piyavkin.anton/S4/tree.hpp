@@ -48,6 +48,21 @@ namespace piyavkin
       {
         Tree< Key, T, Compare > temp(rhs);
         swap(temp);
+        detail::Node< Key, T >* left = root_;
+        detail::Node< Key, T >* right = root_;
+        while (left->left_->parent_ && right->right_->parent_)
+        {
+          if (left->left_->parent_)
+          {
+            left = left->left_;
+          }
+          if (right->right_->parent_)
+          {
+            right = right->right_;
+          }
+        }
+        left->left_ = std::addressof(before_min_);
+        right->right_ = std::addressof(end_node_);
       }
       return *this;
     }
@@ -57,6 +72,21 @@ namespace piyavkin
       {
         // clear();
         swap(rhs);
+        detail::Node< Key, T >* left = root_;
+        detail::Node< Key, T >* right = root_;
+        while (left->left_->parent_ && right->right_->parent_)
+        {
+          if (left->left_)
+          {
+            left = left->left_;
+          }
+          if (right->right_)
+          {
+            right = right->right_;
+          }
+        }
+        left->left_ = std::addressof(before_min_);
+        right->right_ = std::addressof(end_node_);
       }
       return *this;
     }
@@ -129,6 +159,7 @@ namespace piyavkin
       else
       {
         delete node;
+        // splay();
         return std::make_pair< TreeIterator< Key, T, Compare >, bool >(TreeIterator< Key, T, Compare >(parent_node), false);
       }
       node->parent_ = parent_node;
@@ -157,6 +188,7 @@ namespace piyavkin
         {
           if (!cmp_(key, curr_node->key_))
           {
+            // splay();
             return TreeIterator< Key, T, Compare >(curr_node);
           }
           curr_node = curr_node->left_;
