@@ -7,6 +7,7 @@
 #include "node.hpp"
 #include "iterator.hpp"
 #include "constIterator.hpp"
+#include "iteratorFunctions.hpp"
 
 namespace grechishnikov
 {
@@ -358,7 +359,7 @@ namespace grechishnikov
   template< typename T >
   Iterator< T > List< T >::insert(ConstIterator< T > where, T&& value)
   {
-    auto nextNode = where + 1;
+    auto nextNode = advance(where, 1);
     if (nextNode == cend())
     {
       push_back(value);
@@ -447,7 +448,7 @@ namespace grechishnikov
     auto temp = first;
     while (first != last)
     {
-      temp = first + 1;
+      temp = advance(first, 1);
       other.erase(first);
       first = temp;
     }
@@ -472,7 +473,6 @@ namespace grechishnikov
       throw;
     }
   }
-
 }
 
 #endif
