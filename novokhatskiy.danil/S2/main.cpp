@@ -13,7 +13,7 @@
 int main(int argc, char** argv)
 {
   using namespace novokhatskiy;
-  Queue<Queue<InfixType>> infixQueue;
+  Queue< Queue< InfixType > > infixQueue;
   try
   {
     if (argc == 2)
@@ -30,11 +30,11 @@ int main(int argc, char** argv)
       std::cerr << "Wrong input arguments\n";
       return 1;
     }
-    Stack<long long> stack;
+    Stack< long long > stack;
     while (!infixQueue.empty())
     {
-      Queue<InfixType> tmp = infixQueue.drop();
-      Queue<Postfix> res = convertExpression(std::move(tmp));
+      Queue< InfixType > tmp = infixQueue.drop();
+      Queue< Postfix > res = convertExpression(std::move(tmp));
       stack.push(calculatePostExp(std::move(res)));
       // std::cout << calculatePostExp(std::move(res)) << '\n';
     }
@@ -46,7 +46,7 @@ int main(int argc, char** argv)
         std::cout << ' ';
       }
       firstExpression = false;
-      std::cout << stack.drop() ;
+      std::cout << stack.drop();
     }
     std::cout << '\n';
   }

@@ -1,13 +1,13 @@
 #include <string>
 #include "input_infix.hpp"
 
-void novokhatskiy::inputInfix(Queue<Queue<InfixType>>& infixQueue, std::istream& in)
+void novokhatskiy::inputInfix(Queue< Queue< InfixType > >& infixQueue, std::istream& in)
 {
   in >> std::noskipws;
   while (in)
   {
     char symb{};
-    Queue<InfixType> currQ;
+    Queue< InfixType > currQ;
     while (in >> symb && symb != '\n' && !in.eof())
     {
       InfixType res;
@@ -19,12 +19,12 @@ void novokhatskiy::inputInfix(Queue<Queue<InfixType>>& infixQueue, std::istream&
       case '/':
       case '%':
         res.type = TokenType::OPERATION;
-        res.operation = static_cast<Operation>(symb);
+        res.operation = static_cast< Operation >(symb);
         break;
       case '(':
       case ')':
         res.type = TokenType::BRACKET;
-        res.bracket = static_cast<Bracket>(symb);
+        res.bracket = static_cast< Bracket >(symb);
         break;
       default:
         if (std::isdigit(symb))
