@@ -190,9 +190,7 @@ namespace chistyakov
 
       void swap(List & list)
       {
-        BiList< T > * listHead = list.head_;
-        list.head_ = head_;
-        head_ = listHead;
+        std::swap(list.head_, head_);
       }
 
     private:
