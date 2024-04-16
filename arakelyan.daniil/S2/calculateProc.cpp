@@ -16,10 +16,6 @@ arakelyan::Queue< arakelyan::ExpressionObj > arakelyan::transformInfixToPostfix(
     {
       postfixQ.push(tempVal);
     }
-    if (tempVal.type_ == token_t::operation)
-    {
-      stack.push(tempVal);
-    }
     if (tempVal.type_ == token_t::bracket)
     {
       if (tempVal.val_.oper_ == '(')
@@ -35,7 +31,12 @@ arakelyan::Queue< arakelyan::ExpressionObj > arakelyan::transformInfixToPostfix(
           stack.pop();
           bl9 = stack.top();
         }
+        stack.pop();
       }
+    }
+    if (tempVal.type_ == token_t::operation)
+    {
+      stack.push(tempVal);
     }
   }
 
