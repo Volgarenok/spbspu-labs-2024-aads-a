@@ -12,24 +12,13 @@ namespace zhalilov
       Three
     };
 
-    struct BaseNode
-    {
-      BaseNode *parent;
-      BaseNode *left;
-      BaseNode *right;
-      NodeType type;
-    };
-
     template < class T >
-    struct TwoNode: BaseNode
+    struct Node
     {
-      T value;
-    };
-
-    template < class T >
-    struct ThreeNode: BaseNode
-    {
-      BaseNode *middle;
+      Node *parent;
+      Node *left;
+      Node *right;
+      Node *middle;
       T value1;
       T value2;
     };
