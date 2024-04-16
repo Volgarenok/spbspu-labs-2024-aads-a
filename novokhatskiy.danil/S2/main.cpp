@@ -10,7 +10,7 @@
 #include "stack.hpp"
 #include "tokens.hpp"
 
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
   using namespace novokhatskiy;
   Queue<Queue<InfixType>> infixQueue;
@@ -38,12 +38,19 @@ int main(int argc, char **argv)
       stack.push(calculatePostExp(std::move(res)));
       // std::cout << calculatePostExp(std::move(res)) << '\n';
     }
+    bool firstExpression = true;
     while (!stack.empty())
     {
-      std::cout << stack.drop() << ' ';
+      if (!firstExpression)
+      {
+        std::cout << ' ';
+      }
+      firstExpression = false;
+      std::cout << stack.drop() ;
     }
+    std::cout << '\n';
   }
-  catch (const std::exception &e)
+  catch (const std::exception& e)
   {
     std::cerr << e.what() << '\n';
     return 1;
