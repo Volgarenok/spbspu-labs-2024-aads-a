@@ -512,6 +512,25 @@ namespace novokhatskiy
       }
       std::cout << std::endl;
     }
+
+    void push_back(const T& value)
+    {
+      Node< T >* new_node = new Node< T >{ value, nullptr };
+      if (head_ == nullptr)
+      {
+        head_ = new_node;
+      }
+      else
+      {
+        Node< T >* curr = head_;
+        while (curr->next_ != nullptr)
+        {
+          curr = curr->next_;
+        }
+        curr->next_ = new_node;
+      }
+    }
+    
     ~ForwardList()
     {
       clear();
