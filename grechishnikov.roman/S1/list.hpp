@@ -56,7 +56,8 @@ namespace grechishnikov
     Iterator< T > insert(ConstIterator< T >, const T&);
     Iterator< T > insert(ConstIterator< T >, T&&);
     Iterator< T > insert(ConstIterator< T >, size_t, const T&);
-    Iterator< T > insert(ConstIterator< T >, ConstIterator< T >, ConstIterator< T >);
+    template< class InputIterator >
+    Iterator< T > insert(ConstIterator< T >, InputIterator, InputIterator);
     Iterator< T > insert(ConstIterator< T >, std::initializer_list< T >);
 
     void splice(ConstIterator< T >, List< T >&);
@@ -85,17 +86,8 @@ namespace grechishnikov
 
   template< typename T >
   List< T >::List(const List< T >& other):
-    size_(0),
-    head_(nullptr),
-    tail_(nullptr)
-  {
-    detail::Node< T >* node = other.head_;
-    while(node)
-    {
-      safe_push_back(node->data_);
-      node = node->next_;
-    }
-  }
+    List(other.cbegin(), other.cend())
+  {}
 
   template< typename T >
   List< T >::List(std::initializer_list< T > ilist):
@@ -390,7 +382,8 @@ namespace grechishnikov
   }
 
   template< typename T >
-  Iterator< T > List< T >::insert(ConstIterator< T > where, ConstIterator< T > first, ConstIterator< T > last)
+  template< class InputIterator >
+  Iterator< T > List< T >::insert(ConstIterator< T > where, InputIterator first, InputIterator last)
   {
     while (first != last)
     {
@@ -404,8 +397,7 @@ namespace grechishnikov
   template< typename T >
   Iterator< T > List< T >::insert(ConstIterator< T > where, std::initializer_list< T > ilist)
   {
-    List< T > temp(ilist);
-    insert(where, temp.cbegin(), temp.cend());
+    insert(where, ilist.begin(), ilist.end());
     return Iterator< T >(where.node_);
   }
 
