@@ -24,18 +24,18 @@ namespace piyavkin
   private:
     struct Operand
     {
-      Operand(unsigned long long val);
+      explicit Operand(unsigned long long val);
       unsigned long long number;
     };
     struct Operation
     {
-      Operation(char val);
+      explicit Operation(char val);
       bool operator>(const Operation& rhs);
       char operation;
     };
     struct Bracket
     {
-      Bracket(char val);
+      explicit Bracket(char val);
       char bracket;
     };
     union InputT

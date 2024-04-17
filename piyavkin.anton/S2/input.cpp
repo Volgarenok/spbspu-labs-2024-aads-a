@@ -18,7 +18,12 @@ void piyavkin::input(std::istream& in, List< Queue< InputType > >& queues)
         InputType val(symbol, getType(symbol));
         q.push(val);
       }
-      else if (std::isdigit(symbol))
+      else if (symbol == '+' || symbol == '-' || symbol == '*' || symbol == '/' || symbol == '%')
+      {
+        InputType val(symbol, getType(symbol));
+        q.push(val);
+      }
+      else
       {
         std::string result = "";
         while (symbol != ' ' && symbol != '\n')
@@ -32,11 +37,6 @@ void piyavkin::input(std::istream& in, List< Queue< InputType > >& queues)
         {
           break;
         }
-      }
-      else
-      {
-        InputType val(symbol, getType(symbol));
-        q.push(val);
       }
     }
     queues.push_back(q);
