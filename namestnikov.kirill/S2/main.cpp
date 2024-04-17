@@ -19,7 +19,7 @@ int main(int argc, char * argv[])
     {
       inputExpressions(std::cin, infixQueue);
     }
-    else if (argc == 1)
+    else if (argc == 2)
     {
       std::ifstream in(argv[1]);
       if (!in.is_open())
