@@ -3,6 +3,7 @@
 
 #include <list>
 #include <cstddef>
+#include "forward_list.hpp"
 
 namespace namestnikov
 {
@@ -27,9 +28,9 @@ namespace namestnikov
     {
       data_.pop_front();
     }
-    size_t size() const noexcept
+    size_t size()
     {
-      return data_.size();
+      return data_.get_size();
     }
     bool empty() const noexcept
     {
@@ -37,7 +38,7 @@ namespace namestnikov
     }
     ~Queue() = default;
   private:
-    std::list< T > data_;
+    ForwardList< T > data_;
   };
 }
 

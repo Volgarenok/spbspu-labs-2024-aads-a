@@ -11,6 +11,7 @@
 
 namespace namestnikov
 {
+  //void inputExpressions(std::istream& in, Stack< Queue< namestnikov::Key > >& infixQueue);
   void inputExpressions(std::istream & in, Stack< Queue< namestnikov::Key > > & expressionsStack);
   void inputExpression(std::string s, Queue< namestnikov::Key > & expression);
 }

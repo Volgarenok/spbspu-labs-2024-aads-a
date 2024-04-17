@@ -44,11 +44,15 @@ void namestnikov::convertToPostfix(Queue< namestnikov::Key > & currentQueue, Que
     }
     else if (temp.type == namestnikov::PartType::CLOSE_BRACKET)
     {
-      while (processStack.top().type != namestnikov::PartType::OPEN_BRACKET)
+      while (!processStack.empty() && processStack.top().type != namestnikov::PartType::OPEN_BRACKET)
       {
         namestnikov::Key temp = processStack.top();
         resultQueue.push(temp);
         processStack.pop();
+      }
+      if (processStack.empty())
+      {
+        throw std::runtime_error("Wrong brackets");
       }
       processStack.pop();
     }
@@ -67,4 +71,4 @@ void namestnikov::convertToPostfix(Queue< namestnikov::Key > & currentQueue, Que
     resultQueue.push(processStack.top());
     processStack.pop();
   }
-}
+} 

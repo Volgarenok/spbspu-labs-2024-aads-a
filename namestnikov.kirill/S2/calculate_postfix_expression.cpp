@@ -1,14 +1,13 @@
 #include "calculate_postfix_expression.hpp"
-#include <stack>
 #include <stdexcept>
 #include <limits>
+#include <iostream>
 #include "queue.hpp"
 #include "stack.hpp"
 #include "data_types.hpp"
 
-long long calculateExpression(long long num1, long long num2, char op)
+void calculateExpression(long long & num1, long long num2, char op)
 {
-  long long result = 0ll;
   if (op == '+')
   {
     long long maxLong = std::numeric_limits< long long >::max();
@@ -16,7 +15,7 @@ long long calculateExpression(long long num1, long long num2, char op)
     {
       throw std::out_of_range("Overflow error");
     }
-    result = num1 + num2;
+    num1 += num2;
   }
   else if (op == '-')
   {
@@ -25,7 +24,7 @@ long long calculateExpression(long long num1, long long num2, char op)
     {
       throw std::out_of_range("Overflow error");
     }
-    result = num1 - num2;
+    num1 -= num2;
   }
   else if (op == '*')
   {
@@ -34,7 +33,7 @@ long long calculateExpression(long long num1, long long num2, char op)
     {
       throw std::out_of_range("Overflow error");
     }
-    result = num1 * num2;
+    num1 *= num2;
   }
   else if (op == '/')
   {
@@ -47,17 +46,16 @@ long long calculateExpression(long long num1, long long num2, char op)
     {
       throw std::out_of_range("Overflow error");
     }
-    result = num1 / num2;
+    num1 /= num2;
   }
   else if (op == '%')
   {
-    (num1 % num2 < 0) ? result = num1 % num2 + num2 : result = num1 % num2;
+    (num1 % num2 < 0) ? num1 %= num2 + num2 : num1 %= num2;
   }
   else
   {
     throw std::invalid_argument("Wrong operator");
   }
-  return result;
 }
 
 long long namestnikov::calculatePostfixExpression(Queue< namestnikov::Key > & resultQueue)
@@ -66,28 +64,25 @@ long long namestnikov::calculatePostfixExpression(Queue< namestnikov::Key > & re
   Stack< long long > operandsStack;
   while (!resultQueue.empty())
   {
-    if (resultQueue.front().type == namestnikov::PartType::OPERAND)
+    namestnikov::Key token = resultQueue.front();
+    resultQueue.pop();
+    if (token.type == namestnikov::PartType::OPERATION)
     {
-      operandsStack.push(resultQueue.front().value.operand);
-      resultQueue.pop();
-      ++countOperands;
+      if (operandsStack.empty())
+      {
+        throw std::runtime_error("Stack is empty");
+      }
+      long long secondNum = operandsStack.top();
+      operandsStack.pop();
+      calculateExpression(operandsStack.top(), secondNum, token.value.operand);
     }
-    else
+    else if (token.type == namestnikov::PartType::OPERAND)
     {
-      if (countOperands > 1)
-      {
-        long long num2 = operandsStack.top();
-        operandsStack.pop();
-        long long num1 = operandsStack.top();
-        operandsStack.pop();
-        char op = resultQueue.front().value.operation;
-        resultQueue.pop();
-        operandsStack.push(calculateExpression(num1, num2, op));
-      }
-      else
-      {
-        throw std::invalid_argument("Wrong expression");
-      }
+      operandsStack.push(token.value.operand);
+    }
+    else if ((token.type == namestnikov::PartType::OPEN_BRACKET) || (token.type == namestnikov::PartType::CLOSE_BRACKET))
+    {
+      throw std::invalid_argument("Wrong bracket");
     }
   }
   return operandsStack.top();

@@ -7,46 +7,54 @@
 #include "calculate_postfix_expression.hpp"
 #include "input_expressions.hpp"
 #include "data_types.hpp"
+#include "forward_list.hpp"
+
+#include <exception>
+#include <fstream>
+#include <iostream>
+#include <list>
+#include <string>
+#include "calculate_postfix_expression.hpp"
+#include "convert_to_postfix.hpp"
+#include "input_expressions.hpp"
+#include "queue.hpp"
+#include "stack.hpp"
+#include "data_types.hpp"
 
 int main(int argc, char * argv[])
 {
   using namespace namestnikov;
-  Stack < Queue< namestnikov::Key > > infixes;
-  Stack< long long > results;
-  Stack< Queue< namestnikov::Key > > postfixes;
+  Stack< Queue< namestnikov::Key > > infixQueue;
   try
   {
     if (argc == 1)
     {
-      inputExpressions(std::cin, infixes);
+      inputExpressions(std::cin, infixQueue);
     }
-    else if (argc == 2)
+    else if (argc == 1)
     {
       std::ifstream in(argv[1]);
       if (!in.is_open())
       {
-        std::cerr << "Can not open file\n";
+        std::cerr << "Can not open the file\n";
         return 1;
       }
-      inputExpressions(in, infixes);
+      inputExpressions(in, infixQueue);
       in.close();
     }
     else
     {
-      std::cerr << "Wrong count of parameters\n";
+      std::cerr << "Wrong input arguments\n";
       return 1;
     }
-    while (!infixes.empty())
+    Stack< long long > results;
+    while (!infixQueue.empty())
     {
-      Queue< namestnikov::Key > expression;
-      convertToPostfix(infixes.top(), expression);
-      postfixes.push(expression);
-      infixes.pop();
-    }
-    while (!postfixes.empty())
-    {
-      results.push(calculatePostfixExpression(postfixes.top()));
-      postfixes.pop();
+      Queue< namestnikov::Key > tmp = infixQueue.top();
+      infixQueue.pop();
+      Queue< namestnikov::Key > res;
+      convertToPostfix(tmp, res);
+      results.push(calculatePostfixExpression(res));
     }
     while (!results.empty())
     {
@@ -56,7 +64,7 @@ int main(int argc, char * argv[])
   }
   catch (const std::exception & e)
   {
-    std::cerr << e.what() << "\n";
+    std::cerr << e.what() << '\n';
     return 1;
   }
 }
