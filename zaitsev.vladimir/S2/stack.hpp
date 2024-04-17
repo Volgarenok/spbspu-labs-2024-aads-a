@@ -1,6 +1,7 @@
 #ifndef STACK_HPP
 #define STACK_HPP
 #include "deque.hpp"
+
 namespace zaitsev
 {
   template< typename T, typename Container = Deque< T > >

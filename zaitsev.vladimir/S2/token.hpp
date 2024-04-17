@@ -20,7 +20,7 @@ namespace zaitsev
   template< typename T >
   struct Token
   {
-    token_type type_;
+    token_type type_ = token_type::undefined;
     TokenValue< T > token_;
     Token() = default;
     Token(const Token< T >& other):

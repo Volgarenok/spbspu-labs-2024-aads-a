@@ -1,7 +1,7 @@
 #ifndef QUEUE_HPP
 #define QUEUE_HPP
 #include "deque.hpp"
-#include <deque>
+
 namespace zaitsev
 {
   template< typename T, typename Container = Deque< T > >

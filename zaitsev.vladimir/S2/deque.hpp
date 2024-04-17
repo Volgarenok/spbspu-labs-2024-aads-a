@@ -304,8 +304,16 @@ namespace zaitsev
       }
       head_alloc_.deallocate(chunk_heads_, chunks_nmb_);
     }
+    void push_back(const T& value)
+    {
+      emplace_back(value);
+    }
+    void push_back(T&& value)
+    {
+      emplace_back(std::move(value));
+    }
     template<class ... Args>
-    void push_back(Args&&... args)
+    void emplace_back(Args&&... args)
     {
       size_t end_chunk = head_chunk_;
       size_t end_pos = head_pos_;
@@ -334,7 +342,16 @@ namespace zaitsev
       reset_head();
     }
     template<class ... Args>
-    void push_front(Args&&... args)
+    void push_front(const T& value)
+    {
+      emplace_front(value);
+    }
+    void push_front(T&& value)
+    {
+      emplace_front(std::move(value));
+    }
+    template<class ... Args>
+    void emplace_front(Args&&... args)
     {
       if (head_chunk_ == 0 && head_pos_ == 0)
       {
