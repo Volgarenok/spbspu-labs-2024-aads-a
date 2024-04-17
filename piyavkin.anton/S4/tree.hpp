@@ -1,7 +1,6 @@
 #ifndef TREE_HPP
 #define TREE_HPP
 #include <cstddef>
-#include "treenode.hpp"
 #include "treeiterator.hpp"
 
 namespace piyavkin
@@ -41,6 +40,10 @@ namespace piyavkin
     {
       rhs.root_ = nullptr;
       rhs.size_ = 0;
+    }
+    ~Tree()
+    {
+      clear();
     }
     Tree< Key, T, Compare >& operator=(const Tree& rhs)
     {
@@ -216,14 +219,23 @@ namespace piyavkin
       detail::Node< Key, T >* node = delete_node.node_->right_;
       if (!node || delete_node.node_->right_ == std::addressof(end_node_))
       {
-        if ((size_ == 1) || !delete_node.node_->parent_->left_)
+        if ((size_ == 1) || (delete_node.node_->parent_ && !delete_node.node_->parent_->left_))
         {
           delete delete_node.node_;
           --size_;
           return result;
         }
         delete_node.node_->left_->parent_ = delete_node.node_->parent_;
-        delete_node.node_->left_->right_ = delete_node.node_->right_;
+        node = delete_node.node_->left_;
+        while (node->right_)
+        {
+          node = node->right_;
+        }
+        node->right_ = delete_node.node_->right_;
+        if (node)
+        {
+          node->parent_ = delete_node.node_->left_;
+        }
         if (delete_node.node_->parent_)
         {
           if (delete_node.node_->parent_->left_ == delete_node.node_)
@@ -235,25 +247,47 @@ namespace piyavkin
             delete_node.node_->parent_->right_ = delete_node.node_->left_;
           }
         }
+        if (delete_node.node_ == root_)
+        {
+          root_ = delete_node.node_->left_;
+        }
         delete delete_node.node_;
         --size_;
         return result;
       }
-      while (node && !node->left_)
+      while (node && node->left_)
       {
         node = node->left_;
       }
       if (node)
       {
         node->left_ = delete_node.node_->left_;
-        node->right_ = delete_node.node_->right_;
+        if (node->parent_)
+        {
+          if (node->parent_->left_ == node)
+          {
+            node->parent_->left_ = node->right_;
+          }
+          else
+          {
+            node->parent_->right_ = node->right_;
+          }
+          if (node->right_)
+          {
+            node->right_->parent_ = node->parent_;
+          }
+          if (!(delete_node.node_->right_ == node))
+          {
+            node->right_ = delete_node.node_->right_;
+          }
+        }
         node->parent_ = delete_node.node_->parent_;
       }
-      if (delete_node.node_->left_)
+      if (delete_node.node_->left_ && delete_node.node_->left_ != node)
       {
         delete_node.node_->left_->parent_ = node;
       }
-      if (delete_node.node_->right_)
+      if (delete_node.node_->right_ && delete_node.node_->right_ != node)
       {
         delete_node.node_->right_->parent_ = node;
       }
@@ -268,9 +302,20 @@ namespace piyavkin
           delete_node.node_->parent_->right_ = node;
         }
       }
+      if (delete_node.node_ == root_)
+      {
+        root_ = node;
+      }
       delete delete_node.node_;
       --size_;
       return result;
+    }
+    void clear()
+    {
+      while (!empty())
+      {
+        erase(TreeIterator< Key, T, Compare >(root_));
+      }
     }
   private:
     detail::Node< Key, T >* root_;
