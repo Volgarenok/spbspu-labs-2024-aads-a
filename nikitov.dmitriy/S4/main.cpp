@@ -8,6 +8,7 @@
 int main(int argc, char* argv[])
 {
   using namespace nikitov;
+
   std::map< std::string, std::map< size_t, std::string > > treeOfDictionaries;
   if (argc == 2)
   {
@@ -19,5 +20,6 @@ int main(int argc, char* argv[])
     std::cerr << "Error: Wrong input parameters" << '\n';
     return 1;
   }
+
   return 0;
 }
