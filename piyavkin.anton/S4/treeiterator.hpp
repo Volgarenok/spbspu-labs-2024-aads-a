@@ -20,7 +20,7 @@ namespace piyavkin
     ~TreeIterator() = default;
     TreeIterator< Key, T, Compare >& operator++()
     {
-      if (!node_->parent_)
+      if (node_->right_)
       {
         node_ = node_->right_;
         while (node_->left_)
@@ -29,12 +29,7 @@ namespace piyavkin
         }
         return *this;
       }
-      else if (node_->right_)
-      {
-        node_ = node_->right_;
-        return *this;
-      }
-      while (node_->parent_->right_ == node_)
+      while (node_->parent_ && node_->parent_->right_ == node_)
       {
         node_ = node_->parent_;
       }
@@ -43,7 +38,7 @@ namespace piyavkin
     }
     TreeIterator< Key, T, Compare >& operator--()
     {
-      if (!node_->parent_)
+      if (node_->left_)
       {
         node_ = node_->left_;
         while (node_->right_)
@@ -52,12 +47,7 @@ namespace piyavkin
         }
         return *this;
       }
-      if (node_->left_)
-      {
-        node_ = node_->left_;
-        return *this;
-      }
-      while (node_->parent_->left_ == node_)
+      while (node_->parent_ && node_->parent_->left_ == node_)
       {
         node_ = node_->parent_;
       }
