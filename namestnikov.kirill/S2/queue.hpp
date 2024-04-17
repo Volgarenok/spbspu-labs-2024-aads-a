@@ -2,6 +2,7 @@
 #define QUEUE_HPP
 
 #include <list>
+#include <cstddef>
 
 namespace namestnikov
 {

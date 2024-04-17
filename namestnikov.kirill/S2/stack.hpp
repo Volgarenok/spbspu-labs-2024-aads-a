@@ -2,7 +2,7 @@
 #define STACK_HPP
 
 #include <list>
-#include <iostream>
+#include <cstddef>
 
 namespace namestnikov
 {
