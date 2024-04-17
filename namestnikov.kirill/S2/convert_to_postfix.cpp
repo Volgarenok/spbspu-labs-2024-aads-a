@@ -71,4 +71,4 @@ void namestnikov::convertToPostfix(Queue< namestnikov::Key > & currentQueue, Que
     resultQueue.push(processStack.top());
     processStack.pop();
   }
-} 
+}
