@@ -12,7 +12,7 @@ int main(int argc, char* argv[])
   if (argc == 2)
   {
     std::ifstream input(argv[1]);
-    readDictionaries(treeOfDictionaries);
+    readDictionaries(treeOfDictionaries, input);
   }
   else
   {
