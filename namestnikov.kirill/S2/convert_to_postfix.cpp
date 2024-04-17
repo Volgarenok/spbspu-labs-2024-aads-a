@@ -6,7 +6,7 @@
 #include "data_types.hpp"
 
 
-int getPrecedence(char op)
+unsigned char getPrecedence(char op)
 {
   if ((op == '/') || (op == '*'))
   {
