@@ -2,11 +2,13 @@
 #define BINARYSEARCHTREE_HPP
 #include "treeNode.hpp"
 #include <cstddef>
+#include <iostream>
 
 namespace zakozhurnikova
 {
   template< typename Key, typename Value >
   struct BinarySearchTree {
+    using node = TreeNode< Key, Value >;
     BinarySearchTree() = default;
 
     int length()
@@ -22,12 +24,12 @@ namespace zakozhurnikova
       }
       else
       {
-        this->root = new TreeNode< Key, Value >(key, val);
+        this->root = new node(key, val);
       }
       this->size = this->size + 1;
     }
 
-    void put(Key key, Value val, TreeNode< Key, Value >* currentNode)
+    void put(Key key, Value val, node* currentNode)
     {
       if (key < currentNode->key)
       {
@@ -37,7 +39,7 @@ namespace zakozhurnikova
         }
         else
         {
-          currentNode->leftChild = new TreeNode< Key, Value >(key, val, currentNode);
+          currentNode->leftChild = new node(key, val, currentNode);
         }
       }
       else
@@ -47,7 +49,7 @@ namespace zakozhurnikova
         }
         else
         {
-          currentNode->rightChild = new TreeNode< Key, Value >(key, val, currentNode);
+          currentNode->rightChild = new node(key, val, currentNode);
         }
       }
     }
@@ -56,7 +58,7 @@ namespace zakozhurnikova
     {
       if (this->root)
       {
-        TreeNode< Key, Value >* res = this->get(key, this->root);
+        node* res = this->get(key, this->root);
         if (res)
         {
           return res->value;
@@ -72,7 +74,7 @@ namespace zakozhurnikova
       }
     }
 
-    TreeNode< Key, Value >* get(Key key, TreeNode< Key, Value >* currentNode)
+    node* get(Key key, node* currentNode)
     {
       if (!currentNode)
       {
@@ -92,8 +94,36 @@ namespace zakozhurnikova
       }
     }
 
+    //херня какая-то пока что, сначала пробую балансировку при вставке
+    void del(Key key)
+    {
+      if (this->size > 1)
+      {
+        node* nodeToRemove = this->get(key, this->root);
+        if (nodeToRemove)
+        {
+          this->remove(nodeToRemove);
+          this->size = this->size - 1;
+        }
+        else
+        {
+          std::cerr << "Error, key not in tree" << '\n';
+        }
+      }
+      else if (this->size == 1 && this->root->key == key)
+      {
+        this->root = nullptr;
+        this->size = this->size - 1;
+      }
+      else
+      {
+        std::cerr << "Error, key not in tree" << '\n';
+      }
+    }
+
+
   private:
-    TreeNode< Key, Value >* root;
+    node* root;
     size_t size;
   };
 }
