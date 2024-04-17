@@ -2,7 +2,6 @@
 #include <queue>
 #include <stack>
 #include <stdexcept>
-#include <iostream>
 #include "stack.hpp"
 #include "data_types.hpp"
 

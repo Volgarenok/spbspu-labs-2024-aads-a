@@ -1,7 +1,6 @@
 #include "calculate_postfix_expression.hpp"
 #include <stack>
 #include <stdexcept>
-#include <iostream>
 #include <limits>
 #include "queue.hpp"
 #include "stack.hpp"
