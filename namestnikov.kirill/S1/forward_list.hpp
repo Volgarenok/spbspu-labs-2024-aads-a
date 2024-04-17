@@ -143,6 +143,27 @@ namespace namestnikov
     {
       push_front(data);
     }
+    void push_back(const T & value)
+    {
+      if (!head_)
+      {
+        push_front(value);
+      }
+      else
+      {
+        node_t * new_node = new node_t(value);
+        node_t * curr = head_;
+        while (curr->next_ != nullptr)
+        {
+          curr = curr->next_;
+        }
+        curr->next_ = new_node;
+      }
+    }
+    void push_back(T && data)
+    {
+      push_back(data);
+    }
     T & front()
     {
       return head_->data_;
