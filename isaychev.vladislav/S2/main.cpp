@@ -10,11 +10,11 @@ int main(int argc, char * argv[])
   {
     while (!std::cin.eof())
     {
-      std::cout << "ya input\n";
     }
   }
   else if (argc == 2)
   {
     std::fstream input(argv[1]);
+    
   }
 }

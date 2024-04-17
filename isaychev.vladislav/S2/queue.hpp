@@ -31,7 +31,7 @@ namespace isaychev
   template < class T, class Container >
   void Queue< T, Container >::push(const T & rhs)
   {
-    con.push_back();
+    con.push_back(rhs);
   }
 
   template < class T, class Container >
