@@ -10,20 +10,6 @@ namespace namestnikov
   {
     using queue_t = Queue< T >;
   public:
-    Queue() = default;
-    Queue(const queue_t & other) = default;
-    queue_t & operator=(const queue_t & other) = default;
-    Queue(queue_t && other) noexcept:
-      data_(std::move(other.data_))
-    {}
-    queue_t & operator=(queue_t && other)
-    {
-      if (std::addressof(other) != this)
-      {
-        std::swap(data_, other.data_);
-      }
-      return *this;
-    }
     T & front()
     {
       return data_.front();
@@ -31,14 +17,6 @@ namespace namestnikov
     const T & front() const
     {
       return data_.front();
-    }
-    T & back()
-    {
-      return data_.back();
-    }
-    const T & back() const
-    {
-      return data_.back();
     }
     void push(const T & value)
     {

@@ -11,20 +11,6 @@ namespace namestnikov
   {
     using stack_t = Stack< T >;
   public:
-    Stack() = default;
-    Stack(const stack_t & other) = default;
-    stack_t & operator=(const stack_t & other) = default;
-    Stack(stack_t && other) noexcept:
-      data_(std::move(other.data_))
-    {}
-    stack_t & operator=(stack_t && other)
-    {
-      if (std::addressof(other) != this)
-      {
-        std::swap(data_, other.data_);
-      }
-      return *this;
-    }
     void push(const T & value)
     {
       data_.push_front(value);
