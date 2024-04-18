@@ -330,6 +330,14 @@ namespace piyavkin
       }
       return count;
     }
+    std::pair< TreeIterator< Key, T, Compare >, TreeIterator< Key, T, Compare > > equil_range(const Key& key)
+    {
+      return std::pair< TreeIterator< Key, T, Compare >, TreeIterator< Key, T, Compare > >(find(key), ++find(key));
+    }
+    size_t count(const Key& key)
+    {
+      return (find(key) != end()) ? 1 : 0;
+    }
   private:
     detail::Node< Key, T >* root_;
     Compare cmp_;

@@ -16,5 +16,6 @@ int main()
     std::cout << ' ' << *it++;
   }
   std::cout << '\n';
+  std::cout << tree.count(11) << *tree.equil_range(11).first;
   std::cout << '\n' << tree.erase(11);
 }
