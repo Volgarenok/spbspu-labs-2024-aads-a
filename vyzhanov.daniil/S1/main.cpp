@@ -1,6 +1,13 @@
-#include <iostream>
+#include "List.hpp"
 
 int main()
 {
-  std::cout << "Oh shit, here we go again!";
+  vyzhanov::List<int> test;
+  for (int i = 0; i < 20; i++)
+  {
+    test.Add(i);
+  }
+  test.Show();
+  test.~List();
+  test.Show();
 }
