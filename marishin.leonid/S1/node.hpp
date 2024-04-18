@@ -3,18 +3,21 @@
 
 namespace marishin
 {
-  template < class T >
-  struct Node
+  namespace datail
   {
-    Node(const T & value):
-      data_(value),
-      next_(nullptr),
-      prev_(nullptr)
-    {}
-    T data_;
-    Node * next_;
-    Node * prev_;
-  };
+    template < class T >
+    struct Node
+    {
+      Node(const T & value):
+        data_(value),
+        next_(nullptr),
+        prev_(nullptr)
+      {}
+      T data_;
+      Node * next_;
+      Node * prev_;
+    };
+  }
 }
 
 #endif

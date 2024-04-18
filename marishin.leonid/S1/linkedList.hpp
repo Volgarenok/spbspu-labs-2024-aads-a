@@ -36,7 +36,7 @@ namespace marishin
     {
       try
       {
-        Node< T > * curr = other.head_;
+        datail::Node< T > * curr = other.head_;
         while (size_ != other.size_)
         {
           push_back(curr->data_);
@@ -127,7 +127,7 @@ namespace marishin
 
     void push_front(const T & value)
     {
-      Node< T > * newNode = new Node< T >(value);
+      datail::Node< T > * newNode = new datail::Node< T >(value);
       if (empty())
       {
         head_ = tail_ = newNode;
@@ -147,7 +147,7 @@ namespace marishin
       {
         return;
       }
-      Node< T > * temp = head_->next_;
+      datail::Node< T > * temp = head_->next_;
       if (temp != nullptr)
       {
         temp->prev_ = nullptr;
@@ -163,7 +163,7 @@ namespace marishin
 
     void push_back(const T & value)
     {
-      Node< T > * newNode = new Node< T >(value);
+      datail::Node< T > * newNode = new datail::Node< T >(value);
       if (empty())
       {
         head_ = tail_ = newNode;
@@ -183,7 +183,7 @@ namespace marishin
       {
         return;
       }
-      Node< T > * temp = tail_->prev_;
+      datail::Node< T > * temp = tail_->prev_;
       if (temp != nullptr)
       {
         temp->next_ = nullptr;
@@ -220,8 +220,8 @@ namespace marishin
     template < class Predicate >
     void remove_if(Predicate pred)
     {
-      Node< T > * curr = head_;
-      Node< T > * prev = nullptr;
+      datail::Node< T > * curr = head_;
+      datail::Node< T > * prev = nullptr;
       while (curr)
       {
         if (pred(curr->data_))
@@ -253,8 +253,8 @@ namespace marishin
     }
 
   private:
-    Node< T >* head_;
-    Node< T >* tail_;
+    datail::Node< T >* head_;
+    datail::Node< T >* tail_;
     size_t size_;
   };
 }
