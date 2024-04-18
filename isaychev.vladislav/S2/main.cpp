@@ -1,7 +1,5 @@
 #include <iostream>
 #include <fstream>
-#include "queue.hpp"
-#include "stack.hpp"
 #include "dataArray.hpp"
 #include "inputInfix.hpp"
 
