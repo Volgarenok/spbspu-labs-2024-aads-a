@@ -19,7 +19,7 @@ int main(int argc, char* argv[])
     if (argc == 2)
     {
       std::ifstream input(argv[1]);
-      if(input.is_open())
+      if (input.is_open())
       {
         getPostfixFromInfix(input, queue);
         evaluatePostfix(result, queue);
@@ -35,7 +35,7 @@ int main(int argc, char* argv[])
       getPostfixFromInfix(std::cin, queue);
       evaluatePostfix(result, queue);
     }
-    outputResult(result);
+    outputResult(std::cout, result);
   }
   catch (const std::exception& e)
   {

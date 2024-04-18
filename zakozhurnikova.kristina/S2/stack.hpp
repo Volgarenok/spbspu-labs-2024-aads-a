@@ -18,7 +18,8 @@ namespace zakozhurnikova
 
     void push(const T& rhs);
     void drop();
-    T& top();
+    T& top() noexcept;
+    const T& top() const noexcept;
     size_t size() const noexcept;
     bool empty() const noexcept;
 
@@ -27,12 +28,12 @@ namespace zakozhurnikova
   };
 
   template< class T >
-  Stack< T >::Stack(const Stack< T >& rhs) :
+  Stack< T >::Stack(const Stack< T >& rhs):
     stack_(rhs.stack_)
   {}
 
   template< class T >
-  Stack< T >::Stack(Stack< T >&& rhs) noexcept :
+  Stack< T >::Stack(Stack< T >&& rhs) noexcept:
     stack_(std::move(rhs.stack_))
   {}
 
@@ -68,9 +69,15 @@ namespace zakozhurnikova
   }
 
   template< class T >
-  T& Stack< T >::top()
+  T& Stack< T >::top() noexcept
   {
     return stack_.front();
+  }
+
+  template< class T >
+  const T& Stack< T >::top() const noexcept
+  {
+    return stack_.front;
   }
 
   template< class T >

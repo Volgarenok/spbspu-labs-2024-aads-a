@@ -5,6 +5,6 @@
 namespace zakozhurnikova
 {
   using ll = long long;
-  void outputResult(Stack< ll >& result);
+  void outputResult(std::ostream& out, Stack< ll >& result);
 }
 #endif

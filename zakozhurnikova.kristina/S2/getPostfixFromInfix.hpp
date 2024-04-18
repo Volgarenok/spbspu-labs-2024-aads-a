@@ -6,6 +6,6 @@
 
 namespace zakozhurnikova
 {
-  void getPostfixFromInfix(std::istream &in, Queue< std::string >& queue);
+  void getPostfixFromInfix(std::istream& in, Queue< std::string >& queue);
 }
 #endif

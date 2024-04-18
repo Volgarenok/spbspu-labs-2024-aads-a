@@ -19,7 +19,8 @@ namespace zakozhurnikova
 
     void push(const T& rhs);
     void drop();
-    T& top();
+    T& top() noexcept;
+    const T& top() const noexcept;
     size_t size() const noexcept;
     bool empty() const noexcept;
 
@@ -70,9 +71,15 @@ namespace zakozhurnikova
   }
 
   template< class T>
-  T& Queue< T >::top()
+  T& Queue< T >::top() noexcept
   {
     return queue_.front();
+  }
+
+  template< class T >
+  const T& Queue< T >::top() const noexcept
+  {
+   return queue_.front();
   }
 
   template< class T >
