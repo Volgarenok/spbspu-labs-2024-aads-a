@@ -4,7 +4,7 @@
 #include <cctype>
 #include <stdexcept>
 #include <limits>
-#include <common/forward_list.hpp>
+#include <forward_list.hpp>
 
 namespace zaitsev
 {
