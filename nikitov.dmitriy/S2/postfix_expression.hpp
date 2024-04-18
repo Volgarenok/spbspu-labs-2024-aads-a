@@ -10,7 +10,7 @@ namespace nikitov
   {
   public:
     PostfixExpression() = default;
-    explicit PostfixExpression(Queue< PostfixType >& postfixQueue);
+    explicit PostfixExpression(const Queue< PostfixType >& postfixQueue);
 
     PostfixExpression operator+(long long value) const;
     PostfixExpression operator-(long long value) const;

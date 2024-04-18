@@ -2,15 +2,9 @@
 #include <limits>
 #include "stack.hpp"
 
-nikitov::PostfixExpression::PostfixExpression(Queue< PostfixType >& postfixQueue):
-  data_()
-{
-  while (!postfixQueue.empty())
-  {
-    data_.push(postfixQueue.top());
-    postfixQueue.pop();
-  }
-}
+nikitov::PostfixExpression::PostfixExpression(const Queue< PostfixType >& postfixQueue):
+  data_(std::move(postfixQueue))
+{}
 
 nikitov::PostfixExpression nikitov::PostfixExpression::operator+(long long value) const
 {
