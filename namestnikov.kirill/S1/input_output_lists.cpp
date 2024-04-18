@@ -40,7 +40,7 @@ void namestnikov::outputNumsAndSums(std::ostream & out, const ForwardList< named
   {
     for (auto it = dataList.begin(); it != dataList.end(); ++it)
     {
-      ConstForwardIterator<unsigned long long> numIt = it->second.cbegin();
+      ConstForwardIterator< unsigned long long > numIt = it->second.cbegin();
       size_t currentListSize = it->second.get_size();
       if (i < currentListSize)
       {
