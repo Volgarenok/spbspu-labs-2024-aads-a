@@ -4,7 +4,7 @@
 size_t zakozhurnikova::getMaxSize(const List< pair >& l)
 {
   size_t max = 0;
-  for (pair p : l)
+  for (auto p : l)
   {
     size_t size = p.second.size();
     max = std::max(max, size);
@@ -55,11 +55,11 @@ void zakozhurnikova::printSums(const List< pair >& l, std::ostream& out)
   bool overflow = false;
   constexpr size_t max = std::numeric_limits< size_t >::max();
   size_t maxSize = getMaxSize(l);
-  List < size_t > listSum;
+  List< size_t > listSum;
   for (size_t i = 0; i < maxSize; ++i)
   {
     size_t sum = 0;
-    for (pair p : l)
+    for (auto p : l)
     {
       if (i >= p.second.size())
       {

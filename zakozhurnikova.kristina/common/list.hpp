@@ -40,7 +40,7 @@ namespace zakozhurnikova
       }
     }
 
-    List (List&& rhs) noexcept:
+    List(List&& rhs) noexcept:
       head_(rhs.head_),
       tail_(rhs.tail_),
       size_(rhs.size_)
@@ -237,14 +237,13 @@ namespace zakozhurnikova
       }
     }
 
-    void assign (size_t count, const T& value)
+    void assign(size_t count, const T& value)
     {
       List< T > temp;
       for (size_t i = 0; i < count; i++)
       {
         temp.push_front(value);
       }
-      clear();
       swap(temp);
     }
 

@@ -11,7 +11,7 @@ int main()
   using pair = std::pair< std::string, List< size_t > >;
   try
   {
-    List<pair> list;
+    List< pair > list;
     readList(list, std::cin);
     printNames(list, std::cout);
     printByIndex(list, std::cout);
