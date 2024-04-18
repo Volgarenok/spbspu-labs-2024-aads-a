@@ -165,6 +165,7 @@ int main(int argc, char * argv[])
   {
     std::cout << " " << results.drop();
   }
+  std::cout << "\n";
 
   return 0;
 }
