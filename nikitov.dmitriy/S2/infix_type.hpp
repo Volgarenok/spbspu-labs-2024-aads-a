@@ -14,7 +14,7 @@ namespace nikitov
     explicit InfixType(char value);
 
     bool isOpenBracket() const;
-    bool isCloseBracket() const;    
+    bool isCloseBracket() const;
     long long getOperand() const;
     char getOperation() const;
     ExprTypeName getType() const;
