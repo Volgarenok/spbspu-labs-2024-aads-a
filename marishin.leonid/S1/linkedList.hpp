@@ -206,7 +206,12 @@ namespace marishin
 
     void remove(const T & value)
     {
-      remove_if([value](const T & data) { return data == value; });
+      remove_if(
+        [&](const T & data)
+        {
+          return (data == value);
+        }
+      );
     }
 
     template < class Predicate >
