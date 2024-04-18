@@ -173,6 +173,12 @@ namespace zhalilov
   }
 
   template < class T >
+  TwoThreeIterator < T >::TwoThreeIterator(detail::Node < T > *node, bool isPtrToLeft):
+    node_(node),
+    isPtrToLeft_(isPtrToLeft)
+  {}
+
+  template < class T >
   detail::Node < T > *TwoThreeIterator < T >::findMin(const detail::Node < T > *nodeFrom)
   {
     detail::Node < T > *minNode = nodeFrom;
