@@ -2,70 +2,53 @@
 #include <limits>
 #include "stack.hpp"
 
-void inputOperator(nikitov::PostfixExpression& expression, char symb, long long value)
+nikitov::PostfixExpression::PostfixExpression(Queue< PostfixType >& postfixQueue)
 {
-  expression.add(nikitov::PostfixType(symb));
-  expression.add(nikitov::PostfixType(value));
+  while (!postfixQueue.empty())
+  {
+    data_.push(postfixQueue.top());
+    postfixQueue.pop();
+  }
 }
 
 nikitov::PostfixExpression nikitov::PostfixExpression::operator+(long long value) const
 {
   PostfixExpression newExpression(*this);
-  inputOperator(newExpression, '+', value);
+  newExpression.data_.push(nikitov::PostfixType('+'));
+  newExpression.data_.push(nikitov::PostfixType(value));
   return newExpression;
 }
 
 nikitov::PostfixExpression nikitov::PostfixExpression::operator-(long long value) const
 {
   PostfixExpression newExpression(*this);
-  inputOperator(newExpression, '-', value);
+  newExpression.data_.push(nikitov::PostfixType('-'));
+  newExpression.data_.push(nikitov::PostfixType(value));;
   return newExpression;
 }
 
 nikitov::PostfixExpression nikitov::PostfixExpression::operator*(long long value) const
 {
   PostfixExpression newExpression(*this);
-  inputOperator(newExpression, '*', value);
+  newExpression.data_.push(nikitov::PostfixType('*'));
+  newExpression.data_.push(nikitov::PostfixType(value));
   return newExpression;
 }
 
 nikitov::PostfixExpression nikitov::PostfixExpression::operator/(long long value) const
 {
   PostfixExpression newExpression(*this);
-  inputOperator(newExpression, '/', value);
+  newExpression.data_.push(nikitov::PostfixType('/'));
+  newExpression.data_.push(nikitov::PostfixType(value));
   return newExpression;
 }
 
 nikitov::PostfixExpression nikitov::PostfixExpression::operator%(long long value) const
 {
   PostfixExpression newExpression(*this);
-  inputOperator(newExpression, '%', value);
+  newExpression.data_.push(nikitov::PostfixType('%'));
+  newExpression.data_.push(nikitov::PostfixType(value));
   return newExpression;
-}
-
-void nikitov::PostfixExpression::add(PostfixType& value)
-{
-  data.push(value);
-}
-
-void nikitov::PostfixExpression::add(PostfixType&& value)
-{
-  data.push(std::move(value));
-}
-
-void nikitov::PostfixExpression::remove()
-{
-  data.pop();
-}
-
-size_t nikitov::PostfixExpression::size() const
-{
-  return data.size();
-}
-
-bool nikitov::PostfixExpression::empty() const
-{
-  return data.empty();
 }
 
 bool isAdditionOverflow(long long first, long long second)
@@ -107,10 +90,10 @@ long long nikitov::PostfixExpression::solve()
 {
   Stack< long long > solverStack;
   size_t countElem = 0;
-  while (!data.empty())
+  while (!data_.empty())
   {
-    PostfixType postfixValue = data.top();
-    data.pop();
+    PostfixType postfixValue = data_.top();
+    data_.pop();
     if (postfixValue.getType() == ExprTypeName::operation)
     {
       if (countElem >= 2)

@@ -9,23 +9,18 @@ namespace nikitov
   struct PostfixExpression
   {
   public:
+    PostfixExpression(Queue< PostfixType >& postfixQueue);
+
     PostfixExpression operator+(long long value) const;
     PostfixExpression operator-(long long value) const;
     PostfixExpression operator/(long long value) const;
     PostfixExpression operator*(long long value) const;
     PostfixExpression operator%(long long value) const;
 
-    void add(PostfixType& value);
-    void add(PostfixType&& value);
-    void remove();
-
-    size_t size() const;
-    bool empty() const;
-
     long long solve();
 
   private:
-    Queue< PostfixType > data;
+    Queue< PostfixType > data_;
   };
 }
 #endif

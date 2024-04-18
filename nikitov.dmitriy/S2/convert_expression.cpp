@@ -21,7 +21,7 @@ bool isLessPriority(char left, char right)
 
 nikitov::PostfixExpression nikitov::convertExpression(Queue< InfixType > infixExpression)
 {
-  PostfixExpression postfixExpression;
+  Queue< PostfixType > postfixQueue;
   Stack< StackType > operandsStack;
   while (!infixExpression.empty())
   {
@@ -30,7 +30,7 @@ nikitov::PostfixExpression nikitov::convertExpression(Queue< InfixType > infixEx
     if (infixValue.getType() == ExprTypeName::operand)
     {
       long long value = infixValue.getOperand();
-      postfixExpression.add(PostfixType(value));
+      postfixQueue.push(PostfixType(value));
     }
     else
     {
@@ -47,7 +47,7 @@ nikitov::PostfixExpression nikitov::convertExpression(Queue< InfixType > infixEx
           {
             char value = operandsStack.top().getOperation();
             operandsStack.pop();
-            postfixExpression.add(PostfixType(value));
+            postfixQueue.push(PostfixType(value));
           }
           if (operandsStack.empty())
           {
@@ -64,7 +64,7 @@ nikitov::PostfixExpression nikitov::convertExpression(Queue< InfixType > infixEx
           {
             char value = operandsStack.top().getOperation();
             operandsStack.pop();
-            postfixExpression.add(PostfixType(value));
+            postfixQueue.push(PostfixType(value));
           }
           else
           {
@@ -86,7 +86,8 @@ nikitov::PostfixExpression nikitov::convertExpression(Queue< InfixType > infixEx
       throw std::logic_error("Error: Wrong brackets");
     }
     char value = stackValue.getOperation();
-    postfixExpression.add(PostfixType(value));
+    postfixQueue.push(PostfixType(value));
   }
-  return postfixExpression;
+
+  return PostfixExpression(postfixQueue);
 }
