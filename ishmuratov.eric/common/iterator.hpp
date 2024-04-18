@@ -7,15 +7,14 @@
 namespace ishmuratov
 {
   template< class T >
+  class List;
+
+  template< class T >
   class Iterator
   {
     public:
       Iterator():
         node_(nullptr)
-      {}
-
-      Iterator(Node< T > * node):
-        node_(node)
       {}
 
       ~Iterator() = default;
@@ -79,45 +78,45 @@ namespace ishmuratov
       }
 
     private:
-      Node< T > * node_;
+      friend List< T >;
+      detail::Node< T > * node_;
+      explicit Iterator(detail::Node< T > * node):
+        node_(node)
+      {}
   };
 
   template< class T >
-  class constIterator
+  class ConstIterator
   {
     public:
-      constIterator():
+      ConstIterator():
         node_(nullptr)
       {}
 
-      constIterator(Node< T > * node):
-        node_(node)
-      {}
+      ~ConstIterator() = default;
+      ConstIterator(const ConstIterator< T > &) = default;
+      ConstIterator< T > & operator=(const ConstIterator< T > &) = default;
 
-      ~constIterator() = default;
-      constIterator(const constIterator< T > &) = default;
-      constIterator< T > & operator=(const constIterator< T > &) = default;
-
-      constIterator< T > & operator++()
+      ConstIterator< T > & operator++()
       {
         node_ = node_->next_;
         return *this;
       }
 
-      constIterator< T > operator++(int)
+      ConstIterator< T > operator++(int)
       {
-        constIterator< T > result(*this);
+        ConstIterator< T > result(*this);
         ++(*this);
         return result;
       }
 
-      constIterator< T > & operator--()
+      ConstIterator< T > & operator--()
       {
         node_ = node_->prev_;
         return *this;
       }
 
-      constIterator< T > operator--(int)
+      ConstIterator< T > operator--(int)
       {
         Iterator< T > result(*this);
         --(*this);
@@ -145,7 +144,11 @@ namespace ishmuratov
       }
 
     private:
-      Node< T > * node_;
+      friend List< T >;
+      detail::Node< T > * node_;
+      explicit ConstIterator(detail::Node< T > * node):
+        node_(node)
+      {}
   };
 }
 

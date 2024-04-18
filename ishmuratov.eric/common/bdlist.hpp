@@ -25,16 +25,9 @@ namespace ishmuratov
       List(const T & data, size_t size):
         List()
       {
-        try
+        for (size_t i = 0; i < size; ++i)
         {
-          for (size_t i = 0; i < size; ++i)
-          {
-            pushBack(data);
-          }
-        }
-        catch(const std::exception & e)
-        {
-          clear();
+          pushBack(data);
         }
       }
 
@@ -45,7 +38,7 @@ namespace ishmuratov
       {
         try
         {
-          Node< T > * cur = other.head_;
+          detail::Node< T > * cur = other.head_;
           while (size_ != other.size_)
           {
             pushBack(cur->data_);
@@ -55,6 +48,7 @@ namespace ishmuratov
         catch (const std::exception & e)
         {
           clear();
+          throw;
         }
       }
 
@@ -68,24 +62,38 @@ namespace ishmuratov
         other.size_ = 0;
       }
 
-      Iterator< T > begin()
+      List & operator=(const List & other)
+      {
+        List temp(other);
+        swap(temp);
+        return *this;
+      }
+
+      List & operator=(List && other)
+      {
+        clear();
+        swap(other);
+        return *this;
+      }
+
+      Iterator< T > begin() noexcept
       {
         return Iterator< T >(head_);
       }
 
-      const Iterator< T > cbegin() const
+      const Iterator< T > cbegin() const noexcept
       {
         return Iterator< T >(head_);
       }
 
-      Iterator< T > end()
+      Iterator< T > end() noexcept
       {
-        return Iterator< T >(tail_);
+        return Iterator< T >(nullptr);
       }
 
-      const Iterator< T > cend() const
+      const Iterator< T > cend() const noexcept
       {
-        return Iterator< T >(tail_);
+        return Iterator< T >(nullptr);
       }
 
       T & front()
@@ -98,38 +106,30 @@ namespace ishmuratov
         return tail_->data_;
       }
 
-      bool empty() const
+      bool empty() const noexcept
       {
         return head_ == nullptr && tail_ == nullptr;
       }
 
-      size_t size() const
+      size_t size() const noexcept
       {
-        return size();
+        return size_;
       }
 
       void assign(size_t count, const T & value)
       {
+        List temp;
         clear();
-        for (size_t i = 0; i < size; ++i)
+        for (size_t i = 0; i < count; ++i)
         {
-          pushBack(value);
+          temp.pushBack(value);
         }
-      }
-
-      void assign(Iterator< T > first, Iterator< T > last)
-      {
-        clear();
-        while (first != last)
-        {
-          pushBack(*first);
-          ++first;
-        }
+        swap(temp);
       }
 
       void pushFront(const T & data)
       {
-        Node< T > * ptr = new Node< T >(data);
+        detail::Node< T > * ptr = new detail::Node< T >(data);
         ptr->next_ = head_;
         if (tail_ == nullptr)
         {
@@ -145,7 +145,7 @@ namespace ishmuratov
 
       void pushBack(const T & data)
       {
-        Node< T > * ptr = new Node< T >(data);
+        detail::Node< T > * ptr = new detail::Node< T >(data);
         ptr->prev_ = tail_;
         if (head_ == nullptr)
         {
@@ -161,37 +161,19 @@ namespace ishmuratov
 
       void remove(const T & value)
       {
-        if (empty())
-        {
-          return;
-        }
-        Node< T > * temp = head_;
-        while (temp->data_ != value)
-        {
-          temp = temp->next;
-        }
-        if (temp == head_)
-        {
-          popFront();
-        }
-        else if (temp == tail_)
-        {
-          popBack();
-        }
-        else
-        {
-          temp->next_->prev_ = temp->prev_;
-          temp->prev_->next_ = temp->next_;
-          delete temp;
-          --size_;
-        }
+        auto predicate =
+          [& value](const T & data_)
+          {
+            return data_ == value;
+          };
+        remove_if(predicate);
       }
 
       template < class UnaryPredicate >
       void remove_if(UnaryPredicate p)
       {
-        Node< T > * cur = head_;
-        Node< T > * temp = nullptr;
+        detail::Node< T > * cur = head_;
+        detail::Node< T > * temp = nullptr;
         while (cur)
         {
           if (p(cur->data_))
@@ -210,14 +192,14 @@ namespace ishmuratov
             {
               temp->next_ = cur->next_;
               delete cur;
-              cur = temp->next;
+              cur = temp->next_;
               --size_;
             }
           }
           else
           {
             temp = cur;
-            cur = cur->next;
+            cur = cur->next_;
           }
         }
       }
@@ -228,7 +210,7 @@ namespace ishmuratov
         {
           return;
         }
-        Node< T > * ptr = head_->next_;
+        detail::Node< T > * ptr = head_->next_;
         if (ptr != nullptr)
         {
           ptr->prev_ = nullptr;
@@ -248,7 +230,7 @@ namespace ishmuratov
         {
           return;
         }
-        Node< T > * ptr = tail_->prev_;
+        detail::Node< T > * ptr = tail_->prev_;
         if (ptr != nullptr)
         {
           ptr->next_ = nullptr;
@@ -262,7 +244,7 @@ namespace ishmuratov
         --size_;
       }
 
-      void clear()
+      void clear() noexcept
       {
         while (!empty())
         {
@@ -271,15 +253,15 @@ namespace ishmuratov
         size_ = 0;
       }
 
-      void swap(List< T > & other)
+      void swap(List & other)
       {
         std::swap(other.head_, head_);
         std::swap(other.tail_, tail_);
       }
 
     private:
-      Node< T > * head_;
-      Node< T > * tail_;
+      detail::Node< T > * head_;
+      detail::Node< T > * tail_;
       size_t size_;
   };
 }
