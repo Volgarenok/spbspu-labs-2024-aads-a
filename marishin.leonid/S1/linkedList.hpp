@@ -189,7 +189,7 @@ namespace marishin
       --size_;
     }
 
-    void swap(LinkedList & other)
+    void swap(LinkedList & other) noexcept
     {
       std::swap(other.head_, head_);
       std::swap(other.tail_, tail_);
