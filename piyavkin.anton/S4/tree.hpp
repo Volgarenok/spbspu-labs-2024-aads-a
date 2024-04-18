@@ -214,6 +214,10 @@ namespace piyavkin
     TreeIterator< Key, T, Compare > erase(TreeIterator< Key, T, Compare> pos)
     {
       TreeIterator< Key, T, Compare > delete_node = find(pos.node_->key_);
+      if (delete_node == end())
+      {
+        return delete_node;
+      }
       TreeIterator< Key, T, Compare > result = delete_node;
       ++result;
       detail::Node< Key, T >* node = delete_node.node_->right_;
@@ -316,6 +320,15 @@ namespace piyavkin
       {
         erase(TreeIterator< Key, T, Compare >(root_));
       }
+    }
+    size_t erase(const Key& key)
+    {
+      size_t count = 0;
+      while (erase(find(key)) != end())
+      {
+        ++count;
+      }
+      return count;
     }
   private:
     detail::Node< Key, T >* root_;

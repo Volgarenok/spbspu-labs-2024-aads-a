@@ -6,7 +6,7 @@ int main()
   piyavkin::Tree< int, int > tree;
   for (size_t i = 0; i < 100; ++i)
   {
-    int val = std::rand();
+    int val = std::rand() % 1000;
     tree.insert(std::pair< int, int >(val, val));
   }
   std::cout << '\n';
@@ -16,4 +16,5 @@ int main()
     std::cout << ' ' << *it++;
   }
   std::cout << '\n';
+  std::cout << '\n' << tree.erase(11);
 }
