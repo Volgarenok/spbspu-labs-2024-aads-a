@@ -9,6 +9,7 @@ namespace nikitov
   struct PostfixExpression
   {
   public:
+    PostfixExpression() = default;
     PostfixExpression(Queue< PostfixType >& postfixQueue);
 
     PostfixExpression operator+(long long value) const;

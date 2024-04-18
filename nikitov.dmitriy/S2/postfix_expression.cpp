@@ -2,7 +2,8 @@
 #include <limits>
 #include "stack.hpp"
 
-nikitov::PostfixExpression::PostfixExpression(Queue< PostfixType >& postfixQueue)
+nikitov::PostfixExpression::PostfixExpression(Queue< PostfixType >& postfixQueue):
+  data_()
 {
   while (!postfixQueue.empty())
   {
