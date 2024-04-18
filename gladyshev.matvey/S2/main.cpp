@@ -49,7 +49,7 @@ int main(int argc, char* argv[])
         ++i;
       }
       Queue< std::string > postfix = infixToPostfix(queuecheck);
-      long long result = evaluatePostfix(postfix);
+      long long int result = evaluatePostfix(postfix);
       results.push(result);
     }
   }
