@@ -3,7 +3,7 @@
 
 namespace marishin
 {
-  namespace datail
+  namespace detail
   {
     template < class T >
     struct Node

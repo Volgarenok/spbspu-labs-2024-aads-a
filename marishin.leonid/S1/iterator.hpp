@@ -77,8 +77,8 @@ namespace marishin
 
     private:
       friend LinkedList< T >;
-      datail::Node< T > * ptr_;
-      explicit Iterator(datail::Node< T > * ptr):
+      detail::Node< T > * ptr_;
+      explicit Iterator(detail::Node< T > * ptr):
         ptr_(ptr)
       {}
   };
@@ -142,8 +142,8 @@ namespace marishin
 
     private:
       friend LinkedList< T >;
-      datail::Node< T > * ptr_;
-      explicit ConstIterator(datail::Node< T > * ptr):
+      detail::Node< T > * ptr_;
+      explicit ConstIterator(detail::Node< T > * ptr):
         ptr_(ptr)
       {}
   };
