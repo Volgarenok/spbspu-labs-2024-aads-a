@@ -2,7 +2,6 @@
 #define BINLIST_HPP
 
 #include <cassert>
-#include <cinttypes>
 #include <initializer_list>
 #include <memory>
 #include <stdexcept>
@@ -456,7 +455,7 @@ arakelyan::Iterator< T > arakelyan::BinList< T >::erase(iterator it_pos)
     pop_front();
     return begin();
   }
-  else if (it_pos == end() || it_pos.node->nextNode == nullprt)
+  else if (it_pos == end() || it_pos.node->nextNode == nullptr)
   {
     pop_back();
     return end();
@@ -475,7 +474,6 @@ arakelyan::Iterator< T > arakelyan::BinList< T >::erase(iterator it_pos)
 template < class T >
 arakelyan::Iterator< T > arakelyan::BinList< T >::erase(iterator it_start, iterator it_end)
 {
-
   auto st = it_start;
   auto end = it_end;
   while (st != end)
