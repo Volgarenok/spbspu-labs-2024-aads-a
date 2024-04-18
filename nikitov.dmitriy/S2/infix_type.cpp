@@ -15,17 +15,22 @@ nikitov::InfixType::InfixType(char value):
   type(ExprTypeName::operation)
 {}
 
-bool& nikitov::InfixType::getBracket()
+bool nikitov::InfixType::isOpenBracket() const
 {
   return bracket.isOpen;
 }
 
-long long& nikitov::InfixType::getOperand()
+bool nikitov::InfixType::isCloseBracket() const
+{
+  return !bracket.isOpen;
+}
+
+long long nikitov::InfixType::getOperand() const
 {
   return operand.num;
 }
 
-char& nikitov::InfixType::getOperation()
+char nikitov::InfixType::getOperation() const
 {
   return operation.symb;
 }

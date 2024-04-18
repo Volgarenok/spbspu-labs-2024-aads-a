@@ -10,12 +10,17 @@ nikitov::StackType::StackType(char value):
   type(ExprTypeName::operation)
 {}
 
-bool& nikitov::StackType::getBracket()
+bool nikitov::StackType::isOpenBracket() const
 {
   return bracket.isOpen;
 }
 
-char& nikitov::StackType::getOperation()
+bool nikitov::StackType::isCloseBracket() const
+{
+  return !bracket.isOpen;
+}
+
+char nikitov::StackType::getOperation() const
 {
   return operation.symb;
 }

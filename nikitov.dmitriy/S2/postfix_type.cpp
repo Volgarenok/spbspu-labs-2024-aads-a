@@ -10,12 +10,12 @@ nikitov::PostfixType::PostfixType(char value):
   type(ExprTypeName::operation)
 {}
 
-long long& nikitov::PostfixType::getOperand()
+long long nikitov::PostfixType::getOperand() const
 {
   return operand.num;
 }
 
-char& nikitov::PostfixType::getOperation()
+char nikitov::PostfixType::getOperation() const
 {
   return operation.symb;
 }

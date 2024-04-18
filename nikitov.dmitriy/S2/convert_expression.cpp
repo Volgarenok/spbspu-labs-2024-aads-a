@@ -36,9 +36,9 @@ nikitov::PostfixExpression nikitov::convertExpression(Queue< InfixType > infixEx
     {
       if (infixValue.getType() == ExprTypeName::bracket)
       {
-        if (infixValue.getBracket())
+        if (infixValue.isOpenBracket())
         {
-          bool value = infixValue.getBracket();
+          bool value = infixValue.isOpenBracket();
           operandsStack.push(StackType(value));
         }
         else

@@ -12,8 +12,8 @@ namespace nikitov
     explicit PostfixType(long long value);
     explicit PostfixType(char value);
 
-    long long& getOperand();
-    char& getOperation();
+    long long getOperand() const;
+    char getOperation() const;
     ExprTypeName getType() const;
 
   private:

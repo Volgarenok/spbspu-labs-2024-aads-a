@@ -12,8 +12,9 @@ namespace nikitov
     explicit StackType(bool value);
     explicit StackType(char value);
 
-    bool& getBracket();
-    char& getOperation();
+    bool isOpenBracket() const;
+    bool isCloseBracket() const;
+    char getOperation() const;
     ExprTypeName getType() const;
 
   private:
