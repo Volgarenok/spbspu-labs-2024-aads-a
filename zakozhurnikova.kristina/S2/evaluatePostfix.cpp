@@ -70,7 +70,7 @@ ll calculate(ll first, ll second, char operation)
 ll evaluatePostfixPart(const std::string& postfix)
 {
   zakozhurnikova::Stack< ll > stack;
-  for(auto it = postfix.cbegin(); it != postfix.cend(); ++it)
+  for (auto it = postfix.cbegin(); it != postfix.cend(); ++it)
   {
     if (std::isdigit(*it))
     {
