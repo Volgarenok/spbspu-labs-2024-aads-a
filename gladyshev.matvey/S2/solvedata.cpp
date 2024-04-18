@@ -1,7 +1,7 @@
 #include "solvedata.hpp"
 
 #include <limits>
-#include <iostream>
+#include <stdexcept>
 
 #include "checkdata.hpp"
 #include "stack.hpp"
