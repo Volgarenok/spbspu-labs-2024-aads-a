@@ -62,15 +62,21 @@ namespace marishin
 
     LinkedList & operator=(const LinkedList & other)
     {
-      LinkedList temp(other);
-      swap(temp);
+      if (this != std::addressof(other))
+      {
+        LinkedList temp(other);
+        swap(temp);
+      }
       return *this;
     }
 
     LinkedList & operator=(LinkedList && other)
     {
-      clear();
-      swap(other);
+      if (this != std::addressof(other))
+      {
+        clear();
+        swap(other);
+      }
       return *this;
     }
 
