@@ -6,11 +6,7 @@
 
 nikitov::InfixType recognizeType(std::string& line)
 {
-  if (std::isdigit(line[0]))
-  {
-    return nikitov::InfixType(stoll(line));
-  }
-  else if (line[0] == '(')
+  if (line[0] == '(')
   {
     return nikitov::InfixType::openBracket();
   }
@@ -18,9 +14,13 @@ nikitov::InfixType recognizeType(std::string& line)
   {
     return nikitov::InfixType::closeBracket();
   }
-  else
+  else if (!std::isdigit(line[0]))
   {
     return nikitov::InfixType(line[0]);
+  }
+  else
+  {
+    return nikitov::InfixType(stoll(line));
   }
 }
 
