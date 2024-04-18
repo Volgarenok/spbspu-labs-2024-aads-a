@@ -3,25 +3,27 @@
 #include <string>
 #include <utility>
 
-void erohin::inputNamedList(std::istream & input, List< named_list > & result)
+void erohin::inputNamedList(std::istream & input, named_list & result)
+{
+  input >> result.first;
+  uint64_t number;
+  while (input >> number)
+  {
+    result.second.push_front(number);
+  }
+  result.second.reverse();
+}
+
+void erohin::inputNamedListList(std::istream & input, List< named_list > & result)
 {
   while (!input.eof())
   {
     input.clear();
-    std::string name;
-    input >> name;
-    std::string string_number;
-    List< int_t > num_list;
-    int_t elem = 0;
-    while (input.peek() != '\n' && input >> string_number)
+    named_list current_line;
+    inputNamedList(input, current_line);
+    if (current_line.first != "")
     {
-      elem = std::stoull(string_number);
-      num_list.push_front(elem);
-    }
-    if (name != "")
-    {
-      num_list.reverse();
-      result.push_front(std::make_pair(name, std::move(num_list)));
+      result.push_front(current_line);
     }
   }
   result.reverse();

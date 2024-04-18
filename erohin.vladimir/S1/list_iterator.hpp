@@ -17,20 +17,19 @@ namespace erohin
   public:
     ListIterator();
     ListIterator(const ListIterator< T > &) = default;
-    ListIterator(const Node< T > * node_ptr);
     ~ListIterator() = default;
     ListIterator< T > & operator=(const ListIterator< T > &) = default;
     ListIterator< T > & operator++();
     ListIterator< T > operator++(int);
-    ListIterator< T > operator+(int number);
     T & operator*();
     const T & operator*() const;
     T * operator->();
     const T * operator->() const;
-    bool operator==(const ListIterator< T > & rhs);
-    bool operator!=(const ListIterator< T > & rhs);
+    bool operator==(const ListIterator< T > & rhs) const;
+    bool operator!=(const ListIterator< T > & rhs) const;
   private:
-    Node< T > * node_;
+    detail::Node< T > * node_;
+    explicit ListIterator(detail::Node< T > * node_ptr);
   };
 
   template< class T >
@@ -39,8 +38,8 @@ namespace erohin
   {}
 
   template< class T >
-  ListIterator< T >::ListIterator(const Node< T > * node_ptr):
-    node_(const_cast< Node< T > * >(node_ptr))
+  ListIterator< T >::ListIterator(detail::Node< T > * node_ptr):
+    node_(node_ptr)
   {}
 
   template< class T >
@@ -56,18 +55,6 @@ namespace erohin
     ListIterator< T > prev = *this;
     node_ = node_->next_;
     return prev;
-  }
-
-
-  template< class T >
-  ListIterator< T > ListIterator< T >::operator+(int number)
-  {
-    ListIterator< T > result = *this;
-    for (int i = 0; i < number; ++i)
-    {
-      ++result;
-    }
-    return result;
   }
 
   template< class T >
@@ -95,27 +82,15 @@ namespace erohin
   }
 
   template< class T >
-  bool ListIterator< T >::operator==(const ListIterator< T > & rhs)
+  bool ListIterator< T >::operator==(const ListIterator< T > & rhs) const
   {
     return (node_ == rhs.node_);
   }
 
   template< class T >
-  bool ListIterator< T >::operator!=(const ListIterator< T > & rhs)
+  bool ListIterator< T >::operator!=(const ListIterator< T > & rhs) const
   {
-    return !(operator==(rhs));
-  }
-
-  template< class T >
-  bool operator==(const ListIterator< T > & lhs, const ListIterator< T > & rhs)
-  {
-    return (lhs.node_ == rhs.node_);
-  }
-
-  template< class T >
-  bool operator!=(const ListIterator< T > & lhs, const ListIterator< T > & rhs)
-  {
-    return !(lhs == rhs);
+    return !(*this == rhs);
   }
 }
 
