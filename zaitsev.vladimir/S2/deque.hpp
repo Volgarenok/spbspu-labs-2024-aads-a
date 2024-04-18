@@ -204,7 +204,7 @@ namespace zaitsev
       vals_alloc_(),
       chunk_heads_alloc_()
     {
-      chunk_heads_ = chunk_alloc_traits::allocate(chunk_heads_alloc_,chunks_nmb_);
+      chunk_heads_ = chunk_alloc_traits::allocate(chunk_heads_alloc_, chunks_nmb_);
       size_t i = 0;
       size_t j = 0;
       try
