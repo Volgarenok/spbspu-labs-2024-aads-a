@@ -143,10 +143,6 @@ namespace marishin
 
     void pop_front()
     {
-      if (empty())
-      {
-        return;
-      }
       detail::Node< T > * temp = head_->next_;
       if (temp != nullptr)
       {
@@ -179,10 +175,6 @@ namespace marishin
 
     void pop_back()
     {
-      if (empty())
-      {
-        return;
-      }
       detail::Node< T > * temp = tail_->prev_;
       if (temp != nullptr)
       {
