@@ -3,8 +3,8 @@
 #include <iostream>
 
 using ull_list_t = std::forward_list< unsigned long long >;
-using data_t = std::pair< std::string, ull_list_t >;
-using list_t = std::forward_list< data_t >;
+using named_list_t = std::pair< std::string, ull_list_t >;
+using lists_t = std::forward_list< named_list_t >;
 
 ull_list_t read_ulls(std::istream & in)
 {
@@ -18,7 +18,7 @@ ull_list_t read_ulls(std::istream & in)
   return data;
 }
 
-data_t read_data(std::istream & in)
+named_list_t read_named(std::istream & in)
 {
   std::string name;
   std::cin >> name;
@@ -30,9 +30,21 @@ data_t read_data(std::istream & in)
   return std::make_pair(name, ulls);
 }
 
+lists_t read_lists(std::istream & in)
+{
+  lists_t data{};
+  auto toinsert = data.before_begin();
+  while (!in.eof())
+  {
+    named_list_t named = read_named(in);
+    toinsert = data.insert_after(toinsert, named);
+  }
+  return data;
+}
+
 int main()
 {
-  auto datal = read_data(std::cin);
-  auto & data = datal.second;
+  auto lists = read_lists(std::cin);
+  auto & data = lists.begin()->second;
   std::copy(data.cbegin(), data.cend(), std::ostream_iterator< unsigned long long >{std::cout, "\n"});
 }
