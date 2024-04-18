@@ -52,6 +52,66 @@ nikitov::PostfixExpression nikitov::PostfixExpression::operator%(long long value
   return newExpression;
 }
 
+nikitov::PostfixExpression nikitov::PostfixExpression::operator+(PostfixExpression value) const
+{
+  PostfixExpression newExpression(*this);
+  while (!value.data_.empty())
+  {
+    newExpression.data_.push(value.data_.top());
+    value.data_.pop();
+  }
+  newExpression.data_.push(PostfixType('+'));
+  return newExpression;
+}
+
+nikitov::PostfixExpression nikitov::PostfixExpression::operator-(PostfixExpression value) const
+{
+  PostfixExpression newExpression(*this);
+  while (!value.data_.empty())
+  {
+    newExpression.data_.push(value.data_.top());
+    value.data_.pop();
+  }
+  newExpression.data_.push(PostfixType('-'));
+  return newExpression;
+}
+
+nikitov::PostfixExpression nikitov::PostfixExpression::operator/(PostfixExpression value) const
+{
+  PostfixExpression newExpression(*this);
+  while (!value.data_.empty())
+  {
+    newExpression.data_.push(value.data_.top());
+    value.data_.pop();
+  }
+  newExpression.data_.push(PostfixType('/'));
+  return newExpression;
+}
+
+nikitov::PostfixExpression nikitov::PostfixExpression::operator*(PostfixExpression value) const
+{
+  PostfixExpression newExpression(*this);
+  while (!value.data_.empty())
+  {
+    newExpression.data_.push(value.data_.top());
+    value.data_.pop();
+  }
+  newExpression.data_.push(PostfixType('*'));
+  return newExpression;
+}
+
+nikitov::PostfixExpression nikitov::PostfixExpression::operator%(PostfixExpression value) const
+{
+  PostfixExpression newExpression(*this);
+  while (!value.data_.empty())
+  {
+    newExpression.data_.push(value.data_.top());
+    value.data_.pop();
+  }
+  newExpression.data_.push(PostfixType('%'));
+  return newExpression;
+}
+
 bool isAdditionOverflow(long long first, long long second)
 {
   long long maxNum = std::numeric_limits< long long >::max();

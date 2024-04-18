@@ -18,6 +18,12 @@ namespace nikitov
     PostfixExpression operator*(long long value) const;
     PostfixExpression operator%(long long value) const;
 
+    PostfixExpression operator+(PostfixExpression value) const;
+    PostfixExpression operator-(PostfixExpression value) const;
+    PostfixExpression operator/(PostfixExpression value) const;
+    PostfixExpression operator*(PostfixExpression value) const;
+    PostfixExpression operator%(PostfixExpression value) const;
+
     long long solve();
 
   private:
