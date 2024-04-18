@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include "queue.hpp"
 #include "stack.hpp"
 
@@ -42,93 +43,128 @@ int calculate(int n1, int n2, const std::string& opr)
   return 0;
 }
 
-int main()
+int main(int argc, char * argv[])
 {
   using namespace ishmuratov;
+  std::istream * input;
+  std::ifstream input_file;
+  if (argc == 1)
+  {
+    input = &std::cin;
+  }
+  else if (argc == 2)
+  {
+    input_file.open(argv[1]);
+    input = &input_file;
+  }
+
   Stack< std::string > process_stack;
   Queue< std::string > process_queue;
   Queue< std::string > result_queue;
   Stack< int > operands;
+  Stack< int > results;
 
-  std::string input;
-  std::cin >> input;
-  while (!std::cin.eof())
+  std::string line;
+  while (std::getline(*input, line))
   {
-    process_queue.push(input);
-    std::cin >> input;
-  }
-
-  while (!process_queue.empty())
-  {
-    std::string temp = process_queue.drop();
-    if (std::isdigit(temp[0]))
+    //read infix
+    std::string token;
+    for (char i : line)
     {
-      result_queue.push(temp);
-    }
-    else if (temp == "(")
-    {
-      process_stack.push(temp);
-    }
-    else if (temp == ")")
-    {
-      while (process_stack.top() != "(")
+      if (!std::isspace(i))
       {
-        result_queue.push(process_stack.drop());
-      }
-      process_stack.drop();
-    }
-    else if ((temp == "+") || (temp == "-"))
-    {
-      if (process_stack.empty())
-      {
-        process_stack.push(temp);
+        token += i;
       }
       else
       {
-        while (!process_stack.empty() && low_priority(process_stack.top()))
-        {
-          result_queue.push(process_stack.drop());
-        }
-        process_stack.push(temp);
+        process_queue.push(token);
+        token = "";
       }
     }
-    else if (temp == "*" || temp == "/" || temp == "%")
+    process_queue.push(token);
+
+
+    //to postfix
+    while (!process_queue.empty())
     {
-      if (process_stack.empty())
+      std::string temp = process_queue.drop();
+      if (std::isdigit(temp[0]))
+      {
+        result_queue.push(temp);
+      }
+      else if (temp == "(")
       {
         process_stack.push(temp);
       }
-      else
+      else if (temp == ")")
       {
-        while (!process_stack.empty() && high_priority(process_stack.top()))
+        while (process_stack.top() != "(")
         {
           result_queue.push(process_stack.drop());
         }
-        process_stack.push(temp);
+        process_stack.drop();
+      }
+      else if ((temp == "+") || (temp == "-"))
+      {
+        if (process_stack.empty())
+        {
+          process_stack.push(temp);
+        }
+        else
+        {
+          while (!process_stack.empty() && low_priority(process_stack.top()))
+          {
+            result_queue.push(process_stack.drop());
+          }
+          process_stack.push(temp);
+        }
+      }
+      else if (temp == "*" || temp == "/" || temp == "%")
+      {
+        if (process_stack.empty())
+        {
+          process_stack.push(temp);
+        }
+        else
+        {
+          while (!process_stack.empty() && high_priority(process_stack.top()))
+          {
+            result_queue.push(process_stack.drop());
+          }
+          process_stack.push(temp);
+        }
       }
     }
-  }
-  while(!process_stack.empty())
-  {
-    result_queue.push(process_stack.drop());
+    while(!process_stack.empty())
+    {
+      result_queue.push(process_stack.drop());
+    }
+
+    //result
+    while (!result_queue.empty())
+    {
+      std::string temp = result_queue.drop();
+      if (isdigit(temp[0]))
+      {
+        operands.push(std::stoi(temp));
+      }
+      else if (isOperator(temp))
+      {
+        int n2 = operands.drop();
+        int n1 = operands.drop();
+        int res = calculate(n1, n2, temp);
+        operands.push(res);
+      }
+    }
+
+    results.push(operands.top());
   }
 
-  while (!result_queue.empty())
+  std::cout << results.drop();
+  while (!results.empty())
   {
-    std::string temp = result_queue.drop();
-    if (isdigit(temp[0]))
-    {
-      operands.push(std::stoi(temp));
-    }
-    else if (isOperator(temp))
-    {
-      int n2 = operands.drop();
-      int n1 = operands.drop();
-      int res = calculate(n1, n2, temp);
-      operands.push(res);
-    }
+    std::cout << " " << results.drop();
   }
 
-  std::cout << operands.top();
   return 0;
 }
