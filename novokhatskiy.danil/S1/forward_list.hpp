@@ -230,14 +230,17 @@ namespace novokhatskiy
       constIter otherBegin = other.cbegin();
       constIter nextIt = pos.node_->next_;
       pos.node_->next_ = otherBegin.node_;
-      while (otherBegin != other.cend())
+      while (otherBegin.node_->next_ != nullptr)
       {
-        otherBegin.node_ = otherBegin.node_->next_;
-        pos.node_ = pos.node_->next_;
-        pos.node_->next_ = otherBegin.node_;
+        assert(otherBegin.node_ == nullptr);
+        otherBegin++;
+        // otherBegin.node_ = otherBegin.node_->next_;
+        // pos.node_ = pos.node_->next_;
+        // pos.node_->next_ = otherBegin.node_;
       }
-      // otherBegin.node_->next_ = nextIt.node_;
-      pos.node_->next_ = nextIt.node_;
+      otherBegin.node_->next_ = nextIt.node_;
+
+      // pos.node_->next_ = nextIt.node_;
 
       // node_t *next = pos.node_->next_;
       // pos.node_->next_ = other.head_;
