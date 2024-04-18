@@ -56,17 +56,21 @@ int main(int argc, char ** argv)
         results.pop();
       }
       std::cout << "\n";
-      return 0;
     }
     else
     {
       return 3;
     }
   }
+  catch (const invalid_argument & e)
+  {
+    std::cerr << e.what() << "\n";
+    return 4;
+  }
   catch (const std::exception & e)
   {
     std::cerr << e.what() << "\n";
     isAnyExpressionCorrect = false;
   }
-
+  return 0;
 }
