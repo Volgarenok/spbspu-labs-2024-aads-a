@@ -1,55 +1,25 @@
 #include <iostream>
 #include <utility>
-#include <string>
-#include <limits>
 
-#include "biList.hpp"
-#include "BidirectionalIterator.hpp"
-#include "pairsFunction.hpp"
+#include "listFunction.hpp"
+//#include "biList.hpp"
+#include <list> //del
 
 int main()
 {
-  using list = rebdev::BiList< size_t >;
-  using stringAndList = std::pair< std::string, list >;
-  using iter = rebdev::BidirectionalIterator< size_t >;
+  rebdev::pairList listOfPairs; //corr
 
-  rebdev::BiList< stringAndList > listOfPairs;
-
-  size_t maxNumber = 0;
-  std::string listName;
-
-  while (std::cin >> listName)
+  try
   {
-    list numList;
-
-    try
-    {
-      size_t listLength = rebdev::inputNumbersList(std::cin, numList);
-      maxNumber = std::max(maxNumber, listLength);
-      listOfPairs.push_back(stringAndList(listName, numList));
-    }
-    catch (const std::exception & e)
-    {
-      std::cerr << e.what();
-      return 1;
-    }
-
-    listName.clear();
-
+    using namespace rebdev;
+    inputList(std::cin, listOfPairs);
+    nameAndListOfNumList pair{createNameList(listOfPairs), createListOfNumList(listOfPairs)};
+    outputList(std::cout, pair);
   }
-
-  rebdev::BidirectionalIterator< stringAndList > beg = listOfPairs.begin();
-
-  while (beg != listOfPairs.end())
+  catch (const std::exception & e)
   {
-    iter readIter = (*beg).second.begin();
-    std::cout << (*beg).first << ' ';
-    while (readIter != (*beg).second.end())
-    {
-      std::cout << (*readIter) << ' ';
-      ++readIter;
-    }
-    ++beg;
+    std::cerr << e.what();
+    return 1;
   }
 
   return 0;
