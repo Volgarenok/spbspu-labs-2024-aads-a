@@ -5,14 +5,14 @@
 #include "forward_list.hpp"
 #include "forward_list_iterators.hpp"
 
-using pairsOfList = novokhatskiy::ForwardList< std::pair< std::string, novokhatskiy::ForwardList< size_t > > >;
+using pairsOfList = novokhatskiy::ForwardList<std::pair<std::string, novokhatskiy::ForwardList<size_t>>>;
 
-void inputForwardList(pairsOfList& pairsList, std::istream& input)
+void inputForwardList(pairsOfList &pairsList, std::istream &input)
 {
   while (!input.eof())
   {
     input.clear();
-    std::pair< std::string, novokhatskiy::ForwardList< size_t > > pair{};
+    std::pair<std::string, novokhatskiy::ForwardList<size_t>> pair{};
     input >> pair.first;
     if (pair.first.empty())
     {
@@ -28,13 +28,13 @@ void inputForwardList(pairsOfList& pairsList, std::istream& input)
   pairsList.reverse();
 }
 
-void outputForwardList(std::ostream& out, pairsOfList& pairs)
+void outputForwardList(std::ostream &out, pairsOfList &pairs)
 {
   if (pairs.empty())
   {
     throw std::invalid_argument("ForwardList is empty");
   }
-  novokhatskiy::ForwardIterator< std::pair< std::string, novokhatskiy::ForwardList< size_t > > > iter = pairs.begin();
+  novokhatskiy::ForwardIterator<std::pair<std::string, novokhatskiy::ForwardList<size_t>>> iter = pairs.begin();
   size_t maxSize{};
   for (; iter != pairs.end(); iter++)
   {
@@ -53,25 +53,26 @@ void outputForwardList(std::ostream& out, pairsOfList& pairs)
     maxSize = std::max(maxSize, iter->second.size());
   }
   std::cout << '\n';
-  novokhatskiy::ForwardList< size_t > listOfSums;
+  novokhatskiy::ForwardList<size_t> listOfSums;
   size_t sum{};
   bool overFlow = false;
   for (size_t i = 0; i < maxSize; i++)
   {
     for (auto j = pairs.begin(); j != pairs.end(); ++j)
     {
-      novokhatskiy::ForwardIterator< size_t > numberIter = j->second.begin();
+      novokhatskiy::ForwardIterator<size_t> numberIter = j->second.begin();
       if (j->second.size() <= i)
       {
         continue;
       }
-      numberIter = numberIter.moveIterator(i);
+      // numberIter = numberIter.moveIterator(i);
+      std::advance(numberIter, i);
       if (sum != 0)
       {
         out << ' ';
       }
       out << *numberIter;
-      if (std::numeric_limits< size_t >::max() - *numberIter < sum)
+      if (std::numeric_limits<size_t>::max() - *numberIter < sum)
       {
         overFlow = true;
       }
@@ -119,15 +120,20 @@ int main()
   using namespace novokhatskiy;
   try
   {
-    ForwardList< std::pair< std::string, ForwardList< size_t > > > pairsOfForwardList;
+    ForwardList<size_t> f1 = {1, 2, 3};
+    ForwardList<size_t> f2 = {4, 5, 6};
+    ConstForwardIterator<size_t> c = f1.cbegin();
+    f1.splice_after(c, f2);
+    f1.print();
+    ForwardList<std::pair<std::string, ForwardList<size_t>>> pairsOfForwardList;
     inputForwardList(pairsOfForwardList, std::cin);
     outputForwardList(std::cout, pairsOfForwardList);
   }
-  catch (const std::invalid_argument&)
+  catch (const std::invalid_argument &)
   {
     std::cout << 0 << '\n';
   }
-  catch (const std::exception& e)
+  catch (const std::exception &e)
   {
     std::cerr << e.what() << '\n';
     return 1;
