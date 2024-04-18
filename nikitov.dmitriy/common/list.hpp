@@ -148,7 +148,7 @@ namespace nikitov
 
   template< class T >
   List< T >::List(List< T >&& other) noexcept:
-    dummyNode_(other.dummyNode_),
+    dummyNode_(other.dummyNode_.value_),
     head_(other.head_),
     tail_(other.tail_),
     size_(other.size_)
