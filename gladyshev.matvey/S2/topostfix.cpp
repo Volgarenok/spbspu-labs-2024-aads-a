@@ -1,6 +1,7 @@
 #include "topostfix.hpp"
 
 #include <stdexcept>
+
 #include "stack.hpp"
 #include "checkdata.hpp"
 
@@ -45,7 +46,7 @@ gladyshev::Queue< std::string > gladyshev::infixToPostfix(Queue< std::string > e
   {
     if (ops.top() == "(")
     {
-      throw std::logic_error("bad brasket");
+      throw std::logic_error("bad bracket");
     }
     output.push(ops.drop());
   }
