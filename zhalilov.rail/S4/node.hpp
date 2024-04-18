@@ -16,11 +16,11 @@ namespace zhalilov
     struct Node
     {
       Node *parent;
-      Node *left;
-      Node *right;
-      Node *middle;
-      T value1;
-      T value2;
+      Node *childs[3];
+      Node *next;
+      Node *prev;
+      T values[2];
+      NodeType type;
     };
 
   }
