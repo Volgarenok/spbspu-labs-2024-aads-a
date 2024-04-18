@@ -10,38 +10,38 @@ namespace gladyshev
   {
   public:
     Stack():
-      list_(Container())
+      array_(Container())
     {}
     Stack(const Stack& other):
-      list_(other.list_)
+      array_(other.array_)
     {}
     Stack(Stack&& other) noexcept:
-      list_(std::move(other.list_))
+      array_(std::move(other.array_))
     {}
     T& top()
     {
-      return list_.front();
+      return array_.front();
     }
     const T& top() const
     {
-      return list_.front();
+      return array_.front();
     }
     bool empty() const noexcept
     {
-      return list_.empty();
+      return array_.empty();
     }
     T drop()
     {
-      T temp = list_.front();
-      list_.pop_front();
+      T temp = array_.front();
+      array_.pop_front();
       return temp;
     }
     void push(const T& other)
     {
-      list_.push_front(other);
+      array_.push_front(other);
     }
   private:
-    Container list_;
+    Container array_;
   };
 }
 
