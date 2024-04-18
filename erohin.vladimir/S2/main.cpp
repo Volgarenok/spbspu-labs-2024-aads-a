@@ -62,7 +62,7 @@ int main(int argc, char ** argv)
       return 3;
     }
   }
-  catch (const invalid_argument & e)
+  catch (const std::invalid_argument & e)
   {
     std::cerr << e.what() << "\n";
     return 4;
