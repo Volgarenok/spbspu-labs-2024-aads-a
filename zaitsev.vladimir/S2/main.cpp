@@ -28,8 +28,9 @@ int main(int argc, char** argv)
       {
         continue;
       }
-      PostfixExpression< long long > post(InfixExpression< long long >(s, std::stoll));
-      results.push(post.calculate());
+      InfixExpression< long long > infix_expr(s, std::stoll);
+      PostfixExpression< long long > postfix_expr(infix_expr);
+      results.push(postfix_expr.calculate());
     }
     for (Stack< long long >::const_iterator i = results.cbegin(); i != results.cend(); ++i)
     {
