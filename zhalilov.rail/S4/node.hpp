@@ -17,8 +17,6 @@ namespace zhalilov
     {
       Node *parent;
       Node *childs[3];
-      Node *next;
-      Node *prev;
       T values[2];
       NodeType type;
     };
