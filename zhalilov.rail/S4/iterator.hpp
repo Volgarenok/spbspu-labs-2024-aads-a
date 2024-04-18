@@ -32,7 +32,7 @@ namespace zhalilov
     detail::Node < T > node_;
     bool isPtrToLeft_;
 
-    explicit TwoThreeIterator(detail::Node *, bool isPtrToLeft = true);
+    explicit TwoThreeIterator(detail::Node < T > *node, bool isPtrToLeft = true);
     detail::Node < T > *findMin(detail::Node < T > *nodeFrom);
   };
 
