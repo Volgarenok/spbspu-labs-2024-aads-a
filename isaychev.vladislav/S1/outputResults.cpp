@@ -1,6 +1,5 @@
 #include "outputResults.hpp"
 #include <limits>
-#include <iostream>
 #include <stdexcept>
 #include "listManipulations.hpp"
 

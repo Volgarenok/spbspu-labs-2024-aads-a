@@ -2,7 +2,7 @@
 #define OUTPUTRESULTS_HPP
 
 #include <string>
-#include <iosfwd>
+#include <iostream>
 #include "list.hpp"
 
 namespace isaychev
@@ -23,9 +23,9 @@ namespace isaychev
       out << *k;
       for (++k; k != list.end(); ++k)
       {
-        out << std::string(" ") << *k;
+        out << " " << *k;
       }
-      out << std::string("\n");
+      out << "\n";
     }
   }
 }

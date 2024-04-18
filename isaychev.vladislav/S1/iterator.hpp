@@ -29,8 +29,8 @@ namespace isaychev
     bool operator!=(const this_t & rhs) const;
 
    private:
-    nodeNS::node_t< T > * currNode_;
-    explicit fwdIterator(nodeNS::node_t< T > * pos);
+    detail::node_t< T > * currNode_;
+    explicit fwdIterator(detail::node_t< T > * pos);
   };
 
   template < typename T >
@@ -39,7 +39,7 @@ namespace isaychev
   {}
 
   template < typename T >
-  fwdIterator< T >::fwdIterator(nodeNS::node_t< T > * pos):
+  fwdIterator< T >::fwdIterator(detail::node_t< T > * pos):
    currNode_(pos)
   {}
 

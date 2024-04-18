@@ -38,7 +38,7 @@ namespace isaychev
     void reverse() noexcept;
 
    private:
-    nodeNS::node_t< T > * head_;
+    detail::node_t< T > * head_;
   };
 
   template < typename T >
@@ -150,7 +150,7 @@ namespace isaychev
   template < typename T >
   void List< T >::push_front(const T & obj)
   {
-    nodeNS::node_t< T > * temp = new nodeNS::node_t< T >(obj);
+    detail::node_t< T > * temp = new detail::node_t< T >(obj);
     temp->next = head_;
     head_ = temp;
   }
@@ -160,7 +160,7 @@ namespace isaychev
   {
     if (head_)
     {
-      nodeNS::node_t< T > * temp = head_->next;
+      detail::node_t< T > * temp = head_->next;
       delete head_;
       head_ = temp;
     }
@@ -190,9 +190,9 @@ namespace isaychev
   {
     if (head_)
     {
-      nodeNS::node_t< T > * currElem = head_;
-      nodeNS::node_t< T > * temp1 = nullptr;
-      nodeNS::node_t< T > * temp2 = head_;
+      detail::node_t< T > * currElem = head_;
+      detail::node_t< T > * temp1 = nullptr;
+      detail::node_t< T > * temp2 = head_;
       while (currElem)
       {
         temp2 = currElem->next;

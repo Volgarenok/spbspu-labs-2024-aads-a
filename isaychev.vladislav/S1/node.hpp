@@ -3,7 +3,7 @@
 
 namespace isaychev
 {
-  namespace nodeNS
+  namespace detail
   {
     template < typename T >
     struct node_t
