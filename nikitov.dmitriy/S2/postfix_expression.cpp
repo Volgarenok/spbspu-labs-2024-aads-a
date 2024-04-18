@@ -3,7 +3,7 @@
 #include "stack.hpp"
 
 nikitov::PostfixExpression::PostfixExpression(const Queue< PostfixType >& postfixQueue):
-  data_(std::move(postfixQueue))
+  data_(postfixQueue)
 {}
 
 nikitov::PostfixExpression nikitov::PostfixExpression::operator+(long long value) const
