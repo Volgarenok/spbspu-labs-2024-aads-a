@@ -43,7 +43,7 @@ nikitov::PostfixExpression nikitov::convertExpression(Queue< InfixType > infixEx
         }
         else
         {
-          while (!operandsStack.empty() && !operandsStack.top().getType() == nikitov::bracket)
+          while (!operandsStack.empty() && !(operandsStack.top().getType() == ExprTypeName::bracket))
           {
             char value = operandsStack.top().getOperation();
             operandsStack.pop();

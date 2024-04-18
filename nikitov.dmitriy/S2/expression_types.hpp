@@ -27,7 +27,7 @@ namespace nikitov
     };
   }
 
-  enum ExprTypeName
+  enum class ExprTypeName
   {
     bracket,
     operand,
