@@ -483,33 +483,6 @@ arakelyan::Iterator< T > arakelyan::BinList< T >::erase(iterator it_start, itera
     st = erase(st);
   }
   return st;
-  // if (it_start == begin() && it_end == end())
-  // {
-  //   clear();
-  //   return end();
-  // }
-  // else if (it_start == begin() && it_end != end())
-  // {
-  //   while (it_start != it_end && it_start != end())
-  //   {
-  //     ++it_start;
-  //     pop_front();
-  //   }
-  //   return it_start;
-  // }
-  // else if (it_start != begin() && it_end == end())
-  // {
-  //   while (it_start != it_end)
-  //   {
-  //     erase(it_start);
-  //   }
-  //   return it_start;
-  // }
-  // while (it_start != it_end && it_start != end())
-  // {
-  //   erase(it_start);
-  // }
-  // return it_end;
 }
 
 template < class T >
