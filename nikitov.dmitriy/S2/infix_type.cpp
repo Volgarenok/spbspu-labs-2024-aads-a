@@ -15,6 +15,16 @@ nikitov::InfixType::InfixType(char value):
   type(ExprTypeName::operation)
 {}
 
+nikitov::InfixType nikitov::InfixType::openBracket()
+{
+  return InfixType(true);
+}
+
+nikitov::InfixType nikitov::InfixType::closeBracket()
+{
+  return InfixType(false);
+}
+
 bool nikitov::InfixType::isOpenBracket() const
 {
   return bracket.isOpen;

@@ -10,6 +10,16 @@ nikitov::StackType::StackType(char value):
   type(ExprTypeName::operation)
 {}
 
+nikitov::StackType nikitov::StackType::openBracket()
+{
+  return StackType(true);
+}
+
+nikitov::StackType nikitov::StackType::closeBracket()
+{
+  return StackType(false);
+}
+
 bool nikitov::StackType::isOpenBracket() const
 {
   return bracket.isOpen;

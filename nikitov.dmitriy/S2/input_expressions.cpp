@@ -10,9 +10,13 @@ nikitov::InfixType recognizeType(std::string& line)
   {
     return nikitov::InfixType(stoll(line));
   }
-  else if (line[0] == '(' || line[0] == ')')
+  else if (line[0] == '(')
   {
-    return nikitov::InfixType(line[0] == '(');
+    return nikitov::InfixType::openBracket();
+  }
+  else if (line[0] == ')')
+  {
+    return nikitov::InfixType::closeBracket();
   }
   else
   {

@@ -38,8 +38,15 @@ nikitov::PostfixExpression nikitov::convertExpression(Queue< InfixType > infixEx
       {
         if (infixValue.isOpenBracket())
         {
-          bool value = infixValue.isOpenBracket();
-          operandsStack.push(StackType(value));
+          bool isOpenBracket = infixValue.isOpenBracket();
+          if (isOpenBracket)
+          {
+            operandsStack.push(StackType::openBracket());
+          }
+          else
+          {
+            operandsStack.push(StackType::closeBracket());
+          }
         }
         else
         {

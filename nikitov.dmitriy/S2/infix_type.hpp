@@ -9,9 +9,11 @@ namespace nikitov
   {
   public:
     InfixType() = default;
-    explicit InfixType(bool value);
     explicit InfixType(long long value);
     explicit InfixType(char value);
+
+    static InfixType openBracket();
+    static InfixType closeBracket();
 
     bool isOpenBracket() const;
     bool isCloseBracket() const;
@@ -27,6 +29,8 @@ namespace nikitov
       detail::Operation operation;
     };
     ExprTypeName type;
+
+    explicit InfixType(bool value);
   };
 }
 #endif

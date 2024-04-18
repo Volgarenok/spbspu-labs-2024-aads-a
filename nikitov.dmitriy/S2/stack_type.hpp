@@ -9,8 +9,10 @@ namespace nikitov
   {
   public:
     StackType() = default;
-    explicit StackType(bool value);
     explicit StackType(char value);
+
+    static StackType openBracket();
+    static StackType closeBracket();
 
     bool isOpenBracket() const;
     bool isCloseBracket() const;
@@ -24,6 +26,8 @@ namespace nikitov
       detail::Operation operation;
     };
     ExprTypeName type;
+
+    explicit StackType(bool value);
   };
 }
 #endif
