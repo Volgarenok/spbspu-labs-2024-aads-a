@@ -12,7 +12,7 @@ ll calculate(ll first, ll second, char operation)
   {
   case '+':
   {
-    ll maxNum = std::numeric_limits<ll>::max();
+    ll maxNum = std::numeric_limits< ll >::max();
     if (maxNum - first < second)
     {
       throw std::out_of_range("Error: Addition overflow");
@@ -22,7 +22,7 @@ ll calculate(ll first, ll second, char operation)
   }
   case '-':
   {
-    ll minNum = std::numeric_limits<ll>::min();
+    ll minNum = std::numeric_limits< ll >::min();
     if (minNum + first > second)
     {
       throw std::out_of_range("Error: Subtraction overflow");
@@ -39,7 +39,7 @@ ll calculate(ll first, ll second, char operation)
     break;
   case '/':
   {
-    ll minNum = std::numeric_limits<ll>::min();
+    ll minNum = std::numeric_limits< ll >::min();
     if (second == 0)
     {
       throw std::logic_error("Error: Division by zero");
