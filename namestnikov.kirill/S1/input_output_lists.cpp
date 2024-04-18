@@ -10,10 +10,17 @@ void namestnikov::inputLists(std::istream & in, ForwardList< namedLists > & data
   while (in)
   {
     dataList.push_front({listParameters, ForwardList< unsigned long long >{}});
-    while ((in >> listParameters) && (std::isdigit(listParameters[0])))
+    while (in >> listParameters)
     {
-      unsigned long long number = std::stoull(listParameters);
-      dataList.front().second.push_front(number);
+      try
+      {
+        unsigned long long number = std::stoull(listParameters);
+        dataList.front().second.push_front(number);
+      }
+      catch (const std::invalid_argument &)
+      {
+        dataList.push_front({listParameters, ForwardList< unsigned long long >{}});
+      }
     }
   }
 }

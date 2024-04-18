@@ -8,7 +8,6 @@ namespace namestnikov
     template< class T >
     struct Node
     {
-      Node() = default;
       explicit Node(const T & data):
         data_(data), next_(nullptr)
       {}
