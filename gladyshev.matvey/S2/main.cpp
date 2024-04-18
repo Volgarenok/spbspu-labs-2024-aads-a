@@ -3,7 +3,6 @@
 
 #include "queue.hpp"
 #include "stack.hpp"
-#include "checkdata.hpp"
 #include "topostfix.hpp"
 #include "solvedata.hpp"
 
