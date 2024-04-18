@@ -50,7 +50,7 @@ int main(int argc, char* argv[])
       results.push(result);
     }
   }
-  catch (const std::logic_error& e)
+  catch (const std::exception& e)
   {
     std::cerr << e.what() << "\n";
     return 1;
