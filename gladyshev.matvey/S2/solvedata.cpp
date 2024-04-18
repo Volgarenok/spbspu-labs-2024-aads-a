@@ -24,7 +24,7 @@ long long int gladyshev::evaluatePostfix(Queue< std::string > postfix)
       {
         if (std::numeric_limits< long long int >::max() - left < right)
         {
-          throw std::logic_error("overflow detected");
+          throw std::overflow_error("overflow detected");
         }
         operands.push(left + right);
       }
@@ -32,7 +32,7 @@ long long int gladyshev::evaluatePostfix(Queue< std::string > postfix)
       {
         if (std::numeric_limits < long long int >::min() + left > right)
         {
-          throw std::logic_error("overflow detected");
+          throw std::overflow_error("overflow detected");
         }
         operands.push(left - right);
       }
@@ -41,7 +41,7 @@ long long int gladyshev::evaluatePostfix(Queue< std::string > postfix)
         long long int calc = left * right;
         if ((left != 0) && (calc / left) != right)
         {
-          throw std::logic_error("overflow detected");
+          throw std::overflow_error("overflow detected");
         }
         operands.push(left * right);
       }
@@ -49,7 +49,7 @@ long long int gladyshev::evaluatePostfix(Queue< std::string > postfix)
       {
         if (right == 0)
         {
-          throw std::logic_error("division by 0");
+          throw std::overflow_error("division by 0");
         }
         operands.push(left / right);
       }
@@ -57,7 +57,7 @@ long long int gladyshev::evaluatePostfix(Queue< std::string > postfix)
       {
         if (right == 0)
         {
-          throw std::logic_error("division by 0");
+          throw std::overflow_error("division by 0");
         }
         left %= right;
         if (left < 0)
