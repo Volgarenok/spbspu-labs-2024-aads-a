@@ -172,7 +172,7 @@ namespace namestnikov
     {
       return head_->data_;
     }
-    void swap(ForwardList< T > & other)
+    void swap(ForwardList< T > & other) noexcept
     {
       std::swap(head_, other.head_);
     }
@@ -236,6 +236,12 @@ namespace namestnikov
       assign(temp.begin(), temp.end());
       temp.clear();
     }
+    void assign(std::initializer_list< T > list)
+    {
+      ForwardList< T > temp(list);
+      assign(temp.begin(), temp.end());
+      temp.clear();
+    }
     void assign(iterator begin, iterator end)
     {
       try
@@ -252,29 +258,6 @@ namespace namestnikov
         splice_after(cbegin(), temp);
       }
       catch (...)
-      {
-        clear();
-        throw;
-      }
-    }
-    void assign(std::initializer_list< T > list)
-    {
-      try
-      {
-        ForwardList< T > temp;
-        auto start = list.begin();
-        auto end = list.end();
-        for (; start != end; ++start)
-        {
-          temp.push_front(*start);
-        }
-        clear();
-        temp.reverse();
-        push_front(temp.front());
-        temp.pop_front();
-        splice_after(cbegin(), temp);
-      }
-      catch(...)
       {
         clear();
         throw;
