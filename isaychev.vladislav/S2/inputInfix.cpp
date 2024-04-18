@@ -1,5 +1,6 @@
 #include "inputInfix.hpp"
 #include <iostream>
+#include <cctype>
 
 void isaychev::inputInfix(std::istream & in, Queue< char > & infExp)
 {
@@ -20,6 +21,10 @@ void isaychev::inputInfix(std::istream & in, Queue< char > & infExp)
       infExp.push(c);
     }
     else if (c == '/' || c == '*' || c == '%')
+    {
+      infExp.push(c);
+    }
+    else if (std::isdigit(c))
     {
       infExp.push(c);
     }
