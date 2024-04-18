@@ -9,7 +9,8 @@ namespace namestnikov
     struct Node
     {
       explicit Node(const T & data):
-        data_(data), next_(nullptr)
+        data_(data),
+        next_(nullptr)
       {}
       ~Node() = default;
       T data_;
