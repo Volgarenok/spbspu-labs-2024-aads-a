@@ -14,20 +14,20 @@ namespace zakozhurnikova
 
     int length()
     {
-      return this->size;
+      return this->size_;
     }
 
     void push(Key key, Value val)
     {
-      if (this->root)
+      if (this->root_)
       {
-        this->put(key, val, this->root);
+        this->put(key, val, this->root_);
       }
       else
       {
-        this->root = new node(key, val);
+        this->root_ = new node(key, val);
       }
-      this->size = this->size + 1;
+      this->size_ = this->size_ + 1;
     }
 
     void put(Key key, Value val, node* currentNode)
@@ -121,7 +121,7 @@ namespace zakozhurnikova
       newRoot->parent = rotRoot->parent;
       if (rotRoot->isRoot())
       {
-        this->root = newRoot;
+        this->root_ = newRoot;
       }
       else
       {
@@ -151,7 +151,7 @@ namespace zakozhurnikova
       newRoot->parent = rotRoot->parent;
       if (rotRoot->isRoot())
       {
-        this->root = newRoot;
+        this->root_ = newRoot;
       }
       else
       {
@@ -172,9 +172,9 @@ namespace zakozhurnikova
 
     Value get(Key key)
     {
-      if (this->root)
+      if (this->root_)
       {
-        node* res = this->get(key, this->root);
+        node* res = this->get(key, this->root_);
         if (res)
         {
           return res->value;
@@ -210,26 +210,25 @@ namespace zakozhurnikova
       }
     }
 
-    //херня какая-то пока что, сначала пробую балансировку при вставке
     void del(Key key)
     {
-      if (this->size > 1)
+      if (this->size_ > 1)
       {
-        node* nodeToRemove = this->get(key, this->root);
+        node* nodeToRemove = this->get(key, this->root_);
         if (nodeToRemove)
         {
           this->remove(nodeToRemove);
-          this->size = this->size - 1;
+          this->size_ = this->size_ - 1;
         }
         else
         {
           std::cerr << "Error, key not in tree" << '\n';
         }
       }
-      else if (this->size == 1 && this->root->key == key)
+      else if (this->size_ == 1 && this->root_->key == key)
       {
-        this->root = nullptr;
-        this->size = this->size - 1;
+        this->root_ = nullptr;
+        this->size_ = this->size_ - 1;
       }
       else
       {
@@ -239,8 +238,10 @@ namespace zakozhurnikova
 
 
   private:
-    node* root;
-    size_t size;
+    node* root_;
+    size_t size_;
+
+
   };
 }
 
