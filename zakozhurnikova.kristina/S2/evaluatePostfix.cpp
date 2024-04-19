@@ -4,15 +4,14 @@
 #include "stack.hpp"
 #include "queue.hpp"
 
-using ll = long long;
-ll calculate(ll first, ll second, char operation)
+long long calculate(long long first, long long second, char operation)
 {
-  ll result = 0;
+  long long result = 0;
   switch (operation)
   {
   case '+':
   {
-    ll maxNum = std::numeric_limits< ll >::max();
+    long long maxNum = std::numeric_limits< long long >::max();
     if (maxNum - first < second)
     {
       throw std::out_of_range("Error: Addition overflow");
@@ -22,7 +21,7 @@ ll calculate(ll first, ll second, char operation)
   }
   case '-':
   {
-    ll minNum = std::numeric_limits< ll >::min();
+    long long minNum = std::numeric_limits< long long >::min();
     if (minNum + first > second)
     {
       throw std::out_of_range("Error: Subtraction overflow");
@@ -39,7 +38,7 @@ ll calculate(ll first, ll second, char operation)
     break;
   case '/':
   {
-    ll minNum = std::numeric_limits< ll >::min();
+    long long minNum = std::numeric_limits< long long >::min();
     if (second == 0)
     {
       throw std::logic_error("Error: Division by zero");
@@ -67,9 +66,9 @@ ll calculate(ll first, ll second, char operation)
 }
 
 
-ll evaluatePostfixPart(const std::string& postfix)
+long long evaluatePostfixPart(const std::string& postfix)
 {
-  zakozhurnikova::Stack< ll > stack;
+  zakozhurnikova::Stack< long long > stack;
   for (auto it = postfix.cbegin(); it != postfix.cend(); ++it)
   {
     if (std::isdigit(*it))
@@ -91,18 +90,18 @@ ll evaluatePostfixPart(const std::string& postfix)
     }
     else
     {
-      ll second = stack.top();
+      long long second = stack.top();
       stack.drop();
       if (stack.empty())
       {
         return second;
       }
-      ll first = stack.top();
+      long long first = stack.top();
       stack.drop();
       stack.push(calculate(first, second, *it));
     }
   }
-  ll result = stack.top();
+  long long result = stack.top();
   stack.drop();
   if (!stack.empty())
   {
@@ -112,7 +111,7 @@ ll evaluatePostfixPart(const std::string& postfix)
 }
 
 namespace zak = zakozhurnikova;
-zak::Stack< ll >& zak::evaluatePostfix(Stack< ll >& result, Queue< std::string >& queue)
+zak::Stack< long long >& zak::evaluatePostfix(Stack< long long >& result, Queue< std::string >& queue)
 {
   while (!queue.empty())
   {

@@ -1,6 +1,6 @@
 #ifndef GET_POSTFIX_FROM_INFIX_HPP
 #define GET_POSTFIX_FROM_INFIX_HPP
-#include <iostream>
+#include <iosfwd>
 #include <string>
 #include "queue.hpp"
 

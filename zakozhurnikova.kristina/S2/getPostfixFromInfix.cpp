@@ -1,5 +1,6 @@
 #include "getPostfixFromInfix.hpp"
 #include <cctype>
+#include <iostream>
 #include "stack.hpp"
 #include "queue.hpp"
 
