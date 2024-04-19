@@ -47,7 +47,13 @@ void calculateExpression(long long & num1, long long num2, char op)
   }
   else if (op == '%')
   {
-    (num1 % num2 < 0) ? num1 %= num2 + num2 : num1 %= num2;
+    if (num2 == 0)
+    {
+      throw std::logic_error("Division mod by zero error");
+    }
+    long long res = num1 % num2;
+    bool gotSameSign = ((num1 > 0) && (num2 > 0)) || ((num1 < 0) && (num2 < 0));
+    num1 = (gotSameSign) ? res : (num2 + res);
   }
   else
   {
