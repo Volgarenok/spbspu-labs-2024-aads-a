@@ -5,7 +5,6 @@
 #include "stack.hpp"
 #include "data_types.hpp"
 
-
 unsigned char getPrecedence(char op)
 {
   if ((op == '/') || (op == '*'))
@@ -58,7 +57,8 @@ void namestnikov::convertToPostfix(Queue< namestnikov::Key > & currentQueue, Que
     }
     else if (temp.type == namestnikov::PartType::OPERATION)
     {
-      while ((!processStack.empty()) && (processStack.top().type != namestnikov::PartType::OPEN_BRACKET) && (hasHigherPriority(processStack.top().value.operation, temp.value.operation)))
+      while ((!processStack.empty()) && (processStack.top().type != namestnikov::PartType::OPEN_BRACKET) &&
+       (hasHigherPriority(processStack.top().value.operation, temp.value.operation)))
       {
         resultQueue.push(processStack.top());
         processStack.pop();
