@@ -3,7 +3,7 @@
 #include <string>
 #include "data_types.hpp"
 
-void namestnikov::inputExpressions(std::istream & in, Stack< Queue< namestnikov::Key > > & expressionsStack)
+void namestnikov::inputExpressions(std::istream & in, Queue< Queue< namestnikov::Key > > & expressionsStack)
 {
   std::string s = "";
   while (std::getline(in, s, '\n'))

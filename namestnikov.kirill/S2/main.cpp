@@ -12,7 +12,7 @@
 int main(int argc, char * argv[])
 {
   using namespace namestnikov;
-  Stack< Queue< namestnikov::Key > > infixQueue;
+  Queue< Queue< namestnikov::Key > > infixQueue;
   try
   {
     if (argc == 1)
@@ -38,7 +38,7 @@ int main(int argc, char * argv[])
     Stack< long long > results;
     while (!infixQueue.empty())
     {
-      Queue< namestnikov::Key > tmp = infixQueue.top();
+      Queue< namestnikov::Key > tmp = infixQueue.front();
       infixQueue.pop();
       Queue< namestnikov::Key > res;
       convertToPostfix(tmp, res);
