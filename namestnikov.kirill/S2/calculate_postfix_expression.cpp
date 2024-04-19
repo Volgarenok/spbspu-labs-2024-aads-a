@@ -7,9 +7,10 @@
 
 void calculateExpression(long long & num1, long long num2, char op)
 {
+  long long maxLong = std::numeric_limits< long long >::max();
+  long long minLong = std::numeric_limits< long long >::min();
   if (op == '+')
   {
-    long long maxLong = std::numeric_limits< long long >::max();
     if (maxLong - num2 < num1)
     {
       throw std::out_of_range("Overflow error");
@@ -18,8 +19,7 @@ void calculateExpression(long long & num1, long long num2, char op)
   }
   else if (op == '-')
   {
-    long long minLong = std::numeric_limits< long long >::min();
-    if (minLong + num1 > num1)
+    if (minLong + num1 > num2)
     {
       throw std::out_of_range("Overflow error");
     }
@@ -27,8 +27,7 @@ void calculateExpression(long long & num1, long long num2, char op)
   }
   else if (op == '*')
   {
-    long long maxLong = std::numeric_limits< long long >::max();
-    if (maxLong / num1 < num1)
+    if (maxLong / num1 < num2)
     {
       throw std::out_of_range("Overflow error");
     }
@@ -40,7 +39,6 @@ void calculateExpression(long long & num1, long long num2, char op)
     {
       throw std::logic_error("Division by zero error");
     }
-    long long minLong = std::numeric_limits< long long >::min();
     if ((num1 == minLong) && (num2 == -1))
     {
       throw std::out_of_range("Overflow error");

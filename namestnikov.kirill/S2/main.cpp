@@ -28,6 +28,10 @@ int main(int argc, char * argv[])
         return 1;
       }
       inputExpressions(in, infixQueue);
+      if (infixQueue.empty())
+      {
+        std::cout << "\n";
+      }
       in.close();
     }
     else
