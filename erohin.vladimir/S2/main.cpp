@@ -58,15 +58,10 @@ int main(int argc, char ** argv)
     }
     std::cout << "\n";
   }
-  catch (const std::invalid_argument & e)
-  {
-    std::cerr << e.what() << "\n";
-    return 3;
-  }
   catch (const std::exception & e)
   {
     std::cerr << e.what() << "\n";
-    return 4;
+    return 3;
   }
   return 0;
 }
