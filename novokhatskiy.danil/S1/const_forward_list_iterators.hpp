@@ -8,27 +8,27 @@
 
 namespace novokhatskiy
 {
-  template <typename T>
+  template < typename T >
   class ForwardList;
 
-  template <typename T>
+  template < typename T >
   class ForwardIterator;
 
-  template <typename T>
-  class ConstForwardIterator : public std::iterator<std::forward_iterator_tag, T>
+  template < typename T >
+  class ConstForwardIterator: public std::iterator< std::forward_iterator_tag, T >
   {
-    friend class novokhatskiy::ForwardList<T>;
-    friend class novokhatskiy::ForwardIterator<T>;
+    friend class novokhatskiy::ForwardList< T >;
+    friend class novokhatskiy::ForwardIterator< T >;
 
   public:
-    using constIter = ConstForwardIterator<T>;
-    ConstForwardIterator() : node_(nullptr)
-    {
-    }
-    ConstForwardIterator(const constIter &) = default;
-    constIter &operator=(const constIter &) = default;
+    using constIter = ConstForwardIterator< T >;
+    ConstForwardIterator():
+      node_(nullptr)
+    {}
+    ConstForwardIterator(const constIter&) = default;
+    constIter& operator=(const constIter&) = default;
 
-    constIter &operator++()
+    constIter& operator++()
     {
       assert(node_ != nullptr);
       node_ = node_->next_;
@@ -50,15 +50,15 @@ namespace novokhatskiy
       return !(node_ == other.node_);
     }
 
-    bool operator!=(ForwardIterator<T> &other) const
+    bool operator!=(ForwardIterator< T >& other) const
     {
       return node_ != other.node_;
     }
-    const T &operator*() const
+    const T& operator*() const
     {
       return node_->value_;
     }
-    const T *operator->() const
+    const T* operator->() const
     {
       assert(this->node_ != nullptr);
       return std::addressof(this->node_->value_);
@@ -66,10 +66,10 @@ namespace novokhatskiy
     ~ConstForwardIterator() = default;
 
   private:
-    detail::Node<T> *node_;
-    ConstForwardIterator(detail::Node<T> *node) : node_(node)
-    {
-    }
+    detail::Node< T >* node_;
+    ConstForwardIterator(detail::Node< T >* node):
+      node_(node)
+    {}
   };
 }
 #endif
