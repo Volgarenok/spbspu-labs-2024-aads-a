@@ -8,7 +8,7 @@ namespace erohin
 {
   enum limit_t
   {
-    MIN = std::numeric_limits< long long >::min(),
+    MIN = std::numeric_limits< Operand::value_type >::min(),
     MAX = std::numeric_limits< long long >::max()
   };
 

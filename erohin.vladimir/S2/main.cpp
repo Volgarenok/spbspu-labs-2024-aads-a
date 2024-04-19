@@ -10,7 +10,7 @@ int main(int argc, char ** argv)
 {
   using namespace erohin;
   Queue< PostfixExpression > expr_lines;
-  Stack< long long > results;
+  Stack< Operand::value_type > results;
   bool isAnyExpressionCorrect = true;
   try
   {

@@ -6,12 +6,13 @@ namespace erohin
   class Operand
   {
   public:
+    using value_type = long long;
     Operand();
-    Operand(long long number);
+    Operand(value_type  number);
     ~Operand() = default;
-    long long operator()() const;
+    value_type operator()() const;
   private:
-    long long numeric_;
+    value_type numeric_;
   };
 }
 
