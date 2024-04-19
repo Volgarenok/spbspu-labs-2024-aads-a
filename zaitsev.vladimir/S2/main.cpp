@@ -15,7 +15,7 @@ int main(int argc, char** argv)
   {
     finput.open(argv[1]);
   }
-  std::istream& input = argc == 2 ? finput : std::cin;
+  std::istream& input = (argc == 2 ? finput : std::cin);
   using namespace zaitsev;
   try
   {
@@ -24,17 +24,22 @@ int main(int argc, char** argv)
     {
       std::string s;
       std::getline(input, s);
-      if (s == "")
+      if (s == "" || !input)
       {
         continue;
       }
-      InfixExpression< long long > infix_expr(s, std::stoll);
-      PostfixExpression< long long > postfix_expr(infix_expr);
-      results.push(postfix_expr.calculate());
+      PostfixExpression expr(s);
+      results.push(expr.calculate());
     }
-    for (Stack< long long >::const_iterator i = results.cbegin(); i != results.cend(); ++i)
+    if (!results.empty())
     {
-      i == results.cbegin() ? std::cout << *i : std::cout << ' ' << *i;
+      std::cout << results.top();
+      results.pop();
+    }
+    while(!results.empty())
+    {
+      std::cout << ' ' << results.top();
+      results.pop();
     }
     std::cout << '\n';
   }

@@ -4,16 +4,25 @@
 
 namespace zaitsev
 {
-  template< typename T, typename Container = Deque< T > >
+  template< typename T, typename Container = PseudoDeque< T > >
   class Queue
   {
   public:
-    using iterator = typename Container::iterator;
-    using const_iterator = typename Container::const_iterator;
-
     T& front()
     {
       return container.front();
+    }
+    const T& front() const
+    {
+      return container.front();
+    }
+    T& back()
+    {
+      return container.back();
+    }
+    const T& back() const
+    {
+      return container.back();
     }
     bool empty() const
     {
@@ -38,30 +47,6 @@ namespace zaitsev
     void clear()
     {
       container.clear();
-    }
-    iterator begin()
-    {
-      return container.begin();
-    }
-    iterator end()
-    {
-      return container.end();
-    }
-    const_iterator begin() const
-    {
-      return container.cbegin();
-    }
-    const_iterator end() const
-    {
-      return container.cend();
-    }
-    const_iterator cbegin() const
-    {
-      return container.cbegin();
-    }
-    const_iterator cend() const
-    {
-      return container.cend();
     }
   protected:
     Container container;

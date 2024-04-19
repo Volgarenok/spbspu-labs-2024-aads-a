@@ -4,13 +4,10 @@
 
 namespace zaitsev
 {
-  template< typename T, typename Container = Deque< T > >
+  template< typename T, typename Container = PseudoDeque< T > >
   class Stack
   {
   public:
-    using iterator = typename Container::iterator;
-    using const_iterator = typename Container::const_iterator;
-
     T& top()
     {
       return container.front();
@@ -42,30 +39,6 @@ namespace zaitsev
     void clear()
     {
       container.clear();
-    }
-    iterator begin()
-    {
-      return container.begin();
-    }
-    iterator end()
-    {
-      return container.end();
-    }
-    const_iterator begin() const
-    {
-      return container.cbegin();
-    }
-    const_iterator end() const
-    {
-      return container.cend();
-    }
-    const_iterator cbegin() const
-    {
-      return container.cbegin();
-    }
-    const_iterator cend() const
-    {
-      return container.cend();
     }
   protected:
     Container container;

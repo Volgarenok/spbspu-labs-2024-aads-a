@@ -1,464 +1,120 @@
 #ifndef DEQUE_HPP
 #define DEQUE_HPP
 #include <cstddef>
-#include <memory>
-#include <cstring>
-#include <iterator>
-#include <algorithm>
+#include <utility>
+#include <forward_list.hpp>
 
 namespace zaitsev
 {
   template< typename T >
-  class Deque
+  class PseudoDeque
   {
-    using val_alloc_traits = std::allocator_traits< std::allocator< T > >;
-    using chunk_alloc_traits = std::allocator_traits< std::allocator< T* > >;
-    static const size_t chunk_cap_ = 20;
-    size_t chunks_nmb_;
+    using list_tail = typename ForwardList< T >::const_iterator;
+    ForwardList< T >list_;
+    list_tail tail_;
     size_t size_;
-    size_t head_chunk_;
-    size_t head_pos_;
-    T** chunk_heads_;
-    std::allocator< T > vals_alloc_;
-    std::allocator< T* > chunk_heads_alloc_;
 
-    template<bool IsConst>
-    class BaseIterator
+  public:
+    PseudoDeque():
+      list_(),
+      tail_(),
+      size_(0)
+    {}
+    PseudoDeque(const PseudoDeque& other):
+      list_(),
+      tail_(),
+      size_(0)
     {
-      template< bool U > friend class BaseIterator;
-      using diff_t = std::ptrdiff_t;
-      using prt_t = std::conditional_t< IsConst, const T*, T* >;
-      using ref_t = std::conditional_t< IsConst, const T&, T& >;
-      T** chunk_head_;
-      size_t pos_;
-      void shift(diff_t shift_sz)
-      {
-        if ((shift_sz > 0 && pos_ + size_t(shift_sz) < chunk_cap_) || (shift_sz < 0 && pos_ >= size_t(-shift_sz)))
-        {
-          pos_ += shift_sz;
-        }
-        else
-        {
-          diff_t shift_in_cur_chunk = shift_sz > 0 ? chunk_cap_ - 1 - pos_ : pos_;
-          diff_t shift_out_of_chunk = std::abs(shift_sz) - shift_in_cur_chunk;
-          diff_t shift_chunks = 1 + shift_out_of_chunk / chunk_cap_;
-          diff_t shift_in_new_chunk = (shift_out_of_chunk - 1) % chunk_cap_;
-          if (shift_sz > 0)
-          {
-            chunk_head_ += shift_chunks;
-            pos_ = shift_in_new_chunk;
-          }
-          else
-          {
-            chunk_head_ -= shift_chunks;
-            pos_ = chunk_cap_ - 1 - shift_in_new_chunk;
-          }
-        }
-      }
-    public:
-      using difference_type = diff_t;
-      using value_type = T;
-      using pointer = prt_t;
-      using reference = ref_t;
-      using iterator_category = std::bidirectional_iterator_tag;
-
-      BaseIterator(const BaseIterator& other) = default;
-      BaseIterator(BaseIterator&& other) = default;
-      BaseIterator(T** chunk_head, size_t pos):
-        chunk_head_(chunk_head),
-        pos_(pos)
-      {}
-      template<bool cond = IsConst, std::enable_if_t<cond, bool> = true >
-      BaseIterator(const BaseIterator<!cond>& other):
-        chunk_head_(other.chunk_head_),
-        pos_(other.pos_)
-      {}
-      BaseIterator& operator++()
-      {
-        shift(1);
-        return *this;
-      }
-      BaseIterator operator++(int)
-      {
-        BaseIterator copy = *this;
-        shift(1);
-        return copy;
-      }
-      BaseIterator& operator--()
-      {
-        shift(-1);
-        return *this;
-      }
-      BaseIterator operator--(int)
-      {
-        BaseIterator copy = *this;
-        shift(-1);
-        return copy;
-      }
-      ref_t operator*() const
-      {
-        return (*chunk_head_)[pos_];
-      }
-      prt_t operator->() const
-      {
-        return (*chunk_head_) + pos_;
-      }
-      bool operator!=(const BaseIterator& other) const
-      {
-        return pos_ != other.pos_ || chunk_head_ != other.chunk_head_;
-      }
-      bool operator==(const BaseIterator& other) const
-      {
-        return pos_ == other.pos_ && chunk_head_ == other.chunk_head_;
-      }
-    };
-
-    void add_chunk(bool to_end)
-    {
-      T** new_chunk_heads_ = chunk_alloc_traits::allocate(chunk_heads_alloc_, chunks_nmb_ + 1);
-      if (to_end)
-      {
-        std::memcpy(new_chunk_heads_, chunk_heads_, chunks_nmb_ * sizeof(T*));
-        new_chunk_heads_[chunks_nmb_] = val_alloc_traits::allocate(vals_alloc_, chunk_cap_);
-      }
-      else
-      {
-        std::memcpy(new_chunk_heads_ + 1, chunk_heads_, chunks_nmb_ * sizeof(T*));
-        new_chunk_heads_[0] = val_alloc_traits::allocate(vals_alloc_, chunk_cap_);
-      }
-      chunk_alloc_traits::deallocate(chunk_heads_alloc_, chunk_heads_, chunks_nmb_);
-      chunk_heads_ = new_chunk_heads_;
-      if (!to_end)
-      {
-        ++head_chunk_;
-      }
-      ++chunks_nmb_;
-    }
-    void next_pos(size_t& chunk_nmb, size_t& pos) const
-    {
-      if (pos < chunk_cap_ - 1)
-      {
-        ++pos;
-      }
-      else
-      {
-        ++chunk_nmb;
-        pos = 0;
-      }
-    }
-    void prev_pos(size_t& chunk_nmb, size_t& pos) const
-    {
-      if (pos > 0)
-      {
-        --pos;
-      }
-      else
-      {
-        --chunk_nmb;
-        pos = chunk_cap_ - 1;
-      }
-    }
-    void convert_index(size_t index, size_t& dest_chunk_nmb, size_t& dest_pos) const
-    {
-      if (index == 0)
+      using c_it = typename ForwardList< T >::const_iterator;
+      if (other.empty())
       {
         return;
       }
-      if (chunk_cap_ - 1 - head_pos_ >= index)
+      push_front(*(other.list_.cbegin()));
+      for (c_it i = ++other.list_.cbegin(); i != other.list_.cend(); ++i)
       {
-        dest_chunk_nmb = head_chunk_;
-        dest_pos = head_pos_ + index;
-      }
-      else
-      {
-        size_t shift_without_first_chunk = index - (chunk_cap_ - 1 - head_pos_);
-        dest_chunk_nmb = head_chunk_ + 1 + (shift_without_first_chunk - 1) / chunk_cap_;
-        dest_pos = (shift_without_first_chunk - 1) % chunk_cap_;
+        push_back(*i);
       }
     }
-    void reset_head()
+    PseudoDeque(PseudoDeque&& other):
+      list_(std::move(other.list_)),
+      tail_(std::move(other.tail_)),
+      size_(other.size_)
     {
-      if (!size_)
-      {
-        head_chunk_ = chunks_nmb_ / 2;
-        head_pos_ = 0;
-      }
-    }
-
-  public:
-    using iterator = BaseIterator<false>;
-    using const_iterator = BaseIterator<true>;
-    Deque():
-      chunks_nmb_(0),
-      size_(0),
-      head_chunk_(0),
-      head_pos_(0),
-      chunk_heads_(nullptr),
-      vals_alloc_(),
-      chunk_heads_alloc_()
-    {}
-    Deque(const Deque& other):
-      chunks_nmb_(other.chunks_nmb_),
-      size_(other.size_),
-      head_pos_(0),
-      vals_alloc_(),
-      chunk_heads_alloc_()
-    {
-      chunk_heads_ = chunk_alloc_traits::allocate(chunk_heads_alloc_, chunks_nmb_);
-      size_t i = 0;
-      size_t j = 0;
-      try
-      {
-        for (; j < chunks_nmb_; ++j)
-        {
-          chunk_heads_[j] = val_alloc_traits::allocate(vals_alloc_, chunk_cap_);
-        }
-        size_t chunk = other.head_chunk_;
-        size_t pos = other.head_pos_;
-        Deque< T >::iterator it = other.begin();
-        for (; i < size_; ++i, ++it)
-        {
-          val_alloc_traits::construct(vals_alloc_, chunk_heads_[chunk] + pos, *it);
-          if (pos < chunk_cap_ - 1)
-          {
-            ++pos;
-          }
-          else
-          {
-            ++chunks_nmb_;
-            pos = 0;
-          }
-        }
-      }
-      catch (...)
-      {
-        size_t chunk = other.head_chunk_;
-        size_t pos = other.head_pos_;
-        for (; chunk <= j; ++chunk)
-        {
-          for (pos = 0; pos < (chunk == j ? i : chunk_cap_); ++pos)
-          {
-            val_alloc_traits::destroy(vals_alloc_, chunk_heads_[chunk] + pos);
-          }
-        }
-        for (size_t k = 0; k < j; ++k)
-        {
-          val_alloc_traits::deallocate(vals_alloc_, chunk_heads_[j], chunk_cap_);
-        }
-        chunk_alloc_traits::deallocate(chunk_heads_alloc_, chunk_heads_, chunks_nmb_);
-        throw;
-      }
-    }
-    Deque(Deque&& other):
-      chunks_nmb_(other.chunks_nmb_),
-      size_(other.size_),
-      head_chunk_(other.head_chunk_),
-      head_pos_(other.head_pos_),
-      chunk_heads_(other.chunk_heads_),
-      vals_alloc_(),
-      chunk_heads_alloc_()
-    {
-      other.chunks_nmb_ = 0;
       other.size_ = 0;
-      other.head_chunk_ = 0;
-      other.head_pos_ = 0;
-      other.chunk_heads_ = nullptr;
     }
-    Deque& operator=(const Deque& other)
+    PseudoDeque& operator=(const PseudoDeque& other)
     {
-      Deque& other_cp(other);
+      PseudoDeque& other_cp(other);
       *this = std::move(other_cp);
       return *this;
     }
-    Deque& operator=(Deque&& other) noexcept
+    PseudoDeque& operator=(PseudoDeque&& other)
     {
       clear();
-      chunks_nmb_ = other.chunks_nmb_;
+      list_ = std::move(other.list_);
+      tail_ = std::move(other.tail_);
       size_ = other.size_;
-      head_chunk_ = other.head_chunk_;
-      head_pos_ = other.head_pos_;
-      chunk_heads_ = other.chunk_heads_;
-
-      other.chunks_nmb_ = 0;
-      other.size_ = 0;
-      other.head_chunk_ = 0;
-      other.head_pos_ = 0;
-      other.chunk_heads_ = nullptr;
 
       return *this;
     }
-    ~Deque()
+    ~PseudoDeque() = default;
+
+    template< class ... Args >
+    void push_back(Args&&... args)
     {
-      for (Deque< T >::iterator i = begin(); i != end(); ++i)
+      if (!size_)
       {
-        val_alloc_traits::destroy(vals_alloc_, i.operator->());
+        list_.emplace_front(std::forward< Args >(args)...);
+        tail_ = list_.begin();
       }
-      for (size_t i = 0; i < chunks_nmb_; ++i)
+      else
       {
-        val_alloc_traits::deallocate(vals_alloc_, chunk_heads_[i], chunk_cap_);
+        list_.emplace_after(tail_, std::forward< Args >(args)...);
+        ++tail_;
       }
-      chunk_alloc_traits::deallocate(chunk_heads_alloc_, chunk_heads_, chunks_nmb_);
-    }
-    void push_back(const T& value)
-    {
-      emplace_back(value);
-    }
-    void push_back(T&& value)
-    {
-      emplace_back(std::move(value));
-    }
-    template<class ... Args>
-    void emplace_back(Args&&... args)
-    {
-      size_t end_chunk = head_chunk_;
-      size_t end_pos = head_pos_;
-      if (size_)
-      {
-        convert_index(size_, end_chunk, end_pos);
-      }
-      if (chunks_nmb_ == 0 || (end_chunk == chunks_nmb_ - 1 && end_pos == chunk_cap_ - 1))
-      {
-        add_chunk(true);
-      }
-      val_alloc_traits::construct(vals_alloc_, chunk_heads_[end_chunk] + end_pos, std::forward< Args >(args)...);
       ++size_;
     }
-    void pop_back()
+    template< class... Args >
+    void push_front(Args&&... args)
     {
-      if (size_ == 0)
+      list_.emplace_front(std::forward< Args >(args)...);
+      if (!size_)
       {
-        throw std::out_of_range("Queue is empty");
+        tail_ = list_.cbegin();
       }
-      size_t end_chunk = 0;
-      size_t end_pos = 0;
-      convert_index(size_, end_chunk, end_pos);
-      val_alloc_traits::destroy(vals_alloc_, chunk_heads_[end_chunk] + end_pos);
-      --size_;
-      reset_head();
-    }
-    template<class ... Args>
-    void push_front(const T& value)
-    {
-      emplace_front(value);
-    }
-    void push_front(T&& value)
-    {
-      emplace_front(std::move(value));
-    }
-    template<class ... Args>
-    void emplace_front(Args&&... args)
-    {
-      if (head_chunk_ == 0 && head_pos_ == 0)
-      {
-        add_chunk(false);
-      }
-      prev_pos(head_chunk_, head_pos_);
-      try
-      {
-        val_alloc_traits::construct(vals_alloc_, chunk_heads_[head_chunk_] + head_pos_, std::forward< Args >(args)...);
-        ++size_;
-      }
-      catch (const std::bad_alloc&)
-      {
-        next_pos(head_chunk_, head_pos_);
-        throw;
-      }
+      ++size_;
     }
     void pop_front()
     {
+      list_.pop_front();
+      --size_;
       if (size_ == 0)
       {
-        throw std::out_of_range("Queue is empty");
+        tail_ = list_.end();
       }
-      val_alloc_traits::destroy(vals_alloc_, chunk_heads_[head_chunk_] + head_pos_);
-      next_pos(head_chunk_, head_pos_);
-      --size_;
-      reset_head();
     }
     void clear()
     {
-      for (Deque< T >::iterator i = begin(); i != end(); ++i)
-      {
-        val_alloc_traits::destroy(vals_alloc_, i.operator->());
-      }
-      for (size_t i = 0; i < chunks_nmb_; ++i)
-      {
-        val_alloc_traits::deallocate(vals_alloc_, chunk_heads_[i], chunk_cap_);
-      }
-      chunk_alloc_traits::deallocate(chunk_heads_alloc_, chunk_heads_, chunks_nmb_);
+      list_.clear();
+      tail_ = list_.end();
       size_ = 0;
-      chunks_nmb_ = 0;
-      head_chunk_ = 0;
-      head_pos_ = 0;
-      chunk_heads_ = nullptr;
     }
     T& front()
     {
-      if (size_ == 0)
-      {
-        throw std::out_of_range("Queue is empty");
-      }
-      return chunk_heads_[head_chunk_][head_pos_];
+      return list_.front();
     }
     const T& front() const
     {
-      if (size_ == 0)
-      {
-        throw std::out_of_range("Queue is empty");
-      }
-      return chunk_heads_[head_chunk_][head_pos_];
+      return list_.front();
     }
     T& back()
     {
-      if (size_ == 0)
-      {
-        throw std::out_of_range("Queue is empty");
-      }
-      size_t chunk = 0;
-      size_t pos = 0;
-      convert_index(size_, chunk, pos);
-      return chunk_heads_[chunk][pos];
+      return *tail_;
     }
     const T& back() const
     {
-      if (size_ == 0)
-      {
-        throw std::out_of_range("Queue is empty");
-      }
-      size_t chunk = 0;
-      size_t pos = 0;
-      convert_index(size_, chunk, pos);
-      return chunk_heads_[chunk][pos];
-    }
-    iterator begin()
-    {
-      return iterator(chunk_heads_ + head_chunk_, head_pos_);
-    }
-    iterator end()
-    {
-      size_t end_chunk = head_chunk_;
-      size_t end_pos = head_pos_;
-      convert_index(size_, end_chunk, end_pos);
-      return iterator(chunk_heads_ + end_chunk, end_pos);
-    }
-    const_iterator begin() const
-    {
-      return cbegin();
-    }
-    const_iterator end() const
-    {
-      return cend();
-    }
-    const_iterator cbegin() const
-    {
-      return const_iterator(chunk_heads_ + head_chunk_, head_pos_);
-    }
-    const_iterator cend() const
-    {
-      size_t end_chunk = 0;
-      size_t end_pos = 0;
-      convert_index(size_, end_chunk, end_pos);
-      return const_iterator(chunk_heads_ + end_chunk, end_pos);
+      return *tail_;
     }
     bool empty() const
     {
