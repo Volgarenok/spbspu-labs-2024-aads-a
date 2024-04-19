@@ -42,7 +42,7 @@ void zaitsev::PostfixExpression::make_postfix(const std::string& s)
     {
       while (!internal_state.empty()
         && internal_state.top().type_ == token_type::bin_operator
-        && lessBinOperatorPriority(internal_state.top(), raw_sequence.front()))
+        && !lessBinOperatorPriority(internal_state.top(), raw_sequence.front()))
       {
         new_tokens.push(internal_state.top());
         internal_state.pop();
