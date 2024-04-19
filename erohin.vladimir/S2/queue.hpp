@@ -24,8 +24,8 @@ namespace erohin
     const T & front() const;
     T & back();
     const T & back() const;
-    bool empty();
-    size_t size();
+    bool empty() const;
+    size_t size() const;
     void push(const T & value);
     void push(T && value);
     template< class... Args >
@@ -117,13 +117,13 @@ namespace erohin
   }
 
   template< class T, class Container >
-  bool Queue< T, Container >::empty()
+  bool Queue< T, Container >::empty() const
   {
     return container_.empty();
   }
 
   template< class T, class Container >
-  size_t Queue< T, Container >::size()
+  size_t Queue< T, Container >::size() const
   {
     return container_.size();
   }

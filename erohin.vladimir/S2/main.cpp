@@ -27,6 +27,10 @@ int main(int argc, char ** argv)
         return 1;
       }
       inputPostfixExpressionLines(file, expr_lines);
+      if (expr_lines.empty())
+      {
+        std::cout << "\n";
+      }
       file.close();
     }
     else

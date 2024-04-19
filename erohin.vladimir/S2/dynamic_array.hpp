@@ -33,8 +33,8 @@ namespace erohin
     const T & front() const;
     T & back();
     const T & back() const;
-    bool empty();
-    size_t size();
+    bool empty() const;
+    size_t size() const;
     void push_back(const T & value);
     void push_back(T && value);
     template< class... Args >
@@ -213,13 +213,13 @@ namespace erohin
   }
 
   template< class T >
-  bool DynamicArray< T >::empty()
+  bool DynamicArray< T >::empty() const
   {
     return (size_ == 0);
   }
 
   template< class T >
-  size_t DynamicArray< T >::size()
+  size_t DynamicArray< T >::size() const
   {
     return size_;
   }

@@ -8,6 +8,11 @@ erohin::PostfixExpression::PostfixExpression(const expression_t & inf_expr)
   convertInfixToPostfix(expression, inf_expr);
 }
 
+bool erohin::PostfixExpression::empty() const
+{
+  return expression.empty();
+}
+
 erohin::Operand erohin::PostfixExpression::evaluate() const
 {
   Stack< Token > temp_stack;

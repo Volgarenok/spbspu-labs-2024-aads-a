@@ -20,6 +20,7 @@ namespace erohin
     PostfixExpression() = default;
     PostfixExpression(const expression_t & inf_expr);
     ~PostfixExpression() = default;
+    bool empty() const;
     Operand evaluate() const;
   };
 
