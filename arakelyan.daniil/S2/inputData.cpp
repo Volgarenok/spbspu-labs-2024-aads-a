@@ -52,5 +52,6 @@ arakelyan::Queue< arakelyan::ExpressionObj > arakelyan::readDataInInfixForm(std:
       break;
     }
   }
+
   return someQ;
 }

@@ -1,53 +1,75 @@
 #include "calculateProc.hpp"
 #include "token.hpp"
 
-#include <iostream>
+#include <stdexcept>
 
-arakelyan::Queue< arakelyan::ExpressionObj > arakelyan::transformInfixToPostfix(Queue<ExpressionObj> &infixQueue)
+int operationPriority(arakelyan::ExpressionObj obj)
+{
+  if (obj.val_.oper_ == '+' || obj.val_.oper_ == '-')
+  {
+    return 1;
+  }
+  else if (obj.val_.oper_ == '*' || obj.val_.oper_ == '/' || obj.val_.oper_ == '%')
+  {
+    return 2;
+  }
+  else
+  {
+    throw std::logic_error("invalid operation!");
+  }
+  return 0;
+}
+
+arakelyan::Queue< arakelyan::ExpressionObj > arakelyan::transformInfixToPostfix(Queue< ExpressionObj > &infixQueue)
 {
   Queue< ExpressionObj > postfixQ;
-  Stack< ExpressionObj > stack;
+  Stack< ExpressionObj > operS;
 
   while (!infixQueue.empty())
   {
-    auto tempVal = infixQueue.front();
+    auto curObj = infixQueue.front();
     infixQueue.pop();
-    if (tempVal.type_ == token_t::operand)
+
+    if (curObj.type_ == token_t::operand)
     {
-      postfixQ.push(tempVal);
+      postfixQ.push(curObj);
     }
-    if (tempVal.type_ == token_t::bracket)
+    else if (curObj.type_ == token_t::bracket)
     {
-      if (tempVal.val_.oper_ == '(')
+      if (curObj.val_.oper_ == '(')
       {
-        stack.push(tempVal);
+        operS.push(curObj);
       }
-      else if (tempVal.val_.oper_ == ')')
+      else if (curObj.val_.oper_ == ')')
       {
-        auto bl9 = stack.top();
-        while (bl9.val_.oper_ != '(')
+        while ((!operS.empty()) && (operS.top().val_.oper_ != '('))
         {
-          postfixQ.push(stack.top());
-          stack.pop();
-          bl9 = stack.top();
+          postfixQ.push(operS.top());
+          operS.pop();
         }
-        stack.pop();
+        if (operS.empty())
+        {
+          throw std::logic_error("brackets fault");
+        }
+        operS.pop();
       }
     }
-    if (tempVal.type_ == token_t::operation)
+    else if (curObj.type_ == token_t::operation)
     {
-      stack.push(tempVal);
+      while (!operS.empty() && (operS.top().val_.oper_ != '(') && (operationPriority(operS.top()) <= operationPriority(curObj)))
+      {
+        postfixQ.push(operS.top());
+        operS.pop();
+      }
+      operS.push(curObj);
     }
   }
 
-  while (!stack.empty())
+  while (!operS.empty())
   {
-    if (stack.top().val_.oper_ == '(')
-    {
-      break;
-    }
-    postfixQ.push(stack.top());
-    stack.pop();
+    postfixQ.push(operS.top());
+    operS.pop();
   }
+
   return postfixQ;
 }

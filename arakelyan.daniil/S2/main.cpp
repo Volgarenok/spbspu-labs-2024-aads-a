@@ -20,8 +20,19 @@ int main()
   //   std::cout << "read one q\n";
   // }
 
-  Queue< ExpressionObj > infixQueue = readDataInInfixForm(std::cin);
-  Queue< ExpressionObj > postfixQueue = transformInfixToPostfix(infixQueue);
+  Queue< ExpressionObj > infixQueue;
+  Queue< ExpressionObj > postfixQueue;
+
+  try
+  {
+    infixQueue = readDataInInfixForm(std::cin);
+    postfixQueue = transformInfixToPostfix(infixQueue);
+  }
+  catch (const std::exception &e)
+  {
+    std::cerr << "Error: " << e.what() << "\n";
+    return 1;
+  }
 
   while (!postfixQueue.empty())
   {
