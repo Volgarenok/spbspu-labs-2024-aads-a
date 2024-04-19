@@ -11,14 +11,16 @@ namespace zakozhurnikova
     TreeNode *leftChild;
     TreeNode *rightChild;
     TreeNode *parent;
+    int balanceFactor;
 
-    TreeNode(Key key, Value val, TreeNode *parent = nullptr, TreeNode *left = nullptr, TreeNode *right = nullptr)
+    TreeNode(Key key, Value val, TreeNode *parent = nullptr, TreeNode *left = nullptr, TreeNode *right = nullptr, int balanceFactor = 0)
     {
       this->key = key;
       this->value = val;
       this->leftChild = left;
       this->rightChild = right;
       this->parent = parent;
+      this->balanceFactor = balanceFactor;
     }
 
     TreeNode* hasLeftChild()
