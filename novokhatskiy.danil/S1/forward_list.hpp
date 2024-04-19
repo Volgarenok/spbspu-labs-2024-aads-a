@@ -481,15 +481,7 @@ namespace novokhatskiy
     {
       return !(*this < other);
     }
-    void print()
-    {
-      while (head_ != nullptr)
-      {
-        std::cout << head_->value_ << " ";
-        head_ = head_->next_;
-      }
-      std::cout << std::endl;
-    }
+
     ~ForwardList()
     {
       clear();
