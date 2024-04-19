@@ -119,6 +119,11 @@ int main()
   using namespace novokhatskiy;
   try
   {
+    ForwardList< size_t > p1 ={1,2,3};
+    ForwardList< size_t > p2 = {4,5,6};
+    ConstForwardIterator< size_t > c = p1.cbegin();
+    p1.splice_after(c, p2);
+    p1.print();
     ForwardList< std::pair< std::string, ForwardList< size_t > > > pairsOfForwardList;
     inputForwardList(pairsOfForwardList, std::cin);
     outputForwardList(std::cout, pairsOfForwardList);
