@@ -5,7 +5,18 @@
 
 erohin::PostfixExpression::PostfixExpression(const expression_t & inf_expr)
 {
-  convertInfixToPostfix(expression, inf_expr);
+  try
+  {
+    convertInfixToPostfix(expression, inf_expr);
+  }
+  catch (...)
+  {
+    while (!expression.empty())
+    {
+      expression.pop();
+    }
+    throw;
+  }
 }
 
 bool erohin::PostfixExpression::empty() const

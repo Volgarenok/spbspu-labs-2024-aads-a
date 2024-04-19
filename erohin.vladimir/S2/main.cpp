@@ -11,7 +11,6 @@ int main(int argc, char ** argv)
   using namespace erohin;
   Queue< PostfixExpression > expr_lines;
   Stack< Operand::value_type > results;
-  bool isAnyExpressionCorrect = true;
   try
   {
     if (argc == 1)
@@ -43,38 +42,31 @@ int main(int argc, char ** argv)
       results.push(expr_lines.front().evaluate()());
       expr_lines.pop();
     }
-    if (isAnyExpressionCorrect)
+    if (!results.empty())
     {
-      if (!results.empty())
-      {
-        std::cout << results.top();
-        results.pop();
-      }
-      else
-      {
-        return 0;
-      }
-      while (!results.empty())
-      {
-        std::cout << " " << results.top();
-        results.pop();
-      }
-      std::cout << "\n";
+      std::cout << results.top();
+      results.pop();
     }
     else
     {
-      return 3;
+      return 0;
     }
+    while (!results.empty())
+    {
+      std::cout << " " << results.top();
+      results.pop();
+    }
+    std::cout << "\n";
   }
   catch (const std::invalid_argument & e)
   {
     std::cerr << e.what() << "\n";
-    return 4;
+    return 3;
   }
   catch (const std::exception & e)
   {
     std::cerr << e.what() << "\n";
-    isAnyExpressionCorrect = false;
+    return 4;
   }
   return 0;
 }

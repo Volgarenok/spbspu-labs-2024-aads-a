@@ -36,7 +36,7 @@ void erohin::inputInfixExpression(std::istream & input, expression_t & inf_expr)
       }
       else
       {
-        throw;
+        isUnidentifiedTokenFound = true;
       }
     }
     inf_expr.push(Token{ temp_id, temp_token });
