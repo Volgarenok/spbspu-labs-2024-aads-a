@@ -230,16 +230,15 @@ namespace novokhatskiy
         throw std::out_of_range("Can not insert");
       }
       constIter otherBegin = other.cbegin();
-      constIter nextIt = pos.node_->next_;
+      constIter nextIt = pos;
+      nextIt++;
       pos.node_->next_ = otherBegin.node_;
       while (otherBegin.node_->next_ != nullptr)
       {
-        otherBegin.node_ = otherBegin.node_->next_;
-        pos.node_ = pos.node_->next_;
-        pos.node_->next_ = otherBegin.node_;
+        otherBegin++;
       }
       otherBegin.node_->next_ = nextIt.node_;
-      other.clear();
+      other.head_ = nullptr;
     }
 
     void splice_after(constIter pos, ForwardList< T >&& other)
