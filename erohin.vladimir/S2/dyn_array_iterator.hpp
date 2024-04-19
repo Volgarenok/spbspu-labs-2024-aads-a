@@ -20,7 +20,6 @@ namespace erohin
     using pointer = T *;
     using reference = T &;
     DynArrayIterator();
-    DynArrayIterator(T * ptr);
     DynArrayIterator(const DynArrayIterator< T > &) = default;
     ~DynArrayIterator() = default;
     DynArrayIterator< T > & operator=(const DynArrayIterator< T > &) = default;
@@ -47,6 +46,7 @@ namespace erohin
     bool operator>=(const DynArrayIterator< T > & rhs);
   private:
     T * ptr_;
+    DynArrayIterator(T * ptr);
   };
 
   template< class T >

@@ -288,64 +288,67 @@ namespace erohin
     lhs.swap(rhs);
   }
 
-  template< class T >
-  int compare(DynamicArray< T > & lhs, DynamicArray< T > & rhs) noexcept
+  namespace detail
   {
-    for (size_t i = 0; i < std::min(lhs.size_, rhs.size_); ++i)
+    template< class T >
+    int compare(DynamicArray< T > & lhs, DynamicArray< T > & rhs) noexcept
     {
-      if (lhs[i] < rhs[i])
+      for (size_t i = 0; i < std::min(lhs.size_, rhs.size_); ++i)
       {
-        return -1;
+        if (lhs[i] < rhs[i])
+        {
+          return -1;
+        }
+        else if (lhs[i] > rhs[i])
+        {
+          return 1;
+        }
       }
-      else if (lhs[i] > rhs[i])
+      if (lhs.size_ == rhs.size_)
       {
-        return 1;
+        return 0;
       }
-    }
-    if (lhs.size_ == rhs.size_)
-    {
-      return 0;
-    }
-    else
-    {
-      return (1 - 2 * (lhs.size_ < rhs.size_));
+      else
+      {
+        return (1 - 2 * (lhs.size_ < rhs.size_));
+      }
     }
   }
 
   template< class T >
   bool operator==(DynamicArray< T > & lhs, DynamicArray< T > & rhs) noexcept
   {
-    return (compare(lhs, rhs) == 0);
+    return (detail::compare(lhs, rhs) == 0);
   }
 
   template< class T >
   bool operator!=(DynamicArray< T > & lhs, DynamicArray< T > & rhs) noexcept
   {
-    return (compare(lhs, rhs) != 0);
+    return (detail::compare(lhs, rhs) != 0);
   }
 
   template< class T >
   bool operator<(DynamicArray< T > & lhs, DynamicArray< T > & rhs) noexcept
   {
-    return (compare(lhs, rhs) < 0);
+    return (detail::compare(lhs, rhs) < 0);
   }
 
   template< class T >
   bool operator<=(DynamicArray< T > & lhs, DynamicArray< T > & rhs) noexcept
   {
-    return (compare(lhs, rhs) <= 0);
+    return (detail::compare(lhs, rhs) <= 0);
   }
 
   template< class T >
   bool operator>(DynamicArray< T > & lhs, DynamicArray< T > & rhs) noexcept
   {
-    return (compare(lhs, rhs) > 0);
+    return (detail::compare(lhs, rhs) > 0);
   }
 
   template< class T >
   bool operator>=(DynamicArray< T > & lhs, DynamicArray< T > & rhs) noexcept
   {
-    return (compare(lhs, rhs) >= 0);
+    return (detail::compare(lhs, rhs) >= 0);
   }
 
   template< class T >
