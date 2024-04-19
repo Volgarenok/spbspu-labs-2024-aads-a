@@ -1,12 +1,8 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-#include "token.hpp"
-#include "infix_expression.hpp"
 #include "postfix_expression.hpp"
 #include "stack.hpp"
-#include "queue.hpp"
-#include "operators.hpp"
 
 int main(int argc, char** argv)
 {

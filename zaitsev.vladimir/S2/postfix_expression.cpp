@@ -82,6 +82,8 @@ long long zaitsev::PostfixExpression::calculate()
   Stack< long long > values;
   while (!tokens.empty())
   {
+    long long a = 0;
+    long long b = 0;
     switch (tokens.front().type_)
     {
     case token_type::numeric:
@@ -92,11 +94,14 @@ long long zaitsev::PostfixExpression::calculate()
       {
         throw std::runtime_error("Incorrect expression");
       }
-      long long a = values.top();
+      a = values.top();
       values.pop();
-      long long b = values.top();
+      b = values.top();
       values.pop();
       values.push(binOperatorResult(tokens.front(), b, a));
+      break;
+    default:
+      throw std::runtime_error("Incorrect token");
     }
     tokens.pop();
   }
