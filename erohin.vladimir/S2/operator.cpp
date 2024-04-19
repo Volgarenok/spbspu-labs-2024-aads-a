@@ -145,5 +145,6 @@ erohin::Operand erohin::mod(const Operand & lhs, const Operand & rhs)
     throw std::invalid_argument("Division by 0");
   }
   long long res = lhs() % rhs();
-  return (res < 0) ? Operand(rhs() - res) : Operand(res);
+  bool isSameSign = (rhs() > 0 && lhs() > 0) || (rhs() < 0 && lhs() < 0);
+  return (isSameSign) ? res : (rhs() + res);
 }
