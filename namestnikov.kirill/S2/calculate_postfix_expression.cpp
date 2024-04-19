@@ -59,7 +59,6 @@ void calculateExpression(long long & num1, long long num2, char op)
 
 long long namestnikov::calculatePostfixExpression(Queue< namestnikov::Key > & resultQueue)
 {
-  size_t countOperands = 0;
   Stack< long long > operandsStack;
   while (!resultQueue.empty())
   {
