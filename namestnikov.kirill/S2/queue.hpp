@@ -1,7 +1,6 @@
 #ifndef QUEUE_HPP
 #define QUEUE_HPP
 
-#include <list>
 #include <cstddef>
 #include "forward_list.hpp"
 

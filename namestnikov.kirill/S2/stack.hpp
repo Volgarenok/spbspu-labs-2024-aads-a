@@ -1,7 +1,6 @@
 #ifndef STACK_HPP
 #define STACK_HPP
 
-#include <list>
 #include <cstddef>
 #include "forward_list.hpp"
 
