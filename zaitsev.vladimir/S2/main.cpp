@@ -1,6 +1,7 @@
 #include <iostream>
-#include <string>
 #include <fstream>
+#include <string>
+#include <stdexcept>
 #include "postfix_expression.hpp"
 #include "stack.hpp"
 
