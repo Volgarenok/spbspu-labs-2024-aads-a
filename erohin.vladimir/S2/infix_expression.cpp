@@ -8,6 +8,11 @@ void erohin::inputInfixExpression(std::istream & input, expression_t & inf_expr)
 {
   std::string line;
   std::getline(input, line);
+  if (!input || line.empty())
+  {
+    input.clear();
+    return;
+  }
   char * string_token = strtok(const_cast< char * >(line.data()), " ");
   token_identifier_t temp_id = token_identifier_t::OPERAND_TYPE;
   token_t temp_token{ Operand() };
