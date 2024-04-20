@@ -62,7 +62,7 @@ namespace belokurskaya
         }
       }
 
-      bool empty() const
+      bool empty() const noexcept
       {
         return head == nullptr;
       }
@@ -195,7 +195,7 @@ namespace belokurskaya
         }
       }
 
-      T & at(size_t index) const
+      T & at(size_t index) const noexcept
       {
         Node * current = head;
         for (size_t i = 0; i < index && current; ++i)
@@ -209,7 +209,7 @@ namespace belokurskaya
         return current->value;
       }
 
-      size_t size() const
+      size_t size() const noexcept
       {
         size_t count = 0;
         Node * current = head;
@@ -221,7 +221,7 @@ namespace belokurskaya
         return count;
       }
 
-      bool operator==(const List< T > & other) const
+      bool operator==(const List< T > & other) const noexcept
       {
         Node * current1 = head;
         Node * current2 = other.head;
@@ -237,12 +237,12 @@ namespace belokurskaya
         return !current1 && !current2;
       }
 
-      bool operator!=(const List< T > & other) const
+      bool operator!=(const List< T > & other) const noexcept
       {
         return !(* this == other);
       }
 
-      bool operator<(const List< T > & other) const
+      bool operator<(const List< T > & other) const noexcept
       {
         Node * current1 = head;
         Node * current2 = other.head;
@@ -258,18 +258,18 @@ namespace belokurskaya
         return current2 != nullptr;
       }
 
-      bool operator<=(const List< T > & other) const
+      bool operator<=(const List< T > & other) const noexcept
       {
         return * this < other || * this == other;
       }
 
-      bool operator>(const List< T > & other) const
+      bool operator>(const List< T > & other) const noexcept
       {
         return !(* this <= other);
       }
 
 
-      bool operator>=(const List< T > & other) const
+      bool operator>=(const List< T > & other) const noexcept
       {
         return * this > other || * this == other;
       }
