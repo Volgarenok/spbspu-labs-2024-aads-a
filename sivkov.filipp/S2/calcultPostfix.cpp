@@ -1,64 +1,67 @@
 #include "calcultPostfix.hpp"
+#include "postfixType.hpp"
 
-int calcult(std::queue< char >& numb)
+long long calcult(std::queue<PostfixType>& numb)
 {
-  std::stack<int> infix;
+  std::stack<long long> infix;
   while (!numb.empty())
   {
-    if (numb.front() == '+')
+    if (numb.front().isChar())
     {
-      int a = infix.top();
-      infix.pop();
-      int b = infix.top();
-      infix.pop();
-      int c = b + a;
-      infix.push(c);
-      numb.pop();
-    }
-    else if (numb.front() == '-')
-    {
-      int a = infix.top();
-      infix.pop();
-      int b = infix.top();
-      infix.pop();
-      int c = b - a;
-      infix.push(c);
-      numb.pop();
-    }
-    else if (numb.front() == '/')
-    {
-      int a = infix.top();
-      infix.pop();
-      int b = infix.top();
-      infix.pop();
-      int c = b / a;
-      infix.push(c);
-      numb.pop();
-    }
-    else if (numb.front() == '*')
-    {
-      int a = infix.top();
-      infix.pop();
-      int b = infix.top();
-      infix.pop();
-      int c = b * a;
-      infix.push(c);
-      numb.pop();
-    }
-    else if (numb.front() == '%')
-    {
-      int a = infix.top();
-      infix.pop();
-      int b = infix.top();
-      infix.pop();
-      int c = b % a;
-      infix.push(c);
-      numb.pop();
+      if (numb.front().getChar() == '+')
+      {
+        long long a = infix.top();
+        infix.pop();
+        long long b = infix.top();
+        infix.pop();
+        long long c = b + a;
+        infix.push(c);
+        numb.pop();
+      }
+      else if (numb.front().getChar() == '-')
+      {
+        long long a = infix.top();
+        infix.pop();
+        long long b = infix.top();
+        infix.pop();
+        long long c = b - a;
+        infix.push(c);
+        numb.pop();
+      }
+      else if (numb.front().getChar() == '/')
+      {
+        long long a = infix.top();
+        infix.pop();
+        long long b = infix.top();
+        infix.pop();
+        long long c = b / a;
+        infix.push(c);
+        numb.pop();
+      }
+      else if (numb.front().getChar() == '*')
+      {
+        long long a = infix.top();
+        infix.pop();
+        long long b = infix.top();
+        infix.pop();
+        long long c = b * a;
+        infix.push(c);
+        numb.pop();
+      }
+      else if (numb.front().getChar() == '%')
+      {
+        long long a = infix.top();
+        infix.pop();
+        long long b = infix.top();
+        infix.pop();
+        long long c = b % a;
+        infix.push(c);
+        numb.pop();
+      }
     }
     else
     {
-      char num = numb.front();
-      int a = num - '0';
+      long long a = numb.front().getLL();
       infix.push(a);
       numb.pop();
     }

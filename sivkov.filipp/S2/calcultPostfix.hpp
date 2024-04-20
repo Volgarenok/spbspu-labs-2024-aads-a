@@ -3,7 +3,8 @@
 
 #include <queue>
 #include <stack>
+#include "postfixType.hpp"
 
-int calcult(std::queue< char >& numb);
+long long calcult(std::queue< PostfixType >& numb);
 
 #endif
