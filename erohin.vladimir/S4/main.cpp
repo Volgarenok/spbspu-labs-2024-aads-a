@@ -5,7 +5,7 @@
 
 int main(int argc, char ** argv)
 {
-  if (argc != 1)
+  if (argc != 2)
   {
     std::cerr << "Wrong CLA number\n";
     return 0;
@@ -13,22 +13,23 @@ int main(int argc, char ** argv)
   std::fstream file(argv[1]);
   std::map< std::string, std::map< size_t, std::string > > collection;
   std::string dict_name;
-  std::cin >> dict_name;
-  while (!std::cin.eof())
+  file >> dict_name;
+  while (!file.eof())
   {
     size_t key;
     std::string value;
-    while (std::cin >> key >> value)
+    while (file >> key >> value)
     {
       collection[dict_name][key] = value;
     }
-    std::cin.clear();
-    std::cin >> dict_name;
+    file.clear();
+    file >> dict_name;
     if (!dict_name.size())
     {
       continue;
     }
   }
+  file.close();
   for (auto & dict: collection)
   {
     for (auto & record: dict.second)
