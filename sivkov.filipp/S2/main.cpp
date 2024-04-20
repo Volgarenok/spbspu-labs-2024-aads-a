@@ -6,11 +6,12 @@
 #include "infixToPostfix.hpp"
 #include "utilities.hpp"
 #include "calcultPostfix.hpp"
+#include "postfixType.hpp"
 
 int main(int argc, char* argv[])
 {
-  std::queue<char> numb;
-  std::stack<int> infix;
+  std::queue<PostfixType> numb;
+  std::stack<long long> infix;
 
   if (argc == 2)
   {
@@ -22,9 +23,10 @@ int main(int argc, char* argv[])
     infixToPostFix(std::cin, numb);
   }
 
-  int rez = 0;
+  long long rez = 0;
   rez = calcult(numb);
 
   std::cout << rez;
   return 0;
 }
+
