@@ -10,7 +10,6 @@ void erohin::inputInfixExpression(std::istream & input, expression_t & inf_expr)
   std::getline(input, line);
   if (!input || line.empty())
   {
-    input.clear();
     return;
   }
   char * string_token = strtok(const_cast< char * >(line.data()), " ");
@@ -47,10 +46,6 @@ void erohin::inputInfixExpression(std::istream & input, expression_t & inf_expr)
       }
     }
     inf_expr.push(Token{ temp_id, temp_token });
-    if (input.peek() == '\n')
-    {
-      break;
-    }
     string_token = strtok(nullptr, " ");
   }
   if (isUnidentifiedTokenFound)
