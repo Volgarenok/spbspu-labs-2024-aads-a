@@ -1,35 +1,37 @@
 #include "infix_expression.hpp"
 #include <iostream>
 #include <string>
+#include <cstring>
 #include <stdexcept>
 
 void erohin::inputInfixExpression(std::istream & input, expression_t & inf_expr)
 {
-  std::string string_token;
+  std::string line;
+  std::getline(input, line);
+  char * string_token = strtok(const_cast< char * >(line.data()), " ");
   token_identifier_t temp_id = token_identifier_t::OPERAND_TYPE;
   token_t temp_token{ Operand() };
   bool isUnidentifiedTokenFound = false;
-  input >> string_token;
-  while (input)
+  while (string_token)
   {
     try
     {
-      temp_token.operand = Operand(std::stoll(string_token));
+      temp_token.operand = Operand(std::stoll(std::string(string_token)));
       temp_id = token_identifier_t::OPERAND_TYPE;
     }
     catch (const std::invalid_argument &)
     {
-      if (string_token == "(")
+      if (string_token[1] == '\0' && string_token[0] == '(')
       {
         temp_token.bracket = Bracket{ bracket_t::OPEN_BRACKET };
         temp_id = token_identifier_t::BRACKET_TYPE;
       }
-      else if (string_token == ")")
+      else if (string_token[1] == '\0' && string_token[0] == ')')
       {
         temp_token.bracket = Bracket{ bracket_t::CLOSE_BRACKET };
         temp_id = token_identifier_t::BRACKET_TYPE;
       }
-      else if (string_token.length() == 1)
+      else if (string_token[1] == '\0')
       {
         temp_token.operation = Operator(string_token[0]);
         temp_id = token_identifier_t::OPERATOR_TYPE;
@@ -44,7 +46,7 @@ void erohin::inputInfixExpression(std::istream & input, expression_t & inf_expr)
     {
       break;
     }
-    input >> string_token;
+    string_token = strtok(nullptr, " ");
   }
   if (isUnidentifiedTokenFound)
   {
