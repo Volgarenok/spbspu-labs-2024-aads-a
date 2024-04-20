@@ -13,9 +13,21 @@ namespace zakozhurnikova
     using node = TreeNode< Key, Value >;
     BinarySearchTree() = default;
 
-    int length()
+    int size() const noexcept
     {
       return this->size_;
+    }
+
+    void swap(BinarySearchTree< Key, Value, Compare >& other)
+    {
+      std::swap(root_, other.root_);
+      std::swap(size_, other.size_);
+      std::swap(compare_, other.compare_);
+    }
+
+    bool empty() const noexcept
+    {
+      return size_ == 0;
     }
 
     void push(Key key, Value val)
@@ -235,7 +247,6 @@ namespace zakozhurnikova
     node* root_;
     size_t size_;
     Compare compare_;
-
 
   };
 }
