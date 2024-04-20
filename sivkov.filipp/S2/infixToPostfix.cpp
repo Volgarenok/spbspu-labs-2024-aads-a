@@ -1,38 +1,55 @@
 #include "infixToPostfix.hpp"
+#include <cctype>
+#include <string>
+#include <stack>
 #include "utilities.hpp"
+#include "postfixType.hpp"
 
-void infixToPostFix(std::istream& inputFile, std::queue< char >& numb)
+void infixToPostFix(std::istream& inputFile, std::queue< PostfixType >& numb)
 {
-  std::stack<char> oper;
+  std::stack< PostfixType > oper;
   char token;
+  std::string numString;
   while (inputFile >> token)
   {
-    if (isNum(token))
+    if (isdigit(token))
     {
-      numb.push(token);
+      numString += token;
     }
-    else if (isOperator(token))
+    else
     {
-      while (!oper.empty() && oper.top() != '(' && getPriority(oper.top()) >= getPriority(token))
+      if (!numString.empty())
       {
-        numb.push(oper.top());
+        numb.push(PostfixType(std::stoll(numString)));
+        numString.clear();
+      }
+      if (isOperator(token))
+      {
+        while (!oper.empty() && oper.top().getChar() != '(' && getPriority(oper.top().getChar()) >= getPriority(token))
+        {
+          numb.push(oper.top());
+          oper.pop();
+        }
+        oper.push(PostfixType(token));
+      }
+      else if (token == '(')
+      {
+        oper.push(PostfixType(token));
+      }
+      else if (token == ')')
+      {
+        while (!oper.empty() && oper.top().getChar() != '(')
+        {
+          numb.push(oper.top());
+          oper.pop();
+        }
         oper.pop();
       }
-      oper.push(token);
     }
-    else if (token == '(')
-    {
-      oper.push(token);
-    }
-    else if (token == ')')
-    {
-      while (!oper.empty() && oper.top() != '(')
-      {
-        numb.push(oper.top());
-        oper.pop();
-      }
-      oper.pop();
-    }
+  }
+  if (!numString.empty())
+  {
+    numb.push(PostfixType(std::stoll(numString)));
   }
   while (!oper.empty())
   {
@@ -40,3 +57,4 @@ void infixToPostFix(std::istream& inputFile, std::queue< char >& numb)
     oper.pop();
   }
 }
+

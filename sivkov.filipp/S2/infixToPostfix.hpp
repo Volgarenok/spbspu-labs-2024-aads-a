@@ -2,11 +2,11 @@
 #define INFIXTOPOSTFIX_HPP
 
 #include <queue>
-#include <stack>
 #include <iostream>
-#include "utilities.hpp"
+#include "postfixType.hpp"
 
-void infixToPostFix(std::istream& inputFile, std::queue< char >& numb);
+void infixToPostFix(std::istream& inputFile, std::queue<PostfixType>& numb);
 
 #endif
+
 
