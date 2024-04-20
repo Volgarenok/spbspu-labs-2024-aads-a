@@ -3,71 +3,78 @@
 #include <iostream>
 #include "stack.hpp"
 #include "queue.hpp"
+#include "readWord.hpp"
 
-bool isBinaryOperator(char ch)
+bool isBinaryOperator(const std::string& op)
 {
-  return ch == '+' || ch == '-' || ch == '/' || ch == '*' || ch == '%';
+  return op == "+" || op == "-" || op == "/" || op == "*" || op == "%";
 }
 
-bool hasMorePriority(char stack, char current)
+bool hasMorePriority(const std::string& stack, const std::string& current)
 {
-  return (stack != '(') && (((current == '*' || current == '/') && (stack == '*' || stack == '/')) || (current == '+' || current == '-'));
+  return (stack != "(") && (((current == "*" || current == "/") && (stack == "*" || stack == "/")) || (current == "+" || current == "-"));
+}
+
+void handleBinaryOperations(zakozhurnikova::Stack<std::string> &stack, const std::string &src, std::string &dest)
+{
+  if (isBinaryOperator(src))
+  {
+    while (!stack.empty() && hasMorePriority(stack.top(), src))
+    {
+      dest += stack.top() + " ";
+      stack.drop();
+    }
+    stack.push(src);
+  }
+  else if (src == "(")
+  {
+    stack.push(src);
+  }
+  else if (src == ")")
+  {
+    while (stack.top() != "(")
+    {
+      dest += stack.top() + " ";
+      stack.drop();
+    }
+    stack.drop();
+  }
+}
+
+void getRemainsFromStack(zakozhurnikova::Stack<std::string> &stack, std::string &dest)
+{
+  while (!stack.empty())
+  {
+    if (stack.top() == "(")
+    {
+      throw std::runtime_error("incorrect brackets");
+    }
+    dest += stack.top() + " ";
+    stack.drop();
+  }
 }
 
 std::string& getPostfixFromInfixPart(std::istream& in, std::string& result)
 {
-  const char WHITE_SPACE = ' ';
-  zakozhurnikova::Stack< char > stack;
+  zakozhurnikova::Stack<std::string> stack;
   std::string buff;
   std::getline(in, buff, '\n');
-  for (auto it = buff.cbegin(); it != buff.cend(); ++it)
+  c_iterator_t it = buff.cbegin();
+  while (it != buff.cend())
   {
-    if (std::isdigit(*it))
+    std::string sub;
+    it = readWord(it, buff.cend(), sub);
+    try
     {
-      auto cpy = it;
-      while (std::isdigit(*cpy))
-      {
-        result.push_back(*cpy);
-        ++cpy;
-      }
-      it = --cpy;
-      result.push_back(WHITE_SPACE);
+      std::stoll(sub);
+      result += sub + " ";
     }
-    else if (isBinaryOperator(*it))
+    catch (const std::invalid_argument &)
     {
-      while (!stack.empty() && hasMorePriority(stack.top(), *it))
-      {
-        result.push_back(stack.top());
-        result.push_back(WHITE_SPACE);
-        stack.drop();
-      }
-      stack.push(*it);
-    }
-    else if (*it == '(')
-    {
-      stack.push(*it);
-    }
-    else if (*it == ')')
-    {
-      while (stack.top() != '(')
-      {
-        result.push_back(stack.top());
-        result.push_back(WHITE_SPACE);
-        stack.drop();
-      }
-      stack.drop();
+      handleBinaryOperations(stack, sub, result);
     }
   }
-  while (!stack.empty())
-  {
-    if (stack.top() == '(')
-    {
-      throw std::runtime_error("incorrect brackets");
-    }
-    result.push_back(stack.top());
-    result.push_back(WHITE_SPACE);
-    stack.drop();
-  }
+  getRemainsFromStack(stack, result);
   return result;
 }
 

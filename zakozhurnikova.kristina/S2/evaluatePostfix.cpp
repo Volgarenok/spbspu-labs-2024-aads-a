@@ -3,13 +3,12 @@
 #include <limits>
 #include "stack.hpp"
 #include "queue.hpp"
+#include "readWord.hpp"
 
-long long calculate(long long first, long long second, char operation)
+long long calculate(long long first, long long second, const std::string& operation)
 {
   long long result = 0;
-  switch (operation)
-  {
-  case '+':
+  if (operation == "+")
   {
     long long maxNum = std::numeric_limits< long long >::max();
     if (maxNum - first < second)
@@ -17,9 +16,8 @@ long long calculate(long long first, long long second, char operation)
       throw std::out_of_range("Error: Addition overflow");
     }
     result = first + second;
-    break;
   }
-  case '-':
+  else if (operation == "-")
   {
     long long minNum = std::numeric_limits< long long >::min();
     if (minNum + first > second)
@@ -27,16 +25,16 @@ long long calculate(long long first, long long second, char operation)
       throw std::out_of_range("Error: Subtraction overflow");
     }
     result = first - second;
-    break;
   }
-  case '*':
+  else if (operation == "*")
+  {
     result = first * second;
     if (second != 0 && result / second != first)
     {
       throw std::out_of_range("Error: Mulptiplication overflow");
     }
-    break;
-  case '/':
+  }
+  else if (operation == "/")
   {
     long long minNum = std::numeric_limits< long long >::min();
     if (second == 0)
@@ -48,59 +46,57 @@ long long calculate(long long first, long long second, char operation)
       throw std::out_of_range("Error: Division overflow");
     }
     result = first / second;
-    break;
   }
-  case '%':
+  else if (operation == "%")
   {
     result = first % second;
     if (result < 0)
     {
       result += second;
     }
-    break;
   }
-  default:
+  else
+  {
     throw std::logic_error("Error: Wrong operation");
   }
   return result;
 }
 
+using c_iterator_t = std::string::const_iterator;
 
 long long evaluatePostfixPart(const std::string& postfix)
 {
   zakozhurnikova::Stack< long long > stack;
-  for (auto it = postfix.cbegin(); it != postfix.cend(); ++it)
+  c_iterator_t it = postfix.cbegin();
+  while (it != postfix.cend())
   {
-    if (std::isdigit(*it))
+    std::string sub;
+    it = readWord(it, postfix.cend(), sub);
+    try
     {
-      auto cpy = it;
-      std::string value;
-      value.push_back(*cpy);
-      while (std::isdigit(*cpy))
-      {
-        ++cpy;
-        value.push_back(*cpy);
-      }
-      it = --cpy;
-      stack.push(std::stoll(value));
+      stack.push(std::stoll(sub));
     }
-    else if (std::isspace(*it))
+    catch (const std::invalid_argument &)
     {
-      continue;
-    }
-    else
-    {
-      long long second = stack.top();
-      stack.drop();
-      if (stack.empty())
+      if (std::isspace(*it))
       {
-        return second;
+        continue;
       }
-      long long first = stack.top();
-      stack.drop();
-      stack.push(calculate(first, second, *it));
+      else
+      {
+        long long second = stack.top();
+        stack.drop();
+        if (stack.empty())
+        {
+          return second;
+        }
+        long long first = stack.top();
+        stack.drop();
+        stack.push(calculate(first, second, sub));
+      }
     }
   }
+
   long long result = stack.top();
   stack.drop();
   if (!stack.empty())
