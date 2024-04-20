@@ -76,7 +76,7 @@ namespace belokurskaya
         }
         else
         {
-          Node* current = head;
+          Node * current = head;
           while (current->next)
           {
             current = current->next;
@@ -195,7 +195,7 @@ namespace belokurskaya
         }
       }
 
-      T & at(size_t index) const noexcept
+      T & at(size_t index) const
       {
         Node * current = head;
         for (size_t i = 0; i < index && current; ++i)
@@ -213,7 +213,7 @@ namespace belokurskaya
       {
         size_t count = 0;
         Node * current = head;
-        while (current)
+        while (current != nullptr)
         {
           ++count;
           current = current->next;
