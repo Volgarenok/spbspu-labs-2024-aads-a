@@ -28,7 +28,7 @@ namespace zakozhurnikova
       return this->leftChild;
     }
 
-    TreeNode *hasRightChild()
+    TreeNode* hasRightChild()
     {
       return this->rightChild;
     }

@@ -1,20 +1,30 @@
 #include <iostream>
+#include <fstream>
+#include <utility>
 #include <string>
 #include "treeNode.hpp"
 #include "binarySearchTree.hpp"
+#include "comparator.hpp"
+#include "inputMaps.hpp"
 
-int main()
+int main(int argc, char *argv[])
 {
   using namespace zakozhurnikova;
-  BinarySearchTree<int, std::string >* mytree = new BinarySearchTree< int, std::string >();
-  mytree->push(3, "red");
-  mytree->push(4, "blue");
-  mytree->push(6, "yellow");
-  mytree->push(2, "at");
-
-  std::cout << mytree->get(6) << " ";
-  std::cout << mytree->get(2);
-
+  BinarySearchTree< std::string, BinarySearchTree< int, std::string > > maps;
+  BinarySearchTree<int, std::string> mytree;
+  if (argc == 2)
+  {
+    std::ifstream file(argv[1]);
+    inputMaps(file, maps);
+  }
+  else
+  {
+    std::cerr << "you didn't attach the file";
+  }
+  mytree.push(2, "hjk");
+  mytree.push(3, "m");
+  maps.push("zaz", mytree);
+  std::cout << mytree.get(2) << " " << maps.get("zaz").get(2);
   return 0;
 
 }

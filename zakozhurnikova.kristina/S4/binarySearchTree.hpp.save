@@ -171,12 +171,19 @@ namespace zakozhurnikova
       newRoot->balanceFactor = newRoot->balanceFactor - 1 + std::min(0, rotRoot->balanceFactor);
     }
 
-    Value& get(Key key)
+    Value get(Key key)
     {
-      node* res = this->get(key, this->root_);
-      if (res)
+      if (this->root_)
       {
-        return res->value;
+        node* res = this->get(key, this->root_);
+        if (res)
+        {
+          return res->value;
+        }
+        else
+        {
+          return res->value;
+        }
       }
       else
       {
