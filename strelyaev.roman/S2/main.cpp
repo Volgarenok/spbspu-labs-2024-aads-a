@@ -15,10 +15,10 @@ int main(int argc, char** argv)
   {
     file.open(argv[1]);
     stream_pointer = std::addressof(file);
-  }
-  if (!file)
-  {
-    return 0;
+    if (!file)
+    {
+      return 1;
+    }
   }
   std::istream& in = *stream_pointer;
   while (!in.eof())
