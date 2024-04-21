@@ -1,22 +1,18 @@
 #include "utilities.hpp"
+#include <string>
 
-bool isNum(char c)
+bool isOeprator(std::string c)
 {
-  return (c >= '0' && c <= '9');
+  return (c == "+" || c == "-" || c == "*" || c == "/");
 }
 
-bool isOperator(char c)
+int getPriority(std::string op)
 {
-  return (c == '+' || c == '-' || c == '*' || c == '/');
-}
-
-int getPriority(char op)
-{
-  if (op == '*' || op == '/')
+  if (op == "*" || op == "/")
   {
     return 2;
   }
-  else if (op == '+' || op == '-')
+  else if (op == "+" || op == "-")
   {
     return 1;
   }
