@@ -1,6 +1,6 @@
 #ifndef STACK_HPP
 #define STACK_HPP
-#include "../common/list/list.hpp"
+#include <list/list.hpp>
 
 namespace strelyaev
 {
@@ -33,7 +33,7 @@ namespace strelyaev
   {}
 
   template< typename T >
-  Stack< T >& Stack< T >::operator=(Stack< T >&& other) // no compile
+  Stack< T >& Stack< T >::operator=(Stack< T >&& other)
   {
     data = other.data;
   }
@@ -81,6 +81,6 @@ namespace strelyaev
     data.pop_back();
     return value;
   }
-
 }
 #endif
+

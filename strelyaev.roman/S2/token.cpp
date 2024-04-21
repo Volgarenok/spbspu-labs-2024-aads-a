@@ -23,4 +23,3 @@ strelyaev::detail::ExpressionUnit& strelyaev::detail::ExpressionUnit::operator=(
   return *this;
 }
 
-

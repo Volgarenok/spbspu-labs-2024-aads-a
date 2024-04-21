@@ -11,3 +11,4 @@ namespace strelyaev
   long long calculateOperation(long long, long long, char);
 }
 #endif
+

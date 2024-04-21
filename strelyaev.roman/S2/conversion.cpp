@@ -164,3 +164,4 @@ long long strelyaev::calculatePostfix(strelyaev::Queue< strelyaev::detail::Expre
   }
   return result;
 }
+

@@ -1,6 +1,6 @@
 #ifndef QUEUE_HPP
 #define QUEUE_HPP
-#include "../common/list/list.hpp"
+#include <list/list.hpp>
 
 namespace strelyaev
 {
@@ -98,3 +98,4 @@ Queue< T >& Queue< T >::operator=(Queue< T >&& other)
 
 }
 #endif
+

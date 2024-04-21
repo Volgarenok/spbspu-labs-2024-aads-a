@@ -11,3 +11,4 @@ namespace strelyaev
   long long calculatePostfix(strelyaev::Queue< strelyaev::detail::ExpressionUnit >&);
 }
 #endif
+
