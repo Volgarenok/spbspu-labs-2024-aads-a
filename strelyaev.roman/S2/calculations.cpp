@@ -39,12 +39,16 @@ long long strelyaev::calculateOperation(long long first, long long second, char 
   case '+':
     if (first > max - second || first > min - second)
     {
-      throw std::overflow_error("overflow in +");
+      throw std::overflow_error("overflow");
     }
     return first + second;
   case '-':
     return first - second;
   case '*':
+    if (first == 0 || second == 0)
+    {
+      return 0;
+    }
     if ((first > (max / second)) || (first < (min / second)))
     {
       throw std::overflow_error("overflow");
