@@ -1,5 +1,5 @@
-#ifndef CALCULATIONS
-#define CALCULATIONS
+#ifndef CALCULATIONS_HPP
+#define CALCULATIONS_HPP
 #include <string>
 #include <iosfwd>
 #include "stack.hpp"
@@ -11,4 +11,5 @@ namespace strelyaev
   long long calculateOperation(long long, long long, char);
 }
 #endif
+
 

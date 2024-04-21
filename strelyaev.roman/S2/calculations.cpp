@@ -47,3 +47,4 @@ long long strelyaev::calculateOperation(long long first, long long second, char 
   throw std::logic_error("Invalid operation");
 }
 
+

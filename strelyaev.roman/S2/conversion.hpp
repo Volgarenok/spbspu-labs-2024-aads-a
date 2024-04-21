@@ -1,5 +1,5 @@
-#ifndef CONVERSION
-#define CONVERSION
+#ifndef CONVERSION_HPP
+#define CONVERSION_HPP
 #include <iosfwd>
 #include "queue.hpp"
 #include "token.hpp"
@@ -11,4 +11,5 @@ namespace strelyaev
   long long calculatePostfix(strelyaev::Queue< strelyaev::detail::ExpressionUnit >&);
 }
 #endif
+
 
