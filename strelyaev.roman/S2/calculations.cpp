@@ -1,6 +1,7 @@
 #include "calculations.hpp"
 #include <stdexcept>
 #include <iostream>
+#include <limits>
 
 bool strelyaev::isOperation(std::string& c)
 {
@@ -31,14 +32,25 @@ int strelyaev::getPrecedence(char c)
 
 long long strelyaev::calculateOperation(long long first, long long second, char operation)
 {
+  long long max = std::numeric_limits< long long >::max;
+  long long min = std::numeric_limits< long long >::min;
   switch (operation)
   {
   case '+':
-    return first + second;
+    if (first <= max - second || first >= min - second)
+    {
+      return first + second;
+    }
   case '-':
-    return first - second;
+    if (first <= max + second || first >= min + second)
+    {
+      return first - second;
+    }
   case '*':
-    return first * second;
+    if (first <= (max / second) || first >= (min / second))
+    {
+      return first * second;
+    }
   case '/':
     return first / second;
   case '%':
