@@ -6,27 +6,53 @@
 #include "infixToPostfix.hpp"
 #include "utilities.hpp"
 #include "calcultPostfix.hpp"
-#include "postfixType.hpp"
 
-int main(int argc, char* argv[])
+int main()
 {
-  std::queue<PostfixType> numb;
-  std::stack<long long> infix;
+  std::string in = "";
+  std::queue< std::string > infix1;
+  std::string token = "";
+  std::stack< std::string > oper;
+  std::queue <std::queue< std::string >> postfix;
 
-  if (argc == 2)
+  while (std::getline(std::cin, in))
   {
-    std::ifstream inputFile(argv[1]);
-    infixToPostFix(inputFile, numb);
+    if (in == "")
+    {
+      continue;
+    }
+    for (size_t i = 0; i < in.length(); ++i)
+    {
+      token = "";
+      while (i < in.length() && !std::isspace(in[i]))
+      {
+        token += in[i];
+        ++i;
+      }
+      infix1.push(token);
+    }
+    postfix.push(infixToPostfix(infix1));
   }
-  else
+
+  std::queue<long long> res;
+
+  while (!postfix.empty())
   {
-    infixToPostFix(std::cin, numb);
+    res.push(calcult(postfix.front()));
+    postfix.pop();
   }
 
-  long long rez = 0;
-  rez = calcult(numb);
-
-  std::cout << rez;
+  bool second = true;
+  while (!res.empty())
+  {
+    if (!second)
+    {
+      std::cout << " ";
+    }
+    second = false;
+    std::cout << res.front();
+    res.pop();
+  }
+  std::cout << "\n";
   return 0;
 }
-
