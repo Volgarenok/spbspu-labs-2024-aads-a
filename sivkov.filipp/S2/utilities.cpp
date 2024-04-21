@@ -3,12 +3,12 @@
 
 bool isOeprator(std::string c)
 {
-  return (c == "+" || c == "-" || c == "*" || c == "/");
+  return (c == "+" || c == "-" || c == "*" || c == "/" || c == "%");
 }
 
 int getPriority(std::string op)
 {
-  if (op == "*" || op == "/")
+  if (op == "*" || op == "/" || op == "%")
   {
     return 2;
   }
