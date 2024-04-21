@@ -37,9 +37,15 @@ int main(int argc, char** argv)
     }
     results.push(result);
   }
+  if (results.empty())
+  {
+    return 0;
+  }
+  std::cout << results.drop();
   while (!results.empty())
   {
-    std::cout << results.drop() << "\n";
+    std::cout << " " << results.drop();
   }
+  std::cout << "\n";
 }
 
