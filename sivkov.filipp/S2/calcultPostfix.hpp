@@ -2,9 +2,8 @@
 #define CALCULTPOSTFIX_HPP
 
 #include <queue>
-#include <stack>
-#include "postfixType.hpp"
+#include <string>
 
-long long calcult(std::queue< PostfixType >& numb);
+long long calcult(std::queue< std::string > postfix);
 
 #endif

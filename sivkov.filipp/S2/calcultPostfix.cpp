@@ -1,69 +1,55 @@
 #include "calcultPostfix.hpp"
-#include "postfixType.hpp"
+#include <queue>
+#include <stack>
+#include "utilities.hpp"
 
-long long calcult(std::queue<PostfixType>& numb)
+long long calcult(std::queue< std::string > postfix)
 {
   std::stack<long long> infix;
-  while (!numb.empty())
+  while (!postfix.empty())
   {
-    if (numb.front().isChar())
+    if (isOeprator(postfix.front()))
     {
-      if (numb.front().getChar() == '+')
+      long long a = infix.top();
+      infix.pop();
+      long long b = infix.top();
+      infix.pop();
+      if (postfix.front() == "+")
       {
-        long long a = infix.top();
-        infix.pop();
-        long long b = infix.top();
-        infix.pop();
         long long c = b + a;
         infix.push(c);
-        numb.pop();
+        postfix.pop();
       }
-      else if (numb.front().getChar() == '-')
+      else if (postfix.front() == "-")
       {
-        long long a = infix.top();
-        infix.pop();
-        long long b = infix.top();
-        infix.pop();
         long long c = b - a;
         infix.push(c);
-        numb.pop();
+        postfix.pop();
       }
-      else if (numb.front().getChar() == '/')
+      else if (postfix.front() == "/")
       {
-        long long a = infix.top();
-        infix.pop();
-        long long b = infix.top();
-        infix.pop();
         long long c = b / a;
         infix.push(c);
-        numb.pop();
+        postfix.pop();
       }
-      else if (numb.front().getChar() == '*')
+      else if (postfix.front() == "*")
       {
-        long long a = infix.top();
-        infix.pop();
-        long long b = infix.top();
-        infix.pop();
         long long c = b * a;
         infix.push(c);
-        numb.pop();
+        postfix.pop();
       }
-      else if (numb.front().getChar() == '%')
+      else if (postfix.front() == "%")
       {
-        long long a = infix.top();
-        infix.pop();
-        long long b = infix.top();
-        infix.pop();
         long long c = b % a;
         infix.push(c);
-        numb.pop();
+        postfix.pop();
       }
     }
     else
     {
-      long long a = numb.front().getLL();
+      long long a = std::stoll(postfix.front());
       infix.push(a);
-      numb.pop();
+      postfix.pop();
     }
   }
   return infix.top();
