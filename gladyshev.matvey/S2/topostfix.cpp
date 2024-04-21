@@ -12,33 +12,37 @@ gladyshev::Queue< std::string > gladyshev::infixToPostfix(Queue< std::string > e
   while (!expression.empty())
   {
     std::string value = expression.drop();
-    if (isNumber(value))
+    try
     {
+      std::stoll(value);
       output.push(value);
     }
-    else if (isOperator(value))
+    catch (...)
     {
-      while (!ops.empty() && isOperator(ops.top()) && checkQuality(ops.top(), value))
+      if (isOperator(value))
       {
-        output.push(ops.drop());
+        while (!ops.empty() && checkQuality(ops.top(), value))
+        {
+          output.push(ops.drop());
+        }
+        ops.push(value);
       }
-      ops.push(value);
-    }
-    else if (value == "(")
-    {
-      ops.push(value);
-    }
-    else if (value == ")")
-    {
-      while (!ops.empty() && ops.top() != "(")
+      else if (value == "(")
       {
-        output.push(ops.drop());
+        ops.push(value);
       }
-      ops.drop();
-    }
-    else
-    {
-      throw std::logic_error("what is that");
+      else if (value == ")")
+      {
+        while (!ops.empty() && ops.top() != "(")
+        {
+          output.push(ops.drop());
+        }
+        ops.drop();
+      }
+      else
+      {
+        throw std::logic_error("what is that");
+      }
     }
   }
   while (!ops.empty())

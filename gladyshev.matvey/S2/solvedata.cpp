@@ -12,11 +12,12 @@ long long int gladyshev::evaluatePostfix(Queue< std::string > postfix)
   while (!postfix.empty())
   {
     std::string token = postfix.drop();
-    if (isNumber(token))
+    try
     {
-      operands.push(std::stoll(token));
+      long long int value = std::stoll(token);
+      operands.push(value);
     }
-    else if (isOperator(token))
+    catch (...)
     {
       long long int right = operands.drop();
       long long int left = operands.drop();
