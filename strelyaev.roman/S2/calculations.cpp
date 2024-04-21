@@ -32,8 +32,8 @@ int strelyaev::getPrecedence(char c)
 
 long long strelyaev::calculateOperation(long long first, long long second, char operation)
 {
-  long long max = std::numeric_limits< long long >::max;
-  long long min = std::numeric_limits< long long >::min;
+  long long max = std::numeric_limits< long long >::max();
+  long long min = std::numeric_limits< long long >::min();
   switch (operation)
   {
   case '+':
