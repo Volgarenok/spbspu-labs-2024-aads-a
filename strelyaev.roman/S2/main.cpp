@@ -17,6 +17,7 @@ int main(int argc, char** argv)
     stream_pointer = std::addressof(file);
     if (!file)
     {
+      std::cout << "\n";
       return 1;
     }
   }
