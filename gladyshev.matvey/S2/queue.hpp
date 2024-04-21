@@ -10,34 +10,34 @@ namespace gladyshev
   {
   public:
     Queue():
-      list_(Container())
+      array_(Container())
     {}
     Queue(const Queue& other):
-      list_(other.list_)
+      array_(other.array_)
     {}
     Queue(Queue&& other) noexcept:
-      list_(std::move(other.list_))
+      array_(std::move(other.array_))
     {}
     bool empty() const noexcept
     {
-      return list_.empty();
+      return array_.empty();
     }
     T drop()
     {
-      T temp = list_.back();
-      list_.pop_back();
+      T temp = array_.back();
+      array_.pop_back();
       return temp;
     }
     void push(const T& other)
     {
-      list_.push_front(other);
+      array_.push_front(other);
     }
     void reverse() noexcept
     {
-      list_.reverse();
+      array_.reverse();
     }
   private:
-    Container list_;
+    Container array_;
   };
 }
 
