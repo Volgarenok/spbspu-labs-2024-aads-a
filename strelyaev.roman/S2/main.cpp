@@ -5,27 +5,35 @@
 #include "calculations.hpp"
 #include "conversion.hpp"
 
-int main(int argc, char * argv[])
+int main(int argc, char** argv)
 {
   using namespace strelyaev;
   Stack< long long > results;
-  while (!std::cin.eof())
+  std::istream* stream_pointer = std::addressof(std::cin);
+  std::fstream file;
+  if (argc > 1)
   {
-    Queue< detail::ExpressionUnit > infix_queue = parseString(std::cin);
+    file.open(argv[1]);
+    stream_pointer = std::addressof(file);
+  }
+  std::istream& in = *stream_pointer;
+  while (!in.eof())
+  {
+    Queue< detail::ExpressionUnit > infix_queue = parseString(in);
     Queue< detail::ExpressionUnit > post_fix = makePostfix(infix_queue);
     long long result = 0;
     try
     {
       result = calculatePostfix(post_fix);
     }
-    catch (const std::invalid_argument& e)
-    {
-      std::cerr << e.what() << '\n';
-      return 0;
-    }
     catch (const std::out_of_range& e)
     {
       continue;
+    }
+    catch (const std::exception& e)
+    {
+      std::cerr << e.what() << '\n';
+      return 1;
     }
     results.push(result);
   }

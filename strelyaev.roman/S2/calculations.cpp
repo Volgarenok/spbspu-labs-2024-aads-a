@@ -1,6 +1,6 @@
 #include "calculations.hpp"
 #include <stdexcept>
-#include <ostream>
+#include <iostream>
 
 bool strelyaev::isOperation(std::string& c)
 {

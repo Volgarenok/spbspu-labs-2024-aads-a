@@ -75,8 +75,8 @@ namespace strelyaev
 
   template< typename T >
   List< T >::List(List< T >&& other):
-    head_(other.head_),
     tail_(other.tail_),
+    head_(other.head_),
     size_(other.size_)
   {
     other.head_ = nullptr;
@@ -157,7 +157,7 @@ namespace strelyaev
       head_->prev_ = node;
       head_ = node;
       size_++;
-      return Iterator(node);
+      return Iterator< T >(node);
     }
     else if (it.node_ == tail_)
     {
@@ -172,7 +172,7 @@ namespace strelyaev
       it.node_->prev_ = node;
     }
     size_++;
-    return Iterator(node);
+    return Iterator< T >(node);
   }
 
   template< typename T >

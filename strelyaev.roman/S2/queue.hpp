@@ -1,6 +1,6 @@
 #ifndef QUEUE_HPP
 #define QUEUE_HPP
-#include <list>
+#include "../common/list/list.hpp"
 
 namespace strelyaev
 {
@@ -24,7 +24,7 @@ namespace strelyaev
       Queue< T >& operator=(const Queue< T >&);
       Queue< T >& operator=(Queue< T >&&);
     private:
-      std::list< T > data;
+      strelyaev::List< T > data;
   };
 
   template< typename T >

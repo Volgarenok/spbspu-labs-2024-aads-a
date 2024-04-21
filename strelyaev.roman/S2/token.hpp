@@ -1,6 +1,5 @@
 #ifndef TOKEN_HPP
 #define TOKEN_HPP
-
 namespace strelyaev
 {
   namespace detail
@@ -27,8 +26,7 @@ namespace strelyaev
     {
       Token token;
       TokenType type;
-      
-      ExpressionUnit() = delete;
+      ExpressionUnit() = default;
       ExpressionUnit(const ExpressionUnit& other) = default;
       ~ExpressionUnit() = default;
       ExpressionUnit& operator=(const ExpressionUnit&);

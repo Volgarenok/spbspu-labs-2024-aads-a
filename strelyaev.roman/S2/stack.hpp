@@ -1,6 +1,6 @@
-#ifndef Stack_HPP
-#define Stack_HPP
-#include <list>
+#ifndef STACK_HPP
+#define STACK_HPP
+#include "../common/list/list.hpp"
 
 namespace strelyaev
 {
@@ -22,9 +22,9 @@ namespace strelyaev
       T drop();
 
       Stack< T >& operator=(const Stack< T >&) = default;
-      Stack< T >& operator=(const Stack< T >&&);
+      Stack< T >& operator=(Stack< T >&&);
     private:
-      std::list< T > data;
+      strelyaev::List< T > data;
   };
 
   template< typename T >
@@ -33,14 +33,9 @@ namespace strelyaev
   {}
 
   template< typename T >
-  Stack< T >& Stack< T >::operator=(const Stack< T >&& other)
+  Stack< T >& Stack< T >::operator=(Stack< T >&& other) // no compile
   {
-    if (std::addressof(other) != this)
-    {
-      std::swap(data, other.data);
-      other.data.clear();
-    }
-    return *this;
+    data = other.data;
   }
 
   template< typename T >

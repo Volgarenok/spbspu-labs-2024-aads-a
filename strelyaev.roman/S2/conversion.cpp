@@ -7,42 +7,61 @@
 #include "stack.hpp"
 #include "token.hpp"
 
-strelyaev::Queue< strelyaev::detail::ExpressionUnit > strelyaev::parseString(std::istream& input)
+strelyaev::detail::ExpressionUnit strelyaev::convertStringToUnit(std::string string_token)
 {
-  strelyaev::Queue< strelyaev::detail::ExpressionUnit > token_queue;
   strelyaev::detail::Token new_token;
   strelyaev::detail::TokenType type = strelyaev::detail::TokenType::NONE;
-  std::string line = "";
-  while (input)
+  if (string_token.size() == 0)
   {
-    input >> line;
-    try
+    throw std::logic_error("empty string_token");
+  }
+  try
+  {
+    long long operand = std::stoll(string_token);
+    new_token = strelyaev::detail::Token(operand);
+    type = strelyaev::detail::TokenType::OPERAND;
+  }
+  catch(...)
+  {
+    char c = string_token[0];
+    new_token = strelyaev::detail::Token(c);
+    if (strelyaev::isBracket(string_token))
     {
-      long long operand = std::stoll(line);
-      new_token = strelyaev::detail::Token(operand);
-      type = strelyaev::detail::TokenType::OPERAND;
+      type = strelyaev::detail::TokenType::BRACKET;
     }
-    catch (...)
+    if (strelyaev::isOperation(string_token))
     {
-      char c = line[0];
-      new_token = strelyaev::detail::Token(c);
-      if (strelyaev::isBracket(line))
-      {
-        type = strelyaev::detail::TokenType::BRACKET;
-      }
-      if (strelyaev::isOperation(line))
-      {
-        type = strelyaev::detail::TokenType::OPERATION;
-      }
-    }
-    strelyaev::detail::ExpressionUnit new_unit{new_token, type};
-    token_queue.push(new_unit);
-    if (input.peek() == '\n')
-    {
-      break;
+      type = strelyaev::detail::TokenType::OPERATION;
     }
   }
-  return token_queue;
+  strelyaev::detail::ExpressionUnit new_unit{new_token, type};
+  return new_unit;
+}
+
+strelyaev::Queue< strelyaev::detail::ExpressionUnit > strelyaev::parseString(std::istream& input)
+{
+  strelyaev::Queue< strelyaev::detail::ExpressionUnit > queue_of_eu;
+  std::string line = "";
+  std::string token_string = "";
+  std::getline(input, line);
+  strelyaev::detail::ExpressionUnit unit;
+  for (char c : line)
+  {
+    if (c == ' ' || c == '\0')
+    {
+      unit = convertStringToUnit(token_string);
+      queue_of_eu.push(unit);
+      token_string = "";
+      continue;
+    }
+    token_string += c;
+  }
+  if (!token_string.empty())
+  {
+    unit = convertStringToUnit(token_string);
+    queue_of_eu.push(unit);
+  }
+  return queue_of_eu;
 }
 
 strelyaev::Queue< strelyaev::detail::ExpressionUnit > strelyaev::makePostfix(Queue< detail::ExpressionUnit >& queue)
