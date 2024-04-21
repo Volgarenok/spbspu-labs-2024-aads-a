@@ -31,23 +31,23 @@ void namestnikov::inputExpression(std::string s, Queue< namestnikov::Key > & exp
   {
     if (!std::isspace(s[i]))
     {
-      if (std::isdigit(s[i]))
-      {
-        std::string temp = "";
+      std::string temp = "";
         while ((s[i] != ' ') && (s[i] != '\n') && (i < s.size()))
         {
           temp += s[i];
           ++i;
         }
+      try
+      {
         long long operand = std::stoll(temp);
         value = namestnikov::PartValue(operand);
         type = namestnikov::PartType::OPERAND;
         namestnikov::Key key{type, value};
         expression.push(key);
       }
-      else
+      catch (const std::invalid_argument &)
       {
-        char sym = s[i];
+        char sym = temp[0];
         if (isOperation(sym))
         {
           type = namestnikov::PartType::OPERATION;
