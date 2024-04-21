@@ -3,9 +3,8 @@
 
 #include <queue>
 #include <iostream>
-#include "postfixType.hpp"
 
-void infixToPostFix(std::istream& inputFile, std::queue<PostfixType>& numb);
+std::queue<std::string> infixToPostfix(std::queue<std::string>& infix);
 
 #endif
 

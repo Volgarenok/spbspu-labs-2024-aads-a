@@ -3,58 +3,55 @@
 #include <string>
 #include <stack>
 #include "utilities.hpp"
-#include "postfixType.hpp"
 
-void infixToPostFix(std::istream& inputFile, std::queue< PostfixType >& numb)
+std::queue<std::string> infixToPostfix(std::queue<std::string>& infix)
 {
-  std::stack< PostfixType > oper;
-  char token;
-  std::string numString;
-  while (inputFile >> token)
+  std::queue<std::string> postfix;
+  std::stack<std::string> operators;
+
+  while (!infix.empty())
   {
-    if (isdigit(token))
+    std::string token = infix.front();
+    infix.pop();
+
+    if (std::isdigit(token[0]) || (std::isdigit(token[1]) && token[0] == '-'))
     {
-      numString += token;
+      postfix.push(token);
+    }
+    else if (token == "(")
+    {
+      operators.push("(");
+    }
+    else if (token == ")")
+    {
+      while (!operators.empty() && operators.top() != "(")
+      {
+        std::string op = operators.top();
+        operators.pop();
+        postfix.push(op);
+      }
+      if (!operators.empty() && operators.top() == "(")
+      {
+        operators.pop();
+      }
     }
     else
     {
-      if (!numString.empty())
+      while (!operators.empty() && getPriority(operators.top()) >= getPriority(token))
       {
-        numb.push(PostfixType(std::stoll(numString)));
-        numString.clear();
+        std::string op = operators.top();
+        operators.pop();
+        postfix.push(op);
       }
-      if (isOperator(token))
-      {
-        while (!oper.empty() && oper.top().getChar() != '(' && getPriority(oper.top().getChar()) >= getPriority(token))
-        {
-          numb.push(oper.top());
-          oper.pop();
-        }
-        oper.push(PostfixType(token));
-      }
-      else if (token == '(')
-      {
-        oper.push(PostfixType(token));
-      }
-      else if (token == ')')
-      {
-        while (!oper.empty() && oper.top().getChar() != '(')
-        {
-          numb.push(oper.top());
-          oper.pop();
-        }
-        oper.pop();
-      }
+      operators.push(token);
     }
   }
-  if (!numString.empty())
+  while (!operators.empty())
   {
-    numb.push(PostfixType(std::stoll(numString)));
+    std::string op = operators.top();
+    operators.pop();
+    postfix.push(op);
   }
-  while (!oper.empty())
-  {
-    numb.push(oper.top());
-    oper.pop();
-  }
-}
 
+  return postfix;
+}
