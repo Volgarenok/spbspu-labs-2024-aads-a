@@ -37,20 +37,19 @@ long long strelyaev::calculateOperation(long long first, long long second, char 
   switch (operation)
   {
   case '+':
-    if (first <= max - second || first >= min - second)
+    if (first > max - second || first > min - second)
     {
-      return first + second;
+      throw std::overflow_error("overflow in +");
     }
+    return first + second;
   case '-':
-    if (first <= max + second || first >= min + second)
-    {
-      return first - second;
-    }
+    return first - second;
   case '*':
-    if (first <= (max / second) || first >= (min / second))
+    if ((first > (max / second)) || (first < (min / second)))
     {
-      return first * second;
+      throw std::overflow_error("overflow");
     }
+    return first * second;
   case '/':
     return first / second;
   case '%':
