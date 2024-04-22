@@ -2,11 +2,10 @@
 #define CALCULATEPROC_HPP
 
 #include "queue.hpp"
-#include "stack.hpp"
-#include "token.hpp"
+#include "expressionObject.hpp"
 
 namespace arakelyan
 {
-  Queue< ExpressionObj > transformInfixToPostfix( Queue< ExpressionObj > &infixQueue);
+  void calculatePostfixQ(Queue< Queue< ExpressionObj > > &qOfPostfixQs, Queue< long long > &answerQ);
 }
 #endif

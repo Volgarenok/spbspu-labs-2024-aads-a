@@ -3,7 +3,7 @@
 
 #include <iosfwd>
 #include "queue.hpp"
-#include "token.hpp"
+#include "expressionObject.hpp"
 
 namespace arakelyan
 {

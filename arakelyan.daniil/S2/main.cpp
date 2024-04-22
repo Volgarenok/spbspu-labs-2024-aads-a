@@ -1,14 +1,13 @@
 #include <iostream>
-#include <fstream>
+#include <stdexcept>
 
 #include "queue.hpp"
 #include "stack.hpp"
-#include "token.hpp"
+#include "expressionObject.hpp"
 #include "inputData.hpp"
+#include "transformToPostfix.hpp"
 #include "calculateProc.hpp"
 #include <list/binList.hpp>
-#include <stdexcept>
-
 
 std::ostream &printAllPostfixQs(std::ostream &out, arakelyan::Queue< arakelyan::Queue< arakelyan::ExpressionObj > > &qOfQs)
 {
@@ -40,22 +39,49 @@ std::ostream &printAllPostfixQs(std::ostream &out, arakelyan::Queue< arakelyan::
 int main()
 {
   using namespace arakelyan;
-  Queue< Queue< ExpressionObj > > qOfQs;
+  Queue< Queue< ExpressionObj > > qOfInfQs;
 
   while (!std::cin.eof())
   {
     Queue< ExpressionObj > infixQueue = readDataInInfixForm(std::cin);
-    qOfQs.push(infixQueue);
+    qOfInfQs.push(infixQueue);
   }
 
+  Queue< Queue< ExpressionObj > > qOfPostQs;
   try
   {
-    printAllPostfixQs(std::cout, qOfQs);
+    while (!qOfInfQs.empty())
+    {
+      Queue< ExpressionObj > postQ = transformInfixToPostfix(qOfInfQs.front());
+      qOfInfQs.pop();
+      qOfPostQs.push(postQ);
+    }
   }
   catch (const std::logic_error &e)
   {
     std::cout << "Error: " << e.what() << "\n";
     return 1;
+  }
+
+  Queue< long long > answQ;
+
+  try
+  {
+    while (!qOfPostQs.empty())
+    {
+      calculatePostfixQ(qOfPostQs, answQ);
+    }
+  }
+  catch (const std::exception &e)
+  {
+    std::cerr << "Error: " << e.what() << "\n";
+    return 1;
+  }
+
+  while (!answQ.empty())
+  {
+    std::cout << answQ.front() << " -> ";
+    answQ.pop();
   }
 
   return 0;

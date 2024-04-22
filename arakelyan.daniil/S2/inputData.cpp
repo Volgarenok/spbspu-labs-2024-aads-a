@@ -1,5 +1,4 @@
 #include "inputData.hpp"
-#include "token.hpp"
 
 #include <cstddef>
 #include <iostream>

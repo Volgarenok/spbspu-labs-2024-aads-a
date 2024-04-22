@@ -1,79 +1,78 @@
 #include "calculateProc.hpp"
-#include "token.hpp"
+#include "stack.hpp"
 
 #include <stdexcept>
+#include <iostream>
 
-int operationPriority(arakelyan::ExpressionObj obj)
+long long calcExp(long long first, long long second, char operation)
 {
-  if (obj.val_.oper_ == '+' || obj.val_.oper_ == '-')
+  long long rObj = 0;
+  if (operation == '+') // fine
   {
-    return 1;
+    rObj = (first + second);
   }
-  else if (obj.val_.oper_ == '*' || obj.val_.oper_ == '/' || obj.val_.oper_ == '%')
+  else if (operation == '-') // fine
   {
-    return 2;
+    rObj = (first - second);
+  }
+  else if (operation == '*') // fine
+  {
+    rObj = (first * second);
+  }
+  else if (operation == '/') // fine
+  {
+    rObj = (first / second);
+  }
+  else if (operation == '%') //fine
+  {
+    rObj = (first % second);
   }
   else
   {
-    throw std::logic_error("invalid operation!");
+    throw std::logic_error("Calculation error!");
   }
-  return 0;
+  return rObj;
 }
 
-arakelyan::Queue< arakelyan::ExpressionObj > arakelyan::transformInfixToPostfix(Queue< ExpressionObj > &infixQueue)
+void arakelyan::calculatePostfixQ(Queue< Queue< ExpressionObj > > &qOfPostfixQs, Queue< long long > &answerQ)
 {
-  Queue< ExpressionObj > postfixQ;
-  Stack< ExpressionObj > operS;
+  Queue< ExpressionObj > curQ = qOfPostfixQs.front();
+  qOfPostfixQs.pop();
 
-  while (!infixQueue.empty())
+  if (curQ.empty())
   {
-    auto curObj = infixQueue.front();
-    infixQueue.pop();
+    // throw std::logic_error("empty q!");
+    return;
+  }
+  std::cout << "start calculate\n";
 
-    if (curObj.type_ == token_t::operand)
+  Stack< long long > stack;
+
+  while (!curQ.empty())
+  {
+    ExpressionObj obj = curQ.front();
+    curQ.pop();
+
+    if (obj.type_ == token_t::operation)
     {
-      postfixQ.push(curObj);
+      if (stack.size() < 2)
+      {
+        throw std::logic_error("Invalid sequence of expressions!");
+      }
+      long long sec = stack.top();
+      stack.pop();
+      long long first = stack.top();
+      stack.pop();
+      stack.push((calcExp(first, sec, obj.val_.oper_)));
     }
-    else if (curObj.type_ == token_t::bracket)
+    else if (obj.type_ == token_t::operand)
     {
-      if (curObj.val_.oper_ == '(')
-      {
-        operS.push(curObj);
-      }
-      else if (curObj.val_.oper_ == ')')
-      {
-        while ((!operS.empty()) && (operS.top().val_.oper_ != '('))
-        {
-          postfixQ.push(operS.top());
-          operS.pop();
-        }
-        if (operS.empty())
-        {
-          throw std::logic_error("brackets fault");
-        }
-        operS.pop();
-      }
+      stack.push(obj.val_.operand_);
     }
-    else if (curObj.type_ == token_t::operation)
+    else
     {
-      while (!operS.empty() && (operS.top().val_.oper_ != '(') && (operationPriority(operS.top()) <= operationPriority(curObj)))
-      {
-        postfixQ.push(operS.top());
-        operS.pop();
-      }
-      operS.push(curObj);
+      throw std::invalid_argument("Invalid argument in postfix queue!");
     }
   }
-
-  while (!operS.empty())
-  {
-    if (operS.top().type_ == token_t::bracket)
-    {
-      throw std::logic_error("bracket error!");
-    }
-    postfixQ.push(operS.top());
-    operS.pop();
-  }
-
-  return postfixQ;
+  answerQ.push(stack.top());
 }
