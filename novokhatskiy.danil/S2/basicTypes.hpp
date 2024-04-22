@@ -30,5 +30,5 @@ namespace novokhatskiy
     CLOSE = ')',
   };
 }
-  
+
 #endif
