@@ -221,27 +221,6 @@ namespace belokurskaya
         return count;
       }
 
-      List& operator=(const List& other)
-      {
-        if (this != &other)
-        {
-          while (head)
-          {
-            Node * temp = head;
-            head = head->next;
-            delete temp;
-          }
-
-          Node * current = other.head;
-          while (current)
-          {
-            push_back(current->value);
-            current = current->next;
-          }
-        }
-        return *this;
-      }
-
       bool operator==(const List< T > & other) const noexcept
       {
         Node * current1 = head;
