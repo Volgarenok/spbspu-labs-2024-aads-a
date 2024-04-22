@@ -1,3 +1,4 @@
+#include <exception>
 #include <iostream>
 #include <fstream>
 #include <stdexcept>
@@ -20,6 +21,11 @@ int main(int argc, char *argv[])
   {
     std::ifstream inputFile(argv[1]);
     readDataInInfixFormat(inputFile, qOfInfQs);
+    if (qOfInfQs.empty)
+    {
+      std::cerr << "File empty!\n";
+      return 1;
+    }
   }
   else
   {

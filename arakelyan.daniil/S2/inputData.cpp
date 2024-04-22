@@ -86,6 +86,5 @@ std::istream &arakelyan::readDataInInfixFormat(std::istream &input, Queue< Queue
       }
     }
   }
-
   return input;
 }
