@@ -1,5 +1,6 @@
 #include "calculateProc.hpp"
 
+#include <algorithm>
 #include <limits>
 #include <stdexcept>
 #include <iostream>
@@ -13,7 +14,7 @@ long long calcExp(long long first, long long second, char operation)
   long long rObj = 0;
   if (operation == '+')
   {
-    if ((first > 0) && (second > 0) && (first > (maxVal - second)))
+    if (first > (maxVal - second))
     {
       throw std::overflow_error("Addition overflow error!");
     }
@@ -21,16 +22,15 @@ long long calcExp(long long first, long long second, char operation)
   }
   else if (operation == '-')
   {
-    if ((second > 0) && (first < (minVal + second)))
+    if (first - second < minVal)
     {
-      throw std::overflow_error("Sub underflow error!");
+      throw std::underflow_error("Sub underflow error");
     }
-
     rObj = (first - second);
   }
   else if (operation == '*')
   {
-    if (second > (maxVal / first) || second < (minVal / first))
+    if (first != 0 && (second > (maxVal / first) || second < (minVal / first)))
     {
       throw std::overflow_error("Multiplication overflow error!");
     }
@@ -42,7 +42,7 @@ long long calcExp(long long first, long long second, char operation)
     {
       throw std::logic_error("Division by zero!");
     }
-    else if (second == -1 && first == minVal)
+    else if (first == minVal && second == -1)
     {
       throw std::overflow_error("Division overflow!");
     }
