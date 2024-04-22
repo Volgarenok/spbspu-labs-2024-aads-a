@@ -75,20 +75,20 @@ void rebdev::outputList(std::ostream & out, nameAndListOfNumList & pair)
   {
     if (!pair.first.front().empty())
     {
-      std::cout << pair.first.front() << '\n';
+      out << pair.first.front() << '\n';
     }
-    std::cout << "0\n";
+    out << "0\n";
     return;
   }
 
   using nameListCIter = nameList::const_iterator;
   nameListCIter nameNow = pair.first.cbegin();
-  std::cout << *nameNow;
+  out << *nameNow;
   while (++nameNow != pair.first.cend())
   {
-    std::cout << ' ' << *nameNow;
+    out << ' ' << *nameNow;
   }
-  std::cout << '\n';
+  out << '\n';
 
   using ListOfNumListCIter = listOfNumList::const_iterator;
   ListOfNumListCIter listOfNumNow = pair.second.cbegin();
@@ -101,13 +101,13 @@ void rebdev::outputList(std::ostream & out, nameAndListOfNumList & pair)
     numListCIter numNow = (*listOfNumNow).cbegin();
     size_t sum = *numNow;
 
-    std::cout << *numNow;
+    out << *numNow;
     while (++numNow != (*listOfNumNow).cend())
     {
-      std::cout << ' ' << *numNow;
+      out << ' ' << *numNow;
       sumIsGood &= plus(sum, *numNow);
     }
-    std::cout << '\n';
+    out << '\n';
 
     ++listOfNumNow;
     sumList.push_back(sum);
@@ -115,15 +115,15 @@ void rebdev::outputList(std::ostream & out, nameAndListOfNumList & pair)
 
   if (sumIsGood)
   {
-    std::cout << sumList.front();
+    out << sumList.front();
     sumList.pop_front();
 
     while (!sumList.empty())
     {
-      std::cout << ' ' << sumList.front();
+      out << ' ' << sumList.front();
       sumList.pop_front();
     }
-    std::cout << '\n';
+    out << '\n';
   }
 }
 

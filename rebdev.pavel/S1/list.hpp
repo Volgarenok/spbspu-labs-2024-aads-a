@@ -70,10 +70,12 @@ namespace rebdev
 
         node * newHeadCopy = headNode_;
         node * newTailCopy = tailNode_;
+        sizeCopy = size_;
+
         headNode_ = headCopy;
         tailNode_ = tailCopy;
-        sizeCopy = size_;
         clear();
+
         headNode_ = newHeadCopy;
         tailNode_ = newTailCopy;
         size_ = sizeCopy;
@@ -163,7 +165,7 @@ namespace rebdev
       }
       void pop_front()
       {
-        node * headCopy = headNode_->next;
+        sizeCopy = size_;node * headCopy = headNode_->next;
         delete headNode_;
         headNode_ = headCopy;
         --size_;
