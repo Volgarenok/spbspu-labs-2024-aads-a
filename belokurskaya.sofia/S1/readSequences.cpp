@@ -6,8 +6,8 @@ belokurskaya::SequenceVector belokurskaya::readSequences()
 {
   using namespace belokurskaya;
   SequenceVector sequences;
-  std::string name = "";
-  int number = 0;
+  std::string name;
+  int number;
 
   while (std::cin >> name)
   {
