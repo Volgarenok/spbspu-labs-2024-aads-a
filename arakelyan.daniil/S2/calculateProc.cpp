@@ -1,9 +1,6 @@
 #include "calculateProc.hpp"
 
-#include <algorithm>
-#include <limits>
 #include <stdexcept>
-#include <iostream>
 
 #include "stack.hpp"
 

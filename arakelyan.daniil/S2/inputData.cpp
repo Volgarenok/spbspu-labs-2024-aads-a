@@ -11,12 +11,12 @@
 
 bool isOperation(const std::string line)
 {
-  return line == "+" || line == "-" || line == "/" || line == "*" || line == "%";
+  return (line == "+" || line == "-" || line == "/" || line == "*" || line == "%");
 }
 
 bool isBracket(const std::string line)
 {
-  return line == "(" || line == ")";
+  return (line == "(" || line == ")");
 }
 
 void parseLine(std::string &line, arakelyan::Queue< arakelyan::detail::ExpressionObj > &someQ)
@@ -61,6 +61,10 @@ void parseLine(std::string &line, arakelyan::Queue< arakelyan::detail::Expressio
         {
           tokenType = token_t::bracket;
         }
+      }
+      catch (const std::out_of_range &e)
+      {
+        throw std::out_of_range("Out of range!");
       }
 
       ExpressionObj expObj{token, tokenType};

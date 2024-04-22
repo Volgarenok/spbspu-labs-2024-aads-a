@@ -1,6 +1,6 @@
-#include <exception>
 #include <iostream>
 #include <fstream>
+#include <exception>
 #include <stdexcept>
 
 #include <list/binList.hpp>

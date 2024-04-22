@@ -1,7 +1,6 @@
 #ifndef QUEUE_HPP
 #define QUEUE_HPP
 
-#include <memory>
 #include <utility>
 #include <list/binList.hpp>
 
