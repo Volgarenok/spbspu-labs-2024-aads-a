@@ -17,20 +17,29 @@ int main(int argc, char *argv[])
   using namespace detail;
   Queue< Queue< ExpressionObj > > qOfInfQs;
 
-  if (argc == 2)
+  try
   {
-    std::ifstream inputFile(argv[1]);
-    readDataInInfixFormat(inputFile, qOfInfQs);
-    if (qOfInfQs.empty())
+    if (argc == 2)
     {
-      std::cout << "\n";
-      return 0;
+      std::ifstream inputFile(argv[1]);
+      readDataInInfixFormat(inputFile, qOfInfQs);
+      if (qOfInfQs.empty())
+      {
+        std::cout << "\n";
+        return 0;
+      }
+    }
+    else
+    {
+      readDataInInfixFormat(std::cin, qOfInfQs);
     }
   }
-  else
+  catch (const std::out_of_range &e)
   {
-    readDataInInfixFormat(std::cin, qOfInfQs);
+    std::cerr << "Error: " << e.what() << "\n";
+    return 1;
   }
+
 
   Queue< Queue< ExpressionObj > > qOfPostQs;
   try
