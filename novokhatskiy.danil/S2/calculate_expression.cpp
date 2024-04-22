@@ -3,11 +3,68 @@
 #include <stdexcept>
 #include "stack.hpp"
 
+long long novokhatskiy::Addition(const long long& op1, const long long& op2)
+{
+  constexpr long long maxSize = std::numeric_limits< long long >::max();
+  if (maxSize - op1 < op2)
+  {
+    throw std::out_of_range("Sum overflow");
+  }
+  return op1 + op2;
+}
+
+long long novokhatskiy::Substraction(const long long& op1, const long long& op2)
+{
+  constexpr long long minSize = std::numeric_limits< long long >::min();
+  if (minSize + op1 > op2)
+  {
+    throw std::out_of_range("Subtraction overflow");
+  }
+  return op1 - op2;
+}
+
+long long novokhatskiy::Multiplication(const long long& op1, const long long& op2)
+{
+  constexpr long long minSize = std::numeric_limits< long long >::min();
+  constexpr long long maxSize = std::numeric_limits< long long >::max();
+  if (op1 > maxSize / op2)
+  {
+    throw std::out_of_range("Multiplication overflow");
+  }
+  else if (op2 != 0 && op1 < minSize / op2)
+  {
+    throw std::out_of_range("Multiplication underflow");
+  }
+  return op1 * op2;
+}
+
+long long novokhatskiy::Division(const long long& op1, const long long& op2)
+{
+  constexpr long long minSize = std::numeric_limits< long long >::min();
+  if (op2 == 0)
+  {
+    throw std::logic_error("Dividing by zero");
+  }
+  if (op1 == minSize && op2 == -1)
+  {
+    throw std::out_of_range("Dividing overflow");
+  }
+  return op1 / op2;
+}
+
+long long novokhatskiy::Mod(const long long& op1, const long long& op2)
+{
+  long long res = op1 % op2;
+  if (res < 0)
+  {
+     res+= op2;
+  }
+  return res;
+}
+
 long long novokhatskiy::calculatePostExp(novokhatskiy::Queue< Postfix >&& inQueue)
 {
   novokhatskiy::Stack< long long > stack;
-  constexpr long long minSize = std::numeric_limits< long long >::min();
-  constexpr long long maxSize = std::numeric_limits< long long >::max();
   while (!inQueue.empty())
   {
     novokhatskiy::Postfix token = inQueue.drop();
@@ -23,47 +80,19 @@ long long novokhatskiy::calculatePostExp(novokhatskiy::Queue< Postfix >&& inQueu
       switch (token.operation)
       {
       case Operation::ADD:
-        if (maxSize - stack.top() < secondOperand)
-        {
-          throw std::out_of_range("Sum overflow");
-        }
-        stack.top() += secondOperand;
+        stack.top() = Addition(stack.top(), secondOperand);
         break;
       case Operation::SUB:
-        if (minSize + stack.top() > secondOperand)
-        {
-          throw std::out_of_range("Subtraction overflow");
-        }
-        stack.top() -= secondOperand;
+        stack.top() = Substraction(stack.top(), secondOperand);
         break;
       case Operation::MUL:
-        if (stack.top() > maxSize / secondOperand)
-        {
-          throw std::out_of_range("Multiplication overflow");
-        }
-        else if (secondOperand != 0 && stack.top() < minSize / secondOperand)
-        {
-          throw std::out_of_range("Multiplication underflow");
-        }
-        stack.top() *= secondOperand;
+        stack.top() = Multiplication(stack.top(), secondOperand);
         break;
       case Operation::DIV:
-        if (secondOperand == 0)
-        {
-          throw std::logic_error("Dividing by zero");
-        }
-        if (stack.top() == minSize && secondOperand == -1)
-        {
-          throw std::out_of_range("Dividing overflow");
-        }
-        stack.top() /= secondOperand;
+        stack.top() = Division(stack.top(), secondOperand);
         break;
       case Operation::MOD:
-        stack.top() %= secondOperand;
-        if (stack.top() < 0)
-        {
-          stack.top() += secondOperand;
-        }
+        stack.top() = Mod(stack.top(),secondOperand);
         break;
       }
       break;
