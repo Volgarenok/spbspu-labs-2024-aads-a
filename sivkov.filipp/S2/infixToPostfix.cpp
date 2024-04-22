@@ -48,10 +48,14 @@ std::queue<std::string> infixToPostfix(std::queue<std::string>& infix)
   }
   while (!operators.empty())
   {
+    if (operators.top() == "(")
+    {
+      throw std::logic_error("error line");
+    }
     std::string op = operators.top();
     operators.pop();
     postfix.push(op);
   }
-
   return postfix;
 }
+
