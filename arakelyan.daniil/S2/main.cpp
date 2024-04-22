@@ -23,8 +23,8 @@ int main(int argc, char *argv[])
     readDataInInfixFormat(inputFile, qOfInfQs);
     if (qOfInfQs.empty())
     {
-      std::cerr << "File empty!\n";
-      return 1;
+      std::cout << "File empty!\n";
+      return 0;
     }
   }
   else
