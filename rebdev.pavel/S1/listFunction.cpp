@@ -125,6 +125,10 @@ void rebdev::outputList(std::ostream & out, nameAndListOfNumList & pair)
     }
     out << '\n';
   }
+  else
+  {
+    throw std::logic_error("Overlow as a result of sum");
+  }
 }
 
 bool rebdev::plus(size_t & f, size_t s)
