@@ -44,7 +44,6 @@ void arakelyan::calculatePostfixQ(Queue< Queue< detail::ExpressionObj > > &qOfPo
     // throw std::logic_error("empty q!");
     return;
   }
-  std::cout << "start calculate\n";
 
   Stack< long long > stack;
 
