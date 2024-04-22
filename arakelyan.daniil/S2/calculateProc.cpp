@@ -34,7 +34,7 @@ long long calcExp(long long first, long long second, char operation)
   return rObj;
 }
 
-void arakelyan::calculatePostfixQ(Queue< Queue< detail::ExpressionObj > > &qOfPostfixQs, Queue< long long > &answerQ)
+void arakelyan::calculatePostfixQ(Queue< Queue< detail::ExpressionObj > > &qOfPostfixQs, Stack< long long > &answerQ)
 {
   Queue< detail::ExpressionObj > curQ = qOfPostfixQs.front();
   qOfPostfixQs.pop();

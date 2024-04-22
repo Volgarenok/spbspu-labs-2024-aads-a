@@ -65,7 +65,7 @@ int main()
     return 1;
   }
 
-  Queue< long long > answQ;
+  Stack< long long > answQ;
 
   try
   {
@@ -84,7 +84,7 @@ int main()
   {
     while (!answQ.empty())
     {
-      std::cout << answQ.front() << "\n";
+      std::cout << answQ.top() << "\n";
       answQ.pop();
     }
   }
@@ -92,7 +92,7 @@ int main()
   {
     while (!answQ.empty())
     {
-      std::cout << answQ.front() << " ";
+      std::cout << answQ.top() << " ";
       answQ.pop();
     }
     std::cout << "\n";
