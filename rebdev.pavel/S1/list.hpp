@@ -23,6 +23,12 @@ namespace rebdev
       {
         createHeadTail();
       }
+      BiList(size_t n, const T & val)
+      {
+        createHeadTail();
+        assign(n, val);
+      }
+      BiList(size_t n): BiList(n, T{}){};
       BiList(const BiList & list):
         headNode_(nullptr),
         tailNode_(nullptr),
@@ -141,6 +147,41 @@ namespace rebdev
         return ref;
       }
 
+      void assign (size_t n, const T & val)
+      {
+        node * headCopy = headNode_;
+        node * tailCopy = tailNode_;
+        size_t sizeCopy = size_;
+
+        createHeadTail();
+
+        for (size_t i = 0; i < n; ++i)
+        {
+          try
+          {
+            push_back(val);
+          }
+          catch (...)
+          {
+            clear();
+            headNode_ = headCopy;
+            tailNode_ = tailCopy;
+            size_ = sizeCopy;
+            throw;
+          }
+        }
+
+        node * newHeadCopy = headNode_;
+        node * newTailCopy = tailNode_;
+
+        headNode_ = headCopy;
+        tailNode_ = tailCopy;
+        clear();
+
+        headNode_ = newHeadCopy;
+        tailNode_ = newTailCopy;
+        size_ = n;
+      }
       void push_front(const T & val)
       {
         if (headNode_ == nullptr)
@@ -241,6 +282,45 @@ namespace rebdev
         headNode_ = nullptr;
         tailNode_ = nullptr;
         size_ = 0;
+      }
+
+      void remove(const T & val)
+      {
+        remove_if([& val](const T & valNow)
+        {
+          return (valNow == val);
+        }
+        );
+      }
+      template < class Predicate >
+      void remove_if(Predicate pred)
+      {
+        iterator it = begin();
+        while (it != end())
+        {
+          if (pred(*it))
+          {
+            node * lastNode = it.node_->last;
+            node * nextNode = it.node_->next;
+            delete it.node_;
+
+            if (lastNode == nullptr)
+            {
+              headNode_ = nextNode;
+            }
+            else
+            {
+              lastNode->next = nextNode;
+            }
+            nextNode->last = lastNode;
+            it = iterator(nextNode);
+            --size_;
+          }
+          else
+          {
+            ++it;
+          }
+        }
       }
     private:
       node * headNode_;
