@@ -1,32 +1,64 @@
 #include "calculateProc.hpp"
 
+#include <limits>
 #include <stdexcept>
 #include <iostream>
 
 #include "stack.hpp"
 
-long long calcExp(long long first, long long second, char operation) // need overflow checks
+long long calcExp(long long first, long long second, char operation)
 {
+  long long maxVal = std::numeric_limits< long long >::max();
+  long long minVal = std::numeric_limits< long long >::min();
   long long rObj = 0;
-  if (operation == '+') // fine
+  if (operation == '+')
   {
+    if ((first > 0) && (second > 0) && (first > (maxVal - second)))
+    {
+      throw std::overflow_error("Addition overflow error!");
+    }
     rObj = (first + second);
   }
-  else if (operation == '-') // fine
+  else if (operation == '-')
   {
+    if ((second > 0) && (first < (minVal + second)))
+    {
+      throw std::overflow_error("Sub underflow error!");
+    }
+
     rObj = (first - second);
   }
-  else if (operation == '*') // fine
+  else if (operation == '*')
   {
+    if (second > (maxVal / first) || second < (minVal / first))
+    {
+      throw std::overflow_error("Multiplication overflow error!");
+    }
     rObj = (first * second);
   }
-  else if (operation == '/') // fine
+  else if (operation == '/')
   {
+    if (second == 0)
+    {
+      throw std::logic_error("Division by zero!");
+    }
+    else if (second == -1 && first == minVal)
+    {
+      throw std::overflow_error("Division overflow!");
+    }
     rObj = (first / second);
   }
-  else if (operation == '%') //fine
+  else if (operation == '%')
   {
+    if (second == 0)
+    {
+      throw std::logic_error("Division by zero!");
+    }
     rObj = (first % second);
+    if (rObj < 0)
+    {
+      rObj += second;
+    }
   }
   else
   {
