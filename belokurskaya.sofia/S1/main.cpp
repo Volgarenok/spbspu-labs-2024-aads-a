@@ -16,7 +16,6 @@ int main()
     if (sequences.getSize() == 0)
     {
       std::cout << "0\n";
-      throw std::runtime_error("No sequences provided.");
     }
 
     for (size_t i = 0; i < sequences.getSize(); ++i)
@@ -41,8 +40,8 @@ int main()
           std::cout << seq.at(j) << " ";
         }
       }
+      std::cout << "\n";
     }
-    std::cout << "\n";
 
     for (size_t i = 0; i < sequences.getSize(); ++i)
     {
