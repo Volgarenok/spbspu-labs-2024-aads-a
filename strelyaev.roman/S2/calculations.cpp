@@ -3,6 +3,7 @@
 #include <iostream>
 #include <limits>
 
+
 bool strelyaev::isOperation(std::string& c)
 {
   return ((c == "+") || (c == "-") || (c == "/") || (c == "*") || (c == "%"));
@@ -57,7 +58,12 @@ long long strelyaev::calculateOperation(long long first, long long second, char 
   case '/':
     return first / second;
   case '%':
-    return first % second;
+    long long result = first % second;
+    if (result < 0)
+    {
+      result += second;
+    }
+    return result;
   }
   throw std::logic_error("Invalid operation");
 }
