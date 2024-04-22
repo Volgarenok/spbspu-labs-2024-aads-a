@@ -87,22 +87,18 @@ namespace piyavkin
     val_type* operator->()
     {
       return std::addressof(pair_);
-      // return std::addressof(node_->data_);
     }
     val_type& operator*()
     {
       return pair_;
-      // return node_->data_;
     }
     const val_type* operator->() const
     {
       return std::addressof(pair_);
-      // return std::addressof(node_->data_);
     }
     const val_type& operator*() const
     {
       return pair_;
-      // return node_->data_;
     }
   private:
     detail::Node< Key, T >* node_;

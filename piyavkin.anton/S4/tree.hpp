@@ -89,7 +89,7 @@ namespace piyavkin
     {
       if (this != std::addressof(rhs))
       {
-        // clear();
+        clear();
         swap(rhs);
         detail::Node< Key, T >* left = root_;
         detail::Node< Key, T >* right = root_;
@@ -185,6 +185,14 @@ namespace piyavkin
       ++size_;
       //splay();
       return std::make_pair< TreeIterator< Key, T, Compare >, bool >(TreeIterator< Key, T, Compare >(node), true);
+    }
+    template< class Iterator >
+    void insert(Iterator start, Iterator finish)
+    {
+      while (start != finish)
+      {
+        insert(*start++);
+      }
     }
     TreeIterator< Key, T, Compare > begin() noexcept
     {
@@ -329,6 +337,14 @@ namespace piyavkin
       delete delete_node.node_;
       --size_;
       return result;
+    }
+    TreeIterator< Key, T, Compare > erase(TreeIterator< Key, T, Compare> start, TreeIterator< Key, T, Compare> finish)
+    {
+      while (start != finish)
+      {
+        erase(start++);
+      }
+      return finish;
     }
     void clear()
     {
