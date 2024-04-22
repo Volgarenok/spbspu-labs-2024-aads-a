@@ -1,6 +1,7 @@
 #include "calculateProc.hpp"
 
 #include <stdexcept>
+#include <limits>
 
 #include "stack.hpp"
 
