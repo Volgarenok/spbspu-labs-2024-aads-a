@@ -34,9 +34,9 @@ long long calcExp(long long first, long long second, char operation)
   return rObj;
 }
 
-void arakelyan::calculatePostfixQ(Queue< Queue< ExpressionObj > > &qOfPostfixQs, Queue< long long > &answerQ)
+void arakelyan::calculatePostfixQ(Queue< Queue< detail::ExpressionObj > > &qOfPostfixQs, Queue< long long > &answerQ)
 {
-  Queue< ExpressionObj > curQ = qOfPostfixQs.front();
+  Queue< detail::ExpressionObj > curQ = qOfPostfixQs.front();
   qOfPostfixQs.pop();
 
   if (curQ.empty())
@@ -50,10 +50,10 @@ void arakelyan::calculatePostfixQ(Queue< Queue< ExpressionObj > > &qOfPostfixQs,
 
   while (!curQ.empty())
   {
-    ExpressionObj obj = curQ.front();
+    detail::ExpressionObj obj = curQ.front();
     curQ.pop();
 
-    if (obj.type_ == token_t::operation)
+    if (obj.type_ == detail::token_t::operation)
     {
       if (stack.size() < 2)
       {
@@ -65,7 +65,7 @@ void arakelyan::calculatePostfixQ(Queue< Queue< ExpressionObj > > &qOfPostfixQs,
       stack.pop();
       stack.push((calcExp(first, sec, obj.val_.oper_)));
     }
-    else if (obj.type_ == token_t::operand)
+    else if (obj.type_ == detail::token_t::operand)
     {
       stack.push(obj.val_.operand_);
     }

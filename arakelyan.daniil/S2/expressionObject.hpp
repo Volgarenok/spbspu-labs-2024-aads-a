@@ -5,34 +5,37 @@
 
 namespace arakelyan
 {
-  enum class token_t
+  namespace detail
   {
-    operand = 0,
-    operation = 1,
-    bracket = 2,
-    undef = 3
-  };
+    enum class token_t
+    {
+      operand = 0,
+      operation = 1,
+      bracket = 2,
+      undef = 3
+    };
 
-  union Token
-  {
-    long long operand_;
-    char oper_;
+    union Token
+    {
+      long long operand_;
+      char oper_;
 
-    Token();
-    Token(long long val);
-    Token(char val);
-    ~Token() = default;
-  };
+      Token();
+      Token(long long val);
+      Token(char val);
+      ~Token() = default;
+    };
 
-  struct ExpressionObj
-  {
-    Token val_;
-    token_t type_;
+    struct ExpressionObj
+    {
+      Token val_;
+      token_t type_;
 
-    ExpressionObj() = delete;
-    ExpressionObj(const ExpressionObj &obj) = default;
-    ~ExpressionObj() = default;
-    ExpressionObj &operator=(const ExpressionObj &obj) = default;
-  };
+      ExpressionObj() = delete;
+      ExpressionObj(const ExpressionObj &obj) = default;
+      ~ExpressionObj() = default;
+      ExpressionObj &operator=(const ExpressionObj &obj) = default;
+    };
+  }
 }
 #endif

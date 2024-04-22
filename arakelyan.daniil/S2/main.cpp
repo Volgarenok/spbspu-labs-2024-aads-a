@@ -9,22 +9,23 @@
 #include "calculateProc.hpp"
 #include <list/binList.hpp>
 
-std::ostream &printAllPostfixQs(std::ostream &out, arakelyan::Queue< arakelyan::Queue< arakelyan::ExpressionObj > > &qOfQs)
+std::ostream &printAllPostfixQs(std::ostream &out, arakelyan::Queue< arakelyan::Queue< arakelyan::detail::ExpressionObj > > &qOfQs)
 {
+  using namespace arakelyan::detail;
   while (!qOfQs.empty())
   {
-    arakelyan::Queue< arakelyan::ExpressionObj > postfixQueue = transformInfixToPostfix(qOfQs.front());
+    arakelyan::Queue< ExpressionObj > postfixQueue = transformInfixToPostfix(qOfQs.front());
     while (!postfixQueue.empty())
     {
-      if (postfixQueue.front().type_ == arakelyan::token_t::operation)
+      if (postfixQueue.front().type_ == token_t::operation)
       {
         out << postfixQueue.front().val_.oper_ << " ";
       }
-      else if (postfixQueue.front().type_ == arakelyan::token_t::operand)
+      else if (postfixQueue.front().type_ == token_t::operand)
       {
         out << postfixQueue.front().val_.operand_ << " ";
       }
-      else if (postfixQueue.front().type_ == arakelyan::token_t::bracket)
+      else if (postfixQueue.front().type_ == token_t::bracket)
       {
         out << postfixQueue.front().val_.oper_ << " ";
       }
@@ -39,6 +40,7 @@ std::ostream &printAllPostfixQs(std::ostream &out, arakelyan::Queue< arakelyan::
 int main()
 {
   using namespace arakelyan;
+  using namespace detail;
   Queue< Queue< ExpressionObj > > qOfInfQs;
 
   while (!std::cin.eof())

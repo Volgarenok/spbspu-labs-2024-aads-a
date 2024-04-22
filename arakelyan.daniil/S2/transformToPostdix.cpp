@@ -3,7 +3,7 @@
 #include <stdexcept>
 #include "stack.hpp"
 
-int operationPriority(arakelyan::ExpressionObj obj)
+int operationPriority(arakelyan::detail::ExpressionObj obj)
 {
   if (obj.val_.oper_ == '+' || obj.val_.oper_ == '-')
   {
@@ -20,8 +20,9 @@ int operationPriority(arakelyan::ExpressionObj obj)
   return 0;
 }
 
-arakelyan::Queue< arakelyan::ExpressionObj > arakelyan::transformInfixToPostfix(Queue< ExpressionObj > &infixQueue)
+arakelyan::Queue< arakelyan::detail::ExpressionObj > arakelyan::transformInfixToPostfix(Queue< detail::ExpressionObj > &infixQueue)
 {
+  using namespace detail;
   Queue< ExpressionObj > postfixQ;
   Stack< ExpressionObj > operS;
 
