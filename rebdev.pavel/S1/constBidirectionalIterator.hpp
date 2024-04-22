@@ -15,56 +15,56 @@ namespace rebdev
   class ConstBidirectionalIterator: public std::iterator< std::bidirectional_iterator_tag, T >
   {
     friend BiList< T >;
-    using const_iter = ConstBidirectionalIterator< T >;
+    using const_iterator = ConstBidirectionalIterator< T >;
     using node = biListNode< T >;
 
     public:
       ConstBidirectionalIterator() = default;
-      ConstBidirectionalIterator(const const_iter & iterator) = default;
-      ConstBidirectionalIterator(const_iter && iterator) = default;
+      ConstBidirectionalIterator(const const_iterator & c_it) = default;
+      ConstBidirectionalIterator(const_iterator && c_it) = default;
 
       ~ConstBidirectionalIterator() noexcept = default;
 
-      const_iter & operator=(const const_iter & iterator) noexcept = default;
-      const_iter & operator=(const_iter && iterator) noexcept = default;
+      const_iterator & operator=(const const_iterator & c_it) noexcept = default;
+      const_iterator & operator=(const_iterator && c_it) noexcept = default;
 
-      bool operator==(const const_iter & iterator) const noexcept
+      bool operator==(const const_iterator & c_it) const noexcept
       {
-        return (node_ == iterator.node_);
+        return (node_ == c_it.node_);
       }
-      bool operator!=(const const_iter & iterator) const noexcept
+      bool operator!=(const const_iterator & c_it) const noexcept
       {
-        return !(*this == iterator);
+        return !(*this == c_it);
       }
 
       const T & operator*() const
       {
-        return node_->data_;
+        return node_->data;
       }
       const T * operator->() const
       {
-        return std::addressof(node_->data_);
+        return std::addressof(node_->data);
       }
 
-      const_iter & operator++()
+      const_iterator & operator++()
       {
-        node_ = node_->next_;
+        node_ = node_->next;
         return *this;
       }
-      const_iter operator++(int)
+      const_iterator operator++(int)
       {
-        const_iter oldIter(node_);
+        const_iterator oldIter(node_);
         ++node_;
         return oldIter;
       }
-      const_iter & operator--()
+      const_iterator & operator--()
       {
-        node_ = node_->last_;
+        node_ = node_->last;
         return *this;
       }
-      const_iter operator--(int)
+      const_iterator operator--(int)
       {
-        const_iter oldIter(node_);
+        const_iterator oldIter(node_);
         --node_;
         return oldIter;
       }

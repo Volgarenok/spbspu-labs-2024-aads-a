@@ -11,11 +11,18 @@ namespace rebdev
   class BiList
   {
     using node = biListNode< T >;
-    using iter = BidirectionalIterator< T >;
-    using c_iter = ConstBidirectionalIterator< T >;
 
     public:
-      BiList() = default;
+      using iterator = BidirectionalIterator< T >;
+      using const_iterator = ConstBidirectionalIterator< T >;
+
+      BiList():
+        headNode_(nullptr),
+        tailNode_(nullptr),
+        size_(0)
+      {
+        createHeadTail();
+      }
       BiList(const BiList & list):
         headNode_(nullptr),
         tailNode_(nullptr),
@@ -30,7 +37,7 @@ namespace rebdev
       {
         *this = std::move(list);
       }
-      ~BiList noexcept
+      ~BiList() noexcept
       {
         clear();
       }
@@ -39,11 +46,12 @@ namespace rebdev
       {
         node * headCopy = headNode_;
         node * tailCopy = tailNode_;
+        size_t sizeCopy = size_;
 
         createHeadTail();
-        c_iter it = list.begin();
+        const_iterator it = list.cbegin();
 
-        while (it != list.end())
+        while (it != list.cend())
         {
           try
           {
@@ -54,16 +62,28 @@ namespace rebdev
             clear();
             headNode_ = headCopy;
             tailNode_ = tailCopy;
+            size_ = sizeCopy;
             throw;
           }
-          ++size_;
           ++it;
         }
+
+        node * newHeadCopy = headNode_;
+        node * newTailCopy = tailNode_;
+        headNode_ = headCopy;
+        tailNode_ = tailCopy;
+        sizeCopy = size_;
+        clear();
+        headNode_ = newHeadCopy;
+        tailNode_ = newTailCopy;
+        size_ = sizeCopy;
 
         return *this;
       }
       BiList & operator=(BiList && list)
       {
+        clear();
+
         headNode_ = list.headNode_;
         tailNode_ = list.tailNode_;
         size_ = list.size_;
@@ -74,6 +94,152 @@ namespace rebdev
         return *this;
       }
 
+      iterator begin()
+      {
+        return iterator(headNode_);
+      }
+      const_iterator cbegin() const
+      {
+        return const_iterator(headNode_);
+      }
+      iterator end()
+      {
+        return iterator(tailNode_);
+      }
+      const_iterator cend() const
+      {
+        return const_iterator(tailNode_);
+      }
+
+      bool empty() const noexcept
+      {
+        return (headNode_ == tailNode_);
+      }
+      size_t size() const noexcept
+      {
+        return size_;
+      }
+
+      T & front()
+      {
+        return headNode_->data;
+      }
+      T & back()
+      {
+        return tailNode_->last->data;
+      }
+      const T & front() const
+      {
+        const T & ref = headNode_->data;
+        return ref;
+      }
+      const T & back() const
+      {
+        const T & ref = tailNode_->last->data;
+        return ref;
+      }
+
+      void push_front(const T & val)
+      {
+        if (headNode_ == nullptr)
+        {
+          createHeadTail();
+        }
+        node * newNode = new node{val, nullptr, headNode_};
+        headNode_->last = newNode;
+        headNode_ = newNode;
+        ++size_;
+      }
+      void push_front(T && val)
+      {
+        if (headNode_ == nullptr)
+        {
+          createHeadTail();
+        }
+        node * newNode = new node{std::move(val), nullptr, headNode_};
+        headNode_->last = newNode;
+        headNode_ = newNode;
+        ++size_;
+      }
+      void pop_front()
+      {
+        node * headCopy = headNode_->next;
+        delete headNode_;
+        headNode_ = headCopy;
+        --size_;
+      }
+      void push_back(const T & val)
+      {
+        if (tailNode_ == nullptr)
+        {
+          createHeadTail();
+        }
+        node * newNode = new node{val, tailNode_->last, tailNode_};
+        if ((tailNode_->last) != nullptr)
+        {
+          tailNode_->last->next = newNode;
+        }
+        else
+        {
+          headNode_ = newNode;
+        }
+        tailNode_->last = newNode;
+        ++size_;
+      }
+      void push_back(T && val)
+      {
+        if (tailNode_ == nullptr)
+        {
+          createHeadTail();
+        }
+        node * newNode = new node{std::move(val), tailNode_->last, tailNode_};
+        if ((tailNode_->last) != nullptr)
+        {
+          tailNode_->last->next = newNode;
+        }
+        else
+        {
+          headNode_ = newNode;
+        }
+        tailNode_->last = newNode;
+        ++size_;
+      }
+      void pop_back()
+      {
+        node * tailCopy = tailNode_->last->last;
+        delete tailCopy->last;
+        tailNode_->last = tailCopy;
+        tailCopy->next = tailNode_;
+        --size_;
+      }
+      void swap(BiList & x)
+      {
+        node * thisHeadCopy = headNode_;
+        node * thisTailCopy = tailNode_;
+        size_t thisSizeCopy = size_;
+
+        headNode_ = x.headNode_;
+        tailNode_ = x.tailNode_;
+        size_ = x.size_;
+
+        x.headNode_ = thisHeadCopy;
+        x.tailNode_ = thisTailCopy;
+        x.size_ = thisSizeCopy;
+      }
+      void clear() noexcept
+      {
+        while (headNode_ != tailNode_)
+        {
+          node * nextNode = headNode_->next;
+          delete headNode_;
+          headNode_ = nextNode;
+        }
+        delete headNode_;
+
+        headNode_ = nullptr;
+        tailNode_ = nullptr;
+        size_ = 0;
+      }
     private:
       node * headNode_;
       node * tailNode_;
@@ -82,9 +248,9 @@ namespace rebdev
       void createHeadTail()
       {
         headNode_ = new node{T{}, nullptr, nullptr};
-        tailNode_ = headNode;
+        tailNode_ = headNode_;
       }
-  }
+  };
 }
 
 #endif

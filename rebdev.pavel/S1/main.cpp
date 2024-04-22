@@ -2,13 +2,11 @@
 #include <utility>
 
 #include "listFunction.hpp"
-//#include "biList.hpp"
-#include <list> //del
+
 
 int main()
 {
-  rebdev::pairList listOfPairs; //corr
-
+  rebdev::pairList listOfPairs;
   try
   {
     using namespace rebdev;
@@ -21,6 +19,5 @@ int main()
     std::cerr << e.what();
     return 1;
   }
-
   return 0;
 }

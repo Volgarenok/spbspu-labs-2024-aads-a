@@ -15,56 +15,56 @@ namespace rebdev
   class BidirectionalIterator: public std::iterator< std::bidirectional_iterator_tag, T >
   {
     friend BiList< T >;
-    using iter = BidirectionalIterator< T >;
+    using iterator = BidirectionalIterator< T >;
     using node = biListNode< T >;
 
     public:
       BidirectionalIterator() = default;
-      BidirectionalIterator(const iter & iterator) = default;
-      BidirectionalIterator(iter&& iterator) = default;
+      BidirectionalIterator(const iterator & it) = default;
+      BidirectionalIterator(iterator && it) = default;
 
       ~BidirectionalIterator() noexcept = default;
 
-      iter & operator=(const iter & iterator) noexcept = default;
-      iter & operator=(iter && iterator) noexcept = default;
+      iterator & operator=(const iterator & it) noexcept = default;
+      iterator & operator=(iterator && it) noexcept = default;
 
-      bool operator==(const iter & iterator) const noexcept
+      bool operator==(const iterator & it) const noexcept
       {
-        return (node_ == iterator.node_);
+        return (node_ == it.node_);
       }
-      bool operator!=(const iter & iterator) const noexcept
+      bool operator!=(const iterator & it) const noexcept
       {
-        return !(*this == iterator);
+        return !(*this == it);
       }
 
       T & operator*() const
       {
-        return node_->data_;
+        return node_->data;
       }
       T * operator->() const
       {
-        return std::addressof(node_->data_);
+        return std::addressof(node_->data);
       }
 
-      iter & operator++()
+      iterator& operator++()
       {
-        node_ = node_->next_;
+        node_ = node_->next;
         return *this;
       }
-      iter operator++(int)
+      iterator operator++(int)
       {
-        iter oldIter(node_);
+        iterator oldIter(node_);
         ++node_;
         return oldIter;
       }
-      iter & operator--()
+      iterator& operator--()
       {
-        node_ = node_->last_;
+        node_ = node_->last;
         return *this;
       }
-      iter operator--(int)
+      iterator operator--(int)
       {
-        iter oldIter(node_);
+        iterator oldIter(node_);
         --node_;
         return oldIter;
       }

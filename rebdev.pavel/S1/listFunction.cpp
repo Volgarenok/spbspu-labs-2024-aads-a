@@ -5,7 +5,6 @@
 void rebdev::inputList(std::istream & in, pairList & pList)
 {
   std::string listName;
-
   while (in >> listName)
   {
     numList inNumList;
@@ -28,10 +27,10 @@ void rebdev::inputNumList(std::istream & in, numList & nList)
 rebdev::nameList rebdev::createNameList(pairList & pList)
 {
   using pairCIter = pairList::const_iterator;
-  pairCIter pairNow = pList.begin();
+  pairCIter pairNow = pList.cbegin();
   nameList newNameList;
 
-  while (pairNow != pList.end())
+  while (pairNow != pList.cend())
   {
     newNameList.push_back((*pairNow).first);
     ++pairNow;
@@ -52,14 +51,13 @@ rebdev::listOfNumList rebdev::createListOfNumList(pairList & pList)
   }
 
   listOfNumList newListOfNumList;
-
   for (size_t i = 0; i < maxLength; ++i)
   {
     pairNow = pList.begin();
     numList localList;
     while (pairNow != pList.end())
     {
-      if (!((*pairNow).second.empty()))
+      if ((*pairNow).second.size() > 0)
       {
         localList.push_back((*pairNow).second.front());
         (*pairNow).second.pop_front();
@@ -84,27 +82,27 @@ void rebdev::outputList(std::ostream & out, nameAndListOfNumList & pair)
   }
 
   using nameListCIter = nameList::const_iterator;
-  nameListCIter nameNow = pair.first.begin();
+  nameListCIter nameNow = pair.first.cbegin();
   std::cout << *nameNow;
-  while (++nameNow != pair.first.end())
+  while (++nameNow != pair.first.cend())
   {
     std::cout << ' ' << *nameNow;
   }
   std::cout << '\n';
 
   using ListOfNumListCIter = listOfNumList::const_iterator;
-  ListOfNumListCIter listOfNumNow = pair.second.begin();
+  ListOfNumListCIter listOfNumNow = pair.second.cbegin();
 
   numList sumList;
   bool sumIsGood = true;
-  while (listOfNumNow != pair.second.end())
+  while (listOfNumNow != pair.second.cend())
   {
     using numListCIter = numList::const_iterator;
-    numListCIter numNow = (*listOfNumNow).begin();
+    numListCIter numNow = (*listOfNumNow).cbegin();
     size_t sum = *numNow;
 
     std::cout << *numNow;
-    while (++numNow != (*listOfNumNow).end())
+    while (++numNow != (*listOfNumNow).cend())
     {
       std::cout << ' ' << *numNow;
       sumIsGood &= plus(sum, *numNow);

@@ -7,9 +7,9 @@ namespace rebdev
 
   struct biListNode
   {
-    T data_;
-    biListNode * last_;
-    biListNode * next_;
+    T data;
+    biListNode * last;
+    biListNode * next;
   };
 }
 

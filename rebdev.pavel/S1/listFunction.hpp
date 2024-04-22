@@ -5,16 +5,15 @@
 #include <utility>
 #include <string>
 
-//include "BiList"
-#include <list> //del
+#include "list.hpp"
 
 namespace rebdev
 {
-  using numList = std::list< size_t >;
+  using numList = rebdev::BiList< size_t >;
   using nameAndNum = std::pair< std::string, numList >;
-  using pairList = std::list< nameAndNum >;
-  using nameList = std::list< std::string >;
-  using listOfNumList = std::list< numList >;
+  using pairList = rebdev::BiList< nameAndNum >;
+  using nameList = rebdev::BiList< std::string >;
+  using listOfNumList = rebdev::BiList< numList >;
   using nameAndListOfNumList = std::pair< nameList, listOfNumList >;
 
   void inputList(std::istream & in, pairList & pList);
