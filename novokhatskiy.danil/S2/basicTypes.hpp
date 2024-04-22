@@ -1,31 +1,34 @@
 #ifndef BASIC_TYPES_HPP
 #define BASIC_TYPES_HPP
 
-enum class TokenType
+namespace novokhatskiy
 {
-  OPERATION,
-  OPERAND,
-  BRACKET,
-};
+  enum class TokenType
+  {
+    OPERATION,
+    OPERAND,
+    BRACKET,
+  };
 
-struct Operand
-{
-  long long num;
-};
+  struct Operand
+  {
+    long long num;
+  };
 
-enum class Operation
-{
-  ADD = '+',
-  SUB = '-',
-  MUL = '*',
-  DIV = '/',
-  MOD = '%',
-};
+  enum class Operation
+  {
+    ADD = '+',
+    SUB = '-',
+    MUL = '*',
+    DIV = '/',
+    MOD = '%',
+  };
 
-enum class Bracket
-{
-  OPEN = '(',
-  CLOSE = ')',
-};
-
+  enum class Bracket
+  {
+    OPEN = '(',
+    CLOSE = ')',
+  };
+}
+  
 #endif

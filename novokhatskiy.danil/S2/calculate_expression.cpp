@@ -1,6 +1,6 @@
+#include "calculate_expression.hpp"
 #include <limits>
 #include <stdexcept>
-#include "calculate_expression.hpp"
 #include "stack.hpp"
 
 long long novokhatskiy::calculatePostExp(novokhatskiy::Queue< Postfix >&& inQueue)
