@@ -15,13 +15,13 @@ int main(int argc, char** argv)
   {
     file.open(argv[1]);
     stream_pointer = std::addressof(file);
-    if (!file)
-    {
-      std::cout << "\n";
-      return 1;
-    }
   }
   std::istream& in = *stream_pointer;
+  if (in.eof() || !in)
+  {
+    std::cout << "\n";
+    return 0;
+  }
   while (!in.eof())
   {
     Queue< detail::ExpressionUnit > infix_queue = parseString(in);
