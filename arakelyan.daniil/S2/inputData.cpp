@@ -1,8 +1,13 @@
 #include "inputData.hpp"
 
-#include <cstddef>
+#include <cctype>
 #include <iostream>
+#include <cstddef>
+#include <stdexcept>
 #include <string>
+
+#include "expressionObject.hpp"
+#include "queue.hpp"
 
 bool isOperation(const std::string line)
 {
@@ -14,44 +19,73 @@ bool isBracket(const std::string line)
   return line == "(" || line == ")";
 }
 
-arakelyan::Queue< arakelyan::detail::ExpressionObj > arakelyan::readDataInInfixForm(std::istream &input)
+void parseLine(std::string &line, arakelyan::Queue< arakelyan::detail::ExpressionObj > &someQ)
 {
-  using namespace detail;
-  Queue< ExpressionObj > someQ;
-  Token token;
-  token_t tokenType = token_t::undef;
-
-  std::string exp;
-  while (input)
+  using namespace arakelyan::detail;
+  size_t pos = 0;
+  std::string expr;
+  while (pos < line.length())
   {
-    input >> exp;
-    try
+    while (pos < line.length() && line[pos] == ' ')
     {
-      long long expLl = std::stoll(exp);
-      token = Token(expLl);
-      tokenType = token_t::operand;
-    }
-    catch (...)
-    {
-      char expCh = exp[0];
-      token = Token(expCh);
-      if (isOperation(exp))
-      {
-        tokenType = token_t::operation;
-      }
-      else if (isBracket(exp))
-      {
-        tokenType = token_t::bracket;
-      }
+      pos++;
     }
 
-    ExpressionObj expObj{token, tokenType};
-    someQ.push(expObj);
-    if (input.peek() == '\n')
+    size_t start = pos;
+    while (pos < line.length() && line[pos] != ' ')
     {
-      break;
+      pos++;
+    }
+
+    if (start < pos)
+    {
+      expr = line.substr(start, pos - start);
+
+      Token token;
+      token_t tokenType = token_t::undef;
+      try
+      {
+        long long expLl = std::stoll(expr);
+        token = Token(expLl);
+        tokenType = token_t::operand;
+      }
+      catch (const std::invalid_argument &e)
+      {
+        char expCh = expr[0];
+        token = Token(expCh);
+        if (isOperation(expr))
+        {
+          tokenType = token_t::operation;
+        }
+        else if (isBracket(expr))
+        {
+          tokenType = token_t::bracket;
+        }
+      }
+
+      ExpressionObj expObj{token, tokenType};
+      someQ.push(expObj);
+    }
+  }
+}
+
+std::istream &arakelyan::readDataInInfixFormat(std::istream &input, Queue< Queue< detail::ExpressionObj > > &qOfInfixQs)
+{
+  std::string line;
+
+  while (!input.eof())
+  {
+    std::getline(input, line, '\n');
+    if (!line.empty())
+    {
+      Queue< detail::ExpressionObj > infixQ;
+      parseLine(line, infixQ);
+      if (!infixQ.empty())
+      {
+        qOfInfixQs.push(infixQ);
+      }
     }
   }
 
-  return someQ;
+  return input;
 }

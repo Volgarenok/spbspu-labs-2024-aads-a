@@ -1,10 +1,11 @@
 #include "calculateProc.hpp"
-#include "stack.hpp"
 
 #include <stdexcept>
 #include <iostream>
 
-long long calcExp(long long first, long long second, char operation)
+#include "stack.hpp"
+
+long long calcExp(long long first, long long second, char operation) // need overflow checks
 {
   long long rObj = 0;
   if (operation == '+') // fine
@@ -39,12 +40,6 @@ void arakelyan::calculatePostfixQ(Queue< Queue< detail::ExpressionObj > > &qOfPo
   Queue< detail::ExpressionObj > curQ = qOfPostfixQs.front();
   qOfPostfixQs.pop();
 
-  if (curQ.empty())
-  {
-    // throw std::logic_error("empty q!");
-    return;
-  }
-
   Stack< long long > stack;
 
   while (!curQ.empty())
@@ -58,11 +53,11 @@ void arakelyan::calculatePostfixQ(Queue< Queue< detail::ExpressionObj > > &qOfPo
       {
         throw std::logic_error("Invalid sequence of expressions!");
       }
-      long long sec = stack.top();
+      long long right = stack.top();
       stack.pop();
-      long long first = stack.top();
+      long long left = stack.top();
       stack.pop();
-      stack.push((calcExp(first, sec, obj.val_.oper_)));
+      stack.push((calcExp(left, right, obj.val_.oper_)));
     }
     else if (obj.type_ == detail::token_t::operand)
     {

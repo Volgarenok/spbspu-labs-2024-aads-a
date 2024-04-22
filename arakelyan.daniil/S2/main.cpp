@@ -1,52 +1,29 @@
 #include <iostream>
+#include <fstream>
 #include <stdexcept>
 
+#include <list/binList.hpp>
 #include "queue.hpp"
 #include "stack.hpp"
 #include "expressionObject.hpp"
 #include "inputData.hpp"
 #include "transformToPostfix.hpp"
 #include "calculateProc.hpp"
-#include <list/binList.hpp>
 
-std::ostream &printAllPostfixQs(std::ostream &out, arakelyan::Queue< arakelyan::Queue< arakelyan::detail::ExpressionObj > > &qOfQs)
-{
-  using namespace arakelyan::detail;
-  while (!qOfQs.empty())
-  {
-    arakelyan::Queue< ExpressionObj > postfixQueue = transformInfixToPostfix(qOfQs.front());
-    while (!postfixQueue.empty())
-    {
-      if (postfixQueue.front().type_ == token_t::operation)
-      {
-        out << postfixQueue.front().val_.oper_ << " ";
-      }
-      else if (postfixQueue.front().type_ == token_t::operand)
-      {
-        out << postfixQueue.front().val_.operand_ << " ";
-      }
-      else if (postfixQueue.front().type_ == token_t::bracket)
-      {
-        out << postfixQueue.front().val_.oper_ << " ";
-      }
-      postfixQueue.pop();
-    }
-    out << "\n";
-    qOfQs.pop();
-  }
-  return out;
-}
-
-int main()
+int main(int argc, char *argv[])
 {
   using namespace arakelyan;
   using namespace detail;
   Queue< Queue< ExpressionObj > > qOfInfQs;
 
-  while (!std::cin.eof())
+  if (argc == 2)
   {
-    Queue< ExpressionObj > infixQueue = readDataInInfixForm(std::cin);
-    qOfInfQs.push(infixQueue);
+    std::ifstream inputFile(argv[1]);
+    readDataInInfixFormat(inputFile, qOfInfQs);
+  }
+  else
+  {
+    readDataInInfixFormat(std::cin, qOfInfQs);
   }
 
   Queue< Queue< ExpressionObj > > qOfPostQs;
@@ -66,7 +43,6 @@ int main()
   }
 
   Stack< long long > answQ;
-
   try
   {
     while (!qOfPostQs.empty())
