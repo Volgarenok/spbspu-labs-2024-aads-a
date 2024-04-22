@@ -22,6 +22,8 @@ namespace grechishnikov
     void pop();
     T& top();
 
+    bool empty() const noexcept;
+
   private:
     List< T > queue_;
   };
@@ -71,6 +73,12 @@ namespace grechishnikov
   T& Queue< T >::top()
   {
     return *queue_.begin();
+  }
+
+  template< typename T >
+  bool Queue< T >::empty() const noexcept
+  {
+    return queue_.empty();
   }
 }
 

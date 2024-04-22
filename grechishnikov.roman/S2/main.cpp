@@ -15,4 +15,6 @@ int main()
   std::cout << s3.top() << '\n';
   s3.pop();
   std::cout << s3.top() << '\n';
+  s3.pop();
+  std::cout << s3.empty() << '\n';
 }
