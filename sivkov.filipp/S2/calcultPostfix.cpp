@@ -28,7 +28,7 @@ long long calcult(std::queue< std::string > postfix)
       }
       else if (postfix.front() == "-")
       {
-        if (std::numeric_limits< long long >::max() + b > a)
+        if (std::numeric_limits< long long >::min() + b > a)
         {
           throw std::overflow_error("overflow");
         }
