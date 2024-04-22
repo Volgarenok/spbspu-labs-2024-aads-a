@@ -80,11 +80,22 @@ int main()
     return 1;
   }
 
-  while (!answQ.empty())
+  if (answQ.size() == 1)
   {
-    std::cout << answQ.front() << "\n";
-    answQ.pop();
+    while (!answQ.empty())
+    {
+      std::cout << answQ.front() << "\n";
+      answQ.pop();
+    }
   }
-
+  else
+  {
+    while (!answQ.empty())
+    {
+      std::cout << answQ.front() << " ";
+      answQ.pop();
+    }
+    std::cout << "\n";
+  }
   return 0;
 }
