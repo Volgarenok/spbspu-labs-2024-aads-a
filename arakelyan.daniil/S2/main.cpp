@@ -82,7 +82,7 @@ int main()
 
   while (!answQ.empty())
   {
-    std::cout << answQ.front() << " -> ";
+    std::cout << answQ.front() << "  ";
     answQ.pop();
   }
 

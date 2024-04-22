@@ -1,6 +1,5 @@
 #include "expressionObject.hpp"
 
-
 arakelyan::detail::Token::Token():
   operand_(0)
 {}

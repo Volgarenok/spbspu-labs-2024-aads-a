@@ -1,5 +1,5 @@
-#ifndef TOKEN_HPP
-#define TOKEN_HPP
+#ifndef EXPRESSIONOBJ_HPP
+#define EXPRESSIONOBJ_HPP
 
 #include <string>
 
