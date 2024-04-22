@@ -7,7 +7,7 @@ namespace novokhatskiy
   {
     class Node
     {
-      
+
     };
   }
 }

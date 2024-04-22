@@ -5,7 +5,7 @@ namespace novokhatskiy
 {
   class TreeIterator
   {
-    
+
   };
 }
 
