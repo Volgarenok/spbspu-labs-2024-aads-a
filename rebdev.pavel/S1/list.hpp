@@ -165,7 +165,7 @@ namespace rebdev
       }
       void pop_front()
       {
-        sizeCopy = size_;node * headCopy = headNode_->next;
+        node * headCopy = headNode_->next;
         delete headNode_;
         headNode_ = headCopy;
         --size_;
