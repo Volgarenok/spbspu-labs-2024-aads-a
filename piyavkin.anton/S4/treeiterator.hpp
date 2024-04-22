@@ -10,10 +10,12 @@ namespace piyavkin
   template< class Key, class T, class Compare = std::less< Key > >
   class TreeIterator: public std::iterator< std::bidirectional_iterator_tag, T >
   {
+    using val_type = std::pair< Key, T >;
     friend class Tree< Key, T, Compare >;
   public:
     TreeIterator():
-      node_(nullptr)
+      node_(nullptr),
+      pair_()
     {}
     TreeIterator(const TreeIterator< Key, T, Compare >&) = default;
     TreeIterator< Key, T, Compare >& operator=(const TreeIterator< Key, T, Compare >&) = default;
@@ -27,6 +29,8 @@ namespace piyavkin
         {
           node_ = node_->left_;
         }
+        pair_.first = node_->key_;
+        pair_.second = node_->data_;
         return *this;
       }
       while (node_->parent_ && node_->parent_->right_ == node_)
@@ -34,6 +38,8 @@ namespace piyavkin
         node_ = node_->parent_;
       }
       node_ = node_->parent_;
+      pair_.first = node_->key_;
+      pair_.second = node_->data_;
       return *this;
     }
     TreeIterator< Key, T, Compare >& operator--()
@@ -45,6 +51,8 @@ namespace piyavkin
         {
           node_ = node_->right_;
         }
+        pair_.first = node_->key_;
+        pair_.second = node_->data_;
         return *this;
       }
       while (node_->parent_ && node_->parent_->left_ == node_)
@@ -52,6 +60,8 @@ namespace piyavkin
         node_ = node_->parent_;
       }
       node_ = node_->parent_;
+      pair_.first = node_->key_;
+      pair_.second = node_->data_;
       return *this;
     }
     TreeIterator< Key, T, Compare > operator++(int)
@@ -74,26 +84,32 @@ namespace piyavkin
     {
       return !(*this == rhs);
     }
-    T* operator->()
+    val_type* operator->()
     {
-      return std::addressof(node_->data_);
+      return std::addressof(pair_);
+      // return std::addressof(node_->data_);
     }
-    T& operator*()
+    val_type& operator*()
     {
-      return node_->data_;
+      return pair_;
+      // return node_->data_;
     }
-    const T* operator->() const
+    const val_type* operator->() const
     {
-      return std::addressof(node_->data_);
+      return std::addressof(pair_);
+      // return std::addressof(node_->data_);
     }
-    const T& operator*() const
+    const val_type& operator*() const
     {
-      return node_->data_;
+      return pair_;
+      // return node_->data_;
     }
   private:
     detail::Node< Key, T >* node_;
+    val_type pair_;
     explicit TreeIterator(detail::Node< Key, T >* node):
-      node_(node)
+      node_(node),
+      pair_(node->key_, node->data_)
     {}
   };
 }

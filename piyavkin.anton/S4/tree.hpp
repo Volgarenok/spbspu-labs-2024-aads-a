@@ -17,6 +17,24 @@ namespace piyavkin
       before_min_(Key(), nullptr, nullptr, nullptr, T()),
       end_node_(Key(), nullptr, nullptr, nullptr, T())
     {}
+    template< class InputIterator >
+    Tree(InputIterator first, InputIterator second):
+      Tree()
+    {
+      while (first != second)
+      {
+        insert(*first++);
+      }
+    }
+    Tree(std::initializer_list< val_type > il):
+      Tree()
+    {
+      auto it = il.begin();
+      while (it != il.end())
+      {
+        insert(*it++);
+      }
+    }
     Tree(const Tree& rhs):
       Tree()
     {
@@ -25,10 +43,8 @@ namespace piyavkin
       TreeIterator< Key, T, Compare > it_left(rhs.root_);
       while (it_left.node_ != std::addressof(rhs.before_min_) && it_right.node_ != std::addressof(rhs.end_node_))
       {
-        insert(std::make_pair< Key, T >(std::move(it_right.node_->key_), std::move(it_right.node_->data_)));
-        insert(std::make_pair< Key, T >(std::move(it_left.node_->key_), std::move(it_left.node_->data_)));
-        --it_left;
-        ++it_right;
+        insert(std::pair< Key, T >(*it_right++));
+        insert(std::pair< Key, T >(*it_left--));
       }
     }
     Tree(Tree&& rhs):
@@ -332,7 +348,9 @@ namespace piyavkin
     }
     std::pair< TreeIterator< Key, T, Compare >, TreeIterator< Key, T, Compare > > equil_range(const Key& key)
     {
-      return std::pair< TreeIterator< Key, T, Compare >, TreeIterator< Key, T, Compare > >(find(key), ++find(key));
+      TreeIterator< Key, T, Compare > it = find(key);
+      TreeIterator< Key, T, Compare > it2 = it;
+      return std::pair< TreeIterator< Key, T, Compare >, TreeIterator< Key, T, Compare > >(it, ++it2);
     }
     size_t count(const Key& key)
     {
