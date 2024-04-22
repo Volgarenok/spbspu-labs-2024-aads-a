@@ -67,6 +67,10 @@ arakelyan::Queue< arakelyan::ExpressionObj > arakelyan::transformInfixToPostfix(
 
   while (!operS.empty())
   {
+    if (operS.top().type_ == token_t::bracket)
+    {
+      throw std::logic_error("bracket error!");
+    }
     postfixQ.push(operS.top());
     operS.pop();
   }
