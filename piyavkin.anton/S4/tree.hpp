@@ -188,16 +188,16 @@ namespace piyavkin
     }
     TreeIterator< Key, T, Compare > insert(TreeIterator< Key, T, Compare > pos, const val_type& val)
     {
-      if (cmp_(val.first, pos.node_->right_->val_type.first) && cmp_(pos.node_->left_->val_type.first, val.first) && ((isLeftChild(pos.node_) && cmp_(val.first, pos.node_->parent_->val_type.first)) || (isRightChild(pos.node_) && cmp_(pos.node_->parent_->val_type.first, val.first))))
+      if ((pos.node_ == std::addressof(end_node_) || cmp_(val.first, pos.node_->val_type.first)) && (!pos.node_->left_ || pos.node_->left_ == std::addressof(before_min_) || cmp_(pos.node_->left_->val_type.first, val.first)) && (pos.node_ == root_ || (isLeftChild(pos.node_) && cmp_(val.first, pos.node_->parent_->val_type.first)) || (isRightChild(pos.node_) && cmp_(pos.node_->parent_->val_type.first, val.first))))
       {
-        detail::Node< Key, T >* node = new detail::Node< Key, T >(val.first, pos.node_->right_, pos.node_->left_, pos.node_->parent_, val.second);
+        detail::Node< Key, T >* node = new detail::Node< Key, T >(val.first, pos.node_, pos.node_->left_, pos.node_->parent_, val.second);
         if (pos.node_->left_)
         {
           pos.node_->left_->parent_ = node;
-        }
-        if (pos.node_->right_)
-        {
-          pos.node_->right_->parent_ = node;
+          if (pos.node_->left_ == std::addressof(before_min_))
+          {
+            node->right_->left_ = nullptr;
+          }
         }
         if (isLeftChild(pos.node_))
         {
@@ -207,6 +207,13 @@ namespace piyavkin
         {
           pos.node_->parent_->right_ = node;
         }
+        pos.node_->parent_ = node;
+        if (pos.node_ == root_)
+        {
+          root_ = node;
+        }
+        ++size_;
+        return TreeIterator< Key, T, Compare >(node);
       }
       return insert(val).first;
     }

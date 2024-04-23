@@ -37,6 +37,6 @@ int main()
   // tree3.erase(tree3.begin(), --tree3.end());
   std::cout << ' ' << tree3.begin()->second;
   std::cout << '\n' << tree3.upper_bound(0)->second;
-  tree3.insert(tree3.begin(), std::make_pair< int, int >(0, 0));
+  tree3.insert(++tree3.begin(), std::make_pair< int, int >(0, 0));
   std::cout << tree3.begin()->second;
 }
