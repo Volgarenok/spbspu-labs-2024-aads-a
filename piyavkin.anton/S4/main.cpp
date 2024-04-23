@@ -36,5 +36,5 @@ int main()
   }
   // tree3.erase(tree3.begin(), --tree3.end());
   std::cout << ' ' << tree3.begin()->second;
-  std::cout << '\n' << tree3.lower_bound()->second;
+  std::cout << '\n' << tree3.upper_bound(0)->second;
 }

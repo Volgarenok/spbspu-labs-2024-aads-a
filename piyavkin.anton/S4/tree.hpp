@@ -204,24 +204,21 @@ namespace piyavkin
     }
     TreeIterator< Key, T, Compare > find(const Key& key)
     {
-      detail::Node< Key, T >* curr_node = root_;
-      while (curr_node != nullptr && (curr_node != std::addressof(end_node_) && curr_node != std::addressof(before_min_)))
+      TreeIterator< Key, T, Compare > it = lower_bound(key);
+      if (it.node_->key_ != key)
       {
-        if (cmp_(curr_node->key_, key))
-        {
-          curr_node = curr_node->right_;
-        }
-        else
-        {
-          if (!cmp_(key, curr_node->key_))
-          {
-            // splay();
-            return TreeIterator< Key, T, Compare >(curr_node);
-          }
-          curr_node = curr_node->left_;
-        }
+        return end();
       }
-      return end();
+      return it;
+    }
+    TreeIterator< Key, T, Compare > upper_bound(const Key& key)
+    {
+      TreeIterator< Key, T, Compare > it = lower_bound(key);
+      if (it.node_->key_ != key)
+      {
+        return it;
+      }
+      return ++it;
     }
     TreeIterator< Key, T, Compare > lower_bound(const Key& key)
     {
