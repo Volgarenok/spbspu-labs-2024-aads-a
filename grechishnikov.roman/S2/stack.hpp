@@ -23,6 +23,7 @@ namespace grechishnikov
     T& top();
 
     bool empty() const noexcept;
+    size_t size() const noexcept;
 
   private:
     List< T > stack_;
@@ -79,6 +80,12 @@ namespace grechishnikov
   bool Stack< T >::empty() const noexcept
   {
     return stack_.empty();
+  }
+
+  template< typename T >
+  size_t Stack< T >::size() const noexcept
+  {
+    return stack_.size();
   }
 }
 

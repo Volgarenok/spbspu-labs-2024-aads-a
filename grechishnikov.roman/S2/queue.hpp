@@ -23,6 +23,7 @@ namespace grechishnikov
     T& top();
 
     bool empty() const noexcept;
+    size_t size() const noexcept;
 
   private:
     List< T > queue_;
@@ -79,6 +80,12 @@ namespace grechishnikov
   bool Queue< T >::empty() const noexcept
   {
     return queue_.empty();
+  }
+
+  template< typename T >
+  size_t Queue< T >::size() const noexcept
+  {
+    return queue_.size();
   }
 }
 
