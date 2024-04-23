@@ -39,10 +39,10 @@ namespace sivkov
     ConstIterator< T > cbegin() const;
     ConstIterator< T > cend() const;
 
-    private:
-      size_t size_;
-      detail::Node< T >* head_;
-    };
+  private:
+    size_t size_;
+    detail::Node< T >* head_;
+  };
 
   template< typename T >
   List< T >::List():
@@ -55,11 +55,11 @@ namespace sivkov
     size_(0),
     head_(nullptr)
   {
-    assign(count,value);
+    assign(count, value);
   }
 
   template< typename T >
-  List< T >::List(const List& other) :
+  List< T >::List(const List& other):
     List()
   {
     detail::Node< T >* current = other.head_;
@@ -129,11 +129,11 @@ namespace sivkov
       detail::Node< T >* head = head_;
       while (head->next)
       {
-          head = head->next;
+        head = head->next;
       }
       head->next = newNode;
     }
-   ++size_;
+    ++size_;
   }
 
   template< typename T >
@@ -196,9 +196,9 @@ namespace sivkov
   void List< T >::remove(const T& value)
   {
     auto pred = [&value](const T& elem)
-    {
-     return elem == value;
-    };
+      {
+        return elem == value;
+      };
     remove_if(pred);
   }
 
