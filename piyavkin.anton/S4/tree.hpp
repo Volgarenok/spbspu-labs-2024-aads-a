@@ -223,6 +223,27 @@ namespace piyavkin
       }
       return end();
     }
+    TreeIterator< Key, T, Compare > lower_bound(const Key& key)
+    {
+      detail::Node< Key, T >* curr_node = root_;
+      while (curr_node && (curr_node != std::addressof(end_node_) && curr_node != std::addressof(before_min_)))
+      {
+        if (cmp_(curr_node->key_, key))
+        {
+          curr_node = curr_node->right_;
+        }
+        else
+        {
+          if (!cmp_(key, curr_node->key_) || (curr_node->left_ == std::addressof(before_min_)))
+          {
+            // splay();
+            return TreeIterator< Key, T, Compare >(curr_node);
+          }
+          curr_node = curr_node->left_;
+        }
+      }
+      return TreeIterator< Key, T, Compare >(curr_node);
+    }
     T& operator[](const Key& key)
     {
       return (*((this->insert(std::make_pair(key, T()))).first));
@@ -366,7 +387,11 @@ namespace piyavkin
     {
       TreeIterator< Key, T, Compare > it = find(key);
       TreeIterator< Key, T, Compare > it2 = it;
-      return std::pair< TreeIterator< Key, T, Compare >, TreeIterator< Key, T, Compare > >(it, ++it2);
+      if (it != end())
+      {
+        ++it2;
+      }
+      return std::pair< TreeIterator< Key, T, Compare >, TreeIterator< Key, T, Compare > >(it, it2);
     }
     size_t count(const Key& key)
     {

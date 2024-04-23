@@ -34,6 +34,7 @@ int main()
     std::cout << ' ' << it3->second;
     ++it3;
   }
-  tree3.erase(tree3.begin(), --tree3.end());
+  // tree3.erase(tree3.begin(), --tree3.end());
   std::cout << ' ' << tree3.begin()->second;
+  std::cout << '\n' << tree3.lower_bound()->second;
 }
