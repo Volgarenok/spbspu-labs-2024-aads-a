@@ -91,7 +91,7 @@ namespace sivkov
       temp.push_front(list_.front());
       list_.pop_front();
     }
-    swap(list_, temp);
+    list_.swap(temp);
   }
 
   template< typename T >
