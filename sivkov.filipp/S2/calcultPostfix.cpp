@@ -62,8 +62,12 @@ long long calcult(std::queue< std::string > postfix)
         {
           throw std::overflow_error("dev by 0");
         }
-        long long c = b % a;
-        infix.push(c);
+        b %= a;
+        if (b < 0)
+        {
+          b += a;
+        }
+        infix.push(b);
         postfix.pop();
       }
     }
