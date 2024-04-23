@@ -48,11 +48,11 @@ long long calcult(std::queue< std::string > postfix)
       }
       else if (postfix.front() == "*")
       {
-        if ((b != 0) && ((a * b) / b) != a)
-        {
-          throw std::overflow_error("overflow detected");
-        }
         long long c = b * a;
+        if ((b != 0) && (c / b) != a)
+        {
+          throw std::overflow_error("overflow");
+        }
         infix.push(c);
         postfix.pop();
       }
