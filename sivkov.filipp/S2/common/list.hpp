@@ -45,13 +45,13 @@ namespace sivkov
   };
 
   template< typename T >
-  List< T >::List() :
+  List< T >::List():
     size_(0),
     head_(nullptr)
   {}
 
   template< typename T >
-  List< T >::List(size_t count, const T& value) :
+  List< T >::List(size_t count, const T& value):
     size_(0),
     head_(nullptr)
   {
@@ -59,7 +59,7 @@ namespace sivkov
   }
 
   template< typename T >
-  List< T >::List(const List& other) :
+  List< T >::List(const List& other):
     List()
   {
     detail::Node< T >* current = other.head_;
@@ -71,7 +71,7 @@ namespace sivkov
   }
 
   template< typename T >
-  List< T >::List(List&& other) noexcept :
+  List< T >::List(List&& other) noexcept:
     size_(other.size_),
     head_(other.head_)
   {
@@ -268,3 +268,4 @@ namespace sivkov
   }
 }
 #endif
+
