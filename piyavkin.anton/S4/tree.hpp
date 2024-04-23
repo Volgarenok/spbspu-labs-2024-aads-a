@@ -430,6 +430,16 @@ namespace piyavkin
     {
       return (find(key) != end()) ? 1 : 0;
     }
+    template< class... Args >
+    std::pair< TreeIterator< Key, T, Compare >, bool > emplace(Args&&... args)
+    {
+      return insert(val_type(std::forward< Args >(args)...));
+    }
+    template< class... Args >
+    TreeIterator< Key, T, Compare > emplace_hint(TreeIterator< Key, T, Compare > pos, Args&&... args)
+    {
+      return insert(pos, val_type(std::forward< Args >(args)...));
+    }
   private:
     detail::Node< Key, T >* root_;
     Compare cmp_;
