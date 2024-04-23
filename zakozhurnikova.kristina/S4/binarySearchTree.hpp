@@ -5,13 +5,43 @@
 #include <cstddef>
 #include <iostream>
 #include "comparator.hpp"
+#include "constIterator.hpp"
 
 namespace zakozhurnikova
 {
   template< typename Key, typename Value, typename Compare = Comparator< Key > >
   struct BinarySearchTree {
-    using node = TreeNode< Key, Value >;
-    BinarySearchTree() = default;
+    using node = detail::TreeNode< Key, Value >;
+    BinarySearchTree():
+      root_(nullptr),
+      size_(0),
+      compare_(Compare())
+    {}
+
+    BinarySearchTree(BinarySearchTree&& rhs):
+      root_(rhs.root_),
+      size_(rhs.size_),
+      compare_(rhs.compare_)
+    {
+      rhs.root_ = nullptr;
+      rhs.size_ = 0;
+    }
+
+    BinarySearchTree& operator=(BinarySearchTree&& rhs)
+    {
+      if (this != std::addressof(rhs))
+      {
+        std::swap(root_, rhs.root_);
+        std::swap(size_, rhs.size_);
+        std::swap(compare_, rhs.compare_);
+      }
+      return *this;
+    }
+
+    ~BinarySearchTree()
+    {
+      clear();
+    }
 
     int size() const noexcept
     {
@@ -34,26 +64,26 @@ namespace zakozhurnikova
     {
       if (this->root_)
       {
-        this->put(key, val, this->root_);
+        this->put(key, std::move(val), this->root_);
       }
       else
       {
-        this->root_ = new node(key, val);
+        this->root_ = new node(key, std::move(val));
       }
       this->size_ = this->size_ + 1;
     }
 
     void put(Key key, Value val, node* currentNode)
     {
-      if (compare_(key, currentNode->key))
+      if (compare_(key, currentNode->data.first))
       {
         if (currentNode->hasLeftChild())
         {
-          this->put(key, val, currentNode->leftChild);
+          this->put(key, std::move(val), currentNode->leftChild);
         }
         else
         {
-          currentNode->leftChild = new node(key, val, currentNode);
+          currentNode->leftChild = new node(key, std::move(val), currentNode);
           this->updateBalance(currentNode->leftChild);
         }
       }
@@ -61,11 +91,11 @@ namespace zakozhurnikova
       {
         if (currentNode->hasRightChild())
         {
-          this->put(key, val, currentNode->rightChild);
+          this->put(key, std::move(val), currentNode->rightChild);
         }
         else
         {
-          currentNode->rightChild = new node(key, val, currentNode);
+          currentNode->rightChild = new node(key, std::move(val), currentNode);
           this->updateBalance(currentNode->rightChild);
         }
       }
@@ -202,11 +232,11 @@ namespace zakozhurnikova
       {
         return nullptr;
       }
-      else if (currentNode->key == key)
+      else if (currentNode->data.first == key)
       {
         return currentNode;
       }
-      else if (compare_(key, currentNode->key))
+      else if (compare_(key, currentNode->data.first))
       {
         return this->get(key, currentNode->leftChild);
       }
@@ -242,11 +272,72 @@ namespace zakozhurnikova
       }
     }
 
+    node* getLowest(node* prev) const
+    {
+      node* lowest = prev;
+      if (!lowest)
+      {
+        return nullptr;
+      }
+      while (lowest->leftChild != nullptr)
+      {
+        lowest = lowest->leftChild;
+      }
+
+      return lowest;
+    }
+
+    node* getNext(node* prev) const
+    {
+      node* cur = prev;
+      while (cur->rightChild == nullptr || cur->data.first < prev->data.first)
+      {
+        if (cur->parent == nullptr && (cur->rightChild == nullptr || cur->data.first < prev->data.first))
+        {
+          return nullptr;
+        }
+        cur = cur->parent;
+        if (cur->data.first > prev->data.first)
+        {
+          return cur;
+        }
+      }
+      cur = cur->rightChild;
+      cur = getLowest(cur);
+      return cur;
+    }
+
+    ConstIterator<Key, Value, Compare> cbegin() noexcept
+    {
+      return ConstIterator<Key, Value, Compare>(getLowest(root_));
+    }
+    ConstIterator<Key, Value, Compare> cend() noexcept
+    {
+      return ConstIterator<Key, Value, Compare>();
+    }
+
+
 
   private:
     node* root_;
     size_t size_;
     Compare compare_;
+
+    void clear()
+    {
+      clear(root_);
+    }
+    void clear(node* node)
+    {
+      if (node != nullptr)
+      {
+        clear(node->leftChild);
+        clear(node->rightChild);
+        delete node;
+      }
+      root_ = nullptr;
+    }
+
 
   };
 }

@@ -21,10 +21,16 @@ int main(int argc, char *argv[])
   {
     std::cerr << "you didn't attach the file";
   }
+
   mytree.push(2, "hjk");
   mytree.push(3, "m");
-  maps.push("zaz", mytree);
-  std::cout << mytree.get(2) << " " << maps.get("zaz").get(2);
+  mytree.push(1, "hello");
+  mytree.push(0, "uhyyh");
+  for (auto it = mytree.cbegin(); it != mytree.cend(); ++it)
+  {
+    std::cout << (*it).first << ' ' << (*it).second << '\n';
+  }
+  maps.push("zaz", std::move(mytree));
   return 0;
 
 }

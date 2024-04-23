@@ -18,6 +18,6 @@ void zakozhurnikova::inputMaps(std::istream& in, BinarySearchTree< std::string, 
     {
       in.clear();
     }
-    maps.push(nameTree, tree);
+    maps.push(nameTree, std::move(tree));
   }
 }
