@@ -20,9 +20,10 @@ namespace sivkov
     bool empty() const;
     size_t size() const;
     void swap(Queue< T >& other);
+    void reverse();
 
-    Queue< T >& operator=(const Queue< T >& other);
-    Queue< T >& operator=(Queue< T >&& other) noexcept;
+    Queue& operator=(const Queue& other);
+    Queue& operator=(Queue && other) noexcept;
 
   private:
     List< T > list_;
@@ -42,7 +43,7 @@ namespace sivkov
   Queue< T >::Queue(Queue&& other) noexcept:
     list_(std::move(other.list_))
   {
-    other.list_ = list_();
+    other.list_ = List< T >();
   }
 
   template< typename T >
@@ -82,6 +83,18 @@ namespace sivkov
   }
 
   template< typename T >
+  void Queue< T >::reverse()
+  {
+    List< T > temp;
+    while (!list_.empty())
+    {
+      temp.push_front(list_.front());
+      list_.pop_front();
+    }
+    swap(list_, temp);
+  }
+
+  template< typename T >
   Queue< T >& Queue< T >::operator=(const Queue< T >& other)
   {
     list_ = other.list_;
@@ -96,5 +109,5 @@ namespace sivkov
     return *this;
   }
 }
-#endif
 
+#endif
