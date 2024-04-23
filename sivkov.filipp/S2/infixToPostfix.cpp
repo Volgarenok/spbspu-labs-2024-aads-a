@@ -1,61 +1,64 @@
 #include "infixToPostfix.hpp"
 #include <cctype>
 #include <string>
-#include <stack>
+#include "queue.hpp"
+#include "stack.hpp"
 #include "utilities.hpp"
 
-std::queue<std::string> infixToPostfix(std::queue<std::string>& infix)
+namespace sivkov
 {
-  std::queue<std::string> postfix;
-  std::stack<std::string> operators;
-
-  while (!infix.empty())
+  Queue< std::string > infixToPostfix(Queue< std::string >& infix)
   {
-    std::string token = infix.front();
-    infix.pop();
+    Queue< std::string > postfix;
+    Stack< std::string > operators;
 
-    if (std::isdigit(token[0]) || (std::isdigit(token[1]) && token[0] == '-'))
+    while (!infix.empty())
     {
-      postfix.push(token);
-    }
-    else if (token == "(")
-    {
-      operators.push("(");
-    }
-    else if (token == ")")
-    {
-      while (!operators.empty() && operators.top() != "(")
+      std::string token = infix.front();
+      infix.pop();
+
+      if (std::isdigit(token[0]) || (std::isdigit(token[1]) && token[0] == '-'))
       {
-        std::string op = operators.top();
-        operators.pop();
-        postfix.push(op);
+        postfix.push(token);
       }
-      if (!operators.empty() && operators.top() == "(")
+      else if (token == "(")
       {
-        operators.pop();
+        operators.push("(");
+      }
+      else if (token == ")")
+      {
+        while (!operators.empty() && operators.top() != "(")
+        {
+          std::string op = operators.top();
+          operators.pop();
+          postfix.push(op);
+        }
+        if (!operators.empty() && operators.top() == "(")
+        {
+          operators.pop();
+        }
+      }
+      else
+      {
+        while (!operators.empty() && getPriority(operators.top()) >= getPriority(token))
+        {
+          std::string op = operators.top();
+          operators.pop();
+          postfix.push(op);
+        }
+        operators.push(token);
       }
     }
-    else
+    while (!operators.empty())
     {
-      while (!operators.empty() && getPriority(operators.top()) >= getPriority(token))
+      if (operators.top() == "(")
       {
-        std::string op = operators.top();
-        operators.pop();
-        postfix.push(op);
+        throw std::logic_error("error line");
       }
-      operators.push(token);
+      std::string op = operators.top();
+      operators.pop();
+      postfix.push(op);
     }
+    return postfix;
   }
-  while (!operators.empty())
-  {
-    if (operators.top() == "(")
-    {
-      throw std::logic_error("error line");
-    }
-    std::string op = operators.top();
-    operators.pop();
-    postfix.push(op);
-  }
-  return postfix;
 }
-

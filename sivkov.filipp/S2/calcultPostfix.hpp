@@ -1,9 +1,12 @@
 #ifndef CALCULTPOSTFIX_HPP
 #define CALCULTPOSTFIX_HPP
 
-#include <queue>
 #include <string>
+#include "queue.hpp"
 
-long long calcult(std::queue< std::string > postfix);
-
+namespace sivkov
+{
+  long long calcult(Queue< std::string > postfix);
+}
 #endif
+

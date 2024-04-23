@@ -1,15 +1,15 @@
 #include <iostream>
 #include <fstream>
-#include <stack>
-#include <queue>
 #include <string>
+#include "queue.hpp"
 #include "infixToPostfix.hpp"
 #include "utilities.hpp"
 #include "calcultPostfix.hpp"
 
 int main(int argc, char* argv[])
 {
-  std::queue <std::queue< std::string >> postfix;
+  using namespace sivkov;
+  Queue< Queue< std::string > > postfix;
   std::istream* input;
   std::ifstream file;
 
@@ -30,8 +30,8 @@ int main(int argc, char* argv[])
 
   std::string in = "";
   std::string token = "";
-  std::queue< std::string > infix1;
-  std::queue<long long> res;
+  Queue< std::string > infix1;
+  Queue< long long > res;
   try
   {
     while (std::getline(*input, in))
@@ -63,6 +63,7 @@ int main(int argc, char* argv[])
     std::cerr << e.what() << "\n";
     return 1;
   }
+  res.reverse();
   bool second = true;
   while (!res.empty())
   {

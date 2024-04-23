@@ -1,11 +1,12 @@
 #ifndef INFIXTOPOSTFIX_HPP
 #define INFIXTOPOSTFIX_HPP
 
-#include <queue>
 #include <iostream>
+#include "queue.hpp"
 
-std::queue<std::string> infixToPostfix(std::queue<std::string>& infix);
+namespace sivkov
+{
+  Queue< std::string > infixToPostfix(Queue< std::string >& infix);
+}
 
 #endif
-
-
