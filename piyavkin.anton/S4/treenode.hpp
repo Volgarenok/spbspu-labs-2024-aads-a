@@ -12,14 +12,12 @@ namespace piyavkin
     {
       template< class... Args >
       Node(const Key& key, Node* right, Node* left, Node* parent, Args&& ...args):
-        key_(key),
-        data_(std::forward< Args >(args)...),
+        val_type(key, std::forward< Args >(args)...),
         right_(right),
         left_(left),
         parent_(parent)
       {}
-      Key key_;
-      T data_;
+      std::pair< Key, T > val_type;
       Node* right_;
       Node* left_;
       Node* parent_;

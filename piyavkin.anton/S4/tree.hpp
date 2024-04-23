@@ -132,7 +132,7 @@ namespace piyavkin
       detail::Node< Key, T >* parent_node = nullptr;
       while (curr_node != nullptr && (curr_node != std::addressof(end_node_) && curr_node != std::addressof(before_min_)))
       {
-        if (cmp_(curr_node->key_, node->key_))
+        if (cmp_(curr_node->val_type.first, node->val_type.first))
         {
           if (!curr_node->right_ || curr_node != std::addressof(end_node_))
           {
@@ -157,7 +157,7 @@ namespace piyavkin
         before_min_.parent_ = root_;
         end_node_.parent_ = root_;
       }
-      else if (cmp_(parent_node->key_, node->key_))
+      else if (cmp_(parent_node->val_type.first, node->val_type.first))
       {
         if (parent_node->right_ == std::addressof(end_node_))
         {
@@ -166,7 +166,7 @@ namespace piyavkin
         }
         parent_node->right_ = node;
       }
-      else if (cmp_(node->key_, parent_node->key_))
+      else if (cmp_(node->val_type.first, parent_node->val_type.first))
       {
         if (parent_node->left_ == std::addressof(before_min_))
         {
@@ -185,6 +185,30 @@ namespace piyavkin
       ++size_;
       //splay();
       return std::make_pair< TreeIterator< Key, T, Compare >, bool >(TreeIterator< Key, T, Compare >(node), true);
+    }
+    TreeIterator< Key, T, Compare > insert(TreeIterator< Key, T, Compare > pos, const val_type& val)
+    {
+      if (cmp_(val.first, pos.node_->right_->val_type.first) && cmp_(pos.node_->left_->val_type.first, val.first) && ((isLeftChild(pos.node_) && cmp_(val.first, pos.node_->parent_->val_type.first)) || (isRightChild(pos.node_) && cmp_(pos.node_->parent_->val_type.first, val.first))))
+      {
+        detail::Node< Key, T >* node = new detail::Node< Key, T >(val.first, pos.node_->right_, pos.node_->left_, pos.node_->parent_, val.second);
+        if (pos.node_->left_)
+        {
+          pos.node_->left_->parent_ = node;
+        }
+        if (pos.node_->right_)
+        {
+          pos.node_->right_->parent_ = node;
+        }
+        if (isLeftChild(pos.node_))
+        {
+          pos.node_->parent_->left_ = node;
+        }
+        else if (isRightChild(pos.node_))
+        {
+          pos.node_->parent_->right_ = node;
+        }
+      }
+      return insert(val).first;
     }
     template< class Iterator >
     void insert(Iterator start, Iterator finish)
@@ -205,7 +229,7 @@ namespace piyavkin
     TreeIterator< Key, T, Compare > find(const Key& key)
     {
       TreeIterator< Key, T, Compare > it = lower_bound(key);
-      if (it.node_->key_ != key)
+      if (it.node_->val_type.first != key)
       {
         return end();
       }
@@ -214,7 +238,7 @@ namespace piyavkin
     TreeIterator< Key, T, Compare > upper_bound(const Key& key)
     {
       TreeIterator< Key, T, Compare > it = lower_bound(key);
-      if (it.node_->key_ != key)
+      if (it.node_->val_type.first != key)
       {
         return it;
       }
@@ -225,13 +249,18 @@ namespace piyavkin
       detail::Node< Key, T >* curr_node = root_;
       while (curr_node && (curr_node != std::addressof(end_node_) && curr_node != std::addressof(before_min_)))
       {
-        if (cmp_(curr_node->key_, key))
+        if (cmp_(curr_node->val_type.first, key))
         {
+          if (!curr_node->right_)
+          {
+            TreeIterator< Key, T, Compare > it(curr_node);
+            return ++it;
+          }
           curr_node = curr_node->right_;
         }
         else
         {
-          if (!cmp_(key, curr_node->key_) || (curr_node->left_ == std::addressof(before_min_)))
+          if (!cmp_(key, curr_node->val_type.first) || (curr_node->left_ == std::addressof(before_min_)))
           {
             // splay();
             return TreeIterator< Key, T, Compare >(curr_node);
@@ -255,7 +284,7 @@ namespace piyavkin
     }
     TreeIterator< Key, T, Compare > erase(TreeIterator< Key, T, Compare> pos)
     {
-      TreeIterator< Key, T, Compare > delete_node = find(pos.node_->key_);
+      TreeIterator< Key, T, Compare > delete_node = find(pos.node_->val_type.first);
       if (delete_node == end())
       {
         return delete_node;
@@ -400,6 +429,14 @@ namespace piyavkin
     size_t size_;
     detail::Node< Key, T > before_min_;
     detail::Node< Key, T > end_node_;
+    bool isLeftChild(detail::Node< Key, T >* node) const
+    {
+      return (node->parent_ && node->parent_->left_ == node);
+    }
+    bool isRightChild(detail::Node< Key, T >* node) const
+    {
+      return (node->parent_ && node->parent_->right_ == node);
+    }
   };
 }
 #endif

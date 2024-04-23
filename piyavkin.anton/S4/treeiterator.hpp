@@ -14,8 +14,7 @@ namespace piyavkin
     friend class Tree< Key, T, Compare >;
   public:
     TreeIterator():
-      node_(nullptr),
-      pair_()
+      node_(nullptr)
     {}
     TreeIterator(const TreeIterator< Key, T, Compare >&) = default;
     TreeIterator< Key, T, Compare >& operator=(const TreeIterator< Key, T, Compare >&) = default;
@@ -29,8 +28,6 @@ namespace piyavkin
         {
           node_ = node_->left_;
         }
-        pair_.first = node_->key_;
-        pair_.second = node_->data_;
         return *this;
       }
       while (node_->parent_ && node_->parent_->right_ == node_)
@@ -38,8 +35,6 @@ namespace piyavkin
         node_ = node_->parent_;
       }
       node_ = node_->parent_;
-      pair_.first = node_->key_;
-      pair_.second = node_->data_;
       return *this;
     }
     TreeIterator< Key, T, Compare >& operator--()
@@ -51,8 +46,6 @@ namespace piyavkin
         {
           node_ = node_->right_;
         }
-        pair_.first = node_->key_;
-        pair_.second = node_->data_;
         return *this;
       }
       while (node_->parent_ && node_->parent_->left_ == node_)
@@ -60,8 +53,6 @@ namespace piyavkin
         node_ = node_->parent_;
       }
       node_ = node_->parent_;
-      pair_.first = node_->key_;
-      pair_.second = node_->data_;
       return *this;
     }
     TreeIterator< Key, T, Compare > operator++(int)
@@ -86,26 +77,25 @@ namespace piyavkin
     }
     val_type* operator->()
     {
-      return std::addressof(pair_);
+      return std::addressof(node_->val_type);
     }
     val_type& operator*()
     {
-      return pair_;
+      return node_->val_type;
     }
     const val_type* operator->() const
     {
-      return std::addressof(pair_);
+      return std::addressof(node_->val_type);
     }
     const val_type& operator*() const
     {
-      return pair_;
+      return node_->val_type;
     }
   private:
     detail::Node< Key, T >* node_;
     val_type pair_;
     explicit TreeIterator(detail::Node< Key, T >* node):
-      node_(node),
-      pair_(node->key_, node->data_)
+      node_(node)
     {}
   };
 }
