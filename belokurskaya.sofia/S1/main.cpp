@@ -13,6 +13,11 @@ int main()
   try
   {
     SequenceVector sequences = readSequences();
+    if (sequences.getSize() == 0)
+    {
+      std::cout << "0\n";
+      return 0;
+    }
     printNames(sequences);
     printSequences(sequences);
     printSums(sequences);

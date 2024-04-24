@@ -6,11 +6,11 @@ belokurskaya::SequenceVector belokurskaya::readSequences()
 {
   SequenceVector sequences;
   std::string name = "";
-  int number = 0;
 
   while (std::cin >> name)
   {
     List< int > sequence;
+    int number = 0;
     while (std::cin >> number)
     {
       sequence.push_back(number);
