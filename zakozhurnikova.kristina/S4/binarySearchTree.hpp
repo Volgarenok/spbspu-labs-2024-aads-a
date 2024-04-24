@@ -4,12 +4,13 @@
 #include <algorithm>
 #include <cstddef>
 #include <iostream>
+#include <functional>
 #include "comparator.hpp"
 #include "constIterator.hpp"
 
 namespace zakozhurnikova
 {
-  template< typename Key, typename Value, typename Compare = Comparator< Key > >
+  template< typename Key, typename Value, typename Compare = std::less< Key > >
   struct BinarySearchTree {
     using node = detail::TreeNode< Key, Value >;
     BinarySearchTree():
@@ -43,7 +44,7 @@ namespace zakozhurnikova
       clear();
     }
 
-    int size() const noexcept
+    int length() const noexcept
     {
       return this->size_;
     }
@@ -101,7 +102,7 @@ namespace zakozhurnikova
       }
     }
 
-    void rebalance(node *node)
+    void rebalance(node* node)
     {
       if (node->balanceFactor < 0)
       {
@@ -218,11 +219,11 @@ namespace zakozhurnikova
       node* res = this->get(key, this->root_);
       if (res)
       {
-        return res->value;
+        return res->data.second;
       }
       else
       {
-        return res->value;
+        return res->data.second;
       }
     }
 
@@ -307,13 +308,13 @@ namespace zakozhurnikova
       return cur;
     }
 
-    ConstIterator<Key, Value, Compare> cbegin() noexcept
+    ConstIterator< Key, Value, Compare > cbegin() noexcept
     {
-      return ConstIterator<Key, Value, Compare>(getLowest(root_));
+      return ConstIterator< Key, Value, Compare >(getLowest(root_));
     }
-    ConstIterator<Key, Value, Compare> cend() noexcept
+    ConstIterator< Key, Value, Compare > cend() noexcept
     {
-      return ConstIterator<Key, Value, Compare>();
+      return ConstIterator< Key, Value, Compare >();
     }
 
 
@@ -337,8 +338,6 @@ namespace zakozhurnikova
       }
       root_ = nullptr;
     }
-
-
   };
 }
 

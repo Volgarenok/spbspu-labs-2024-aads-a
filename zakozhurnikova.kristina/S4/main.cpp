@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
 {
   using namespace zakozhurnikova;
   BinarySearchTree< std::string, BinarySearchTree< int, std::string > > maps;
-  BinarySearchTree<int, std::string> mytree;
+  BinarySearchTree< int, std::string > mytree;
   if (argc == 2)
   {
     std::ifstream file(argv[1]);
@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
   {
     std::cout << (*it).first << ' ' << (*it).second << '\n';
   }
-  maps.push("zaz", std::move(mytree));
+//  maps.push("zaz", std::move(mytree));
   return 0;
 
 }
