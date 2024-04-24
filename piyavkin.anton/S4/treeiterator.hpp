@@ -92,8 +92,8 @@ namespace piyavkin
       return node_->val_type;
     }
   private:
-    detail::Node< Key, T >* node_;
-    explicit TreeIterator(detail::Node< Key, T >* node):
+    detail::TreeNode< Key, T >* node_;
+    explicit TreeIterator(detail::TreeNode< Key, T >* node):
       node_(node)
     {}
   };
@@ -174,8 +174,8 @@ namespace piyavkin
       return node_->val_type;
     }
   private:
-    detail::Node< Key, T >* node_;
-    explicit ConstTreeIterator(detail::Node< Key, T >* node):
+    detail::TreeNode< Key, T >* node_;
+    explicit ConstTreeIterator(detail::TreeNode< Key, T >* node):
       node_(node)
     {}
   };
@@ -264,8 +264,8 @@ namespace piyavkin
       return node_->val_type;
     }
   private:
-    detail::Node< Key, T >* node_;
-    explicit TreeReverseIterator(detail::Node< Key, T >* node):
+    detail::TreeNode< Key, T >* node_;
+    explicit TreeReverseIterator(detail::TreeNode< Key, T >* node):
       node_(node)
     {}
   };
@@ -346,8 +346,8 @@ namespace piyavkin
       return node_->val_type;
     }
   private:
-    detail::Node< Key, T >* node_;
-    explicit ConstTreeReverseIterator(detail::Node< Key, T >* node):
+    detail::TreeNode< Key, T >* node_;
+    explicit ConstTreeReverseIterator(detail::TreeNode< Key, T >* node):
       node_(node)
     {}
   };

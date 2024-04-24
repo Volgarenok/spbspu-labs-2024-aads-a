@@ -67,8 +67,8 @@ namespace piyavkin
       {
         Tree< Key, T, Compare > temp(rhs);
         swap(temp);
-        detail::Node< Key, T >* left = root_;
-        detail::Node< Key, T >* right = root_;
+        detail::TreeNode< Key, T >* left = root_;
+        detail::TreeNode< Key, T >* right = root_;
         while (left->left_->parent_ && right->right_->parent_)
         {
           if (left->left_->parent_)
@@ -91,8 +91,8 @@ namespace piyavkin
       {
         clear();
         swap(rhs);
-        detail::Node< Key, T >* left = root_;
-        detail::Node< Key, T >* right = root_;
+        detail::TreeNode< Key, T >* left = root_;
+        detail::TreeNode< Key, T >* right = root_;
         while (left->left_->parent_ && right->right_->parent_)
         {
           if (left->left_)
@@ -127,9 +127,9 @@ namespace piyavkin
     }
     std::pair< TreeIterator< Key, T, Compare >, bool > insert(const val_type& val)
     {
-      detail::Node< Key, T >* node = new detail::Node< Key, T >(val.first, nullptr, nullptr, nullptr, val.second);
-      detail::Node< Key, T >* curr_node = root_;
-      detail::Node< Key, T >* parent_node = nullptr;
+      detail::TreeNode< Key, T >* node = new detail::TreeNode< Key, T >(val.first, nullptr, nullptr, nullptr, val.second);
+      detail::TreeNode< Key, T >* curr_node = root_;
+      detail::TreeNode< Key, T >* parent_node = nullptr;
       while (curr_node != nullptr && (curr_node != std::addressof(end_node_) && curr_node != std::addressof(before_min_)))
       {
         if (cmp_(curr_node->val_type.first, node->val_type.first))
@@ -190,7 +190,7 @@ namespace piyavkin
     {
       if ((pos.node_ == std::addressof(end_node_) || cmp_(val.first, pos.node_->val_type.first)) && (!pos.node_->left_ || pos.node_->left_ == std::addressof(before_min_) || cmp_(pos.node_->left_->val_type.first, val.first)) && (pos.node_ == root_ || (isLeftChild(pos.node_) && cmp_(val.first, pos.node_->parent_->val_type.first)) || (isRightChild(pos.node_) && cmp_(pos.node_->parent_->val_type.first, val.first))))
       {
-        detail::Node< Key, T >* node = new detail::Node< Key, T >(val.first, pos.node_, pos.node_->left_, pos.node_->parent_, val.second);
+        detail::TreeNode< Key, T >* node = new detail::TreeNode< Key, T >(val.first, pos.node_, pos.node_->left_, pos.node_->parent_, val.second);
         if (pos.node_->left_)
         {
           pos.node_->left_->parent_ = node;
@@ -277,7 +277,7 @@ namespace piyavkin
     }
     TreeIterator< Key, T, Compare > lower_bound(const Key& key)
     {
-      detail::Node< Key, T >* curr_node = root_;
+      detail::TreeNode< Key, T >* curr_node = root_;
       while (curr_node && (curr_node != std::addressof(end_node_) && curr_node != std::addressof(before_min_)))
       {
         if (cmp_(curr_node->val_type.first, key))
@@ -322,7 +322,7 @@ namespace piyavkin
       }
       TreeIterator< Key, T, Compare > result = delete_node;
       ++result;
-      detail::Node< Key, T >* node = delete_node.node_->right_;
+      detail::TreeNode< Key, T >* node = delete_node.node_->right_;
       if (!node || delete_node.node_->right_ == std::addressof(end_node_))
       {
         if ((size_ == 1) || (delete_node.node_->parent_ && !delete_node.node_->parent_->left_))
@@ -465,16 +465,16 @@ namespace piyavkin
       return insert(pos, val_type(std::forward< Args >(args)...));
     }
   private:
-    detail::Node< Key, T >* root_;
+    detail::TreeNode< Key, T >* root_;
     Compare cmp_;
     size_t size_;
-    detail::Node< Key, T > before_min_;
-    detail::Node< Key, T > end_node_;
-    bool isLeftChild(detail::Node< Key, T >* node) const
+    detail::TreeNode< Key, T > before_min_;
+    detail::TreeNode< Key, T > end_node_;
+    bool isLeftChild(detail::TreeNode< Key, T >* node) const
     {
       return (node->parent_ && node->parent_->left_ == node);
     }
-    bool isRightChild(detail::Node< Key, T >* node) const
+    bool isRightChild(detail::TreeNode< Key, T >* node) const
     {
       return (node->parent_ && node->parent_->right_ == node);
     }

@@ -8,19 +8,19 @@ namespace piyavkin
   namespace detail
   {
     template< class Key, class T >
-    struct Node
+    struct TreeNode
     {
       template< class... Args >
-      Node(const Key& key, Node* right, Node* left, Node* parent, Args&& ...args):
+      TreeNode(const Key& key, TreeNode* right, TreeNode* left, TreeNode* parent, Args&& ...args):
         val_type(key, std::forward< Args >(args)...),
         right_(right),
         left_(left),
         parent_(parent)
       {}
       std::pair< Key, T > val_type;
-      Node* right_;
-      Node* left_;
-      Node* parent_;
+      TreeNode* right_;
+      TreeNode* left_;
+      TreeNode* parent_;
     };
   }
 }
