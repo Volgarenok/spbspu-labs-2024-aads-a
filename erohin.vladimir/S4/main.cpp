@@ -2,9 +2,11 @@
 #include <fstream>
 #include <map>
 #include <string>
+#include "dictionary.hpp"
 
 int main(int argc, char ** argv)
 {
+  using namespace erohin;
   if (argc != 2)
   {
     std::cerr << "Wrong CLA number\n";
@@ -30,6 +32,8 @@ int main(int argc, char ** argv)
     }
   }
   file.close();
+  std::map< std::string, void (*)(Dictionary &, const Dictionary &, const Dictionary &) > command;
+  command.empty();
   for (auto & dict: collection)
   {
     for (auto & record: dict.second)
