@@ -70,7 +70,8 @@ strelyaev::Queue< strelyaev::detail::ExpressionUnit > strelyaev::makePostfix(Que
   strelyaev::Queue< strelyaev::detail::ExpressionUnit > postfix_queue;
   while (!queue.empty())
   {
-    strelyaev::detail::ExpressionUnit unit = queue.drop();
+    strelyaev::detail::ExpressionUnit unit = queue.front();
+    queue.pop_front();
     if (unit.type == strelyaev::detail::TokenType::OPERAND)
     {
       postfix_queue.push(unit);
@@ -83,11 +84,13 @@ strelyaev::Queue< strelyaev::detail::ExpressionUnit > strelyaev::makePostfix(Que
       }
       if (unit.token.operation == ')')
       {
-        strelyaev::detail::ExpressionUnit stack_peek = temp_stack.drop();
+        strelyaev::detail::ExpressionUnit stack_peek = temp_stack.back();
+        temp_stack.pop_back();
         while (stack_peek.token.operation != '(')
         {
           postfix_queue.push(stack_peek);
-          stack_peek = temp_stack.drop();
+          stack_peek = temp_stack.back();
+          temp_stack.pop_back();
         }
       }
     }
@@ -98,7 +101,8 @@ strelyaev::Queue< strelyaev::detail::ExpressionUnit > strelyaev::makePostfix(Que
         temp_stack.push(unit);
         continue;
       }
-      strelyaev::detail::ExpressionUnit stack_peek = temp_stack.drop();
+      strelyaev::detail::ExpressionUnit stack_peek = temp_stack.back();
+      temp_stack.pop_back();
       if (strelyaev::getPrecedence(unit.token.operation) > strelyaev::getPrecedence(stack_peek.token.operation))
       {
         temp_stack.push(stack_peek);
@@ -113,7 +117,8 @@ strelyaev::Queue< strelyaev::detail::ExpressionUnit > strelyaev::makePostfix(Que
           {
             break;
           }
-          stack_peek = temp_stack.drop();
+          stack_peek = temp_stack.back();
+          temp_stack.pop_back();
         }
         if (!temp_stack.empty())
         {
@@ -125,7 +130,8 @@ strelyaev::Queue< strelyaev::detail::ExpressionUnit > strelyaev::makePostfix(Que
   }
   while (!temp_stack.empty())
   {
-    strelyaev::detail::ExpressionUnit unit = temp_stack.drop();
+    strelyaev::detail::ExpressionUnit unit = temp_stack.back();
+    temp_stack.pop_back();
     postfix_queue.push(unit);
   }
   return postfix_queue;
@@ -140,24 +146,28 @@ long long strelyaev::calculatePostfix(strelyaev::Queue< strelyaev::detail::Expre
   }
   while (!queue.empty())
   {
-    strelyaev::detail::ExpressionUnit unit = queue.drop();
+    strelyaev::detail::ExpressionUnit unit = queue.front();
+    queue.pop_front();
     if (unit.type == strelyaev::detail::TokenType::OPERAND)
     {
       processing_stack.push(unit.token.operand);
     }
     if (unit.type == strelyaev::detail::TokenType::OPERATION)
     {
-      long long second = processing_stack.drop();
+      long long second = processing_stack.back();
+      processing_stack.pop_back();
       if (processing_stack.empty())
       {
         throw std::invalid_argument("Something is wrong with postfix expression");
       }
-      long long first = processing_stack.drop();
+      long long first = processing_stack.back();
+      processing_stack.pop_back();
       long long result = calculateOperation(first, second, unit.token.operation);
       processing_stack.push(result);
     }
   }
-  long long result = processing_stack.drop();
+  long long result = processing_stack.back();
+  processing_stack.pop_back();
   if (!processing_stack.empty())
   {
     throw std::invalid_argument("Something is wrong with postfix expression");

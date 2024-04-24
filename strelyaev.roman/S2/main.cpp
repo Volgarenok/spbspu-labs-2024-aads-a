@@ -47,10 +47,12 @@ int main(int argc, char** argv)
     std::cout << "\n";
     return 0;
   }
-  std::cout << results.drop();
+  std::cout << results.back();
+  results.pop_back();
   while (!results.empty())
   {
-    std::cout << " " << results.drop();
+    std::cout << " " << results.back();
+    results.pop_back();
   }
   std::cout << "\n";
 }

@@ -19,7 +19,7 @@ namespace strelyaev
       T& front();
       const T& front() const;
       bool empty();
-      T drop();
+      void pop_front();
 
       Queue< T >& operator=(const Queue< T >&);
       Queue< T >& operator=(Queue< T >&&);
@@ -89,11 +89,9 @@ Queue< T >& Queue< T >::operator=(Queue< T >&& other)
   }
 
   template< typename T >
-  T Queue< T >::drop()
+  void Queue< T >::pop_front()
   {
-    T value = data.front();
     data.pop_front();
-    return value;
   }
 
 }

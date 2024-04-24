@@ -19,7 +19,7 @@ namespace strelyaev
       T& front();
       const T& front() const;
       bool empty();
-      T drop();
+      void pop_back();
 
       Stack< T >& operator=(const Stack< T >&) = default;
       Stack< T >& operator=(Stack< T >&&);
@@ -75,11 +75,9 @@ namespace strelyaev
   }
 
   template< typename T >
-  T Stack< T >::drop()
+  void Stack< T >::pop_back()
   {
-    T value = data.back();
     data.pop_back();
-    return value;
   }
 }
 #endif
