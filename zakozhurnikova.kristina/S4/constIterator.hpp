@@ -10,8 +10,8 @@ namespace zakozhurnikova
   template <class Key, class Value, class Compare>
   class BinarySearchTree;
 
-  template <class Key, class Value, class Compare = std::less<Key>>
-  struct ConstIterator : public std::iterator<std::bidirectional_iterator_tag, Value>
+  template <class Key, class Value, class Compare = std::less< Key > >
+  struct ConstIterator: public std::iterator< std::bidirectional_iterator_tag, Value >
   {
       friend class BinarySearchTree<Key, Value, Compare>;
       using this_t = ConstIterator<Key, Value, Compare>;
@@ -28,15 +28,15 @@ namespace zakozhurnikova
       this_t operator--(int);
       bool operator!=(const this_t &) const;
       bool operator==(const this_t &) const;
-      const std::pair<Key, Value>& operator*() const;
-      const std::pair<Key, Value>* operator->() const;
+      const std::pair< Key, Value >& operator*() const;
+      const std::pair< Key, Value >* operator->() const;
 
   private:
-      detail::TreeNode< Key, Value > *node_;
+      detail::TreeNode< Key, Value >* node_;
   };
 
   template <class Key, class Value, class Compare>
-  ConstIterator<Key, Value, Compare>& ConstIterator<Key, Value, Compare>::operator++()
+  ConstIterator< Key, Value, Compare >& ConstIterator<Key, Value, Compare>::operator++()
   {
      if (node_->rightChild)
     {
@@ -55,7 +55,7 @@ namespace zakozhurnikova
     return *this;
   }
 
-  template <class Key, class Value, class Compare>
+  template < class Key, class Value, class Compare >
   ConstIterator<Key, Value, Compare> ConstIterator<Key, Value, Compare>::operator++(int)
   {
       ConstIterator<Key, Value> result(*this);
@@ -63,14 +63,14 @@ namespace zakozhurnikova
       return result;
   }
 
-  template <class Key, class Value, class Compare>
+  template < class Key, class Value, class Compare >
   ConstIterator<Key, Value, Compare> &ConstIterator<Key, Value, Compare>::operator--()
   {
       node_ = node_->prev;
       return *this;
   }
 
-  template <class Key, class Value, class Compare>
+  template < class Key, class Value, class Compare >
   ConstIterator<Key, Value, Compare> ConstIterator<Key, Value, Compare>::operator--(int)
   {
       ConstIterator<Key, Value, Compare> result(*this);
@@ -78,26 +78,26 @@ namespace zakozhurnikova
       return result;
   }
 
-  template <class Key, class Value, class Compare>
-  bool ConstIterator<Key, Value, Compare>::operator==(const ConstIterator<Key, Value, Compare> &rhs) const
+  template < class Key, class Value, class Compare >
+  bool ConstIterator< Key, Value, Compare >::operator==(const ConstIterator<Key, Value, Compare> &rhs) const
   {
       return node_ == rhs.node_;
   }
 
-  template <class Key, class Value, class Compare>
+  template < class Key, class Value, class Compare >
   bool ConstIterator<Key, Value, Compare>::operator!=(const ConstIterator<Key, Value, Compare> &rhs) const
   {
       return !(*this == rhs);
   }
 
-  template <class Key, class Value, class Compare>
-  const std::pair<Key, Value>& ConstIterator<Key, Value, Compare>::operator*() const
+  template < class Key, class Value, class Compare >
+  const std::pair< Key, Value >& ConstIterator< Key, Value, Compare >::operator*() const
   {
       return node_->data;
   }
 
-  template <class Key, class Value, class Compare>
-  const std::pair<Key, Value>* ConstIterator<Key, Value, Compare>::operator->() const
+  template < class Key, class Value, class Compare >
+  const std::pair< Key, Value >* ConstIterator< Key, Value, Compare >::operator->() const
   {
       return std::addressof(node_->data);
   }

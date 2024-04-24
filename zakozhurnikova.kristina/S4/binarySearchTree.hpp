@@ -49,29 +49,29 @@ namespace zakozhurnikova
       return this->size_;
     }
 
-    void swap(BinarySearchTree< Key, Value, Compare >& other)
-    {
-      std::swap(root_, other.root_);
-      std::swap(size_, other.size_);
-      std::swap(compare_, other.compare_);
-    }
+//    void swap(BinarySearchTree< Key, Value, Compare >& other)
+//    {
+//      std::swap(root_, other.root_);
+//      std::swap(size_, other.size_);
+//      std::swap(compare_, other.compare_);
+//    }
 
-    bool empty() const noexcept
-    {
-      return size_ == 0;
-    }
+//    bool empty() const noexcept
+//    {
+//      return size_ == 0;
+//    }
 
     void push(Key key, Value val)
     {
-      if (this->root_)
+      if (root_)
       {
-        this->put(key, std::move(val), this->root_);
+        put(key, std::move(val), root_);
       }
       else
       {
-        this->root_ = new node(key, std::move(val));
+        root_ = new node(key, std::move(val));
       }
-      this->size_ = this->size_ + 1;
+      size_ = size_ + 1;
     }
 
     void put(Key key, Value val, node* currentNode)
@@ -80,24 +80,24 @@ namespace zakozhurnikova
       {
         if (currentNode->hasLeftChild())
         {
-          this->put(key, std::move(val), currentNode->leftChild);
+          put(key, std::move(val), currentNode->leftChild);
         }
         else
         {
           currentNode->leftChild = new node(key, std::move(val), currentNode);
-          this->updateBalance(currentNode->leftChild);
+          updateBalance(currentNode->leftChild);
         }
       }
       else
       {
         if (currentNode->hasRightChild())
         {
-          this->put(key, std::move(val), currentNode->rightChild);
+          put(key, std::move(val), currentNode->rightChild);
         }
         else
         {
           currentNode->rightChild = new node(key, std::move(val), currentNode);
-          this->updateBalance(currentNode->rightChild);
+          updateBalance(currentNode->rightChild);
         }
       }
     }
@@ -108,24 +108,24 @@ namespace zakozhurnikova
       {
         if (node->rightChild->balanceFactor > 0)
         {
-          this->rotateRight(node->rightChild);
-          this->rotateLeft(node);
+          rotateRight(node->rightChild);
+          rotateLeft(node);
         }
         else
         {
-          this->rotateLeft(node);
+          rotateLeft(node);
         }
       }
       else
       {
         if (node->leftChild->balanceFactor < 0)
         {
-          this->rotateLeft(node->leftChild);
-          this->rotateRight(node);
+          rotateLeft(node->leftChild);
+          rotateRight(node);
         }
         else
         {
-          this->rotateRight(node);
+          rotateRight(node);
         }
       }
     }
@@ -134,7 +134,7 @@ namespace zakozhurnikova
     {
       if (node->balanceFactor > 1 || node->balanceFactor < -1)
       {
-        this->rebalance(node);
+        rebalance(node);
         return;
       }
       if (node->parent != nullptr)
@@ -149,7 +149,7 @@ namespace zakozhurnikova
         }
         if (node->parent->balanceFactor != 0)
         {
-          this->updateBalance(node->parent);
+          updateBalance(node->parent);
         }
       }
     }
@@ -165,7 +165,7 @@ namespace zakozhurnikova
       newRoot->parent = rotRoot->parent;
       if (rotRoot->isRoot())
       {
-        this->root_ = newRoot;
+        root_ = newRoot;
       }
       else
       {
@@ -195,7 +195,7 @@ namespace zakozhurnikova
       newRoot->parent = rotRoot->parent;
       if (rotRoot->isRoot())
       {
-        this->root_ = newRoot;
+        root_ = newRoot;
       }
       else
       {
@@ -216,7 +216,7 @@ namespace zakozhurnikova
 
     Value& get(Key key)
     {
-      node* res = this->get(key, this->root_);
+      node* res = get(key, root_);
       if (res)
       {
         return res->data.second;
@@ -239,33 +239,33 @@ namespace zakozhurnikova
       }
       else if (compare_(key, currentNode->data.first))
       {
-        return this->get(key, currentNode->leftChild);
+        return get(key, currentNode->leftChild);
       }
       else
       {
-        return this->get(key, currentNode->rightChild);
+        return get(key, currentNode->rightChild);
       }
     }
 
     void del(Key key)
     {
-      if (this->size_ > 1)
+      if (size_ > 1)
       {
-        node* nodeToRemove = this->get(key, this->root_);
+        node* nodeToRemove = get(key, root_);
         if (nodeToRemove)
         {
-          this->remove(nodeToRemove);
-          this->size_ = this->size_ - 1;
+          remove(nodeToRemove);
+          size_ = size_ - 1;
         }
         else
         {
           std::cerr << "Error, key not in tree" << '\n';
         }
       }
-      else if (this->size_ == 1 && this->root_->key == key)
+      else if (size_ == 1 && root_->key == key)
       {
-        this->root_ = nullptr;
-        this->size_ = this->size_ - 1;
+        root_ = nullptr;
+        size_ = size_ - 1;
       }
       else
       {

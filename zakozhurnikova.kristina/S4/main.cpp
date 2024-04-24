@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
   }
   else
   {
-    std::cerr << "you didn't attach the file";
+    std::cerr << "you didn't attach the file\n";
   }
 
   mytree.push(2, "hjk");
