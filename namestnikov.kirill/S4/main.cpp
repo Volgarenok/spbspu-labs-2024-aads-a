@@ -1,14 +1,43 @@
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <map>
 
-int main()
+int main(int argc, char * argv[])
 {
-  std::map< char, int > letters{{'a', 27}, {'b', 3}, {'c', 1}};
-  letters['b'] = 57;
-  letters['c'] = 24;
-  for (const auto & pair : letters)
+  std::map< std::string, std::map< size_t, std::string > > myMap;
+  if (argc == 2)
   {
-    std::cout << "{" << pair.first << ";" << pair.second << "}";
+    std::ifstream in(argv[1]);
+    if (!in.is_open())
+    {
+      std::cerr << "Can not open the file\n";
+      return 1;
+    }
+    std::map< size_t, std::string > tempMap;
+    std::string mapName = "";
+    in >> mapName;
+    while (!in.eof())
+    {
+      size_t keyNumber = 0;
+      std::string value = "";
+      while (in >> keyNumber >> value)
+      {
+        tempMap.insert(std::make_pair(keyNumber, value));
+      }
+      if (!in.eof())
+      {
+        in.clear();
+      }
+      myMap.insert(std::make_pair(mapName, tempMap));
+    }
+    in.close();
+  }
+  for (const auto & pair : myMap)
+  {
+    for (const auto & pair2 : pair.second)
+    {
+      std::cout << pair2.first << " " << pair2.second;
+    }
   }
 }
