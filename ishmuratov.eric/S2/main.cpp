@@ -1,5 +1,7 @@
 #include <iostream>
 #include <fstream>
+#include <limits>
+#include <exception>
 #include "queue.hpp"
 #include "stack.hpp"
 
@@ -18,32 +20,7 @@ bool low_priority(const std::string& opr)
   return (high_priority(opr) || (opr == "+") || (opr == "-"));
 }
 
-int calculate(int n1, int n2, const std::string& opr)
-{
-  if (opr == "+")
-  {
-    return n1 + n2;
-  }
-  else if (opr == "-")
-  {
-    return n1 - n2;
-  }
-  else if (opr == "*")
-  {
-    return n1 * n2;
-  }
-  else if (opr == "/")
-  {
-    return n1 / n2;
-  }
-  else if (opr == "%")
-  {
-    return n1 % n2;
-  }
-  return 0;
-}
-
-void input_infix(std::string line, ishmuratov::Queue< std::string > & input_queue)
+void input_infix(const std::string & line, ishmuratov::Queue< std::string > & input_queue)
 {
   std::string token;
   for (char i : line)
@@ -120,20 +97,71 @@ void topostfix(ishmuratov::Queue< std::string > & process_queue, ishmuratov::Que
   }
 }
 
-void calculate_postfix(ishmuratov::Queue< std::string > & result_queue, ishmuratov::Stack< int > & operands)
+void calculate_postfix(ishmuratov::Queue< std::string > & result_queue, ishmuratov::Stack< long long int > & operands)
 {
   while (!result_queue.empty())
   {
     std::string temp = result_queue.drop();
     if (isdigit(temp[0]))
     {
-      operands.push(std::stoi(temp));
+      operands.push(std::stoll(temp));
     }
     else if (isOperator(temp))
     {
-      int n2 = operands.drop();
-      int n1 = operands.drop();
-      int res = calculate(n1, n2, temp);
+      long long int n2 = operands.drop();
+      long long int n1 = operands.drop();
+      long long int res = 0;
+      long long int max_value = std::numeric_limits< long long int >::max();
+      long long int min_value = std::numeric_limits< long long int >::min();
+
+      if (temp == "+")
+      {
+        if (n1 > max_value - n2)
+        {
+          throw std::overflow_error("Sum overflow!");
+        }
+        res = n1 + n2;
+      }
+      else if (temp == "-")
+      {
+        if (n1 < min_value + n2)
+        {
+          throw std::underflow_error("Subtraction underflow!");
+        }
+        res = n1 - n2;
+      }
+      else if (temp == "*")
+      {
+        if (n1 > max_value / n2)
+        {
+          throw std::overflow_error("Multiplication overflow!");
+        }
+        else if (n1 < min_value / n2)
+        {
+          throw std::underflow_error("Multiplication underflow!");
+        }
+        res = n1 * n2;
+      }
+      else if (temp == "/")
+      {
+        if (n2 == 0)
+        {
+          throw std::logic_error("Division by 0!");
+        }
+        res = n1 / n2;
+      }
+      else if (temp == "%")
+      {
+        if (n2 == 0)
+        {
+          throw std::logic_error("Division by 0!");
+        }
+        res = n1 % n2;
+        if (res < 0)
+        {
+          res += n2;
+        }
+      }
       operands.push(res);
     }
   }
@@ -154,28 +182,46 @@ int main(int argc, char * argv[])
     input_file.open(argv[1]);
     input = &input_file;
   }
+  else
+  {
+    std::cerr << "Too many arguments!\n";
+    return 1;
+  }
 
   Stack< std::string > process_stack;
   Queue< std::string > process_queue;
   Queue< std::string > result_queue;
-  Stack< int > operands;
-  Stack< int > results;
+  Stack< long long int > operands;
+  Stack< long long int > results;
   std::string line;
 
-  while (std::getline(*input, line))
+  try
   {
-    input_infix(line, process_queue);
-    topostfix(process_queue, result_queue);
-    calculate_postfix(result_queue, operands);
-    results.push(operands.top());
+    while (std::getline(*input, line))
+    {
+      if (!line.empty())
+      {
+        input_infix(line, process_queue);
+        topostfix(process_queue, result_queue);
+        calculate_postfix(result_queue, operands);
+        results.push(operands.top());
+      }
+    }
+  }
+  catch (std::exception & e)
+  {
+    std::cerr << e.what() << "\n";
+    return 1;
   }
 
-  std::cout << results.drop();
-  while (!results.empty())
+  if (!results.empty())
   {
-    std::cout << " " << results.drop();
+    std::cout << results.drop();
+    while (!results.empty())
+    {
+      std::cout << " " << results.drop();
+    }
+    std::cout << "\n";
   }
-  std::cout << "\n";
-
   return 0;
 }
