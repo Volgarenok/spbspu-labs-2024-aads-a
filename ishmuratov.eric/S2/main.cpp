@@ -164,6 +164,10 @@ void calculate_postfix(ishmuratov::Queue< std::string > & result_queue, ishmurat
       }
       operands.push(res);
     }
+    else
+    {
+      throw std::invalid_argument("Unexpected token!");
+    }
   }
 }
 
@@ -217,11 +221,11 @@ int main(int argc, char * argv[])
   if (!results.empty())
   {
     std::cout << results.drop();
-    while (!results.empty())
-    {
-      std::cout << " " << results.drop();
-    }
-    std::cout << "\n";
   }
+  while (!results.empty())
+  {
+    std::cout << " " << results.drop();
+  }
+  std::cout << "\n";
   return 0;
 }
