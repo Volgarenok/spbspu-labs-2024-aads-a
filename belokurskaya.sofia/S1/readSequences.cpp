@@ -4,7 +4,6 @@
 
 belokurskaya::SequenceVector belokurskaya::readSequences()
 {
-  using namespace belokurskaya;
   SequenceVector sequences;
   std::string name = "";
   int number = 0;
@@ -15,10 +14,14 @@ belokurskaya::SequenceVector belokurskaya::readSequences()
     while (std::cin >> number)
     {
       sequence.push_back(number);
-      if (std::cin.peek() == '\n' || std::cin.peek() == EOF)
+      if (std::cin.peek() == '\n')
       {
         break;
       }
+    }
+    if (!std::cin.eof())
+    {
+      std::cin.clear();
     }
     sequences.push_back({ name, sequence });
   }
