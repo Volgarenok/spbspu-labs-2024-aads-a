@@ -269,5 +269,87 @@ namespace piyavkin
       node_(node)
     {}
   };
+  template< class Key, class T, class Compare = std::less< Key > >
+  class ConstTreeReverseIterator: public std::iterator< std::bidirectional_iterator_tag, T >
+  {
+    using val_type = std::pair< Key, T >;
+    friend class Tree< Key, T, Compare >;
+  public:
+    ConstTreeReverseIterator():
+      node_(nullptr)
+    {}
+    ConstTreeReverseIterator(const ConstTreeReverseIterator< Key, T, Compare >&) = default;
+    ConstTreeReverseIterator< Key, T, Compare >& operator=(const ConstTreeReverseIterator< Key, T, Compare >&) = default;
+    ~ConstTreeReverseIterator() = default;
+    ConstTreeReverseIterator< Key, T, Compare >& operator--()
+    {
+      if (node_->right_)
+      {
+        node_ = node_->right_;
+        while (node_->left_)
+        {
+          node_ = node_->left_;
+        }
+        return *this;
+      }
+      while (node_->parent_ && node_->parent_->right_ == node_)
+      {
+        node_ = node_->parent_;
+      }
+      node_ = node_->parent_;
+      return *this;
+    }
+    ConstTreeReverseIterator< Key, T, Compare >& operator++()
+    {
+      if (node_->left_)
+      {
+        node_ = node_->left_;
+        while (node_->right_)
+        {
+          node_ = node_->right_;
+        }
+        return *this;
+      }
+      while (node_->parent_ && node_->parent_->left_ == node_)
+      {
+        node_ = node_->parent_;
+      }
+      node_ = node_->parent_;
+      return *this;
+    }
+    ConstTreeReverseIterator< Key, T, Compare > operator++(int)
+    {
+      ConstTreeReverseIterator< Key, T, Compare > result(*this);
+      ++(*this);
+      return result;
+    }
+    ConstTreeReverseIterator< Key, T, Compare > operator--(int)
+    {
+      ConstTreeReverseIterator< Key, T, Compare > result(*this);
+      --(*this);
+      return result;
+    }
+    bool operator==(const ConstTreeReverseIterator< Key, T, Compare >& rhs) const
+    {
+      return node_ == rhs.node_;
+    }
+    bool operator!=(const ConstTreeReverseIterator< Key, T, Compare >& rhs) const
+    {
+      return !(*this == rhs);
+    }
+    const val_type* operator->() const
+    {
+      return std::addressof(node_->val_type);
+    }
+    const val_type& operator*() const
+    {
+      return node_->val_type;
+    }
+  private:
+    detail::Node< Key, T >* node_;
+    explicit ConstTreeReverseIterator(detail::Node< Key, T >* node):
+      node_(node)
+    {}
+  };
 }
 #endif

@@ -43,4 +43,30 @@ int main()
   std::cout << (--tree3.end())->second;
   tree3.emplace_hint(tree3.end(), 6, 6);
   std::cout << (--tree3.end())->second;
+  piyavkin::Tree< int, int > tree4;
+  for (size_t i = 0; i < 100; ++i)
+  {
+    int val = std::rand() % 1000;
+    tree4.insert(std::pair< int, int >(val, val));
+  }
+  std::cout << '\n';
+  auto it4 = tree4.cbegin();
+  for (size_t i = 0; i < tree4.size(); ++i)
+  {
+    std::cout << ' ' << it4->second;
+    ++it4;
+  }
+  piyavkin::Tree< int, int > tree5;
+  for (size_t i = 0; i < 100; ++i)
+  {
+    int val = std::rand() % 1000;
+    tree5.insert(std::pair< int, int >(val, val));
+  }
+  std::cout << '\n';
+  auto it5 = tree5.rbegin();
+  for (size_t i = 0; i < tree5.size(); ++i)
+  {
+    ++it5;
+    std::cout << ' ' << it5->second;
+  }
 }
