@@ -3,6 +3,20 @@
 #include <string>
 #include <map>
 
+void print(std::ostream & out, const std::map< size_t, std::string > & map, const std::string & name)
+{
+  out << name;
+  auto begin = map.cbegin();
+  auto end = map.cend();
+  --end;
+  while (begin != end)
+  {
+    out << begin->first << " " << begin->second << " ";
+    ++begin;
+  }
+  out << begin->first << " " << begin->second << " ";
+}
+
 int main(int argc, char * argv[])
 {
   std::map< std::string, std::map< size_t, std::string > > myMap;
@@ -40,4 +54,5 @@ int main(int argc, char * argv[])
       std::cout << pair2.first << " " << pair2.second;
     }
   }
+  print(std::cout, myMap["first"], "first");
 }
