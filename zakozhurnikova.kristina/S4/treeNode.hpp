@@ -4,12 +4,12 @@
 
 namespace zakozhurnikova
 {
-namespace detail
+  namespace detail
   {
 	  template< typename Key, typename Value >
 	  struct TreeNode {
 
-	    std::pair<Key, Value> data;
+	    std::pair< Key, Value > data;
 	    TreeNode *leftChild;
 	    TreeNode *rightChild;
 	    TreeNode *parent;
@@ -64,7 +64,7 @@ namespace detail
 	    {
 	      return this->rightChild && this->leftChild;
 	    }
-	  };
+    };
   }
 }
 
