@@ -71,12 +71,15 @@ int main(int argc, char *argv[])
     return 1;
   }
 
-  std::cout << answQ.top();
-  answQ.pop();
+
   while (!answQ.empty())
   {
-    std::cout << " " << answQ.top();
+    std::cout << answQ.top();
     answQ.pop();
+    if (answQ.size() != 0)
+    {
+      std::cout << " ";
+    }
   }
   std::cout << "\n";
   return 0;
