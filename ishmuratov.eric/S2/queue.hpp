@@ -5,24 +5,10 @@
 
 namespace ishmuratov
 {
-  template< class T, class Container = List< T > >
+  template< class T >
   class Queue
   {
     public:
-      Queue():
-        c_(Container())
-      {}
-
-      Queue(const Queue & other):
-        c_(other.c_)
-      {}
-
-      Queue(Queue && other):
-        c_(std::move(other.c_))
-      {}
-
-      ~Queue() = default;
-
       void push(const T & rhs)
       {
         c_.pushFront(rhs);
@@ -56,7 +42,7 @@ namespace ishmuratov
       }
 
     private:
-      Container c_;
+      List< T > c_;
   };
 }
 
