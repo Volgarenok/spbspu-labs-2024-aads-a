@@ -24,7 +24,7 @@ namespace skuratov
     bool operator==(const ConstIterator< T >& different) const;
     bool operator!=(const ConstIterator< T >& different) const;
 
-    ConstIterator< T >& operator=(const ConstIterator< T >& different) = default;
+    ConstIterator< T >& operator=(const ConstIterator< T >& different);
     ConstIterator< T >& operator++();
     ConstIterator< T >& operator--();
     ConstIterator< T > operator++(int);
@@ -34,6 +34,68 @@ namespace skuratov
     Node< T >* node_;
     ConstIterator(Node< T >* node_);
   };
+
+  template< typename T >
+  ConstIterator< T >::ConstIterator()
+  {}
+
+  template< typename T >
+  ConstIterator< T >::ConstIterator(const ConstIterator< T >& different)
+  {}
+
+  template< typename T >
+  const T& ConstIterator< T >::operator*()
+  {
+    return;
+  }
+
+  template< typename T >
+  const T* ConstIterator< T >::operator->()
+  {
+    return nullptr;
+  }
+
+  template< typename T >
+  bool ConstIterator< T >::operator==(const ConstIterator< T >& different) const
+  {
+    return false;
+  }
+
+  template< typename T >
+  bool ConstIterator< T >::operator!=(const ConstIterator< T >& different) const
+  {
+    return false;
+  }
+
+  template< typename T >
+  ConstIterator< T >& ConstIterator< T >::operator=(const ConstIterator< T >& different)
+  {
+    return;
+  }
+
+  template< typename T >
+  ConstIterator< T >& ConstIterator< T >::operator++()
+  {
+    return;
+  }
+
+  template< typename T >
+  ConstIterator< T >& ConstIterator< T >::operator--()
+  {
+    return;
+  }
+
+  template< typename T >
+  ConstIterator< T > ConstIterator< T >::operator++(int)
+  {
+    return ConstIterator< T >();
+  }
+
+  template< typename T >
+  ConstIterator< T > ConstIterator< T >::operator--(int)
+  {
+    return ConstIterator< T >();
+  }
 }
 
 #endif

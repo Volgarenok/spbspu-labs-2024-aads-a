@@ -6,7 +6,7 @@
 
 void skuratov::inputOutput()
 {
-  std::vector<Sequence> sequences;
+  std::vector< Sequence > sequences;
   std::string line;
 
   while (std::getline(std::cin, line))
@@ -71,7 +71,7 @@ void skuratov::inputOutput()
     }
   }
 
-  std::vector<size_t> column_sums(maxSize, 0);
+  std::vector< size_t > column_sums(maxSize, 0);
 
   for (size_t i = 0; i < maxSize; ++i)
   {
@@ -80,7 +80,7 @@ void skuratov::inputOutput()
       const auto& numbers = seq.numbers();
       if (i < numbers.size())
       {
-        if (column_sums[i] <= std::numeric_limits<size_t>::max() - numbers[i])
+        if (column_sums[i] <= std::numeric_limits< size_t >::max() - numbers[i])
         {
           column_sums[i] += numbers[i];
         }

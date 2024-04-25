@@ -3,7 +3,6 @@
 
 #include <string>
 #include <vector>
-#include "list.hpp"
 
 namespace skuratov
 {
@@ -14,12 +13,12 @@ namespace skuratov
       name_(name)
     {}
     const std::string& name() const { return name_; }
-    std::vector<size_t>& numbers() { return numbers_; }
-    const std::vector<size_t>& numbers() const { return numbers_; }
+    std::vector< size_t >& numbers() { return numbers_; }
+    const std::vector< size_t >& numbers() const { return numbers_; }
 
   private:
     std::string name_;
-    std::vector<size_t> numbers_;
+    std::vector< size_t > numbers_;
   };
 }
 
