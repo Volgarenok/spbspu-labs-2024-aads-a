@@ -9,11 +9,7 @@ void isaychev::convertInfToPostf(Queue< std::string > & infExp, Queue< std::stri
   while (!infExp.empty())
   {
     s = infExp.front();
-    if (s == "")
-    {
-      postfExp.push(s);
-    }
-    else if (s == "(")
+    if (s == "(")
     {
       temp.push(s);
     }
@@ -43,6 +39,10 @@ void isaychev::convertInfToPostf(Queue< std::string > & infExp, Queue< std::stri
         temp.pop();
       }
       temp.push(s);
+    }
+    else
+    {
+      postfExp.push(s);
     }
     if (!infExp.empty())
     {

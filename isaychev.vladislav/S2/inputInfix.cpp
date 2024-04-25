@@ -1,6 +1,7 @@
 #include "inputInfix.hpp"
 #include <iostream>
 #include <cctype>
+#include <stdexcept>
 
 void isaychev::inputInfix(std::istream & in, Queue< std::string > & infExp)
 {
@@ -37,6 +38,10 @@ void isaychev::inputInfix(std::istream & in, Queue< std::string > & infExp)
         ++i;
       }
       infExp.push(token);
+    }
+    else
+    {
+      throw std::invalid_argument("wrong token");
     }
   }
 }

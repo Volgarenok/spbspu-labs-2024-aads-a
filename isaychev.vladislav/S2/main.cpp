@@ -13,14 +13,22 @@ int main(int argc, char * argv[])
   {
     while (!std::cin.eof())
     {
-      inputInfix(std::cin, infExp);
+      try
+      {
+        inputInfix(std::cin, infExp);
+      }
+      catch (const std::invalid_argument & e)
+      {
+        std::cerr << e.what() << "\n";
+        return 1;
+      }
     }
     std::cout << "done input\n";
-//    convertInfToPostf(infExp, postfExp);
-    while (!infExp.empty())
+    convertInfToPostf(infExp, postfExp);
+    while (!postfExp.empty())
     {
-      std::cout << infExp.front();
-      infExp.pop();
+      std::cout << postfExp.front();
+      postfExp.pop();
     }
     std::cout << '\n';
   }
