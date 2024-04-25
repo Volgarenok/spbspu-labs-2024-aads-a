@@ -99,9 +99,9 @@ namespace sivkov
   template< typename T >
   List< T >& List< T >::operator=(List< T >&& other) noexcept
   {
-    List< T > prev(std::move(other));
     if (std::addressof(other) != this)
     {
+       List< T > prev(std::move(other));
       swap(prev);
     }
     return *this;
