@@ -13,11 +13,17 @@ namespace gladyshev
     {
       return array_.empty();
     }
-    T drop()
+    T& back()
     {
-      T temp = array_.back();
+      return array_.back();
+    }
+    const T& back() const
+    {
+      return array_.back();
+    }
+    T pop()
+    {
       array_.pop_back();
-      return temp;
     }
     void push(const T& other)
     {
