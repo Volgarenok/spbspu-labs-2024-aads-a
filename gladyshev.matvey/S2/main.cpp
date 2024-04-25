@@ -58,12 +58,12 @@ int main(int argc, char* argv[])
   results.reverse();
   if (!results.empty())
   {
-    std::cout << results.top();
+    std::cout << results.back();
     results.pop();
   }
   while (!results.empty())
   {
-    std::cout << " " << results.top();
+    std::cout << " " << results.back();
     results.pop();
   }
   std::cout << "\n";
