@@ -21,7 +21,7 @@ namespace gladyshev
     {
       return array_.back();
     }
-    T pop()
+    void pop()
     {
       array_.pop_back();
     }
