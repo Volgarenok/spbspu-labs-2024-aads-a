@@ -39,6 +39,6 @@ int main()
 
   sums.reverse();
   outputSums(sums, std::cout);
-
+  std::cout << '\n';
   return 0;
 }
