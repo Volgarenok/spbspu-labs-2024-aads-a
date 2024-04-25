@@ -24,8 +24,8 @@ int main()
   }
   list.reverse();
 
-  outputNames(list);
-
+  outputNames(list, std::cout);
+  std::cout << '\n';
   List< size_t > sums;
   try
   {
@@ -38,7 +38,7 @@ int main()
   }
 
   sums.reverse();
-  outputSums(sums);
+  outputSums(sums, std::cout);
 
   return 0;
 }

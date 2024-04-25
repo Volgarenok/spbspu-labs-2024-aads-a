@@ -6,34 +6,28 @@
 #include <stdexcept>
 #include <list.hpp>
 
-void sivkov::outputNames(const List< std::pair< std::string, List< size_t > > >& list)
+void sivkov::outputNames(const List< std::pair< std::string, List< size_t > > >& list, std::ostream& out)
 {
   for (auto it = list.cbegin(); it != list.cend(); ++it)
   {
-    std::cout << it->first;
-    auto temp = it;
-    ++temp;
-    if (temp != list.cend())
+    if (it != list.cbegin())
     {
-      std::cout << " ";
+      out << ' ';
     }
+    out << it->first;
   }
-  std::cout << "\n";
 }
 
-void sivkov::outputSums(const List< size_t > &numbers)
+void sivkov::outputSums(const List< size_t >& numbers, std::ostream& out)
 {
   for (auto it = numbers.cbegin(); it != numbers.cend(); ++it)
   {
-    std::cout << *it;
-    auto temp = it;
-    ++temp;
-    if (temp != numbers.cend())
+    if (it != numbers.cbegin())
     {
-      std::cout << " ";
+      out << ' ';
     }
+    out << *it;
   }
-  std::cout << "\n";
 }
 
 void sivkov::input(std::istream& input, List< std::pair< std::string, List< size_t > > >& list)
