@@ -235,7 +235,10 @@ namespace sivkov
   template< typename T >
   void List< T >::assign(size_t count, const T& value)
   {
-    clear();
+    if (!empty())
+    {
+      clear();
+    }
     for (size_t i = 0; i < count; ++i)
     {
       push_back(value);
