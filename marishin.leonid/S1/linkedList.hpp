@@ -50,7 +50,7 @@ namespace marishin
       }
     }
 
-    LinkedList(LinkedList && other):
+    LinkedList(LinkedList && other) noexcept:
       head_(other.head_),
       tail_(other.tail_),
       size_(other.size_)
@@ -70,7 +70,7 @@ namespace marishin
       return *this;
     }
 
-    LinkedList & operator=(LinkedList && other)
+    LinkedList & operator=(LinkedList && other) noexcept
     {
       if (this != std::addressof(other))
       {
