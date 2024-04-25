@@ -5,7 +5,7 @@
 
 namespace gladyshev
 {
-  template < class T, class Container = DynArray< T > >
+  template < class T >
   class Stack
   {
   public:
@@ -30,7 +30,7 @@ namespace gladyshev
       array_.push_front(other);
     }
   private:
-    Container array_;
+    DynArray< T > array_;
   };
 }
 
