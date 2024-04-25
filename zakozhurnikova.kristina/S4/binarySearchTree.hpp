@@ -1,17 +1,19 @@
 #ifndef BINARYSEARCHTREE_HPP
 #define BINARYSEARCHTREE_HPP
-#include "treeNode.hpp"
 #include <algorithm>
 #include <cstddef>
-#include <iostream>
+#include <cstdlib>
 #include <functional>
+#include <iostream>
 #include "comparator.hpp"
 #include "constIterator.hpp"
+#include "treeNode.hpp"
 
 namespace zakozhurnikova
 {
-  template< typename Key, typename Value, typename Compare = std::less< Key > >
-  struct BinarySearchTree {
+  template < typename Key, typename Value, typename Compare = std::less< Key > >
+  struct BinarySearchTree
+  {
     using node = detail::TreeNode< Key, Value >;
     BinarySearchTree():
       root_(nullptr),
@@ -273,11 +275,67 @@ namespace zakozhurnikova
       }
     }
 
-    void remove(node *currentNode)
+    void updateRemoveBalance(node* balanceParent, const int& oldBal)
+    {
+      if (balanceParent->balanceFactor == 0)
+      {
+        if (!balanceParent->isRoot)
+        {
+          int bal = balanceParent->parent->balanceFactor;
+          if (balanceParent->isLeftChild())
+          {
+            --balanceParent->parent->balanceFactor;
+          }
+          else
+          {
+            ++balanceParent->parent->balanceFactor;
+          }
+          updateRemoveBalance(balanceParent->parent, bal);
+        }
+      }
+      else if (1 < balanceParent->balanceFactor || -1 > balanceParent->balanceFactor)
+      {
+        if (!balanceParent->isRoot())
+        {
+          node* grandParent = balanceParent->parent;
+          bool leftChild = balanceParent->isLeftChild();
+          rebalance(balanceParent);
+          if (leftChild)
+          {
+            int newBal = grandParent->leftChild->balanceFactor;
+          }
+          else
+          {
+            int newBal = grandParent->rightChild->balanceFactor;
+          }
+          if (std::abs(newBal) - std::abs(oldBal) != 0)
+          {
+            int balGrand = grandParent->balanceFactor;
+            if (leftChild)
+            {
+              --grandParent->balanceFactor;
+            }
+            else
+            {
+              ++grandParent->balanceFactor;
+            }
+            updateRemoveBalance(grandParent, balGrand);
+          }
+        }
+        else
+        {
+          rebalance(balanceParent);
+        }
+      }
+      return;
+    }
+
+    void remove(node* currentNode)
     {
       if (currentNode->isLeaf())
       {
-        if (currentNode == currentNode->parent->leftChild)
+        int oldBal = currentNode->parent.balanceFactor;
+        if (currentNode->isLeftChild())
         {
           currentNode->parent->leftChild = nullptr;
           --currentNode->parent.balanceFactor;
@@ -287,118 +345,140 @@ namespace zakozhurnikova
           currentNode->parent->rightChild = nullptr;
           ++currentNode->parent.balanceFactor;
         }
-      updateBalance(current->parent);
+        node* balanceParent = currentNode->parent;
+        delete currentNode;
+        updateRemoveBalance(balanceParent, oldBal);
       }
       else if (currentNode->hasBothChildren())
       {
-        TreeNode *succ = getLowest(currentNode->rightChild);
+        node* succ = getLowest(currentNode->rightChild);
+        node* parentRemove = succ->parent;
+        int oldBal = parentRemove->balanceFactor;
+        if (parentRemove->isLeftChild())
+        {
+          --parentRemove->balanceFactor;
+        }
+        else
+        {
+          ++parentRemove->balanceFactor;
+        }
         succ->spliceOut();
         currentNode->data.first = succ->data.first;
         currentNode->data.second = succ->data.second;
+        delete succ;
+        updateRemoveBalance(parentRemove);
       }
       else
       {
         if (currentNode->hasLeftChild())
         {
-            if (currentNode->isLeftChild()){
-                currentNode->leftChild->parent = currentNode->parent;
-                currentNode->parent->leftChild = currentNode->leftChild;
-            }
-            else if (currentNode->isRightChild()){
-                currentNode->leftChild->parent = currentNode->parent;
-                currentNode->parent->rightChild = currentNode->leftChild;
-            }
-            else{
-                currentNode->replaceNodeData(currentNode->leftChild->key,
-                                             currentNode->leftChild->payload,
-                                             currentNode->leftChild->leftChild,
-                                             currentNode->leftChild->rightChild);
-
-            }
+          if (currentNode->isLeftChild())
+          {
+            currentNode->leftChild->parent = currentNode->parent;
+            currentNode->parent->leftChild = currentNode->leftChild;
+          }
+          else if (currentNode->isRightChild())
+          {
+            currentNode->leftChild->parent = currentNode->parent;
+            currentNode->parent->rightChild = currentNode->leftChild;
+          }
+          int oldBal = currentNode->parent->balanceFactor;
+          --currentNode->parent->balanceFactor;
+          updateRemoveBalance(current->parent, oldBal);
+          else
+          {
+            root_ = currentNode->leftChild;
+            root_->parent = nullptr;
+          }
         }
-        else{
-            if (currentNode->isLeftChild()){
-                currentNode->rightChild->parent = currentNode->parent;
-                currentNode->parent->leftChild = currentNode->rightChild;
-            }
-            else if (currentNode->isRightChild()){
-                currentNode->rightChild->parent = currentNode->parent;
-                currentNode->parent->rightChild = currentNode->rightChild;
-            }
-            else{
-                currentNode->replaceNodeData(currentNode->rightChild->key,
-                                             currentNode->rightChild->payload,
-                                             currentNode->rightChild->leftChild,
-                                             currentNode->rightChild->rightChild);
-            }
+        else
+        {
+          if (currentNode->isLeftChild())
+          {
+            currentNode->rightChild->parent = currentNode->parent;
+            currentNode->parent->leftChild = currentNode->rightChild;
+          }
+          else if (currentNode->isRightChild())
+          {
+            currentNode->rightChild->parent = currentNode->parent;
+            currentNode->parent->rightChild = currentNode->rightChild;
+          }
+          int oldBal = currentNode->parent->balanceFactor;
+          ++currentNode->parent->balanceFactor;
+          updateRemoveBalance(current->parent, oldBal);
+          else
+          {
+            root_ = currentNode->rightChild;
+            root_->parent = nullptr;
+          }
+        delete currentNode;
         }
-       }
-    node* getLowest(node* prev) const
-    {
-      node* lowest = prev;
-      if (!lowest)
-      {
-        return nullptr;
-      }
-      while (lowest->leftChild != nullptr)
-      {
-        lowest = lowest->leftChild;
       }
 
-      return lowest;
-    }
-
-    node* getNext(node* prev) const
-    {
-      node* cur = prev;
-      while (cur->rightChild == nullptr || cur->data.first < prev->data.first)
+      node* getLowest(node * prev) const
       {
-        if (cur->parent == nullptr)
+        node* lowest = prev;
+        if (!lowest)
         {
           return nullptr;
         }
-        cur = cur->parent;
-        if (cur->data.first > prev->data.first)
+        while (lowest->leftChild != nullptr)
         {
-          return cur;
+          lowest = lowest->leftChild;
         }
+
+        return lowest;
       }
-      cur = cur->rightChild;
-      cur = getLowest(cur);
-      return cur;
-    }
 
-    ConstIterator< Key, Value, Compare > cbegin() noexcept
-    {
-      return ConstIterator< Key, Value, Compare >(getLowest(root_));
-    }
-    ConstIterator< Key, Value, Compare > cend() noexcept
-    {
-      return ConstIterator< Key, Value, Compare >();
-    }
-
-
-
-  private:
-    node* root_;
-    size_t size_;
-    Compare compare_;
-
-    void clear()
-    {
-      clear(root_);
-    }
-    void clear(node* node)
-    {
-      if (node != nullptr)
+      node* getNext(node * prev) const
       {
-        clear(node->leftChild);
-        clear(node->rightChild);
-        delete node;
+        node* cur = prev;
+        while (cur->rightChild == nullptr || cur->data.first < prev->data.first)
+        {
+          if (cur->parent == nullptr)
+          {
+            return nullptr;
+          }
+          cur = cur->parent;
+          if (cur->data.first > prev->data.first)
+          {
+            return cur;
+          }
+        }
+        cur = cur->rightChild;
+        cur = getLowest(cur);
+        return cur;
       }
-      root_ = nullptr;
-    }
-  };
-}
+
+      ConstIterator< Key, Value, Compare > cbegin() noexcept
+      {
+        return ConstIterator< Key, Value, Compare >(getLowest(root_));
+      }
+      ConstIterator< Key, Value, Compare > cend() noexcept
+      {
+        return ConstIterator< Key, Value, Compare >();
+      }
+
+    private:
+      node* root_;
+      size_t size_;
+      Compare compare_;
+
+      void clear()
+      {
+        clear(root_);
+      }
+      void clear(node * node)
+      {
+        if (node != nullptr)
+        {
+          clear(node->leftChild);
+          clear(node->rightChild);
+          delete node;
+        }
+        root_ = nullptr;
+      }
+    };
+  }
 
 #endif
