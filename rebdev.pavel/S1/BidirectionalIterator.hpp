@@ -71,7 +71,7 @@ namespace rebdev
 
     private:
       node * node_;
-      BidirectionalIterator(node * originalNode) noexcept:
+      explicit BidirectionalIterator(node * originalNode) noexcept:
         node_(originalNode)
       {}
   };

@@ -4,7 +4,6 @@
 namespace rebdev
 {
   template < class T >
-
   struct BiListNode
   {
     T data;
