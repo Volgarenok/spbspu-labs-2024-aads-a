@@ -1,15 +1,15 @@
 #ifndef OPERATOR_HPP
 #define OPERATOR_HPP
 
-#include "operand.hpp"
 #include <limits>
+#include "operand.hpp"
 
 namespace erohin
 {
   enum limit_t
   {
     MIN = std::numeric_limits< Operand::value_type >::min(),
-    MAX = std::numeric_limits< long long >::max()
+    MAX = std::numeric_limits< Operand::value_type >::max()
   };
 
   enum operator_t

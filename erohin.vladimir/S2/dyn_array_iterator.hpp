@@ -14,7 +14,7 @@ namespace erohin
   {
     friend class DynamicArray< T >;
   public:
-    using iterator_category = std::forward_iterator_tag;
+    using iterator_category = std::random_access_iterator_tag;
     using value_type = T;
     using difference_type = size_t;
     using pointer = T *;
@@ -46,7 +46,7 @@ namespace erohin
     bool operator>=(const DynArrayIterator< T > & rhs);
   private:
     T * ptr_;
-    DynArrayIterator(T * ptr);
+    explicit DynArrayIterator(T * ptr);
   };
 
   template< class T >

@@ -11,15 +11,11 @@ namespace erohin
   {
   public:
     Stack();
-    Stack(const Stack & stack);
-    Stack(Stack && stack);
     template< class InputIt >
     Stack(InputIt first, InputIt last);
     explicit Stack(const Container & cont);
     explicit Stack(Container && cont);
     ~Stack();
-    Stack & operator=(const Stack & other);
-    Stack & operator=(Stack && other) noexcept;
     T & top();
     const T & top() const;
     bool empty();
@@ -35,19 +31,7 @@ namespace erohin
   };
 
   template< class T, class Container >
-  Stack< T, Container >::Stack():
-    container_(Container())
-  {}
-
-  template< class T, class Container >
-  Stack< T, Container >::Stack(const Stack & stack):
-    container_(stack.container_)
-  {}
-
-  template< class T, class Container >
-  Stack< T, Container >::Stack(Stack && stack):
-    container_(std::move(stack.container_))
-  {}
+  Stack< T, Container >::Stack() = default;
 
   template< class T, class Container >
   template< class InputIt >
@@ -67,28 +51,6 @@ namespace erohin
 
   template< class T, class Container >
   Stack< T, Container >::~Stack() = default;
-
-  template< class T, class Container >
-  Stack< T, Container > & Stack< T, Container >::operator=(const Stack & other)
-  {
-    if (this != &other)
-    {
-      Stack< T, Container > temp(other);
-      swap(temp);
-    }
-    return *this;
-  }
-
-  template< class T, class Container >
-  Stack< T, Container > & Stack< T, Container >::operator=(Stack && other) noexcept
-  {
-    if (this != &other)
-    {
-      Stack< T, Container > temp(std::move(other));
-      swap(temp);
-    }
-    return *this;
-  }
 
   template< class T, class Container >
   T & Stack< T, Container >::top()

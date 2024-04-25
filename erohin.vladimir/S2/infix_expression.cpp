@@ -12,7 +12,7 @@ void erohin::inputInfixExpression(std::istream & input, expression_t & inf_expr)
   {
     return;
   }
-  char * string_token = strtok(const_cast< char * >(line.data()), " ");
+  char * string_token = std::strtok(const_cast< char * >(line.data()), " ");
   token_identifier_t temp_id = token_identifier_t::OPERAND_TYPE;
   token_t temp_token{ Operand() };
   bool isUnidentifiedTokenFound = false;
@@ -46,7 +46,7 @@ void erohin::inputInfixExpression(std::istream & input, expression_t & inf_expr)
       }
     }
     inf_expr.push(Token{ temp_id, temp_token });
-    string_token = strtok(nullptr, " ");
+    string_token = std::strtok(nullptr, " ");
   }
   if (isUnidentifiedTokenFound)
   {

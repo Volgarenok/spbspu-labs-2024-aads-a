@@ -11,15 +11,11 @@ namespace erohin
   {
   public:
     Queue();
-    Queue(const Queue & stack);
-    Queue(Queue && stack);
     template< class InputIt >
     Queue(InputIt first, InputIt last);
     explicit Queue(const Container & cont);
     explicit Queue(Container && cont);
     ~Queue();
-    Queue & operator=(const Queue & other);
-    Queue & operator=(Queue && other) noexcept;
     T & front();
     const T & front() const;
     T & back();
@@ -37,19 +33,8 @@ namespace erohin
   };
 
   template< class T, class Container >
-  Queue< T, Container >::Queue():
-    container_(Container())
-  {}
+  Queue< T, Container >::Queue() = default;
 
-  template< class T, class Container >
-  Queue< T, Container >::Queue(const Queue & queue):
-    container_(queue.container_)
-  {}
-
-  template< class T, class Container >
-  Queue< T, Container >::Queue(Queue && queue):
-    container_(std::move(queue.container_))
-  {}
 
   template< class T, class Container >
   template< class InputIt >
@@ -69,28 +54,6 @@ namespace erohin
 
   template< class T, class Container >
   Queue< T, Container >::~Queue() = default;
-
-  template< class T, class Container >
-  Queue< T, Container > & Queue< T, Container >::operator=(const Queue & other)
-  {
-    if (this != &other)
-    {
-      Queue< T, Container > temp(other);
-      swap(temp);
-    }
-    return *this;
-  }
-
-  template< class T, class Container >
-  Queue< T, Container > & Queue< T, Container >::operator=(Queue && other) noexcept
-  {
-    if (this != &other)
-    {
-      Queue< T, Container > temp(std::move(other));
-      swap(temp);
-    }
-    return *this;
-  }
 
   template< class T, class Container >
   T & Queue< T, Container >::front()

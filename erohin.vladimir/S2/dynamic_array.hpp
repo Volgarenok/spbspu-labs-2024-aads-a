@@ -70,7 +70,7 @@ namespace erohin
     {
       for (size_t i = 0; i < size_; ++i)
       {
-        new (data_ + i) T(other.data_[i + begin_index_]);
+        new (data_ + i) T(other[i + begin_index_]);
       }
     }
     catch (...)
@@ -133,7 +133,7 @@ namespace erohin
   template< class T >
   DynamicArray< T > & DynamicArray< T >::operator=(const DynamicArray & other)
   {
-    if (this != &other)
+    if (this != std::addressof(other))
     {
       DynamicArray< T > temp(other);
       swap(temp);
@@ -144,7 +144,7 @@ namespace erohin
   template< class T >
   DynamicArray< T > & DynamicArray< T >::operator=(DynamicArray && other) noexcept
   {
-    if (this != &other)
+    if (this != std::addressof(other))
     {
       DynamicArray< T > temp(std::move(other));
       swap(temp);
