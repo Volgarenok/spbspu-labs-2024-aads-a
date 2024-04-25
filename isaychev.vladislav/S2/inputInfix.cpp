@@ -2,36 +2,41 @@
 #include <iostream>
 #include <cctype>
 
-void isaychev::inputInfix(std::istream & in, Queue< char > & infExp)
+void isaychev::inputInfix(std::istream & in, Queue< std::string > & infExp)
 {
-  in >> std::noskipws;
-  char c = 0;
-  while (in >> c)
+  std::string str = "";
+  std::getline(in, str, '\n');
+  for (auto i = str.begin(); i != str.end(); ++i)
   {
-    if (c == ' ')
+    std::string token = "";
+    if (*i == ' ')
     {
       continue;
     }
-    else if (c == '(' || c == ')')
+    else if (*i == '(' || *i == ')')
     {
-      infExp.push(c);
+      token += *i;
+      infExp.push(token);
     }
-    else if (c == '+' || c == '-')
+    else if (*i == '+' || *i == '-')
     {
-      infExp.push(c);
+      token += *i;
+      infExp.push(token);
     }
-    else if (c == '/' || c == '*' || c == '%')
+    else if (*i == '/' || *i == '*' || *i == '%')
     {
-      infExp.push(c);
+      token += *i;
+      infExp.push(token);
     }
-    else if (std::isdigit(c))
+    else if (std::isdigit(*i))
     {
-      infExp.push(c);
-    }
-    else if (c == '\n')
-    {
-      break;
+      token += *(i++);
+      while (*i != ' ' && std::isdigit(*i) && i != str.end())
+      {
+        token += *i;
+        ++i;
+      }
+      infExp.push(token);
     }
   }
-  in >> std::skipws;
 }

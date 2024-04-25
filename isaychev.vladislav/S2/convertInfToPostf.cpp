@@ -2,47 +2,47 @@
 #include <cctype>
 #include <iostream>
 
-void isaychev::convertInfToPostf(Queue< char > & infExp, Queue< char > & postfExp)
+void isaychev::convertInfToPostf(Queue< std::string > & infExp, Queue< std::string > & postfExp)
 {
-  Stack< char > temp;
-  char c = 0;
+  Stack< std::string > temp;
+  std::string s = "";
   while (!infExp.empty())
   {
-    c = infExp.front();
-    if (std::isdigit(c))
+    s = infExp.front();
+    if (s == "")
     {
-      postfExp.push(c);
+      postfExp.push(s);
     }
-    else if (c == '(')
+    else if (s == "(")
     {
-      temp.push(c);
+      temp.push(s);
     }
-    else if (c == ')')
+    else if (s == ")")
     {
-      while (temp.top() != '(')
+      while (temp.top() != "(")
       {
         postfExp.push(temp.top());
         temp.pop();
       }
       temp.pop();
     }
-    else if (c == '/' || c == '%' || c == '*')
+    else if (s == "/" || s == "%" || s == "*")
     {
-      if (!temp.empty() && temp.top() != '(')
+      if (!temp.empty() && temp.top() != "(")
       {
         postfExp.push(temp.top());
         temp.pop();
       }
-      temp.push(c);
+      temp.push(s);
     }
-    else if (c == '+' || c == '-')
+    else if (s == "+" || s == "-")
     {
-      while (temp.top() != '/' && temp.top() != '%' && temp.top() != '*' && temp.top() != '(')
+      while (temp.top() != "/" && temp.top() != "%" && temp.top() != "*" && temp.top() != "(")
       {
         postfExp.push(temp.top());
         temp.pop();
       }
-      temp.push(c);
+      temp.push(s);
     }
     if (!infExp.empty())
     {

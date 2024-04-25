@@ -7,8 +7,8 @@
 int main(int argc, char * argv[])
 {
   using namespace isaychev;
-  Queue< char > infExp;
-  Queue< char > postfExp;
+  Queue< std::string > infExp;
+  Queue< std::string > postfExp;
   if (argc == 1)
   {
     while (!std::cin.eof())
@@ -16,11 +16,11 @@ int main(int argc, char * argv[])
       inputInfix(std::cin, infExp);
     }
     std::cout << "done input\n";
-    convertInfToPostf(infExp, postfExp);
-    while (!postfExp.empty())
+//    convertInfToPostf(infExp, postfExp);
+    while (!infExp.empty())
     {
-      std::cout << postfExp.front();
-      postfExp.pop();
+      std::cout << infExp.front();
+      infExp.pop();
     }
     std::cout << '\n';
   }
