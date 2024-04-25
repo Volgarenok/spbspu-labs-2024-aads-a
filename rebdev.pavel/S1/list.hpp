@@ -33,7 +33,7 @@ namespace rebdev
       }
       BiList(size_t n):
         BiList(n, T{})
-      {};
+      {}
       BiList(const BiList & list):
         headNode_(new node{T{}, nullptr, nullptr}),
         tailNode_(nullptr),
@@ -196,18 +196,11 @@ namespace rebdev
       }
       void push_front(const T & val)
       {
-        push_front(std::move(val));
+        push_front(new node{val, nullptr, headNode_});
       }
       void push_front(T && val)
       {
-        if (headNode_ == nullptr)
-        {
-          *this = BiList();
-        }
-        node * newNode = new node{std::move(val), nullptr, headNode_};
-        headNode_->last = newNode;
-        headNode_ = newNode;
-        ++size_;
+        push_front(new node{std::move(val), nullptr, headNode_});
       }
       void pop_front()
       {
@@ -218,25 +211,11 @@ namespace rebdev
       }
       void push_back(const T & val)
       {
-        push_back(std::move(val));
+        push_back(new node{val, tailNode_->last, tailNode_});
       }
       void push_back(T && val)
       {
-        if (tailNode_ == nullptr)
-        {
-          *this = BiList();
-        }
-        node * newNode = new node{std::move(val), tailNode_->last, tailNode_};
-        if ((tailNode_->last) != nullptr)
-        {
-          tailNode_->last->next = newNode;
-        }
-        else
-        {
-          headNode_ = newNode;
-        }
-        tailNode_->last = newNode;
-        ++size_;
+        push_back(new node{std::move(val), tailNode_->last, tailNode_});
       }
       void pop_back()
       {
@@ -302,6 +281,34 @@ namespace rebdev
       node * headNode_;
       node * tailNode_;
       size_t size_;
+
+      void push_back(node * n)
+      {
+        if (tailNode_ == nullptr)
+        {
+          *this = BiList();
+        }
+        if ((tailNode_->last) != nullptr)
+        {
+          tailNode_->last->next = n;
+        }
+        else
+        {
+          headNode_ = n;
+        }
+        tailNode_->last = n;
+        ++size_;
+      }
+      void push_front(node * n)
+      {
+        if (headNode_ == nullptr)
+        {
+          *this = BiList();
+        }
+        headNode_->last = n;
+        headNode_ = n;
+        ++size_;
+      }
   };
 }
 
