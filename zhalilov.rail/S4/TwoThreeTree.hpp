@@ -15,7 +15,7 @@ namespace zhalilov
   public:
     using MapPair = std::pair < Key, T >;
     using iterator = TwoThreeIterator < MapPair >;
-    using const_iterator = TwoThreeIterator < MapPair >;
+    using const_iterator = ConstTwoThreeIterator < MapPair >;
 
     TwoThree();
 
