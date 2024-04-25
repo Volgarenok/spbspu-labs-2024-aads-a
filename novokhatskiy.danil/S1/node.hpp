@@ -25,16 +25,17 @@ namespace novokhatskiy
                                                   next_(next)
       {
       }
-      void freeNode(Node *other) noexcept
-      {
-        while (other)
-        {
-          Node *tmp = other->next_;
-          delete other;
-          other = tmp;
-        }
-      }
     };
+    template <typename T>
+    void freeNode(Node<T> *other) noexcept
+    {
+      while (other)
+      {
+        Node<T> *tmp = other->next_;
+        delete other;
+        other = tmp;
+      }
+    }
   }
 }
 #endif
