@@ -32,6 +32,11 @@ namespace zaitsev
     {
       container.push_front(std::move(value));
     }
+    template< class... Args >
+    void emplace(Args&&... args)
+    {
+      container.emplace_front(std::forward< Args >(args)...);
+    }
     void pop()
     {
       container.pop_front();

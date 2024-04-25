@@ -50,8 +50,8 @@ long long zaitsev::safeMod(long long a, long long b)
 long long zaitsev::safeMult(long long a, long long b)
 {
   using ll = long long;
-  ll max_val = std::numeric_limits< ll >::max();
-  ll min_val = std::numeric_limits< ll >::lowest();
+  constexpr ll max_val = std::numeric_limits< ll >::max();
+  constexpr ll min_val = std::numeric_limits< ll >::lowest();
   if ((a < 0 && b == min_val) || (a == min_val && b < 0))
   {
     throw std::runtime_error("Multiplication overflow");

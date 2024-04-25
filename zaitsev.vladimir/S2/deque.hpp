@@ -60,8 +60,36 @@ namespace zaitsev
     }
     ~PseudoDeque() = default;
 
+    template< class... Args >
+    void emplace_front(Args&&... args)
+    {
+      list_.emplace_front(std::forward< Args >(args)...);
+      if (!size_)
+      {
+        tail_ = list_.cbegin();
+      }
+      ++size_;
+    }
+    void push_front(const T& value)
+    {
+      emplace_front(value);
+    }
+    void push_front(T&& value)
+    {
+      emplace_front(std::move(value));
+    }
+    void pop_front()
+    {
+      list_.pop_front();
+      --size_;
+      if (size_ == 0)
+      {
+        tail_ = list_.end();
+      }
+    }
+
     template< class ... Args >
-    void push_back(Args&&... args)
+    void emplace_back(Args&&... args)
     {
       if (!size_)
       {
@@ -75,25 +103,15 @@ namespace zaitsev
       }
       ++size_;
     }
-    template< class... Args >
-    void push_front(Args&&... args)
+    void push_back(const T& value)
     {
-      list_.emplace_front(std::forward< Args >(args)...);
-      if (!size_)
-      {
-        tail_ = list_.cbegin();
-      }
-      ++size_;
+      emplace_back(value);
     }
-    void pop_front()
+    void push_back(T&& value)
     {
-      list_.pop_front();
-      --size_;
-      if (size_ == 0)
-      {
-        tail_ = list_.end();
-      }
+      emplace_back(std::move(value));
     }
+
     void clear()
     {
       list_.clear();

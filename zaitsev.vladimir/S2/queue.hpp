@@ -32,6 +32,11 @@ namespace zaitsev
     {
       return container.size();
     }
+    template< class... Args >
+    void emplace(Args&&... args)
+    {
+      container.emplace_back(std::forward< Args >(args)...);
+    }
     void push(const T& value)
     {
       container.push_back(value);
