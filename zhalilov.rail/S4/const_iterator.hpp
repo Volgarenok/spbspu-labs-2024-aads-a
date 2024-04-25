@@ -1,3 +1,6 @@
+#ifndef CONST_ITERATOR_HPP
+#define CONST_ITERATOR_HPP
+
 #ifndef ITERATOR_HPP
 #define ITERATOR_HPP
 
@@ -11,25 +14,23 @@ namespace zhalilov
   class TwoThreeTree < Key, T, Compare >;
 
   template < class T >
-  class TwoThreeIterator: public std::iterator < std::bidirectional_iterator_tag, T >
+  class ConstTwoThreeIterator: public std::iterator < std::bidirectional_iterator_tag, const T >
   {
   public:
-    ~TwoThreeIterator() = default;
+    ~ConstTwoThreeIterator() = default;
 
-    TwoThreeIterator &operator=(const TwoThreeIterator &) = default;
+    ConstTwoThreeIterator &operator=(const ConstTwoThreeIterator &) = default;
 
-    TwoThreeIterator &operator++();
-    TwoThreeIterator &operator--();
-    TwoThreeIterator operator++(int);
-    TwoThreeIterator operator--(int);
+    ConstTwoThreeIterator &operator++();
+    ConstTwoThreeIterator &operator--();
+    ConstTwoThreeIterator operator++(int);
+    ConstTwoThreeIterator operator--(int);
 
-    T &operator*();
-    T *operator->();
     const T &operator*() const;
     const T *operator->() const;
 
-    bool operator==(const TwoThreeIterator < T > &) const;
-    bool operator!=(const TwoThreeIterator < T > &) const;
+    bool operator==(const ConstTwoThreeIterator < T > &) const;
+    bool operator!=(const ConstTwoThreeIterator < T > &) const;
 
     template < class Key, class T, class Compare >
     friend TwoThreeTree < Key, T, Compare >;
@@ -38,13 +39,13 @@ namespace zhalilov
     detail::Node < T > node_;
     bool isPtrToLeft_;
 
-    explicit TwoThreeIterator(detail::Node < T > *node, bool isPtrToLeft = true);
+    explicit ConstTwoThreeIterator(detail::Node < T > *node, bool isPtrToLeft = true);
     detail::Node < T > *findMin(const detail::Node < T > *);
     detail::Node < T > *findMax(const detail::Node < T > *);
   };
 
   template < class T >
-  TwoThreeIterator < T > &TwoThreeIterator < T >::operator++()
+  ConstTwoThreeIterator < T > &ConstTwoThreeIterator < T >::operator++()
   {
     if (node_.type == detail::NodeType::Three)
     {
@@ -76,7 +77,7 @@ namespace zhalilov
   }
 
   template < class T >
-  TwoThreeIterator < T > &TwoThreeIterator < T >::operator--()
+  ConstTwoThreeIterator < T > &ConstTwoThreeIterator < T >::operator--()
   {
     if (node_.type == detail::NodeType::Three)
     {
@@ -108,23 +109,23 @@ namespace zhalilov
   }
 
   template < class T >
-  TwoThreeIterator < T > TwoThreeIterator < T >::operator++(int)
+  ConstTwoThreeIterator < T > ConstTwoThreeIterator < T >::operator++(int)
   {
-    TwoThreeIterator temp(*this);
+    ConstTwoThreeIterator temp(*this);
     operator++();
     return temp;
   }
 
   template < class T >
-  TwoThreeIterator < T > TwoThreeIterator < T >::operator--(int)
+  ConstTwoThreeIterator < T > ConstTwoThreeIterator < T >::operator--(int)
   {
-    TwoThreeIterator temp(*this);
+    ConstTwoThreeIterator temp(*this);
     operator--();
     return temp;
   }
 
   template < class T >
-  T &TwoThreeIterator < T >::operator*()
+  T &ConstTwoThreeIterator < T >::operator*()
   {
     if (node_.type == detail::NodeType::Three)
     {
@@ -137,7 +138,7 @@ namespace zhalilov
   }
 
   template < class T >
-  T *TwoThreeIterator < T >::operator->()
+  T *ConstTwoThreeIterator < T >::operator->()
   {
     if (node_.type == detail::NodeType::Three)
     {
@@ -150,19 +151,19 @@ namespace zhalilov
   }
 
   template < class T >
-  const T &TwoThreeIterator < T >::operator*() const
+  const T &ConstTwoThreeIterator < T >::operator*() const
   {
     return operator*();
   }
 
   template < class T >
-  const T *TwoThreeIterator < T >::operator->() const
+  const T *ConstTwoThreeIterator < T >::operator->() const
   {
     return operator->();
   }
 
   template < class T >
-  bool TwoThreeIterator < T >::operator==(const TwoThreeIterator < T > &ait) const
+  bool ConstTwoThreeIterator < T >::operator==(const ConstTwoThreeIterator < T > &ait) const
   {
     bool isEqualValue = true;
     if (node_.type == detail::NodeType::Three)
@@ -173,19 +174,19 @@ namespace zhalilov
   }
 
   template < class T >
-  bool TwoThreeIterator < T >::operator!=(const TwoThreeIterator < T > &ait) const
+  bool ConstTwoThreeIterator < T >::operator!=(const ConstTwoThreeIterator < T > &ait) const
   {
     return !operator==(ait);
   }
 
   template < class T >
-  TwoThreeIterator < T >::TwoThreeIterator(detail::Node < T > *node, bool isPtrToLeft):
+  ConstTwoThreeIterator < T >::ConstTwoThreeIterator(detail::Node < T > *node, bool isPtrToLeft):
     node_(node),
     isPtrToLeft_(isPtrToLeft)
   {}
 
   template < class T >
-  detail::Node < T > *TwoThreeIterator < T >::findMin(const detail::Node < T > *nodeFrom)
+  detail::Node < T > *ConstTwoThreeIterator < T >::findMin(const detail::Node < T > *nodeFrom)
   {
     detail::Node < T > *minNode = nodeFrom;
     while (minNode->childs[0])
@@ -196,7 +197,7 @@ namespace zhalilov
   }
 
   template < class T >
-  detail::Node < T > *TwoThreeIterator < T >::findMax(const detail::Node < T > *nodeFrom)
+  detail::Node < T > *ConstTwoThreeIterator < T >::findMax(const detail::Node < T > *nodeFrom)
   {
     detail::Node < T > *maxNode = nodeFrom;
     while (maxNode->childs[2])
@@ -206,5 +207,7 @@ namespace zhalilov
     return maxNode;
   }
 }
+
+#endif
 
 #endif
