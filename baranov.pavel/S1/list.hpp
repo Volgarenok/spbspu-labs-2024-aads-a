@@ -11,12 +11,14 @@ namespace baranov
   {
     public:
       List();
-      List(const List &);
+      List(const List & rhs);
+      List(const List && rhs) noexcept;
+      List(size_t count, const T & data);
       ~List();
       Iterator< T > begin();
       Iterator< T > end();
       bool empty() const;
-      size_t size();
+      size_t size() const;
       void push_back(T data);
       void pop_back();
       void push_front(T data);
@@ -38,16 +40,39 @@ namespace baranov
   {}
 
   template< class T >
-  List< T >::List(const List & other):
+  List< T >::List(const List & rhs):
     head_(nullptr),
     tail_(nullptr),
     size_(0)
   {
-    Node< T > * current = other.head_;
+    Node< T > * current = rhs.head_;
     while (current)
     {
       push_back(current->data_);
       current = current->next_;
+    }
+  }
+
+  template< class T >
+  List< T >::List(const List && rhs) noexcept:
+    head_(rhs.head_),
+    tail_(rhs.tail_),
+    size_(rhs.size_)
+  {
+    rhs.head_ = nullptr;
+    rhs.tail_ = nullptr;
+    rhs.size_ = nullptr;
+  }
+
+  template< class T >
+  List< T >::List(size_t count, const T & data):
+    head_(nullptr),
+    tail_(nullptr),
+    size_(0)
+  {
+    for (size_t i = 0; i < count; ++i)
+    {
+      push_front(data);
     }
   }
 
@@ -76,7 +101,7 @@ namespace baranov
       imagNode->prev_ = tail_;
       tail_->next_ = imagNode;
     }
-    return tail_->next_;
+    return Iterator< T >(tail_->next_);
   }
 
   template< class T >
@@ -86,7 +111,7 @@ namespace baranov
   }
 
   template< class T >
-  size_t List< T >::size()
+  size_t List< T >::size() const
   {
     return size_;
   }

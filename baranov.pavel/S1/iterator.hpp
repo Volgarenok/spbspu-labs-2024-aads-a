@@ -8,13 +8,13 @@
 namespace baranov
 {
   template< class T >
-  class Iterator
+  class Iterator: public std::iterator < std::bidirectional_iterator_tag, T >
   {
     public:
       using this_t = Iterator< T >;
 
       Iterator();
-      Iterator(Node< T > * node);
+      explicit Iterator(Node< T > * node);
       ~Iterator() = default;
       Iterator(const this_t &) = default;
       this_t & operator=(const this_t &) = default;
