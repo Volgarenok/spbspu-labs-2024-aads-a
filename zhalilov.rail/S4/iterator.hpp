@@ -31,8 +31,8 @@ namespace zhalilov
     bool operator==(const TwoThreeIterator < T > &) const;
     bool operator!=(const TwoThreeIterator < T > &) const;
 
-    template < class Key, class T, class Compare >
-    friend TwoThreeTree < Key, T, Compare >;
+    template < class Key, class Value, class Compare >
+    friend TwoThreeTree < Key, Value, Compare >;
 
   private:
     detail::Node < T > node_;
