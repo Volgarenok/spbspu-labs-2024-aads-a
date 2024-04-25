@@ -179,9 +179,9 @@ namespace rebdev
       }
       void swap(BiList & x) noexcept
       {
-        std::swap< node< T > >(headNode_, x.headNode_);
-        std::swap< node< T > >(tailNode_, x.tailNode_);
-        std::swap< size_t >(size__, x.size_);
+        std::swap< node >(headNode_, x.headNode_);
+        std::swap< node >(tailNode_, x.tailNode_);
+        std::swap< size_t >(size_, x.size_);
       }
       void clear() noexcept
       {
