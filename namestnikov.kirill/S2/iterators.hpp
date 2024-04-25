@@ -79,4 +79,5 @@ namespace namestnikov
     {}
   };
 }
+
 #endif
