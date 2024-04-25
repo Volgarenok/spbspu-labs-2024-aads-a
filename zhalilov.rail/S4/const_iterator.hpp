@@ -1,9 +1,6 @@
 #ifndef CONST_ITERATOR_HPP
 #define CONST_ITERATOR_HPP
 
-#ifndef ITERATOR_HPP
-#define ITERATOR_HPP
-
 #include <iterator>
 
 #include "node.hpp"
@@ -195,7 +192,5 @@ namespace zhalilov
     return maxNode;
   }
 }
-
-#endif
 
 #endif
