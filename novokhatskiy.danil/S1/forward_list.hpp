@@ -449,7 +449,7 @@ namespace novokhatskiy
       }
       catch (...)
       {
-        freeNode(new_head);
+        novokhatskiy::detail::Node::freeNode(new_head);
         throw;
       }
       return new_head;
@@ -468,7 +468,7 @@ namespace novokhatskiy
       }
       catch (...)
       {
-        freeNode(new_node);
+        novokhatskiy::detail::Node::freeNode(new_node);
         throw;
       }
       return new_node;
