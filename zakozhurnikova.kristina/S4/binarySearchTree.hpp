@@ -49,17 +49,17 @@ namespace zakozhurnikova
       return this->size_;
     }
 
-//    void swap(BinarySearchTree< Key, Value, Compare >& other)
-//    {
-//      std::swap(root_, other.root_);
-//      std::swap(size_, other.size_);
-//      std::swap(compare_, other.compare_);
-//    }
+    void swap(BinarySearchTree< Key, Value, Compare >& other)
+    {
+      std::swap(root_, other.root_);
+      std::swap(size_, other.size_);
+      std::swap(compare_, other.compare_);
+    }
 
-//    bool empty() const noexcept
-//    {
-//      return size_ == 0;
-//    }
+    bool empty() const noexcept
+    {
+      return size_ == 0;
+    }
 
     void push(Key key, Value val)
     {
@@ -184,7 +184,7 @@ namespace zakozhurnikova
       newRoot->balanceFactor = newRoot->balanceFactor + 1 + std::max(rotRoot->balanceFactor, 0);
     }
 
-    void rotateRight(node *rotRoot)
+    void rotateRight(node* rotRoot)
     {
       node* newRoot = rotRoot->leftChild;
       rotRoot->leftChild = newRoot->rightChild;
@@ -273,6 +273,66 @@ namespace zakozhurnikova
       }
     }
 
+    void remove(node *currentNode)
+    {
+      if (currentNode->isLeaf())
+      {
+        if (currentNode == currentNode->parent->leftChild)
+        {
+          currentNode->parent->leftChild = nullptr;
+          --currentNode->parent.balanceFactor;
+        }
+        else
+        {
+          currentNode->parent->rightChild = nullptr;
+          ++currentNode->parent.balanceFactor;
+        }
+      updateBalance(current->parent);
+      }
+      else if (currentNode->hasBothChildren())
+      {
+        TreeNode *succ = getLowest(currentNode->rightChild);
+        succ->spliceOut();
+        currentNode->data.first = succ->data.first;
+        currentNode->data.second = succ->data.second;
+      }
+      else
+      {
+        if (currentNode->hasLeftChild())
+        {
+            if (currentNode->isLeftChild()){
+                currentNode->leftChild->parent = currentNode->parent;
+                currentNode->parent->leftChild = currentNode->leftChild;
+            }
+            else if (currentNode->isRightChild()){
+                currentNode->leftChild->parent = currentNode->parent;
+                currentNode->parent->rightChild = currentNode->leftChild;
+            }
+            else{
+                currentNode->replaceNodeData(currentNode->leftChild->key,
+                                             currentNode->leftChild->payload,
+                                             currentNode->leftChild->leftChild,
+                                             currentNode->leftChild->rightChild);
+
+            }
+        }
+        else{
+            if (currentNode->isLeftChild()){
+                currentNode->rightChild->parent = currentNode->parent;
+                currentNode->parent->leftChild = currentNode->rightChild;
+            }
+            else if (currentNode->isRightChild()){
+                currentNode->rightChild->parent = currentNode->parent;
+                currentNode->parent->rightChild = currentNode->rightChild;
+            }
+            else{
+                currentNode->replaceNodeData(currentNode->rightChild->key,
+                                             currentNode->rightChild->payload,
+                                             currentNode->rightChild->leftChild,
+                                             currentNode->rightChild->rightChild);
+            }
+        }
+       }
     node* getLowest(node* prev) const
     {
       node* lowest = prev;
@@ -293,7 +353,7 @@ namespace zakozhurnikova
       node* cur = prev;
       while (cur->rightChild == nullptr || cur->data.first < prev->data.first)
       {
-        if (cur->parent == nullptr && (cur->rightChild == nullptr || cur->data.first < prev->data.first))
+        if (cur->parent == nullptr)
         {
           return nullptr;
         }
