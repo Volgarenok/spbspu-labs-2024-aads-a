@@ -21,11 +21,9 @@ namespace gladyshev
     {
       return array_.empty();
     }
-    T drop()
+    void pop()
     {
-      T temp = array_.front();
       array_.pop_front();
-      return temp;
     }
     void push(const T& other)
     {
