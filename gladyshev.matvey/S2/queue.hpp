@@ -9,15 +9,6 @@ namespace gladyshev
   class Queue
   {
   public:
-    Queue():
-      array_(Container())
-    {}
-    Queue(const Queue& other):
-      array_(other.array_)
-    {}
-    Queue(Queue&& other) noexcept:
-      array_(std::move(other.array_))
-    {}
     bool empty() const noexcept
     {
       return array_.empty();
