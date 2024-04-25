@@ -37,6 +37,12 @@ namespace zhalilov
     detail::Node < MapPair > *head_;
     size_t size_;
   };
+
+  template < class Key, class T, class Compare >
+  TwoThree < Key, T, Compare >::TwoThree():
+    head_(nullptr),
+    size_(0)
+  {}
 }
 
 #endif
