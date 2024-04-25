@@ -79,7 +79,7 @@ namespace rebdev
         size_t sizeCopy = size_;
         try
         {
-          BiList(list);
+          BiList(*list);
         }
         catch (...)
         {
