@@ -235,14 +235,12 @@ namespace sivkov
   template< typename T >
   void List< T >::assign(size_t count, const T& value)
   {
-    if (!empty())
-    {
-      clear();
-    }
+    List< T > assignList;
     for (size_t i = 0; i < count; ++i)
     {
-      push_back(value);
+      assignList.push_back(value);
     }
+    swap(assignList)
   }
 
   template< typename T >
