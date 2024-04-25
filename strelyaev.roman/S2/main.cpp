@@ -24,8 +24,8 @@ int main(int argc, char** argv)
   }
   while (!in.eof())
   {
-    Queue< detail::ExpressionUnit > infix_queue = parseString(in);
-    Queue< detail::ExpressionUnit > post_fix = makePostfix(infix_queue);
+    Queue< ExpressionUnit > infix_queue = parseString(in);
+    Queue< ExpressionUnit > post_fix = makePostfix(infix_queue);
     long long result = 0;
     try
     {

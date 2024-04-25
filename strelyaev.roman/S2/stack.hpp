@@ -8,10 +8,6 @@ namespace strelyaev
   class Stack
   {
     public:
-      Stack() = default;
-      Stack(const Stack< T >&) = default;
-      Stack(Stack< T >&&);
-      ~Stack() = default;
 
       void push(const T&);
       T& back();
@@ -21,22 +17,9 @@ namespace strelyaev
       bool empty();
       void pop_back();
 
-      Stack< T >& operator=(const Stack< T >&) = default;
-      Stack< T >& operator=(Stack< T >&&);
     private:
-      strelyaev::List< T > data;
+      List< T > data;
   };
-
-  template< typename T >
-  Stack< T >::Stack(Stack< T >&& other):
-    data(std::move(other.data))
-  {}
-
-  template< typename T >
-  Stack< T >& Stack< T >::operator=(Stack< T >&& other)
-  {
-    data = other.data;
-  }
 
   template< typename T >
   void Stack< T >::push(const T& value)

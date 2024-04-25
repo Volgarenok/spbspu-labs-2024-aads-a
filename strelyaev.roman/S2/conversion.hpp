@@ -5,10 +5,10 @@
 #include "token.hpp"
 namespace strelyaev
 {
-  strelyaev::detail::ExpressionUnit convertStringToUnit(std::string);
-  strelyaev::Queue< strelyaev::detail::ExpressionUnit > parseString(std::istream&);
-  Queue< detail::ExpressionUnit > makePostfix(Queue< detail::ExpressionUnit >&);
-  long long calculatePostfix(strelyaev::Queue< strelyaev::detail::ExpressionUnit >&);
+  strelyaev::ExpressionUnit convertStringToUnit(std::string);
+  strelyaev::Queue< strelyaev::ExpressionUnit > parseString(std::istream&);
+  Queue< ExpressionUnit > makePostfix(Queue< ExpressionUnit >&);
+  long long calculatePostfix(strelyaev::Queue< strelyaev::ExpressionUnit >&);
 }
 #endif
 

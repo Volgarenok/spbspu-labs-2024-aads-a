@@ -21,17 +21,22 @@ namespace strelyaev
       Token(char);
       ~Token() = default;
     };
+  }
 
-    struct ExpressionUnit
-    {
-      Token token;
-      TokenType type;
+  struct ExpressionUnit
+  {
+    public:
       ExpressionUnit() = default;
       ExpressionUnit(const ExpressionUnit& other) = default;
+      ExpressionUnit(detail::Token&, detail::TokenType&);
       ~ExpressionUnit() = default;
       ExpressionUnit& operator=(const ExpressionUnit&);
-    };
-  }
+      const detail::Token getToken() const;
+      detail::TokenType getType() const;
+    private:
+      detail::Token token;
+      detail::TokenType type;
+  };
 }
 
 #endif

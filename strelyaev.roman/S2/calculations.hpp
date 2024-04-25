@@ -2,13 +2,14 @@
 #define CALCULATIONS_HPP
 #include <string>
 #include <iosfwd>
+#include "token.hpp"
 #include "stack.hpp"
 namespace strelyaev
 {
-  bool isOperation(std::string& c);
-  bool isBracket(std::string& c);
+  bool isOperation(const std::string& c);
+  bool isBracket(const std::string& c);
   int getPrecedence(char);
-  long long calculateOperation(long long, long long, char);
+  long long calculateOperation(const detail::Token&, const detail::Token&, const detail::Token&);
 }
 #endif
 

@@ -13,7 +13,12 @@ strelyaev::detail::Token::Token(char value):
   operation(value)
 {}
 
-strelyaev::detail::ExpressionUnit& strelyaev::detail::ExpressionUnit::operator=(const ExpressionUnit& other)
+strelyaev::ExpressionUnit::ExpressionUnit(detail::Token& other_token, detail::TokenType& other_type):
+  token(other_token),
+  type(other_type)
+{}
+
+strelyaev::ExpressionUnit& strelyaev::ExpressionUnit::operator=(const ExpressionUnit& other)
 {
   if (this != std::addressof(other))
   {
@@ -23,4 +28,13 @@ strelyaev::detail::ExpressionUnit& strelyaev::detail::ExpressionUnit::operator=(
   return *this;
 }
 
+const strelyaev::detail::Token strelyaev::ExpressionUnit::getToken() const
+{
+  return token;
+}
+
+strelyaev::detail::TokenType strelyaev::ExpressionUnit::getType() const
+{
+  return type;
+}
 

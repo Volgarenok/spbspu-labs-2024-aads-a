@@ -111,7 +111,7 @@ namespace strelyaev
   template< typename T >
   List< T >& List< T >::operator=(List< T >&& other)
   {
-    List< T >temp(std::move(other));
+    List< T > temp(std::move(other));
     if (this != std::addressof(other))
     {
       clear();
@@ -231,7 +231,7 @@ namespace strelyaev
   template< typename T >
   void List< T >::clear() noexcept
   {
-    while (size_ != 0)
+    while (!empty())
     {
       pop_front();
     }

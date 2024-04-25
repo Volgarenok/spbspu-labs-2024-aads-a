@@ -4,12 +4,12 @@
 #include <limits>
 
 
-bool strelyaev::isOperation(std::string& c)
+bool strelyaev::isOperation(const std::string& c)
 {
   return ((c == "+") || (c == "-") || (c == "/") || (c == "*") || (c == "%"));
 }
 
-bool strelyaev::isBracket(std::string& c)
+bool strelyaev::isBracket(const std::string& c)
 {
   return ((c == "(") || (c == ")"));
 }
@@ -31,37 +31,37 @@ int strelyaev::getPrecedence(char c)
   return -1;
 }
 
-long long strelyaev::calculateOperation(long long first, long long second, char operation)
+long long strelyaev::calculateOperation(const detail::Token& first, const detail::Token& second, const detail::Token& oper)
 {
   long long max = std::numeric_limits< long long >::max();
   long long min = std::numeric_limits< long long >::min();
-  switch (operation)
+  switch (oper.operation)
   {
   case '+':
-    if (first > max - second || first > min - second)
+    if (first.operand > max - second.operand || first.operand > min - second.operand)
     {
       throw std::overflow_error("overflow");
     }
-    return first + second;
+    return first.operand + second.operand;
   case '-':
-    return first - second;
+    return first.operand - second.operand;
   case '*':
-    if (first == 0 || second == 0)
+    if (first.operand == 0 || second.operand == 0)
     {
       return 0;
     }
-    if ((first > (max / second)) || (first < (min / second)))
+    if ((first.operand > (max / second.operand)) || (first.operand < (min / second.operand)))
     {
       throw std::overflow_error("overflow");
     }
-    return first * second;
+    return first.operand * second.operand;
   case '/':
-    return first / second;
+    return first.operand / second.operand;
   case '%':
-    long long result = first % second;
+    long long result = first.operand % second.operand;
     if (result < 0)
     {
-      result += second;
+      result += second.operand;
     }
     return result;
   }

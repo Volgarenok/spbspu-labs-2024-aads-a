@@ -7,7 +7,7 @@
 #include "stack.hpp"
 #include "token.hpp"
 
-strelyaev::detail::ExpressionUnit strelyaev::convertStringToUnit(std::string string_token)
+strelyaev::ExpressionUnit strelyaev::convertStringToUnit(std::string string_token)
 {
   strelyaev::detail::Token new_token;
   strelyaev::detail::TokenType type = strelyaev::detail::TokenType::NONE;
@@ -34,17 +34,17 @@ strelyaev::detail::ExpressionUnit strelyaev::convertStringToUnit(std::string str
       type = strelyaev::detail::TokenType::OPERATION;
     }
   }
-  strelyaev::detail::ExpressionUnit new_unit{new_token, type};
+  strelyaev::ExpressionUnit new_unit(new_token, type);
   return new_unit;
 }
 
-strelyaev::Queue< strelyaev::detail::ExpressionUnit > strelyaev::parseString(std::istream& input)
+strelyaev::Queue< strelyaev::ExpressionUnit > strelyaev::parseString(std::istream& input)
 {
-  strelyaev::Queue< strelyaev::detail::ExpressionUnit > queue_of_eu;
+  strelyaev::Queue< strelyaev::ExpressionUnit > queue_of_eu;
   std::string line = "";
   std::string token_string = "";
   std::getline(input, line);
-  strelyaev::detail::ExpressionUnit unit;
+  strelyaev::ExpressionUnit unit;
   for (char c : line)
   {
     if (c == ' ' || c == '\0')
@@ -64,29 +64,29 @@ strelyaev::Queue< strelyaev::detail::ExpressionUnit > strelyaev::parseString(std
   return queue_of_eu;
 }
 
-strelyaev::Queue< strelyaev::detail::ExpressionUnit > strelyaev::makePostfix(Queue< detail::ExpressionUnit >& queue)
+strelyaev::Queue< strelyaev::ExpressionUnit > strelyaev::makePostfix(Queue< ExpressionUnit >& queue)
 {
-  strelyaev::Stack< strelyaev::detail::ExpressionUnit > temp_stack;
-  strelyaev::Queue< strelyaev::detail::ExpressionUnit > postfix_queue;
+  strelyaev::Stack< strelyaev::ExpressionUnit > temp_stack;
+  strelyaev::Queue< strelyaev::ExpressionUnit > postfix_queue;
   while (!queue.empty())
   {
-    strelyaev::detail::ExpressionUnit unit = queue.front();
+    strelyaev::ExpressionUnit unit = queue.front();
     queue.pop_front();
-    if (unit.type == strelyaev::detail::TokenType::OPERAND)
+    if (unit.getType() == strelyaev::detail::TokenType::OPERAND)
     {
       postfix_queue.push(unit);
     }
-    if (unit.type == strelyaev::detail::TokenType::BRACKET)
+    if (unit.getType() == strelyaev::detail::TokenType::BRACKET)
     {
-      if (unit.token.operation == '(')
+      if (unit.getToken().operation == '(')
       {
         temp_stack.push(unit);
       }
-      if (unit.token.operation == ')')
+      if (unit.getToken().operation == ')')
       {
-        strelyaev::detail::ExpressionUnit stack_peek = temp_stack.back();
+        strelyaev::ExpressionUnit stack_peek = temp_stack.back();
         temp_stack.pop_back();
-        while (stack_peek.token.operation != '(')
+        while (stack_peek.getToken().operation != '(')
         {
           postfix_queue.push(stack_peek);
           stack_peek = temp_stack.back();
@@ -94,23 +94,23 @@ strelyaev::Queue< strelyaev::detail::ExpressionUnit > strelyaev::makePostfix(Que
         }
       }
     }
-    if (unit.type == strelyaev::detail::TokenType::OPERATION)
+    if (unit.getType() == strelyaev::detail::TokenType::OPERATION)
     {
       if (temp_stack.empty())
       {
         temp_stack.push(unit);
         continue;
       }
-      strelyaev::detail::ExpressionUnit stack_peek = temp_stack.back();
+      strelyaev::ExpressionUnit stack_peek = temp_stack.back();
       temp_stack.pop_back();
-      if (strelyaev::getPrecedence(unit.token.operation) > strelyaev::getPrecedence(stack_peek.token.operation))
+      if (strelyaev::getPrecedence(unit.getToken().operation) > strelyaev::getPrecedence(stack_peek.getToken().operation))
       {
         temp_stack.push(stack_peek);
         temp_stack.push(unit);
       }
-      else if (strelyaev::getPrecedence(unit.token.operation) <= strelyaev::getPrecedence(stack_peek.token.operation))
+      else if (strelyaev::getPrecedence(unit.getToken().operation) <= strelyaev::getPrecedence(stack_peek.getToken().operation))
       {
-        while (strelyaev::getPrecedence(unit.token.operation) <= strelyaev::getPrecedence(stack_peek.token.operation))
+        while (strelyaev::getPrecedence(unit.getToken().operation) <= strelyaev::getPrecedence(stack_peek.getToken().operation))
         {
           postfix_queue.push(stack_peek);
           if (temp_stack.empty())
@@ -130,14 +130,14 @@ strelyaev::Queue< strelyaev::detail::ExpressionUnit > strelyaev::makePostfix(Que
   }
   while (!temp_stack.empty())
   {
-    strelyaev::detail::ExpressionUnit unit = temp_stack.back();
+    strelyaev::ExpressionUnit unit = temp_stack.back();
     temp_stack.pop_back();
     postfix_queue.push(unit);
   }
   return postfix_queue;
 }
 
-long long strelyaev::calculatePostfix(strelyaev::Queue< strelyaev::detail::ExpressionUnit >& queue)
+long long strelyaev::calculatePostfix(strelyaev::Queue< strelyaev::ExpressionUnit >& queue)
 {
   strelyaev::Stack< long long > processing_stack;
   if (queue.empty())
@@ -146,13 +146,13 @@ long long strelyaev::calculatePostfix(strelyaev::Queue< strelyaev::detail::Expre
   }
   while (!queue.empty())
   {
-    strelyaev::detail::ExpressionUnit unit = queue.front();
+    strelyaev::ExpressionUnit unit = queue.front();
     queue.pop_front();
-    if (unit.type == strelyaev::detail::TokenType::OPERAND)
+    if (unit.getType() == strelyaev::detail::TokenType::OPERAND)
     {
-      processing_stack.push(unit.token.operand);
+      processing_stack.push(unit.getToken().operand);
     }
-    if (unit.type == strelyaev::detail::TokenType::OPERATION)
+    if (unit.getType() == strelyaev::detail::TokenType::OPERATION)
     {
       long long second = processing_stack.back();
       processing_stack.pop_back();
@@ -162,7 +162,7 @@ long long strelyaev::calculatePostfix(strelyaev::Queue< strelyaev::detail::Expre
       }
       long long first = processing_stack.back();
       processing_stack.pop_back();
-      long long result = calculateOperation(first, second, unit.token.operation);
+      long long result = calculateOperation(first, second, unit.getToken().operation);
       processing_stack.push(result);
     }
   }

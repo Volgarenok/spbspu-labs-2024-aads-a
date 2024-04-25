@@ -8,10 +8,6 @@ namespace strelyaev
   class Queue
   {
     public:
-      Queue() = default;
-      Queue(const Queue< T >&) = default;
-      Queue(Queue< T >&&);
-      ~Queue() = default;
 
       void push(const T&);
       T& back();
@@ -21,36 +17,9 @@ namespace strelyaev
       bool empty();
       void pop_front();
 
-      Queue< T >& operator=(const Queue< T >&);
-      Queue< T >& operator=(Queue< T >&&);
     private:
-      strelyaev::List< T > data;
+      List< T > data;
   };
-
-  template< typename T >
-  Queue< T >::Queue(Queue< T >&& other):
-    data(std::move(other.data))
-  {}
-
-  template< typename T >
-Queue< T >& Queue< T >::operator=(const Queue< T >& other)
-{
-  if (std::addressof(other) != this)
-  {
-    data = other.data;
-  }
-  return *this;
-}
-
-template< typename T >
-Queue< T >& Queue< T >::operator=(Queue< T >&& other)
-{
-  if (std::addressof(other) != this)
-  {
-    data = std::move(other.data);
-  }
-  return *this;
-}
 
   template< typename T >
   void Queue< T >::push(const T& value)
