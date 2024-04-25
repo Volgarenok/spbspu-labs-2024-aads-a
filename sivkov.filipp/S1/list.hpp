@@ -195,9 +195,9 @@ namespace sivkov
   void List< T >::remove(const T& value)
   {
     auto pred = [&value](const T& elem)
-      {
-        return elem == value;
-      };
+    {
+      return elem == value;
+    };
     remove_if(pred);
   }
 
