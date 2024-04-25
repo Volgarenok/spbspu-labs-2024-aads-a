@@ -41,10 +41,16 @@ namespace piyavkin
       cmp_ = rhs.cmp_;
       TreeIterator< Key, T, Compare > it_right(rhs.root_);
       TreeIterator< Key, T, Compare > it_left(rhs.root_);
-      while (it_left.node_ != std::addressof(rhs.before_min_) && it_right.node_ != std::addressof(rhs.end_node_))
+      while (root_ && (it_left.node_ != std::addressof(rhs.before_min_) && it_right.node_ != std::addressof(rhs.end_node_)))
       {
-        insert(std::pair< Key, T >(*it_right++));
-        insert(std::pair< Key, T >(*it_left--));
+        if (rhs.root_ && (it_right.node_ != rhs.end_node_.parent_->right_))
+        {
+          insert(std::pair< Key, T >(*it_right++));
+        }
+        if (rhs.root_ && (it_left.node_ != rhs.before_min_.parent_->left_))
+        {
+          insert(std::pair< Key, T >(*it_left--));
+        }
       }
     }
     Tree(Tree&& rhs):
@@ -69,7 +75,7 @@ namespace piyavkin
         swap(temp);
         detail::TreeNode< Key, T >* left = root_;
         detail::TreeNode< Key, T >* right = root_;
-        while (left->left_->parent_ && right->right_->parent_)
+        while (left->left_->parent_ || right->right_->parent_)
         {
           if (left->left_->parent_)
           {
@@ -93,7 +99,7 @@ namespace piyavkin
         swap(rhs);
         detail::TreeNode< Key, T >* left = root_;
         detail::TreeNode< Key, T >* right = root_;
-        while (left->left_->parent_ && right->right_->parent_)
+        while (left->left_->parent_ || right->right_->parent_)
         {
           if (left->left_)
           {

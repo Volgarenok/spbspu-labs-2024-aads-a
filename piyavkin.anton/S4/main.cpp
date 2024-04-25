@@ -1,7 +1,6 @@
 #include <iostream>
 #include <fstream>
-#include <list.hpp>
-#include "tree.hpp"
+#include "inputfile.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -11,7 +10,7 @@ int main(int argc, char* argv[])
     return 1;
   }
   using namespace piyavkin;
-  List< Tree< int, std::string > > list;
+  map_t map;
   std::ifstream in(argv[1]);
-  // inputFile(in);
+  inputFile(in, map);
 }
