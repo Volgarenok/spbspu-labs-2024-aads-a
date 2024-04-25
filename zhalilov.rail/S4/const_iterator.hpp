@@ -125,7 +125,7 @@ namespace zhalilov
   }
 
   template < class T >
-  T &ConstTwoThreeIterator < T >::operator*()
+  const T &ConstTwoThreeIterator < T >::operator*() const
   {
     if (node_.type == detail::NodeType::Three)
     {
@@ -138,7 +138,7 @@ namespace zhalilov
   }
 
   template < class T >
-  T *ConstTwoThreeIterator < T >::operator->()
+  const T *ConstTwoThreeIterator < T >::operator->() const
   {
     if (node_.type == detail::NodeType::Three)
     {
@@ -148,18 +148,6 @@ namespace zhalilov
       }
     }
     return *node_.values[0];
-  }
-
-  template < class T >
-  const T &ConstTwoThreeIterator < T >::operator*() const
-  {
-    return operator*();
-  }
-
-  template < class T >
-  const T *ConstTwoThreeIterator < T >::operator->() const
-  {
-    return operator->();
   }
 
   template < class T >
