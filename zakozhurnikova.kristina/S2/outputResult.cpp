@@ -1,7 +1,7 @@
 #include "outputResult.hpp"
-#include "iostream"
+#include <iostream>
 
-void zakozhurnikova::outputResult(std::ostream& out, Stack< ll >& result)
+void zakozhurnikova::outputResult(std::ostream& out, Stack< long long >& result)
 {
   if (!result.empty())
   {
@@ -14,5 +14,4 @@ void zakozhurnikova::outputResult(std::ostream& out, Stack< ll >& result)
     out << result.top();
     result.drop();
   }
-  out << '\n';
 }

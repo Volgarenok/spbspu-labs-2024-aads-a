@@ -8,7 +8,6 @@ namespace zakozhurnikova
   class Stack
   {
   public:
-
     void push(const T& rhs);
     void drop();
     T& top() noexcept;

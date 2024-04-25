@@ -71,7 +71,7 @@ long long evaluatePostfixPart(const std::string& postfix)
   while (it != postfix.cend())
   {
     std::string sub;
-    it = readWord(it, postfix.cend(), sub);
+    it = zakozhurnikova::readWord(it, postfix.cend(), sub);
     try
     {
       stack.push(std::stoll(sub));

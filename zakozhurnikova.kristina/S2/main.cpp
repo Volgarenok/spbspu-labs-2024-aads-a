@@ -36,6 +36,7 @@ int main(int argc, char* argv[])
       evaluatePostfix(result, queue);
     }
     outputResult(std::cout, result);
+    std::cout << '\n';
   }
   catch (const std::exception& e)
   {

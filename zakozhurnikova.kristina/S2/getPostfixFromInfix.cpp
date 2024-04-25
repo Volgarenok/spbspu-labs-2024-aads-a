@@ -63,7 +63,7 @@ std::string& getPostfixFromInfixPart(std::istream& in, std::string& result)
   while (it != buff.cend())
   {
     std::string sub;
-    it = readWord(it, buff.cend(), sub);
+    it = zakozhurnikova::readWord(it, buff.cend(), sub);
     try
     {
       std::stoll(sub);
