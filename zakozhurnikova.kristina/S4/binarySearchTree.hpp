@@ -264,7 +264,7 @@ namespace zakozhurnikova
           std::cerr << "Error, key not in tree" << '\n';
         }
       }
-      else if (size_ == 1 && root_->key == key)
+      else if (size_ == 1 && root_->data.first == key)
       {
         root_ = nullptr;
         size_ = size_ - 1;
@@ -279,7 +279,7 @@ namespace zakozhurnikova
     {
       if (balanceParent->balanceFactor == 0)
       {
-        if (!balanceParent->isRoot)
+        if (!balanceParent->isRoot())
         {
           int bal = balanceParent->parent->balanceFactor;
           if (balanceParent->isLeftChild())
@@ -300,14 +300,16 @@ namespace zakozhurnikova
           node* grandParent = balanceParent->parent;
           bool leftChild = balanceParent->isLeftChild();
           rebalance(balanceParent);
+          int newBal = 0;
           if (leftChild)
           {
-            int newBal = grandParent->leftChild->balanceFactor;
+            newBal = grandParent->leftChild->balanceFactor;
           }
           else
           {
-            int newBal = grandParent->rightChild->balanceFactor;
+            newBal = grandParent->rightChild->balanceFactor;
           }
+          newBal = std::abs(newBal) - std::abs(oldBal);
           if (std::abs(newBal) - std::abs(oldBal) != 0)
           {
             int balGrand = grandParent->balanceFactor;
@@ -334,16 +336,16 @@ namespace zakozhurnikova
     {
       if (currentNode->isLeaf())
       {
-        int oldBal = currentNode->parent.balanceFactor;
+        int oldBal = currentNode->parent->balanceFactor;
         if (currentNode->isLeftChild())
         {
           currentNode->parent->leftChild = nullptr;
-          --currentNode->parent.balanceFactor;
+          --currentNode->parent->balanceFactor;
         }
         else
         {
           currentNode->parent->rightChild = nullptr;
-          ++currentNode->parent.balanceFactor;
+          ++currentNode->parent->balanceFactor;
         }
         node* balanceParent = currentNode->parent;
         delete currentNode;
@@ -366,7 +368,7 @@ namespace zakozhurnikova
         currentNode->data.first = succ->data.first;
         currentNode->data.second = succ->data.second;
         delete succ;
-        updateRemoveBalance(parentRemove);
+        updateRemoveBalance(parentRemove, oldBal);
       }
       else
       {
@@ -382,10 +384,12 @@ namespace zakozhurnikova
             currentNode->leftChild->parent = currentNode->parent;
             currentNode->parent->rightChild = currentNode->leftChild;
           }
+
           int oldBal = currentNode->parent->balanceFactor;
           --currentNode->parent->balanceFactor;
-          updateRemoveBalance(current->parent, oldBal);
-          else
+          updateRemoveBalance(currentNode->parent, oldBal);
+
+          if (currentNode->isRoot())
           {
             root_ = currentNode->leftChild;
             root_->parent = nullptr;
@@ -403,10 +407,12 @@ namespace zakozhurnikova
             currentNode->rightChild->parent = currentNode->parent;
             currentNode->parent->rightChild = currentNode->rightChild;
           }
+
           int oldBal = currentNode->parent->balanceFactor;
           ++currentNode->parent->balanceFactor;
-          updateRemoveBalance(current->parent, oldBal);
-          else
+          updateRemoveBalance(currentNode->parent, oldBal);
+
+          if (currentNode->isRoot())
           {
             root_ = currentNode->rightChild;
             root_->parent = nullptr;
@@ -414,6 +420,7 @@ namespace zakozhurnikova
         delete currentNode;
         }
       }
+    }
 
       node* getLowest(node * prev) const
       {
