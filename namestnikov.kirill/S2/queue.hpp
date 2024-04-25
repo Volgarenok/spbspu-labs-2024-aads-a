@@ -2,7 +2,7 @@
 #define QUEUE_HPP
 
 #include <cstddef>
-#include "forward_list.hpp"
+#include <forward_list.hpp>
 
 namespace namestnikov
 {
