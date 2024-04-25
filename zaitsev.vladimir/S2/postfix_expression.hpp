@@ -19,6 +19,17 @@ namespace zaitsev
     {
       make_postfix(s);
     }
+    PostfixExpression& operator=(const PostfixExpression& other)
+    {
+      Queue< Token > new_tokens = other.tokens_;
+      tokens_ = std::move(new_tokens);
+      return *this;
+    }
+    PostfixExpression& operator=(PostfixExpression&& other) noexcept
+    {
+      tokens_ = std::move(other.tokens_);
+      return *this;
+    }
     void make_postfix(const std::string& s);
     long long calculate();
     bool empty() const
