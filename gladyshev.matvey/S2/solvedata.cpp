@@ -11,7 +11,8 @@ long long int gladyshev::evaluatePostfix(Queue< std::string > postfix)
   Stack < long long int > operands;
   while (!postfix.empty())
   {
-    std::string token = postfix.drop();
+    std::string token = postfix.back();
+    postfix.pop();
     try
     {
       long long int value = std::stoll(token);
@@ -19,8 +20,10 @@ long long int gladyshev::evaluatePostfix(Queue< std::string > postfix)
     }
     catch (...)
     {
-      long long int right = operands.drop();
-      long long int left = operands.drop();
+      long long int right = operands.top();
+      operands.pop();
+      long long int left = operands.top();
+      operands.pop();
       if (token == "+")
       {
         if (std::numeric_limits< long long int >::max() - left < right)
