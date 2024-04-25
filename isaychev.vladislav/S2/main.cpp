@@ -2,23 +2,27 @@
 #include <fstream>
 #include "dataArray.hpp"
 #include "inputInfix.hpp"
+#include "convertInfToPostf.hpp"
 
 int main(int argc, char * argv[])
 {
   using namespace isaychev;
   Queue< char > infExp;
+  Queue< char > postfExp;
   if (argc == 1)
   {
     while (!std::cin.eof())
     {
       inputInfix(std::cin, infExp);
     }
-    while (!infExp.empty())
+    std::cout << "done input\n";
+    convertInfToPostf(infExp, postfExp);
+    while (!postfExp.empty())
     {
-      std::cout << infExp.front();
-      infExp.pop();
-     }
-    std::cout << "\n";
+      std::cout << postfExp.front();
+      postfExp.pop();
+    }
+    std::cout << '\n';
   }
   else if (argc == 2)
   {
