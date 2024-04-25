@@ -16,7 +16,7 @@ namespace rebdev
   {
     friend BiList< T >;
     using iterator = BidirectionalIterator< T >;
-    using node = biListNode< T >;
+    using node = BiListNode< T >;
 
     public:
       BidirectionalIterator() = default;

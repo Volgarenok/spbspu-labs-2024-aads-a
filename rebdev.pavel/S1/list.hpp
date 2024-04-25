@@ -10,51 +10,36 @@ namespace rebdev
 
   class BiList
   {
-    using node = biListNode< T >;
+    using node = BiListNode< T >;
 
     public:
       using iterator = BidirectionalIterator< T >;
       using const_iterator = ConstBidirectionalIterator< T >;
 
       BiList():
-        headNode_(nullptr),
+        headNode_(new node{T{}, nullptr, nullptr}),
         tailNode_(nullptr),
         size_(0)
       {
-        createHeadTail();
+        tailNode_ = headNode_;
       }
-      BiList(size_t n, const T & val)
+      BiList(size_t n, const T & val):
+        headNode_(new node{T{}, nullptr, nullptr}),
+        tailNode_(nullptr),
+        size_(0)
       {
-        createHeadTail();
+        tailNode_ = headNode_;
         assign(n, val);
       }
-      BiList(size_t n): BiList(n, T{}){};
+      BiList(size_t n):
+        BiList(n, T{})
+      {};
       BiList(const BiList & list):
-        headNode_(nullptr),
+        headNode_(new node{T{}, nullptr, nullptr}),
         tailNode_(nullptr),
         size_(0)
       {
-        *this = list;
-      }
-      BiList(BiList && list):
-        headNode_(nullptr),
-        tailNode_(nullptr),
-        size_(0)
-      {
-        *this = std::move(list);
-      }
-      ~BiList() noexcept
-      {
-        clear();
-      }
-
-      BiList & operator=(const BiList & list)
-      {
-        node * headCopy = headNode_;
-        node * tailCopy = tailNode_;
-        size_t sizeCopy = size_;
-
-        createHeadTail();
+        tailNode_ = headNode_;
         const_iterator it = list.cbegin();
 
         while (it != list.cend())
@@ -66,12 +51,43 @@ namespace rebdev
           catch (...)
           {
             clear();
-            headNode_ = headCopy;
-            tailNode_ = tailCopy;
-            size_ = sizeCopy;
             throw;
           }
           ++it;
+        }
+      }
+      BiList(BiList && list):
+        headNode_(list.headNode_),
+        tailNode_(list.tailNode_),
+        size_(0)
+      {
+        size_ = list.size_;
+
+        list.headNode_ = nullptr;
+        list.tailNode_ = nullptr;
+      }
+      ~BiList() noexcept
+      {
+        clear();
+        delete headNode_;
+      }
+
+      BiList & operator=(const BiList & list)
+      {
+        node * headCopy = headNode_;
+        node * tailCopy = tailNode_;
+        size_t sizeCopy = size_;
+        try
+        {
+          BiList(list);
+        }
+        catch (...)
+        {
+          delete headNode_;
+          headNode_ = headCopy;
+          tailNode_ = tailCopy;
+          size_ = sizeCopy;
+          throw;
         }
 
         node * newHeadCopy = headNode_;
@@ -81,6 +97,7 @@ namespace rebdev
         headNode_ = headCopy;
         tailNode_ = tailCopy;
         clear();
+        delete headNode_;
 
         headNode_ = newHeadCopy;
         tailNode_ = newTailCopy;
@@ -91,14 +108,8 @@ namespace rebdev
       BiList & operator=(BiList && list)
       {
         clear();
-
-        headNode_ = list.headNode_;
-        tailNode_ = list.tailNode_;
-        size_ = list.size_;
-
-        list.headNode_ = nullptr;
-        list.tailNode_ = nullptr;
-
+        delete headNode_;
+        Bilist(std::move(list));
         return *this;
       }
 
@@ -147,13 +158,13 @@ namespace rebdev
         return ref;
       }
 
-      void assign (size_t n, const T & val)
+      void assign(size_t n, const T & val)
       {
         node * headCopy = headNode_;
         node * tailCopy = tailNode_;
         size_t sizeCopy = size_;
 
-        createHeadTail();
+        BiList();
 
         for (size_t i = 0; i < n; ++i)
         {
@@ -164,6 +175,7 @@ namespace rebdev
           catch (...)
           {
             clear();
+            delete headNode_;
             headNode_ = headCopy;
             tailNode_ = tailCopy;
             size_ = sizeCopy;
@@ -177,27 +189,20 @@ namespace rebdev
         headNode_ = headCopy;
         tailNode_ = tailCopy;
         clear();
-
+        delete headNode_;
         headNode_ = newHeadCopy;
         tailNode_ = newTailCopy;
         size_ = n;
       }
       void push_front(const T & val)
       {
-        if (headNode_ == nullptr)
-        {
-          createHeadTail();
-        }
-        node * newNode = new node{val, nullptr, headNode_};
-        headNode_->last = newNode;
-        headNode_ = newNode;
-        ++size_;
+        push_front(std::move(val));
       }
       void push_front(T && val)
       {
         if (headNode_ == nullptr)
         {
-          createHeadTail();
+          BiList();
         }
         node * newNode = new node{std::move(val), nullptr, headNode_};
         headNode_->last = newNode;
@@ -213,27 +218,13 @@ namespace rebdev
       }
       void push_back(const T & val)
       {
-        if (tailNode_ == nullptr)
-        {
-          createHeadTail();
-        }
-        node * newNode = new node{val, tailNode_->last, tailNode_};
-        if ((tailNode_->last) != nullptr)
-        {
-          tailNode_->last->next = newNode;
-        }
-        else
-        {
-          headNode_ = newNode;
-        }
-        tailNode_->last = newNode;
-        ++size_;
+        push_back(std::move(val));
       }
       void push_back(T && val)
       {
         if (tailNode_ == nullptr)
         {
-          createHeadTail();
+          BiList();
         }
         node * newNode = new node{std::move(val), tailNode_->last, tailNode_};
         if ((tailNode_->last) != nullptr)
@@ -257,17 +248,7 @@ namespace rebdev
       }
       void swap(BiList & x)
       {
-        node * thisHeadCopy = headNode_;
-        node * thisTailCopy = tailNode_;
-        size_t thisSizeCopy = size_;
-
-        headNode_ = x.headNode_;
-        tailNode_ = x.tailNode_;
-        size_ = x.size_;
-
-        x.headNode_ = thisHeadCopy;
-        x.tailNode_ = thisTailCopy;
-        x.size_ = thisSizeCopy;
+        std::swap< BiList< T > >(*this, x);
       }
       void clear() noexcept
       {
@@ -277,20 +258,15 @@ namespace rebdev
           delete headNode_;
           headNode_ = nextNode;
         }
-        delete headNode_;
-
-        headNode_ = nullptr;
-        tailNode_ = nullptr;
-        size_ = 0;
       }
 
       void remove(const T & val)
       {
-        remove_if([& val](const T & valNow)
+        remove_if(
+        [&](const T & current)
         {
-          return (valNow == val);
-        }
-        );
+          return (current == val);
+        });
       }
       template < class Predicate >
       void remove_if(Predicate pred)
@@ -326,12 +302,6 @@ namespace rebdev
       node * headNode_;
       node * tailNode_;
       size_t size_;
-
-      void createHeadTail()
-      {
-        headNode_ = new node{T{}, nullptr, nullptr};
-        tailNode_ = headNode_;
-      }
   };
 }
 

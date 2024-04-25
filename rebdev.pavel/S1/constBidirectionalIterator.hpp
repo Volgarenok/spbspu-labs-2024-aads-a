@@ -16,7 +16,7 @@ namespace rebdev
   {
     friend BiList< T >;
     using const_iterator = ConstBidirectionalIterator< T >;
-    using node = biListNode< T >;
+    using node = BiListNode< T >;
 
     public:
       ConstBidirectionalIterator() = default;

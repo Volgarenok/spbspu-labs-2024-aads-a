@@ -5,11 +5,11 @@ namespace rebdev
 {
   template < class T >
 
-  struct biListNode
+  struct BiListNode
   {
     T data;
-    biListNode * last;
-    biListNode * next;
+    BiListNode * last;
+    BiListNode * next;
   };
 }
 
