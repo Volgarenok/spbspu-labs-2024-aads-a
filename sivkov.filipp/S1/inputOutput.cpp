@@ -4,7 +4,7 @@
 #include <limits>
 #include <iterator>
 #include <stdexcept>
-#include "list.hpp"
+#include <list.hpp>
 
 void sivkov::outputNames(const List< std::pair< std::string, List< size_t > > >& list)
 {
