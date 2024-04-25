@@ -87,7 +87,7 @@ namespace rebdev
         if (*this != std::addressof(list))
         {
           BiList< T > lst(std::move(list));
-          std::swap(lst);
+          swap(lst);
         }
         return *this;
       }
@@ -177,9 +177,11 @@ namespace rebdev
         tailCopy->next = tailNode_;
         --size_;
       }
-      void swap(BiList & x)
+      void swap(BiList & x) noexcept
       {
-        std::swap< BiList< T > >(*this, x);
+        std::swap< node< T > >(headNode_, x.headNode_);
+        std::swap< node< T > >(tailNode_, x.tailNode_);
+        std::swap< size_t >(size__, x.size_);
       }
       void clear() noexcept
       {
@@ -234,7 +236,7 @@ namespace rebdev
       node * tailNode_;
       size_t size_;
 
-      void push_back(node * n)
+      void push_back(node * n) noexcept
       {
         if ((tailNode_->last) != nullptr)
         {
@@ -247,7 +249,7 @@ namespace rebdev
         tailNode_->last = n;
         ++size_;
       }
-      void push_front(node * n)
+      void push_front(node * n) noexcept
       {
         headNode_->last = n;
         headNode_ = n;
