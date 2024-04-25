@@ -13,6 +13,14 @@ namespace ishmuratov
         c_(Container())
       {}
 
+      Stack(const Stack & other):
+        c_(other.c_)
+      {}
+
+      Stack(Stack && other):
+        c_(std::move(other.c_))
+      {}
+
       ~Stack() = default;
 
       void push(const T & rhs)

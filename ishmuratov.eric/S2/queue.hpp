@@ -13,6 +13,14 @@ namespace ishmuratov
         c_(Container())
       {}
 
+      Queue(const Queue & other):
+        c_(other.c_)
+      {}
+
+      Queue(Queue && other):
+        c_(std::move(other.c_))
+      {}
+
       ~Queue() = default;
 
       void push(const T & rhs)
