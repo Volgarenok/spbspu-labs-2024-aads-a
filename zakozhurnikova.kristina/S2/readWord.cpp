@@ -9,7 +9,7 @@ c_iterator_t zakozhurnikova::readWord(c_iterator_t first, c_iterator_t last, std
     {
       return first;
     }
-      dest.push_back(*first++);
+    dest.push_back(*first++);
   }
   return ++first;
 }
