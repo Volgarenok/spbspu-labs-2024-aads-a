@@ -143,7 +143,6 @@ namespace sivkov
     {
       pop_front();
     }
-    size_ = 0;
   }
 
   template< typename T >
