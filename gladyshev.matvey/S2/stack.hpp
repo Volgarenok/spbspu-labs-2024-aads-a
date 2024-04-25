@@ -9,15 +9,6 @@ namespace gladyshev
   class Stack
   {
   public:
-    Stack():
-      array_(Container())
-    {}
-    Stack(const Stack& other):
-      array_(other.array_)
-    {}
-    Stack(Stack&& other) noexcept:
-      array_(std::move(other.array_))
-    {}
     T& top()
     {
       return array_.front();
