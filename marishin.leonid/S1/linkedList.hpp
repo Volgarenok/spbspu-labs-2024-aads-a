@@ -122,8 +122,7 @@ namespace marishin
 
     void assign(size_t count, const T & value)
     {
-      LinkedList ls;
-      clear();
+      LinkedList<T> ls;
       for (size_t i = 0; i < count; ++i)
       {
         ls.push_back(value);
