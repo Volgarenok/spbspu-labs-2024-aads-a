@@ -5,11 +5,11 @@
 
 int operationPriority(arakelyan::detail::ExpressionObj obj)
 {
-  if (obj.val_.oper_ == '+' || obj.val_.oper_ == '-')
+  if (obj.getVal().oper_ == '+' || obj.getVal().oper_ == '-')
   {
     return 1;
   }
-  else if (obj.val_.oper_ == '*' || obj.val_.oper_ == '/' || obj.val_.oper_ == '%')
+  else if (obj.getVal().oper_ == '*' || obj.getVal().oper_ == '/' || obj.getVal().oper_ == '%')
   {
     return 2;
   }
@@ -31,19 +31,19 @@ arakelyan::Queue< arakelyan::detail::ExpressionObj > arakelyan::transformInfixTo
     auto curObj = infixQueue.front();
     infixQueue.pop();
 
-    if (curObj.type_ == token_t::operand)
+    if (curObj.getType() == token_t::operand)
     {
       postfixQ.push(curObj);
     }
-    else if (curObj.type_ == token_t::bracket)
+    else if (curObj.getType() == token_t::bracket)
     {
-      if (curObj.val_.oper_ == '(')
+      if (curObj.getVal().oper_ == '(')
       {
         operS.push(curObj);
       }
-      else if (curObj.val_.oper_ == ')')
+      else if (curObj.getVal().oper_ == ')')
       {
-        while ((!operS.empty()) && (operS.top().val_.oper_ != '('))
+        while ((!operS.empty()) && (operS.top().getVal().oper_ != '('))
         {
           postfixQ.push(operS.top());
           operS.pop();
@@ -55,9 +55,9 @@ arakelyan::Queue< arakelyan::detail::ExpressionObj > arakelyan::transformInfixTo
         operS.pop();
       }
     }
-    else if (curObj.type_ == token_t::operation)
+    else if (curObj.getType() == token_t::operation)
     {
-      while (!operS.empty() && (operS.top().val_.oper_ != '(') && (operationPriority(operS.top()) <= operationPriority(curObj)))
+      while (!operS.empty() && (operS.top().getVal().oper_ != '(') && (operationPriority(operS.top()) <= operationPriority(curObj)))
       {
         postfixQ.push(operS.top());
         operS.pop();
@@ -68,7 +68,7 @@ arakelyan::Queue< arakelyan::detail::ExpressionObj > arakelyan::transformInfixTo
 
   while (!operS.empty())
   {
-    if (operS.top().type_ == token_t::bracket)
+    if (operS.top().getType() == token_t::bracket)
     {
       throw std::logic_error("bracket error!");
     }

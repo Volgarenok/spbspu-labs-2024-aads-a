@@ -3,13 +3,15 @@
 #include <stdexcept>
 #include <limits>
 
+#include "expressionObject.hpp"
 #include "stack.hpp"
 
-long long calcExp(long long first, long long second, char operation)
+long long calcExp(long long first, long long second, arakelyan::detail::ExpressionObj obj)
 {
   long long maxVal = std::numeric_limits< long long >::max();
   long long minVal = std::numeric_limits< long long >::min();
   long long rObj = 0;
+  char operation = obj.getVal().oper_;
   if (operation == '+')
   {
     if (first > (maxVal - second))
@@ -77,7 +79,7 @@ void arakelyan::calculatePostfixQ(Queue< Queue< detail::ExpressionObj > > &qOfPo
     detail::ExpressionObj obj = curQ.front();
     curQ.pop();
 
-    if (obj.type_ == detail::token_t::operation)
+    if (obj.getType() == detail::token_t::operation)
     {
       if (stack.size() < 2)
       {
@@ -87,11 +89,12 @@ void arakelyan::calculatePostfixQ(Queue< Queue< detail::ExpressionObj > > &qOfPo
       stack.pop();
       long long left = stack.top();
       stack.pop();
-      stack.push((calcExp(left, right, obj.val_.oper_)));
+      long long res = calcExp(left, right, obj);
+      stack.push(res);
     }
-    else if (obj.type_ == detail::token_t::operand)
+    else if (obj.getType() == detail::token_t::operand)
     {
-      stack.push(obj.val_.operand_);
+      stack.push(obj.getVal().operand_);
     }
     else
     {

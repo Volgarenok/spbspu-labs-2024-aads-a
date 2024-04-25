@@ -28,13 +28,18 @@ namespace arakelyan
 
     struct ExpressionObj
     {
-      Token val_;
-      token_t type_;
-
+    public:
       ExpressionObj() = delete;
+      ExpressionObj(token_t type, Token val);
       ExpressionObj(const ExpressionObj &obj) = default;
       ~ExpressionObj() = default;
       ExpressionObj &operator=(const ExpressionObj &obj) = default;
+
+      Token getVal() const;
+      token_t getType() const;
+    private:
+      Token val_;
+      token_t type_;
     };
   }
 }

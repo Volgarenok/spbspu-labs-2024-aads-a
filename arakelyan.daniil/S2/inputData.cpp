@@ -67,7 +67,7 @@ void parseLine(std::string &line, arakelyan::Queue< arakelyan::detail::Expressio
         throw std::out_of_range("Out of range!");
       }
 
-      ExpressionObj expObj{token, tokenType};
+      ExpressionObj expObj(tokenType, token);
       someQ.push(expObj);
     }
   }
