@@ -4,17 +4,17 @@
 #include <limits>
 
 
-bool strelyaev::detail::isOperation(const std::string& c)
+bool strelyaev::isOperation(const std::string& c)
 {
   return ((c == "+") || (c == "-") || (c == "/") || (c == "*") || (c == "%"));
 }
 
-bool strelyaev::detail::isBracket(const std::string& c)
+bool strelyaev::isBracket(const std::string& c)
 {
   return ((c == "(") || (c == ")"));
 }
 
-int strelyaev::detail::getPrecedence(char c)
+int strelyaev::getPrecedence(char c)
 {
   if (c == '+' || c == '-')
   {
@@ -31,37 +31,37 @@ int strelyaev::detail::getPrecedence(char c)
   return -1;
 }
 
-long long strelyaev::detail::calculateOperation(const detail::Token& first, const detail::Token& second, const detail::Token& oper)
+long long strelyaev::calculateOperation(const ExpressionUnit& first, const ExpressionUnit& second, const ExpressionUnit& oper)
 {
   long long max = std::numeric_limits< long long >::max();
   long long min = std::numeric_limits< long long >::min();
-  switch (oper.operation)
+  switch (oper.getOperation())
   {
   case '+':
-    if (first.operand > max - second.operand || first.operand > min - second.operand)
+    if (first.getOperand() > max - second.getOperand() || first.getOperand() > min - second.getOperand())
     {
       throw std::overflow_error("overflow");
     }
-    return first.operand + second.operand;
+    return first.getOperand() + second.getOperand();
   case '-':
-    return first.operand - second.operand;
+    return first.getOperand() - second.getOperand();
   case '*':
-    if (first.operand == 0 || second.operand == 0)
+    if (first.getOperand() == 0 || second.getOperand() == 0)
     {
       return 0;
     }
-    if ((first.operand > (max / second.operand)) || (first.operand < (min / second.operand)))
+    if ((first.getOperand() > (max / second.getOperand())) || (first.getOperand() < (min / second.getOperand())))
     {
       throw std::overflow_error("overflow");
     }
-    return first.operand * second.operand;
+    return first.getOperand() * second.getOperand();
   case '/':
-    return first.operand / second.operand;
+    return first.getOperand() / second.getOperand();
   case '%':
-    long long result = first.operand % second.operand;
+    long long result = first.getOperand() % second.getOperand();
     if (result < 0)
     {
-      result += second.operand;
+      result += second.getOperand();
     }
     return result;
   }
@@ -70,8 +70,8 @@ long long strelyaev::detail::calculateOperation(const detail::Token& first, cons
 
 bool strelyaev::isPrecedenceLess(char a, char b)
 {
-  int first = detail::getPrecedence(a);
-  int second = detail::getPrecedence(b);
+  int first = getPrecedence(a);
+  int second = getPrecedence(b);
   return first <= second;
 }
 

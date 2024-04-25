@@ -1,39 +1,35 @@
 #include "token.hpp"
 #include <memory>
 
-strelyaev::detail::Token::Token():
+strelyaev::Token::Token():
   operand(0)
 {}
 
-strelyaev::detail::Token::Token(long long value):
+strelyaev::Token::Token(long long value):
   operand(value)
 {}
 
-strelyaev::detail::Token::Token(char value):
+strelyaev::Token::Token(char value):
   operation(value)
 {}
 
-strelyaev::ExpressionUnit::ExpressionUnit(detail::Token& other_token, detail::TokenType& other_type):
+strelyaev::ExpressionUnit::ExpressionUnit(const Token& other_token, TokenType other_type):
   token(other_token),
   type(other_type)
 {}
 
-strelyaev::ExpressionUnit& strelyaev::ExpressionUnit::operator=(const ExpressionUnit& other)
+long long strelyaev::ExpressionUnit::getOperand() const
 {
-  if (this != std::addressof(other))
-  {
-    token = other.token;
-    type = other.type;
-  }
-  return *this;
+  const long long to_return = token.operand;
+  return to_return;
 }
 
-const strelyaev::detail::Token strelyaev::ExpressionUnit::getToken() const
+char strelyaev::ExpressionUnit::getOperation() const
 {
-  return token;
+  return token.operation;
 }
 
-strelyaev::detail::TokenType strelyaev::ExpressionUnit::getType() const
+strelyaev::TokenType strelyaev::ExpressionUnit::getType() const
 {
   return type;
 }

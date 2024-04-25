@@ -9,8 +9,8 @@
 
 strelyaev::ExpressionUnit strelyaev::convertStringToUnit(std::string string_token)
 {
-  strelyaev::detail::Token new_token;
-  strelyaev::detail::TokenType type = strelyaev::detail::TokenType::NONE;
+  strelyaev::Token new_token;
+  strelyaev::TokenType type = strelyaev::TokenType::NONE;
   if (string_token.size() == 0)
   {
     throw std::logic_error("empty string_token");
@@ -18,20 +18,20 @@ strelyaev::ExpressionUnit strelyaev::convertStringToUnit(std::string string_toke
   try
   {
     long long operand = std::stoll(string_token);
-    new_token = strelyaev::detail::Token(operand);
-    type = strelyaev::detail::TokenType::OPERAND;
+    new_token = strelyaev::Token(operand);
+    type = strelyaev::TokenType::OPERAND;
   }
   catch(...)
   {
     char c = string_token[0];
-    new_token = strelyaev::detail::Token(c);
-    if (strelyaev::detail::isBracket(string_token))
+    new_token = strelyaev::Token(c);
+    if (strelyaev::isBracket(string_token))
     {
-      type = strelyaev::detail::TokenType::BRACKET;
+      type = strelyaev::TokenType::BRACKET;
     }
-    if (strelyaev::detail::isOperation(string_token))
+    if (strelyaev::isOperation(string_token))
     {
-      type = strelyaev::detail::TokenType::OPERATION;
+      type = strelyaev::TokenType::OPERATION;
     }
   }
   strelyaev::ExpressionUnit new_unit(new_token, type);
@@ -72,21 +72,21 @@ strelyaev::Queue< strelyaev::ExpressionUnit > strelyaev::makePostfix(Queue< Expr
   {
     strelyaev::ExpressionUnit unit = queue.front();
     queue.pop_front();
-    if (unit.getType() == strelyaev::detail::TokenType::OPERAND)
+    if (unit.getType() == strelyaev::TokenType::OPERAND)
     {
       postfix_queue.push(unit);
     }
-    if (unit.getType() == strelyaev::detail::TokenType::BRACKET)
+    if (unit.getType() == strelyaev::TokenType::BRACKET)
     {
-      if (unit.getToken().operation == '(')
+      if (unit.getOperation() == '(')
       {
         temp_stack.push(unit);
       }
-      if (unit.getToken().operation == ')')
+      if (unit.getOperation() == ')')
       {
         strelyaev::ExpressionUnit stack_peek = temp_stack.back();
         temp_stack.pop_back();
-        while (stack_peek.getToken().operation != '(')
+        while (stack_peek.getOperation() != '(')
         {
           postfix_queue.push(stack_peek);
           stack_peek = temp_stack.back();
@@ -94,7 +94,7 @@ strelyaev::Queue< strelyaev::ExpressionUnit > strelyaev::makePostfix(Queue< Expr
         }
       }
     }
-    if (unit.getType() == strelyaev::detail::TokenType::OPERATION)
+    if (unit.getType() == strelyaev::TokenType::OPERATION)
     {
       if (temp_stack.empty())
       {
@@ -103,14 +103,14 @@ strelyaev::Queue< strelyaev::ExpressionUnit > strelyaev::makePostfix(Queue< Expr
       }
       strelyaev::ExpressionUnit stack_peek = temp_stack.back();
       temp_stack.pop_back();
-      if (!(strelyaev::isPrecedenceLess(unit.getToken().operation, stack_peek.getToken().operation)))
+      if (!(strelyaev::isPrecedenceLess(unit.getOperation(), stack_peek.getOperation())))
       {
         temp_stack.push(stack_peek);
         temp_stack.push(unit);
       }
-      else if (strelyaev::isPrecedenceLess(unit.getToken().operation, stack_peek.getToken().operation))
+      else if (strelyaev::isPrecedenceLess(unit.getOperation(), stack_peek.getOperation()))
       {
-        while (strelyaev::isPrecedenceLess(unit.getToken().operation, stack_peek.getToken().operation))
+        while (strelyaev::isPrecedenceLess(unit.getOperation(), stack_peek.getOperation()))
         {
           postfix_queue.push(stack_peek);
           if (temp_stack.empty())
@@ -139,7 +139,7 @@ strelyaev::Queue< strelyaev::ExpressionUnit > strelyaev::makePostfix(Queue< Expr
 
 long long strelyaev::calculatePostfix(strelyaev::Queue< strelyaev::ExpressionUnit >& queue)
 {
-  strelyaev::Stack< long long > processing_stack;
+  strelyaev::Stack< ExpressionUnit > processing_stack;
   if (queue.empty())
   {
     throw std::out_of_range("Empty queue is met");
@@ -148,31 +148,33 @@ long long strelyaev::calculatePostfix(strelyaev::Queue< strelyaev::ExpressionUni
   {
     strelyaev::ExpressionUnit unit = queue.front();
     queue.pop_front();
-    if (unit.getType() == strelyaev::detail::TokenType::OPERAND)
+    if (unit.getType() == strelyaev::TokenType::OPERAND)
     {
-      processing_stack.push(unit.getToken().operand);
+      processing_stack.push(unit);
     }
-    if (unit.getType() == strelyaev::detail::TokenType::OPERATION)
+    if (unit.getType() == strelyaev::TokenType::OPERATION)
     {
-      long long second = processing_stack.back();
+      ExpressionUnit second = processing_stack.back();
       processing_stack.pop_back();
       if (processing_stack.empty())
       {
         throw std::invalid_argument("Something is wrong with postfix expression");
       }
-      long long first = processing_stack.back();
+      ExpressionUnit first = processing_stack.back();
       processing_stack.pop_back();
-      long long result = detail::calculateOperation(first, second, unit.getToken().operation);
-      processing_stack.push(result);
+      long long result = calculateOperation(first, second, unit);
+      Token temp_token(result);
+      ExpressionUnit operand_unit(temp_token, strelyaev::TokenType::OPERAND);
+      processing_stack.push(operand_unit);
     }
   }
-  long long result = processing_stack.back();
+  ExpressionUnit result = processing_stack.back();
   processing_stack.pop_back();
   if (!processing_stack.empty())
   {
     throw std::invalid_argument("Something is wrong with postfix expression");
   }
-  return result;
+  return result.getOperand();
 }
 
 

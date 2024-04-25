@@ -2,40 +2,40 @@
 #define TOKEN_HPP
 namespace strelyaev
 {
-  namespace detail
+  enum class TokenType
   {
-    enum class TokenType
-    {
-      OPERAND = 0,
-      OPERATION = 1,
-      BRACKET = 2,
-      NONE = 3
-    };
+    OPERAND = 0,
+    OPERATION = 1,
+    BRACKET = 2,
+    NONE = 3
+  };
 
-    union Token
-    {
-      long long operand;
-      char operation;
+  class ExpressionUnit;
+
+  union Token
+  {
+    friend struct ExpressionUnit;
+    public:
       Token();
       Token(long long);
       Token(char);
       ~Token() = default;
-    };
-  }
+    private:
+      long long operand;
+      char operation;
+  };
 
   struct ExpressionUnit
   {
     public:
       ExpressionUnit() = default;
-      ExpressionUnit(const ExpressionUnit& other) = default;
-      ExpressionUnit(detail::Token&, detail::TokenType&);
-      ~ExpressionUnit() = default;
-      ExpressionUnit& operator=(const ExpressionUnit&);
-      const detail::Token getToken() const;
-      detail::TokenType getType() const;
+      ExpressionUnit(const Token&, TokenType);
+      long long getOperand() const;
+      char getOperation() const;
+      TokenType getType() const;
     private:
-      detail::Token token;
-      detail::TokenType type;
+      Token token;
+      TokenType type;
   };
 }
 
