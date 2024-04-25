@@ -4,17 +4,17 @@
 #include <limits>
 
 
-bool strelyaev::isOperation(const std::string& c)
+bool strelyaev::detail::isOperation(const std::string& c)
 {
   return ((c == "+") || (c == "-") || (c == "/") || (c == "*") || (c == "%"));
 }
 
-bool strelyaev::isBracket(const std::string& c)
+bool strelyaev::detail::isBracket(const std::string& c)
 {
   return ((c == "(") || (c == ")"));
 }
 
-int strelyaev::getPrecedence(char c)
+int strelyaev::detail::getPrecedence(char c)
 {
   if (c == '+' || c == '-')
   {
@@ -31,7 +31,7 @@ int strelyaev::getPrecedence(char c)
   return -1;
 }
 
-long long strelyaev::calculateOperation(const detail::Token& first, const detail::Token& second, const detail::Token& oper)
+long long strelyaev::detail::calculateOperation(const detail::Token& first, const detail::Token& second, const detail::Token& oper)
 {
   long long max = std::numeric_limits< long long >::max();
   long long min = std::numeric_limits< long long >::min();
@@ -68,4 +68,10 @@ long long strelyaev::calculateOperation(const detail::Token& first, const detail
   throw std::logic_error("Invalid operation");
 }
 
+bool strelyaev::isPrecedenceLess(char a, char b)
+{
+  int first = detail::getPrecedence(a);
+  int second = detail::getPrecedence(b);
+  return first <= second;
+}
 

@@ -25,11 +25,11 @@ strelyaev::ExpressionUnit strelyaev::convertStringToUnit(std::string string_toke
   {
     char c = string_token[0];
     new_token = strelyaev::detail::Token(c);
-    if (strelyaev::isBracket(string_token))
+    if (strelyaev::detail::isBracket(string_token))
     {
       type = strelyaev::detail::TokenType::BRACKET;
     }
-    if (strelyaev::isOperation(string_token))
+    if (strelyaev::detail::isOperation(string_token))
     {
       type = strelyaev::detail::TokenType::OPERATION;
     }
@@ -103,14 +103,14 @@ strelyaev::Queue< strelyaev::ExpressionUnit > strelyaev::makePostfix(Queue< Expr
       }
       strelyaev::ExpressionUnit stack_peek = temp_stack.back();
       temp_stack.pop_back();
-      if (strelyaev::getPrecedence(unit.getToken().operation) > strelyaev::getPrecedence(stack_peek.getToken().operation))
+      if (!(strelyaev::isPrecedenceLess(unit.getToken().operation, stack_peek.getToken().operation)))
       {
         temp_stack.push(stack_peek);
         temp_stack.push(unit);
       }
-      else if (strelyaev::getPrecedence(unit.getToken().operation) <= strelyaev::getPrecedence(stack_peek.getToken().operation))
+      else if (strelyaev::isPrecedenceLess(unit.getToken().operation, stack_peek.getToken().operation))
       {
-        while (strelyaev::getPrecedence(unit.getToken().operation) <= strelyaev::getPrecedence(stack_peek.getToken().operation))
+        while (strelyaev::isPrecedenceLess(unit.getToken().operation, stack_peek.getToken().operation))
         {
           postfix_queue.push(stack_peek);
           if (temp_stack.empty())
@@ -162,7 +162,7 @@ long long strelyaev::calculatePostfix(strelyaev::Queue< strelyaev::ExpressionUni
       }
       long long first = processing_stack.back();
       processing_stack.pop_back();
-      long long result = calculateOperation(first, second, unit.getToken().operation);
+      long long result = detail::calculateOperation(first, second, unit.getToken().operation);
       processing_stack.push(result);
     }
   }

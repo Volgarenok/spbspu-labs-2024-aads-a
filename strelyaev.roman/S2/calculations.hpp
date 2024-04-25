@@ -6,10 +6,14 @@
 #include "stack.hpp"
 namespace strelyaev
 {
-  bool isOperation(const std::string& c);
-  bool isBracket(const std::string& c);
-  int getPrecedence(char);
-  long long calculateOperation(const detail::Token&, const detail::Token&, const detail::Token&);
+  namespace detail
+  {
+    bool isOperation(const std::string& c);
+    bool isBracket(const std::string& c);
+    int getPrecedence(char);
+    long long calculateOperation(const Token&, const Token&, const Token&);
+  }
+  bool isPrecedenceLess(char, char);
 }
 #endif
 
