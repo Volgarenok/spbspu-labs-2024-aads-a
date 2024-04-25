@@ -5,7 +5,7 @@
 
 namespace gladyshev
 {
-  template < class T, class Container = DynArray< T > >
+  template < class T >
   class Queue
   {
   public:
@@ -34,7 +34,7 @@ namespace gladyshev
       array_.reverse();
     }
   private:
-    Container array_;
+    DynArray< T > array_;
   };
 }
 
