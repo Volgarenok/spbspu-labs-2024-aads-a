@@ -240,7 +240,7 @@ namespace sivkov
     {
       assignList.push_back(value);
     }
-    swap(assignList)
+    swap(assignList);
   }
 
   template< typename T >
