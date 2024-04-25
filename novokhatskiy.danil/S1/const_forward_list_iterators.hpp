@@ -40,7 +40,7 @@ namespace novokhatskiy
       constIter temp = (*this);
       ++(*this);
       return temp;
-    };
+    }
     bool operator==(const constIter other) const
     {
       return node_ == other.node_;
