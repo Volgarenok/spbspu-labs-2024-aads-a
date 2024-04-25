@@ -37,11 +37,9 @@ namespace novokhatskiy
     ForwardList(const ForwardList< T >& other):
       head_(make_list(other.cbegin(), other.cend()))
     {}
-    // использовать make_list
     ForwardList(size_t size, const T& value):
       head_(make_list(size, value))
     {}
-    // использовать make_list
     ForwardList(std::initializer_list< T > list):
       head_(make_list(list.cbegin(), list.cend()))
     {}
@@ -147,7 +145,7 @@ namespace novokhatskiy
       {
         goToPos++;
       }
-      for (T&& value : list)
+      for (T&& value: list)
       {
         node_t* node = new node_t(value);
         node->next_ = goToPos.node_->next_;
@@ -330,7 +328,12 @@ namespace novokhatskiy
     }
     size_t remove(const T& value)
     {
-      return remove_if([&value](const T& tmp) -> bool { return tmp = value; });
+      return remove_if(
+        [&value](const T& tmp) -> bool 
+        { 
+          return tmp = value; 
+        }
+      );
     }
     template < typename P >
     size_t remove_if(P predicate)
