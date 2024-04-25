@@ -79,7 +79,7 @@ namespace rebdev
         size_t sizeCopy = size_;
         try
         {
-          BiList(*list);
+          *this = BiList(list);
         }
         catch (...)
         {
@@ -109,7 +109,7 @@ namespace rebdev
       {
         clear();
         delete headNode_;
-        Bilist(std::move(list));
+        *this = BiList(std::move(list));
         return *this;
       }
 
@@ -164,7 +164,7 @@ namespace rebdev
         node * tailCopy = tailNode_;
         size_t sizeCopy = size_;
 
-        BiList();
+        *this = BiList();
 
         for (size_t i = 0; i < n; ++i)
         {
@@ -202,7 +202,7 @@ namespace rebdev
       {
         if (headNode_ == nullptr)
         {
-          BiList();
+          *this = BiList();
         }
         node * newNode = new node{std::move(val), nullptr, headNode_};
         headNode_->last = newNode;
@@ -224,7 +224,7 @@ namespace rebdev
       {
         if (tailNode_ == nullptr)
         {
-          BiList();
+          *this = BiList();
         }
         node * newNode = new node{std::move(val), tailNode_->last, tailNode_};
         if ((tailNode_->last) != nullptr)
