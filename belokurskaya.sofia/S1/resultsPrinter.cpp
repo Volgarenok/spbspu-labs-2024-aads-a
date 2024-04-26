@@ -5,16 +5,16 @@
 
 #include "list.hpp"
 
-void belokurskaya::printNames(const SequenceVector& sequences, std::ostream & out)
+void belokurskaya::printNames(const SequenceVector& sequences, std::ostream& out)
 {
-  for (size_t i = 0; i < sequences.getSize() - 1; ++i)
+  for (size_t i = 0; i < sequences.getSize(); ++i)
   {
     out << sequences[i].getName() << " ";
   }
-  out << sequences[sequences.getSize() - 1].getName() << "\n";
+  out << "\n";
 }
 
-void belokurskaya::printSequences(const SequenceVector& sequences, std::ostream & out)
+void belokurskaya::printSequences(const SequenceVector& sequences, std::ostream& out)
 {
   size_t maxLength = 0;
   for (size_t i = 0; i < sequences.getSize(); ++i)
@@ -22,29 +22,32 @@ void belokurskaya::printSequences(const SequenceVector& sequences, std::ostream 
     maxLength = std::max(maxLength, sequences[i].getSequence().size());
   }
 
-  for (size_t j = 0; j < maxLength - 1; ++j)
+  for (size_t j = 0; j < maxLength; ++j)
   {
     for (size_t i = 0; i < sequences.getSize(); ++i)
     {
-      const List< int > & seq = sequences[i].getSequence();
+      const List< int >& seq = sequences[i].getSequence();
       if (j < seq.size())
       {
         out << seq.at(j) << " ";
       }
-      out << seq.at(maxLength - 1);
     }
     out << "\n";
   }
 }
 
-void belokurskaya::printSums(const SequenceVector& sequences, std::ostream & out)
+void belokurskaya::printSums(const SequenceVector& sequences, std::ostream& out)
 {
   size_t maxLength = 0;
   for (size_t i = 0; i < sequences.getSize(); ++i)
   {
     maxLength = std::max(maxLength, sequences[i].getSequence().size());
   }
-
+  if (maxLength == 0)
+  {
+    out << "0\n";
+    return;
+  }
   int* sums = new int[maxLength] {};
   if (sums == nullptr)
   {
@@ -58,7 +61,7 @@ void belokurskaya::printSums(const SequenceVector& sequences, std::ostream & out
 
   for (size_t i = 0; i < sequences.getSize(); ++i)
   {
-    const List< int > & seq = sequences[i].getSequence();
+    const List< int >& seq = sequences[i].getSequence();
     for (size_t j = 0; j < maxLength; ++j)
     {
       int max = std::numeric_limits< int >::max() - seq.at(j);
@@ -71,11 +74,11 @@ void belokurskaya::printSums(const SequenceVector& sequences, std::ostream & out
     }
   }
 
-  for (size_t i = 0; i < maxLength - 1; ++i)
+  for (size_t i = 0; i < maxLength; ++i)
   {
     out << sums[i] << " ";
   }
-  out << sums[maxLength - 1] << "\n";
+  out << "\n";
 
   delete[] sums;
 }
