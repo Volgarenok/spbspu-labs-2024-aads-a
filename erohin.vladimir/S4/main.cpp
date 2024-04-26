@@ -3,18 +3,20 @@
 #include <map>
 #include <string>
 #include <functional>
+#include <stdexcept>
+#include <limits>
 #include "dictionary_command.hpp"
 
 int main(int argc, char ** argv)
 {
   using namespace erohin;
-  if (argc != 2)
+  if (argc != 1)
   {
     std::cerr << "Wrong CLA number\n";
     return 0;
   }
   std::fstream file(argv[1]);
-  std::map< std::string, dict > context;
+  collection context;
   std::string dict_name;
   file >> dict_name;
   while (!file.eof())
@@ -33,14 +35,29 @@ int main(int argc, char ** argv)
     }
   }
   file.close();
-  using dict_func = std::function< void(dict &, const dict &, const dict &) >;
+  using dict_func = std::function< void(std::istream &, std::ostream &) >;
   std::map< std::string, dict_func > command;
   {
     using namespace std::placeholders;
-    command["print"] = std::bind(print, std::ref(std::cout), _1);
-    command["implement"] = std::bind(implement, std::ref(std::cin), std::ref(std::cout), _1, _2, _3);
-    command["intersect"] = std::bind(intersect, std::ref(std::cin), std::ref(std::cout), _1, _2, _3);
-    command["union"] = std::bind(unite, std::ref(std::cin), std::ref(std::cout), _1, _2, _3);
+    command["print"] = std::bind(print, context, _1, _2);
+    command["implement"] = std::bind(implement, context, _1, _2);
+    command["intersect"] = std::bind(intersect, context, _1, _2);
+    command["union"] = std::bind(unite, context, _1, _2);
   }
-  command.empty();
+  std::string command_name;
+  while (!std::cin.eof())
+  {
+    std::cin >> command_name;
+    try
+    {
+      command.at(command_name)(std::cin, std::cout);
+    }
+    catch (const std::out_of_range &)
+    {
+      std::cout << "<INVALID COMMAND\n>";
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    }
+    catch (const std::exception &)
+    {}
+  }
 }

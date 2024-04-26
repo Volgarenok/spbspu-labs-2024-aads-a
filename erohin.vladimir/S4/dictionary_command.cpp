@@ -1,22 +1,22 @@
 #include "dictionary_command.hpp"
 #include <iostream>
 
-void erohin::print(std::ostream & output, const dict & dest)
+void erohin::print(const collection & context, std::istream & input, std::ostream & output)
 {
   return;
 }
 
-void erohin::implement(std::istream & input, std::ostream & output, dict & dest, const dict & source1, const dict & source2)
+void erohin::implement(collection & context, std::istream & input, std::ostream & output)
 {
   return;
 }
 
-void erohin::intersect(std::istream & input, std::ostream & output, dict & dest, const dict & source1, const dict & source2)
+void erohin::intersect(collection & context, std::istream & input, std::ostream & output)
 {
   return;
 }
 
-void erohin::unite(std::istream & input, std::ostream & output, dict & dest, const dict & source1, const dict & source2)
+void erohin::unite(collection & context, std::istream & input, std::ostream & output)
 {
   return;
 }
