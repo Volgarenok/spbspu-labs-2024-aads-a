@@ -60,7 +60,7 @@ void belokurskaya::printSums(const SequenceVector& sequences, std::ostream & out
     const List< int > & seq = sequences[i].getSequence();
     for (size_t j = 0; j < maxLength; ++j)
     {
-      size_t max = std::numeric_limits< int >::max() - seq.at(j);
+      int max = std::numeric_limits< int >::max() - seq.at(j);
       if (sums[j] > max - seq.at(j))
       {
         delete[] sums;
