@@ -1,6 +1,7 @@
 #include "resultsPrinter.hpp"
 
 #include <iostream>
+#include <limits>
 
 #include "list.hpp"
 
@@ -57,7 +58,7 @@ void belokurskaya::printSums(const SequenceVector& sequences, std::ostream & out
   for (size_t i = 0; i < sequences.getSize(); ++i)
   {
     const List< int > & seq = sequences[i].getSequence();
-    for (size_t j = 0; j < seq.size(); ++j)
+    for (size_t j = 0; j < maxLength; ++j)
     {
       size_t max = std::numeric_limits< int >::max() - seq.at(j);
       if (sums[j] > max - seq.at(j))
