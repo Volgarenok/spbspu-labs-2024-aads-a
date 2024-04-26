@@ -19,8 +19,21 @@ void print(std::ostream & out, const std::map< size_t, std::string > & map, cons
   }
 }
 
-void intersect()
-{}
+std::map< size_t, std::string > intersect(const std::map< size_t, std::string > & left, const std::map< size_t, std::string > & right)
+{
+  std::map< size_t, std::string > res;
+  for (auto key1: left)
+  {
+    for (auto key2: right)
+    {
+      if (key1.first == key2.first)
+      {
+        res.insert(key1);
+      }
+    }
+  }
+  return res;
+}
 
 int main(int argc, char * argv[])
 {
@@ -59,5 +72,12 @@ int main(int argc, char * argv[])
       std::cout << pair2.first << " " << pair2.second;
     }
   }
-  print(std::cout, myMap["first"], "first");
+  std::map< size_t, std::string > temp1;
+  temp1.insert(std::make_pair(1, "hello"));
+  temp1.insert(std::make_pair(2, "jeez"));
+  std::map< size_t, std::string > temp2;
+  temp2.insert(std::make_pair(2, "hi"));
+  temp2.insert(std::make_pair(3, "jeezus"));
+  auto temp3 = intersect(temp1, temp2);
+  print(std::cout, temp3, "third");
 }
