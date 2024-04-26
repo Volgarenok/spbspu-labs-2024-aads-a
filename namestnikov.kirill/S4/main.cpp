@@ -5,17 +5,22 @@
 
 void print(std::ostream & out, const std::map< size_t, std::string > & map, const std::string & name)
 {
-  out << name;
-  auto begin = map.cbegin();
-  auto end = map.cend();
-  --end;
-  while (begin != end)
+  if (map.empty())
   {
-    out << begin->first << " " << begin->second << " ";
-    ++begin;
+    out << "<EMPTY>\n";
   }
-  out << begin->first << " " << begin->second << " ";
+  else
+  {
+    out << name;
+    for (auto key: map)
+    {
+      out << " " << key.first << " " << key.second;
+    }
+  }
 }
+
+void intersect()
+{}
 
 int main(int argc, char * argv[])
 {
