@@ -62,6 +62,21 @@ namespace belokurskaya
         }
       }
 
+      Node * begin() const
+      {
+        return head;
+      }
+
+      Node * end() const
+      {
+        Node * current = head;
+        while (current && current->next)
+        {
+          current = current->next;
+        }
+        return current;
+      }
+
       bool empty() const noexcept
       {
         return head == nullptr;
@@ -221,7 +236,7 @@ namespace belokurskaya
         return count;
       }
 
-      List& operator=(const List& other)
+      List & operator=(const List & other)
       {
         if (this != &other)
         {
@@ -288,7 +303,6 @@ namespace belokurskaya
       {
         return !(* this <= other);
       }
-
 
       bool operator>=(const List< T > & other) const noexcept
       {

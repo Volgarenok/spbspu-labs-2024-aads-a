@@ -4,16 +4,16 @@
 
 #include "list.hpp"
 
-void belokurskaya::printNames(const SequenceVector & sequences)
+void belokurskaya::printNames(const SequenceVector& sequences, std::ostream & out)
 {
   for (size_t i = 0; i < sequences.getSize(); ++i)
   {
-    std::cout << sequences[i].getName() << " ";
+    out << sequences[i].getName() << " ";
   }
-  std::cout << "\n";
+  out << "\n";
 }
 
-void belokurskaya::printSequences(const SequenceVector & sequences)
+void belokurskaya::printSequences(const SequenceVector& sequences, std::ostream & out)
 {
   size_t maxLength = 0;
   for (size_t i = 0; i < sequences.getSize(); ++i)
@@ -25,27 +25,55 @@ void belokurskaya::printSequences(const SequenceVector & sequences)
   {
     for (size_t i = 0; i < sequences.getSize(); ++i)
     {
-      const List<int>& seq = sequences[i].getSequence();
+      const List< int > & seq = sequences[i].getSequence();
       if (j < seq.size())
       {
-        std::cout << seq.at(j) << " ";
+        out << seq.at(j) << " ";
       }
     }
-    std::cout << "\n";
+    out << "\n";
   }
 }
 
-void belokurskaya::printSums(const SequenceVector & sequences)
+void belokurskaya::printSums(const SequenceVector& sequences, std::ostream & out)
 {
+  size_t maxLength = 0;
   for (size_t i = 0; i < sequences.getSize(); ++i)
   {
-    const List<int>& seq = sequences[i].getSequence();
-    int sum = 0;
+    maxLength = std::max(maxLength, sequences[i].getSequence().size());
+  }
+
+  int* sums = new int[maxLength] {};
+  if (sums == nullptr)
+  {
+    std::cerr << "Failed to allocate memory\n";
+    return;
+  }
+  for (size_t i = 0; i < maxLength; ++i)
+  {
+    sums[i] = 0;
+  }
+
+  for (size_t i = 0; i < sequences.getSize(); ++i)
+  {
+    const List< int > & seq = sequences[i].getSequence();
     for (size_t j = 0; j < seq.size(); ++j)
     {
-      sum += seq.at(j);
+      size_t max = std::numeric_limits< int >::max() - seq.at(j);
+      if (sums[j] > max - seq.at(j))
+      {
+        delete[] sums;
+        throw std::overflow_error("Overflow");
+      }
+      sums[j] += seq.at(j);
     }
-    std::cout << sum << " ";
   }
-  std::cout << "\n";
+
+  for (size_t i = 0; i < maxLength; ++i)
+  {
+    out << sums[i] << " ";
+  }
+  out << "\n";
+
+  delete[] sums;
 }

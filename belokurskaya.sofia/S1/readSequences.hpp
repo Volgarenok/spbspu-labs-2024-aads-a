@@ -5,7 +5,7 @@
 
 namespace belokurskaya
 {
-  SequenceVector readSequences();
+  SequenceVector readSequences(std::istream & in);
 }
 
 #endif

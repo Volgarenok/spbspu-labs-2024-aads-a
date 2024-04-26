@@ -5,9 +5,9 @@
 
 namespace belokurskaya
 {
-  void printNames(const SequenceVector & sequences);
-  void printSequences(const SequenceVector & sequences);
-  void printSums(const SequenceVector & sequences);
+  void printNames(const SequenceVector & sequences, std::ostream & out);
+  void printSequences(const SequenceVector & sequences, std::ostream & out);
+  void printSums(const SequenceVector & sequences, std::ostream & out);
 }
 
 #endif
