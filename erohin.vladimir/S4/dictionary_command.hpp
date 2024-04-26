@@ -3,6 +3,7 @@
 
 #include <map>
 #include <iosfwd>
+#include <string>
 
 namespace erohin
 {
