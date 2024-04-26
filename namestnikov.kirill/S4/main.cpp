@@ -12,7 +12,7 @@ void print(std::ostream & out, const std::map< size_t, std::string > & map, cons
   else
   {
     out << name;
-    for (auto key: map)
+    for (const auto & key: map)
     {
       out << " " << key.first << " " << key.second;
     }
@@ -22,9 +22,9 @@ void print(std::ostream & out, const std::map< size_t, std::string > & map, cons
 std::map< size_t, std::string > makeIntersect(const std::map< size_t, std::string > & left, const std::map< size_t, std::string > & right)
 {
   std::map< size_t, std::string > res;
-  for (auto key1: left)
+  for (const auto & key1: left)
   {
-    for (auto key2: right)
+    for (const auto & key2: right)
     {
       if (key1.first == key2.first)
       {
@@ -38,11 +38,11 @@ std::map< size_t, std::string > makeIntersect(const std::map< size_t, std::strin
 std::map< size_t, std::string > makeUnion(const std::map< size_t, std::string > & left, const std::map< size_t, std::string > & right)
 {
   std::map< size_t, std::string > res;
-  for (auto key1: left)
+  for (const auto & key1: left)
   {
     res.insert(key1);
   }
-  for (auto key2: right)
+  for (const auto & key2: right)
   {
     if (res.find(key2.first) == res.end())
     {
