@@ -2,6 +2,8 @@
 #include <fstream>
 #include <string>
 #include <map>
+#include <functional>
+#include <limits>
 
 void print(std::ostream & out, const std::map< size_t, std::string > & map, const std::string & name)
 {
@@ -52,9 +54,10 @@ std::map< size_t, std::string > makeUnion(const std::map< size_t, std::string > 
   return res;
 }
 
-std::map< size_t, std::string > makeUnion(const std::map< size_t, std::string > & left, const std::map< size_t, std::string > & right)
+std::map< size_t, std::string > makeComplement(const std::map< size_t, std::string > & left, const std::map< size_t, std::string > & right)
 {
-  
+  std::map< size_t, std::string > res;
+  return res;
 }
 
 void inputMaps(std::ifstream & in, std::map< std::string, std::map< size_t, std::string > > & myMap)
@@ -92,11 +95,50 @@ int main(int argc, char * argv[])
     inputMaps(in, myMap);
     in.close();
   }
+  else
+  {
+    std::cerr << "Wrong command line arguments\n";
+    return 2;
+  }
   for (const auto & pair : myMap)
   {
     for (const auto & pair2 : pair.second)
     {
       std::cout << pair2.first << " " << pair2.second;
+    }
+  }
+  std::map< std::string, std::function< std::map< size_t, std::string >(const std::map< size_t, std::string > &, const std::map< size_t, std::string >) > > commands;
+  {
+    using namespace std::placeholders;
+    commands["union"] = std::bind(makeUnion, _1, _2);
+    commands["intersect"] = std::bind(makeIntersect, _1, _2);
+    commands["complement"] = std::bind(makeComplement, _1, _2);
+  }
+  std::string commandName = "";
+  while (std::cin >> commandName)
+  {
+    try
+    {
+      if (commandName == "print")
+      {
+        std::string mapName = "";
+        std::cin >> mapName;
+        print(std::cout, myMap[mapName], mapName);
+      }
+      else
+      {
+        std::string resultMapName = "";
+        std::string firstMapName = "";
+        std::string secondMapName = "";
+        std::cin >> resultMapName >> firstMapName >> secondMapName;
+        std::map< size_t, std::string > newMap = commands.at(commandName)(myMap[firstMapName], myMap[secondMapName]);
+        myMap.insert(std::make_pair(resultMapName, newMap));
+      }
+    }
+    catch (const std::out_of_range &)
+    {
+      std::cerr << "<INVALID COMMAND>\n";
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
   }
   std::map< size_t, std::string > temp1;
