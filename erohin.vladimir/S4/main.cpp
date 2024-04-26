@@ -52,14 +52,15 @@ int main(int argc, char ** argv)
     {
       command.at(command_name)(std::cin, std::cout);
     }
-    catch (const std::out_of_range &)
-    {
-      std::cout << "<INVALID COMMAND>\n";
-      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
-    }
     catch (const std::logic_error &)
     {
       std::cout << "<EMPTY>\n";
     }
+    catch (const std::exception &)
+    {
+      std::cout << "<INVALID COMMAND>\n";
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    }
+
   }
 }
