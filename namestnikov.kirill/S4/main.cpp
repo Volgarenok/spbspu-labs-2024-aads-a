@@ -52,6 +52,11 @@ std::map< size_t, std::string > makeUnion(const std::map< size_t, std::string > 
   return res;
 }
 
+std::map< size_t, std::string > makeUnion(const std::map< size_t, std::string > & left, const std::map< size_t, std::string > & right)
+{
+  
+}
+
 void inputMaps(std::ifstream & in, std::map< std::string, std::map< size_t, std::string > > & myMap)
 {
   std::map< size_t, std::string > tempMap;
