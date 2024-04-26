@@ -22,25 +22,16 @@ int main(int argc, char* argv[])
     std::cerr << "you didn't attach the file\n";
   }
 
-  mytree.push(2, "hjk");
-  mytree.push(3, "m");
-  mytree.push(1, "hello");
-  mytree.push(0, "uhyyh");
-  mytree.del(0);
-  mytree.push(10, "uhyyh");
-  mytree.push(15, "uhyyh");
-  mytree.push(20, "uhyyh");
-  mytree.push(30, "uhyyh");
-  mytree.push(5, "uhyyh");
+  mytree.push(10, "hjk");
+  mytree.push(9, "m");
+  mytree.push(15, "hello");
+  mytree.push(18, "uhyyh");
   mytree.push(8, "uhyyh");
-  mytree.push(90, "uhyyh");
-  mytree.push(65, "uhyyh");
-  mytree.push(34, "uhyyh");
-  mytree.push(23, "uhyyh");
-  mytree.del(65);
-  mytree.push(12, "uhyyh");
-  mytree.push(80, "uhyyh");
-  mytree.del(10);
+  mytree.push(14, "uhyyh");
+  mytree.push(7, "uhyyh");
+  mytree.del(15);
+  mytree.del(14);
+  mytree.del(18);
   for (auto it = mytree.cbegin(); it != mytree.cend(); ++it)
   {
     std::cout << (*it).first << ' ' << (*it).second << '\n';

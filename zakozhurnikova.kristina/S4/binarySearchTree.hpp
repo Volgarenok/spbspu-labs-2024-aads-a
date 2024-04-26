@@ -6,7 +6,7 @@
 #include <functional>
 #include <iostream>
 #include "comparator.hpp"
-#include "constIterator.hpp"
+#include "constIteratorTree.hpp"
 #include "treeNode.hpp"
 
 namespace zakozhurnikova
@@ -354,39 +354,27 @@ namespace zakozhurnikova
       else if (currentNode->hasBothChildren())
       {
         node* succ = getLowest(currentNode->rightChild);
-        node* parentRemove = succ->parent;
-        int oldBal = parentRemove->balanceFactor;
-        if (parentRemove->isLeftChild())
-        {
-          --parentRemove->balanceFactor;
-        }
-        else
-        {
-          ++parentRemove->balanceFactor;
-        }
-        succ->spliceOut();
         currentNode->data.first = succ->data.first;
         currentNode->data.second = succ->data.second;
-        delete succ;
-        updateRemoveBalance(parentRemove, oldBal);
+        remove(succ);
       }
       else
       {
         if (currentNode->hasLeftChild())
         {
+          int oldBal = currentNode->parent->balanceFactor;
           if (currentNode->isLeftChild())
           {
             currentNode->leftChild->parent = currentNode->parent;
             currentNode->parent->leftChild = currentNode->leftChild;
+            --currentNode->parent->balanceFactor;
           }
           else if (currentNode->isRightChild())
           {
             currentNode->leftChild->parent = currentNode->parent;
             currentNode->parent->rightChild = currentNode->leftChild;
+            ++currentNode->parent->balanceFactor;
           }
-
-          int oldBal = currentNode->parent->balanceFactor;
-          --currentNode->parent->balanceFactor;
           updateRemoveBalance(currentNode->parent, oldBal);
 
           if (currentNode->isRoot())
@@ -397,19 +385,19 @@ namespace zakozhurnikova
         }
         else
         {
+          int oldBal = currentNode->parent->balanceFactor;
           if (currentNode->isLeftChild())
           {
             currentNode->rightChild->parent = currentNode->parent;
             currentNode->parent->leftChild = currentNode->rightChild;
+            --currentNode->parent->balanceFactor;
           }
           else if (currentNode->isRightChild())
           {
             currentNode->rightChild->parent = currentNode->parent;
             currentNode->parent->rightChild = currentNode->rightChild;
+            ++currentNode->parent->balanceFactor;
           }
-
-          int oldBal = currentNode->parent->balanceFactor;
-          ++currentNode->parent->balanceFactor;
           updateRemoveBalance(currentNode->parent, oldBal);
 
           if (currentNode->isRoot())
@@ -457,13 +445,13 @@ namespace zakozhurnikova
         return cur;
       }
 
-      ConstIterator< Key, Value, Compare > cbegin() noexcept
+      ConstIteratorTree< Key, Value, Compare > cbegin() noexcept
       {
-        return ConstIterator< Key, Value, Compare >(getLowest(root_));
+        return ConstIteratorTree< Key, Value, Compare >(getLowest(root_));
       }
-      ConstIterator< Key, Value, Compare > cend() noexcept
+      ConstIteratorTree< Key, Value, Compare > cend() noexcept
       {
-        return ConstIterator< Key, Value, Compare >();
+        return ConstIteratorTree< Key, Value, Compare >();
       }
 
     private:

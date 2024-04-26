@@ -1,5 +1,5 @@
-#ifndef CONST_ITERATOR_HPP
-#define CONST_ITERATOR_HPP
+#ifndef CONST_ITERATOR_TREE_HPP
+#define CONST_ITERATOR_TREE_HPP
 #include <iterator>
 #include <functional>
 #include <utility>
@@ -11,14 +11,14 @@ namespace zakozhurnikova
   class BinarySearchTree;
 
   template <class Key, class Value, class Compare = std::less< Key > >
-  struct ConstIterator: public std::iterator< std::bidirectional_iterator_tag, Value >
+  struct ConstIteratorTree: public std::iterator< std::bidirectional_iterator_tag, Value >
   {
       friend class BinarySearchTree<Key, Value, Compare>;
-      using this_t = ConstIterator<Key, Value, Compare>;
+      using this_t = ConstIteratorTree<Key, Value, Compare>;
       using TreeNode = detail::TreeNode<Key, Value>;
 
-      ConstIterator() = default;
-      ConstIterator(detail::TreeNode< Key, Value >* node):
+      ConstIteratorTree() = default;
+      ConstIteratorTree(detail::TreeNode< Key, Value >* node):
         node_(node)
       {}
       this_t &operator=(const this_t &) = default;
@@ -36,7 +36,7 @@ namespace zakozhurnikova
   };
 
   template <class Key, class Value, class Compare>
-  ConstIterator< Key, Value, Compare >& ConstIterator<Key, Value, Compare>::operator++()
+  ConstIteratorTree< Key, Value, Compare >& ConstIteratorTree<Key, Value, Compare>::operator++()
   {
      if (node_->rightChild)
     {
@@ -56,51 +56,50 @@ namespace zakozhurnikova
   }
 
   template < class Key, class Value, class Compare >
-  ConstIterator<Key, Value, Compare> ConstIterator<Key, Value, Compare>::operator++(int)
+  ConstIteratorTree<Key, Value, Compare> ConstIteratorTree<Key, Value, Compare>::operator++(int)
   {
-      ConstIterator<Key, Value> result(*this);
+      ConstIteratorTree<Key, Value> result(*this);
       ++(*this);
       return result;
   }
 
   template < class Key, class Value, class Compare >
-  ConstIterator<Key, Value, Compare> &ConstIterator<Key, Value, Compare>::operator--()
+  ConstIteratorTree<Key, Value, Compare> &ConstIteratorTree<Key, Value, Compare>::operator--()
   {
       node_ = node_->prev;
       return *this;
   }
 
   template < class Key, class Value, class Compare >
-  ConstIterator<Key, Value, Compare> ConstIterator<Key, Value, Compare>::operator--(int)
+  ConstIteratorTree<Key, Value, Compare> ConstIteratorTree<Key, Value, Compare>::operator--(int)
   {
-      ConstIterator<Key, Value, Compare> result(*this);
+      ConstIteratorTree<Key, Value, Compare> result(*this);
       --(*this);
       return result;
   }
 
   template < class Key, class Value, class Compare >
-  bool ConstIterator< Key, Value, Compare >::operator==(const ConstIterator<Key, Value, Compare> &rhs) const
+  bool ConstIteratorTree< Key, Value, Compare >::operator==(const ConstIteratorTree<Key, Value, Compare> &rhs) const
   {
       return node_ == rhs.node_;
   }
 
   template < class Key, class Value, class Compare >
-  bool ConstIterator<Key, Value, Compare>::operator!=(const ConstIterator<Key, Value, Compare> &rhs) const
+  bool ConstIteratorTree<Key, Value, Compare>::operator!=(const ConstIteratorTree<Key, Value, Compare> &rhs) const
   {
       return !(*this == rhs);
   }
 
   template < class Key, class Value, class Compare >
-  const std::pair< Key, Value >& ConstIterator< Key, Value, Compare >::operator*() const
+  const std::pair< Key, Value >& ConstIteratorTree< Key, Value, Compare >::operator*() const
   {
       return node_->data;
   }
 
   template < class Key, class Value, class Compare >
-  const std::pair< Key, Value >* ConstIterator< Key, Value, Compare >::operator->() const
+  const std::pair< Key, Value >* ConstIteratorTree< Key, Value, Compare >::operator->() const
   {
       return std::addressof(node_->data);
   }
 }
-
 #endif
