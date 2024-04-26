@@ -19,7 +19,7 @@ void print(std::ostream & out, const std::map< size_t, std::string > & map, cons
   }
 }
 
-std::map< size_t, std::string > intersect(const std::map< size_t, std::string > & left, const std::map< size_t, std::string > & right)
+std::map< size_t, std::string > makeIntersect(const std::map< size_t, std::string > & left, const std::map< size_t, std::string > & right)
 {
   std::map< size_t, std::string > res;
   for (auto key1: left)
@@ -30,6 +30,23 @@ std::map< size_t, std::string > intersect(const std::map< size_t, std::string > 
       {
         res.insert(key1);
       }
+    }
+  }
+  return res;
+}
+
+std::map< size_t, std::string > makeUnion(const std::map< size_t, std::string > & left, const std::map< size_t, std::string > & right)
+{
+  std::map< size_t, std::string > res;
+  for (auto key1: left)
+  {
+    res.insert(key1);
+  }
+  for (auto key2: right)
+  {
+    if (res.find(key2.first) == res.end())
+    {
+      res.insert(key2);
     }
   }
   return res;
@@ -78,6 +95,6 @@ int main(int argc, char * argv[])
   std::map< size_t, std::string > temp2;
   temp2.insert(std::make_pair(2, "hi"));
   temp2.insert(std::make_pair(3, "jeezus"));
-  auto temp3 = intersect(temp1, temp2);
+  auto temp3 = makeUnion(temp1, temp2);
   print(std::cout, temp3, "third");
 }
