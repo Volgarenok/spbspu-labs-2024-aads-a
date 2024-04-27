@@ -11,7 +11,7 @@ namespace erohin
   using collection = std::map< std::string, dictionary >;
 
   void print(const collection & context, std::istream & input, std::ostream & output);
-  void implement(collection & context, std::istream & input, std::ostream &);
+  void complement(collection & context, std::istream & input, std::ostream &);
   void intersect(collection & context, std::istream & input, std::ostream &);
   void unite(collection & context, std::istream & input, std::ostream &);
 }

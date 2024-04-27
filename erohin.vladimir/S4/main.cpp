@@ -10,7 +10,7 @@
 int main(int argc, char ** argv)
 {
   using namespace erohin;
-  if (argc != 1)
+  if (argc != 2)
   {
     std::cerr << "Wrong CLA number\n";
     return 0;
@@ -39,10 +39,10 @@ int main(int argc, char ** argv)
   std::map< std::string, dict_func > command;
   {
     using namespace std::placeholders;
-    command["print"] = std::bind(print, context, _1, _2);
-    command["implement"] = std::bind(implement, context, _1, _2);
-    command["intersect"] = std::bind(intersect, context, _1, _2);
-    command["union"] = std::bind(unite, context, _1, _2);
+    command["print"] = std::bind(print, std::ref(context), _1, _2);
+    command["complement"] = std::bind(complement, std::ref(context), _1, _2);
+    command["intersect"] = std::bind(intersect, std::ref(context), _1, _2);
+    command["union"] = std::bind(unite, std::ref(context), _1, _2);
   }
   std::string command_name;
   while (!std::cin.eof())
@@ -52,15 +52,15 @@ int main(int argc, char ** argv)
     {
       command.at(command_name)(std::cin, std::cout);
     }
-    catch (const std::logic_error &)
+    catch (const std::underflow_error &)
     {
       std::cout << "<EMPTY>\n";
     }
-    catch (const std::exception &)
+    catch (const std::exception & e)
     {
+      std::cout << e.what();
       std::cout << "<INVALID COMMAND>\n";
       std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
-
   }
 }

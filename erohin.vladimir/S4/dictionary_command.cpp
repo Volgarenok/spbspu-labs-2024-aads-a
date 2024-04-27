@@ -1,45 +1,50 @@
 #include "dictionary_command.hpp"
 #include <iostream>
 
+
+
 void erohin::print(const collection & context, std::istream & input, std::ostream & output)
 {
   std::string dict_name;
   input >> dict_name;
+  if (!input.good())
+  {
+    return;
+  }
   const dictionary & dict = context.at(dict_name);
   if (dict.empty())
   {
-    throw std::logic_error("Dictionary is empty");
+    throw std::underflow_error("Dictionary is empty");
   }
   output << dict_name;
   auto iter = dict.cbegin();
   auto end_iter = dict.cend();
-  output << iter->first << " " << iter->second;
-  ++iter;
-  if (iter != end_iter)
-  {
-    output << " ";
-  }
   while (iter != end_iter)
   {
-    output << iter->first << " " << iter->second;
+    output << " " << iter->first << " " << iter->second;
     ++iter;
   }
   output << "\n";
 }
 
-void erohin::implement(collection & context, std::istream & input, std::ostream &)
+void erohin::complement(collection & context, std::istream & input, std::ostream &)
 {
   std::string dict_name[3];
   for (int i = 0; i < 3; ++i)
   {
     input >> dict_name[i];
-    if (input.peek() == '\n')
-    {
-      throw std::runtime_error("End of line was found");
-    }
   }
-  context[dict_name[0]] = dictionary();
-  dictionary & dict = context.at(dict_name[0]);
+  if (!input.good())
+  {
+    return;
+  }
+  auto iter_pair = context.insert(make_pair(dict_name[0], dictionary()));
+
+  if (!iter_pair.second)
+  {
+    throw std::invalid_argument("Dictionary just exists");
+  }
+  dictionary & dict = context[dict_name[0]];
   const dictionary & source1 = context.at(dict_name[1]);
   const dictionary & source2 = context.at(dict_name[2]);
   auto iter = source1.cbegin();
@@ -48,7 +53,7 @@ void erohin::implement(collection & context, std::istream & input, std::ostream 
   {
     if (source2.find(iter->first) == source2.end())
     {
-      dict[iter->first] = iter->second;
+      dict.insert(*iter);
     }
     ++iter;
   }
@@ -60,32 +65,29 @@ void erohin::intersect(collection & context, std::istream & input, std::ostream 
   for (int i = 0; i < 3; ++i)
   {
     input >> dict_name[i];
-    if (input.peek() == '\n')
-    {
-      throw std::runtime_error("End of line was found");
-    }
   }
-  context[dict_name[0]] = dictionary();
-  dictionary & dict = context.at(dict_name[0]);
+  if (!input.good())
+  {
+    return;
+  }
+  auto iter_pair = context.insert(make_pair(dict_name[0], dictionary()));
+
+  if (!iter_pair.second)
+  {
+    throw std::invalid_argument("Dictionary just exists");
+  }
+  dictionary & dict = context[dict_name[0]];
   const dictionary & source1 = context.at(dict_name[1]);
   const dictionary & source2 = context.at(dict_name[2]);
   auto iter = source1.cbegin();
   auto end_iter = source1.cend();
-  try
+  while (iter != end_iter)
   {
-    while (iter != end_iter)
+    if (source2.find(iter->first) != source2.end())
     {
-      if (source2.find(iter->first) != source2.end())
-      {
-        dict[iter->first] = iter->second;
-      }
-      ++iter;
+      dict.insert(*iter);
     }
-  }
-  catch (...)
-  {
-    context.erase(std::move(dict_name[0]));
-    throw;
+    ++iter;
   }
 }
 
@@ -95,13 +97,17 @@ void erohin::unite(collection & context, std::istream & input, std::ostream &)
   for (int i = 0; i < 3; ++i)
   {
     input >> dict_name[i];
-    if (input.peek() == '\n')
-    {
-      throw std::runtime_error("End of line was found");
-    }
   }
-  context[dict_name[0]] = dictionary();
-  dictionary & dict = context.at(dict_name[0]);
+  if (!input.good())
+  {
+    return;
+  }
+  auto iter_pair = context.insert(make_pair(dict_name[0], dictionary()));
+  if (!iter_pair.second)
+  {
+    throw std::invalid_argument("Dictionary just exists");
+  }
+  dictionary & dict = context[dict_name[0]];
   const dictionary & source1 = context.at(dict_name[1]);
   const dictionary & source2 = context.at(dict_name[2]);
   try
@@ -111,7 +117,7 @@ void erohin::unite(collection & context, std::istream & input, std::ostream &)
   }
   catch (...)
   {
-    context.erase(std::move(dict_name[0]));
+    context.erase(dict_name[0]);
     throw;
   }
 }
