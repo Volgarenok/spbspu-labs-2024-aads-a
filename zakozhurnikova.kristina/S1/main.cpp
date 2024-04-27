@@ -1,7 +1,7 @@
 #include <iostream>
 #include <algorithm>
 #include <limits>
-#include "list.hpp"
+#include <list.hpp>
 #include "inputOperations.hpp"
 #include "print.hpp"
 
