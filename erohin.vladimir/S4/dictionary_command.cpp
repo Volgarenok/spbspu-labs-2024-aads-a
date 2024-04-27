@@ -46,10 +46,9 @@ void erohin::complement(collection & context, std::istream & input, std::ostream
 {
   std::string dict_name[3];
   inputArguments(input, dict_name, 3);
-  auto iter_pair = context.insert(make_pair(dict_name[0], dictionary()));
-  if (!iter_pair.second)
+  if (dict_name[0] == dict_name[1] || dict_name[0] == dict_name[2])
   {
-    throw std::invalid_argument("Dictionary just exists");
+    throw std::invalid_argument("Dictionary already exists");
   }
   dictionary & dict = context[dict_name[0]];
   const dictionary & source1 = context.at(dict_name[1]);
@@ -64,16 +63,19 @@ void erohin::complement(collection & context, std::istream & input, std::ostream
     }
     ++iter;
   }
+  if (dict.empty())
+  {
+    throw std::underflow_error("Dictionary is empty");
+  }
 }
 
 void erohin::intersect(collection & context, std::istream & input, std::ostream &)
 {
   std::string dict_name[3];
   inputArguments(input, dict_name, 3);
-  auto iter_pair = context.insert(make_pair(dict_name[0], dictionary()));
-  if (!iter_pair.second)
+  if (dict_name[0] == dict_name[1] || dict_name[0] == dict_name[2])
   {
-    throw std::invalid_argument("Dictionary just exists");
+    throw std::invalid_argument("Dictionary already exists");
   }
   dictionary & dict = context[dict_name[0]];
   const dictionary & source1 = context.at(dict_name[1]);
@@ -88,28 +90,36 @@ void erohin::intersect(collection & context, std::istream & input, std::ostream 
     }
     ++iter;
   }
+  if (dict.empty())
+  {
+    throw std::underflow_error("Dictionary is empty");
+  }
 }
 
 void erohin::unite(collection & context, std::istream & input, std::ostream &)
 {
   std::string dict_name[3];
   inputArguments(input, dict_name, 3);
-  auto iter_pair = context.insert(make_pair(dict_name[0], dictionary()));
-  if (!iter_pair.second)
+  if (dict_name[0] == dict_name[1] || dict_name[0] == dict_name[2])
   {
-    throw std::invalid_argument("Dictionary just exists");
+    throw std::invalid_argument("Dictionary already exists");
   }
+  context.insert(make_pair(dict_name[0], dictionary()));
   dictionary & dict = context[dict_name[0]];
   const dictionary & source1 = context.at(dict_name[1]);
   const dictionary & source2 = context.at(dict_name[2]);
   try
   {
-    dict.insert(source1.cbegin(), source1.cend());
     dict.insert(source2.cbegin(), source2.cend());
+    dict.insert(source1.cbegin(), source1.cend());
   }
   catch (...)
   {
     context.erase(dict_name[0]);
     throw;
+  }
+  if (dict.empty())
+  {
+    throw std::underflow_error("Dictionary is empty");
   }
 }

@@ -48,4 +48,5 @@ int main(int argc, char ** argv)
     }
     std::cin >> command_name;
   }
+  return 0;
 }
