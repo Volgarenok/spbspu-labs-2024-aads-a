@@ -2,35 +2,30 @@
 #include <iostream>
 #include <cstring>
 
-std::string * erohin::parseStringBySpace(std::string * dest, size_t size, const std::string & source)
+void erohin::inputArguments(std::istream & input, std::string * dest, size_t size)
 {
-  char * string_token = std::strtok(const_cast< char * >(source.c_str()), " ");
-  size_t index = 0;
-  while (string_token)
+  for (size_t i = 0; i < size; ++i)
   {
-    if (index == size)
+    if (input.peek() == '\n')
     {
-      throw std::invalid_argument("Wrong arguments number");
+      throw std::invalid_argument("Invalid arguments number");
     }
-    dest[index++] = std::string(string_token);
-    string_token = std::strtok(nullptr, " ");
+    input >> dest[i];
   }
-  if (index < size)
+  if (input.peek() != '\n')
   {
-    throw std::invalid_argument("Wrong arguments number");
+    throw std::invalid_argument("Invalid arguments number");
   }
-  return dest;
 }
 
 void erohin::print(const collection & context, std::istream & input, std::ostream & output)
 {
   std::string dict_name;
-  std::string input_string;
-  if (!(input >> input_string))
+  inputArguments(input, std::addressof(dict_name), 1);
+  if (!input)
   {
-    return;
+    throw std::runtime_error("Not goodbit was found");
   }
-  parseStringBySpace(std::addressof(dict_name), 1, input_string);
   const dictionary & dict = context.at(dict_name);
   if (dict.empty())
   {
@@ -50,12 +45,7 @@ void erohin::print(const collection & context, std::istream & input, std::ostrea
 void erohin::complement(collection & context, std::istream & input, std::ostream &)
 {
   std::string dict_name[3];
-  std::string input_string;
-  if (!std::getline(input, input_string))
-  {
-    return;
-  }
-  parseStringBySpace(dict_name, 3, input_string);
+  inputArguments(input, dict_name, 3);
   auto iter_pair = context.insert(make_pair(dict_name[0], dictionary()));
   if (!iter_pair.second)
   {
@@ -79,12 +69,7 @@ void erohin::complement(collection & context, std::istream & input, std::ostream
 void erohin::intersect(collection & context, std::istream & input, std::ostream &)
 {
   std::string dict_name[3];
-  std::string input_string;
-  if (!std::getline(input, input_string))
-  {
-    return;
-  }
-  parseStringBySpace(dict_name, 3, input_string);
+  inputArguments(input, dict_name, 3);
   auto iter_pair = context.insert(make_pair(dict_name[0], dictionary()));
   if (!iter_pair.second)
   {
@@ -108,9 +93,7 @@ void erohin::intersect(collection & context, std::istream & input, std::ostream 
 void erohin::unite(collection & context, std::istream & input, std::ostream &)
 {
   std::string dict_name[3];
-  std::string input_string;
-  std::getline(input, input_string);
-  parseStringBySpace(dict_name, 3, input_string);
+  inputArguments(input, dict_name, 3);
   auto iter_pair = context.insert(make_pair(dict_name[0], dictionary()));
   if (!iter_pair.second)
   {

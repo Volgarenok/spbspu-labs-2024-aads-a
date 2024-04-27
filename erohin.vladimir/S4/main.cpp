@@ -4,6 +4,7 @@
 #include <string>
 #include <functional>
 #include <stdexcept>
+#include <limits>
 #include "dictionary_command.hpp"
 #include "input_output_collection.hpp"
 
@@ -13,7 +14,7 @@ int main(int argc, char ** argv)
   if (argc != 2)
   {
     std::cerr << "Wrong CLA number\n";
-    return 0;
+    return 1;
   }
   std::fstream file(argv[1]);
   collection context;
@@ -29,9 +30,9 @@ int main(int argc, char ** argv)
     command["union"] = std::bind(unite, std::ref(context), _1, _2);
   }
   std::string command_name;
+  std::cin >> command_name;
   while (!std::cin.eof())
   {
-    std::cin >> command_name;
     try
     {
       command.at(command_name)(std::cin, std::cout);
@@ -43,6 +44,8 @@ int main(int argc, char ** argv)
     catch (const std::exception & e)
     {
       std::cout << "<INVALID COMMAND>\n";
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
+    std::cin >> command_name;
   }
 }
