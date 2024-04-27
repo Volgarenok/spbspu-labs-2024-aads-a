@@ -8,13 +8,13 @@ void erohin::inputArguments(std::istream & input, std::string * dest, size_t siz
   {
     if (input.peek() == '\n')
     {
-      throw std::invalid_argument("Invalid arguments number");
+      throw std::invalid_argument("Need more argument to command");
     }
     input >> dest[i];
   }
   if (input.peek() != '\n')
   {
-    throw std::invalid_argument("Invalid arguments number");
+    throw std::invalid_argument("Need less argument to comman");
   }
 }
 
@@ -46,11 +46,7 @@ void erohin::complement(collection & context, std::istream & input, std::ostream
 {
   std::string dict_name[3];
   inputArguments(input, dict_name, 3);
-  if (dict_name[0] == dict_name[1] || dict_name[0] == dict_name[2])
-  {
-    throw std::invalid_argument("Dictionary already exists");
-  }
-  dictionary & dict = context[dict_name[0]];
+  dictionary temp_dict;
   const dictionary & source1 = context.at(dict_name[1]);
   const dictionary & source2 = context.at(dict_name[2]);
   auto iter = source1.cbegin();
@@ -59,25 +55,22 @@ void erohin::complement(collection & context, std::istream & input, std::ostream
   {
     if (source2.find(iter->first) == source2.end())
     {
-      dict.insert(*iter);
+      temp_dict.insert(*iter);
     }
     ++iter;
   }
-  if (dict.empty())
+  if (context.find(dict_name[0]) != context.end())
   {
-    throw std::underflow_error("Dictionary is empty");
+    context[dict_name[0]].clear();
   }
+  context[dict_name[0]] = std::move(temp_dict);
 }
 
 void erohin::intersect(collection & context, std::istream & input, std::ostream &)
 {
   std::string dict_name[3];
   inputArguments(input, dict_name, 3);
-  if (dict_name[0] == dict_name[1] || dict_name[0] == dict_name[2])
-  {
-    throw std::invalid_argument("Dictionary already exists");
-  }
-  dictionary & dict = context[dict_name[0]];
+  dictionary temp_dict;
   const dictionary & source1 = context.at(dict_name[1]);
   const dictionary & source2 = context.at(dict_name[2]);
   auto iter = source1.cbegin();
@@ -86,40 +79,37 @@ void erohin::intersect(collection & context, std::istream & input, std::ostream 
   {
     if (source2.find(iter->first) != source2.end())
     {
-      dict.insert(*iter);
+      temp_dict.insert(*iter);
     }
     ++iter;
   }
-  if (dict.empty())
+  if (temp_dict.empty())
   {
     throw std::underflow_error("Dictionary is empty");
   }
+  if (context.find(dict_name[0]) != context.end())
+  {
+    context[dict_name[0]].clear();
+  }
+  context[dict_name[0]] = std::move(temp_dict);
 }
 
 void erohin::unite(collection & context, std::istream & input, std::ostream &)
 {
   std::string dict_name[3];
   inputArguments(input, dict_name, 3);
-  if (dict_name[0] == dict_name[1] || dict_name[0] == dict_name[2])
-  {
-    throw std::invalid_argument("Dictionary already exists");
-  }
-  context.insert(make_pair(dict_name[0], dictionary()));
-  dictionary & dict = context[dict_name[0]];
+  dictionary temp_dict;
   const dictionary & source1 = context.at(dict_name[1]);
   const dictionary & source2 = context.at(dict_name[2]);
-  try
-  {
-    dict.insert(source2.cbegin(), source2.cend());
-    dict.insert(source1.cbegin(), source1.cend());
-  }
-  catch (...)
-  {
-    context.erase(dict_name[0]);
-    throw;
-  }
-  if (dict.empty())
+  temp_dict.insert(source2.cbegin(), source2.cend());
+  temp_dict.insert(source1.cbegin(), source1.cend());
+  if (temp_dict.empty())
   {
     throw std::underflow_error("Dictionary is empty");
   }
+  if (context.find(dict_name[0]) != context.end())
+  {
+    context[dict_name[0]].clear();
+  }
+  context[dict_name[0]] = std::move(temp_dict);
 }
