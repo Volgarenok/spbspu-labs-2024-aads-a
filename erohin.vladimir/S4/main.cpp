@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include <limits>
 #include "dictionary_command.hpp"
+#include "input_output_collection.hpp"
 
 int main(int argc, char ** argv)
 {
@@ -17,23 +18,7 @@ int main(int argc, char ** argv)
   }
   std::fstream file(argv[1]);
   collection context;
-  std::string dict_name;
-  file >> dict_name;
-  while (!file.eof())
-  {
-    size_t key;
-    std::string value;
-    while (file >> key >> value)
-    {
-      context[dict_name][key] = value;
-    }
-    file.clear();
-    file >> dict_name;
-    if (!dict_name.size())
-    {
-      continue;
-    }
-  }
+  inputCollection(file, context);
   file.close();
   using dict_func = std::function< void(std::istream &, std::ostream &) >;
   std::map< std::string, dict_func > command;

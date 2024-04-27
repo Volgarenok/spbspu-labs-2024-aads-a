@@ -1,7 +1,11 @@
 #include "dictionary_command.hpp"
 #include <iostream>
+#include <cstring>
 
-
+std::string * erohin::parseStringBySpace(std::string * dest, const std::string & source, size_t size)
+{
+  return dest;
+}
 
 void erohin::print(const collection & context, std::istream & input, std::ostream & output)
 {
