@@ -83,10 +83,6 @@ void erohin::intersect(collection & context, std::istream & input, std::ostream 
     }
     ++iter;
   }
-  if (temp_dict.empty())
-  {
-    throw std::underflow_error("Dictionary is empty");
-  }
   if (context.find(dict_name[0]) != context.end())
   {
     context[dict_name[0]].clear();
@@ -103,10 +99,6 @@ void erohin::unite(collection & context, std::istream & input, std::ostream &)
   const dictionary & source2 = context.at(dict_name[2]);
   temp_dict.insert(source2.cbegin(), source2.cend());
   temp_dict.insert(source1.cbegin(), source1.cend());
-  if (temp_dict.empty())
-  {
-    throw std::underflow_error("Dictionary is empty");
-  }
   if (context.find(dict_name[0]) != context.end())
   {
     context[dict_name[0]].clear();

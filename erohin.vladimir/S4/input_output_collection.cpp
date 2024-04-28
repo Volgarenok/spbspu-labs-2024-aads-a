@@ -10,6 +10,7 @@ void erohin::inputCollection(std::istream & input, collection & dest)
   {
     size_t key;
     std::string value;
+    dest.insert(std::make_pair(dict_name,  dictionary()));
     while (input >> key >> value)
     {
       dest[dict_name][key] = value;
