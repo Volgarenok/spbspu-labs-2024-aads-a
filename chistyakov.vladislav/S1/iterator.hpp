@@ -7,8 +7,12 @@
 namespace chistyakov
 {
   template< typename T >
+  class List;
+
+  template< typename T >
   class Iterator
   {
+    friend class List< T >;
     public:
       Iterator():
         node_(nullptr)
@@ -18,20 +22,12 @@ namespace chistyakov
         node_(val.node_)
       {}
 
-      Iterator(BiList< T > * val):
-        node_(val)
-      {}
-
       ~Iterator() = default;
       Iterator< T > & operator=(const Iterator< T > & ) = default;
 
       Iterator< T > & operator++()
       {
-        if (node_ != nullptr)
-        {
-          node_ = node_->next_;
-        }
-
+        node_ = node_->next_;
         return *this;
       }
 
@@ -44,11 +40,7 @@ namespace chistyakov
 
       Iterator< T > & operator--()
       {
-        if (node_ != nullptr)
-        {
-          node_ = node_->previous_;
-        }
-
+        node_ = node_->previous_;
         return *this;
       }
 
@@ -56,30 +48,6 @@ namespace chistyakov
       {
         Iterator now(*this);
         --(*this);
-        return now;
-      }
-
-      Iterator< T > & operator+(int num)
-      {
-         Iterator now(*this);
-
-         for (int i = 0; i < num; ++i)
-         {
-           ++now;
-         }
-
-         return now;
-      }
-
-      Iterator< T > & operator-(int num)
-      {
-        Iterator< T > now(*this);
-
-        for (int i = 0; i < num; ++i)
-        {
-          --now;
-        }
-
         return now;
       }
 
@@ -101,11 +69,6 @@ namespace chistyakov
       T * operator->()
       {
         return std::addressof(node_->value_);
-      }
-
-      BiList< T > * get_BiList()
-      {
-        return node_;
       }
 
     private:

@@ -7,6 +7,9 @@
 namespace chistyakov
 {
   template< typename T >
+  class List;
+
+  template< typename T >
   class ConstIterator
   {
     public:
@@ -18,19 +21,11 @@ namespace chistyakov
         node_(val.node_)
       {}
 
-      ConstIterator(BiList< T > * val):
-        node_(val)
-      {}
-
       ~ConstIterator() = default;
 
       ConstIterator< T > & operator++()
       {
-        if (node_ != nullptr)
-        {
-          node_ = node_->next_;
-        }
-
+        node_ = node_->next_;
         return *this;
       }
 
@@ -43,11 +38,7 @@ namespace chistyakov
 
       ConstIterator< T > & operator--()
       {
-        if (node_ != nullptr)
-        {
-          node_ = node_->previous_;
-        }
-
+        node_ = node_->previous_;
         return *this;
       }
 
@@ -55,30 +46,6 @@ namespace chistyakov
       {
         ConstIterator< T > now(*this);
         --(*this);
-        return now;
-      }
-
-      ConstIterator< T > & operator+(int num)
-      {
-        ConstIterator< T > now(*this);
-
-        for (int i = 0; i < num; ++i)
-        {
-          ++now;
-        }
-
-        return now;
-      }
-
-      ConstIterator< T > & operator-(int num)
-      {
-        ConstIterator< T > now(*this);
-
-        for (int i = 0; i < num; ++i)
-        {
-          --now;
-        }
-
         return now;
       }
 
@@ -100,11 +67,6 @@ namespace chistyakov
       T * operator->()
       {
         return std::addressof(node_->value_);
-      }
-
-      BiList< T > * get_BiList()
-      {
-        return node_;
       }
 
     private:
