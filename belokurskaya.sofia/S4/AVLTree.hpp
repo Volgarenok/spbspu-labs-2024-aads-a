@@ -34,6 +34,11 @@ public:
     root_ = insertRecursive(root_, value);
   }
 
+  void pop(const T & value)
+  {
+    root_ = popRecursive(root_, value);
+  }
+
   T search(const T & value)
   {
     return searchRecursive(root_, value)->data;
@@ -211,6 +216,80 @@ private:
       delete node;
     }
   }
+
+  Node * popRecursive(Node * node, const T & value)
+  {
+    if (node == nullptr)
+    {
+      return node;
+    }
+
+    if (value < node->data)
+    {
+      node->left = popRecursive(node->left, value);
+    }
+    else if (value > node->data)
+    {
+      node->right = popRecursive(node->right, value);
+    }
+    else
+    {
+      if (node->left == nullptr)
+      {
+        Node * temp = node->right;
+        delete node;
+        return temp;
+      }
+      else if (node->right == nullptr)
+      {
+        Node * temp = node->left;
+        delete node;
+        return temp;
+      }
+
+      Node * temp = minValueNode(node->right);
+      node->data = temp->data;
+      node->right = popRecursive(node->right, temp->data);
+    }
+
+    node->height = 1 + std::max(getHeight(node->left), getHeight(node->right));
+
+    int balance = getBalance(node);
+
+    if (balance > 1 && getBalance(node->left) >= 0)
+    {
+      return rightRotate(node);
+    }
+    if (balance > 1 && getBalance(node->left) < 0)
+    {
+      node->left = leftRotate(node->left);
+      return rightRotate(node);
+    }
+    if (balance < -1 && getBalance(node->right) <= 0)
+    {
+      return leftRotate(node);
+    }
+    if (balance < -1 && getBalance(node->right) > 0)
+    {
+      node->right = rightRotate(node->right);
+      return leftRotate(node);
+    }
+
+    return node;
+  }
+
+  Node * minValueNode(Node * node)
+  {
+    Node * current = node;
+
+    while (current && current->left != nullptr)
+    {
+      current = current->left;
+    }
+
+    return current;
+  }
+
 
   void print(Node * root, int space)
   {

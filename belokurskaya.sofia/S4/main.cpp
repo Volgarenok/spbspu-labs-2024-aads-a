@@ -9,7 +9,11 @@ int main()
   tree.insert(4);
   tree.insert(5);
 
-  std::cout << tree.search(1);
+  std::cout << tree.getHeight() << "\n";
+  tree.pop(1);
+  tree.pop(3);
+  tree.pop(5);
+  std::cout << tree.getHeight() << "\n";
 
   tree.print();
 }
