@@ -3,6 +3,7 @@
 
 #include <functional>
 #include <utility>
+#include <list>
 
 #include "treeNode.hpp"
 #include "iterBase.hpp"
@@ -25,6 +26,7 @@ namespace rebdev
       {}
       ~AVLTree() noexcept
       {
+        clear();
         delete headNode_;
       }
 
@@ -64,6 +66,28 @@ namespace rebdev
         return size_;
       }
 
+      void swap(AVLTree & tree)
+      {
+        std::swap(headNode_, tree.headNode_);
+        std::swap(size_, tree.size_);
+      }
+      void clear() noexcept
+      {
+        std::list< node * > deleteList;
+        iterator it = begin();
+        while (it != end())
+        {
+          deleteList.push_back(it.node_);
+          ++it;
+        }
+        auto listIter = deleteList.begin();
+        while (listIter != deleteList.end())
+        {
+          delete (*listIter);
+          ++listIter;
+        }
+      }
+
       iterator find(const Key & k)
       {
         return iterator(findBase(k));
@@ -79,15 +103,23 @@ namespace rebdev
 
       node * findBase(const Key & k)
       {
-        iterator it = begin();
-        while (it != end())
+        node * nodeNow = headNode_;
+        while (nodeNow->data.first != k)
         {
-          if ((*it.first) == k)
+          if (Compare(k, nodeNow.first))
           {
-            return &it;
+            nodeNow = nodeNow->right;
+          }
+          else
+          {
+            nodeNow = nodeNow->left;
+          }
+          if (nodeNow == nullptr)
+          {
+            break;
           }
         }
-        return nullptr;
+        return nodeNow;
       }
   };
 }
