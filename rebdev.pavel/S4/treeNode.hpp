@@ -4,11 +4,11 @@
 namespace rebdev
 {
   template < class T >
-  struct treeNode
+  struct TreeNode
   {
-    treeNode * parent;
-    treeNode * right;
-    treeNode * left;
+    TreeNode * parent;
+    TreeNode * right;
+    TreeNode * left;
     T data;
   };
 }

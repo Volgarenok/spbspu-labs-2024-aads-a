@@ -4,6 +4,6 @@
 
 int main()
 {
-  rebdev::tree< int > firstTree;
+  rebdev::AVLTree< int, int > firstTree;
   return 0;
 }
