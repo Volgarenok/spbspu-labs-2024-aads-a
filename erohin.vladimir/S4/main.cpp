@@ -7,10 +7,16 @@
 #include <limits>
 #include "dictionary_command.hpp"
 #include "input_output_collection.hpp"
+#include "red_black_tree.hpp"
 
 int main(int argc, char ** argv)
 {
   using namespace erohin;
+
+  {
+    RedBlackTree< int > int_dict;
+  }
+
   if (argc != 2)
   {
     std::cerr << "Wrong CLA number\n";
