@@ -144,10 +144,10 @@ namespace skuratov
         size = 0;
       }
 
-      void assign(sizet n, const T& value)
+      void assign(size_t n, const T& value)
       {
         clear();
-        for (sizet i = 0; i < n; ++i)
+        for (size_t i = 0; i < n; ++i)
         {
           push_back(value);
         }
