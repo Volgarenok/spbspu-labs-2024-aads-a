@@ -121,7 +121,7 @@ void zak::ImplementedCommands::intersect(zak::List< std::string >& args, std::st
   result = std::string();
 }
 
-void zak::ImplementedCommands::doUnion(zak::List< std::string >& args, std::string& result)
+void zak::ImplementedCommands::doUnion(List< std::string >& args, std::string& result)
 {
   if (args.size() != 3)
   {
@@ -140,7 +140,10 @@ void zak::ImplementedCommands::doUnion(zak::List< std::string >& args, std::stri
 
   for (auto it = secondMap.cbegin(); it != secondMap.cend(); ++it)
   {
-    resultMap.push(it->first, it->second);
+    if (resultMap.find(it->first) == resultMap.cend())
+    {
+      resultMap.push(it->first, it->second);
+    }
   }
 
   addMap(args.front(), resultMap);
@@ -149,6 +152,12 @@ void zak::ImplementedCommands::doUnion(zak::List< std::string >& args, std::stri
 
 void zak::ImplementedCommands::addMap(std::string& mapName, map& toAdd)
 {
-  std::pair< std::string, map > insertedPair = std::make_pair(mapName, toAdd);
-  maps_.push(insertedPair.first, insertedPair.second);
+  if (maps_.find(mapName) != maps_.cend())
+  {
+    maps_[mapName] = std::move(toAdd);
+  }
+  else
+  {
+    maps_.push(mapName, toAdd);
+  }
 }

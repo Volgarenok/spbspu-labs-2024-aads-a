@@ -487,20 +487,36 @@ namespace zakozhurnikova
       }
     }
 
-      Value& at(const Key& key)
+    Value& at(const Key& key)
+    {
+      node* traverser = get(key, root_);
+      if (traverser)
       {
-        node* traverser = get(key, root_);
-        if (traverser)
-        {
-          return traverser->data.second;
-        }
-        throw std::out_of_range("No such element");
+        return traverser->data.second;
       }
+      throw std::out_of_range("No such element");
+    }
 
-      ConstIteratorTree< Key, Value > find(const Key& key)
+    ConstIteratorTree< Key, Value > find(const Key& key)
+    {
+      node* wanted = root_;
+      while (wanted)
       {
-        return ConstIteratorTree< Key, Value >(get(key, root_));
+        if (wanted->data.first == key)
+        {
+          break;
+        }
+        else if (compare_(wanted->data.first, key))
+        {
+          wanted = wanted->rightChild;
+        }
+        else
+        {
+          wanted = wanted->leftChild;
+        }
       }
+      return ConstIteratorTree< Key, Value >(wanted);
+    }
 
   private:
     node* root_;
