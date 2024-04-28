@@ -2,7 +2,7 @@
 #define IMPLEMENTED_COMMANDS_HPP
 #include <string>
 #include "binarySearchTree.hpp"
-#include "list.hpp"
+#include <list.hpp>
 
 namespace zakozhurnikova
 {
