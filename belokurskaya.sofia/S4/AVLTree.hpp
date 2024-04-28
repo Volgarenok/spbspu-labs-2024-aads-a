@@ -34,6 +34,11 @@ public:
     root_ = insertRecursive(root_, value);
   }
 
+  T search(const T & value)
+  {
+    return searchRecursive(root_, value)->data;
+  }
+
   size_t getHeight()
   {
     return getHeight(root_);
@@ -182,6 +187,19 @@ private:
     nextRightNode->height = 1 + std::max(getHeight(nextRightNode->left), getHeight(nextRightNode->right));
 
     return nextRightNode;
+  }
+
+  Node * searchRecursive(Node * node, const T & value)
+  {
+    if (node == nullptr || node->data == value)
+    {
+      return node;
+    }
+    if (value < node->data)
+    {
+      return searchRecursive(node->left, value);
+    }
+    return searchRecursive(node->right, value);
   }
 
   void deleteSubTree(Node * node)
