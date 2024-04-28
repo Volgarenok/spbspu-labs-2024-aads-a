@@ -39,6 +39,11 @@ public:
     root_ = popRecursive(root_, value);
   }
 
+  bool contains(const T & value) const
+  {
+    return containsRecursive(root_, value);
+  }
+
   T search(const T & value)
   {
     return searchRecursive(root_, value)->data;
@@ -290,6 +295,26 @@ private:
     return current;
   }
 
+  bool containsRecursive(Node * node, const T & value) const
+  {
+    if (node == nullptr)
+    {
+      return false;
+    }
+
+    if (value < node->data)
+    {
+      return containsRecursive(node->left, value);
+    }
+    else if (value > node->data)
+    {
+      return containsRecursive(node->right, value);
+    }
+    else
+    {
+      return true;
+    }
+  }
 
   void print(Node * root, int space)
   {

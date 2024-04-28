@@ -15,5 +15,9 @@ int main()
   tree.pop(5);
   std::cout << tree.getHeight() << "\n";
 
+  std::cout << tree.contains(2) << "\n";
+  std::cout << tree.contains(4) << "\n";
+  std::cout << tree.contains(5) << "\n";
+
   tree.print();
 }
