@@ -6,6 +6,13 @@ struct Node
   int height;
 };
 
+struct Tree
+{
+  Node* root;
+  Tree():
+   root(nullptr)
+  {}
+}
 
 int main()
 {}
