@@ -21,6 +21,17 @@ namespace zakozhurnikova
       compare_(Compare())
     {}
 
+    BinarySearchTree(const BinarySearchTree& rhs):
+      root_(nullptr),
+      size_(0),
+      compare_(rhs.compare_)
+    {
+      for (auto it = rhs.cbegin(); it != rhs.cend(); ++it)
+      {
+        push(it->first, it->second);
+      }
+    }
+
     BinarySearchTree(BinarySearchTree&& rhs):
       root_(rhs.root_),
       size_(rhs.size_),
@@ -30,13 +41,21 @@ namespace zakozhurnikova
       rhs.size_ = 0;
     }
 
+    BinarySearchTree& operator=(const BinarySearchTree& rhs)
+    {
+      if (this != std::addressof(rhs))
+      {
+        BinarySearchTree< Key, Value > temp(rhs);
+        swap(temp);
+      }
+      return *this;
+    }
+
     BinarySearchTree& operator=(BinarySearchTree&& rhs)
     {
       if (this != std::addressof(rhs))
       {
-        std::swap(root_, rhs.root_);
-        std::swap(size_, rhs.size_);
-        std::swap(compare_, rhs.compare_);
+        swap(rhs);
       }
       return *this;
     }
@@ -405,75 +424,104 @@ namespace zakozhurnikova
             root_ = currentNode->rightChild;
             root_->parent = nullptr;
           }
-        delete currentNode;
         }
+        delete currentNode;
       }
     }
 
-      node* getLowest(node * prev) const
+    node* getLowest(node* prev) const
+    {
+      node* lowest = prev;
+      if (!lowest)
       {
-        node* lowest = prev;
-        if (!lowest)
+        return nullptr;
+      }
+      while (lowest->leftChild != nullptr)
+      {
+        lowest = lowest->leftChild;
+      }
+
+      return lowest;
+    }
+
+    node* getNext(node* prev) const
+    {
+      node* cur = prev;
+      while (cur->rightChild == nullptr || cur->data.first < prev->data.first)
+      {
+        if (cur->parent == nullptr)
         {
           return nullptr;
         }
-        while (lowest->leftChild != nullptr)
+        cur = cur->parent;
+        if (cur->data.first > prev->data.first)
         {
-          lowest = lowest->leftChild;
+          return cur;
         }
-
-        return lowest;
       }
+      cur = cur->rightChild;
+      cur = getLowest(cur);
+      return cur;
+    }
 
-      node* getNext(node * prev) const
+    ConstIteratorTree< Key, Value, Compare > cbegin() const noexcept
+    {
+      return ConstIteratorTree< Key, Value, Compare >(getLowest(root_));
+    }
+    ConstIteratorTree< Key, Value, Compare > cend() const noexcept
+    {
+      return ConstIteratorTree< Key, Value, Compare >();
+    }
+
+    Value& operator[](const Key& key)
+    {
+      node* traverser = get(key, root_);
+      if (traverser)
       {
-        node* cur = prev;
-        while (cur->rightChild == nullptr || cur->data.first < prev->data.first)
+        return traverser->data.second;
+      }
+      else
+      {
+        push(key, Value());
+        return get(key, root_)->data.second;
+      }
+    }
+
+      Value& at(const Key& key)
+      {
+        node* traverser = get(key, root_);
+        if (traverser)
         {
-          if (cur->parent == nullptr)
-          {
-            return nullptr;
-          }
-          cur = cur->parent;
-          if (cur->data.first > prev->data.first)
-          {
-            return cur;
-          }
+          return traverser->data.second;
         }
-        cur = cur->rightChild;
-        cur = getLowest(cur);
-        return cur;
+        throw std::out_of_range("No such element");
       }
 
-      ConstIteratorTree< Key, Value, Compare > cbegin() noexcept
+      ConstIteratorTree< Key, Value > find(const Key& key)
       {
-        return ConstIteratorTree< Key, Value, Compare >(getLowest(root_));
-      }
-      ConstIteratorTree< Key, Value, Compare > cend() noexcept
-      {
-        return ConstIteratorTree< Key, Value, Compare >();
+        return ConstIteratorTree< Key, Value >(get(key, root_));
       }
 
-    private:
-      node* root_;
-      size_t size_;
-      Compare compare_;
+  private:
+    node* root_;
+    size_t size_;
+    Compare compare_;
 
-      void clear()
+    void clear()
+    {
+      clear(root_);
+      root_ = nullptr;
+    }
+    void clear(node* node)
+    {
+      if (node != nullptr)
       {
-        clear(root_);
+        clear(node->leftChild);
+        clear(node->rightChild);
+        delete node;
       }
-      void clear(node * node)
-      {
-        if (node != nullptr)
-        {
-          clear(node->leftChild);
-          clear(node->rightChild);
-          delete node;
-        }
-        root_ = nullptr;
-      }
-    };
-  }
+    }
+  };
+}
 
 #endif

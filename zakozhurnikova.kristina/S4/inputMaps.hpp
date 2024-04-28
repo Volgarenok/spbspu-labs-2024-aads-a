@@ -2,6 +2,7 @@
 #define INPUTMAPS_HPP
 #include <iosfwd>
 #include "binarySearchTree.hpp"
+#include "scopeGuard.hpp"
 
 namespace zakozhurnikova
 {

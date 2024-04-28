@@ -3,15 +3,16 @@
 #include <string>
 #include <utility>
 #include "binarySearchTree.hpp"
+#include "implementedCommands.hpp"
 #include "comparator.hpp"
 #include "inputMaps.hpp"
 #include "treeNode.hpp"
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
   using namespace zakozhurnikova;
-  BinarySearchTree< std::string, BinarySearchTree< int, std::string > > maps;
-  BinarySearchTree< int, std::string > mytree;
+  using map = BinarySearchTree< int, std::string >;
+  BinarySearchTree< std::string, map > maps;
   if (argc == 2)
   {
     std::ifstream file(argv[1]);
@@ -19,23 +20,30 @@ int main(int argc, char* argv[])
   }
   else
   {
-    std::cerr << "you didn't attach the file\n";
+    std::cerr << "No file argument";
+    return 1;
   }
 
-  mytree.push(10, "hjk");
-  mytree.push(9, "m");
-  mytree.push(15, "hello");
-  mytree.push(18, "uhyyh");
-  mytree.push(8, "uhyyh");
-  mytree.push(14, "uhyyh");
-  mytree.push(7, "uhyyh");
-  mytree.del(15);
-  mytree.del(14);
-  mytree.del(18);
-  for (auto it = mytree.cbegin(); it != mytree.cend(); ++it)
+  ImplementedCommands master(maps);
+  std::string cmdOutput;
+  while (!std::cin.eof())
   {
-    std::cout << (*it).first << ' ' << (*it).second << '\n';
+    try
+    {
+      master.executeCommand(std::cin, cmdOutput);
+      if (!cmdOutput.empty())
+      {
+        std::cout << cmdOutput << '\n';
+      }
+    }
+    catch (const std::invalid_argument &e)
+    {
+      std::cout << "<INVALID COMMAND>\n";
+    }
+    catch (const std::exception &e)
+    {
+      std::cerr << e.what();
+      return 1;
+    }
   }
-  //  maps.push("zaz", std::move(mytree));
-  return 0;
 }
