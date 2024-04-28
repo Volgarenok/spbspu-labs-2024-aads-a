@@ -44,7 +44,11 @@ namespace erohin
   template< class T >
   void RedBlackTree< T >::clear_subtree(Node * subtree)
   {
-    if (subtree->left_ == leaf_ && subtree->right_ == leaf_)
+    if (subtree == leaf_)
+    {
+      return;
+    }
+    else if (subtree->left_ == leaf_ && subtree->right_ == leaf_)
     {
       delete subtree;
       return;
