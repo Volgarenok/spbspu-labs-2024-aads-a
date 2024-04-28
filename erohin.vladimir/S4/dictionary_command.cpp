@@ -97,8 +97,8 @@ void erohin::unite(collection & context, std::istream & input, std::ostream &)
   dictionary temp_dict;
   const dictionary & source1 = context.at(dict_name[1]);
   const dictionary & source2 = context.at(dict_name[2]);
-  temp_dict.insert(source2.cbegin(), source2.cend());
   temp_dict.insert(source1.cbegin(), source1.cend());
+  temp_dict.insert(source2.cbegin(), source2.cend());
   if (context.find(dict_name[0]) != context.end())
   {
     context[dict_name[0]].clear();
