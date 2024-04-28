@@ -1,176 +1,176 @@
 #ifndef LIST_HPP
 #define LIST_HPP
 
-#include "constIterators.hpp"
+#include <cstddef>
 #include "node.hpp"
-#include "cstddef"
+#include "constIterators.hpp"
 
 namespace skuratov
 {
-  template < typename T >
+  template< typename T >
   class List
   {
-  public:
-    List():
-      head_(nullptr),
-      tail_(nullptr),
-      size_(0)
-    {}
+    public:
+      List():
+        head(nullptr),
+        tail(nullptr),
+        size(0)
+      {}
 
-    ~List()
-    {
-      while (head_ != nullptr)
+      ~List()
       {
-        popFront();
+        while (head != nullptr)
+        {
+          popFront();
+        }
       }
-    }
 
-    List(size_t n, const T& value):
-      head_(nullptr),
-      tail_(nullptr),
-      size_(0)
-    {
-      for (size_t i = 0; i < n; ++i)
+      List(size_t n, const T & value_):
+        head(nullptr),
+        tail(nullptr),
+        size(0)
       {
-        pushBack(value);
+        for (size_t i = 0; i < n; ++i)
+        {
+          pushBack(value_);
+        }
       }
-    }
 
-    List< T > cbegin() noexcept
-    {
-      return ConstIterator< T >(head_);
-    }
-
-    List< T > cend() noexcept
-    {
-      return ConstIterator< T >(nullptr);
-    }
-
-    T & front()
-    {
-      return head_ -> value_;
-    }
-
-    T & back()
-    {
-      return tail_ -> value_;
-    }
-
-    bool empty() const
-    {
-      return !size_;
-    }
-
-    Node< T >* pushFront(T value)
-    {
-      Node< T >* ptr = new Node< T >(value);
-      ptr->next_ = head_;
-      if (head_ != nullptr)
+      List< T > cbegin() noexcept
       {
-        head_->prev_ = ptr;
+        return ConstIterator< T >(head);
       }
-      if (tail_ == nullptr)
-      {
-        tail_ = ptr;
-      }
-      head_ = ptr;
-      ++size_;
-      return ptr;
-    }
 
-    Node< T >* pushBack(T value)
-    {
-      Node< T >* ptr = new Node< T >(value);
-      ptr->prev_ = tail_;
-      if (tail_ != nullptr)
+      List< T > cend() noexcept
       {
-        tail_->next_ = ptr;
+        return ConstIterator< T >(nullptr);
       }
-      if (head_ == nullptr)
-      {
-        head_ = ptr;
-      }
-      tail_ = ptr;
-      ++size_;
-      return ptr;
-    }
 
-    void popFront()
-    {
-      if (head_ == nullptr)
+      T & front()
       {
-        return;
+        return head->value;
       }
-      Node< T >* ptr = head_->next_;
-      if (ptr != nullptr)
+
+      T & back()
       {
-        ptr->prev_ = nullptr;
+        return tail->value;
       }
-      else
+
+      bool empty() const
       {
-        tail_ = nullptr;
+        return !size;
       }
-      delete head_;
-      head_ = ptr;
-      --size_;
-    }
 
-    void popBack()
-    {
-      if (tail_ == nullptr)
+      detail::Node< T >* pushFront(T value_)
       {
-        return;
+        detail::Node< T >* ptr = new detail::Node< T >(value_);
+        ptr->next = head;
+        if (head != nullptr)
+        {
+          head->prev = ptr;
+        }
+        if (tail == nullptr)
+        {
+          tail = ptr;
+        }
+        head = ptr;
+        ++size;
+        return ptr;
       }
-      Node< T >* ptr = tail_->prev_;
-      if (ptr != nullptr)
+
+      detail::Node< T >* pushBack(T value)
       {
-        ptr->next_ = nullptr;
+        detail::Node< T >* ptr = new detail::Node< T >(value);
+        ptr->prev = tail;
+        if (tail != nullptr)
+        {
+          tail->next = ptr;
+        }
+        if (head == nullptr)
+        {
+          head = ptr;
+        }
+        tail = ptr;
+        ++size;
+        return ptr;
       }
-      else
+
+      void popFront()
       {
-        head_ = nullptr;
+        if (head == nullptr)
+        {
+          return;
+        }
+        detail::Node< T >* ptr = head->next;
+        if (ptr != nullptr)
+        {
+          ptr->prev = nullptr;
+        }
+        else
+        {
+          tail = nullptr;
+        }
+        delete head;
+        head = ptr;
+        --size;
       }
-      delete tail_;
-      tail_ = ptr;
-      --size_;
-    }
 
-    void clear() noexcept
-    {
-      while (!empty())
+      void popBack()
       {
-        popBack();
+        if (tail == nullptr)
+        {
+          return;
+        }
+        detail::Node< T >* ptr = tail->prev;
+        if (ptr != nullptr)
+        {
+          ptr->next = nullptr;
+        }
+        else
+        {
+          head = nullptr;
+        }
+        delete tail;
+        tail = ptr;
+        --size;
       }
-      size_ = 0;
-    }
 
-    void assign(size_t n, const T& value)
-    {
-      clear();
-      for (size_t i = 0; i < n; ++i)
+      void clear() noexcept
       {
-        push_back(value);
+        while (!empty())
+        {
+          popBack();
+        }
+        size = 0;
       }
-    }
 
-    void swap() noexcept
-    {}
+      void assign(sizet n, const T& value)
+      {
+        clear();
+        for (sizet i = 0; i < n; ++i)
+        {
+          push_back(value);
+        }
+      }
 
-    void remove(const T& value)
-    {}
+      void swap() noexcept
+      {}
 
-    void remove_if()
-    {}
+      void remove(const T& value)
+      {}
 
-    size_t getSize() const
-    {
-      return size_;
-    }
+      void remove_if()
+      {}
 
-  private:
-    Node< T >* head_;
-    Node< T >* tail_;
-    size_t size_;
+      size_t getSize() const
+      {
+        return size;
+      }
+
+    private:
+      detail::Node< T >* head;
+      detail::Node< T >* tail;
+      size_t size;
   };
 }
 

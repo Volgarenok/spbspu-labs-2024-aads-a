@@ -5,97 +5,68 @@
 
 namespace skuratov
 {
-  template < typename T >
+  template< typename T >
   class List;
 
-  template < typename T >
+  template< typename T >
   class ConstIterator
   {
-    friend List< T >;
+    public:
+      ConstIterator():
+        nodePointer(nullptr)
+      {}
+      ~ConstIterator() = default;
+      ConstIterator(const ConstIterator< T >&) = default;
 
-  public:
-    ConstIterator();
-    ConstIterator(const ConstIterator< T >& different);
-    ~ConstIterator() = default;
+      const T& operator*()
+      {
+        return nodePointer->value_;
+      }
+      const T* operator->()
+      {
+        return &(nodePointer->value_);
+      }
 
-    const T& operator*();
-    const T* operator->();
+      bool operator==(const ConstIterator< T >& diff) const
+      {
+        return nodePointer == diff.nodePointer;
+      }
+      bool operator!=(const ConstIterator< T >& diff) const
+      {
+        return diff != *this;
+      }
 
-    bool operator==(const ConstIterator< T >& different) const;
-    bool operator!=(const ConstIterator< T >& different) const;
+      ConstIterator< T >& operator=(const ConstIterator< T >&) = default;
+      ConstIterator< T >& operator++()
+      {
+        nodePointer = nodePointer->next;
+        return *this;
+      }
+      ConstIterator< T >& operator--()
+      {
+        nodePointer = nodePointer->prev;
+        return *this;
+      }
+      ConstIterator< T > operator++(int)
+      {
+        ConstIterator< T > result(*this);
+        (*this)++;
+        return result;
+      }
+      ConstIterator< T > operator--(int)
+      {
+        ConstIterator< T > result(*this);
+        (*this)--;
+        return result;
+      }
 
-    ConstIterator< T >& operator=(const ConstIterator< T >& different);
-    ConstIterator< T >& operator++();
-    ConstIterator< T >& operator--();
-    ConstIterator< T > operator++(int);
-    ConstIterator< T > operator--(int);
-
-  private:
-    Node< T >* node_;
-    ConstIterator(Node< T >* node_);
+    private:
+      friend List< T >;
+      detail::Node< T >* nodePointer;
+      explicit ConstIterator(detail::Node< T >* nodePointer_) :
+        nodePointer(nodePointer_)
+      {}
   };
-
-  template< typename T >
-  ConstIterator< T >::ConstIterator()
-  {}
-
-  template< typename T >
-  ConstIterator< T >::ConstIterator(const ConstIterator< T >& different)
-  {}
-
-  template< typename T >
-  const T& ConstIterator< T >::operator*()
-  {
-    return;
-  }
-
-  template< typename T >
-  const T* ConstIterator< T >::operator->()
-  {
-    return nullptr;
-  }
-
-  template< typename T >
-  bool ConstIterator< T >::operator==(const ConstIterator< T >& different) const
-  {
-    return false;
-  }
-
-  template< typename T >
-  bool ConstIterator< T >::operator!=(const ConstIterator< T >& different) const
-  {
-    return false;
-  }
-
-  template< typename T >
-  ConstIterator< T >& ConstIterator< T >::operator=(const ConstIterator< T >& different)
-  {
-    return;
-  }
-
-  template< typename T >
-  ConstIterator< T >& ConstIterator< T >::operator++()
-  {
-    return;
-  }
-
-  template< typename T >
-  ConstIterator< T >& ConstIterator< T >::operator--()
-  {
-    return;
-  }
-
-  template< typename T >
-  ConstIterator< T > ConstIterator< T >::operator++(int)
-  {
-    return ConstIterator< T >();
-  }
-
-  template< typename T >
-  ConstIterator< T > ConstIterator< T >::operator--(int)
-  {
-    return ConstIterator< T >();
-  }
 }
 
 #endif

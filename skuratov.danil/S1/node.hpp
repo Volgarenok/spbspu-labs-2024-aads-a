@@ -3,19 +3,22 @@
 
 namespace skuratov
 {
-  template < typename T >
-  class Node
+  namespace detail
   {
-  public:
-    Node(const T & value):
-      value_(value),
-      prev_(nullptr),
-      next_(nullptr)
-    {}
-    ~Node() = default;
-    T value_;
-    Node* prev_;
-    Node* next_;
-  };
+    template< typename T >
+    class Node
+    {
+    public:
+      Node(const T & value_):
+        value(value_),
+        prev(nullptr),
+        next(nullptr)
+      {}
+      ~Node() = default;
+      T value;
+      Node* prev;
+      Node* next;
+    };
+  }
 }
 #endif
