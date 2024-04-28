@@ -14,7 +14,7 @@ int main(int argc, char ** argv)
   using namespace erohin;
 
   {
-    RedBlackTree< int > int_dict;
+    RedBlackTree< int, int > int_dict;
   }
 
   if (argc != 2)
