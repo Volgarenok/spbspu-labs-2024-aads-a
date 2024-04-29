@@ -32,6 +32,25 @@ namespace nikitov
   {}
 
   template< class Key, class T, class Compare >
+  BinarySearchTree< Key, T, Compare >::~BinarySearchTree()
+  {
+    clear();
+    delete root_;
+  }
+
+  template< class Key, class T, class Compare >
+  void BinarySearchTree< Key, T, Compare >::clear()
+  {
+    if (!empty())
+    {
+      root_->clear();
+      root_ = root_->parent_;
+      delete root_->middle_;
+      size_ = 0;
+    }
+  }
+
+  template< class Key, class T, class Compare >
   size_t BinarySearchTree< Key, T, Compare >::size() const
   {
     return size_;

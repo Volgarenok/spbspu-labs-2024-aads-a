@@ -7,9 +7,8 @@
 namespace nikitov
 {
   template< class Key, class T, class Compare = std::less< Key > >
-  class Tree
+  struct Tree
   {
-  public:
     Tree();
     Tree(const Key& key, const T& value);
     ~Tree() = default;
@@ -17,7 +16,6 @@ namespace nikitov
     void add(const Key& key, const T& value);
     void clear();
 
-  private:
     std::pair< Key, T > firstValue_;
     std::pair< Key, T > secondValue_;
     Tree< Key, T, Compare >* left_;
