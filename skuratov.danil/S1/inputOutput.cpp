@@ -1,29 +1,30 @@
-#include <iostream>
-#include <sstream>
-#include <numeric>
-#include <limits>
 #include "inputOutput.hpp"
+#include <iostream>
+#include <string>
+#include <limits>
+#include <stdexcept>
+#include "list.hpp"
 
 void skuratov::inputOutput()
 {
-  std::vector< Sequence > sequences;
-  std::string line;
+  skuratov::List<std::pair<std::string, skuratov::List<size_t>>> sequences;
 
-  while (std::getline(std::cin, line))
+  std::string name;
+  while (std::cin >> name)
   {
-    if (!line.empty())
+    skuratov::List<size_t> numbersList;
+    size_t number;
+    while (std::cin >> number)
     {
-      std::istringstream iss(line);
-      std::string name;
-      iss >> name;
-      Sequence sequence(name);
-      size_t num = {};
-      while (iss >> num)
-      {
-        sequence.numbers().push_back(num);
-      }
-      sequences.push_back(sequence);
+      numbersList.pushBack(number);
     }
+
+    if (numbersList.empty())
+    {
+      throw std::invalid_argument("Empty list");
+    }
+
+    sequences.pushBack(std::make_pair(name, numbersList));
   }
 
   if (sequences.empty())
@@ -32,36 +33,36 @@ void skuratov::inputOutput()
   }
 
   bool first = true;
-  for (const auto& seq : sequences)
+  for (size_t i = 0; i < sequences.getSize(); ++i)
   {
     if (!first)
     {
       std::cout << " ";
     }
-    std::cout << seq.name();
+    std::cout << sequences.get(i).first;
     first = false;
   }
   std::cout << '\n';
 
-  size_t maxSize = 1;
-  for (const auto& seq : sequences)
+  size_t maxSize = 0;
+  for (size_t i = 0; i < sequences.getSize(); ++i)
   {
-    maxSize = std::max(maxSize, seq.numbers().size());
+    maxSize = std::max(maxSize, sequences.get(i).second.getSize());
   }
 
   for (size_t i = 0; i < maxSize; ++i)
   {
     bool isFirst = true;
-    for (const auto& seq : sequences)
+    for (size_t j = 0; j < sequences.getSize(); ++j)
     {
-      const auto& numbers = seq.numbers();
-      if (i < numbers.size())
+      const auto& numbers = sequences.get(j).second;
+      if (i < numbers.getSize())
       {
         if (!isFirst)
         {
           std::cout << " ";
         }
-        std::cout << numbers[i];
+        std::cout << numbers.get(i);
         isFirst = false;
       }
     }
@@ -71,18 +72,18 @@ void skuratov::inputOutput()
     }
   }
 
-  std::vector< size_t > column_sums(maxSize, 0);
+  skuratov::List<size_t> columnSums(maxSize, 0);
 
   for (size_t i = 0; i < maxSize; ++i)
   {
-    for (const auto& seq : sequences)
+    for (size_t j = 0; j < sequences.getSize(); ++j)
     {
-      const auto& numbers = seq.numbers();
-      if (i < numbers.size())
+      const auto& numbers = sequences.get(j).second;
+      if (i < numbers.getSize())
       {
-        if (column_sums[i] <= std::numeric_limits< size_t >::max() - numbers[i])
+        if (columnSums.get(i) <= std::numeric_limits<size_t>::max() - numbers.get(i))
         {
-          column_sums[i] += numbers[i];
+          columnSums.get(i) += numbers.get(i);
         }
         else
         {
@@ -91,8 +92,9 @@ void skuratov::inputOutput()
       }
     }
   }
+
   bool firstSeq = true;
-  for (const auto& sum : column_sums)
+  for (size_t sum : columnSums)
   {
     if (!firstSeq)
     {

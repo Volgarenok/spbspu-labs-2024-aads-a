@@ -79,7 +79,7 @@ namespace skuratov
         return *this;
       }
 
-      const List< T > cbegin() const noexcept
+      const List< T > ñbegin() const noexcept
       {
         return ConstIterator< T >(head);
       }
@@ -255,6 +255,20 @@ namespace skuratov
       size_t getSize() const
       {
         return size;
+      }
+
+      const T& get(size_t index) const
+      {
+        if (index >= size)
+        {
+          throw std::out_of_range("Index out of bounds");
+        }
+        detail::Node* current = head;
+        for (size_t i = 0; i < index; ++i)
+        {
+          current = current->next;
+        }
+        return current->data;
       }
 
     private:
