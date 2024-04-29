@@ -10,7 +10,8 @@ int main(int argc, char* argv[])
 {
   using namespace nikitov;
 
-  Tree< std::string, size_t > tree;
+  Tree< int, size_t > tree;
+  tree.insert({1, 3});
   std::map< std::string, std::map< size_t, std::string > > treeOfDictionaries;
   if (argc == 2)
   {
