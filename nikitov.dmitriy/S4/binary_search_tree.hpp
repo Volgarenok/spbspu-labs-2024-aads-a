@@ -2,10 +2,11 @@
 #define BINARY_SEARCH_TREE_HPP
 
 #include "tree.hpp"
+#include <functional>
 
 namespace nikitov
 {
-  template< class Key, class T, class Compare >
+  template< class Key, class T, class Compare = std::less< Key > >
   class BinarySearchTree
   {
   public:
@@ -25,7 +26,7 @@ namespace nikitov
 
   template< class Key, class T, class Compare >
   BinarySearchTree< Key, T, Compare >::BinarySearchTree():
-    root_(Tree< Key, T, Compare >()),
+    root_(new Tree< Key, T, Compare >()),
     size_(0),
     cmp_(Compare())
   {}
