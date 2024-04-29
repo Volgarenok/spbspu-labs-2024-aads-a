@@ -16,7 +16,6 @@ namespace erohin
   {
     template < class T1, class T2, class T3 >
     friend class RedBlackTree;
-
   public:
     TreeIterator();
     TreeIterator(const TreeIterator< Key, T, S > &) = default;

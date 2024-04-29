@@ -38,7 +38,10 @@ namespace erohin
         {
           node = node->parent_;
         }
-        node = node->parent_;
+        while (node->parent_ && node->parent_->left_ == node && !(node->right_))
+        {
+          node = node->parent_;
+        }
       }
       return node;
     }

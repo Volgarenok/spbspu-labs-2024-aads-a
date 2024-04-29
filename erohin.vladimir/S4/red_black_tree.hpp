@@ -19,31 +19,17 @@ namespace erohin
     RedBlackTree();
     ~RedBlackTree();
     void clear();
+    bool empty() const noexcept;
     std::pair< iterator, bool > insert(const value_type & value);
   private:
-    detail::Node< Key, T > * last_;
     detail::Node< Key, T > * root_;
-    char fake_[sizeof(detail::Node< Key, T >)];
     Compare cmp_;
-    detail::Node< Key, T > * createFakeLeaf();
     void clear_subtree(detail::Node< Key, T > * subtree);
-    bool is_leaf(detail::Node< Key, T > * node);
-    bool is_last(detail::Node< Key, T > * node);
   };
 
   template< class Key, class T, class Compare >
-  detail::Node< Key, T > * RedBlackTree< Key, T, Compare >::createFakeLeaf()
-  {
-    detail::Node< Key, T > * result = reinterpret_cast< detail::Node< Key, T > * >(fake_);
-    result->left_ = nullptr;
-    result->right_ = nullptr;
-    return result;
-  }
-
-  template< class Key, class T, class Compare >
   RedBlackTree< Key, T, Compare >::RedBlackTree():
-    last_(createFakeLeaf()),
-    root_(last_)
+    root_(nullptr)
   {}
 
   template< class Key, class T, class Compare >
@@ -55,11 +41,7 @@ namespace erohin
   template< class Key, class T, class Compare >
   void RedBlackTree< Key, T, Compare >::clear_subtree(detail::Node< Key, T > * subtree)
   {
-    if (subtree == last_ || !subtree)
-    {
-      return;
-    }
-    else if (subtree->left_ == last_ && subtree->right_ == last_)
+    if (!subtree)
     {
       delete subtree;
       return;
@@ -67,18 +49,6 @@ namespace erohin
     clear_subtree(subtree->left_);
     clear_subtree(subtree->right_);
     delete subtree;
-  }
-
-  template< class Key, class T, class Compare >
-  bool RedBlackTree< Key, T, Compare >::is_leaf(detail::Node< Key, T > * node)
-  {
-    return (node->left_ && node->right_);
-  }
-
-  template< class Key, class T, class Compare >
-  bool RedBlackTree< Key, T, Compare >::is_last(detail::Node< Key, T > * node)
-  {
-    return (node->left_ == last_ || node->right_ == last_);
   }
 
   template< class Key, class T, class Compare >
@@ -90,8 +60,13 @@ namespace erohin
   template< class Key, class T, class Compare >
   std::pair< TreeIterator< Key, T >, bool > RedBlackTree< Key, T, Compare >::insert(const value_type & value)
   {
+    if (empty())
+    {
+      root_ = new detail::Node< Key, T >(value, nullptr, nullptr, nullptr);
+      return std::make_pair(iterator(root_), true);
+    }
     detail::Node< Key, T > * node = root_;
-    while (is_leaf(node) || is_last(node))
+    while (node->left_ && node->right_)
     {
       if (node->data_.first == value.first)
       {
@@ -117,6 +92,12 @@ namespace erohin
       prev->right_ = node;
     }
     return std::make_pair(iterator(node), true);
+  }
+
+  template< class Key, class T, class Compare >
+  bool RedBlackTree< Key, T, Compare >::empty() const noexcept
+  {
+    return (!root_);
   }
 }
 

@@ -2,7 +2,7 @@
 #define TREE_NODE_HPP
 
 #include <utility>
-#include <algorithm>
+#include <cstddef>
 
 namespace erohin
 {
@@ -28,7 +28,7 @@ namespace erohin
       parent_(parent),
       left_(left),
       right_(right),
-      color_(0),
+      color_(1),
       height_(0)
     {}
 
@@ -38,7 +38,7 @@ namespace erohin
       parent_(parent),
       left_(left),
       right_(right),
-      color_(0),
+      color_(1),
       height_(0)
     {}
   }

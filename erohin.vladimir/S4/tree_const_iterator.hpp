@@ -8,18 +8,14 @@
 
 namespace erohin
 {
-  /*
   template < class Key, class T, class Compare >
   class RedBlackTree;
-  */
 
   template< class Key, class T, class S = detail::InfixTraversal< Key, T > >
   class TreeConstIterator: public std::iterator< std::bidirectional_iterator_tag, T >
   {
-    /*
-    template < class Compare >
-    friend class RedBlackTree< Key, T, Compare >;
-    */
+    template < class T1, class T2, class T3 >
+    friend class RedBlackTree;
   public:
     TreeConstIterator();
     TreeConstIterator(const TreeConstIterator< Key, T, S > &) = default;
@@ -35,6 +31,7 @@ namespace erohin
     bool operator!=(const TreeConstIterator< Key, T, S > & rhs) const;
   private:
     const detail::Node< Key, T > * node_;
+    S strategy_;
     explicit TreeConstIterator(const detail::Node< Key, T > * node_ptr);
   };
 
@@ -51,7 +48,7 @@ namespace erohin
   template< class Key, class T, class S >
   TreeConstIterator< Key, T, S > & TreeConstIterator< Key, T, S >::operator++()
   {
-    node_ = S::next(node_);
+    node_ = strategy_.next(node_);
     return *this;
   }
 
@@ -59,14 +56,14 @@ namespace erohin
   TreeConstIterator< Key, T, S > TreeConstIterator< Key, T, S >::operator++(int)
   {
     TreeConstIterator< Key, T, S > temp = *this;
-    node_ = S::next(node_);
+    node_ = strategy_.next(node_);
     return temp;
   }
 
   template< class Key, class T, class S >
   TreeConstIterator< Key, T, S > & TreeConstIterator< Key, T, S >::operator--()
   {
-    node_ = S::prev(node_);
+    node_ = strategy_.prev(node_);
     return *this;
   }
 
@@ -74,7 +71,7 @@ namespace erohin
   TreeConstIterator< Key, T, S > TreeConstIterator< Key, T, S >::operator--(int)
   {
     TreeConstIterator< Key, T, S > temp = *this;
-    node_ = S::prev(node_);
+    node_ = strategy_.prev(node_);
     return temp;
   }
 
