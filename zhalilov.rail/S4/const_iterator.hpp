@@ -48,7 +48,7 @@ namespace zhalilov
     {
       if (isPtrToLeft_)
       {
-        detail::Node < T > *minMid = findMin(node_->childs[1]);
+        detail::Node < T > *minMid = findMin(node_->mid);
         if (minMid == node_)
         {
           isPtrToLeft_ = false;
@@ -57,10 +57,10 @@ namespace zhalilov
       }
     }
 
-    detail::Node < T > *minRight = findMin(node_->childs[2]);
+    detail::Node < T > *minRight = findMin(node_->right);
     if (minRight == node_)
     {
-      while (node_->parent->childs[2] == node_)
+      while (node_->parent->right == node_)
       {
         node_ = node_->parent;
       }
@@ -80,7 +80,7 @@ namespace zhalilov
     {
       if (!isPtrToLeft_)
       {
-        detail::Node < T > *maxMid = findMax(node_->childs[1]);
+        detail::Node < T > *maxMid = findMax(node_->mid);
         if (maxMid == node_)
         {
           isPtrToLeft_ = false;
@@ -89,10 +89,10 @@ namespace zhalilov
       }
     }
 
-    detail::Node < T > *maxLeft = findMax(node_->childs[0]);
+    detail::Node < T > *maxLeft = findMax(node_->left);
     if (maxLeft == node_)
     {
-      while (node_->parent->childs[0] == node_)
+      while (node_->parent->left == node_)
       {
         node_ = node_->parent;
       }
@@ -128,10 +128,10 @@ namespace zhalilov
     {
       if (!isPtrToLeft_)
       {
-        return node_->values[1];
+        return node_->two;
       }
     }
-    return node_->values[0];
+    return node_->one;
   }
 
   template < class T >
@@ -141,10 +141,10 @@ namespace zhalilov
     {
       if (!isPtrToLeft_)
       {
-        return node_->values[1];
+        return node_->two;
       }
     }
-    return *node_->values[0];
+    return *node_->one;
   }
 
   template < class T >
@@ -174,9 +174,9 @@ namespace zhalilov
   detail::Node < T > *ConstTwoThreeIterator < T >::findMin(const detail::Node < T > *nodeFrom)
   {
     detail::Node < T > *minNode = nodeFrom;
-    while (minNode->childs[0])
+    while (minNode->left)
     {
-      minNode = minNode->childs[0];
+      minNode = minNode->left;
     }
     return minNode;
   }
@@ -185,9 +185,9 @@ namespace zhalilov
   detail::Node < T > *ConstTwoThreeIterator < T >::findMax(const detail::Node < T > *nodeFrom)
   {
     detail::Node < T > *maxNode = nodeFrom;
-    while (maxNode->childs[2])
+    while (maxNode->right)
     {
-      maxNode = maxNode->childs[2];
+      maxNode = maxNode->right;
     }
     return maxNode;
   }
