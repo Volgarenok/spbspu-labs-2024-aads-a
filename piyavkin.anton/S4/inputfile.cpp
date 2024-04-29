@@ -11,13 +11,13 @@ void piyavkin::inputFile(std::istream& in, map_t& map)
     while (in)
     {
       in >> key >> val;
-      if (in.bad())
+      if (in.fail())
       {
         in.clear();
         break;
       }
+      tree.insert(std::pair< long long, std::string >(key, val));
     }
-    tree.insert(std::pair< long long, std::string >(key, val));
+    map.insert(std::pair< std::string, tree_t >(str, tree));
   }
-  map.insert(std::pair< std::string, tree_t >(str, tree));
 }
