@@ -2,7 +2,6 @@
 #define AVLTREE_HPP
 
 #include <iostream>
-
 #include <iomanip>
 
 template <class T>
@@ -26,17 +25,33 @@ public:
 
   ~AVLTree()
   {
-    deleteSubTree(root_);
+    clear();
   }
 
-  void insert(const T& value)
+  void clear()
+  {
+    removeSubTree(root_);
+    root_ = nullptr;
+  }
+
+  void insert(const T & value)
   {
     root_ = insertRecursive(root_, value);
   }
 
-  void pop(const T & value)
+  void remove(const T & value)
   {
-    root_ = popRecursive(root_, value);
+    root_ = removeRecursive(root_, value);
+  }
+
+  void addElements(const AVLTree< T >& other)
+  {
+    addElementsRecursive(other.root_);
+  }
+
+  void removeElements(const AVLTree< T >& other)
+  {
+    removeElementsRecursive(root_, other.root_);
   }
 
   bool contains(const T & value) const
@@ -49,23 +64,49 @@ public:
     return searchRecursive(root_, value)->data;
   }
 
+  size_t getCountElements() const
+  {
+    return getCountElementsRecursive(root_);
+  }
+
   size_t getHeight()
   {
     return getHeight(root_);
   }
 
-  void print()
+  AVLTree< T >& operator=(const AVLTree< T >& other)
   {
-    print(root_, 2);
+    if (this != &other)
+    {
+      removeSubTree(root_);
+      root_ = deepCopy(other.root_);
+    }
+    return *this;
+  }
+
+  friend std::ostream& operator<<(std::ostream& os, const AVLTree< T >& tree)
+  {
+    os << tree.root_;
+    return os;
+  }
+
+  void display() const
+  {
+    std::cout << *this << getCountElements() << "\n";
   }
 
 private:
   struct Node
   {
-    T data;
-    Node * left;
-    Node * right;
-    size_t height;
+    T data_;
+    Node * left_;
+    Node * right_;
+    size_t height_;
+
+    Node():
+      left_(nullptr), right_(nullptr), height_(1) {}
+    Node(const T & data):
+      data_(data), left_(nullptr), right_(nullptr), height_(1) {}
   };
 
   Node * root_;
@@ -79,10 +120,10 @@ private:
     else
     {
       Node * newNode = new Node;
-      newNode->data = node->data;
-      newNode->left = deepCopy(node->left);
-      newNode->right = deepCopy(node->right);
-      newNode->height = node->height;
+      newNode->data_ = node->data_;
+      newNode->left_ = deepCopy(node->left_);
+      newNode->right_ = deepCopy(node->right_);
+      newNode->height_ = node->height_;
       return newNode;
     }
   }
@@ -91,29 +132,29 @@ private:
   {
     if (node == nullptr)
     {
-      return new Node{ value, nullptr, nullptr, 1 };
+      return new Node(value);
     }
 
-    if (value < node->data)
+    if (value < node->data_)
     {
-      if (node->left == nullptr)
+      if (node->left_ == nullptr)
       {
-        node->left = new Node{ value, nullptr, nullptr, 1 };
+        node->left_ = new Node(value);
       }
       else
       {
-        node->left = insertRecursive(node->left, value);
+        node->left_ = insertRecursive(node->left_, value);
       }
     }
-    else if (value > node->data)
+    else if (value > node->data_)
     {
-      if (node->right == nullptr)
+      if (node->right_ == nullptr)
       {
-        node->right = new Node{ value, nullptr, nullptr, 1 };
+        node->right_ = new Node(value);
       }
       else
       {
-        node->right = insertRecursive(node->right, value);
+        node->right_ = insertRecursive(node->right_, value);
       }
     }
     else
@@ -121,31 +162,31 @@ private:
       throw std::invalid_argument("Inserting a duplicate into the AVLTree is not allowed");
     }
 
-    node->height = 1 + std::max(getHeight(node->left), getHeight(node->right));
+    node->height_ = 1 + std::max(getHeight(node->left_), getHeight(node->right_));
 
     size_t balance = getBalance(node);
 
-    if (balance > 1 && node->left && value < node->left->data)
+    if (balance > 1 && node->left_ && value < node->left_->data_)
     {
       return rightRotate(node);
     }
-    if (balance < -1 && node->right && value > node->right->data)
+    if (balance < -1 && node->right_ && value > node->right_->data_)
     {
       return leftRotate(node);
     }
-    if (balance > 1 && node->left && value > node->left->data)
+    if (balance > 1 && node->left_ && value > node->left_->data_)
     {
-      if (node->left && node->left->left && value > node->left->left->data)
+      if (node->left_ && node->left_->left_ && value > node->left_->left_->data_)
       {
-        node->left = leftRotate(node->left);
+        node->left_ = leftRotate(node->left_);
       }
       return rightRotate(node);
     }
-    if (balance < -1 && node->right && value < node->right->data)
+    if (balance < -1 && node->right_ && value < node->right_->data_)
     {
-      if (node->right && node->right->right && value < node->right->right->data)
+      if (node->right_ && node->right_->right_ && value < node->right_->right_->data_)
       {
-        node->right = rightRotate(node->right);
+        node->right_ = rightRotate(node->right_);
       }
       return leftRotate(node);
     }
@@ -153,143 +194,186 @@ private:
     return node;
   }
 
-  size_t getHeight(Node * node)
+  Node * removeRecursive(Node * node, const T & value)
   {
     if (node == nullptr)
     {
-      return 0;
+      return node;
     }
-    return node->height;
+
+    if (value < node->data_)
+    {
+      node->left_ = removeRecursive(node->left_, value);
+    }
+    else if (value > node->data_)
+    {
+      node->right_ = removeRecursive(node->right_, value);
+    }
+    else
+    {
+      if (node->left_ == nullptr)
+      {
+        Node * temp = node->right_;
+        delete node;
+        return temp;
+      }
+      else if (node->right_ == nullptr)
+      {
+        Node * temp = node->left_;
+        delete node;
+        return temp;
+      }
+
+      Node * temp = getMinValueNode(node->right_);
+      node->data_ = temp->data_;
+      node->right_ = removeRecursive(node->right_, temp->data_);
+    }
+
+    node->height_ = 1 + std::max(getHeight(node->left_), getHeight(node->right_));
+
+    size_t balance = getBalance(node);
+
+    if (balance > 1 && getBalance(node->left_) >= 0)
+    {
+      return rightRotate(node);
+    }
+    if (balance > 1 && getBalance(node->left_) < 0)
+    {
+      node->left_ = leftRotate(node->left_);
+      return rightRotate(node);
+    }
+    if (balance < -1 && getBalance(node->right_) <= 0)
+    {
+      return leftRotate(node);
+    }
+    if (balance < -1 && getBalance(node->right_) > 0)
+    {
+      node->right_ = rightRotate(node->right_);
+      return leftRotate(node);
+    }
+
+    return node;
   }
 
-  size_t getBalance(Node * node)
+  void addElementsRecursive(Node * node)
+  {
+    if (node != nullptr)
+    {
+      insert(node->data_);
+      addElementsRecursive(node->left_);
+      addElementsRecursive(node->right_);
+    }
+  }
+
+  void removeElementsRecursive(Node * thisNode, Node * otherNode)
+  {
+    if (otherNode != nullptr)
+    {
+      remove(otherNode->data_);
+      removeElementsRecursive(thisNode, otherNode->left_);
+      removeElementsRecursive(thisNode, otherNode->right_);
+    }
+  }
+
+  size_t getCountElementsRecursive(Node * node) const
   {
     if (node == nullptr)
     {
       return 0;
     }
-    return getHeight(node->left) - getHeight(node->right);
+    return 1 + getCountElementsRecursive(node->left_) + getCountElementsRecursive(node->right_);
+  }
+
+  size_t getHeight(Node * node) const
+  {
+    if (node == nullptr)
+    {
+      return 0;
+    }
+    return node->height_;
+  }
+
+  size_t getBalance(Node * node) const
+  {
+    if (node == nullptr)
+    {
+      return 0;
+    }
+    return getHeight(node->left_) - getHeight(node->right_);
   }
 
   Node * rightRotate(Node * node)
   {
-    Node * nextLeftNode = node->left;
-    Node * newRightSubtree = nextLeftNode->right;
+    if (node == nullptr || node->left_ == nullptr || node->left_->right_ == nullptr)
+    {
+      return node;
+    }
 
-    nextLeftNode->right = node;
-    node->left = newRightSubtree;
+    Node * nextLeftNode = node->left_;
+    Node * newRightSubtree = nextLeftNode->right_;
 
-    node->height = 1 + std::max(getHeight(node->left), getHeight(node->right));
-    nextLeftNode->height = 1 + std::max(getHeight(nextLeftNode->left), getHeight(nextLeftNode->right));
+    nextLeftNode->right_ = node;
+    node->left_ = newRightSubtree;
+
+    node->height_ = 1 + std::max(getHeight(node->left_), getHeight(node->right_));
+    nextLeftNode->height_ = 1 + std::max(getHeight(nextLeftNode->left_), getHeight(nextLeftNode->right_));
 
     return nextLeftNode;
   }
 
-  Node* leftRotate(Node * node)
+  Node * leftRotate(Node * node)
   {
-    Node * nextRightNode = node->right;
-    Node * newLeftSubtree = nextRightNode->left;
+    if (node == nullptr || node->right_ == nullptr || node->right_->left_ == nullptr)
+    {
+      return node;
+    }
 
-    nextRightNode->left = node;
-    node->right = newLeftSubtree;
+    Node * nextRightNode = node->right_;
+    Node * newLeftSubtree = nextRightNode->left_;
 
-    node->height = 1 + std::max(getHeight(node->left), getHeight(node->right));
-    nextRightNode->height = 1 + std::max(getHeight(nextRightNode->left), getHeight(nextRightNode->right));
+    nextRightNode->left_ = node;
+    node->right_ = newLeftSubtree;
+
+    node->height_ = 1 + std::max(getHeight(node->left_), getHeight(node->right_));
+    nextRightNode->height_ = 1 + std::max(getHeight(nextRightNode->left_), getHeight(nextRightNode->right_));
 
     return nextRightNode;
   }
 
-  Node * searchRecursive(Node * node, const T & value)
+  void removeSubTree(Node * node)
   {
-    if (node == nullptr || node->data == value)
+    if (node != nullptr)
     {
-      return node;
-    }
-    if (value < node->data)
-    {
-      return searchRecursive(node->left, value);
-    }
-    return searchRecursive(node->right, value);
-  }
-
-  void deleteSubTree(Node * node)
-  {
-    if (node)
-    {
-      deleteSubTree(node->left);
-      deleteSubTree(node->right);
+      removeSubTree(node->left_);
+      removeSubTree(node->right_);
       delete node;
     }
   }
 
-  Node * popRecursive(Node * node, const T & value)
+  Node * searchRecursive(Node * node, const T & value)
   {
     if (node == nullptr)
     {
+      throw std::invalid_argument("There is no specified element");
+    }
+    if (node->data_ == value)
+    {
       return node;
     }
-
-    if (value < node->data)
+    if (value < node->data_)
     {
-      node->left = popRecursive(node->left, value);
+      return searchRecursive(node->left_, value);
     }
-    else if (value > node->data)
-    {
-      node->right = popRecursive(node->right, value);
-    }
-    else
-    {
-      if (node->left == nullptr)
-      {
-        Node * temp = node->right;
-        delete node;
-        return temp;
-      }
-      else if (node->right == nullptr)
-      {
-        Node * temp = node->left;
-        delete node;
-        return temp;
-      }
-
-      Node * temp = minValueNode(node->right);
-      node->data = temp->data;
-      node->right = popRecursive(node->right, temp->data);
-    }
-
-    node->height = 1 + std::max(getHeight(node->left), getHeight(node->right));
-
-    int balance = getBalance(node);
-
-    if (balance > 1 && getBalance(node->left) >= 0)
-    {
-      return rightRotate(node);
-    }
-    if (balance > 1 && getBalance(node->left) < 0)
-    {
-      node->left = leftRotate(node->left);
-      return rightRotate(node);
-    }
-    if (balance < -1 && getBalance(node->right) <= 0)
-    {
-      return leftRotate(node);
-    }
-    if (balance < -1 && getBalance(node->right) > 0)
-    {
-      node->right = rightRotate(node->right);
-      return leftRotate(node);
-    }
-
-    return node;
+    return searchRecursive(node->right_, value);
   }
 
-  Node * minValueNode(Node * node)
+  Node * getMinValueNode(Node * node) const
   {
     Node * current = node;
 
-    while (current && current->left != nullptr)
+    while (current && current->left_ != nullptr)
     {
-      current = current->left;
+      current = current->left_;
     }
 
     return current;
@@ -302,36 +386,18 @@ private:
       return false;
     }
 
-    if (value < node->data)
+    if (value < node->data_)
     {
-      return containsRecursive(node->left, value);
+      return containsRecursive(node->left_, value);
     }
-    else if (value > node->data)
+    else if (value > node->data_)
     {
-      return containsRecursive(node->right, value);
+      return containsRecursive(node->right_, value);
     }
     else
     {
       return true;
     }
-  }
-
-  void print(Node * root, int space)
-  {
-    if (root == nullptr)
-    {
-      return;
-    }
-
-    int count = 5;
-
-    space += count;
-
-    print(root->right, space);
-
-    std::cout << std::setw(space) << root->data << "\n";
-
-    print(root->left, space);
   }
 };
 #endif

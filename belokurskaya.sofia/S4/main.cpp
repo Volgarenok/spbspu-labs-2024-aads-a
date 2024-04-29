@@ -2,22 +2,35 @@
 #include "AVLTree.hpp"
 int main()
 {
-  AVLTree< int > tree;
-  tree.insert(1);
-  tree.insert(2);
-  tree.insert(3);
-  tree.insert(4);
-  tree.insert(5);
+  AVLTree< std::string > tree;
+  tree.insert("A");
+  tree.insert("B");
+  tree.insert("D");
+  tree.insert("C");
+  tree.insert("J");
+  tree.insert("E");
 
-  std::cout << tree.getHeight() << "\n";
-  tree.pop(1);
-  tree.pop(3);
-  tree.pop(5);
-  std::cout << tree.getHeight() << "\n";
+  tree.display();
 
-  std::cout << tree.contains(2) << "\n";
-  std::cout << tree.contains(4) << "\n";
-  std::cout << tree.contains(5) << "\n";
+  AVLTree<std::string> deleteTree(tree);
 
-  tree.print();
+  deleteTree.remove("A");
+  deleteTree.remove("D");
+  deleteTree.remove("J");
+
+  tree.removeElements(deleteTree);
+
+  tree.display();
+
+  AVLTree<std::string> addTree(std::move(deleteTree));
+
+  tree.addElements(addTree);
+
+  deleteTree = tree;
+
+  tree.display();
+
+  tree = addTree;
+
+  tree.display();
 }
