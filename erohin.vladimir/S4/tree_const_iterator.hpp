@@ -29,8 +29,8 @@ namespace erohin
     TreeConstIterator< Key, T, S > operator++(int);
     TreeConstIterator< Key, T, S > & operator--();
     TreeConstIterator< Key, T, S > operator--(int);
-    const T & operator*() const;
-    const T * operator->() const;
+    const std::pair< Key, T > & operator*() const;
+    const std::pair< Key, T > * operator->() const;
     bool operator==(const TreeConstIterator< Key, T, S > & rhs) const;
     bool operator!=(const TreeConstIterator< Key, T, S > & rhs) const;
   private:
@@ -79,13 +79,13 @@ namespace erohin
   }
 
   template< class Key, class T, class S >
-  const T & TreeConstIterator< Key, T, S>::operator*() const
+  const std::pair< Key, T > & TreeConstIterator< Key, T, S>::operator*() const
   {
     return node_->data_;
   }
 
   template< class Key, class T, class S >
-  const T * TreeConstIterator< Key, T, S >::operator->() const
+  const std::pair< Key, T > * TreeConstIterator< Key, T, S >::operator->() const
   {
     return std::addressof(node_->data_);
   }

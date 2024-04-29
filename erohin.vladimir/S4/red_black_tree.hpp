@@ -2,7 +2,10 @@
 #define RED_BLACK_TREE_HPP
 
 #include <functional>
+#include <initializer_list>
 #include "tree_node.hpp"
+#include "tree_const_iterator.hpp"
+#include "tree_iterator.hpp"
 
 namespace erohin
 {
@@ -10,19 +13,31 @@ namespace erohin
   class RedBlackTree
   {
   public:
+    using iterator = TreeIterator< Key, T >;
+    using const_iterator = TreeConstIterator< Key, T >;
     RedBlackTree();
     ~RedBlackTree();
     void clear();
-
+    std::pair< iterator, bool > insert(const T & value);
   private:
     using node = detail::Node< Key, T >;
+    node * last_;
     node * root_;
+    char fake_[sizeof(node)];
+    node * createFakeLeaf();
     void clear_subtree(node * subtree);
   };
 
   template< class Key, class T, class Compare >
+  detail::Node< Key, T > * RedBlackTree< Key, T, Compare >::createFakeLeaf()
+  {
+    return reinterpret_cast< node * >(fake_);
+  }
+
+  template< class Key, class T, class Compare >
   RedBlackTree< Key, T, Compare >::RedBlackTree():
-    root_(nullptr)
+    last_(createFakeLeaf()),
+    root_(last_)
   {}
 
   template< class Key, class T, class Compare >
@@ -34,11 +49,11 @@ namespace erohin
   template< class Key, class T, class Compare >
   void RedBlackTree< Key, T, Compare >::clear_subtree(node * subtree)
   {
-    if (!subtree)
+    if (subtree == last_ || !subtree)
     {
       return;
     }
-    else if (subtree->left_ == leaf_ && subtree->right_ == leaf_)
+    else if (subtree->left_ == last_ && subtree->right_ == last_)
     {
       delete subtree;
       return;
