@@ -27,6 +27,7 @@ namespace zhalilov
     bool empty();
     size_t size();
 
+    std::pair < iterator, bool > insert(const MapPair &);
     void clear();
     void swap();
 
@@ -38,10 +39,10 @@ namespace zhalilov
     Node *head_;
     size_t size_;
 
-    void doInsert(const Key &, const T &);
     std::pair < iterator, bool > doFind(const Key &);
-    Node *createTwoNode(Node *, const MapPair &);
-    Node *createThreeNode(Node *, const MapPair &, const MapPair &);
+    Node *createTwoNode(Node *, const MapPair &) const;
+    Node *createThreeNode(Node *, const MapPair &, const MapPair &) const;
+    void balanceAndInsert(iterator, const MapPair &);
   };
 
   template < class Key, class T, class Compare >
@@ -50,9 +51,8 @@ namespace zhalilov
   {}
 
   template < class Key, class T, class Compare >
-  void TwoThree < Key, T, Compare >::doInsert(const Key &key, const T &value)
+  std::pair < typename TwoThree < Key, T, Compare >::iterator, bool > TwoThree < Key, T, Compare >::insert(const MapPair &newPair)
   {
-    MapPair newPair = std::make_pair(key, value);
     if (empty())
     {
       head_ = createTwoNode(nullptr, MapPair());
@@ -61,14 +61,10 @@ namespace zhalilov
     }
     else
     {
-      auto resultPair = doFind(key);
+      auto resultPair = doFind(newPair.first);
       if (!resultPair.second)
       {
         Node *foundNode = resultPair.first.node_;
-        if (Compare(foundNode->values[0].first, key))
-        {
-
-        }
       }
     }
   }
@@ -105,15 +101,43 @@ namespace zhalilov
   }
 
   template < class Key, class T, class Compare >
-  typename TwoThree < Key, T, Compare >::Node *TwoThree < Key, T, Compare >::createTwoNode(Node *parent, const MapPair &pair)
+  typename TwoThree < Key, T, Compare >::Node *TwoThree < Key, T, Compare >::createTwoNode(Node *parent, const MapPair &pair) const
   {
     return new Node{ parent, { nullptr, nullptr, nullptr }, { pair, pair }, detail::NodeType::Two };
   }
 
   template < class Key, class T, class Compare >
-  typename TwoThree < Key, T, Compare >::Node *TwoThree < Key, T, Compare >::createThreeNode(Node *parent, const MapPair &pair1, const MapPair &pair2)
+  typename TwoThree < Key, T, Compare >::Node *TwoThree < Key, T, Compare >::createThreeNode(Node *parent, const MapPair &pair1, const MapPair &pair2) const
   {
     return new Node{ parent, { nullptr, nullptr, nullptr }, { pair1, pair2 }, detail::NodeType::Three };
+  }
+
+  template < class Key, class T, class Compare >
+  void TwoThree < Key, T, Compare >::balanceAndInsert(iterator it, const MapPair &pair)
+  {
+    if (it.node_->type == detail::NodeType::Two)
+    {
+      it.node_->values[1] = pair;
+      if (!Compare(it.node_->values[0].first, pair.first))
+      {
+        std::swap(it.node_->values[0], it.node_->values[1]);
+      }
+      it.node_->type = detail::NodeType::Three;
+    }
+    else if (it.node_->parent->type == detail::NodeType::Three)
+    {
+      Node *currNode = it.node_;
+      Node *prevNode = createTwoNode(currNode, pair);
+      while (currNode == detail::NodeType::Three)
+      {
+        if (Compare(prevNode->values[0].first, currNode->values[0].first))
+        {
+          Node *newRight = createTwoNode(currNode, currNode->values[1]);
+          newRight->childs[0] = currNode->childs[1];
+          newRight->childs[2] = currNode->childs[2];
+        }
+      }
+    }
   }
 }
 
