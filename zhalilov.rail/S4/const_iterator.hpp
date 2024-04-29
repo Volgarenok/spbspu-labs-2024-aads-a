@@ -33,7 +33,7 @@ namespace zhalilov
     friend TwoThreeTree < Key, Value, Compare >;
 
   private:
-    detail::Node < T > node_;
+    detail::Node < T > *node_;
     bool isPtrToLeft_;
 
     explicit ConstTwoThreeIterator(detail::Node < T > *node, bool isPtrToLeft = true);
@@ -44,11 +44,11 @@ namespace zhalilov
   template < class T >
   ConstTwoThreeIterator < T > &ConstTwoThreeIterator < T >::operator++()
   {
-    if (node_.type == detail::NodeType::Three)
+    if (node_->type == detail::NodeType::Three)
     {
       if (isPtrToLeft_)
       {
-        detail::Node < T > *minMid = findMin(node_.childs[1]);
+        detail::Node < T > *minMid = findMin(node_->childs[1]);
         if (minMid == node_)
         {
           isPtrToLeft_ = false;
@@ -57,12 +57,12 @@ namespace zhalilov
       }
     }
 
-    detail::Node < T > *minRight = findMin(node_.childs[2]);
+    detail::Node < T > *minRight = findMin(node_->childs[2]);
     if (minRight == node_)
     {
-      while (node_.parent->childs[2] == node_)
+      while (node_->parent->childs[2] == node_)
       {
-        node_ = node_.parent;
+        node_ = node_->parent;
       }
       isPtrToLeft_ = true;
     }
@@ -76,11 +76,11 @@ namespace zhalilov
   template < class T >
   ConstTwoThreeIterator < T > &ConstTwoThreeIterator < T >::operator--()
   {
-    if (node_.type == detail::NodeType::Three)
+    if (node_->type == detail::NodeType::Three)
     {
       if (!isPtrToLeft_)
       {
-        detail::Node < T > *maxMid = findMax(node_.childs[1]);
+        detail::Node < T > *maxMid = findMax(node_->childs[1]);
         if (maxMid == node_)
         {
           isPtrToLeft_ = false;
@@ -89,12 +89,12 @@ namespace zhalilov
       }
     }
 
-    detail::Node < T > *maxLeft = findMax(node_.childs[0]);
+    detail::Node < T > *maxLeft = findMax(node_->childs[0]);
     if (maxLeft == node_)
     {
-      while (node_.parent->childs[0] == node_)
+      while (node_->parent->childs[0] == node_)
       {
-        node_ = node_.parent;
+        node_ = node_->parent;
       }
       isPtrToLeft_ = false;
     }
@@ -124,34 +124,34 @@ namespace zhalilov
   template < class T >
   const T &ConstTwoThreeIterator < T >::operator*() const
   {
-    if (node_.type == detail::NodeType::Three)
+    if (node_->type == detail::NodeType::Three)
     {
       if (!isPtrToLeft_)
       {
-        return node_.values[1];
+        return node_->values[1];
       }
     }
-    return node_.values[0];
+    return node_->values[0];
   }
 
   template < class T >
   const T *ConstTwoThreeIterator < T >::operator->() const
   {
-    if (node_.type == detail::NodeType::Three)
+    if (node_->type == detail::NodeType::Three)
     {
       if (!isPtrToLeft_)
       {
-        return node_.values[1];
+        return node_->values[1];
       }
     }
-    return *node_.values[0];
+    return *node_->values[0];
   }
 
   template < class T >
   bool ConstTwoThreeIterator < T >::operator==(const ConstTwoThreeIterator < T > &ait) const
   {
     bool isEqualValue = true;
-    if (node_.type == detail::NodeType::Three)
+    if (node_->type == detail::NodeType::Three)
     {
       isEqualValue = ait.isPtrToLeft_ == isPtrToLeft_;
     }
