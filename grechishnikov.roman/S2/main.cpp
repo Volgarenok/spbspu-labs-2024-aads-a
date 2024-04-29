@@ -1,18 +1,18 @@
 #include <iostream>
 #include "queue.hpp"
 #include "calculatePostfix.hpp"
+#include "getExpression.hpp"
+
 int main()
 {
   using namespace grechishnikov;
 
   Queue< std::string > b;
-  b.push("23");
-  b.push("10");
-  b.push("+");
-  b.push("-140");
-  b.push("-");
+  std::string str;
+  getline(std::cin, str);
   try
   {
+    b = getExpression(str);
     std::cout << calculatePostfix(b) << '\n';
   }
   catch(std::exception &e)
