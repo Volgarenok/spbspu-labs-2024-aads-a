@@ -41,7 +41,8 @@ namespace piyavkin
       cmp_ = rhs.cmp_;
       TreeIterator< Key, T, Compare > it_right(rhs.root_);
       TreeIterator< Key, T, Compare > it_left(rhs.root_);
-      while (rhs.root_ && (it_right.node_ != rhs.end_node_.parent_->right_ || it_left.node_ != rhs.before_min_.parent_->left_))
+      while (rhs.root_ && (it_right.node_ != rhs.end_node_.parent_->right_
+        || it_left.node_ != rhs.before_min_.parent_->left_))
       {
         if (rhs.root_ && (it_right.node_ != rhs.end_node_.parent_->right_))
         {
@@ -199,9 +200,14 @@ namespace piyavkin
     }
     TreeIterator< Key, T, Compare > insert(ConstTreeIterator< Key, T, Compare > pos, const val_type& val)
     {
-      if ((pos.node_ == std::addressof(end_node_) || cmp_(val.first, pos.node_->val_type.first)) && (!pos.node_->left_ || pos.node_->left_ == std::addressof(before_min_) || cmp_(pos.node_->left_->val_type.first, val.first)) && (pos.node_ == root_ || (isLeftChild(pos.node_) && cmp_(val.first, pos.node_->parent_->val_type.first)) || (isRightChild(pos.node_) && cmp_(pos.node_->parent_->val_type.first, val.first))))
+      if ((pos.node_ == std::addressof(end_node_) || cmp_(val.first, pos.node_->val_type.first)) 
+        && (!pos.node_->left_ || pos.node_->left_ == std::addressof(before_min_)
+        || cmp_(pos.node_->left_->val_type.first, val.first))
+        && (pos.node_ == root_ || (isLeftChild(pos.node_) && cmp_(val.first, pos.node_->parent_->val_type.first))
+        || (isRightChild(pos.node_) && cmp_(pos.node_->parent_->val_type.first, val.first))))
       {
-        detail::TreeNode< Key, T >* node = new detail::TreeNode< Key, T >(val.first, pos.node_, pos.node_->left_, pos.node_->parent_, val.second);
+        detail::TreeNode< Key, T >* node = new detail::TreeNode< Key, T >(val.first, pos.node_,
+          pos.node_->left_, pos.node_->parent_, val.second);
         if (pos.node_->left_)
         {
           pos.node_->left_->parent_ = node;
