@@ -16,8 +16,10 @@ int main(int argc, char* argv[])
   inputFile(in, map);
   Tree< std::string, std::function< void(std::ostream&, const std::string&, const map_t&) > > cmdsForOutput;
   cmdsForOutput["print"] = print;
+  Tree< std::string, std::function< void(map_t&, const std::string&, const std::string&, const std::string&) > > cmdsForCreate;
   {
     using namespace std::placeholders;
+    cmdsForCreate["complement"] = complement;
   }
   std::string name = "";
   std::string nameDataSet = "";
@@ -28,9 +30,24 @@ int main(int argc, char* argv[])
     {
       cmdsForOutput.at(name)(std::cout, nameDataSet, map);
     }
-    catch(const std::out_of_range& e)
+    catch (const std::out_of_range&)
     {
-      std::cerr << "<INVALID COMMANDS>" << '\n';
+      try
+      {
+        std::string rhsName = "";
+        std::string lhsName = "";
+        std::cin >> rhsName >> lhsName;
+        cmdsForCreate.at(name)(map, nameDataSet, rhsName, lhsName);
+      }
+      catch (const std::out_of_range&)
+      {
+        std::cerr << "<INVALID COMMANDS>";
+      }
+      catch(const std::exception& e)
+      {
+        std::cerr << e.what() << '\n';
+        return 1;
+      }
     }
   }
 }
