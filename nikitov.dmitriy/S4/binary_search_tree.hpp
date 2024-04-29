@@ -25,7 +25,7 @@ namespace nikitov
 
   template< class Key, class T, class Compare >
   BinarySearchTree< Key, T, Compare >::BinarySearchTree():
-    root_(Tree()),
+    root_(Tree< Key, T, Compare >()),
     size_(0),
     cmp_(Compare())
   {}
