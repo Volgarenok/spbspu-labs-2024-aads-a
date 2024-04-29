@@ -37,5 +37,16 @@ namespace nikitov
     size_(1),
     cmp_(Compare())
   {}
+
+  template< class Key, class T, class Compare >
+  void Tree< Key, T, Compare >::add(Key& key, T& value)
+  {
+    secondValue_ = { key, value };
+    if (!cmp_(firstValue_.first, secondValue_.first))
+    {
+      std::swap(firstValue_, secondValue_);
+    }
+    ++size_;
+  }
 }
 #endif
