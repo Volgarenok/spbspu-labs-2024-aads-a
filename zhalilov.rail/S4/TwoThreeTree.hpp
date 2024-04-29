@@ -39,6 +39,7 @@ namespace zhalilov
     size_t size_;
 
     void doInsert(const Key &, const T &);
+    std::pair < iterator, bool > doFind(const Key &);
     Node *createTwoNode(Node *, const MapPair &);
     Node *createThreeNode(Node *, const MapPair &, const MapPair &);
   };
@@ -55,9 +56,52 @@ namespace zhalilov
     if (empty())
     {
       head_ = createTwoNode(nullptr, MapPair());
-      Node newNode = createTwoNode(head_, newPair);
+      Node *newNode = createTwoNode(head_, newPair);
       head_->childs[0] = newNode;
     }
+    else
+    {
+      auto resultPair = doFind(key);
+      if (!resultPair.second)
+      {
+        Node *foundNode = resultPair.first.node_;
+        if (Compare(foundNode->values[0].first, key))
+        {
+
+        }
+      }
+    }
+  }
+
+  template < class Key, class T, class Compare >
+  std::pair < typename TwoThree < Key, T, Compare >::iterator, bool > TwoThree < Key, T, Compare >::doFind(const Key &key)
+  {
+    Node *currNode = head_->childs[0];
+    while (currNode)
+    {
+      Node *proposedNext = currNode->childs[2];
+      if (Compare(currNode->values[0].first, key))
+      {
+        proposedNext = currNode->childs[0];
+      }
+      else if (!Compare(currNode->values[0].first, key))
+      {
+        return std::make_pair(iterator(currNode, true), true);
+      }
+      else if (currNode->type == detail::NodeType::Three)
+      {
+        if (Compare(currNode->values[1].first, key))
+        {
+          proposedNext = currNode->childs[1];
+        }
+        else if (!Compare(currNode->values[1].first, key))
+        {
+          return std::make_pair(iterator(currNode, false), true);
+        }
+      }
+      currNode = proposedNext;
+    }
+    return std::make_pair(iterator(currNode->parent, true), false);
   }
 
   template < class Key, class T, class Compare >
@@ -71,6 +115,6 @@ namespace zhalilov
   {
     return new Node{ parent, { nullptr, nullptr, nullptr }, { pair1, pair2 }, detail::NodeType::Three };
   }
-} // namespace zhalilov
+}
 
 #endif
