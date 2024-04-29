@@ -200,7 +200,7 @@ namespace piyavkin
     }
     TreeIterator< Key, T, Compare > insert(ConstTreeIterator< Key, T, Compare > pos, const val_type& val)
     {
-      if ((pos.node_ == std::addressof(end_node_) || cmp_(val.first, pos.node_->val_type.first)) 
+      if ((pos.node_ == std::addressof(end_node_) || cmp_(val.first, pos.node_->val_type.first))
         && (!pos.node_->left_ || pos.node_->left_ == std::addressof(before_min_)
         || cmp_(pos.node_->left_->val_type.first, val.first))
         && (pos.node_ == root_ || (isLeftChild(pos.node_) && cmp_(val.first, pos.node_->parent_->val_type.first))
@@ -570,3 +570,4 @@ namespace piyavkin
   };
 }
 #endif
+
