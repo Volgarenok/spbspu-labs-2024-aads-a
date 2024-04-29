@@ -2,39 +2,40 @@
 #define TREE_HPP
 
 #include <utility>
+#include <functional>
 
 namespace nikitov
 {
-  template< class Key, class T, class Compare >
+  template< class Key, class T, class Compare = std::less< Key > >
   class Tree
   {
   public:
-    Tree(Key key, T& value, Compare cmp = std::less< Key >);
+    Tree(Key& key, T& value);
     ~Tree() = default;
 
-    void add();
+    void add(Key& key, T& value);
 
   private:
     std::pair< Key, T > firstValue_;
     std::pair< Key, T > secondValue_;
-    Tree< T >* left_;
-    Tree< T >* middle_;
-    Tree< T >* right_;
-    Tree< T >* parent_;
+    Tree< Key, T, Compare >* left_;
+    Tree< Key, T, Compare >* middle_;
+    Tree< Key, T, Compare >* right_;
+    Tree< Key, T, Compare >* parent_;
     size_t size_;
     Compare cmp_;
   };
 
   template< class Key, class T, class Compare >
-  Tree< Key, T, Compare >::Tree(Key key, T& value, Compare cmp = std::less< Key >):
+  Tree< Key, T, Compare >::Tree(Key& key, T& value):
     firstValue_({ key, value }),
     secondValue_({ Key(), T() }),
     left_(nullptr),
     middle_(nullptr),
     right_(nullptr),
-    parent_(nullptr)
+    parent_(nullptr),
     size_(1),
-    cmp_(cmp)
+    cmp_(Compare())
   {}
 }
 #endif
