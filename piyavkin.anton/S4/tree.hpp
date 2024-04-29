@@ -425,11 +425,11 @@ namespace piyavkin
             node->parent_->right_ = nullptr;
           }
           node->parent_ = delete_node.node_->parent_;
-        }
-        if (delete_node.node_->right_)
-        {
-          end_node_.parent_ = node;
-          node->right_ = std::addressof(end_node_);
+          if (delete_node.node_->right_)
+          {
+            end_node_.parent_ = node;
+            node->right_ = std::addressof(end_node_);
+          }
         }
         if (delete_node.node_->parent_)
         {

@@ -40,7 +40,7 @@ int main(int argc, char* argv[])
       }
       catch (const std::out_of_range&)
       {
-        std::cerr << "<INVALID COMMANDS>";
+        std::cerr << "<INVALID COMMAND>";
       }
       catch(const std::exception& e)
       {
