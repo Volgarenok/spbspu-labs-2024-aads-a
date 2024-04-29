@@ -49,7 +49,7 @@ void zak::ImplementedCommands::executeCommand(std::istream& input, std::string& 
   }
 }
 
-void zak::ImplementedCommands::print(zak::List< std::string >& args, std::string& result)
+void zak::ImplementedCommands::print(List< std::string >& args, std::string& result)
 {
   if (args.size() != 1)
   {
@@ -73,7 +73,7 @@ void zak::ImplementedCommands::print(zak::List< std::string >& args, std::string
   }
 }
 
-void zak::ImplementedCommands::complement(zak::List< std::string >& args, std::string& result)
+void zak::ImplementedCommands::complement(List< std::string >& args, std::string& result)
 {
   if (args.size() != 3)
   {
@@ -97,7 +97,7 @@ void zak::ImplementedCommands::complement(zak::List< std::string >& args, std::s
   result = std::string();
 }
 
-void zak::ImplementedCommands::intersect(zak::List< std::string >& args, std::string& result)
+void zak::ImplementedCommands::intersect(List< std::string >& args, std::string& result)
 {
   if (args.size() != 3)
   {

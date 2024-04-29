@@ -21,7 +21,7 @@ namespace zakozhurnikova
       )
       {
         data.first = key;
-        data.second = std::move(val);
+        data.second = val;
         this->leftChild = left;
         this->rightChild = right;
         this->parent = parent;
@@ -38,60 +38,34 @@ namespace zakozhurnikova
         return this->rightChild;
       }
 
-      bool isLeftChild()
+      bool isLeftChild() const
       {
         return this->parent && this->parent->leftChild == this;
       }
 
-      bool isRightChild()
+      bool isRightChild() const
       {
         return this->parent && this->parent->rightChild == this;
       }
 
-      bool isRoot()
+      bool isRoot() const
       {
         return !this->parent;
       }
 
-      bool isLeaf()
+      bool isLeaf() const
       {
         return !(this->rightChild || this->leftChild);
       }
 
-      bool hasAnyChildren()
+      bool hasAnyChildren() const
       {
         return this->rightChild || this->leftChild;
       }
 
-      bool hasBothChildren()
+      bool hasBothChildren() const
       {
         return this->rightChild && this->leftChild;
-      }
-      void spliceOut()
-      {
-        if (this->isLeaf())
-        {
-          if (this->isLeftChild())
-          {
-            this->parent->leftChild = nullptr;
-          }
-          else
-          {
-            this->parent->rightChild = nullptr;
-          }
-        }
-        else if (this->hasAnyChildren())
-        {
-          if (this->isLeftChild())
-          {
-            this->parent->leftChild = this->rightChild;
-          }
-          else
-          {
-            this->parent->rightChild = this->rightChild;
-          }
-          this->rightChild->parent = this->parent;
-        }
       }
     };
   }

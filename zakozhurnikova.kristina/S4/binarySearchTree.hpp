@@ -70,7 +70,7 @@ namespace zakozhurnikova
       return this->size_;
     }
 
-    void swap(BinarySearchTree< Key, Value, Compare >& other)
+    void swap(BinarySearchTree< Key, Value, Compare >& other) noexcept
     {
       std::swap(root_, other.root_);
       std::swap(size_, other.size_);
@@ -82,30 +82,30 @@ namespace zakozhurnikova
       return size_ == 0;
     }
 
-    void push(Key key, Value val)
+    void push(const Key& key, const Value& val)
     {
       if (root_)
       {
-        put(key, std::move(val), root_);
+        put(key, val, root_);
       }
       else
       {
-        root_ = new node(key, std::move(val));
+        root_ = new node(key, val);
       }
       size_ = size_ + 1;
     }
 
-    void put(Key key, Value val, node* currentNode)
+    void put(const Key& key,const Value& val, node* currentNode)
     {
       if (compare_(key, currentNode->data.first))
       {
         if (currentNode->hasLeftChild())
         {
-          put(key, std::move(val), currentNode->leftChild);
+          put(key, val, currentNode->leftChild);
         }
         else
         {
-          currentNode->leftChild = new node(key, std::move(val), currentNode);
+          currentNode->leftChild = new node(key, val, currentNode);
           updateBalance(currentNode->leftChild);
         }
       }
@@ -113,11 +113,11 @@ namespace zakozhurnikova
       {
         if (currentNode->hasRightChild())
         {
-          put(key, std::move(val), currentNode->rightChild);
+          put(key, val, currentNode->rightChild);
         }
         else
         {
-          currentNode->rightChild = new node(key, std::move(val), currentNode);
+          currentNode->rightChild = new node(key, val, currentNode);
           updateBalance(currentNode->rightChild);
         }
       }
@@ -235,7 +235,7 @@ namespace zakozhurnikova
       newRoot->balanceFactor = newRoot->balanceFactor - 1 + std::min(0, rotRoot->balanceFactor);
     }
 
-    Value& get(Key key)
+    Value& get(const Key& key)
     {
       node* res = get(key, root_);
       if (res)
@@ -248,7 +248,7 @@ namespace zakozhurnikova
       }
     }
 
-    node* get(Key key, node* currentNode)
+    node* get(const Key& key, node* currentNode)
     {
       if (!currentNode)
       {
@@ -268,7 +268,7 @@ namespace zakozhurnikova
       }
     }
 
-    void del(Key key)
+    void del(const Key& key)
     {
       if (size_ > 1)
       {
@@ -294,7 +294,7 @@ namespace zakozhurnikova
       }
     }
 
-    void updateRemoveBalance(node* balanceParent, const int& oldBal)
+    void updateRemoveBalance(node* balanceParent, int oldBal)
     {
       if (balanceParent->balanceFactor == 0)
       {
@@ -444,26 +444,6 @@ namespace zakozhurnikova
       return lowest;
     }
 
-    node* getNext(node* prev) const
-    {
-      node* cur = prev;
-      while (cur->rightChild == nullptr || cur->data.first < prev->data.first)
-      {
-        if (cur->parent == nullptr)
-        {
-          return nullptr;
-        }
-        cur = cur->parent;
-        if (cur->data.first > prev->data.first)
-        {
-          return cur;
-        }
-      }
-      cur = cur->rightChild;
-      cur = getLowest(cur);
-      return cur;
-    }
-
     ConstIteratorTree< Key, Value, Compare > cbegin() const noexcept
     {
       return ConstIteratorTree< Key, Value, Compare >(getLowest(root_));
@@ -497,7 +477,7 @@ namespace zakozhurnikova
       throw std::out_of_range("No such element");
     }
 
-    ConstIteratorTree< Key, Value > find(const Key& key)
+    ConstIteratorTree< Key, Value > find(const Key& key) const
     {
       node* wanted = root_;
       while (wanted)
