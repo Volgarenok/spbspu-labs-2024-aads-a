@@ -1,77 +1,65 @@
 #ifndef TREE_HPP
 #define TREE_HPP
 
-#include <utility>
+#include "tree_node.hpp"
 #include <functional>
 
 namespace nikitov
 {
   template< class Key, class T, class Compare = std::less< Key > >
-  struct Tree
+  class Tree
   {
+  public:
     Tree();
-    Tree(const Key& key, const T& value);
-    ~Tree() = default;
+    ~Tree();
 
-    void add(const Key& key, const T& value);
+    void insert(Key& key, T& value);
     void clear();
+    size_t size() const;
+    bool empty() const;
 
-    std::pair< Key, T > firstValue_;
-    std::pair< Key, T > secondValue_;
-    Tree< Key, T, Compare >* left_;
-    Tree< Key, T, Compare >* middle_;
-    Tree< Key, T, Compare >* right_;
-    Tree< Key, T, Compare >* parent_;
+  private:
+    Tree< Key, T, Compare >* root_;
     size_t size_;
     Compare cmp_;
   };
 
   template< class Key, class T, class Compare >
   Tree< Key, T, Compare >::Tree():
-    Tree(Key(), T())
-  {}
-
-  template< class Key, class T, class Compare >
-  Tree< Key, T, Compare >::Tree(const Key& key, const T& value):
-    firstValue_({ key, value }),
-    secondValue_({ Key(), T() }),
-    left_(nullptr),
-    middle_(nullptr),
-    right_(nullptr),
-    parent_(nullptr),
-    size_(1),
+    root_(new Tree< Key, T, Compare >()),
+    size_(0),
     cmp_(Compare())
   {}
 
   template< class Key, class T, class Compare >
-  void Tree< Key, T, Compare >::add(const Key& key, const T& value)
+  Tree< Key, T, Compare >::~Tree()
   {
-    secondValue_ = { key, value };
-    if (!cmp_(firstValue_.first, secondValue_.first))
-    {
-      std::swap(firstValue_, secondValue_);
-    }
-    ++size_;
+    clear();
+    delete root_;
   }
 
   template< class Key, class T, class Compare >
   void Tree< Key, T, Compare >::clear()
   {
-    if (left_)
+    if (!empty())
     {
-      left_->clear();
-      delete left_;
+      root_->clear();
+      root_ = root_->parent_;
+      delete root_->middle_;
+      size_ = 0;
     }
-    if (middle_)
-    {
-      middle_->clear();
-      delete middle_;
-    }
-    if (right_)
-    {
-      right_->clear();
-      delete right_;
-    }
+  }
+
+  template< class Key, class T, class Compare >
+  size_t Tree< Key, T, Compare >::size() const
+  {
+    return size_;
+  }
+
+  template< class Key, class T, class Compare >
+  bool Tree< Key, T, Compare >::empty() const
+  {
+    return !size_;
   }
 }
 #endif

@@ -4,11 +4,13 @@
 #include <string>
 #include <map>
 #include "read_dictionaries.hpp"
+#include "tree.hpp"
 
 int main(int argc, char* argv[])
 {
   using namespace nikitov;
 
+  Tree< std::string, size_t > tree;
   std::map< std::string, std::map< size_t, std::string > > treeOfDictionaries;
   if (argc == 2)
   {
