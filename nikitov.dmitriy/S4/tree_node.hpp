@@ -10,18 +10,19 @@ namespace nikitov
   struct TreeNode
   {
     TreeNode();
-    TreeNode(const Key& key, const T& value);
+    TreeNode(const std::pair< Key, T >& value);
     ~TreeNode() = default;
 
-    void add(const Key& key, const T& value);
+    void add(const std::pair< Key, T >& value);
+    void split(const std::pair< Key, T >& value);
     void clear();
 
     std::pair< Key, T > firstValue_;
     std::pair< Key, T > secondValue_;
-    Tree< Key, T, Compare >* left_;
-    Tree< Key, T, Compare >* middle_;
-    Tree< Key, T, Compare >* right_;
-    Tree< Key, T, Compare >* parent_;
+    TreeNode< Key, T, Compare >* left_;
+    TreeNode< Key, T, Compare >* middle_;
+    TreeNode< Key, T, Compare >* right_;
+    TreeNode< Key, T, Compare >* parent_;
     size_t size_;
     Compare cmp_;
   };
@@ -32,9 +33,9 @@ namespace nikitov
   {}
 
   template< class Key, class T, class Compare >
-  TreeNode< Key, T, Compare >::TreeNode(const Key& key, const T& value):
-    firstValue_({ key, value }),
-    secondValue_({ Key(), T() }),
+  TreeNode< Key, T, Compare >::TreeNode(const std::pair< Key, T >& value):
+    firstValue_(value),
+    secondValue_(std::pair< Key, T >),
     left_(nullptr),
     middle_(nullptr),
     right_(nullptr),
@@ -44,14 +45,67 @@ namespace nikitov
   {}
 
   template< class Key, class T, class Compare >
-  void TreeNode< Key, T, Compare >::add(const Key& key, const T& value)
+  void TreeNode< Key, T, Compare >::add(const std::pair< Key, T >& value)
   {
-    secondValue_ = { key, value };
-    if (!cmp_(firstValue_.first, secondValue_.first))
+    if (size_ == 1)
     {
-      std::swap(firstValue_, secondValue_);
+      secondValue_ = value;
+      if (!cmp_(firstValue_.first, secondValue_.first))
+      {
+        std::swap(firstValue_, secondValue_);
+      }
+      ++size_;
     }
-    ++size_;
+    else if (size_ == 2)
+    {
+      if (cmp_(value.first, firstValue_.first))
+      {
+        std::pair< Key, T > temp = firstValue_;
+        firstValue_ = value;
+        split(temp);
+      }
+      else if (cmp_(secondValue_.first, value.first))
+      {
+        std::pair< Key, T > temp = secondValue_;
+        secondValue_ = value;
+        split(temp);
+      }
+      else
+      {
+        split(value);
+      }
+    }
+  }
+
+  template< class Key, class T, class Compare >
+  void TreeNode< Key, T, Compare >::split(const std::pair< Key, T >& value)
+  {
+    if (!parent_->parent_)
+    {
+      parent_->middle_ = new TreeNode< Key, T, Compare >(value);
+      parent_ = parent_->middle_;
+    }
+    else
+    {
+      parent_.add(value);
+    }
+    
+    if (parent_->left_ == this)
+    {
+      parent_->middle_ = new TreeNode< Key, T, Compare >(secondValue_);
+    }
+    else if (parent_->right_ == this)
+    {
+      parent_->middle_ = new TreeNode< Key, T, Compare >(firstValue_);
+      firstValue_ = secondValue_
+    }
+    else
+    {
+      parent_->right_ = new TreeNode< Key, T, Compare >(secondValue_);
+      parent_->left_ = this;
+      parent_->middle_ = nullptr;
+    }
+    --size_;
   }
 
   template< class Key, class T, class Compare >
