@@ -7,11 +7,14 @@ void piyavkin::print(std::ostream& out, const std::string& str, const map_t& map
   out << str;
   if (res.empty())
   {
-    out << "<EMPTY>";
+    out << " <EMPTY>";
   }
-  for (auto it = res.cbegin(); it != res.cend(); ++it)
+  else
   {
-    out << ' ' << it->first << ' ' << it->second;
+    for (auto it = res.cbegin(); it != res.cend(); ++it)
+    {
+      out << ' ' << it->first << ' ' << it->second;
+    }
   }
   out << '\n';
 }
@@ -31,11 +34,17 @@ void piyavkin::complement(map_t& res, const std::string& newDataSet, const std::
     else if (lhsIt->first < it->first)
     {
       newTree.insert(std::pair< int, std::string >(it->first, it->second));
-      ++lhsIt;
+      if (lhsIt != lhsTree.cend())
+      {
+        ++lhsIt;
+      }
     }
     else
     {
-      ++lhsIt;
+      if (lhsIt != lhsTree.cend())
+      {
+        ++lhsIt;
+      }
     }
   }
   res[newDataSet] = newTree;

@@ -73,21 +73,24 @@ namespace piyavkin
       {
         Tree< Key, T, Compare > temp(rhs);
         swap(temp);
-        detail::TreeNode< Key, T >* left = root_;
-        detail::TreeNode< Key, T >* right = root_;
-        while (left->left_->parent_ || right->right_->parent_)
+        if (root_)
         {
-          if (left->left_->parent_)
+          detail::TreeNode< Key, T >* left = root_;
+          detail::TreeNode< Key, T >* right = root_;
+          while (left->left_->parent_ || right->right_->parent_)
           {
-            left = left->left_;
+            if (left->left_->parent_)
+            {
+              left = left->left_;
+            }
+            if (right->right_->parent_)
+            {
+              right = right->right_;
+            }
           }
-          if (right->right_->parent_)
-          {
-            right = right->right_;
-          }
+          left->left_ = std::addressof(before_min_);
+          right->right_ = std::addressof(end_node_);
         }
-        left->left_ = std::addressof(before_min_);
-        right->right_ = std::addressof(end_node_);
       }
       return *this;
     }
@@ -97,21 +100,24 @@ namespace piyavkin
       {
         clear();
         swap(rhs);
-        detail::TreeNode< Key, T >* left = root_;
-        detail::TreeNode< Key, T >* right = root_;
-        while (left->left_->parent_ || right->right_->parent_)
+        if (root_)
         {
-          if (left->left_)
+          detail::TreeNode< Key, T >* left = root_;
+          detail::TreeNode< Key, T >* right = root_;
+          while (left->left_->parent_ || right->right_->parent_)
           {
-            left = left->left_;
+            if (left->left_)
+            {
+              left = left->left_;
+            }
+            if (right->right_)
+            {
+              right = right->right_;
+            }
           }
-          if (right->right_)
-          {
-            right = right->right_;
-          }
+          left->left_ = std::addressof(before_min_);
+          right->right_ = std::addressof(end_node_);
         }
-        left->left_ = std::addressof(before_min_);
-        right->right_ = std::addressof(end_node_);
       }
       return *this;
     }
