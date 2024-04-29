@@ -17,10 +17,9 @@ int main(int argc, char* argv[])
   Tree< std::string, std::function< void(std::ostream&, const std::string&, const map_t&) > > cmdsForOutput;
   cmdsForOutput["print"] = print;
   Tree< std::string, std::function< void(map_t&, const std::string&, const std::string&, const std::string&) > > cmdsForCreate;
-  {
-    using namespace std::placeholders;
-    cmdsForCreate["complement"] = complement;
-  }
+  cmdsForCreate["complement"] = complement;
+  cmdsForCreate["union"] = unionF;
+  // cmdsForCreate["intersect"] = intersect;
   std::string name = "";
   std::string nameDataSet = "";
   while (std::cin >> name)
