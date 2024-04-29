@@ -2,37 +2,72 @@
 #define TREE_NODE_HPP
 
 #include <utility>
+#include <algorithm>
 
 namespace erohin
 {
   namespace detail
   {
-    template< class Key, class T >
-    struct TreeNode
+    enum color_t
     {
-      std::pair< Key, T > data_;
-      TreeNode * parent_;
-      TreeNode * left_;
-      TreeNode * right_;
-      TreeNode(const Key & key, const T & value, TreeNode * parent_node, TreeNode * left_node, TreeNode * right_node);
-      TreeNode(const Key & key, T && value, TreeNode * parent_node, TreeNode * left_node, TreeNode * right_node);
-      ~TreeNode() = default;
+      BLACK,
+      RED
     };
 
     template< class Key, class T >
-    TreeNode< Key, T >::TreeNode(const Key & key, const T & value, TreeNode * parent_node, TreeNode * left_node, TreeNode * right_node):
+    struct Node
+    {
+      std::pair< Key, T > data_;
+      Node * parent_;
+      Node * left_;
+      Node * right_;
+      color_t * color_;
+      size_t height_;
+      Node(const Key & key, const T & value, Node * parent, Node * left, Node * right, color_t clr);
+      Node(const Key & key, T && value, Node * parent, Node * left, Node * right, color_t clr);
+      Node(Key && key, const T & value, Node * parent, Node * left, Node * right, color_t clr);
+      Node(Key && key, T && value, Node * parent, Node * left, Node * right, color_t clr);
+      ~Node() = default;
+    };
+
+    template< class Key, class T >
+    Node< Key, T >::Node(const Key & key, const T & value, Node * parent, Node * left, Node * right, color_t clr):
       data_(std::make_pair(key, value)),
-      parent_(parent_node),
-      left_(left_node),
-      right_(right_node)
+      parent_(parent),
+      left_(left),
+      right_(right),
+      color_(clr),
+      height_(0)
     {}
 
     template< class Key, class T >
-    TreeNode< Key, T >::TreeNode(const Key & key, T && value, TreeNode * parent_node, TreeNode * left_node, TreeNode * right_node):
+    Node< Key, T >::Node(const Key & key, T && value, Node * parent, Node * left, Node * right, color_t clr):
       data_(std::make_pair(key, std::move(value))),
-      parent_(parent_node),
-      left_(left_node),
-      right_(right_node)
+      parent_(parent),
+      left_(left),
+      right_(right),
+      color_(clr),
+      height_(0)
+    {}
+
+    template< class Key, class T >
+    Node< Key, T >::Node(Key && key, const T & value, Node * parent, Node * left, Node * right, color_t clr):
+      data_(std::make_pair(std::move(key), value)),
+      parent_(parent),
+      left_(left),
+      right_(right),
+      color_(clr),
+      height_(0)
+    {}
+
+    template< class Key, class T >
+    Node< Key, T >::Node(Key && key, T && value, Node * parent, Node * left, Node * right, color_t clr):
+      data_(std::make_pair(std::move(key), std::move(value))),
+      parent_(parent),
+      left_(left),
+      right_(right),
+      color_(clr),
+      height_(0)
     {}
   }
 }

@@ -15,25 +15,14 @@ namespace erohin
     void clear();
 
   private:
-    using Node = detail::TreeNode< Key, T >;
-
-    Node * leaf_;
-    Node * root_;
-    char fake_[sizeof(Node)];
-    Node * createFakeLeaf();
-    void clear_subtree(Node * subtree);
+    using node = detail::Node< Key, T >;
+    node * root_;
+    void clear_subtree(node * subtree);
   };
 
   template< class Key, class T, class Compare >
-  detail::TreeNode< Key, T > * RedBlackTree< Key, T, Compare >::createFakeLeaf()
-  {
-    return reinterpret_cast< Node * >(fake_);
-  }
-
-  template< class Key, class T, class Compare >
   RedBlackTree< Key, T, Compare >::RedBlackTree():
-    leaf_(createFakeLeaf()),
-    root_(leaf_)
+    root_(nullptr)
   {}
 
   template< class Key, class T, class Compare >
@@ -43,9 +32,9 @@ namespace erohin
   }
 
   template< class Key, class T, class Compare >
-  void RedBlackTree< Key, T, Compare >::clear_subtree(Node * subtree)
+  void RedBlackTree< Key, T, Compare >::clear_subtree(node * subtree)
   {
-    if (subtree == leaf_)
+    if (!subtree)
     {
       return;
     }
