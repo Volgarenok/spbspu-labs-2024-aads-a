@@ -1,19 +1,22 @@
 #include <iostream>
-#include "stack.hpp"
 #include "queue.hpp"
-#include "tokenType.hpp"
-
+#include "calculatePostfix.hpp"
 int main()
 {
   using namespace grechishnikov;
-  Queue< int > a;
-  a.push(10);
-  a.push(20);
-  std::cout << a.size() << '\n';
 
-  Stack< int > b;
-  b.push(10);
-  b.push(20);
-  std::cout << b.size() << '\n';
-
+  Queue< std::string > b;
+  b.push("23");
+  b.push("10");
+  b.push("+");
+  b.push("-140");
+  b.push("-");
+  try
+  {
+    std::cout << calculatePostfix(b) << '\n';
+  }
+  catch(std::exception &e)
+  {
+    std::cout << e.what() << '\n';
+  }
 }
