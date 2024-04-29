@@ -15,6 +15,16 @@ int main(int argc, char ** argv)
 
   {
     RedBlackTree< int, int > int_dict;
+    auto iter = int_dict.insert(std::make_pair(1, 10));
+    int_dict.insert(std::make_pair(2, 20));
+    int_dict.insert(std::make_pair(3, 30));
+    int_dict.insert(std::make_pair(4, 40));
+    auto pre_end_iter = int_dict.insert(std::make_pair(5, 50));
+    while (iter.first != pre_end_iter.first)
+    {
+      std::cout << (*(iter.first)).first << " ";
+      (iter.first)++;
+    }
   }
 
   if (argc != 2)

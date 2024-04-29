@@ -8,18 +8,15 @@
 
 namespace erohin
 {
-  /*
   template < class Key, class T, class Compare >
   class RedBlackTree;
-  */
 
   template< class Key, class T, class S = detail::InfixTraversal< Key, T > >
   class TreeIterator: public std::iterator< std::bidirectional_iterator_tag, T >
   {
-    /*
-    template < class Compare >
-    friend class RedBlackTree< Key, T, Compare >;
-    */
+    template < class T1, class T2, class T3 >
+    friend class RedBlackTree;
+
   public:
     TreeIterator();
     TreeIterator(const TreeIterator< Key, T, S > &) = default;
@@ -36,8 +33,9 @@ namespace erohin
     bool operator==(const TreeIterator< Key, T, S > & rhs) const;
     bool operator!=(const TreeIterator< Key, T, S > & rhs) const;
   private:
-    const detail::Node< Key, T > * node_;
-    explicit TreeIterator(const detail::Node< Key, T > * node_ptr);
+    detail::Node< Key, T > * node_;
+    S strategy_;
+    explicit TreeIterator(detail::Node< Key, T > * node_ptr);
   };
 
   template< class Key, class T, class S >
@@ -46,14 +44,14 @@ namespace erohin
   {}
 
   template< class Key, class T, class S >
-  TreeIterator< Key, T, S >::TreeIterator(const detail::Node< Key, T > * node_ptr):
+  TreeIterator< Key, T, S >::TreeIterator(detail::Node< Key, T > * node_ptr):
     node_(node_ptr)
   {}
 
   template< class Key, class T, class S >
   TreeIterator< Key, T, S > & TreeIterator< Key, T, S >::operator++()
   {
-    node_ = S::next(node_);
+    node_ = strategy_(node_);
     return *this;
   }
 
@@ -61,14 +59,14 @@ namespace erohin
   TreeIterator< Key, T, S > TreeIterator< Key, T, S >::operator++(int)
   {
     TreeIterator< Key, T, S > temp = *this;
-    node_ = S::next(node_);
+    node_ = strategy_.next(node_);
     return temp;
   }
 
   template< class Key, class T, class S >
   TreeIterator< Key, T, S > & TreeIterator< Key, T, S >::operator--()
   {
-    node_ = S::prev(node_);
+    node_ = strategy_.prev(node_);
     return *this;
   }
 
@@ -76,7 +74,7 @@ namespace erohin
   TreeIterator< Key, T, S > TreeIterator< Key, T, S >::operator--(int)
   {
     TreeIterator< Key, T, S > temp = *this;
-    node_ = S::prev(node_);
+    node_ = strategy_.prev(node_);
     return temp;
   }
 
