@@ -19,7 +19,7 @@ int main(int argc, char* argv[])
   Tree< std::string, std::function< void(map_t&, const std::string&, const std::string&, const std::string&) > > cmdsForCreate;
   cmdsForCreate["complement"] = complement;
   cmdsForCreate["union"] = unionF;
-  // cmdsForCreate["intersect"] = intersect;
+  cmdsForCreate["intersect"] = intersect;
   std::string name = "";
   std::string nameDataSet = "";
   while (std::cin >> name)

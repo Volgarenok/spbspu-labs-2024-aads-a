@@ -32,14 +32,14 @@ void piyavkin::complement(map_t& res, const std::string& newDataSet, const std::
       if (rhsIt->first < it->first)
       {
         newTree.insert(std::pair< int, std::string >(it->first, it->second));
+        while (rhsIt != rhsTree.cend() && rhsIt->first < it->first)
+        {
+          ++rhsIt;
+        }
       }
       else if (rhsIt->first > it->first)
       {
         newTree.insert(std::pair< int, std::string >(it->first, it->second));
-        if (rhsIt != rhsTree.cend())
-        {
-          ++rhsIt;
-        }
       }
       else
       {
@@ -57,14 +57,47 @@ void piyavkin::unionF(map_t& res, const std::string& newDataSet, const std::stri
 {
   const tree_t rhsTree = res.at(rhs);
   const tree_t lhsTree = res.at(lhs);
-  tree_t newTree;
-  for (auto lhsIt = lhsTree.cbegin(); lhsIt != lhsTree.cend(); ++lhsIt)
+  if (res.find(newDataSet) == res.end())
   {
-    newTree.insert(std::pair< int, std::string >(lhsIt->first, lhsIt->second));
+    tree_t newTree;
+    for (auto lhsIt = lhsTree.cbegin(); lhsIt != lhsTree.cend(); ++lhsIt)
+    {
+      newTree.insert(std::pair< int, std::string >(lhsIt->first, lhsIt->second));
+    }
+    for (auto it = rhsTree.cbegin(); it != rhsTree.cend(); ++it)
+    {
+      newTree.insert(std::pair< int, std::string >(it->first, it->second));
+    }
+    res[newDataSet] = newTree;
   }
-  for (auto it = rhsTree.cbegin(); it != rhsTree.cend(); ++it)
+}
+
+void piyavkin::intersect(map_t& res, const std::string& newDataSet, const std::string& lhs, const std::string& rhs)
+{
+  const tree_t rhsTree = res.at(rhs);
+  const tree_t lhsTree = res.at(lhs);
+  auto rhsIt = rhsTree.cbegin();
+  if (res.find(newDataSet) == res.end())
   {
-    newTree.insert(std::pair< int, std::string >(it->first, it->second));
+    tree_t newTree;
+    for (auto it = lhsTree.cbegin(); it != lhsTree.cend(); ++it)
+    {
+      if (rhsIt->first == it->first)
+      {
+        newTree.insert(std::pair< int, std::string >(it->first, it->second));
+        if (rhsIt != rhsTree.cend())
+        {
+          ++rhsIt;
+        }
+      }
+      else if (rhsIt->first < it->first)
+      {
+        while (rhsIt != rhsTree.cend() && rhsIt->first < it->first)
+        {
+          ++rhsIt;
+        }
+      }
+    }
+    res[newDataSet] = newTree;
   }
-  res[newDataSet] = newTree;
 }

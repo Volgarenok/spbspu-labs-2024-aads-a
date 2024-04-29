@@ -271,7 +271,7 @@ namespace piyavkin
     TreeIterator< Key, T, Compare > find(const Key& key)
     {
       TreeIterator< Key, T, Compare > it = lower_bound(key);
-      if (it.node_->val_type.first != key)
+      if (!it.node_ || it.node_->val_type.first != key)
       {
         return end();
       }
@@ -280,7 +280,7 @@ namespace piyavkin
     ConstTreeIterator< Key, T, Compare > find(const Key& key) const
     {
       ConstTreeIterator< Key, T, Compare > it = lower_bound(key);
-      if (it.node_->val_type.first != key)
+      if (!it.node_ || it.node_->val_type.first != key)
       {
         return cend();
       }
