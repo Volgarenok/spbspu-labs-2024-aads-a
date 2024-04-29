@@ -386,39 +386,59 @@ namespace piyavkin
       TreeIterator< Key, T, Compare > result = delete_node;
       ++result;
       detail::TreeNode< Key, T >* node = delete_node.node_->right_;
-      if (!node || delete_node.node_->right_ == std::addressof(end_node_))
+      if (!node || delete_node.node_->right_ == end_node_.parent_->right_)
       {
         if ((size_ == 1) || (delete_node.node_->parent_ && !delete_node.node_->parent_->left_))
         {
+          if (size_ != 1 && delete_node.node_->right_)
+          {
+            delete_node.node_->parent_->right_ = std::addressof(end_node_);
+          }
           delete delete_node.node_;
           --size_;
           return result;
         }
-        delete_node.node_->left_->parent_ = delete_node.node_->parent_;
         node = delete_node.node_->left_;
-        while (node->right_)
+        while (node && node->right_)
         {
           node = node->right_;
         }
-        node->right_ = delete_node.node_->right_;
         if (node)
         {
-          node->parent_ = delete_node.node_->left_;
-        }
-        if (delete_node.node_->parent_)
-        {
-          if (delete_node.node_->parent_->left_ == delete_node.node_)
+          if (node != delete_node.node_->left_)
           {
-            delete_node.node_->parent_->left_ = delete_node.node_->left_;
+            node->left_ = delete_node.node_->left_;
+            delete_node.node_->left_->parent_ = node;
+          }
+          if (isLeftChild(node))
+          {
+            node->parent_->left_ = nullptr;
           }
           else
           {
-            delete_node.node_->parent_->right_ = delete_node.node_->left_;
+            node->parent_->right_ = nullptr;
+          }
+          node->parent_ = delete_node.node_->parent_;
+        }
+        if (delete_node.node_->right_)
+        {
+          end_node_.parent_ = node;
+          node->right_ = std::addressof(end_node_);
+        }
+        if (delete_node.node_->parent_)
+        {
+          if (isLeftChild(delete_node.node_))
+          {
+            delete_node.node_->parent_->left_ = node;
+          }
+          else
+          {
+            delete_node.node_->parent_->right_ = node;
           }
         }
         if (delete_node.node_ == root_)
         {
-          root_ = delete_node.node_->left_;
+          root_ = node;
         }
         delete delete_node.node_;
         --size_;
