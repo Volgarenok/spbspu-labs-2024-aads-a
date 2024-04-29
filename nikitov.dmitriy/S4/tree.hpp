@@ -10,10 +10,12 @@ namespace nikitov
   class Tree
   {
   public:
-    Tree(Key& key, T& value);
+    Tree();
+    Tree(const Key& key, const T& value);
     ~Tree() = default;
 
-    void add(Key& key, T& value);
+    void add(const Key& key, const T& value);
+    void clear();
 
   private:
     std::pair< Key, T > firstValue_;
@@ -27,7 +29,12 @@ namespace nikitov
   };
 
   template< class Key, class T, class Compare >
-  Tree< Key, T, Compare >::Tree(Key& key, T& value):
+  Tree< Key, T, Compare >::Tree():
+    Tree(Key(), T())
+  {}
+
+  template< class Key, class T, class Compare >
+  Tree< Key, T, Compare >::Tree(const Key& key, const T& value):
     firstValue_({ key, value }),
     secondValue_({ Key(), T() }),
     left_(nullptr),
@@ -39,7 +46,7 @@ namespace nikitov
   {}
 
   template< class Key, class T, class Compare >
-  void Tree< Key, T, Compare >::add(Key& key, T& value)
+  void Tree< Key, T, Compare >::add(const Key& key, const T& value)
   {
     secondValue_ = { key, value };
     if (!cmp_(firstValue_.first, secondValue_.first))
@@ -47,6 +54,26 @@ namespace nikitov
       std::swap(firstValue_, secondValue_);
     }
     ++size_;
+  }
+
+  template< class Key, class T, class Compare >
+  void Tree< Key, T, Compare >::clear()
+  {
+    if (left_)
+    {
+      left_->clear();
+      delete left_;
+    }
+    if (middle_)
+    {
+      middle_->clear();
+      delete middle_;
+    }
+    if (right_)
+    {
+      right_->clear();
+      delete right_;
+    }
   }
 }
 #endif
