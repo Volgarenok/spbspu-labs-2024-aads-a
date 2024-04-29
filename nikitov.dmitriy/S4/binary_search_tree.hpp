@@ -13,6 +13,9 @@ namespace nikitov
     ~BinarySearchTree();
 
     void insert(Key& key, T& value);
+    void clear();
+    size_t size() const;
+    bool empty() const;
 
   private:
     Tree< Key, T, Compare >* root_;
@@ -26,5 +29,17 @@ namespace nikitov
     size_(0),
     cmp_(Compare())
   {}
+
+  template< class Key, class T, class Compare >
+  size_t BinarySearchTree< Key, T, Compare >::size() const
+  {
+    return size_;
+  }
+
+  template< class Key, class T, class Compare >
+  bool BinarySearchTree< Key, T, Compare >::empty() const
+  {
+    return !size_;
+  }
 }
 #endif
