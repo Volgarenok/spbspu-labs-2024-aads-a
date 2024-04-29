@@ -62,7 +62,7 @@ namespace nikitov
   TreeNode< Key, T, Compare >* Tree< Key, T, Compare >::findToAdd(const std::pair< Key, T >& value) const
   {
     TreeNode< Key, T, Compare >* node = root_;
-    while (!node->left_ && !node->right_ && !node->middle_)
+    while ((node->left_ != nullptr) && (node->right_ != nullptr) && (node->middle_ != nullptr))
     {
       if (cmp_(value.first, node->firstValue_.first))
       {
