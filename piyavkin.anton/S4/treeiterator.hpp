@@ -73,7 +73,7 @@ namespace piyavkin
     }
     bool operator!=(const TreeIterator< Key, T, Compare >& rhs) const
     {
-      return !(*this == rhs);
+      return !(node_ == rhs.node_);
     }
     val_type* operator->()
     {
@@ -163,7 +163,7 @@ namespace piyavkin
     }
     bool operator!=(const ConstTreeIterator< Key, T, Compare >& rhs) const
     {
-      return !(*this == rhs);
+      return !(node_ == rhs.node_);
     }
     const val_type* operator->() const
     {
@@ -174,8 +174,8 @@ namespace piyavkin
       return node_->val_type;
     }
   private:
-    detail::TreeNode< Key, T >* node_;
-    explicit ConstTreeIterator(detail::TreeNode< Key, T >* node):
+    const detail::TreeNode< Key, T >* node_;
+    explicit ConstTreeIterator(const detail::TreeNode< Key, T >* node):
       node_(node)
     {}
   };
@@ -245,7 +245,7 @@ namespace piyavkin
     }
     bool operator!=(const TreeReverseIterator< Key, T, Compare >& rhs) const
     {
-      return !(*this == rhs);
+      return !(node_ == rhs.node_);
     }
     val_type* operator->()
     {
@@ -335,7 +335,7 @@ namespace piyavkin
     }
     bool operator!=(const ConstTreeReverseIterator< Key, T, Compare >& rhs) const
     {
-      return !(*this == rhs);
+      return !(node_ == rhs.node_);
     }
     const val_type* operator->() const
     {
@@ -346,8 +346,8 @@ namespace piyavkin
       return node_->val_type;
     }
   private:
-    detail::TreeNode< Key, T >* node_;
-    explicit ConstTreeReverseIterator(detail::TreeNode< Key, T >* node):
+    const detail::TreeNode< Key, T >* node_;
+    explicit ConstTreeReverseIterator(const detail::TreeNode< Key, T >* node):
       node_(node)
     {}
   };
