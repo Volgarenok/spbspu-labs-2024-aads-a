@@ -130,12 +130,65 @@ namespace zhalilov
       Node *prevNode = createTwoNode(currNode, pair);
       while (currNode == detail::NodeType::Three)
       {
-        if (Compare(prevNode->one.first, currNode->one.first))
+        if (Compare(prevNode->one.first, currNode->two.first))
         {
-          Node *newRight = createTwoNode(currNode, currNode->two);
-          newRight->left = currNode->mid;
+          Node *newRight = createTwoNode(prevNode, currNode->two);
+          newRight->left = prevNode->right;
           newRight->right = currNode->right;
+
+          currNode->parent = prevNode;
+          currNode->right = prevNode->left;
+          currNode->mid = nullptr;
+          currNode->type = detail::NodeType::Two;
+
+          prevNode->parent = currNode->parent;
+          prevNode->left = currNode;
+          prevNode->right = newRight;
+          std::swap(prevNode, currNode);
         }
+        else
+        {
+          Node *newRight = nullptr;
+          Node *newLeft = nullptr;
+          if (Compare(prevNode->one.first, currNode->one.first))
+          {
+            newRight = createTwoNode(currNode, currNode->two);
+            newRight->left = currNode->mid;
+            newRight->right = currNode->right;
+            newLeft = prevNode;
+          }
+          else
+          {
+            newLeft = createTwoNode(currNode, currNode->one);
+            newLeft->left = currNode->left;
+            newLeft->right = currNode->mid;
+            newRight = prevNode;
+          }
+          currNode->right = newRight;
+          currNode->mid = nullptr;
+          currNode->left = newLeft;
+          currNode->type = detail::NodeType::Two;
+        }
+        prevNode = currNode;
+        currNode = currNode->parent;
+      }
+
+      if (currNode->parent->left == currNode)
+      {
+        currNode->parent->type = detail::NodeType::Three;
+        currNode->parent->mid = currNode->right;
+        currNode->parent->left = currNode->left;
+        currNode->parent->two = currNode->one;
+        std::swap(currNode->parent->two, currNode->parent->one);
+        delete currNode;
+      }
+      else if (currNode->parent->right == currNode)
+      {
+        currNode->parent->type = detail::NodeType::Three;
+        currNode->parent->mid = currNode->left;
+        currNode->parent->right = currNode->right;
+        currNode->parent->two = currNode->one;
+        delete currNode;
       }
     }
   }
