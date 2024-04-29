@@ -1,6 +1,7 @@
 #ifndef LIST_HPP
 #define LIST_HPP
 
+#include <algorithm>
 #include <cstddef>
 #include "node.hpp"
 #include "constIterators.hpp"
@@ -25,23 +26,65 @@ namespace skuratov
         }
       }
 
-      List(size_t n, const T & value_):
+      List(size_t n, const T & value):
         head(nullptr),
         tail(nullptr),
         size(0)
       {
         for (size_t i = 0; i < n; ++i)
         {
-          pushBack(value_);
+          pushBack(value);
         }
       }
 
-      List< T > cbegin() noexcept
+      List& operator=(const List& diff)
+      {
+        if (this == &diff)
+        {
+          return *this;
+        }
+        clear();
+
+        try
+        {
+          detail::Node<T>* current = diff.head;
+          while (current)
+          {
+            pushBack(current->data);
+            current = current->next;
+          }
+        }
+        catch (...)
+        {
+          clear();
+          throw;
+        }
+        return *this;
+      }
+
+      List& operator=(List&& diff)
+      {
+        if (this != &diff)
+        {
+          clear();
+
+          head = diff.head;
+          tail = diff.tail;
+          size = diff.size;
+
+          diff.head = nullptr;
+          diff.tail = nullptr;
+          diff.size = 0;
+        }
+        return *this;
+      }
+
+      const List< T > cbegin() const noexcept
       {
         return ConstIterator< T >(head);
       }
 
-      List< T > cend() noexcept
+      const List< T > cend() const noexcept
       {
         return ConstIterator< T >(nullptr);
       }
@@ -56,7 +99,7 @@ namespace skuratov
         return tail->value;
       }
 
-      bool empty() const
+      bool empty() const noexcept
       {
         return !size;
       }
@@ -153,14 +196,61 @@ namespace skuratov
         }
       }
 
-      void swap() noexcept
-      {}
+      void swap(List& diff) noexcept
+      {
+        std::swap(head, diff.head);
+        std::swap(tail, diff.tail);
+        std::swap(size, diff.size);
+      }
 
       void remove(const T& value)
-      {}
+      {
+        detail::Node< T > dummyNode(0);
+        dummyNode.next = head;
+        detail::Node< T >* prev = &dummyNode;
+        detail::Node< T >* current = head;
 
-      void remove_if()
-      {}
+        while (current)
+        {
+          if (current->data == value)
+          {
+            prev->next = current->next;
+            delete current;
+            current = prev->next;
+          }
+          else
+          {
+            prev = current;
+            current = current->next;
+          }
+        }
+        head = dummyNode.next;
+      }
+
+      template< typename UnaryPredicate >
+      void removeIf(UnaryPredicate predicate)
+      {
+        detail::Node< T > dummyNode(0);
+        dummyNode.next = head;
+        detail::Node< T >* prev = &dummyNode;
+        detail::Node< T >* current = head;
+
+        while (current)
+        {
+          if (predicate(current->data))
+          {
+            prev->next = current->next;
+            delete current;
+            current = prev->next;
+          }
+          else
+          {
+            prev = current;
+            current = current->next;
+          }
+        }
+        head = dummyNode.next;
+      }
 
       size_t getSize() const
       {
