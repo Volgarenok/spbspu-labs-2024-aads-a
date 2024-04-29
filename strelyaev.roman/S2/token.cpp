@@ -20,8 +20,7 @@ strelyaev::ExpressionUnit::ExpressionUnit(const Token& other_token, TokenType ot
 
 long long strelyaev::ExpressionUnit::getOperand() const
 {
-  const long long to_return = token.operand;
-  return to_return;
+  return token.operand;;
 }
 
 char strelyaev::ExpressionUnit::getOperation() const
