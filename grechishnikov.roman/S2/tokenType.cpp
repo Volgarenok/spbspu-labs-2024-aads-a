@@ -1,5 +1,6 @@
 #include "tokenType.hpp"
 #include <cstddef>
+#include <stdexcept>
 
 bool grechishnikov::isOperator(const std::string& token)
 {
@@ -9,6 +10,13 @@ bool grechishnikov::isOperator(const std::string& token)
 bool grechishnikov::isOperand(const std::string& token)
 {
   size_t count = 0;
-  std::stoll(token, &count);
+  try
+  {
+    std::stoll(token, &count);
+  }
+  catch(...)
+  {
+    return 0;
+  }
   return count == token.size();
 }
