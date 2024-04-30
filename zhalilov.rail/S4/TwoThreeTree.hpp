@@ -42,7 +42,7 @@ namespace zhalilov
     std::pair < iterator, bool > doFind(const Key &);
     Node *createTwoNode(Node *, const MapPair &) const;
     Node *createThreeNode(Node *, const MapPair &, const MapPair &) const;
-    void balanceAndInsert(iterator, const MapPair &);
+    void connectNodes(Node *parent, Node *left, Node *right, Node *mid = nullptr);
   };
 
   template < class Key, class T, class Compare >
@@ -64,8 +64,60 @@ namespace zhalilov
       auto resultPair = doFind(newPair.first);
       if (!resultPair.second)
       {
-        Node *foundNode = resultPair.first.node_;
+        Node *prevLeft = nullptr;
+        Node *prevRight = nullptr;
+        MapPair currPair = newPair;
+        Node *currNode = resultPair.first.node_;
+        while (currNode == detail::NodeType::Three)
+        {
+          if (Compare(currPair.first, currNode->one.first))
+          {
+            Node *newRight = createTwoNode(nullptr, currNode->two);
+            connectNodes(newRight, currNode->mid, currNode->right);
+            connectNodes(currNode, prevLeft, prevRight);
+            std::swap(currPair, currNode->one);
+            prevRight = newRight;
+            prevLeft = currNode;
+          }
+          else if (Compare(currPair.first, currNode->two.first))
+          {
+            Node *newRight = createTwoNode(nullptr, currNode->two);
+            connectNodes(newRight, prevRight, currNode->right);
+            connectNodes(currNode, currNode->left, prevLeft);
+            prevRight = newRight;
+            prevLeft = currNode;
+          }
+          else
+          {
+            Node *newLeft = createTwoNode(nullptr, currNode->one);
+            connectNodes(newLeft, currNode->left, currNode->mid);
+            connectNodes(currNode, prevLeft, prevRight);
+            std::swap(currPair, currNode->two);
+            prevRight = currNode;
+            prevLeft = newLeft;
+          }
+          currNode->type = detail::NodeType::Two;
+          currNode = currNode->parent;
+        }
+
+        if (currNode == head_)
+        {
+          Node *newNode = createTwoNode(head_, currPair);
+          connectNodes(head_, newNode, nullptr);
+          connectNodes(newNode, prevLeft, prevRight);
+        }
+        else
+        {
+          currNode->two = newPair;
+          if (!Compare(currNode->one.first, newPair.first))
+          {
+            std::swap(currNode->one, currNode->two);
+          }
+          currNode->type = detail::NodeType::Three;
+        }
+        return std::make_pair(doFind(newPair.key).first, true);
       }
+      return std::make_pair(resultPair.first, false);
     }
   }
 
@@ -76,7 +128,7 @@ namespace zhalilov
     while (currNode)
     {
       Node *proposedNext = currNode->right;
-      if (Compare(currNode->one.first, key))
+      if (Compare(key, currNode->one.first))
       {
         proposedNext = currNode->left;
       }
@@ -86,7 +138,7 @@ namespace zhalilov
       }
       else if (currNode->type == detail::NodeType::Three)
       {
-        if (Compare(currNode->two.first, key))
+        if (Compare(key, currNode->two.first))
         {
           proposedNext = currNode->mid;
         }
@@ -113,82 +165,18 @@ namespace zhalilov
   }
 
   template < class Key, class T, class Compare >
-  void TwoThree < Key, T, Compare >::balanceAndInsert(iterator it, const MapPair &pair)
+  void TwoThree < Key, T, Compare >::connectNodes(Node *parent, Node *left, Node *right, Node *mid)
   {
-    if (it.node_->type == detail::NodeType::Two)
+    parent->left = left;
+    parent->right = right;
+    parent->mid = mid;
+    if (left)
     {
-      it.node_->two = pair;
-      if (!Compare(it.node_->one.first, pair.first))
+      left->parent = parent;
+      right->parent = parent;
+      if (mid)
       {
-        std::swap(it.node_->one, it.node_->two);
-      }
-      it.node_->type = detail::NodeType::Three;
-    }
-    else if (it.node_->parent->type == detail::NodeType::Three)
-    {
-      Node *currNode = it.node_;
-      Node *prevNode = createTwoNode(currNode, pair);
-      while (currNode == detail::NodeType::Three)
-      {
-        if (Compare(prevNode->one.first, currNode->two.first))
-        {
-          Node *newRight = createTwoNode(prevNode, currNode->two);
-          newRight->left = prevNode->right;
-          newRight->right = currNode->right;
-
-          currNode->parent = prevNode;
-          currNode->right = prevNode->left;
-          currNode->mid = nullptr;
-          currNode->type = detail::NodeType::Two;
-
-          prevNode->parent = currNode->parent;
-          prevNode->left = currNode;
-          prevNode->right = newRight;
-          std::swap(prevNode, currNode);
-        }
-        else
-        {
-          Node *newRight = nullptr;
-          Node *newLeft = nullptr;
-          if (Compare(prevNode->one.first, currNode->one.first))
-          {
-            newRight = createTwoNode(currNode, currNode->two);
-            newRight->left = currNode->mid;
-            newRight->right = currNode->right;
-            newLeft = prevNode;
-          }
-          else
-          {
-            newLeft = createTwoNode(currNode, currNode->one);
-            newLeft->left = currNode->left;
-            newLeft->right = currNode->mid;
-            newRight = prevNode;
-          }
-          currNode->right = newRight;
-          currNode->mid = nullptr;
-          currNode->left = newLeft;
-          currNode->type = detail::NodeType::Two;
-        }
-        prevNode = currNode;
-        currNode = currNode->parent;
-      }
-
-      if (currNode->parent->left == currNode)
-      {
-        currNode->parent->type = detail::NodeType::Three;
-        currNode->parent->mid = currNode->right;
-        currNode->parent->left = currNode->left;
-        currNode->parent->two = currNode->one;
-        std::swap(currNode->parent->two, currNode->parent->one);
-        delete currNode;
-      }
-      else if (currNode->parent->right == currNode)
-      {
-        currNode->parent->type = detail::NodeType::Three;
-        currNode->parent->mid = currNode->left;
-        currNode->parent->right = currNode->right;
-        currNode->parent->two = currNode->one;
-        delete currNode;
+        mid->parent = parent;
       }
     }
   }
