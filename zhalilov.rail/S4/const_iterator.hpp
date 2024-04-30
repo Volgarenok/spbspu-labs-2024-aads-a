@@ -66,12 +66,12 @@ namespace zhalilov
         node_ = node_->parent;
       }
       node_ = node_->parent;
-      isPtrToLeft_ = true;
     }
     else
     {
       node_ = minRight;
     }
+    isPtrToLeft_ = true;
     return *this;
   }
 
@@ -85,8 +85,9 @@ namespace zhalilov
         detail::Node < T > *maxMid = findMax(node_->mid);
         if (maxMid == node_)
         {
-          isPtrToLeft_ = false;
+          isPtrToLeft_ = true;
         }
+        node_ = maxMid;
         return *this;
       }
     }
@@ -98,12 +99,12 @@ namespace zhalilov
       {
         node_ = node_->parent;
       }
-      isPtrToLeft_ = false;
     }
     else
     {
       node_ = maxLeft;
     }
+    isPtrToLeft_ = false;
     return *this;
   }
 
