@@ -3,9 +3,12 @@ int main()
 {
   strelyaev::Tree< int > tree;
   int a = 5;
-  tree.push(a);
+  tree.push(5);
   tree.push(4);
   tree.push(3);
   tree.push(6);
-  std::cout << tree.root->right_->value_;
+  for (auto it = tree.begin(); it != tree.end(); ++it)
+  {
+    std::cout << *it << "\n";
+  }
 }

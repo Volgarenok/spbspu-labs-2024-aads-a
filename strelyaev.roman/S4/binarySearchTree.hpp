@@ -2,6 +2,7 @@
 #define BINARYSEARCHTREE_HPP
 #include <functional>
 #include "node.hpp"
+#include "listIterator.hpp"
 
 
 #include <iostream>
@@ -59,6 +60,21 @@ namespace strelyaev
             size_++;
           }
         }
+      }
+
+      Iterator< T > begin() noexcept
+      {
+        Node< T >* current = root;
+        while (current->left_)
+        {
+          current = current->left_;
+        }
+        return Iterator(current);
+      }
+
+      Iterator< T > end() noexcept
+      {
+        return Iterator< T >(nullptr);
       }
 
       bool empty()

@@ -12,6 +12,21 @@ namespace strelyaev
       left_(left)
     {}
 
+    bool isRoot()
+    {
+      return (parent_ == nullptr);
+    }
+
+    bool isLeftChild()
+    {
+      return (parent_->left_ == this);
+    }
+
+    bool isRightChild()
+    {
+      return (parent_->right_ == this);
+    }
+
     T value_;
     Node< T >* parent_;
     Node< T >* right_;
