@@ -27,6 +27,7 @@ int main(int argc, char* argv[])
 
   std::map< std::string, std::function< void(TreeOfDict&, std::istream&) > > commands;
   commands["print"] = std::bind(printCmd, std::placeholders::_1, std::placeholders::_2, std::ref(std::cout));
+  commands["complement"] = complementCmd;
   commands["intersect"] = intersectCmd;
   commands["union"] = unionCmd;
 
