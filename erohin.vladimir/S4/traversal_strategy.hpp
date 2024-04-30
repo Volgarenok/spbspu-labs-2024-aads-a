@@ -34,7 +34,7 @@ namespace erohin
       }
       else
       {
-        while (node->parent_ && node->parent_->right_ == node)
+        while (node->parent_->right_ == node)
         {
           node = node->parent_;
         }

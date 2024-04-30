@@ -7,6 +7,8 @@
 #include "tree_const_iterator.hpp"
 #include "tree_iterator.hpp"
 
+#include <iostream>
+
 namespace erohin
 {
   template< class Key, class T, class Compare = std::less< Key > >
@@ -66,14 +68,17 @@ namespace erohin
       return std::make_pair(iterator(root_), true);
     }
     detail::Node< Key, T > * node = root_;
-    while (node->left_ && node->right_)
+    detail::Node< Key, T > * prev = node;
+    while (node)
     {
+      prev = node;
       if (node->data_.first == value.first)
       {
         return std::make_pair(iterator(node), false);
       }
-      else if (cmp_(node->data_.first, value.first))
+      else if (cmp_(value.first, node->data_.first))
       {
+        std::cout << node->data_.first << " : " << value.first << "\n";
         node = node->left_;
       }
       else
@@ -81,7 +86,6 @@ namespace erohin
         node = node->right_;
       }
     }
-    detail::Node< Key, T > * prev = node;
     node = new detail::Node< Key, T >(value, prev, prev->left_, prev->right_);
     if (cmp_(node->data_.first, prev->data_.first))
     {
@@ -91,6 +95,7 @@ namespace erohin
     {
       prev->right_ = node;
     }
+    std::cout << node << " " << node->parent_ << " " << node->left_ << " " << node->right_ << "\n";
     return std::make_pair(iterator(node), true);
   }
 
