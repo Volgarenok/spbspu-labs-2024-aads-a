@@ -152,6 +152,12 @@ namespace arakelyan
   }
 
   template < class T >
+  size_t RBTree< T >::getSize() const noexcept
+  {
+    return size_;
+  }
+
+  template < class T >
   bool RBTree< T >::empty() const noexcept
   {
     return root_ == nullptr;
@@ -189,6 +195,7 @@ namespace arakelyan
     {
       root_ = newNode;
       root_->color_ = detail::color_t::BLACK;
+      ++size_;
       return;
     }
     Node *curNode = root_;
