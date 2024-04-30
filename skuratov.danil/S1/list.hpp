@@ -1,7 +1,8 @@
 #ifndef LIST_HPP
 #define LIST_HPP
 
-#include <algorithm>
+#include <utility>
+#include <memory>
 #include <cstddef>
 #include "node.hpp"
 #include "constIterators.hpp"
@@ -26,7 +27,7 @@ namespace skuratov
         }
       }
 
-      List(size_t n, const T & value):
+      List(const T& value, size_t n):
         head(nullptr),
         tail(nullptr),
         size(0)
@@ -50,7 +51,7 @@ namespace skuratov
           detail::Node<T>* current = diff.head;
           while (current)
           {
-            pushBack(current->data);
+            pushBack(current->value_);
             current = current->next;
           }
         }
@@ -79,7 +80,7 @@ namespace skuratov
         return *this;
       }
 
-      const List< T > ñbegin() const noexcept
+      const List< T > cbegin() const noexcept
       {
         return ConstIterator< T >(head);
       }
@@ -91,12 +92,12 @@ namespace skuratov
 
       T & front()
       {
-        return head->value;
+        return head->value_;
       }
 
       T & back()
       {
-        return tail->value;
+        return tail->value_;
       }
 
       bool empty() const noexcept
@@ -104,9 +105,9 @@ namespace skuratov
         return !size;
       }
 
-      detail::Node< T >* pushFront(T value_)
+      void pushFront(const T& value)
       {
-        detail::Node< T >* ptr = new detail::Node< T >(value_);
+        detail::Node< T >* ptr = new detail::Node< T >(value);
         ptr->next = head;
         if (head != nullptr)
         {
@@ -121,7 +122,7 @@ namespace skuratov
         return ptr;
       }
 
-      detail::Node< T >* pushBack(T value)
+      void pushBack(const T& value)
       {
         detail::Node< T >* ptr = new detail::Node< T >(value);
         ptr->prev = tail;
@@ -135,7 +136,6 @@ namespace skuratov
         }
         tail = ptr;
         ++size;
-        return ptr;
       }
 
       void popFront()
@@ -237,7 +237,7 @@ namespace skuratov
 
         while (current)
         {
-          if (predicate(current->data))
+          if (predicate(current->value_))
           {
             prev->next = current->next;
             delete current;
@@ -255,20 +255,6 @@ namespace skuratov
       size_t getSize() const
       {
         return size;
-      }
-
-      const T& get(size_t index) const
-      {
-        if (index >= size)
-        {
-          throw std::out_of_range("Index out of bounds");
-        }
-        detail::Node* current = head;
-        for (size_t i = 0; i < index; ++i)
-        {
-          current = current->next;
-        }
-        return current->data;
       }
 
     private:

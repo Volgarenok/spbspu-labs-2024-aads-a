@@ -1,37 +1,61 @@
 #include "inputOutput.hpp"
-#include <iostream>
 #include <string>
 #include <limits>
 #include <stdexcept>
 #include "list.hpp"
 
-void skuratov::inputOutput()
+void skuratov::inputAll(std::istream& in, List< std::pair< std::string, List< size_t > > >& sequences)
 {
-  skuratov::List<std::pair<std::string, skuratov::List<size_t>>> sequences;
-
-  std::string name;
-  while (std::cin >> name)
+  std::string name = "";
+  while (in)
   {
-    skuratov::List<size_t> numbersList;
-    size_t number;
-    while (std::cin >> number)
+    in >> name;
+    if (name.empty())
     {
-      numbersList.pushBack(number);
+      throw std::invalid_argument("Empty list");
+      break;
+    }
+    sequences.pushBack(std::make_pair(name, List<size_t>()));
+
+    size_t numbers = {};
+    while (in >> numbers)
+    {
+      sequences.back().second.pushBack(numbers);
+    }
+    if (!in)
+    {
+      in.clear();
+    }
+  }
+}
+  /*
+  std::string name;
+  size_t numbers = {};
+  while (in)
+  {
+    in >> name;
+    
+    if (name.empty())
+    {
+      throw std::invalid_argument("Empty list");
+      break;
+    }
+    sequences.pushBack({ name, List< size_t >() });
+
+    while (in >> numbers)
+    {
+      seqeunces.back().second.pushBack(numbers);
     }
 
-    if (numbersList.empty())
+    if (sequences.empty())
     {
       throw std::invalid_argument("Empty list");
     }
-
-    sequences.pushBack(std::make_pair(name, numbersList));
   }
+  */
 
-  if (sequences.empty())
-  {
-    throw std::invalid_argument("Empty list");
-  }
-
+/*
+{
   bool first = true;
   for (size_t i = 0; i < sequences.getSize(); ++i)
   {
@@ -39,7 +63,7 @@ void skuratov::inputOutput()
     {
       std::cout << " ";
     }
-    std::cout << sequences.get(i).first;
+    std::cout << sequences[i].first;
     first = false;
   }
   std::cout << '\n';
@@ -47,7 +71,7 @@ void skuratov::inputOutput()
   size_t maxSize = 0;
   for (size_t i = 0; i < sequences.getSize(); ++i)
   {
-    maxSize = std::max(maxSize, sequences.get(i).second.getSize());
+    maxSize = std::max(maxSize, sequences[i].second.getSize());
   }
 
   for (size_t i = 0; i < maxSize; ++i)
@@ -55,7 +79,7 @@ void skuratov::inputOutput()
     bool isFirst = true;
     for (size_t j = 0; j < sequences.getSize(); ++j)
     {
-      const auto& numbers = sequences.get(j).second;
+      const auto& numbers = sequences[j].second;
       if (i < numbers.getSize())
       {
         if (!isFirst)
@@ -72,18 +96,16 @@ void skuratov::inputOutput()
     }
   }
 
-  skuratov::List<size_t> columnSums(maxSize, 0);
-
   for (size_t i = 0; i < maxSize; ++i)
   {
     for (size_t j = 0; j < sequences.getSize(); ++j)
     {
-      const auto& numbers = sequences.get(j).second;
+      const auto& numbers = sequences[j].second;
       if (i < numbers.getSize())
       {
-        if (columnSums.get(i) <= std::numeric_limits<size_t>::max() - numbers.get(i))
+        if (columnSums[i] <= std::numeric_limits<size_t>::max() - numbers.get(i))
         {
-          columnSums.get(i) += numbers.get(i);
+          columnSums[i] += numbers.get(i);
         }
         else
         {
@@ -93,15 +115,14 @@ void skuratov::inputOutput()
     }
   }
 
-  bool firstSeq = true;
-  for (size_t sum : columnSums)
+  for (size_t i = 0; i < columnSums.getSize(); ++i)
   {
-    if (!firstSeq)
+    if (i != 0)
     {
       std::cout << " ";
     }
-    std::cout << sum;
-    firstSeq = false;
+    std::cout << columnSums[i];
   }
   std::cout << '\n';
 }
+*/

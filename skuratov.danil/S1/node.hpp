@@ -9,13 +9,13 @@ namespace skuratov
     class Node
     {
     public:
-      Node(const T & value_):
-        value(value_),
+      Node(const T & value):
+        value_(value),
         prev(nullptr),
         next(nullptr)
       {}
       ~Node() = default;
-      T value;
+      T value_;
       Node* prev;
       Node* next;
     };

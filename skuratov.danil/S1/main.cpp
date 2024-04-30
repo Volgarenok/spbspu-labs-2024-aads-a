@@ -5,11 +5,13 @@
 int main()
 {
   using namespace skuratov;
+  using pair = std::pair< std::string, List< size_t > >;
+  List< pair > sequences;
   try
   {
-    inputOutput();
+    inputAll(std::cin, sequences);
   }
-  catch (const std::invalid_argument& e)
+  catch (const std::invalid_argument)
   {
     std::cout << 0 << '\n';
   }
