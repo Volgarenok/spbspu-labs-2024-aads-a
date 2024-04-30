@@ -60,6 +60,12 @@ namespace zhalilov
   {}
 
   template < class Key, class T, class Compare >
+  TwoThree < Key, T, Compare >::~TwoThree()
+  {
+    clear();
+  }
+
+  template < class Key, class T, class Compare >
   typename TwoThree < Key, T, Compare >::iterator TwoThree < Key, T, Compare >::begin()
   {
     return iterator(iterator::findMin(head_->left), true);
