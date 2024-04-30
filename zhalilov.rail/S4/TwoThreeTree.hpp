@@ -19,6 +19,7 @@ namespace zhalilov
     using const_iterator = ConstTwoThreeIterator < MapPair >;
 
     TwoThree();
+    ~TwoThree();
 
     T &at(const Key &);
     const T &at(const Key &) const;
@@ -32,11 +33,11 @@ namespace zhalilov
     const_iterator end() const;
     const_iterator cend() const noexcept;
 
-    bool empty();
-    size_t size();
+    bool empty() const noexcept;
+    size_t size() const;
 
     std::pair < iterator, bool > insert(const MapPair &);
-    void clear();
+    void clear() noexcept;
     void swap();
 
     iterator find(const Key &);
@@ -95,13 +96,13 @@ namespace zhalilov
   }
 
   template < class Key, class T, class Compare >
-  bool TwoThree < Key, T, Compare >::empty()
+  bool TwoThree < Key, T, Compare >::empty() const noexcept
   {
     return size_ == 0;
   }
 
   template < class Key, class T, class Compare >
-  size_t TwoThree < Key, T, Compare >::size()
+  size_t TwoThree < Key, T, Compare >::size() const
   {
     return size_;
   }
@@ -181,7 +182,7 @@ namespace zhalilov
   }
 
   template < class Key, class T, class Compare >
-  void TwoThree < Key, T, Compare >::clear()
+  void TwoThree < Key, T, Compare >::clear() noexcept
   {
     auto it = begin();
     auto endIt = end();
