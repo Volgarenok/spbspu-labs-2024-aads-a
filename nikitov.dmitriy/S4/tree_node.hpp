@@ -16,6 +16,7 @@ namespace nikitov
     void add(const std::pair< Key, T >& value);
     void split(const std::pair< Key, T >& value);
     void clear();
+    bool find(const Key& key) const;
 
     std::pair< Key, T > firstValue_;
     std::pair< Key, T > secondValue_;
@@ -126,6 +127,17 @@ namespace nikitov
       right_->clear();
       delete right_;
     }
+  }
+
+  template< class Key, class T, class Compare >
+  bool TreeNode< Key, T, Compare >::find(const Key& key) const
+  {
+    bool isFound = (firstValue_.first == key);
+    if (size_ == 2)
+    {
+      isFound = isFound || (secondValue_.first == key);
+    }
+    return isFound;
   }
 }
 #endif

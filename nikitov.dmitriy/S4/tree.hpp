@@ -4,8 +4,6 @@
 #include "tree_node.hpp"
 #include <functional>
 
-#include <iostream>
-
 namespace nikitov
 {
   template< class Key, class T, class Compare = std::less< Key > >
@@ -15,10 +13,12 @@ namespace nikitov
     Tree();
     ~Tree();
 
+    T& operator[](const Key& key);
     void insert(const std::pair< Key, T >& value);
     void clear();
     size_t size() const;
     bool empty() const;
+    TreeNode< Key, T, Compare >* search(TreeNode< Key, T, Compare >* node, const Key& key);
 
     TreeNode< Key, T, Compare >* findToAdd(const std::pair< Key, T >& value) const;
 
@@ -40,6 +40,43 @@ namespace nikitov
   {
     clear();
     delete root_;
+  }
+
+  template< class Key, class T, class Compare >
+  T& Tree< Key, T, Compare >::operator[](const Key& key)
+  {
+    TreeNode< Key, T, Compare >* node = search(root_, key);
+    if (node->firstValue_.first == key)
+    {
+      return node->firstValue_.second;
+    }
+    return node->secondValue_.second;
+  }
+
+  template< class Key, class T, class Compare >
+  TreeNode< Key, T, Compare >* Tree< Key, T, Compare >::search(TreeNode< Key, T, Compare >* node, const Key& key)
+  {
+    if (!node)
+    {
+      return nullptr;
+    }
+
+    if (node->find(key))
+    {
+      return node;
+    }
+    else if (cmp_(key, node->firstValue_.first))
+    {
+      return search(node->left_, key);
+    }
+    else if (node->size_ == 1)
+    {
+      return search(node->right_, key);
+    }
+    else
+    {
+      return search(node->middle_, key);
+    }
   }
 
   template< class Key, class T, class Compare >
