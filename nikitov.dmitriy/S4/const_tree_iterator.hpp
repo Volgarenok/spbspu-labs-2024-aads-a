@@ -17,7 +17,7 @@ namespace nikitov
     ~ConstTreeIterator() = default;
 
   private:
-    TreeNode< Key, T, Compare >* node_;
+    detail::TreeNode< Key, T, Compare >* node_;
   };
 
   template< class Key, class T, class Compare >
