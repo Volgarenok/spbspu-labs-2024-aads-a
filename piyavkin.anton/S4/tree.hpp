@@ -51,10 +51,6 @@ namespace piyavkin
           insert(std::pair< Key, T >(*it_left--));
         }
       }
-      for (auto it = rhs.cbegin(); it != rhs.cend(); ++it)
-      {
-        insert(std::pair< Key, T >(*it));
-      }
     }
     Tree(Tree&& rhs):
       root_(rhs.root_),
@@ -373,7 +369,7 @@ namespace piyavkin
       TreeIterator< Key, T, Compare > result = delete_node;
       ++result;
       detail::TreeNode< Key, T >* node = delete_node.node_->right_;
-      if (!node || delete_node.node_->right_ == end_node_.parent_->right_)
+      if (!node || delete_node.node_->right_ == std::addressof(end_node_))
       {
         if ((size_ == 1) || (delete_node.node_->parent_ && !delete_node.node_->parent_->left_))
         {
