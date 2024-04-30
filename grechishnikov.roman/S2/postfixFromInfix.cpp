@@ -25,7 +25,7 @@ bool higherPriority(std::string first, std::string second)
   {
     return 1;
   }
-  if ((first == "*" || first == "/") && (second == "+" || second == "-"))
+  if ((second == "*" || second == "/") && (first == "+" || first == "-"))
   {
     return 1;
   }
