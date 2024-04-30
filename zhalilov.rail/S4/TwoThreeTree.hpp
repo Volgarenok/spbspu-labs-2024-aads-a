@@ -24,6 +24,13 @@ namespace zhalilov
     T &operator[](const Key &);
     T &operator[](Key &&);
 
+    iterator begin();
+    const_iterator begin() const;
+    const_iterator cbegin() const noexcept;
+    iterator end();
+    const_iterator end() const;
+    const_iterator cend() const noexcept;
+
     bool empty();
     size_t size();
 
@@ -51,6 +58,42 @@ namespace zhalilov
   {}
 
   template < class Key, class T, class Compare >
+  typename TwoThree < Key, T, Compare >::iterator TwoThree < Key, T, Compare >::begin()
+  {
+    return iterator(iterator::findMin(head_->left), true);
+  }
+
+  template < class Key, class T, class Compare >
+  typename TwoThree < Key, T, Compare >::const_iterator TwoThree < Key, T, Compare >::begin() const
+  {
+    return const_iterator(const_iterator::findMin(head_->left), true);
+  }
+
+  template < class Key, class T, class Compare >
+  typename TwoThree < Key, T, Compare >::const_iterator TwoThree < Key, T, Compare >::cbegin() const noexcept
+  {
+    return const_iterator(const_iterator::findMin(head_->left), true);
+  }
+
+  template < class Key, class T, class Compare >
+  typename TwoThree < Key, T, Compare >::iterator TwoThree < Key, T, Compare >::end()
+  {
+    return iterator(head_, true);
+  }
+
+  template < class Key, class T, class Compare >
+  typename TwoThree < Key, T, Compare >::const_iterator TwoThree < Key, T, Compare >::end() const
+  {
+    return const_iterator(head_, true);
+  }
+
+  template < class Key, class T, class Compare >
+  typename TwoThree < Key, T, Compare >::const_iterator TwoThree < Key, T, Compare >::cend() const noexcept
+  {
+    return const_iterator(head_, true);
+  }
+
+  template < class Key, class T, class Compare >
   std::pair < typename TwoThree < Key, T, Compare >::iterator, bool > TwoThree < Key, T, Compare >::insert(const MapPair &newPair)
   {
     if (empty())
@@ -58,67 +101,70 @@ namespace zhalilov
       head_ = createTwoNode(nullptr, MapPair());
       Node *newNode = createTwoNode(head_, newPair);
       head_->left = newNode;
+      size_++;
+      return std::make_pair(begin(), true);
     }
-    else
-    {
-      auto resultPair = doFind(newPair.first);
-      if (!resultPair.second)
-      {
-        Node *prevLeft = nullptr;
-        Node *prevRight = nullptr;
-        MapPair currPair = newPair;
-        Node *currNode = resultPair.first.node_;
-        while (currNode == detail::NodeType::Three)
-        {
-          if (Compare(currPair.first, currNode->one.first))
-          {
-            Node *newRight = createTwoNode(nullptr, currNode->two);
-            connectNodes(newRight, currNode->mid, currNode->right);
-            connectNodes(currNode, prevLeft, prevRight);
-            std::swap(currPair, currNode->one);
-            prevRight = newRight;
-            prevLeft = currNode;
-          }
-          else if (Compare(currPair.first, currNode->two.first))
-          {
-            Node *newRight = createTwoNode(nullptr, currNode->two);
-            connectNodes(newRight, prevRight, currNode->right);
-            connectNodes(currNode, currNode->left, prevLeft);
-            prevRight = newRight;
-            prevLeft = currNode;
-          }
-          else
-          {
-            Node *newLeft = createTwoNode(nullptr, currNode->one);
-            connectNodes(newLeft, currNode->left, currNode->mid);
-            connectNodes(currNode, prevLeft, prevRight);
-            std::swap(currPair, currNode->two);
-            prevRight = currNode;
-            prevLeft = newLeft;
-          }
-          currNode->type = detail::NodeType::Two;
-          currNode = currNode->parent;
-        }
 
-        if (currNode == head_)
+    auto resultPair = doFind(newPair.first);
+    if (!resultPair.second)
+    {
+      Node *prevLeft = nullptr;
+      Node *prevRight = nullptr;
+      MapPair currPair = newPair;
+      Node *currNode = resultPair.first.node_;
+      while (currNode == detail::NodeType::Three)
+      {
+        if (Compare(currPair.first, currNode->one.first))
         {
-          Node *newNode = createTwoNode(head_, currPair);
-          connectNodes(head_, newNode, nullptr);
-          connectNodes(newNode, prevLeft, prevRight);
+          Node *newRight = createTwoNode(nullptr, currNode->two);
+          connectNodes(newRight, currNode->mid, currNode->right);
+          connectNodes(currNode, prevLeft, prevRight);
+          std::swap(currPair, currNode->one);
+          prevRight = newRight;
+          prevLeft = currNode;
+        }
+        else if (Compare(currPair.first, currNode->two.first))
+        {
+          Node *newRight = createTwoNode(nullptr, currNode->two);
+          connectNodes(newRight, prevRight, currNode->right);
+          connectNodes(currNode, currNode->left, prevLeft);
+          prevRight = newRight;
+          prevLeft = currNode;
         }
         else
         {
-          currNode->two = newPair;
-          if (!Compare(currNode->one.first, newPair.first))
-          {
-            std::swap(currNode->one, currNode->two);
-          }
-          currNode->type = detail::NodeType::Three;
+          Node *newLeft = createTwoNode(nullptr, currNode->one);
+          connectNodes(newLeft, currNode->left, currNode->mid);
+          connectNodes(currNode, prevLeft, prevRight);
+          std::swap(currPair, currNode->two);
+          prevRight = currNode;
+          prevLeft = newLeft;
         }
-        return std::make_pair(doFind(newPair.key).first, true);
+        currNode->type = detail::NodeType::Two;
+        currNode = currNode->parent;
       }
-      return std::make_pair(resultPair.first, false);
+
+      if (currNode == head_)
+      {
+        Node *newNode = createTwoNode(head_, currPair);
+        connectNodes(head_, newNode, nullptr);
+        connectNodes(newNode, prevLeft, prevRight);
+      }
+      else if (Compare(currNode->one.first, newPair.first))
+      {
+        connectNodes(currNode, currNode->left, prevRight, prevLeft);
+        currNode->two = newPair;
+      }
+      else
+      {
+        connectNodes(currNode, prevLeft, currNode->right, prevRight);
+        currNode->one = newPair;
+      }
+      currNode->type = detail::NodeType::Three;
+      size_++;
+      return std::make_pair(doFind(newPair.key).first, true);
     }
+    return std::make_pair(resultPair.first, false);
   }
 
   template < class Key, class T, class Compare >
