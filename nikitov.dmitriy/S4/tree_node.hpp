@@ -13,8 +13,8 @@ namespace nikitov
     TreeNode(const std::pair< Key, T >& value);
     ~TreeNode() = default;
 
-    void add(const std::pair< Key, T >& value);
-    void split(const std::pair< Key, T >& value);
+    TreeNode< Key, T, Compare >* add(const std::pair< Key, T >& value);
+    TreeNode< Key, T, Compare >* split(const std::pair< Key, T >& value);
     void clear();
     bool find(const Key& key) const;
 
@@ -29,12 +29,12 @@ namespace nikitov
   };
 
   template< class Key, class T, class Compare >
-  TreeNode< Key, T, Compare >::TreeNode():
+  TreeNode< Key, T, Compare >::TreeNode() :
     TreeNode(std::pair< Key, T >())
   {}
 
   template< class Key, class T, class Compare >
-  TreeNode< Key, T, Compare >::TreeNode(const std::pair< Key, T >& value):
+  TreeNode< Key, T, Compare >::TreeNode(const std::pair< Key, T >& value) :
     firstValue_(value),
     secondValue_(std::pair< Key, T >()),
     left_(nullptr),
@@ -46,8 +46,9 @@ namespace nikitov
   {}
 
   template< class Key, class T, class Compare >
-  void TreeNode< Key, T, Compare >::add(const std::pair< Key, T >& value)
+  TreeNode< Key, T, Compare >* TreeNode< Key, T, Compare >::add(const std::pair< Key, T >& value)
   {
+    TreeNode< Key, T, Compare >* newRoot = nullptr;
     if (size_ == 1)
     {
       secondValue_ = value;
@@ -63,50 +64,92 @@ namespace nikitov
       {
         std::pair< Key, T > temp = firstValue_;
         firstValue_ = value;
-        split(temp);
+        newRoot = split(temp);
       }
       else if (cmp_(secondValue_.first, value.first))
       {
         std::pair< Key, T > temp = secondValue_;
         secondValue_ = value;
-        split(temp);
+        newRoot = split(temp);
       }
       else
       {
-        split(value);
+        newRoot = split(value);
       }
     }
+    return newRoot;
   }
 
   template< class Key, class T, class Compare >
-  void TreeNode< Key, T, Compare >::split(const std::pair< Key, T >& value)
+  TreeNode< Key, T, Compare >* TreeNode< Key, T, Compare >::split(const std::pair< Key, T >& value)
   {
+    TreeNode< Key, T, Compare >* newRoot = nullptr;
     if (!parent_->parent_)
     {
       parent_->middle_ = new TreeNode< Key, T, Compare >(value);
+      parent_->middle_->parent_ = parent_;
       parent_ = parent_->middle_;
+      newRoot = parent_;
     }
     else
     {
-      parent_->add(value);
+      newRoot = parent_->add(value);
     }
-    
+
     if (parent_->left_ == this)
     {
-      parent_->middle_ = new TreeNode< Key, T, Compare >(secondValue_);
+      if (parent_->right_)
+      {
+        parent_->middle_ = new TreeNode< Key, T, Compare >(secondValue_);
+        parent_->middle_->parent_ = parent_;
+      }
+      else
+      {
+        parent_->right_ = new TreeNode< Key, T, Compare >(secondValue_);
+        parent_->right_->parent_ = parent_;
+      }
     }
     else if (parent_->right_ == this)
     {
-      parent_->middle_ = new TreeNode< Key, T, Compare >(firstValue_);
+      if (parent_->left_)
+      {
+        parent_->middle_ = new TreeNode< Key, T, Compare >(firstValue_);
+        parent_->middle_->parent_ = parent_;
+      }
+      else
+      {
+        parent_->left_ = new TreeNode< Key, T, Compare >(firstValue_);
+        parent_->left_->parent_ = parent_;
+      }
       firstValue_ = secondValue_;
+    }
+    else if (right_ && right_->size_ == 2)
+    {
+      parent_->left_ = new TreeNode< Key, T, Compare >(firstValue_);
+      std::swap(firstValue_, secondValue_);
+      parent_->left_->parent_ = parent_;
+      parent_->left_->left_ = left_;
+      parent_->left_->right_ = middle_;
+      parent_->right_ = this;
+      parent_->middle_ = nullptr;
+      left_ = nullptr;
+      middle_ = nullptr;
     }
     else
     {
       parent_->right_ = new TreeNode< Key, T, Compare >(secondValue_);
+      parent_->right_->parent_ = parent_;
+      parent_->right_->right_ = right_;
+      parent_->right_->left_ = middle_;
       parent_->left_ = this;
       parent_->middle_ = nullptr;
+      right_ = nullptr;
+      middle_ = nullptr;
     }
+    secondValue_ = std::pair< Key, T >();
     --size_;
+
+    return newRoot;
   }
 
   template< class Key, class T, class Compare >
