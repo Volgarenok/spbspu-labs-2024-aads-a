@@ -20,6 +20,32 @@ void nikitov::printCmd(const std::map< std::string, std::map< size_t, std::strin
   output << '\n';
 }
 
+void nikitov::intersectCmd(std::map< std::string, std::map< size_t, std::string > >& tree, std::istream& input)
+{
+  std::string newDictName = {};
+  input >> newDictName;
+  std::string firstDictName = {};
+  input >> firstDictName;
+  std::string secondDictName = {};
+  input >> secondDictName;
+
+  std::map< size_t, std::string > newDict;
+  std::map< size_t, std::string > dict1 = tree.at(firstDictName);
+  std::map< size_t, std::string > dict2 = tree.at(secondDictName);
+  for (auto i = dict2.cbegin(); i != dict2.cend(); ++i)
+  {
+    try
+    {
+      newDict.insert({ (*i).first, dict1.at((*i).first) });
+    }
+    catch(const std::logic_error&)
+    {
+      continue;
+    }
+  }
+  tree.insert({ newDictName, newDict });
+}
+
 void nikitov::unionCmd(std::map< std::string, std::map< size_t, std::string > >& tree, std::istream& input)
 {
   std::string newDictName = {};

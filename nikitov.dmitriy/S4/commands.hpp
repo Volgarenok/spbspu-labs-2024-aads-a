@@ -10,7 +10,7 @@ namespace nikitov
 
   void complementCmd(std::map< std::string, std::map< size_t, std::string > >& tree, std::istream& input);
 
-  void intersectCmd(std::map< std::string, std::map< size_t, std::string > >& tree, std::istream&input);
+  void intersectCmd(std::map< std::string, std::map< size_t, std::string > >& tree, std::istream& input);
 
   void unionCmd( std::map< std::string, std::map< size_t, std::string > >& tree, std::istream& input);
 }
