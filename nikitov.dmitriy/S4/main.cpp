@@ -5,7 +5,7 @@
 #include <map>
 #include <limits>
 #include "read_dictionaries.hpp"
-#include "tree.hpp"
+#include "commands.hpp"
 
 int main(int argc, char* argv[])
 {
