@@ -26,8 +26,8 @@ namespace nikitov
     size_t size_;
     Compare cmp_;
 
-    TreeNode< Key, T, Compare >* search(TreeNode< Key, T, Compare >* node, const Key& key) const;
-    TreeNode< Key, T, Compare >* findNode(const std::pair< Key, T >& value) const;
+    detail::TreeNode< Key, T, Compare >* search(detail::TreeNode< Key, T, Compare >* node, const Key& key) const;
+    detail::TreeNode< Key, T, Compare >* findNode(const std::pair< Key, T >& value) const;
   };
 
   template< class Key, class T, class Compare >
@@ -47,7 +47,7 @@ namespace nikitov
   template< class Key, class T, class Compare >
   T& Tree< Key, T, Compare >::operator[](const Key& key)
   {
-    TreeNode< Key, T, Compare >* node = search(root_, key);
+    detail::TreeNode< Key, T, Compare >* node = search(root_, key);
     if (node->firstValue_.first == key)
     {
       return node->firstValue_.second;
@@ -99,7 +99,7 @@ namespace nikitov
   }
 
   template< class Key, class T, class Compare >
-  TreeNode< Key, T, Compare >* Tree< Key, T, Compare >::search(TreeNode< Key, T, Compare >* node, const Key& key) const
+  detail::TreeNode< Key, T, Compare >* Tree< Key, T, Compare >::search(detail::TreeNode< Key, T, Compare >* node, const Key& key) const
   {
     if (!node)
     {
@@ -124,7 +124,7 @@ namespace nikitov
   }
 
   template< class Key, class T, class Compare >
-  TreeNode< Key, T, Compare >* Tree< Key, T, Compare >::findNode(const std::pair< Key, T >& value) const
+  detail::TreeNode< Key, T, Compare >* Tree< Key, T, Compare >::findNode(const std::pair< Key, T >& value) const
   {
     TreeNode< Key, T, Compare >* node = root_;
     while (node->left_ || node->right_ || node->middle_)
