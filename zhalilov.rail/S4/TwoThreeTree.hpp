@@ -94,6 +94,18 @@ namespace zhalilov
   }
 
   template < class Key, class T, class Compare >
+  bool TwoThree < Key, T, Compare >::empty()
+  {
+    return size_ == 0;
+  }
+
+  template < class Key, class T, class Compare >
+  size_t TwoThree < Key, T, Compare >::size()
+  {
+    return size_;
+  }
+
+  template < class Key, class T, class Compare >
   std::pair < typename TwoThree < Key, T, Compare >::iterator, bool > TwoThree < Key, T, Compare >::insert(const MapPair &newPair)
   {
     if (empty())
