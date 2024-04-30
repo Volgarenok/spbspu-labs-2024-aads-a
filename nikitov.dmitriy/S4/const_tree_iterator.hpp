@@ -21,6 +21,9 @@ namespace nikitov
 
     ConstTreeIterator< Key, T, Compare >& operator++();
 
+    bool operator==(const ConstTreeIterator< Key, T, Compare >& other) const;
+    bool operator!=(const ConstTreeIterator< Key, T, Compare >& other) const;
+
   private:
     bool isFirst_;
     detail::TreeNode< Key, T, Compare >* node_;
@@ -143,6 +146,18 @@ namespace nikitov
       }
     }
     return *this;
+  }
+
+  template< class Key, class T, class Compare >
+  bool ConstTreeIterator< Key, T, Compare >::operator==(const ConstTreeIterator< Key, T, Compare >& other) const
+  {
+    return (node_ == other.node_) && (isFirst_ == other.isFirst_);
+  }
+
+  template< class Key, class T, class Compare >
+  bool ConstTreeIterator< Key, T, Compare >::operator!=(const ConstTreeIterator< Key, T, Compare >& other) const
+  {
+    return (node_ != other.node_) || (isFirst_ != other.isFirst_);
   }
 
   template< class Key, class T, class Compare >
