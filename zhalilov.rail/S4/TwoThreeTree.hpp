@@ -181,6 +181,24 @@ namespace zhalilov
   }
 
   template < class Key, class T, class Compare >
+  void TwoThree < Key, T, Compare >::clear()
+  {
+    auto it = begin();
+    auto endIt = end();
+    while (it != endIt)
+    {
+      auto prevIt = it;
+      it++;
+      if (prevIt.node_->parent == it.node_)
+      {
+        delete prevIt.node_;
+      }
+    }
+    delete head_;
+    size_ = 0;
+  }
+
+  template < class Key, class T, class Compare >
   typename TwoThree < Key, T, Compare >::iterator TwoThree < Key, T, Compare >::find(const Key &key)
   {
     auto resultPair = doFind(key);
