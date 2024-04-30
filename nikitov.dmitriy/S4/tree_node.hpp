@@ -142,6 +142,7 @@ namespace nikitov
           parent_->left_ = newNode;
           newNode->left_ = left_;
           newNode->right_ = middle_;
+          parent_->right_ = this;
         }
         else
         {
@@ -149,9 +150,9 @@ namespace nikitov
           parent_->right_ = newNode;
           newNode->right_ = right_;
           newNode->left_ = middle_;
+          parent_->left_ = this;
         }
         newNode->parent_ = parent_;
-        parent_->right_ = this;
         parent_->middle_ = nullptr;
         left_ = nullptr;
         middle_ = nullptr;
