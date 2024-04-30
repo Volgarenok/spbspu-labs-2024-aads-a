@@ -2,7 +2,7 @@
 #define CONSTITERATOR_HPP
 
 #include <cassert>
-#include <stack>
+#include <memory>
 
 #include "node.hpp"
 
@@ -164,6 +164,5 @@ namespace arakelyan
   {
     return !(*this == otherI);
   }
-
 }
 #endif

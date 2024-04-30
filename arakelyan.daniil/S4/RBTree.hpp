@@ -2,6 +2,8 @@
 #define RBTREE_HPP
 
 #include <iostream>
+#include <memory>
+#include <initializer_list>
 
 #include "node.hpp"
 #include "iterator.hpp"
@@ -19,12 +21,14 @@ namespace arakelyan
     RBTree();
     RBTree(const RBTree &otherT);//fine
     // RBTree(RBTree &&otherT);
-    // RBTree(const std::initializer_list &otherT);
-    ~RBTree();
+    RBTree(std::initializer_list< T > otherT);//fine
+    template < class Iterator_t >
+    RBTree(Iterator_t it_start, Iterator_t it_end);//fine
+    ~RBTree();//fine
 
-    // RBTree &operator=(const Tree &otherT);
-    // RBTree &operator=(const Tree &&otherT);
-    // RBTree &operator=(const std::initializer_list &otherT);
+    RBTree &operator=(const RBTree &otherT);//fine
+    RBTree &operator=(RBTree &&otherT);//fine
+    RBTree &operator=(std::initializer_list< T > otherT);//fine
 
     size_t getSize() const noexcept;
     bool empty() const noexcept;
@@ -66,6 +70,15 @@ namespace arakelyan
       }
     }
 
+    template < class Iterator_t >
+    void copyFromRange(Iterator_t it_start, Iterator_t it_end)
+    {
+      for (auto it = it_start; it != it_end; ++it)
+      {
+        insert(*it);
+      }
+    }
+
     // void someFixInput()
     // void someFixDelete()
     // void leftRotate()
@@ -82,11 +95,23 @@ namespace arakelyan
   RBTree< T >::RBTree(const RBTree< T > &otherT):
     RBTree()
   {
-    for (auto it = otherT.cbegin(); it != otherT.cend(); ++it)
+    if (!otherT.empty())
     {
-      std::cout << "insert: " << *it << " ";
-      insert(*it);
+      copyFromRange(otherT.cbegin(), otherT.cend());
     }
+  }
+
+  template < class T >
+  RBTree< T >::RBTree(std::initializer_list< T > otherT):
+    RBTree(otherT.begin(), otherT.end())
+  {}
+
+  template < class T >
+  template < class Iterator_t >
+  RBTree< T >::RBTree(Iterator_t it_start, Iterator_t it_end):
+    RBTree()
+  {
+    copyFromRange(it_start, it_end);
   }
 
   template < class T >
@@ -95,11 +120,36 @@ namespace arakelyan
     clear(root_);
   }
 
-  // template < class T >
-  // Tree< T > &Tree< T >::operator=(const Tree< T > &otherT)
-  // {
+  template < class T >
+  RBTree< T > &RBTree< T >::operator=(const RBTree< T > &otherT)
+  {
+    RBTree temp(otherT);
+    if (this != std::addressof(temp))
+    {
+      swap(temp);
+    }
+    return *this;
+  }
 
-  // }
+  template < class T >
+  RBTree< T > &RBTree< T >::operator=(RBTree< T > &&otherT)
+  {
+    RBTree temp(std::move(otherT));
+    if (this != std::addressof(temp))
+    {
+      clear(root_);
+      swap(temp);
+    }
+    return *this;
+  }
+
+  template < class T >
+  RBTree< T > &RBTree< T >::operator=(std::initializer_list< T > otherT)
+  {
+    clear(root_);
+    copyFromRange(otherT.begin(), otherT.end());
+    return *this;
+  }
 
   template < class T >
   bool RBTree< T >::empty() const noexcept

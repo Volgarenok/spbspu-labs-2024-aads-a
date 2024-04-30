@@ -2,7 +2,7 @@
 #define ITERATOR_HPP
 
 #include <cassert>
-#include <stack>
+#include <memory>
 
 #include "node.hpp"
 
@@ -22,19 +22,19 @@ namespace arakelyan
     ~Iterator() = default;
     Iterator &operator=(const Iterator< T > &val) = default;
 
-    Iterator &operator++();//fine
-    Iterator operator++(int);//fine
+    Iterator &operator++();
+    Iterator operator++(int);
 
-    Iterator &operator--();//fine
-    Iterator operator--(int);//fine
+    Iterator &operator--();
+    Iterator operator--(int);
 
-    const T &operator*() const;//fine
-    const T *operator->() const;//fine
-    T &operator*();//fine
-    T *operator->();//fine
+    const T &operator*() const;
+    const T *operator->() const;
+    T &operator*();
+    T *operator->();
 
-    bool operator!=(Iterator< T > otherI) const;//fine
-    bool operator==(Iterator< T > otherI) const;//fine
+    bool operator!=(Iterator< T > otherI) const;
+    bool operator==(Iterator< T > otherI) const;
 
   private:
     explicit Iterator(detail::Node< T > *val);
