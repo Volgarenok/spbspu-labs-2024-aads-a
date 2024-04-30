@@ -18,7 +18,9 @@ namespace zhalilov
     using iterator = TwoThreeIterator < MapPair >;
     using const_iterator = ConstTwoThreeIterator < MapPair >;
 
-    TwoThree();
+    TwoThree() = default;
+    TwoThree(const TwoThree &);
+    TwoThree(TwoThree &&) noexcept;
     ~TwoThree();
 
     T &at(const Key &);
@@ -38,7 +40,7 @@ namespace zhalilov
 
     std::pair < iterator, bool > insert(const MapPair &);
     void clear() noexcept;
-    void swap();
+    void swap(TwoThree &);
 
     iterator find(const Key &);
     const_iterator find(const Key &) const;
@@ -55,9 +57,26 @@ namespace zhalilov
   };
 
   template < class Key, class T, class Compare >
-  TwoThree < Key, T, Compare >::TwoThree() :
-    head_(nullptr), size_(0)
-  {}
+  TwoThree < Key, T, Compare >::TwoThree(const TwoThree &other):
+    TwoThree()
+  {
+    auto it = other.cbegin();
+    auto endIt = other.cend();
+    while (it != endIt)
+    {
+      insert(it.node_.first, it.node_.second);
+      it++;
+    }
+  }
+
+  template < class Key, class T, class Compare >
+  TwoThree < Key, T, Compare >::TwoThree(TwoThree &&other) noexcept:
+    head_(other.head_),
+    size_(other.size_)
+  {
+    other.size_ = 0;
+    other.head_ = nullptr;
+  }
 
   template < class Key, class T, class Compare >
   TwoThree < Key, T, Compare >::~TwoThree()
@@ -71,7 +90,7 @@ namespace zhalilov
     auto it = find(key);
     if (it == end())
     {
-      throw std::out_of_range("TwoThreeTree: accessing element doesn't exist");
+      throw std::out_of_range("TwoThree: accessing element doesn't exist");
     }
     return *it;
   }
@@ -82,7 +101,7 @@ namespace zhalilov
     auto it = find(key);
     if (it == cend())
     {
-      throw std::out_of_range("TwoThreeTree: accessing element doesn't exist");
+      throw std::out_of_range("TwoThree: accessing element doesn't exist");
     }
     return *it;
   }
@@ -238,6 +257,10 @@ namespace zhalilov
     delete head_;
     size_ = 0;
   }
+
+  template < class Key, class T, class Compare >
+  void TwoThree < Key, T, Compare >::swap(TwoThree &other)
+  {}
 
   template < class Key, class T, class Compare >
   typename TwoThree < Key, T, Compare >::iterator TwoThree < Key, T, Compare >::find(const Key &key)
