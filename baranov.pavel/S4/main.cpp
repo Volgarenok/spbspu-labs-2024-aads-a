@@ -1,4 +1,6 @@
 #include <iostream>
+#include <fstream>
+#include "inputTrees.hpp"
 
 int main(int argc, char ** argv)
 {
@@ -7,5 +9,6 @@ int main(int argc, char ** argv)
     std::cerr << "Invalid CLA\n";
     return 1;
   }
+  std::ifstream file(argv[1]);
   std::cout << argv[1];
 }
