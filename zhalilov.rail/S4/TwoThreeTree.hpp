@@ -1,3 +1,4 @@
+// ReSharper disable CppDFAUnreachableCode
 #ifndef TWOTHREETREE_HPP
 #define TWOTHREETREE_HPP
 
@@ -177,6 +178,28 @@ namespace zhalilov
       return std::make_pair(doFind(newPair.key).first, true);
     }
     return std::make_pair(resultPair.first, false);
+  }
+
+  template < class Key, class T, class Compare >
+  typename TwoThree < Key, T, Compare >::iterator TwoThree < Key, T, Compare >::find(const Key &key)
+  {
+    auto resultPair = doFind(key);
+    if (resultPair.second)
+    {
+      return std::make_pair(resultPair.first, true);
+    }
+    return std::make_pair(end(), false);
+  }
+
+  template < class Key, class T, class Compare >
+  typename TwoThree < Key, T, Compare >::const_iterator TwoThree < Key, T, Compare >::find(const Key &key) const
+  {
+    auto resultPair = doFind(key);
+    if (resultPair.second)
+    {
+      return std::make_pair(const_iterator(resultPair.first.node_, resultPair.first.isPtrToLeft_), true);
+    }
+    return std::make_pair(cend(), false);
   }
 
   template < class Key, class T, class Compare >
