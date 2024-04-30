@@ -39,8 +39,8 @@ namespace zhalilov
     bool isPtrToLeft_;
 
     explicit TwoThreeIterator(detail::Node < T > *node, bool isPtrToLeft = true);
-    detail::Node < T > *findMin(const detail::Node < T > *);
-    detail::Node < T > *findMax(const detail::Node < T > *);
+    static detail::Node < T > *findMin(const detail::Node < T > *);
+    static detail::Node < T > *findMax(const detail::Node < T > *);
   };
 
   template < class T >
