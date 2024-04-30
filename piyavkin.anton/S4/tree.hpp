@@ -38,31 +38,37 @@ namespace piyavkin
     Tree(const Tree& rhs):
       Tree()
     {
-      cmp_ = rhs.cmp_;
-      TreeIterator< Key, T, Compare > it_right(rhs.root_);
-      TreeIterator< Key, T, Compare > it_left(rhs.root_);
-      while (rhs.root_ && (it_right.node_ != rhs.end_node_.parent_->right_
-        || it_left.node_ != rhs.before_min_.parent_->left_))
+      ConstTreeIterator< Key, T, Compare > it_right(rhs.root_);
+      ConstTreeIterator< Key, T, Compare > it_left(rhs.root_);
+      while (rhs.root_ && (it_right != rhs.cend() || it_left != --rhs.cbegin()))
       {
-        if (rhs.root_ && (it_right.node_ != rhs.end_node_.parent_->right_))
+        if (it_right != rhs.cend())
         {
           insert(std::pair< Key, T >(*it_right++));
         }
-        if (rhs.root_ && (it_left.node_ != rhs.before_min_.parent_->left_))
+        if (it_left != --rhs.cbegin())
         {
           insert(std::pair< Key, T >(*it_left--));
         }
+      }
+      for (auto it = rhs.cbegin(); it != rhs.cend(); ++it)
+      {
+        insert(std::pair< Key, T >(*it));
       }
     }
     Tree(Tree&& rhs):
       root_(rhs.root_),
       cmp_(rhs.cmp_),
       size_(rhs.size_),
-      before_min_(rhs.before_min_),
-      end_node_(rhs.end_node_)
+      before_min_(Key(), nullptr, nullptr, rhs.before_min_.parent_, T()),
+      end_node_(Key(), nullptr, nullptr, rhs.end_node_.parent_, T())
     {
       rhs.root_ = nullptr;
       rhs.size_ = 0;
+      end_node_.parent_->right_ = std::addressof(end_node_);
+      before_min_.parent_->left_ = std::addressof(before_min_);
+      rhs.before_min_.parent_ = std::addressof(rhs.end_node_);
+      rhs.end_node_.parent_ = std::addressof(rhs.before_min_);
     }
     ~Tree()
     {
@@ -74,24 +80,6 @@ namespace piyavkin
       {
         Tree< Key, T, Compare > temp(rhs);
         swap(temp);
-        if (root_)
-        {
-          detail::TreeNode< Key, T >* left = root_;
-          detail::TreeNode< Key, T >* right = root_;
-          while (left->left_ || right->right_)
-          {
-            if (left->left_)
-            {
-              left = left->left_;
-            }
-            if (right->right_)
-            {
-              right = right->right_;
-            }
-          }
-          left->left_ = std::addressof(before_min_);
-          right->right_ = std::addressof(end_node_);
-        }
       }
       return *this;
     }
@@ -101,24 +89,6 @@ namespace piyavkin
       {
         clear();
         swap(rhs);
-        if (root_)
-        {
-          detail::TreeNode< Key, T >* left = root_;
-          detail::TreeNode< Key, T >* right = root_;
-          while (left->left_->parent_ || right->right_->parent_)
-          {
-            if (left->left_)
-            {
-              left = left->left_;
-            }
-            if (right->right_)
-            {
-              right = right->right_;
-            }
-          }
-          left->left_ = std::addressof(before_min_);
-          right->right_ = std::addressof(end_node_);
-        }
       }
       return *this;
     }
@@ -135,8 +105,19 @@ namespace piyavkin
       std::swap(root_, mp.root_);
       std::swap(cmp_, mp.cmp_);
       std::swap(size_, mp.size_);
-      std::swap(before_min_, mp.before_min_);
-      std::swap(end_node_, mp.end_node_);
+      detail::TreeNode< Key, T > temp1 = end_node_;
+      detail::TreeNode< Key, T > temp2 = before_min_;
+      end_node_.parent_ = mp.end_node_.parent_;
+      end_node_.parent_->right_ = std::addressof(end_node_);
+      before_min_.parent_ = mp.before_min_.parent_;
+      before_min_.parent_->left_ = std::addressof(before_min_);
+      mp.before_min_.parent_ = temp2.parent_;
+      mp.end_node_.parent_ = temp1.parent_;
+      if (mp.size_ != 0)
+      {
+        mp.before_min_.parent_->left_ = std::addressof(mp.before_min_);
+        mp.end_node_.parent_->right_ = std::addressof(mp.end_node_);
+      }
     }
     std::pair< TreeIterator< Key, T, Compare >, bool > insert(const val_type& val)
     {
