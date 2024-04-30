@@ -1,8 +1,6 @@
 #ifndef LIST_HPP
 #define LIST_HPP
 
-#include <utility>
-#include <memory>
 #include <cstddef>
 #include "node.hpp"
 #include "constIterators.hpp"
@@ -38,14 +36,11 @@ namespace skuratov
         }
       }
 
-      List& operator=(const List& diff)
+      List(const List& diff):
+        head(nullptr),
+        tail(nullptr),
+        size(0)
       {
-        if (this == &diff)
-        {
-          return *this;
-        }
-        clear();
-
         try
         {
           detail::Node<T>* current = diff.head;
@@ -60,7 +55,25 @@ namespace skuratov
           clear();
           throw;
         }
-        return *this;
+      }
+
+      List& operator=(const List& diff)
+      {
+        if (this == &diff)
+        {
+          return *this;
+        }
+        clear();
+      }
+
+      List(List&& diff) noexcept:
+        head(diff.head),
+        tail(diff.tail),
+        size(diff.size)
+      {
+        diff.head = nullptr;
+        diff.tail = nullptr;
+        diff.size = 0;
       }
 
       List& operator=(List&& diff)
@@ -68,14 +81,7 @@ namespace skuratov
         if (this != &diff)
         {
           clear();
-
-          head = diff.head;
-          tail = diff.tail;
-          size = diff.size;
-
-          diff.head = nullptr;
-          diff.tail = nullptr;
-          diff.size = 0;
+          swap(diff);
         }
         return *this;
       }

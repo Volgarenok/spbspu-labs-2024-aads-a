@@ -3,6 +3,7 @@
 #include <limits>
 #include <stdexcept>
 #include "list.hpp"
+#include "constIterators.hpp"
 
 void skuratov::inputAll(std::istream& in, List< std::pair< std::string, List< size_t > > >& sequences)
 {
@@ -30,58 +31,61 @@ void skuratov::inputAll(std::istream& in, List< std::pair< std::string, List< si
   }
 }
 
-/*
+void skuratov::outputAll(const List< size_t >& sequences, std::ostream& out)
 {
-  bool first = true;
-  for (size_t i = 0; i < sequences.getSize(); ++i)
+  for (auto it1 = sequences.cbegin(); it1 != sequences.cend(); ++it1)
   {
-    if (!first)
+    if (it1 != sequences.cbegin())
     {
-      std::cout << " ";
+      out << " ";
     }
-    std::cout << sequences[i].first;
-    first = false;
+    out << it1->first;
   }
-  std::cout << '\n';
-
-  size_t maxSize = 0;
-  for (size_t i = 0; i < sequences.getSize(); ++i)
+  if (!sequences.empty())
   {
-    maxSize = std::max(maxSize, sequences[i].second.getSize());
+    out << "\n";
+  }
+
+  size_t maxSize = {};
+  for (auto it2 = sequences.cbegin(); it2 != sequences.cend(); ++it2)
+  {
+    maxSize = std::max(maxSize, it2->second.getSize());
   }
 
   for (size_t i = 0; i < maxSize; ++i)
   {
     bool isFirst = true;
-    for (size_t j = 0; j < sequences.getSize(); ++j)
+    for (auto it3 = sequences.cbegin(); it3 != sequences.cend(); ++it3)
     {
-      const auto& numbers = sequences[j].second;
+      const auto& numbers = it3->second;
       if (i < numbers.getSize())
       {
         if (!isFirst)
         {
-          std::cout << " ";
+          out << " ";
         }
-        std::cout << numbers.get(i);
+        out << numbers[i];
         isFirst = false;
       }
     }
     if (!isFirst)
     {
-      std::cout << '\n';
+      out << '\n';
     }
   }
 
+  List< size_t > columnSums = {};
+
   for (size_t i = 0; i < maxSize; ++i)
   {
-    for (size_t j = 0; j < sequences.getSize(); ++j)
+    for (auto it4 = sequences.cbegin(); it4 != sequences.cend(); ++it4)
     {
-      const auto& numbers = sequences[j].second;
+      const auto& numbers = it4->second;
       if (i < numbers.getSize())
       {
-        if (columnSums[i] <= std::numeric_limits<size_t>::max() - numbers.get(i))
+        if (columnSums[i] <= std::numeric_limits<size_t>::max() - numbers[i])
         {
-          columnSums[i] += numbers.get(i);
+          columnSums[i] += numbers[i];
         }
         else
         {
@@ -101,4 +105,3 @@ void skuratov::inputAll(std::istream& in, List< std::pair< std::string, List< si
   }
   std::cout << '\n';
 }
-*/
