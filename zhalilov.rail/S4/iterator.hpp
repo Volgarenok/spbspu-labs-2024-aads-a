@@ -55,6 +55,7 @@ namespace zhalilov
         {
           isPtrToLeft_ = false;
         }
+        node_ = minMid;
         return *this;
       }
     }
@@ -66,6 +67,7 @@ namespace zhalilov
       {
         node_ = node_->parent;
       }
+      node_ = node_->parent;
       isPtrToLeft_ = true;
     }
     else
