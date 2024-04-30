@@ -19,11 +19,11 @@ namespace skuratov
       ~ConstIterator() = default;
       ConstIterator(const ConstIterator< T >&) = default;
 
-      const T& operator*()
+      const T& operator*() const
       {
         return nodePointer->value_;
       }
-      const T* operator->()
+      const T* operator->() const
       {
         return &(nodePointer->value_);
       }

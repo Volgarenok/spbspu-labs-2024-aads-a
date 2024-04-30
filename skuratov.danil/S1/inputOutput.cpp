@@ -46,10 +46,10 @@ void skuratov::outputAll(const List< size_t >& sequences, std::ostream& out)
     out << "\n";
   }
 
-  size_t maxSize = {};
+  size_t maxSize = std::numeric_limits< size_t >::max();
   for (auto it2 = sequences.cbegin(); it2 != sequences.cend(); ++it2)
   {
-    maxSize = std::max(maxSize, it2->second.getSize());
+    maxSize = (maxSize, it2->second.getSize());
   }
 
   for (size_t i = 0; i < maxSize; ++i)
@@ -83,9 +83,9 @@ void skuratov::outputAll(const List< size_t >& sequences, std::ostream& out)
       const auto& numbers = it4->second;
       if (i < numbers.getSize())
       {
-        if (columnSums[i] <= std::numeric_limits<size_t>::max() - numbers[i])
+        if (columnSums.at(i) <= std::numeric_limits<size_t>::max() - numbers.at(i))
         {
-          columnSums[i] += numbers[i];
+          columnSums.at(i) += numbers.at(i);
         }
         else
         {
@@ -101,7 +101,7 @@ void skuratov::outputAll(const List< size_t >& sequences, std::ostream& out)
     {
       std::cout << " ";
     }
-    std::cout << columnSums[i];
+    std::cout << columnSums.at(i);
   }
   std::cout << '\n';
 }
