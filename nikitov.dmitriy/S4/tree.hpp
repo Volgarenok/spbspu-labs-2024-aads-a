@@ -22,7 +22,7 @@ namespace nikitov
     void clear();
 
   private:
-    TreeNode< Key, T, Compare >* root_;
+    detail::TreeNode< Key, T, Compare >* root_;
     size_t size_;
     Compare cmp_;
 
@@ -32,7 +32,7 @@ namespace nikitov
 
   template< class Key, class T, class Compare >
   Tree< Key, T, Compare >::Tree() :
-    root_(new TreeNode< Key, T, Compare >()),
+    root_(new detail::TreeNode< Key, T, Compare >()),
     size_(0),
     cmp_(Compare())
   {}
@@ -83,13 +83,13 @@ namespace nikitov
   {
     if (empty())
     {
-      root_->middle_ = new TreeNode< Key, T, Compare >(value);
+      root_->middle_ = new detail::TreeNode< Key, T, Compare >(value);
       root_->middle_->parent_ = root_;
       root_ = root_->middle_;
     }
     else
     {
-      TreeNode< Key, T, Compare >* newRoot = findNode(value)->add(value);
+      detail::TreeNode< Key, T, Compare >* newRoot = findNode(value)->add(value);
       if (newRoot)
       {
         root_ = newRoot;
@@ -126,7 +126,7 @@ namespace nikitov
   template< class Key, class T, class Compare >
   detail::TreeNode< Key, T, Compare >* Tree< Key, T, Compare >::findNode(const std::pair< Key, T >& value) const
   {
-    TreeNode< Key, T, Compare >* node = root_;
+    detail::TreeNode< Key, T, Compare >* node = root_;
     while (node->left_ || node->right_ || node->middle_)
     {
       if (cmp_(value.first, node->firstValue_.first))
