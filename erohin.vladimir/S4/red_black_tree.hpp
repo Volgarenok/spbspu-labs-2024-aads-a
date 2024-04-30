@@ -19,6 +19,11 @@ namespace erohin
     using const_iterator = TreeConstIterator< Key, T >;
     using value_type = std::pair< Key, T >;
     RedBlackTree();
+    RedBlackTree(const RedBlackTree< Key, T, Compare > & rhs);
+    RedBlackTree(RedBlackTree< Key, T, Compare > && rhs);
+    RedBlackTree(std::initializer_list< value_type > init_list);
+    template< class InputIt>
+    RedBlackTree(InputIt first, InputIt last);
     ~RedBlackTree();
     iterator begin();
     iterator end();
@@ -31,12 +36,49 @@ namespace erohin
     detail::Node< Key, T > * root_;
     Compare cmp_;
     void clear_subtree(detail::Node< Key, T > * subtree);
+    void insert_balance(detail::Node< Key, T > * subtree);
+    void erase_balance(detail::Node< Key, T > * subtree);
   };
 
   template< class Key, class T, class Compare >
   RedBlackTree< Key, T, Compare >::RedBlackTree():
     root_(nullptr)
   {}
+
+  template< class Key, class T, class Compare >
+  RedBlackTree< Key, T, Compare >::RedBlackTree(const RedBlackTree< Key, T, Compare > & rhs):
+    RedBlackTree(rhs.cbegin(), rhs.cend())
+  {}
+
+  template< class Key, class T, class Compare >
+  RedBlackTree< Key, T, Compare >::RedBlackTree(RedBlackTree< Key, T, Compare > && rhs):
+    root_(rhs.root_)
+  {
+    rhs.root_ = nullptr;
+  }
+
+  template< class Key, class T, class Compare >
+  RedBlackTree< Key, T, Compare >::RedBlackTree(std::initializer_list< value_type > init_list):
+    RedBlackTree(init_list.begin(), init_list.end())
+  {}
+
+  template< class Key, class T, class Compare >
+  template< class InputIt >
+  RedBlackTree< Key, T, Compare >::RedBlackTree(InputIt first, InputIt last):
+    root_(nullptr)
+  {
+    while (first != last)
+    {
+      try
+      {
+        insert(*(first++));
+      }
+      catch (...)
+      {
+        clear();
+      }
+    }
+  }
 
   template< class Key, class T, class Compare >
   RedBlackTree< Key, T, Compare >::~RedBlackTree()
@@ -71,19 +113,6 @@ namespace erohin
   TreeConstIterator< Key, T > RedBlackTree< Key, T, Compare >::cend()
   {
     return const_iterator(end().node_);
-  }
-
-  template< class Key, class T, class Compare >
-  void RedBlackTree< Key, T, Compare >::clear_subtree(detail::Node< Key, T > * subtree)
-  {
-    if (!subtree)
-    {
-      delete subtree;
-      return;
-    }
-    clear_subtree(subtree->left_);
-    clear_subtree(subtree->right_);
-    delete subtree;
   }
 
   template< class Key, class T, class Compare >
@@ -127,6 +156,7 @@ namespace erohin
     {
       prev->right_ = node;
     }
+    insert_balance(node);
     return std::make_pair(iterator(node), true);
   }
 
@@ -134,6 +164,31 @@ namespace erohin
   bool RedBlackTree< Key, T, Compare >::empty() const noexcept
   {
     return (!root_);
+  }
+
+  template< class Key, class T, class Compare >
+  void RedBlackTree< Key, T, Compare >::clear_subtree(detail::Node< Key, T > * subtree)
+  {
+    if (!subtree)
+    {
+      delete subtree;
+      return;
+    }
+    clear_subtree(subtree->left_);
+    clear_subtree(subtree->right_);
+    delete subtree;
+  }
+
+  template< class Key, class T, class Compare >
+  void RedBlackTree< Key, T, Compare >::insert_balance(detail::Node< Key, T > * subtree)
+  {
+    return;
+  }
+
+  template< class Key, class T, class Compare >
+  void RedBlackTree< Key, T, Compare >::erase_balance(detail::Node< Key, T > * subtree)
+  {
+    return;
   }
 }
 
