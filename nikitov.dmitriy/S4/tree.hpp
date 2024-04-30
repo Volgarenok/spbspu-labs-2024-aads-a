@@ -64,13 +64,12 @@ namespace nikitov
   template< class Key, class T, class Compare >
   void Tree< Key, T, Compare >::clear()
   {
-    if (!empty())
+    root_->clear();
+    if (root_->parent_)
     {
-      root_->clear();
       root_ = root_->parent_;
-      delete root_->middle_;
-      size_ = 0;
     }
+    size_ = 0;
   }
 
   template< class Key, class T, class Compare >
