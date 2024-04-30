@@ -29,64 +29,68 @@ namespace arakelyan
     Iterator operator--(int);//fine
 
     const T &operator*() const;//fine
-    T &operator*();//fine
     const T *operator->() const;//fine
+    T &operator*();//fine
     T *operator->();//fine
 
-    bool operator!=(Iterator< T > val) const;//fine
-    bool operator==(Iterator< T > val) const;//fine
+    bool operator!=(Iterator< T > otherI) const;//fine
+    bool operator==(Iterator< T > otherI) const;//fine
 
   private:
     explicit Iterator(detail::Node< T > *val);
 
     void next()
     {
-      if (node_)
+      detail::Node< T > *temp = node_;
+      if (temp)
       {
-        if (node_->right_)
+        if (temp->right_)
         {
-          node_ = node_->right_;
-          while (node_->left_)
+          temp = temp->right_;
+          while (temp->left_)
           {
-            node_ = node_->left_;
+            temp = temp->left_;
           }
         }
         else
         {
-          detail::Node<T> *parent = node_->parent_;
-          while (parent && node_ == node_->right_)
+          detail::Node< T > *parent = temp->parent_;
+          while (parent && temp == parent->right_)
           {
-            node_ = parent;
+            temp = parent;
             parent = parent->parent_;
           }
-          node_ = parent;
+          temp = parent;
         }
+        node_ = temp;
       }
     }
 
     void prev()
     {
-      detail::Node<T> *temp = node_;
-
-      if (temp->left_)
+      detail::Node< T > *temp = node_;
+      if (temp)
       {
-        temp = temp->left_;
-        while (temp->right_)
+        if (temp->left_)
         {
-          temp = temp->right_;
+          temp = temp->left_;
+          while (temp->right_)
+          {
+            temp = temp->right_;
+          }
         }
-      }
-      else
-      {
-        detail::Node<T> *parent = temp->parent_;
-        while (parent && temp == parent->left_)
+        else
         {
+          detail::Node< T > *parent = temp->parent_;
+          while (parent && temp == parent->left_)
+          {
+            temp = parent;
+            parent = parent->parent_;
+          }
           temp = parent;
-          parent = parent->parent_;
         }
-        temp = parent;
+        node_ = temp;
       }
-      node_ = temp;
     }
 
     detail::Node< T > *node_;
@@ -149,17 +153,17 @@ namespace arakelyan
   }
 
   template < class T >
-  T &Iterator< T >::operator*()
-  {
-    assert(node_ != nullptr);
-    return node_->data_;
-  }
-
-  template < class T >
   const T *Iterator< T >::operator->() const
   {
     assert(node_ != nullptr);
     return std::addressof(node_->data_);
+  }
+
+  template < class T >
+  T &Iterator< T >::operator*()
+  {
+    assert(node_ != nullptr);
+    return node_->data_;
   }
 
   template < class T >
@@ -170,15 +174,15 @@ namespace arakelyan
   }
 
   template < class T >
-  bool Iterator< T >::operator!=(Iterator< T > val) const
+  bool Iterator< T >::operator!=(Iterator< T > otherI) const
   {
-    return !(*this == val);
+    return !(*this == otherI);
   }
 
   template < class T >
-  bool Iterator< T >::operator==(Iterator< T > val) const
+  bool Iterator< T >::operator==(Iterator< T > otherI) const
   {
-    return node_ == val.node_;
+    return node_ == otherI.node_;
   }
 }
 #endif

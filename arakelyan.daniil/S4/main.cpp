@@ -15,21 +15,12 @@ int main()
   t.insert(24);
   t.insert(30);
   t.insert(34);
-  // for (auto it = t.begin(); it != t.end(); it++)
-  // {
-  //   std::cout << " - " << *it;
-  // }
-  // std::cout << "\n";
 
-  auto it = t.begin();
-  std::cout << *it << "\n";
-  // while (it != t.end())
-  // {
-  //   std::cout << *it << "-";
-  //   --it;
-  // }
-
-  assert(!t.empty());
+  RBTree< size_t > otherT(t);
+  std::cout << "\n";
+  std::cout << "old tree: ";
   t.printInOrder();
+  std::cout << "copyed tree: ";
+  otherT.printInOrder();
   return 0;
 }

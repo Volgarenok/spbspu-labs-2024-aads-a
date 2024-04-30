@@ -14,23 +14,30 @@ namespace arakelyan
   {
   public:
     using iterator = Iterator< T >;
+    using const_iterator = ConstIterator< T >;
 
     RBTree();
-    // Tree(const Tree &otherT);
-    // Tree(const Tree &&otherT);
+    RBTree(const RBTree &otherT);//fine
+    // RBTree(RBTree &&otherT);
+    // RBTree(const std::initializer_list &otherT);
     ~RBTree();
 
-    // Tree &operator=(const Tree &otherT);
-    // Tree &operator=(const Tree &&otherT);
+    // RBTree &operator=(const Tree &otherT);
+    // RBTree &operator=(const Tree &&otherT);
+    // RBTree &operator=(const std::initializer_list &otherT);
 
     size_t getSize() const noexcept;
-    bool empty() const noexcept; // fine
+    bool empty() const noexcept;
 
-    iterator begin() const;
-    iterator end() const;
+    iterator begin() noexcept;
+    iterator end() noexcept;
+    const_iterator cbegin() const noexcept;
+    const_iterator cend() const noexcept;
 
     void insert(const T &val); // fine?
     // void remove()
+
+    void swap(RBTree &otherT) noexcept;
 
     void printInOrder() const noexcept;
 
@@ -59,25 +66,10 @@ namespace arakelyan
       }
     }
 
-    // void balance(Node *newNode)
-    // {
-    //   Node *uncle;
-    //   while (newNode->parent_->color_ == detail::color_t::RED)
-    //   {
-    //     if (newNode->parent_ == newNode->parent_->parent_->left_)
-    //     {
-    //       uncle = newNode->parent_->parent_.right_;
-    //       if (uncle->color_ == detail::color_t::RED)
-    //       {
-    //         newNode->parent_->color_ = detail::color_t::BLACK;
-    //         uncle->color_ = detail::color_t::BLACK;
-    //         newNode->parent_->parent_->color_ = detail::color_t::RED;
-    //         newNode =
-    //       }
-    //     }
-    //   }
-    // }
-
+    // void someFixInput()
+    // void someFixDelete()
+    // void leftRotate()
+    // void rightTorate()
   };
 
   template < class T >
@@ -86,11 +78,16 @@ namespace arakelyan
     size_(0)
   {}
 
-  // template < class T >
-  // Tree< T >::Tree(const Tree< T > &otherT)
-  // {
-
-  // }
+  template < class T >
+  RBTree< T >::RBTree(const RBTree< T > &otherT):
+    RBTree()
+  {
+    for (auto it = otherT.cbegin(); it != otherT.cend(); ++it)
+    {
+      std::cout << "insert: " << *it << " ";
+      insert(*it);
+    }
+  }
 
   template < class T >
   RBTree< T >::~RBTree()
@@ -111,15 +108,27 @@ namespace arakelyan
   }
 
   template < class T >
-  Iterator< T > RBTree< T >::begin() const
+  Iterator< T > RBTree< T >::begin() noexcept
   {
-    return iterator(root_);
+    return Iterator< T >(root_);
   }
 
   template < class T >
-  Iterator< T > RBTree< T >::end() const
+  Iterator< T > RBTree< T >::end() noexcept
   {
-    return iterator(nullptr);
+    return Iterator< T >(nullptr);
+  }
+
+  template < class T >
+  ConstIterator< T > RBTree< T >::cbegin() const noexcept
+  {
+    return ConstIterator< T >(root_);
+  }
+
+  template < class T >
+  ConstIterator< T > RBTree< T >::cend() const noexcept
+  {
+    return ConstIterator< T >(nullptr);
   }
 
   template < class T >
@@ -157,6 +166,12 @@ namespace arakelyan
     }
     ++size_;
     // balance func.
+  }
+
+  template < class T >
+  void RBTree< T >::swap(RBTree< T > &otherT) noexcept
+  {
+    std::swap(root_, otherT.root_);
   }
 
   template < class T >

@@ -31,36 +31,36 @@ namespace arakelyan
     const T &operator*() const;
     const T *operator->() const;
 
-    bool operator!=(ConstIterator< T > val) const;
-    bool operator==(ConstIterator< T > val) const;
+    bool operator!=(ConstIterator< T > otherI) const;
+    bool operator==(ConstIterator< T > otherI) const;
 
   private:
     explicit ConstIterator(detail::Node< T > *sNode);
 
-    void next()
+  void next()
+  {
+    if (node_)
     {
-      if (node_)
+      if (node_->right_)
       {
-        if (node_->right_)
+        node_ = node_->right_;
+        while (node_->left_)
         {
-          node_ = node_->right_;
-          while (node_->left_)
-          {
-            node_ = node_->left_;
-          }
-        }
-        else
-        {
-          detail::Node<T> *parent = node_->parent_;
-          while (parent && node_ == node_->right_)
-          {
-            node_ = parent;
-            parent = parent->parent_;
-          }
-          node_ = parent;
+          node_ = node_->left_;
         }
       }
+      else
+      {
+        detail::Node<T> *parent = node_->parent_;
+        while (parent && node_ == parent->right_)
+        {
+          node_ = parent;
+          parent = parent->parent_;
+        }
+        node_ = parent;
+      }
     }
+  }
 
     void prev()
     {
@@ -142,7 +142,7 @@ namespace arakelyan
   template < class T >
   const T &ConstIterator< T >::operator*() const
   {
-    asser(node_ != nullptr);
+    assert(node_ != nullptr);
     return node_->data_;
   }
 
@@ -152,5 +152,18 @@ namespace arakelyan
     assert(node_ != nullptr);
     return std::addressof(node_->data_);
   }
+
+  template < class T >
+  bool ConstIterator< T >::operator==(ConstIterator< T > otherI) const
+  {
+    return node_ == otherI.node_;
+  }
+
+  template < class T >
+  bool ConstIterator< T >::operator!=(ConstIterator< T > otherI) const
+  {
+    return !(*this == otherI);
+  }
+
 }
 #endif
