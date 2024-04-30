@@ -81,19 +81,19 @@ namespace nikitov
   template< class Key, class T, class Compare >
   void Tree< Key, T, Compare >::insert(const std::pair< Key, T >& value)
   {
-    if (!empty())
+    if (empty())
+    {
+      root_->middle_ = new TreeNode< Key, T, Compare >(value);
+      root_->middle_->parent_ = root_;
+      root_ = root_->middle_;
+    }
+    else
     {
       TreeNode< Key, T, Compare >* newRoot = findNode(value)->add(value);
       if (newRoot)
       {
         root_ = newRoot;
       }
-    }
-    else
-    {
-      root_->middle_ = new TreeNode< Key, T, Compare >(value);
-      root_->middle_->parent_ = root_;
-      root_ = root_->middle_;
     }
     ++size_;
   }
@@ -105,7 +105,6 @@ namespace nikitov
     {
       return nullptr;
     }
-
     if (node->find(key))
     {
       return node;
@@ -128,7 +127,7 @@ namespace nikitov
   TreeNode< Key, T, Compare >* Tree< Key, T, Compare >::findNode(const std::pair< Key, T >& value) const
   {
     TreeNode< Key, T, Compare >* node = root_;
-    while ((node->left_ != nullptr) || (node->right_ != nullptr) || (node->middle_ != nullptr))
+    while (node->left_ || node->right_ || node->middle_)
     {
       if (cmp_(value.first, node->firstValue_.first))
       {
