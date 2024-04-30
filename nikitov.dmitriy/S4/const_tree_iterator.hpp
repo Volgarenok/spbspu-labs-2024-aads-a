@@ -16,6 +16,9 @@ namespace nikitov
     explicit ConstTreeIterator(detail::TreeNode< Key, T, Compare >* node);
     ~ConstTreeIterator() = default;
 
+    const std::pair< Key, T >& operator*() const;
+    const std::pair< Key, T >* operator->() const;
+
     ConstTreeIterator< Key, T, Compare >& operator++();
 
   private:
@@ -32,6 +35,32 @@ namespace nikitov
   {}
 
   template< class Key, class T, class Compare >
+  const std::pair< Key, T >& ConstTreeIterator< Key, T, Compare >::operator*() const
+  {
+    if (isFirst_)
+    {
+      return node_->firstValue_;
+    }
+    else
+    {
+      return node_->secondValue_;
+    }
+  }
+
+  template< class Key, class T, class Compare >
+  const std::pair< Key, T >* ConstTreeIterator< Key, T, Compare >::operator->() const
+  {
+    if (isFirst_)
+    {
+      return std::addressof(node_->firstValue_);
+    }
+    else
+    {
+      return std::addressof(node_->secondValue_);
+    }
+  }
+
+  template< class Key, class T, class Compare >
   ConstTreeIterator< Key, T, Compare >& ConstTreeIterator< Key, T, Compare >::operator++()
   {
     if (isFirst_)
@@ -45,7 +74,7 @@ namespace nikitov
         }
         else
         {
-          isFirst_ == false;
+          isFirst_ = false;
         }
       }
       else
@@ -59,17 +88,24 @@ namespace nikitov
         {
           if (node_->parent_->right_ == node_)
           {
-            while (node_->parent_->parent_)
+            while (node_->parent_->right_ == node_)
+            {
+              node_ = node_->parent_;
+            }
+            if (!node_->parent_->parent_)
             {
               node_ = node_->parent_;
             }
           }
+          else if (node_->parent_->middle_ == node_)
+          {
+            node_ = node_->parent_;
+            isFirst_ = false;
+          }
           else
           {
-            while (node_->parent_)
-            {
-              node_ = node_->parent_;
-            }
+            node_ = node_->parent_;
+            isFirst_ = true;
           }
         }
       }
@@ -85,17 +121,24 @@ namespace nikitov
       {
         if (node_->parent_->right_ == node_)
         {
-          while (node_->parent_->parent_)
+          while (node_->parent_->right_ == node_)
+          {
+            node_ = node_->parent_;
+          }
+          if (!node_->parent_->parent_)
           {
             node_ = node_->parent_;
           }
         }
+        else if (node_->parent_->middle_ == node_)
+        {
+          node_ = node_->parent_;
+          isFirst_ = false;
+        }
         else
         {
-          while (node_->parent_)
-          {
-            node_ = node_->parent_;
-          }
+          node_ = node_->parent_;
+          isFirst_ = true;
         }
       }
     }
