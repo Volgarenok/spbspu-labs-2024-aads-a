@@ -14,18 +14,20 @@ namespace nikitov
     ~Tree();
 
     T& operator[](const Key& key);
+
+    bool empty() const;
+    size_t size() const;
+
     void insert(const std::pair< Key, T >& value);
     void clear();
-    size_t size() const;
-    bool empty() const;
-    TreeNode< Key, T, Compare >* search(TreeNode< Key, T, Compare >* node, const Key& key);
-
-    TreeNode< Key, T, Compare >* findToAdd(const std::pair< Key, T >& value) const;
 
   private:
     TreeNode< Key, T, Compare >* root_;
     size_t size_;
     Compare cmp_;
+
+    TreeNode< Key, T, Compare >* search(TreeNode< Key, T, Compare >* node, const Key& key) const;
+    TreeNode< Key, T, Compare >* findNode(const std::pair< Key, T >& value) const;
   };
 
   template< class Key, class T, class Compare >
@@ -54,7 +56,51 @@ namespace nikitov
   }
 
   template< class Key, class T, class Compare >
-  TreeNode< Key, T, Compare >* Tree< Key, T, Compare >::search(TreeNode< Key, T, Compare >* node, const Key& key)
+  bool Tree< Key, T, Compare >::empty() const
+  {
+    return !size_;
+  }
+
+  template< class Key, class T, class Compare >
+  void Tree< Key, T, Compare >::clear()
+  {
+    if (!empty())
+    {
+      root_->clear();
+      root_ = root_->parent_;
+      delete root_->middle_;
+      size_ = 0;
+    }
+  }
+
+  template< class Key, class T, class Compare >
+  size_t Tree< Key, T, Compare >::size() const
+  {
+    return size_;
+  }
+
+  template< class Key, class T, class Compare >
+  void Tree< Key, T, Compare >::insert(const std::pair< Key, T >& value)
+  {
+    if (!empty())
+    {
+      TreeNode< Key, T, Compare >* newRoot = findNode(value)->add(value);
+      if (newRoot)
+      {
+        root_ = newRoot;
+      }
+    }
+    else
+    {
+      root_->middle_ = new TreeNode< Key, T, Compare >(value);
+      root_->middle_->parent_ = root_;
+      root_ = root_->middle_;
+    }
+    ++size_;
+  }
+
+  template< class Key, class T, class Compare >
+  TreeNode< Key, T, Compare >* Tree< Key, T, Compare >::search(TreeNode< Key, T, Compare >* node, const Key& key) const
   {
     if (!node)
     {
@@ -80,27 +126,7 @@ namespace nikitov
   }
 
   template< class Key, class T, class Compare >
-  void Tree< Key, T, Compare >::insert(const std::pair< Key, T >& value)
-  {
-    if (!empty())
-    {
-      TreeNode< Key, T, Compare >* newRoot = findToAdd(value)->add(value);
-      if (newRoot)
-      {
-        root_ = newRoot;
-      }
-    }
-    else
-    {
-      root_->middle_ = new TreeNode< Key, T, Compare >(value);
-      root_->middle_->parent_ = root_;
-      root_ = root_->middle_;
-    }
-    ++size_;
-  }
-
-  template< class Key, class T, class Compare >
-  TreeNode< Key, T, Compare >* Tree< Key, T, Compare >::findToAdd(const std::pair< Key, T >& value) const
+  TreeNode< Key, T, Compare >* Tree< Key, T, Compare >::findNode(const std::pair< Key, T >& value) const
   {
     TreeNode< Key, T, Compare >* node = root_;
     while ((node->left_ != nullptr) || (node->right_ != nullptr) || (node->middle_ != nullptr))
@@ -119,30 +145,6 @@ namespace nikitov
       }
     }
     return node;
-  }
-
-  template< class Key, class T, class Compare >
-  void Tree< Key, T, Compare >::clear()
-  {
-    if (!empty())
-    {
-      root_->clear();
-      root_ = root_->parent_;
-      delete root_->middle_;
-      size_ = 0;
-    }
-  }
-
-  template< class Key, class T, class Compare >
-  size_t Tree< Key, T, Compare >::size() const
-  {
-    return size_;
-  }
-
-  template< class Key, class T, class Compare >
-  bool Tree< Key, T, Compare >::empty() const
-  {
-    return !size_;
   }
 }
 #endif
