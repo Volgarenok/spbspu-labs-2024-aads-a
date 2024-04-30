@@ -15,7 +15,8 @@ void skuratov::inputAll(std::istream& in, List< std::pair< std::string, List< si
       throw std::invalid_argument("Empty list");
       break;
     }
-    sequences.pushBack(std::make_pair(name, List<size_t>()));
+    std::pair<std::string, List<size_t>> pair = std::make_pair(name, List<size_t>());
+    sequences.pushBack(pair);
 
     size_t numbers = {};
     while (in >> numbers)
@@ -28,31 +29,6 @@ void skuratov::inputAll(std::istream& in, List< std::pair< std::string, List< si
     }
   }
 }
-  /*
-  std::string name;
-  size_t numbers = {};
-  while (in)
-  {
-    in >> name;
-    
-    if (name.empty())
-    {
-      throw std::invalid_argument("Empty list");
-      break;
-    }
-    sequences.pushBack({ name, List< size_t >() });
-
-    while (in >> numbers)
-    {
-      seqeunces.back().second.pushBack(numbers);
-    }
-
-    if (sequences.empty())
-    {
-      throw std::invalid_argument("Empty list");
-    }
-  }
-  */
 
 /*
 {
