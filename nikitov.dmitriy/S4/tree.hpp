@@ -17,6 +17,7 @@ namespace nikitov
     T& operator[](const Key& key);
 
     ConstTreeIterator< Key, T, Compare > cbegin() const;
+    ConstTreeIterator< Key, T, Compare > cend() const;
 
     bool empty() const;
     size_t size() const;
@@ -64,6 +65,19 @@ namespace nikitov
     ConstTreeIterator< Key, T, Compare > iterator(root_);
     iterator.fallLeft();
     return iterator;
+  }
+
+  template< class Key, class T, class Compare >
+  ConstTreeIterator< Key, T, Compare > Tree< Key, T, Compare >::cend() const
+  {
+    if (empty())
+    {
+      return ConstTreeIterator< Key, T, Compare >(root_);
+    }
+    else
+    {
+      return ConstTreeIterator< Key, T, Compare >(root_->parent_);
+    }
   }
 
   template< class Key, class T, class Compare >
