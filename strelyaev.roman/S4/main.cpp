@@ -2,5 +2,10 @@
 int main()
 {
   strelyaev::Tree< int > tree;
-  tree.insert(5);
+  int a = 5;
+  tree.push(a);
+  tree.push(4);
+  tree.push(3);
+  tree.push(6);
+  std::cout << tree.root->right_->value_;
 }
