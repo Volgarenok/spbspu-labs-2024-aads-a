@@ -9,17 +9,19 @@ namespace nikitov
   class Tree;
 
   template< class Key, class T, class Compare = std::less< Key > >
-  class ConstTreeIterator
+  class ConstTreeIterator: public std::iterator< std::bidirectional_iterator_tag, T >
   {
     friend class Tree< Key, T, Compare >;
   public:
-    explicit ConstTreeIterator(detail::TreeNode< Key, T, Compare >* node);
+    ConstTreeIterator(const ConstListIterator< Key, T, Compare >&) = default;
     ~ConstTreeIterator() = default;
 
     const std::pair< Key, T >& operator*() const;
     const std::pair< Key, T >* operator->() const;
 
     ConstTreeIterator< Key, T, Compare >& operator++();
+
+    ConstTreeIterator< Key, T, Compare >& operator=(const ConstTreeIterator< Key, T, Compare >&) = default;
 
     bool operator==(const ConstTreeIterator< Key, T, Compare >& other) const;
     bool operator!=(const ConstTreeIterator< Key, T, Compare >& other) const;
@@ -28,6 +30,7 @@ namespace nikitov
     bool isFirst_;
     detail::TreeNode< Key, T, Compare >* node_;
 
+    explicit ConstTreeIterator(detail::TreeNode< Key, T, Compare >* node);
     void fallLeft();
   };
 
