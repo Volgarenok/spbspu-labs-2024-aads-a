@@ -15,10 +15,10 @@ namespace nikitov
       TreeNode(const std::pair< Key, T >& value);
       ~TreeNode() = default;
 
+      bool find(const Key& key) const;
       TreeNode< Key, T, Compare >* add(const std::pair< Key, T >& value);
       TreeNode< Key, T, Compare >* split(const std::pair< Key, T >& value);
       void clear();
-      bool find(const Key& key) const;
 
       std::pair< Key, T > firstValue_;
       std::pair< Key, T > secondValue_;
@@ -48,6 +48,17 @@ namespace nikitov
     {}
 
     template< class Key, class T, class Compare >
+    bool TreeNode< Key, T, Compare >::find(const Key& key) const
+    {
+      bool isFound = (firstValue_.first == key);
+      if (size_ == 2)
+      {
+        isFound = isFound || (secondValue_.first == key);
+      }
+      return isFound;
+    }
+
+    template< class Key, class T, class Compare >
     TreeNode< Key, T, Compare >* TreeNode< Key, T, Compare >::add(const std::pair< Key, T >& value)
     {
       TreeNode< Key, T, Compare >* newRoot = nullptr;
@@ -60,24 +71,20 @@ namespace nikitov
         }
         ++size_;
       }
-      else if (size_ == 2)
+      else
       {
+        std::pair< Key, T > toSplit = value;
         if (cmp_(value.first, firstValue_.first))
         {
-          std::pair< Key, T > temp = firstValue_;
+          toSplit = firstValue_;
           firstValue_ = value;
-          newRoot = split(temp);
         }
         else if (cmp_(secondValue_.first, value.first))
         {
-          std::pair< Key, T > temp = secondValue_;
+          toSplit = secondValue_;
           secondValue_ = value;
-          newRoot = split(temp);
         }
-        else
-        {
-          newRoot = split(value);
-        }
+        newRoot = split(toSplit);
       }
       return newRoot;
     }
@@ -172,17 +179,6 @@ namespace nikitov
         right_->clear();
         delete right_;
       }
-    }
-
-    template< class Key, class T, class Compare >
-    bool TreeNode< Key, T, Compare >::find(const Key& key) const
-    {
-      bool isFound = (firstValue_.first == key);
-      if (size_ == 2)
-      {
-        isFound = isFound || (secondValue_.first == key);
-      }
-      return isFound;
     }
   }
 }
