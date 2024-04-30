@@ -66,6 +66,40 @@ namespace zhalilov
   }
 
   template < class Key, class T, class Compare >
+  T &TwoThree < Key, T, Compare >::at(const Key &key)
+  {
+    auto it = find(key);
+    if (it == end())
+    {
+      throw std::out_of_range("TwoThreeTree: accessing element doesn't exist");
+    }
+    return *it;
+  }
+
+  template < class Key, class T, class Compare >
+  const T &TwoThree < Key, T, Compare >::at(const Key &key) const
+  {
+    auto it = find(key);
+    if (it == cend())
+    {
+      throw std::out_of_range("TwoThreeTree: accessing element doesn't exist");
+    }
+    return *it;
+  }
+
+  template < class Key, class T, class Compare >
+  T &TwoThree < Key, T, Compare >::operator[](const Key &key)
+  {
+    return *((insert(std::make_pair(key, T()))).first);
+  }
+
+  template < class Key, class T, class Compare >
+  T &TwoThree < Key, T, Compare >::operator[](Key &&key)
+  {
+    return *((insert(std::make_pair(std::move(key), T()))).first);
+  }
+
+  template < class Key, class T, class Compare >
   typename TwoThree < Key, T, Compare >::iterator TwoThree < Key, T, Compare >::begin()
   {
     return iterator(iterator::findMin(head_->left), true);
