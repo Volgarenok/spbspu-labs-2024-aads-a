@@ -7,7 +7,6 @@ namespace zhalilov
   {
     enum class NodeType
     {
-      Leaf,
       Two,
       Three
     };
