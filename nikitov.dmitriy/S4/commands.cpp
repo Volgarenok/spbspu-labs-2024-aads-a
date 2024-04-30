@@ -43,7 +43,11 @@ void nikitov::complementCmd(std::map< std::string, std::map< size_t, std::string
       newDict.insert({ (*i).first, (*i).second });
     }
   }
-  tree.insert({ newDictName, newDict });
+
+  if (!tree.insert({ newDictName, newDict }).second)
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
 }
 
 void nikitov::intersectCmd(std::map< std::string, std::map< size_t, std::string > >& tree, std::istream& input)
@@ -69,7 +73,11 @@ void nikitov::intersectCmd(std::map< std::string, std::map< size_t, std::string 
       continue;
     }
   }
-  tree.insert({ newDictName, newDict });
+
+  if (!tree.insert({ newDictName, newDict }).second)
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
 }
 
 void nikitov::unionCmd(std::map< std::string, std::map< size_t, std::string > >& tree, std::istream& input)
@@ -92,5 +100,9 @@ void nikitov::unionCmd(std::map< std::string, std::map< size_t, std::string > >&
   {
     newDict.insert({(*i).first, (*i).second });
   }
-  tree.insert({ newDictName, newDict });
+
+  if (!tree.insert({ newDictName, newDict }).second)
+  {
+    throw std::logic_error("<INVALID COMMAND>");
+  }
 }
