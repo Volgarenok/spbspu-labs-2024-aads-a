@@ -13,7 +13,7 @@ namespace nikitov
   {
     friend class Tree< Key, T, Compare >;
   public:
-    explicit ConstTreeIterator(TreeNode< Key, T, Compare >* node);
+    explicit ConstTreeIterator(detail::TreeNode< Key, T, Compare >* node);
     ~ConstTreeIterator() = default;
 
   private:
@@ -21,7 +21,7 @@ namespace nikitov
   };
 
   template< class Key, class T, class Compare >
-  ConstTreeIterator< Key, T, Compare >::ConstTreeIterator(TreeNode< Key, T, Compare >* node):
+  ConstTreeIterator< Key, T, Compare >::ConstTreeIterator(detail::TreeNode< Key, T, Compare >* node):
     node_(node)
   {}
 }
