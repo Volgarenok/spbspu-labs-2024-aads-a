@@ -43,7 +43,7 @@ namespace zhalilov
 
     std::pair < iterator, bool > insert(const MapPair &);
     void clear() noexcept;
-    void swap(TwoThree &);
+    void swap(TwoThree &) noexcept;
 
     iterator find(const Key &);
     const_iterator find(const Key &) const;
@@ -284,8 +284,12 @@ namespace zhalilov
   }
 
   template < class Key, class T, class Compare >
-  void TwoThree < Key, T, Compare >::swap(TwoThree &other)
-  {}
+  void TwoThree < Key, T, Compare >::swap(TwoThree &other) noexcept
+  {
+    TwoThree temp(std::move(*this));
+    *this = std::move(other);
+    other = std::move(temp);
+  }
 
   template < class Key, class T, class Compare >
   typename TwoThree < Key, T, Compare >::iterator TwoThree < Key, T, Compare >::find(const Key &key)
