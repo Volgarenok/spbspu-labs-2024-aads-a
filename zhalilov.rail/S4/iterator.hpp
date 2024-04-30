@@ -28,8 +28,8 @@ namespace zhalilov
     const T &operator*() const;
     const T *operator->() const;
 
-    bool operator==(const TwoThreeIterator < T > &) const;
-    bool operator!=(const TwoThreeIterator < T > &) const;
+    bool operator==(const TwoThreeIterator &) const;
+    bool operator!=(const TwoThreeIterator &) const;
 
     template < class Key, class Value, class Compare >
     friend TwoThreeTree < Key, Value, Compare >;
