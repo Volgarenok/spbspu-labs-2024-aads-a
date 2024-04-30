@@ -17,4 +17,28 @@ void nikitov::printCmd(const std::map< std::string, std::map< size_t, std::strin
   {
     output << ' ' << (*i).first << ' ' << (*i).second;
   }
+  output << '\n';
+}
+
+void nikitov::unionCmd(std::map< std::string, std::map< size_t, std::string > >& tree, std::istream& input)
+{
+  std::string newDictName = {};
+  input >> newDictName;
+  std::string firstDictName = {};
+  input >> firstDictName;
+  std::string secondDictName = {};
+  input >> secondDictName;
+
+  std::map< size_t, std::string > newDict;
+  std::map< size_t, std::string > dict1 = tree.at(firstDictName);
+  std::map< size_t, std::string > dict2 = tree.at(secondDictName);
+  for (auto i = dict1.cbegin(); i != dict1.cend(); ++i)
+  {
+    newDict.insert({(*i).first, (*i).second });
+  }
+  for (auto i = dict2.cbegin(); i != dict2.cend(); ++i)
+  {
+    newDict.insert({(*i).first, (*i).second });
+  }
+  tree.insert({ newDictName, newDict });
 }

@@ -25,16 +25,16 @@ int main(int argc, char* argv[])
     return 1;
   }
 
-  std::map< std::string, std::function< void(const TreeOfDict&, std::istream&, std::ostream&) > > commands;
-  commands["print"] = printCmd;
+  std::map< std::string, std::function< void(TreeOfDict&, std::istream&) > > commands;
+  commands["print"] = std::bind(printCmd, std::placeholders::_1, std::placeholders::_2, std::ref(std::cout));
+  commands["union"] = unionCmd;
 
   std::string cmd = {};
   while (std::cin >> cmd)
   {
     try
     {
-      commands.at(cmd)(treeOfDictionaries, std::cin, std::cout);
-      std::cout << '\n';
+      commands.at(cmd)(treeOfDictionaries, std::cin);
     }
     catch(const std::out_of_range&)
     {
