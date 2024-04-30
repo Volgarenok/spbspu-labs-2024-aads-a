@@ -4,6 +4,8 @@
 #include <iterator>
 #include <memory>
 
+#include "treeNode.hpp"
+
 namespace rebdev
 {
   template < class Key, class Value, class Compare >
@@ -45,22 +47,27 @@ namespace rebdev
 
       iter & operator++()
       {
-        if ((node_->right) == nullptr)
+        node * nodeCopy = node_->parent;
+        if ((nodeCopy->right == node_) || (nodeCopy->right == nullptr))
         {
-          while ((node_->parent->right) == node_)
-          {
-            node_ = node_ ->parent;
-          }
-          node_ = node_->parent;
+          node_ = nodeCopy;
         }
         else
         {
-          node_ = node_->right;
-          while ((node_->left) != nullptr)
+          node_ = nodeCopy->right;
+          while ((node_->left != nullptr) || (node_->right != nullptr))
           {
-            node_ = node_->left;
+            while (node_->left != nullptr)
+            {
+              node_ = node_->left;
+            }
+            if (node_->right != nullptr)
+            {
+              node_ = node_->right;
+            }
           }
         }
+        nodeCopy = nullptr;
         return *this;
       }
       iter operator++(int)
@@ -71,21 +78,21 @@ namespace rebdev
       }
       iter & operator--()
       {
-        if ((node_->left) == nullptr)
+        if (node_->right != nullptr)
         {
-          while ((node_->parent->left) == node_)
-          {
-            node_ = node_ ->parent;
-          }
-          node_ = node_->parent;
+          node_ = node_->right;
+        }
+        else if (node_->left != nullptr)
+        {
+          node_ = node_->left;
         }
         else
         {
-          node_ = node_->left;
-          while ((node_->right) != nullptr)
+          while (!((node_->parent->right == node_) && (node_->parent->left != nullptr)))
           {
-            node_ = node_->right;
+            node_ = node_->parent;
           }
+          node_ = node_->parent->left;
         }
         return *this;
       }

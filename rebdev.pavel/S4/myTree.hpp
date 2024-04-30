@@ -33,20 +33,22 @@ namespace rebdev
       iterator begin()
       {
         node * beginNode = headNode_;
-        while ((beginNode->left) != (nullptr))
+        while ((beginNode->left != nullptr) || (beginNode->right != nullptr))
         {
-          beginNode = beginNode->left;
+          while (beginNode->left != nullptr)
+          {
+            beginNode = beginNode->left;
+          }
+          if (beginNode->right != nullptr)
+          {
+            beginNode = beginNode->right;
+          }
         }
         return iterator(beginNode);
       }
       iterator end()
       {
-        node * beginNode = headNode_;
-        while ((beginNode->right) != (nullptr))
-        {
-          beginNode = beginNode->right;
-        }
-        return iterator(beginNode);
+        return iterator(headNode_);
       }
       const_iterator cbegin() const
       {
@@ -66,6 +68,77 @@ namespace rebdev
         return size_;
       }
 
+      Value & operator[](const Key & k)
+      {
+        iterator it = find(k);
+        if (it != end())
+        {
+          return ((*it).second);
+        }
+
+        node * newNode = new node{nullptr, nullptr, nullptr, pair{k, Value{}}};
+        if (headNode_->right == nullptr)
+        {
+          headNode_->right = newNode;
+          newNode->parent = headNode_;
+        }
+        else
+        {
+          node * nodeNow = headNode_->right;
+          while (newNode->parent != nodeNow)
+          {
+            if (comp(nodeNow->data.first, k))
+            {
+              if ((nodeNow->right) == nullptr)
+              {
+                nodeNow->right = newNode;
+                newNode->parent = nodeNow;
+              }
+              else
+              {
+                nodeNow = nodeNow->right;
+              }
+            }
+            else
+            {
+              if ((nodeNow->left) == nullptr)
+              {
+                nodeNow->left = newNode;
+                newNode->parent = nodeNow;
+              }
+              else
+              {
+                nodeNow = nodeNow->left;
+              }
+            }
+          }
+        }
+        ++size_;
+        return newNode->data.second;
+      }
+      Value & operator[](Key && k)
+      {
+        return operator[](k);
+      }
+      Value & at (const Key & k)
+      {
+        iterator it = find(k);
+        if (it == end())
+        {
+          throw std::out_of_range("Can't find element in tree by method at");
+        }
+        return (*it).second;
+      }
+      const Value & at (const Key & k) const
+      {
+        const_iterator it = find(k);
+        if (it = cend())
+        {
+          throw std::out_of_range("Can't find element in tree by method at");
+        }
+        return (*it).second;
+      }
+
       void swap(AVLTree & tree)
       {
         std::swap(headNode_, tree.headNode_);
@@ -73,19 +146,14 @@ namespace rebdev
       }
       void clear() noexcept
       {
-        std::list< node * > deleteList;
         iterator it = begin();
         while (it != end())
         {
-          deleteList.push_back(it.node_);
+          node * nodeToDel = it.node_;
           ++it;
+          delete nodeToDel;
         }
-        auto listIter = deleteList.begin();
-        while (listIter != deleteList.end())
-        {
-          delete (*listIter);
-          ++listIter;
-        }
+        size_ = 0;
       }
 
       iterator find(const Key & k)
@@ -100,13 +168,14 @@ namespace rebdev
     private:
       node * headNode_;
       size_t size_;
+      Compare comp;
 
       node * findBase(const Key & k)
       {
         node * nodeNow = headNode_;
         while (nodeNow->data.first != k)
         {
-          if (Compare(k, nodeNow.first))
+          if (comp(nodeNow->data.first, k))
           {
             nodeNow = nodeNow->right;
           }
@@ -116,7 +185,7 @@ namespace rebdev
           }
           if (nodeNow == nullptr)
           {
-            break;
+            return headNode_;
           }
         }
         return nodeNow;
