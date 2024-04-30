@@ -20,6 +20,10 @@ namespace erohin
     using value_type = std::pair< Key, T >;
     RedBlackTree();
     ~RedBlackTree();
+    iterator begin();
+    iterator end();
+    const_iterator cbegin();
+    const_iterator cend();
     void clear();
     bool empty() const noexcept;
     std::pair< iterator, bool > insert(const value_type & value);
@@ -38,6 +42,35 @@ namespace erohin
   RedBlackTree< Key, T, Compare >::~RedBlackTree()
   {
     clear();
+  }
+
+  template< class Key, class T, class Compare >
+  TreeIterator< Key, T > RedBlackTree< Key, T, Compare >::begin()
+  {
+    iterator result = root_;
+    while (result->left_ || result->right_)
+    {
+      result = result->left_;
+    }
+    return result;
+  }
+
+  template< class Key, class T, class Compare >
+  TreeIterator< Key, T > RedBlackTree< Key, T, Compare >::end()
+  {
+    return iterator(nullptr);
+  }
+
+  template< class Key, class T, class Compare >
+  TreeConstIterator< Key, T > RedBlackTree< Key, T, Compare >::cbegin()
+  {
+    return const_iterator(begin().node_);
+  }
+
+  template< class Key, class T, class Compare >
+  TreeConstIterator< Key, T > RedBlackTree< Key, T, Compare >::cend()
+  {
+    return const_iterator(end().node_);
   }
 
   template< class Key, class T, class Compare >
@@ -78,7 +111,6 @@ namespace erohin
       }
       else if (cmp_(value.first, node->data_.first))
       {
-        std::cout << node->data_.first << " : " << value.first << "\n";
         node = node->left_;
       }
       else
@@ -86,7 +118,7 @@ namespace erohin
         node = node->right_;
       }
     }
-    node = new detail::Node< Key, T >(value, prev, prev->left_, prev->right_);
+    node = new detail::Node< Key, T >(value, prev, nullptr, nullptr);
     if (cmp_(node->data_.first, prev->data_.first))
     {
       prev->left_ = node;
@@ -95,7 +127,6 @@ namespace erohin
     {
       prev->right_ = node;
     }
-    std::cout << node << " " << node->parent_ << " " << node->left_ << " " << node->right_ << "\n";
     return std::make_pair(iterator(node), true);
   }
 
