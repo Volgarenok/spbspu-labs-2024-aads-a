@@ -35,8 +35,8 @@ int main(int argc, char* argv[])
       {
         std::string rhsName = "";
         std::string lhsName = "";
-        std::cin >> rhsName >> lhsName;
-        cmdsForCreate.at(name)(map, nameDataSet, rhsName, lhsName);
+        std::cin >> lhsName >> rhsName;
+        cmdsForCreate.at(name)(map, nameDataSet, lhsName, rhsName);
       }
       catch (const std::out_of_range&)
       {

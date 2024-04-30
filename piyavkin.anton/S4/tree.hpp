@@ -14,8 +14,8 @@ namespace piyavkin
       root_(nullptr),
       cmp_(Compare()),
       size_(0),
-      before_min_(Key(), nullptr, nullptr, nullptr, T()),
-      end_node_(Key(), nullptr, nullptr, nullptr, T())
+      before_min_(Key(), nullptr, nullptr, std::addressof(end_node_), T()),
+      end_node_(Key(), nullptr, nullptr, std::addressof(before_min_), T())
     {}
     template< class InputIterator >
     Tree(InputIterator first, InputIterator second):
@@ -78,13 +78,13 @@ namespace piyavkin
         {
           detail::TreeNode< Key, T >* left = root_;
           detail::TreeNode< Key, T >* right = root_;
-          while (left->left_->parent_ || right->right_->parent_)
+          while (left->left_ || right->right_)
           {
-            if (left->left_->parent_)
+            if (left->left_)
             {
               left = left->left_;
             }
-            if (right->right_->parent_)
+            if (right->right_)
             {
               right = right->right_;
             }
