@@ -23,6 +23,9 @@ namespace zhalilov
     TwoThree(TwoThree &&) noexcept;
     ~TwoThree();
 
+    TwoThree &operator=(const TwoThree &);
+    TwoThree &operator=(TwoThree &&) noexcept;
+
     T &at(const Key &);
     const T &at(const Key &) const;
     T &operator[](const Key &);
@@ -82,6 +85,28 @@ namespace zhalilov
   TwoThree < Key, T, Compare >::~TwoThree()
   {
     clear();
+  }
+
+  template < class Key, class T, class Compare >
+  TwoThree < Key, T, Compare > &TwoThree < Key, T, Compare >::operator=(const TwoThree &other)
+  {
+    TwoThree temp(other);
+    swap(temp);
+    return *this;
+  }
+
+  template < class Key, class T, class Compare >
+  TwoThree < Key, T, Compare > &TwoThree < Key, T, Compare >::operator=(TwoThree &&other) noexcept
+  {
+    if (head_ != other.head_)
+    {
+      clear();
+      head_ = other.head_;
+      size_ = other.size_;
+      other.head_ = nullptr;
+      other.size_ = 0;
+    }
+    return *this;
   }
 
   template < class Key, class T, class Compare >
