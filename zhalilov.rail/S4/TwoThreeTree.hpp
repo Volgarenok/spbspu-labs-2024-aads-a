@@ -146,19 +146,19 @@ namespace zhalilov
   template < class Key, class T, class Compare >
   typename TwoThree < Key, T, Compare >::iterator TwoThree < Key, T, Compare >::begin()
   {
-    return iterator(iterator::findMin(head_->left), true);
+    return iterator(iterator::findMin(head_->right), true);
   }
 
   template < class Key, class T, class Compare >
   typename TwoThree < Key, T, Compare >::const_iterator TwoThree < Key, T, Compare >::begin() const
   {
-    return const_iterator(const_iterator::findMin(head_->left), true);
+    return const_iterator(const_iterator::findMin(head_->right), true);
   }
 
   template < class Key, class T, class Compare >
   typename TwoThree < Key, T, Compare >::const_iterator TwoThree < Key, T, Compare >::cbegin() const noexcept
   {
-    return const_iterator(const_iterator::findMin(head_->left), true);
+    return const_iterator(const_iterator::findMin(head_->right), true);
   }
 
   template < class Key, class T, class Compare >
@@ -198,7 +198,7 @@ namespace zhalilov
     {
       head_ = createTwoNode(nullptr, MapPair());
       Node *newNode = createTwoNode(head_, newPair);
-      head_->left = newNode;
+      head_->right = newNode;
       size_++;
       return std::make_pair(begin(), true);
     }
@@ -268,16 +268,30 @@ namespace zhalilov
   template < class Key, class T, class Compare >
   void TwoThree < Key, T, Compare >::clear() noexcept
   {
-    auto it = begin();
-    auto endIt = end();
-    while (it != endIt)
+    if (empty())
     {
-      auto prevIt = it;
-      it++;
-      if (prevIt.node_->parent == it.node_)
+      return;
+    }
+    Node *currNode = iterator::findMin(head_);
+    while (currNode != head_)
+    {
+      Node *nextNode = nullptr;
+      Node *parentNode = currNode->parent;
+      if (parentNode->left == currNode)
       {
-        delete prevIt.node_;
+        nextNode = parentNode->mid ? parentNode->mid : parentNode->right;
+        nextNode = iterator::findMin(nextNode);
       }
+      else if (parentNode->mid == currNode)
+      {
+        nextNode = iterator::findMin(parentNode->right);
+      }
+      else
+      {
+        nextNode = parentNode;
+      }
+      delete currNode;
+      currNode = nextNode;
     }
     delete head_;
     size_ = 0;
@@ -316,7 +330,7 @@ namespace zhalilov
   template < class Key, class T, class Compare >
   std::pair < typename TwoThree < Key, T, Compare >::iterator, bool > TwoThree < Key, T, Compare >::doFind(const Key &key)
   {
-    Node *currNode = head_->left;
+    Node *currNode = head_->right;
     while (currNode)
     {
       Node *proposedNext = currNode->right;
