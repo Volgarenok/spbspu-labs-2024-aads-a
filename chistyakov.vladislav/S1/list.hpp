@@ -211,7 +211,7 @@ namespace chistyakov
         {
           tmp.push_back(value);
         }
-        
+
         swap(tmp);
       }
 

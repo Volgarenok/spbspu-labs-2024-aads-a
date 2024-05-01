@@ -84,4 +84,3 @@ void chistyakov::outPutSums(List < std::pair < size_t, List < size_t > > > & lis
     }
   }
 }
-
