@@ -13,9 +13,11 @@ namespace nikitov
   public:
     Tree();
     Tree(const Tree< Key, T, Compare >& other);
+    Tree(Tree< Key, T, Compare >&& other);
     ~Tree();
 
     Tree< Key, T, Compare >& operator=(const Tree& other);
+    Tree< Key, T, Compare >& operator=(Tree&& other);
 
     T& operator[](const Key& key);
     T& at(const Key& key);
@@ -60,6 +62,16 @@ namespace nikitov
   }
 
   template< class Key, class T, class Compare >
+  Tree< Key, T, Compare >::Tree(Tree< Key, T, Compare >&& other):
+    root_(other.root_),
+    size_(other.size_),
+    cmp_(other.cmp_)
+  {
+    other.root_ = nullptr;
+    other.size_ = 0;
+  }
+
+  template< class Key, class T, class Compare >
   Tree< Key, T, Compare >::~Tree()
   {
     clear();
@@ -70,6 +82,17 @@ namespace nikitov
   Tree< Key, T, Compare >& Tree< Key, T, Compare >::operator=(const Tree& other)
   {
     Tree< Key, T, Compare > temp(other);
+    if (std::addressof(other) != this)
+    {
+      swap(temp);
+    }
+    return *this;
+  }
+
+  template< class Key, class T, class Compare >
+  Tree< Key, T, Compare >& Tree< Key, T, Compare >::operator=(Tree&& other)
+  {
+    Tree< Key, T, Compare > temp(std::move(other));
     if (std::addressof(other) != this)
     {
       swap(temp);
