@@ -161,37 +161,40 @@ namespace erohin
   template< class Key, class T, class Compare >
   std::pair< TreeIterator< Key, T >, bool > RedBlackTree< Key, T, Compare >::insert(const value_type & value)
   {
+    detail::Node< Key, T > * node = root_;
     if (empty())
     {
       root_ = new detail::Node< Key, T >(value, nullptr, nullptr, nullptr);
-      return std::make_pair(iterator(root_), true);
-    }
-    detail::Node< Key, T > * node = root_;
-    detail::Node< Key, T > * prev = node;
-    while (node)
-    {
-      prev = node;
-      if (node->data_.first == value.first)
-      {
-        return std::make_pair(iterator(node), false);
-      }
-      else if (cmp_(value.first, node->data_.first))
-      {
-        node = node->left_;
-      }
-      else
-      {
-        node = node->right_;
-      }
-    }
-    node = new detail::Node< Key, T >(value, prev, nullptr, nullptr);
-    if (cmp_(node->data_.first, prev->data_.first))
-    {
-      prev->left_ = node;
+      node = root_;
     }
     else
     {
-      prev->right_ = node;
+      detail::Node< Key, T > * prev = node;
+      while (node)
+      {
+        prev = node;
+        if (node->data_.first == value.first)
+        {
+          return std::make_pair(iterator(node), false);
+        }
+        else if (cmp_(value.first, node->data_.first))
+        {
+          node = node->left_;
+        }
+        else
+        {
+          node = node->right_;
+        }
+      }
+      node = new detail::Node< Key, T >(value, prev, nullptr, nullptr);
+      if (cmp_(node->data_.first, prev->data_.first))
+      {
+        prev->left_ = node;
+      }
+      else
+      {
+        prev->right_ = node;
+      }
     }
     insert_balance(node);
     return std::make_pair(iterator(node), true);
@@ -288,11 +291,6 @@ namespace erohin
   void RedBlackTree< Key, T, Compare >::insert_balance(detail::Node< Key, T > * subtree)
   {
     insert_balance_case1(subtree);
-    insert_balance_case2(subtree);
-    insert_balance_case3(subtree);
-    insert_balance_case4(subtree);
-    insert_balance_case5(subtree);
-    return;
   }
 
   template< class Key, class T, class Compare >
@@ -306,35 +304,66 @@ namespace erohin
     {
       insert_balance_case2(subtree);
     }
-    return;
   }
 
   template< class Key, class T, class Compare >
   void RedBlackTree< Key, T, Compare >::insert_balance_case2(detail::Node< Key, T > * subtree)
   {
-    subtree = subtree->parent_;
-    return;
+    if (subtree->parent_->color_ == 1)
+    {
+      insert_balance_case3(subtree);
+    }
   }
 
   template< class Key, class T, class Compare >
   void RedBlackTree< Key, T, Compare >::insert_balance_case3(detail::Node< Key, T > * subtree)
   {
-    subtree = subtree->parent_;
-    return;
+    detail::Node< Key, T > * uncle = find_uncle(subtree);
+    if (uncle && uncle->color_ == 1)
+    {
+      subtree->parent_->color_ = 0;
+      uncle->color_ = 0;
+      detail::Node< Key, T > * grand = find_grandparent(subtree);
+      grand->color_ = 1;
+      insert_balance_case1(grand);
+    }
+    else
+    {
+      insert_balance_case4(subtree);
+    }
   }
 
   template< class Key, class T, class Compare >
   void RedBlackTree< Key, T, Compare >::insert_balance_case4(detail::Node< Key, T > * subtree)
   {
-    subtree = subtree->parent_;
-    return;
+    detail::Node< Key, T > * grand = find_grandparent(subtree);
+    if (subtree == subtree->parent_->right_ && subtree->parent_ == grand->left_)
+    {
+      rotate_left(subtree->parent_);
+      subtree = subtree->left_;
+    }
+    else if (subtree == subtree->parent_->left_ && subtree->parent_ == grand->right_)
+    {
+      rotate_right(subtree->parent_);
+      subtree = subtree->right_;
+    }
+    insert_balance_case5(subtree);
   }
 
   template< class Key, class T, class Compare >
   void RedBlackTree< Key, T, Compare >::insert_balance_case5(detail::Node< Key, T > * subtree)
   {
-    subtree = subtree->parent_;
-    return;
+    detail::Node< Key, T > * grand = find_grandparent(subtree);
+    subtree->parent_->color_ = 0;
+    grand->color_ = 1;
+    if (subtree == subtree->parent_->left_ && subtree->parent_ == grand->left_)
+    {
+      rotate_right(grand);
+    }
+    else
+    {
+      rotate_left(grand);
+    }
   }
 
   template< class Key, class T, class Compare >

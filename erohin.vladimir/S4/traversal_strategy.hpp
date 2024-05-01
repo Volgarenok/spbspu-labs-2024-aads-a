@@ -27,6 +27,10 @@ namespace erohin
       }
       else
       {
+        if (!node->parent_)
+        {
+          return nullptr;
+        }
         while (node->parent_->right_ == node)
         {
           node = node->parent_;

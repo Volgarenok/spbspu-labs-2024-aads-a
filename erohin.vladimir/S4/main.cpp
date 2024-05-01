@@ -23,7 +23,7 @@ int main(int argc, char ** argv)
     int_dict.insert(std::make_pair(5, 50));
     for (auto iter: int_dict)
     {
-      std::cout << iter.first << " ";
+      std::cout << std::endl << "//" << iter.first << "//" << std::endl;
     }
   }
 
