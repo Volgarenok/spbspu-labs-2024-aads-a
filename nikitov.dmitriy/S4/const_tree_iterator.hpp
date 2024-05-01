@@ -9,7 +9,7 @@ namespace nikitov
   class Tree;
 
   template< class Key, class T, class Compare = std::less< Key > >
-  class ConstTreeIterator: public std::iterator< std::bidirectional_iterator_tag, T >
+  class ConstTreeIterator : public std::iterator< std::bidirectional_iterator_tag, T >
   {
     friend class Tree< Key, T, Compare >;
   private:
@@ -41,7 +41,7 @@ namespace nikitov
   };
 
   template< class Key, class T, class Compare >
-  ConstTreeIterator< Key, T, Compare >::ConstTreeIterator(detail::TreeNode< Key, T, Compare >* node):
+  ConstTreeIterator< Key, T, Compare >::ConstTreeIterator(detail::TreeNode< Key, T, Compare >* node) :
     isFirst_(true),
     node_(node)
   {}
@@ -72,8 +72,15 @@ namespace nikitov
       {
         node_ = node_->parent_;
       }
+      if (node_->parent_->middle_ == node_ && node_->parent_->parent_)
+      {
+        isFirst_ = false;
+      }
+      else
+      {
+        isFirst_ = true;
+      }
       node_ = node_->parent_;
-      isFirst_ = true;
     }
     else if (node_->parent_->middle_ == node_)
     {
