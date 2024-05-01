@@ -138,12 +138,17 @@ namespace nikitov
   template< class Key, class T, class Compare >
   ConstTreeIterator< Key, T, Compare > Tree< Key, T, Compare >::find(const Key& key) const
   {
-    ConstTreeIterator< Key, T, Compare > iterator(search(root_, key));
-    if (!(iterator.node_->firstValue_.first == key))
+    detail::TreeNode< Key, T, Compare >* node = search(root_, key);
+    if (node)
     {
-      iterator.isFirst_ = false;
+      ConstTreeIterator< Key, T, Compare > iterator(node);
+      if (!(iterator.node_->firstValue_.first == key))
+      {
+        iterator.isFirst_ = false;
+      }
+      return iterator;
     }
-    return iterator;
+    return cend();
   }
 
   template< class Key, class T, class Compare >
