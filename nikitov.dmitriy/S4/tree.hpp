@@ -21,6 +21,7 @@ namespace nikitov
     Tree< Key, T, Compare >& operator=(Tree&& other);
 
     T& operator[](const Key& key);
+    T& operator[](Key&& key);
     T& at(const Key& key);
     const T& at(const Key& key) const;
 
@@ -114,6 +115,19 @@ namespace nikitov
       return node->get(key);
     }
     insert({ key, T() });
+    node = search(root_, key);
+    return node->get(key);
+  }
+
+  template< class Key, class T, class Compare >
+  T& Tree< Key, T, Compare >::operator[](Key&& key)
+  {
+    detail::TreeNode< Key, T, Compare >* node = search(root_, key);
+    if (node)
+    {
+      return node->get(key);
+    }
+    insert({ std::move(key), T() });
     node = search(root_, key);
     return node->get(key);
   }
