@@ -3,6 +3,7 @@
 
 #include "tree_node.hpp"
 #include <functional>
+#include <exception>
 #include "tree_iterator.hpp"
 #include "const_tree_iterator.hpp"
 
