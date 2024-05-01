@@ -20,6 +20,7 @@ namespace nikitov
     const std::pair< Key, T >* operator->() const;
 
     ConstTreeIterator< Key, T, Compare >& operator++();
+    ConstTreeIterator< Key, T, Compare > operator++(int);
 
     ConstTreeIterator< Key, T, Compare >& operator=(const ConstTreeIterator< Key, T, Compare >&) = default;
 
@@ -69,44 +70,52 @@ namespace nikitov
   template< class Key, class T, class Compare >
   ConstTreeIterator< Key, T, Compare >& ConstTreeIterator< Key, T, Compare >::operator++()
   {
-      if (isFirst_ && node_->size_ == 2)
-  {
-    if (node_->middle_)
+    if (isFirst_ && node_->size_ == 2)
     {
-      node_ = node_->middle_;
+      if (node_->middle_)
+      {
+        node_ = node_->middle_;
+        fallLeft();
+      }
+      else
+      {
+        isFirst_ = false;
+      }
+    }
+    else if (node_->right_)
+    {
+      node_ = node_->right_;
       fallLeft();
+    }
+    else if (node_->parent_->right_ == node_)
+    {
+      while (node_->parent_->right_ == node_)
+      {
+        node_ = node_->parent_;
+      }
+      node_ = node_->parent_;
+      isFirst_ = true;
+    }
+    else if (node_->parent_->middle_ == node_)
+    {
+      node_ = node_->parent_;
+      isFirst_ = false;
     }
     else
     {
-      isFirst_ = false;
-    }
-  }
-  else if (node_->right_)
-  {
-    node_ = node_->right_;
-    fallLeft();
-  }
-  else if (node_->parent_->right_ == node_)
-  {
-    while (node_->parent_->right_ == node_)
-    {
       node_ = node_->parent_;
+      isFirst_ = true;
     }
-    node_ = node_->parent_;
-    isFirst_ = true;
+    return *this;
   }
-  else if (node_->parent_->middle_ == node_)
+
+  template< class Key, class T, class Compare >
+  ConstTreeIterator< Key, T, Compare > ConstTreeIterator< Key, T, Compare >::operator++(int)
   {
-    node_ = node_->parent_;
-    isFirst_ = false;
+    ConstTreeIterator< Key, T, Compare > temp(*this);
+    ++*this;
+    return temp;
   }
-  else
-  {
-    node_ = node_->parent_;
-    isFirst_ = true;
-  }
-  return *this;
-}
 
   template< class Key, class T, class Compare >
   bool ConstTreeIterator< Key, T, Compare >::operator==(const ConstTreeIterator< Key, T, Compare >& other) const
