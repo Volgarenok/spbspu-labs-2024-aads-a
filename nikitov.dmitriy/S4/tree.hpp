@@ -54,6 +54,16 @@ namespace nikitov
   T& Tree< Key, T, Compare >::operator[](const Key& key)
   {
     detail::TreeNode< Key, T, Compare >* node = search(root_, key);
+    if (node)
+    {
+      if (node->firstValue_.first == key)
+      {
+        return node->firstValue_.second;
+      }
+      return node->secondValue_.second;
+    }
+    insert({ key, T() });
+    node = search(root_, key);
     if (node->firstValue_.first == key)
     {
       return node->firstValue_.second;
