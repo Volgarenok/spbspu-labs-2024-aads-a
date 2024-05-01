@@ -35,10 +35,12 @@ namespace erohin
     bool empty() const noexcept;
     std::pair< iterator, bool > insert(const value_type & value);
     std::pair< iterator, bool > erase(const Key & key);
-    void swap(RedBlackTree & rhs);
+    void swap(RedBlackTree & rhs) noexcept;
+    size_t size() const noexcept;
   private:
     detail::Node< Key, T > * root_;
     Compare cmp_;
+    size_t size_;
     void clear_subtree(detail::Node< Key, T > * subtree);
     detail::Node< Key, T > * find_to_change_erased(detail::Node< Key, T > * subtree);
     detail::Node< Key, T > * find_grandparent(detail::Node< Key, T > * subtree);
@@ -62,7 +64,8 @@ namespace erohin
 
   template< class Key, class T, class Compare >
   RedBlackTree< Key, T, Compare >::RedBlackTree():
-    root_(nullptr)
+    root_(nullptr),
+    size_(0)
   {}
 
   template< class Key, class T, class Compare >
@@ -72,9 +75,11 @@ namespace erohin
 
   template< class Key, class T, class Compare >
   RedBlackTree< Key, T, Compare >::RedBlackTree(RedBlackTree< Key, T, Compare > && rhs) noexcept:
-    root_(rhs.root_)
+    root_(rhs.root_),
+    size_(rhs.size_)
   {
     rhs.root_ = nullptr;
+    rhs.size_ = 0;
   }
 
   template< class Key, class T, class Compare >
@@ -162,6 +167,7 @@ namespace erohin
   {
     clear_subtree(root_);
     root_ = nullptr;
+    size_ = 0;
   }
 
   template< class Key, class T, class Compare >
@@ -172,6 +178,7 @@ namespace erohin
     {
       root_ = new detail::Node< Key, T >(value, nullptr, nullptr, nullptr);
       node = root_;
+      ++size_;
     }
     else
     {
@@ -203,6 +210,7 @@ namespace erohin
       }
     }
     insert_balance_case1(node);
+    ++size_;
     return std::make_pair(iterator(node), true);
   }
 
@@ -258,6 +266,7 @@ namespace erohin
     erase_balance_case1(found);
     auto iter = iterator(to_delete);
     delete found;
+    ++size_;
     return std::make_pair(++iter, true);
   }
 
@@ -268,9 +277,15 @@ namespace erohin
   }
 
   template< class Key, class T, class Compare >
-  void RedBlackTree< Key, T, Compare >::swap(RedBlackTree< Key, T, Compare > & rhs)
+  void RedBlackTree< Key, T, Compare >::swap(RedBlackTree< Key, T, Compare > & rhs) noexcept
   {
     std::swap(root_, rhs.root_);
+  }
+
+  template< class Key, class T, class Compare >
+  size_t RedBlackTree< Key, T, Compare >::size() const noexcept
+  {
+    return size_;
   }
 
   template< class Key, class T, class Compare >
@@ -286,7 +301,7 @@ namespace erohin
     delete subtree;
   }
 
-    template< class Key, class T, class Compare >
+  template< class Key, class T, class Compare >
   detail::Node< Key, T > * RedBlackTree< Key, T, Compare >::find_to_change_erased(detail::Node< Key, T > * subtree)
   {
     if (subtree->left_)
