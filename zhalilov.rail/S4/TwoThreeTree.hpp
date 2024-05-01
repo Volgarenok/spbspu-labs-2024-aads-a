@@ -42,6 +42,9 @@ namespace zhalilov
     size_t size() const;
 
     std::pair < iterator, bool > insert(const MapPair &);
+    iterator erase(iterator);
+    iterator erase(const_iterator);
+    char erase(const Key &);
     void clear() noexcept;
     void swap(TwoThree &) noexcept;
 
@@ -57,6 +60,9 @@ namespace zhalilov
     Node *createTwoNode(const MapPair &) const;
     Node *createThreeNode(const MapPair &, const MapPair &) const;
     void connectNodes(Node *parent, Node *left, Node *right, Node *mid = nullptr);
+
+    bool eraseAndBalanceFromBros(iterator);
+    void eraseAndBalanceFromParents(iterator);
   };
 
   template < class Key, class T, class Compare >
@@ -266,6 +272,36 @@ namespace zhalilov
   }
 
   template < class Key, class T, class Compare >
+  typename TwoThree < Key, T, Compare >::iterator TwoThree < Key, T, Compare >::erase(iterator it)
+  {
+    if (it.node_->left)
+    {
+      Node *nodeFrom = nullptr;
+      if (it.node_->type == detail::NodeType::Three && !it.isPtrToLeft_)
+      {
+        nodeFrom = it.node_->mid;
+      }
+      else
+      {
+        nodeFrom = it.node_->left;
+      }
+      iterator toSwapIt(iterator::findMax(nodeFrom), false);
+      std::swap(*it, *toSwapIt);
+      it = toSwapIt;
+    }
+    if (it.node_->type == detail::NodeType::Three)
+    {
+      if (!it.isPtrToLeft_)
+      {
+        std::swap(it.node_->one, it.node->two);
+      }
+      it.node_->type = detail::NodeType::Two;
+    }
+    else if (!eraseAndBalanceFromBros(it))
+    {}
+  }
+
+  template < class Key, class T, class Compare >
   void TwoThree < Key, T, Compare >::clear() noexcept
   {
     if (empty())
@@ -384,6 +420,128 @@ namespace zhalilov
       {
         mid->parent = parent;
       }
+    }
+  }
+
+  template < class Key, class T, class Compare >
+  bool TwoThree < Key, T, Compare >::eraseAndBalanceFromBros(iterator it)
+  {
+    Node *parentNode = it.node_->parent;
+    if (parentNode->mid && parentNode->mid == it.node_)
+    {
+      if (parentNode->left->type == detail::NodeType::Three)
+      {
+        std::swap(parentNode->one, it.node_->one);
+        std::swap(parentNode->one, parentNode->left->two);
+        parentNode->left->type = detail::NodeType::Two;
+        return true;
+      }
+      else if (parentNode->right->type == detail::NodeType::Three)
+      {
+        std::swap(parentNode->two, it.node_->one);
+        std::swap(parentNode->two, parentNode->right->one);
+        std::swap(parentNode->right->one, parentNode->right->two);
+        parentNode->right->type = detail::NodeType::Two;
+        return true;
+      }
+      return false;
+    }
+    else if (parentNode->right == it.node_)
+    {
+      if (parentNode->mid)
+      {
+        if (parentNode->mid->type == detail::NodeType::Three)
+        {
+          std::swap(parentNode->two, parentNode->right->one);
+          std::swap(parentNode->two, parentNode->mid->two);
+          parentNode->mid->type = detail::NodeType::Two;
+          return true;
+        }
+        else if (parentNode->left->type == detail::NodeType::Three)
+        {
+          std::swap(parentNode->two, parentNode->right->one);
+          std::swap(parentNode->two, parentNode->mid->one);
+          std::swap(parentNode->one, parentNode->mid->one);
+          std::swap(parentNode->one, parentNode->left->two);
+          parentNode->left->type = detail::NodeType::Two;
+          return true;
+        }
+      }
+      else if (parentNode->left->type == detail::NodeType::Three)
+      {
+        std::swap(parentNode->one, parentNode->right->one);
+        std::swap(parentNode->one, parentNode->left->two);
+        parentNode->left->type = detail::NodeType::Two;
+        return true;
+      }
+      return false;
+    }
+    else if (parentNode->left == it.node_)
+    {
+      if (parentNode->mid)
+      {
+        if (parentNode->mid->type == detail::NodeType::Three)
+        {
+          std::swap(parentNode->one, parentNode->left->one);
+          std::swap(parentNode->one, parentNode->mid->one);
+          std::swap(parentNode->mid->two, parentNode->mid->one);
+          parentNode->mid->type = detail::NodeType::Two;
+          return true;
+        }
+        else if (parentNode->right->type == detail::NodeType::Three)
+        {
+          std::swap(parentNode->one, parentNode->left->one);
+          std::swap(parentNode->one, parentNode->mid->one);
+          std::swap(parentNode->two, parentNode->mid->one);
+          std::swap(parentNode->two, parentNode->right->one);
+          std::swap(parentNode->right->two, parentNode->right->one);
+          parentNode->left->type = detail::NodeType::Two;
+          return true;
+        }
+        return false;
+      }
+      else if (parentNode->right->type == detail::NodeType::Three)
+      {
+        std::swap(parentNode->one, parentNode->left->one);
+        std::swap(parentNode->one, parentNode->right->one);
+        std::swap(parentNode->right->two, parentNode->right->one);
+        parentNode->left->type = detail::NodeType::Two;
+        return true;
+      }
+      return false;
+    }
+  }
+
+  template < class Key, class T, class Compare >
+  void TwoThree < Key, T, Compare >::eraseAndBalanceFromParents(iterator it)
+  {
+    if (it.node_->parent->type == detail::NodeType::Three)
+    {
+      Node *parentNode = it.node_->parent;
+      if (parentNode->left == it.node_)
+      {
+        std::swap(parentNode->one, parentNode->mid->two);
+        std::swap(parentNode->mid->one, parentNode->mid->two);
+        std::swap(parentNode->one, parentNode->two);
+        connectNodes(parentNode, parentNode->mid, parentNode->right);
+        parentNode->mid->type = detail::NodeType::Three;
+        delete it.node_;
+      }
+      else if (parentNode->mid == it.node_)
+      {
+        std::swap(parentNode->one, parentNode->left->two);
+        std::swap(parentNode->one, parentNode->two);
+        parentNode->left->type = detail::NodeType::Three;
+        delete it.node_;
+      }
+      else
+      {
+        std::swap(parentNode->two, parentNode->mid->two);
+        parentNode->mid->type = detail::NodeType::Three;
+        connectNodes(parentNode, parentNode->left, parentNode->mid);
+        delete it.node_;
+      }
+      parentNode->type = detail::NodeType::Two;
     }
   }
 }
