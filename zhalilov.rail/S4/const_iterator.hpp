@@ -61,7 +61,7 @@ namespace zhalilov
     detail::Node < T > *minRight = findMin(node_->right);
     if (minRight == node_)
     {
-      while (node_->parent->right == node_)
+      while (node_->parent && node_->parent->right == node_)
       {
         node_ = node_->parent;
       }
@@ -99,6 +99,7 @@ namespace zhalilov
       {
         node_ = node_->parent;
       }
+      node_ = node_->parent;
     }
     else
     {
