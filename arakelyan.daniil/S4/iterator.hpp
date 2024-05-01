@@ -2,25 +2,27 @@
 #define ITERATOR_HPP
 
 #include <cassert>
+#include <functional>
 #include <memory>
 
 #include "node.hpp"
 
 namespace arakelyan
 {
-  template < class T >
+  template < class Key, class Value, class Comparator >
   struct RBTree;
 
-  template < class T >
+  template < class Key, class Value, class Comparator >
   struct Iterator
   {
   public:
-    friend struct RBTree< T >;
+    friend struct RBTree< Key, Value, Comparator >;
+    using value_t = std::pair< Key, Value >;
 
     Iterator();
-    Iterator(const Iterator< T > &val) = default;
+    Iterator(const Iterator &val) = default;
     ~Iterator() = default;
-    Iterator &operator=(const Iterator< T > &val) = default;
+    Iterator &operator=(const Iterator &val) = default;
 
     Iterator &operator++();
     Iterator operator++(int);
@@ -28,20 +30,20 @@ namespace arakelyan
     Iterator &operator--();
     Iterator operator--(int);
 
-    const T &operator*() const;
-    const T *operator->() const;
-    T &operator*();
-    T *operator->();
+    const value_t &operator*() const;
+    const value_t *operator->() const;
+    value_t &operator*();
+    value_t *operator->();
 
-    bool operator!=(Iterator< T > otherI) const;
-    bool operator==(Iterator< T > otherI) const;
+    bool operator!=(Iterator otherI) const;
+    bool operator==(Iterator otherI) const;
 
   private:
-    explicit Iterator(detail::Node< T > *val);
+    explicit Iterator(detail::Node< Key, Value > *val);
 
     void next()
     {
-      detail::Node< T > *temp = node_;
+      detail::Node< Key, Value > *temp = node_;
       if (temp)
       {
         if (temp->right_)
@@ -54,7 +56,7 @@ namespace arakelyan
         }
         else
         {
-          detail::Node< T > *parent = temp->parent_;
+          detail::Node< Key, Value > *parent = temp->parent_;
           while (parent && temp == parent->right_)
           {
             temp = parent;
@@ -68,7 +70,7 @@ namespace arakelyan
 
     void prev()
     {
-      detail::Node< T > *temp = node_;
+      detail::Node< Key, Value > *temp = node_;
       if (temp)
       {
         if (temp->left_)
@@ -81,7 +83,7 @@ namespace arakelyan
         }
         else
         {
-          detail::Node< T > *parent = temp->parent_;
+          detail::Node< Key, Value > *parent = temp->parent_;
           while (parent && temp == parent->left_)
           {
             temp = parent;
@@ -93,16 +95,16 @@ namespace arakelyan
       }
     }
 
-    detail::Node< T > *node_;
+    detail::Node< Key, Value > *node_;
   };
 
-  template < class T >
-  Iterator< T >::Iterator():
+  template < class Key, class Value, class Comparator >
+  Iterator< Key, Value, Comparator >::Iterator():
     node_(nullptr)
   {}
 
-  template < class T >
-  Iterator< T >::Iterator(detail::Node< T > *root):
+  template < class Key, class Value, class Comparator >
+  Iterator< Key, Value, Comparator >::Iterator(detail::Node< Key, Value > *root):
     node_(root)
   {
     while (node_ && node_->left_)
@@ -111,16 +113,16 @@ namespace arakelyan
     }
   }
 
-  template < class T >
-  Iterator< T > &Iterator< T >::operator++()
+  template < class Key, class Value, class Comparator >
+  Iterator< Key, Value, Comparator > &Iterator< Key, Value, Comparator >::operator++()
   {
     assert(node_ != nullptr);
     next();
     return *this;
   }
 
-  template < class T >
-  Iterator< T > Iterator< T >::operator++(int)
+  template < class Key, class Value, class Comparator >
+  Iterator< Key, Value, Comparator > Iterator< Key, Value, Comparator >::operator++(int)
   {
     assert(node_ != nullptr);
     Iterator res(*this);
@@ -128,16 +130,16 @@ namespace arakelyan
     return res;
   }
 
-  template < class T >
-  Iterator< T > &Iterator< T >::operator--()
+  template < class Key, class Value, class Comparator >
+  Iterator< Key, Value, Comparator > &Iterator< Key, Value, Comparator >::operator--()
   {
     assert(node_ != nullptr);
     prev();
     return *this;
   }
 
-  template < class T >
-  Iterator< T > Iterator< T >::operator--(int)
+  template < class Key, class Value, class Comparator >
+  Iterator< Key, Value, Comparator > Iterator< Key, Value, Comparator >::operator--(int)
   {
     assert(node_ != nullptr);
     Iterator res(*this);
@@ -145,42 +147,42 @@ namespace arakelyan
     return res;
   }
 
-  template < class T >
-  const T &Iterator< T >::operator*() const
+  template < class Key, class Value, class Comparator >
+  const std::pair< Key, Value > &Iterator< Key, Value, Comparator >::operator*() const
   {
     assert(node_ != nullptr);
     return node_->data_;
   }
 
-  template < class T >
-  const T *Iterator< T >::operator->() const
+  template < class Key, class Value, class Comparator >
+  const std::pair< Key, Value > *Iterator< Key, Value, Comparator >::operator->() const
   {
     assert(node_ != nullptr);
     return std::addressof(node_->data_);
   }
 
-  template < class T >
-  T &Iterator< T >::operator*()
+  template < class Key, class Value, class Comparator >
+  std::pair< Key, Value > &Iterator< Key, Value, Comparator >::operator*()
   {
     assert(node_ != nullptr);
     return node_->data_;
   }
 
-  template < class T >
-  T *Iterator< T >::operator->()
+  template < class Key, class Value, class Comparator >
+  std::pair< Key, Value > *Iterator< Key, Value, Comparator >::operator->()
   {
     assert(node_ != nullptr);
     return std::addressof(node_->data_);
   }
 
-  template < class T >
-  bool Iterator< T >::operator!=(Iterator< T > otherI) const
+  template < class Key, class Value, class Comparator >
+  bool Iterator< Key, Value, Comparator >::operator!=(Iterator< Key, Value, Comparator > otherI) const
   {
     return !(*this == otherI);
   }
 
-  template < class T >
-  bool Iterator< T >::operator==(Iterator< T > otherI) const
+  template < class Key, class Value, class Comparator >
+  bool Iterator< Key, Value, Comparator >::operator==(Iterator< Key, Value, Comparator > otherI) const
   {
     return node_ == otherI.node_;
   }

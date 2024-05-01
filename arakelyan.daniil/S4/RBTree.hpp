@@ -1,9 +1,11 @@
 #ifndef RBTREE_HPP
 #define RBTREE_HPP
 
+#include <functional>
 #include <iostream>
 #include <memory>
 #include <initializer_list>
+#include <utility>
 
 #include "node.hpp"
 #include "iterator.hpp"
@@ -11,24 +13,25 @@
 
 namespace arakelyan
 {
-  template < class T >
+  template < class Key, class Value, class Comparator = std::less< Key > >
   struct RBTree
   {
   public:
-    using iterator = Iterator< T >;
-    using const_iterator = ConstIterator< T >;
+    using iterator = Iterator< Key, Value, Comparator >;
+    using const_iterator = ConstIterator< Key, Value, Comparator >;
+    using value_t = std::pair< Key, Value >;
 
     RBTree();
     RBTree(const RBTree &otherT);//fine
     // RBTree(RBTree &&otherT);
-    RBTree(std::initializer_list< T > otherT);//fine
+    RBTree(std::initializer_list< value_t > otherT);//fine
     template < class Iterator_t >
     RBTree(Iterator_t it_start, Iterator_t it_end);//fine
     ~RBTree();//fine
 
     RBTree &operator=(const RBTree &otherT);//fine
     RBTree &operator=(RBTree &&otherT);//fine
-    RBTree &operator=(std::initializer_list< T > otherT);//fine
+    RBTree &operator=(std::initializer_list< value_t > otherT);//fine
 
     size_t getSize() const noexcept;
     bool empty() const noexcept;
@@ -38,17 +41,18 @@ namespace arakelyan
     const_iterator cbegin() const noexcept;
     const_iterator cend() const noexcept;
 
-    void insert(const T &val); // fine?
+    void insert(const value_t &val); // fine?
     // void remove()
 
     void swap(RBTree &otherT) noexcept;
 
-    void printInOrder() const noexcept;
+    // void printInOrder() const noexcept;
 
   private:
-    using Node = detail::Node< T >;
+    using Node = detail::Node< Key, Value >;
     Node *root_;
     size_t size_;
+    Comparator comp;
 
     void clear(Node *node)
     {
@@ -60,15 +64,15 @@ namespace arakelyan
       }
     }
 
-    void traversal(Node *node) const noexcept
-    {
-      if (node)
-      {
-        traversal(node->left_);
-        std::cout << node->data_ << ":" << node->color_ << " -- ";
-        traversal(node->right_);
-      }
-    }
+    // void traversal(Node *node) const noexcept
+    // {
+    //   if (node)
+    //   {
+    //     traversal(node->left_);
+    //     std::cout << node->data_ << ":" << node->color_ << " -- ";
+    //     traversal(node->right_);
+    //   }
+    // }
 
     template < class Iterator_t >
     void copyFromRange(Iterator_t it_start, Iterator_t it_end)
@@ -85,14 +89,14 @@ namespace arakelyan
     // void rightTorate()
   };
 
-  template < class T >
-  RBTree< T >::RBTree():
+  template < class Key, class Value, class Comparator >
+  RBTree< Key, Value, Comparator >::RBTree():
     root_(nullptr),
     size_(0)
   {}
 
-  template < class T >
-  RBTree< T >::RBTree(const RBTree< T > &otherT):
+  template < class Key, class Value, class Comparator >
+  RBTree< Key, Value, Comparator >::RBTree(const RBTree< Key, Value, Comparator > &otherT):
     RBTree()
   {
     if (!otherT.empty())
@@ -101,27 +105,27 @@ namespace arakelyan
     }
   }
 
-  template < class T >
-  RBTree< T >::RBTree(std::initializer_list< T > otherT):
+  template < class Key, class Value, class Comparator >
+  RBTree< Key, Value, Comparator >::RBTree(std::initializer_list< std::pair< Key, Value > > otherT):
     RBTree(otherT.begin(), otherT.end())
   {}
 
-  template < class T >
+  template < class Key, class Value, class Comparator >
   template < class Iterator_t >
-  RBTree< T >::RBTree(Iterator_t it_start, Iterator_t it_end):
+  RBTree< Key, Value, Comparator >::RBTree(Iterator_t it_start, Iterator_t it_end):
     RBTree()
   {
     copyFromRange(it_start, it_end);
   }
 
-  template < class T >
-  RBTree< T >::~RBTree()
+  template < class Key, class Value, class Comparator >
+  RBTree< Key, Value, Comparator >::~RBTree()
   {
     clear(root_);
   }
 
-  template < class T >
-  RBTree< T > &RBTree< T >::operator=(const RBTree< T > &otherT)
+  template < class Key, class Value, class Comparator  >
+  RBTree< Key, Value, Comparator > &RBTree< Key, Value, Comparator >::operator=(const RBTree< Key, Value, Comparator > &otherT)
   {
     RBTree temp(otherT);
     if (this != std::addressof(temp))
@@ -131,8 +135,8 @@ namespace arakelyan
     return *this;
   }
 
-  template < class T >
-  RBTree< T > &RBTree< T >::operator=(RBTree< T > &&otherT)
+  template < class Key, class Value, class Comparator  >
+  RBTree< Key, Value, Comparator > &RBTree< Key, Value, Comparator >::operator=(RBTree< Key, Value, Comparator > &&otherT)
   {
     RBTree temp(std::move(otherT));
     if (this != std::addressof(temp))
@@ -143,52 +147,52 @@ namespace arakelyan
     return *this;
   }
 
-  template < class T >
-  RBTree< T > &RBTree< T >::operator=(std::initializer_list< T > otherT)
+  template < class Key, class Value, class Comparator >
+  RBTree< Key, Value, Comparator > &RBTree< Key, Value, Comparator >::operator=(std::initializer_list< std::pair< Key, Value > > otherT)
   {
     clear(root_);
     copyFromRange(otherT.begin(), otherT.end());
     return *this;
   }
 
-  template < class T >
-  size_t RBTree< T >::getSize() const noexcept
+  template < class Key, class Value, class Comparator >
+  size_t RBTree< Key, Value, Comparator >::getSize() const noexcept
   {
     return size_;
   }
 
-  template < class T >
-  bool RBTree< T >::empty() const noexcept
+  template < class Key, class Value, class Comparator >
+  bool RBTree< Key, Value, Comparator >::empty() const noexcept
   {
     return root_ == nullptr;
   }
 
-  template < class T >
-  Iterator< T > RBTree< T >::begin() noexcept
+  template < class Key, class Value, class Comparator  >
+  Iterator< Key, Value, Comparator > RBTree< Key, Value, Comparator >::begin() noexcept
   {
-    return Iterator< T >(root_);
+    return Iterator< Key, Value, Comparator >(root_);
   }
 
-  template < class T >
-  Iterator< T > RBTree< T >::end() noexcept
+  template < class Key, class Value, class Comparator  >
+  Iterator< Key, Value, Comparator > RBTree< Key, Value, Comparator >::end() noexcept
   {
-    return Iterator< T >(nullptr);
+    return Iterator< Key, Value, Comparator >(nullptr);
   }
 
-  template < class T >
-  ConstIterator< T > RBTree< T >::cbegin() const noexcept
+  template < class Key, class Value, class Comparator  >
+  ConstIterator< Key, Value, Comparator > RBTree< Key, Value, Comparator >::cbegin() const noexcept
   {
-    return ConstIterator< T >(root_);
+    return ConstIterator< Key, Value, Comparator >(root_);
   }
 
-  template < class T >
-  ConstIterator< T > RBTree< T >::cend() const noexcept
+  template < class Key, class Value, class Comparator  >
+  ConstIterator< Key, Value, Comparator > RBTree< Key, Value, Comparator >::cend() const noexcept
   {
-    return ConstIterator< T >(nullptr);
+    return ConstIterator< Key, Value, Comparator >(nullptr);
   }
 
-  template < class T >
-  void RBTree< T >::insert(const T &val)
+  template < class Key, class Value, class Comparator  >
+  void RBTree< Key, Value, Comparator >::insert(const std::pair< Key, Value > &val)
   {
     Node *newNode = new Node(val);
     if (empty())
@@ -203,7 +207,7 @@ namespace arakelyan
     while (curNode)
     {
       parent = curNode;
-      if (val < curNode->data_)
+      if (comp(val.first, curNode->data_.first))
       {
         curNode = curNode->left_;
       }
@@ -213,11 +217,11 @@ namespace arakelyan
       }
     }
     newNode->parent_ = parent;
-    if (val < parent->data_)
+    if (comp(val.first, parent->data_.first))
     {
       parent->left_ = newNode;
     }
-    else if (val > parent->data_)
+    else if (!comp(val.first,parent->data_.first))
     {
       parent->right_ = newNode;
     }
@@ -225,16 +229,16 @@ namespace arakelyan
     // balance func.
   }
 
-  template < class T >
-  void RBTree< T >::swap(RBTree< T > &otherT) noexcept
+  template < class Key, class Value, class Comparator  >
+  void RBTree< Key, Value, Comparator >::swap(RBTree< Key, Value, Comparator > &otherT) noexcept
   {
     std::swap(root_, otherT.root_);
   }
 
-  template < class T >
-  void RBTree< T >::printInOrder() const noexcept
-  {
-    traversal(root_);
-  }
+  // template < class Key, class Value, class Comparator  >
+  // void RBTree< Key, Value, Comparator >::printInOrder() const noexcept
+  // {
+  //   traversal(root_);
+  // }
 }
 #endif
