@@ -192,7 +192,7 @@ namespace zhalilov
   detail::Node < T > *TwoThreeIterator < T >::findMin(const detail::Node < T > *nodeFrom)
   {
     detail::Node < T > *minNode = nodeFrom;
-    while (minNode->left)
+    while (minNode && minNode->left)
     {
       minNode = minNode->left;
     }
@@ -203,7 +203,7 @@ namespace zhalilov
   detail::Node < T > *TwoThreeIterator < T >::findMax(const detail::Node < T > *nodeFrom)
   {
     detail::Node < T > *maxNode = nodeFrom;
-    while (maxNode->right)
+    while (maxNode && maxNode->right)
     {
       maxNode = maxNode->right;
     }
