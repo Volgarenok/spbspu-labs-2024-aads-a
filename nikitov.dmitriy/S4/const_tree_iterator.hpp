@@ -21,6 +21,7 @@ namespace nikitov
 
     ConstTreeIterator< Key, T, Compare >& operator++();
     ConstTreeIterator< Key, T, Compare > operator++(int);
+    ConstTreeIterator< Key, T, Compare >& operator--();
 
     ConstTreeIterator< Key, T, Compare >& operator=(const ConstTreeIterator< Key, T, Compare >&) = default;
 
@@ -33,6 +34,7 @@ namespace nikitov
 
     explicit ConstTreeIterator(detail::TreeNode< Key, T, Compare >* node);
     void fallLeft();
+    void fallRight();
   };
 
   template< class Key, class T, class Compare >
@@ -118,6 +120,67 @@ namespace nikitov
   }
 
   template< class Key, class T, class Compare >
+  ConstTreeIterator< Key, T, Compare >& ConstTreeIterator< Key, T, Compare >::operator--()
+  {
+    if (node_->parent_ == nullptr)
+    {
+      node_ = node_->middle_;
+      fallRight();
+    }
+    else if (!isFirst_)
+    {
+      if (node_->middle_)
+      {
+        node_ = node_->middle_;
+        fallRight();
+      }
+      else
+      {
+        isFirst_ = true;
+      }
+    }
+    else if (node_->left_)
+    {
+      node_ = node_->left_;
+      fallRight();
+    }
+    else if (node_->parent_->left_ == node_)
+    {
+      while (node_->parent_->left_ == node_)
+      {
+        node_ = node_->parent_;
+      }
+      node_ = node_->parent_;
+      if (node_->size_ == 2)
+      {
+        isFirst_ = false;
+      }
+      else
+      {
+        isFirst_ = true;
+      }
+    }
+    else if (node_->parent_->middle_ == node_)
+    {
+      node_ = node_->parent_;
+      isFirst_ = true;
+    }
+    else
+    {
+      node_ = node_->parent_;
+      if (node_->size_ == 2)
+      {
+        isFirst_ = false;
+      }
+      else
+      {
+        isFirst_ = true;
+      }
+    }
+    return *this;
+  }
+
+  template< class Key, class T, class Compare >
   bool ConstTreeIterator< Key, T, Compare >::operator==(const ConstTreeIterator< Key, T, Compare >& other) const
   {
     return (node_ == other.node_) && (isFirst_ == other.isFirst_);
@@ -137,6 +200,23 @@ namespace nikitov
       node_ = node_->left_;
     }
     isFirst_ = true;
+  }
+
+  template< class Key, class T, class Compare >
+  void ConstTreeIterator< Key, T, Compare >::fallRight()
+  {
+    while (node_->right_)
+    {
+      node_ = node_->right_;
+    }
+    if (node_->size_ == 2)
+    {
+      isFirst_ = false;
+    }
+    else
+    {
+      isFirst_ = true;
+    }
   }
 }
 #endif
