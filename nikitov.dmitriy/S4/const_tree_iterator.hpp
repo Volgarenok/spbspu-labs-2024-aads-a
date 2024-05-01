@@ -12,19 +12,22 @@ namespace nikitov
   class ConstTreeIterator: public std::iterator< std::bidirectional_iterator_tag, T >
   {
     friend class Tree< Key, T, Compare >;
+  private:
+    explicit ConstTreeIterator(detail::TreeNode< Key, T, Compare >* node);
+
   public:
     ConstTreeIterator(const ConstTreeIterator< Key, T, Compare >&) = default;
     ~ConstTreeIterator() = default;
 
-    const std::pair< Key, T >& operator*() const;
-    const std::pair< Key, T >* operator->() const;
+    ConstTreeIterator< Key, T, Compare >& operator=(const ConstTreeIterator< Key, T, Compare >&) = default;
 
     ConstTreeIterator< Key, T, Compare >& operator++();
     ConstTreeIterator< Key, T, Compare > operator++(int);
     ConstTreeIterator< Key, T, Compare >& operator--();
     ConstTreeIterator< Key, T, Compare > operator--(int);
 
-    ConstTreeIterator< Key, T, Compare >& operator=(const ConstTreeIterator< Key, T, Compare >&) = default;
+    const std::pair< Key, T >& operator*() const;
+    const std::pair< Key, T >* operator->() const;
 
     bool operator==(const ConstTreeIterator< Key, T, Compare >& other) const;
     bool operator!=(const ConstTreeIterator< Key, T, Compare >& other) const;
@@ -33,7 +36,6 @@ namespace nikitov
     bool isFirst_;
     detail::TreeNode< Key, T, Compare >* node_;
 
-    explicit ConstTreeIterator(detail::TreeNode< Key, T, Compare >* node);
     void fallLeft();
     void fallRight();
   };
@@ -43,32 +45,6 @@ namespace nikitov
     isFirst_(true),
     node_(node)
   {}
-
-  template< class Key, class T, class Compare >
-  const std::pair< Key, T >& ConstTreeIterator< Key, T, Compare >::operator*() const
-  {
-    if (isFirst_)
-    {
-      return node_->firstValue_;
-    }
-    else
-    {
-      return node_->secondValue_;
-    }
-  }
-
-  template< class Key, class T, class Compare >
-  const std::pair< Key, T >* ConstTreeIterator< Key, T, Compare >::operator->() const
-  {
-    if (isFirst_)
-    {
-      return std::addressof(node_->firstValue_);
-    }
-    else
-    {
-      return std::addressof(node_->secondValue_);
-    }
-  }
 
   template< class Key, class T, class Compare >
   ConstTreeIterator< Key, T, Compare >& ConstTreeIterator< Key, T, Compare >::operator++()
@@ -187,6 +163,32 @@ namespace nikitov
     ConstTreeIterator< Key, T, Compare > temp(*this);
     --*this;
     return temp;
+  }
+
+  template< class Key, class T, class Compare >
+  const std::pair< Key, T >& ConstTreeIterator< Key, T, Compare >::operator*() const
+  {
+    if (isFirst_)
+    {
+      return node_->firstValue_;
+    }
+    else
+    {
+      return node_->secondValue_;
+    }
+  }
+
+  template< class Key, class T, class Compare >
+  const std::pair< Key, T >* ConstTreeIterator< Key, T, Compare >::operator->() const
+  {
+    if (isFirst_)
+    {
+      return std::addressof(node_->firstValue_);
+    }
+    else
+    {
+      return std::addressof(node_->secondValue_);
+    }
   }
 
   template< class Key, class T, class Compare >

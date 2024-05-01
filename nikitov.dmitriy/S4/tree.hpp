@@ -67,7 +67,7 @@ namespace nikitov
     size_(other.size_),
     cmp_(other.cmp_)
   {
-    other.root_ = nullptr;
+    other.root_ = new detail::TreeNode< Key, T, Compare >();
     other.size_ = 0;
   }
 
