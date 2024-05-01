@@ -14,7 +14,7 @@ int main()
   RBTree< size_t, size_t > otherT;
   otherT = {param1, param2, param3, param4, param5};
   std::cout << "copyed tree: ";
-  // otherT.printInOrder();
+  otherT.printInOrder();
   std::cout << "\nsize: " << otherT.getSize() << "\n";
   return 0;
 }

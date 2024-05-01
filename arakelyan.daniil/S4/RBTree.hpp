@@ -46,7 +46,7 @@ namespace arakelyan
 
     void swap(RBTree &otherT) noexcept;
 
-    // void printInOrder() const noexcept;
+    void printInOrder() const noexcept;
 
   private:
     using Node = detail::Node< Key, Value >;
@@ -64,15 +64,15 @@ namespace arakelyan
       }
     }
 
-    // void traversal(Node *node) const noexcept
-    // {
-    //   if (node)
-    //   {
-    //     traversal(node->left_);
-    //     std::cout << node->data_ << ":" << node->color_ << " -- ";
-    //     traversal(node->right_);
-    //   }
-    // }
+    void traversal(Node *node) const noexcept
+    {
+      if (node)
+      {
+        traversal(node->left_);
+        std::cout << node->data_.first << ":" << node->data_.second << " col:" << node->color_ << " -> ";
+        traversal(node->right_);
+      }
+    }
 
     template < class Iterator_t >
     void copyFromRange(Iterator_t it_start, Iterator_t it_end)
@@ -235,10 +235,10 @@ namespace arakelyan
     std::swap(root_, otherT.root_);
   }
 
-  // template < class Key, class Value, class Comparator  >
-  // void RBTree< Key, Value, Comparator >::printInOrder() const noexcept
-  // {
-  //   traversal(root_);
-  // }
+  template < class Key, class Value, class Comparator  >
+  void RBTree< Key, Value, Comparator >::printInOrder() const noexcept
+  {
+    traversal(root_);
+  }
 }
 #endif
