@@ -88,6 +88,10 @@ namespace nikitov
     {
       node_ = node_->parent_;
       isFirst_ = false;
+      if (!node_->parent_)
+      {
+        isFirst_ = true;
+      }
     }
     else
     {
