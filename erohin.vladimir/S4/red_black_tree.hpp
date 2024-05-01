@@ -512,23 +512,101 @@ namespace erohin
 
   template< class Key, class T, class Compare >
   void RedBlackTree< Key, T, Compare >::erase_balance_case2(detail::Node< Key, T > * subtree)
-  {}
+  {
+    detail::Node< Key, T > * brother = find_brother(subtree);
+    if (brother->color_ == detail::color_t::RED)
+    {
+      subtree->parent_->color_ = detail::color_t::RED;
+      brother->color_ = detail::color_t::BLACK;
+      if (subtree == subtree->parent_->left_)
+      {
+        rotate_left(subtree->parent_);
+      }
+      else
+      {
+        rotate_right(subtree->parent_);
+      }
+    }
+    erase_balance_case3(subtree);
+  }
 
   template< class Key, class T, class Compare >
   void RedBlackTree< Key, T, Compare >::erase_balance_case3(detail::Node< Key, T > * subtree)
-  {}
+  {
+    detail::Node< Key, T > * brother = find_brother(subtree);
+    bool is_left_black = (brother->left_->color_ == detail::color_t::BLACK);
+    bool is_right_black = (brother->right_->color_ == detail::color_t::BLACK);
+    bool is_black = (brother->color_ == detail::color_t::BLACK);
+    if (subtree->parent_->color_ == detail::color_t::BLACK && is_black && is_left_black && is_right_black)
+    {
+      brother->color_ = detail::color_t::RED;
+      erase_balance_case1(subtree->parent_);
+    }
+    else
+    {
+      erase_balance_case4(subtree);
+    }
+  }
 
   template< class Key, class T, class Compare >
   void RedBlackTree< Key, T, Compare >::erase_balance_case4(detail::Node< Key, T > * subtree)
-  {}
+  {
+    detail::Node< Key, T > * brother = find_brother(subtree);
+    bool is_left_black = (brother->left_->color_ == detail::color_t::BLACK);
+    bool is_right_black = (brother->right_->color_ == detail::color_t::BLACK);
+    bool is_black = (brother->color_ == detail::color_t::BLACK);
+    if (subtree->parent_->color_ == detail::color_t::RED && is_black && is_left_black && is_right_black)
+    {
+      brother->color_ = detail::color_t::RED;
+      subtree->parent_->color_ = detail::color_t::BLACK;
+    }
+    else
+    {
+      erase_balance_case5(subtree);
+    }
+  }
 
   template< class Key, class T, class Compare >
   void RedBlackTree< Key, T, Compare >::erase_balance_case5(detail::Node< Key, T > * subtree)
-  {}
+  {
+    detail::Node< Key, T > * brother = find_brother(subtree);
+    bool is_left_black = (brother->left_->color_ == detail::color_t::BLACK);
+    bool is_right_black = (brother->right_->color_ == detail::color_t::BLACK);
+    if (brother->color_ == detail::color_t::BLACK)
+    {
+      if (subtree == subtree->parent_->left_ && is_right_black && !is_left_black)
+      {
+        brother->color_ = detail::color_t::RED;
+        brother->left_->color_ = detail::color_t::BLACK;
+        rotate_right(brother);
+      }
+      else if (subtree == subtree->parent_->right_ && is_left_black && !is_right_black)
+      {
+        brother->color_ = detail::color_t::RED;
+        brother->right_->color_ = detail::color_t::BLACK;
+        rotate_left(brother);
+      }
+    }
+    erase_balance_case6(subtree);
+  }
 
   template< class Key, class T, class Compare >
   void RedBlackTree< Key, T, Compare >::erase_balance_case6(detail::Node< Key, T > * subtree)
-  {}
+  {
+    detail::Node< Key, T > * brother = find_brother(subtree);
+    brother->color_ = subtree->parent_->color_;
+    subtree->parent_->color_ = detail::color_t::BLACK;
+    if (subtree == subtree->parent_->left_)
+    {
+      brother->right_->color_ = detail::color_t::BLACK;
+      rotate_left(subtree->parent_);
+    }
+    else
+    {
+      brother->left_->color_ = detail::color_t::BLACK;
+      rotate_right(subtree->parent_);
+    }
+  }
 }
 
 #endif
