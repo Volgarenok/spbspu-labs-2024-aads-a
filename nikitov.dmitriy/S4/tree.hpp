@@ -33,7 +33,7 @@ namespace nikitov
     bool empty() const;
     size_t size() const;
 
-    void insert(const std::pair< Key, T >& value);
+    std::pair< TreeIterator< Key, T, Compare >, bool > insert(const std::pair< Key, T >& value);
     void clear();
     void swap(Tree< Key, T, Compare >& other);
     TreeIterator< Key, T, Compare > find(const Key& key);
@@ -234,23 +234,28 @@ namespace nikitov
   }
 
   template< class Key, class T, class Compare >
-  void Tree< Key, T, Compare >::insert(const std::pair< Key, T >& value)
+  std::pair< TreeIterator< Key, T, Compare >, bool > Tree< Key, T, Compare >::insert(const std::pair< Key, T >& value)
   {
+    bool isInserted = false;
     if (empty())
     {
       root_->middle_ = new detail::TreeNode< Key, T, Compare >(value);
       root_->middle_->parent_ = root_;
       root_ = root_->middle_;
+      isInserted = true;
+      ++size_;
     }
-    else
+    else if (!search(root_, value.first))
     {
       detail::TreeNode< Key, T, Compare >* newRoot = findNode(value.first)->add(value);
       if (newRoot)
       {
         root_ = newRoot;
       }
+      isInserted = true;
+      ++size_;
     }
-    ++size_;
+    return std::pair< TreeIterator< Key, T, Compare >, bool > { find(value.first), isInserted };
   }
 
   template< class Key, class T, class Compare >
