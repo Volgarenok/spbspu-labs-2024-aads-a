@@ -22,6 +22,7 @@ namespace nikitov
     ConstTreeIterator< Key, T, Compare >& operator++();
     ConstTreeIterator< Key, T, Compare > operator++(int);
     ConstTreeIterator< Key, T, Compare >& operator--();
+    ConstTreeIterator< Key, T, Compare > operator--(int);
 
     ConstTreeIterator< Key, T, Compare >& operator=(const ConstTreeIterator< Key, T, Compare >&) = default;
 
@@ -178,6 +179,14 @@ namespace nikitov
       }
     }
     return *this;
+  }
+
+  template< class Key, class T, class Compare >
+  ConstTreeIterator< Key, T, Compare > ConstTreeIterator< Key, T, Compare >::operator--(int)
+  {
+    ConstTreeIterator< Key, T, Compare > temp(*this);
+    --*this;
+    return temp;
   }
 
   template< class Key, class T, class Compare >
