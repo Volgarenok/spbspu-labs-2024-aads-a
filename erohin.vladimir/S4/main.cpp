@@ -22,10 +22,12 @@ int main(int argc, char ** argv)
     int_dict.insert(std::make_pair(0, 00));
     int_dict.insert(std::make_pair(5, 50));
     int_dict.erase(4);
+    int_dict[7] = 70;
     for (auto iter: int_dict)
     {
-      std::cout << std::endl << "//" << iter.first << "//" << std::endl;
+      std::cout << std::endl << "//" << iter.first << ":" << iter.second<< "//" << std::endl;
     }
+    RedBlackTree< int, int >::iterator iter = int_dict.find(4);
   }
 
   if (argc != 2)

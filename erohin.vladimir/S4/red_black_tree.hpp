@@ -37,6 +37,11 @@ namespace erohin
     std::pair< iterator, bool > erase(const Key & key);
     void swap(RedBlackTree & rhs) noexcept;
     size_t size() const noexcept;
+    iterator find(const Key & key);
+    const_iterator find(const Key & key) const;
+    T & operator[](const Key & key);
+    T & at(const Key & key);
+    const T & at(const Key & key) const;
   private:
     detail::Node< Key, T > * root_;
     Compare cmp_;
@@ -286,6 +291,80 @@ namespace erohin
   size_t RedBlackTree< Key, T, Compare >::size() const noexcept
   {
     return size_;
+  }
+
+  template< class Key, class T, class Compare >
+  TreeIterator< Key, T > RedBlackTree< Key, T, Compare >::find(const Key & key)
+  {
+    detail::Node< Key, T > * node = root_;
+    while (node)
+    {
+      if (node->data_.first == key)
+      {
+        return iterator(node);
+      }
+      else if (cmp_(key, node->data_.first))
+      {
+        node = node->left_;
+      }
+      else
+      {
+        node = node->right_;
+      }
+    }
+    return end();
+  }
+
+  template< class Key, class T, class Compare >
+  TreeConstIterator< Key, T > RedBlackTree< Key, T, Compare >::find(const Key & key) const
+  {
+    const detail::Node< Key, T > * node = root_;
+    while (node)
+    {
+      if (node->data_.first == key)
+      {
+        return const_iterator(node);
+      }
+      else if (cmp_(key, node->data_.first))
+      {
+        node = node->left_;
+      }
+      else
+      {
+        node = node->right_;
+      }
+    }
+    return cend();
+  }
+
+  template< class Key, class T, class Compare >
+  T & RedBlackTree< Key, T, Compare >::operator[](const Key & key)
+  {
+    char temp_memory[sizeof(T)];
+    auto iter_pair = insert(std::make_pair(key, *reinterpret_cast< T * >(temp_memory)));
+    return iter_pair.first->second;
+  }
+
+  template< class Key, class T, class Compare >
+  T & RedBlackTree< Key, T, Compare >::at(const Key & key)
+  {
+    TreeIterator< Key, T > iter = find(key);
+    if (iter == end())
+    {
+      throw std::out_of_range("Out of range in element access");
+    }
+    return iter->second;
+  }
+
+  template< class Key, class T, class Compare >
+  const T & RedBlackTree< Key, T, Compare >::at(const Key & key) const
+  {
+    TreeConstIterator< Key, T > citer = find(key);
+    if (citer == cend())
+    {
+      throw std::out_of_range("Out of range in element access");
+    }
+    return citer->second;
   }
 
   template< class Key, class T, class Compare >
