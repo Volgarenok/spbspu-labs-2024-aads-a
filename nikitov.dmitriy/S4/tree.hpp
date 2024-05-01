@@ -3,6 +3,7 @@
 
 #include "tree_node.hpp"
 #include <functional>
+#include "tree_iterator.hpp"
 #include "const_tree_iterator.hpp"
 
 namespace nikitov
@@ -22,7 +23,9 @@ namespace nikitov
     T& operator[](const Key& key);
     T& at(const Key& key);
 
+    TreeIterator< Key, T, Compare > begin();
     ConstTreeIterator< Key, T, Compare > cbegin() const;
+    TreeIterator< Key, T, Compare > end();
     ConstTreeIterator< Key, T, Compare > cend() const;
 
     bool empty() const;
@@ -128,11 +131,32 @@ namespace nikitov
   }
 
   template< class Key, class T, class Compare >
+  TreeIterator< Key, T, Compare > Tree< Key, T, Compare >::begin()
+  {
+    TreeIterator< Key, T, Compare > iterator(root_);
+    iterator.fallLeft();
+    return iterator;
+  }
+
+  template< class Key, class T, class Compare >
   ConstTreeIterator< Key, T, Compare > Tree< Key, T, Compare >::cbegin() const
   {
     ConstTreeIterator< Key, T, Compare > iterator(root_);
     iterator.fallLeft();
     return iterator;
+  }
+
+  template< class Key, class T, class Compare >
+  TreeIterator< Key, T, Compare > Tree< Key, T, Compare >::end()
+  {
+    if (empty())
+    {
+      return TreeIterator< Key, T, Compare >(root_);
+    }
+    else
+    {
+      return TreeIterator< Key, T, Compare >(root_->parent_);
+    }
   }
 
   template< class Key, class T, class Compare >
