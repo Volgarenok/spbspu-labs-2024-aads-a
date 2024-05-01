@@ -16,6 +16,7 @@ namespace nikitov
       ~TreeNode() = default;
 
       bool find(const Key& key) const;
+      T& get(const Key& key);
       TreeNode< Key, T, Compare >* add(const std::pair< Key, T >& value);
       TreeNode< Key, T, Compare >* split(const std::pair< Key, T >& value);
       void clear();
@@ -56,6 +57,16 @@ namespace nikitov
         isFound = isFound || (secondValue_.first == key);
       }
       return isFound;
+    }
+
+    template< class Key, class T, class Compare >
+    T& TreeNode< Key, T, Compare >::get(const Key& key)
+    {
+      if (size_ == 2 && secondValue_.first == key)
+      {
+        return secondValue_.second;
+      }
+      return firstValue_.second;
     }
 
     template< class Key, class T, class Compare >

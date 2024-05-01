@@ -33,7 +33,7 @@ namespace nikitov
     Compare cmp_;
 
     detail::TreeNode< Key, T, Compare >* search(detail::TreeNode< Key, T, Compare >* node, const Key& key) const;
-    detail::TreeNode< Key, T, Compare >* findNode(const std::pair< Key, T >& value) const;
+    detail::TreeNode< Key, T, Compare >* findNode(const Key& value) const;
   };
 
   template< class Key, class T, class Compare >
@@ -56,19 +56,11 @@ namespace nikitov
     detail::TreeNode< Key, T, Compare >* node = search(root_, key);
     if (node)
     {
-      if (node->firstValue_.first == key)
-      {
-        return node->firstValue_.second;
-      }
-      return node->secondValue_.second;
+      return node->get(key);
     }
     insert({ key, T() });
     node = search(root_, key);
-    if (node->firstValue_.first == key)
-    {
-      return node->firstValue_.second;
-    }
-    return node->secondValue_.second;
+    return node->get();
   }
 
   template< class Key, class T, class Compare >
@@ -134,7 +126,7 @@ namespace nikitov
     }
     else
     {
-      detail::TreeNode< Key, T, Compare >* newRoot = findNode(value)->add(value);
+      detail::TreeNode< Key, T, Compare >* newRoot = findNode(value.first)->add(value);
       if (newRoot)
       {
         root_ = newRoot;
@@ -180,16 +172,16 @@ namespace nikitov
   }
 
   template< class Key, class T, class Compare >
-  detail::TreeNode< Key, T, Compare >* Tree< Key, T, Compare >::findNode(const std::pair< Key, T >& value) const
+  detail::TreeNode< Key, T, Compare >* Tree< Key, T, Compare >::findNode(const Key& value) const
   {
     detail::TreeNode< Key, T, Compare >* node = root_;
     while (node->left_ || node->right_ || node->middle_)
     {
-      if (cmp_(value.first, node->firstValue_.first))
+      if (cmp_(value, node->firstValue_.first))
       {
         node = node->left_;
       }
-      else if (cmp_(node->secondValue_.first, value.first))
+      else if (cmp_(node->secondValue_.first, value))
       {
         node = node->right_;
       }
