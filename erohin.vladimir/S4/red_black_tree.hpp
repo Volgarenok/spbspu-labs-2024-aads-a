@@ -41,11 +41,16 @@ namespace erohin
     Compare cmp_;
     void clear_subtree(detail::Node< Key, T > * subtree);
     void insert_balance(detail::Node< Key, T > * subtree);
+    void insert_balance_case1(detail::Node< Key, T > * subtree);
+    void insert_balance_case2(detail::Node< Key, T > * subtree);
+    void insert_balance_case3(detail::Node< Key, T > * subtree);
+    void insert_balance_case4(detail::Node< Key, T > * subtree);
+    void insert_balance_case5(detail::Node< Key, T > * subtree);
     void erase_balance(detail::Node< Key, T > * subtree);
     detail::Node< Key, T > * find_to_change_erased(detail::Node< Key, T > * subtree);
     detail::Node< Key, T > * find_grandparent(detail::Node< Key, T > * subtree);
     detail::Node< Key, T > * find_uncle(detail::Node< Key, T > * subtree);
-    detail::Node< Key, T > * find_child(detail::Node< Key, T > * subtree);
+    detail::Node< Key, T > * find_brother(detail::Node< Key, T > * subtree);
     void rotate_left(detail::Node< Key, T > * subtree);
     void rotate_right(detail::Node< Key, T > * subtree);
   };
@@ -236,13 +241,10 @@ namespace erohin
     else if (!new_node)
     {
       new_node = to_delete;
-      std::cout << "/////////////////////////////" << std::endl;
     }
     if (new_node->parent_->left_ == new_node)
     {
       new_node->parent_->left_ = nullptr;
-
-      std::cout << "/////////////////////////////" << std::endl;
     }
     else if (new_node->parent_->right_ == new_node)
     {
@@ -253,7 +255,6 @@ namespace erohin
       std::swap(new_node->data_, to_delete->data_);
     }
     auto iter = ++iterator(to_delete);
-      std::cout << "/////////////////////////////" << std::endl;
     delete new_node;
     return std::make_pair(iter, true);
   }
@@ -285,6 +286,52 @@ namespace erohin
 
   template< class Key, class T, class Compare >
   void RedBlackTree< Key, T, Compare >::insert_balance(detail::Node< Key, T > * subtree)
+  {
+    insert_balance_case1(subtree);
+    insert_balance_case2(subtree);
+    insert_balance_case3(subtree);
+    insert_balance_case4(subtree);
+    insert_balance_case5(subtree);
+    return;
+  }
+
+  template< class Key, class T, class Compare >
+  void RedBlackTree< Key, T, Compare >::insert_balance_case1(detail::Node< Key, T > * subtree)
+  {
+    if (subtree == root_)
+    {
+      subtree->color_ = 0;
+    }
+    else
+    {
+      insert_balance_case2(subtree);
+    }
+    return;
+  }
+
+  template< class Key, class T, class Compare >
+  void RedBlackTree< Key, T, Compare >::insert_balance_case2(detail::Node< Key, T > * subtree)
+  {
+    subtree = subtree->parent_;
+    return;
+  }
+
+  template< class Key, class T, class Compare >
+  void RedBlackTree< Key, T, Compare >::insert_balance_case3(detail::Node< Key, T > * subtree)
+  {
+    subtree = subtree->parent_;
+    return;
+  }
+
+  template< class Key, class T, class Compare >
+  void RedBlackTree< Key, T, Compare >::insert_balance_case4(detail::Node< Key, T > * subtree)
+  {
+    subtree = subtree->parent_;
+    return;
+  }
+
+  template< class Key, class T, class Compare >
+  void RedBlackTree< Key, T, Compare >::insert_balance_case5(detail::Node< Key, T > * subtree)
   {
     subtree = subtree->parent_;
     return;
@@ -354,7 +401,7 @@ namespace erohin
   }
 
   template< class Key, class T, class Compare >
-  detail::Node< Key, T > * RedBlackTree< Key, T, Compare >::find_child(detail::Node< Key, T > * subtree)
+  detail::Node< Key, T > * RedBlackTree< Key, T, Compare >::find_brother(detail::Node< Key, T > * subtree)
   {
     if (subtree == subtree->parent_->left_)
     {
