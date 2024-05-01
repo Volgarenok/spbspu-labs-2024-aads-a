@@ -42,7 +42,6 @@ int main()
 
     for (auto element = list.begin(); element != list.end(); ++element)
     {
-      List< size_t > nowList = element->second;
       size_t index = 0;
 
       for (auto numList = (element->second).begin(); numList != (element->second).end(); ++numList)
@@ -66,7 +65,7 @@ int main()
 
     if (!nums.empty())
     {
-      listSumAndNums.push_back({sum, nums});
+      listSumAndNums.push_back(std::pair< size_t, List < size_t > >(sum, nums));
     }
     else
     {

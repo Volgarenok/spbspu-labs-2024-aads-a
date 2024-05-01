@@ -3,7 +3,7 @@
 
 #include "iterator.hpp"
 #include "constIterator.hpp"
-#include "Node.hpp"
+#include "node.hpp"
 
 namespace chistyakov
 {

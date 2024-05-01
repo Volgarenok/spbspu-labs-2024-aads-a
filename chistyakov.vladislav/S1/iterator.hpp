@@ -18,6 +18,10 @@ namespace chistyakov
         node_(nullptr)
       {}
 
+      Iterator(Node< T > * val):
+        node_(val)
+      {}
+
       ~Iterator() = default;
       Iterator(const Iterator< T > &) = default;
       Iterator< T > & operator=(const Iterator< T > & ) = default;
