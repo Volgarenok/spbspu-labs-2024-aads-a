@@ -19,7 +19,8 @@ namespace nikitov
       T& get(const Key& key);
       const T& get(const Key& key) const;
       TreeNode< Key, T, Compare >* add(const std::pair< Key, T >& value);
-      TreeNode< Key, T, Compare >* split(const std::pair< Key, T >& value);
+      TreeNode< Key, T, Compare >* split(const std::pair< Key, T >& value, TreeNode< Key, T, Compare >* first, TreeNode< Key, T, Compare >* second);
+      void check(TreeNode< Key, T, Compare >* first, TreeNode< Key, T, Compare >* second);
       void clear();
 
       std::pair< Key, T > firstValue_;
@@ -33,9 +34,11 @@ namespace nikitov
     };
 
     template< class Key, class T, class Compare >
-    TreeNode< Key, T, Compare >::TreeNode() :
+    TreeNode< Key, T, Compare >::TreeNode():
       TreeNode(std::pair< Key, T >())
-    {}
+    {
+      --size_;
+    }
 
     template< class Key, class T, class Compare >
     TreeNode< Key, T, Compare >::TreeNode(const std::pair< Key, T >& value):
@@ -84,7 +87,12 @@ namespace nikitov
     TreeNode< Key, T, Compare >* TreeNode< Key, T, Compare >::add(const std::pair< Key, T >& value)
     {
       TreeNode< Key, T, Compare >* newRoot = nullptr;
-      if (size_ == 1)
+      if (size_ == 0)
+      {
+        firstValue_ = value;
+        ++size_;
+      }
+      else if (size_ == 1)
       {
         secondValue_ = value;
         if (!cmp_(firstValue_.first, secondValue_.first))
@@ -106,96 +114,204 @@ namespace nikitov
           toSplit = secondValue_;
           secondValue_ = value;
         }
-        newRoot = split(toSplit);
+        TreeNode< Key, T, Compare >* newNode = new TreeNode< Key, T, Compare >(secondValue_);
+        secondValue_ = std::pair< Key, T >{};
+        size_ = 1;
+        if (parent_->left_ == this)
+        {
+          parent_->left_ = nullptr;
+        }
+        else if (parent_->right_ == this)
+        {
+          parent_->right_ = nullptr;
+        }
+        else if (parent_->parent_)
+        {
+          parent_->middle_ = nullptr;
+        }
+        newRoot = parent_->split(toSplit, this, newNode);
       }
       return newRoot;
     }
 
     template< class Key, class T, class Compare >
-    TreeNode< Key, T, Compare >* TreeNode< Key, T, Compare >::split(const std::pair< Key, T >& value)
+    TreeNode< Key, T, Compare >* TreeNode< Key, T, Compare >::split(const std::pair< Key, T >& value, TreeNode< Key, T, Compare >* first, TreeNode< Key, T, Compare >* second)
     {
       TreeNode< Key, T, Compare >* newRoot = nullptr;
-      if (parent_->parent_)
+      if (!parent_)
       {
-        newRoot = parent_->add(value);
+        middle_ = new TreeNode< Key, T, Compare >();
+        middle_->parent_ = this;
+        newRoot = middle_;
+        newRoot->split(value, first, second);
       }
       else
       {
-        parent_->middle_ = new TreeNode< Key, T, Compare >(value);
-        parent_->middle_->parent_ = parent_;
-        parent_ = parent_->middle_;
-        newRoot = parent_;
-      }
-
-      if (parent_->left_ == this)
-      {
-        if (parent_->right_)
+        newRoot = add(value);
+        if (left_ && (!right_ && !middle_))
         {
-          parent_->middle_ = new TreeNode< Key, T, Compare >(secondValue_);
-          parent_->middle_->parent_ = parent_;
+          middle_ = first;
+          right_ = second;
+          first->parent_ = this;
+          second->parent_ = this;
+        }
+        else if (right_ && (!left_ && !middle_))
+        {
+          middle_ = second;
+          left_ = first;
+          first->parent_ = this;
+          second->parent_ = this;
+        }
+        else if (parent_->parent_)
+        {
+          check(first, second);
         }
         else
         {
-          parent_->right_ = new TreeNode< Key, T, Compare >(secondValue_);
-          parent_->right_->parent_ = parent_;
+          left_ = first;
+          right_ = second;
+          first->parent_ = this;
+          second->parent_ = this;
         }
       }
-      else if (parent_->right_ == this)
-      {
-        if (parent_->left_)
-        {
-          parent_->middle_ = new TreeNode< Key, T, Compare >(firstValue_);
-          parent_->middle_->parent_ = parent_;
-        }
-        else
-        {
-          parent_->left_ = new TreeNode< Key, T, Compare >(firstValue_);
-          parent_->left_->parent_ = parent_;
-        }
-        firstValue_ = secondValue_;
-      }
-      else
-      {
-        TreeNode< Key, T, Compare >* newNode = nullptr;
-        if (right_ && right_->size_ == 2)
-        {
-          newNode = new TreeNode< Key, T, Compare >(firstValue_);
-          std::swap(firstValue_, secondValue_);
-          parent_->left_ = newNode;
-          newNode->left_ = left_;
-          if (left_)
-          {
-            left_->parent_ = newNode;
-          }
-          newNode->right_ = middle_;
-          parent_->right_ = this;
-          left_ = nullptr;
-        }
-        else
-        {
-          newNode = new TreeNode< Key, T, Compare >(secondValue_);
-          parent_->right_ = newNode;
-          newNode->right_ = right_;
-          if (right_)
-          {
-            right_->parent_ = newNode;
-          }
-          newNode->left_ = middle_;
-          parent_->left_ = this;
-          right_ = nullptr;
-        }
-        if (middle_)
-        {
-          middle_->parent_ = newNode;
-        }
-        newNode->parent_ = parent_;
-        parent_->middle_ = nullptr;
-        middle_ = nullptr;
-      }
-      secondValue_ = std::pair< Key, T >();
-      --size_;
 
       return newRoot;
+    }
+
+    template< class Key, class T, class Compare >
+    void TreeNode< Key, T, Compare >::check(TreeNode< Key, T, Compare >* first, TreeNode< Key, T, Compare >* second)
+    {
+      TreeNode< Key, T, Compare >* ownFirst = nullptr;
+      TreeNode< Key, T, Compare >* ownSecond = nullptr;
+      if (left_)
+      {
+        ownFirst = left_;
+        if (right_)
+        {
+          ownSecond = right_;
+        }
+        else
+        {
+          ownSecond = middle_;
+        }
+      }
+      else
+      {
+        ownFirst = middle_;
+        ownSecond = right_;
+      }
+      left_ = nullptr;
+      right_ = nullptr;
+      middle_ = nullptr;
+
+      TreeNode< Key, T, Compare >* neigbour = nullptr;
+      if (parent_->right_ == this)
+      {
+        if (parent_->middle_)
+        {
+          neigbour = parent_->middle_;
+        }
+        else
+        {
+          neigbour = parent_->left_;
+        }
+      }
+      else if (parent_->left_ == this)
+      {
+        if (parent_->middle_)
+        {
+          neigbour = parent_->middle_;
+        }
+        else
+        {
+          neigbour = parent_->right_;
+        }
+      }
+      else
+      {
+        if (!parent_->right_->right_)
+        {
+          neigbour = parent_->right_;
+        }
+        else
+        {
+          neigbour = parent_->left_;
+        }
+      }
+      TreeNode< Key, T, Compare >* one = nullptr;
+      TreeNode< Key, T, Compare >* two = nullptr;
+      TreeNode< Key, T, Compare >* three = nullptr;
+      TreeNode< Key, T, Compare >* four = nullptr;
+      if (cmp_(ownFirst->firstValue_.first, first->firstValue_.first))
+      {
+        one = ownFirst;
+        if (cmp_(ownSecond->firstValue_.first, first->firstValue_.first))
+        {
+          two = ownSecond;
+          three = first;
+          four = second;
+        }
+        else
+        {
+          two = first;
+          if (cmp_(ownSecond->firstValue_.first, second->firstValue_.first))
+          {
+            three = ownSecond;
+            four = second;
+          }
+          else
+          {
+            three = second;
+            four = ownSecond;
+          }
+        }
+      }
+      else
+      {
+        one = first;
+        if (cmp_(second->firstValue_.first, ownFirst->firstValue_.first))
+        {
+          two = second;
+          three = ownFirst;
+          four = ownSecond;
+        }
+        else
+        {
+          two = ownFirst;
+          if (cmp_(second->firstValue_.first, ownSecond->firstValue_.first))
+          {
+            three = second;
+            four = ownSecond;
+          }
+          else
+          {
+            three = ownSecond;
+            four = second;
+          }
+        }
+      }
+      if (cmp_(firstValue_.first, neigbour->firstValue_.first))
+      {
+        left_ = one;
+        left_->parent_ = this;
+        right_ = two;
+        right_->parent_ = this;
+        neigbour->left_ = three;
+        neigbour->left_->parent_ = neigbour;
+        neigbour->right_ = four;
+        neigbour->right_->parent_ = neigbour;
+      }
+      else
+      {
+        left_ = three;
+        left_->parent_ = this;
+        right_ = four;
+        right_->parent_ = this;
+        neigbour->left_ = one;
+        neigbour->left_->parent_ = neigbour;
+        neigbour->right_ = two;
+        neigbour->right_->parent_ = neigbour;
+      }
     }
 
     template< class Key, class T, class Compare >
