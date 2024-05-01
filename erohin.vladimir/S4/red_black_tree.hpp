@@ -46,6 +46,8 @@ namespace erohin
     detail::Node< Key, T > * find_grandparent(detail::Node< Key, T > * subtree);
     detail::Node< Key, T > * find_uncle(detail::Node< Key, T > * subtree);
     detail::Node< Key, T > * find_child(detail::Node< Key, T > * subtree);
+    void rotate_left(detail::Node< Key, T > * subtree);
+    void rotate_right(detail::Node< Key, T > * subtree);
   };
 
   template< class Key, class T, class Compare >
@@ -362,6 +364,64 @@ namespace erohin
     {
       return subtree->parent_->left_;
     }
+  }
+
+  template< class Key, class T, class Compare >
+  void RedBlackTree< Key, T, Compare >::rotate_left(detail::Node< Key, T > * subtree)
+  {
+    detail::Node< Key, T > * node = subtree->right_;
+    node->parent_ = subtree->parent_;
+    if (!node->parent_)
+    {
+      root_ = node;
+    }
+    if (subtree->parent_)
+    {
+      if (subtree->parent_->left_ == subtree)
+      {
+        subtree->parent_->left_ = node;
+      }
+      else
+      {
+        subtree->parent_->right_ = node;
+      }
+    }
+    subtree->right_ = node->left_;
+    if (node->left_)
+    {
+      node->left_->parent_ = subtree;
+    }
+    subtree->parent_ = node;
+    node->left_ = subtree;
+  }
+
+  template< class Key, class T, class Compare >
+  void RedBlackTree< Key, T, Compare >::rotate_right(detail::Node< Key, T > * subtree)
+  {
+    detail::Node< Key, T > * node = subtree->left_;
+    node->parent_ = subtree->parent_;
+    if (!node->parent_)
+    {
+      root_ = node;
+    }
+    if (subtree->parent_)
+    {
+      if (subtree->parent_->left_ == subtree)
+      {
+        subtree->parent_->left_ = node;
+      }
+      else
+      {
+        subtree->parent_->right_ = node;
+      }
+    }
+    subtree->left_ = node->right_;
+    if (node->right_)
+    {
+      node->right_->parent_ = subtree;
+    }
+    subtree->parent_ = node;
+    node->right_ = subtree;
   }
 }
 
