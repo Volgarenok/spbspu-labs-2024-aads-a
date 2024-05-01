@@ -1,22 +1,22 @@
-#ifndef BILIST_HPP
-#define BILIST_HPP
+#ifndef NODE_HPP
+#define NODE_HPP
 
 namespace chistyakov
 {
   template< typename T >
-  struct BiList
+  struct Node
   {
-    BiList(const T & value):
+    Node(const T & value):
       value_(value),
       next_(nullptr),
       previous_(nullptr)
     {}
 
-    ~BiList() = default;
+    ~Node() = default;
 
     T value_;
-    BiList * next_;
-    BiList * previous_;
+    Node * next_;
+    Node * previous_;
   };
 }
 

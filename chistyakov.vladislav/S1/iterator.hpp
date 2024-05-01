@@ -2,7 +2,7 @@
 #define ITERATOR_HPP
 
 #include <memory>
-#include "biList.hpp"
+#include "node.hpp"
 
 namespace chistyakov
 {
@@ -79,7 +79,7 @@ namespace chistyakov
       }
 
     private:
-      BiList< T > * node_;
+      Node< T > * node_;
   };
 }
 

@@ -3,7 +3,7 @@
 
 #include "iterator.hpp"
 #include "constIterator.hpp"
-#include "biList.hpp"
+#include "Node.hpp"
 
 namespace chistyakov
 {
@@ -16,7 +16,7 @@ namespace chistyakov
         tail_(nullptr)
       {}
 
-      List(BiList< T > * head, BiList< T > * tail):
+      List(Node< T > * head, Node< T > * tail):
         head_(head),
         tail_(tail)
       {}
@@ -114,50 +114,50 @@ namespace chistyakov
 
       void push_back(const T & value)
       {
-        BiList< T > * newBiList = new BiList< T >(value);
-        newBiList->previous_ = tail_;
+        Node< T > * newNode = new Node< T >(value);
+        newNode->previous_ = tail_;
 
         if (!head_)
         {
-          head_ = newBiList;
+          head_ = newNode;
         }
 
         if (tail_)
         {
-          tail_->next_ = newBiList;
+          tail_->next_ = newNode;
         }
 
-        tail_ = newBiList;
+        tail_ = newNode;
       }
 
       void push_front(const T & value)
       {
-        BiList< T > * newBiList = new BiList< T >(value);
-        newBiList->next = head_;
+        Node< T > * newNode = new Node< T >(value);
+        newNode->next = head_;
 
         if (head_)
         {
-          head_->previous = newBiList;
+          head_->previous = newNode;
         }
 
         if (!tail_)
         {
-          tail_ = newBiList;
+          tail_ = newNode;
         }
 
-        head_ = newBiList;
+        head_ = newNode;
       }
 
       void pop_back()
       {
-        BiList< T > * lastTail = tail_;
+        Node< T > * lastTail = tail_;
         tail_ = tail_->previous_;
         delete lastTail;
       }
 
       void pop_front()
       {
-        BiList< T > * lastHead = head_;
+        Node< T > * lastHead = head_;
         head_ = head_->next_;
         delete lastHead;
       }
@@ -203,6 +203,18 @@ namespace chistyakov
         }
       }
 
+      void assign(size_t n, const T & value)
+      {
+        List< T > tmp;
+
+        for (size_t i = 0; i < n; ++i)
+        {
+          tmp.push_back(value);
+        }
+        
+        swap(tmp);
+      }
+
       void swap(List & list)
       {
         std::swap(list.head_, head_);
@@ -210,8 +222,8 @@ namespace chistyakov
       }
 
     private:
-      BiList< T > * head_;
-      BiList< T > * tail_;
+      Node< T > * head_;
+      Node< T > * tail_;
   };
 }
 
