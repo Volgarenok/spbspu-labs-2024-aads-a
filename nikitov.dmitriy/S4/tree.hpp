@@ -56,7 +56,7 @@ namespace nikitov
   {}
 
   template< class Key, class T, class Compare >
-  Tree< Key, T, Compare >::Tree(const Tree< Key, T, Compare >& other) :
+  Tree< Key, T, Compare >::Tree(const Tree< Key, T, Compare >& other):
     root_(new detail::TreeNode< Key, T, Compare >()),
     size_(0),
     cmp_(other.cmp_)
@@ -68,7 +68,7 @@ namespace nikitov
   }
 
   template< class Key, class T, class Compare >
-  Tree< Key, T, Compare >::Tree(Tree< Key, T, Compare >&& other) :
+  Tree< Key, T, Compare >::Tree(Tree< Key, T, Compare >&& other):
     root_(other.root_),
     size_(other.size_),
     cmp_(other.cmp_)
@@ -118,7 +118,7 @@ namespace nikitov
     node = search(root_, key);
     return node->get(key);
   }
-  
+
   /*template< class Key, class T, class Compare >
   T& Tree< Key, T, Compare >::operator[](Key&& key)
   {

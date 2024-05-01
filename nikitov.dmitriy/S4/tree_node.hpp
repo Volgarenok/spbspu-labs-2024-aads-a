@@ -11,6 +11,7 @@ namespace nikitov
     template< class Key, class T, class Compare = std::less< Key > >
     struct TreeNode
     {
+      using Node = TreeNode< Key, T, Compare >;
       TreeNode();
       TreeNode(const std::pair< Key, T >& value);
       ~TreeNode() = default;
@@ -19,7 +20,7 @@ namespace nikitov
       T& get(const Key& key);
       const T& get(const Key& key) const;
       TreeNode< Key, T, Compare >* add(const std::pair< Key, T >& value);
-      TreeNode< Key, T, Compare >* split(const std::pair< Key, T >& value, TreeNode< Key, T, Compare >* first, TreeNode< Key, T, Compare >* second);
+      TreeNode< Key, T, Compare >* split(const std::pair< Key, T >& value, Node* first, Node* second);
       void check(TreeNode< Key, T, Compare >* first, TreeNode< Key, T, Compare >* second);
       void clear();
 
@@ -135,7 +136,7 @@ namespace nikitov
     }
 
     template< class Key, class T, class Compare >
-    TreeNode< Key, T, Compare >* TreeNode< Key, T, Compare >::split(const std::pair< Key, T >& value, TreeNode< Key, T, Compare >* first, TreeNode< Key, T, Compare >* second)
+    TreeNode< Key, T, Compare >* TreeNode< Key, T, Compare >::split(const std::pair< Key, T >& value, Node* first, Node* second)
     {
       TreeNode< Key, T, Compare >* newRoot = nullptr;
       if (!parent_)
