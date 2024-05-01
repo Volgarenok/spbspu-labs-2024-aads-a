@@ -20,11 +20,13 @@ namespace erohin
     using value_type = std::pair< Key, T >;
     RedBlackTree();
     RedBlackTree(const RedBlackTree< Key, T, Compare > & rhs);
-    RedBlackTree(RedBlackTree< Key, T, Compare > && rhs);
+    RedBlackTree(RedBlackTree< Key, T, Compare > && rhs) noexcept;
     RedBlackTree(std::initializer_list< value_type > init_list);
     template< class InputIt>
     RedBlackTree(InputIt first, InputIt last);
     ~RedBlackTree();
+    RedBlackTree< Key, T, Compare > & operator=(const RedBlackTree< Key, T, Compare > & rhs);
+    RedBlackTree< Key, T, Compare > & operator=(RedBlackTree< Key, T, Compare > && rhs) noexcept;
     iterator begin();
     iterator end();
     const_iterator cbegin();
@@ -32,12 +34,18 @@ namespace erohin
     void clear();
     bool empty() const noexcept;
     std::pair< iterator, bool > insert(const value_type & value);
+    std::pair< iterator, bool > erase(const Key & key);
+    void swap(RedBlackTree & rhs);
   private:
     detail::Node< Key, T > * root_;
     Compare cmp_;
     void clear_subtree(detail::Node< Key, T > * subtree);
     void insert_balance(detail::Node< Key, T > * subtree);
     void erase_balance(detail::Node< Key, T > * subtree);
+    detail::Node< Key, T > * find_to_change_erased(detail::Node< Key, T > * subtree);
+    detail::Node< Key, T > * find_grandparent(detail::Node< Key, T > * subtree);
+    detail::Node< Key, T > * find_uncle(detail::Node< Key, T > * subtree);
+    detail::Node< Key, T > * find_child(detail::Node< Key, T > * subtree);
   };
 
   template< class Key, class T, class Compare >
@@ -51,7 +59,7 @@ namespace erohin
   {}
 
   template< class Key, class T, class Compare >
-  RedBlackTree< Key, T, Compare >::RedBlackTree(RedBlackTree< Key, T, Compare > && rhs):
+  RedBlackTree< Key, T, Compare >::RedBlackTree(RedBlackTree< Key, T, Compare > && rhs) noexcept:
     root_(rhs.root_)
   {
     rhs.root_ = nullptr;
@@ -87,14 +95,36 @@ namespace erohin
   }
 
   template< class Key, class T, class Compare >
+  RedBlackTree< Key, T, Compare > & RedBlackTree< Key, T, Compare >::operator=(const RedBlackTree< Key, T, Compare > & rhs)
+  {
+    if (std::addressof(rhs) != this)
+    {
+      RedBlackTree< Key, T, Compare > temp(rhs);
+      swap(temp);
+      return *this;
+    }
+  }
+
+  template< class Key, class T, class Compare >
+  RedBlackTree< Key, T, Compare > & RedBlackTree< Key, T, Compare >::operator=(RedBlackTree< Key, T, Compare > && rhs) noexcept
+  {
+    if (std::addressof(rhs) != this)
+    {
+      RedBlackTree< Key, T, Compare > temp(std::move(rhs));
+      swap(temp);
+      return *this;
+    }
+  }
+
+  template< class Key, class T, class Compare >
   TreeIterator< Key, T > RedBlackTree< Key, T, Compare >::begin()
   {
-    iterator result = root_;
+    detail::Node< Key, T > * result = root_;
     while (result->left_ || result->right_)
     {
       result = result->left_;
     }
-    return result;
+    return iterator(result);
   }
 
   template< class Key, class T, class Compare >
@@ -161,9 +191,81 @@ namespace erohin
   }
 
   template< class Key, class T, class Compare >
+  std::pair< TreeIterator< Key, T >, bool > RedBlackTree< Key, T, Compare >::erase(const Key & key)
+  {
+    if (empty())
+    {
+      return std::make_pair(end(), false);
+    }
+    detail::Node< Key, T > * node = root_;
+    detail::Node< Key, T > * to_delete = nullptr;
+    while (!to_delete && node)
+    {
+      if (node->data_.first == key)
+      {
+        to_delete = node;
+      }
+      else if (cmp_(key, node->data_.first))
+      {
+        node = node->left_;
+      }
+      else
+      {
+        node = node->right_;
+      }
+    }
+    if (!to_delete)
+    {
+      return std::make_pair(end(), false);
+    }
+    detail::Node< Key, T > * new_node = find_to_change_erased(to_delete);
+    if (to_delete == root_ && !new_node)
+    {
+      root_ = nullptr;
+      delete to_delete;
+      return std::make_pair(end(), true);
+    }
+    else if (to_delete == root_)
+    {
+      root_ = new_node;
+      delete to_delete;
+      return std::make_pair(iterator(root_), true);
+    }
+    else if (!new_node)
+    {
+      new_node = to_delete;
+      std::cout << "/////////////////////////////" << std::endl;
+    }
+    if (new_node->parent_->left_ == new_node)
+    {
+      new_node->parent_->left_ = nullptr;
+
+      std::cout << "/////////////////////////////" << std::endl;
+    }
+    else if (new_node->parent_->right_ == new_node)
+    {
+      new_node->parent_->right_ = nullptr;
+    }
+    if (new_node != to_delete)
+    {
+      std::swap(new_node->data_, to_delete->data_);
+    }
+    auto iter = ++iterator(to_delete);
+      std::cout << "/////////////////////////////" << std::endl;
+    delete new_node;
+    return std::make_pair(iter, true);
+  }
+
+  template< class Key, class T, class Compare >
   bool RedBlackTree< Key, T, Compare >::empty() const noexcept
   {
     return (!root_);
+  }
+
+  template< class Key, class T, class Compare >
+  void RedBlackTree< Key, T, Compare >::swap(RedBlackTree< Key, T, Compare > & rhs)
+  {
+    std::swap(root_, rhs.root_);
   }
 
   template< class Key, class T, class Compare >
@@ -182,6 +284,7 @@ namespace erohin
   template< class Key, class T, class Compare >
   void RedBlackTree< Key, T, Compare >::insert_balance(detail::Node< Key, T > * subtree)
   {
+    subtree = subtree->parent_;
     return;
   }
 
@@ -189,6 +292,76 @@ namespace erohin
   void RedBlackTree< Key, T, Compare >::erase_balance(detail::Node< Key, T > * subtree)
   {
     return;
+  }
+
+  template< class Key, class T, class Compare >
+  detail::Node< Key, T > * RedBlackTree< Key, T, Compare >::find_to_change_erased(detail::Node< Key, T > * subtree)
+  {
+    if (subtree->left_)
+    {
+      subtree = subtree->left_;
+      while (subtree->right_)
+      {
+        subtree = subtree->right_;
+      }
+    }
+    else if (subtree->right_)
+    {
+      subtree = subtree->right_;
+      while (subtree->left_)
+      {
+        subtree = subtree->left_;
+      }
+    }
+    else
+    {
+      subtree = nullptr;
+    }
+    return subtree;
+  }
+
+  template< class Key, class T, class Compare >
+  detail::Node< Key, T > * RedBlackTree< Key, T, Compare >::find_grandparent(detail::Node< Key, T > * subtree)
+  {
+    if (subtree && subtree->parent_)
+    {
+      return subtree->parent_->parent_;
+    }
+    else
+    {
+      return nullptr;
+    }
+  }
+
+  template< class Key, class T, class Compare >
+  detail::Node< Key, T > * RedBlackTree< Key, T, Compare >::find_uncle(detail::Node< Key, T > * subtree)
+  {
+    detail::Node< Key, T > * node = find_grandparent(subtree);
+    if (!node)
+    {
+      return nullptr;
+    }
+    if (node->parent_ == node->left_)
+    {
+      return node->right_;
+    }
+    else
+    {
+      return node->left_;
+    }
+  }
+
+  template< class Key, class T, class Compare >
+  detail::Node< Key, T > * RedBlackTree< Key, T, Compare >::find_child(detail::Node< Key, T > * subtree)
+  {
+    if (subtree == subtree->parent_->left_)
+    {
+      return subtree->parent_->right_;
+    }
+    else
+    {
+      return subtree->parent_->left_;
+    }
   }
 }
 

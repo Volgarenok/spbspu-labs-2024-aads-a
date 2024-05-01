@@ -19,12 +19,11 @@ int main(int argc, char ** argv)
     int_dict.insert(std::make_pair(2, 20));
     int_dict.insert(std::make_pair(3, 30));
     int_dict.insert(std::make_pair(4, 40));
-    auto iter = int_dict.insert(std::make_pair(0, 00));
+    int_dict.insert(std::make_pair(0, 00));
     int_dict.insert(std::make_pair(5, 50));
-    while (iter.first != int_dict.end())
+    for (auto iter: int_dict)
     {
-      std::cout << (*(iter.first)).first << " ";
-      (iter.first)++;
+      std::cout << iter.first << " ";
     }
   }
 

@@ -50,7 +50,7 @@ namespace erohin
   template< class Key, class T, class S >
   TreeIterator< Key, T, S > & TreeIterator< Key, T, S >::operator++()
   {
-    node_ = strategy_(node_);
+    node_ = strategy_.next(node_);
     return *this;
   }
 
