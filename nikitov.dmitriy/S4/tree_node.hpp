@@ -17,6 +17,7 @@ namespace nikitov
 
       bool find(const Key& key) const;
       T& get(const Key& key);
+      const T& get(const Key& key) const;
       TreeNode< Key, T, Compare >* add(const std::pair< Key, T >& value);
       TreeNode< Key, T, Compare >* split(const std::pair< Key, T >& value);
       void clear();
@@ -37,7 +38,7 @@ namespace nikitov
     {}
 
     template< class Key, class T, class Compare >
-    TreeNode< Key, T, Compare >::TreeNode(const std::pair< Key, T >& value) :
+    TreeNode< Key, T, Compare >::TreeNode(const std::pair< Key, T >& value):
       firstValue_(value),
       secondValue_(std::pair< Key, T >()),
       left_(nullptr),
@@ -61,6 +62,16 @@ namespace nikitov
 
     template< class Key, class T, class Compare >
     T& TreeNode< Key, T, Compare >::get(const Key& key)
+    {
+      if (size_ == 2 && secondValue_.first == key)
+      {
+        return secondValue_.second;
+      }
+      return firstValue_.second;
+    }
+
+    template< class Key, class T, class Compare >
+    const T& TreeNode< Key, T, Compare >::get(const Key& key) const
     {
       if (size_ == 2 && secondValue_.first == key)
       {

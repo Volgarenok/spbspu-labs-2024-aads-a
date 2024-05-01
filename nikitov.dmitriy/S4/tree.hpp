@@ -12,7 +12,10 @@ namespace nikitov
   {
   public:
     Tree();
+    Tree(const Tree< Key, T, Compare >& other);
     ~Tree();
+
+    Tree< Key, T, Compare >& operator=(const Tree& other);
 
     T& operator[](const Key& key);
     T& at(const Key& key);
@@ -38,17 +41,40 @@ namespace nikitov
   };
 
   template< class Key, class T, class Compare >
-  Tree< Key, T, Compare >::Tree() :
+  Tree< Key, T, Compare >::Tree():
     root_(new detail::TreeNode< Key, T, Compare >()),
     size_(0),
     cmp_(Compare())
   {}
 
   template< class Key, class T, class Compare >
+  Tree< Key, T, Compare >::Tree(const Tree< Key, T, Compare >& other):
+    root_(new detail::TreeNode< Key, T, Compare >()),
+    size_(0),
+    cmp_(other.cmp_)
+  {
+    for (auto i = other.cbegin(); i != other.cend(); ++i)
+    {
+      insert((*i));
+    }
+  }
+
+  template< class Key, class T, class Compare >
   Tree< Key, T, Compare >::~Tree()
   {
     clear();
     delete root_;
+  }
+
+  template< class Key, class T, class Compare >
+  Tree< Key, T, Compare >& Tree< Key, T, Compare >::operator=(const Tree& other)
+  {
+    Tree< Key, T, Compare > temp(other);
+    if (std::addressof(other) != this)
+    {
+      swap(temp);
+    }
+    return *this;
   }
 
   template< class Key, class T, class Compare >
@@ -61,7 +87,7 @@ namespace nikitov
     }
     insert({ key, T() });
     node = search(root_, key);
-    return node->get();
+    return node->get(key);
   }
 
   template< class Key, class T, class Compare >
