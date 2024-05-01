@@ -13,7 +13,7 @@ namespace nikitov
   {
     friend class Tree< Key, T, Compare >;
   public:
-    ConstTreeIterator(const ConstListIterator< Key, T, Compare >&) = default;
+    ConstTreeIterator(const ConstTreeIterator< Key, T, Compare >&) = default;
     ~ConstTreeIterator() = default;
 
     const std::pair< Key, T >& operator*() const;
@@ -69,87 +69,44 @@ namespace nikitov
   template< class Key, class T, class Compare >
   ConstTreeIterator< Key, T, Compare >& ConstTreeIterator< Key, T, Compare >::operator++()
   {
-    if (isFirst_)
+      if (isFirst_ && node_->size_ == 2)
+  {
+    if (node_->middle_)
     {
-      if (node_->size_ == 2)
-      {
-        if (node_->middle_)
-        {
-          node_ = node_->middle_;
-          fallLeft();
-        }
-        else
-        {
-          isFirst_ = false;
-        }
-      }
-      else
-      {
-        if (node_->right_)
-        {
-          node_ = node_->right_;
-          fallLeft();
-        }
-        else
-        {
-          if (node_->parent_->right_ == node_)
-          {
-            while (node_->parent_->right_ == node_)
-            {
-              node_ = node_->parent_;
-            }
-            if (!node_->parent_->parent_)
-            {
-              node_ = node_->parent_;
-            }
-          }
-          else if (node_->parent_->middle_ == node_)
-          {
-            node_ = node_->parent_;
-            isFirst_ = false;
-          }
-          else
-          {
-            node_ = node_->parent_;
-            isFirst_ = true;
-          }
-        }
-      }
+      node_ = node_->middle_;
+      fallLeft();
     }
     else
     {
-      if (node_->right_)
-      {
-        node_ = node_->right_;
-        fallLeft();
-      }
-      else
-      {
-        if (node_->parent_->right_ == node_)
-        {
-          while (node_->parent_->right_ == node_)
-          {
-            node_ = node_->parent_;
-          }
-          if (!node_->parent_->parent_)
-          {
-            node_ = node_->parent_;
-          }
-        }
-        else if (node_->parent_->middle_ == node_)
-        {
-          node_ = node_->parent_;
-          isFirst_ = false;
-        }
-        else
-        {
-          node_ = node_->parent_;
-          isFirst_ = true;
-        }
-      }
+      isFirst_ = false;
     }
-    return *this;
   }
+  else if (node_->right_)
+  {
+    node_ = node_->right_;
+    fallLeft();
+  }
+  else if (node_->parent_->right_ == node_)
+  {
+    while (node_->parent_->right_ == node_)
+    {
+      node_ = node_->parent_;
+    }
+    node_ = node_->parent_;
+    isFirst_ = true;
+  }
+  else if (node_->parent_->middle_ == node_)
+  {
+    node_ = node_->parent_;
+    isFirst_ = false;
+  }
+  else
+  {
+    node_ = node_->parent_;
+    isFirst_ = true;
+  }
+  return *this;
+}
 
   template< class Key, class T, class Compare >
   bool ConstTreeIterator< Key, T, Compare >::operator==(const ConstTreeIterator< Key, T, Compare >& other) const

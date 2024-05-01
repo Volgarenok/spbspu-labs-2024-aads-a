@@ -141,20 +141,33 @@ namespace nikitov
           std::swap(firstValue_, secondValue_);
           parent_->left_ = newNode;
           newNode->left_ = left_;
+          if (left_)
+          {
+            left_->parent_ = newNode;
+          }
           newNode->right_ = middle_;
           parent_->right_ = this;
+          left_ = nullptr;
         }
         else
         {
           newNode = new TreeNode< Key, T, Compare >(secondValue_);
           parent_->right_ = newNode;
           newNode->right_ = right_;
+          if (right_)
+          {
+            right_->parent_ = newNode;
+          }
           newNode->left_ = middle_;
           parent_->left_ = this;
+          right_ = nullptr;
+        }
+        if (middle_)
+        {
+          middle_->parent_ = newNode;
         }
         newNode->parent_ = parent_;
         parent_->middle_ = nullptr;
-        left_ = nullptr;
         middle_ = nullptr;
       }
       secondValue_ = std::pair< Key, T >();
