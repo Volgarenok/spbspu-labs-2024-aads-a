@@ -24,6 +24,7 @@ namespace nikitov
 
     void insert(const std::pair< Key, T >& value);
     void clear();
+    void swap(Tree< Key, T, Compare >& other);
 
   private:
     detail::TreeNode< Key, T, Compare >* root_;
@@ -95,6 +96,14 @@ namespace nikitov
       root_ = root_->parent_;
     }
     size_ = 0;
+  }
+
+  template< class Key, class T, class Compare >
+  void Tree< Key, T, Compare >::swap(Tree< Key, T, Compare >& other)
+  {
+    std::swap(root_, other.root_);
+    std::swap(size_, other.size_);
+    std::swap(cmp_, other.cmp_);
   }
 
   template< class Key, class T, class Compare >
