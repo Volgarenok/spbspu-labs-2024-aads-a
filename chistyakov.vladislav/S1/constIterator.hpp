@@ -10,7 +10,7 @@ namespace chistyakov
   class List;
 
   template< typename T >
-  class ConstIterator
+  class ConstIterator : public std::iterator< std::bidirectional_iterator_tag, T >
   {
     public:
       ConstIterator():
