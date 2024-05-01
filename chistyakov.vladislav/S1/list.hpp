@@ -21,56 +21,93 @@ namespace chistyakov
         tail_(tail)
       {}
 
-      List(const List & list):
+      explicit List(const List & list):
         head_(nullptr),
         tail_(nullptr)
       {
         for (auto element = list.head_; element != nullptr; element = element->next_)
         {
-          push_back(element->value_);
+          try
+          {
+            push_back(element->value_);
+          }
+          catch (...)
+          {
+            clear();
+            throw;
+          }
         }
       }
 
-      List(List< T > && list):
+      explicit List(List< T > && list):
         head_(list.head_)
-      {}
+      {
+        list.head_ = nullptr;
+        list.tail_ = nullptr;
+      }
 
       ~List()
       {
         clear();
       }
 
-      Iterator< T > begin()
+      List & operator=(const List & other)
+      {
+        List temp(other);
+        swap(temp);
+        return *this;
+      }
+
+      List & operator=(List && other)
+      {
+        clear();
+        swap(other);
+        return *this;
+      }
+
+      Iterator< T > begin() noexcept
       {
         return Iterator< T >(head_);
       }
 
-      Iterator< T > end()
+      Iterator< T > end() noexcept
       {
         return Iterator< T >(nullptr);
       }
 
-      ConstIterator< T > cbegin()
+      ConstIterator< T > cbegin() const noexcept
       {
         return ConstIterator< T >(head_);
       }
 
-      ConstIterator< T > cend()
+      ConstIterator< T > cend() const noexcept
       {
         return ConstIterator < T >(nullptr);
       }
 
-      T & front() const
+      T & front()
       {
         return head_->value_;
       }
 
-      T & back() const
+      T & back()
       {
         return tail_->value_;
       }
 
-      bool empty()
+      const T & front() const
+      {
+        const T & tmp = head_->value_;
+        return tmp;
+      }
+
+      const T & back() const
+      {
+        const T & tmp = tail_->value_;
+        return tmp;
+      }
+
+      bool empty() const noexcept
       {
         return head_ == nullptr;
       }
@@ -85,7 +122,7 @@ namespace chistyakov
           head_ = newBiList;
         }
 
-        if(tail_)
+        if (tail_)
         {
           tail_->next_ = newBiList;
         }
@@ -113,41 +150,19 @@ namespace chistyakov
 
       void pop_back()
       {
-        if (!tail_)
-        {
-          return;
-        }
-
         BiList< T > * lastTail = tail_;
         tail_ = tail_->previous_;
-
-        if (tail_)
-        {
-          tail_->next_ = nullptr;
-        }
-
         delete lastTail;
       }
 
       void pop_front()
       {
-        if (!head_)
-        {
-          return;
-        }
-
         BiList< T > * lastHead = head_;
         head_ = head_->next_;
-
-        if (head_)
-        {
-          head_->previous_ = nullptr;
-        }
-
         delete lastHead;
       }
 
-      void clear()
+      void clear() noexcept
       {
         while (head_ != nullptr)
         {
@@ -191,6 +206,7 @@ namespace chistyakov
       void swap(List & list)
       {
         std::swap(list.head_, head_);
+        std::swap(list.tail_, tail_);
       }
 
     private:

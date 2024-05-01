@@ -10,7 +10,7 @@ namespace chistyakov
   class List;
 
   template< typename T >
-  class Iterator
+  class Iterator : public std::iterator< std::bidirectional_iterator_tag, T >
   {
     friend class List< T >;
     public:
@@ -18,11 +18,8 @@ namespace chistyakov
         node_(nullptr)
       {}
 
-      Iterator(const Iterator & val):
-        node_(val.node_)
-      {}
-
       ~Iterator() = default;
+      Iterator(const Iterator< T > &) = default;
       Iterator< T > & operator=(const Iterator< T > & ) = default;
 
       Iterator< T > & operator++()
@@ -67,6 +64,16 @@ namespace chistyakov
       }
 
       T * operator->()
+      {
+        return std::addressof(node_->value_);
+      }
+
+      const T & operator*() const
+      {
+        return node_->value_;
+      }
+
+      const T * operator->() const
       {
         return std::addressof(node_->value_);
       }

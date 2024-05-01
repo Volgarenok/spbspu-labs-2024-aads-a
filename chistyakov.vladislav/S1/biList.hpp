@@ -6,7 +6,7 @@ namespace chistyakov
   template< typename T >
   struct BiList
   {
-    BiList(T value):
+    BiList(const T & value):
       value_(value),
       next_(nullptr),
       previous_(nullptr)

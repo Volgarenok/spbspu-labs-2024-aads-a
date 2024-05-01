@@ -18,7 +18,7 @@ void chistyakov::inputList(std::istream & input, List< std::pair< std::string, L
     {
       nums.push_back(std::stoull(line));
     }
-    list.push_back({name, nums});
+    list.push_back(std::pair< std::string, List < size_t > >(name, nums));
   }
 }
 
@@ -62,7 +62,7 @@ void chistyakov::outPutNums(List < std::pair < size_t, List < size_t > > > & lis
       std::cout << *num;
       auto next = num;
 
-      if (next.get_BiList()->next_ != nullptr)
+      if (++next != (element->second).end())
       {
         std::cout << " ";
       }
