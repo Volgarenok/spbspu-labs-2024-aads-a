@@ -22,6 +22,7 @@ namespace nikitov
 
     T& operator[](const Key& key);
     T& at(const Key& key);
+    const T& at(const Key& key) const;
 
     TreeIterator< Key, T, Compare > begin();
     ConstTreeIterator< Key, T, Compare > cbegin() const;
@@ -119,6 +120,20 @@ namespace nikitov
 
   template< class Key, class T, class Compare >
   T& Tree< Key, T, Compare >::at(const Key& key)
+  {
+    detail::TreeNode< Key, T, Compare >* node = search(root_, key);
+    if (node)
+    {
+      return node->get(key);
+    }
+    else
+    {
+      throw std::out_of_range("Error: No element by key");
+    }
+  }
+
+  template< class Key, class T, class Compare >
+  const T& Tree< Key, T, Compare >::at(const Key& key) const
   {
     detail::TreeNode< Key, T, Compare >* node = search(root_, key);
     if (node)
