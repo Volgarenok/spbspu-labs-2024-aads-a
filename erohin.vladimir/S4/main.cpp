@@ -21,6 +21,7 @@ int main(int argc, char ** argv)
     int_dict.insert(std::make_pair(4, 40));
     int_dict.insert(std::make_pair(0, 00));
     int_dict.insert(std::make_pair(5, 50));
+    int_dict.erase(0);
     for (auto iter: int_dict)
     {
       std::cout << std::endl << "//" << iter.first << "//" << std::endl;

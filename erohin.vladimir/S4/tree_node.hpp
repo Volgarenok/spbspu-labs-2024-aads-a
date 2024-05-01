@@ -8,6 +8,12 @@ namespace erohin
 {
   namespace detail
   {
+    enum color_t
+    {
+      BLACK,
+      RED
+    };
+
     template< class Key, class T >
     struct Node
     {
@@ -16,7 +22,6 @@ namespace erohin
       Node * left_;
       Node * right_;
       unsigned short int color_;
-      size_t height_;
       Node(const std::pair< Key, T > & value, Node * parent, Node * left, Node * right);
       Node(std::pair< Key, T > && value, Node * parent, Node * left, Node * right);
       ~Node() = default;
@@ -28,8 +33,7 @@ namespace erohin
       parent_(parent),
       left_(left),
       right_(right),
-      color_(1),
-      height_(0)
+      color_(color_t::RED)
     {}
 
     template< class Key, class T >
@@ -38,8 +42,7 @@ namespace erohin
       parent_(parent),
       left_(left),
       right_(right),
-      color_(1),
-      height_(0)
+      color_(color_t::RED)
     {}
   }
 }
