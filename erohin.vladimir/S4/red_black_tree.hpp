@@ -29,8 +29,8 @@ namespace erohin
     RedBlackTree< Key, T, Compare > & operator=(RedBlackTree< Key, T, Compare > && rhs) noexcept;
     iterator begin();
     iterator end();
-    const_iterator cbegin();
-    const_iterator cend();
+    const_iterator cbegin() const;
+    const_iterator cend() const;
     void clear();
     bool empty() const noexcept;
     std::pair< iterator, bool > insert(const value_type & value);
@@ -51,6 +51,10 @@ namespace erohin
     T & operator[](const Key & key);
     T & at(const Key & key);
     const T & at(const Key & key) const;
+    iterator lower_bound(const Key & key);
+    const_iterator lower_bound(const Key & key) const;
+    iterator upper_bound(const Key & key);
+    const_iterator upper_bound(const Key & key) const;
   private:
     detail::Node< Key, T > * root_;
     Compare cmp_;
@@ -160,15 +164,15 @@ namespace erohin
   }
 
   template< class Key, class T, class Compare >
-  TreeConstIterator< Key, T > RedBlackTree< Key, T, Compare >::cbegin()
+  TreeConstIterator< Key, T > RedBlackTree< Key, T, Compare >::cbegin() const
   {
-    return const_iterator(begin().node_);
+    return const_iterator(begin());
   }
 
   template< class Key, class T, class Compare >
-  TreeConstIterator< Key, T > RedBlackTree< Key, T, Compare >::cend()
+  TreeConstIterator< Key, T > RedBlackTree< Key, T, Compare >::cend() const
   {
-    return const_iterator(end().node_);
+    return const_iterator(nullptr);
   }
 
   template< class Key, class T, class Compare >
@@ -410,6 +414,62 @@ namespace erohin
   const T & RedBlackTree< Key, T, Compare >::at(const Key & key) const
   {
     return at(key);
+  }
+
+  template< class Key, class T, class Compare >
+  TreeIterator< Key, T > RedBlackTree< Key, T, Compare >::lower_bound(const Key & key)
+  {
+    detail::Node< Key, T > * node = root_;
+    while (node)
+    {
+      if (!cmp_(node->data_.first, key))
+      {
+        return iterator(node);
+      }
+      if (cmp_(key, node->data_.first))
+      {
+        node = node->left_;
+      }
+      else
+      {
+        node = node->right_;
+      }
+    }
+    return end();
+  }
+
+  template< class Key, class T, class Compare >
+  TreeConstIterator< Key, T > RedBlackTree< Key, T, Compare >::lower_bound(const Key & key) const
+  {
+    return const_iterator(lower_bound(key).node_);
+  }
+
+  template< class Key, class T, class Compare >
+  TreeIterator< Key, T > RedBlackTree< Key, T, Compare >::upper_bound(const Key & key)
+  {
+    detail::Node< Key, T > * node = root_;
+    while (node)
+    {
+      if (!cmp_(node->data_.first, key) && !(node->data_.first == key))
+      {
+        return iterator(node);
+      }
+      if (cmp_(key, node->data_.first))
+      {
+        node = node->left_;
+      }
+      else
+      {
+        node = node->right_;
+      }
+    }
+    return end();
+  }
+
+  template< class Key, class T, class Compare >
+  TreeConstIterator< Key, T > RedBlackTree< Key, T, Compare >::upper_bound(const Key & key) const
+  {
+    return const_iterator(upper_bound(key).node_);
   }
 
   template< class Key, class T, class Compare >

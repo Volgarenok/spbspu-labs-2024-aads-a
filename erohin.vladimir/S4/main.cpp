@@ -29,6 +29,7 @@ int main(int argc, char ** argv)
     }
     RedBlackTree< int, int >::const_iterator rte = int_dict.cend();
     RedBlackTree< int, int >::iterator iter = int_dict.find(4);
+    std::cout << std::endl << "//" << int_dict.lower_bound(0)->first << "//" << std::endl;
   }
 
   if (argc != 2)
