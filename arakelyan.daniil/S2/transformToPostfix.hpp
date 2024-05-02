@@ -6,6 +6,6 @@
 
 namespace arakelyan
 {
-  Queue< detail::ExpressionObj > transformInfixToPostfix(Queue< detail::ExpressionObj > &infixQueue);
+  Queue< ExpressionObj > transformInfixToPostfix(Queue< ExpressionObj > &infixQueue);
 }
 #endif

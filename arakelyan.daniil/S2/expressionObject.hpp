@@ -1,6 +1,7 @@
 #ifndef EXPRESSIONOBJ_HPP
 #define EXPRESSIONOBJ_HPP
 
+#include <stdexcept>
 #include <string>
 
 namespace arakelyan
@@ -26,21 +27,42 @@ namespace arakelyan
       ~Token() = default;
     };
 
+    struct Comparator
+    {
+      int operator()(const Token &value) const
+      {
+        if (value.oper_ == '+' || value.oper_ == '-')
+        {
+          return 1;
+        }
+        else if (value.oper_ == '*' || value.oper_ == '/' || value.oper_ == '%')
+        {
+          return 2;
+        }
+        else
+        {
+          throw std::logic_error("Invalid operator!");
+        }
+      }
+    };
+  }
+
     struct ExpressionObj
     {
     public:
       ExpressionObj() = delete;
-      ExpressionObj(token_t type, Token val);
+      ExpressionObj(detail::token_t type, detail::Token val);
       ExpressionObj(const ExpressionObj &obj) = default;
       ~ExpressionObj() = default;
       ExpressionObj &operator=(const ExpressionObj &obj) = default;
 
-      Token getVal() const;
-      token_t getType() const;
+      detail::Token getVal() const;
+      detail::token_t getType() const;
+      int getPriority() const;
     private:
-      Token val_;
-      token_t type_;
+      detail::Token val_;
+      detail::token_t type_;
+      detail::Comparator compar;
     };
-  }
 }
 #endif

@@ -12,17 +12,22 @@ arakelyan::detail::Token::Token(char val):
   oper_(val)
 {}
 
-arakelyan::detail::ExpressionObj::ExpressionObj(token_t type, Token val):
+arakelyan::ExpressionObj::ExpressionObj(arakelyan::detail::token_t type, arakelyan::detail::Token val):
   val_(val),
   type_(type)
 {}
 
-arakelyan::detail::Token arakelyan::detail::ExpressionObj::getVal() const
+arakelyan::detail::Token arakelyan::ExpressionObj::getVal() const
 {
   return val_;
 }
 
-arakelyan::detail::token_t arakelyan::detail::ExpressionObj::getType() const
+arakelyan::detail::token_t arakelyan::ExpressionObj::getType() const
 {
   return type_;
+}
+
+int arakelyan::ExpressionObj::getPriority() const
+{
+  return compar(val_.oper_);
 }

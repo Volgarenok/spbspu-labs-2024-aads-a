@@ -19,7 +19,7 @@ bool isBracket(const std::string line)
   return (line == "(" || line == ")");
 }
 
-void parseLine(std::string &line, arakelyan::Queue< arakelyan::detail::ExpressionObj > &someQ)
+void parseLine(std::string &line, arakelyan::Queue< arakelyan::ExpressionObj > &someQ)
 {
   using namespace arakelyan::detail;
   size_t pos = 0;
@@ -67,13 +67,13 @@ void parseLine(std::string &line, arakelyan::Queue< arakelyan::detail::Expressio
         throw std::out_of_range("Out of range!");
       }
 
-      ExpressionObj expObj(tokenType, token);
+      arakelyan::ExpressionObj expObj(tokenType, token);
       someQ.push(expObj);
     }
   }
 }
 
-std::istream &arakelyan::readDataInInfixFormat(std::istream &input, Queue< Queue< detail::ExpressionObj > > &qOfInfixQs)
+std::istream &arakelyan::readDataInInfixFormat(std::istream &input, Queue< Queue< ExpressionObj > > &qOfInfixQs)
 {
   std::string line;
 
@@ -82,7 +82,7 @@ std::istream &arakelyan::readDataInInfixFormat(std::istream &input, Queue< Queue
     std::getline(input, line, '\n');
     if (!line.empty())
     {
-      Queue< detail::ExpressionObj > infixQ;
+      Queue< ExpressionObj > infixQ;
       parseLine(line, infixQ);
       if (!infixQ.empty())
       {
