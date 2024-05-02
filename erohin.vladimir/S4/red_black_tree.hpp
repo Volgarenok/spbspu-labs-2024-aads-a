@@ -164,7 +164,7 @@ namespace erohin
   TreeIterator< Key, T > RedBlackTree< Key, T, Compare >::begin()
   {
     detail::Node< Key, T > * result = root_;
-    while (result->left_)
+    while (result && result->left_)
     {
       result = result->left_;
     }
@@ -181,7 +181,7 @@ namespace erohin
   TreeConstIterator< Key, T > RedBlackTree< Key, T, Compare >::cbegin() const
   {
     const detail::Node< Key, T > * result = root_;
-    while (result->left_)
+    while (result && result->left_)
     {
       result = result->left_;
     }
