@@ -3,6 +3,7 @@
 
 #include <utility>
 #include <functional>
+#include <list.hpp>
 
 namespace nikitov
 {
@@ -187,13 +188,10 @@ namespace nikitov
       if (left_)
       {
         ownFirst = left_;
+        ownSecond = middle_;
         if (right_)
         {
           ownSecond = right_;
-        }
-        else
-        {
-          ownSecond = middle_;
         }
       }
       else
@@ -208,35 +206,26 @@ namespace nikitov
       TreeNode< Key, T, Compare >* neigbour = nullptr;
       if (parent_->right_ == this)
       {
+        neigbour = parent_->left_;
         if (parent_->middle_)
         {
           neigbour = parent_->middle_;
-        }
-        else
-        {
-          neigbour = parent_->left_;
         }
       }
       else if (parent_->left_ == this)
       {
+        neigbour = parent_->right_;
         if (parent_->middle_)
         {
           neigbour = parent_->middle_;
         }
-        else
-        {
-          neigbour = parent_->right_;
-        }
       }
       else
       {
+        neigbour = parent_->left_;
         if (!parent_->right_->right_)
         {
           neigbour = parent_->right_;
-        }
-        else
-        {
-          neigbour = parent_->left_;
         }
       }
       TreeNode< Key, T, Compare >* one = nullptr;
@@ -255,15 +244,12 @@ namespace nikitov
         else
         {
           two = first;
+          three = second;
+          four = ownSecond;
           if (cmp_(ownSecond->firstValue_.first, second->firstValue_.first))
           {
             three = ownSecond;
             four = second;
-          }
-          else
-          {
-            three = second;
-            four = ownSecond;
           }
         }
       }
@@ -279,40 +265,34 @@ namespace nikitov
         else
         {
           two = ownFirst;
+          three = ownSecond;
+          four = second;
           if (cmp_(second->firstValue_.first, ownSecond->firstValue_.first))
           {
             three = second;
             four = ownSecond;
           }
-          else
-          {
-            three = ownSecond;
-            four = second;
-          }
         }
       }
+
       if (cmp_(firstValue_.first, neigbour->firstValue_.first))
       {
         left_ = one;
-        left_->parent_ = this;
         right_ = two;
-        right_->parent_ = this;
         neigbour->left_ = three;
-        neigbour->left_->parent_ = neigbour;
         neigbour->right_ = four;
-        neigbour->right_->parent_ = neigbour;
       }
       else
       {
         left_ = three;
-        left_->parent_ = this;
         right_ = four;
-        right_->parent_ = this;
         neigbour->left_ = one;
-        neigbour->left_->parent_ = neigbour;
         neigbour->right_ = two;
-        neigbour->right_->parent_ = neigbour;
       }
+      left_->parent_ = this;
+      right_->parent_ = this;
+      neigbour->left_->parent_ = neigbour;
+      neigbour->right_->parent_ = neigbour;
     }
 
     template< class Key, class T, class Compare >
