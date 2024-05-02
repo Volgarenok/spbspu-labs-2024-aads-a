@@ -9,29 +9,25 @@
 
 strelyaev::ExpressionUnit strelyaev::convertStringToUnit(std::string string_token)
 {
-  strelyaev::Token new_token;
-  strelyaev::TokenType type = strelyaev::TokenType::NONE;
-  if (string_token.size() == 0)
-  {
-    throw std::logic_error("empty string_token");
-  }
+  Token new_token;
+  TokenType type = TokenType::NONE;
   try
   {
     long long operand = std::stoll(string_token);
-    new_token = strelyaev::Token(operand);
-    type = strelyaev::TokenType::OPERAND;
+    new_token = Token(operand);
+    type = TokenType::OPERAND;
   }
-  catch(...)
+  catch (...)
   {
     char c = string_token[0];
-    new_token = strelyaev::Token(c);
-    if (strelyaev::isBracket(string_token))
+    new_token = Token(c);
+    if (isBracket(c))
     {
-      type = strelyaev::TokenType::BRACKET;
+      type = TokenType::BRACKET;
     }
-    if (strelyaev::isOperation(string_token))
+    if (isOperation(c))
     {
-      type = strelyaev::TokenType::OPERATION;
+      type = TokenType::OPERATION;
     }
   }
   strelyaev::ExpressionUnit new_unit(new_token, type);
@@ -40,43 +36,38 @@ strelyaev::ExpressionUnit strelyaev::convertStringToUnit(std::string string_toke
 
 strelyaev::Queue< strelyaev::ExpressionUnit > strelyaev::parseString(std::istream& input)
 {
-  strelyaev::Queue< strelyaev::ExpressionUnit > queue_of_eu;
+  Queue< ExpressionUnit > queue_of_eu;
   std::string line = "";
-  std::string token_string = "";
   std::getline(input, line);
-  strelyaev::ExpressionUnit unit;
-  for (char c : line)
+  ExpressionUnit unit;
+  std::string delimiter = " ";
+  size_t pos = 0;
+  std::string token;
+  while ((pos = line.find(delimiter)) != std::string::npos)
   {
-    if (c == ' ' || c == '\0')
-    {
-      unit = convertStringToUnit(token_string);
-      queue_of_eu.push(unit);
-      token_string = "";
-      continue;
-    }
-    token_string += c;
-  }
-  if (!token_string.empty())
-  {
-    unit = convertStringToUnit(token_string);
+    token = line.substr(0, pos);
+    unit = convertStringToUnit(token);
+    line.erase(0, pos + delimiter.length());
     queue_of_eu.push(unit);
   }
+  unit = convertStringToUnit(line);
+  queue_of_eu.push(unit);
   return queue_of_eu;
 }
 
 strelyaev::Queue< strelyaev::ExpressionUnit > strelyaev::makePostfix(Queue< ExpressionUnit >& queue)
 {
-  strelyaev::Stack< strelyaev::ExpressionUnit > temp_stack;
-  strelyaev::Queue< strelyaev::ExpressionUnit > postfix_queue;
+  Stack< ExpressionUnit > temp_stack;
+  Queue< ExpressionUnit > postfix_queue;
   while (!queue.empty())
   {
-    strelyaev::ExpressionUnit unit = queue.front();
+    ExpressionUnit unit = queue.front();
     queue.pop_front();
-    if (unit.getType() == strelyaev::TokenType::OPERAND)
+    if (unit.getType() == TokenType::OPERAND)
     {
       postfix_queue.push(unit);
     }
-    if (unit.getType() == strelyaev::TokenType::BRACKET)
+    if (unit.getType() == TokenType::BRACKET)
     {
       if (unit.getOperation() == '(')
       {
@@ -84,7 +75,7 @@ strelyaev::Queue< strelyaev::ExpressionUnit > strelyaev::makePostfix(Queue< Expr
       }
       if (unit.getOperation() == ')')
       {
-        strelyaev::ExpressionUnit stack_peek = temp_stack.back();
+        ExpressionUnit stack_peek = temp_stack.back();
         temp_stack.pop_back();
         while (stack_peek.getOperation() != '(')
         {
@@ -94,23 +85,23 @@ strelyaev::Queue< strelyaev::ExpressionUnit > strelyaev::makePostfix(Queue< Expr
         }
       }
     }
-    if (unit.getType() == strelyaev::TokenType::OPERATION)
+    if (unit.getType() == TokenType::OPERATION)
     {
       if (temp_stack.empty())
       {
         temp_stack.push(unit);
         continue;
       }
-      strelyaev::ExpressionUnit stack_peek = temp_stack.back();
+      ExpressionUnit stack_peek = temp_stack.back();
       temp_stack.pop_back();
-      if (!(strelyaev::isPrecedenceLess(unit.getOperation(), stack_peek.getOperation())))
+      if (!(isPrecedenceLess(unit.getOperation(), stack_peek.getOperation())))
       {
         temp_stack.push(stack_peek);
         temp_stack.push(unit);
       }
-      else if (strelyaev::isPrecedenceLess(unit.getOperation(), stack_peek.getOperation()))
+      else if (isPrecedenceLess(unit.getOperation(), stack_peek.getOperation()))
       {
-        while (strelyaev::isPrecedenceLess(unit.getOperation(), stack_peek.getOperation()))
+        while (isPrecedenceLess(unit.getOperation(), stack_peek.getOperation()))
         {
           postfix_queue.push(stack_peek);
           if (temp_stack.empty())
@@ -130,7 +121,7 @@ strelyaev::Queue< strelyaev::ExpressionUnit > strelyaev::makePostfix(Queue< Expr
   }
   while (!temp_stack.empty())
   {
-    strelyaev::ExpressionUnit unit = temp_stack.back();
+    ExpressionUnit unit = temp_stack.back();
     temp_stack.pop_back();
     postfix_queue.push(unit);
   }
@@ -139,20 +130,20 @@ strelyaev::Queue< strelyaev::ExpressionUnit > strelyaev::makePostfix(Queue< Expr
 
 long long strelyaev::calculatePostfix(strelyaev::Queue< strelyaev::ExpressionUnit >& queue)
 {
-  strelyaev::Stack< ExpressionUnit > processing_stack;
+  Stack< ExpressionUnit > processing_stack;
   if (queue.empty())
   {
     throw std::out_of_range("Empty queue is met");
   }
   while (!queue.empty())
   {
-    strelyaev::ExpressionUnit unit = queue.front();
+    ExpressionUnit unit = queue.front();
     queue.pop_front();
-    if (unit.getType() == strelyaev::TokenType::OPERAND)
+    if (unit.getType() == TokenType::OPERAND)
     {
       processing_stack.push(unit);
     }
-    if (unit.getType() == strelyaev::TokenType::OPERATION)
+    if (unit.getType() == TokenType::OPERATION)
     {
       ExpressionUnit second = processing_stack.back();
       processing_stack.pop_back();
@@ -164,7 +155,7 @@ long long strelyaev::calculatePostfix(strelyaev::Queue< strelyaev::ExpressionUni
       processing_stack.pop_back();
       long long result = calculateOperation(first, second, unit);
       Token temp_token(result);
-      ExpressionUnit operand_unit(temp_token, strelyaev::TokenType::OPERAND);
+      ExpressionUnit operand_unit(temp_token, TokenType::OPERAND);
       processing_stack.push(operand_unit);
     }
   }
@@ -176,6 +167,4 @@ long long strelyaev::calculatePostfix(strelyaev::Queue< strelyaev::ExpressionUni
   }
   return result.getOperand();
 }
-
-
 

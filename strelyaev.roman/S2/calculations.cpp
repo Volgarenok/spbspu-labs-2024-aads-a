@@ -3,28 +3,37 @@
 #include <iostream>
 #include <limits>
 
-
-bool strelyaev::isOperation(const std::string& c)
+bool strelyaev::isPlusOrMinus(char c)
 {
-  return ((c == "+") || (c == "-") || (c == "/") || (c == "*") || (c == "%"));
+  return ((c == '+') || (c == '-'));
 }
 
-bool strelyaev::isBracket(const std::string& c)
+bool strelyaev::isMultiplyOrDivision(char c)
 {
-  return ((c == "(") || (c == ")"));
+  return ((c == '*') || (c == '/') || (c == '%'));
+}
+
+bool strelyaev::isOperation(char c)
+{
+  return (isPlusOrMinus(c) || isMultiplyOrDivision(c));
+}
+
+bool strelyaev::isBracket(char c)
+{
+  return ((c == '(') || (c == ')'));
 }
 
 int strelyaev::getPrecedence(char c)
 {
-  if (c == '+' || c == '-')
+  if (isPlusOrMinus(c))
   {
     return 1;
   }
-  if (c == '*' || c == '%' || c == '/')
+  if (isMultiplyOrDivision(c))
   {
     return 2;
   }
-  if (c == '(' || c == ')')
+  if (isBracket(c))
   {
     return 0;
   }
