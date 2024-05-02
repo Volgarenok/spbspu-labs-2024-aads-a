@@ -47,3 +47,8 @@ int arakelyan::ExpressionObj::getPriority() const
     throw std::logic_error("Invalid operator!");
   }
 }
+
+bool arakelyan::ExpressionObj::isLessPriority(const arakelyan::ExpressionObj &otherObj)
+{
+  return this->getPriority() <= otherObj.getPriority();
+}

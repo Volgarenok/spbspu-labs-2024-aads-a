@@ -27,8 +27,6 @@ namespace arakelyan
     char oper_;
   };
 
-
-
   struct ExpressionObj
   {
   public:
@@ -41,10 +39,12 @@ namespace arakelyan
     char getOper() const;
     long long getNumber() const;
     token_t getType() const;
-    int getPriority() const;
+    bool isLessPriority(const ExpressionObj &otherObj);
   private:
     Token val_;
     token_t type_;
+
+    int getPriority() const;
   };
 }
 #endif

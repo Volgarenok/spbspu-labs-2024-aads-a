@@ -5,12 +5,6 @@
 #include <sys/resource.h>
 #include "stack.hpp"
 
-
-bool isLessPriority(const arakelyan::ExpressionObj &rhs, const arakelyan::ExpressionObj &lhs)
-{
-  return rhs.getPriority() <= lhs.getPriority();
-}
-
 arakelyan::Queue< arakelyan::ExpressionObj > arakelyan::transformInfixToPostfix(Queue< ExpressionObj > &infixQueue)
 {
   Queue< ExpressionObj > postfixQ;
@@ -47,7 +41,7 @@ arakelyan::Queue< arakelyan::ExpressionObj > arakelyan::transformInfixToPostfix(
     }
     else if (curObj.getType() == token_t::operation)
     {
-      while (!operS.empty() && (operS.top().getOper() != '(') && (isLessPriority(operS.top(), curObj)))
+      while (!operS.empty() && (operS.top().getOper() != '(') && (operS.top().isLessPriority(curObj)))
       {
         postfixQ.push(operS.top());
         operS.pop();
