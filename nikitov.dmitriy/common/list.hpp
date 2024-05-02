@@ -84,6 +84,8 @@ namespace nikitov
     void merge(List< T >& other);
     void merge(List< T >&& other);
     void sort();
+    template< class Compare >
+    void sort(Compare cmp);
     void unique();
     void reverse();
 
@@ -601,6 +603,13 @@ namespace nikitov
   template< class T >
   void List< T >::sort()
   {
+    sort(std::less< T >());
+  }
+
+  template< class T >
+  template< class Compare >
+  void List< T >::sort(Compare cmp)
+  {
     if (empty())
     {
       return;
@@ -612,27 +621,25 @@ namespace nikitov
       detail::Node< T >* node = head_;
       while (node != tail_)
       {
-        if (node->value_ > node->next_->value_)
+        if (!cmp(node->value_, node->next_->value_))
         {
           isSorted = false;
-          if (node->prev_ != nullptr)
+          if (node->prev_)
           {
-            std::swap(node->prev_->next_, node->next_->next_->prev_);
+            node->prev_->next_ = node->next_;
           }
           else
           {
-            node->next_->next_->prev_ = node;
             head_ = node->next_;
           }
-          node->next_->prev_ = node->prev_;
-          detail::Node< T >* temp = node->next_->next_;
-          node->prev_ = node->next_;
-          node->next_ = temp;
-          node->prev_->next_ = node;
-          if (node->prev_ == tail_)
+          if (node->next_->next_)
           {
-            tail_ = node;
+            node->next_->next_->prev_ = node;
           }
+          node->next_->prev_ = node->prev_;
+          node->prev_ = node->next_;
+          node->next_ = node->prev_->next_;
+          node->prev_->next_ = node;
         }
         else
         {
