@@ -245,7 +245,6 @@ namespace erohin
     {
       root_ = new detail::Node< Key, T >(std::move(value), nullptr, nullptr, nullptr);
       node = root_;
-      ++size_;
     }
     else
     {
@@ -758,7 +757,7 @@ namespace erohin
   template< class Key, class T, class Compare >
   void RedBlackTree< Key, T, Compare >::insert_balance_case1(detail::Node< Key, T > * subtree)
   {
-    if (subtree == root_)
+    if (!subtree->parent_)
     {
       subtree->color_ = detail::color_t::BLACK;
     }

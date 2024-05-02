@@ -61,9 +61,13 @@ void erohin::complement(collection & context, std::istream & input, std::ostream
   }
   if (context.find(dict_name[0]) != context.end())
   {
-    context[dict_name[0]].clear();
+    context.at(dict_name[0]).clear();
+    context.at(dict_name[0]) = std::move(temp_dict);
   }
-  context[dict_name[0]] = std::move(temp_dict);
+  else
+  {
+    context.insert(std::make_pair(dict_name[0], std::move(temp_dict)));
+  }
 }
 
 void erohin::intersect(collection & context, std::istream & input, std::ostream &)
@@ -85,9 +89,13 @@ void erohin::intersect(collection & context, std::istream & input, std::ostream 
   }
   if (context.find(dict_name[0]) != context.end())
   {
-    context[dict_name[0]].clear();
+    context.at(dict_name[0]).clear();
+    context.at(dict_name[0]) = std::move(temp_dict);
   }
-  context[dict_name[0]] = std::move(temp_dict);
+  else
+  {
+    context.insert(std::make_pair(dict_name[0], std::move(temp_dict)));
+  }
 }
 
 void erohin::unite(collection & context, std::istream & input, std::ostream &)
@@ -101,7 +109,11 @@ void erohin::unite(collection & context, std::istream & input, std::ostream &)
   temp_dict.insert(source2.cbegin(), source2.cend());
   if (context.find(dict_name[0]) != context.end())
   {
-    context[dict_name[0]].clear();
+    context.at(dict_name[0]).clear();
+    context.at(dict_name[0]) = std::move(temp_dict);
   }
-  context[dict_name[0]] = std::move(temp_dict);
+  else
+  {
+    context.insert(std::make_pair(dict_name[0], std::move(temp_dict)));
+  }
 }

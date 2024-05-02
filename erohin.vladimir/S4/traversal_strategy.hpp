@@ -2,6 +2,7 @@
 #define TRAVERSAL_STRATEGY_HPP
 
 #include "tree_node.hpp"
+#include <iostream>
 
 namespace erohin
 {
@@ -45,12 +46,12 @@ namespace erohin
         while (node->parent_->right_ == node)
         {
           node = node->parent_;
-          if (!(node->parent_))
+          if (!node->parent_)
           {
             return nullptr;
           }
         }
-        while (node->parent_ && node->parent_->left_ == node && !(node->right_))
+        while (node->parent_ && node->parent_->left_ == node)
         {
           node = node->parent_;
         }
@@ -85,7 +86,7 @@ namespace erohin
             return nullptr;
           }
         }
-        while (node->parent_ && node->parent_->right_ == node && !(node->left_))
+        while (node->parent_ && node->parent_->right_ == node)
         {
           node = node->parent_;
         }
