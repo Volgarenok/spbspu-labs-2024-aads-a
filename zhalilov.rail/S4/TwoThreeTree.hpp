@@ -61,8 +61,8 @@ namespace zhalilov
     Node *createThreeNode(const MapPair &, const MapPair &) const;
     void connectNodes(Node *parent, Node *left, Node *right, Node *mid = nullptr);
 
-    bool eraseAndBalanceFromBros(iterator);
-    void eraseAndBalanceFromParents(iterator);
+    std::pair < iterator, bool > balanceFromBros(iterator);
+    std::pair < iterator, bool > balanceFromParents(iterator);
   };
 
   template < class Key, class T, class Compare >
@@ -274,6 +274,14 @@ namespace zhalilov
   template < class Key, class T, class Compare >
   typename TwoThree < Key, T, Compare >::iterator TwoThree < Key, T, Compare >::erase(iterator it)
   {
+    if (size_ == 1)
+    {
+      delete head_->left;
+      delete head_;
+      head_ = nullptr;
+      size--;
+      return end();
+    }
     if (it.node_->left)
     {
       Node *nodeFrom = nullptr;
@@ -289,6 +297,8 @@ namespace zhalilov
       std::swap(*it, *toSwapIt);
       it = toSwapIt;
     }
+    iterator itToReturn = it;
+    size_--;
     if (it.node_->type == detail::NodeType::Three)
     {
       if (!it.isPtrToLeft_)
@@ -297,8 +307,19 @@ namespace zhalilov
       }
       it.node_->type = detail::NodeType::Two;
     }
-    else if (!eraseAndBalanceFromBros(it))
-    {}
+    else
+    {
+      auto isBalancedFroBrosPair = balanceFromBros(it);
+      if (isBalancedFroBrosPair.second)
+      {
+        itToReturn = isBalancedFroBrosPair.first;
+      }
+      else
+      {
+        itToReturn = balanceFromParents(it).first;
+      }
+    }
+    return itToReturn;
   }
 
   template < class Key, class T, class Compare >
@@ -424,29 +445,54 @@ namespace zhalilov
   }
 
   template < class Key, class T, class Compare >
-  bool TwoThree < Key, T, Compare >::eraseAndBalanceFromBros(iterator it)
+  std::pair < typename TwoThree < Key, T, Compare >::iterator, bool > TwoThree < Key, T, Compare >::balanceFromBros(iterator emptyIt)
   {
-    Node *parentNode = it.node_->parent;
-    if (parentNode->mid && parentNode->mid == it.node_)
+    Node *parentNode = emptyIt.node_->parent;
+    bool balanced = true;
+    auto lastRemovedIt = emptyIt;
+    lastRemovedIt++;
+    MapPair lastRemovedPair = *lastRemovedIt;
+    if (parentNode->mid && parentNode->mid == emptyIt.node_)
     {
       if (parentNode->left->type == detail::NodeType::Three)
       {
-        std::swap(parentNode->one, it.node_->one);
+        std::swap(parentNode->one, emptyIt.node_->one);
         std::swap(parentNode->one, parentNode->left->two);
+        if (emptyIt.node_->left)
+        {
+          connectNodes(emptyIt, parentNode->left->right, emptyIt->left);
+          connectNodes(parentNode->left, parentNode->left->left, parentNode->left->mid);
+        }
+        else if (emptyIt.node_->right)
+        {
+          connectNodes(emptyIt, parentNode->left->right, emptyIt->right);
+          connectNodes(parentNode->left, parentNode->left->left, parentNode->left->mid);
+        }
         parentNode->left->type = detail::NodeType::Two;
-        return true;
       }
       else if (parentNode->right->type == detail::NodeType::Three)
       {
-        std::swap(parentNode->two, it.node_->one);
+        std::swap(parentNode->two, emptyIt.node_->one);
         std::swap(parentNode->two, parentNode->right->one);
         std::swap(parentNode->right->one, parentNode->right->two);
+        if (emptyIt.node_->left)
+        {
+          connectNodes(emptyIt, emptyIt->left, parentNode->right->left);
+          connectNodes(parentNode->right, parentNode->left, parentNode->mid);
+        }
+        else if (emptyIt.node_->right)
+        {
+          connectNodes(emptyIt, parentNode->left->right, emptyIt->right);
+          connectNodes(parentNode->right, parentNode->right->mid, parentNode->right->right);
+        }
         parentNode->right->type = detail::NodeType::Two;
-        return true;
       }
-      return false;
+      else
+      {
+        balanced = false;
+      }
     }
-    else if (parentNode->right == it.node_)
+    else if (parentNode->right == emptyIt.node_)
     {
       if (parentNode->mid)
       {
@@ -454,8 +500,17 @@ namespace zhalilov
         {
           std::swap(parentNode->two, parentNode->right->one);
           std::swap(parentNode->two, parentNode->mid->two);
+          if (emptyIt.node_->left)
+          {
+            connectNodes(emptyIt, parentNode->mid->right, emptyIt->left);
+            connectNodes(parentNode->mid, parentNode->mid->left, parentNode->mid->mid);
+          }
+          else if (emptyIt.node_->right)
+          {
+            connectNodes(emptyIt, parentNode->mid->right, emptyIt->right);
+            connectNodes(parentNode->mid, parentNode->mid->left, parentNode->mid->mid);
+          }
           parentNode->mid->type = detail::NodeType::Two;
-          return true;
         }
         else if (parentNode->left->type == detail::NodeType::Three)
         {
@@ -463,20 +518,47 @@ namespace zhalilov
           std::swap(parentNode->two, parentNode->mid->one);
           std::swap(parentNode->one, parentNode->mid->one);
           std::swap(parentNode->one, parentNode->left->two);
+          if (emptyIt.node_->left)
+          {
+            connectNodes(emptyIt, parentNode->mid->right, emptyIt->left);
+            connectNodes(parentNode->mid, parentNode->left->right, parentNode->mid->left);
+            connectNodes(parentNode->left, parentNode->left->left, parentNode->left->mid);
+          }
+          else if (emptyIt.node_->right)
+          {
+            connectNodes(emptyIt, parentNode->mid->right, emptyIt->right);
+            connectNodes(parentNode->mid, parentNode->left->right, parentNode->mid->left);
+            connectNodes(parentNode->left, parentNode->left->left, parentNode->left->mid);
+          }
           parentNode->left->type = detail::NodeType::Two;
-          return true;
+        }
+        else
+        {
+          balanced = false;
         }
       }
       else if (parentNode->left->type == detail::NodeType::Three)
       {
         std::swap(parentNode->one, parentNode->right->one);
         std::swap(parentNode->one, parentNode->left->two);
+        if (emptyIt.node_->left)
+        {
+          connectNodes(emptyIt, parentNode->left->right, emptyIt->left);
+          connectNodes(parentNode->left, parentNode->left->left, parentNode->left->mid);
+        }
+        else if (emptyIt.node_->right)
+        {
+          connectNodes(emptyIt, parentNode->left->right, emptyIt->right);
+          connectNodes(parentNode->left, parentNode->left->left, parentNode->left->mid);
+        }
         parentNode->left->type = detail::NodeType::Two;
-        return true;
       }
-      return false;
+      else
+      {
+        balanced = false;
+      }
     }
-    else if (parentNode->left == it.node_)
+    else if (parentNode->left == emptyIt.node_)
     {
       if (parentNode->mid)
       {
@@ -485,8 +567,17 @@ namespace zhalilov
           std::swap(parentNode->one, parentNode->left->one);
           std::swap(parentNode->one, parentNode->mid->one);
           std::swap(parentNode->mid->two, parentNode->mid->one);
+          if (emptyIt.node_->left)
+          {
+            connectNodes(emptyIt, emptyIt->left, parentNode->mid->left);
+            connectNodes(parentNode->mid, parentNode->mid->mid, parentNode->mid->right);
+          }
+          else if (emptyIt.node_->right)
+          {
+            connectNodes(emptyIt, emptyIt->right, parentNode->mid->left);
+            connectNodes(parentNode->mid, parentNode->mid->mid, parentNode->mid->right);
+          }
           parentNode->mid->type = detail::NodeType::Two;
-          return true;
         }
         else if (parentNode->right->type == detail::NodeType::Three)
         {
@@ -495,53 +586,194 @@ namespace zhalilov
           std::swap(parentNode->two, parentNode->mid->one);
           std::swap(parentNode->two, parentNode->right->one);
           std::swap(parentNode->right->two, parentNode->right->one);
+          if (emptyIt.node_->left)
+          {
+            connectNodes(emptyIt, emptyIt->left, parentNode->mid->left);
+            connectNodes(parentNode->mid, parentNode->mid->right, parentNode->right->left);
+            connectNodes(parentNode->right, parentNode->right->mid, parentNode->right->right);
+          }
+          else if (emptyIt.node_->right)
+          {
+            connectNodes(emptyIt, emptyIt->right, parentNode->mid->left);
+            connectNodes(parentNode->mid, parentNode->mid->right, parentNode->right->left);
+            connectNodes(parentNode->right, parentNode->right->mid, parentNode->right->right);
+          }
           parentNode->left->type = detail::NodeType::Two;
-          return true;
         }
-        return false;
+        else
+        {
+          balanced = false;
+        }
       }
       else if (parentNode->right->type == detail::NodeType::Three)
       {
         std::swap(parentNode->one, parentNode->left->one);
         std::swap(parentNode->one, parentNode->right->one);
         std::swap(parentNode->right->two, parentNode->right->one);
+        if (emptyIt.node_->left)
+        {
+          connectNodes(emptyIt, emptyIt->left, parentNode->right->left);
+          connectNodes(parentNode->right, parentNode->right->mid, parentNode->right->right);
+        }
+        else if (emptyIt.node_->right)
+        {
+          cconnectNodes(emptyIt, emptyIt->right, parentNode->right->left);
+          connectNodes(parentNode->right, parentNode->right->mid, parentNode->right->right);
+        }
         parentNode->left->type = detail::NodeType::Two;
-        return true;
       }
-      return false;
+      else
+      {
+        balanced = false;
+      }
     }
+    if (balanced)
+    {
+      return std::make_pair(doFind(lastRemovedPair.first).first, balanced);
+    }
+    return std::make_pair(iterator(emptyIt, balanced));
   }
 
   template < class Key, class T, class Compare >
-  void TwoThree < Key, T, Compare >::eraseAndBalanceFromParents(iterator it)
+  std::pair < typename TwoThree < Key, T, Compare >::iterator, bool > TwoThree < Key, T, Compare >::balanceFromParents(iterator emptyIt)
   {
-    if (it.node_->parent->type == detail::NodeType::Three)
+    Node *parentNode = emptyIt.node_->parent;
+    Node *emptyNode = emptyIt.node_;
+    auto lastRemovedIt = emptyIt;
+    lastRemovedIt++;
+    MapPair lastRemovedPair = *lastRemovedIt;
+    if (emptyNode->parent->type == detail::NodeType::Three)
     {
-      Node *parentNode = it.node_->parent;
-      if (parentNode->left == it.node_)
+      if (parentNode->left == emptyNode)
       {
         std::swap(parentNode->one, parentNode->mid->two);
         std::swap(parentNode->mid->one, parentNode->mid->two);
         std::swap(parentNode->one, parentNode->two);
         connectNodes(parentNode, parentNode->mid, parentNode->right);
         parentNode->mid->type = detail::NodeType::Three;
-        delete it.node_;
+        delete emptyNode;
       }
-      else if (parentNode->mid == it.node_)
+      else if (parentNode->mid == emptyNode)
       {
         std::swap(parentNode->one, parentNode->left->two);
         std::swap(parentNode->one, parentNode->two);
         parentNode->left->type = detail::NodeType::Three;
-        delete it.node_;
+        delete emptyNode;
       }
       else
       {
         std::swap(parentNode->two, parentNode->mid->two);
         parentNode->mid->type = detail::NodeType::Three;
         connectNodes(parentNode, parentNode->left, parentNode->mid);
-        delete it.node_;
+        delete emptyNode;
       }
       parentNode->type = detail::NodeType::Two;
+    }
+    else
+    {
+      while (parentNode != head_)
+      {
+        auto isBalancedFromBrosPair = balanceFromBros(iterator(emptyNode, true));
+        if (isBalancedFromBrosPair.second)
+        {
+          return std::make_pair(doFind(lastRemovedPair.first).first, true);
+        }
+        if (parentNode->type == detail::NodeType::Three)
+        {
+          if (parentNode->left == emptyNode)
+          {
+            std::swap(parentNode->one, emptyNode->one);
+            std::swap(parentNode->mid->one, emptyNode->two);
+            std::swap(parentNode->one, parentNode->two);
+            if (emptyNode->left)
+            {
+              connectNodes(emptyNode, emptyNode->left, parentNode->mid->right, parentNode->mid->left);
+            }
+            else
+            {
+              connectNodes(emptyNode, emptyNode->right, parentNode->mid->right, parentNode->mid->left);
+            }
+            connectNodes(parentNode, emptyNode, parentNode->right);
+            delete parentNode->mid;
+            parentNode->type = detail::NodeType::Two;
+            emptyNode->type = detail::NodeType::Three;
+          }
+          else if (parentNode->mid == emptyNode)
+          {
+            std::swap(parentNode->one, emptyNode->two);
+            std::swap(parentNode->left->one, emptyNode->one);
+            std::swap(parentNode->one, parentNode->two);
+            if (emptyNode->left)
+            {
+              connectNodes(emptyNode, parentNode->left->left, emptyNode->left, parentNode->left->right);
+            }
+            else
+            {
+              connectNodes(emptyNode, parentNode->left->left, emptyNode->right, parentNode->left->right);
+            }
+            delete parentNode->left;
+            connectNodes(parentNode, emptyNode, parentNode->right);
+            parentNode->type = detail::NodeType::Two;
+            emptyNode->type = detail::NodeType::Three;
+          }
+          else
+          {
+            std::swap(parentNode->two, emptyNode->two);
+            std::swap(parentNode->mid->one, emptyNode->one);
+            if (emptyNode->left)
+            {
+              connectNodes(emptyNode, parentNode->mid->left, emptyNode->left, parentNode->mid->right);
+            }
+            else
+            {
+              connectNodes(emptyNode, parentNode->mid->left, emptyNode->right, parentNode->mid->right);
+            }
+            delete parentNode->mid;
+            connectNodes(parentNode, parentNode->left, emptyNode);
+            parentNode->type = detail::NodeType::Two;
+            emptyNode->type = detail::NodeType::Three;
+          }
+          return std::make_pair(doFind(lastRemovedPair.first).first, true);
+        }
+        if (parentNode->left == emptyNode)
+        {
+          std::swap(parentNode->one, parentNode->right->two);
+          std::swap(parentNode->right->one, parentNode->right->two);
+          if (emptyNode->left)
+          {
+            connectNodes(parentNode->right, emptyNode->left, parentNode->right->right, parentNode->right->left);
+          }
+          else if (emptyNode->right)
+          {
+            connectNodes(parentNode->right, emptyNode->right, parentNode->right->right, parentNode->right->left);
+          }
+          parentNode->right->type = detail::NodeType::Three;
+          delete emptyNode;
+          parentNode->left = nullptr;
+          emptyNode = parentNode;
+          parentNode = parentNode->parent;
+        }
+        else
+        {
+          std::swap(parentNode->one, parentNode->left->two);
+          if (emptyNode->left)
+          {
+            connectNodes(parentNode->left, parentNode->left->left, emptyNode->left, parentNode->left->right);
+          }
+          else if (emptyNode->right)
+          {
+            connectNodes(parentNode->left, parentNode->left->left, emptyNode->right, parentNode->left->right);
+          }
+          parentNode->left->type = detail::NodeType::Three;
+          delete emptyNode;
+          parentNode->left = nullptr;
+          emptyNode = parentNode;
+          parentNode = parentNode->parent;
+        }
+      }
+      Node *toConnect = emptyNode->left ? emptyNode->left : emptyNode->right;
+      connectNodes(head_, nullptr, toConnect);
+      return std::make_pair(doFind(lastRemovedPair.first).first, true);
     }
   }
 }
