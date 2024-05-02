@@ -90,3 +90,4 @@ bool strelyaev::operator<(const ExpressionUnit& a, const ExpressionUnit& b)
   int precedence_b = getPrecedence(b.getOperation());
   return precedence_a < precedence_b;
 }
+
