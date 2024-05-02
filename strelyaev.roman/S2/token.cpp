@@ -1,4 +1,6 @@
 #include "token.hpp"
+#include <string>
+#include <stdexcept>
 
 strelyaev::Token::Token():
   operand_(0)
@@ -33,3 +35,52 @@ strelyaev::TokenType strelyaev::ExpressionUnit::getType() const
   return type_;
 }
 
+bool isPlusOrMinus(const std::string& c)
+{
+  return ((c == "+") || (c == "-"));
+}
+
+bool isMultiplyOrDivision(const std::string& c)
+{
+  return ((c == "*") || (c == "/") || (c == "%"));
+}
+
+bool strelyaev::isOperation(const std::string& line)
+{
+  return ((line.size() == 1) && (isPlusOrMinus(line) || isMultiplyOrDivision(line)));
+}
+
+bool strelyaev::isBracket(const std::string& line)
+{
+  return ((line.size() == 1) && ((line[0] == '(') || (line[0] == ')')));
+}
+
+int getPrecedence(char c)
+{
+  std::string line = "";
+  line += c;
+  if (isPlusOrMinus(line))
+  {
+    return 1;
+  }
+  if (isMultiplyOrDivision(line))
+  {
+    return 2;
+  }
+  if (strelyaev::isBracket(line))
+  {
+    return 0;
+  }
+  return -1;
+}
+
+bool strelyaev::operator<(const ExpressionUnit& a, const ExpressionUnit& b)
+{
+  if ((a.getType() != TokenType::OPERATION) && (a.getType() != TokenType::BRACKET) && (b.getType() != TokenType::OPERATION) && (b.getType() != TokenType::BRACKET))
+  {
+    throw std::logic_error("Something is wrong with operator<");
+  }
+  int precedence_a = getPrecedence(a.getOperation());
+  int precedence_b = getPrecedence(b.getOperation());
+  return precedence_a < precedence_b;
+}

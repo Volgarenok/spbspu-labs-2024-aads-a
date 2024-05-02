@@ -1,5 +1,6 @@
 #ifndef TOKEN_HPP
 #define TOKEN_HPP
+#include <string>
 namespace strelyaev
 {
   enum class TokenType
@@ -37,6 +38,9 @@ namespace strelyaev
       Token token_;
       TokenType type_;
   };
+  bool isOperation(const std::string&);
+  bool isBracket(const std::string&);
+  bool operator<(const strelyaev::ExpressionUnit& a, const strelyaev::ExpressionUnit& b);
 }
 
 #endif
