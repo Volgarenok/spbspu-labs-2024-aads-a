@@ -34,6 +34,10 @@ namespace erohin
     void clear();
     bool empty() const noexcept;
     std::pair< iterator, bool > insert(const value_type & value);
+    std::pair< iterator, bool > insert(value_type && value);
+    template< class InputIt>
+    void insert(InputIt first, InputIt last);
+    void insert(std::initializer_list< value_type > init_list);
     iterator erase(const Key & key);
     void swap(RedBlackTree & rhs) noexcept;
     size_t size() const noexcept;
@@ -120,12 +124,7 @@ namespace erohin
   template< class Key, class T, class Compare >
   RedBlackTree< Key, T, Compare > & RedBlackTree< Key, T, Compare >::operator=(const RedBlackTree< Key, T, Compare > & rhs)
   {
-    if (std::addressof(rhs) != this)
-    {
-      RedBlackTree< Key, T, Compare > temp(rhs);
-      swap(temp);
-      return *this;
-    }
+    return operator=(RedBlackTree< Key, T, Compare >(rhs));
   }
 
   template< class Key, class T, class Compare >
@@ -179,14 +178,21 @@ namespace erohin
   template< class Key, class T, class Compare >
   std::pair< TreeIterator< Key, T >, bool > RedBlackTree< Key, T, Compare >::insert(const value_type & value)
   {
+    return insert(value_type(value));
+  }
+
+  template< class Key, class T, class Compare >
+  std::pair< TreeIterator< Key, T >, bool > RedBlackTree< Key, T, Compare >::insert(value_type && value)
+  {
     detail::Node< Key, T > * node = root_;
     try
     {
       if (empty())
       {
-        root_ = new detail::Node< Key, T >(value, nullptr, nullptr, nullptr);
+        root_ = new detail::Node< Key, T >(std::move(value), nullptr, nullptr, nullptr);
         node = root_;
         ++size_;
+        return std::make_pair(iterator(node), true);
       }
       else
       {
@@ -225,7 +231,22 @@ namespace erohin
     {
       return std::make_pair(end(), false);
     }
+  }
 
+  template< class Key, class T, class Compare >
+  template< class InputIt >
+  void RedBlackTree< Key, T, Compare >::insert(InputIt first, InputIt last)
+  {
+    while (first != last)
+    {
+      insert(*(first++));
+    }
+  }
+
+  template< class Key, class T, class Compare >
+  void RedBlackTree< Key, T, Compare >::insert(std::initializer_list< value_type > init_list)
+  {
+    insert(init_list.begin(), init_list.end());
   }
 
   template< class Key, class T, class Compare >
