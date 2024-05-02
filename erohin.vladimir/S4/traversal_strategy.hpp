@@ -11,14 +11,18 @@ namespace erohin
     struct InfixTraversal
     {
       Node< Key, T > * next(Node< Key, T > * node);
+      const Node< Key, T > * next(const Node< Key, T > * node);
       Node< Key, T > * prev(Node< Key, T > * node);
+      const Node< Key, T > * prev(const Node< Key, T > * node);
     };
 
     template< class Key, class T >
     struct ReverseInfixTraversal
     {
       Node< Key, T > * next(Node< Key, T > * node);
+      const Node< Key, T > * next(const Node< Key, T > * node);
       Node< Key, T > * prev(Node< Key, T > * node);
+      const Node< Key, T > * prev(const Node< Key, T > * node);
     };
 
     template< class Key, class T >
@@ -55,6 +59,12 @@ namespace erohin
     }
 
     template< class Key, class T >
+    const Node< Key, T > * InfixTraversal< Key, T >::next(const Node< Key, T > * node)
+    {
+      return const_cast< const Node< Key, T > * >(next(const_cast< Node< Key, T > * >(node)));
+    }
+
+    template< class Key, class T >
     Node< Key, T > * InfixTraversal< Key, T >::prev(Node< Key, T > * node)
     {
       if (node->left_)
@@ -84,15 +94,21 @@ namespace erohin
     }
 
     template< class Key, class T >
+    const Node< Key, T > * InfixTraversal< Key, T >::prev(const Node< Key, T > * node)
+    {
+      return const_cast< const Node< Key, T > * >(prev(const_cast< Node< Key, T > * >(node)));
+    }
+
+    template< class Key, class T >
     Node< Key, T > * ReverseInfixTraversal< Key, T >::next(Node< Key, T > * node)
     {
-      return InfixTraversal< Key, T >::prev(node);
+      return InfixTraversal< Key, T >().prev(node);
     }
 
     template< class Key, class T >
     Node< Key, T > * ReverseInfixTraversal< Key, T >::prev(Node< Key, T > * node)
     {
-      return InfixTraversal< Key, T >::next(node);
+      return InfixTraversal< Key, T >().next(node);
     }
   }
 }

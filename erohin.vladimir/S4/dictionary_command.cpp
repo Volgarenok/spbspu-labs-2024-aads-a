@@ -53,7 +53,7 @@ void erohin::complement(collection & context, std::istream & input, std::ostream
   auto end_iter = source1.cend();
   while (iter != end_iter)
   {
-    if (source2.find(iter->first) == source2.end())
+    if (source2.find(iter->first) == source2.cend())
     {
       temp_dict.insert(*iter);
     }
@@ -77,7 +77,7 @@ void erohin::intersect(collection & context, std::istream & input, std::ostream 
   auto end_iter = source1.cend();
   while (iter != end_iter)
   {
-    if (source2.find(iter->first) != source2.end())
+    if (source2.find(iter->first) != source2.cend())
     {
       temp_dict.insert(*iter);
     }

@@ -156,8 +156,8 @@ namespace erohin
     {
       RedBlackTree< Key, T, Compare > temp(std::move(rhs));
       swap(temp);
-      return *this;
     }
+    return *this;
   }
 
   template< class Key, class T, class Compare >
@@ -180,7 +180,12 @@ namespace erohin
   template< class Key, class T, class Compare >
   TreeConstIterator< Key, T > RedBlackTree< Key, T, Compare >::cbegin() const
   {
-    return const_iterator(begin());
+    const detail::Node< Key, T > * result = root_;
+    while (result->left_)
+    {
+      result = result->left_;
+    }
+    return const_iterator(result);
   }
 
   template< class Key, class T, class Compare >
@@ -192,12 +197,7 @@ namespace erohin
   template< class Key, class T, class Compare >
   typename RedBlackTree< Key, T, Compare >::reverse_iterator RedBlackTree< Key, T, Compare >::rbegin()
   {
-    detail::Node< Key, T > * result = root_;
-    while (result->left_)
-    {
-      result = result->left_;
-    }
-    return reverse_iterator(result);
+    return reverse_iterator(crbegin().node_);
   }
 
   template< class Key, class T, class Compare >
@@ -209,7 +209,12 @@ namespace erohin
   template< class Key, class T, class Compare >
   typename RedBlackTree< Key, T, Compare >::const_reverse_iterator RedBlackTree< Key, T, Compare >::crbegin() const
   {
-    return const_reverse_iterator(rbegin());
+    detail::Node< Key, T > * result = root_;
+    while (result->right_)
+    {
+      result = result->right_;
+    }
+    return const_reverse_iterator(result);
   }
 
   template< class Key, class T, class Compare >
@@ -241,33 +246,35 @@ namespace erohin
       root_ = new detail::Node< Key, T >(std::move(value), nullptr, nullptr, nullptr);
       node = root_;
       ++size_;
-      return std::make_pair(iterator(node), true);
-    }
-    detail::Node< Key, T > * prev = node;
-    while (node)
-    {
-      prev = node;
-      if (node->data_.first == value.first)
-      {
-        return std::make_pair(iterator(node), false);
-      }
-      else if (cmp_(value.first, node->data_.first))
-      {
-        node = node->left_;
-      }
-      else
-      {
-        node = node->right_;
-      }
-    }
-    node = new detail::Node< Key, T >(std::move(value), prev, nullptr, nullptr);
-    if (cmp_(node->data_.first, prev->data_.first))
-    {
-      prev->left_ = node;
     }
     else
     {
-      prev->right_ = node;
+      detail::Node< Key, T > * prev = node;
+      while (node)
+      {
+        prev = node;
+        if (node->data_.first == value.first)
+        {
+          return std::make_pair(iterator(node), false);
+        }
+        else if (cmp_(value.first, node->data_.first))
+        {
+          node = node->left_;
+        }
+        else
+        {
+          node = node->right_;
+        }
+      }
+      node = new detail::Node< Key, T >(std::move(value), prev, nullptr, nullptr);
+      if (cmp_(node->data_.first, prev->data_.first))
+      {
+        prev->left_ = node;
+      }
+      else
+      {
+        prev->right_ = node;
+      }
     }
     insert_balance_case1(node);
     ++size_;
@@ -482,7 +489,23 @@ namespace erohin
   template< class Key, class T, class Compare >
   TreeConstIterator< Key, T > RedBlackTree< Key, T, Compare >::find(const Key & key) const
   {
-    return const_iterator(iterator(find(key)).node_);
+    const detail::Node< Key, T > * node = root_;
+    while (node)
+    {
+      if (node->data_.first == key)
+      {
+        return const_iterator(node);
+      }
+      else if (cmp_(key, node->data_.first))
+      {
+        node = node->left_;
+      }
+      else
+      {
+        node = node->right_;
+      }
+    }
+    return cend();
   }
 
   template< class Key, class T, class Compare >
@@ -507,19 +530,22 @@ namespace erohin
   template< class Key, class T, class Compare >
   const T & RedBlackTree< Key, T, Compare >::at(const Key & key) const
   {
-    return at(key);
+    TreeConstIterator< Key, T > iter = find(key);
+    if (iter == cend())
+    {
+      throw std::out_of_range("Out of range in element access");
+    }
+    return iter->second;
   }
 
   template< class Key, class T, class Compare >
   TreeIterator< Key, T > RedBlackTree< Key, T, Compare >::lower_bound(const Key & key)
   {
     detail::Node< Key, T > * node = root_;
+    detail::Node< Key, T > * prev = root_;
     while (node)
     {
-      if (!cmp_(node->data_.first, key))
-      {
-        return iterator(node);
-      }
+      prev = node;
       if (cmp_(key, node->data_.first))
       {
         node = node->left_;
@@ -527,6 +553,10 @@ namespace erohin
       else
       {
         node = node->right_;
+      }
+      if (!cmp_(prev->data_.first, key))
+      {
+        return iterator(node);
       }
     }
     return end();

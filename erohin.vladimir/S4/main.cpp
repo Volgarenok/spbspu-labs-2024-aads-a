@@ -12,26 +12,6 @@
 int main(int argc, char ** argv)
 {
   using namespace erohin;
-
-  {
-    RedBlackTree< int, int > int_dict;
-    int_dict.insert(std::make_pair(1, 10));
-    int_dict.insert(std::make_pair(2, 20));
-    int_dict.insert(std::make_pair(3, 30));
-    int_dict.insert(std::make_pair(4, 40));
-    int_dict.insert(std::make_pair(0, 00));
-    int_dict.insert(std::make_pair(5, 50));
-    int_dict.erase(4);
-    int_dict[7] = 70;
-    for (auto iter: int_dict)
-    {
-      std::cout << std::endl << "//" << iter.first << ":" << iter.second<< "//" << std::endl;
-    }
-    RedBlackTree< int, int >::const_iterator rte = int_dict.cend();
-    RedBlackTree< int, int >::iterator iter = int_dict.find(4);
-    std::cout << std::endl << "//" << int_dict.lower_bound(0)->first << "//" << std::endl;
-  }
-
   if (argc != 2)
   {
     std::cerr << "Wrong CLA number\n";
