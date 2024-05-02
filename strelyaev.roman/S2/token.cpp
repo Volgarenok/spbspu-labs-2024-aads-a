@@ -67,7 +67,7 @@ bool strelyaev::isOperation(const std::string& line)
 
 bool strelyaev::isBracket(const std::string& line)
 {
-  return ((line.size() == 1) && ((line[0] == '(') || (line[0] == ')')));
+  return ((line.size() == 1) && (isBracket(line[0])));
 }
 
 bool strelyaev::isBracket(char c)
