@@ -12,7 +12,7 @@ arakelyan::Token::Token(char val):
   oper_(val)
 {}
 
-arakelyan::ExpressionObj::ExpressionObj(arakelyan::token_t type, arakelyan::Token val):
+arakelyan::ExpressionObj::ExpressionObj(token_t type, Token val):
   val_(val),
   type_(type)
 {}
