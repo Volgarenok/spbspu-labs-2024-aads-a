@@ -20,7 +20,6 @@ int main(int argc, char ** argv)
   std::fstream file(argv[1]);
   collection context;
   inputCollection(file, context);
-  file.close();
   using dict_func = std::function< void(std::istream &, std::ostream &) >;
   std::map< std::string, dict_func > command;
   {
@@ -49,5 +48,7 @@ int main(int argc, char ** argv)
     }
     std::cin >> command_name;
   }
+  outputCollection(file, context);
+  file.close();
   return 0;
 }
