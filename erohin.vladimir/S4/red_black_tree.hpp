@@ -35,6 +35,8 @@ namespace erohin
     bool empty() const noexcept;
     std::pair< iterator, bool > insert(const value_type & value);
     std::pair< iterator, bool > insert(value_type && value);
+    iterator insert(iterator pos, const value_type & value);
+    iterator insert(iterator pos, value_type && value);
     template< class InputIt>
     void insert(InputIt first, InputIt last);
     void insert(std::initializer_list< value_type > init_list);
@@ -195,51 +197,79 @@ namespace erohin
   std::pair< TreeIterator< Key, T >, bool > RedBlackTree< Key, T, Compare >::insert(value_type && value)
   {
     detail::Node< Key, T > * node = root_;
-    try
+    if (empty())
     {
-      if (empty())
-      {
-        root_ = new detail::Node< Key, T >(std::move(value), nullptr, nullptr, nullptr);
-        node = root_;
-        ++size_;
-      }
-      else
-      {
-        detail::Node< Key, T > * prev = node;
-        while (node)
-        {
-          prev = node;
-          if (node->data_.first == value.first)
-          {
-            return std::make_pair(iterator(node), false);
-          }
-          else if (cmp_(value.first, node->data_.first))
-          {
-            node = node->left_;
-          }
-          else
-          {
-            node = node->right_;
-          }
-        }
-        node = new detail::Node< Key, T >(value, prev, nullptr, nullptr);
-        if (cmp_(node->data_.first, prev->data_.first))
-        {
-          prev->left_ = node;
-        }
-        else
-        {
-          prev->right_ = node;
-        }
-      }
-      insert_balance_case1(node);
+      root_ = new detail::Node< Key, T >(std::move(value), nullptr, nullptr, nullptr);
+      node = root_;
       ++size_;
       return std::make_pair(iterator(node), true);
     }
-    catch (...)
+    detail::Node< Key, T > * prev = node;
+    while (node)
     {
-      return std::make_pair(end(), false);
+      prev = node;
+      if (node->data_.first == value.first)
+      {
+        return std::make_pair(iterator(node), false);
+      }
+      else if (cmp_(value.first, node->data_.first))
+      {
+        node = node->left_;
+      }
+      else
+      {
+        node = node->right_;
+      }
     }
+    node = new detail::Node< Key, T >(std::move(value), prev, nullptr, nullptr);
+    if (cmp_(node->data_.first, prev->data_.first))
+    {
+      prev->left_ = node;
+    }
+    else
+    {
+      prev->right_ = node;
+    }
+    insert_balance_case1(node);
+    ++size_;
+    return std::make_pair(iterator(node), true);
+  }
+
+  template< class Key, class T, class Compare >
+  TreeIterator< Key, T > RedBlackTree< Key, T, Compare >::insert(iterator pos, const value_type & value)
+  {
+    return insert(pos, value_type(value));
+  }
+
+  template< class Key, class T, class Compare >
+  TreeIterator< Key, T > RedBlackTree< Key, T, Compare >::insert(iterator pos, value_type && value)
+  {
+    detail::Node< Key, T > * node = pos.node_;
+    detail::Node< Key, T > * prev = node;
+    while (node)
+    {
+      prev = node;
+      if (cmp_(value.first, node->data_.first))
+      {
+        node = node->left_;
+      }
+      else
+      {
+        node = node->right_;
+      }
+    }
+    node = new detail::Node< Key, T >(std::move(value), prev, nullptr, nullptr);
+    if (cmp_(node->data_.first, prev->data_.first))
+    {
+      prev->left_ = node;
+    }
+    else
+    {
+      prev->right_ = node;
+    }
+    insert_balance_case1(node);
+    ++size_;
+    return iterator(node);
   }
 
   template< class Key, class T, class Compare >
