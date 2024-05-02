@@ -8,7 +8,6 @@ namespace strelyaev
   class Stack
   {
     public:
-
       void push(const T&);
       T& back();
       const T& back() const;

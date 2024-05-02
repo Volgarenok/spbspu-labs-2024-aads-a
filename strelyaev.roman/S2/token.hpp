@@ -17,12 +17,12 @@ namespace strelyaev
     friend struct ExpressionUnit;
     public:
       Token();
-      Token(long long);
-      Token(char);
+      explicit Token(long long);
+      explicit Token(char);
       ~Token() = default;
     private:
-      long long operand;
-      char operation;
+      long long operand_;
+      char operation_;
   };
 
   struct ExpressionUnit
@@ -34,8 +34,8 @@ namespace strelyaev
       char getOperation() const;
       TokenType getType() const;
     private:
-      Token token;
-      TokenType type;
+      Token token_;
+      TokenType type_;
   };
 }
 

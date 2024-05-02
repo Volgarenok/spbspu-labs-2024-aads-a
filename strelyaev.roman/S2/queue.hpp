@@ -8,7 +8,6 @@ namespace strelyaev
   class Queue
   {
     public:
-
       void push(const T&);
       T& back();
       const T& back() const;
