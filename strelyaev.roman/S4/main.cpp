@@ -11,4 +11,6 @@ int main()
   {
     std::cout << *it << "\n";
   }
+  std::cout << "==================================\n";
+  tree.treePrint(tree.root);
 }

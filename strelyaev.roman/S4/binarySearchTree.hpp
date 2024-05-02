@@ -2,7 +2,7 @@
 #define BINARYSEARCHTREE_HPP
 #include <functional>
 #include "node.hpp"
-#include "listIterator.hpp"
+#include "treeIterator.hpp"
 
 
 #include <iostream>
@@ -21,6 +21,16 @@ namespace strelyaev
       void push(T value)
       {
         insert(value, root);
+      }
+
+      void treePrint(Node< T >* current)
+      {
+        if (current)
+        {
+          treePrint(current->left_);
+          std::cout << current->value_;
+          treePrint(current->right_);
+        }
       }
 
       void insert(T value, Node< T >* current_node)
