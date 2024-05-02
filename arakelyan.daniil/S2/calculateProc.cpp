@@ -11,7 +11,7 @@ long long calcExp(long long first, long long second, arakelyan::ExpressionObj ob
   constexpr long long maxVal = std::numeric_limits< long long >::max();
   constexpr long long minVal = std::numeric_limits< long long >::min();
   long long rObj = 0;
-  char operation = obj.getVal().oper_;
+  char operation = obj.getOper();
   if (operation == '+')
   {
     if (first > (maxVal - second))
@@ -94,7 +94,7 @@ void arakelyan::calculatePostfixQ(Queue< Queue< ExpressionObj > > &qOfPostfixQs,
     }
     else if (obj.getType() == token_t::operand)
     {
-      stack.push(obj.getVal().operand_);
+      stack.push(obj.getNumber());
     }
     else
     {

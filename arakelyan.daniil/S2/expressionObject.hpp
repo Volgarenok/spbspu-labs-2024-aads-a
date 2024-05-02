@@ -16,13 +16,15 @@ namespace arakelyan
 
   union Token
   {
-    long long operand_;
-    char oper_;
-
+  public:
+    friend struct ExpressionObj;
     Token();
     explicit Token(long long val);
     explicit Token(char val);
     ~Token() = default;
+  private:
+    long long operand_;
+    char oper_;
   };
 
 
@@ -36,7 +38,8 @@ namespace arakelyan
     ~ExpressionObj() = default;
     ExpressionObj &operator=(const ExpressionObj &obj) = default;
 
-    Token getVal() const;
+    char getOper() const;
+    long long getNumber() const;
     token_t getType() const;
     int getPriority() const
     {

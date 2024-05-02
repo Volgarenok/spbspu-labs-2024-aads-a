@@ -17,9 +17,14 @@ arakelyan::ExpressionObj::ExpressionObj(arakelyan::token_t type, arakelyan::Toke
   type_(type)
 {}
 
-arakelyan::Token arakelyan::ExpressionObj::getVal() const
+char arakelyan::ExpressionObj::getOper() const
 {
-  return val_;
+  return val_.oper_;
+}
+
+long long arakelyan::ExpressionObj::getNumber() const
+{
+  return val_.operand_;
 }
 
 arakelyan::token_t arakelyan::ExpressionObj::getType() const

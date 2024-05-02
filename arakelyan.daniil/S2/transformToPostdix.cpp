@@ -6,9 +6,9 @@
 #include "stack.hpp"
 
 
-bool getpriority(const arakelyan::ExpressionObj &val, const arakelyan::ExpressionObj &otherV)
+bool isLessPriority(const arakelyan::ExpressionObj &rhs, const arakelyan::ExpressionObj &lhs)
 {
-  return val.getPriority() <= otherV.getPriority();
+  return rhs.getPriority() <= lhs.getPriority();
 }
 
 arakelyan::Queue< arakelyan::ExpressionObj > arakelyan::transformInfixToPostfix(Queue< ExpressionObj > &infixQueue)
@@ -27,13 +27,13 @@ arakelyan::Queue< arakelyan::ExpressionObj > arakelyan::transformInfixToPostfix(
     }
     else if (curObj.getType() == token_t::bracket)
     {
-      if (curObj.getVal().oper_ == '(')
+      if (curObj.getOper() == '(')
       {
         operS.push(curObj);
       }
-      else if (curObj.getVal().oper_ == ')')
+      else if (curObj.getOper() == ')')
       {
-        while ((!operS.empty()) && (operS.top().getVal().oper_ != '('))
+        while ((!operS.empty()) && (operS.top().getOper() != '('))
         {
           postfixQ.push(operS.top());
           operS.pop();
@@ -47,7 +47,7 @@ arakelyan::Queue< arakelyan::ExpressionObj > arakelyan::transformInfixToPostfix(
     }
     else if (curObj.getType() == token_t::operation)
     {
-      while (!operS.empty() && (operS.top().getVal().oper_ != '(') && (getpriority(operS.top(), curObj)))
+      while (!operS.empty() && (operS.top().getOper() != '(') && (isLessPriority(operS.top(), curObj)))
       {
         postfixQ.push(operS.top());
         operS.pop();
