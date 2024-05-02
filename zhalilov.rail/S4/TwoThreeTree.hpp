@@ -323,6 +323,23 @@ namespace zhalilov
   }
 
   template < class Key, class T, class Compare >
+  typename TwoThree < Key, T, Compare >::iterator TwoThree < Key, T, Compare >::erase(const_iterator it)
+  {
+    return erase(iterator(it.node_, it.isPtrToLeft_));
+  }
+
+  template < class Key, class T, class Compare >
+  char TwoThree < Key, T, Compare >::erase(const Key &key)
+  {
+    auto it = find(key);
+    if (it == end())
+    {
+      return 0;
+    }
+    return erase(it);
+  }
+
+  template < class Key, class T, class Compare >
   void TwoThree < Key, T, Compare >::clear() noexcept
   {
     if (empty())
@@ -436,11 +453,14 @@ namespace zhalilov
     if (left)
     {
       left->parent = parent;
+    }
+    if (right)
+    {
       right->parent = parent;
-      if (mid)
-      {
-        mid->parent = parent;
-      }
+    }
+    if (mid)
+    {
+      mid->parent = parent;
     }
   }
 
