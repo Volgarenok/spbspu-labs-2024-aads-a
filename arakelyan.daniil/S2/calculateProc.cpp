@@ -8,8 +8,8 @@
 
 long long calcExp(long long first, long long second, arakelyan::ExpressionObj obj)
 {
-  long long maxVal = std::numeric_limits< long long >::max();
-  long long minVal = std::numeric_limits< long long >::min();
+  constexpr long long maxVal = std::numeric_limits< long long >::max();
+  constexpr long long minVal = std::numeric_limits< long long >::min();
   long long rObj = 0;
   char operation = obj.getVal().oper_;
   if (operation == '+')

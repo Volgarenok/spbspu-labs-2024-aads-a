@@ -29,5 +29,5 @@ arakelyan::detail::token_t arakelyan::ExpressionObj::getType() const
 
 int arakelyan::ExpressionObj::getPriority() const
 {
-  return compar(val_.oper_);
+  return compar(val_);
 }

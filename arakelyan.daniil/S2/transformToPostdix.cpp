@@ -3,23 +3,6 @@
 #include <stdexcept>
 #include "stack.hpp"
 
-// int operationPriority(arakelyan::detail::ExpressionObj obj)
-// {
-//   if (obj.getVal().oper_ == '+' || obj.getVal().oper_ == '-')
-//   {
-//     return 1;
-//   }
-//   else if (obj.getVal().oper_ == '*' || obj.getVal().oper_ == '/' || obj.getVal().oper_ == '%')
-//   {
-//     return 2;
-//   }
-//   else
-//   {
-//     throw std::logic_error("invalid operation!");
-//   }
-//   return 0;
-// }
-
 arakelyan::Queue< arakelyan::ExpressionObj > arakelyan::transformInfixToPostfix(Queue< ExpressionObj > &infixQueue)
 {
   using namespace detail;

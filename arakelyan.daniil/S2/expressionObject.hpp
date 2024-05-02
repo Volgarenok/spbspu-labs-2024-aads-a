@@ -22,14 +22,14 @@ namespace arakelyan
       char oper_;
 
       Token();
-      Token(long long val);
-      Token(char val);
+      explicit Token(long long val);
+      explicit Token(char val);
       ~Token() = default;
     };
 
     struct Comparator
     {
-      int operator()(const Token &value) const
+      int operator()(Token value) const
       {
         if (value.oper_ == '+' || value.oper_ == '-')
         {
@@ -47,22 +47,22 @@ namespace arakelyan
     };
   }
 
-    struct ExpressionObj
-    {
-    public:
-      ExpressionObj() = delete;
-      ExpressionObj(detail::token_t type, detail::Token val);
-      ExpressionObj(const ExpressionObj &obj) = default;
-      ~ExpressionObj() = default;
-      ExpressionObj &operator=(const ExpressionObj &obj) = default;
+  struct ExpressionObj
+  {
+  public:
+    ExpressionObj() = delete;
+    ExpressionObj(detail::token_t type, detail::Token val);
+    ExpressionObj(const ExpressionObj &obj) = default;
+    ~ExpressionObj() = default;
+    ExpressionObj &operator=(const ExpressionObj &obj) = default;
 
-      detail::Token getVal() const;
-      detail::token_t getType() const;
-      int getPriority() const;
-    private:
-      detail::Token val_;
-      detail::token_t type_;
-      detail::Comparator compar;
-    };
+    detail::Token getVal() const;
+    detail::token_t getType() const;
+    int getPriority() const;
+  private:
+    detail::Token val_;
+    detail::token_t type_;
+    detail::Comparator compar;
+  };
 }
 #endif
