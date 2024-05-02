@@ -41,24 +41,8 @@ namespace arakelyan
     char getOper() const;
     long long getNumber() const;
     token_t getType() const;
-    int getPriority() const
-    {
-      if (val_.oper_ == '+' || val_.oper_ == '-')
-      {
-        return 1;
-      }
-      else if (val_.oper_ == '*' || val_.oper_ == '/' || val_.oper_ == '%')
-      {
-        return 2;
-      }
-      else
-      {
-        throw std::logic_error("Invalid operator!");
-      }
-    }
-  struct Comparator;
+    int getPriority() const;
   private:
-
     Token val_;
     token_t type_;
   };

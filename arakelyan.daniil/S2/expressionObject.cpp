@@ -31,3 +31,19 @@ arakelyan::token_t arakelyan::ExpressionObj::getType() const
 {
   return type_;
 }
+
+int arakelyan::ExpressionObj::getPriority() const
+{
+  if (val_.oper_ == '+' || val_.oper_ == '-')
+  {
+    return 1;
+  }
+  else if (val_.oper_ == '*' || val_.oper_ == '/' || val_.oper_ == '%')
+  {
+    return 2;
+  }
+  else
+  {
+    throw std::logic_error("Invalid operator!");
+  }
+}
