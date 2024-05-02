@@ -458,7 +458,10 @@ namespace zaitsev
       fakeroot_->left_ = create_map(begin, end, size_);
       fakeroot_->left_->parent_ = fakeroot_;
     }
-
+    ~Map()
+    {
+      freeNodes(fakeroot_);
+    }
     Map& operator=(const Map& other)
     {
       Map new_map(other);
