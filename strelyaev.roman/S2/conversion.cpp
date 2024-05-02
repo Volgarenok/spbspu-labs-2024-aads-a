@@ -19,16 +19,15 @@ strelyaev::ExpressionUnit strelyaev::convertStringToUnit(std::string string_toke
   }
   catch (...)
   {
-    char c = string_token[0];
-    new_token = Token(c);
-    if (isBracket(c))
+    if (isBracket(string_token))
     {
       type = TokenType::BRACKET;
     }
-    if (isOperation(c))
+    if (isOperation(string_token))
     {
       type = TokenType::OPERATION;
     }
+    new_token = Token(string_token[0]);
   }
   strelyaev::ExpressionUnit new_unit(new_token, type);
   return new_unit;
@@ -94,14 +93,14 @@ strelyaev::Queue< strelyaev::ExpressionUnit > strelyaev::makePostfix(Queue< Expr
       }
       ExpressionUnit stack_peek = temp_stack.back();
       temp_stack.pop_back();
-      if (!(isPrecedenceLess(unit.getOperation(), stack_peek.getOperation())))
+      if (!(unit <= stack_peek))
       {
         temp_stack.push(stack_peek);
         temp_stack.push(unit);
       }
-      else if (isPrecedenceLess(unit.getOperation(), stack_peek.getOperation()))
+      else if (unit <= stack_peek)
       {
-        while (isPrecedenceLess(unit.getOperation(), stack_peek.getOperation()))
+        while (unit <= stack_peek)
         {
           postfix_queue.push(stack_peek);
           if (temp_stack.empty())
