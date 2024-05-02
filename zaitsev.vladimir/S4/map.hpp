@@ -32,7 +32,7 @@ namespace zaitsev
         right_(nullptr),
         parent_(nullptr)
       {}
-      explicit Node(bool fake):
+      explicit Node(bool):
         val_(),
         height_(-1),
         left_(nullptr),
@@ -78,7 +78,7 @@ namespace zaitsev
       }
       bool update_height()
       {
-        size_t old_height = height_;
+        int old_height = height_;
         height_ = std::max(depth(left_), depth(right_));
         return old_height != height_;
       }
