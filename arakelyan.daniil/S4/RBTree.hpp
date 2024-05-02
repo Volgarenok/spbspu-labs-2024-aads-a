@@ -2,6 +2,7 @@
 #define RBTREE_HPP
 
 #include <functional>
+#include <ios>
 #include <iostream>
 #include <memory>
 #include <initializer_list>
@@ -50,43 +51,23 @@ namespace arakelyan
 
   private:
     using Node = detail::Node< Key, Value >;
+
     Node *root_;
     size_t size_;
     Comparator comp;
 
-    void clear(Node *node)
-    {
-      if (node)
-      {
-        clear(node->left_);
-        clear(node->right_);
-        delete node;
-      }
-    }
-
-    void traversal(Node *node) const noexcept
-    {
-      if (node)
-      {
-        traversal(node->left_);
-        std::cout << node->data_.first << ":" << node->data_.second << " col:" << node->color_ << " -> ";
-        traversal(node->right_);
-      }
-    }
-
+    void clear(Node *node);
+    void traversal(Node *node) const noexcept;
     template < class Iterator_t >
-    void copyFromRange(Iterator_t it_start, Iterator_t it_end)
-    {
-      for (auto it = it_start; it != it_end; ++it)
-      {
-        insert(*it);
-      }
-    }
+    void copyFromRange(Iterator_t it_start, Iterator_t it_end);
 
-    // void someFixInput()
-    // void someFixDelete()
-    // void leftRotate()
-    // void rightTorate()
+    // void swapNodeData(Node *node, Node *aNode);
+    // void someFixInput(Node *node);
+    // void someFixDelete(Node *node);
+    // void leftRotate(Node *node);
+    // void rightRotate(Node *node);
+    //void leftRightRotate(Node *node);
+    //void rightLeftRotate(Node *node);
   };
 
   template < class Key, class Value, class Comparator >
@@ -219,15 +200,55 @@ namespace arakelyan
     newNode->parent_ = parent;
     if (comp(val.first, parent->data_.first))
     {
-      parent->left_ = newNode;
+      if (parent->color_ == detail::color_t::BLACK)
+      {
+        parent->left_ = newNode;
+      }
     }
     else if (!comp(val.first,parent->data_.first))
     {
-      parent->right_ = newNode;
+      if (parent->color_ == detail::color_t::BLACK)
+      {
+        parent->right_ = newNode;
+      }
     }
     ++size_;
+    // if (size_ == 5)
+    // {
+    //   rightRotate(root_->left_);
+    // }
     // balance func.
   }
+
+  // template < class Key, class Value, class Comparator >
+  // void RBTree< Key, Value, Comparator >::leftRotate()
+  // {
+  //
+  // }
+
+  // template < class Key, class Value, class Comparator >
+  // void RBTree< Key, Value, Comparator >::rightRotate(detail::Node< Key, Value > *node)
+  // {
+  //   std::cout << "\nim here\n";
+  //   swapNodeData(node, node->left_);
+  //   detail::Node< Key, Value > *tempRight = node->right_;
+  //   node->right_ = node->left_;
+  //   node->left_ = node->right_->left_;
+  //   node->right_->left_ = node->right_->right_;
+  //   node->right_->right_ = tempRight;
+  // }
+
+  // template < class Key, class Value, class Comparator >
+  // void RBTree< Key, Value, Comparator >::leftRightRotate()
+  // {
+  //
+  // }
+
+  // template < class Key, class Value, class Comparator >
+  // void RBTree< Key, Value, Comparator >::rightLeftRotate(detail::Node< Key, Value > *node)
+  // {
+  //
+  // }
 
   template < class Key, class Value, class Comparator  >
   void RBTree< Key, Value, Comparator >::swap(RBTree< Key, Value, Comparator > &otherT) noexcept
@@ -239,6 +260,46 @@ namespace arakelyan
   void RBTree< Key, Value, Comparator >::printInOrder() const noexcept
   {
     traversal(root_);
+  }
+
+  // template < class Key, class Value, class Comparator >
+  // void RBTree< Key, Value, Comparator >::swapNodeData(detail::Node< Key, Value > *node, detail::Node< Key, Value > *aNode)
+  // {
+  //   std::cout << "\nim in swap\n";
+  //   std::swap(node->data_.first, aNode->data_.first);
+  //   std::swap(node->data_.second, aNode->data_.second);
+  // }
+
+  template < class Key, class Value, class Comparator >
+  void RBTree< Key, Value,Comparator >::clear(detail::Node< Key, Value > *node)
+  {
+    if (node)
+    {
+      clear(node->left_);
+      clear(node->right_);
+      delete node;
+    }
+  }
+
+  template < class Key, class Value, class Comparator >
+  void RBTree< Key, Value, Comparator >::traversal(detail::Node< Key, Value > *node) const noexcept
+  {
+    if (node)
+    {
+      traversal(node->left_);
+      std::cout << node->data_.first << ":" << node->data_.second << " col:" << node->color_ << " -> ";
+      traversal(node->right_);
+    }
+  }
+
+  template < class Key, class Value, class Comparator >
+  template < class Iterator_t >
+  void RBTree< Key, Value, Comparator >::copyFromRange(Iterator_t it_start, Iterator_t it_end)
+  {
+    for (auto it = it_start; it != it_end; ++it)
+    {
+      insert(*it);
+    }
   }
 }
 #endif

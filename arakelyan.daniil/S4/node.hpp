@@ -26,7 +26,7 @@ namespace arakelyan
 
       Node() = delete;
       explicit Node(const value_t &val);
-      explicit Node(const Key &key, const Value &value);
+      Node(const Key &key, const Value &value);
     };
 
     template < class Key, class Value >
