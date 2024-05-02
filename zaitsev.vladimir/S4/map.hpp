@@ -563,105 +563,49 @@ namespace zaitsev
     {
       return (find(x) != end());
     }
-    template< class K >
-    iterator lower_bound(const K& x)
+    iterator lower_bound(const Key& key)
     {
-      Node* cur = fakeroot_.left_;
-      while (cur)
+      Node* cur = find_hint(fakeroot_->left_, key);
+      if (cmp_(cur->val_.first, key))
       {
-        if (cur->val_.first == x)
-        {
-          return iterator(cur);
-        }
-        if (cmp_(cur->val_.first, x))
-        {
-          if (!cur->left_)
-          {
-            break;
-          }
-          cur = cur->left_;
-        }
-        else
-        {
-          if (!cur->right_)
-          {
-            break;
-          }
-          cur = cur->right_;
-        }
+        return ++iterator(cur);
       }
-      iterator temp(cur);
-      if (cmp_(cur->val_.first, x))
-      {
-        ++temp;
-      }
-      return temp;
+      return iterator(cur);
     }
-    template< class K >
-    const_iterator lower_bound(const K& x) const
+    const_iterator lower_bound(const Key& key) const
     {
-      Node* cur = fakeroot_.left_;
-      while (cur)
+      Node* cur = find_hint(fakeroot_->left_, key);
+      if (cmp_(cur->val_.first, key))
       {
-        if (cur->val_.first == x)
-        {
-          return const_iterator(cur);
-        }
-        if (cmp_(cur->val_.first, x))
-        {
-          if (!cur->left_)
-          {
-            break;
-          }
-          cur = cur->left_;
-        }
-        else
-        {
-          if (!cur->right_)
-          {
-            break;
-          }
-          cur = cur->right_;
-        }
+        return ++const_iterator(cur);
       }
-      const_iterator temp(cur);
-      if (cmp_(cur->val_.first, x))
-      {
-        ++temp;
-      }
-      return temp;
+      return const_iterator(cur);
     }
-    template< class K >
-    iterator upper_bound(const K& x)
+    iterator upper_bound(const Key& key)
     {
-      iterator lb = lower_bound(x);
-      if (lb != end() && (*lb).first == x)
+      iterator lb = lower_bound(key);
+      if (lb != end() && (*lb).first == key)
       {
         return ++lb;
       }
-      else
-        return lb;
+      return lb;
     }
-    template< class K >
-    const_iterator upper_bound(const K& x) const
+    const_iterator upper_bound(const Key& key) const
     {
-      const_iterator lb = lower_bound(x);
-      if (lb != cend() && (*lb).first == x)
+      const_iterator lb = lower_bound(key);
+      if (lb != cend() && (*lb).first == key)
       {
         return ++lb;
       }
-      else
-        return lb;
+      return lb;
     }
-    template< class K >
-    std::pair< iterator, iterator > equal_range(const K& x)
+    std::pair< iterator, iterator > equal_range(const Key& key)
     {
-      return std::make_pair(lower_bound(x), upper_bound(x));
+      return std::make_pair(lower_bound(key), upper_bound(key));
     }
-    template< class K >
-    std::pair< const_iterator, const_iterator > equal_range(const K& x) const
+    std::pair< const_iterator, const_iterator > equal_range(const Key& key) const
     {
-      return std::make_pair(lower_bound(x), upper_bound(x));
+      return std::make_pair(lower_bound(key), upper_bound(key));
     }
     const_iterator find(const Key& key) const
     {
@@ -679,7 +623,7 @@ namespace zaitsev
 
     T& at(const Key& key)
     {
-      Node* cur = find_hint(fakeroot_.left_, key);
+      Node* cur = find_hint(fakeroot_->left_, key);
       if (cur && cur->val_.first == key)
       {
         return cur->val_.second;
@@ -691,7 +635,7 @@ namespace zaitsev
     }
     const T& at(const Key& key) const
     {
-      Node* cur = find_hint(fakeroot_.left_, key);
+      Node* cur = find_hint(fakeroot_->left_, key);
       if (cur && cur->val_.first == key)
       {
         return cur->val_.second;
@@ -708,7 +652,7 @@ namespace zaitsev
       {
         return cur->val_.second;
       }
-      Node* added=addNode(fakeroot_,cur, key, T());
+      Node* added = addNode(fakeroot_, cur, key, T());
       ++size_;
       return added->val_.second;
     }

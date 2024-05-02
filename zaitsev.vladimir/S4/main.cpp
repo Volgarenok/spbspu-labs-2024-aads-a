@@ -107,7 +107,13 @@ private:
   using library = zaitsev::Map< string, dictionary>;
   library lib;
 
-  enum struct com_nmb { print_c, complement_c, intersect_c, union_c };
+  enum struct com_nmb
+  {
+    print_c,
+    complement_c,
+    intersect_c,
+    union_c
+  };
   zaitsev::Map<string, com_nmb> commands = {
     {"print", com_nmb::print_c},
     {"intersect", com_nmb::intersect_c },
@@ -201,7 +207,7 @@ private:
         (*ds1_beg).first < (*ds2_beg).first ? ++ds1_beg : ++ds2_beg;
       }
     }
-    lib[std::move(new_ds_name)] = std::move(new_dict);
+    lib[new_ds_name] = new_dict;
   }
   void union_ds(string new_ds_name, string ds1_name, string ds2_name)
   {
@@ -239,7 +245,7 @@ private:
       new_dict.insert(*ds2_beg);
       ++ds2_beg;
     }
-    lib[new_ds_name] = new_dict;
+    lib[new_ds_name] = std::move(new_dict);
   }
 };
 
