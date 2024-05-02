@@ -1,5 +1,4 @@
 #include "token.hpp"
-#include <string>
 #include <stdexcept>
 
 strelyaev::Token::Token():
@@ -35,19 +34,35 @@ strelyaev::TokenType strelyaev::ExpressionUnit::getType() const
   return type_;
 }
 
-bool isPlusOrMinus(const std::string& c)
+bool isOperand(const strelyaev::ExpressionUnit& a)
 {
-  return ((c == "+") || (c == "-"));
+  return (a.getType() == strelyaev::TokenType::OPERAND);
 }
 
-bool isMultiplyOrDivision(const std::string& c)
+bool strelyaev::operator<=(const ExpressionUnit& a, const ExpressionUnit& b)
 {
-  return ((c == "*") || (c == "/") || (c == "%"));
+  if (isOperand(a) || isOperand(b))
+  {
+    throw std::logic_error("Something went wrong!");
+  }
+  char a_operation = a.getOperation();
+  char b_operation = b.getOperation();
+  return getPrecedence(a_operation) <= getPrecedence(b_operation);
+}
+
+bool strelyaev::isPlusOrMinus(char c)
+{
+  return ((c == '+') || (c == '-'));
+}
+
+bool strelyaev::isMultiplyOrDivision(char c)
+{
+  return ((c == '*') || (c == '/') || (c == '%'));
 }
 
 bool strelyaev::isOperation(const std::string& line)
 {
-  return ((line.size() == 1) && (isPlusOrMinus(line) || isMultiplyOrDivision(line)));
+  return ((line.size() == 1) && (isPlusOrMinus(line[0]) || isMultiplyOrDivision(line[0])));
 }
 
 bool strelyaev::isBracket(const std::string& line)
@@ -55,39 +70,26 @@ bool strelyaev::isBracket(const std::string& line)
   return ((line.size() == 1) && ((line[0] == '(') || (line[0] == ')')));
 }
 
-int getPrecedence(char c)
+bool strelyaev::isBracket(char c)
 {
-  std::string line = "";
-  line += c;
-  if (isPlusOrMinus(line))
+  return ((c == '(') || (c == ')'));
+}
+
+int strelyaev::getPrecedence(char c)
+{
+  if (isPlusOrMinus(c))
   {
     return 1;
   }
-  if (isMultiplyOrDivision(line))
+  if (isMultiplyOrDivision(c))
   {
     return 2;
   }
-  if (strelyaev::isBracket(line))
+  if (isBracket(c))
   {
     return 0;
   }
   return -1;
 }
 
-bool isOperand(const strelyaev::ExpressionUnit& a)
-{
-  using namespace strelyaev;
-  return a.getType() == TokenType::OPERAND;
-}
-
-bool strelyaev::operator<(const ExpressionUnit& a, const ExpressionUnit& b)
-{
-  if (isOperand(a) && isOperand(b))
-  {
-    throw std::logic_error("Something is wrong with operator<");
-  }
-  int precedence_a = getPrecedence(a.getOperation());
-  int precedence_b = getPrecedence(b.getOperation());
-  return precedence_a < precedence_b;
-}
 

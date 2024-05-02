@@ -38,9 +38,13 @@ namespace strelyaev
       Token token_;
       TokenType type_;
   };
+  bool isPlusOrMinus(char c);
+  bool isMultiplyOrDivision(char c);
   bool isOperation(const std::string&);
   bool isBracket(const std::string&);
-  bool operator<(const strelyaev::ExpressionUnit& a, const strelyaev::ExpressionUnit& b);
+  bool isBracket(char c);
+  int getPrecedence(char);
+  bool operator<=(const ExpressionUnit& a, const ExpressionUnit& b);
 }
 
 #endif

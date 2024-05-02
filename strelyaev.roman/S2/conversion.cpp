@@ -93,14 +93,14 @@ strelyaev::Queue< strelyaev::ExpressionUnit > strelyaev::makePostfix(Queue< Expr
       }
       ExpressionUnit stack_peek = temp_stack.back();
       temp_stack.pop_back();
-      if (!(unit.getOperation() < stack_peek.getOperation()))
+      if (!(unit <= stack_peek))
       {
         temp_stack.push(stack_peek);
         temp_stack.push(unit);
       }
-      else if ((unit.getOperation() < stack_peek.getOperation()))
+      else if (unit <= stack_peek)
       {
-        while ((unit.getOperation() < stack_peek.getOperation()))
+        while (unit <= stack_peek)
         {
           postfix_queue.push(stack_peek);
           if (temp_stack.empty())

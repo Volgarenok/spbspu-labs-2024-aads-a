@@ -1,5 +1,6 @@
 #include "calculations.hpp"
 #include <stdexcept>
+#include <iostream>
 #include <limits>
 
 long long strelyaev::calculateOperation(const ExpressionUnit& first, const ExpressionUnit& second, const ExpressionUnit& oper)
@@ -38,6 +39,4 @@ long long strelyaev::calculateOperation(const ExpressionUnit& first, const Expre
   }
   throw std::logic_error("Invalid operation");
 }
-
-
 
