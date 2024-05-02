@@ -55,6 +55,8 @@ namespace erohin
     const_iterator lower_bound(const Key & key) const;
     iterator upper_bound(const Key & key);
     const_iterator upper_bound(const Key & key) const;
+    std::pair< iterator, iterator > equal_range(const Key & key);
+    std::pair< const_iterator, const_iterator > equal_range(const Key & key) const;
   private:
     detail::Node< Key, T > * root_;
     Compare cmp_;
@@ -360,7 +362,16 @@ namespace erohin
   template< class Key, class T, class Compare >
   size_t RedBlackTree< Key, T, Compare >::count(const Key & key) const
   {
-    return (find(key) != end()) ? 1 : 0;
+    auto citer = cbegin();
+    size_t size = 0;
+    while (citer != cend())
+    {
+      if (citer->first == key)
+      {
+        ++size;
+      }
+    }
+    return size;
   }
 
   template< class Key, class T, class Compare >
@@ -470,6 +481,18 @@ namespace erohin
   TreeConstIterator< Key, T > RedBlackTree< Key, T, Compare >::upper_bound(const Key & key) const
   {
     return const_iterator(upper_bound(key).node_);
+  }
+
+  template< class Key, class T, class Compare >
+  std::pair< TreeIterator< Key, T >, TreeIterator< Key, T > > RedBlackTree< Key, T, Compare >::equal_range(const Key & key)
+  {
+    return std::make_pair(lower_bound(key), upper_bound(key));
+  }
+
+  template< class Key, class T, class Compare >
+  std::pair< TreeConstIterator< Key, T >, TreeConstIterator< Key, T > > RedBlackTree< Key, T, Compare >::equal_range(const Key & key) const
+  {
+    return std::make_pair(lower_bound(key), upper_bound(key));
   }
 
   template< class Key, class T, class Compare >
