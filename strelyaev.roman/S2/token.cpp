@@ -74,15 +74,15 @@ int getPrecedence(char c)
   return -1;
 }
 
-bool checkUnit(const strelyaev::ExpressionUnit& a)
+bool isOperand(const strelyaev::ExpressionUnit& a)
 {
   using namespace strelyaev;
-  return (a.getType() == TokenType::OPERATION) || (a.getType() == TokenType::BRACKET);
+  return a.getType() == TokenType::OPERAND;
 }
 
 bool strelyaev::operator<(const ExpressionUnit& a, const ExpressionUnit& b)
 {
-  if (!checkUnit(a) && !checkUnit(b))
+  if (isOperand(a) && isOperand(b))
   {
     throw std::logic_error("Something is wrong with operator<");
   }
