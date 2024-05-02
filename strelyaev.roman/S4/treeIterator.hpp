@@ -1,5 +1,5 @@
-#ifndef LISTITERATOR_HPP
-#define LISTITERATOR_HPP
+#ifndef TREEITERATOR_HPP
+#define TREEITERATOR_HPP
 #include <memory>
 #include "node.hpp"
 
