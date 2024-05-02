@@ -39,6 +39,10 @@ namespace erohin
     void insert(InputIt first, InputIt last);
     void insert(std::initializer_list< value_type > init_list);
     iterator erase(const Key & key);
+    iterator erase(iterator pos);
+    iterator erase(const_iterator pos);
+    iterator erase(iterator first, iterator last);
+    iterator erase(const_iterator first, const_iterator last);
     void swap(RedBlackTree & rhs) noexcept;
     size_t size() const noexcept;
     size_t count(const Key & key) const;
@@ -192,7 +196,6 @@ namespace erohin
         root_ = new detail::Node< Key, T >(std::move(value), nullptr, nullptr, nullptr);
         node = root_;
         ++size_;
-        return std::make_pair(iterator(node), true);
       }
       else
       {
@@ -253,11 +256,9 @@ namespace erohin
   TreeIterator< Key, T > RedBlackTree< Key, T, Compare >::erase(const Key & key)
   {
     detail::Node< Key, T > * node = root_;
-    detail::Node< Key, T > * prev = root_;
     detail::Node< Key, T > * to_delete = nullptr;
     while (!to_delete && node)
     {
-      prev = node;
       if (node->data_.first == key)
       {
         to_delete = node;
@@ -271,11 +272,17 @@ namespace erohin
         node = node->right_;
       }
     }
-    node = prev;
     if (!to_delete)
     {
       return end();
     }
+    return erase(iterator(to_delete));
+  }
+
+  template< class Key, class T, class Compare >
+  TreeIterator< Key, T > RedBlackTree< Key, T, Compare >::erase(iterator pos)
+  {
+    detail::Node< Key, T > * to_delete = pos.node_;
     detail::Node< Key, T > * found = find_to_change_erased(to_delete);
     if (to_delete == root_ && !found)
     {
@@ -299,10 +306,33 @@ namespace erohin
       std::swap(found->data_, to_delete->data_);
     }
     erase_balance_case1(found);
-    auto iter = iterator(to_delete);
+    auto iter = ++pos;
     delete found;
-    ++size_;
-    return ++iter;
+    --size_;
+    return iter;
+  }
+
+  template< class Key, class T, class Compare >
+  TreeIterator< Key, T > RedBlackTree< Key, T, Compare >::erase(const_iterator pos)
+  {
+    return TreeConstIterator< Key, T >(erase(iterator(pos.node_)));
+  }
+
+  template< class Key, class T, class Compare >
+  TreeIterator< Key, T > RedBlackTree< Key, T, Compare >::erase(iterator first, iterator last)
+  {
+    iterator result;
+    while (first != last)
+    {
+      result = erase(first++);
+    }
+    return result;
+  }
+
+  template< class Key, class T, class Compare >
+  TreeIterator< Key, T > RedBlackTree< Key, T, Compare >::erase(const_iterator first, const_iterator last)
+  {
+    return erase(iterator(first.node_), iterator(last.node_));
   }
 
   template< class Key, class T, class Compare >
@@ -354,23 +384,7 @@ namespace erohin
   template< class Key, class T, class Compare >
   TreeConstIterator< Key, T > RedBlackTree< Key, T, Compare >::find(const Key & key) const
   {
-    const detail::Node< Key, T > * node = root_;
-    while (node)
-    {
-      if (node->data_.first == key)
-      {
-        return const_iterator(node);
-      }
-      else if (cmp_(key, node->data_.first))
-      {
-        node = node->left_;
-      }
-      else
-      {
-        node = node->right_;
-      }
-    }
-    return cend();
+    return const_iterator(iterator(find(key)).node_);
   }
 
   template< class Key, class T, class Compare >
@@ -395,12 +409,7 @@ namespace erohin
   template< class Key, class T, class Compare >
   const T & RedBlackTree< Key, T, Compare >::at(const Key & key) const
   {
-    TreeConstIterator< Key, T > citer = find(key);
-    if (citer == cend())
-    {
-      throw std::out_of_range("Out of range in element access");
-    }
-    return citer->second;
+    return at(key);
   }
 
   template< class Key, class T, class Compare >

@@ -27,6 +27,7 @@ int main(int argc, char ** argv)
     {
       std::cout << std::endl << "//" << iter.first << ":" << iter.second<< "//" << std::endl;
     }
+    RedBlackTree< int, int >::const_iterator rte = int_dict.cend();
     RedBlackTree< int, int >::iterator iter = int_dict.find(4);
   }
 
