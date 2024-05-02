@@ -216,6 +216,7 @@ namespace nikitov
     if (root_->parent_)
     {
       root_ = root_->parent_;
+      delete root_->middle_;
     }
     size_ = 0;
   }
