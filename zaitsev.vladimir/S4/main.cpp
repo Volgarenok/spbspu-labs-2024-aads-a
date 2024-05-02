@@ -3,6 +3,7 @@
 #include <map>
 #include <limits>
 #include <string>
+#include "map.hpp"
 
 using namespace std;
 
@@ -101,14 +102,14 @@ public:
     }
   }
 private:
-  using dictionary = map<int, string>;
-  using ds_it = map<int, string>::const_iterator;
-  using library = map< string, dictionary>;
+  using dictionary = zaitsev::Map<int, string>;
+  using ds_it = zaitsev::Map<int, string>::const_iterator;
+  using library = zaitsev::Map< string, dictionary>;
   library lib;
 
   enum struct com_nmb { print_c, complement_c, intersect_c, union_c };
-  map<string, com_nmb> commands = {
-    {"print",com_nmb::print_c},
+  zaitsev::Map<string, com_nmb> commands = {
+    {"print", com_nmb::print_c},
     {"intersect", com_nmb::intersect_c },
     {"complement", com_nmb::complement_c},
     { "union", com_nmb::union_c } };
@@ -120,16 +121,20 @@ private:
   void read_ds(istream& in)
   {
     string name;
-    dictionary new_dict;
     in >> name;
+    if (!in)
+    {
+      return;
+    }
+    dictionary new_dict;
     string value;
     int key;
     while (in.peek() != '\n' && in)
     {
       in >> key >> value;
-      new_dict[key] = std::move(value);
+      new_dict[key] = value;
     }
-    lib[std::move(name)] = std::move(new_dict);
+    lib[name] = std::move(new_dict);
   }
   ostream& print_ds(string ds_name, ostream& out)
   {
@@ -149,8 +154,8 @@ private:
   {
     ds_it ds1_beg = lib[ds1_name].cbegin();
     ds_it ds2_beg = lib[ds2_name].cbegin();
-    ds_it ds1_end = lib[ds1_name].end();
-    ds_it ds2_end = lib[ds2_name].end();
+    ds_it ds1_end = lib[ds1_name].cend();
+    ds_it ds2_end = lib[ds2_name].cend();
     dictionary new_dict;
     while (ds1_beg != ds1_end && ds2_beg != ds2_end)
     {
@@ -174,7 +179,7 @@ private:
       new_dict.insert(*ds1_beg);
       ++ds1_beg;
     }
-    lib[std::move(new_ds_name)] = std::move(new_dict);
+    lib[new_ds_name] = new_dict;
   }
   void intersect_ds(string new_ds_name, string ds1_name, string ds2_name)
   {
@@ -234,7 +239,7 @@ private:
       new_dict.insert(*ds2_beg);
       ++ds2_beg;
     }
-    lib[std::move(new_ds_name)] = std::move(new_dict);
+    lib[new_ds_name] = new_dict;
   }
 };
 
