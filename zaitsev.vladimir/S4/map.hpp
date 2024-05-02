@@ -150,7 +150,6 @@ namespace zaitsev
         return new_root;
       }
     };
-    //after what or before what
     Node* find_hint(Node* root, const Key& key)
     {
       Node* cur = (root->height_ < 0) ? root->left_ : root;
@@ -162,25 +161,19 @@ namespace zaitsev
         }
         if (cmp_(key, cur->val_.first))
         {
-          if (cur->left_)
-          {
-            cur = cur->left_;
-          }
-          else
+          if (!cur->left_)
           {
             return cur;
           }
+          cur = cur->left_;
         }
         else
         {
-          if (cur->right_)
-          {
-            cur = cur->right_;
-          }
-          else
+          if (!cur->right_)
           {
             return cur;
           }
+          cur = cur->right_;
         }
       }
       return nullptr;
@@ -203,7 +196,6 @@ namespace zaitsev
       }
       return;
     }
-
     void freeNodes(Node* root)
     {
       if (!root)
@@ -237,13 +229,8 @@ namespace zaitsev
       }
       delete root;
     }
-    //to fix
     Node* addNode(Node* root, Node* hint, const Key& key, const T& new_val)
     {
-      if (!root)
-      {
-        throw std::logic_error("No root to add node");
-      }
       hint = find_hint((!hint || !cmp_(hint->val_.first, key)) ? root : hint, key);
       if (!hint)
       {
@@ -301,7 +288,6 @@ namespace zaitsev
       using node_t = std::conditional_t < IsConst, const Node*, Node*>;
 
       node_t node_;
-
     public:
       using iterator_category = std::bidirectional_iterator_tag;
       using value_type = val_t;
@@ -324,17 +310,11 @@ namespace zaitsev
         if (node_->right_)
         {
           node_ = node_->right_;
-          while (node_->left_)
-          {
-            node_ = node_->left_;
-          }
+          for (; node_->left_; node_ = node_->left_);
         }
         else
         {
-          while (node_ == node_->parent_->right_)
-          {
-            node_ = node_->parent_;
-          }
+          for (; node_ == node_->parent_->right_; node_ = node_->parent_);
           node_ = node_->parent_;
         }
         return *this;
@@ -350,17 +330,11 @@ namespace zaitsev
         if (node_->left_)
         {
           node_ = node_->left_;
-          while (node_->right_)
-          {
-            node_ = node_->right_;
-          }
+          for (; node_->right_; node_ = node_->right_);
         }
         else
         {
-          while (node_ == node_->parent_->left_)
-          {
-            node_ = node_->parent_;
-          }
+          for (; node_ == node_->parent_->left_; node_ = node_->parent_);
           node_ = node_->parent_;
         }
         return *this;
@@ -395,11 +369,13 @@ namespace zaitsev
     using const_reverse_iterator = std::reverse_iterator< const_iterator >;
     Map():
       fakeroot_(new Node(false)),
-      size_(0)
+      size_(0),
+      cmp_()
     {}
     Map(const Map& other):
       fakeroot_(new Node(*(other.fakeroot_))),
-      size_(other.size_)
+      size_(other.size_),
+      cmp_(other.cmp_)
     {
       size_t added = 0;
       const Node* cur_other = other.fakeroot_;
@@ -438,14 +414,16 @@ namespace zaitsev
     }
     Map(Map&& other):
       fakeroot_(other.fakeroot_),
-      size_(other.size_)
+      size_(other.size_),
+      cmp_(std::move(other.cmp_))
     {
       other.fakeroot_ = nullptr;
       other.size_ = 0;
     }
     Map(std::initializer_list< std::pair< const Key, T > > init_list):
       fakeroot_(new Node(false)),
-      size_(0)
+      size_(0),
+      cmp_()
     {
       fakeroot_->left_ = create_map(init_list.begin(), init_list.end(), size_);
       fakeroot_->left_->parent_ = fakeroot_;
@@ -453,7 +431,8 @@ namespace zaitsev
     template< typename InputIt >
     Map(InputIt begin, InputIt end):
       fakeroot_(new Node(false)),
-      size_(0)
+      size_(0),
+      cmp_()
     {
       fakeroot_->left_ = create_map(begin, end, size_);
       fakeroot_->left_->parent_ = fakeroot_;
@@ -475,7 +454,6 @@ namespace zaitsev
       this->swap(other);
       return *this;
     }
-
 
     iterator begin()
     {
@@ -549,6 +527,7 @@ namespace zaitsev
     {
       std::swap(fakeroot_, other.fakeroot_);
       std::swap(size_, other.size_);
+      std::swap(cmp_, other.cmp_);
     }
 
     template< typename K>
@@ -734,19 +713,16 @@ namespace zaitsev
       return added->val_.second;
     }
 
-    std::pair<iterator, bool> insert(const val_t& val)
+    std::pair< iterator, bool > insert(const val_t& val)
     {
       Node* hint = find_hint(fakeroot_, val.first);
       if (hint && hint->val_.first == val.first)
       {
         return std::make_pair(iterator(hint), false);
       }
-      else
-      {
-        Node* added = addNode(fakeroot_, hint, val.first, val.second);
-        ++size_;
-        return std::make_pair(iterator(added), true);
-      }
+      Node* added = addNode(fakeroot_, hint, val.first, val.second);
+      ++size_;
+      return std::make_pair(iterator(added), true);
     }
     template< class InputIt >
     void insert(InputIt first, InputIt last)
