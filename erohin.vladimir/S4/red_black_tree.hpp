@@ -34,9 +34,10 @@ namespace erohin
     void clear();
     bool empty() const noexcept;
     std::pair< iterator, bool > insert(const value_type & value);
-    std::pair< iterator, bool > erase(const Key & key);
+    iterator erase(const Key & key);
     void swap(RedBlackTree & rhs) noexcept;
     size_t size() const noexcept;
+    size_t count(const Key & key) const;
     iterator find(const Key & key);
     const_iterator find(const Key & key) const;
     T & operator[](const Key & key);
@@ -179,48 +180,56 @@ namespace erohin
   std::pair< TreeIterator< Key, T >, bool > RedBlackTree< Key, T, Compare >::insert(const value_type & value)
   {
     detail::Node< Key, T > * node = root_;
-    if (empty())
+    try
     {
-      root_ = new detail::Node< Key, T >(value, nullptr, nullptr, nullptr);
-      node = root_;
-      ++size_;
-    }
-    else
-    {
-      detail::Node< Key, T > * prev = node;
-      while (node)
+      if (empty())
       {
-        prev = node;
-        if (node->data_.first == value.first)
-        {
-          return std::make_pair(iterator(node), false);
-        }
-        else if (cmp_(value.first, node->data_.first))
-        {
-          node = node->left_;
-        }
-        else
-        {
-          node = node->right_;
-        }
-      }
-      node = new detail::Node< Key, T >(value, prev, nullptr, nullptr);
-      if (cmp_(node->data_.first, prev->data_.first))
-      {
-        prev->left_ = node;
+        root_ = new detail::Node< Key, T >(value, nullptr, nullptr, nullptr);
+        node = root_;
+        ++size_;
       }
       else
       {
-        prev->right_ = node;
+        detail::Node< Key, T > * prev = node;
+        while (node)
+        {
+          prev = node;
+          if (node->data_.first == value.first)
+          {
+            return std::make_pair(iterator(node), false);
+          }
+          else if (cmp_(value.first, node->data_.first))
+          {
+            node = node->left_;
+          }
+          else
+          {
+            node = node->right_;
+          }
+        }
+        node = new detail::Node< Key, T >(value, prev, nullptr, nullptr);
+        if (cmp_(node->data_.first, prev->data_.first))
+        {
+          prev->left_ = node;
+        }
+        else
+        {
+          prev->right_ = node;
+        }
       }
+      insert_balance_case1(node);
+      ++size_;
+      return std::make_pair(iterator(node), true);
     }
-    insert_balance_case1(node);
-    ++size_;
-    return std::make_pair(iterator(node), true);
+    catch (...)
+    {
+      return std::make_pair(end(), false);
+    }
+
   }
 
   template< class Key, class T, class Compare >
-  std::pair< TreeIterator< Key, T >, bool > RedBlackTree< Key, T, Compare >::erase(const Key & key)
+  TreeIterator< Key, T > RedBlackTree< Key, T, Compare >::erase(const Key & key)
   {
     detail::Node< Key, T > * node = root_;
     detail::Node< Key, T > * prev = root_;
@@ -244,13 +253,13 @@ namespace erohin
     node = prev;
     if (!to_delete)
     {
-      return std::make_pair(end(), false);
+      return end();
     }
     detail::Node< Key, T > * found = find_to_change_erased(to_delete);
     if (to_delete == root_ && !found)
     {
       clear();
-      return std::make_pair(end(), true);
+      return end();
     }
     else if (!found)
     {
@@ -272,7 +281,7 @@ namespace erohin
     auto iter = iterator(to_delete);
     delete found;
     ++size_;
-    return std::make_pair(++iter, true);
+    return ++iter;
   }
 
   template< class Key, class T, class Compare >
@@ -291,6 +300,12 @@ namespace erohin
   size_t RedBlackTree< Key, T, Compare >::size() const noexcept
   {
     return size_;
+  }
+
+  template< class Key, class T, class Compare >
+  size_t RedBlackTree< Key, T, Compare >::count(const Key & key) const
+  {
+    return (find(key) != end()) ? 1 : 0;
   }
 
   template< class Key, class T, class Compare >
