@@ -4,9 +4,9 @@
 
 #include <functional>
 
-#include "const_iterator.hpp"
-#include "iterator.hpp"
-#include "node.hpp"
+#include "const_treeIterator.hpp"
+#include "treeIterator.hpp"
+#include "treeNode.hpp"
 
 namespace zhalilov
 {
@@ -52,7 +52,7 @@ namespace zhalilov
     const_iterator find(const Key &) const;
 
   private:
-    using Node = detail::Node < MapPair >;
+    using Node = detail::TreeNode < MapPair >;
     Node *head_;
     size_t size_;
 

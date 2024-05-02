@@ -1,5 +1,5 @@
-#ifndef NODE_HPP
-#define NODE_HPP
+#ifndef TREENODE_HPP
+#define TREENODE_HPP
 
 namespace zhalilov
 {
@@ -12,12 +12,12 @@ namespace zhalilov
     };
 
     template < class T >
-    struct Node
+    struct TreeNode
     {
-      Node *parent;
-      Node *left;
-      Node *mid;
-      Node *right;
+      TreeNode *parent;
+      TreeNode *left;
+      TreeNode *mid;
+      TreeNode *right;
       T one;
       T two;
       NodeType type;
