@@ -1,28 +1,54 @@
 #include "expressionObject.hpp"
 
-arakelyan::detail::Token::Token():
+arakelyan::Token::Token():
   operand_(0)
 {}
 
-arakelyan::detail::Token::Token(long long val):
+arakelyan::Token::Token(long long val):
   operand_(val)
 {}
 
-arakelyan::detail::Token::Token(char val):
+arakelyan::Token::Token(char val):
   oper_(val)
 {}
 
-arakelyan::detail::ExpressionObj::ExpressionObj(token_t type, Token val):
+arakelyan::ExpressionObj::ExpressionObj(token_t type, Token val):
   val_(val),
   type_(type)
 {}
 
-arakelyan::detail::Token arakelyan::detail::ExpressionObj::getVal() const
+char arakelyan::ExpressionObj::getOper() const
 {
-  return val_;
+  return val_.oper_;
 }
 
-arakelyan::detail::token_t arakelyan::detail::ExpressionObj::getType() const
+long long arakelyan::ExpressionObj::getNumber() const
+{
+  return val_.operand_;
+}
+
+arakelyan::token_t arakelyan::ExpressionObj::getType() const
 {
   return type_;
+}
+
+int arakelyan::ExpressionObj::getPriority() const
+{
+  if (val_.oper_ == '+' || val_.oper_ == '-')
+  {
+    return 1;
+  }
+  else if (val_.oper_ == '*' || val_.oper_ == '/' || val_.oper_ == '%')
+  {
+    return 2;
+  }
+  else
+  {
+    throw std::logic_error("Invalid operator!");
+  }
+}
+
+bool arakelyan::ExpressionObj::isLessPriority(const arakelyan::ExpressionObj &otherObj)
+{
+  return this->getPriority() <= otherObj.getPriority();
 }

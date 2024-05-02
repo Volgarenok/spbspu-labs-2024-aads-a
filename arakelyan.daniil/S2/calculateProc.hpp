@@ -7,6 +7,6 @@
 
 namespace arakelyan
 {
-  void calculatePostfixQ(Queue< Queue< detail::ExpressionObj > > &qOfPostfixQs, Stack< long long > &answerQ);
+  void calculatePostfixQ(Queue< Queue< ExpressionObj > > &qOfPostfixQs, Stack< long long > &answerQ);
 }
 #endif

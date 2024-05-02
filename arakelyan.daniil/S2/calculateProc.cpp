@@ -6,12 +6,12 @@
 #include "expressionObject.hpp"
 #include "stack.hpp"
 
-long long calcExp(long long first, long long second, arakelyan::detail::ExpressionObj obj)
+long long calcExp(long long first, long long second, arakelyan::ExpressionObj obj)
 {
-  long long maxVal = std::numeric_limits< long long >::max();
-  long long minVal = std::numeric_limits< long long >::min();
+  constexpr long long maxVal = std::numeric_limits< long long >::max();
+  constexpr long long minVal = std::numeric_limits< long long >::min();
   long long rObj = 0;
-  char operation = obj.getVal().oper_;
+  char operation = obj.getOper();
   if (operation == '+')
   {
     if (first > (maxVal - second))
@@ -67,19 +67,19 @@ long long calcExp(long long first, long long second, arakelyan::detail::Expressi
   return rObj;
 }
 
-void arakelyan::calculatePostfixQ(Queue< Queue< detail::ExpressionObj > > &qOfPostfixQs, Stack< long long > &answerQ)
+void arakelyan::calculatePostfixQ(Queue< Queue< ExpressionObj > > &qOfPostfixQs, Stack< long long > &answerQ)
 {
-  Queue< detail::ExpressionObj > curQ = qOfPostfixQs.front();
+  Queue< ExpressionObj > curQ = qOfPostfixQs.front();
   qOfPostfixQs.pop();
 
   Stack< long long > stack;
 
   while (!curQ.empty())
   {
-    detail::ExpressionObj obj = curQ.front();
+    ExpressionObj obj = curQ.front();
     curQ.pop();
 
-    if (obj.getType() == detail::token_t::operation)
+    if (obj.getType() == token_t::operation)
     {
       if (stack.size() < 2)
       {
@@ -92,9 +92,9 @@ void arakelyan::calculatePostfixQ(Queue< Queue< detail::ExpressionObj > > &qOfPo
       long long res = calcExp(left, right, obj);
       stack.push(res);
     }
-    else if (obj.getType() == detail::token_t::operand)
+    else if (obj.getType() == token_t::operand)
     {
-      stack.push(obj.getVal().operand_);
+      stack.push(obj.getNumber());
     }
     else
     {

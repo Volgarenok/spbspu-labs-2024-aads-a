@@ -1,28 +1,12 @@
+#include "expressionObject.hpp"
 #include "transformToPostfix.hpp"
 
 #include <stdexcept>
+#include <sys/resource.h>
 #include "stack.hpp"
 
-int operationPriority(arakelyan::detail::ExpressionObj obj)
+arakelyan::Queue< arakelyan::ExpressionObj > arakelyan::transformInfixToPostfix(Queue< ExpressionObj > &infixQueue)
 {
-  if (obj.getVal().oper_ == '+' || obj.getVal().oper_ == '-')
-  {
-    return 1;
-  }
-  else if (obj.getVal().oper_ == '*' || obj.getVal().oper_ == '/' || obj.getVal().oper_ == '%')
-  {
-    return 2;
-  }
-  else
-  {
-    throw std::logic_error("invalid operation!");
-  }
-  return 0;
-}
-
-arakelyan::Queue< arakelyan::detail::ExpressionObj > arakelyan::transformInfixToPostfix(Queue< detail::ExpressionObj > &infixQueue)
-{
-  using namespace detail;
   Queue< ExpressionObj > postfixQ;
   Stack< ExpressionObj > operS;
 
@@ -37,13 +21,13 @@ arakelyan::Queue< arakelyan::detail::ExpressionObj > arakelyan::transformInfixTo
     }
     else if (curObj.getType() == token_t::bracket)
     {
-      if (curObj.getVal().oper_ == '(')
+      if (curObj.getOper() == '(')
       {
         operS.push(curObj);
       }
-      else if (curObj.getVal().oper_ == ')')
+      else if (curObj.getOper() == ')')
       {
-        while ((!operS.empty()) && (operS.top().getVal().oper_ != '('))
+        while ((!operS.empty()) && (operS.top().getOper() != '('))
         {
           postfixQ.push(operS.top());
           operS.pop();
@@ -57,7 +41,7 @@ arakelyan::Queue< arakelyan::detail::ExpressionObj > arakelyan::transformInfixTo
     }
     else if (curObj.getType() == token_t::operation)
     {
-      while (!operS.empty() && (operS.top().getVal().oper_ != '(') && (operationPriority(operS.top()) <= operationPriority(curObj)))
+      while (!operS.empty() && (operS.top().getOper() != '(') && (operS.top().isLessPriority(curObj)))
       {
         postfixQ.push(operS.top());
         operS.pop();

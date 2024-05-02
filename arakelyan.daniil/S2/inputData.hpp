@@ -7,6 +7,6 @@
 
 namespace arakelyan
 {
-  std::istream &readDataInInfixFormat(std::istream &input, Queue< Queue< detail::ExpressionObj > > & qOfInfixQs);
+  std::istream &readDataInInfixFormat(std::istream &input, Queue< Queue< ExpressionObj > > & qOfInfixQs);
 }
 #endif
