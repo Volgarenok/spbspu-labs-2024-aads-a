@@ -17,6 +17,8 @@ namespace erohin
   public:
     using iterator = TreeIterator< Key, T >;
     using const_iterator = TreeConstIterator< Key, T >;
+    using reverse_iterator = TreeIterator< Key, T, detail::ReverseInfixTraversal< Key, T > >;
+    using const_reverse_iterator = TreeConstIterator< Key, T, detail::ReverseInfixTraversal< Key, T > >;
     using value_type = std::pair< Key, T >;
     RedBlackTree();
     RedBlackTree(const RedBlackTree< Key, T, Compare > & rhs);
@@ -31,6 +33,10 @@ namespace erohin
     iterator end();
     const_iterator cbegin() const;
     const_iterator cend() const;
+    reverse_iterator rbegin();
+    reverse_iterator rend();
+    const_reverse_iterator crbegin() const;
+    const_reverse_iterator crend() const;
     void clear();
     bool empty() const noexcept;
     std::pair< iterator, bool > insert(const value_type & value);
@@ -40,6 +46,10 @@ namespace erohin
     template< class InputIt>
     void insert(InputIt first, InputIt last);
     void insert(std::initializer_list< value_type > init_list);
+    template< class... Args >
+    std::pair< iterator, bool > emplace(Args &&... args);
+    template< class... Args >
+    iterator emplace_hint(const_iterator pos, Args &&... args);
     iterator erase(const Key & key);
     iterator erase(iterator pos);
     iterator erase(const_iterator pos);
@@ -180,6 +190,35 @@ namespace erohin
   }
 
   template< class Key, class T, class Compare >
+  typename RedBlackTree< Key, T, Compare >::reverse_iterator RedBlackTree< Key, T, Compare >::rbegin()
+  {
+    detail::Node< Key, T > * result = root_;
+    while (result->left_)
+    {
+      result = result->left_;
+    }
+    return reverse_iterator(result);
+  }
+
+  template< class Key, class T, class Compare >
+  typename RedBlackTree< Key, T, Compare >::reverse_iterator RedBlackTree< Key, T, Compare >::rend()
+  {
+    return reverse_iterator(nullptr);
+  }
+
+  template< class Key, class T, class Compare >
+  typename RedBlackTree< Key, T, Compare >::const_reverse_iterator RedBlackTree< Key, T, Compare >::crbegin() const
+  {
+    return const_reverse_iterator(rbegin());
+  }
+
+  template< class Key, class T, class Compare >
+  typename RedBlackTree< Key, T, Compare >::const_reverse_iterator RedBlackTree< Key, T, Compare >::crend() const
+  {
+    return const_reverse_iterator(nullptr);
+  }
+
+  template< class Key, class T, class Compare >
   void RedBlackTree< Key, T, Compare >::clear()
   {
     clear_subtree(root_);
@@ -286,6 +325,20 @@ namespace erohin
   void RedBlackTree< Key, T, Compare >::insert(std::initializer_list< value_type > init_list)
   {
     insert(init_list.begin(), init_list.end());
+  }
+
+  template< class Key, class T, class Compare >
+  template< class... Args >
+  std::pair< TreeIterator< Key, T >, bool > RedBlackTree< Key, T, Compare >::emplace(Args &&... args)
+  {
+    return insert(T(std::forward< Args... >(args...)));
+  }
+
+  template< class Key, class T, class Compare >
+  template< class... Args >
+  TreeIterator< Key, T > RedBlackTree< Key, T, Compare >::emplace_hint(const_iterator pos, Args &&... args)
+  {
+    return insert(iterator(pos.node_), T(std::forward< Args... >(args...)));
   }
 
   template< class Key, class T, class Compare >

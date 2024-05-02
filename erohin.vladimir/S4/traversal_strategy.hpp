@@ -15,6 +15,13 @@ namespace erohin
     };
 
     template< class Key, class T >
+    struct ReverseInfixTraversal
+    {
+      Node< Key, T > * next(Node< Key, T > * node);
+      Node< Key, T > * prev(Node< Key, T > * node);
+    };
+
+    template< class Key, class T >
     Node< Key, T > * InfixTraversal< Key, T >::next(Node< Key, T > * node)
     {
       if (node->right_)
@@ -74,6 +81,18 @@ namespace erohin
         }
       }
       return node;
+    }
+
+    template< class Key, class T >
+    Node< Key, T > * ReverseInfixTraversal< Key, T >::next(Node< Key, T > * node)
+    {
+      return InfixTraversal< Key, T >::prev(node);
+    }
+
+    template< class Key, class T >
+    Node< Key, T > * ReverseInfixTraversal< Key, T >::prev(Node< Key, T > * node)
+    {
+      return InfixTraversal< Key, T >::next(node);
     }
   }
 }
