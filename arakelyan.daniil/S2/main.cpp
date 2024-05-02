@@ -14,7 +14,6 @@
 int main(int argc, char *argv[])
 {
   using namespace arakelyan;
-  using namespace detail;
   Queue< Queue< ExpressionObj > > qOfInfQs;
 
   try

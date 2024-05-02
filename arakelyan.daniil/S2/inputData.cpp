@@ -21,7 +21,7 @@ bool isBracket(const std::string line)
 
 void parseLine(std::string &line, arakelyan::Queue< arakelyan::ExpressionObj > &someQ)
 {
-  using namespace arakelyan::detail;
+  using namespace arakelyan;
   size_t pos = 0;
   std::string expr;
   while (pos < line.length())

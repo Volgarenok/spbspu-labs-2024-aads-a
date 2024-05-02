@@ -1,11 +1,18 @@
+#include "expressionObject.hpp"
 #include "transformToPostfix.hpp"
 
 #include <stdexcept>
+#include <sys/resource.h>
 #include "stack.hpp"
+
+
+bool getpriority(const arakelyan::ExpressionObj &val, const arakelyan::ExpressionObj &otherV)
+{
+  return val.getPriority() <= otherV.getPriority();
+}
 
 arakelyan::Queue< arakelyan::ExpressionObj > arakelyan::transformInfixToPostfix(Queue< ExpressionObj > &infixQueue)
 {
-  using namespace detail;
   Queue< ExpressionObj > postfixQ;
   Stack< ExpressionObj > operS;
 
@@ -40,7 +47,7 @@ arakelyan::Queue< arakelyan::ExpressionObj > arakelyan::transformInfixToPostfix(
     }
     else if (curObj.getType() == token_t::operation)
     {
-      while (!operS.empty() && (operS.top().getVal().oper_ != '(') && (operS.top().getPriority() <= curObj.getPriority()))
+      while (!operS.empty() && (operS.top().getVal().oper_ != '(') && (getpriority(operS.top(), curObj)))
       {
         postfixQ.push(operS.top());
         operS.pop();

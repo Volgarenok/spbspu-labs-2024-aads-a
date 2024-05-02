@@ -79,7 +79,7 @@ void arakelyan::calculatePostfixQ(Queue< Queue< ExpressionObj > > &qOfPostfixQs,
     ExpressionObj obj = curQ.front();
     curQ.pop();
 
-    if (obj.getType() == detail::token_t::operation)
+    if (obj.getType() == token_t::operation)
     {
       if (stack.size() < 2)
       {
@@ -92,7 +92,7 @@ void arakelyan::calculatePostfixQ(Queue< Queue< ExpressionObj > > &qOfPostfixQs,
       long long res = calcExp(left, right, obj);
       stack.push(res);
     }
-    else if (obj.getType() == detail::token_t::operand)
+    else if (obj.getType() == token_t::operand)
     {
       stack.push(obj.getVal().operand_);
     }
