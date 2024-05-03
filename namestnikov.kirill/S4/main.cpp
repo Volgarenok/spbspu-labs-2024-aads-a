@@ -76,7 +76,23 @@ void makeUnion(std::istream & in, std::map< std::string, std::map< size_t, std::
 
 void makeComplement(std::istream & in, std::map< std::string, std::map< size_t, std::string > > & myMap)
 {
+  std::string newName = "";
+  in >> newName;
+  std::string firstName = "";
+  in >> firstName;
+  std::string secondName = "";
+  in >> secondName;
   std::map< size_t, std::string > res;
+  std::map< size_t, std::string > left = myMap[firstName];
+  std::map< size_t, std::string > right = myMap[secondName];
+  for (const auto & key1: left)
+  {
+    if (right.find(key1.first) == right.end())
+    {
+      res.insert(key1);
+    }
+  }
+  myMap[newName] = res;
 }
 
 void inputMaps(std::istream & in, std::map< std::string, std::map< size_t, std::string > > & myMap)
