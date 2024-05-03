@@ -56,4 +56,23 @@ struct AVLTree
   {
     clear();
   }
+
+  AVLTree& operator=(const AVLTree& other)
+  {
+    if (this != std::addressof(other))
+    {
+      AVLTree< Key, Value, Comp > temp(other);
+      swap(temp);
+    }
+    return *this;
+  }
+
+  AVLTree& operator=(const AVLTree&& other)
+  {
+    if (this != std::addressof(other))
+    {
+      swap(other);
+    }
+    return *this;
+  }
 };
