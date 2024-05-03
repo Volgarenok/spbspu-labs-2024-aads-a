@@ -33,7 +33,7 @@ namespace skuratov
       }
       bool operator!=(const ConstIterator< T >& diff) const
       {
-        return diff != *this;
+        return nodePointer != diff.nodePointer;
       }
 
       ConstIterator< T >& operator=(const ConstIterator< T >&) = default;

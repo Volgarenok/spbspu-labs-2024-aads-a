@@ -8,12 +8,10 @@
 void skuratov::inputAll(std::istream& in, List< std::pair< std::string, List< size_t > > >& sequences)
 {
   std::string name = "";
-  while (!in.eof())
+  while (in >> name)
   {
-    in >> name;
     if (name.empty())
     {
-      throw std::invalid_argument("Empty list");
       break;
     }
     std::pair< std::string, List< size_t > > pair = std::make_pair(name, List< size_t >());
@@ -46,7 +44,7 @@ void skuratov::outputAll(const List< std::pair< std::string, List< size_t > > >&
     out << "\n";
   }
 
-  size_t maxSize = std::numeric_limits< size_t >::max();
+  size_t maxSize = 1;
   for (auto it = sequences.cbegin(); it != sequences.cend(); ++it)
   {
     if (it->second.getSize() > maxSize)
@@ -57,21 +55,30 @@ void skuratov::outputAll(const List< std::pair< std::string, List< size_t > > >&
 
   for (size_t i = 0; i < maxSize; ++i)
   {
-    bool isFirst = true;
+    bool isFirst = false;
     for (auto it = sequences.cbegin(); it != sequences.cend(); ++it)
     {
       auto numbersIt = it->second.cbegin();
+      for (size_t j = 0; j < i; ++j)
+      {
+        if (numbersIt != it->second.cend())
+        {
+          ++numbersIt;
+        }
+      }
+
       if (numbersIt != it->second.cend())
       {
-        if (!isFirst)
+        if (isFirst)
         {
           out << " ";
         }
+
         out << *numbersIt;
-        isFirst = false;
+        isFirst = true;
       }
     }
-    if (!isFirst)
+    if (isFirst)
     {
       out << '\n';
     }
@@ -82,7 +89,7 @@ void skuratov::outputAll(const List< std::pair< std::string, List< size_t > > >&
   for (size_t i = 0; i < maxSize; ++i)
   {
     size_t sum = {};
-    bool hasData = false;
+    bool isFirst = false;
 
     for (auto it = sequences.cbegin(); it != sequences.cend(); ++it)
     {
@@ -97,38 +104,26 @@ void skuratov::outputAll(const List< std::pair< std::string, List< size_t > > >&
 
       if (numbersIt != it->second.cend())
       {
-        if (hasData)
-        {
-          std::cout << " ";
-        }
-
-        if (std::numeric_limits<size_t>::max() - sum >= *numbersIt)
+        if (std::numeric_limits< size_t >::max() - sum >= *numbersIt)
         {
           sum += *numbersIt;
         }
-
         else
         {
-          throw std::overflow_error("Overflow occurred");
+          throw std::overflow_error("Overflow");
         }
-        std::cout << *numbersIt;
-        hasData = true;
       }
     }
-    if (hasData)
-    {
-      std::cout << "\n";
-      columnSums.pushBack(sum);
-    }
+    columnSums.pushBack(sum);
   }
 
   for (auto it = columnSums.cbegin(); it != columnSums.cend(); ++it)
   {
     if (it != columnSums.cbegin())
     {
-      std::cout << " ";
+      out << " ";
     }
-    std::cout << *it;
+    out << *it;
   }
-  std::cout << '\n';
+  out << '\n';
 }
