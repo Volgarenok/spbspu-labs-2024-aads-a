@@ -327,9 +327,9 @@ namespace novokhatskiy
     size_t remove(const T& value)
     {
       return remove_if(
-        [&value](const T& tmp) -> bool 
-        { 
-          return tmp = value; 
+        [&value](const T& tmp) -> bool
+        {
+          return tmp = value;
         }
       );
     }
