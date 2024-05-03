@@ -24,3 +24,36 @@ struct Node
 
   ~Node() = default;
 };
+
+template < typename Key, typename Value, typename Comp = std::less< Key > >
+struct AVLTree
+{
+  using node = Node< Key, Value >;
+  AVLTree():
+    size_(0),
+    root_(nullptr),
+    comp_(Comp())
+  {}
+
+  AVLTree(const AVLTree& other):
+    size_(0),
+    root_(nullptr),
+    comp_(other.comp_)
+  {
+    root_ = deep_copy(other.root_);
+  }
+
+  AVLTree(const AVLTree&& other):
+    size_(other.size_),
+    root_(other.root_),
+    comp_(other.comp_)
+  {
+    other.root_ = nullptr;
+    other.size_ = 0;
+  }
+
+  ~AVLTree()
+  {
+    clear();
+  }
+};
