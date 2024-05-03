@@ -57,7 +57,7 @@ namespace zhalilov
     Node *head_;
     size_t size_;
 
-    std::pair < iterator, bool > doFind(const Key &);
+    std::pair < iterator, bool > doFind(const Key &) const;
     Node *createTwoNode(const MapPair &) const;
     Node *createThreeNode(const MapPair &, const MapPair &) const;
     void connectNodes(Node *parent, Node *left, Node *right, Node *mid = nullptr);
@@ -74,7 +74,7 @@ namespace zhalilov
     auto endIt = other.cend();
     while (it != endIt)
     {
-      insert(it.node_.first, it.node_.second);
+      insert({it->first, it->second});
       it++;
     }
   }
@@ -124,7 +124,7 @@ namespace zhalilov
     {
       throw std::out_of_range("TwoThree: accessing element doesn't exist");
     }
-    return *it;
+    return it->second;
   }
 
   template < class Key, class T, class Compare >
@@ -141,7 +141,7 @@ namespace zhalilov
   template < class Key, class T, class Compare >
   T &TwoThree < Key, T, Compare >::operator[](const Key &key)
   {
-    return *((insert(std::make_pair(key, T()))).first);
+    return (insert(std::make_pair(key, T()))).first->second;
   }
 
   template < class Key, class T, class Compare >
@@ -267,7 +267,7 @@ namespace zhalilov
       }
       currNode->type = detail::NodeType::Three;
       size_++;
-      return std::make_pair(doFind(newPair.key).first, true);
+      return std::make_pair(doFind(newPair.first).first, true);
     }
     return std::make_pair(resultPair.first, false);
   }
@@ -386,9 +386,9 @@ namespace zhalilov
     auto resultPair = doFind(key);
     if (resultPair.second)
     {
-      return std::make_pair(resultPair.first, true);
+      return resultPair.first;
     }
-    return std::make_pair(end(), false);
+    return end();
   }
 
   template < class Key, class T, class Compare >
@@ -403,7 +403,7 @@ namespace zhalilov
   }
 
   template < class Key, class T, class Compare >
-  std::pair < typename TwoThree < Key, T, Compare >::iterator, bool > TwoThree < Key, T, Compare >::doFind(const Key &key)
+  std::pair < typename TwoThree < Key, T, Compare >::iterator, bool > TwoThree < Key, T, Compare >::doFind(const Key &key) const
   {
     Node *currNode = head_->right;
     while (currNode)
