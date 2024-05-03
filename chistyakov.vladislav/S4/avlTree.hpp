@@ -22,6 +22,18 @@ namespace chistyakov
         tmp.root_ = nullptr;
       }
 
+      AVLTree & operator=(const AVLTree & tmp)
+      {
+        //swap
+        return *this;
+      }
+
+      AVLTree & operator=(const AVLTree && tmp)
+      {
+        //swap
+        return *this;
+      }
+
     private:
       size_t size_;
       Node * root_;
