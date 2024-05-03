@@ -34,6 +34,8 @@ namespace chistyakov
         return *this;
       }
 
+      ~AVLTree() = default;
+
     private:
       size_t size_;
       Node * root_;
