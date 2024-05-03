@@ -1,7 +1,6 @@
 #ifndef CONST_ITERATORS_HPP
 #define CONST_ITERATORS_HPP
 
-#include <memory>
 #include "node.hpp"
 
 namespace skuratov

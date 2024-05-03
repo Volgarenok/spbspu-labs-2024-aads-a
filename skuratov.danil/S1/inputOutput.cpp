@@ -16,7 +16,7 @@ void skuratov::inputAll(std::istream& in, List< std::pair< std::string, List< si
       throw std::invalid_argument("Empty list");
       break;
     }
-    std::pair<std::string, List<size_t>> pair = std::make_pair(name, List<size_t>());
+    std::pair< std::string, List< size_t > > pair = std::make_pair(name, List< size_t >());
     sequences.pushBack(pair);
 
     size_t numbers = {};
@@ -31,15 +31,15 @@ void skuratov::inputAll(std::istream& in, List< std::pair< std::string, List< si
   }
 }
 
-void skuratov::outputAll(const List< size_t >& sequences, std::ostream& out)
+void skuratov::outputAll(const List< std::pair< std::string, List< size_t > > >& sequences, std::ostream& out)
 {
-  for (auto it1 = sequences.cbegin(); it1 != sequences.cend(); ++it1)
+  for (auto it = sequences.cbegin(); it != sequences.cend(); ++it)
   {
-    if (it1 != sequences.cbegin())
+    if (it != sequences.cbegin())
     {
       out << " ";
     }
-    out << it1->first;
+    out << it->first;
   }
   if (!sequences.empty())
   {
@@ -47,24 +47,29 @@ void skuratov::outputAll(const List< size_t >& sequences, std::ostream& out)
   }
 
   size_t maxSize = std::numeric_limits< size_t >::max();
-  for (auto it2 = sequences.cbegin(); it2 != sequences.cend(); ++it2)
+  for (auto it = sequences.cbegin(); it != sequences.cend(); ++it)
   {
-    maxSize = (maxSize, it2->second.getSize());
+    if (it->second.getSize() > maxSize)
+    {
+      maxSize = it->second.getSize();
+    }
   }
 
   for (size_t i = 0; i < maxSize; ++i)
   {
     bool isFirst = true;
-    for (auto it3 = sequences.cbegin(); it3 != sequences.cend(); ++it3)
+    for (auto it = sequences.cbegin(); it != sequences.cend(); ++it)
     {
-      const auto& numbers = it3->second;
-      if (i < numbers.getSize())
+      auto numbers = it->second;
+      auto numbersIt = numbers.cbegin();
+      std::advance(numbersIt, i);
+      if (numbersIt != numbers.cend())
       {
         if (!isFirst)
         {
           out << " ";
         }
-        out << numbers[i];
+        out << *numbersIt;
         isFirst = false;
       }
     }
@@ -78,18 +83,27 @@ void skuratov::outputAll(const List< size_t >& sequences, std::ostream& out)
 
   for (size_t i = 0; i < maxSize; ++i)
   {
-    for (auto it4 = sequences.cbegin(); it4 != sequences.cend(); ++it4)
+    for (auto it = sequences.cbegin(); it != sequences.cend(); ++it)
     {
-      const auto& numbers = it4->second;
-      if (i < numbers.getSize())
+      auto numbers = it->second;
+      auto numbersIt = numbers.cbegin();
+      std::advance(numbersIt, i);
+      if (numbersIt != numbers.cend())
       {
-        if (columnSums.at(i) <= std::numeric_limits<size_t>::max() - numbers.at(i))
+        if (columnSums.getSize() <= i)
         {
-          columnSums.at(i) += numbers.at(i);
+          columnSums.pushBack(*numbersIt);
         }
         else
         {
-          throw std::out_of_range("Impossible to calculate");
+          if (columnSums[i] <= std::numeric_limits<size_t>::max() - *numbersIt)
+          {
+            columnSums[i] += *numbersIt;
+          }
+          else
+          {
+            throw std::out_of_range("Impossible to calculate");
+          }
         }
       }
     }
@@ -101,7 +115,7 @@ void skuratov::outputAll(const List< size_t >& sequences, std::ostream& out)
     {
       std::cout << " ";
     }
-    std::cout << columnSums.at(i);
+    std::cout << columnSums[i];
   }
   std::cout << '\n';
 }

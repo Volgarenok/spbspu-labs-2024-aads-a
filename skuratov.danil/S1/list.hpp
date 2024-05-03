@@ -263,20 +263,6 @@ namespace skuratov
         return size;
       }
 
-      T& at(size_t index)
-      {
-        if (index >= size)
-        {
-          throw std::out_of_range("Index out of range");
-        }
-        detail::Node* current = head;
-        for (size_t i = 0; i < index; ++i)
-        {
-          current = current->next;
-        }
-        return current->value_;
-      }
-
     private:
       detail::Node< T >* head;
       detail::Node< T >* tail;

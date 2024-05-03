@@ -20,5 +20,7 @@ int main()
     std::cerr << e.what() << '\n';
     return 1;
   }
+
+  outputAll(sequences, std::cout);
   return 0;
 }
