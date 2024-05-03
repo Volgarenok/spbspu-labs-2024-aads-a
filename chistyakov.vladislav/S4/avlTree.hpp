@@ -7,9 +7,16 @@ namespace chistyakov
   class AVLTree
   {
     public:
+      AVLTree():
+        size_(0),
+        root_(nullptr),
+        comp_(Comp)
+      {}
+
     private:
       size_t size_;
-      Node * node_;
+      Node * root_;
+      Comp comp_;
   };
 }
 
