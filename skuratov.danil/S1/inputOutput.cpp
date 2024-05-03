@@ -60,10 +60,9 @@ void skuratov::outputAll(const List< std::pair< std::string, List< size_t > > >&
     bool isFirst = true;
     for (auto it = sequences.cbegin(); it != sequences.cend(); ++it)
     {
-      auto numbers = it->second;
-      auto numbersIt = numbers.cbegin();
+      auto numbersIt = it->second.cbegin();
       std::advance(numbersIt, i);
-      if (numbersIt != numbers.cend())
+      if (numbersIt != it->second.cend())
       {
         if (!isFirst)
         {
@@ -83,39 +82,54 @@ void skuratov::outputAll(const List< std::pair< std::string, List< size_t > > >&
 
   for (size_t i = 0; i < maxSize; ++i)
   {
+    size_t sum = {};
+    bool hasData = false;
+
     for (auto it = sequences.cbegin(); it != sequences.cend(); ++it)
     {
-      auto numbers = it->second;
-      auto numbersIt = numbers.cbegin();
-      std::advance(numbersIt, i);
-      if (numbersIt != numbers.cend())
+      auto numbersIt = it->second.cbegin();
+      for (size_t j = 0; j < i; ++j)
       {
-        if (columnSums.getSize() <= i)
+        if (numbersIt != it->second.cend())
         {
-          columnSums.pushBack(*numbersIt);
-        }
-        else
-        {
-          if (columnSums[i] <= std::numeric_limits<size_t>::max() - *numbersIt)
-          {
-            columnSums[i] += *numbersIt;
-          }
-          else
-          {
-            throw std::out_of_range("Impossible to calculate");
-          }
+          ++numbersIt;
         }
       }
+
+      if (numbersIt != it->second.cend())
+      {
+        if (hasData)
+        {
+          std::cout << " ";
+        }
+
+        if (std::numeric_limits<size_t>::max() - sum >= *numbersIt)
+        {
+          sum += *numbersIt;
+        }
+
+        else
+        {
+          throw std::overflow_error("Overflow occurred");
+        }
+        std::cout << *numbersIt;
+        hasData = true;
+      }
+    }
+    if (hasData)
+    {
+      std::cout << "\n";
+      columnSums.pushBack(sum);
     }
   }
 
-  for (size_t i = 0; i < columnSums.getSize(); ++i)
+  for (auto it = columnSums.cbegin(); it != columnSums.cend(); ++it)
   {
-    if (i != 0)
+    if (it != columnSums.cbegin())
     {
       std::cout << " ";
     }
-    std::cout << columnSums[i];
+    std::cout << *it;
   }
   std::cout << '\n';
 }
