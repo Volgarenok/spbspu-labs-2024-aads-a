@@ -24,17 +24,29 @@ namespace chistyakov
 
       AVLTree & operator=(const AVLTree & tmp)
       {
-        //swap
+        swap(tmp);
         return *this;
       }
 
       AVLTree & operator=(const AVLTree && tmp)
       {
-        //swap
+        swap(tmp);
         return *this;
       }
 
       ~AVLTree() = default;
+
+      bool empty() const
+      {
+        return size_ == 0;
+      }
+
+      void swap(AVLTree tmp)
+      {
+        std::swap(tmp.size_, size_);
+        std::swap(tmp.root_, root_);
+        std::swap(tmp.comp_, comp_);
+      }
 
     private:
       size_t size_;
