@@ -2,8 +2,9 @@
 
 #include <iostream>
 
-zhalilov::MapMaster::MapMaster(std::map < std::string, primaryMap > &maps):
-  maps_(maps)
+zhalilov::MapMaster::MapMaster(TwoThree < std::string, primaryMap > &maps):
+  maps_(maps),
+  commands_()
 {
   std::pair < std::string, commandFunc > cmdPair;
   cmdPair = std::make_pair("print", &MapMaster::printCmd);

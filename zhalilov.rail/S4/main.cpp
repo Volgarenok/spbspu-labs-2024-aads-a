@@ -3,10 +3,11 @@
 
 #include "getMaps.hpp"
 #include "mapMaster.hpp"
+#include "twoThreeTree.hpp"
 
 int main(int argc, char *argv[])
 {
-  std::map < std::string, zhalilov::primaryMap > maps;
+  zhalilov::TwoThree < std::string, zhalilov::primaryMap > maps;
   if (argc == 2)
   {
     std::ifstream file(argv[1]);

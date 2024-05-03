@@ -2,7 +2,9 @@
 
 #include <istream>
 
-void zhalilov::getMaps(std::map < std::string, primaryMap > &maps, std::istream &input)
+#include "twoThreeTree.hpp"
+
+void zhalilov::getMaps(TwoThree < std::string, primaryMap > &maps, std::istream &input)
 {
   int key = 0;
   std::string value;
