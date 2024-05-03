@@ -24,13 +24,20 @@ namespace chistyakov
 
       AVLTree & operator=(const AVLTree & tmp)
       {
-        swap(tmp);
+        if (this != std::addressof(tmp))
+        {
+          AVLTree< T > temper(tmp);
+          swap(temper);
+        }
         return *this;
       }
 
       AVLTree & operator=(const AVLTree && tmp)
       {
-        swap(tmp);
+        if (this != std::addressof(tmp))
+        {
+          swap(tmp);
+        }
         return *this;
       }
 
