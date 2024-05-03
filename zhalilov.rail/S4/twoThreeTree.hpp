@@ -18,7 +18,7 @@ namespace zhalilov
     using iterator = TwoThreeIterator < MapPair >;
     using const_iterator = ConstTwoThreeIterator < MapPair >;
 
-    TwoThree() = default;
+    TwoThree();
     TwoThree(const TwoThree &);
     TwoThree(TwoThree &&) noexcept;
     ~TwoThree();
@@ -67,6 +67,14 @@ namespace zhalilov
   };
 
   template < class Key, class T, class Compare >
+  TwoThree < Key, T, Compare >::TwoThree():
+    head_(createTwoNode(MapPair())),
+    size_(0)
+  {
+    connectNodes(head_, nullptr, head_);
+  }
+
+  template < class Key, class T, class Compare >
   TwoThree < Key, T, Compare >::TwoThree(const TwoThree &other):
     TwoThree()
   {
@@ -74,7 +82,7 @@ namespace zhalilov
     auto endIt = other.cend();
     while (it != endIt)
     {
-      insert({it->first, it->second});
+      insert({ it->first, it->second });
       it++;
     }
   }
@@ -201,15 +209,6 @@ namespace zhalilov
   template < class Key, class T, class Compare >
   std::pair < typename TwoThree < Key, T, Compare >::iterator, bool > TwoThree < Key, T, Compare >::insert(const MapPair &newPair)
   {
-    if (empty())
-    {
-      head_ = createTwoNode(MapPair());
-      Node *newNode = createTwoNode(newPair);
-      connectNodes(head_, nullptr, newNode);
-      size_++;
-      return std::make_pair(begin(), true);
-    }
-
     auto resultPair = doFind(newPair.first);
     if (!resultPair.second)
     {
@@ -219,7 +218,7 @@ namespace zhalilov
       Node *currNode = resultPair.first.node_;
       while (currNode->type == detail::NodeType::Three)
       {
-        if (compare_(currPair.first, currNode->one.first))
+        if (compare_(currNode->one.first, currPair.first))
         {
           Node *newRight = createTwoNode(currNode->two);
           connectNodes(newRight, currNode->mid, currNode->right);
@@ -252,7 +251,7 @@ namespace zhalilov
       if (currNode == head_)
       {
         Node *newNode = createTwoNode(currPair);
-        connectNodes(head_, newNode, nullptr);
+        connectNodes(head_, nullptr, newNode);
         connectNodes(newNode, prevLeft, prevRight);
       }
       else if (compare_(currNode->one.first, newPair.first))
@@ -332,21 +331,12 @@ namespace zhalilov
   template < class Key, class T, class Compare >
   char TwoThree < Key, T, Compare >::erase(const Key &key)
   {
-    auto it = find(key);
-    if (it == end())
-    {
-      return 0;
-    }
-    return erase(it);
+    return erase(find(key));
   }
 
   template < class Key, class T, class Compare >
   void TwoThree < Key, T, Compare >::clear() noexcept
   {
-    if (empty())
-    {
-      return;
-    }
     Node *currNode = iterator::findMin(head_);
     while (currNode != head_)
     {
@@ -368,7 +358,6 @@ namespace zhalilov
       delete currNode;
       currNode = nextNode;
     }
-    delete head_;
     size_ = 0;
   }
 
@@ -405,8 +394,12 @@ namespace zhalilov
   template < class Key, class T, class Compare >
   std::pair < typename TwoThree < Key, T, Compare >::iterator, bool > TwoThree < Key, T, Compare >::doFind(const Key &key) const
   {
+    if (empty())
+    {
+      return std::make_pair(iterator(head_, true), false);
+    }
     Node *currNode = head_->right;
-    while (currNode)
+    while (currNode->left)
     {
       Node *proposedNext = currNode->right;
       if (compare_(key, currNode->one.first))
@@ -430,7 +423,7 @@ namespace zhalilov
       }
       currNode = proposedNext;
     }
-    return std::make_pair(iterator(currNode->parent, true), false);
+    return std::make_pair(iterator(currNode, true), false);
   }
 
   template < class Key, class T, class Compare >
