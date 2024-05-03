@@ -89,8 +89,6 @@ void skuratov::outputAll(const List< std::pair< std::string, List< size_t > > >&
   for (size_t i = 0; i < maxSize; ++i)
   {
     size_t sum = {};
-    bool isFirst = false;
-
     for (auto it = sequences.cbegin(); it != sequences.cend(); ++it)
     {
       auto numbersIt = it->second.cbegin();
