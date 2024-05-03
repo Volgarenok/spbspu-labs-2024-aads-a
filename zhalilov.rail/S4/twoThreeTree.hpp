@@ -52,6 +52,7 @@ namespace zhalilov
     const_iterator find(const Key &) const;
 
   private:
+    Compare compare_;
     using Node = detail::TreeNode < MapPair >;
     Node *head_;
     size_t size_;
@@ -216,9 +217,9 @@ namespace zhalilov
       Node *prevRight = nullptr;
       MapPair currPair = newPair;
       Node *currNode = resultPair.first.node_;
-      while (currNode == detail::NodeType::Three)
+      while (currNode->type == detail::NodeType::Three)
       {
-        if (Compare(currPair.first, currNode->one.first))
+        if (compare_(currPair.first, currNode->one.first))
         {
           Node *newRight = createTwoNode(currNode->two);
           connectNodes(newRight, currNode->mid, currNode->right);
@@ -227,7 +228,7 @@ namespace zhalilov
           prevRight = newRight;
           prevLeft = currNode;
         }
-        else if (Compare(currPair.first, currNode->two.first))
+        else if (compare_(currPair.first, currNode->two.first))
         {
           Node *newRight = createTwoNode(currNode->two);
           connectNodes(newRight, prevRight, currNode->right);
@@ -254,7 +255,7 @@ namespace zhalilov
         connectNodes(head_, newNode, nullptr);
         connectNodes(newNode, prevLeft, prevRight);
       }
-      else if (Compare(currNode->one.first, newPair.first))
+      else if (compare_(currNode->one.first, newPair.first))
       {
         connectNodes(currNode, currNode->left, prevRight, prevLeft);
         currNode->two = newPair;
@@ -408,21 +409,21 @@ namespace zhalilov
     while (currNode)
     {
       Node *proposedNext = currNode->right;
-      if (Compare(key, currNode->one.first))
+      if (compare_(key, currNode->one.first))
       {
         proposedNext = currNode->left;
       }
-      else if (!Compare(currNode->one.first, key))
+      else if (!compare_(currNode->one.first, key))
       {
         return std::make_pair(iterator(currNode, true), true);
       }
       else if (currNode->type == detail::NodeType::Three)
       {
-        if (Compare(key, currNode->two.first))
+        if (compare_(key, currNode->two.first))
         {
           proposedNext = currNode->mid;
         }
-        else if (!Compare(currNode->two.first, key))
+        else if (!compare_(currNode->two.first, key))
         {
           return std::make_pair(iterator(currNode, false), true);
         }
