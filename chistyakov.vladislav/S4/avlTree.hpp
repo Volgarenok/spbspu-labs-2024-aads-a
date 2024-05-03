@@ -48,6 +48,11 @@ namespace chistyakov
         std::swap(tmp.comp_, comp_);
       }
 
+      size_t size() const
+      {
+        return size_;
+      }
+
     private:
       size_t size_;
       Node * root_;
