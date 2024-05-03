@@ -8,7 +8,7 @@
 void skuratov::inputAll(std::istream& in, List< std::pair< std::string, List< size_t > > >& sequences)
 {
   std::string name = "";
-  while (in)
+  while (!in.eof())
   {
     in >> name;
     if (name.empty())
@@ -24,7 +24,7 @@ void skuratov::inputAll(std::istream& in, List< std::pair< std::string, List< si
     {
       sequences.back().second.pushBack(numbers);
     }
-    if (!in)
+    if (!in.eof())
     {
       in.clear();
     }
@@ -61,7 +61,6 @@ void skuratov::outputAll(const List< std::pair< std::string, List< size_t > > >&
     for (auto it = sequences.cbegin(); it != sequences.cend(); ++it)
     {
       auto numbersIt = it->second.cbegin();
-      std::advance(numbersIt, i);
       if (numbersIt != it->second.cend())
       {
         if (!isFirst)
