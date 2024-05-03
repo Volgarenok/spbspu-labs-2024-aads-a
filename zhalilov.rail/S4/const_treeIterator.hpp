@@ -37,8 +37,8 @@ namespace zhalilov
     bool isPtrToLeft_;
 
     explicit ConstTwoThreeIterator(detail::TreeNode < T > *node, bool isPtrToLeft = true);
-    static detail::TreeNode < T > *findMin(const detail::TreeNode < T > *);
-    static detail::TreeNode < T > *findMax(const detail::TreeNode < T > *);
+    static detail::TreeNode < T > *findMin(detail::TreeNode < T > *);
+    static detail::TreeNode < T > *findMax(detail::TreeNode < T > *);
   };
 
   template < class T >
@@ -145,10 +145,10 @@ namespace zhalilov
     {
       if (!isPtrToLeft_)
       {
-        return node_->two;
+        return &node_->two;
       }
     }
-    return *node_->one;
+    return &node_->one;
   }
 
   template < class T >
@@ -175,7 +175,7 @@ namespace zhalilov
   {}
 
   template < class T >
-  detail::TreeNode < T > *ConstTwoThreeIterator < T >::findMin(const detail::TreeNode < T > *nodeFrom)
+  detail::TreeNode < T > *ConstTwoThreeIterator < T >::findMin(detail::TreeNode < T > *nodeFrom)
   {
     detail::TreeNode < T > *minNode = nodeFrom;
     while (minNode && minNode->left)
@@ -186,7 +186,7 @@ namespace zhalilov
   }
 
   template < class T >
-  detail::TreeNode < T > *ConstTwoThreeIterator < T >::findMax(const detail::TreeNode < T > *nodeFrom)
+  detail::TreeNode < T > *ConstTwoThreeIterator < T >::findMax(detail::TreeNode < T > *nodeFrom)
   {
     detail::TreeNode < T > *maxNode = nodeFrom;
     while (maxNode && maxNode->right)

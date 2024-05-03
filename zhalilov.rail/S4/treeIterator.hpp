@@ -147,10 +147,10 @@ namespace zhalilov
     {
       if (!isPtrToLeft_)
       {
-        return node_->two;
+        return &node_->two;
       }
     }
-    return *node_->one;
+    return &node_->one;
   }
 
   template < class T >
