@@ -60,6 +60,43 @@ namespace chistyakov
         return size_;
       }
 
+      void insert(T value)
+      {
+        Node * n = new Node(value);
+
+        if (root_ == nullptr)
+        {
+          root_ = n;
+        }
+        else
+        {
+          Node * curr = root_;
+          Node * parent = nullptr;
+
+          while (current != nullptr)
+          {
+            parent = curr;
+
+            if (comp_(value, root_->value))
+            {
+              curr = curr->left;
+              if (curr == nullptr)
+              {
+                parent->left = n;
+              }
+            }
+            else
+            {
+              curr = curr->right;
+              if (curr == nullptr)
+              {
+                parent->right = n;
+              }
+            }
+          }
+        }
+      }
+
     private:
       size_t size_;
       Node * root_;
