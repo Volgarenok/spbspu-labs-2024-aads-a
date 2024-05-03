@@ -28,8 +28,8 @@ namespace zhalilov
     const T &operator*() const;
     const T *operator->() const;
 
-    bool operator==(const TwoThreeIterator &) const;
-    bool operator!=(const TwoThreeIterator &) const;
+    bool operator==(TwoThreeIterator) const;
+    bool operator!=(TwoThreeIterator) const;
 
     template < class Key, class Value, class Compare >
     friend class TwoThree;
@@ -51,23 +51,29 @@ namespace zhalilov
       if (isPtrToLeft_)
       {
         detail::TreeNode < T > *minMid = findMin(node_->mid);
-        if (minMid == node_)
+        if (minMid)
         {
           isPtrToLeft_ = false;
+          node_ = minMid;
+          return *this;
         }
-        node_ = minMid;
-        return *this;
       }
     }
 
     detail::TreeNode < T > *minRight = findMin(node_->right);
-    if (minRight == node_)
+    if (!minRight)
     {
-      while (node_->parent && node_->parent->right == node_)
+      if (node_ != node_->parent)
       {
-        node_ = node_->parent;
+        while (node_->parent && node_->parent->right == node_)
+        {
+          node_ = node_->parent;
+        }
+        if (node_->parent)
+        {
+          node_ = node_->parent;
+        }
       }
-      node_ = node_->parent;
     }
     else
     {
@@ -97,11 +103,13 @@ namespace zhalilov
     detail::TreeNode < T > *maxLeft = findMax(node_->left);
     if (maxLeft == node_)
     {
-      while (node_->parent->left == node_)
+      detail::TreeNode < T > *prevNode = node_;
+      node_ = node_->parent;
+      while (node_ && node_->left == prevNode)
       {
+        prevNode = node_;
         node_ = node_->parent;
       }
-      node_ = node_->parent;
     }
     else
     {
@@ -166,18 +174,17 @@ namespace zhalilov
   }
 
   template < class T >
-  bool TwoThreeIterator < T >::operator==(const TwoThreeIterator < T > &ait) const
+  bool TwoThreeIterator < T >::operator==(TwoThreeIterator ait) const
   {
-    bool isEqualValue = true;
     if (node_->type == detail::NodeType::Three)
     {
-      isEqualValue = ait.isPtrToLeft_ == isPtrToLeft_;
+      return ait.isPtrToLeft_ == isPtrToLeft_ && ait.node_ == node_;
     }
-    return ait.node_ == node_ && isEqualValue;
+    return ait.node_ == node_;
   }
 
   template < class T >
-  bool TwoThreeIterator < T >::operator!=(const TwoThreeIterator < T > &ait) const
+  bool TwoThreeIterator < T >::operator!=(TwoThreeIterator ait) const
   {
     return !operator==(ait);
   }

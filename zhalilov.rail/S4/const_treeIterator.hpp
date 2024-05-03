@@ -26,8 +26,8 @@ namespace zhalilov
     const T &operator*() const;
     const T *operator->() const;
 
-    bool operator==(const ConstTwoThreeIterator &) const;
-    bool operator!=(const ConstTwoThreeIterator &) const;
+    bool operator==(ConstTwoThreeIterator) const;
+    bool operator!=(ConstTwoThreeIterator) const;
 
     template < class Key, class Value, class Compare >
     friend class TwoThree;
@@ -49,23 +49,29 @@ namespace zhalilov
       if (isPtrToLeft_)
       {
         detail::TreeNode < T > *minMid = findMin(node_->mid);
-        if (minMid == node_)
+        if (minMid)
         {
           isPtrToLeft_ = false;
+          node_ = minMid;
+          return *this;
         }
-        node_ = minMid;
-        return *this;
       }
     }
 
     detail::TreeNode < T > *minRight = findMin(node_->right);
-    if (minRight == node_)
+    if (!minRight)
     {
-      while (node_->parent && node_->parent->right == node_)
+      if (node_ != node_->parent)
       {
-        node_ = node_->parent;
+        while (node_->parent && node_->parent->right == node_)
+        {
+          node_ = node_->parent;
+        }
+        if (node_->parent)
+        {
+          node_ = node_->parent;
+        }
       }
-      node_ = node_->parent;
     }
     else
     {
@@ -152,18 +158,17 @@ namespace zhalilov
   }
 
   template < class T >
-  bool ConstTwoThreeIterator < T >::operator==(const ConstTwoThreeIterator < T > &ait) const
+  bool ConstTwoThreeIterator < T >::operator==(ConstTwoThreeIterator ait) const
   {
-    bool isEqualValue = true;
     if (node_->type == detail::NodeType::Three)
     {
-      isEqualValue = ait.isPtrToLeft_ == isPtrToLeft_;
+      return ait.isPtrToLeft_ == isPtrToLeft_ && ait.node_ == node_;
     }
-    return ait.node_ == node_ && isEqualValue;
+    return ait.node_ == node_;
   }
 
   template < class T >
-  bool ConstTwoThreeIterator < T >::operator!=(const ConstTwoThreeIterator < T > &ait) const
+  bool ConstTwoThreeIterator < T >::operator!=(ConstTwoThreeIterator ait) const
   {
     return !operator==(ait);
   }
