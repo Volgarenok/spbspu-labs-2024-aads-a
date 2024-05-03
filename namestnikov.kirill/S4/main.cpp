@@ -5,7 +5,7 @@
 #include <functional>
 #include <limits>
 
-void print(std::map< std::string, std::map< size_t, std::string > > & myMap, std::istream & in, std::ostream & out)
+void print(std::istream & in, std::map< std::string, std::map< size_t, std::string > > & myMap, std::ostream & out)
 {
   std::string name = "";
   in >> name;
@@ -25,7 +25,7 @@ void print(std::map< std::string, std::map< size_t, std::string > > & myMap, std
   }
 }
 
-void makeIntersect(std::map< std::string, std::map< size_t, std::string > > & myMap, std::istream & in)
+void makeIntersect(std::istream & in, std::map< std::string, std::map< size_t, std::string > > & myMap)
 {
   std::string newName = "";
   in >> newName;
@@ -49,7 +49,7 @@ void makeIntersect(std::map< std::string, std::map< size_t, std::string > > & my
   myMap[newName] = res;
 }
 
-void makeUnion(std::map< std::string, std::map< size_t, std::string > > & myMap, std::istream & in)
+void makeUnion(std::istream & in, std::map< std::string, std::map< size_t, std::string > > & myMap)
 {
   std::string newName = "";
   in >> newName;
@@ -74,7 +74,7 @@ void makeUnion(std::map< std::string, std::map< size_t, std::string > > & myMap,
   myMap[newName] = res;
 }
 
-void makeComplement(std::map< std::string, std::map< size_t, std::string > > & myMap, std::istream & in)
+void makeComplement(std::istream & in, std::map< std::string, std::map< size_t, std::string > > & myMap)
 {
   std::map< size_t, std::string > res;
 }
@@ -95,7 +95,6 @@ void inputMaps(std::istream & in, std::map< std::string, std::map< size_t, std::
       tempMap.insert(std::make_pair(keyNumber, value));
     }
     myMap.insert(std::make_pair(mapName, tempMap));
-    std::cout << "here";
   }
 }
 
@@ -119,7 +118,7 @@ int main(int argc, char * argv[])
     std::cerr << "Wrong command line arguments\n";
     return 2;
   }
-  std::map< std::string, std::function< void(mapOfDicts &, std::istream &) > > commands;
+  std::map< std::string, std::function< void(std::istream &, mapOfDicts &) > > commands;
   {
     using namespace std::placeholders;
     commands["union"] = makeUnion;
@@ -132,7 +131,7 @@ int main(int argc, char * argv[])
   {
     try
     {
-      commands.at(commandName)(myMap, std::cin);
+      commands.at(commandName)(std::cin, myMap);
     }
     catch (const std::out_of_range &)
     {
