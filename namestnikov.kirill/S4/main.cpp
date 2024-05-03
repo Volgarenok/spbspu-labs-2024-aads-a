@@ -5,8 +5,11 @@
 #include <functional>
 #include <limits>
 
-void print(std::ostream & out, const std::map< size_t, std::string > & map, const std::string & name)
+void print(std::map< std::string, std::map< size_t, std::string > > & myMap, std::istream & in, std::ostream & out)
 {
+  std::string name = "";
+  in >> name;
+  std::map< size_t, std::string > map = myMap[name];
   if (map.empty())
   {
     out << "<EMPTY>\n";
@@ -18,12 +21,21 @@ void print(std::ostream & out, const std::map< size_t, std::string > & map, cons
     {
       out << " " << key.first << " " << key.second;
     }
+    out << "\n";
   }
 }
 
-std::map< size_t, std::string > makeIntersect(const std::map< size_t, std::string > & left, const std::map< size_t, std::string > & right)
+void makeIntersect(std::map< std::string, std::map< size_t, std::string > > & myMap, std::istream & in)
 {
+  std::string newName = "";
+  in >> newName;
+  std::string firstName = "";
+  in >> firstName;
+  std::string secondName = "";
+  in >> secondName;
   std::map< size_t, std::string > res;
+  std::map< size_t, std::string > left = myMap[firstName];
+  std::map< size_t, std::string > right = myMap[secondName];
   for (const auto & key1: left)
   {
     for (const auto & key2: right)
@@ -34,12 +46,20 @@ std::map< size_t, std::string > makeIntersect(const std::map< size_t, std::strin
       }
     }
   }
-  return res;
+  myMap[newName] = res;
 }
 
-std::map< size_t, std::string > makeUnion(const std::map< size_t, std::string > & left, const std::map< size_t, std::string > & right)
+void makeUnion(std::map< std::string, std::map< size_t, std::string > > & myMap, std::istream & in)
 {
+  std::string newName = "";
+  in >> newName;
+  std::string firstName = "";
+  in >> firstName;
+  std::string secondName = "";
+  in >> secondName;
   std::map< size_t, std::string > res;
+  std::map< size_t, std::string > left = myMap[firstName];
+  std::map< size_t, std::string > right = myMap[secondName];
   for (const auto & key1: left)
   {
     res.insert(key1);
@@ -51,39 +71,38 @@ std::map< size_t, std::string > makeUnion(const std::map< size_t, std::string > 
       res.insert(key2);
     }
   }
-  return res;
+  myMap[newName] = res;
 }
 
-std::map< size_t, std::string > makeComplement(const std::map< size_t, std::string > & left, const std::map< size_t, std::string > & right)
+void makeComplement(std::map< std::string, std::map< size_t, std::string > > & myMap, std::istream & in)
 {
   std::map< size_t, std::string > res;
-  return res;
 }
 
-void inputMaps(std::ifstream & in, std::map< std::string, std::map< size_t, std::string > > & myMap)
+void inputMaps(std::istream & in, std::map< std::string, std::map< size_t, std::string > > & myMap)
 {
-  std::map< size_t, std::string > tempMap;
-  std::string mapName = "";
-  in >> mapName;
   while (!in.eof())
   {
+    in.clear();
+    std::map< size_t, std::string > tempMap;
+    std::string mapName = "";
+    in >> mapName;
     size_t keyNumber = 0;
-    std::string value = "";
-    while (in >> keyNumber >> value)
+    while (in >> keyNumber)
     {
+      std::string value = "";
+      in >> value;
       tempMap.insert(std::make_pair(keyNumber, value));
     }
-    if (!in.eof())
-    {
-      in.clear();
-    }
     myMap.insert(std::make_pair(mapName, tempMap));
+    std::cout << "here";
   }
 }
 
 int main(int argc, char * argv[])
 {
-  std::map< std::string, std::map< size_t, std::string > > myMap;
+  using mapOfDicts = std::map< std::string, std::map< size_t, std::string > >;
+  mapOfDicts myMap;
   if (argc == 2)
   {
     std::ifstream in(argv[1]);
@@ -100,53 +119,27 @@ int main(int argc, char * argv[])
     std::cerr << "Wrong command line arguments\n";
     return 2;
   }
-  for (const auto & pair : myMap)
-  {
-    for (const auto & pair2 : pair.second)
-    {
-      std::cout << pair2.first << " " << pair2.second;
-    }
-  }
-  std::map< std::string, std::function< std::map< size_t, std::string >(const std::map< size_t, std::string > &, const std::map< size_t, std::string >) > > commands;
+  std::map< std::string, std::function< void(mapOfDicts &, std::istream &) > > commands;
   {
     using namespace std::placeholders;
-    commands["union"] = std::bind(makeUnion, _1, _2);
-    commands["intersect"] = std::bind(makeIntersect, _1, _2);
-    commands["complement"] = std::bind(makeComplement, _1, _2);
+    commands["union"] = makeUnion;
+    commands["intersect"] = makeIntersect;
+    commands["complement"] = makeComplement, _1, _2;
+    commands["print"] = std::bind(print, _1, _2, std::ref(std::cout));
   }
   std::string commandName = "";
   while (std::cin >> commandName)
   {
     try
     {
-      if (commandName == "print")
-      {
-        std::string mapName = "";
-        std::cin >> mapName;
-        print(std::cout, myMap[mapName], mapName);
-      }
-      else
-      {
-        std::string resultMapName = "";
-        std::string firstMapName = "";
-        std::string secondMapName = "";
-        std::cin >> resultMapName >> firstMapName >> secondMapName;
-        std::map< size_t, std::string > newMap = commands.at(commandName)(myMap[firstMapName], myMap[secondMapName]);
-        myMap.insert(std::make_pair(resultMapName, newMap));
-      }
+      commands.at(commandName)(myMap, std::cin);
     }
     catch (const std::out_of_range &)
     {
       std::cerr << "<INVALID COMMAND>\n";
-      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+
   }
-  std::map< size_t, std::string > temp1;
-  temp1.insert(std::make_pair(1, "hello"));
-  temp1.insert(std::make_pair(2, "jeez"));
-  std::map< size_t, std::string > temp2;
-  temp2.insert(std::make_pair(2, "hi"));
-  temp2.insert(std::make_pair(3, "jeezus"));
-  auto temp3 = makeUnion(temp1, temp2);
-  print(std::cout, temp3, "third");
 }
