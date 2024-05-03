@@ -1,7 +1,8 @@
 #ifndef LIST_HPP
 #define LIST_HPP
 
-#
+#include <utility>
+#include <algorithm>
 #include <cstddef>
 #include "node.hpp"
 #include "constIterators.hpp"
@@ -126,7 +127,6 @@ namespace skuratov
         }
         head = ptr;
         ++size;
-        return ptr;
       }
 
       void pushBack(const T& value)
@@ -203,7 +203,7 @@ namespace skuratov
         }
       }
 
-      void swap(List& diff) noexcept
+      void swap(List& diff)
       {
         std::swap(head, diff.head);
         std::swap(tail, diff.tail);

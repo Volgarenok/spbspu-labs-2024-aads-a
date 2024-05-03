@@ -11,16 +11,26 @@ int main()
   {
     inputAll(std::cin, sequences);
   }
-  catch (const std::invalid_argument)
-  {
-    std::cout << 0 << '\n';
-  }
   catch (const std::exception& e)
   {
     std::cerr << e.what() << '\n';
     return 1;
   }
 
-  outputAll(sequences, std::cout);
+  if (sequences.empty())
+  {
+    std::cout << 0 << '\n';
+    return 0;
+  }
+
+  try
+  {
+    outputAll(sequences, std::cout);
+  }
+  catch (const std::overflow_error&)
+  {
+    std::cerr << "Overflow" << '\n';
+    return 1;
+  }
   return 0;
 }
