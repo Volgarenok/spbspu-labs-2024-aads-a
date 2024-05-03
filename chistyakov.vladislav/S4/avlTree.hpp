@@ -13,6 +13,15 @@ namespace chistyakov
         comp_(Comp)
       {}
 
+      AVLTree(AVLTree && tmp)
+        size_(tmp.size_),
+        root_(tmp.root_),
+        comp_(tmp.comp_)
+      {
+        tmp.size_ = 0;
+        tmp.root_ = nullptr;
+      }
+
     private:
       size_t size_;
       Node * root_;
