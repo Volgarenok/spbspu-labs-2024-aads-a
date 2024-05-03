@@ -1,6 +1,5 @@
 #ifndef FORWARD_LIST_HPP
 #define FORWARD_LIST_HPP
-#include <iostream>
 #include "const_forward_list_iterators.hpp"
 #include "forward_list_iterators.hpp"
 #include "node.hpp"
@@ -26,7 +25,7 @@ namespace novokhatskiy
     ForwardList():
       head_(nullptr)
     {}
-    ForwardList(const T& value):
+    ForwardList(const T& value) noexcept:
       head_(make_list(1, value))
     {}
     ForwardList(ForwardList&& other) noexcept:
@@ -34,14 +33,14 @@ namespace novokhatskiy
     {
       other.head_ = nullptr;
     }
-    ForwardList(const ForwardList< T >& other):
+    ForwardList(const ForwardList< T >& other) noexcept:
       head_(make_list(other.cbegin(), other.cend()))
     {}
-    ForwardList(size_t size, const T& value):
+    ForwardList(size_t size, const T& value) noexcept:
       head_(make_list(size, value))
     {}
-    ForwardList(std::initializer_list< T > list):
-      head_(make_list(list.cbegin(), list.cend()))
+    ForwardList(std::initializer_list< T > list) noexcept:
+      head_(make_list(list.begin(), list.end()))
     {}
 
     ForwardList< T >& operator=(const ForwardList< T >& other)
@@ -54,7 +53,7 @@ namespace novokhatskiy
       return *this;
     }
 
-    ForwardList< T >& operator=(ForwardList< T >&& other)
+    ForwardList< T >& operator=(ForwardList< T >&& other) noexcept
     {
       if (std::addressof(other) != this)
       {
@@ -132,26 +131,23 @@ namespace novokhatskiy
 
     iter insert_after(constIter pos, T&& value) noexcept
     {
-      iter iter_res(pos.node_);
-      node_t* new_node = new node_t(std::move(value), iter_res.node_->next_);
-      iter_res.node_->next_ = new_node;
-      return (++iter_res);
+      auto res = insert_after(pos, value);
+      return res;
     }
 
     iter insert_after(constIter pos, std::initializer_list< T > list)
     {
-      auto goToPos = this->begin();
-      while (pos.operator!=(goToPos))
+      node_t* node = make_list(list.begin(), list.end());
+      auto res = insert_after(pos, node->value_);
+      node = node->next_;
+      pos++;
+      while (node != nullptr)
       {
-        goToPos++;
+        res = insert_after(pos, node->value_);
+        node = node->next_;
+        pos++;
       }
-      for (T&& value: list)
-      {
-        node_t* node = new node_t(value);
-        node->next_ = goToPos.node_->next_;
-        goToPos.node_->next_ = node;
-      }
-      return goToPos++;
+      return res;
     }
 
     iter erase_after(constIter pos)
@@ -190,10 +186,6 @@ namespace novokhatskiy
 
     void splice_after(constIter pos, ForwardList< T >&& other)
     {
-      if (pos == cend())
-      {
-        throw std::out_of_range("Can not insert");
-      }
       constIter otherBegin = other.cbegin();
       constIter nextIt = pos;
       nextIt++;
@@ -225,15 +217,22 @@ namespace novokhatskiy
       splice_after(pos, T(other), first, last);
     }
 
-    void splice_after(constIter pos, ForwardList< T >&& other, constIter first, constIter last)
+    void splice_after(constIter pos, ForwardList< T >&& other, constIter first, constIter last) noexcept
     {
-      auto curr_iter = first;
-      auto iter_end = last;
-      while (std::next(first) != iter_end)
+      auto first_it = std::next(first);
+      auto last_it = last;
+      while (first_it != last_it)
       {
-        insert_after(pos, std::move(*std::next(curr_iter)));
-        other.erase_after(curr_iter);
+        insert_after(pos, std::move(*first_it));
+        ++first_it;
         ++pos;
+      }
+      constIter next = std::next(first);
+      while (next != last)
+      {
+        node_t* next2 = next.node_->next_;
+        next.node_ = nullptr;
+        next.node_ = next2;
       }
     }
     void push_front(const T& value)
@@ -254,7 +253,6 @@ namespace novokhatskiy
     {
       if (empty())
       {
-        std::cerr << "The forward_list is empty\n";
         return;
       }
       node_t* temp = head_;
@@ -308,7 +306,7 @@ namespace novokhatskiy
     {
       std::swap(head_, other.head_);
     }
-    void reverse()
+    void reverse() noexcept
     {
       if (!head_)
       {
@@ -329,9 +327,9 @@ namespace novokhatskiy
     size_t remove(const T& value)
     {
       return remove_if(
-        [&value](const T& tmp) -> bool
-        {
-          return tmp = value;
+        [&value](const T& tmp) -> bool 
+        { 
+          return tmp = value; 
         }
       );
     }
