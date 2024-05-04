@@ -6,15 +6,10 @@ zhalilov::MapMaster::MapMaster(TwoThree < std::string, primaryMap > &maps):
   maps_(maps),
   commands_()
 {
-  std::pair < std::string, commandFunc > cmdPair;
-  cmdPair = std::make_pair("print", &MapMaster::printCmd);
-  commands_.insert(cmdPair);
-  cmdPair = std::make_pair("complement", &MapMaster::complementCmd);
-  commands_.insert(cmdPair);
-  cmdPair = std::make_pair("intersect", &MapMaster::intersectCmd);
-  commands_.insert(cmdPair);
-  cmdPair = std::make_pair("union", &MapMaster::unionCmd);
-  commands_.insert(cmdPair);
+  commands_["print"] = &MapMaster::printCmd;
+  commands_["complement"] = &MapMaster::complementCmd;
+  commands_["intersect"] = &MapMaster::intersectCmd;
+  commands_["union"] = &MapMaster::unionCmd;
 }
 
 void zhalilov::MapMaster::doCommandLine(std::istream &input, std::string &result)
