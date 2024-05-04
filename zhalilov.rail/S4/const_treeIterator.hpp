@@ -99,13 +99,19 @@ namespace zhalilov
     }
 
     detail::TreeNode < T > *maxLeft = findMax(node_->left);
-    if (maxLeft == node_)
+    if (!maxLeft)
     {
-      while (node_->parent->left == node_)
+      if (node_ != node_->parent)
       {
-        node_ = node_->parent;
+        while (node_->parent && node_->parent->left == node_)
+        {
+          node_ = node_->parent;
+        }
+        if (node_->parent)
+        {
+          node_ = node_->parent;
+        }
       }
-      node_ = node_->parent;
     }
     else
     {
