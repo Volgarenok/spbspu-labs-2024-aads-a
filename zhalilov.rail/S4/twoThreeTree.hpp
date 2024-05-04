@@ -100,6 +100,7 @@ namespace zhalilov
   TwoThree < Key, T, Compare >::~TwoThree()
   {
     clear();
+    delete head_;
   }
 
   template < class Key, class T, class Compare >
