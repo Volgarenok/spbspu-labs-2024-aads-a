@@ -7,13 +7,6 @@
 
 int main(int argc, char *argv[])
 {
-  zhalilov::TwoThree < int, int > mapsss;
-  mapsss.insert({10, 0});
-  mapsss.insert({20, 0});
-  mapsss.insert({60, 0});
-  mapsss.insert({50, 0});
-  mapsss.insert({40, 0});
-  mapsss.erase(50);
   zhalilov::TwoThree < std::string, zhalilov::primaryMap > maps;
   if (argc == 2)
   {

@@ -796,8 +796,8 @@ namespace zhalilov
       }
       Node *toConnect = emptyNode->left ? emptyNode->left : emptyNode->right;
       connectNodes(head_, toConnect, nullptr);
-      return std::make_pair(doFind(lastRemovedPair.first).first, true);
     }
+    return std::make_pair(doFind(lastRemovedPair.first).first, true);
   }
 }
 
