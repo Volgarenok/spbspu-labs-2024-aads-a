@@ -1,4 +1,3 @@
-// ReSharper disable CppDFAUnreachableCode
 #ifndef TWOTHREETREE_HPP
 #define TWOTHREETREE_HPP
 
@@ -68,6 +67,7 @@ namespace zhalilov
 
   template < class Key, class T, class Compare >
   TwoThree < Key, T, Compare >::TwoThree():
+    compare_(Compare{}),
     head_(createTwoNode(MapPair())),
     size_(0)
   {
@@ -149,13 +149,15 @@ namespace zhalilov
   template < class Key, class T, class Compare >
   T &TwoThree < Key, T, Compare >::operator[](const Key &key)
   {
-    return (insert(std::make_pair(key, T()))).first->second;
+    auto insertPair = insert(std::make_pair(key, T()));
+    return insertPair.first->second;
   }
 
   template < class Key, class T, class Compare >
   T &TwoThree < Key, T, Compare >::operator[](Key &&key)
   {
-    return *((insert(std::make_pair(std::move(key), T()))).first);
+    auto insertPair = insert(std::make_pair(std::move(key), T()));
+    return insertPair.first->second;
   }
 
   template < class Key, class T, class Compare >
@@ -218,7 +220,7 @@ namespace zhalilov
       Node *currNode = resultPair.first.node_;
       while (currNode->type == detail::NodeType::Three)
       {
-        if (compare_(currNode->one.first, currPair.first))
+        if (compare_(currPair.first, currNode->one.first))
         {
           Node *newRight = createTwoNode(currNode->two);
           connectNodes(newRight, currNode->mid, currNode->right);
@@ -254,19 +256,21 @@ namespace zhalilov
         connectNodes(head_, nullptr, newNode);
         connectNodes(newNode, prevLeft, prevRight);
       }
-      else if (compare_(currNode->one.first, newPair.first))
+      else if (compare_(currPair.first, currNode->one.first))
       {
         connectNodes(currNode, currNode->left, prevRight, prevLeft);
-        currNode->two = newPair;
+        currNode->two = currPair;
+        std::swap(currNode->two, currNode->one);
+        currNode->type = detail::NodeType::Three;
       }
       else
       {
         connectNodes(currNode, prevLeft, currNode->right, prevRight);
-        currNode->one = newPair;
+        currNode->two = currPair;
+        currNode->type = detail::NodeType::Three;
       }
-      currNode->type = detail::NodeType::Three;
       size_++;
-      return std::make_pair(doFind(newPair.first).first, true);
+      return std::make_pair(doFind(currPair.first).first, true);
     }
     return std::make_pair(resultPair.first, false);
   }
@@ -399,14 +403,15 @@ namespace zhalilov
       return std::make_pair(iterator(head_, true), false);
     }
     Node *currNode = head_->right;
-    while (currNode->left)
+    Node *prevParentNode = currNode;
+    while (currNode)
     {
       Node *proposedNext = currNode->right;
       if (compare_(key, currNode->one.first))
       {
         proposedNext = currNode->left;
       }
-      else if (!compare_(currNode->one.first, key))
+      else if (!(compare_(currNode->one.first, key)))
       {
         return std::make_pair(iterator(currNode, true), true);
       }
@@ -421,9 +426,10 @@ namespace zhalilov
           return std::make_pair(iterator(currNode, false), true);
         }
       }
+      prevParentNode = currNode;
       currNode = proposedNext;
     }
-    return std::make_pair(iterator(currNode, true), false);
+    return std::make_pair(iterator(prevParentNode, true), false);
   }
 
   template < class Key, class T, class Compare >
