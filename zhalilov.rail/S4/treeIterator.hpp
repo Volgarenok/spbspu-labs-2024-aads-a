@@ -53,10 +53,13 @@ namespace zhalilov
         detail::TreeNode < T > *minMid = findMin(node_->mid);
         if (minMid)
         {
-          isPtrToLeft_ = false;
           node_ = minMid;
-          return *this;
         }
+        else
+        {
+          isPtrToLeft_ = false;
+        }
+        return *this;
       }
     }
 
@@ -65,12 +68,11 @@ namespace zhalilov
     {
       if (node_ != node_->parent)
       {
-        while (node_->parent && node_->parent->right == node_)
+        detail::TreeNode < T > *prevNode = node_;
+        node_ = node_->parent;
+        while (node_->right == prevNode)
         {
-          node_ = node_->parent;
-        }
-        if (node_->parent)
-        {
+          prevNode = node_;
           node_ = node_->parent;
         }
       }
@@ -203,7 +205,7 @@ namespace zhalilov
   detail::TreeNode < T > *TwoThreeIterator < T >::findMin(detail::TreeNode < T > *nodeFrom)
   {
     detail::TreeNode < T > *minNode = nodeFrom;
-    while (minNode && minNode->left)
+    while (minNode && minNode->left && minNode->left != minNode)
     {
       minNode = minNode->left;
     }
