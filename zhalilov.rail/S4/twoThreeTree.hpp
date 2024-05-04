@@ -260,14 +260,14 @@ namespace zhalilov
       }
       else if (compare_(currPair.first, currNode->one.first))
       {
-        connectNodes(currNode, currNode->left, prevRight, prevLeft);
+        connectNodes(currNode, prevLeft, currNode->right, prevRight);
         currNode->two = currPair;
         std::swap(currNode->two, currNode->one);
         currNode->type = detail::NodeType::Three;
       }
       else
       {
-        connectNodes(currNode, currNode->left, currNode->right, prevLeft);
+        connectNodes(currNode, currNode->left, prevRight, prevLeft);
         currNode->two = currPair;
         currNode->type = detail::NodeType::Three;
       }
@@ -285,7 +285,7 @@ namespace zhalilov
       delete head_->left;
       delete head_;
       head_ = nullptr;
-      size--;
+      size_--;
       return end();
     }
     if (it.node_->left)
@@ -309,7 +309,7 @@ namespace zhalilov
     {
       if (!it.isPtrToLeft_)
       {
-        std::swap(it.node_->one, it.node->two);
+        std::swap(it.node_->one, it.node_->two);
       }
       it.node_->type = detail::NodeType::Two;
     }
@@ -337,7 +337,8 @@ namespace zhalilov
   template < class Key, class T, class Compare >
   char TwoThree < Key, T, Compare >::erase(const Key &key)
   {
-    return erase(find(key));
+    erase(find(key));
+    return doFind(key).second;
   }
 
   template < class Key, class T, class Compare >
@@ -482,12 +483,12 @@ namespace zhalilov
         std::swap(parentNode->one, parentNode->left->two);
         if (emptyIt.node_->left)
         {
-          connectNodes(emptyIt, parentNode->left->right, emptyIt->left);
+          connectNodes(emptyIt.node_, parentNode->left->right, emptyIt.node_->left);
           connectNodes(parentNode->left, parentNode->left->left, parentNode->left->mid);
         }
         else if (emptyIt.node_->right)
         {
-          connectNodes(emptyIt, parentNode->left->right, emptyIt->right);
+          connectNodes(emptyIt.node_, parentNode->left->right, emptyIt.node_->right);
           connectNodes(parentNode->left, parentNode->left->left, parentNode->left->mid);
         }
         parentNode->left->type = detail::NodeType::Two;
@@ -499,12 +500,12 @@ namespace zhalilov
         std::swap(parentNode->right->one, parentNode->right->two);
         if (emptyIt.node_->left)
         {
-          connectNodes(emptyIt, emptyIt->left, parentNode->right->left);
+          connectNodes(emptyIt.node_, emptyIt.node_->left, parentNode->right->left);
           connectNodes(parentNode->right, parentNode->left, parentNode->mid);
         }
         else if (emptyIt.node_->right)
         {
-          connectNodes(emptyIt, parentNode->left->right, emptyIt->right);
+          connectNodes(emptyIt.node_, parentNode->left->right, emptyIt.node_->right);
           connectNodes(parentNode->right, parentNode->right->mid, parentNode->right->right);
         }
         parentNode->right->type = detail::NodeType::Two;
@@ -524,12 +525,12 @@ namespace zhalilov
           std::swap(parentNode->two, parentNode->mid->two);
           if (emptyIt.node_->left)
           {
-            connectNodes(emptyIt, parentNode->mid->right, emptyIt->left);
+            connectNodes(emptyIt.node_, parentNode->mid->right, emptyIt.node_->left);
             connectNodes(parentNode->mid, parentNode->mid->left, parentNode->mid->mid);
           }
           else if (emptyIt.node_->right)
           {
-            connectNodes(emptyIt, parentNode->mid->right, emptyIt->right);
+            connectNodes(emptyIt.node_, parentNode->mid->right, emptyIt.node_->right);
             connectNodes(parentNode->mid, parentNode->mid->left, parentNode->mid->mid);
           }
           parentNode->mid->type = detail::NodeType::Two;
@@ -542,13 +543,13 @@ namespace zhalilov
           std::swap(parentNode->one, parentNode->left->two);
           if (emptyIt.node_->left)
           {
-            connectNodes(emptyIt, parentNode->mid->right, emptyIt->left);
+            connectNodes(emptyIt.node_, parentNode->mid->right, emptyIt.node_->left);
             connectNodes(parentNode->mid, parentNode->left->right, parentNode->mid->left);
             connectNodes(parentNode->left, parentNode->left->left, parentNode->left->mid);
           }
           else if (emptyIt.node_->right)
           {
-            connectNodes(emptyIt, parentNode->mid->right, emptyIt->right);
+            connectNodes(emptyIt.node_, parentNode->mid->right, emptyIt.node_->right);
             connectNodes(parentNode->mid, parentNode->left->right, parentNode->mid->left);
             connectNodes(parentNode->left, parentNode->left->left, parentNode->left->mid);
           }
@@ -565,12 +566,12 @@ namespace zhalilov
         std::swap(parentNode->one, parentNode->left->two);
         if (emptyIt.node_->left)
         {
-          connectNodes(emptyIt, parentNode->left->right, emptyIt->left);
+          connectNodes(emptyIt.node_, parentNode->left->right, emptyIt.node_->left);
           connectNodes(parentNode->left, parentNode->left->left, parentNode->left->mid);
         }
         else if (emptyIt.node_->right)
         {
-          connectNodes(emptyIt, parentNode->left->right, emptyIt->right);
+          connectNodes(emptyIt.node_, parentNode->left->right, emptyIt.node_->right);
           connectNodes(parentNode->left, parentNode->left->left, parentNode->left->mid);
         }
         parentNode->left->type = detail::NodeType::Two;
@@ -591,12 +592,12 @@ namespace zhalilov
           std::swap(parentNode->mid->two, parentNode->mid->one);
           if (emptyIt.node_->left)
           {
-            connectNodes(emptyIt, emptyIt->left, parentNode->mid->left);
+            connectNodes(emptyIt.node_, emptyIt.node_->left, parentNode->mid->left);
             connectNodes(parentNode->mid, parentNode->mid->mid, parentNode->mid->right);
           }
           else if (emptyIt.node_->right)
           {
-            connectNodes(emptyIt, emptyIt->right, parentNode->mid->left);
+            connectNodes(emptyIt.node_, emptyIt.node_->right, parentNode->mid->left);
             connectNodes(parentNode->mid, parentNode->mid->mid, parentNode->mid->right);
           }
           parentNode->mid->type = detail::NodeType::Two;
@@ -610,13 +611,13 @@ namespace zhalilov
           std::swap(parentNode->right->two, parentNode->right->one);
           if (emptyIt.node_->left)
           {
-            connectNodes(emptyIt, emptyIt->left, parentNode->mid->left);
+            connectNodes(emptyIt.node_, emptyIt.node_->left, parentNode->mid->left);
             connectNodes(parentNode->mid, parentNode->mid->right, parentNode->right->left);
             connectNodes(parentNode->right, parentNode->right->mid, parentNode->right->right);
           }
           else if (emptyIt.node_->right)
           {
-            connectNodes(emptyIt, emptyIt->right, parentNode->mid->left);
+            connectNodes(emptyIt.node_, emptyIt.node_->right, parentNode->mid->left);
             connectNodes(parentNode->mid, parentNode->mid->right, parentNode->right->left);
             connectNodes(parentNode->right, parentNode->right->mid, parentNode->right->right);
           }
@@ -634,12 +635,12 @@ namespace zhalilov
         std::swap(parentNode->right->two, parentNode->right->one);
         if (emptyIt.node_->left)
         {
-          connectNodes(emptyIt, emptyIt->left, parentNode->right->left);
+          connectNodes(emptyIt.node_, emptyIt.node_->left, parentNode->right->left);
           connectNodes(parentNode->right, parentNode->right->mid, parentNode->right->right);
         }
         else if (emptyIt.node_->right)
         {
-          cconnectNodes(emptyIt, emptyIt->right, parentNode->right->left);
+          connectNodes(emptyIt.node_, emptyIt.node_->right, parentNode->right->left);
           connectNodes(parentNode->right, parentNode->right->mid, parentNode->right->right);
         }
         parentNode->left->type = detail::NodeType::Two;
@@ -653,7 +654,7 @@ namespace zhalilov
     {
       return std::make_pair(doFind(lastRemovedPair.first).first, balanced);
     }
-    return std::make_pair(iterator(emptyIt, balanced));
+    return std::make_pair(iterator(emptyIt), balanced);
   }
 
   template < class Key, class T, class Compare >
