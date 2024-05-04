@@ -243,6 +243,7 @@ namespace zhalilov
           connectNodes(newLeft, currNode->left, currNode->mid);
           connectNodes(currNode, prevLeft, prevRight);
           std::swap(currPair, currNode->two);
+          std::swap(currNode->one, currNode->two);
           prevRight = currNode;
           prevLeft = newLeft;
         }
@@ -265,7 +266,7 @@ namespace zhalilov
       }
       else
       {
-        connectNodes(currNode, prevLeft, currNode->right, prevRight);
+        connectNodes(currNode, currNode->left, currNode->right, prevLeft);
         currNode->two = currPair;
         currNode->type = detail::NodeType::Three;
       }
