@@ -63,8 +63,6 @@ namespace zhalilov
 
     std::pair < iterator, bool > balanceFromBros(iterator);
     std::pair < iterator, bool > balanceFromParents(iterator);
-
-    void recursiveClear(Node *);
   };
 
   template < class Key, class T, class Compare >
@@ -798,18 +796,6 @@ namespace zhalilov
       Node *toConnect = emptyNode->left ? emptyNode->left : emptyNode->right;
       connectNodes(head_, toConnect, nullptr);
       return std::make_pair(doFind(lastRemovedPair.first).first, true);
-    }
-  }
-
-  template < class Key, class T, class Compare >
-  void TwoThree < Key, T, Compare >::recursiveClear(Node *node)
-  {
-    if (node && node != head_)
-    {
-      recursiveClear(node->right);
-      recursiveClear(node->left);
-      recursiveClear(node->mid);
-      delete node;
     }
   }
 }
