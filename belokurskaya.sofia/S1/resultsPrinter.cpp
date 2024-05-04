@@ -15,7 +15,10 @@ void belokurskaya::printNames(const SequenceVector& sequences, std::ostream& out
       out << " ";
     }
   }
-  out << "\n";
+  if (sequences.getSize() > 0)
+  {
+    out << "\n";
+  }
 }
 
 void belokurskaya::printSequences(const SequenceVector& sequences, std::ostream& out)
