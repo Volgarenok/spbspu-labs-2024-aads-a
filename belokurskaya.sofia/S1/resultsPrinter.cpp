@@ -9,7 +9,11 @@ void belokurskaya::printNames(const SequenceVector& sequences, std::ostream& out
 {
   for (size_t i = 0; i < sequences.getSize(); ++i)
   {
-    out << sequences[i].getName() << " ";
+    out << sequences[i].getName();
+    if (i < sequences.getSize() - 1)
+    {
+      out << " ";
+    }
   }
   out << "\n";
 }
@@ -29,7 +33,11 @@ void belokurskaya::printSequences(const SequenceVector& sequences, std::ostream&
       const List< int >& seq = sequences[i].getSequence();
       if (j < seq.size())
       {
-        out << seq.at(j) << " ";
+        out << seq.at(j);
+        if (i < sequences.getSize() - 1)
+        {
+          out << " ";
+        }
       }
     }
     out << "\n";
@@ -76,7 +84,11 @@ void belokurskaya::printSums(const SequenceVector& sequences, std::ostream& out)
 
   for (size_t i = 0; i < maxLength; ++i)
   {
-    out << sums[i] << " ";
+    out << sums[i];
+    if (i < maxLength - 1)
+    {
+      out << " ";
+    }
   }
   out << "\n";
 
