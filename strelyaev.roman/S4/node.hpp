@@ -9,7 +9,8 @@ namespace strelyaev
       value_(value),
       parent_(parent),
       right_(right),
-      left_(left)
+      left_(left),
+      height_(0)
     {}
 
     bool isRoot()
@@ -31,6 +32,7 @@ namespace strelyaev
     Node< T >* parent_;
     Node< T >* right_;
     Node< T >* left_;
+    size_t height_;
   };
 }
 #endif

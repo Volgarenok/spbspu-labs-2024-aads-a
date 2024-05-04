@@ -18,22 +18,93 @@ namespace strelyaev
         size_(0)
       {}
 
-      void push(T value)
+      int getHeight(Node< T >* node)
       {
-        insert(value, root);
-      }
-
-      void treePrint(Node< T >* current)
-      {
-        if (current)
+        if (!node)
         {
-          treePrint(current->left_);
-          std::cout << current->value_;
-          treePrint(current->right_);
+          return -1;
         }
+        return node->height_;
       }
 
-      void insert(T value, Node< T >* current_node)
+      int getBalance(Node< T >* node)
+      {
+        if (!node)
+        {
+          return 0;
+        }
+        return getHeight(node->right_) - getHeight(node->left_);
+      }
+
+      void updateHeight(Node< T >* node)
+      {
+        node->height_ = std::max(getHeight(node->left_), getHeight(node->right_)) + 1;
+      }
+
+       void rotateRight(Node< T >* node)
+       {
+        std::swap(node->left_->value_, node->value_);
+        Node< T >* buffer = node->right_;
+        node->right_ = node->left_;
+
+        node->left_ = node->right_->left_;
+        if (node->left_)
+        {
+          node->left_->parent_ = node;
+        }
+
+        node->right_->left_ = node->right_->right_;
+
+        node->right_->right_ = buffer;
+        buffer->parent_ = node->right_;
+
+        updateHeight(node->right_);
+        updateHeight(node);
+       }
+
+       void rotateLeft(Node< T >* node)
+       {
+        std::swap(node->right_->value_, node->value_);
+        Node< T >* buffer = node->left_;
+        node->left_ = node->right_;
+
+        node->right_ = node->left_->right_;
+        if (node->right_)
+        {
+          node->right_->parent_ = node;
+        }
+
+        node->right_->left_ = node->right_->right_;
+
+        node->left_->left_ = buffer;
+        buffer->parent_ = node->left_;
+
+        updateHeight(node->left_);
+        updateHeight(node);
+       }
+
+       void balance(Node< T >* node)
+       {
+        int balance = getBalance(node);
+        if (balance == -2)
+        {
+          if (getBalance(node->left_) == 1)
+          {
+            rotateLeft(node->left_);
+          }
+          rotateRight(node);
+        }
+        else if (balance == 2)
+        {
+          if (getBalance(node->right_) == -1)
+          {
+            rotateRight(node->right_);
+          }
+          rotateLeft(node);
+        }
+       }
+
+      void push(T value)
       {
         if (!root)
         {
@@ -41,34 +112,34 @@ namespace strelyaev
           size_++;
           return;
         }
-        if (current_node == nullptr)
+        Node< T >* current_node = root;
+        Node< T >* parent = nullptr;
+        while(current_node)
         {
-          current_node = root;
-        }
-
-        if (Comp()(value, current_node->value_))
-        {
-          if (current_node->left_)
+          parent = current_node;
+          if (Comp()(value, current_node->value_))
           {
-            insert(value, current_node->left_);
+            current_node = current_node->left_;
           }
           else
           {
-            current_node->left_ = new Node< T >(nullptr, current_node, nullptr, value);
-            size_++;
+            current_node = current_node->right_;
           }
         }
-        else
+        if (Comp()(value, parent->value_))
         {
-          if (current_node->right_)
-          {
-            insert(value, current_node->right_);
-          }
-          else
-          {
-            current_node->right_ = new Node< T >(nullptr, current_node, nullptr, value);
-            size_++;
-          }
+          parent->left_ = new Node< T >(nullptr, parent, nullptr, value);
+        }
+        else if (!Comp()(value, parent->value_))
+        {
+          parent->right_ = new Node< T >(nullptr, parent, nullptr, value);
+        }
+        size_++;
+        while (parent)
+        {
+          updateHeight(parent);
+          balance(parent);
+          parent = parent->parent_;
         }
       }
 
