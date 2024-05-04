@@ -345,32 +345,28 @@ namespace zhalilov
   template < class Key, class T, class Compare >
   void TwoThree < Key, T, Compare >::clear() noexcept
   {
-    if (head_)
+    Node *currNode = iterator::findMin(head_);
+    while (currNode && currNode != head_)
     {
-      recursiveClear(head_->left);
+      Node *nextNode = nullptr;
+      Node *parentNode = currNode->parent;
+      if (parentNode->left == currNode)
+      {
+        nextNode = parentNode->mid ? parentNode->mid : parentNode->right;
+        nextNode = iterator::findMin(nextNode);
+      }
+      else if (parentNode->mid == currNode)
+      {
+        nextNode = iterator::findMin(parentNode->right);
+      }
+      else
+      {
+        nextNode = parentNode;
+      }
+      delete currNode;
+      currNode = nextNode;
     }
-    // Node *currNode = iterator::findMin(head_);
-    // while (currNode != head_)
-    // {
-    //   Node *nextNode = nullptr;
-    //   Node *parentNode = currNode->parent;
-    //   if (parentNode->left == currNode)
-    //   {
-    //     nextNode = parentNode->mid ? parentNode->mid : parentNode->right;
-    //     nextNode = iterator::findMin(nextNode);
-    //   }
-    //   else if (parentNode->mid == currNode)
-    //   {
-    //     nextNode = iterator::findMin(parentNode->right);
-    //   }
-    //   else
-    //   {
-    //     nextNode = parentNode;
-    //   }
-    //   delete currNode;
-    //   currNode = nextNode;
-    // }
-    // size_ = 0;
+    size_ = 0;
   }
 
   template < class Key, class T, class Compare >
