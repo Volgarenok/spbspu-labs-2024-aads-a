@@ -214,27 +214,23 @@ namespace novokhatskiy
 
     void splice_after(constIter pos, ForwardList< T >& other, constIter first, constIter last)
     {
-      splice_after(pos, T(other), first, last);
+      splice_after(pos, std::move(other), first, last);
     }
-
-    void splice_after(constIter pos, ForwardList< T >&& other, constIter first, constIter last) noexcept
+    
+    void splice_after(constIter pos, ForwardList< T >&& other, constIter first, constIter last) noexcept 
     {
-      auto first_it = std::next(first);
-      auto last_it = last;
-      while (first_it != last_it)
+      constIter nextIt = pos.node_->next_;
+      constIter curr = first.node_->next_;
+      pos.node_->next_ = curr.node_;
+      while (curr.node_->next_ != last.node_)
       {
-        insert_after(pos, std::move(*first_it));
-        ++first_it;
-        ++pos;
+        curr++;
       }
-      constIter next = std::next(first);
-      while (next != last)
-      {
-        node_t* next2 = next.node_->next_;
-        next.node_ = nullptr;
-        next.node_ = next2;
-      }
+      curr.node_->next_ = nextIt.node_;
+      constIter del = other.cbegin();
+      del.node_->next_ = nullptr;
     }
+    
     void push_front(const T& value)
     {
       node_t* ptr = new node_t(value);
