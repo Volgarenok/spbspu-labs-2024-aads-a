@@ -289,29 +289,8 @@ namespace piyavkin
     }
     TreeIterator< Key, T, Compare > lower_bound(const Key& key)
     {
-      detail::TreeNode< Key, T >* curr_node = root_;
-      while (curr_node && (curr_node != std::addressof(end_node_) && curr_node != std::addressof(before_min_)))
-      {
-        if (cmp_(curr_node->val_type.first, key))
-        {
-          if (!curr_node->right_)
-          {
-            TreeIterator< Key, T, Compare > it(curr_node);
-            return ++it;
-          }
-          curr_node = curr_node->right_;
-        }
-        else
-        {
-          if (!cmp_(key, curr_node->val_type.first) || (curr_node->left_ == std::addressof(before_min_)))
-          {
-            // splay();
-            return TreeIterator< Key, T, Compare >(curr_node);
-          }
-          curr_node = curr_node->left_;
-        }
-      }
-      return TreeIterator< Key, T, Compare >(curr_node);
+      auto it = static_cast< const Tree< Key, T, Compare >& >(*this).lower_bound(key);
+      return TreeIterator< Key, T, Compare >(const_cast< detail::TreeNode< Key, T >* >(it.node_));
     }
     ConstTreeIterator< Key, T, Compare > lower_bound(const Key& key) const
     {
@@ -506,19 +485,46 @@ namespace piyavkin
       }
       return count;
     }
-    std::pair< TreeIterator< Key, T, Compare >, TreeIterator< Key, T, Compare > > equil_range(const Key& key)
+    std::pair< ConstTreeIterator< Key, T, Compare >, ConstTreeIterator< Key, T, Compare > > equil_range(const Key& key) const
     {
-      TreeIterator< Key, T, Compare > it = find(key);
-      TreeIterator< Key, T, Compare > it2 = it;
-      if (it != end())
+      ConstTreeIterator< Key, T, Compare > it = find(key);
+      if (it == cend())
+      {
+        return std::make_pair< ConstTreeIterator< Key, T, Compare >, ConstTreeIterator< Key, T, Compare > >(cend(), cend());
+      }
+      ConstTreeIterator< Key, T, Compare > it2 = it;
+      ConstTreeIterator< Key, T, Compare > temp = --it;
+      ++it;
+      while (temp != --cbegin() && it.node_->val_type.first == temp.node_->val_type.first)
+      {
+        --it;
+        --temp;
+      }
+      temp = ++it2;
+      --it2;
+      while (temp != cend() && it2.node_->val_type.first == temp.node_->val_type.first)
       {
         ++it2;
       }
-      return std::pair< TreeIterator< Key, T, Compare >, TreeIterator< Key, T, Compare > >(it, it2);
+      return std::pair< ConstTreeIterator< Key, T, Compare >, ConstTreeIterator< Key, T, Compare > >(it, ++it2);
     }
-    size_t count(const Key& key)
+    std::pair< TreeIterator< Key, T, Compare >, TreeIterator< Key, T, Compare > > equil_range(const Key& key)
     {
-      return (find(key) != end()) ? 1 : 0;
+      auto pair = static_cast< const Tree< Key, T, Compare >& >(*this).equil_range(key);
+      TreeIterator< Key, T, Compare > it1(const_cast< detail::TreeNode< Key, T >* >(pair.first.node_));
+      TreeIterator< Key, T, Compare > it2(const_cast< detail::TreeNode< Key, T >* >(pair.second.node_));
+      return std::pair< TreeIterator< Key, T, Compare >, TreeIterator< Key, T, Compare > >(it1, it2);
+    }
+    size_t count(const Key& key) const
+    {
+      std::pair< ConstTreeIterator< Key, T, Compare >, ConstTreeIterator< Key, T, Compare > > pair = equil_range(key);
+      size_t sum = 0;
+      while (pair.first != pair.second)
+      {
+        ++sum;
+        ++pair.first;
+      }
+      return sum;
     }
     template< class... Args >
     std::pair< TreeIterator< Key, T, Compare >, bool > emplace(Args&&... args)

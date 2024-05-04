@@ -13,6 +13,11 @@ int main(int argc, char* argv[])
   using namespace piyavkin;
   map_t map;
   std::ifstream in(argv[1]);
+  if (!in.is_open())
+  {
+    std::cerr << "The file is not open\n";
+    return 2;
+  }
   inputFile(in, map);
   Tree< std::string, std::function< void(std::ostream&, const std::string&, const map_t&) > > cmdsForOutput;
   cmdsForOutput["print"] = print;
