@@ -73,7 +73,7 @@ namespace zhalilov
     head_(createTwoNode(MapPair())),
     size_(0)
   {
-    connectNodes(head_, nullptr, head_);
+    connectNodes(head_, head_, nullptr);
   }
 
   template < class Key, class T, class Compare >
@@ -166,19 +166,19 @@ namespace zhalilov
   template < class Key, class T, class Compare >
   typename TwoThree < Key, T, Compare >::iterator TwoThree < Key, T, Compare >::begin()
   {
-    return iterator(iterator::findMin(head_->right), true);
+    return iterator(iterator::findMin(head_->left), true);
   }
 
   template < class Key, class T, class Compare >
   typename TwoThree < Key, T, Compare >::const_iterator TwoThree < Key, T, Compare >::begin() const
   {
-    return const_iterator(const_iterator::findMin(head_->right), true);
+    return const_iterator(const_iterator::findMin(head_->left), true);
   }
 
   template < class Key, class T, class Compare >
   typename TwoThree < Key, T, Compare >::const_iterator TwoThree < Key, T, Compare >::cbegin() const noexcept
   {
-    return const_iterator(const_iterator::findMin(head_->right), true);
+    return const_iterator(const_iterator::findMin(head_->left), true);
   }
 
   template < class Key, class T, class Compare >
@@ -257,7 +257,7 @@ namespace zhalilov
       if (currNode == head_)
       {
         Node *newNode = createTwoNode(currPair);
-        connectNodes(head_, nullptr, newNode);
+        connectNodes(head_, newNode, nullptr);
         connectNodes(newNode, prevLeft, prevRight);
       }
       else if (compare_(currPair.first, currNode->one.first))
@@ -347,7 +347,7 @@ namespace zhalilov
   {
     if (head_)
     {
-      recursiveClear(head_->right);
+      recursiveClear(head_->left);
     }
     // Node *currNode = iterator::findMin(head_);
     // while (currNode != head_)
@@ -410,7 +410,7 @@ namespace zhalilov
     {
       return std::make_pair(iterator(head_, true), false);
     }
-    Node *currNode = head_->right;
+    Node *currNode = head_->left;
     Node *prevParentNode = currNode;
     while (currNode)
     {
@@ -800,7 +800,7 @@ namespace zhalilov
         }
       }
       Node *toConnect = emptyNode->left ? emptyNode->left : emptyNode->right;
-      connectNodes(head_, nullptr, toConnect);
+      connectNodes(head_, toConnect, nullptr);
       return std::make_pair(doFind(lastRemovedPair.first).first, true);
     }
   }
