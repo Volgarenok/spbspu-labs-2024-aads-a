@@ -216,8 +216,8 @@ namespace novokhatskiy
     {
       splice_after(pos, std::move(other), first, last);
     }
-    
-    void splice_after(constIter pos, ForwardList< T >&& other, constIter first, constIter last) noexcept 
+
+    void splice_after(constIter pos, ForwardList< T >&& other, constIter first, constIter last) noexcept
     {
       constIter nextIt = pos.node_->next_;
       constIter curr = first.node_->next_;
@@ -230,7 +230,7 @@ namespace novokhatskiy
       constIter del = other.cbegin();
       del.node_->next_ = nullptr;
     }
-    
+
     void push_front(const T& value)
     {
       node_t* ptr = new node_t(value);
