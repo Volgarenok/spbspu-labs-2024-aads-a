@@ -63,6 +63,8 @@ namespace zhalilov
 
     std::pair < iterator, bool > balanceFromBros(iterator);
     std::pair < iterator, bool > balanceFromParents(iterator);
+
+    void recursiveClear(Node *);
   };
 
   template < class Key, class T, class Compare >
@@ -343,28 +345,32 @@ namespace zhalilov
   template < class Key, class T, class Compare >
   void TwoThree < Key, T, Compare >::clear() noexcept
   {
-    Node *currNode = iterator::findMin(head_);
-    while (currNode != head_)
+    if (head_)
     {
-      Node *nextNode = nullptr;
-      Node *parentNode = currNode->parent;
-      if (parentNode->left == currNode)
-      {
-        nextNode = parentNode->mid ? parentNode->mid : parentNode->right;
-        nextNode = iterator::findMin(nextNode);
-      }
-      else if (parentNode->mid == currNode)
-      {
-        nextNode = iterator::findMin(parentNode->right);
-      }
-      else
-      {
-        nextNode = parentNode;
-      }
-      delete currNode;
-      currNode = nextNode;
+      recursiveClear(head_->right);
     }
-    size_ = 0;
+    // Node *currNode = iterator::findMin(head_);
+    // while (currNode != head_)
+    // {
+    //   Node *nextNode = nullptr;
+    //   Node *parentNode = currNode->parent;
+    //   if (parentNode->left == currNode)
+    //   {
+    //     nextNode = parentNode->mid ? parentNode->mid : parentNode->right;
+    //     nextNode = iterator::findMin(nextNode);
+    //   }
+    //   else if (parentNode->mid == currNode)
+    //   {
+    //     nextNode = iterator::findMin(parentNode->right);
+    //   }
+    //   else
+    //   {
+    //     nextNode = parentNode;
+    //   }
+    //   delete currNode;
+    //   currNode = nextNode;
+    // }
+    // size_ = 0;
   }
 
   template < class Key, class T, class Compare >
@@ -796,6 +802,18 @@ namespace zhalilov
       Node *toConnect = emptyNode->left ? emptyNode->left : emptyNode->right;
       connectNodes(head_, nullptr, toConnect);
       return std::make_pair(doFind(lastRemovedPair.first).first, true);
+    }
+  }
+
+  template < class Key, class T, class Compare >
+  void TwoThree < Key, T, Compare >::recursiveClear(Node *node)
+  {
+    if (node && node != head_)
+    {
+      recursiveClear(node->right);
+      recursiveClear(node->left);
+      recursiveClear(node->mid);
+      delete node;
     }
   }
 }
