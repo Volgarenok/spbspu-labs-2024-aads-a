@@ -74,7 +74,7 @@ namespace strelyaev
           node->right_->parent_ = node;
         }
 
-        node->right_->left_ = node->right_->right_;
+        node->left_->right_ = node->left_->left_;
 
         node->left_->left_ = buffer;
         buffer->parent_ = node->left_;
