@@ -3,6 +3,7 @@
 #include <functional>
 #include "node.hpp"
 #include "treeIterator.hpp"
+#include "constTreeIterator.hpp"
 
 
 #include <iostream>
@@ -17,6 +18,18 @@ namespace strelyaev
         root(nullptr),
         size_(0)
       {}
+
+      ~Tree()
+      {
+        clear(root);
+        root = nullptr;
+      }
+
+      void swap(Tree< T >& other) noexcept
+      {
+        std::swap(other.root, root);
+        std::swap(other.size_, size_);
+      }
 
       int getHeight(Node< T >* node)
       {
@@ -156,7 +169,7 @@ namespace strelyaev
         {
           current = current->left_;
         }
-        return Iterator(current);
+        return Iterator< T >(current);
       }
 
       Iterator< T > end() noexcept
@@ -164,12 +177,63 @@ namespace strelyaev
         return Iterator< T >(nullptr);
       }
 
-      bool empty()
+      ConstIterator< T > cbegin() const noexcept
+      {
+        Node< T >* current = root;
+        while (current->left_)
+        {
+          current = current->left_;
+        }
+        return ConstIterator(current);
+      }
+
+      ConstIterator< T > cend() const noexcept
+      {
+        return ConstIterator< T >(nullptr);
+      }
+
+      ConstIterator< T > find(const T& value)
+      {
+        Node< T >* current = root;
+        while (current)
+        {
+          if (current->value_ == value)
+          {
+            return ConstIterator< T >(current);
+          }
+          else if (Comp()(current->value_, value))
+          {
+            current = current->right_;
+          }
+          else
+          {
+            current = current->left_;
+          }
+        }
+        return ConstIterator< T >(current);
+      }
+
+      bool empty() noexcept
       {
         return size_ == 0;
       }
 
-    //private:
+      size_t size() noexcept
+      {
+        return size_;
+      }
+
+      void clear(Node< T >* node)
+      {
+        if (node != nullptr)
+        {
+          clear(node->left_);
+          clear(node->right_);
+          delete node;
+        }
+      }
+
+    private:
       Node< T >* root;
       size_t size_;
   };
