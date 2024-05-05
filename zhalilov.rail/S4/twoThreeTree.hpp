@@ -70,16 +70,14 @@ namespace zhalilov
   };
 
   template < class Key, class T, class Compare >
-  TwoThree < Key, T, Compare >::TwoThree():
-    compare_(Compare{}),
-    head_(createTwoNode(MapPair())),
-    size_(0)
+  TwoThree < Key, T, Compare >::TwoThree() :
+    compare_(Compare{}), head_(createTwoNode(MapPair())), size_(0)
   {
     connectNodes(head_, head_, nullptr);
   }
 
   template < class Key, class T, class Compare >
-  TwoThree < Key, T, Compare >::TwoThree(const TwoThree &other):
+  TwoThree < Key, T, Compare >::TwoThree(const TwoThree &other) :
     TwoThree()
   {
     auto it = other.cbegin();
@@ -92,9 +90,8 @@ namespace zhalilov
   }
 
   template < class Key, class T, class Compare >
-  TwoThree < Key, T, Compare >::TwoThree(TwoThree &&other) noexcept:
-    head_(other.head_),
-    size_(other.size_)
+  TwoThree < Key, T, Compare >::TwoThree(TwoThree &&other) noexcept :
+    head_(other.head_), size_(other.size_)
   {
     other.size_ = 0;
     other.head_ = nullptr;
@@ -414,7 +411,8 @@ namespace zhalilov
   }
 
   template < class Key, class T, class Compare >
-  std::pair < typename TwoThree < Key, T, Compare >::iterator, typename TwoThree < Key, T, Compare >::iterator > TwoThree < Key, T, Compare >::equal_range(const Key &key)
+  std::pair < typename TwoThree < Key, T, Compare >::iterator, typename TwoThree < Key, T, Compare >::iterator >
+  TwoThree < Key, T, Compare >::equal_range(const Key &key)
   {
     auto firstIt = doFind(key).first;
     if (key != firstIt->first)
@@ -431,7 +429,8 @@ namespace zhalilov
   }
 
   template < class Key, class T, class Compare >
-  std::pair < typename TwoThree < Key, T, Compare >::const_iterator, typename TwoThree < Key, T, Compare >::const_iterator > TwoThree < Key, T, Compare >::equal_range(const Key &key) const
+  std::pair < typename TwoThree < Key, T, Compare >::const_iterator, typename TwoThree < Key, T, Compare >::const_iterator >
+  TwoThree < Key, T, Compare >::equal_range(const Key &key) const
   {
     auto nonConstIt = doFind(key).first;
     auto firstIt = const_iterator(nonConstIt.node_, nonConstIt.isPtrToLeft_);
@@ -849,6 +848,6 @@ namespace zhalilov
     }
     return std::make_pair(doFind(lastRemovedPair.first).first, true);
   }
-}
+} // namespace zhalilov
 
 #endif
