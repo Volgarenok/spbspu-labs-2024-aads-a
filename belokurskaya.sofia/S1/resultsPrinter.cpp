@@ -37,7 +37,7 @@ void belokurskaya::printSequences(const SequenceVector& sequences, std::ostream&
       if (j < seq.size())
       {
         out << seq.at(j);
-        if (i < sequences.getSize() - 1)
+        if (i < sequences.getSize() - 1 && j < maxLength - 1)
         {
           out << " ";
         }
