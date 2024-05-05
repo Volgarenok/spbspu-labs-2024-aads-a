@@ -177,14 +177,10 @@ namespace piyavkin
     }
     TreeIterator< Key, T, Compare > insert(ConstTreeIterator< Key, T, Compare > pos, const val_type& val)
     {
-      if ((pos.node_ == std::addressof(end_node_) || cmp_(val.first, pos.node_->val_type.first))
-        && (!pos.node_->left_ || pos.node_->left_ == std::addressof(before_min_)
-        || cmp_(pos.node_->left_->val_type.first, val.first))
-        && (pos.node_ == root_ || (isLeftChild(pos.node_) && cmp_(val.first, pos.node_->parent_->val_type.first))
-        || (isRightChild(pos.node_) && cmp_(pos.node_->parent_->val_type.first, val.first))))
+      if (cmpLeftNode(pos.node_, val.first) && cmpNodeRight(pos.node_, val.first) && cmpNodeParent(pos.node_, val.first))
       {
-        detail::TreeNode< Key, T >* node = new detail::TreeNode< Key, T >(val.first, pos.node_,
-          pos.node_->left_, pos.node_->parent_, val.second);
+        detail::TreeNode< Key, T >* node = nullptr;
+        node = new detail::TreeNode< Key, T >(val.first, pos.node_, pos.node_->left_, pos.node_->parent_, val.second);
         if (pos.node_->left_)
         {
           pos.node_->left_->parent_ = node;
@@ -202,8 +198,14 @@ namespace piyavkin
           pos.node_->parent_->right_ = node;
         }
         pos.node_->parent_ = node;
-        if (pos.node_ == root_)
+        if (pos.node_ == root_ || !root_)
         {
+          if (!root_)
+          {
+            node->parent_ = nullptr;
+            node->left_ = std::addressof(before_min_);
+            before_min_.parent_ = node;
+          }
           root_ = node;
         }
         ++size_;
@@ -233,7 +235,7 @@ namespace piyavkin
     }
     ConstTreeIterator< Key, T, Compare > cend() const noexcept
     {
-      return ConstTreeIterator< Key, T, Compare >(std::addressof(end_node_));
+      return ConstTreeIterator< Key, T, Compare >(const_cast< detail::TreeNode< Key, T >* >(std::addressof(end_node_)));
     }
     TreeReverseIterator< Key, T, Compare > rbegin() noexcept
     {
@@ -245,7 +247,7 @@ namespace piyavkin
     }
     ConstTreeReverseIterator< Key, T, Compare > crbegin() const noexcept
     {
-      return ConstTreeReverseIterator< Key, T, Compare >(std::addressof(end_node_));
+      return ConstTreeReverseIterator< Key, T, Compare >(const_cast< detail::TreeNode< Key, T >* >(std::addressof(end_node_)));
     }
     ConstTreeReverseIterator< Key, T, Compare > crend() const noexcept
     {
@@ -387,16 +389,13 @@ namespace piyavkin
             node->right_ = std::addressof(end_node_);
           }
         }
-        if (delete_node.node_->parent_)
+        if (isLeftChild(delete_node.node_))
         {
-          if (isLeftChild(delete_node.node_))
-          {
-            delete_node.node_->parent_->left_ = node;
-          }
-          else
-          {
-            delete_node.node_->parent_->right_ = node;
-          }
+          delete_node.node_->parent_->left_ = node;
+        }
+        else if (isRightChild(delete_node.node_))
+        {
+          delete_node.node_->parent_->right_ = node;
         }
         if (delete_node.node_ == root_)
         {
@@ -413,24 +412,21 @@ namespace piyavkin
       if (node)
       {
         node->left_ = delete_node.node_->left_;
-        if (node->parent_)
+        if (isLeftChild(node))
         {
-          if (node->parent_->left_ == node)
-          {
-            node->parent_->left_ = node->right_;
-          }
-          else
-          {
-            node->parent_->right_ = node->right_;
-          }
-          if (node->right_)
-          {
-            node->right_->parent_ = node->parent_;
-          }
-          if (!(delete_node.node_->right_ == node))
-          {
-            node->right_ = delete_node.node_->right_;
-          }
+          node->parent_->left_ = node->right_;
+        }
+        else if (isRightChild(node))
+        {
+          node->parent_->right_ = node->right_;
+        }
+        if (node->right_)
+        {
+          node->right_->parent_ = node->parent_;
+        }
+        if (!(delete_node.node_->right_ == node))
+        {
+          node->right_ = delete_node.node_->right_;
         }
         node->parent_ = delete_node.node_->parent_;
       }
@@ -442,16 +438,13 @@ namespace piyavkin
       {
         delete_node.node_->right_->parent_ = node;
       }
-      if (delete_node.node_->parent_)
+      if (isLeftChild(delete_node.node_))
       {
-        if (delete_node.node_->parent_->left_ == delete_node.node_)
-        {
-          delete_node.node_->parent_->left_ = node;
-        }
-        else
-        {
-          delete_node.node_->parent_->right_ = node;
-        }
+        delete_node.node_->parent_->left_ = node;
+      }
+      else if (isRightChild(delete_node.node_))
+      {
+        delete_node.node_->parent_->right_ = node;
       }
       if (delete_node.node_ == root_)
       {
@@ -542,13 +535,26 @@ namespace piyavkin
     size_t size_;
     detail::TreeNode< Key, T > before_min_;
     detail::TreeNode< Key, T > end_node_;
-    bool isLeftChild(detail::TreeNode< Key, T >* node) const
+    bool isLeftChild(const detail::TreeNode< Key, T >* node) const
     {
       return (node->parent_ && node->parent_->left_ == node);
     }
-    bool isRightChild(detail::TreeNode< Key, T >* node) const
+    bool isRightChild(const detail::TreeNode< Key, T >* node) const
     {
       return (node->parent_ && node->parent_->right_ == node);
+    }
+    bool cmpLeftNode(const detail::TreeNode< Key, T >* node, const Key& key) const
+    {
+      return (!node->left_ || node->left_ == std::addressof(before_min_) || cmp_(node->left_->val_type.first, key));
+    }
+    bool cmpNodeRight(const detail::TreeNode< Key, T >* node, const Key& key) const
+    {
+      return (!node->right_ || node->right == std::addressof(end_node_) || cmp_(key, node->right_->val_type.first));
+    }
+    bool cmpNodeParent(const detail::TreeNode< Key, T >* node, const Key& key) const
+    {
+      return (!root_ || node == root_ || (isLeftChild(node) && cmp_(key,node->parent_->val_type.first))
+        || (isRightChild(node) && cmp_(node->parent_->val_type.first, key)));
     }
   };
 }
