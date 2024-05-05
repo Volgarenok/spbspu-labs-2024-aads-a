@@ -50,6 +50,9 @@ namespace zhalilov
     iterator find(const Key &);
     const_iterator find(const Key &) const;
 
+    std::pair < iterator, iterator > equal_range(const Key &);
+    std::pair < const_iterator, const_iterator > equal_range(const Key &) const;
+
   private:
     Compare compare_;
     using Node = detail::TreeNode < MapPair >;
@@ -396,6 +399,41 @@ namespace zhalilov
       return std::make_pair(const_iterator(resultPair.first.node_, resultPair.first.isPtrToLeft_), true);
     }
     return std::make_pair(cend(), false);
+  }
+
+  template < class Key, class T, class Compare >
+  std::pair < typename TwoThree < Key, T, Compare >::iterator, typename TwoThree < Key, T, Compare >::iterator > TwoThree < Key, T, Compare >::equal_range(const Key &key)
+  {
+    auto firstIt = doFind(key).first;
+    if (key != firstIt->first)
+    {
+      firstIt++;
+    }
+    auto secondIt = firstIt;
+    auto endIt = end();
+    while (secondIt != endIt && compare_(secondIt->first, key))
+    {
+      secondIt++;
+    }
+    return std::make_pair(firstIt, secondIt);
+  }
+
+  template < class Key, class T, class Compare >
+  std::pair < typename TwoThree < Key, T, Compare >::const_iterator, typename TwoThree < Key, T, Compare >::const_iterator > TwoThree < Key, T, Compare >::equal_range(const Key &key) const
+  {
+    auto nonConstIt = doFind(key).first;
+    auto firstIt = const_iterator(nonConstIt.node_, nonConstIt.isPtrToLeft_);
+    if (key > firstIt->first)
+    {
+      firstIt++;
+    }
+    auto secondIt = const_iterator(firstIt.node_, firstIt.isPtrToLeft_);
+    auto endIt = cend();
+    while (secondIt != endIt && compare_(secondIt->first, key))
+    {
+      secondIt++;
+    }
+    return std::make_pair(firstIt, secondIt);
   }
 
   template < class Key, class T, class Compare >
