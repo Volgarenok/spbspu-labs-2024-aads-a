@@ -249,6 +249,32 @@ namespace zaitsev
       rebalance_tree(hint);
       return new_node;
     }
+    void eraseNode(Node* for_del)
+    {
+      Node* parent = for_del->parent_;
+      if (!for_del->left_ || !for_del->right_)
+      {
+        Node* child = (for_del->left_ ? for_del->left_ : for_del->right_);
+        (for_del == parent->left_ ? parent->left_ : parent->right_) = child;
+        if (child)
+        {
+          child->parent_ = parent;
+        }
+        rebalance_tree(parent);
+      }
+      else
+      {
+        Node* prev = for_del->left_;
+        for (; prev->right_; prev = prev->right_);
+        Node* prev_parent = prev->parent_;
+        ((prev == prev_parent->left_) ? prev_parent->left_ : prev_parent->right_) = prev->left_;
+        ((for_del == parent->left_) ? parent->left_ : parent->right_) = prev;
+        prev->left_ = for_del->left_;
+        prev->right_ = for_del->right_;
+        rebalance_tree((prev_parent != for_del) ? prev_parent : prev);
+      }
+      delete for_del;
+    }
     template< typename InputIt >
     Node* create_map(InputIt begin, InputIt end, size_t& nmb_of_added)
     {
@@ -628,10 +654,7 @@ namespace zaitsev
       {
         return cur->val_.second;
       }
-      else
-      {
-        throw std::out_of_range("No such element");
-      }
+      throw std::out_of_range("No such element");
     }
     const T& at(const Key& key) const
     {
@@ -640,10 +663,7 @@ namespace zaitsev
       {
         return cur->val_.second;
       }
-      else
-      {
-        throw std::out_of_range("No such element");
-      }
+      throw std::out_of_range("No such element");
     }
     T& operator[](const Key& key)
     {
@@ -657,6 +677,19 @@ namespace zaitsev
       return added->val_.second;
     }
 
+    template< class... Args >
+    std::pair< iterator, bool > emplace(Args&&... args)
+    {
+      val_t new_val(std::forward< Args >(args)...);
+      Node* hint = find_hint(fakeroot_, new_val.first);
+      if (hint && hint->val_.first == new_val.first)
+      {
+        return std::make_pair(iterator(hint), false);
+      }
+      Node* added = addNode(fakeroot_, hint, new_val.first, new_val.second);
+      ++size_;
+      return std::make_pair(iterator(added), true);
+    }
     std::pair< iterator, bool > insert(const val_t& val)
     {
       Node* hint = find_hint(fakeroot_, val.first);
@@ -684,33 +717,15 @@ namespace zaitsev
     iterator erase(iterator pos)
     {
       Node* for_del = pos.node_;
-      Node* parent = for_del->parent_;
       ++pos;
-      if (!for_del->left_ || !for_del->right_)
-      {
-        Node* child = ((for_del->left_) ? for_del->left_ : for_del->right_);
-        ((for_del == parent->left_) ? parent->left_ : parent->right_) = child;
-        rebalance_tree(parent);
-      }
-      else
-      {
-        Node* prev = for_del->left_;
-        for (; prev->right_; prev = prev->right_);
-        Node* prev_parent = prev->parent_;
-        ((prev == prev_parent->left_) ? prev_parent->left_ : prev_parent->right_) = prev->left_;
-        ((for_del == parent->left_) ? parent->left_ : parent->right_) = prev;
-        prev->left_ = for_del->left_;
-        prev->right_ = for_del->right_;
-        if (prev_parent != for_del)
-        {
-          rebalance_tree(prev_parent);
-        }
-        else
-        {
-          rebalance_tree(prev);
-        }
-      }
-      delete for_del;
+      eraseNode(for_del);
+      return pos;
+    }
+    const_iterator erase(const_iterator pos)
+    {
+      Node* for_del = pos.node_;
+      ++pos;
+      eraseNode(for_del);
       return pos;
     }
     size_t erase(const Key& key)
@@ -720,11 +735,18 @@ namespace zaitsev
       {
         return 0;
       }
-      else
-      {
-        erase(pos);
-        return 1;
-      }
+      erase(pos);
+      return 1;
+    }
+    iterator  erase(iterator first, iterator last)
+    {
+      for (; first != last; first = erase(first));
+      return first;
+    }
+    const_iterator  erase(const_iterator first, const_iterator last)
+    {
+      for (; first != last; first = erase(first));
+      return first;
     }
   };
 }
