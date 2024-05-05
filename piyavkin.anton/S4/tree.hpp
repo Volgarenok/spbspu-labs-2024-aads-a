@@ -44,11 +44,11 @@ namespace piyavkin
       {
         if (it_right != rhs.cend())
         {
-          insert(std::pair< Key, T >(*it_right++));
+          insert_impl(std::pair< Key, T >(*it_right++));
         }
         if (it_left != --rhs.cbegin())
         {
-          insert(std::pair< Key, T >(*it_left--));
+          insert_impl(std::pair< Key, T >(*it_left--));
         }
       }
     }
@@ -117,63 +117,9 @@ namespace piyavkin
     }
     std::pair< TreeIterator< Key, T, Compare >, bool > insert(const val_type& val)
     {
-      detail::TreeNode< Key, T >* node = new detail::TreeNode< Key, T >(val.first, nullptr, nullptr, nullptr, val.second);
-      detail::TreeNode< Key, T >* curr_node = root_;
-      detail::TreeNode< Key, T >* parent_node = nullptr;
-      while (curr_node != nullptr && (curr_node != std::addressof(end_node_) && curr_node != std::addressof(before_min_)))
-      {
-        if (cmp_(curr_node->val_type.first, node->val_type.first))
-        {
-          if (!curr_node->right_ || curr_node != std::addressof(end_node_))
-          {
-            parent_node = curr_node;
-          }
-          curr_node = curr_node->right_;
-        }
-        else
-        {
-          if (!cmp_(node->val_type.first, curr_node->val_type.first))
-          {
-            delete node;
-            return std::make_pair< TreeIterator< Key, T, Compare >, bool >(TreeIterator< Key, T, Compare >(curr_node), false);
-          }
-          if (!curr_node->left_ || curr_node != std::addressof(end_node_))
-          {
-            parent_node = curr_node;
-          }
-          curr_node = curr_node->left_;
-        }
-      }
-      if (!parent_node)
-      {
-        root_ = node;
-        root_->left_ = std::addressof(before_min_);
-        root_->right_ = std::addressof(end_node_);
-        before_min_.parent_ = root_;
-        end_node_.parent_ = root_;
-      }
-      else if (cmp_(parent_node->val_type.first, node->val_type.first))
-      {
-        if (parent_node->right_ == std::addressof(end_node_))
-        {
-          node->right_ = std::addressof(end_node_);
-          end_node_.parent_ = node;
-        }
-        parent_node->right_ = node;
-      }
-      else if (cmp_(node->val_type.first, parent_node->val_type.first))
-      {
-        if (parent_node->left_ == std::addressof(before_min_))
-        {
-          node->left_ = std::addressof(before_min_);
-          before_min_.parent_ = node;
-        }
-        parent_node->left_ = node;
-      }
-      node->parent_ = parent_node;
-      ++size_;
-      //splay();
-      return std::make_pair< TreeIterator< Key, T, Compare >, bool >(TreeIterator< Key, T, Compare >(node), true);
+      auto res = insert_impl(val);
+      splay(res.first.node_);
+      return res;
     }
     TreeIterator< Key, T, Compare > insert(ConstTreeIterator< Key, T, Compare > pos, const val_type& val)
     {
@@ -198,6 +144,7 @@ namespace piyavkin
           pos.node_->parent_->right_ = node;
         }
         pos.node_->parent_ = node;
+        pos.node_->left_ = nullptr;
         if (pos.node_ == root_ || !root_)
         {
           if (!root_)
@@ -209,6 +156,7 @@ namespace piyavkin
           root_ = node;
         }
         ++size_;
+        splay(node);
         return TreeIterator< Key, T, Compare >(node);
       }
       return insert(val).first;
@@ -255,21 +203,13 @@ namespace piyavkin
     }
     TreeIterator< Key, T, Compare > find(const Key& key)
     {
-      TreeIterator< Key, T, Compare > it = lower_bound(key);
-      if (!it.node_ || it.node_->val_type.first != key)
-      {
-        return end();
-      }
+      auto it = find_impl(key);
+      splay(it.node_);
       return it;
     }
     ConstTreeIterator< Key, T, Compare > find(const Key& key) const
     {
-      ConstTreeIterator< Key, T, Compare > it = lower_bound(key);
-      if (!it.node_ || it.node_->val_type.first != key)
-      {
-        return cend();
-      }
-      return it;
+      return find_impl(key);
     }
     TreeIterator< Key, T, Compare > upper_bound(const Key& key)
     {
@@ -296,29 +236,7 @@ namespace piyavkin
     }
     ConstTreeIterator< Key, T, Compare > lower_bound(const Key& key) const
     {
-      detail::TreeNode< Key, T >* curr_node = root_;
-      while (curr_node && (curr_node != std::addressof(end_node_) && curr_node != std::addressof(before_min_)))
-      {
-        if (cmp_(curr_node->val_type.first, key))
-        {
-          if (!curr_node->right_)
-          {
-            ConstTreeIterator< Key, T, Compare > it(curr_node);
-            return ++it;
-          }
-          curr_node = curr_node->right_;
-        }
-        else
-        {
-          if (!cmp_(key, curr_node->val_type.first) || (curr_node->left_ == std::addressof(before_min_)))
-          {
-            // splay();
-            return ConstTreeIterator< Key, T, Compare >(curr_node);
-          }
-          curr_node = curr_node->left_;
-        }
-      }
-      return ConstTreeIterator< Key, T, Compare >(curr_node);
+      return lower_bound_impl(key);
     }
     T& operator[](const Key& key)
     {
@@ -342,7 +260,7 @@ namespace piyavkin
     }
     TreeIterator< Key, T, Compare > erase(TreeIterator< Key, T, Compare > pos)
     {
-      TreeIterator< Key, T, Compare > delete_node = find(pos.node_->val_type.first);
+      TreeIterator< Key, T, Compare > delete_node = find_impl(pos.node_->val_type.first);
       if (delete_node == end())
       {
         return delete_node;
@@ -480,7 +398,7 @@ namespace piyavkin
     }
     std::pair< ConstTreeIterator< Key, T, Compare >, ConstTreeIterator< Key, T, Compare > > equil_range(const Key& key) const
     {
-      ConstTreeIterator< Key, T, Compare > it = find(key);
+      ConstTreeIterator< Key, T, Compare > it = find_impl(key);
       if (it == cend())
       {
         return std::make_pair< ConstTreeIterator< Key, T, Compare >, ConstTreeIterator< Key, T, Compare > >(cend(), cend());
@@ -498,6 +416,7 @@ namespace piyavkin
       while (temp != cend() && it2.node_->val_type.first == temp.node_->val_type.first)
       {
         ++it2;
+        ++temp;
       }
       return std::pair< ConstTreeIterator< Key, T, Compare >, ConstTreeIterator< Key, T, Compare > >(it, ++it2);
     }
@@ -506,6 +425,10 @@ namespace piyavkin
       auto pair = static_cast< const Tree< Key, T, Compare >& >(*this).equil_range(key);
       TreeIterator< Key, T, Compare > it1(const_cast< detail::TreeNode< Key, T >* >(pair.first.node_));
       TreeIterator< Key, T, Compare > it2(const_cast< detail::TreeNode< Key, T >* >(pair.second.node_));
+      while (it1 != it2)
+      {
+        splay((it1++).node_);
+      }
       return std::pair< TreeIterator< Key, T, Compare >, TreeIterator< Key, T, Compare > >(it1, it2);
     }
     size_t count(const Key& key) const
@@ -640,6 +563,104 @@ namespace piyavkin
           zag(node->parent_);
         }
       }
+    }
+    std::pair< TreeIterator< Key, T, Compare >, bool > insert_impl(const val_type& val)
+    {
+      detail::TreeNode< Key, T >* node = new detail::TreeNode< Key, T >(val.first, nullptr, nullptr, nullptr, val.second);
+      detail::TreeNode< Key, T >* curr_node = root_;
+      detail::TreeNode< Key, T >* parent_node = nullptr;
+      while (curr_node != nullptr && (curr_node != std::addressof(end_node_) && curr_node != std::addressof(before_min_)))
+      {
+        if (cmp_(curr_node->val_type.first, node->val_type.first))
+        {
+          if (!curr_node->right_ || curr_node != std::addressof(end_node_))
+          {
+            parent_node = curr_node;
+          }
+          curr_node = curr_node->right_;
+        }
+        else
+        {
+          if (!cmp_(node->val_type.first, curr_node->val_type.first))
+          {
+            delete node;
+            return std::make_pair< TreeIterator< Key, T, Compare >, bool >(TreeIterator< Key, T, Compare >(curr_node), false);
+          }
+          if (!curr_node->left_ || curr_node != std::addressof(end_node_))
+          {
+            parent_node = curr_node;
+          }
+          curr_node = curr_node->left_;
+        }
+      }
+      if (!parent_node)
+      {
+        root_ = node;
+        root_->left_ = std::addressof(before_min_);
+        root_->right_ = std::addressof(end_node_);
+        before_min_.parent_ = root_;
+        end_node_.parent_ = root_;
+      }
+      else if (cmp_(parent_node->val_type.first, node->val_type.first))
+      {
+        if (parent_node->right_ == std::addressof(end_node_))
+        {
+          node->right_ = std::addressof(end_node_);
+          end_node_.parent_ = node;
+        }
+        parent_node->right_ = node;
+      }
+      else if (cmp_(node->val_type.first, parent_node->val_type.first))
+      {
+        if (parent_node->left_ == std::addressof(before_min_))
+        {
+          node->left_ = std::addressof(before_min_);
+          before_min_.parent_ = node;
+        }
+        parent_node->left_ = node;
+      }
+      node->parent_ = parent_node;
+      ++size_;
+      return std::make_pair< TreeIterator< Key, T, Compare >, bool >(TreeIterator< Key, T, Compare >(node), true);
+    }
+    ConstTreeIterator< Key, T, Compare > lower_bound_impl(const Key& key) const
+    {
+      detail::TreeNode< Key, T >* curr_node = root_;
+      while (curr_node && (curr_node != std::addressof(end_node_) && curr_node != std::addressof(before_min_)))
+      {
+        if (cmp_(curr_node->val_type.first, key))
+        {
+          if (!curr_node->right_)
+          {
+            ConstTreeIterator< Key, T, Compare > it(curr_node);
+            return ++it;
+          }
+          curr_node = curr_node->right_;
+        }
+        else
+        {
+          if (!cmp_(key, curr_node->val_type.first) || (curr_node->left_ == std::addressof(before_min_)))
+          {
+            return ConstTreeIterator< Key, T, Compare >(curr_node);
+          }
+          curr_node = curr_node->left_;
+        }
+      }
+      return ConstTreeIterator< Key, T, Compare >(curr_node);
+    }
+    TreeIterator< Key, T, Compare > find_impl(const Key& key)
+    {
+      auto it = static_cast< const Tree< Key, T, Compare >& >(*this).find_impl(key);
+      return TreeIterator< Key, T, Compare >(const_cast< detail::TreeNode< Key, T >* >(it.node_));
+    }
+    ConstTreeIterator< Key, T, Compare > find_impl(const Key& key) const
+    {
+      ConstTreeIterator< Key, T, Compare > it = lower_bound_impl(key);
+      if (!it.node_ || it.node_->val_type.first != key)
+      {
+        return cend();
+      }
+      return it;
     }
   };
 }
