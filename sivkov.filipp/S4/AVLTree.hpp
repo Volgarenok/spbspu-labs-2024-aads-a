@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <iostream>
 #include "TreeNode.hpp"
+#include "cIterator.hpp"
 
 
 template < typename Key, typename Value, typename Comp = std::less< Key > >
@@ -34,13 +35,15 @@ struct AVLTree
   TreeNode< Key, Value >* rotate_left(TreeNode< Key, Value >* root);
   TreeNode< Key, Value >* balance(TreeNode< Key, Value >* root);
 
+  ConstIterator< Key, Value> cbegin() const;
+  ConstIterator< Key, Value> cend() const;
+
 private:
   Comp comp_;
   size_t size_;
   TreeNode< Key, Value >* root_;
 };
 
-#endif
 
 template<typename Key, typename Value, typename Comp>
 AVLTree<Key, Value, Comp>::AVLTree():
@@ -290,3 +293,16 @@ TreeNode< Key, Value >* AVLTree<Key, Value, Comp>::balance(TreeNode< Key, Value 
   return root;
 }
 
+template<typename Key, typename Value, typename Comp>
+ConstIterator<Key, Value> AVLTree<Key, Value, Comp>::cbegin() const
+{
+  return AVLTreeConstIterator<Key, Value>(root_ != nullptr ? find_min(root_) : nullptr);
+}
+
+template<typename Key, typename Value, typename Comp>
+ConstIterator<Key, Value> AVLTree<Key, Value, Comp>::cend() const
+{
+  return AVLTreeConstIterator<Key, Value>(nullptr);
+}
+
+#endif
