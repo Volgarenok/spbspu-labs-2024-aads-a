@@ -50,6 +50,7 @@ namespace zhalilov
     iterator find(const Key &);
     const_iterator find(const Key &) const;
 
+    char count(const Key &) const;
     std::pair < iterator, iterator > equal_range(const Key &);
     std::pair < const_iterator, const_iterator > equal_range(const Key &) const;
 
@@ -399,6 +400,17 @@ namespace zhalilov
       return std::make_pair(const_iterator(resultPair.first.node_, resultPair.first.isPtrToLeft_), true);
     }
     return std::make_pair(cend(), false);
+  }
+
+  template < class Key, class T, class Compare >
+  char TwoThree < Key, T, Compare >::count(const Key &key) const
+  {
+    auto it = find(key);
+    if (it == cend())
+    {
+      return 0;
+    }
+    return 1;
   }
 
   template < class Key, class T, class Compare >
