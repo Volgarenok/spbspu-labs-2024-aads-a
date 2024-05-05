@@ -73,15 +73,18 @@ void belokurskaya::printSums(const SequenceVector& sequences, std::ostream& out)
   for (size_t i = 0; i < sequences.getSize(); ++i)
   {
     const List< int >& seq = sequences[i].getSequence();
-    for (size_t j = 0; j < maxLength; ++j)
+    for (size_t j = 0; j < seq.size(); ++j)
     {
-      int max = std::numeric_limits< int >::max() - seq.at(j);
-      if (sums[j] > max - seq.at(j))
+      if (j < maxLength)
       {
-        delete[] sums;
-        throw std::overflow_error("Overflow");
+        int max = std::numeric_limits< int >::max() - seq.at(j);
+        if (sums[j] > max - seq.at(j))
+        {
+          delete[] sums;
+          throw std::overflow_error("Overflow");
+        }
+        sums[j] += seq.at(j);
       }
-      sums[j] += seq.at(j);
     }
   }
 
