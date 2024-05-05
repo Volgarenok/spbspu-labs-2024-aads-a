@@ -549,7 +549,7 @@ namespace piyavkin
     }
     bool cmpNodeRight(const detail::TreeNode< Key, T >* node, const Key& key) const
     {
-      return (!node->right_ || node->right == std::addressof(end_node_) || cmp_(key, node->right_->val_type.first));
+      return (!node->right_ || node->right_ == std::addressof(end_node_) || cmp_(key, node->right_->val_type.first));
     }
     bool cmpNodeParent(const detail::TreeNode< Key, T >* node, const Key& key) const
     {
@@ -560,12 +560,13 @@ namespace piyavkin
     {
       detail::TreeNode< Key, T >* temp = node->left_;
       node->left_ = temp->right_;
-      if (!temp->right_)
+      if (temp->right_)
       {
         temp->right_->parent_ = node;
       }
       temp->parent_ = node->parent_;
-      if (node->parent_)
+      temp->right_ = node;
+      if (!node->parent_)
       {
         root_ = temp;
       }
@@ -577,19 +578,19 @@ namespace piyavkin
       {
         node->parent_->left_ = temp;
       }
-      temp->right_ = node;
       node->parent_ = temp;
     }
     void zag(detail::TreeNode< Key, T >* node)
     {
       detail::TreeNode< Key, T >* temp = node->right_;
       node->right_ = temp->left_;
-      if (!temp->left_)
+      if (temp->left_)
       {
         temp->left_->parent_ = node;
       }
       temp->parent_ = node->parent_;
-      if (node->parent_)
+      temp->left_ = node;
+      if (!node->parent_)
       {
         root_ = temp;
       }
@@ -601,8 +602,44 @@ namespace piyavkin
       {
         node->parent_->left_ = temp;
       }
-      temp->left_ = node;
       node->parent_ = temp;
+    }
+    void splay(detail::TreeNode< Key, T >* node)
+    {
+      while (node->parent_)
+      {
+        if (!node->parent_->parent_)
+        {
+          if (isLeftChild(node))
+          {
+            zig(node->parent_);
+          }
+          else
+          {
+            zag(node->parent_);
+          }
+        }
+        else if (isLeftChild(node->parent_) && isLeftChild(node))
+        {
+          zig(node->parent_);
+          zig(node->parent_);
+        }
+        else if (isLeftChild(node) && isRightChild(node->parent_))
+        {
+          zig(node->parent_);
+          zag(node->parent_);
+        }
+        else if (isRightChild(node) && isLeftChild(node->parent_))
+        {
+          zag(node->parent_);
+          zig(node->parent_);
+        }
+        else
+        {
+          zag(node->parent_);
+          zag(node->parent_);
+        }
+      }
     }
   };
 }
