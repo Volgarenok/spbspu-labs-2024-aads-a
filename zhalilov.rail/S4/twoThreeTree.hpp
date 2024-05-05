@@ -61,8 +61,8 @@ namespace zhalilov
     Node *createThreeNode(const MapPair &, const MapPair &) const;
     void connectNodes(Node *parent, Node *left, Node *right, Node *mid = nullptr);
 
-    std::pair < iterator, bool > balanceFromBros(iterator);
-    std::pair < iterator, bool > balanceFromParents(iterator);
+    std::pair < iterator, bool > deleteAndBalanceFromBros(iterator);
+    std::pair < iterator, bool > deleteAndBalanceFromParents(iterator);
   };
 
   template < class Key, class T, class Compare >
@@ -315,14 +315,14 @@ namespace zhalilov
     }
     else
     {
-      auto isBalancedFroBrosPair = balanceFromBros(it);
+      auto isBalancedFroBrosPair = deleteAndBalanceFromBros(it);
       if (isBalancedFroBrosPair.second)
       {
         itToReturn = isBalancedFroBrosPair.first;
       }
       else
       {
-        itToReturn = balanceFromParents(it).first;
+        itToReturn = deleteAndBalanceFromParents(it).first;
       }
     }
     return itToReturn;
@@ -468,7 +468,7 @@ namespace zhalilov
   }
 
   template < class Key, class T, class Compare >
-  std::pair < typename TwoThree < Key, T, Compare >::iterator, bool > TwoThree < Key, T, Compare >::balanceFromBros(iterator emptyIt)
+  std::pair < typename TwoThree < Key, T, Compare >::iterator, bool > TwoThree < Key, T, Compare >::deleteAndBalanceFromBros(iterator emptyIt)
   {
     Node *parentNode = emptyIt.node_->parent;
     bool balanced = true;
@@ -658,7 +658,7 @@ namespace zhalilov
   }
 
   template < class Key, class T, class Compare >
-  std::pair < typename TwoThree < Key, T, Compare >::iterator, bool > TwoThree < Key, T, Compare >::balanceFromParents(iterator emptyIt)
+  std::pair < typename TwoThree < Key, T, Compare >::iterator, bool > TwoThree < Key, T, Compare >::deleteAndBalanceFromParents(iterator emptyIt)
   {
     Node *parentNode = emptyIt.node_->parent;
     Node *emptyNode = emptyIt.node_;
@@ -696,7 +696,7 @@ namespace zhalilov
     {
       while (parentNode != head_)
       {
-        auto isBalancedFromBrosPair = balanceFromBros(iterator(emptyNode, true));
+        auto isBalancedFromBrosPair = deleteAndBalanceFromBros(iterator(emptyNode, true));
         if (isBalancedFromBrosPair.second)
         {
           return std::make_pair(doFind(lastRemovedPair.first).first, true);
