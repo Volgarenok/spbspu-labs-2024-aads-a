@@ -491,7 +491,8 @@ namespace zhalilov
   }
 
   template < class Key, class T, class Compare >
-  typename TwoThree < Key, T, Compare >::Node *TwoThree < Key, T, Compare >::createThreeNode(const MapPair &pair1, const MapPair &pair2) const
+  typename TwoThree < Key, T, Compare >::Node *TwoThree < Key, T, Compare >::createThreeNode(
+      const MapPair &pair1, const MapPair &pair2) const
   {
     return new Node{ nullptr, nullptr, nullptr, nullptr, pair1, pair2, detail::NodeType::Three };
   }
@@ -517,7 +518,8 @@ namespace zhalilov
   }
 
   template < class Key, class T, class Compare >
-  std::pair < typename TwoThree < Key, T, Compare >::iterator, bool > TwoThree < Key, T, Compare >::deleteAndBalanceFromBros(iterator emptyIt)
+  std::pair < typename TwoThree < Key, T, Compare >::iterator, bool > TwoThree < Key, T, Compare >::deleteAndBalanceFromBros(
+      iterator emptyIt)
   {
     Node *parentNode = emptyIt.node_->parent;
     bool balanced = true;
@@ -707,7 +709,8 @@ namespace zhalilov
   }
 
   template < class Key, class T, class Compare >
-  std::pair < typename TwoThree < Key, T, Compare >::iterator, bool > TwoThree < Key, T, Compare >::deleteAndBalanceFromParents(iterator emptyIt)
+  std::pair < typename TwoThree < Key, T, Compare >::iterator, bool >
+  TwoThree < Key, T, Compare >::deleteAndBalanceFromParents(iterator emptyIt)
   {
     Node *parentNode = emptyIt.node_->parent;
     Node *emptyNode = emptyIt.node_;
