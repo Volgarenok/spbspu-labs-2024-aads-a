@@ -306,7 +306,7 @@ namespace nikitov
   const T& List< T >::front() const
   {
     assert(!empty());
-    return head_->value;
+    return head_->value_;
   }
 
   template< class T >
@@ -624,6 +624,10 @@ namespace nikitov
         if (!cmp(node->value_, node->next_->value_))
         {
           isSorted = false;
+          if (node->next_ == tail_)
+          {
+            tail_ = node;
+          }
           if (node->prev_)
           {
             node->prev_->next_ = node->next_;
