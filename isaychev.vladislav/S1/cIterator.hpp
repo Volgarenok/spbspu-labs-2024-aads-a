@@ -8,44 +8,48 @@
 namespace isaychev
 {
   template < typename T >
-  class cFwdIterator
+  class List;
+
+  template < typename T >
+  class CFwdIterator
   {
-    using this_t = cFwdIterator< T >;
+    using this_t = CFwdIterator< T >;
+    friend class List< T >;
 
    public:
-    cFwdIterator();
-    cFwdIterator(node_t< T > * pos);
+    CFwdIterator();
 
     this_t operator++();
     this_t operator++(int);
-    const T & operator*();
-    const T * operator->();
+    const T & operator*() const;
+    const T * operator->() const;
     bool operator==(const this_t & rhs) const;
     bool operator!=(const this_t & rhs) const;
 
    private:
-    node_t< T > * currNode_;
+    detail::node_t< T > * currNode_;
+    explicit CFwdIterator(detail::node_t< T > * pos);
   };
 
   template < typename T >
-  cFwdIterator< T >::cFwdIterator():
-    currNode_(nullptr)
+  CFwdIterator< T >::CFwdIterator():
+   currNode_(nullptr)
   {}
 
   template < typename T >
-  cFwdIterator< T >::cFwdIterator(node_t< T > * pos):
-    currNode_(pos)
+  isaychev::CFwdIterator< T >::CFwdIterator(detail::node_t< T > * pos):
+   currNode_(pos)
   {}
 
   template < typename T >
-  cFwdIterator< T >  cFwdIterator< T >::operator++()
+  CFwdIterator< T > CFwdIterator< T >::operator++()
   {
     currNode_ = currNode_->next;
     return *this;
   }
 
   template < typename T >
-  cFwdIterator< T >  cFwdIterator< T >::operator++(int)
+  CFwdIterator< T > CFwdIterator< T >::operator++(int)
   {
     this_t res(*this);
     ++(*this);
@@ -53,25 +57,25 @@ namespace isaychev
   }
 
   template < typename T >
-  const T & cFwdIterator< T >::operator*()
+  const T & CFwdIterator< T >::operator*() const
   {
     return currNode_->data;
   }
 
   template < typename T >
-  const T * cFwdIterator< T >::operator->()
+  const T * CFwdIterator< T >::operator->() const
   {
     return std::addressof(currNode_->data);
   }
 
   template < typename T >
-  bool cFwdIterator< T >::operator==(const this_t & rhs) const
+  bool CFwdIterator< T >::operator==(const this_t & rhs) const
   {
     return (currNode_ == rhs.currNode_);
   }
 
   template < typename T >
-  bool cFwdIterator< T >::operator!=(const this_t & rhs) const
+  bool CFwdIterator< T >::operator!=(const this_t & rhs) const
   {
     return !(currNode_ == rhs.currNode_);
   }

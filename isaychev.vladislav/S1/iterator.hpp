@@ -8,33 +8,39 @@
 namespace isaychev
 {
   template < typename T >
+  class List;
+
+  template < typename T >
   class fwdIterator
   {
     using this_t = fwdIterator< T >;
+    friend class List< T >;
 
    public:
     fwdIterator();
-    fwdIterator(node_t< T > * pos);
 
     this_t operator++();
     this_t operator++(int);
     T & operator*();
     T * operator->();
+    const T & operator*() const;
+    const T * operator->() const;
     bool operator==(const this_t & rhs) const;
     bool operator!=(const this_t & rhs) const;
 
    private:
-    node_t< T > * currNode_;
+    detail::node_t< T > * currNode_;
+    explicit fwdIterator(detail::node_t< T > * pos);
   };
 
   template < typename T >
   fwdIterator< T >::fwdIterator():
-    currNode_(nullptr)
+   currNode_(nullptr)
   {}
 
   template < typename T >
-  fwdIterator< T >::fwdIterator(node_t< T > * pos):
-    currNode_(pos)
+  fwdIterator< T >::fwdIterator(detail::node_t< T > * pos):
+   currNode_(pos)
   {}
 
   template < typename T >
