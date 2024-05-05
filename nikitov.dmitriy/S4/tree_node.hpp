@@ -9,6 +9,19 @@ namespace nikitov
 {
   namespace detail
   {
+    template< class Key, class T, class Compare >
+    struct TreeNode;
+
+    template< class Key, class T, class Compare >
+    struct CompareNodes
+    {
+      bool operator()(const TreeNode< Key, T, Compare >* lhs, const TreeNode< Key, T, Compare >* rhs)
+      {
+        Compare cmp;
+        return cmp(lhs->firstValue_.first, rhs->firstValue_.first);
+      }
+    };
+
     template< class Key, class T, class Compare = std::less< Key > >
     struct TreeNode
     {
@@ -21,8 +34,10 @@ namespace nikitov
       T& get(const Key& key);
       const T& get(const Key& key) const;
       TreeNode< Key, T, Compare >* add(const std::pair< Key, T >& value);
-      TreeNode< Key, T, Compare >* split(const std::pair< Key, T >& value, Node* first, Node* second);
-      void check(TreeNode< Key, T, Compare >* first, TreeNode< Key, T, Compare >* second);
+      TreeNode< Key, T, Compare >* split(const std::pair< Key, T >& value, Node* node);
+      void check(TreeNode< Key, T, Compare >* node);
+      void checkNeighbour(const List< TreeNode< Key, T, Compare >* >& nodes);
+      void connect(Node* left, Node* middle, Node* right);
       void clear();
 
       std::pair< Key, T > firstValue_;
@@ -118,182 +133,110 @@ namespace nikitov
         }
         TreeNode< Key, T, Compare >* newNode = new TreeNode< Key, T, Compare >(secondValue_);
         secondValue_ = std::pair< Key, T >{};
-        size_ = 1;
-        if (parent_->left_ == this)
-        {
-          parent_->left_ = nullptr;
-        }
-        else if (parent_->right_ == this)
-        {
-          parent_->right_ = nullptr;
-        }
-        else if (parent_->parent_)
-        {
-          parent_->middle_ = nullptr;
-        }
-        newRoot = parent_->split(toSplit, this, newNode);
+        --size_;
+        newRoot = parent_->split(toSplit, newNode);
       }
       return newRoot;
     }
 
     template< class Key, class T, class Compare >
-    TreeNode< Key, T, Compare >* TreeNode< Key, T, Compare >::split(const std::pair< Key, T >& value, Node* first, Node* second)
+    TreeNode< Key, T, Compare >* TreeNode< Key, T, Compare >::split(const std::pair< Key, T >& value, Node* node)
     {
       TreeNode< Key, T, Compare >* newRoot = nullptr;
       if (!parent_)
       {
-        middle_ = new TreeNode< Key, T, Compare >();
-        middle_->parent_ = this;
-        newRoot = middle_;
-        newRoot->split(value, first, second);
+        newRoot = new TreeNode< Key, T, Compare >();
+        newRoot->parent_ = this;
+        newRoot->middle_ = middle_;
+        middle_ = newRoot;
+        newRoot->split(value, node);
       }
       else
       {
         newRoot = add(value);
-        if (left_ && (!right_ && !middle_))
-        {
-          middle_ = first;
-          right_ = second;
-          first->parent_ = this;
-          second->parent_ = this;
-        }
-        else if (right_ && (!left_ && !middle_))
-        {
-          middle_ = second;
-          left_ = first;
-          first->parent_ = this;
-          second->parent_ = this;
-        }
-        else if (parent_->parent_)
-        {
-          check(first, second);
-        }
-        else
-        {
-          left_ = first;
-          right_ = second;
-          first->parent_ = this;
-          second->parent_ = this;
-        }
+        check(node);
       }
 
       return newRoot;
     }
 
     template< class Key, class T, class Compare >
-    void TreeNode< Key, T, Compare >::check(TreeNode< Key, T, Compare >* first, TreeNode< Key, T, Compare >* second)
+    void TreeNode< Key, T, Compare >::check(TreeNode< Key, T, Compare >* node)
     {
-      TreeNode< Key, T, Compare >* ownFirst = nullptr;
-      TreeNode< Key, T, Compare >* ownSecond = nullptr;
+      List< TreeNode< Key, T, Compare >* > nodes;
+      nodes.push_back(node);
       if (left_)
       {
-        ownFirst = left_;
-        ownSecond = middle_;
-        if (right_)
-        {
-          ownSecond = right_;
-        }
+        nodes.push_back(left_);
+      }
+      if (right_)
+      {
+        nodes.push_back(right_);
+      }
+      if (middle_)
+      {
+        nodes.push_back(middle_);
+      }
+
+      nodes.sort(CompareNodes< Key, T, Compare >());
+      auto iterator = nodes.cbegin();
+      if (nodes.size() == 2)
+      {
+        connect(*iterator++, nullptr, *iterator++);
+      }
+      else if (nodes.size() == 3)
+      {
+        connect(*iterator++, *iterator++, *iterator++);
       }
       else
       {
-        ownFirst = middle_;
-        ownSecond = right_;
+        checkNeighbour(nodes);
       }
-      left_ = nullptr;
-      right_ = nullptr;
-      middle_ = nullptr;
+    }
 
+    template< class Key, class T, class Compare >
+    void TreeNode< Key, T, Compare >::checkNeighbour(const List< TreeNode< Key, T, Compare >* >& nodes)
+    {
       TreeNode< Key, T, Compare >* neigbour = nullptr;
-      if (parent_->right_ == this)
+      if (parent_->middle_ && parent_->middle_ != this)
       {
-        neigbour = parent_->left_;
-        if (parent_->middle_)
-        {
-          neigbour = parent_->middle_;
-        }
+        neigbour = parent_->middle_;
       }
-      else if (parent_->left_ == this)
+      else if (parent_->right_ && parent_->right_ != this)
       {
         neigbour = parent_->right_;
-        if (parent_->middle_)
-        {
-          neigbour = parent_->middle_;
-        }
       }
       else
       {
         neigbour = parent_->left_;
-        if (!parent_->right_->right_)
-        {
-          neigbour = parent_->right_;
-        }
-      }
-      TreeNode< Key, T, Compare >* one = nullptr;
-      TreeNode< Key, T, Compare >* two = nullptr;
-      TreeNode< Key, T, Compare >* three = nullptr;
-      TreeNode< Key, T, Compare >* four = nullptr;
-      if (cmp_(ownFirst->firstValue_.first, first->firstValue_.first))
-      {
-        one = ownFirst;
-        if (cmp_(ownSecond->firstValue_.first, first->firstValue_.first))
-        {
-          two = ownSecond;
-          three = first;
-          four = second;
-        }
-        else
-        {
-          two = first;
-          three = second;
-          four = ownSecond;
-          if (cmp_(ownSecond->firstValue_.first, second->firstValue_.first))
-          {
-            three = ownSecond;
-            four = second;
-          }
-        }
-      }
-      else
-      {
-        one = first;
-        if (cmp_(second->firstValue_.first, ownFirst->firstValue_.first))
-        {
-          two = second;
-          three = ownFirst;
-          four = ownSecond;
-        }
-        else
-        {
-          two = ownFirst;
-          three = ownSecond;
-          four = second;
-          if (cmp_(second->firstValue_.first, ownSecond->firstValue_.first))
-          {
-            three = second;
-            four = ownSecond;
-          }
-        }
       }
 
-      if (cmp_(firstValue_.first, neigbour->firstValue_.first))
+      auto iterator = nodes.cbegin();
+      if (!cmp_(firstValue_.first, neigbour->firstValue_.first))
       {
-        left_ = one;
-        right_ = two;
-        neigbour->left_ = three;
-        neigbour->right_ = four;
+        connect(*iterator++, nullptr, *iterator++);
+        neigbour->connect(*iterator++, nullptr, *iterator++);
       }
       else
       {
-        left_ = three;
-        right_ = four;
-        neigbour->left_ = one;
-        neigbour->right_ = two;
+        neigbour->connect(*iterator++, nullptr, *iterator++);
+        connect(*iterator++, nullptr, *iterator++);
       }
-      left_->parent_ = this;
-      right_->parent_ = this;
-      neigbour->left_->parent_ = neigbour;
-      neigbour->right_->parent_ = neigbour;
     }
+
+    template< class Key, class T, class Compare >
+    void TreeNode< Key, T, Compare >::connect(Node* left, Node* middle, Node* right)
+    {
+      left_ = left;
+      middle_ = middle;
+      right_ = right;
+      left->parent_ = this;
+      right->parent_ = this;
+      if (middle_)
+      {
+        middle_->parent_ = this;
+      }
+}
 
     template< class Key, class T, class Compare >
     void TreeNode< Key, T, Compare >::clear()
