@@ -216,12 +216,21 @@ namespace piyavkin
     }
     TreeIterator< Key, T, Compare > upper_bound(const Key& key)
     {
-      TreeIterator< Key, T, Compare > it = lower_bound(key);
+      TreeIterator< Key, T, Compare > it = lower_bound_impl(key);
       if (it.node_->val_type.first != key)
       {
+        if (it != end())
+        {
+          splay(it.node_);
+        }
         return it;
       }
-      return ++it;
+      ++it;
+      if (it != end())
+      {
+        splay(it.node_);
+      }
+      return it;
     }
     ConstTreeIterator< Key, T, Compare > upper_bound(const Key& key) const
     {
@@ -235,6 +244,10 @@ namespace piyavkin
     TreeIterator< Key, T, Compare > lower_bound(const Key& key)
     {
       auto it = static_cast< const Tree< Key, T, Compare >& >(*this).lower_bound(key);
+      if (it != end())
+      {
+        splay(it.node_);
+      }
       return TreeIterator< Key, T, Compare >(const_cast< detail::TreeNode< Key, T >* >(it.node_));
     }
     ConstTreeIterator< Key, T, Compare > lower_bound(const Key& key) const
@@ -430,7 +443,9 @@ namespace piyavkin
       TreeIterator< Key, T, Compare > it2(const_cast< detail::TreeNode< Key, T >* >(pair.second.node_));
       while (it1 != it2)
       {
-        splay((it1++).node_);
+        detail::TreeNode< Key, T >* splayNode = it1.node;
+        ++it1;
+        splay(splayNode);
       }
       return std::pair< TreeIterator< Key, T, Compare >, TreeIterator< Key, T, Compare > >(it1, it2);
     }
