@@ -15,7 +15,7 @@ bool isBracket(const char c)
 
 void isaychev::inputInfix(std::istream & in, std::string & str, Queue< std::string > & infExp)
 {
-  for (size_t i = 0; i != str.length(); ++i)
+  for (size_t i = 0; i < str.length(); ++i)
   {
     std::string token = "";
     if (str[i] == ' ')
@@ -35,7 +35,7 @@ void isaychev::inputInfix(std::istream & in, std::string & str, Queue< std::stri
     else if (std::isdigit(str[i]))
     {
       token += str[i];
-      while (str[i] != ' ' && std::isdigit(str[i]) && i != str.length())
+      while (str[i] != ' ' && std::isdigit(str[i]) && i < str.length())
       {
         ++i;
         token += str[i];
