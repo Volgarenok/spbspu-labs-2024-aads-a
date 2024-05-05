@@ -3,39 +3,42 @@
 #include <cctype>
 #include <stdexcept>
 
-void isaychev::inputInfix(std::istream & in, Queue< std::string > & infExp)
+bool isOper(const char c)
 {
-  std::string str = "";
-  std::getline(in, str, '\n');
-  for (auto i = str.begin(); i != str.end(); ++i)
+  return c == '+' || c == '+'|| c == '-' || c == '%' || c == '/' || c == '*';
+}
+
+bool isBracket(const char c)
+{
+  return c == '(' || c == ')';
+}
+
+void isaychev::inputInfix(std::istream & in, std::string & str, Queue< std::string > & infExp)
+{
+  for (size_t i = 0; i != str.length(); ++i)
   {
     std::string token = "";
-    if (*i == ' ')
+    if (str[i] == ' ')
     {
       continue;
     }
-    else if (*i == '(' || *i == ')')
+    else if (isBracket(str[i]))
     {
-      token += *i;
+      token += str[i];
       infExp.push(token);
     }
-    else if (*i == '+' || *i == '-')
+    else if (isOper(str[i]))
     {
-      token += *i;
+      token += str[i];
       infExp.push(token);
     }
-    else if (*i == '/' || *i == '*' || *i == '%')
+    else if (std::isdigit(str[i]))
     {
-      token += *i;
-      infExp.push(token);
-    }
-    else if (std::isdigit(*i))
-    {
-      token += *(i++);
-      while (*i != ' ' && std::isdigit(*i) && i != str.end())
+      token += str[i];
+      while (str[i] != ' ' && std::isdigit(str[i]) && i != str.length())
       {
-        token += *i;
         ++i;
+        token += str[i];
       }
       infExp.push(token);
     }
