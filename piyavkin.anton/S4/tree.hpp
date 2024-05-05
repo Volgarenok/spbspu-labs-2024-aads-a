@@ -204,7 +204,10 @@ namespace piyavkin
     TreeIterator< Key, T, Compare > find(const Key& key)
     {
       auto it = find_impl(key);
-      splay(it.node_);
+      if (it != end())
+      {
+        splay(it.node_);
+      }
       return it;
     }
     ConstTreeIterator< Key, T, Compare > find(const Key& key) const
