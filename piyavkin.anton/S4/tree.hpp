@@ -340,7 +340,7 @@ namespace piyavkin
       }
       return find(key)->second;
     }
-    TreeIterator< Key, T, Compare > erase(TreeIterator< Key, T, Compare> pos)
+    TreeIterator< Key, T, Compare > erase(TreeIterator< Key, T, Compare > pos)
     {
       TreeIterator< Key, T, Compare > delete_node = find(pos.node_->val_type.first);
       if (delete_node == end())
@@ -454,7 +454,7 @@ namespace piyavkin
       --size_;
       return result;
     }
-    TreeIterator< Key, T, Compare > erase(TreeIterator< Key, T, Compare> start, TreeIterator< Key, T, Compare> finish)
+    TreeIterator< Key, T, Compare > erase(TreeIterator< Key, T, Compare > start, TreeIterator< Key, T, Compare > finish)
     {
       while (start != finish)
       {
@@ -555,6 +555,54 @@ namespace piyavkin
     {
       return (!root_ || node == root_ || (isLeftChild(node) && cmp_(key,node->parent_->val_type.first))
         || (isRightChild(node) && cmp_(node->parent_->val_type.first, key)));
+    }
+    void zig(detail::TreeNode< Key, T >* node)
+    {
+      detail::TreeNode< Key, T >* temp = node->left_;
+      node->left_ = temp->right_;
+      if (!temp->right_)
+      {
+        temp->right_->parent_ = node;
+      }
+      temp->parent_ = node->parent_;
+      if (node->parent_)
+      {
+        root_ = temp;
+      }
+      else if (isRightChild(node))
+      {
+        node->parent_->right_ = temp;
+      }
+      else
+      {
+        node->parent_->left_ = temp;
+      }
+      temp->right_ = node;
+      node->parent_ = temp;
+    }
+    void zag(detail::TreeNode< Key, T >* node)
+    {
+      detail::TreeNode< Key, T >* temp = node->right_;
+      node->right_ = temp->left_;
+      if (!temp->left_)
+      {
+        temp->left_->parent_ = node;
+      }
+      temp->parent_ = node->parent_;
+      if (node->parent_)
+      {
+        root_ = temp;
+      }
+      else if (isRightChild(node))
+      {
+        node->parent_->right_ = temp;
+      }
+      else
+      {
+        node->parent_->left_ = temp;
+      }
+      temp->left_ = node;
+      node->parent_ = temp;
     }
   };
 }
