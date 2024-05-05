@@ -27,6 +27,9 @@ namespace arakelyan
       Node() = delete;
       explicit Node(const value_t &val);
       Node(const Key &key, const Value &value);
+      Node *getGrandparent();
+      Node *getUncle();
+      Node *getBrother();
     };
 
     template < class Key, class Value >
@@ -47,6 +50,54 @@ namespace arakelyan
     {
       data_.first = key;
       data_.second = value;
+    }
+
+    template < class Key, class Value >
+    Node< Key, Value > *Node< Key, Value >::getGrandparent()
+    {
+      if (parent_ != nullptr && parent_->parent_ != nullptr)
+      {
+        return parent_->parent_;
+      }
+      else
+      {
+        return nullptr;
+      }
+    }
+
+    template < class Key, class Value >
+    Node< Key, Value > *Node< Key, Value >::getUncle()
+    {
+      Node *grandP = getGrandparent();
+      if (!grandP)
+      {
+        return nullptr;
+      }
+      if (grandP->left_ == parent_)
+      {
+        return grandP->right_;
+      }
+      else
+      {
+        return grandP->left_;
+      }
+    }
+
+    template < class Key, class Value >
+    Node< Key, Value > *Node< Key, Value >::getBrother()
+    {
+      if (!parent_)
+      {
+        return nullptr;
+      }
+      if (parent_->right_ == this)
+      {
+        return parent_->left_;
+      }
+      else
+      {
+        return parent_->right_;
+      }
     }
   }
 }
