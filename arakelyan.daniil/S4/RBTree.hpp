@@ -330,6 +330,7 @@ namespace arakelyan
     }
     else if (node->parent_->color_ == detail::color_t::RED)
     {
+      std::cout << node->data_.first << " go to red parent\n";
       balanceAfterInsertOne(node);
     }
     else if (node->parent_->color_ == detail::color_t::BLACK)
@@ -341,12 +342,24 @@ namespace arakelyan
   template < class Key, class Value, class Comparator >
   void RBTree< Key, Value, Comparator >::balanceAfterInsertOne(detail::Node< Key, Value > *node) //parent red
   {
-    std::cout << node->data_.first << " balance when have uncle and parent red\n";
     if (node->parent_->color_ == detail::color_t::RED && node->getUncle())
     {
+      std::cout << node->data_.first << " balance when have uncle and red parent\n";
       balanceAfterInsertTwo(node);
     }
-    else // fine
+    else if (node->parent_->color_ == detail::color_t::RED && root_ == node->parent_)
+    {
+      node->parent_->color_ = detail::color_t::BLACK;
+      if (node->parent_->left_ == node)
+      {
+        rightRotate(node);
+      }
+      else
+      {
+        leftRotate(node);
+      }
+    }
+    else
     {
       std::cout << node->data_.first << " parent black + grandParent + rotations\n";
       node->parent_->color_ = detail::color_t::BLACK;
@@ -374,9 +387,15 @@ namespace arakelyan
       node->getUncle()->color_ = detail::color_t::BLACK;
       // leftRotate(node->parent_);
     }
-    else if (grandP->parent_ && grandP->getUncle()->color_ == detail::color_t::RED)
+    else if (grandP->parent_ && node->getUncle()->color_ == detail::color_t::RED)
     {
-      balanceAfterInsertTwo(grandP);
+      std::cout << node->data_.first << " have grandP->parent and red uncle\n";
+      node->parent_->color_ = detail::color_t::BLACK;
+      node->getUncle()->color_ = detail::color_t::BLACK;
+      grandP->color_ = detail::color_t::RED;
+      printInOrder();
+      std::cout << "\n root: " << root_->data_.first << "\n";
+      balanceAfterInsert(grandP);
     }
     else if (grandP->parent_ && grandP->getUncle()->color_ == detail::color_t::BLACK)
     {
