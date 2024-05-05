@@ -56,7 +56,10 @@ namespace strelyaev
         node->right_->left_ = node->right_->right_;
 
         node->right_->right_ = buffer;
-        buffer->parent_ = node->right_;
+        if (buffer)
+        {
+          buffer->parent_ = node->right_;
+        }
 
         updateHeight(node->right_);
         updateHeight(node);
@@ -77,7 +80,10 @@ namespace strelyaev
         node->left_->right_ = node->left_->left_;
 
         node->left_->left_ = buffer;
-        buffer->parent_ = node->left_;
+        if (buffer)
+        {
+          buffer->parent_ = node->left_;
+        }
 
         updateHeight(node->left_);
         updateHeight(node);
