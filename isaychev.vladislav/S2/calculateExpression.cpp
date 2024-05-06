@@ -20,7 +20,7 @@ bool isOkToMultiply(long long int n, long long n1)
   {
     return true;
   }
-  else if (n < 0 && n1 > 0 && (min / n < n1))
+  else if (n > 0 && n1 < 0 && (min / n > n1))
   {
     return true;
   }
