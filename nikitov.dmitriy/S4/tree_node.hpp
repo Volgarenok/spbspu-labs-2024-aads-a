@@ -45,7 +45,7 @@ namespace nikitov
       const T& get(const Key& key) const;
 
       treeNode* add(const std::pair< Key, T >& value);
-      treeNode* add(std::pair< Key, T >&& value);
+      treeNode* moveAdd(std::pair< Key, T >&& value);
       treeNode* split(const std::pair< Key, T >& value, treeNode* node);
       void check(treeNode* node);
       void checkNeighbour(const List< treeNode* >& nodes);
@@ -76,12 +76,7 @@ namespace nikitov
     template< class Key, class T, class Compare >
     bool TreeNode< Key, T, Compare >::find(const Key& key) const
     {
-      bool isFound = (firstValue_.first == key);
-      if (size_ == 2)
-      {
-        isFound = isFound || (secondValue_.first == key);
-      }
-      return isFound;
+      return firstValue_.first == key || (size_ == 2 && secondValue_.first == key);
     }
 
     template< class Key, class T, class Compare >
@@ -107,44 +102,12 @@ namespace nikitov
     template< class Key, class T, class Compare >
     TreeNode< Key, T, Compare >* TreeNode< Key, T, Compare >::add(const std::pair< Key, T >& value)
     {
-      treeNode* newRoot = nullptr;
-      if (size_ == 0)
-      {
-        firstValue_ = value;
-        ++size_;
-      }
-      else if (size_ == 1)
-      {
-        secondValue_ = value;
-        if (!cmp_(firstValue_.first, secondValue_.first))
-        {
-          std::swap(firstValue_, secondValue_);
-        }
-        ++size_;
-      }
-      else
-      {
-        std::pair< Key, T > toSplit = value;
-        if (cmp_(value.first, firstValue_.first))
-        {
-          toSplit = firstValue_;
-          firstValue_ = value;
-        }
-        else if (cmp_(secondValue_.first, value.first))
-        {
-          toSplit = secondValue_;
-          secondValue_ = value;
-        }
-        treeNode* newNode = new treeNode(secondValue_);
-        secondValue_ = std::pair< Key, T >{};
-        --size_;
-        newRoot = parent_->split(toSplit, newNode);
-      }
-      return newRoot;
+      std::pair< Key, T > copy = value;
+      return moveAdd(std::move(copy));
     }
 
     template< class Key, class T, class Compare >
-    TreeNode< Key, T, Compare >* TreeNode< Key, T, Compare >::add(std::pair< Key, T >&& value)
+    TreeNode< Key, T, Compare >* TreeNode< Key, T, Compare >::moveAdd(std::pair< Key, T >&& value)
     {
       treeNode* newRoot = nullptr;
       if (size_ == 0)
@@ -163,19 +126,19 @@ namespace nikitov
       }
       else
       {
-        Key key = value.first;
+        Key valueKey = value.first;
         std::pair< Key, T > toSplit = std::move(value);
-        if (cmp_(key, firstValue_.first))
+        if (cmp_(valueKey, firstValue_.first))
         {
           std::swap(firstValue_, toSplit);
         }
-        else if (cmp_(secondValue_.first, key))
+        else if (cmp_(secondValue_.first, valueKey))
         {
           std::swap(secondValue_, toSplit);
         }
-        treeNode* newNode = new treeNode(secondValue_);
-        secondValue_ = std::pair< Key, T >{};
+        treeNode* newNode = new treeNode(std::move(secondValue_));
         --size_;
+
         newRoot = parent_->split(toSplit, newNode);
       }
       return newRoot;

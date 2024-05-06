@@ -462,7 +462,7 @@ namespace nikitov
       }
       else
       {
-        detail::TreeNode< Key, T, Compare >* newRoot = findNode(key)->add(std::move(value));
+        detail::TreeNode< Key, T, Compare >* newRoot = findNode(key)->moveAdd(std::move(value));
         if (newRoot)
         {
           root_ = newRoot;
