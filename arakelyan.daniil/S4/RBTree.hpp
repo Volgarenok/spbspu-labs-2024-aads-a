@@ -60,60 +60,11 @@ namespace arakelyan
     void rightRotate(Node *nodeParent); //work
     //void leftRightRotate(Node *node);
     //void rightLeftRotate(Node *node);
-    void balanceAfterInsert(Node *node); //parent black
-    void balanceAfterInsertOne(Node *node); // parent black and root
-    void balanceAfterInsertTwo(Node *node); // red parent and red uncle
-    void balanceAfterInsertThree(Node *node); //red parent and black uncle. new node is external or new node is internal
-
-    // void fixInput(Node *node)
-    // {
-    //   while (node->parent_->color_ == detail::color_t::RED)
-    //   {
-    //     if (node->getGrandparent()->left_ == node->parent_)
-    //     {
-    //       if (node->getUncle()->color_ == detail::color_t::RED)
-    //       {
-    //         node->parent_->color_ = detail::color_t::BLACK;
-    //         node->getUncle()->color_ = detail::color_t::BLACK;
-    //         node->getGrandparent()->color_ = detail::color_t::RED;
-    //         node = node->getGrandparent();
-    //       }
-    //       else
-    //       {
-    //         if (node->parent_->right_ == node)
-    //         {
-    //           node = node->parent_;
-    //           leftRotate(node->parent_);
-    //         }
-    //         node->parent_->color_ = detail::color_t::BLACK;
-    //         node->getGrandparent()->color_ = detail::color_t::RED;
-    //         rightRotate(node->parent_);
-    //       }
-    //     }
-    //     else
-    //     {
-    //       if (node->getUncle()->color_ == detail::color_t::RED)
-    //       {
-    //         node->parent_->color_ = detail::color_t::BLACK;
-    //         node->getUncle()->color_ = detail::color_t::BLACK;
-    //         node->getGrandparent()->color_ = detail::color_t::RED;
-    //         node = node->getGrandparent();
-    //       }
-    //       else
-    //       {
-    //         if (node->parent_->left_ == node)
-    //         {
-    //           node = node->parent_;
-    //           rightRotate(node);
-    //         }
-    //         node->parent_->color_ = detail::color_t::BLACK;
-    //         node->getGrandparent()->color_ = detail::color_t::RED;
-    //         leftRotate(node->parent_);
-    //       }
-    //     }
-    //   }
-    //   // root_->color_ = detail::color_t::BLACK;
-    // }
+    void balanceAfterInsertOne(Node *node);
+    void balanceAfterInsertTwo(Node *node);
+    void balanceAfterInsertThree(Node *node);
+    void balanceAfterInsertFour(Node *node);
+    void balanceAfterInsertFive(Node *node);
 
     void clear(Node *node);
     void traversal(Node *node) const noexcept;
@@ -258,7 +209,7 @@ namespace arakelyan
       }
     }
     ++size_;
-    balanceAfterInsert(newNode);
+    balanceAfterInsertOne(newNode);
   }
 
   template < class Key, class Value, class Comparator >
@@ -320,102 +271,70 @@ namespace arakelyan
   }
 
   template < class Key, class Value, class Comparator >
-  void RBTree< Key, Value, Comparator >::balanceAfterInsert(detail::Node< Key, Value > *node) // parent == root or parent red and go next 
+  void RBTree< Key, Value, Comparator >::balanceAfterInsertOne(detail::Node< Key, Value > *node) //is node == root
   {
-    std::cout << node->data_.first << " im in balance\n";
-    if (node->parent_ == nullptr)
+    std::cout << "\n" << node->data_.first <<" im here One\n";
+    if (!node->parent_)
     {
-      std::cout << node->data_.first << " node black\n";
+      std::cout << node->data_.first <<" is root and now + black\n";
       node->color_ = detail::color_t::BLACK;
     }
     else if (node->parent_->color_ == detail::color_t::RED)
     {
-      std::cout << node->data_.first << " go to red parent\n";
-      balanceAfterInsertOne(node);
-    }
-    else if (node->parent_->color_ == detail::color_t::BLACK)
-    {
-      return;
+      std::cout << node->data_.first <<" have red parent\n";
+      balanceAfterInsertTwo(node);
     }
   }
 
   template < class Key, class Value, class Comparator >
-  void RBTree< Key, Value, Comparator >::balanceAfterInsertOne(detail::Node< Key, Value > *node) //parent red
+  void RBTree< Key, Value, Comparator >::balanceAfterInsertTwo(detail::Node< Key, Value > *node) //have red uncle?
   {
-    if (node->parent_->color_ == detail::color_t::RED && node->getUncle())
-    {
-      std::cout << node->data_.first << " balance when have uncle and red parent\n";
-      balanceAfterInsertTwo(node);
-    }
-    else if (node->parent_->color_ == detail::color_t::RED && root_ == node->parent_)
+    std::cout << "\n" << node->data_.first <<" im here THREE\n";
+    if (node->getUncle() && node->getUncle()->color_ == detail::color_t::RED)
     {
       node->parent_->color_ = detail::color_t::BLACK;
-      if (node->parent_->left_ == node)
-      {
-        rightRotate(node);
-      }
-      else
-      {
-        leftRotate(node);
-      }
+      node->getUncle()->color_ = detail::color_t::BLACK;
+      node->getGrandparent()->color_ = detail::color_t::RED;
+      balanceAfterInsertOne(node->getGrandparent());
     }
     else
     {
-      std::cout << node->data_.first << " parent black + grandParent + rotations\n";
-      node->parent_->color_ = detail::color_t::BLACK;
-      node->getGrandparent()->color_ = detail::color_t::RED;
-      if (node->parent_->right_ == node)
-      {
-        leftRotate(node->parent_);
-      }
-      else
-      {
-        rightRotate(node->parent_);
-      }
+      balanceAfterInsertFour(node);
     }
   }
 
   template < class Key, class Value, class Comparator >
-  void RBTree< Key, Value, Comparator >::balanceAfterInsertTwo(detail::Node< Key, Value > *node) // red parent and red uncle
+  void RBTree< Key, Value, Comparator >::balanceAfterInsertThree(detail::Node< Key, Value > *node) //node from internal to external
   {
-    std::cout << node->data_.first << " fix red parent and red uncle\n";
-    Node *grandP = node->getGrandparent();
-    if (grandP->parent_ == nullptr && node->getUncle()->color_ == detail::color_t::RED)
+    std::cout << "\n" << node->data_.first <<" im here FOUR\n";
+    if (node->getGrandparent()->right_ == node->parent_ && node->parent_->left_ == node)
     {
-      grandP->color_ = detail::color_t::RED;
-      node->parent_->color_ = detail::color_t::BLACK;
-      node->getUncle()->color_ = detail::color_t::BLACK;
-      // leftRotate(node->parent_);
+      std::cout << "\n" << node->data_.first <<" im here FOUR.1\n";
+      rightRotate(node);
+      node = node->right_;
     }
-    else if (grandP->parent_ && node->getUncle()->color_ == detail::color_t::RED)
+    else if (node->getGrandparent()->left_ == node->parent_ && node->parent_->right_ == node)
     {
-      std::cout << node->data_.first << " have grandP->parent and red uncle\n";
-      node->parent_->color_ = detail::color_t::BLACK;
-      node->getUncle()->color_ = detail::color_t::BLACK;
-      grandP->color_ = detail::color_t::RED;
-      printInOrder();
-      std::cout << "\n root: " << root_->data_.first << "\n";
-      balanceAfterInsert(grandP);
+      std::cout << "\n" << node->data_.first <<" im here FOUR.2\n";
+      leftRotate(node);
+      node = node->left_;
     }
-    else if (grandP->parent_ && grandP->getUncle()->color_ == detail::color_t::BLACK)
-    {
-      balanceAfterInsertThree(grandP);
-    }
+    balanceAfterInsertFive(node);
   }
 
   template < class Key, class Value, class Comparator >
-  void RBTree< Key, Value, Comparator >::balanceAfterInsertThree(detail::Node< Key, Value > *node) //red parent and black uncle. new node is external
+  void RBTree< Key, Value, Comparator >::balanceAfterInsertFour(detail::Node< Key, Value > *node) //external node rotation
   {
-    std::cout << node->data_.first << " red parent and black uncle in or ex\n";
-    if (node->parent_->left_ == node && node->parent_->color_ == detail::color_t::RED)
-    {
-      node->parent_->color_ = detail::color_t::BLACK;
-      rightRotate(node->parent_);
-    }
-    else if (node->parent_->right_ == node && node->parent_->color_ == detail::color_t::RED)
+    std::cout << "\n" << node->data_.first <<" im here FIVE\n";
+    node->parent_->color_ = detail::color_t::BLACK;
+    node->getGrandparent()->color_ = detail::color_t::RED;
+    if (node->getGrandparent()->right_ == node->parent_)
     {
       leftRotate(node->parent_);
-      rightRotate(node);
+    }
+    else
+    {
+      rightRotate(node->parent_);
     }
   }
 
@@ -448,7 +367,15 @@ namespace arakelyan
     if (node)
     {
       traversal(node->left_);
-      std::cout << node->data_.first << ":" << node->data_.second << " col:" << node->color_ << " -> ";
+      std::cout << node->data_.first << " (col:" << node->color_ << "; parent: ";
+      if (node->parent_)
+      {
+        std::cout << node->parent_->data_.first << " ) -> ";
+      }
+      else
+      {
+        std::cout << "this is root) -> ";
+      }
       traversal(node->right_);
     }
   }
