@@ -5,7 +5,7 @@
 
 bool isOper(const char c)
 {
-  return c == '+' || c == '+'|| c == '-' || c == '%' || c == '/' || c == '*';
+  return c == '+'|| c == '-' || c == '%' || c == '/' || c == '*';
 }
 
 bool isBracket(const char c)
@@ -13,11 +13,14 @@ bool isBracket(const char c)
   return c == '(' || c == ')';
 }
 
-void isaychev::inputInfix(std::istream & in, std::string & str, Queue< std::string > & infExp)
+void isaychev::inputInfix(std::istream & in, Queue< std::string > & infExp)
 {
+  std::string str = "";
+  std::getline(in, str);
+  std::string token;
   for (size_t i = 0; i < str.length(); ++i)
   {
-    std::string token = "";
+    token = "";
     if (str[i] == ' ')
     {
       continue;
@@ -34,12 +37,12 @@ void isaychev::inputInfix(std::istream & in, std::string & str, Queue< std::stri
     }
     else if (std::isdigit(str[i]))
     {
-      token += str[i];
-      while (str[i] != ' ' && std::isdigit(str[i]) && i < str.length())
+      do
       {
-        ++i;
         token += str[i];
+        ++i;
       }
+      while (str[i] != ' ' && std::isdigit(str[i]) && i < str.length());
       infExp.push(token);
     }
     else

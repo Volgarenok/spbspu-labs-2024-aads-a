@@ -10,15 +10,13 @@ int main(int argc, char * argv[])
   using namespace isaychev;
   Queue< std::string > infExp;
   Queue< std::string > postfExp;
-  std::string s = "";
   if (argc == 1)
   {
     while (!std::cin.eof())
     {
       try
       {
-        std::getline(std::cin, s);
-        inputInfix(std::cin, s, infExp);
+        inputInfix(std::cin, infExp);
       }
       catch (const std::invalid_argument & e)
       {
@@ -27,14 +25,22 @@ int main(int argc, char * argv[])
       }
     }
     std::cout << "done input\n";
-/*    convertInfToPostf(infExp, postfExp);
+  try
+  {
+    convertInfToPostf(infExp, postfExp);
+  }
+  catch(const std::out_of_range & e)
+  {
+    std::cout << e.what() << "\n";
+    return 2;
+  }
     while (!postfExp.empty())
     {
       std::cout << postfExp.front() << " ";
       postfExp.pop();
     }
     std::cout << '\n';
-    std::cout << calculateExpression(postfExp) << "\n";
+/*    std::cout << calculateExpression(postfExp) << "\n";
     while (!infExp.empty())
     {
       std::cout << infExp.front() << " ";

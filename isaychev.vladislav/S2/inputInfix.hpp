@@ -7,7 +7,7 @@
 
 namespace isaychev
 {
-  void inputInfix(std::istream & in, std::string & str, Queue< std::string > & infExp);
+  void inputInfix(std::istream & in, Queue< std::string > & infExp);
 }
 
 #endif

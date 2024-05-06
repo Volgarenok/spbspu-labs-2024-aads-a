@@ -2,6 +2,11 @@
 #include <cctype>
 #include <iostream>
 
+bool isHighPriority(const std::string & str)
+{
+  return str == "/" || str == "%" || str == "*";
+}
+
 void isaychev::convertInfToPostf(Queue< std::string > & infExp, Queue< std::string > & postfExp)
 {
   Stack< std::string > temp;
@@ -22,9 +27,9 @@ void isaychev::convertInfToPostf(Queue< std::string > & infExp, Queue< std::stri
       }
       temp.pop();
     }
-    else if (s == "/" || s == "%" || s == "*")
+    else if (isHighPriority(s))
     {
-      if (!temp.empty() && temp.top() != "(")
+      while (!temp.empty() && temp.top() != "(")
       {
         postfExp.push(temp.top());
         temp.pop();
@@ -33,7 +38,7 @@ void isaychev::convertInfToPostf(Queue< std::string > & infExp, Queue< std::stri
     }
     else if (s == "+" || s == "-")
     {
-      while (temp.top() != "/" && temp.top() != "%" && temp.top() != "*" && temp.top() != "(")
+      while (!temp.empty() && (temp.top() == "-" || temp.top() == "+") && temp.top() != "(")
       {
         postfExp.push(temp.top());
         temp.pop();
@@ -44,10 +49,7 @@ void isaychev::convertInfToPostf(Queue< std::string > & infExp, Queue< std::stri
     {
       postfExp.push(s);
     }
-    if (!infExp.empty())
-    {
-      infExp.pop();
-    }
+    infExp.pop();
   }
   if (!temp.empty())
   {
