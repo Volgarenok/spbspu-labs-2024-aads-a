@@ -19,7 +19,7 @@ void nikitov::printCmd(const Tree< std::string, Tree< size_t, std::string > >& t
   output << '\n';
 }
 
-void nikitov::complementCmd(Tree< std::string, Tree< size_t, std::string > >& tree, std::istream& input)
+void nikitov::inputCmd(Tree< std::string, Tree< size_t, std::string > >& tree, std::istream& input, const std::string& cmd)
 {
   std::string newDictName = {};
   input >> newDictName;
@@ -31,65 +31,44 @@ void nikitov::complementCmd(Tree< std::string, Tree< size_t, std::string > >& tr
   Tree< size_t, std::string > newDict;
   Tree< size_t, std::string > dict1 = tree.at(firstDictName);
   Tree< size_t, std::string > dict2 = tree.at(secondDictName);
-  for (auto i = dict1.cbegin(); i != dict1.cend(); ++i)
+  if (cmd == "complement")
   {
-    try
+    for (auto i = dict1.cbegin(); i != dict1.cend(); ++i)
     {
-      dict2.at((*i).first);
-    }
-    catch(const std::logic_error&)
-    {
-      newDict.insert({ (*i).first, (*i).second });
-    }
-  }
-  tree[newDictName] = newDict;
-}
-
-void nikitov::intersectCmd(Tree< std::string, Tree< size_t, std::string > >& tree, std::istream& input)
-{
-  std::string newDictName = {};
-  input >> newDictName;
-  std::string firstDictName = {};
-  input >> firstDictName;
-  std::string secondDictName = {};
-  input >> secondDictName;
-
-  Tree< size_t, std::string > newDict;
-  Tree< size_t, std::string > dict1 = tree.at(firstDictName);
-  Tree< size_t, std::string > dict2 = tree.at(secondDictName);
-  for (auto i = dict2.cbegin(); i != dict2.cend(); ++i)
-  {
-    try
-    {
-      newDict.insert({ (*i).first, dict1.at((*i).first) });
-    }
-    catch(const std::logic_error&)
-    {
-      continue;
+      try
+      {
+        dict2.at((*i).first);
+      }
+      catch(const std::logic_error&)
+      {
+        newDict.insert({ (*i).first, (*i).second });
+      }
     }
   }
-  tree[newDictName] = newDict;
-}
-
-void nikitov::unionCmd(Tree< std::string, Tree< size_t, std::string > >& tree, std::istream& input)
-{
-  std::string newDictName = {};
-  input >> newDictName;
-  std::string firstDictName = {};
-  input >> firstDictName;
-  std::string secondDictName = {};
-  input >> secondDictName;
-
-  Tree< size_t, std::string > newDict;
-  Tree< size_t, std::string > dict1 = tree.at(firstDictName);
-  Tree< size_t, std::string > dict2 = tree.at(secondDictName);
-  for (auto i = dict1.cbegin(); i != dict1.cend(); ++i)
+  else if (cmd == "intersect")
   {
-    newDict.insert({(*i).first, (*i).second });
+    for (auto i = dict2.cbegin(); i != dict2.cend(); ++i)
+    {
+      try
+      {
+        newDict.insert({ (*i).first, dict1.at((*i).first) });
+      }
+      catch(const std::logic_error&)
+      {
+        continue;
+      }
+    }
   }
-  for (auto i = dict2.cbegin(); i != dict2.cend(); ++i)
+  else if (cmd == "union")
   {
-    newDict.insert({(*i).first, (*i).second });
+    for (auto i = dict1.cbegin(); i != dict1.cend(); ++i)
+    {
+      newDict.insert({(*i).first, (*i).second });
+    }
+    for (auto i = dict2.cbegin(); i != dict2.cend(); ++i)
+    {
+      newDict.insert({(*i).first, (*i).second });
+    }
   }
   tree[newDictName] = newDict;
 }
