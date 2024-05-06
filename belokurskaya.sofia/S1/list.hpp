@@ -321,7 +321,7 @@ namespace belokurskaya
       };
 
       ConstIterator begin() const
-      { 
+      {
         return ConstIterator(head);
       }
       ConstIterator end() const
