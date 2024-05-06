@@ -22,7 +22,7 @@ int main(int argc, char * argv[])
   Stack< long long int > results;
   try
   {
-    while (!std::cin.eof())
+    while (!(*input).eof())
     {
       Queue< std::string > infExp;
       Queue< std::string > postfExp;
