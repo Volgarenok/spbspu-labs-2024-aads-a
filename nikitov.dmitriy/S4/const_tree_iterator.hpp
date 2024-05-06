@@ -43,7 +43,7 @@ namespace nikitov
   };
 
   template< class Key, class T, class Compare >
-  ConstTreeIterator< Key, T, Compare >::ConstTreeIterator(detail::TreeNode< Key, T, Compare >* node, bool isFirst) :
+  ConstTreeIterator< Key, T, Compare >::ConstTreeIterator(detail::TreeNode< Key, T, Compare >* node, bool isFirst):
     node_(node),
     isFirst_(isFirst)
   {}
