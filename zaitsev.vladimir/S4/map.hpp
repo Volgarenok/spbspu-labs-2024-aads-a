@@ -445,7 +445,7 @@ namespace zaitsev
       cmp_()
     {}
     Map(const Map& other):
-      fakeroot_(new Node(*(other.fakeroot_))),
+      fakeroot_(new Node(false)),
       size_(other.size_),
       cmp_(other.cmp_)
     {
@@ -480,7 +480,7 @@ namespace zaitsev
       }
       catch (...)
       {
-        freeNodes(fakeroot_->left_);
+        freeNodes(fakeroot_);
         throw;
       }
     }
@@ -497,7 +497,14 @@ namespace zaitsev
       size_(0),
       cmp_()
     {
-      create_map(fakeroot_, init_list.begin(), init_list.end(), size_);
+      try
+      {
+        create_map(fakeroot_, init_list.begin(), init_list.end(), size_);
+      }
+      catch (...)
+      {
+        freeNodes(fakeroot_);
+      }
     }
     template< typename InputIt >
     Map(InputIt begin, InputIt end):
@@ -505,7 +512,14 @@ namespace zaitsev
       size_(0),
       cmp_()
     {
-      create_map(fakeroot_, begin, end, size_);
+      try
+      {
+        create_map(fakeroot_, begin, end, size_);
+      }
+      catch (...)
+      {
+        freeNodes(fakeroot_);
+      }
     }
     ~Map()
     {
