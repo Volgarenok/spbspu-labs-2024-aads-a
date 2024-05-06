@@ -38,6 +38,8 @@ namespace nikitov
 
     std::pair< TreeIterator< Key, T, Compare >, bool > insert(const std::pair< Key, T >& value);
     std::pair< TreeIterator< Key, T, Compare >, bool > insert(std::pair< Key, T >&& value);
+    void insert(ConstTreeIterator< Key, T, Compare > first, ConstTreeIterator< Key, T, Compare > second);
+    void insert(std::initializer_list< std::pair< Key, T > > initList);
     void clear();
     void swap(Tree< Key, T, Compare >& other);
     TreeIterator< Key, T, Compare > find(const Key& key);
@@ -274,6 +276,26 @@ namespace nikitov
       return TreeIterator< Key, T, Compare >(node, isFirst);
     }
     return end();
+  }
+
+  template< class Key, class T, class Compare >
+  void Tree< Key, T, Compare >::insert(ConstTreeIterator< Key, T, Compare > first, ConstTreeIterator< Key, T, Compare > second)
+  {
+    for (auto i = first; i != second; ++i)
+    {
+      embed(*i);
+    }
+  }
+
+  template< class Key, class T, class Compare >
+  void Tree< Key, T, Compare >::insert(std::initializer_list< std::pair< Key, T > > initList)
+  {
+    auto begin = initList.begin();
+    auto end = initList.end();
+    while (begin != end)
+    {
+      embed(*begin++);
+    }
   }
 
   template< class Key, class T, class Compare >
