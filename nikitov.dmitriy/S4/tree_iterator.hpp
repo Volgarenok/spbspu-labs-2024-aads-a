@@ -13,7 +13,7 @@ namespace nikitov
   {
     friend class Tree< Key, T, Compare >;
   private:
-    explicit TreeIterator(detail::TreeNode< Key, T, Compare >* node);
+    explicit TreeIterator(detail::TreeNode< Key, T, Compare >* node, bool isFirst = true);
 
   public:
     TreeIterator(const TreeIterator< Key, T, Compare >&) = default;
@@ -35,17 +35,17 @@ namespace nikitov
     bool operator!=(const TreeIterator< Key, T, Compare >& other) const;
 
   private:
-    bool isFirst_;
     detail::TreeNode< Key, T, Compare >* node_;
+    bool isFirst_;
 
     void fallLeft();
     void fallRight();
   };
 
   template< class Key, class T, class Compare >
-  TreeIterator< Key, T, Compare >::TreeIterator(detail::TreeNode< Key, T, Compare >* node) :
-    isFirst_(true),
-    node_(node)
+  TreeIterator< Key, T, Compare >::TreeIterator(detail::TreeNode< Key, T, Compare >* node, bool isFirst) :
+    node_(node),
+    isFirst_(isFirst)
   {}
 
   template< class Key, class T, class Compare >

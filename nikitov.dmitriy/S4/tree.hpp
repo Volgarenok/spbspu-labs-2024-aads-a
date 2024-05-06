@@ -48,6 +48,9 @@ namespace nikitov
 
     detail::TreeNode< Key, T, Compare >* search(detail::TreeNode< Key, T, Compare >* node, const Key& key) const;
     detail::TreeNode< Key, T, Compare >* findNode(const Key& value) const;
+
+    std::pair< TreeIterator< Key, T, Compare >, bool > embed(const std::pair< Key, T >& value);
+    std::pair< TreeIterator< Key, T, Compare >, bool > moveEmbed(std::pair< Key, T >&& value);
   };
 
   template< class Key, class T, class Compare >
@@ -65,7 +68,7 @@ namespace nikitov
   {
     for (auto i = other.cbegin(); i != other.cend(); ++i)
     {
-      insert((*i));
+      embed(*i);
     }
   }
 
@@ -185,10 +188,7 @@ namespace nikitov
     {
       return TreeIterator< Key, T, Compare >(root_);
     }
-    else
-    {
-      return TreeIterator< Key, T, Compare >(root_->parent_);
-    }
+    return TreeIterator< Key, T, Compare >(root_->parent_);
   }
 
   template< class Key, class T, class Compare >
@@ -198,10 +198,7 @@ namespace nikitov
     {
       return ConstTreeIterator< Key, T, Compare >(root_);
     }
-    else
-    {
-      return ConstTreeIterator< Key, T, Compare >(root_->parent_);
-    }
+    return ConstTreeIterator< Key, T, Compare >(root_->parent_);
   }
 
   template< class Key, class T, class Compare >
@@ -239,52 +236,13 @@ namespace nikitov
   template< class Key, class T, class Compare >
   std::pair< TreeIterator< Key, T, Compare >, bool > Tree< Key, T, Compare >::insert(const std::pair< Key, T >& value)
   {
-    bool isInserted = false;
-    if (empty())
-    {
-      root_->middle_ = new detail::TreeNode< Key, T, Compare >(value);
-      root_->middle_->parent_ = root_;
-      root_ = root_->middle_;
-      isInserted = true;
-      ++size_;
-    }
-    else if (!search(root_, value.first))
-    {
-      detail::TreeNode< Key, T, Compare >* newRoot = findNode(value.first)->add(value);
-      if (newRoot)
-      {
-        root_ = newRoot;
-      }
-      isInserted = true;
-      ++size_;
-    }
-    return std::pair< TreeIterator< Key, T, Compare >, bool > { find(value.first), isInserted };
+    return embed(value);
   }
 
   template< class Key, class T, class Compare >
   std::pair< TreeIterator< Key, T, Compare >, bool > Tree< Key, T, Compare >::insert(std::pair< Key, T >&& value)
   {
-    Key key = value.first;
-    bool isInserted = false;
-    if (empty())
-    {
-      root_->middle_ = new detail::TreeNode< Key, T, Compare >(std::move(value));
-      root_->middle_->parent_ = root_;
-      root_ = root_->middle_;
-      isInserted = true;
-      ++size_;
-    }
-    else if (!search(root_, value.first))
-    {
-      detail::TreeNode< Key, T, Compare >* newRoot = findNode(key)->add(std::move(value));
-      if (newRoot)
-      {
-        root_ = newRoot;
-      }
-      isInserted = true;
-      ++size_;
-    }
-    return std::pair< TreeIterator< Key, T, Compare >, bool > { find(key), isInserted };
+    return moveEmbed(std::move(value));
   }
 
   template< class Key, class T, class Compare >
@@ -293,12 +251,12 @@ namespace nikitov
     detail::TreeNode< Key, T, Compare >* node = search(root_, key);
     if (node)
     {
-      TreeIterator< Key, T, Compare > iterator(node);
-      if (!(iterator.node_->firstValue_.first == key))
+      bool isFirst = false;
+      if (node->firstValue_.first == key)
       {
-        iterator.isFirst_ = false;
+        isFirst = true;
       }
-      return iterator;
+      return TreeIterator< Key, T, Compare >(node, isFirst);
     }
     return end();
   }
@@ -309,12 +267,12 @@ namespace nikitov
     detail::TreeNode< Key, T, Compare >* node = search(root_, key);
     if (node)
     {
-      ConstTreeIterator< Key, T, Compare > iterator(node);
-      if (!(iterator.node_->firstValue_.first == key))
+      bool isFirst = false;
+      if (node->firstValue_.first == key)
       {
-        iterator.isFirst_ = false;
+        isFirst = true;
       }
-      return iterator;
+      return ConstTreeIterator< Key, T, Compare >(node, isFirst);
     }
     return cend();
   }
@@ -371,6 +329,40 @@ namespace nikitov
       }
     }
     return node;
+  }
+
+  template< class Key, class T, class Compare >
+  std::pair< TreeIterator< Key, T, Compare >, bool > Tree< Key, T, Compare >::embed(const std::pair< Key, T >& value)
+  {
+    std::pair< Key, T > copy = value;
+    return moveEmbed(std::move(copy));
+  }
+
+  template< class Key, class T, class Compare >
+  std::pair< TreeIterator< Key, T, Compare >, bool > Tree< Key, T, Compare >::moveEmbed(std::pair< Key, T >&& value)
+  {
+    Key key = value.first;
+    bool isInserted = false;
+    if (!search(root_, key))
+    {
+      if (empty())
+      {
+        root_->middle_ = new detail::TreeNode< Key, T, Compare >(std::move(value));
+        root_->middle_->parent_ = root_;
+        root_ = root_->middle_;
+      }
+      else
+      {
+        detail::TreeNode< Key, T, Compare >* newRoot = findNode(key)->add(std::move(value));
+        if (newRoot)
+        {
+          root_ = newRoot;
+        }
+      }
+      isInserted = true;
+      ++size_;
+    }
+    return std::pair< TreeIterator< Key, T, Compare >, bool > { find(value.first), isInserted };
   }
 }
 #endif
