@@ -30,7 +30,6 @@ namespace sivkov
       {}
 
       ~TreeNode() = default;
-
     };
   }
 }

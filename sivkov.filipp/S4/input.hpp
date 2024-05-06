@@ -1,7 +1,6 @@
 #ifndef INPUT_HPP
 #define INPUT_HPP
 
-
 #include "AVLTree.hpp"
 
 namespace sivkov
