@@ -51,7 +51,29 @@ namespace nikitov
   template< class Key, class T, class Compare >
   TreeIterator< Key, T, Compare >& TreeIterator< Key, T, Compare >::operator++()
   {
-    if (isFirst_ && node_->size_ == 2)
+    assert(node_->parent_);
+    if (node_->size_ == 1 || !isFirst_)
+    {
+      if (node_->right_)
+      {
+        node_ = node_->right_;
+        fallLeft();
+      }
+      else
+      {
+        isFirst_ = true;
+        while (node_->parent_->right_ == node_)
+        {
+          node_ = node_->parent_;
+        }
+        if (node_->parent_->middle_ == node_ && node_->parent_->parent_)
+        {
+          isFirst_ = false;
+        }
+        node_ = node_->parent_;
+      }
+    }
+    else
     {
       if (node_->middle_)
       {
@@ -62,41 +84,6 @@ namespace nikitov
       {
         isFirst_ = false;
       }
-    }
-    else if (node_->right_)
-    {
-      node_ = node_->right_;
-      fallLeft();
-    }
-    else if (node_->parent_->right_ == node_)
-    {
-      while (node_->parent_->right_ == node_)
-      {
-        node_ = node_->parent_;
-      }
-      if (node_->parent_->middle_ == node_ && node_->parent_->parent_)
-      {
-        isFirst_ = false;
-      }
-      else
-      {
-        isFirst_ = true;
-      }
-      node_ = node_->parent_;
-    }
-    else if (node_->parent_->middle_ == node_)
-    {
-      node_ = node_->parent_;
-      isFirst_ = false;
-      if (!node_->parent_)
-      {
-        isFirst_ = true;
-      }
-    }
-    else
-    {
-      node_ = node_->parent_;
-      isFirst_ = true;
     }
     return *this;
   }
@@ -112,55 +99,42 @@ namespace nikitov
   template< class Key, class T, class Compare >
   TreeIterator< Key, T, Compare >& TreeIterator< Key, T, Compare >::operator--()
   {
-    if (node_->parent_ == nullptr)
+    if (!node_->parent_)
     {
       node_ = node_->middle_;
       fallRight();
     }
-    else if (!isFirst_)
+    else if (node_->size_ == 1 || isFirst_)
     {
-      if (node_->middle_)
+      if (node_->left_)
       {
-        node_ = node_->middle_;
+        node_ = node_->left_;
         fallRight();
       }
       else
       {
         isFirst_ = true;
-      }
-    }
-    else if (node_->left_)
-    {
-      node_ = node_->left_;
-      fallRight();
-    }
-    else if (node_->parent_->left_ == node_)
-    {
-      while (node_->parent_->left_ == node_)
-      {
+        while (node_->parent_->left_ == node_)
+        {
+          node_ = node_->parent_;
+        }
+        if (node_->parent_->size_ == 2)
+        {
+          isFirst_ = false;
+        }
+        if (node_->parent_->middle_ == node_)
+        {
+          isFirst_ = true;
+        }
         node_ = node_->parent_;
       }
-      node_ = node_->parent_;
-      if (node_->size_ == 2)
-      {
-        isFirst_ = false;
-      }
-      else
-      {
-        isFirst_ = true;
-      }
-    }
-    else if (node_->parent_->middle_ == node_)
-    {
-      node_ = node_->parent_;
-      isFirst_ = true;
     }
     else
     {
-      node_ = node_->parent_;
-      if (node_->size_ == 2)
+      if (node_->middle_)
       {
-        isFirst_ = false;
+        node_ = node_->middle_;
+        fallRight();
       }
       else
       {
@@ -181,6 +155,7 @@ namespace nikitov
   template< class Key, class T, class Compare >
   std::pair< Key, T >& TreeIterator< Key, T, Compare >::operator*()
   {
+    assert(node_->parent_);
     if (isFirst_)
     {
       return node_->firstValue_;
@@ -194,6 +169,7 @@ namespace nikitov
   template< class Key, class T, class Compare >
   const std::pair< Key, T >& TreeIterator< Key, T, Compare >::operator*() const
   {
+    assert(node_->parent_);
     if (isFirst_)
     {
       return node_->firstValue_;
@@ -207,6 +183,7 @@ namespace nikitov
   template< class Key, class T, class Compare >
   std::pair< Key, T >* TreeIterator< Key, T, Compare >::operator->()
   {
+    assert(node_->parent_);
     if (isFirst_)
     {
       return std::addressof(node_->firstValue_);
@@ -220,6 +197,7 @@ namespace nikitov
   template< class Key, class T, class Compare >
   const std::pair< Key, T >* TreeIterator< Key, T, Compare >::operator->() const
   {
+    assert(node_->parent_);
     if (isFirst_)
     {
       return std::addressof(node_->firstValue_);
