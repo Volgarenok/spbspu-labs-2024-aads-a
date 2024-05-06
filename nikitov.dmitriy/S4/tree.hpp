@@ -44,6 +44,8 @@ namespace nikitov
     void swap(Tree< Key, T, Compare >& other);
     TreeIterator< Key, T, Compare > find(const Key& key);
     ConstTreeIterator< Key, T, Compare > find(const Key& key) const;
+    TreeIterator< Key, T, Compare > lowerBound(const Key& key);
+    ConstTreeIterator< Key, T, Compare > lowerBound(const Key& key) const;
 
   private:
     detail::TreeNode< Key, T, Compare >* root_;
@@ -312,6 +314,36 @@ namespace nikitov
       return ConstTreeIterator< Key, T, Compare >(node, isFirst);
     }
     return cend();
+  }
+
+  template< class Key, class T, class Compare >
+  TreeIterator< Key, T, Compare > Tree< Key, T, Compare >::lowerBound(const Key& key)
+  {
+    TreeIterator< Key, T, Compare > iterator = find(key);
+    if (iterator == end())
+    {
+      iterator = begin();
+      while (iterator != end() && (*iterator).first < key)
+      {
+        ++iterator;
+      }
+    }
+    return iterator;
+  }
+
+  template< class Key, class T, class Compare >
+  ConstTreeIterator< Key, T, Compare > Tree< Key, T, Compare >::lowerBound(const Key& key) const
+  {
+    ConstTreeIterator< Key, T, Compare > iterator = find(key);
+    if (iterator == cend())
+    {
+      iterator = cbegin();
+      while (iterator != cend() && (*iterator).first < key)
+      {
+        ++iterator;
+      }
+    }
+    return iterator;
   }
 
   template< class Key, class T, class Compare >
