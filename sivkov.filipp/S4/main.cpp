@@ -2,16 +2,17 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-#include <map>
 #include <stdexcept>
 #include <functional>
-
+#include "AVLTree.hpp"
 #include "cmd.hpp"
 #include "input.hpp"
 
+
 int main(int argc, char* argv[])
 {
-  std::map< std::string, std::map< size_t, std::string > > treeOfdic;
+  using namespace sivkov;
+  AVLTree< std::string, AVLTree< size_t, std::string > > treeOfdic;
   if (argc != 2)
   {
     std::cerr << "Error CMD line\n";
@@ -20,20 +21,20 @@ int main(int argc, char* argv[])
   else
   {
     std::ifstream file(argv[1]);
-    sivkov::inputDictionary(treeOfdic, file);
+    inputDictionary(treeOfdic, file);
   }
-  std::map< std::string, std::function< void(std::map< std::string, std::map< size_t, std::string > >&, std::istream&) > > cmd;
-  cmd["print"] = std::bind(sivkov::print, std::placeholders::_1, std::placeholders::_2, std::ref(std::cout));
-  cmd["complement"] = sivkov::complement;
-  cmd["intersect"] = sivkov::intersect;
-  cmd["union"] = sivkov::uni;
 
+  AVLTree< std::string, std::function< void(AVLTree< std::string, AVLTree< size_t, std::string > >&, std::istream&) > > cmd;
+  cmd.push("print", std::bind(print, std::placeholders::_1, std::placeholders::_2, std::ref(std::cout)));
+  cmd.push("complement", complement);
+  cmd.push("intersect",intersect);
+  cmd.push("union", unionCMD);
   std::string inputCommand = "";
 
   while (std::cin >> inputCommand)
   {
     auto it = cmd.find(inputCommand);
-    if (it != cmd.end())
+    if (it != cmd.cend())
     {
       try
       {
