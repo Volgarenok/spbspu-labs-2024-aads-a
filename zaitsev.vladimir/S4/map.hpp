@@ -95,7 +95,8 @@ namespace zaitsev
         {
           root = (depth(left_->right_) <= depth(left_->left_)) ? root->rotate_right() : root->rotate_right_left();
         }
-        (left) ? (parent->left_ = root) : (parent->right_ = root);
+        root->parent_ = parent;
+        (left ? parent->left_ : parent->right_) = root;
         return;
       }
     private:
@@ -104,9 +105,12 @@ namespace zaitsev
         Node* root = this;
         Node* new_root = root->right_;
         root->right_ = new_root->left_;
+        if (new_root->left_)
+        {
+          new_root->left_->parent_ = root;
+        }
         new_root->left_ = root;
         root->parent_ = new_root;
-        root->right_->parent_ = root;
         root->update_height();
         new_root->update_height();
         return new_root;
@@ -116,9 +120,12 @@ namespace zaitsev
         Node* root = this;
         Node* new_root = root->left_;
         root->left_ = new_root->right_;
+        if (new_root->right_)
+        {
+          new_root->right_->parent_ = root;
+        }
         new_root->right_ = root;
         root->parent_ = new_root;
-        root->left_->parent_ = root;
         root->update_height();
         new_root->update_height();
         return new_root;
@@ -128,9 +135,19 @@ namespace zaitsev
         Node* root = this;
         Node* new_root = root->right_->left_;
         root->right_->left_ = new_root->right_;
+        if (new_root->right_)
+        {
+          new_root->right_->parent_ = root->right_;
+        }
         new_root->right_ = root->right_;
+        root->right_->parent_ = new_root;
         root->right_ = new_root->left_;
+        if (new_root->left_)
+        {
+          new_root->left_->parent_ = root;
+        }
         new_root->left_ = root;
+        root->parent_ = new_root;
         root->update_height();
         new_root->right_->update_height();
         new_root->update_height();
@@ -141,9 +158,19 @@ namespace zaitsev
         Node* root = this;
         Node* new_root = root->left_->right_;
         root->left_->right_ = new_root->left_;
+        if (new_root->left_)
+        {
+          new_root->left_->parent_ = root->left_;
+        }
         new_root->left_ = root->left_;
+        root->left_->parent_ = new_root;
         root->left_ = new_root->right_;
+        if (new_root->right_)
+        {
+          new_root->right_->parent_ = root;
+        }
         new_root->right_ = root;
+        root->parent_ = new_root;
         root->update_height();
         new_root->left_->update_height();
         new_root->update_height();
@@ -180,17 +207,21 @@ namespace zaitsev
     }
     void rebalance_tree(Node* start)
     {
-      while (start && start != fakeroot_)
+      while (start && start->height_ != -1)
       {
-        if (start->height_ == Node::depth(start->left_) || start->height_ == Node::depth(start->right_))
+        int depth_diff = Node::depth(start->left_) - Node::depth(start->right_);
+        if (start->height_ == std::max(Node::depth(start->left_), Node::depth(start->right_)) && std::abs(depth_diff) < 2)
         {
           return;
         }
-        int depth_diff = Node::depth(start->left_) - Node::depth(start->right_);
         Node* parent = start->parent_;
         if (std::abs(depth_diff) > 1)
         {
           start->rotate();
+        }
+        else
+        {
+          start->height_ = std::max(Node::depth(start->left_), Node::depth(start->right_));
         }
         start = parent;
       }
@@ -231,7 +262,7 @@ namespace zaitsev
     }
     Node* addNode(Node* root, Node* hint, const Key& key, const T& new_val)
     {
-      hint = find_hint((!hint || !cmp_(hint->val_.first, key)) ? root : hint, key);
+      hint = find_hint((hint == nullptr || !cmp_(hint->val_.first, key)) ? root : hint, key);
       if (!hint)
       {
         root->left_ = new Node(std::make_pair(key, new_val));
@@ -267,40 +298,55 @@ namespace zaitsev
         Node* prev = for_del->left_;
         for (; prev->right_; prev = prev->right_);
         Node* prev_parent = prev->parent_;
-        ((prev == prev_parent->left_) ? prev_parent->left_ : prev_parent->right_) = prev->left_;
-        ((for_del == parent->left_) ? parent->left_ : parent->right_) = prev;
-        prev->left_ = for_del->left_;
         prev->right_ = for_del->right_;
+        if (for_del->right_)
+        {
+          for_del->right_->parent_ = prev;
+        }
+        ((for_del == parent->left_) ? parent->left_ : parent->right_) = prev;
+        prev->parent_ = parent;
+        if (prev_parent != for_del)
+        {
+          prev_parent->right_ = prev->left_;
+          prev->left_->parent_ = prev_parent;
+          prev->left_ = for_del->left_;
+        }
         rebalance_tree((prev_parent != for_del) ? prev_parent : prev);
       }
       delete for_del;
     }
     template< typename InputIt >
-    Node* create_map(InputIt begin, InputIt end, size_t& nmb_of_added)
+    Node* create_map(Node* fakeroot, InputIt begin, InputIt end, size_t& nmb_of_added)
     {
       nmb_of_added = 0;
       if (begin == end)
       {
         return nullptr;
       }
-      Node* root = new Node(*begin);
+      bool fake_given = fakeroot;
+      if (!fakeroot)
+      {
+        fakeroot_ = new Node(false);
+      }
+      fakeroot->left_ = new Node(*begin);
+      fakeroot->left_->parent_ = fakeroot;
       ++begin;
       ++nmb_of_added;
       try
       {
         while (begin != end)
         {
-          addNode(root, nullptr, (*begin).first, (*begin).second);
+          addNode(fakeroot, nullptr, (*begin).first, (*begin).second);
           ++begin;
           ++nmb_of_added;
         }
       }
       catch (...)
       {
-        freeNodes(root);
+        freeNodes(fake_given ? fakeroot->left_ : fakeroot);
         throw;
       }
-      return root;
+      return fakeroot;
     }
 
     template< bool IsConst >
@@ -451,8 +497,7 @@ namespace zaitsev
       size_(0),
       cmp_()
     {
-      fakeroot_->left_ = create_map(init_list.begin(), init_list.end(), size_);
-      fakeroot_->left_->parent_ = fakeroot_;
+      create_map(fakeroot_, init_list.begin(), init_list.end(), size_);
     }
     template< typename InputIt >
     Map(InputIt begin, InputIt end):
@@ -460,8 +505,7 @@ namespace zaitsev
       size_(0),
       cmp_()
     {
-      fakeroot_->left_ = create_map(begin, end, size_);
-      fakeroot_->left_->parent_ = fakeroot_;
+      create_map(fakeroot_, begin, end, size_);
     }
     ~Map()
     {
@@ -559,14 +603,14 @@ namespace zaitsev
     template< typename K>
     iterator find(const K& x)
     {
-      Node* cur = fakeroot_.left_;
+      Node* cur = fakeroot_->left_;
       while (cur)
       {
         if (cur->val_.first == x)
         {
           return iterator(cur);
         }
-        cur = (cmp_(cur->val_.first, x)) ? cur->left_ : cur->right_;
+        cur = (cmp_(cur->val_.first, x)) ? cur->right_ : cur->left_;
       }
       return end();
     }
