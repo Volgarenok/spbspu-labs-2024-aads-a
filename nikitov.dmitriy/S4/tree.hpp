@@ -23,22 +23,22 @@ namespace nikitov
     Tree(constTreeIterator first, constTreeIterator second);
     Tree(std::initializer_list< std::pair< Key, T > > initList);
     Tree(const Tree< Key, T, Compare >& other);
-    Tree(Tree< Key, T, Compare >&& other);
+    Tree(Tree< Key, T, Compare >&& other) noexcept;
     ~Tree();
 
     Tree< Key, T, Compare >& operator=(const Tree& other);
-    Tree< Key, T, Compare >& operator=(Tree&& other);
+    Tree< Key, T, Compare >& operator=(Tree&& other) noexcept;
 
-    T& operator[](const Key& key);
-    T& operator[](Key&& key);
+    T& operator[](const Key& key) noexcept;
+    T& operator[](Key&& key) noexcept;
 
     T& at(const Key& key);
     const T& at(const Key& key) const;
 
-    treeIterator begin();
-    constTreeIterator cbegin() const;
-    treeIterator end();
-    constTreeIterator cend() const;
+    treeIterator begin() noexcept;
+    constTreeIterator cbegin() const noexcept;
+    treeIterator end() noexcept;
+    constTreeIterator cend() const noexcept;
 
     size_t size() const;
     bool empty() const;
@@ -48,12 +48,12 @@ namespace nikitov
     void insert(constTreeIterator first, constTreeIterator second);
     void insert(std::initializer_list< std::pair< Key, T > > initList);
 
-    void clear();
-    void swap(Tree< Key, T, Compare >& other);
+    void clear() noexcept;
+    void swap(Tree< Key, T, Compare >& other) noexcept;
 
     size_t count(const Key& key) const;
-    treeIterator find(const Key& key);
-    constTreeIterator find(const Key& key) const;
+    treeIterator find(const Key& key) noexcept;
+    constTreeIterator find(const Key& key) const noexcept;
 
     treeIterator lowerBound(const Key& key);
     constTreeIterator lowerBound(const Key& key) const;
@@ -107,7 +107,7 @@ namespace nikitov
   {}
 
   template< class Key, class T, class Compare >
-  Tree< Key, T, Compare >::Tree(Tree< Key, T, Compare >&& other):
+  Tree< Key, T, Compare >::Tree(Tree< Key, T, Compare >&& other) noexcept:
     root_(other.root_),
     size_(other.size_),
     cmp_(other.cmp_)
@@ -135,7 +135,7 @@ namespace nikitov
   }
 
   template< class Key, class T, class Compare >
-  Tree< Key, T, Compare >& Tree< Key, T, Compare >::operator=(Tree&& other)
+  Tree< Key, T, Compare >& Tree< Key, T, Compare >::operator=(Tree&& other) noexcept
   {
     Tree< Key, T, Compare > temp(std::move(other));
     if (std::addressof(other) != this)
@@ -146,7 +146,7 @@ namespace nikitov
   }
 
   template< class Key, class T, class Compare >
-  T& Tree< Key, T, Compare >::operator[](const Key& key)
+  T& Tree< Key, T, Compare >::operator[](const Key& key) noexcept
   {
     detail::TreeNode< Key, T, Compare >* node = search(root_, key);
     if (node)
@@ -159,7 +159,7 @@ namespace nikitov
   }
 
   template< class Key, class T, class Compare >
-  T& Tree< Key, T, Compare >::operator[](Key&& key)
+  T& Tree< Key, T, Compare >::operator[](Key&& key) noexcept
   {
     detail::TreeNode< Key, T, Compare >* node = search(root_, key);
     if (node)
@@ -200,7 +200,7 @@ namespace nikitov
   }
 
   template< class Key, class T, class Compare >
-  TreeIterator< Key, T, Compare > Tree< Key, T, Compare >::begin()
+  TreeIterator< Key, T, Compare > Tree< Key, T, Compare >::begin() noexcept
   {
     treeIterator iterator(root_);
     iterator.fallLeft();
@@ -208,7 +208,7 @@ namespace nikitov
   }
 
   template< class Key, class T, class Compare >
-  ConstTreeIterator< Key, T, Compare > Tree< Key, T, Compare >::cbegin() const
+  ConstTreeIterator< Key, T, Compare > Tree< Key, T, Compare >::cbegin() const noexcept
   {
     constTreeIterator iterator(root_);
     iterator.fallLeft();
@@ -216,7 +216,7 @@ namespace nikitov
   }
 
   template< class Key, class T, class Compare >
-  TreeIterator< Key, T, Compare > Tree< Key, T, Compare >::end()
+  TreeIterator< Key, T, Compare > Tree< Key, T, Compare >::end() noexcept
   {
     if (empty())
     {
@@ -226,7 +226,7 @@ namespace nikitov
   }
 
   template< class Key, class T, class Compare >
-  ConstTreeIterator< Key, T, Compare > Tree< Key, T, Compare >::cend() const
+  ConstTreeIterator< Key, T, Compare > Tree< Key, T, Compare >::cend() const noexcept
   {
     if (empty())
     {
@@ -280,7 +280,7 @@ namespace nikitov
   }
 
   template< class Key, class T, class Compare >
-  void Tree< Key, T, Compare >::clear()
+  void Tree< Key, T, Compare >::clear() noexcept
   {
     root_->clear();
     if (root_->parent_)
@@ -292,7 +292,7 @@ namespace nikitov
   }
 
   template< class Key, class T, class Compare >
-  void Tree< Key, T, Compare >::swap(Tree< Key, T, Compare >& other)
+  void Tree< Key, T, Compare >::swap(Tree< Key, T, Compare >& other) noexcept
   {
     std::swap(root_, other.root_);
     std::swap(size_, other.size_);
@@ -310,7 +310,7 @@ namespace nikitov
   }
 
   template< class Key, class T, class Compare >
-  TreeIterator< Key, T, Compare > Tree< Key, T, Compare >::find(const Key& key)
+  TreeIterator< Key, T, Compare > Tree< Key, T, Compare >::find(const Key& key) noexcept
   {
     detail::TreeNode< Key, T, Compare >* node = search(root_, key);
     if (node)
@@ -326,7 +326,7 @@ namespace nikitov
   }
 
   template< class Key, class T, class Compare >
-  ConstTreeIterator< Key, T, Compare > Tree< Key, T, Compare >::find(const Key& key) const
+  ConstTreeIterator< Key, T, Compare > Tree< Key, T, Compare >::find(const Key& key) const noexcept
   {
     detail::TreeNode< Key, T, Compare >* node = search(root_, key);
     if (node)

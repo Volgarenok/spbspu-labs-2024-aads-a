@@ -37,7 +37,7 @@ namespace nikitov
       Compare cmp_;
   
       TreeNode();
-      TreeNode(const std::pair< Key, T >& value);
+      explicit TreeNode(const std::pair< Key, T >& value);
       ~TreeNode() = default;
 
       bool find(const Key& key) const;
