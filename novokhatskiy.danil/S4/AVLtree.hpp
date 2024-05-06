@@ -3,8 +3,8 @@
 
 #include <functional>
 #include <cstddef>
-#include <utility>
 #include <iostream>
+#include <utility>
 #include "AVLtreeNode.hpp"
 
 namespace novokhatskiy
@@ -148,10 +148,13 @@ namespace novokhatskiy
 
     node_t* insert(const std::pair< Key, Value >& value, node_t* root)
     {
+      // root = root_;
       if (root == nullptr)
       {
+        // root = new node_t(value);
         return new node_t(value);
       }
+      // sort by keys
       if (root->value.second < value.second)
       {
         root->right = insert(value, root->right);

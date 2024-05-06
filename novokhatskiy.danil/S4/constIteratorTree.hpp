@@ -38,7 +38,18 @@ namespace novokhatskiy
 
     constIter& operator++()
     {
-
+      if (node_->right)
+      {
+        // node_ = node_->right;
+        goLastLeft();
+        return *this;
+      }
+      while (node_->parent && node_->parent->right == node_)
+      {
+        node_ = node_->parent;
+      }
+      node_ = node_->parent;
+      return *this;
     }
 
     constIter& operator--()
