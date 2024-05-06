@@ -31,19 +31,27 @@ void belokurskaya::printSequences(const SequenceVector& sequences, std::ostream&
 
   for (size_t j = 0; j < maxLength; ++j)
   {
+    bool hasOutput = false;
     for (size_t i = 0; i < sequences.getSize(); ++i)
     {
       const List< int >& seq = sequences[i].getSequence();
       if (j < seq.size())
       {
-        out << seq.at(j);
-        if (i < sequences.getSize() - 1 && j < maxLength - 1)
+        if (seq.at(j) != -1)
         {
-          out << " ";
+          if (hasOutput)
+          {
+            out << " ";
+          }
+          out << seq.at(j);
+          hasOutput = true;
         }
       }
     }
-    out << "\n";
+    if (hasOutput)
+    {
+      out << "\n";
+    }
   }
 }
 
