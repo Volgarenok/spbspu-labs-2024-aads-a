@@ -14,6 +14,8 @@ namespace nikitov
   {
   public:
     Tree();
+    Tree(ConstTreeIterator< Key, T, Compare > first, ConstTreeIterator< Key, T, Compare > second);
+    Tree(std::initializer_list< std::pair< Key, T > > initList);
     Tree(const Tree< Key, T, Compare >& other);
     Tree(Tree< Key, T, Compare >&& other);
     ~Tree();
@@ -54,23 +56,36 @@ namespace nikitov
   };
 
   template< class Key, class T, class Compare >
-  Tree< Key, T, Compare >::Tree() :
+  Tree< Key, T, Compare >::Tree():
     root_(new detail::TreeNode< Key, T, Compare >()),
     size_(0),
     cmp_(Compare())
   {}
 
   template< class Key, class T, class Compare >
-  Tree< Key, T, Compare >::Tree(const Tree< Key, T, Compare >& other):
-    root_(new detail::TreeNode< Key, T, Compare >()),
-    size_(0),
-    cmp_(other.cmp_)
+  Tree< Key, T, Compare >::Tree(ConstTreeIterator< Key, T, Compare > first, ConstTreeIterator< Key, T, Compare > second):
+    Tree()
   {
-    for (auto i = other.cbegin(); i != other.cend(); ++i)
+    for (auto i = first; i != second; ++i)
     {
       embed(*i);
     }
   }
+
+  template< class Key, class T, class Compare >
+  Tree< Key, T, Compare >::Tree(std::initializer_list< std::pair< Key, T > > initList):
+    Tree()
+  {
+    for (auto i = initList.begin(); i != initList.end(); ++i)
+    {
+      embed(*i);
+    }
+  }
+
+  template< class Key, class T, class Compare >
+  Tree< Key, T, Compare >::Tree(const Tree< Key, T, Compare >& other):
+    Tree(other.cbegin(), other.cend())
+  {}
 
   template< class Key, class T, class Compare >
   Tree< Key, T, Compare >::Tree(Tree< Key, T, Compare >&& other):
