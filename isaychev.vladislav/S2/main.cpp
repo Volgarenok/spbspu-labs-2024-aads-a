@@ -8,41 +8,54 @@
 int main(int argc, char * argv[])
 {
   using namespace isaychev;
-  Queue< std::string > infExp;
-  Queue< std::string > postfExp;
+  std::istream * input = nullptr;
+  std::ifstream file;
   if (argc == 1)
   {
-    while (!std::cin.eof())
-    {
-      try
-      {
-        inputInfix(std::cin, infExp);
-      }
-      catch (const std::invalid_argument & e)
-      {
-        std::cerr << e.what() << "\n";
-        return 1;
-      }
-    }
-  try
-  {
-    convertInfToPostf(infExp, postfExp);
-  }
-  catch(const std::out_of_range & e)
-  {
-    std::cout << e.what() << "\n";
-    return 2;
-  }
-/*    while (!postfExp.empty())
-    {
-      std::cout << postfExp.front() << " ";
-      postfExp.pop();
-    }
-    std::cout << '\n';*/
-    std::cout << calculateExpression(postfExp) << "\n";
+    input = std::addressof(std::cin);
   }
   else if (argc == 2)
   {
-    std::fstream input(argv[1]);
+    file.open(argv[1]);
+    input = std::addressof(file);
+  }
+  Stack< long long int > results;
+  try
+  {
+    while (!std::cin.eof())
+    {
+      Queue< std::string > infExp;
+      Queue< std::string > postfExp;
+      try
+      {
+        inputInfix(*input, infExp);
+      }
+      catch (const std::length_error &)
+      {
+        continue;
+      }
+      convertInfToPostf(infExp, postfExp);
+/*      while (!postfExp.empty())
+      {
+        std::cout << postfExp.front() << "\n";
+        postfExp.pop();
+      }*/
+      results.push(calculateExpression(postfExp));
+    }
+  }
+  catch (const std::invalid_argument & e)
+  {
+    std::cerr << e.what() << "\n";
+    return 1;
+  }
+  catch (const std::out_of_range & e)
+  {
+    std::cerr << e.what() << "\n";
+    return 2;
+  }
+  while (!results.empty())
+  {
+    std::cout << results.top() << "\n";
+    results.pop();
   }
 }

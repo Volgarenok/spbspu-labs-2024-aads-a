@@ -6,10 +6,11 @@
 long long int isaychev::calculateExpression(Queue< std::string > & postfExp)
 {
   Stack< long long int > calcStack;
+  long long int nums[2] = {};
+  std::string s = "";
   while (!postfExp.empty())
   {
-    long long int nums[2] = {};
-    std::string s = postfExp.front();
+    s = postfExp.front();
     postfExp.pop();
     if (s == "+")
     {
@@ -18,7 +19,7 @@ long long int isaychev::calculateExpression(Queue< std::string > & postfExp)
         nums[i] = calcStack.top();
         calcStack.pop();
       }
-      calcStack.push(nums[0] + nums[1]);
+      calcStack.push(nums[1] + nums[0]);
     }
     else if (s == "-")
     {
@@ -27,7 +28,7 @@ long long int isaychev::calculateExpression(Queue< std::string > & postfExp)
         nums[i] = calcStack.top();
         calcStack.pop();
       }
-      calcStack.push(nums[0] - nums[1]);
+      calcStack.push(nums[1] - nums[0]);
     }
     else if (s == "*")
     {
@@ -36,7 +37,7 @@ long long int isaychev::calculateExpression(Queue< std::string > & postfExp)
         nums[i] = calcStack.top();
         calcStack.pop();
       }
-      calcStack.push(nums[0] * nums[1]);
+      calcStack.push(nums[1] * nums[0]);
     }
     else if (s == "/")
     {
@@ -45,7 +46,7 @@ long long int isaychev::calculateExpression(Queue< std::string > & postfExp)
         nums[i] = calcStack.top();
         calcStack.pop();
       }
-      calcStack.push(nums[0] / nums[1]);
+      calcStack.push(nums[1] / nums[0]);
     }
     else if (s == "%")
     {
@@ -54,7 +55,7 @@ long long int isaychev::calculateExpression(Queue< std::string > & postfExp)
         nums[i] = calcStack.top();
         calcStack.pop();
       }
-      calcStack.push(nums[0] % nums[1]);
+      calcStack.push(nums[1] % nums[0]);
     }
     else
     {

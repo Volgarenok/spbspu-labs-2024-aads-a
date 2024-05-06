@@ -17,6 +17,10 @@ void isaychev::inputInfix(std::istream & in, Queue< std::string > & infExp)
 {
   std::string str = "";
   std::getline(in, str);
+  if (str.empty())
+  {
+    throw std::length_error("empty string");
+  }
   std::string token;
   for (size_t i = 0; i < str.length(); ++i)
   {
