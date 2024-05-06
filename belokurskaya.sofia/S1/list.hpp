@@ -62,21 +62,6 @@ namespace belokurskaya
         }
       }
 
-      Node * begin() const
-      {
-        return head;
-      }
-
-      Node * end() const
-      {
-        Node * current = head;
-        while (current && current->next)
-        {
-          current = current->next;
-        }
-        return current;
-      }
-
       bool empty() const noexcept
       {
         return head == nullptr;
@@ -307,6 +292,41 @@ namespace belokurskaya
       bool operator>=(const List< T > & other) const noexcept
       {
         return * this > other || * this == other;
+      }
+
+      class ConstIterator
+      {
+        private:
+          Node * current;
+
+        public:
+          ConstIterator(Node * node):
+            current(node) {}
+
+          const T & operator*() const
+          {
+            return current->value;
+          }
+
+          ConstIterator & operator++()
+          {
+            current = current->next;
+            return * this;
+          }
+
+          bool operator!=(const ConstIterator & other) const
+          {
+            return current != other.current;
+          }
+      };
+
+      ConstIterator begin() const
+      { 
+        return ConstIterator(head);
+      }
+      ConstIterator end() const
+      {
+        return ConstIterator(nullptr);
       }
   };
 }

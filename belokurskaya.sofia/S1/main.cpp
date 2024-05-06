@@ -13,9 +13,11 @@ int main()
   try
   {
     SequenceVector sequences = readSequences(std::cin);
-    printNames(sequences, std::cout);
-    printSequences(sequences, std::cout);
-    printSums(sequences, std::cout);
+
+    const SequenceVector & constSequences = sequences;
+    printNames(constSequences, std::cout);
+    printSequences(constSequences, std::cout);
+    printSums(constSequences, std::cout);
   }
 
   catch (const std::exception & e)
