@@ -67,6 +67,6 @@ int main(int argc, char * argv[])
       std::cout << " " << results.top();
       results.pop();
     }
-    std::cout << "\n";
   }
+  std::cout << "\n";
 }
