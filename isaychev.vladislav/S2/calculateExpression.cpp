@@ -25,14 +25,11 @@ long long int isaychev::calculateExpression(Queue< std::string > & postfExp)
     if (s == "+")
     {
       placeOperands(calcStack, nums);
-      if (max - nums[0] > nums[1])
-      {
-        calcStack.push(nums[1] + nums[0]);
-      }
-      else
+      if (max - nums[1] < nums[0])
       {
         throw std::overflow_error("addition overflow");
       }
+        calcStack.push(nums[1] + nums[0]);
     }
     else if (s == "-")
     {

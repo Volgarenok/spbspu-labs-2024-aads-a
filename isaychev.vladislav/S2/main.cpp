@@ -14,7 +14,7 @@ int main(int argc, char * argv[])
   {
     input = std::addressof(std::cin);
   }
-  else if (argc == 2)
+  else
   {
     file.open(argv[1]);
     input = std::addressof(file);
@@ -68,5 +68,10 @@ int main(int argc, char * argv[])
       results.pop();
     }
     std::cout << "\n";
+  }
+  else
+  {
+    std::cerr << "not enough data\n";
+    return 5;
   }
 }
