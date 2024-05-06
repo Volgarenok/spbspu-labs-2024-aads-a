@@ -4,22 +4,22 @@
 #include "AVLTree.hpp"
 namespace sivkov
 {
-  template<typename Key, typename Value, typename Comp>
+  template< typename Key, typename Value, typename Comp >
   class ConstIterator
   {
   public:
-    using Node = detail::TreeNode<Key, Value>;
+    using Node = detail::TreeNode< Key, Value >;
 
     ConstIterator(Node* node):
       current_(node)
     {}
 
-    std::pair<Key, Value>& operator*() const
+    std::pair< Key, Value >& operator*() const
     {
       return current_->data;
     }
 
-    std::pair<Key, Value>* operator->() const
+    std::pair< Key, Value >* operator->() const
     {
       return &(current_->data);
     }
