@@ -149,12 +149,11 @@ namespace nikitov
   T& Tree< Key, T, Compare >::operator[](const Key& key) noexcept
   {
     detail::TreeNode< Key, T, Compare >* node = search(root_, key);
-    if (node)
+    if (!node)
     {
-      return node->get(key);
+      insert({ key, T() });
+      node = search(root_, key);
     }
-    insert({ key, T() });
-    node = search(root_, key);
     return node->get(key);
   }
 
@@ -162,12 +161,11 @@ namespace nikitov
   T& Tree< Key, T, Compare >::operator[](Key&& key) noexcept
   {
     detail::TreeNode< Key, T, Compare >* node = search(root_, key);
-    if (node)
+    if (!node)
     {
-      return node->get(key);
+      insert({ key, T() });
+      node = search(root_, key);
     }
-    insert({ key, T() });
-    node = search(root_, key);
     return node->get(key);
   }
 
@@ -175,28 +173,22 @@ namespace nikitov
   T& Tree< Key, T, Compare >::at(const Key& key)
   {
     detail::TreeNode< Key, T, Compare >* node = search(root_, key);
-    if (node)
-    {
-      return node->get(key);
-    }
-    else
+    if (!node)
     {
       throw std::out_of_range("Error: No element by key");
     }
+    return node->get(key);
   }
 
   template< class Key, class T, class Compare >
   const T& Tree< Key, T, Compare >::at(const Key& key) const
   {
     detail::TreeNode< Key, T, Compare >* node = search(root_, key);
-    if (node)
-    {
-      return node->get(key);
-    }
-    else
+    if (!node)
     {
       throw std::out_of_range("Error: No element by key");
     }
+    return node->get(key);
   }
 
   template< class Key, class T, class Compare >
@@ -302,11 +294,7 @@ namespace nikitov
   template< class Key, class T, class Compare >
   size_t Tree< Key, T, Compare >::count(const Key& key) const
   {
-    if (search(root_, key))
-    {
-      return 1;
-    }
-    return 0;
+    return search(root_, key) != nullptr;
   }
 
   template< class Key, class T, class Compare >
@@ -415,7 +403,7 @@ namespace nikitov
     {
       return nullptr;
     }
-    if (node->find(key))
+    else if (node->find(key))
     {
       return node;
     }
@@ -427,36 +415,26 @@ namespace nikitov
     {
       return search(node->right_, key);
     }
-    else
-    {
-      return search(node->middle_, key);
-    }
+    return search(node->middle_, key);
   }
 
   template< class Key, class T, class Compare >
   detail::TreeNode< Key, T, Compare >* Tree< Key, T, Compare >::findNode(const Key& value) const
   {
     detail::TreeNode< Key, T, Compare >* node = root_;
-    while (node->left_ || node->right_ || node->middle_)
+    while (node->left_ || node->right_)
     {
       if (cmp_(value, node->firstValue_.first))
       {
         node = node->left_;
       }
-      else if (node->size_ == 2)
+      else if (node->size_ == 1 || cmp_(node->secondValue_.first, value))
       {
-        if (cmp_(node->secondValue_.first, value))
-        {
-          node = node->right_;
-        }
-        else
-        {
-          node = node->middle_;
-        }
+        node = node->right_;
       }
       else
       {
-        node = node->right_;
+        node = node->middle_;
       }
     }
     return node;
