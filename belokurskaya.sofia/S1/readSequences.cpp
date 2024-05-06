@@ -10,7 +10,7 @@ belokurskaya::SequenceVector belokurskaya::readSequences(std::istream & in)
   while (in >> name)
   {
     List< int > sequence;
-    int number = 0;
+    size_t number = 0;
     while (in >> number)
     {
       sequence.push_back(number);
