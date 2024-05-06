@@ -1,9 +1,13 @@
 #ifndef TREE_HPP
 #define TREE_HPP
 
-#include "tree_node.hpp"
+#include <cstddef>
+#include <utility>
+#include <cassert>
 #include <functional>
 #include <stdexcept>
+#include <initializer_list>
+#include "tree_node.hpp"
 #include "tree_iterator.hpp"
 #include "const_tree_iterator.hpp"
 
@@ -12,9 +16,11 @@ namespace nikitov
   template< class Key, class T, class Compare = std::less< Key > >
   class Tree
   {
+    using treeIterator = TreeIterator< Key, T, Compare >;
+    using constTreeIterator = ConstTreeIterator< Key, T, Compare >;
   public:
     Tree();
-    Tree(ConstTreeIterator< Key, T, Compare > first, ConstTreeIterator< Key, T, Compare > second);
+    Tree(constTreeIterator first, constTreeIterator second);
     Tree(std::initializer_list< std::pair< Key, T > > initList);
     Tree(const Tree< Key, T, Compare >& other);
     Tree(Tree< Key, T, Compare >&& other);
@@ -28,29 +34,29 @@ namespace nikitov
     T& at(const Key& key);
     const T& at(const Key& key) const;
 
-    TreeIterator< Key, T, Compare > begin();
-    ConstTreeIterator< Key, T, Compare > cbegin() const;
-    TreeIterator< Key, T, Compare > end();
-    ConstTreeIterator< Key, T, Compare > cend() const;
+    treeIterator begin();
+    constTreeIterator cbegin() const;
+    treeIterator end();
+    constTreeIterator cend() const;
 
     bool empty() const;
     size_t size() const;
 
-    std::pair< TreeIterator< Key, T, Compare >, bool > insert(const std::pair< Key, T >& value);
-    std::pair< TreeIterator< Key, T, Compare >, bool > insert(std::pair< Key, T >&& value);
-    void insert(ConstTreeIterator< Key, T, Compare > first, ConstTreeIterator< Key, T, Compare > second);
+    std::pair< treeIterator, bool > insert(const std::pair< Key, T >& value);
+    std::pair< treeIterator, bool > insert(std::pair< Key, T >&& value);
+    void insert(constTreeIterator first, constTreeIterator second);
     void insert(std::initializer_list< std::pair< Key, T > > initList);
     void clear();
     void swap(Tree< Key, T, Compare >& other);
-    TreeIterator< Key, T, Compare > find(const Key& key);
-    ConstTreeIterator< Key, T, Compare > find(const Key& key) const;
-    TreeIterator< Key, T, Compare > lowerBound(const Key& key);
-    ConstTreeIterator< Key, T, Compare > lowerBound(const Key& key) const;
-    TreeIterator< Key, T, Compare > upperBound(const Key& key);
-    ConstTreeIterator< Key, T, Compare > upperBound(const Key& key) const;
+    treeIterator find(const Key& key);
+    constTreeIterator find(const Key& key) const;
+    treeIterator lowerBound(const Key& key);
+    constTreeIterator lowerBound(const Key& key) const;
+    treeIterator upperBound(const Key& key);
+    constTreeIterator upperBound(const Key& key) const;
     size_t count(const Key& key) const;
-    std::pair< TreeIterator< Key, T, Compare >, TreeIterator< Key, T, Compare > > equalRange(const Key& key);
-    std::pair< ConstTreeIterator< Key, T, Compare >, ConstTreeIterator< Key, T, Compare > > equalRange(const Key& key) const;
+    std::pair< treeIterator, treeIterator > equalRange(const Key& key);
+    std::pair< constTreeIterator, constTreeIterator > equalRange(const Key& key) const;
 
   private:
     detail::TreeNode< Key, T, Compare >* root_;
@@ -72,7 +78,7 @@ namespace nikitov
   {}
 
   template< class Key, class T, class Compare >
-  Tree< Key, T, Compare >::Tree(ConstTreeIterator< Key, T, Compare > first, ConstTreeIterator< Key, T, Compare > second):
+  Tree< Key, T, Compare >::Tree(constTreeIterator first, constTreeIterator second):
     Tree()
   {
     for (auto i = first; i != second; ++i)
@@ -192,7 +198,7 @@ namespace nikitov
   template< class Key, class T, class Compare >
   TreeIterator< Key, T, Compare > Tree< Key, T, Compare >::begin()
   {
-    TreeIterator< Key, T, Compare > iterator(root_);
+    treeIterator iterator(root_);
     iterator.fallLeft();
     return iterator;
   }
@@ -200,7 +206,7 @@ namespace nikitov
   template< class Key, class T, class Compare >
   ConstTreeIterator< Key, T, Compare > Tree< Key, T, Compare >::cbegin() const
   {
-    ConstTreeIterator< Key, T, Compare > iterator(root_);
+    constTreeIterator iterator(root_);
     iterator.fallLeft();
     return iterator;
   }
@@ -210,9 +216,9 @@ namespace nikitov
   {
     if (empty())
     {
-      return TreeIterator< Key, T, Compare >(root_);
+      return treeIterator(root_);
     }
-    return TreeIterator< Key, T, Compare >(root_->parent_);
+    return treeIterator(root_->parent_);
   }
 
   template< class Key, class T, class Compare >
@@ -220,9 +226,9 @@ namespace nikitov
   {
     if (empty())
     {
-      return ConstTreeIterator< Key, T, Compare >(root_);
+      return constTreeIterator(root_);
     }
-    return ConstTreeIterator< Key, T, Compare >(root_->parent_);
+    return constTreeIterator(root_->parent_);
   }
 
   template< class Key, class T, class Compare >
@@ -280,13 +286,13 @@ namespace nikitov
       {
         isFirst = true;
       }
-      return TreeIterator< Key, T, Compare >(node, isFirst);
+      return treeIterator(node, isFirst);
     }
     return end();
   }
 
   template< class Key, class T, class Compare >
-  void Tree< Key, T, Compare >::insert(ConstTreeIterator< Key, T, Compare > first, ConstTreeIterator< Key, T, Compare > second)
+  void Tree< Key, T, Compare >::insert(constTreeIterator first, constTreeIterator second)
   {
     for (auto i = first; i != second; ++i)
     {
@@ -316,7 +322,7 @@ namespace nikitov
       {
         isFirst = true;
       }
-      return ConstTreeIterator< Key, T, Compare >(node, isFirst);
+      return constTreeIterator(node, isFirst);
     }
     return cend();
   }
@@ -324,7 +330,7 @@ namespace nikitov
   template< class Key, class T, class Compare >
   TreeIterator< Key, T, Compare > Tree< Key, T, Compare >::lowerBound(const Key& key)
   {
-    TreeIterator< Key, T, Compare > iterator = find(key);
+    treeIterator iterator = find(key);
     if (iterator == end())
     {
       iterator = begin();
@@ -339,7 +345,7 @@ namespace nikitov
   template< class Key, class T, class Compare >
   ConstTreeIterator< Key, T, Compare > Tree< Key, T, Compare >::lowerBound(const Key& key) const
   {
-    ConstTreeIterator< Key, T, Compare > iterator = find(key);
+    constTreeIterator iterator = find(key);
     if (iterator == cend())
     {
       iterator = cbegin();
@@ -354,7 +360,7 @@ namespace nikitov
   template< class Key, class T, class Compare >
   TreeIterator< Key, T, Compare > Tree< Key, T, Compare >::upperBound(const Key& key)
   {
-    TreeIterator< Key, T, Compare > iterator = lowerBound(key);
+    treeIterator iterator = lowerBound(key);
     if (iterator != end() && (*iterator).first == key)
     {
       ++iterator;
@@ -365,7 +371,7 @@ namespace nikitov
   template< class Key, class T, class Compare >
   ConstTreeIterator< Key, T, Compare > Tree< Key, T, Compare >::upperBound(const Key& key) const
   {
-    ConstTreeIterator< Key, T, Compare > iterator = lowerBound(key);
+    constTreeIterator iterator = lowerBound(key);
     if (iterator != cend() && (*iterator).first == key)
     {
       ++iterator;
@@ -384,19 +390,22 @@ namespace nikitov
   }
 
   template< class Key, class T, class Compare >
-  std::pair< TreeIterator< Key, T, Compare >, TreeIterator< Key, T, Compare > > Tree< Key, T, Compare >::equalRange(const Key& key)
+  std::pair< TreeIterator< Key, T, Compare >, TreeIterator< Key, T, Compare > > 
+    Tree< Key, T, Compare >::equalRange(const Key& key)
   {
     return { lowerBound(key), upperBound(key) };
   }
 
   template< class Key, class T, class Compare >
-  std::pair< ConstTreeIterator< Key, T, Compare >, ConstTreeIterator< Key, T, Compare > > Tree< Key, T, Compare >::equalRange(const Key& key) const
+  std::pair< ConstTreeIterator< Key, T, Compare >, ConstTreeIterator< Key, T, Compare > > 
+    Tree< Key, T, Compare >::equalRange(const Key& key) const
   {
     return { lowerBound(key), upperBound(key) };
   }
 
   template< class Key, class T, class Compare >
-  detail::TreeNode< Key, T, Compare >* Tree< Key, T, Compare >::search(detail::TreeNode< Key, T, Compare >* node, const Key& key) const
+  detail::TreeNode< Key, T, Compare >* Tree< Key, T, Compare >::search(detail::TreeNode< Key, T, Compare >* node, 
+    const Key& key) const
   {
     if (!node)
     {
@@ -480,7 +489,7 @@ namespace nikitov
       isInserted = true;
       ++size_;
     }
-    return std::pair< TreeIterator< Key, T, Compare >, bool > { find(value.first), isInserted };
+    return std::pair< treeIterator, bool > { find(value.first), isInserted };
   }
 }
 #endif
