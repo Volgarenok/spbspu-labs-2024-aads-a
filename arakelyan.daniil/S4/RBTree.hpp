@@ -58,13 +58,10 @@ namespace arakelyan
 
     void leftRotate(Node *nodeParent); //work
     void rightRotate(Node *nodeParent); //work
-    //void leftRightRotate(Node *node);
-    //void rightLeftRotate(Node *node);
-    void balanceAfterInsertOne(Node *node);
-    void balanceAfterInsertTwo(Node *node);
-    void balanceAfterInsertThree(Node *node);
-    void balanceAfterInsertFour(Node *node);
-    void balanceAfterInsertFive(Node *node);
+    void balanceAfterInsertOne(Node *node); //is root or have red parent?
+    void balanceAfterInsertTwo(Node *node); //have red uncle?
+    void balanceAfterInsertThree(Node *node); //make node from internal to external
+    void balanceAfterInsertFour(Node *node); //external node rotation
 
     void clear(Node *node);
     void traversal(Node *node) const noexcept;
@@ -271,17 +268,14 @@ namespace arakelyan
   }
 
   template < class Key, class Value, class Comparator >
-  void RBTree< Key, Value, Comparator >::balanceAfterInsertOne(detail::Node< Key, Value > *node) //is node == root
+  void RBTree< Key, Value, Comparator >::balanceAfterInsertOne(detail::Node< Key, Value > *node) //is node == root or have red parent?
   {
-    std::cout << "\n" << node->data_.first <<" im here One\n";
     if (!node->parent_)
     {
-      std::cout << node->data_.first <<" is root and now + black\n";
       node->color_ = detail::color_t::BLACK;
     }
     else if (node->parent_->color_ == detail::color_t::RED)
     {
-      std::cout << node->data_.first <<" have red parent\n";
       balanceAfterInsertTwo(node);
     }
   }
@@ -289,7 +283,6 @@ namespace arakelyan
   template < class Key, class Value, class Comparator >
   void RBTree< Key, Value, Comparator >::balanceAfterInsertTwo(detail::Node< Key, Value > *node) //have red uncle?
   {
-    std::cout << "\n" << node->data_.first <<" im here THREE\n";
     if (node->getUncle() && node->getUncle()->color_ == detail::color_t::RED)
     {
       node->parent_->color_ = detail::color_t::BLACK;
@@ -306,16 +299,13 @@ namespace arakelyan
   template < class Key, class Value, class Comparator >
   void RBTree< Key, Value, Comparator >::balanceAfterInsertThree(detail::Node< Key, Value > *node) //node from internal to external
   {
-    std::cout << "\n" << node->data_.first <<" im here FOUR\n";
     if (node->getGrandparent()->right_ == node->parent_ && node->parent_->left_ == node)
     {
-      std::cout << "\n" << node->data_.first <<" im here FOUR.1\n";
       rightRotate(node);
       node = node->right_;
     }
     else if (node->getGrandparent()->left_ == node->parent_ && node->parent_->right_ == node)
     {
-      std::cout << "\n" << node->data_.first <<" im here FOUR.2\n";
       leftRotate(node);
       node = node->left_;
     }
@@ -325,7 +315,6 @@ namespace arakelyan
   template < class Key, class Value, class Comparator >
   void RBTree< Key, Value, Comparator >::balanceAfterInsertFour(detail::Node< Key, Value > *node) //external node rotation
   {
-    std::cout << "\n" << node->data_.first <<" im here FIVE\n";
     node->parent_->color_ = detail::color_t::BLACK;
     node->getGrandparent()->color_ = detail::color_t::RED;
     if (node->getGrandparent()->right_ == node->parent_)
