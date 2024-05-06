@@ -49,6 +49,8 @@ namespace nikitov
     TreeIterator< Key, T, Compare > upperBound(const Key& key);
     ConstTreeIterator< Key, T, Compare > upperBound(const Key& key) const;
     size_t count(const Key& key) const;
+    std::pair< TreeIterator< Key, T, Compare >, TreeIterator< Key, T, Compare > > equalRange(const Key& key);
+    std::pair< ConstTreeIterator< Key, T, Compare >, ConstTreeIterator< Key, T, Compare > > equalRange(const Key& key) const;
 
   private:
     detail::TreeNode< Key, T, Compare >* root_;
@@ -379,6 +381,18 @@ namespace nikitov
       return 1;
     }
     return 0;
+  }
+
+  template< class Key, class T, class Compare >
+  std::pair< TreeIterator< Key, T, Compare >, TreeIterator< Key, T, Compare > > Tree< Key, T, Compare >::equalRange(const Key& key)
+  {
+    return { lowerBound(key), upperBound(key) };
+  }
+
+  template< class Key, class T, class Compare >
+  std::pair< ConstTreeIterator< Key, T, Compare >, ConstTreeIterator< Key, T, Compare > > Tree< Key, T, Compare >::equalRange(const Key& key) const
+  {
+    return { lowerBound(key), upperBound(key) };
   }
 
   template< class Key, class T, class Compare >
