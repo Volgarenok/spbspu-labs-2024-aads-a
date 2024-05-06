@@ -35,11 +35,6 @@ int main(int argc, char * argv[])
         continue;
       }
       convertInfToPostf(infExp, postfExp);
-/*      while (!postfExp.empty())
-      {
-        std::cout << postfExp.front() << "\n";
-        postfExp.pop();
-      }*/
       results.push(calculateExpression(postfExp));
     }
   }
@@ -53,9 +48,25 @@ int main(int argc, char * argv[])
     std::cerr << e.what() << "\n";
     return 2;
   }
-  while (!results.empty())
+  catch (const std::overflow_error & e)
   {
-    std::cout << results.top() << "\n";
+    std::cerr << e.what() << "\n";
+    return 3;
+  }
+  catch (const std::logic_error & e)
+  {
+    std::cerr << e.what() << "\n";
+    return 4;
+  }
+  if (!results.empty())
+  {
+    std::cout << results.top();
     results.pop();
+    while (!results.empty())
+    {
+      std::cout << " " << results.top();
+      results.pop();
+    }
+    std::cout << "\n";
   }
 }
