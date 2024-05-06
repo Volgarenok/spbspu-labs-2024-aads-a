@@ -162,6 +162,117 @@ namespace strelyaev
         }
       }
 
+      void erase(ConstIterator< T > it)
+      {
+        if (!root || !it.node_)
+        {
+          return;
+        }
+
+        Node< T >* node = it.node_;
+
+        if (!node->left_ && !node->right_)
+        {
+          if (node->isRoot())
+          {
+            size_--;
+            delete node;
+            root = nullptr;
+            return;
+          }
+          else
+          {
+            if (node->isLeftChild())
+            {
+              node->parent_->left_ = nullptr;
+            }
+            else
+            {
+              node->parent_->right_ = nullptr;
+            }
+            delete node;
+            size_--;
+            return;
+          }
+        }
+
+        if (!node->left_ || !node->right_)
+        {
+          Node< T >* child = nullptr;
+          if (node->left_)
+          {
+            child = node->left_;
+          }
+          else
+          {
+            child = node->right_;
+          }
+          if (node->isRoot())
+          {
+            root = child;
+          }
+          else
+          {
+            if (node->isLeftChild())
+            {
+              node->parent_->left_ = child;
+            }
+            else
+            {
+              node->parent_->right_ = child;
+            }
+            child->parent_ = node->parent_;
+          }
+          delete node;
+          size_--;
+          return;
+        }
+
+        Node< T >* successor = node->right_;
+        while (successor->left_)
+        {
+          successor = successor->left_;
+        }
+
+        if (successor->parent_ != node)
+        {
+          if (successor->right_)
+          {
+            successor->right_->parent_ = successor->parent_;
+          }
+          successor->parent_->left_ = successor->right_;
+          successor->right_ = node->right_;
+          node->right_->parent_ = successor;
+        }
+
+        if (node->isRoot())
+        {
+          root = successor;
+        }
+        else
+        {
+          if (node->isLeftChild())
+          {
+            node->parent_->left_ = successor;
+          }
+          else
+          {
+            node->parent_->right_ = successor;
+          }
+        }
+        successor->parent_ = node->parent_;
+        successor->left_ = node->left_;
+        node->left_->parent_ = successor;
+        delete node;
+        size_--;
+      }
+
+      void erase(const T& k)
+      {
+        auto it = find(k);
+        erase(it);
+      }
+
       Iterator< T > begin() noexcept
       {
         Node< T >* current = root;

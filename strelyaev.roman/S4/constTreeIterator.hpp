@@ -1,13 +1,18 @@
 #ifndef CONSTTREEITERATOR_HPP
 #define CONSTTREEITERATOR_HPP
+#include <functional>
 #include <memory>
 #include "node.hpp"
 
 namespace strelyaev
 {
+  template< typename T, typename Comp = std::less< T > >
+  class Tree;
+
   template< typename T >
   struct ConstIterator
   {
+    friend class Tree< T >;
     public:
     ConstIterator(Node< T >* node):
       node_(node)

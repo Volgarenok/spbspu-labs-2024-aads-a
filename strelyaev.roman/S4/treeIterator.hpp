@@ -5,9 +5,14 @@
 
 namespace strelyaev
 {
+
+  template< typename T, typename Comp = std::less< T > >
+  class Tree;
+
   template< typename T >
   struct Iterator
   {
+    friend class Tree< T >;
     public:
 
     Iterator(Node< T >* node):
