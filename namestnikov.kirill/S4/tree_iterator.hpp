@@ -25,6 +25,34 @@ namespace namestnikov
     iterator & operator=(const iterator &) = default;
     IteratorTree(iterator && other) noexcept = default;
     iterator & operator=(iterator && other) noexcept = default;
+    iterator & operator++()
+    {
+      if (node_->right)
+      {
+        node_ = node_->right;
+        while (node_->left)
+        {
+          node_ = node_->left;
+        }
+        return *this;
+      }
+      else
+      {
+        while ((node_->parent) && (node_->parent->right == node_))
+        {
+          node_ = node_->parent;
+        }
+        node_ = node_->parent;
+        return *this;
+      }
+    }
+    iterator & operator++(int)
+    {
+      iterator temp(*this);
+      ++(*this);
+      return temp;
+
+    }
     bool operator==(const iterator & other) const
     {
       return (node_ == other.node_);
@@ -49,6 +77,7 @@ namespace namestnikov
     {
       return std::addressof(node_->data);
     }
+    ~IteratorTree() = default;
   private:
     node_t * node_;
     explicit IteratorTree(node_t * node):
