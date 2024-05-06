@@ -1,6 +1,8 @@
 #ifndef TREE_ITERATOR_HPP
 #define TREE_ITERATOR_HPP
 
+#include <iterator>
+#include <cassert>
 #include "tree_node.hpp"
 
 namespace nikitov
