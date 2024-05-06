@@ -185,7 +185,7 @@ private:
       new_dict.insert(*ds1_beg);
       ++ds1_beg;
     }
-    lib[new_ds_name] = new_dict;
+    lib[new_ds_name] = std::move(new_dict);
   }
   void intersect_ds(string new_ds_name, string ds1_name, string ds2_name)
   {
@@ -207,7 +207,7 @@ private:
         (*ds1_beg).first < (*ds2_beg).first ? ++ds1_beg : ++ds2_beg;
       }
     }
-    lib[new_ds_name] = new_dict;
+    lib[new_ds_name] = std::move(new_dict);
   }
   void union_ds(string new_ds_name, string ds1_name, string ds2_name)
   {
