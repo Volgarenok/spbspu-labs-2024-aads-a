@@ -35,7 +35,7 @@ namespace nikitov
       treeNode* parent_;
       size_t size_;
       Compare cmp_;
-  
+
       TreeNode();
       explicit TreeNode(const std::pair< Key, T >& value);
       ~TreeNode() = default;

@@ -382,21 +382,21 @@ namespace nikitov
   }
 
   template< class Key, class T, class Compare >
-  std::pair< TreeIterator< Key, T, Compare >, TreeIterator< Key, T, Compare > > 
+  std::pair< TreeIterator< Key, T, Compare >, TreeIterator< Key, T, Compare > >
     Tree< Key, T, Compare >::equalRange(const Key& key)
   {
     return { lowerBound(key), upperBound(key) };
   }
 
   template< class Key, class T, class Compare >
-  std::pair< ConstTreeIterator< Key, T, Compare >, ConstTreeIterator< Key, T, Compare > > 
+  std::pair< ConstTreeIterator< Key, T, Compare >, ConstTreeIterator< Key, T, Compare > >
     Tree< Key, T, Compare >::equalRange(const Key& key) const
   {
     return { lowerBound(key), upperBound(key) };
   }
 
   template< class Key, class T, class Compare >
-  detail::TreeNode< Key, T, Compare >* Tree< Key, T, Compare >::search(detail::TreeNode< Key, T, Compare >* node, 
+  detail::TreeNode< Key, T, Compare >* Tree< Key, T, Compare >::search(detail::TreeNode< Key, T, Compare >* node,
     const Key& key) const
   {
     if (!node)
