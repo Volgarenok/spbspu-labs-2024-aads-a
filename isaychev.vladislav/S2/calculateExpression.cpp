@@ -11,7 +11,6 @@ long long int isaychev::calculateExpression(Queue< std::string > & postfExp)
     long long int nums[2] = {};
     std::string s = postfExp.front();
     postfExp.pop();
-    std::cout << s << "\n";
     if (s == "+")
     {
       for (int i = 0; i < 2; ++i)

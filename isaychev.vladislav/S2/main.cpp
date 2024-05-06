@@ -24,7 +24,6 @@ int main(int argc, char * argv[])
         return 1;
       }
     }
-    std::cout << "done input\n";
   try
   {
     convertInfToPostf(infExp, postfExp);
@@ -34,19 +33,13 @@ int main(int argc, char * argv[])
     std::cout << e.what() << "\n";
     return 2;
   }
-    while (!postfExp.empty())
+/*    while (!postfExp.empty())
     {
       std::cout << postfExp.front() << " ";
       postfExp.pop();
     }
-    std::cout << '\n';
-/*    std::cout << calculateExpression(postfExp) << "\n";
-    while (!infExp.empty())
-    {
-      std::cout << infExp.front() << " ";
-      infExp.pop();
-    }
     std::cout << '\n';*/
+    std::cout << calculateExpression(postfExp) << "\n";
   }
   else if (argc == 2)
   {
