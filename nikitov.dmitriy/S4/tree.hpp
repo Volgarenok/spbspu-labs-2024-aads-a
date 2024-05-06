@@ -31,6 +31,7 @@ namespace nikitov
 
     T& operator[](const Key& key);
     T& operator[](Key&& key);
+
     T& at(const Key& key);
     const T& at(const Key& key) const;
 
@@ -39,22 +40,25 @@ namespace nikitov
     treeIterator end();
     constTreeIterator cend() const;
 
-    bool empty() const;
     size_t size() const;
+    bool empty() const;
 
     std::pair< treeIterator, bool > insert(const std::pair< Key, T >& value);
     std::pair< treeIterator, bool > insert(std::pair< Key, T >&& value);
     void insert(constTreeIterator first, constTreeIterator second);
     void insert(std::initializer_list< std::pair< Key, T > > initList);
+
     void clear();
     void swap(Tree< Key, T, Compare >& other);
+
+    size_t count(const Key& key) const;
     treeIterator find(const Key& key);
     constTreeIterator find(const Key& key) const;
+
     treeIterator lowerBound(const Key& key);
     constTreeIterator lowerBound(const Key& key) const;
     treeIterator upperBound(const Key& key);
     constTreeIterator upperBound(const Key& key) const;
-    size_t count(const Key& key) const;
     std::pair< treeIterator, treeIterator > equalRange(const Key& key);
     std::pair< constTreeIterator, constTreeIterator > equalRange(const Key& key) const;
 
@@ -232,9 +236,47 @@ namespace nikitov
   }
 
   template< class Key, class T, class Compare >
+  size_t Tree< Key, T, Compare >::size() const
+  {
+    return size_;
+  }
+
+  template< class Key, class T, class Compare >
   bool Tree< Key, T, Compare >::empty() const
   {
     return !size_;
+  }
+
+  template< class Key, class T, class Compare >
+  std::pair< TreeIterator< Key, T, Compare >, bool > Tree< Key, T, Compare >::insert(const std::pair< Key, T >& value)
+  {
+    return embed(value);
+  }
+
+  template< class Key, class T, class Compare >
+  std::pair< TreeIterator< Key, T, Compare >, bool > Tree< Key, T, Compare >::insert(std::pair< Key, T >&& value)
+  {
+    return moveEmbed(std::move(value));
+  }
+
+  template< class Key, class T, class Compare >
+  void Tree< Key, T, Compare >::insert(constTreeIterator first, constTreeIterator second)
+  {
+    for (auto i = first; i != second; ++i)
+    {
+      embed(*i);
+    }
+  }
+
+  template< class Key, class T, class Compare >
+  void Tree< Key, T, Compare >::insert(std::initializer_list< std::pair< Key, T > > initList)
+  {
+    auto begin = initList.begin();
+    auto end = initList.end();
+    while (begin != end)
+    {
+      embed(*begin++);
+    }
   }
 
   template< class Key, class T, class Compare >
@@ -258,21 +300,13 @@ namespace nikitov
   }
 
   template< class Key, class T, class Compare >
-  size_t Tree< Key, T, Compare >::size() const
+  size_t Tree< Key, T, Compare >::count(const Key& key) const
   {
-    return size_;
-  }
-
-  template< class Key, class T, class Compare >
-  std::pair< TreeIterator< Key, T, Compare >, bool > Tree< Key, T, Compare >::insert(const std::pair< Key, T >& value)
-  {
-    return embed(value);
-  }
-
-  template< class Key, class T, class Compare >
-  std::pair< TreeIterator< Key, T, Compare >, bool > Tree< Key, T, Compare >::insert(std::pair< Key, T >&& value)
-  {
-    return moveEmbed(std::move(value));
+    if (search(root_, key))
+    {
+      return 1;
+    }
+    return 0;
   }
 
   template< class Key, class T, class Compare >
@@ -289,26 +323,6 @@ namespace nikitov
       return treeIterator(node, isFirst);
     }
     return end();
-  }
-
-  template< class Key, class T, class Compare >
-  void Tree< Key, T, Compare >::insert(constTreeIterator first, constTreeIterator second)
-  {
-    for (auto i = first; i != second; ++i)
-    {
-      embed(*i);
-    }
-  }
-
-  template< class Key, class T, class Compare >
-  void Tree< Key, T, Compare >::insert(std::initializer_list< std::pair< Key, T > > initList)
-  {
-    auto begin = initList.begin();
-    auto end = initList.end();
-    while (begin != end)
-    {
-      embed(*begin++);
-    }
   }
 
   template< class Key, class T, class Compare >
@@ -377,16 +391,6 @@ namespace nikitov
       ++iterator;
     }
     return iterator;
-  }
-
-  template< class Key, class T, class Compare >
-  size_t Tree< Key, T, Compare >::count(const Key& key) const
-  {
-    if (search(root_, key))
-    {
-      return 1;
-    }
-    return 0;
   }
 
   template< class Key, class T, class Compare >
