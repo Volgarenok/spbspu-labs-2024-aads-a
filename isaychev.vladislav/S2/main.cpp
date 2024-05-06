@@ -69,9 +69,4 @@ int main(int argc, char * argv[])
     }
     std::cout << "\n";
   }
-  else
-  {
-    std::cerr << "not enough data\n";
-    return 5;
-  }
 }
