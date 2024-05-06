@@ -48,6 +48,7 @@ namespace nikitov
     ConstTreeIterator< Key, T, Compare > lowerBound(const Key& key) const;
     TreeIterator< Key, T, Compare > upperBound(const Key& key);
     ConstTreeIterator< Key, T, Compare > upperBound(const Key& key) const;
+    size_t count(const Key& key) const;
 
   private:
     detail::TreeNode< Key, T, Compare >* root_;
@@ -368,6 +369,16 @@ namespace nikitov
       ++iterator;
     }
     return iterator;
+  }
+
+  template< class Key, class T, class Compare >
+  size_t Tree< Key, T, Compare >::count(const Key& key) const
+  {
+    if (search(root_, key))
+    {
+      return 1;
+    }
+    return 0;
   }
 
   template< class Key, class T, class Compare >
