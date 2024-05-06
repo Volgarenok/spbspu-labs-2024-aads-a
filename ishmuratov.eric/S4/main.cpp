@@ -9,6 +9,11 @@
 
 int main(int argc, char * argv[])
 {
+  if (argc != 2)
+  {
+    std::cerr << "Incorrect number of arguments!\n";
+    return 1;
+  }
   std::ifstream file(argv[1]);
   using namespace ishmuratov;
   data_t data;
@@ -19,8 +24,8 @@ int main(int argc, char * argv[])
     using namespace std::placeholders;
     cmds["print"] = std::bind(print, std::ref(data), _1, _2);
     cmds["complement"] = std::bind(complement, std::ref(data), _1, _2);
-    //cmds["intersect"] = std::bind(intersect, std::ref(data), _1, _2);
-    //cmds["union"] = std::bind(uniond, std::ref(data), _1, _2);
+    cmds["intersect"] = std::bind(intersect, std::ref(data), _1, _2);
+    cmds["union"] = std::bind(uniond, std::ref(data), _1, _2);
   }
 
   std::string cmd;

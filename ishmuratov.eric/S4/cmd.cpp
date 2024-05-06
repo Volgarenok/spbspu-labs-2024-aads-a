@@ -24,7 +24,7 @@ void ishmuratov::complement(ishmuratov::data_t &data, std::istream &input, std::
   dataset_t new_dict;
 
   input >> new_name >> first_name >> second_name;
-  if (data.find(first_name) == data.cend() && data.find(second_name) == data.cend())
+  if (data.find(first_name) == data.cend() || data.find(second_name) == data.cend())
   {
     throw std::runtime_error("Key not found!");
   }
@@ -36,7 +36,6 @@ void ishmuratov::complement(ishmuratov::data_t &data, std::istream &input, std::
       new_dict[dict->first] = data[first_name][dict->first];
     }
   }
-
   for (auto dict = data[second_name].cbegin(); dict != data[second_name].cend(); ++dict)
   {
     if (data[first_name].find(dict->first) == data[first_name].cend())
@@ -44,6 +43,54 @@ void ishmuratov::complement(ishmuratov::data_t &data, std::istream &input, std::
       new_dict[dict->first] = data[second_name][dict->first];
     }
   }
+  data[new_name] = new_dict;
+}
 
+void ishmuratov::intersect(ishmuratov::data_t &data, std::istream &input, std::ostream &output)
+{
+  std::string new_name;
+  std::string first_name;
+  std::string second_name;
+  dataset_t new_dict;
+
+  input >> new_name >> first_name >> second_name;
+  if (data.find(first_name) == data.cend() || data.find(second_name) == data.cend())
+  {
+    throw std::runtime_error("Key not found!");
+  }
+  for (auto dict = data[first_name].cbegin(); dict != data[first_name].cend(); ++dict)
+  {
+    if (data[second_name].find(dict->first) != data[second_name].cend())
+    {
+      new_dict[dict->first] = data[first_name][dict->first];
+    }
+  }
+  data[new_name] = new_dict;
+}
+
+void ishmuratov::uniond(ishmuratov::data_t &data, std::istream &input, std::ostream &output)
+{
+  std::string new_name;
+  std::string first_name;
+  std::string second_name;
+  dataset_t new_dict;
+
+  input >> new_name >> first_name >> second_name;
+  if (data.find(first_name) == data.cend() || data.find(second_name) == data.cend())
+  {
+    throw std::runtime_error("Key not found!");
+  }
+
+  for (auto dict = data[first_name].cbegin(); dict != data[first_name].cend(); ++dict)
+  {
+    new_dict[dict->first] = data[first_name][dict->first];
+  }
+  for (auto dict = data[second_name].cbegin(); dict != data[second_name].cend(); ++dict)
+  {
+    if (data[first_name].find(dict->first) == data[first_name].cend())
+    {
+      new_dict[dict->first] = data[second_name][dict->first];
+    }
+  }
   data[new_name] = new_dict;
 }
