@@ -441,13 +441,14 @@ namespace piyavkin
       auto pair = static_cast< const Tree< Key, T, Compare >& >(*this).equil_range(key);
       TreeIterator< Key, T, Compare > it1(const_cast< detail::TreeNode< Key, T >* >(pair.first.node_));
       TreeIterator< Key, T, Compare > it2(const_cast< detail::TreeNode< Key, T >* >(pair.second.node_));
+      auto res = it1;
       while (it1 != it2)
       {
-        detail::TreeNode< Key, T >* splayNode = it1.node;
+        detail::TreeNode< Key, T >* splayNode = it1.node_;
         ++it1;
         splay(splayNode);
       }
-      return std::pair< TreeIterator< Key, T, Compare >, TreeIterator< Key, T, Compare > >(it1, it2);
+      return std::pair< TreeIterator< Key, T, Compare >, TreeIterator< Key, T, Compare > >(res, it2);
     }
     size_t count(const Key& key) const
     {
