@@ -3,6 +3,8 @@
 
 #include <functional>
 #include <cstddef>
+#include <utility>
+#include <iostream>
 #include "AVLtreeNode.hpp"
 
 namespace novokhatskiy
@@ -12,7 +14,8 @@ namespace novokhatskiy
   {
   public:
     using node_t = detail::NodeTree< Key, Value >;
-    int getBalanceFactor(node_t* node)
+    using v_type = std::pair< Key, Value >;
+    /*int getBalanceFactor(node_t* node)
     {
       if (node == nullptr)
       {
@@ -20,10 +23,150 @@ namespace novokhatskiy
       }
       else
       {
-        return 0;
+        return;
+      }
+    }*/
+
+    Tree(const Tree& other):
+      root_(other.root_),
+      size_(other.size_),
+      cmp_(other.cmp_)
+    {
+      other.root_ = nullptr;
+      other.size_ = 0;
+    }
+
+    Tree& operator=(const Tree& other)
+    {
+      if (this != std::addressof(other))
+      {
+        Tree< Key, Value > tmp(other);
+        swap(tmp);
+      }
+      return *this;
+    }
+
+    Tree& operator=(Tree&& other)
+    {
+      if (this != std::addressof(other))
+      {
+        swap(other);
+      }
+      return *this;
+    }
+
+    node_t* rotate_left(node_t* node)
+    {
+      node_t* newRoot = node->right;
+      node_t* tmp = newRoot->left;
+      node->right = tmp;
+      newRoot->left = node;
+      newRoot = updateHeight(newRoot);
+      node = updateHeight(node);
+      return newRoot;
+      /*node_t* newRoot = node->right;
+      node->right = newRoot->left;
+      newRoot->right = node;
+      node->parent = newRoot;
+      node->right->parent = node;*/
+
+    }
+
+    node_t* rotate_right(node_t* node)
+    {
+      node_t* newRoot = node->left;
+      node_t* tmp = newRoot->right;
+      node->left = tmp;
+      newRoot->right = node;
+      node = updateHeight(node);
+      newRoot = updateHeight(newRoot);
+      return newRoot;
+    }
+
+    void prePrint(node_t* root)
+    {
+      if (root->left != nullptr)
+      {
+        prePrint(root->left);
+      }
+      std::cout << ' ' << root->value.second << ' ';
+      if (root->right != nullptr)
+      {
+        prePrint(root->right);
       }
     }
 
+    void print()
+    {
+      prePrint(root_);
+    }
+
+    node_t* balance(node_t* node)
+    {
+      fixedHeight(node);
+      if (getBalanceFactor(node) == 2)
+      {
+        if (getBalanceFactor(node->right) < 0)
+        {
+          node->right = rotate_right(node->right);
+        }
+        return rotate_left(node);
+      }
+      if (getBalanceFactor(node) == -2)
+      {
+        if (getBalanceFactor(node->left) > 0)
+        {
+          node->left = rotate_left(node->left);
+        }
+        return rotate_right(node);
+      }
+      return node;
+    }
+
+    void fixedHeight(node_t* node)
+    {
+      int rightH = getHeight(node->right);
+      int leftH = getHeight(node->left);
+      node->height = (rightH > leftH ? rightH : leftH) + 1;
+    }
+
+    int getHeight(node_t* root)
+    {
+      return root ? root->height : 0;
+    }
+
+    int getBalanceFactor(node_t* node)
+    {
+      return getHeight(node->right) - getHeight(node->left);
+    }
+
+    node_t* updateHeight(node_t* node)
+    {
+      node->height = 1 + std::max(node->getHeight(node->left), node->getHeight(node->right));
+      return node;
+    }
+
+    node_t* insert(const std::pair< Key, Value >& value, node_t* root)
+    {
+      if (root == nullptr)
+      {
+        return new node_t(value);
+      }
+      if (root->value.second < value.second)
+      {
+        root->right = insert(value, root->right);
+      }
+      else if (root->value.second == value.second)
+      {
+        return balance(root);
+      }
+      else
+      {
+        root->left = insert(value, root->left);
+      }
+      return balance(root);
+    }
+    
     size_t size() const
     {
       return size_;

@@ -7,7 +7,6 @@
 #include <utility>
 #include "AVLtreeNode.hpp"
 
-
 namespace novokhatskiy
 {
   template< class Key, class Value, class Compare >
