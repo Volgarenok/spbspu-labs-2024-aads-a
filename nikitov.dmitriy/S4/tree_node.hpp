@@ -34,6 +34,7 @@ namespace nikitov
       T& get(const Key& key);
       const T& get(const Key& key) const;
       TreeNode< Key, T, Compare >* add(const std::pair< Key, T >& value);
+      TreeNode< Key, T, Compare >* add(std::pair< Key, T >&& value);
       TreeNode< Key, T, Compare >* split(const std::pair< Key, T >& value, Node* node);
       void check(TreeNode< Key, T, Compare >* node);
       void checkNeighbour(const List< TreeNode< Key, T, Compare >* >& nodes);
@@ -140,6 +141,44 @@ namespace nikitov
     }
 
     template< class Key, class T, class Compare >
+    TreeNode< Key, T, Compare >* TreeNode< Key, T, Compare >::add(std::pair< Key, T >&& value)
+    {
+      TreeNode< Key, T, Compare >* newRoot = nullptr;
+      if (size_ == 0)
+      {
+        firstValue_ = std::move(value);
+        ++size_;
+      }
+      else if (size_ == 1)
+      {
+        secondValue_ = std::move(value);
+        if (!cmp_(firstValue_.first, secondValue_.first))
+        {
+          std::swap(firstValue_, secondValue_);
+        }
+        ++size_;
+      }
+      else
+      {
+        Key key = value.first;
+        std::pair< Key, T > toSplit = std::move(value);
+        if (cmp_(key, firstValue_.first))
+        {
+          std::swap(firstValue_, toSplit);
+        }
+        else if (cmp_(secondValue_.first, key))
+        {
+          std::swap(secondValue_, toSplit);
+        }
+        TreeNode< Key, T, Compare >* newNode = new TreeNode< Key, T, Compare >(secondValue_);
+        secondValue_ = std::pair< Key, T >{};
+        --size_;
+        newRoot = parent_->split(toSplit, newNode);
+      }
+      return newRoot;
+    }
+
+    template< class Key, class T, class Compare >
     TreeNode< Key, T, Compare >* TreeNode< Key, T, Compare >::split(const std::pair< Key, T >& value, Node* node)
     {
       TreeNode< Key, T, Compare >* newRoot = nullptr;
@@ -156,7 +195,6 @@ namespace nikitov
         newRoot = add(value);
         check(node);
       }
-
       return newRoot;
     }
 
@@ -236,7 +274,7 @@ namespace nikitov
       {
         middle_->parent_ = this;
       }
-}
+    }
 
     template< class Key, class T, class Compare >
     void TreeNode< Key, T, Compare >::clear()
