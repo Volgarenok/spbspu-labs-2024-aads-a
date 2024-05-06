@@ -1,14 +1,12 @@
 #ifndef INPUT_HPP
 #define INPUT_HPP
 
-#include <map>
-#include <string>
-#include <istream>
+
+#include "AVLTree.hpp"
 
 namespace sivkov
 {
-  void inputDictionary(std::map < std::string, std::map< size_t, std::string > >& treeOfdic, std::istream& in);
+  void inputDictionary(AVLTree < std::string, AVLTree< size_t, std::string > >& treeOfdic, std::istream& in);
 }
-
 #endif
 

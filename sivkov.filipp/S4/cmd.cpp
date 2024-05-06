@@ -1,98 +1,82 @@
 #include "cmd.hpp"
-#include <map>
-#include <iostream>
 
 namespace sivkov
 {
-  void print(std::map< std::string, std::map< size_t, std::string > >& treeOfdic, std::istream& in, std::ostream& out)
+  void print(AVLTree<std::string, AVLTree<size_t, std::string>>& treeOfdic, std::istream& in, std::ostream& out)
   {
     std::string dataset = "";
     in >> dataset;
-    auto found = treeOfdic.find(dataset);
-    if (found != treeOfdic.end())
-    {
-      out << dataset;
-      for (auto it = found->second.begin(); it != found->second.end(); ++it)
-      {
-        out << " " << it->first << " " << it->second;
-      }
-    }
-    else
+    AVLTree< size_t, std::string > data = treeOfdic.get(dataset);
+    if (data.emty())
     {
       throw std::logic_error("<EMPTY>");
     }
+    out << dataset;
+    for (auto it = data.cbegin(); it != data.cend(); ++it)
+    {
+      out << " " << it->first << " " << it->second;
+    }
   }
 
-  void complement(std::map<std::string, std::map<size_t, std::string>>& treeOfdic, std::istream& in)
+  void complement(AVLTree<std::string, AVLTree<size_t, std::string>>& treeOfdic, std::istream& in)
+  {
+    std::string newDataset = "", dataset1 = "", dataset2 = "";
+    in >> newDataset >> dataset1 >> dataset2;
+    AVLTree< size_t, std::string > data1 = treeOfdic.get(dataset1);
+    AVLTree< size_t, std::string > data2 = treeOfdic.get(dataset2);
+    AVLTree< size_t, std::string > result;
+
+    for (auto it = data1.cbegin(); it != data1.cend(); ++it)
+    {
+      try
+      {
+        data2.get(it->first);
+      }
+      catch (...)
+      {
+        result.push(it->first, it->second);
+      }
+    }
+    treeOfdic.push(newDataset, result);
+  }
+
+  void intersect(AVLTree<std::string, AVLTree<size_t, std::string>>& treeOfdic, std::istream& in)
+  {
+    std::string newDataset = "", dataset1 = "", dataset2 = "";
+    in >> newDataset >> dataset1 >> dataset2;
+    AVLTree< size_t, std::string > data1 = treeOfdic.get(dataset1);
+    AVLTree< size_t, std::string > data2 = treeOfdic.get(dataset2);
+    AVLTree< size_t, std::string > result;
+    for (auto it = data1.cbegin(); it != data1.cend(); ++it)
+    {
+      if (data2.contains(it->first))
+      {
+        result.push(it->first, it->second);
+      }
+    }
+
+    treeOfdic.push(newDataset, result);
+  }
+
+  void unionCMD(AVLTree<std::string, AVLTree<size_t, std::string>>& treeOfdic, std::istream& in)
   {
     std::string newDataset, dataset1, dataset2;
     in >> newDataset >> dataset1 >> dataset2;
 
-    auto found1 = treeOfdic.find(dataset1);
-    auto found2 = treeOfdic.find(dataset2);
-
-    if (found1 != treeOfdic.end() && found2 != treeOfdic.end())
+    AVLTree<size_t, std::string> data1 = treeOfdic.get(dataset1);
+    AVLTree<size_t, std::string> data2 = treeOfdic.get(dataset2);
+    AVLTree<size_t, std::string> result;
+    for (auto it = data1.cbegin(); it != data1.cend(); ++it)
     {
-      std::map<size_t, std::string> complementDict;
-      for (auto it = found1->second.begin(); it != found1->second.end(); ++it)
-      {
-        complementDict[it->first] = it->second;
-      }
-      for (auto it = found2->second.begin(); it != found2->second.end(); ++it)
-      {
-        auto iter = complementDict.find(it->first);
-        if (iter != complementDict.end())
-        {
-          complementDict.erase(iter);
-        }
-      }
-      treeOfdic[newDataset] = complementDict;
+      result.push(it->first, it->second);
     }
-  }
-
-  void intersect(std::map<std::string, std::map<size_t, std::string>>& treeOfdic, std::istream& in)
-  {
-    std::string newDataset, dataset1, dataset2;
-    in >> newDataset >> dataset1 >> dataset2;
-
-    auto found1 = treeOfdic.find(dataset1);
-    auto found2 = treeOfdic.find(dataset2);
-
-    if (found1 != treeOfdic.end() && found2 != treeOfdic.end())
+    for (auto it = data2.cbegin(); it != data2.cend(); ++it)
     {
-      std::map<size_t, std::string> intersectDict;
-      for (auto it = found1->second.begin(); it != found1->second.end(); ++it)
+      if (!result.contains(it->first))
       {
-        auto it2 = found2->second.find(it->first);
-        if (it2 != found2->second.end())
-        {
-          intersectDict[it->first] = it->second;
-        }
+        result.push(it->first, it->second);
       }
-      treeOfdic[newDataset] = intersectDict;
     }
-  }
-
-  void uni(std::map<std::string, std::map<size_t, std::string>>& treeOfdic, std::istream& in)
-  {
-    std::string newDataset, dataset1, dataset2;
-    in >> newDataset >> dataset1 >> dataset2;
-
-    auto found1 = treeOfdic.find(dataset1);
-    auto found2 = treeOfdic.find(dataset2);
-
-    if (found1 != treeOfdic.end() && found2 != treeOfdic.end())
-    {
-      std::map<size_t, std::string> unionDict;
-      for (auto it = found1->second.begin(); it != found1->second.end(); ++it)
-      {
-        unionDict[it->first] = it->second;
-      }
-      for (auto it = found2->second.begin(); it != found2->second.end(); ++it)
-      {
-        unionDict[it->first] = it->second;
-      }
-      treeOfdic[newDataset] = unionDict;
-    }
+    treeOfdic.push(newDataset, result);
   }
 }
