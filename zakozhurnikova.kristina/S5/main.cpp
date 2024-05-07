@@ -5,6 +5,7 @@
 #include <binarySearchTree.hpp>
 #include "implementedCommands.hpp"
 #include "inputMap.hpp"
+#include "getSum.hpp"
 
 int main(int argc, char *argv[])
 {
@@ -24,12 +25,13 @@ int main(int argc, char *argv[])
   ImplementedCommands master(map);
   std::string command = argv[1];
   std::string cmdOutput;
+  int amount = 0;
     try
     {
-//      master.executeCommand(command, cmdOutput);
+      amount = master.executeCommand(command, cmdOutput);
       if (!cmdOutput.empty())
       {
-        std::cout << cmdOutput << '\n';
+        std::cout << amount << " " << cmdOutput << '\n';
       }
     }
     catch (const std::invalid_argument &e)

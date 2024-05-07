@@ -1,6 +1,7 @@
 #include <iostream>
 #include <scopeGuard.hpp>
 #include "implementedCommands.hpp"
+#include "getSum.hpp"
 
 namespace zak = zakozhurnikova;
 using map = zak::BinarySearchTree< int, std::string >;
@@ -9,24 +10,40 @@ zak::ImplementedCommands::ImplementedCommands(BinarySearchTree< int, std::string
   map_(map)
 {
   commands_.push("ascending", &ImplementedCommands::ascending);
-  commands_.push("descending", &ImplementedCommands::descending);
-  commands_.push("breadth", &ImplementedCommands::breadth);
+//  commands_.push("descending", &ImplementedCommands::descending);
+//  commands_.push("breadth", &ImplementedCommands::breadth);
 }
 
-void zak::ImplementedCommands::executeCommand(std::string& command, std::string& result)
+int zak::ImplementedCommands::executeCommand(std::string& command, std::string& result)
 {
-  if (command.empty())
-  {
-    result = std::string();
-    return;
-  }
-
+  int sum = 0;
   try
   {
-    (this->*commands_.at(command))(result);
+    sum = (this->*commands_.at(command))(result);
   }
   catch (const std::out_of_range& e)
   {
     throw std::invalid_argument("invalid command name");
   }
+  return sum;
+}
+
+int zak::ImplementedCommands::ascending(std::string& result)
+{
+  KeySum amount;
+  map_.traverse_lnr(amount);
+  int sum = amount.result_;
+  if (!map_.empty())
+  {
+    for (auto it = map_.cbegin(); it != map_.cend(); ++it)
+    {
+      result += it->second + ' ';
+    }
+    result.pop_back();
+  }
+  else
+  {
+    result = "<EMPTY>";
+  }
+  return sum;
 }

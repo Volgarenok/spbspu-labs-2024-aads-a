@@ -10,17 +10,16 @@ namespace zakozhurnikova
   struct ImplementedCommands
   {
     explicit ImplementedCommands(BinarySearchTree< int, std::string > map);
-    void executeCommand(std::string& command, std::string& result);
+    int executeCommand(std::string& command, std::string& result);
 
   private:
-//параметры    
-    using command = void (ImplementedCommands::*)(std::string&);
+    using command = int (ImplementedCommands::*)(std::string&);
     BinarySearchTree< int, std::string >& map_;
     BinarySearchTree< std::string, command > commands_;
 
-    void ascending(std::string& result);
-    void descending(std::string& result);
-    void breadth(std::string& result);
+    int ascending(std::string& result);
+//    int descending(std::string& result);
+//    int breadth(std::string& result);
   };
 }
 
