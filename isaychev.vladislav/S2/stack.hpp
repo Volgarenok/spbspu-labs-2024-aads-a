@@ -23,56 +23,56 @@ namespace isaychev
     void swap(Stack & rhs);
 
    private:
-    Container con;
+    Container con_;
   };
 
   template < class T, class Container >
   void Stack< T, Container >::push(const T & rhs)
   {
-    con.push_back(rhs);
+    con_.push_back(rhs);
   }
 
   template < class T, class Container >
   void Stack< T, Container >::pop()
   {
-    con.pop_back();
+    con_.pop_back();
   }
 
   template < class T, class Container >
   T & Stack< T, Container >::top()
   {
-    return con.back();
+    return con_.back();
   }
 
   template < class T, class Container >
   const T & Stack< T, Container >::top() const
   {
-    return con.back();
+    return con_.back();
   }
 
   template < class T, class Container >
   template < class... Args >
   void Stack< T, Container >::emplace(Args&&... args)
   {
-    con.emplace_back(std::forward< Args... >(args...));
+    con_.emplace_back(std::forward< Args... >(args...));
   }
 
   template < class T, class Container >
   bool Stack< T, Container >::empty() const
   {
-    return con.empty();
+    return con_.empty();
   }
 
   template < class T, class Container >
   size_t Stack< T, Container >::size() const
   {
-    return con.size();
+    return con_.size();
   }
 
   template < class T, class Container >
   void Stack< T, Container >::swap(Stack & rhs)
   {
-    con.swap(rhs.con);
+    con_.swap(rhs.con_);
   }
 }
 

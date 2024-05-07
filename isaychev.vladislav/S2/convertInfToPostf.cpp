@@ -1,6 +1,5 @@
 #include "convertInfToPostf.hpp"
 #include <cctype>
-#include <iostream>
 
 bool isHighPriority(const std::string & str)
 {
