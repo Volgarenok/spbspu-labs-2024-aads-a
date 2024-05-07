@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <stdexcept>
 #include <cstring>
+#include <climits>
 
 namespace spiridonov
 {
