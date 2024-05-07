@@ -6,7 +6,7 @@ bool isHighPriority(const std::string & str)
   return str == "/" || str == "%" || str == "*";
 }
 
-void placeElemIntoQueue(Stack< std::string & s, Queue< std::string > & q)
+void placeElemIntoQueue(isaychev::Stack< std::string > & s, isaychev::Queue< std::string > & q)
 {
   q.push(s.top());
   q.pop();
