@@ -31,6 +31,7 @@ bool higherPriority(std::string first, std::string second)
   }
   return 0;
 }
+
 grechishnikov::Queue< std::string > grechishnikov::postfixFromInfix(const Queue< std::string >& infix)
 {
   Queue< std::string > temp = infix;

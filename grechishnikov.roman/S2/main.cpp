@@ -1,5 +1,6 @@
 #include <iostream>
 #include "queue.hpp"
+#include "stack.hpp"
 #include "calculatePostfix.hpp"
 #include "getExpression.hpp"
 #include "postfixFromInfix.hpp"
@@ -9,21 +10,37 @@ int main()
   using namespace grechishnikov;
 
   Queue< std::string > b;
-  Queue< std::string > b2;
-  Queue< std::string > res;
+  Queue< std::string > temp;
+  Queue< std::string > cl;
   std::string str;
-  getline(std::cin, str);
+  Stack< long long > res;
   try
   {
-    b = getExpression(str);
-    res = postfixFromInfix(b);
-    b2 = res;
-    while (!b2.empty())
+    while (!std::cin.eof())
     {
-      std::cout << b2.top() << '\n';
-      b2.pop();
+      getline(std::cin, str);
+      if (std::cin.eof())
+      {
+        continue;
+      }
+      b = getExpression(str);
+      temp = postfixFromInfix(b);
+//      auto b2 = temp;
+//      while (!b2.empty())
+//      {
+//        std::cout << b2.top();
+//        b2.pop();
+//      }
+//      std::cout << calculatePostfix(temp);
+      res.push(calculatePostfix(temp));
+      b = cl;
+      temp = cl;
     }
-    std::cout << calculatePostfix(res) << '\n';
+    while (!res.empty())
+    {
+      std::cout << res.top() << '\n';
+      res.pop();
+    }
   }
   catch(std::exception &e)
   {
