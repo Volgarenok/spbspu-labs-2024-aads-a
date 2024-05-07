@@ -10,12 +10,12 @@ namespace belokurskaya
   class SequencePair
   {
     std::string name;
-    List< int > sequence;
+    List< unsigned long long > sequence;
 
     public:
       SequencePair() {}
 
-      SequencePair(const std::string & name, const List< int > & sequence):
+      SequencePair(const std::string & name, const List< unsigned long long > & sequence):
         name(name),
         sequence(sequence) {}
 
@@ -24,7 +24,7 @@ namespace belokurskaya
         return name;
       }
 
-      const List< int > & getSequence() const
+      const List< unsigned long long > & getSequence() const
       {
         return sequence;
       }

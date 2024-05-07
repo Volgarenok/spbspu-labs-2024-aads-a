@@ -34,7 +34,7 @@ void belokurskaya::printSequences(const SequenceVector& sequences, std::ostream&
     bool hasOutput = false;
     for (size_t i = 0; i < sequences.getSize(); ++i)
     {
-      const List< int >& seq = sequences[i].getSequence();
+      const List< unsigned long long >& seq = sequences[i].getSequence();
       if (j < seq.size())
       {
         if (seq.at(j) != -1)
@@ -67,7 +67,7 @@ void belokurskaya::printSums(const SequenceVector& sequences, std::ostream& out)
     out << "0\n";
     return;
   }
-  int* sums = new int[maxLength] {};
+  unsigned long long* sums = new unsigned long long[maxLength] {};
   if (sums == nullptr)
   {
     std::cerr << "Failed to allocate memory\n";
@@ -80,7 +80,7 @@ void belokurskaya::printSums(const SequenceVector& sequences, std::ostream& out)
 
   for (size_t i = 0; i < sequences.getSize(); ++i)
   {
-    const List< int >& seq = sequences[i].getSequence();
+    const List< unsigned long long >& seq = sequences[i].getSequence();
     for (size_t j = 0; j < seq.size(); ++j)
     {
       if (j < maxLength)

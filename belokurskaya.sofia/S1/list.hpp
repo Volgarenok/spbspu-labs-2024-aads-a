@@ -67,7 +67,7 @@ namespace belokurskaya
         return head == nullptr;
       }
 
-      void push_back(T value)
+      void push_back(unsigned long long value)
       {
         Node * newNode = new Node(value);
         if (!head)
@@ -167,7 +167,7 @@ namespace belokurskaya
         delete temp;
       }
 
-      void remove(T value)
+      void remove(unsigned long long value)
       {
         Node * current = head;
         Node * prev = nullptr;
