@@ -6,6 +6,12 @@ bool isHighPriority(const std::string & str)
   return str == "/" || str == "%" || str == "*";
 }
 
+void placeElemIntoQueue(Stack< std::string & s, Queue< std::string > & q)
+{
+  q.push(s.top());
+  q.pop();
+}
+
 void isaychev::convertInfToPostf(Queue< std::string > & infExp, Queue< std::string > & postfExp)
 {
   Stack< std::string > temp;
@@ -21,8 +27,7 @@ void isaychev::convertInfToPostf(Queue< std::string > & infExp, Queue< std::stri
     {
       while (temp.top() != "(")
       {
-        postfExp.push(temp.top());
-        temp.pop();
+        placeElemIntoQueue(temp, postfExp);
       }
       temp.pop();
     }
@@ -30,8 +35,7 @@ void isaychev::convertInfToPostf(Queue< std::string > & infExp, Queue< std::stri
     {
       while (!temp.empty() && temp.top() != "(")
       {
-        postfExp.push(temp.top());
-        temp.pop();
+        placeElemIntoQueue(temp, postfExp);
       }
       temp.push(s);
     }
@@ -39,8 +43,7 @@ void isaychev::convertInfToPostf(Queue< std::string > & infExp, Queue< std::stri
     {
       while (!temp.empty() && (temp.top() == "-" || temp.top() == "+") && temp.top() != "(")
       {
-        postfExp.push(temp.top());
-        temp.pop();
+        placeElemIntoQueue(temp, postfExp);
       }
       temp.push(s);
     }
@@ -52,7 +55,6 @@ void isaychev::convertInfToPostf(Queue< std::string > & infExp, Queue< std::stri
   }
   if (!temp.empty())
   {
-    postfExp.push(temp.top());
-    temp.pop();
+    placeElemIntoQueue(temp, postfExp);
   }
 }
