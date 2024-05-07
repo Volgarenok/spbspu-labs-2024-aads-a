@@ -5,9 +5,8 @@
 #include <cstdlib>
 #include <functional>
 #include <iostream>
-#include "comparator.hpp"
-#include "constIteratorTree.hpp"
-#include "treeNode.hpp"
+#include <treeNode.hpp>
+#include <constIteratorTree.hpp>
 
 namespace zakozhurnikova
 {

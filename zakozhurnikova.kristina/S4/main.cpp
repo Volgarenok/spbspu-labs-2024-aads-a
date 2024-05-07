@@ -2,11 +2,9 @@
 #include <iostream>
 #include <string>
 #include <utility>
-#include "binarySearchTree.hpp"
+#include <binarySearchTree.hpp>
 #include "implementedCommands.hpp"
-#include "comparator.hpp"
 #include "inputMaps.hpp"
-#include "treeNode.hpp"
 
 int main(int argc, char *argv[])
 {

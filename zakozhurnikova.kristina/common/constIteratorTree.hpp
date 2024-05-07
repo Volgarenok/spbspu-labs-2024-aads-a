@@ -3,7 +3,7 @@
 #include <functional>
 #include <iterator>
 #include <utility>
-#include "treeNode.hpp"
+#include <treeNode.hpp>
 
 namespace zakozhurnikova
 {

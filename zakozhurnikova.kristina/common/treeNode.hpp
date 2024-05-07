@@ -1,7 +1,7 @@
 #ifndef TREENODE_HPP
 #define TREENODE_HPP
-
 #include <utility>
+
 namespace zakozhurnikova
 {
   namespace detail
