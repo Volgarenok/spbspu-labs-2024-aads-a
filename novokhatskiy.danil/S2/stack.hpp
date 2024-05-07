@@ -2,7 +2,7 @@
 #define STACK_HPP
 
 #include <stdexcept>
-#include "forward_list.hpp"
+#include <forward_list.hpp>
 
 namespace novokhatskiy
 {

@@ -1,7 +1,6 @@
 #include <exception>
 #include <fstream>
 #include <iostream>
-#include <list>
 #include <string>
 #include "calculate_expression.hpp"
 #include "convert_expression.hpp"

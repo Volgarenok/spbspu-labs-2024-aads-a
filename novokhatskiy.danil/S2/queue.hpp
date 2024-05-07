@@ -1,7 +1,7 @@
 #ifndef QUEUE_HPP
 #define QUEUE_HPP
 
-#include "forward_list.hpp"
+#include <forward_list.hpp>
 #include "tokens.hpp"
 
 namespace novokhatskiy
