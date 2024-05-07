@@ -9,7 +9,7 @@ bool isHighPriority(const std::string & str)
 void placeElemIntoQueue(isaychev::Stack< std::string > & s, isaychev::Queue< std::string > & q)
 {
   q.push(s.top());
-  q.pop();
+  s.pop();
 }
 
 void isaychev::convertInfToPostf(Queue< std::string > & infExp, Queue< std::string > & postfExp)
