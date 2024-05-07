@@ -11,7 +11,6 @@ namespace grechishnikov
       T data_;
       Node* prev_;
       Node* next_;
-      Node();
       Node(const T& data, Node* prev, Node* next);
     };
   }

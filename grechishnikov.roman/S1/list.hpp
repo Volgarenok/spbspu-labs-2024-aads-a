@@ -318,11 +318,12 @@ namespace grechishnikov
     auto first = cbegin();
     while (first != cend())
     {
-      if (p(*first))
-      {
-        erase(first);
-      }
+      auto temp = first;
       first++;
+      if (p(*temp))
+      {
+        erase(temp);
+      }
     }
   }
 
@@ -365,7 +366,7 @@ namespace grechishnikov
       push_back(value);
       return Iterator< T >(tail_);
     }
-    auto temp = new detail::Node< T > (value, nullptr, nullptr);
+    auto temp = new detail::Node< T >(value, nullptr, nullptr);
     where.node_->next_ = temp;
     nextNode.node_->prev_ = temp;
     temp->prev_ = where.node_;
