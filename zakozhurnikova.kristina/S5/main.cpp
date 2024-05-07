@@ -3,7 +3,7 @@
 #include <string>
 #include <utility>
 #include <binarySearchTree.hpp>
-//#include "implementedCommands.hpp"
+#include "implementedCommands.hpp"
 #include "inputMap.hpp"
 
 int main(int argc, char *argv[])
@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
     return 1;
   }
 
-//  ImplementedCommands master(map);
+  ImplementedCommands master(map);
   std::string command = argv[1];
   std::string cmdOutput;
     try
