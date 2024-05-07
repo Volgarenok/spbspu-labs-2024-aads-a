@@ -12,7 +12,7 @@ namespace namestnikov
     node_t * left;
     node_t * right;
     int height;
-    TreeNode(const T & value):
+    explicit TreeNode(const T & value):
       data(value),
       parent(nullptr),
       left(nullptr),
