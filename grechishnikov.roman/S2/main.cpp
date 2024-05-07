@@ -1,49 +1,39 @@
 #include <iostream>
-#include "queue.hpp"
+#include <fstream>
+#include <stdexcept>
 #include "stack.hpp"
 #include "calculatePostfix.hpp"
-#include "getExpression.hpp"
-#include "postfixFromInfix.hpp"
 
-int main()
+int main(int argc, char* argv[])
 {
   using namespace grechishnikov;
 
-  Queue< std::string > b;
-  Queue< std::string > temp;
-  Queue< std::string > cl;
-  std::string str;
   Stack< long long > res;
   try
   {
-    while (!std::cin.eof())
+    if (argc == 1)
     {
-      getline(std::cin, str);
-      if (std::cin.eof())
-      {
-        continue;
-      }
-      b = getExpression(str);
-      temp = postfixFromInfix(b);
-//      auto b2 = temp;
-//      while (!b2.empty())
-//      {
-//        std::cout << b2.top();
-//        b2.pop();
-//      }
-//      std::cout << calculatePostfix(temp);
-      res.push(calculatePostfix(temp));
-      b = cl;
-      temp = cl;
+      res = calculateExpressions(std::cin);
     }
-    while (!res.empty())
+    else if (argc == 2)
     {
-      std::cout << res.top() << '\n';
-      res.pop();
+      std::ifstream input(argv[1]);
+      res = calculateExpressions(input);
+    }
+    else
+    {
+      throw std::logic_error("Invalid optiom was passed");
     }
   }
   catch(std::exception &e)
   {
     std::cout << e.what() << '\n';
+    return 1;
   }
+  while (!res.empty())
+  {
+    std::cout << res.top() << '\n';
+    res.pop();
+  }
+
 }

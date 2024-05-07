@@ -4,6 +4,8 @@
 #include "stack.hpp"
 #include "tokenType.hpp"
 #include "safeMathFunctions.hpp"
+#include "getExpression.hpp"
+#include "postfixFromInfix.hpp"
 
 std::pair< long long int, long long int > getTwoFirst(grechishnikov::Stack< long long int >& stack);
 
@@ -50,6 +52,27 @@ long long int grechishnikov::calculatePostfix(const Queue< std::string >& postfi
   }
   return calcStack.top();
 }
+
+grechishnikov::Stack< long long int > grechishnikov::calculateExpressions(std::istream& in)
+{
+  std::string str;
+  Stack< long long > res;
+  while (!in.eof())
+  {
+    getline(in, str);
+    if (in.eof() || str == "")
+    {
+      continue;
+    }
+    Queue< std::string > initExpr;
+    Queue< std::string > postExpr;
+    initExpr = getExpression(str);
+    postExpr = postfixFromInfix(initExpr);
+    res.push(calculatePostfix(postExpr));
+  }
+  return res;
+}
+
 
 std::pair< long long int, long long int > getTwoFirst(grechishnikov::Stack< long long int >& stack)
 {
