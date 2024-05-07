@@ -30,10 +30,15 @@ int main(int argc, char* argv[])
     std::cout << e.what() << '\n';
     return 1;
   }
-  while (!res.empty())
+  if (!res.empty())
   {
-    std::cout << res.top() << '\n';
+    std::cout << res.top();
     res.pop();
   }
-
+  while (!res.empty())
+  {
+    std::cout << " " << res.top();
+    res.pop();
+  }
+  std::cout << '\n';
 }
