@@ -1,6 +1,9 @@
 #ifndef AVLTREE_HPP
 #define AVLTREE_HPP
 
+#include "node.hpp"
+#include "iterator.hpp"
+
 namespace chistyakov
 {
   template< typename T, typename Comp = std::less< T > >
