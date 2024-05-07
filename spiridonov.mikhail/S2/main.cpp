@@ -50,7 +50,6 @@ int main(int argc, char* argv[])
     std::cout << results.getTop() << " ";
     results.pop();
   }
-
   std::cout << "\n";
 
   return 0;

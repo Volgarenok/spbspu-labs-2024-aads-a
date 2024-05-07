@@ -6,7 +6,6 @@ namespace spiridonov
   {
     Stack<int> operands;
     Stack<char> operators;
-
     std::string numString;
 
     for (char ch : expression)

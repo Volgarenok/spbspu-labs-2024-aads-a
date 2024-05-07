@@ -6,7 +6,6 @@
 
 namespace spiridonov
 {
-
   bool isNumber(const std::string& s)
   {
     if (s.empty())

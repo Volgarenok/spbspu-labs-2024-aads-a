@@ -17,5 +17,4 @@ namespace spiridonov
   int opMod(int a, int b);
 }
 
-
 #endif

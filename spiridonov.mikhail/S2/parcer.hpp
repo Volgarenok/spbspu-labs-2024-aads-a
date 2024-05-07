@@ -16,5 +16,4 @@ namespace spiridonov
     static void applyOperation(Stack<int>& operands, char op);
   };
 }
-
 #endif

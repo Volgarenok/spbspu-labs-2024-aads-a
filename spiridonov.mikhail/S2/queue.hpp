@@ -120,5 +120,4 @@ namespace spiridonov
     size_t size_;
   };
 }
-
 #endif
