@@ -152,6 +152,10 @@ namespace namestnikov
       std::swap(size_, other.size_);
       std::swap(compare_, other.compare_);
     }
+    ~Tree()
+    {
+      clear();
+    }
   private:
     node_t * root_;
     size_t size_;
