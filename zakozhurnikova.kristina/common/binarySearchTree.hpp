@@ -1,12 +1,12 @@
 #ifndef BINARYSEARCHTREE_HPP
 #define BINARYSEARCHTREE_HPP
 #include <algorithm>
+#include <constIteratorTree.hpp>
 #include <cstddef>
 #include <cstdlib>
 #include <functional>
 #include <iostream>
 #include <treeNode.hpp>
-#include <constIteratorTree.hpp>
 
 namespace zakozhurnikova
 {
@@ -94,7 +94,7 @@ namespace zakozhurnikova
       size_ = size_ + 1;
     }
 
-    void put(const Key& key,const Value& val, node* currentNode)
+    void put(const Key& key, const Value& val, node* currentNode)
     {
       if (compare_(key, currentNode->data.first))
       {
@@ -443,6 +443,20 @@ namespace zakozhurnikova
       return lowest;
     }
 
+    node* getLowestRight(node* prev) const
+    {
+      node* lowest = prev;
+      if (!lowest)
+      {
+        return nullptr;
+      }
+      while(lowest->rightChild != nullptr)
+      {
+        lowest = lowest->rightChild;
+      }
+      return lowest;
+    }
+
     ConstIteratorTree< Key, Value, Compare > cbegin() const noexcept
     {
       return ConstIteratorTree< Key, Value, Compare >(getLowest(root_));
@@ -495,6 +509,31 @@ namespace zakozhurnikova
         }
       }
       return ConstIteratorTree< Key, Value >(wanted);
+    }
+
+    template < typename F >
+    F traverse_lnr(F f) const
+    {
+      for (auto it = cbegin(); it != cend(); ++it)
+      {
+        f(it->first);
+      }
+      return f;
+    }
+    template < typename F >
+    F traverse_rnl(F f) const
+    {
+      auto it = ConstIteratorTree< Key, Value, Compare>(getLowestRight(root_));
+      for (; it != cend; --it)
+      {
+        f(it->first);
+      }
+      return f;
+    }
+    template < typename F >
+    F traverse_breadth(F f) const
+    {
+      return f;
     }
 
   private:
