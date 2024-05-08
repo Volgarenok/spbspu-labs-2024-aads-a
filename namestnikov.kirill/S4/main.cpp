@@ -14,7 +14,11 @@ int main(int argc, char * argv[])
   using mapOfDicts = std::map< std::string, std::map< size_t, std::string > >;
   Tree< size_t, std::string > tree;
   tree.insert(std::make_pair(10, "20"));
+  tree.insert(std::make_pair(5, "10"));
+  tree.insert(std::make_pair(15, "30"));
+  tree[20] = "40";
   tree.print();
+  std::cout << tree.size();
   mapOfDicts myMap;
   if (argc == 2)
   {

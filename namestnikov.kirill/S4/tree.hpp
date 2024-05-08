@@ -45,6 +45,31 @@ namespace namestnikov
       }
       return *this;
     }
+    const Value & at(const Key & key)
+    {
+      node_t * result = search(root_, key);
+      if (result)
+      {
+        return result->data.second;
+      }
+      else
+      {
+        throw std::out_of_range("Can not give you access to this element");
+      }
+    }
+    Value & operator[](const Key & key)
+    {
+      node_t * result = search(root_, key);
+      if (result)
+      {
+        return result->data.second;
+      }
+      else
+      {
+        insert(std::make_pair(key, Value()));
+        return search(root_, key)->data.second;
+      }
+    }
     void rotate_left(node_t * node)
     {
       node_t * newRoot = node->right;
