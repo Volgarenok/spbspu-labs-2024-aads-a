@@ -23,6 +23,7 @@ namespace baranov
       void pop_back();
       void push_front(T data);
       void pop_front();
+      void assign(size_t count, const T & data);
       void clear();
       template < class UPredicate >
       void remove_if(UPredicate p);
@@ -193,6 +194,13 @@ namespace baranov
       head_->prev_ = nullptr;
     }
     --size_;
+  }
+
+  template< class T >
+  void List< T >::assign(size_t count, const T & data)
+  {
+    List< T > newlist(count, data);
+    swap(newlist);
   }
 
   template< class T >
