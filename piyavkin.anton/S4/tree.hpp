@@ -21,9 +21,16 @@ namespace piyavkin
     Tree(InputIterator first, InputIterator second):
       Tree()
     {
-      while (first != second)
+      try
       {
-        insert(*first++);
+        while (first != second)
+        {
+          insert(*first++);
+        }
+      }
+      catch (...)
+      {
+        clear();
       }
     }
     Tree(std::initializer_list< val_type > il):
@@ -32,18 +39,25 @@ namespace piyavkin
     Tree(const Tree& rhs):
       Tree()
     {
-      ConstTreeIterator< Key, T, Compare > it_right(rhs.root_);
-      ConstTreeIterator< Key, T, Compare > it_left(rhs.root_);
-      while (rhs.root_ && (it_right != rhs.cend() || it_left != --rhs.cbegin()))
+      try
       {
-        if (it_right != rhs.cend())
+        ConstTreeIterator< Key, T, Compare > it_right(rhs.root_);
+        ConstTreeIterator< Key, T, Compare > it_left(rhs.root_);
+        while (rhs.root_ && (it_right != rhs.cend() || it_left != --rhs.cbegin()))
         {
-          insert_impl(std::pair< Key, T >(*it_right++));
+          if (it_right != rhs.cend())
+          {
+            insert_impl(std::pair< Key, T >(*it_right++));
+          }
+          if (it_left != --rhs.cbegin())
+          {
+            insert_impl(std::pair< Key, T >(*it_left--));
+          }
         }
-        if (it_left != --rhs.cbegin())
-        {
-          insert_impl(std::pair< Key, T >(*it_left--));
-        }
+      }
+      catch (...)
+      {
+        clear();
       }
     }
     Tree(Tree&& rhs):
