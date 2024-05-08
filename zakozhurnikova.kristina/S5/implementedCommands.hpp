@@ -19,7 +19,7 @@ namespace zakozhurnikova
 
     int ascending(std::string& result);
     int descending(std::string& result);
-//    int breadth(std::string& result);
+    int breadth(std::string& result);
   };
 }
 

@@ -6,8 +6,8 @@
 #include <cstdlib>
 #include <functional>
 #include <iostream>
-#include <treeNode.hpp>
 #include <queue.hpp>
+#include <treeNode.hpp>
 
 namespace zakozhurnikova
 {
@@ -523,39 +523,19 @@ namespace zakozhurnikova
       for (auto it = cbegin(); it != cend(); ++it)
       {
         f(it->first);
-        result += it->second + ' ';
-      }
-      if (!empty())
-      {
-        result.pop_back();
-      }
-      else
-      {
-        result = "<EMPTY>";
+        
       }
       return f;
     }
-
     template < typename F >
     F traverse_rnl(F& f, std::string& result) const
     {
       for (auto it = cbeginR(); it != cend; --it)
       {
         f(it->first);
-        result += it->second + ' ';
-      }
-      if (!empty())
-      {
-        result.pop_back();
-      }
-      else
-      {
-        result = "<EMPTY>";
       }
       return f;
     }
-
-    template < typename F >
     F traverse_breadth(F& f, std::string& result) const
     {
       Queue< const node* > queue;
@@ -584,28 +564,27 @@ namespace zakozhurnikova
         result = "<EMPTY>";
       }
       return f;
-    }
 
-  private:
-    node* root_;
-    size_t size_;
-    Compare compare_;
+    private:
+      node* root_;
+      size_t size_;
+      Compare compare_;
 
-    void clear()
-    {
-      clear(root_);
-      root_ = nullptr;
-    }
-    void clear(node* node)
-    {
-      if (node != nullptr)
+      void clear()
       {
-        clear(node->leftChild);
-        clear(node->rightChild);
-        delete node;
+        clear(root_);
+        root_ = nullptr;
       }
-    }
-  };
-}
+      void clear(node * node)
+      {
+        if (node != nullptr)
+        {
+          clear(node->leftChild);
+          clear(node->rightChild);
+          delete node;
+        }
+      }
+    };
+  }
 
 #endif
