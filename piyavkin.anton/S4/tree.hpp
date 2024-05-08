@@ -491,11 +491,11 @@ namespace piyavkin
     {
       return (!root_ || node == root_ || isCorrectLeftChild(node, key) || isCorrectRightChild(node, key));
     }
-    bool isCorrectLeftChild(const detail::TreeNode< Key, T >* node, const Key& key_) const
+    bool isCorrectLeftChild(const detail::TreeNode< Key, T >* node, const Key& key) const
     {
       return isLeftChild(node) && cmp_(key, node->parent_->val_type.first);
     }
-    bool isCorrectRightChild(const detail::TreeNode< Key, T >* node, const Key& key_) const
+    bool isCorrectRightChild(const detail::TreeNode< Key, T >* node, const Key& key) const
     {
       return isRightChild(node) && cmp_(node->parent_->val_type.first, key);
     }
@@ -684,7 +684,7 @@ namespace piyavkin
     }
     bool equal_key(const Key& key1, const Key& key2) const
     {
-      return !cmp(key1, key2) && !cmp(key2, key1);
+      return !cmp_(key1, key2) && !cmp_(key2, key1);
     }
   };
 }
