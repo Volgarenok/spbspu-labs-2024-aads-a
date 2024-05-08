@@ -25,14 +25,6 @@ void unionCmd(mainMap& dict, std::istream& in, std::ostream&)
   map resDict;
   map& dict1 = dict.at(first);
   map& dict2 = dict.at(second);
-
-  auto begin2 = dict2.cbegin();
-  auto end2 = dict2.cend();
-  while (begin2 != end2)
-  {
-    resDict.insert({ begin2->first, begin2->second });
-    begin2++;
-  }
   auto begin1 = dict1.cbegin();
   auto end1 = dict1.cend();
   while (begin1 != end1)
@@ -40,6 +32,14 @@ void unionCmd(mainMap& dict, std::istream& in, std::ostream&)
     resDict.insert({ begin1->first, begin1->second });
     begin1++;
   }
+  auto begin2 = dict2.cbegin();
+  auto end2 = dict2.cend();
+  while (begin2 != end2)
+  {
+    resDict.insert({ begin2->first, begin2->second });
+    begin2++;
+  }
+  
   if (dict.find(resName) != dict.end())
   {
     dict.erase(resName);
