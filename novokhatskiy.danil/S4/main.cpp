@@ -39,7 +39,7 @@ void unionCmd(mainMap& dict, std::istream& in, std::ostream&)
     resDict.insert({ begin2->first, begin2->second });
     begin2++;
   }
-  
+
   if (dict.find(resName) != dict.end())
   {
     dict.erase(resName);
