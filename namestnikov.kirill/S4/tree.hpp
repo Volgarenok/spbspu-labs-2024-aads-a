@@ -148,17 +148,17 @@ namespace namestnikov
     node_t * balance(node_t * node)
     {
       fixHeight(node);
-      if (getBalance(node) == 2)
+      if (node->height < 0)
       {
-        if (getBalance(node->right) < 0)
+        if (node->right->height > 0)
         {
           rotate_right(node->right);
         }
         rotate_left(node);
       }
-      else if (getBalance(node) == -2)
+      else if (node->height == -2)
       {
-        if (getBalance(node->left) > 0)
+        if (node->left->height > 0)
         {
           rotate_left(node->left);
         }
