@@ -52,15 +52,16 @@ namespace nikitov
       void fixNeighbour(const List< treeNode* >& nodes);
       void fixErase();
 
-      void free(bool isFirst);
-
-      treeNode* findNeighbour() const;
-      bool isLeaf() const;
-      void rotateRight();
-      void rotateLeft();
       void littleRotateRight();
       void littleRotateLeft();
-      size_t countHeight();
+      void rotateRight();
+      void rotateLeft();
+
+      treeNode* findNeighbour() const;
+      size_t countHeight() const;
+      bool isLeaf() const;
+
+      void free(bool isFirst);
 
       void connect(treeNode* left, treeNode* middle, treeNode* right);
       void clear();
@@ -345,46 +346,6 @@ namespace nikitov
     }
 
     template< class Key, class T, class Compare >
-    void TreeNode< Key, T, Compare >::free(bool isFirst)
-    {
-      if (isFirst)
-      {
-        std::swap(firstValue_, secondValue_);
-      }
-      secondValue_ = std::pair< Key, T >{};
-      --size_;
-    }
-
-    template< class Key, class T, class Compare >
-    TreeNode< Key, T, Compare >* TreeNode< Key, T, Compare >::findNeighbour() const
-    {
-      treeNode* neighbour = nullptr;
-      if (!parent_)
-      {
-        return nullptr;
-      }
-      if (parent_->middle_ && parent_->middle_ != this)
-      {
-        neighbour = parent_->middle_;
-      }
-      else if (parent_->right_ && parent_->right_ != this)
-      {
-        neighbour = parent_->right_;
-      }
-      else
-      {
-        neighbour = parent_->left_;
-      }
-      return neighbour;
-    }
-
-    template< class Key, class T, class Compare >
-    bool TreeNode< Key, T, Compare >::isLeaf() const
-    {
-      return !left_ && !right_ && !middle_;
-    }
-
-    template< class Key, class T, class Compare >
     void TreeNode< Key, T, Compare >::littleRotateRight()
     {
       right_ = new TreeNode< Key, T, Compare >(secondValue_);
@@ -410,19 +371,6 @@ namespace nikitov
       free(true);
       left_->add(middle_->firstValue_);
       middle_->free(true);
-    }
-
-    template< class Key, class T, class Compare >
-    size_t TreeNode< Key, T, Compare >::countHeight()
-    {
-      treeNode* node = this;
-      size_t result = 0;
-      while (node->left_)
-      {
-        ++result;
-        node = node->left_;
-      }
-      return result;
     }
 
     template< class Key, class T, class Compare >
@@ -532,6 +480,59 @@ namespace nikitov
           }
         }
       }
+    }
+
+    template< class Key, class T, class Compare >
+    TreeNode< Key, T, Compare >* TreeNode< Key, T, Compare >::findNeighbour() const
+    {
+      treeNode* neighbour = nullptr;
+      if (!parent_)
+      {
+        return nullptr;
+      }
+      if (parent_->middle_ && parent_->middle_ != this)
+      {
+        neighbour = parent_->middle_;
+      }
+      else if (parent_->right_ && parent_->right_ != this)
+      {
+        neighbour = parent_->right_;
+      }
+      else
+      {
+        neighbour = parent_->left_;
+      }
+      return neighbour;
+    }
+
+    template< class Key, class T, class Compare >
+    size_t TreeNode< Key, T, Compare >::countHeight() const
+    {
+      treeNode* node = this;
+      size_t result = 0;
+      while (node->left_)
+      {
+        ++result;
+        node = node->left_;
+      }
+      return result;
+    }
+
+    template< class Key, class T, class Compare >
+    bool TreeNode< Key, T, Compare >::isLeaf() const
+    {
+      return !left_ && !right_ && !middle_;
+    }
+
+    template< class Key, class T, class Compare >
+    void TreeNode< Key, T, Compare >::free(bool isFirst)
+    {
+      if (isFirst)
+      {
+        std::swap(firstValue_, secondValue_);
+      }
+      secondValue_ = std::pair< Key, T >{};
+      --size_;
     }
 
     template< class Key, class T, class Compare >
