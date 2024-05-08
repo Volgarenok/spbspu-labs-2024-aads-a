@@ -4,10 +4,14 @@
 #include <fstream>
 #include <list>
 #include <vector>
+#include <limits>
+#include <functional>
 #include <stdexcept>
 #include <algorithm>
 #include <map>
 #include <string>
+#include "AVLtree.hpp"
+#include "AVLtreeNode.hpp"
 
 using mainMap = std::map< std::string, std::map< size_t, std::string > >;
 using map = std::map< size_t, std::string >;
@@ -82,6 +86,7 @@ void complement(mainMap& dict, std::istream& in, std::ostream&)
 
   auto begin = dict1.cbegin();
   auto end = dict1.cend();
+  //auto dict2begin = dict2.begin();
   while (begin != end)
   {
     if (dict2.find(begin->first) == dict2.cend())
@@ -131,7 +136,7 @@ void print(mainMap& dict, std::istream& in, std::ostream& out)
   std::map< size_t, std::string > tmp = dict.at(nameOfDict);
   if (tmp.empty())
   {
-    throw std::invalid_argument("<EMPTY>");
+    throw std::logic_error("<EMPTY>");
   }
   //std::sort(tmp.cbegin(), tmp.cend());
   /*for (const auto& val: dict)
@@ -173,16 +178,42 @@ void inputDict(mainMap& dict, std::istream& in)
 
 int main(int argc, char** argv)
 {
+  using namespace novokhatskiy;
+  std::map< std::string, std::map< size_t, std::string > > maps;
   if (argc != 2)
   {
     std::cerr << "Wrong input file\n";
     return 1;
   }
-  std::fstream fileinp(argv[1]);
-  std::map< std::string, std::map< size_t, std::string > > maps;
-  inputDict(maps, fileinp);
-  //unionCmd(maps, std::cin, std::cout);
-  complement(maps, std::cin, std::cout);
-  print(maps, std::cin, std::cout);
-  //print(maps, std::cin, std::cout);
+  else
+  {
+    std::fstream fileinp(argv[1]);
+    inputDict(maps, fileinp);
+  }
+  using namespace std::placeholders;
+  std::map< std::string, std::function< void(mainMap&, std::istream&, std::ostream&) > > commands;
+  commands["print"] = std::bind(print, _1, _2, std::ref(std::cout));
+  commands["complement"] = std::bind(complement, _1, _2, _3);
+  commands["intersect"] = intersectCmd;
+  commands["union"] = unionCmd;
+  std::string command = {};
+  while (std::cin >> command)
+  {
+    try
+    {
+      commands.at(command)(maps, std::cin, std::cout);
+    }
+    catch (const std::invalid_argument& e)
+    {
+      std::cout << e.what() << '\n';
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    }
+    catch (const std::logic_error& e)
+    {
+      std::cout << e.what() << '\n';
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    }
+  }
 }
