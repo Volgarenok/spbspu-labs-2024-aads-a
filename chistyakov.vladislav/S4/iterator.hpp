@@ -2,35 +2,37 @@
 #define ITERATOR_HPP
 
 #include <memory>
+#include <utility>
 #include "node.hpp"
+#include "avlTree.hpp"
 
 namespace chistyakov
 {
-  template< typename T >
+  template< typename Key, typename Value, typename Comp >
   class AVLTree;
 
-  template< typename T >
-  class Iterator : public std::iterator< std::bidirectional_iterator_tag, T >
+  template< typename Key, typename Value, typename Comp = std::less< Key > >
+  class Iterator : public std::iterator< std::bidirectional_iterator_tag, Value >
   {
-    friend class AVLTree< T >;
+    friend class AVLTree< Key, Value, Comp >;
     public:
       Iterator():
         node_(nullptr)
       {}
 
-      Iterator(Node< T > * val):
+      Iterator(Node< std::pair< const Key, Value > > * val):
         node_(val)
       {}
 
       ~Iterator() = default;
-      Iterator(const Iterator< T > &) = default;
-      Iterator< T > & operator=(const Iterator< T > & ) = default;
+      Iterator(const Iterator< Key, Value, Comp > &) = default;
+      Iterator< Key, Value, Comp > & operator=(const Iterator< Key, Value, Comp > & ) = default;
 
-      Iterator< T > operator++()
+      Iterator< Key, Value, Comp > operator++()
       {
-        if (hode_->right)
+        if (node_->right)
         {
-          node_ = node->right;
+          node_ = node_->right;
           while (node_->left)
           {
             node_->left;
@@ -38,7 +40,7 @@ namespace chistyakov
         }
         else
         {
-          while (hode_->parent && node_->parent->right == node_)
+          while (node_->parent && node_->parent->right == node_)
           {
             node_ = node_->parent;
           }
@@ -47,45 +49,45 @@ namespace chistyakov
         return *this;
       }
 
-      Iterator< T > operator++(int)
+      Iterator< Key, Value, Comp > operator++(int)
       {
-        Iterator< T > tmp(*this);
+        Iterator< Key, Value, Comp > tmp(*this);
         ++(*this);
         return tmp;
       }
 
-      bool operator==(const Iterator< T > & rhs) const
+      bool operator==(const Iterator< Key, Value, Comp > & rhs) const
       {
         return node_ == rhs.node_;
       }
 
-      bool operator!=(const Iterator< T > & rhs) const
+      bool operator!=(const Iterator< Key, Value, Comp > & rhs) const
       {
         return !(rhs == *this);
       }
 
-      T & operator*()
+      std::pair< Key, Value > & operator*()
       {
         return node_->value_;
       }
 
-      T * operator->()
+      std::pair< Key, Value > * operator->()
       {
         return std::addressof(node_->value_);
       }
 
-      const T & operator*() const
+      const std::pair< Key, Value > & operator*() const
       {
         return node_->value_;
       }
 
-      const T * operator->() const
+      const std::pair< Key, Value > * operator->() const
       {
-        return std::addressof(treeNode_->value_);
+        return std::addressof(node_->value_);
       }
 
     private:
-      Node< T > * node_;
+      Node< std::pair< const Key, Value > > * node_;
   };
 }
 
