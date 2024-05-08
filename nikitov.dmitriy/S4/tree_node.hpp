@@ -55,6 +55,10 @@ namespace nikitov
 
       treeNode* findNeighbour() const;
       bool isLeaf() const;
+      void rotateRight();
+      void rotateLeft();
+      void littleRotateRight();
+      void littleRotateLeft();
 
       void connect(treeNode* left, treeNode* middle, treeNode* right);
       void clear();
@@ -261,6 +265,124 @@ namespace nikitov
       return !left_ && !right_ && !middle_;
     }
 
+    template< class Key, class T, class Compare >
+    void TreeNode< Key, T, Compare >::littleRotateRight()
+    {
+      right_ = new TreeNode< Key, T, Compare >(secondValue_);
+      free(false);
+      add(middle_->secondValue_);
+      middle_->free(false);
+    }
+
+    template< class Key, class T, class Compare >
+    void TreeNode< Key, T, Compare >::littleRotateLeft()
+    {
+      left_ = new TreeNode< Key, T, Compare >(firstValue_);
+      free(true);
+      add(middle_->firstValue_);
+      middle_->free(true);
+    }
+
+    template< class Key, class T, class Compare >
+    void TreeNode< Key, T, Compare >::rotateRight()
+    {
+      if (middle_ || left_->size_ == 2)
+      {
+        if (size_ == 2)
+        {
+          right_ = new TreeNode< Key, T, Compare >(secondValue_);
+          free(false);
+        }
+        else
+        {
+          right_ = new TreeNode< Key, T, Compare >(firstValue_);
+          free(true);
+        }
+        right_->parent_ = this;
+        if (middle_ && middle_->size_ == 2)
+        {
+          add(middle_->secondValue_);
+          middle_->free(false);
+        }
+        else if (middle_)
+        {
+          right_->add(middle_->firstValue_);
+          middle_->free(true);
+          delete middle_;
+          middle_ = nullptr;
+        }
+        else
+        {
+          add(left_->secondValue_);
+          left_->free(false);
+        }
+        fixInsert(nullptr);
+      }
+      else
+      {
+        if (size_ == 2)
+        {
+          left_->add(firstValue_);
+          free(true);
+        }
+        else
+        {
+          add(left_->firstValue_);
+          delete left_;
+          left_ = nullptr;
+        }
+      }
+    }
+
+    template< class Key, class T, class Compare >
+    void TreeNode< Key, T, Compare >::rotateLeft()
+    {
+      if (middle_ || right_->size_ == 2)
+      {
+        if (left_)
+        {
+          left_->add(firstValue_);
+        }
+        else
+        {
+          left_ = new TreeNode< Key, T, Compare >(firstValue_);
+          left_->parent_ = this;
+        }
+        free(true);
+        if (middle_ && middle_->size_ == 2)
+        {
+          add(middle_->firstValue_);
+          middle_->free(true);
+        }
+        else if (middle_)
+        {
+          left_->add(middle_->firstValue_);
+          middle_->free(true);
+          delete middle_;
+          middle_ = nullptr;
+        }
+        else
+        {
+          add(right_->firstValue_);
+          right_->free(true);
+        }
+        fixInsert(nullptr);
+      }
+      else
+      {
+        if (size_ == 2)
+        {
+          right_->add(secondValue_);
+          free(false);
+        }
+        else
+        {
+          add(right_->firstValue_);
+          delete right_;
+          right_ = nullptr;
+        }
+      }
+    }
 
     template< class Key, class T, class Compare >
     void TreeNode< Key, T, Compare >::connect(treeNode* left, treeNode* middle, treeNode* right)
