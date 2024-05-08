@@ -187,19 +187,19 @@ namespace piyavkin
     }
     TreeReverseIterator< Key, T, Compare > rbegin() noexcept
     {
-      return TreeReverseIterator< Key, T, Compare >(std::addressof(end_node_));
+      return TreeReverseIterator< Key, T, Compare >(end_node_.parent_);
     }
     TreeReverseIterator< Key, T, Compare > rend() noexcept
     {
-      return TreeReverseIterator< Key, T, Compare >(before_min_.parent_);
+      return TreeReverseIterator< Key, T, Compare >(std::addressof(before_min_));
     }
     ConstTreeReverseIterator< Key, T, Compare > crbegin() const noexcept
     {
-      return ConstTreeReverseIterator< Key, T, Compare >(const_cast< detail::TreeNode< Key, T >* >(std::addressof(end_node_)));
+      return ConstTreeReverseIterator< Key, T, Compare >(end_node_.parent_);
     }
     ConstTreeReverseIterator< Key, T, Compare > crend() const noexcept
     {
-      return ConstTreeReverseIterator< Key, T, Compare >(before_min_.parent_);
+      return ConstTreeReverseIterator< Key, T, Compare >(const_cast< detail::TreeNode< Key, T >* >(std::addressof(before_min_)));
     }
     TreeIterator< Key, T, Compare > find(const Key& key)
     {
