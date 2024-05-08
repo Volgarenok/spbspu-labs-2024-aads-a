@@ -55,7 +55,7 @@ int zak::ImplementedCommands::descending(std::string& result)
   int sum = amount.result_;
   if (!map_.empty())
   {
-    for (auto it = map_.cbeginR(); it != map_.cend(); ++it)
+    for (auto it = map_.cbeginR(); it != map_.cend(); --it)
     {
       result += it->second + ' ';
     }
