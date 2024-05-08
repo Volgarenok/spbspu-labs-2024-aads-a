@@ -5,10 +5,11 @@
 
 namespace chistyakov
 {
-  void print(AVLTree & dataset);
-  void complement(AVLTree & newdataset, AVLTree & dataset1, AVLTree & dataset2);
-  void intersect(AVLTree & newdataset, AVLTree & dataset1, AVLTree & dataset2);
-  void makeUnion(AVLTree & newdataset, AVLTree & dataset1, AVLTree & dataset2);
+  void print(AVLTree * dataset);
+  void printImpl(AVLTree * dataset);
+  void complement(AVLTree * newdataset, AVLTree * dataset1, AVLTree * dataset2);
+  void intersect(AVLTree * newdataset, AVLTree * dataset1, AVLTree * dataset2);
+  void makeUnion(AVLTree * newdataset, AVLTree * dataset1, AVLTree * dataset2);
 }
 
 #endif

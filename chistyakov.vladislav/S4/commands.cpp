@@ -1,6 +1,6 @@
 #include "commands.hpp"
 
-chistyakov::printImpl(AVLTree & dataset)
+chistyakov::printImpl(AVLTree * dataset)
 {
   if (dataset.left != nullptr)
   {
@@ -15,7 +15,7 @@ chistyakov::printImpl(AVLTree & dataset)
   }
 }
 
-chistyakov::print(AVLTree & dataset)
+chistyakov::print(AVLTree * dataset)
 {
   if (dataset == nullptr)
   {
