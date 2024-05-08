@@ -67,3 +67,19 @@ int zak::ImplementedCommands::descending(std::string& result)
   }
   return sum;
 }
+
+int zak::ImplementedCommands::breadth(std::string& result)
+{
+  KeySum amount;
+  map_.traverse_breadth(amount);
+  int sum = amount.result_;
+  if (!map_.empty())
+  {
+   
+  }
+  else
+  {
+    result = "<EMPTY>";
+  }
+  return sum;
+}
