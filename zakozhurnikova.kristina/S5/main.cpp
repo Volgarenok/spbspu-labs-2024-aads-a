@@ -10,7 +10,7 @@
 int main(int argc, char *argv[])
 {
   using namespace zakozhurnikova;
-  BinarySearchTree< int, std::string > map;
+  BinarySearchTree< long long, std::string > map;
   if (argc == 3)
   {
     std::ifstream file(argv[2]);
@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
   ImplementedCommands master(map);
   std::string command = argv[1];
   std::string cmdOutput;
-  int amount = 0;
+  long long amount = 0;
     try
     {
       amount = master.executeCommand(command, cmdOutput);

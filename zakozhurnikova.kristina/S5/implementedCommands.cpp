@@ -4,9 +4,9 @@
 #include "implementedCommands.hpp"
 
 namespace zak = zakozhurnikova;
-using map = zak::BinarySearchTree< int, std::string >;
+using map = zak::BinarySearchTree< long long, std::string >;
 
-zak::ImplementedCommands::ImplementedCommands(BinarySearchTree< int, std::string >& map):
+zak::ImplementedCommands::ImplementedCommands(BinarySearchTree< long long, std::string >& map):
   map_(map)
 {
   commands_.push("ascending", &ImplementedCommands::ascending);
@@ -14,33 +14,33 @@ zak::ImplementedCommands::ImplementedCommands(BinarySearchTree< int, std::string
   commands_.push("breadth", &ImplementedCommands::breadth);
 }
 
-int zak::ImplementedCommands::executeCommand(std::string& command, std::string& result)
+long long zak::ImplementedCommands::executeCommand(std::string& command, std::string& result)
 {
-  int sum = 0;
+  long long sum = 0;
   sum = (this->*commands_.at(command))(result);
   return sum;
 }
 
-int zak::ImplementedCommands::ascending(std::string& result)
+long long zak::ImplementedCommands::ascending(std::string& result)
 {
   KeySum amount;
   map_.traverse_lnr(amount, result);
-  int sum = amount.result_;
+  long long sum = amount.result_;
   return sum;
 }
 
-int zak::ImplementedCommands::descending(std::string& result)
+long long zak::ImplementedCommands::descending(std::string& result)
 {
   KeySum amount;
   map_.traverse_rnl(amount, result);
-  int sum = amount.result_;
+  long long sum = amount.result_;
   return sum;
 }
 
-int zak::ImplementedCommands::breadth(std::string& result)
+long long zak::ImplementedCommands::breadth(std::string& result)
 {
   KeySum amount;
   map_.traverse_breadth(amount, result);
-  int sum = amount.result_;
+  long long sum = amount.result_;
   return sum;
 }
