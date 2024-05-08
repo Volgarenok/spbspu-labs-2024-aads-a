@@ -18,7 +18,7 @@ namespace zakozhurnikova
     BinarySearchTree< std::string, command > commands_;
 
     int ascending(std::string& result);
-//    int descending(std::string& result);
+    int descending(std::string& result);
 //    int breadth(std::string& result);
   };
 }

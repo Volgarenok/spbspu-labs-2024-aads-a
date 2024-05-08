@@ -450,11 +450,16 @@ namespace zakozhurnikova
       {
         return nullptr;
       }
-      while(lowest->rightChild != nullptr)
+      while (lowest->rightChild != nullptr)
       {
         lowest = lowest->rightChild;
       }
       return lowest;
+    }
+
+    ConstIteratorTree< Key, Value, Compare > cbeginR() const noexcept
+    {
+      return ConstIteratorTree< Key, Value, Compare >(getLowestRight(root_));
     }
 
     ConstIteratorTree< Key, Value, Compare > cbegin() const noexcept
@@ -523,8 +528,7 @@ namespace zakozhurnikova
     template < typename F >
     F traverse_rnl(F& f) const
     {
-      auto it = ConstIteratorTree< Key, Value, Compare>(getLowestRight(root_));
-      for (; it != cend; --it)
+      for (auto it = cbeginR(); it != cend; --it)
       {
         f(it->first);
       }
