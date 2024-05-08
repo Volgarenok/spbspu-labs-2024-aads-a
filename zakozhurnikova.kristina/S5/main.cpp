@@ -31,7 +31,11 @@ int main(int argc, char *argv[])
       amount = master.executeCommand(command, cmdOutput);
       if (!cmdOutput.empty())
       {
-        std::cout << amount << " " << cmdOutput << '\n';
+        if (cmdOutput != "<EMPTY>")
+        {
+          std::cout << amount << " ";
+        }
+        std::cout << cmdOutput << '\n';
       }
     }
     catch (const std::invalid_argument &e)
