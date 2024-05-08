@@ -24,6 +24,9 @@ namespace baranov
       void push_front(T data);
       void pop_front();
       void clear();
+      template < class UPredicate >
+      void remove_if(UPredicate p);
+      void remove(const T & data);
       void swap(List &);
     private:
       Node< T > * head_;
@@ -190,6 +193,46 @@ namespace baranov
       head_->prev_ = nullptr;
     }
     --size_;
+  }
+
+  template< class T >
+  template < class UPredicate >
+  void List< T >::remove_if(UPredicate p)
+  {
+    if (empty())
+    {
+      return;
+    }
+    auto i = begin();
+    auto end = end();
+    while (i != end)
+    {
+      if (p(*i))
+      {
+        Node< T > * todel = i;
+        if (i->prev != nullptr)
+        {
+          i->prev_->next_=i->next_;
+        }
+        if (i->next_ != end)
+        {
+          i->next_->prev_ = i->prev_;
+        }
+        delete todel;
+        ++i;
+      }
+    }
+  }
+
+  template< class T >
+  void List< T >::remove(const T & data)
+  {
+    remove_if(
+      [&](const T & other)
+      {
+        return other == data;
+      }
+    );
   }
 
   template< class T >
