@@ -316,7 +316,7 @@ namespace nikitov
           add(left_->secondValue_);
           left_->free(false);
         }
-        fixInsert(nullptr);
+        fixOwn(nullptr);
       }
       else
       {
@@ -366,7 +366,7 @@ namespace nikitov
           add(right_->firstValue_);
           right_->free(true);
         }
-        fixInsert(nullptr);
+        fixOwn(nullptr);
       }
       else
       {

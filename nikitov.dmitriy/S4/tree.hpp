@@ -48,6 +48,8 @@ namespace nikitov
     void insert(constTreeIterator first, constTreeIterator second);
     void insert(std::initializer_list< std::pair< Key, T > > initList);
 
+    treeIterator erase(constTreeIterator position);
+
     void clear() noexcept;
     void swap(Tree< Key, T, Compare >& other) noexcept;
 
@@ -269,6 +271,43 @@ namespace nikitov
     {
       embed(*begin++);
     }
+  }
+
+  template< class Key, class T, class Compare >
+  TreeIterator< Key, T, Compare > Tree< Key, T, Compare >::erase(constTreeIterator position)
+  {
+    treeIterator iterator(position.node_, position.isFirst_);
+    if (!iterator.node_->isLeaf())
+    {
+      treeIterator toSwap = iterator--;
+      std::swap(*iterator, *toSwap);
+    }
+    if (iterator.node_->size_ == 2)
+    {
+      iterator.node_->free(iterator.isFirst_);
+    }
+    else
+    {
+      detail::TreeNode< Key, T, Compare >* parent = iterator.node_->parent_;
+      if (parent->left_ == iterator.node_)
+      {
+        parent->left_ = nullptr;
+        parent->moveLeft();
+      }
+      else if (parent->right_ == iterator.node_)
+      {
+        parent->right_ = nullptr;
+        parent->moveRight();
+      }
+      else
+      {
+        parent->middle_ = nullptr;
+        parent->moveLeft();
+      }
+      delete iterator.node_;
+    }
+    --size_;
+    return upperBound((*position).first);
   }
 
   template< class Key, class T, class Compare >
