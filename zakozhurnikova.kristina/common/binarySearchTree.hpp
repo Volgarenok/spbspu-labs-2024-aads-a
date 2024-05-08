@@ -6,8 +6,8 @@
 #include <cstdlib>
 #include <functional>
 #include <iostream>
-#include <treeNode.hpp>
 #include <queue.hpp>
+#include <treeNode.hpp>
 
 namespace zakozhurnikova
 {
