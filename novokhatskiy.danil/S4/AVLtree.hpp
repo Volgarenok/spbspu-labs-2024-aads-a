@@ -55,15 +55,19 @@ namespace novokhatskiy
       return *this;
     }
 
-    node_t* rotate_left(node_t* node)
+    node_t* rotate_left()
     {
-      node_t* newRoot = node->right;
+      node_t* currRoot = this;
+      node_t* newRoot = currRoot->right;
+      currRoot->right = newRoot->left;
+      /*node_t* newRoot = node->right;
       node_t* tmp = newRoot->left;
       node->right = tmp;
       newRoot->left = node;
       newRoot = updateHeight(newRoot);
       node = updateHeight(node);
-      return newRoot;
+      return newRoot;*/
+
       /*node_t* newRoot = node->right;
       node->right = newRoot->left;
       newRoot->right = node;
@@ -146,30 +150,29 @@ namespace novokhatskiy
       return node;
     }
 
-    node_t* insert(const std::pair< Key, Value >& value, node_t* root)
+    void insert(const std::pair< Key, Value >& value)
     {
-      // root = root_;
-      if (root == nullptr)
+      node_t* curr = this;
+      if (curr == nullptr)
       {
-        // root = new node_t(value);
-        return new node_t(value);
+        curr = new node_t(value);
       }
       // sort by keys
-      if (root->value.second < value.second)
+      if (curr->value.first < value.first)
       {
-        root->right = insert(value, root->right);
+        curr->right = insert(value, curr->right);
       }
-      else if (root->value.second == value.second)
+      else if (curr->value.first == value.first)
       {
-        return balance(root);
+        return balance(curr);
       }
       else
       {
-        root->left = insert(value, root->left);
+        curr->left = insert(value, curr->left);
       }
-      return balance(root);
+      return balance(curr);
     }
-    
+
     size_t size() const
     {
       return size_;

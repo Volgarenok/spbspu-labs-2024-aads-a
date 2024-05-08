@@ -16,7 +16,7 @@ namespace novokhatskiy
       NodeTree* left;
       NodeTree* right;
       NodeTree* parent;
-      
+
       NodeTree():
         value(),
         height(0),
@@ -24,7 +24,7 @@ namespace novokhatskiy
         right(nullptr),
         parent(nullptr)
       {}
-      
+
       NodeTree(const val_type& val):
         value(val),
         height(0),
