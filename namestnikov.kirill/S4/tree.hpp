@@ -18,7 +18,8 @@ namespace namestnikov
     using const_iterator = ConstIteratorTree< Key, Value, Compare >;
     Tree():
       root_(nullptr),
-      size_(0)
+      size_(0),
+      compare_(Compare())
     {}
     Tree(const Tree & other):
       root_(other.root_),
