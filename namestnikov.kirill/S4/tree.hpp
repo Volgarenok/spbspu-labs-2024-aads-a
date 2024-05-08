@@ -74,20 +74,60 @@ namespace namestnikov
     void rotate_left(node_t * node)
     {
       node_t * newRoot = node->right;
-      node_t * temp = newRoot->left;
-      node->right = temp;
+      node->right = newRoot->left;
+      if (newRoot->left)
+      {
+        newRoot->left->parent = node;
+      }
+      newRoot->parent = node->parent;
+      if (node->isRoot())
+      {
+        root_ = newRoot;
+      }
+      else
+      {
+        if (node->isLeftChild())
+        {
+          node->parent->left = newRoot;
+        }
+        else
+        {
+          node->parent->right = newRoot;
+        }
+      }
       newRoot->left = node;
-      updateHeight(newRoot);
-      updateHeight(node);
+      node->parent = newRoot;
+      node->height = node->height + 1 - std::min(newRoot->height, 0);
+      newRoot->height = newRoot->height + 1 + std::max(node->height, 0);
     }
     void rotate_right(node_t * node)
     {
       node_t * newRoot = node->left;
-      node_t * temp = newRoot->right;
-      node->left = temp;
+      node->left = newRoot->right;
+      if (newRoot->right)
+      {
+        newRoot->right->parent = node;
+      }
+      newRoot->parent = node->parent;
+      if (node->isRoot())
+      {
+        root_ = newRoot;
+      }
+      else
+      {
+        if (node->isLeftChild())
+        {
+          node->parent->left = newRoot;
+        }
+        else
+        {
+          node->parent->right = newRoot;
+        }
+      }
       newRoot->right = node;
-      updateHeight(node);
-      updateHeight(newRoot);
+      node->parent = newRoot;
+      node->height = node->height + 1 - std::max(newRoot->height, 0);
+      newRoot->height = newRoot->height + 1 + std::min(node->height, 0);
     }
     void print_impl(node_t * root)
     {
@@ -232,7 +272,7 @@ namespace namestnikov
     {
       return size_;
     }
-    void swap(Tree & other)
+    void swap(Tree & other) noexcept
     {
       std::swap(root_, other.root_);
       std::swap(size_, other.size_);

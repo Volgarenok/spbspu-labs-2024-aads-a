@@ -31,6 +31,18 @@ namespace namestnikov
         return (leftHeight > rightHeight) ? (leftHeight + 1) : (rightHeight + 1);
       }
     }
+    bool isLeftChild() const
+    {
+      return (this->parent) && (this->parent->left == this);
+    }
+    bool isRightChild() const
+    {
+      return (this->parent) && (this->parent->right == this);
+    }
+    bool isRoot() const
+    {
+      return !this->parent;
+    }
   };
 }
 

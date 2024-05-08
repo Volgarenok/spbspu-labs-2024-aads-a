@@ -17,6 +17,7 @@ int main(int argc, char * argv[])
   tree.insert(std::make_pair(5, "10"));
   tree.insert(std::make_pair(15, "30"));
   tree[20] = "40";
+  tree[17] = "30";
   auto p = tree.cbegin();
   auto q = tree.cend();
   while (p != q)
