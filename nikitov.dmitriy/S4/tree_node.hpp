@@ -47,8 +47,14 @@ namespace nikitov
       treeNode* add(const std::pair< Key, T >& value);
       treeNode* moveAdd(std::pair< Key, T >&& value);
       treeNode* split(const std::pair< Key, T >& value, treeNode* node);
-      void check(treeNode* node);
-      void checkNeighbour(const List< treeNode* >& nodes);
+
+      void fixOwn(treeNode* node);
+      void fixNeighbour(const List< treeNode* >& nodes);
+
+      void free(bool isFirst);
+
+      treeNode* findNeighbour() const;
+      bool isLeaf() const;
 
       void connect(treeNode* left, treeNode* middle, treeNode* right);
       void clear();
@@ -159,16 +165,19 @@ namespace nikitov
       else
       {
         newRoot = add(value);
-        check(node);
+        fixOwn(node);
       }
       return newRoot;
     }
 
     template< class Key, class T, class Compare >
-    void TreeNode< Key, T, Compare >::check(treeNode* node)
+    void TreeNode< Key, T, Compare >::fixOwn(treeNode* node)
     {
       List< treeNode* > nodes;
-      nodes.push_back(node);
+      if (node)
+      {
+        nodes.push_back(node);
+      }
       if (left_)
       {
         nodes.push_back(left_);
@@ -194,39 +203,64 @@ namespace nikitov
       }
       else
       {
-        checkNeighbour(nodes);
+        fixNeighbour(nodes);
       }
     }
 
     template< class Key, class T, class Compare >
-    void TreeNode< Key, T, Compare >::checkNeighbour(const List< treeNode* >& nodes)
+    void TreeNode< Key, T, Compare >::fixNeighbour(const List< treeNode* >& nodes)
     {
-      treeNode* neigbour = nullptr;
-      if (parent_->middle_ && parent_->middle_ != this)
-      {
-        neigbour = parent_->middle_;
-      }
-      else if (parent_->right_ && parent_->right_ != this)
-      {
-        neigbour = parent_->right_;
-      }
-      else
-      {
-        neigbour = parent_->left_;
-      }
+      treeNode* neighbour = findNeighbour();
 
       auto iterator = nodes.cbegin();
-      if (!cmp_(firstValue_.first, neigbour->firstValue_.first))
+      if (!cmp_(firstValue_.first, neighbour->firstValue_.first))
       {
         connect(*iterator++, nullptr, *iterator++);
-        neigbour->connect(*iterator++, nullptr, *iterator++);
+        neighbour->connect(*iterator++, nullptr, *iterator++);
       }
       else
       {
-        neigbour->connect(*iterator++, nullptr, *iterator++);
+        neighbour->connect(*iterator++, nullptr, *iterator++);
         connect(*iterator++, nullptr, *iterator++);
       }
     }
+
+    template< class Key, class T, class Compare >
+    void TreeNode< Key, T, Compare >::free(bool isFirst)
+    {
+      if (isFirst)
+      {
+        std::swap(firstValue_, secondValue_);
+      }
+      secondValue_ = std::pair< Key, T >{};
+      --size_;
+    }
+
+    template< class Key, class T, class Compare >
+    TreeNode< Key, T, Compare >* TreeNode< Key, T, Compare >::findNeighbour() const
+    {
+      treeNode* neighbour = nullptr;
+      if (parent_->middle_ && parent_->middle_ != this)
+      {
+        neighbour = parent_->middle_;
+      }
+      else if (parent_->right_ && parent_->right_ != this)
+      {
+        neighbour = parent_->right_;
+      }
+      else
+      {
+        neighbour = parent_->left_;
+      }
+      return neighbour;
+    }
+
+    template< class Key, class T, class Compare >
+    bool TreeNode< Key, T, Compare >::isLeaf() const
+    {
+      return !left_ && !right_ && !middle_;
+    }
+
 
     template< class Key, class T, class Compare >
     void TreeNode< Key, T, Compare >::connect(treeNode* left, treeNode* middle, treeNode* right)

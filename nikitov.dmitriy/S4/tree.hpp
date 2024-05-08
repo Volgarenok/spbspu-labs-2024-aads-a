@@ -68,7 +68,7 @@ namespace nikitov
     Compare cmp_;
 
     detail::TreeNode< Key, T, Compare >* search(detail::TreeNode< Key, T, Compare >* node, const Key& key) const;
-    detail::TreeNode< Key, T, Compare >* findNode(const Key& value) const;
+    detail::TreeNode< Key, T, Compare >* findToInsert(const Key& value) const;
 
     std::pair< TreeIterator< Key, T, Compare >, bool > embed(const std::pair< Key, T >& value);
     std::pair< TreeIterator< Key, T, Compare >, bool > moveEmbed(std::pair< Key, T >&& value);
@@ -419,7 +419,7 @@ namespace nikitov
   }
 
   template< class Key, class T, class Compare >
-  detail::TreeNode< Key, T, Compare >* Tree< Key, T, Compare >::findNode(const Key& value) const
+  detail::TreeNode< Key, T, Compare >* Tree< Key, T, Compare >::findToInsert(const Key& value) const
   {
     detail::TreeNode< Key, T, Compare >* node = root_;
     while (node->left_ || node->right_)
@@ -462,7 +462,7 @@ namespace nikitov
       }
       else
       {
-        detail::TreeNode< Key, T, Compare >* newRoot = findNode(key)->moveAdd(std::move(value));
+        detail::TreeNode< Key, T, Compare >* newRoot = findToInsert(key)->moveAdd(std::move(value));
         if (newRoot)
         {
           root_ = newRoot;
