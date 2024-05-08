@@ -11,11 +11,11 @@ namespace zakozhurnikova
     int minNum = std::numeric_limits< int >::min();
     void operator()(int data)
     {
-      if (maxNum - result_ < data)
+      if (data < 0 && result_ < minNum - data)
       {
         throw std::out_of_range("Error: Addition overflow");
       }
-      else if (minNum + result_ > data)
+      else if (data > 0 && result_ > maxNum - data)
       {
         throw std::out_of_range("Error: Addition underflow");
       }
