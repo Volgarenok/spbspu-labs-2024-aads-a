@@ -15,7 +15,7 @@ namespace zakozhurnikova
       {
         throw std::out_of_range("Error: Addition overflow");
       }
-      if (result_ < 0 && (result_ <= minNum - data))
+      else if (result_ < 0 && (result_ <= minNum - data))
       {
         throw std::out_of_range("Error: Addition underflow");
       }
