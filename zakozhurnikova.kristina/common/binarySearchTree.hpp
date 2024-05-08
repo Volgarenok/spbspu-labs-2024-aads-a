@@ -558,6 +558,11 @@ namespace zakozhurnikova
     template < typename F >
     F traverse_breadth(F& f, std::string& result) const
     {
+      if(empty())
+      {
+        result = "<EMPTY>";
+        return f;
+      }
       Queue< const node* > queue;
       queue.push(root_);
       while (!queue.empty())

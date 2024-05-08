@@ -1,7 +1,7 @@
 #include <iostream>
 #include <scopeGuard.hpp>
-#include "implementedCommands.hpp"
 #include "getSum.hpp"
+#include "implementedCommands.hpp"
 
 namespace zak = zakozhurnikova;
 using map = zak::BinarySearchTree< int, std::string >;
@@ -17,14 +17,7 @@ zak::ImplementedCommands::ImplementedCommands(BinarySearchTree< int, std::string
 int zak::ImplementedCommands::executeCommand(std::string& command, std::string& result)
 {
   int sum = 0;
-  try
-  {
-    sum = (this->*commands_.at(command))(result);
-  }
-  catch (const std::out_of_range& e)
-  {
-    throw std::invalid_argument("invalid command name");
-  }
+  sum = (this->*commands_.at(command))(result);
   return sum;
 }
 

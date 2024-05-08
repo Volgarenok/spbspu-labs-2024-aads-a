@@ -9,7 +9,7 @@ namespace zakozhurnikova
   {
     int maxNum = std::numeric_limits< int >::max();
     int minNum = std::numeric_limits< int >::min();
-    void operator()(const int& data)
+    void operator()(int data)
     {
       if (result_ >= 0  && (maxNum - result_ < data))
       {
