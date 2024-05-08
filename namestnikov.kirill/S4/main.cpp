@@ -27,6 +27,11 @@ int main(int argc, char * argv[])
   } 
   tree.print();
   std::cout << tree.size();
+  for (const auto & key: tree)
+    {
+      std::cout << " " << key.second;
+    }
+    std::cout << "\n";
   mapOfDicts myMap;
   if (argc == 2)
   {

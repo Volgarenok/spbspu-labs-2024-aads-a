@@ -175,6 +175,15 @@ namespace namestnikov
       }
       return temp;
     }
+    iterator begin() const
+    {
+      node_t * result = find_min(root_);
+      return iterator(result);
+    }
+    iterator end() const
+    {
+      return iterator();
+    }
     const_iterator cbegin() const noexcept
     {
       node_t * result = find_min(root_);
