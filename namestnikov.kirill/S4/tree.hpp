@@ -126,7 +126,7 @@ namespace namestnikov
       }
       return node;
     }
-    node_t * find_min(node_t * node)
+    node_t * find_min(node_t * node) const
     {
       node_t * temp = node;
       while (temp->left)
@@ -134,6 +134,15 @@ namespace namestnikov
         temp = temp->left;
       }
       return temp;
+    }
+    const_iterator cbegin() const noexcept
+    {
+      node_t * result = find_min(root_);
+      return const_iterator(result);
+    }
+    const_iterator cend() const noexcept
+    {
+      return const_iterator();
     }
     const_iterator find(const Key & key) const
     {

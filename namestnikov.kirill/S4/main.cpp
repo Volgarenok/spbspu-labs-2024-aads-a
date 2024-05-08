@@ -17,7 +17,13 @@ int main(int argc, char * argv[])
   tree.insert(std::make_pair(5, "10"));
   tree.insert(std::make_pair(15, "30"));
   tree[20] = "40";
-  auto it = tree.find(20);
+  auto p = tree.cbegin();
+  auto q = tree.cend();
+  while (p != q)
+  {
+    std::cout << "1";
+    ++p;
+  } 
   tree.print();
   std::cout << tree.size();
   mapOfDicts myMap;
