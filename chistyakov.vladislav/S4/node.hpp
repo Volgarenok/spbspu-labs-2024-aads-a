@@ -12,7 +12,7 @@ namespace chistyakov
       parent(nullptr)
     {}
 
-    Node(const T & value)
+    Node(const T & value):
       value(value),
       left(nullptr),
       right(nullptr),
@@ -21,7 +21,7 @@ namespace chistyakov
 
     T value;
     Node * left;
-    Node * right:
+    Node * right;
     Node * parent;
   };
 }
