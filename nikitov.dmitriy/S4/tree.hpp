@@ -292,17 +292,17 @@ namespace nikitov
       if (parent->left_ == iterator.node_)
       {
         parent->left_ = nullptr;
-        parent->moveLeft();
+        parent->rotateLeft();
       }
       else if (parent->right_ == iterator.node_)
       {
         parent->right_ = nullptr;
-        parent->moveRight();
+        parent->rotateRight();
       }
       else
       {
         parent->middle_ = nullptr;
-        parent->moveLeft();
+        parent->rotateLeft();
       }
       delete iterator.node_;
     }

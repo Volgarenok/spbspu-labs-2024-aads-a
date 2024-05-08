@@ -50,6 +50,7 @@ namespace nikitov
 
       void fixOwn(treeNode* node);
       void fixNeighbour(const List< treeNode* >& nodes);
+      void fixErase();
 
       void free(bool isFirst);
 
@@ -59,13 +60,14 @@ namespace nikitov
       void rotateLeft();
       void littleRotateRight();
       void littleRotateLeft();
+      size_t countHeight();
 
       void connect(treeNode* left, treeNode* middle, treeNode* right);
       void clear();
     };
 
     template< class Key, class T, class Compare >
-    TreeNode< Key, T, Compare >::TreeNode():
+    TreeNode< Key, T, Compare >::TreeNode() :
       firstValue_(std::pair< Key, T >()),
       secondValue_(std::pair< Key, T >()),
       left_(nullptr),
@@ -77,7 +79,7 @@ namespace nikitov
     {}
 
     template< class Key, class T, class Compare >
-    TreeNode< Key, T, Compare >::TreeNode(const std::pair< Key, T >& value):
+    TreeNode< Key, T, Compare >::TreeNode(const std::pair< Key, T >& value) :
       TreeNode()
     {
       add(value);
@@ -230,6 +232,119 @@ namespace nikitov
     }
 
     template< class Key, class T, class Compare >
+    void TreeNode< Key, T, Compare >::fixErase()
+    {
+      List< treeNode* > nodes;
+      nodes.push_back(this);
+      treeNode* neighbour = findNeighbour();
+      if (neighbour->left_)
+      {
+        nodes.push_back(neighbour->left_);
+      }
+      if (neighbour->right_)
+      {
+        nodes.push_back(neighbour->right_);
+      }
+      if (neighbour->middle_)
+      {
+        nodes.push_back(neighbour->middle_);
+      }
+      nodes.sort(CompareNodes< Key, T, Compare >());
+      auto iterator = nodes.cbegin();
+      if (parent_->left_ == this)
+      {
+        parent_->left_ = nullptr;
+        if (neighbour->size_ == 2)
+        {
+          if (parent_->size_ == 1)
+          {
+            parent_->rotateLeft();
+          }
+          else
+          {
+            parent_->littleRotateLeft();
+          }
+          parent_->left_->fixNeighbour(nodes);
+        }
+        else
+        {
+          if (parent_->size_ == 1)
+          {
+            parent_->add(neighbour->firstValue_);
+            delete neighbour;
+            parent_->connect(*iterator++, *iterator++, *iterator++);
+          }
+          else
+          {
+            parent_->littleRotateLeft();
+            delete neighbour;
+            parent_->middle_ = nullptr;
+            parent_->left_->connect(*iterator++, *iterator++, *iterator++);
+          }
+        }
+      }
+      else if (parent_->right_ == this)
+      {
+        parent_->right_ = nullptr;
+        if (neighbour->size_ == 2)
+        {
+          if (parent_->size_ == 1)
+          {
+            parent_->rotateRight();
+          }
+          else
+          {
+            parent_->littleRotateRight();
+          }
+          parent_->right_->fixNeighbour(nodes);
+        }
+        else
+        {
+          if (parent_->size_ == 1)
+          {
+            parent_->add(neighbour->firstValue_);
+            delete neighbour;
+            parent_->connect(*iterator++, *iterator++, *iterator++);
+          }
+          else
+          {
+            parent_->littleRotateRight();
+            delete neighbour;
+            parent_->middle_ = nullptr;
+            parent_->right_->connect(*iterator++, *iterator++, *iterator++);
+          }
+        }
+      }
+      else
+      {
+        parent_->middle_ = nullptr;
+        if (neighbour->size_ == 2)
+        {
+          if (parent_->size_ == 1)
+          {
+            parent_->rotateRight();
+          }
+          else
+          {
+            parent_->right_->add(parent_->secondValue_);
+            parent_->free(false);
+          }
+          parent_->right_->fixNeighbour(nodes);
+        }
+        else
+        {
+           parent_->right_->add(parent_->secondValue_);
+           parent_->free(false);
+           parent_->right_->connect(*iterator++, *iterator++, *iterator++);
+        }
+      }
+      if (parent_->findNeighbour() && (parent_->findNeighbour()->countHeight() != parent_->countHeight()))
+      {
+        parent_->fixErase();
+      }
+    }
+
+    template< class Key, class T, class Compare >
     void TreeNode< Key, T, Compare >::free(bool isFirst)
     {
       if (isFirst)
@@ -244,6 +359,10 @@ namespace nikitov
     TreeNode< Key, T, Compare >* TreeNode< Key, T, Compare >::findNeighbour() const
     {
       treeNode* neighbour = nullptr;
+      if (!parent_)
+      {
+        return nullptr;
+      }
       if (parent_->middle_ && parent_->middle_ != this)
       {
         neighbour = parent_->middle_;
@@ -269,18 +388,41 @@ namespace nikitov
     void TreeNode< Key, T, Compare >::littleRotateRight()
     {
       right_ = new TreeNode< Key, T, Compare >(secondValue_);
+      right_->parent_ = this;
       free(false);
-      add(middle_->secondValue_);
-      middle_->free(false);
+      if (middle_->size_ == 2)
+      {
+        right_->add(middle_->secondValue_);
+        middle_->free(false);
+      }
+      else
+      {
+        right_->add(middle_->firstValue_);
+        middle_->free(true);
+      }
     }
 
     template< class Key, class T, class Compare >
     void TreeNode< Key, T, Compare >::littleRotateLeft()
     {
       left_ = new TreeNode< Key, T, Compare >(firstValue_);
+      left_->parent_ = this;
       free(true);
-      add(middle_->firstValue_);
+      left_->add(middle_->firstValue_);
       middle_->free(true);
+    }
+
+    template< class Key, class T, class Compare >
+    size_t TreeNode< Key, T, Compare >::countHeight()
+    {
+      treeNode* node = this;
+      size_t result = 0;
+      while (node->left_)
+      {
+        ++result;
+        node = node->left_;
+      }
+      return result;
     }
 
     template< class Key, class T, class Compare >
@@ -330,6 +472,10 @@ namespace nikitov
           add(left_->firstValue_);
           delete left_;
           left_ = nullptr;
+          if (parent_->parent_)
+          {
+            fixErase();
+          }
         }
       }
     }
@@ -380,6 +526,10 @@ namespace nikitov
           add(right_->firstValue_);
           delete right_;
           right_ = nullptr;
+          if (parent_->parent_)
+          {
+            fixErase();
+          }
         }
       }
     }
