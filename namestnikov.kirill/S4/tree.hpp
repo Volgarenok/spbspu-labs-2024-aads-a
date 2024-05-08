@@ -53,9 +53,8 @@ namespace namestnikov
       newRoot->left = node;
       updateHeight(newRoot);
       updateHeight(node);
-      return newRoot; 
     }
-    void * rotate_right(node_t * node)
+    void rotate_right(node_t * node)
     {
       node_t * newRoot = node->left;
       node_t * temp = newRoot->right;
@@ -100,25 +99,59 @@ namespace namestnikov
         rotate_right(node);
       }
     }
+    node_t * find_min(node_t * node)
+    {
+      while (node->left)
+      {
+        node = node->left;
+      }
+      return node;
+    }
     node_t * insert(const pair_key_t & value, node_t * root)
     {
       if (root == nullptr)
       {
-        return new node_t(value);
+        root = new node_t(value);
       }
-      if (root->data.second < value.second)
+      else if (compare_(value.first, root->data.first))
       {
-        root->right = insert(value, root->right);
-      }
-      else if (root->data.second == value.second)
-      {
-        return balance(root);
+        root->left = insert(value, root->left);
+        root->left->parent = root;
       }
       else
       {
-        root->left = insert(value, root->left);
+        root->right = insert(value, root->right);
+        root->right->parent = root;
       }
       return balance(root);
+    }
+    void push(const pair_key_t & value)
+    {
+      root_ = insert(root_, value.first, value.second);
+      ++size_;
+    }
+    node_t * search(const Key & key) const
+    {
+      return search(root_, key);
+    }
+    node_t * search(node_t * node, const Key & key) const
+    {
+      if ((node == nullptr) || (node->data.first == key))
+      {
+        return node;
+      }
+      if (compare_(key, node->data.first))
+      {
+        return search(node->left, key);
+      }
+      else
+      {
+        return search(node->right, key);
+      }
+    }
+    bool contains(const Key & key) const
+    {
+      return search(root_, key) != nullptr;
     }
     void fixHeight(node_t * node)
     {
@@ -164,6 +197,7 @@ namespace namestnikov
     {
       clear(root_);
       root_ = nullptr;
+      size_ = 0;
     }
     void clear(node_t * node)
     {
