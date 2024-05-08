@@ -127,11 +127,28 @@ namespace namestnikov
     }
     node_t * find_min(node_t * node)
     {
-      while (node->left)
+      node_t * temp = node;
+      while (temp->left)
       {
-        node = node->left;
+        temp = temp->left;
       }
-      return node;
+      return temp;
+    }
+    const_iterator find(const Key & key) const
+    {
+      node_t * temp = root_;
+      while ((temp) && (temp->data.first == key))
+      {
+        if (compare_(temp->data.first, key))
+        {
+          temp = temp->right;
+        }
+        else
+        {
+          temp = temp->left;
+        }
+      }
+      return const_iterator(temp);
     }
     node_t * insert(const pair_key_t & value, node_t * root)
     {
