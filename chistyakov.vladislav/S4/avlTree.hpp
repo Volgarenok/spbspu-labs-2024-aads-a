@@ -6,9 +6,10 @@
 
 namespace chistyakov
 {
-  template< typename T, typename Comp = std::less< T > >
+  template< typename Key, typename Value, typename Comp = std::less< Key > >
   class AVLTree
   {
+    using pairKV = std::pair< const Key, Value >;
     public:
       AVLTree():
         size_(0),
@@ -16,7 +17,7 @@ namespace chistyakov
         comp_(Comp)
       {}
 
-      AVLTree(AVLTree && tmp)
+      AVLTree(AVLTree && tmp):
         size_(tmp.size_),
         root_(tmp.root_),
         comp_(tmp.comp_)
@@ -29,7 +30,7 @@ namespace chistyakov
       {
         if (this != std::addressof(tmp))
         {
-          AVLTree< T > temper(tmp);
+          AVLTree< pairKV > temper(tmp);
           swap(temper);
         }
         return *this;
@@ -63,7 +64,7 @@ namespace chistyakov
         return size_;
       }
 
-      void insert(T value)
+      void insert(pairKV value)
       {
         Node * n = new Node(value);
 
