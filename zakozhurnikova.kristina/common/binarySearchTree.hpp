@@ -539,7 +539,7 @@ namespace zakozhurnikova
     template < typename F >
     F traverse_rnl(F& f, std::string& result) const
     {
-      for (auto it = cbeginR(); it != cend; --it)
+      for (auto it = cbeginR(); it != cend(); --it)
       {
         f(it->first);
         result += it->second + ' ';

@@ -39,7 +39,7 @@ int zak::ImplementedCommands::ascending(std::string& result)
 int zak::ImplementedCommands::descending(std::string& result)
 {
   KeySum amount;
-  map_.traverse_lnr(amount, result);
+  map_.traverse_rnl(amount, result);
   int sum = amount.result_;
   return sum;
 }
