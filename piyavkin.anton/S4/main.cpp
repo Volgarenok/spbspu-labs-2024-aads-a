@@ -47,7 +47,7 @@ int main(int argc, char* argv[])
       {
         std::cout << "<INVALID COMMAND>\n";
       }
-      catch(const std::exception& e)
+      catch (const std::exception& e)
       {
         std::cerr << e.what() << '\n';
         return 1;

@@ -27,14 +27,8 @@ namespace piyavkin
       }
     }
     Tree(std::initializer_list< val_type > il):
-      Tree()
-    {
-      auto it = il.begin();
-      while (it != il.end())
-      {
-        insert(*it++);
-      }
-    }
+      Tree(il.begin(), il.end())
+    {}
     Tree(const Tree& rhs):
       Tree()
     {
@@ -217,7 +211,7 @@ namespace piyavkin
     TreeIterator< Key, T, Compare > upper_bound(const Key& key)
     {
       TreeIterator< Key, T, Compare > it = lower_bound_impl(key);
-      if (it.node_->val_type.first != key)
+      if (!cmp(it.node_->val_type.first, key) && !cmp(key, it.node_->val_type.first))
       {
         if (it != end())
         {
@@ -235,7 +229,7 @@ namespace piyavkin
     ConstTreeIterator< Key, T, Compare > upper_bound(const Key& key) const
     {
       ConstTreeIterator< Key, T, Compare > it = lower_bound(key);
-      if (it.node_->val_type.first != key)
+      if (equal_key(it.node_->val_type.first, key))
       {
         return it;
       }
@@ -412,7 +406,7 @@ namespace piyavkin
       }
       return count;
     }
-    std::pair< ConstTreeIterator< Key, T, Compare >, ConstTreeIterator< Key, T, Compare > > equil_range(const Key& key) const
+    std::pair< ConstTreeIterator< Key, T, Compare >, ConstTreeIterator< Key, T, Compare > > equal_range(const Key& key) const
     {
       ConstTreeIterator< Key, T, Compare > it = find_impl(key);
       if (it == cend())
@@ -422,23 +416,23 @@ namespace piyavkin
       ConstTreeIterator< Key, T, Compare > it2 = it;
       ConstTreeIterator< Key, T, Compare > temp = --it;
       ++it;
-      while (temp != --cbegin() && it.node_->val_type.first == temp.node_->val_type.first)
+      while (temp != --cbegin() && equal_key(it.node_->val_type.first, temp.node_->val_type.first))
       {
         --it;
         --temp;
       }
       temp = ++it2;
       --it2;
-      while (temp != cend() && it2.node_->val_type.first == temp.node_->val_type.first)
+      while (temp != cend() && equal_key(it2.node_->val_type.first, temp.node_->val_type.first))
       {
         ++it2;
         ++temp;
       }
       return std::pair< ConstTreeIterator< Key, T, Compare >, ConstTreeIterator< Key, T, Compare > >(it, ++it2);
     }
-    std::pair< TreeIterator< Key, T, Compare >, TreeIterator< Key, T, Compare > > equil_range(const Key& key)
+    std::pair< TreeIterator< Key, T, Compare >, TreeIterator< Key, T, Compare > > equal_range(const Key& key)
     {
-      auto pair = static_cast< const Tree< Key, T, Compare >& >(*this).equil_range(key);
+      auto pair = static_cast< const Tree< Key, T, Compare >& >(*this).equal_range(key);
       TreeIterator< Key, T, Compare > it1(const_cast< detail::TreeNode< Key, T >* >(pair.first.node_));
       TreeIterator< Key, T, Compare > it2(const_cast< detail::TreeNode< Key, T >* >(pair.second.node_));
       auto res = it1;
@@ -452,7 +446,7 @@ namespace piyavkin
     }
     size_t count(const Key& key) const
     {
-      std::pair< ConstTreeIterator< Key, T, Compare >, ConstTreeIterator< Key, T, Compare > > pair = equil_range(key);
+      std::pair< ConstTreeIterator< Key, T, Compare >, ConstTreeIterator< Key, T, Compare > > pair = equal_range(key);
       size_t sum = 0;
       while (pair.first != pair.second)
       {
@@ -495,8 +489,15 @@ namespace piyavkin
     }
     bool cmpNodeParent(const detail::TreeNode< Key, T >* node, const Key& key) const
     {
-      return (!root_ || node == root_ || (isLeftChild(node) && cmp_(key,node->parent_->val_type.first))
-        || (isRightChild(node) && cmp_(node->parent_->val_type.first, key)));
+      return (!root_ || node == root_ || isCorrectLeftChild(node, key) || isCorrectRightChild(node, key));
+    }
+    bool isCorrectLeftChild(const detail::TreeNode< Key, T >* node, const Key& key_) const
+    {
+      return isLeftChild(node) && cmp_(key, node->parent_->val_type.first);
+    }
+    bool isCorrectRightChild(const detail::TreeNode< Key, T >* node, const Key& key_) const
+    {
+      return isRightChild(node) && cmp_(node->parent_->val_type.first, key);
     }
     void zig(detail::TreeNode< Key, T >* node)
     {
@@ -675,11 +676,15 @@ namespace piyavkin
     ConstTreeIterator< Key, T, Compare > find_impl(const Key& key) const
     {
       ConstTreeIterator< Key, T, Compare > it = lower_bound_impl(key);
-      if (!it.node_ || it.node_->val_type.first != key)
+      if (!it.node_ || !equal_key(it.node_->val_type.first, key))
       {
         return cend();
       }
       return it;
+    }
+    bool equal_key(const Key& key1, const Key& key2) const
+    {
+      return !cmp(key1, key2) && !cmp(key2, key1);
     }
   };
 }
