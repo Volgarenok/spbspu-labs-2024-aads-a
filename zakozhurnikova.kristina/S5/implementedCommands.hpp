@@ -9,7 +9,7 @@ namespace zakozhurnikova
   using map = BinarySearchTree< int, std::string >;
   struct ImplementedCommands
   {
-    explicit ImplementedCommands(BinarySearchTree< int, std::string > map);
+    explicit ImplementedCommands(BinarySearchTree< int, std::string >& map);
     int executeCommand(std::string& command, std::string& result);
 
   private:

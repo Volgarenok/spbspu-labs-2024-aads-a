@@ -6,7 +6,7 @@
 namespace zak = zakozhurnikova;
 using map = zak::BinarySearchTree< int, std::string >;
 
-zak::ImplementedCommands::ImplementedCommands(BinarySearchTree< int, std::string > map):
+zak::ImplementedCommands::ImplementedCommands(BinarySearchTree< int, std::string >& map):
   map_(map)
 {
   commands_.push("ascending", &ImplementedCommands::ascending);

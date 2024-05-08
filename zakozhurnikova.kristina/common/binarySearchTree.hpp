@@ -512,7 +512,7 @@ namespace zakozhurnikova
     }
 
     template < typename F >
-    F traverse_lnr(F f) const
+    F traverse_lnr(F& f) const
     {
       for (auto it = cbegin(); it != cend(); ++it)
       {
@@ -521,7 +521,7 @@ namespace zakozhurnikova
       return f;
     }
     template < typename F >
-    F traverse_rnl(F f) const
+    F traverse_rnl(F& f) const
     {
       auto it = ConstIteratorTree< Key, Value, Compare>(getLowestRight(root_));
       for (; it != cend; --it)
@@ -531,7 +531,7 @@ namespace zakozhurnikova
       return f;
     }
     template < typename F >
-    F traverse_breadth(F f) const
+    F traverse_breadth(F& f) const
     {
       return f;
     }
