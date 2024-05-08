@@ -12,13 +12,13 @@ namespace namestnikov
   class Tree
   {
   public:
-    using pair_key_t = std::pair< const Key, Value >
+    using pair_key_t = std::pair< const Key, Value >;
     using node_t = TreeNode< pair_key_t >;
     using iterator = IteratorTree< Key, Value, Compare >;
     using const_iterator = ConstIteratorTree< Key, Value, Compare >;
     Tree():
-      head_(nullptr),
-      size_(0),
+      root_(nullptr),
+      size_(0)
     {}
     Tree(const Tree & other):
       root_(other.root_),
@@ -79,14 +79,14 @@ namespace namestnikov
     {
       print_impl(root_);
     }
-    void balance(node_t * node)
+    node_t * balance(node_t * node)
     {
       fixHeight(node);
       if (getBalance(node) == 2)
       {
         if (getBalance(node->right) < 0)
         {
-          node->right = rotate_right(node->right);
+          rotate_right(node->right);
         }
         rotate_left(node);
       }
@@ -94,10 +94,11 @@ namespace namestnikov
       {
         if (getBalance(node->left) > 0)
         {
-          node->left = rotate_left(node->left);
+          rotate_left(node->left);
         }
         rotate_right(node);
       }
+      return node;
     }
     node_t * find_min(node_t * node)
     {
@@ -125,9 +126,9 @@ namespace namestnikov
       }
       return balance(root);
     }
-    void push(const pair_key_t & value)
+    void insert(const pair_key_t & value)
     {
-      root_ = insert(root_, value.first, value.second);
+      root_ = insert(value, root_);
       ++size_;
     }
     node_t * search(const Key & key) const
@@ -204,8 +205,8 @@ namespace namestnikov
       if (node)
       {
         clear(node->left);
-        delete node;
         clear(node->right);
+        delete node;
       }
     }
   };

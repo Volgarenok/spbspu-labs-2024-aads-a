@@ -6,11 +6,15 @@
 #include <limits>
 #include "commands.hpp"
 #include "input_dicts.hpp"
+#include "tree.hpp"
 
 int main(int argc, char * argv[])
 {
   using namespace namestnikov;
   using mapOfDicts = std::map< std::string, std::map< size_t, std::string > >;
+  Tree< size_t, std::string > tree;
+  tree.insert(std::make_pair(10, "20"));
+  tree.print();
   mapOfDicts myMap;
   if (argc == 2)
   {

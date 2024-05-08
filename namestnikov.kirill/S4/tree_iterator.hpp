@@ -46,7 +46,7 @@ namespace namestnikov
         return *this;
       }
     }
-    iterator & operator++(int)
+    iterator operator++(int)
     {
       iterator temp(*this);
       ++(*this);
