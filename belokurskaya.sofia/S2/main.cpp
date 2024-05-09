@@ -10,23 +10,32 @@
 int main(int argc, char* argv[])
 {
   using namespace belokurskaya;
+  std::istream* input;
+  std::ifstream fileInput;
+
   if (argc < 2)
   {
-    std::cerr << "Invalid command line args\n";
-    return 1;
+    input = &std::cin;
   }
-
-  const std::string inputFileName = argv[1];
-  std::ifstream inputFile(inputFileName);
-  if (!inputFile.is_open())
+  else
   {
-    std::cerr << "Unable to open input file\n";
-    return 1;
+    fileInput.open(argv[1]);
+    if (!fileInput.is_open())
+    {
+      std::cerr << "Unable to open input file\n";
+      return 1;
+    }
+    input = &fileInput;
   }
 
   std::string line;
-  while (std::getline(inputFile, line))
+  while (true)
   {
+    if (!std::getline(*input, line))
+    {
+      break;
+    }
+
     if (line.empty())
     {
       continue;
