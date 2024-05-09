@@ -10,30 +10,18 @@
 
 int main(int argc, char * argv[])
 {
+  std::cout << "ETWRE";
   using namespace namestnikov;
-  using mapOfDicts = Tree< std::string, Tree< size_t, std::string > >;
-  Tree< size_t, std::string > tree;
-  tree.insert(std::make_pair(10, "20"));
-  tree.insert(std::make_pair(5, "10"));
-  tree.insert(std::make_pair(15, "30"));
-  tree[20] = "40";
-  tree[17] = "35";
-  tree[2] = "100";
-  auto p = tree.cbegin();
-  auto q = tree.cend();
-  while (p != q)
-  {
-    std::cout << "1";
-    ++p;
-  } 
+  using tree_t = Tree< int, std::string >;
+  using mapOfDicts = Tree< std::string, Tree< int, std::string > >;
+  Tree< std::string, tree_t > myMap;
+  tree_t tree;
+  tree.insert(100, "2000");
+  tree[200] = "100";
+  std::cout << myMap.size();
+  myMap.insert("name", tree);
   tree.print();
-  std::cout << tree.size();
-  for (const auto & key: tree)
-    {
-      std::cout << " " << key.second;
-    }
-    std::cout << "\n";
-  mapOfDicts myMap;
+  /*
   if (argc == 2)
   {
     std::ifstream in(argv[1]);
@@ -72,5 +60,5 @@ int main(int argc, char * argv[])
     std::cin.clear();
     std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
 
-  }
+  }*/
 }

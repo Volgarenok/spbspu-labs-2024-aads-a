@@ -5,21 +5,25 @@ namespace namestnikov
 {
   namespace detail
   {
-    template< class T >
+    template< class Key, class Value >
     struct TreeNode
     {
-      using node_t = detail::TreeNode< T >;
-      T data;
+      using node_t = detail::TreeNode< Key, Value >;
+      std::pair< Key, Value > data;
       node_t * parent;
       node_t * left;
       node_t * right;
       int height;
-      explicit TreeNode(const T & value):
-        data(value),
-        parent(nullptr),
-        left(nullptr),
-        right(nullptr)
-      {}
+      TreeNode(Key key, Value val, TreeNode * parent = nullptr, TreeNode * left = nullptr, TreeNode * right = nullptr, int height = 0)
+      {
+        data.first = key;
+        data.second = val;
+        this->left = left;
+        this->right = right;
+        this->parent = parent;
+        this->height = height;
+      }
+
       int getHeight(node_t * root)
       {
         if (!root)

@@ -13,7 +13,7 @@ namespace namestnikov
   {
   public:
     using pair_key_t = std::pair< const Key, Value >;
-    using node_t = detail::TreeNode< pair_key_t >;
+    using node_t = detail::TreeNode< Key, Value >;
     using iterator = IteratorTree< Key, Value, Compare >;
     using const_iterator = ConstIteratorTree< Key, Value, Compare >;
     Tree():
@@ -30,15 +30,22 @@ namespace namestnikov
       {
         for (auto it = other.begin(); it != other.end(); ++it)
         {
-          insert(std::make_pair(it->first, it->second));
+          insert(it->first, it->second);
         }
       }
       catch(...)
       {
         clear();
         throw;
-      }
-      
+      } 
+    }
+    Tree(Tree && other):
+      root_(other.root_),
+      size_(other.size_),
+      compare_(other.compare_)
+    {
+      other.root_ = nullptr;
+      other.size_ = 0;
     }
     Tree & operator=(const Tree & other)
     {
@@ -78,7 +85,7 @@ namespace namestnikov
       }
       else
       {
-        insert(std::make_pair(key, Value()));
+        insert(key, Value());
         return search(root_, key)->data.second;
       }
     }
@@ -137,8 +144,8 @@ namespace namestnikov
       }
       newRoot->right = node;
       node->parent = newRoot;
-      node->height = node->height + 1 - std::max(newRoot->height, 0);
-      newRoot->height = newRoot->height + 1 + std::min(node->height, 0);
+      node->height = node->height - 1 - std::max(newRoot->height, 0);
+      newRoot->height = newRoot->height - 1 + std::min(node->height, 0);
     }
     void print_impl(node_t * root)
     {
@@ -156,9 +163,8 @@ namespace namestnikov
     {
       print_impl(root_);
     }
-    node_t * balance(node_t * node)
+    void balance(node_t * node)
     {
-      fixHeight(node);
       if (node->height < 0)
       {
         if (node->right->height > 0)
@@ -167,15 +173,37 @@ namespace namestnikov
         }
         rotate_left(node);
       }
-      else if (node->height == -2)
+      else
       {
-        if (node->left->height > 0)
+        if (node->left->height < 0)
         {
           rotate_left(node->left);
         }
         rotate_right(node);
       }
-      return node;
+    }
+    void getNewBalance(node_t * node)
+    {
+      if ((node->height > 1) || (node->height < -1))
+      {
+        balance(node);
+        return;
+      }
+      if (node->parent != nullptr)
+      {
+        if (node->isLeftChild())
+        {
+          node->parent->height += 1;
+        }
+        else if (node->isRightChild())
+        {
+          node->parent->height -= 1;
+        }
+        if (node->parent->height != 0)
+        {
+          getNewBalance(node->parent);
+        }
+      }
     }
     node_t * find_min(node_t * node) const
     {
@@ -207,7 +235,7 @@ namespace namestnikov
     const_iterator find(const Key & key) const
     {
       node_t * temp = root_;
-      while ((temp) && (temp->data.first == key))
+      while ((temp) && (temp->data.first != key))
       {
         if (compare_(temp->data.first, key))
         {
@@ -220,28 +248,46 @@ namespace namestnikov
       }
       return const_iterator(temp);
     }
-    node_t * insert(const pair_key_t & value, node_t * root)
+    void insert(const Key & key, const Value & val, node_t * root)
     {
-      if (root == nullptr)
+      if (compare_(key, root->data.first))
       {
-        root = new node_t(value);
-      }
-      else if (compare_(value.first, root->data.first))
-      {
-        root->left = insert(value, root->left);
-        root->left->parent = root;
+        if (root->left)
+        {
+          insert(key, val, root->left);
+        }
+        else
+        {
+          root->left = new node_t(key, val, root);
+          getNewBalance(root->left);
+
+        }
       }
       else
       {
-        root->right = insert(value, root->right);
-        root->right->parent = root;
+        if (root->right)
+        {
+          insert(key, val, root->right);
+        }
+        else
+        {
+          root->right = new node_t(key, val, root);
+          getNewBalance(root->right);
+        }
       }
-      return balance(root);
     }
-    void insert(const pair_key_t & value)
+    void insert(const Key & key, const Value & val)
     {
-      root_ = insert(value, root_);
-      ++size_;
+      if (root_)
+      {
+        insert(key, val, root_);
+        ++size_;
+      }
+      else
+      {
+        root_ = new node_t(key, val);
+        ++size_;
+      }
     }
     node_t * search(const Key & key) const
     {

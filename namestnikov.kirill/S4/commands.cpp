@@ -37,7 +37,7 @@ void namestnikov::makeIntersect(std::istream & in, Tree< std::string, Tree< size
     {
       if (key1.first == key2.first)
       {
-        res.insert(key1);
+        res.insert(key1.first, key1.second);
       }
     }
   }
@@ -57,13 +57,13 @@ void namestnikov::makeUnion(std::istream & in, Tree< std::string, Tree< size_t, 
   Tree< size_t, std::string > right = myMap[secondName];
   for (const auto & key1: left)
   {
-    res.insert(key1);
+    res.insert(key1.first, key1.second);
   }
   for (const auto & key2: right)
   {
     if (res.find(key2.first) == res.cend())
     {
-      res.insert(key2);
+      res.insert(key2.first, key2.second);
     }
   }
   myMap[newName] = res;
@@ -84,7 +84,7 @@ void namestnikov::makeComplement(std::istream & in, Tree< std::string, Tree< siz
   {
     if (right.find(key1.first) == right.cend())
     {
-      res.insert(key1);
+      res.insert(key1.first, key1.second);
     }
   }
   myMap[newName] = res;
