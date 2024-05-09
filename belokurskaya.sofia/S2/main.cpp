@@ -7,5 +7,6 @@
 
 int main()
 {
+  using namespace belokurskaya;
   return 0;
 }
