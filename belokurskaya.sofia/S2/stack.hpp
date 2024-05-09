@@ -17,7 +17,7 @@ namespace belokurskaya
       data_ = new T[capacity_];
     }
 
-    Stack(const Stack< T >& other) :
+    Stack(const Stack< T >& other):
       size_(other.size_),
       top_(other.top_),
       capacity_(other.capacity_),
@@ -26,7 +26,7 @@ namespace belokurskaya
       std::copy(other.data_, other.data_ + other.capacity_, data_);
     }
 
-    Stack(Stack< T >&& other) :
+    Stack(Stack< T >&& other):
       size_(other.size_),
       top_(other.top_),
       capacity_(other.capacity_),

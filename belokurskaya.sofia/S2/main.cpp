@@ -1,5 +1,6 @@
 ﻿#include <iostream>
 #include <fstream>
+#include <string>
 
 #include "stack.hpp"
 #include "queue.hpp"
@@ -24,6 +25,12 @@ int main(int argc, char* argv[])
   }
 
   std::string line;
-  
+  while (std::getline(inputFile, line))
+  {
+    if (line.empty())
+    {
+      continue;
+    }
+  }
   return 0;
 }
