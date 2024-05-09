@@ -4,10 +4,11 @@
 #include <string>
 #include <map>
 #include <iostream>
+#include "tree.hpp"
 
 namespace namestnikov
 {
-  void inputMaps(std::istream & in, std::map< std::string, std::map< size_t, std::string > > & myMap);
+  void inputMaps(std::istream & in, Tree< std::string, Tree< size_t, std::string > > & myMap);
 }
 
 #endif

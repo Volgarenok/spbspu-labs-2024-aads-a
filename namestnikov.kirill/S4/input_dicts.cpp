@@ -1,11 +1,11 @@
 #include "input_dicts.hpp"
 
-void namestnikov::inputMaps(std::istream & in, std::map< std::string, std::map< size_t, std::string > > & myMap)
+void namestnikov::inputMaps(std::istream & in, Tree< std::string, Tree< size_t, std::string > > & myMap)
 {
   while (!in.eof())
   {
     in.clear();
-    std::map< size_t, std::string > tempMap;
+    Tree< size_t, std::string > tempMap;
     std::string mapName = "";
     in >> mapName;
     size_t keyNumber = 0;

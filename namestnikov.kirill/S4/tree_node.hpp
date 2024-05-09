@@ -3,47 +3,50 @@
 
 namespace namestnikov
 {
-  template< class T >
-  struct TreeNode
+  namespace detail
   {
-    using node_t = TreeNode< T >;
-    T data;
-    node_t * parent;
-    node_t * left;
-    node_t * right;
-    int height;
-    explicit TreeNode(const T & value):
-      data(value),
-      parent(nullptr),
-      left(nullptr),
-      right(nullptr)
-    {}
-    int getHeight(node_t * root)
+    template< class T >
+    struct TreeNode
     {
-      if (!root)
+      using node_t = detail::TreeNode< T >;
+      T data;
+      node_t * parent;
+      node_t * left;
+      node_t * right;
+      int height;
+      explicit TreeNode(const T & value):
+        data(value),
+        parent(nullptr),
+        left(nullptr),
+        right(nullptr)
+      {}
+      int getHeight(node_t * root)
       {
-        return -1;
+        if (!root)
+        {
+          return -1;
+        }
+        else
+        {
+          int leftHeight = getHeight(root->left);
+          int rightHeight = getHeight(root->right);
+          return (leftHeight > rightHeight) ? (leftHeight + 1) : (rightHeight + 1);
+        }
       }
-      else
+      bool isLeftChild() const
       {
-        int leftHeight = getHeight(root->left);
-        int rightHeight = getHeight(root->right);
-        return (leftHeight > rightHeight) ? (leftHeight + 1) : (rightHeight + 1);
+        return (this->parent) && (this->parent->left == this);
       }
-    }
-    bool isLeftChild() const
-    {
-      return (this->parent) && (this->parent->left == this);
-    }
-    bool isRightChild() const
-    {
-      return (this->parent) && (this->parent->right == this);
-    }
-    bool isRoot() const
-    {
-      return !this->parent;
-    }
-  };
+      bool isRightChild() const
+      {
+        return (this->parent) && (this->parent->right == this);
+      }
+      bool isRoot() const
+      {
+        return !this->parent;
+      }
+    };
+  }
 }
 
 #endif

@@ -3,14 +3,15 @@
 #include <map>
 #include <string>
 #include <iostream>
+#include "tree.hpp"
 
 
 namespace namestnikov
 {
-  void print(std::istream & in, std::map< std::string, std::map< size_t, std::string > > & myMap, std::ostream & out);
-  void makeIntersect(std::istream & in, std::map< std::string, std::map< size_t, std::string > > & myMap);
-  void makeUnion(std::istream & in, std::map< std::string, std::map< size_t, std::string > > & myMap);
-  void makeComplement(std::istream & in, std::map< std::string, std::map< size_t, std::string > > & myMap);
+  void print(std::istream & in, Tree< std::string, Tree< size_t, std::string > > & myMap, std::ostream & out);
+  void makeIntersect(std::istream & in, Tree< std::string, Tree< size_t, std::string > > & myMap);
+  void makeUnion(std::istream & in, Tree< std::string, Tree< size_t, std::string > > & myMap);
+  void makeComplement(std::istream & in, Tree< std::string, Tree< size_t, std::string > > & myMap);
 }
 
 #endif

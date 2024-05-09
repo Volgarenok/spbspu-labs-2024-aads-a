@@ -11,13 +11,14 @@
 int main(int argc, char * argv[])
 {
   using namespace namestnikov;
-  using mapOfDicts = std::map< std::string, std::map< size_t, std::string > >;
+  using mapOfDicts = Tree< std::string, Tree< size_t, std::string > >;
   Tree< size_t, std::string > tree;
   tree.insert(std::make_pair(10, "20"));
   tree.insert(std::make_pair(5, "10"));
   tree.insert(std::make_pair(15, "30"));
   tree[20] = "40";
   tree[17] = "35";
+  tree[2] = "100";
   auto p = tree.cbegin();
   auto q = tree.cend();
   while (p != q)
@@ -49,7 +50,7 @@ int main(int argc, char * argv[])
     std::cerr << "Wrong command line arguments\n";
     return 2;
   }
-  std::map< std::string, std::function< void(std::istream &, mapOfDicts &) > > commands;
+  Tree< std::string, std::function< void(std::istream &, mapOfDicts &) > > commands;
   {
     using namespace std::placeholders;
     commands["union"] = makeUnion;

@@ -13,7 +13,7 @@ namespace namestnikov
   {
   public:
     using pair_key_t = std::pair< const Key, Value >;
-    using node_t = TreeNode< pair_key_t >;
+    using node_t = detail::TreeNode< pair_key_t >;
     using iterator = IteratorTree< Key, Value, Compare >;
     using const_iterator = ConstIteratorTree< Key, Value, Compare >;
     Tree():
@@ -26,8 +26,19 @@ namespace namestnikov
       size_(other.size_),
       compare_(other.compare_)
     {
-      other.root_ = nullptr;
-      other.size_ = 0;
+      try
+      {
+        for (auto it = other.begin(); it != other.end(); ++it)
+        {
+          insert(std::make_pair(it->first, it->second));
+        }
+      }
+      catch(...)
+      {
+        clear();
+        throw;
+      }
+      
     }
     Tree & operator=(const Tree & other)
     {

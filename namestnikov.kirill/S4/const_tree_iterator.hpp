@@ -2,6 +2,7 @@
 #define CONST_TREE_ITERATOR_HPP
 
 #include "tree_node.hpp"
+#include "tree_iterator.hpp"
 
 namespace namestnikov
 {
@@ -9,12 +10,17 @@ namespace namestnikov
   class Tree;
 
   template< class Key, class Value, class Compare >
+  class IteratorTree;
+
+  template< class Key, class Value, class Compare >
   class ConstIteratorTree: public std::iterator< std::bidirectional_iterator_tag, Value >
   {
     friend class Tree< Key, Value, Compare >;
+    friend class IteratorTree< Key, Value, Compare >;
     using pair_key_t = std::pair< const Key, Value >;
-    using node_t = TreeNode< pair_key_t >;
+    using node_t = detail::TreeNode< pair_key_t >;
     using const_iterator = ConstIteratorTree< Key, Value, Compare >;
+    using iterator = IteratorTree< Key, Value, Compare >;
   public:
     ConstIteratorTree():
       node_(nullptr)
@@ -55,9 +61,17 @@ namespace namestnikov
     {
       return (node_ == other.node_);
     }
+    bool operator==(iterator & other) const
+    {
+      return (node_ == other.node_);
+    }
     bool operator!=(const const_iterator & other) const
     {
-      return !(*this == other);
+      return node_ != other.node_;
+    }
+    bool operator!=(iterator & other) const
+    {
+      return node_ != other.node_;
     }
     const pair_key_t & operator*() const
     {
