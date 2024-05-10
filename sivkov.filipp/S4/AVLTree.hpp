@@ -59,16 +59,16 @@ namespace sivkov
 
   template< typename Key, typename Value, typename Comp >
   AVLTree< Key, Value, Comp >::AVLTree():
+    comp_(Comp()),
     size_(0),
-    root_(nullptr),
-    comp_(Comp())
+    root_(nullptr)
   {}
 
   template< typename Key, typename Value, typename Comp >
   AVLTree< Key, Value, Comp >::AVLTree(const AVLTree& other):
+    comp_(Comp()),
     size_(0),
-    root_(nullptr),
-    comp_(other.comp_)
+    root_(nullptr)
   {
     for (auto it = other.cbegin(); it != other.cend(); ++it)
     {
@@ -78,9 +78,9 @@ namespace sivkov
 
   template< typename Key, typename Value, typename Comp >
   AVLTree< Key, Value, Comp >::AVLTree(AVLTree&& other) noexcept:
-    size_(other.size_),
-    root_(other.root_),
-    comp_(other.comp_)
+    comp_(Comp()),
+    size_(0),
+    root_(nullptr)
   {
     other.size_ = 0;
     other.root_ = new  detail::TreeNode< Key, Value >();
