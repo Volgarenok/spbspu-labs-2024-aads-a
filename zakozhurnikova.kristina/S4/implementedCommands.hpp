@@ -9,20 +9,15 @@ namespace zakozhurnikova
   using map = BinarySearchTree< int, std::string >;
   struct ImplementedCommands
   {
+    using Command = void (*)(List< std::string >&, std::string&, BinarySearchTree< std::string, map >&);
     explicit ImplementedCommands(BinarySearchTree< std::string, map >& maps);
     void executeCommand(std::istream& in, std::string& result);
+    void addCommand(const std::string& nameCommand, Command command);
 
   private:
-    using command = void (ImplementedCommands::*)(List< std::string >&, std::string&);
     BinarySearchTree< std::string, map >& maps_;
-    BinarySearchTree< std::string, command > commands_;
+    BinarySearchTree< std::string, Command > commands_;
 
-    void print(List< std::string >& args, std::string& result);
-    void complement(List< std::string >& args, std::string& result);
-    void intersect(List< std::string >& args, std::string& result);
-    void doUnion(List< std::string >& args, std::string& result);
-
-    void addMap(std::string& mapName, map& toAdd);
   };
 }
 

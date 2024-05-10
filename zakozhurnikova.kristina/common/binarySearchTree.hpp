@@ -64,7 +64,7 @@ namespace zakozhurnikova
       clear();
     }
 
-    int length() const noexcept
+    int size() const noexcept
     {
       return this->size_;
     }

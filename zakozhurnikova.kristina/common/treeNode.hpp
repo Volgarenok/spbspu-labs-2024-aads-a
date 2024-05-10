@@ -15,55 +15,62 @@ namespace zakozhurnikova
       TreeNode* parent;
       int balanceFactor;
 
-      TreeNode(
-        Key key, Value val, TreeNode* parent = nullptr, TreeNode* left = nullptr, TreeNode* right = nullptr,
-        int balanceFactor = 0
-      )
+      TreeNode(Key key, Value val, TreeNode* parent)
       {
         data.first = key;
         data.second = val;
-        this->leftChild = left;
-        this->rightChild = right;
+        this->rightChild = nullptr;
+        this->leftChild = nullptr;
         this->parent = parent;
-        this->balanceFactor = balanceFactor;
+        this->balanceFactor = 0;
       }
 
-      TreeNode* hasLeftChild()
+      TreeNode(Key key, Value val)
+      {
+        data.first = key;
+        data.second = val;
+        this->rightChild = nullptr;
+        this->leftChild = nullptr;
+        this->parent = nullptr;
+        this->balanceFactor = 0;
+      }
+
+      TreeNode* hasLeftChild() noexcept
       {
         return this->leftChild;
       }
 
-      TreeNode* hasRightChild()
+      TreeNode* hasRightChild() noexcept
       {
         return this->rightChild;
       }
 
-      bool isLeftChild() const
+      bool isLeftChild() const noexcept
       {
         return this->parent && this->parent->leftChild == this;
       }
 
-      bool isRightChild() const
+      bool isRightChild() const noexcept
       {
         return this->parent && this->parent->rightChild == this;
       }
 
-      bool isRoot() const
+      bool isRoot() const noexcept
       {
         return !this->parent;
       }
 
-      bool isLeaf() const
+      bool isLeaf() const noexcept
       {
         return !(this->rightChild || this->leftChild);
       }
 
-      bool hasAnyChildren() const
+      bool hasAnyChildren() const noexcept
       {
         return this->rightChild || this->leftChild;
       }
 
-      bool hasBothChildren() const
+      bool hasBothChildren() const noexcept
       {
         return this->rightChild && this->leftChild;
       }
