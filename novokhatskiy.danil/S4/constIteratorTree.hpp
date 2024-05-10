@@ -33,7 +33,7 @@ namespace novokhatskiy
     bool operator==(const constIter& other) const
     {
       assert(node_ != nullptr);
-      return *this == other;
+      return node_ == other.node_;
     }
 
     constIter operator++()
