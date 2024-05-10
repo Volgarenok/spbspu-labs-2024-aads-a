@@ -14,7 +14,8 @@ namespace ishmuratov
   public:
     AVLTree():
       root_(nullptr),
-      comp_(Compare())
+      comp_(Compare()),
+      size_(0)
     {}
     ~AVLTree() = default;
 
@@ -35,6 +36,37 @@ namespace ishmuratov
     Iter end() noexcept
     {
       return Iter(nullptr);
+    }
+
+    size_t size() noexcept
+    {
+      return size_;
+    }
+
+    bool empty() noexcept
+    {
+      return size_ == 0;
+    }
+
+    Value & at(const Key & key)
+    {
+      tnode * node = root_;
+      while (node != nullptr)
+      {
+        if (comp_(key, node->data.first))
+        {
+          node = node->left;
+        }
+        else if (comp_(node->data.first, key))
+        {
+          node = node->right;
+        }
+        else
+        {
+          return node->data.second;
+        }
+      }
+      throw std::runtime_error("Key wasn't found!");
     }
 
     long long get_height(tnode * node)
@@ -60,6 +92,7 @@ namespace ishmuratov
       if (root_ == nullptr)
       {
         root_ = new tnode(k, v);
+        size_ += 1;
         return;
       }
       else
@@ -81,6 +114,7 @@ namespace ishmuratov
   private:
     detail::TNode< Key, Value> * root_;
     Compare comp_;
+    size_t size_;
 
     void place(Key k, Value v, tnode * curr)
     {
@@ -90,6 +124,7 @@ namespace ishmuratov
         {
           curr->left = new tnode(k, v);
           curr->left->parent = curr;
+          size_ += 1;
           return;
         }
         place(k, v, curr->left);
@@ -100,6 +135,7 @@ namespace ishmuratov
         {
           curr->right = new tnode(k, v);
           curr->right->parent = curr;
+          size_ += 1;
           return;
         }
         place(k, v, curr->right);
