@@ -91,6 +91,7 @@ namespace sivkov
     List< T > prev(other);
     if (std::addressof(other) != this)
     {
+      List< T > prev(other);
       swap(prev);
     }
     return *this;
@@ -101,7 +102,7 @@ namespace sivkov
   {
     if (std::addressof(other) != this)
     {
-       List< T > prev(std::move(other));
+      List< T > prev(std::move(other));
       swap(prev);
     }
     return *this;
