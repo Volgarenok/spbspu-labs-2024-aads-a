@@ -17,7 +17,10 @@ namespace ishmuratov
       comp_(Compare()),
       size_(0)
     {}
-    ~AVLTree() = default;
+    ~AVLTree()
+    {
+      clear();
+    }
 
     tnode * min_elem(tnode * root)
     {
@@ -66,12 +69,18 @@ namespace ishmuratov
           return node->data.second;
         }
       }
-      throw std::runtime_error("Key wasn't found!");
+      throw std::out_of_range("Key wasn't found!");
     }
 
     Value operator[](const Key & key)
     {
       return at(key);
+    }
+
+    void clear()
+    {
+      size_ = 0;
+      delete_node(root_);
     }
 
     long long get_height(tnode * node)
@@ -145,6 +154,17 @@ namespace ishmuratov
         }
         place(k, v, curr->right);
       }
+    }
+
+    void delete_node(tnode * node)
+    {
+      if (node == nullptr)
+      {
+        return;
+      }
+      delete_node(node->left);
+      delete_node(node->right);
+      delete node;
     }
 
     void printUtil(tnode * root, int space, std::ostream & output)
