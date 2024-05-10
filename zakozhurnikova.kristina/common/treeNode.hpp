@@ -33,7 +33,7 @@ namespace zakozhurnikova
         balanceFactor(0)
       {}
 
-      TreeNode* rotateLeft()
+      TreeNode* rotateLeft(TreeNode** root)
       {
         TreeNode* newRoot = this->rightChild;
         this->rightChild = newRoot->leftChild;
@@ -53,6 +53,10 @@ namespace zakozhurnikova
             this->parent->rightChild = newRoot;
           }
         }
+        else
+        {
+          *root = newRoot;
+        }
         newRoot->leftChild = this;
         this->parent = newRoot;
         this->balanceFactor = this->balanceFactor + 1 - std::min(newRoot->balanceFactor, 0);
@@ -60,7 +64,7 @@ namespace zakozhurnikova
         return newRoot;
       }
 
-      TreeNode* rotateRight()
+      TreeNode* rotateRight(TreeNode** root)
       {
         TreeNode* newRoot = this->leftChild;
         this->leftChild = newRoot->rightChild;
@@ -79,6 +83,10 @@ namespace zakozhurnikova
           {
             this->parent->rightChild = newRoot;
           }
+        }
+        else
+        {
+          *root = newRoot;
         }
         newRoot->rightChild = this;
         this->parent = newRoot;

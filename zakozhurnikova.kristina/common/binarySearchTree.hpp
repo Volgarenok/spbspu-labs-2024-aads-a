@@ -267,53 +267,28 @@ namespace zakozhurnikova
 
     void rebalance(Node* node)
     {
-      Node* newRoot = nullptr;
       if (node->balanceFactor < 0)
       {
         if (node->rightChild->balanceFactor > 0)
         {
-          newRoot = node->rightChild->rotateRight();
-          if (node->rightChild->isRoot())
-          {
-            root_ = newRoot;
-          }
-          newRoot = node->rotateLeft();
-          if (node->isRoot())
-          {
-            root_ = newRoot;
-          }
+          node->rightChild->rotateRight(&root_);
+          node->rotateLeft(&root_);
         }
         else
         {
-          newRoot = node->rotateLeft();
-          if (node->isRoot())
-          {
-            root_ = newRoot;
-          }
+          node->rotateLeft(&root_);
         }
       }
       else
       {
         if (node->leftChild->balanceFactor < 0)
         {
-          newRoot = node->leftChild->rotateLeft();
-          if (node->leftChild->isRoot())
-          {
-            root_ = newRoot;
-          }
-          newRoot = node->rotateRight();
-          if (node->isRoot())
-          {
-            root_ = newRoot;
-          }
+          node->leftChild->rotateLeft(&root_);
+          node->rotateRight(&root_);
         }
         else
         {
-          newRoot = node->rotateRight();
-          if (node->isRoot())
-          {
-            root_ = newRoot;
-          }
+          node->rotateRight(&root_);
         }
       }
     }
