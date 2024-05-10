@@ -268,7 +268,8 @@ namespace sivkov
   }
 
   template< typename Key, typename Value, typename Comp >
-  detail::TreeNode< Key, Value >* AVLTree< Key, Value, Comp >::insert( detail::TreeNode< Key, Value >* root, const Key& key, const Value& value)
+  detail::TreeNode< Key, Value >* AVLTree< Key, Value, Comp >::insert(detail::TreeNode< Key, Value >* root,
+    const Key& key, const Value& value)
   {
     if (root == nullptr)
     {
@@ -317,7 +318,7 @@ namespace sivkov
   template< typename Key, typename Value, typename Comp >
   detail::TreeNode< Key, Value >* AVLTree< Key, Value, Comp >::rotate_right(detail::TreeNode< Key, Value >* root)
   {
-     detail::TreeNode< Key, Value >* new_root = root->left;
+    detail::TreeNode< Key, Value >* new_root = root->left;
     root->left = new_root->right;
     if (new_root->right != nullptr)
     {
@@ -378,7 +379,14 @@ namespace sivkov
   template< typename Key, typename Value, typename Comp >
   ConstIterator< Key, Value, Comp > AVLTree< Key, Value, Comp >::cbegin() const
   {
-    return ConstIterator< Key, Value, Comp >(root_ != nullptr ? find_min(root_) : nullptr);
+    if (root_ != nullptr)
+    {
+      return ConstIterator<Key, Value, Comp>(find_min(root_));
+    }
+    else
+    {
+      return ConstIterator<Key, Value, Comp>(nullptr);
+    }
   }
 
   template< typename Key, typename Value, typename Comp >
