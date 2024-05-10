@@ -1,7 +1,7 @@
 #ifndef TREENODE_HPP
 #define TREENODE_HPP
-#include <utility>
 #include <algorithm>
+#include <utility>
 
 namespace zakozhurnikova
 {
@@ -17,79 +17,75 @@ namespace zakozhurnikova
       TreeNode* parent;
       int balanceFactor;
 
-      TreeNode(Key key, Value val, TreeNode* parent)
+      TreeNode(Key key, Value val, TreeNode* parent):
+        data(std::make_pair< Key, Value >(std::forward< Key >(key), std::forward< Value >(val))),
+        leftChild(nullptr),
+        rightChild(nullptr),
+        parent(parent),
+        balanceFactor(0)
+      {}
+
+      TreeNode(Key key, Value val):
+        data(std::make_pair< Key, Value >(std::forward< Key >(key), std::forward< Value >(val))),
+        leftChild(nullptr),
+        rightChild(nullptr),
+        parent(nullptr),
+        balanceFactor(0)
+      {}
+
+      TreeNode* rotateLeft()
       {
-        data.first = key;
-        data.second = val;
-        this->rightChild = nullptr;
-        this->leftChild = nullptr;
-        this->parent = parent;
-        this->balanceFactor = 0;
+        TreeNode* newRoot = this->rightChild;
+        this->rightChild = newRoot->leftChild;
+        if (newRoot->leftChild != nullptr)
+        {
+          newRoot->leftChild->parent = this;
+        }
+        newRoot->parent = this->parent;
+        if (!this->isRoot())
+        {
+          if (this->isLeftChild())
+          {
+            this->parent->leftChild = newRoot;
+          }
+          else
+          {
+            this->parent->rightChild = newRoot;
+          }
+        }
+        newRoot->leftChild = this;
+        this->parent = newRoot;
+        this->balanceFactor = this->balanceFactor + 1 - std::min(newRoot->balanceFactor, 0);
+        newRoot->balanceFactor = newRoot->balanceFactor + 1 + std::max(this->balanceFactor, 0);
+        return newRoot;
       }
 
-      TreeNode(Key key, Value val)
+      TreeNode* rotateRight()
       {
-        data.first = key;
-        data.second = val;
-        this->rightChild = nullptr;
-        this->leftChild = nullptr;
-        this->parent = nullptr;
-        this->balanceFactor = 0;
-      }
-
-    TreeNode* rotateLeft()
-    {
-      TreeNode* newRoot = this->rightChild;
-      this->rightChild = newRoot->leftChild;
-      if (newRoot->leftChild != nullptr)
-      {
-        newRoot->leftChild->parent = this;
-      }
-      newRoot->parent = this->parent;
-      if (!this->isRoot())
-      {
-        if (this->isLeftChild())
+        TreeNode* newRoot = this->leftChild;
+        this->leftChild = newRoot->rightChild;
+        if (newRoot->rightChild != nullptr)
         {
-          this->parent->leftChild = newRoot;
+          newRoot->rightChild->parent = this;
         }
-        else
+        newRoot->parent = this->parent;
+        if (!this->isRoot())
         {
-          this->parent->rightChild = newRoot;
+          if (this->isLeftChild())
+          {
+            this->parent->leftChild = newRoot;
+          }
+          else
+          {
+            this->parent->rightChild = newRoot;
+          }
         }
+        newRoot->rightChild = this;
+        this->parent = newRoot;
+        this->balanceFactor = this->balanceFactor - 1 - std::max(0, newRoot->balanceFactor);
+        newRoot->balanceFactor = newRoot->balanceFactor - 1 + std::min(0, this->balanceFactor);
+        return newRoot;
       }
-      newRoot->leftChild = this;
-      this->parent = newRoot;
-      this->balanceFactor = this->balanceFactor + 1 - std::min(newRoot->balanceFactor, 0);
-      newRoot->balanceFactor = newRoot->balanceFactor + 1 + std::max(this->balanceFactor, 0);
-      return newRoot;
-    }
-
-    TreeNode* rotateRight()
-    {
-      TreeNode* newRoot = this->leftChild;
-      this->leftChild = newRoot->rightChild;
-      if (newRoot->rightChild != nullptr)
-      {
-        newRoot->rightChild->parent = this;
-      }
-      newRoot->parent = this->parent;
-      if (!this->isRoot())
-      {
-        if (this->isLeftChild())
-        {
-          this->parent->leftChild = newRoot;
-        }
-        else
-        {
-          this->parent->rightChild = newRoot;
-        }
-      }
-      newRoot->rightChild = this;
-      this->parent = newRoot;
-      this->balanceFactor = this->balanceFactor - 1 - std::max(0, newRoot->balanceFactor);
-      newRoot->balanceFactor = newRoot->balanceFactor - 1 + std::min(0, this->balanceFactor);
-      return newRoot;
-    }
 
       TreeNode* hasLeftChild() noexcept
       {
