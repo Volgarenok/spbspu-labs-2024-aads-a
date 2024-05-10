@@ -83,7 +83,7 @@ namespace sivkov
     root_(nullptr)
   {
     other.size_ = 0;
-    other.root_ = new  detail::TreeNode< Key, Value >();
+    other.root_ = nullptr;
   }
 
   template< typename Key, typename Value, typename Comp >
