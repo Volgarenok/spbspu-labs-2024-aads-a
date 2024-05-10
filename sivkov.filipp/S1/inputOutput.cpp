@@ -24,7 +24,7 @@ void sivkov::outputNames(List< std::pair< std::string, List< size_t > > >& list,
   out << "\n";
 }
 
-void sivkov::outputSums(List< size_t >& numbers, std::ostream& out)
+void sivkov::outputSums(const List< size_t >& numbers, std::ostream& out)
 {
   for (auto it = numbers.cbegin(); it != numbers.cend(); ++it)
   {
