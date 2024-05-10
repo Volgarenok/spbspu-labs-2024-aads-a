@@ -226,7 +226,7 @@ namespace namestnikov
       clear();
     }
   private:
-    node_t* root_;
+    node_t * root_;
     size_t size_;
     Compare compare_;
     void clear_impl(node_t * node)

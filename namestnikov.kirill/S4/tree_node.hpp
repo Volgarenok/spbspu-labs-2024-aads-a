@@ -14,28 +14,21 @@ namespace namestnikov
       node_t * left;
       node_t * right;
       int height;
-      TreeNode(Key key, Value val, TreeNode * parent = nullptr, TreeNode * left = nullptr, TreeNode * right = nullptr, int height = 0)
+      TreeNode(const Key & key, const Value & value)
       {
-        data.first = key;
-        data.second = val;
-        this->left = left;
-        this->right = right;
-        this->parent = parent;
-        this->height = height;
+        data = std::make_pair(key, value);
+        height = 0;
+        parent = nullptr;
+        left = nullptr;
+        right = nullptr;
       }
-
-      int getHeight(node_t * root)
+      TreeNode(const Key & key, const Value & value, TreeNode * newParent)
       {
-        if (!root)
-        {
-          return -1;
-        }
-        else
-        {
-          int leftHeight = getHeight(root->left);
-          int rightHeight = getHeight(root->right);
-          return (leftHeight > rightHeight) ? (leftHeight + 1) : (rightHeight + 1);
-        }
+        data = std::make_pair(key, value);
+        parent = newParent;
+        left = nullptr;
+        right = nullptr;
+        height = 0;
       }
       bool isLeftChild() const
       {
