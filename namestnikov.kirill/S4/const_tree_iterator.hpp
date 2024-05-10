@@ -17,7 +17,7 @@ namespace namestnikov
   {
     friend class Tree< Key, Value, Compare >;
     friend class IteratorTree< Key, Value, Compare >;
-    using pair_key_t = std::pair< const Key, Value >;
+    using pair_key_t = std::pair< Key, Value >;
     using node_t = detail::TreeNode< Key, Value >;
     using const_iterator = ConstIteratorTree< Key, Value, Compare >;
     using iterator = IteratorTree< Key, Value, Compare >;

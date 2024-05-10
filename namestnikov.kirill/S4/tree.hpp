@@ -21,25 +21,29 @@ namespace namestnikov
       size_(0),
       compare_(Compare())
     {}
+
     Tree(const Tree & other):
-      root_(other.root_),
-      size_(other.size_),
+      root_(nullptr),
+      size_(0),
       compare_(other.compare_)
     {
       try
       {
-        for (auto it = other.begin(); it != other.end(); ++it)
+        const_iterator begin = other.cbegin();
+        const_iterator end = other.cend();
+        for (; begin != end; ++begin)
         {
-          insert(it->first, it->second);
+          insert(begin->first, begin->second);
         }
       }
-      catch(...)
+      catch (...)
       {
         clear();
         throw;
-      } 
+      }
     }
-    Tree(Tree && other):
+
+    Tree(Tree && other) noexcept:
       root_(other.root_),
       size_(other.size_),
       compare_(other.compare_)
@@ -47,49 +51,208 @@ namespace namestnikov
       other.root_ = nullptr;
       other.size_ = 0;
     }
+
     Tree & operator=(const Tree & other)
     {
+      Tree< Key, Value > temp(other);
       if (this != std::addressof(other))
       {
-        Tree< Key, Value, Compare > temp(other);
         swap(temp);
       }
       return *this;
     }
-    Tree & operator=(Tree && other)
+
+    Tree & operator=(Tree && other) noexcept
     {
+      Tree< Key, Value > temp(std::move(other));
       if (this != std::addressof(other))
       {
-        swap(other);
+        swap(temp);
       }
       return *this;
     }
-    const Value & at(const Key & key)
+
+    void swap(Tree< Key, Value, Compare > & other) noexcept
     {
-      node_t * result = search(root_, key);
-      if (result)
+      std::swap(root_, other.root_);
+      std::swap(size_, other.size_);
+      std::swap(compare_, other.compare_);
+    }
+
+    void insert(const Key & key, const Value & val)
+    {
+      try
       {
-        return result->data.second;
+        if (root_)
+        {
+          insert_impl(key, val, root_);
+          ++size_;
+        }
+        else
+        {
+          root_ = new node_t(key, val);
+          ++size_;
+        }
+      }
+      catch (...)
+      {
+        clear();
+        throw;
+      }
+    }
+    void balance(node_t * node)
+    {
+      if (node->height < 0)
+      {
+        if (node->right->height > 0)
+        {
+          rotateRight(node->right);
+        }
+        rotateLeft(node);
       }
       else
       {
-        throw std::out_of_range("Can not give you access to this element");
+        if (node->left->height < 0)
+        {
+          rotateLeft(node->left);
+        }
+        rotateRight(node);
       }
     }
+
+    void getNewBalance(node_t * node)
+    {
+      if ((node->height > 1) || (node->height < -1))
+      {
+        balance(node);
+      }
+      else
+      {
+        if (node->parent)
+        {
+          if (node->left)
+          {
+            ++node->parent->height;
+          }
+          else if (node->right)
+          {
+            --node->parent->height;
+          }
+          if (node->parent->height != 0)
+          {
+            getNewBalance(node->parent);
+          }
+        }
+      }
+    }
+    node_t * search(const Key & key)
+    {
+      node_t * res = search_impl(root_, key);
+      return res;
+    }
+    const_iterator cbegin() const noexcept
+    {
+      return const_iterator(get_min(root_));
+    }
+    iterator begin() const noexcept
+    {
+      return iterator(get_min(root_));
+    }
+    const_iterator cend() const noexcept
+    {
+      return const_iterator();
+    }
+    iterator end() const noexcept
+    {
+      return iterator();
+    }
+
     Value & operator[](const Key & key)
     {
-      node_t * result = search(root_, key);
-      if (result)
+      node_t * traverser = search(key);
+      if (traverser)
       {
-        return result->data.second;
+        return traverser->data.second;
       }
       else
       {
         insert(key, Value());
-        return search(root_, key)->data.second;
+        node_t * result = search(key);
+        return result->data.second;
       }
     }
-    void rotate_left(node_t * node)
+
+    Value & at(const Key & key)
+    {
+      node_t * traverser = search(key);
+      if (traverser)
+      {
+        return traverser->data.second;
+      }
+      throw std::out_of_range("No such element");
+    }
+
+    const_iterator find(const Key & key) const
+    {
+      node_t * wanted = root_;
+      while ((wanted) && (wanted->data.first != key))
+      {
+        if (compare_(wanted->data.first, key))
+        {
+          wanted = wanted->right;
+        }
+        else
+        {
+          wanted = wanted->left;
+        }
+      }
+      return const_iterator(wanted);
+    }
+    size_t size() const noexcept
+    {
+      return size_;
+    }
+    bool empty() const noexcept
+    {
+      return (size_ == 0);
+    }
+    void clear()
+    {
+      clear_impl(root_);
+      root_ = nullptr;
+    }
+    ~Tree()
+    {
+      clear();
+    }
+  private:
+    node_t* root_;
+    size_t size_;
+    Compare compare_;
+    void clear_impl(node_t * node)
+    {
+      if (node)
+      {
+        --size_;
+        clear_impl(node->left);
+        clear_impl(node->right);
+        delete node;
+      }
+    }
+    node_t * get_min(node_t * node) const
+    {
+      node_t * result = node;
+      if (!result)
+      {
+        return nullptr;
+      }
+      while (result->left)
+      {
+        result = result->left;
+      }
+      return result;
+    }
+    void rotateLeft(node_t * node)
     {
       node_t * newRoot = node->right;
       node->right = newRoot->left;
@@ -118,7 +281,7 @@ namespace namestnikov
       node->height = node->height + 1 - std::min(newRoot->height, 0);
       newRoot->height = newRoot->height + 1 + std::max(node->height, 0);
     }
-    void rotate_right(node_t * node)
+    void rotateRight(node_t * node)
     {
       node_t * newRoot = node->left;
       node->left = newRoot->right;
@@ -144,227 +307,61 @@ namespace namestnikov
       }
       newRoot->right = node;
       node->parent = newRoot;
-      node->height = node->height - 1 - std::max(newRoot->height, 0);
-      newRoot->height = newRoot->height - 1 + std::min(node->height, 0);
+      node->height = node->height - 1 - std::max(0, newRoot->height);
+      newRoot->height = newRoot->height - 1 + std::min(0, node->height);
     }
-    void print_impl(node_t * root)
+    node_t * search_impl(node_t * node, const Key & key)
     {
-      if (root->left != nullptr)
+      if (!node)
       {
-        print_impl(root->left);
+        return nullptr;
       }
-      std::cout << " " << root->data.second << " ";
-      if (root->right != nullptr)
-      {
-        print_impl(root->right);
-      }
-    }
-    void print()
-    {
-      print_impl(root_);
-    }
-    void balance(node_t * node)
-    {
-      if (node->height < 0)
-      {
-        if (node->right->height > 0)
-        {
-          rotate_right(node->right);
-        }
-        rotate_left(node);
-      }
-      else
-      {
-        if (node->left->height < 0)
-        {
-          rotate_left(node->left);
-        }
-        rotate_right(node);
-      }
-    }
-    void getNewBalance(node_t * node)
-    {
-      if ((node->height > 1) || (node->height < -1))
-      {
-        balance(node);
-        return;
-      }
-      if (node->parent != nullptr)
-      {
-        if (node->isLeftChild())
-        {
-          node->parent->height += 1;
-        }
-        else if (node->isRightChild())
-        {
-          node->parent->height -= 1;
-        }
-        if (node->parent->height != 0)
-        {
-          getNewBalance(node->parent);
-        }
-      }
-    }
-    node_t * find_min(node_t * node) const
-    {
-      node_t * temp = node;
-      while (temp->left)
-      {
-        temp = temp->left;
-      }
-      return temp;
-    }
-    iterator begin() const
-    {
-      node_t * result = find_min(root_);
-      return iterator(result);
-    }
-    iterator end() const
-    {
-      return iterator();
-    }
-    const_iterator cbegin() const noexcept
-    {
-      node_t * result = find_min(root_);
-      return const_iterator(result);
-    }
-    const_iterator cend() const noexcept
-    {
-      return const_iterator();
-    }
-    const_iterator find(const Key & key) const
-    {
-      node_t * temp = root_;
-      while ((temp) && (temp->data.first != key))
-      {
-        if (compare_(temp->data.first, key))
-        {
-          temp = temp->right;
-        }
-        else
-        {
-          temp = temp->left;
-        }
-      }
-      return const_iterator(temp);
-    }
-    void insert(const Key & key, const Value & val, node_t * root)
-    {
-      if (compare_(key, root->data.first))
-      {
-        if (root->left)
-        {
-          insert(key, val, root->left);
-        }
-        else
-        {
-          root->left = new node_t(key, val, root);
-          getNewBalance(root->left);
-
-        }
-      }
-      else
-      {
-        if (root->right)
-        {
-          insert(key, val, root->right);
-        }
-        else
-        {
-          root->right = new node_t(key, val, root);
-          getNewBalance(root->right);
-        }
-      }
-    }
-    void insert(const Key & key, const Value & val)
-    {
-      if (root_)
-      {
-        insert(key, val, root_);
-        ++size_;
-      }
-      else
-      {
-        root_ = new node_t(key, val);
-        ++size_;
-      }
-    }
-    node_t * search(const Key & key) const
-    {
-      return search(root_, key);
-    }
-    node_t * search(node_t * node, const Key & key) const
-    {
-      if ((node == nullptr) || (node->data.first == key))
+      else if (node->data.first == key)
       {
         return node;
       }
-      if (compare_(key, node->data.first))
+      else if (compare_(key, node->data.first))
       {
-        return search(node->left, key);
+        return search_impl(node->left, key);
       }
       else
       {
-        return search(node->right, key);
+        return search_impl(node->right, key);
       }
     }
-    bool contains(const Key & key) const
+    void insert_impl(const Key & key, const Value & val, node_t * currentNode)
     {
-      return search(root_, key) != nullptr;
-    }
-    void fixHeight(node_t * node)
-    {
-      int rightHeight = getHeight(node->right);
-      int leftHeight = getHeight(node->left);
-      node->height = std::max(rightHeight, leftHeight) + 1;
-    }
-    int getHeight(node_t * root)
-    {
-      return root ? (root->height) : 0;
-    }
-    void updateHeight(node_t * node)
-    {
-      node->height = 1 + std::max(node->getHeight(node->left), node->getHeight(node->right));
-    }
-    int getBalance(node_t * node)
-    {
-      return getHeight(node->right) - getHeight(node->left);
-    }
-    bool empty() const noexcept
-    {
-      return (size_ == 0);
-    }
-    size_t size() const noexcept
-    {
-      return size_;
-    }
-    void swap(Tree & other) noexcept
-    {
-      std::swap(root_, other.root_);
-      std::swap(size_, other.size_);
-      std::swap(compare_, other.compare_);
-    }
-    ~Tree()
-    {
-      clear();
-    }
-  private:
-    node_t * root_;
-    size_t size_;
-    Compare compare_;
-    void clear()
-    {
-      clear(root_);
-      root_ = nullptr;
-      size_ = 0;
-    }
-    void clear(node_t * node)
-    {
-      if (node)
+      try
       {
-        clear(node->left);
-        clear(node->right);
-        delete node;
+        if (compare_(key, currentNode->data.first))
+        {
+          if (currentNode->left)
+          {
+            insert_impl(key, val, currentNode->left);
+          }
+          else
+          {
+            currentNode->left = new node_t(key, val, currentNode);
+            getNewBalance(currentNode->left);
+          }
+        }
+        else
+        {
+          if (currentNode->right)
+          {
+            insert_impl(key, val, currentNode->right);
+          }
+          else
+          {
+            currentNode->right = new node_t(key, val, currentNode);
+            getNewBalance(currentNode->right);
+          }
+        }
+      }
+      catch (...)
+      {
+        clear();
+        throw;
       }
     }
   };
