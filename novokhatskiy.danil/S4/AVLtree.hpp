@@ -28,15 +28,22 @@ namespace novokhatskiy
       }
     }*/
 
-    Tree(const Tree &other) : root_(other.root_),
-                              size_(other.size_),
-                              cmp_(other.cmp_)
+    Tree():
+      root_(nullptr),
+      size_(0),
+      cmp_()
+    {}
+
+    Tree(Tree&& other): 
+      root_(other.root_),
+      size_(other.size_),
+      cmp_(std::move(other.cmp_))
     {
       other.root_ = nullptr;
       other.size_ = 0;
     }
 
-    Tree &operator=(const Tree &other)
+    Tree& operator=(const Tree& other)
     {
       if (this != std::addressof(other))
       {
@@ -46,7 +53,7 @@ namespace novokhatskiy
       return *this;
     }
 
-    Tree &operator=(Tree &&other)
+    Tree& operator=(Tree&& other)
     {
       if (this != std::addressof(other))
       {
@@ -55,29 +62,9 @@ namespace novokhatskiy
       return *this;
     }
 
-    node_t *rotate_left()
+    node_t* find(node_t* node, const Key& key)
     {
-      node_t *currRoot = this;
-      node_t *newRoot = currRoot->right;
-      currRoot->right = newRoot->left;
-      /*node_t* newRoot = node->right;
-      node_t* tmp = newRoot->left;
-      node->right = tmp;
-      newRoot->left = node;
-      newRoot = updateHeight(newRoot);
-      node = updateHeight(node);
-      return newRoot;*/
-
-      /*node_t* newRoot = node->right;
-      node->right = newRoot->left;
-      newRoot->right = node;
-      node->parent = newRoot;
-      node->right->parent = node;*/
-    }
-
-    node_t *find(node_t *node, const Key &key)
-    {
-      node_t *root = (node->height < 0) ? node->left : node;
+      node_t* root = (node->height < 0) ? node->left : node;
       while (root)
       {
         if (key == root->value.first)
@@ -104,9 +91,9 @@ namespace novokhatskiy
       return nullptr;
     }
 
-    Value &at(const Key &key)
+    Value& at(const Key& key)
     {
-      node_t *curr = find(root_->left, key);
+      node_t* curr = find(root_->left, key);
       if (curr && curr->value.first == key)
       {
         return curr->value.second;
@@ -114,9 +101,9 @@ namespace novokhatskiy
       throw std::out_of_range("No such element");
     }
 
-    const Value &at(const Key &key) const
+    const Value& at(const Key& key) const
     {
-      node_t *curr = find(root_->left, key);
+      node_t* curr = find(root_->left, key);
       if (curr && curr->value.first == key)
       {
         return curr->value.second;
@@ -124,24 +111,11 @@ namespace novokhatskiy
       throw std::out_of_range("No such element");
     }
 
-    Value &operator[](const Key &key)
+    Value& operator[](const Key& key)
     {
     }
 
-    node_t *rotate_right(node_t *node)
-    {
-      node_t *newRoot = node->left;
-      node_t *tmp = newRoot->right;
-      node->left = tmp;
-      newRoot->right = node;
-      node = updateHeight(node);
-      // fixedHeight
-      newRoot = updateHeight(newRoot);
-      // fixheight
-      return newRoot;
-    }
-
-    void prePrint(node_t *root)
+    void prePrint(node_t* root)
     {
       if (root->left != nullptr)
       {
@@ -159,7 +133,94 @@ namespace novokhatskiy
       prePrint(root_);
     }
 
-    node_t *balance(node_t *node)
+    void fixedHeight(node_t* node)
+    {
+      int rightH = getHeight(node->right);
+      int leftH = getHeight(node->left);
+      node->height = (rightH > leftH ? rightH : leftH) + 1;
+    }
+
+    int getHeight(node_t* root)
+    {
+      return root ? root->height : 0;
+    }
+
+    int getBalanceFactor(node_t* node)
+    {
+      return getHeight(node->right) - getHeight(node->left);
+    }
+
+    node_t* updateHeight(node_t* node)
+    {
+      node->height = 1 + std::max(node->getHeight(node->left), node->getHeight(node->right));
+      return node;
+    }
+
+    node_t* insert(const std::pair< Key, Value >& value)
+    {
+      root_ = insert_imp(value, root_);
+      return root_;
+    }
+
+    size_t size() const
+    {
+      return size_;
+    }
+
+    bool empty() const noexcept
+    {
+      return !size_;
+    }
+
+    void clear(node_t* root)
+    {
+      if (root)
+      {
+        clear(root->left);
+        clear(root->right);
+        delete root;
+      }
+    }
+
+    void swap(Tree& other)
+    {
+      std::swap(root_, other.root_);
+      std::swap(size_, other.size_);
+      std::swap(cmp_, other.cmp_);
+    }
+
+    ~Tree()
+    {
+      clear(root_);
+    }
+
+  private:
+    node_t* root_;
+    size_t size_;
+    Compare cmp_;
+
+    node_t* insert_imp(const std::pair< Key, Value >& value, node_t* curr)
+    {
+      if (curr == nullptr)
+      {
+        curr = new node_t(value);
+      }
+      if (cmp_(curr->value.first, value.first))
+      {
+        curr->right = insert_imp(value, curr->right);
+      }
+      else if (curr->value.first == value.first)
+      {
+        return balance(curr);
+      }
+      else
+      {
+        curr->left = insert_imp(value, curr->left);
+      }
+      return balance(curr);
+    }
+
+    node_t* balance(node_t* node)
     {
       fixedHeight(node);
       if (getBalanceFactor(node) == 2)
@@ -181,77 +242,35 @@ namespace novokhatskiy
       return node;
     }
 
-    void fixedHeight(node_t *node)
+    node_t* rotate_left(node_t* currRoot)
     {
-      int rightH = getHeight(node->right);
-      int leftH = getHeight(node->left);
-      node->height = (rightH > leftH ? rightH : leftH) + 1;
-    }
-
-    int getHeight(node_t *root)
-    {
-      return root ? root->height : 0;
-    }
-
-    int getBalanceFactor(node_t *node)
-    {
-      return getHeight(node->right) - getHeight(node->left);
-    }
-
-    node_t *updateHeight(node_t *node)
-    {
-      node->height = 1 + std::max(node->getHeight(node->left), node->getHeight(node->right));
-      return node;
-    }
-
-    void insert(const std::pair<Key, Value> &value)
-    {
-      node_t *curr = this;
-      if (curr == nullptr)
+      node_t* newRoot = currRoot->right;
+      currRoot->right = newRoot->left;
+      if (newRoot->left)
       {
-        curr = new node_t(value);
+        newRoot->left->parent = currRoot;
       }
-      // sort by keys
-      if (curr->value.first < value.first)
+      newRoot->left = currRoot;
+      currRoot->parent = newRoot;
+      fixedHeight(currRoot);
+      fixedHeight(newRoot);
+      return newRoot;
+    }
+
+    node_t* rotate_right(node_t* currRoot)
+    {
+      node_t* newRoot = currRoot->left;
+      currRoot->left = newRoot->right;
+      if (newRoot->right)
       {
-        curr->right = insert(value, curr->right);
+        newRoot->right->parent = currRoot;
       }
-      else if (curr->value.first == value.first)
-      {
-        return balance(curr);
-      }
-      else
-      {
-        curr->left = insert(value, curr->left);
-      }
-      return balance(curr);
+      newRoot->right = currRoot;
+      currRoot->parent = newRoot;
+      fixedHeight(currRoot);
+      fixedHeight(newRoot);
+      return newRoot;
     }
-
-    size_t size() const
-    {
-      return size_;
-    }
-
-    bool empty() const noexcept
-    {
-      return !size_;
-    }
-
-    void clear()
-    {
-    }
-
-    void swap(Tree &other)
-    {
-      std::swap(root_, other.root_);
-      std::swap(size_, other.size_);
-      std::swap(cmp_, other.cmp_);
-    }
-
-  private:
-    node_t *root_;
-    size_t size_;
-    Compare cmp_;
   };
 }
 
