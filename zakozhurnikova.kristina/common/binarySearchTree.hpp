@@ -265,90 +265,55 @@ namespace zakozhurnikova
       }
     }
 
-    void rotateLeft(Node* rotRoot)
-    {
-      Node* newRoot = rotRoot->rightChild;
-      rotRoot->rightChild = newRoot->leftChild;
-      if (newRoot->leftChild != nullptr)
-      {
-        newRoot->leftChild->parent = rotRoot;
-      }
-      newRoot->parent = rotRoot->parent;
-      if (rotRoot->isRoot())
-      {
-        root_ = newRoot;
-      }
-      else
-      {
-        if (rotRoot->isLeftChild())
-        {
-          rotRoot->parent->leftChild = newRoot;
-        }
-        else
-        {
-          rotRoot->parent->rightChild = newRoot;
-        }
-      }
-      newRoot->leftChild = rotRoot;
-      rotRoot->parent = newRoot;
-      rotRoot->balanceFactor = rotRoot->balanceFactor + 1 - std::min(newRoot->balanceFactor, 0);
-      newRoot->balanceFactor = newRoot->balanceFactor + 1 + std::max(rotRoot->balanceFactor, 0);
-    }
-
-    void rotateRight(Node* rotRoot)
-    {
-      Node* newRoot = rotRoot->leftChild;
-      rotRoot->leftChild = newRoot->rightChild;
-      if (newRoot->rightChild != nullptr)
-      {
-        newRoot->rightChild->parent = rotRoot;
-      }
-      newRoot->parent = rotRoot->parent;
-      if (rotRoot->isRoot())
-      {
-        root_ = newRoot;
-      }
-      else
-      {
-        if (rotRoot->isLeftChild())
-        {
-          rotRoot->parent->leftChild = newRoot;
-        }
-        else
-        {
-          rotRoot->parent->rightChild = newRoot;
-        }
-      }
-      newRoot->rightChild = rotRoot;
-      rotRoot->parent = newRoot;
-      rotRoot->balanceFactor = rotRoot->balanceFactor - 1 - std::max(0, newRoot->balanceFactor);
-      newRoot->balanceFactor = newRoot->balanceFactor - 1 + std::min(0, rotRoot->balanceFactor);
-    }
-
     void rebalance(Node* node)
     {
+      Node* newRoot = nullptr;
       if (node->balanceFactor < 0)
       {
         if (node->rightChild->balanceFactor > 0)
         {
-          rotateRight(node->rightChild);
-          rotateLeft(node);
+          newRoot = node->rightChild->rotateRight();
+          if (node->rightChild->isRoot())
+          {
+            root_ = newRoot;
+          }
+          newRoot = node->rotateLeft();
+          if (node->isRoot())
+          {
+            root_ = newRoot;
+          }
         }
         else
         {
-          rotateLeft(node);
+          newRoot = node->rotateLeft();
+          if (node->isRoot())
+          {
+            root_ = newRoot;
+          }
         }
       }
       else
       {
         if (node->leftChild->balanceFactor < 0)
         {
-          rotateLeft(node->leftChild);
-          rotateRight(node);
+          newRoot = node->leftChild->rotateLeft();
+          if (node->leftChild->isRoot())
+          {
+            root_ = newRoot;
+          }
+          newRoot = node->rotateRight();
+          if (node->isRoot())
+          {
+            root_ = newRoot;
+          }
         }
         else
         {
-          rotateRight(node);
+          newRoot = node->rotateRight();
+          if (node->isRoot())
+          {
+            root_ = newRoot;
+          }
         }
       }
     }
