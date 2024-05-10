@@ -83,6 +83,23 @@ namespace ishmuratov
       delete_node(root_);
     }
 
+    void swap(AVLTree & other)
+    {
+      std::swap(other.root_, root_);
+    }
+
+    Iter find(const Key & key)
+    {
+      for (auto search = this->begin(); search != this->end(); ++search)
+      {
+        if (search.node_->data.first == key)
+        {
+          return search;
+        }
+      }
+      return this->end();
+    }
+
     long long get_height(tnode * node)
     {
       if (node == nullptr)
