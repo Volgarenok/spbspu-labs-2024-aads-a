@@ -288,6 +288,8 @@ namespace zakozhurnikova
               node->rightChild->parent->rightChild = newRoot;
             }
           }
+          newRoot->parent = node->rightChild->parent;
+          newRoot->rightChild = node->rightChild;
           newRoot = node->rotateLeft();
           if (node->isRoot())
           {
@@ -304,6 +306,8 @@ namespace zakozhurnikova
               node->parent->rightChild = newRoot;
             }
           }
+          newRoot->leftChild = node;
+          node->parent = newRoot;
         }
         else
         {
@@ -323,6 +327,8 @@ namespace zakozhurnikova
               node->parent->rightChild = newRoot;
             }
           }
+          newRoot->leftChild = node;
+          node->parent = newRoot;
         }
       }
       else
@@ -345,6 +351,8 @@ namespace zakozhurnikova
               node->leftChild->parent->rightChild = newRoot;
             }
           }
+          newRoot->leftChild = node->leftChild;
+          node->leftChild->parent = newRoot;
           newRoot = node->rotateRight();
           if (node->isRoot())
           {
@@ -361,6 +369,8 @@ namespace zakozhurnikova
               node->parent->rightChild = newRoot;
             }
           }
+          newRoot->rightChild = node;
+          node->parent = newRoot;
         }
         else
         {
@@ -380,6 +390,8 @@ namespace zakozhurnikova
               node->parent->rightChild = newRoot;
             }
           }
+          newRoot->rightChild = node;
+          node->parent = newRoot;
         }
       }
     }
