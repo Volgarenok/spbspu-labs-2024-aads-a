@@ -8,6 +8,7 @@
 #include <utility>
 #include "AVLtreeNode.hpp"
 #include "constIteratorTree.hpp"
+#include "IteratorTree.hpp"
 
 namespace novokhatskiy
 {
@@ -18,6 +19,7 @@ namespace novokhatskiy
     using node_t = detail::NodeTree<Key, Value>;
     using v_type = std::pair<Key, Value>;
     using constIter = ConstIteratorTree< Key, Value, Compare >;
+    using iter = IteratorTree< Key, Value, Compare >;
     /*int getBalanceFactor(node_t* node)
     {
       if (node == nullptr)
@@ -193,12 +195,22 @@ namespace novokhatskiy
 
     constIter cbegin() const
     {
-      return constIter(minN(root_));
+      return constIter(minN());
     }
 
     constIter cend() const
     {
       return constIter(nullptr);
+    }
+
+    iter begin()
+    {
+      return iter(minN());
+    }
+
+    iter end()
+    {
+      return iter(nullptr);
     }
 
     ~Tree()
@@ -284,7 +296,7 @@ namespace novokhatskiy
       return newRoot;
     }
 
-    void minN()
+    node_t* minN()
     {
       auto tmp = root_->left;
       while (tmp->left)
@@ -292,6 +304,7 @@ namespace novokhatskiy
         tmp = tmp->left;
       }
       root_ = tmp;
+      return root_;
     }
 
   };
