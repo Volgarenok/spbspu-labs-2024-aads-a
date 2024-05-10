@@ -273,19 +273,19 @@ namespace zakozhurnikova
         if (node->rightChild->balanceFactor > 0)
         {
           newRoot = node->rightChild->rotateRight();
-          if (node->isRoot())
+          if (node->rightChild->isRoot())
           {
             root_ = newRoot;
           }
           else
           {
-            if (node->isLeftChild())
+            if (node->rightChild->isLeftChild())
             {
-              node->parent->leftChild = newRoot;
+              node->rightChild->parent->leftChild = newRoot;
             }
             else
             {
-              node->parent->rightChild = newRoot;
+              node->rightChild->parent->rightChild = newRoot;
             }
           }
           newRoot = node->rotateLeft();
@@ -330,19 +330,19 @@ namespace zakozhurnikova
         if (node->leftChild->balanceFactor < 0)
         {
           newRoot = node->leftChild->rotateLeft();
-          if (node->isRoot())
+          if (node->leftChild->isRoot())
           {
             root_ = newRoot;
           }
           else
           {
-            if (node->isLeftChild())
+            if (node->leftChild->isLeftChild())
             {
-              node->parent->leftChild = newRoot;
+              node->leftChild->parent->leftChild = newRoot;
             }
             else
             {
-              node->parent->rightChild = newRoot;
+              node->leftChild->parent->rightChild = newRoot;
             }
           }
           newRoot = node->rotateRight();
