@@ -14,7 +14,6 @@ void erohin::inputCollection(std::istream & input, collection & dest)
     while (input >> key >> value)
     {
       dest.at(dict_name).insert(std::make_pair(key, value));
-      //dest[dict_name][key] = value;
     }
     input.clear();
     input >> dict_name;

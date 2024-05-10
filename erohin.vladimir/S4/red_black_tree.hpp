@@ -455,7 +455,7 @@ namespace erohin
     size_t size = 0;
     while (citer != cend())
     {
-      if (citer->first == key)
+      if (!cmp_(key, citer->first) || !cmp_(citer->first, key))
       {
         ++size;
       }
@@ -469,17 +469,17 @@ namespace erohin
     detail::Node< Key, T > * node = root_;
     while (node)
     {
-      if (node->data_.first == key)
-      {
-        return iterator(node);
-      }
-      else if (cmp_(key, node->data_.first))
+      if (cmp_(key, node->data_.first))
       {
         node = node->left_;
       }
-      else
+      else if (cmp_(node->data_.first, key))
       {
         node = node->right_;
+      }
+      else
+      {
+        return iterator(node);
       }
     }
     return end();
@@ -491,17 +491,17 @@ namespace erohin
     const detail::Node< Key, T > * node = root_;
     while (node)
     {
-      if (node->data_.first == key)
-      {
-        return const_iterator(node);
-      }
-      else if (cmp_(key, node->data_.first))
+      if (cmp_(key, node->data_.first))
       {
         node = node->left_;
       }
-      else
+      else if (cmp_(node->data_.first, key))
       {
         node = node->right_;
+      }
+      else
+      {
+        return const_iterator(node);
       }
     }
     return cend();
@@ -573,11 +573,11 @@ namespace erohin
     detail::Node< Key, T > * node = root_;
     while (node)
     {
-      if (!cmp_(node->data_.first, key) && !(node->data_.first == key))
+      if (cmp_(node->data_.first, key))
       {
         return iterator(node);
       }
-      if (cmp_(key, node->data_.first))
+      else if (cmp_(key, node->data_.first))
       {
         node = node->left_;
       }
