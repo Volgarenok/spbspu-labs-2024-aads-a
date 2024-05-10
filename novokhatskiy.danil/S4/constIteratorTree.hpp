@@ -1,5 +1,5 @@
-#ifndef CONST_ITERATOR_AVL
-#define CONST_ITERATOR_AVL
+#ifndef CONST_ITERATOR_TREE
+#define CONST_ITERATOR_TREE
 
 #include <cassert>
 #include <iterator>
@@ -13,7 +13,7 @@ namespace novokhatskiy
   class Tree;
 
   template< class Key, class Value, class Compare  = std::less< Key > >
-  struct ConstIteratorTree : public std::iterator< std::bidirectional_iterator_tag, Value >
+  struct ConstIteratorTree: public std::iterator< std::bidirectional_iterator_tag, Value >
   {
     friend class Tree< Key, Value,Compare >;
     using node_t = detail::NodeTree< Key, Value >;
@@ -36,11 +36,11 @@ namespace novokhatskiy
       return *this == other;
     }
 
-    constIter& operator++()
+    constIter operator++()
     {
       if (node_->right)
       {
-        // node_ = node_->right;
+        node_ = node_->right;
         goLastLeft();
         return *this;
       }
@@ -52,9 +52,24 @@ namespace novokhatskiy
       return *this;
     }
 
-    constIter& operator--()
+    constIter operator++(int)
     {
+      constIter tmp(*this);
+      ++(*this);
+      return tmp;
+    }
 
+    constIter operator--()
+    {
+      node_ = predecessor(node_);
+      return *this;
+    }
+
+    constIter operator--(int)
+    {
+      constIter tmp(*this);
+      --(*this);
+      return tmp;
     }
 
     const std::pair< Key, Value > operator*() const
@@ -67,7 +82,10 @@ namespace novokhatskiy
     {
       assert(node_ != nullptr);
       return std::addressof(node_->value);
-    }
+    }  
+
+  private:
+    node_t* node_;
 
     void goLastRight()
     {
@@ -89,8 +107,20 @@ namespace novokhatskiy
       node_ = tmp;
     }
 
-  private:
-    node_t* node_;
+    node_t* predecessor(node_t* node)
+    {
+      if (node->left)
+      {
+        goLastRight(node->left);
+      }
+      node_t* tmp = node->parent;
+      while (tmp && node == tmp->left)
+      {
+        node = tmp;
+        tmp = tmp->parent;
+      }
+      return tmp;
+    }
   };
 }
 
