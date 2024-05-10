@@ -37,38 +37,38 @@ namespace sivkov
     detail::TreeNode< Key, Value >* find_min(detail::TreeNode< Key, Value >* node) const;
     detail::TreeNode< Key, Value >* deep_copy(detail::TreeNode< Key, Value >* root);
 
-    detail::TreeNode< Key, Value >* insert( detail::TreeNode< Key, Value >* root, const Key& key, const Value& value);
+    detail::TreeNode< Key, Value >* insert(detail::TreeNode< Key, Value >* root, const Key& key, const Value& value);
 
     detail::TreeNode< Key, Value >* search(const Key& key) const;
     detail::TreeNode< Key, Value >* search(detail::TreeNode< Key, Value >* node, const Key& key) const;
 
-    detail::TreeNode< Key, Value >* rotate_right( detail::TreeNode< Key, Value >* root);
-    detail::TreeNode< Key, Value >* rotate_left( detail::TreeNode< Key, Value >* root);
-    detail::TreeNode< Key, Value >* balance( detail::TreeNode< Key, Value >* root);
+    detail::TreeNode< Key, Value >* rotate_right(detail::TreeNode< Key, Value >* root);
+    detail::TreeNode< Key, Value >* rotate_left(detail::TreeNode< Key, Value >* root);
+    detail::TreeNode< Key, Value >* balance(detail::TreeNode< Key, Value >* root);
 
-    ConstIterator< Key, Value, Comp > cbegin() const noexcept;
-    ConstIterator< Key, Value, Comp > cend() const noexcept;
+    ConstIterator< Key, Value, Comp > cbegin() const;
+    ConstIterator< Key, Value, Comp > cend() const;
     ConstIterator< Key, Value, Comp > find(const Key& key) const;
 
   private:
-    Comp comp_;
     size_t size_;
     detail::TreeNode< Key, Value >* root_;
+    Comp comp_;
   };
 
 
   template< typename Key, typename Value, typename Comp >
   AVLTree< Key, Value, Comp >::AVLTree():
-    comp_(Comp()),
     size_(0),
-    root_(nullptr)
+    root_(nullptr),
+    comp_(Comp())
   {}
 
   template< typename Key, typename Value, typename Comp >
   AVLTree< Key, Value, Comp >::AVLTree(const AVLTree& other):
-    comp_(Comp()),
     size_(0),
-    root_(nullptr)
+    root_(nullptr),
+    comp_(other.comp_)
   {
     for (auto it = other.cbegin(); it != other.cend(); ++it)
     {
@@ -78,9 +78,9 @@ namespace sivkov
 
   template< typename Key, typename Value, typename Comp >
   AVLTree< Key, Value, Comp >::AVLTree(AVLTree&& other) noexcept:
-    comp_(Comp()),
-    size_(0),
-    root_(nullptr)
+    size_(other.size_),
+    root_(other.root_),
+    comp_(other.comp_)
   {
     other.size_ = 0;
     other.root_ = nullptr;
@@ -117,7 +117,7 @@ namespace sivkov
   template< typename Key, typename Value, typename Comp >
   Value AVLTree< Key, Value, Comp >::get(const Key& key)
   {
-     detail::TreeNode< Key, Value >* node = search(root_, key);
+    detail::TreeNode< Key, Value >* node = search(root_, key);
     if (node)
     {
       return node->data.second;
@@ -139,7 +139,9 @@ namespace sivkov
   detail::TreeNode< Key, Value >* AVLTree< Key, Value, Comp >::remove(detail::TreeNode< Key, Value >* node, const Key& key)
   {
     if (node == nullptr)
+    {
       return nullptr;
+    }
 
     if (comp_(key, node->data.first))
     {
@@ -377,22 +379,22 @@ namespace sivkov
   }
 
   template< typename Key, typename Value, typename Comp >
-  ConstIterator< Key, Value, Comp > AVLTree< Key, Value, Comp >::cbegin() const noexcept
+  ConstIterator< Key, Value, Comp > AVLTree< Key, Value, Comp >::cbegin() const
   {
     if (root_ != nullptr)
     {
-      return ConstIterator< Key, Value, Comp > (find_min(root_));
+      return ConstIterator<Key, Value, Comp>(find_min(root_));
     }
     else
     {
-      return ConstIterator< Key, Value, Comp > (nullptr);
+      return ConstIterator<Key, Value, Comp>(nullptr);
     }
   }
 
   template< typename Key, typename Value, typename Comp >
-  ConstIterator< Key, Value, Comp > AVLTree< Key, Value, Comp >::cend() const noexcept
+  ConstIterator< Key, Value, Comp > AVLTree< Key, Value, Comp >::cend() const
   {
-    return ConstIterator< Key, Value, Comp > (nullptr);
+    return ConstIterator< Key, Value, Comp >(nullptr);
   }
 
   template< typename Key, typename Value, typename Comp >
@@ -411,3 +413,4 @@ namespace sivkov
   }
 }
 #endif
+
