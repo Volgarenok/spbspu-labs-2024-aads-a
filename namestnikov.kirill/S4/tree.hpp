@@ -181,7 +181,20 @@ namespace namestnikov
         return result->data.second;
       }
     }
-
+    const Value & operator[](const Key & key) const
+    {
+      node_t * traverser = search(key);
+      if (traverser)
+      {
+        return traverser->data.second;
+      }
+      else
+      {
+        insert(key, Value());
+        node_t * result = search(key);
+        return result->data.second;
+      }
+    }
     Value & at(const Key & key)
     {
       node_t * traverser = search(key);
@@ -191,7 +204,15 @@ namespace namestnikov
       }
       throw std::out_of_range("No such element");
     }
-
+    const Value & at(const Key & key) const
+    {
+      node_t * traverser = search(key);
+      if (traverser)
+      {
+        return traverser->data.second;
+      }
+      throw std::out_of_range("No such element");
+    }
     const_iterator find(const Key & key) const
     {
       node_t * wanted = root_;
