@@ -69,6 +69,11 @@ namespace ishmuratov
       throw std::runtime_error("Key wasn't found!");
     }
 
+    Value operator[](const Key & key)
+    {
+      return at(key);
+    }
+
     long long get_height(tnode * node)
     {
       if (node == nullptr)
