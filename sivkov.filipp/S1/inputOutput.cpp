@@ -34,6 +34,7 @@ void sivkov::outputSums(const List< size_t >& numbers, std::ostream& out)
     }
     out << *it;
   }
+  out << "\n";
 }
 
 void sivkov::input(std::istream& input, List< std::pair< std::string, List< size_t > > >& list)
