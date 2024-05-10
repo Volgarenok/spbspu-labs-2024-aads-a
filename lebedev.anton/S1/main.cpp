@@ -18,7 +18,6 @@ int main()
   list.swap(list2);
 
   list.outputList(std::cout);
-  std::cout << list.size() << '\n';
   std::cout << list.empty() << '\n';
   return 0;
 }

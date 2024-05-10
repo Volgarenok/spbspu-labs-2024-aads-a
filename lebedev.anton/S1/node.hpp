@@ -3,19 +3,33 @@
 
 namespace lebedev
 {
-  template< class T >
-  struct Node
+  namespace detail
   {
-    Node(const T & data, Node * next = nullptr, Node * prev = nullptr) :
+    template< class T >
+    struct Node
+    {
+      T data_;
+      Node * next_;
+      Node * prev_;
+
+      Node();
+      Node(const T & data, Node * next, Node * prev);
+      ~Node() = default;
+    };
+
+    template< class T >
+    Node< T >::Node():
+      data_(0),
+      next_(nullptr),
+      prev_(nullptr)
+    {}
+    template< class T >
+    Node< T >::Node(const T & data, Node * next, Node * prev):
       data_(data),
       next_(next),
       prev_(prev)
     {}
-    ~Node() = default;
-    T data_;
-    Node * next_;
-    Node * prev_;
-  };
+  }
 }
 
 #endif
