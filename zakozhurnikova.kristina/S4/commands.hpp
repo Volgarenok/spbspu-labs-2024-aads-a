@@ -8,10 +8,10 @@ namespace zakozhurnikova
 {
   using map = BinarySearchTree< int, std::string >;
   using tree = BinarySearchTree< std::string, map >;
-  void print(List< std::string >& args, std::string& result, tree& maps_);
-  void complement(List< std::string >& args, std::string& result, tree& maps_);
-  void intersect(List< std::string >& args, std::string& result, tree& maps_);
-  void doUnion(List< std::string >& args, std::string& result, tree& maps_);
+  void print(List< std::string >& args, std::string& result, tree& maps);
+  void complement(List< std::string >& args, std::string& result, tree& maps);
+  void intersect(List< std::string >& args, std::string& result, tree& maps);
+  void doUnion(List< std::string >& args, std::string& result, tree& maps);
 }
 
 #endif
