@@ -1,6 +1,6 @@
 #include "outputFunctions.hpp"
-#include "list.hpp"
 #include <limits>
+#include "list.hpp"
 
 void baranov::printNames(std::ostream & output, ds_t & list)
 {
