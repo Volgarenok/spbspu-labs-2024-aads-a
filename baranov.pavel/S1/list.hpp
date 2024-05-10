@@ -3,6 +3,7 @@
 
 #include "node.hpp"
 #include "iterator.hpp"
+#include "constIterator.hpp"
 
 namespace baranov
 {
@@ -17,6 +18,8 @@ namespace baranov
       ~List();
       Iterator< T > begin();
       Iterator< T > end();
+      ConstIterator< T > cbegin();
+      ConstIterator< T > cend();
       bool empty() const;
       size_t size() const;
       void push_back(T data);
@@ -95,17 +98,19 @@ namespace baranov
   template< class T >
   Iterator< T > List< T >::end()
   {
-    if (empty())
-    {
-      return begin();
-    }
-    if (tail_->next_ == nullptr)
-    {
-      Node< T > * imagNode = new Node< T >{ tail_->data_ };
-      imagNode->prev_ = tail_;
-      tail_->next_ = imagNode;
-    }
-    return Iterator< T >(tail_->next_);
+    return Iterator< T >();
+  }
+
+  template< class T >
+  ConstIterator< T > List< T >::cbegin()
+  {
+    return ConstIterator< T >(head_);
+  }
+
+  template< class T >
+  ConstIterator< T > List< T >::cend()
+  {
+    return ConstIterator< T >();
   }
 
   template< class T >
