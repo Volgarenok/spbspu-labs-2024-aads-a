@@ -9,15 +9,14 @@ int main()
   list.push_back(20);
   list.push_back(30);
 
-  List< int > list2;
-  list2.push_back(-10);
-  list2.push_back(-20);
-  list2.push_back(-30);
-  list2.push_back(-40);
+  list.push_back(-10);
+  list.push_back(-20);
+  list.push_back(-30);
+  list.push_back(-40);
 
-  list.swap(list2);
-
+  std::cout << list.front() << "\n";
+  std::cout << list.back() << "\n";
+  std::cout << "=============\n";
   list.outputList(std::cout);
-  std::cout << list.empty() << '\n';
   return 0;
 }
