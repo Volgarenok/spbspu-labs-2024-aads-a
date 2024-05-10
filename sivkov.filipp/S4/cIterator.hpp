@@ -1,12 +1,17 @@
 #ifndef CITERATOR_HPP
 #define CITERATOR_HPP
 
-#include "AVLTree.hpp"
+#include "treeNode.hpp"
+
 namespace sivkov
 {
   template< typename Key, typename Value, typename Comp >
+  class AVLTree;
+
+  template< typename Key, typename Value, typename Comp >
   class ConstIterator
   {
+    friend class AVLTree< Key, Value, Comp >;
   public:
     using Node = detail::TreeNode< Key, Value >;
 
@@ -24,7 +29,7 @@ namespace sivkov
       return &(current_->data);
     }
 
-    ConstIterator& operator++()
+    ConstIterator< Key, Value, Comp >& operator++()
     {
       if (current_ == nullptr)
       {
@@ -50,7 +55,7 @@ namespace sivkov
       return *this;
     }
 
-    ConstIterator operator++(int)
+    ConstIterator< Key, Value, Comp > operator++(int)
     {
       ConstIterator tmp = *this;
       ++(*this);
@@ -67,14 +72,10 @@ namespace sivkov
       return !(*this == other);
     }
 
-    Node* getCurrent() const
-    {
-      return current_;
-    }
-
   private:
     Node* current_;
   };
 }
 #endif
+
 

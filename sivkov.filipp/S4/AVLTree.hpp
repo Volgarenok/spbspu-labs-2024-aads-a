@@ -46,8 +46,8 @@ namespace sivkov
     detail::TreeNode< Key, Value >* rotate_left( detail::TreeNode< Key, Value >* root);
     detail::TreeNode< Key, Value >* balance( detail::TreeNode< Key, Value >* root);
 
-    ConstIterator< Key, Value, Comp > cbegin() const;
-    ConstIterator< Key, Value, Comp > cend() const;
+    ConstIterator< Key, Value, Comp > cbegin() const noexcept;
+    ConstIterator< Key, Value, Comp > cend() const noexcept;
     ConstIterator< Key, Value, Comp > find(const Key& key) const;
 
   private:
@@ -377,22 +377,22 @@ namespace sivkov
   }
 
   template< typename Key, typename Value, typename Comp >
-  ConstIterator< Key, Value, Comp > AVLTree< Key, Value, Comp >::cbegin() const
+  ConstIterator< Key, Value, Comp > AVLTree< Key, Value, Comp >::cbegin() const noexcept
   {
     if (root_ != nullptr)
     {
-      return ConstIterator<Key, Value, Comp>(find_min(root_));
+      return ConstIterator< Key, Value, Comp > (find_min(root_));
     }
     else
     {
-      return ConstIterator<Key, Value, Comp>(nullptr);
+      return ConstIterator< Key, Value, Comp > (nullptr);
     }
   }
 
   template< typename Key, typename Value, typename Comp >
-  ConstIterator< Key, Value, Comp > AVLTree< Key, Value, Comp >::cend() const
+  ConstIterator< Key, Value, Comp > AVLTree< Key, Value, Comp >::cend() const noexcept
   {
-    return ConstIterator< Key, Value, Comp >(nullptr);
+    return ConstIterator< Key, Value, Comp > (nullptr);
   }
 
   template< typename Key, typename Value, typename Comp >
@@ -402,7 +402,7 @@ namespace sivkov
     if (node)
     {
       ConstIterator< Key, Value, Comp > it(node);
-      if (it.getCurrent()->data.first == key)
+      if (it.current_->data.first == key)
       {
         return it;
       }
