@@ -14,6 +14,7 @@ int main()
     outputNames(list, std::cout);
     outputNums(list, sums, std::cout);
     outputSums(sums, std::cout);
+    std::cout << "\n";
   }
   catch (const std::logic_error&)
   {
