@@ -60,7 +60,6 @@ namespace erohin
     size_t count(const Key & key) const;
     iterator find(const Key & key);
     const_iterator find(const Key & key) const;
-    T & operator[](const Key & key);
     T & at(const Key & key);
     const T & at(const Key & key) const;
     iterator lower_bound(const Key & key);
@@ -505,14 +504,6 @@ namespace erohin
       }
     }
     return cend();
-  }
-
-  template< class Key, class T, class Compare >
-  T & RedBlackTree< Key, T, Compare >::operator[](const Key & key)
-  {
-    char temp_memory[sizeof(T)];
-    auto iter_pair = insert(std::make_pair(key, *reinterpret_cast< T * >(temp_memory)));
-    return iter_pair.first->second;
   }
 
   template< class Key, class T, class Compare >
