@@ -15,12 +15,13 @@ int main()
   list.push_back(-30);
   list.push_back(-40);
 
-  List< int > list2(list);
+  List< int > list2;
+  list2 = list;
 
 
-  std::cout << list.front() << "\n";
-  std::cout << list.back() << "\n";
   std::cout << "=============\n";
-  listC.outputList(std::cout);
+  list.outputList(std::cout);
+  std::cout << "=============\n";
+  list2.outputList(std::cout);
   return 0;
 }

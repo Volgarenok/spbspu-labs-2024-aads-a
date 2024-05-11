@@ -18,11 +18,11 @@ namespace lebedev
 
     List();
     List(const List< T > & list);
-    //List(List< T > && list);
+    List(List< T > && list);
     ~List();
 
-    //List< T > & operator=(const List< T > & list);
-    //List< T > & operator=(List< T > && list);
+    List< T > & operator=(const List< T > & list);
+    List< T > & operator=(List< T > && list);
 
     void push_back(const T & val);
     void push_back(T && val);
@@ -86,11 +86,40 @@ namespace lebedev
       push_back(*iter);
     }
   }
+  template<class T >
+  List< T >::List(List< T > && list):
+    head_(list.head_),
+    tail_(list.tail_)
+  {
+    list.head_ = nullptr;
+    list.tail_ = nullptr;
+  }
 
   template<class T >
   List< T >::~List()
   {
     clear();
+  }
+
+  template < typename T >
+  List< T > & List< T >::operator=(const List< T > & list)
+  {
+    if (std::addressof(list) != this)
+    {
+      List< T > temp(list);
+      swap(temp);
+    }
+    return *this;
+  }
+  template < typename T >
+  List< T > & List< T >::operator=(List< T > && list)
+  {
+    if (std::addressof(list) != this)
+    {
+      List< T > temp(list);
+      swap(temp);
+    }
+    return *this;
   }
 
   template<class T >
