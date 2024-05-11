@@ -73,6 +73,10 @@ namespace grechishnikov
   private:
     void safe_push_back(const T&);
 
+    void sew(ConstIterator< T > first, ConstIterator< T > last);
+    void doSplice(ConstIterator< T > where, List< T >& other, ConstIterator< T > iter);
+    ConstIterator< T > doSlice(List< T >& other, ConstIterator< T > pos);
+
     size_t size_;
     detail::Node< T >* head_;
     detail::Node< T >* tail_;
@@ -419,38 +423,42 @@ namespace grechishnikov
   template< typename T >
   void List< T >::splice(ConstIterator< T > where, List< T >& other)
   {
-    insert(where, other.cbegin(), other.cend());
-    other.clear();
+    splice(where, other, other.cbegin(), other.cend());
   }
 
   template< typename T >
   void List< T >::splice(ConstIterator< T > where, List< T >&& other)
   {
-    insert(where, other.cbegin(), other.cend());
+    splice(where, other, other.cbegin(), other.cend());
   }
 
   template< typename T >
   void List< T >::splice(ConstIterator< T > where, List< T >& other, ConstIterator< T > iter)
   {
-    insert(where, *iter);
-    other.erase(iter);
+    if (where == cend())
+    {
+      push_back(T());
+      doSplice(ConstIterator< T >(tail_), other, iter);
+      pop_back();
+      return;
+    }
+    doSplice(where, other, iter);
   }
 
   template< typename T >
   void List< T >::splice(ConstIterator< T > where, List< T >&& other, ConstIterator< T > iter)
   {
-    insert(where, *iter);
+    splice(where, other, iter);
   }
 
   template< typename T >
   void List< T >::splice(ConstIterator< T > where, List< T >& other, ConstIterator< T > first, ConstIterator< T > last)
   {
-    insert(where, first, last);
     auto temp = first;
     while (first != last)
     {
-      temp = advance(first, 1);
-      other.erase(first);
+      temp++;
+      splice(where, other, first);
       first = temp;
     }
   }
@@ -473,6 +481,66 @@ namespace grechishnikov
       clear();
       throw;
     }
+  }
+
+  template< typename T >
+  void List< T >::sew(ConstIterator< T > first, ConstIterator< T > second)
+  {
+    if (first.node_ && second.node_)
+    {
+      first.node_->next_ = second.node_;
+      second.node_->prev_ = first.node_;
+    }
+  }
+
+  template< typename T >
+  void List< T >::doSplice(ConstIterator< T > where, List< T >& other, ConstIterator< T > iter)
+  {
+    auto prev = where;
+    prev--;
+
+    auto slice = doSlice(other, iter);
+    sew(prev, slice);
+    sew(slice, where);
+
+    if (where.node_ == head_)
+    {
+      head_ = slice.node_;
+    }
+    size_++;
+  }
+
+  template< typename T >
+  ConstIterator< T > List< T >::doSlice(List< T >& other, ConstIterator< T > pos)
+  {
+    if (pos.node_ == other.head_ && pos.node_ == other.tail_)
+    {
+      other.head_ = nullptr;
+      other.tail_ = nullptr;
+      other.size_ = 0;
+      return pos;
+    }
+
+    if (pos.node_ == other.head_)
+    {
+      other.head_ = pos.node_->next_;
+    }
+    if (pos.node_ == other.tail_)
+    {
+      other.tail_ = pos.node_->prev_;
+    }
+    auto prev = pos.node_->prev_;
+    auto next = pos.node_->next_;
+    if (prev)
+    {
+      prev->next_ = next;
+    }
+    if (next)
+    {
+      next->prev_ = prev;
+    }
+    other.size_--;
+    return pos;
   }
 }
 
