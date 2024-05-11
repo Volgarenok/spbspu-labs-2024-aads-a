@@ -180,11 +180,6 @@ namespace ishmuratov
       printUtil(root_, 0, output);
     }
 
-    tnode * root()
-    {
-      return root_;
-    }
-
   private:
     detail::TNode< Key, Value> * root_;
     Compare comp_;
