@@ -10,27 +10,9 @@
 
 int main(int argc, char * argv[])
 {
-  std::cout << "ETWRE";
   using namespace namestnikov;
-  using tree_t = Tree< size_t, std::string >;
   using mapOfDicts = Tree< std::string, Tree< size_t, std::string > >;
-  Tree< std::string, tree_t > myMap;
-  tree_t tree;
-  tree_t tree2;
-  tree.insert(100, "2000");
-  tree[200] = "100";
-  tree[300] = "3000";
-  std::cout << myMap.size();
-  std::cout << tree.size();
-  myMap.insert("name2", tree2);
-  myMap.insert("name", tree);
-  std::cout << myMap.size();
-  myMap.clear();
-  std::cout << myMap.size();
-  tree_t tree3(tree);
-  //std::cout << tree3.size();
-  //tree.print();
-  
+  mapOfDicts myMap;
   if (argc == 2)
   {
     std::ifstream in(argv[1]);
