@@ -291,6 +291,10 @@ namespace sivkov
       root->right = insert(root->right, key, value);
       root->right->parent = root;
     }
+    else
+    {
+      root->data.second = value;
+    }
     return balance(root);
   }
 
