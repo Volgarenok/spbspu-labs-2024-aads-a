@@ -16,6 +16,7 @@ namespace sivkov
     {
       out << " " << it->first << " " << it->second;
     }
+    out << "\n";
   }
 
   void complement(AVLTree<std::string, AVLTree<size_t, std::string>>& treeOfdic, std::istream& in)
