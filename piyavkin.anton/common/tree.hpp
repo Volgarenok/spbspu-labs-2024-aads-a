@@ -471,6 +471,19 @@ namespace piyavkin
     {
       return insert(pos, val_type(std::forward< Args >(args)...));
     }
+    ConstLnrIterator< Key, T, Compare > clbegin() const noexcept
+    {
+      return ConstLnrIterator< Key, T, Compare >(root_, before_min_.parent_, false);
+    }
+    ConstLnrIterator< Key, T, Compare > clend() const noexcept
+    {
+      return ConstLnrIterator< Key, T, Compare >(root_, const_cast< detail::TreeNode< Key, T >* >(std::addressof(end_node_)), true);
+    }
+    template< class F >
+    F traverse_breadth(F f) const
+    {
+
+    }
   private:
     detail::TreeNode< Key, T >* root_;
     Compare cmp_;
