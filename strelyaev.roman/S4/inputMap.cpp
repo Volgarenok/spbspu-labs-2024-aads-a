@@ -1,12 +1,13 @@
 #include "inputMap.hpp"
 #include <iostream>
+#include "binarySearchTree.hpp"
 
-void strelyaev::inputMap(std::istream& in, std::map< std::string, std::map< int, std::string > >& map)
+void strelyaev::inputMap(std::istream& in, Tree< std::string, Tree< int, std::string > >& map)
 {
   while (!in.eof())
   {
     in.clear();
-    std::map< int, std::string > temp_map;
+    Tree< int, std::string > temp_map;
     std::string map_name = "";
     in >> map_name;
     int key_number = 0;

@@ -1,38 +1,43 @@
 #ifndef NODE_HPP
 #define NODE_HPP
+#include <utility>
+#include <cstddef>
 namespace strelyaev
 {
-  template< typename T >
-  struct Node
+  namespace detail
   {
-    Node(Node* left, Node* parent, Node* right, T value):
-      value_(value),
-      parent_(parent),
-      right_(right),
-      left_(left),
-      height_(0)
-    {}
-
-    bool isRoot()
+    template< typename Key, typename T >
+    struct Node
     {
-      return (parent_ == nullptr);
-    }
+      Node(Node* left, Node* parent, Node* right, Key key, T value):
+        data_(std::make_pair(key, value)),
+        parent_(parent),
+        right_(right),
+        left_(left),
+        height_(0)
+      {}
 
-    bool isLeftChild()
-    {
-      return (parent_->left_ == this);
-    }
+      bool isRoot() noexcept
+      {
+        return (parent_ == nullptr);
+      }
 
-    bool isRightChild()
-    {
-      return (parent_->right_ == this);
-    }
+      bool isLeftChild() noexcept
+      {
+        return (parent_->left_ == this);
+      }
 
-    T value_;
-    Node< T >* parent_;
-    Node< T >* right_;
-    Node< T >* left_;
-    size_t height_;
-  };
+      bool isRightChild() noexcept
+      {
+        return (parent_->right_ == this);
+      }
+
+      std::pair< Key, T > data_;
+      Node< Key, T >* parent_;
+      Node< Key, T >* right_;
+      Node< Key, T >* left_;
+      size_t height_;
+    };
+  }
 }
 #endif

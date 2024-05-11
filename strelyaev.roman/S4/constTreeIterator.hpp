@@ -1,38 +1,37 @@
 #ifndef CONSTTREEITERATOR_HPP
 #define CONSTTREEITERATOR_HPP
-#include <functional>
 #include <memory>
 #include "node.hpp"
 
 namespace strelyaev
 {
-  template< typename T, typename Comp = std::less< T > >
+  template< typename Key, typename T, typename Compare >
   class Tree;
 
-  template< typename T >
+  template< typename Key, typename T >
   struct ConstIterator
   {
-    friend class Tree< T >;
+    friend class Tree< Key, T, std::less< Key > >;
     public:
-    ConstIterator(Node< T >* node):
+    ConstIterator(detail::Node< Key, T >* node):
       node_(node)
     {}
 
-    ConstIterator(const ConstIterator< T >& val):
+    ConstIterator(const ConstIterator< Key, T >& val):
       node_(val.node_)
     {}
 
-    T& operator*()
+    std::pair< Key, T >& operator*()
     {
-      return node_->value_;
+      return node_->data_;
     }
 
-    T* operator->()
+    std::pair< Key, T >* operator->()
     {
-      return std::addressof(node_->value_);
+      return std::addressof(node_->data_);
     }
 
-    ConstIterator< T >& operator++()
+    ConstIterator< Key, T >& operator++()
     {
       if (node_->right_)
       {
@@ -51,25 +50,25 @@ namespace strelyaev
       return *this;
     }
 
-    ConstIterator< T >& operator++(int)
+    ConstIterator< Key, T > operator++(int)
     {
-      ConstIterator< T > result(*this);
+      ConstIterator< Key, T > result(*this);
       ++(*this);
       return result;
     }
 
-    bool operator==(ConstIterator< T > rhs)
+    bool operator==(ConstIterator< Key, T > rhs)
     {
       return node_ == rhs.node_;
     }
 
-    bool operator!=(ConstIterator< T > rhs)
+    bool operator!=(ConstIterator< Key, T > rhs)
     {
       return !(*this == rhs);
     }
 
     private:
-      Node< T >* node_;
+      detail::Node< Key, T >* node_;
   };
 
 }

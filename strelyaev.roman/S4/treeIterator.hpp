@@ -5,35 +5,33 @@
 
 namespace strelyaev
 {
-
-  template< typename T, typename Comp = std::less< T > >
+  template< typename Key, typename T, typename Compare >
   class Tree;
 
-  template< typename T >
+  template< typename Key, typename T >
   struct Iterator
   {
-    friend class Tree< T >;
+    friend class Tree< Key, T, std::less< Key > >;
     public:
-
-    Iterator(Node< T >* node):
+    Iterator(detail::Node< Key, T >* node):
       node_(node)
     {}
 
-    Iterator(Iterator< T >& val):
+    Iterator(Iterator< Key, T >& val):
       node_(val.node_)
     {}
 
-    T& operator*()
+    std::pair< Key, T >& operator*()
     {
-      return node_->value_;
+      return node_->data_;
     }
 
-    T* operator->()
+    std::pair< Key, T >* operator->()
     {
-      return std::addressof(node_->value_);
+      return std::addressof(node_->data_);
     }
 
-    Iterator< T >& operator++()
+    Iterator< Key, T >& operator++()
     {
       if (node_->right_)
       {
@@ -52,25 +50,25 @@ namespace strelyaev
       return *this;
     }
 
-    Iterator< T >& operator++(int)
+    Iterator< Key, T > operator++(int)
     {
-      Iterator< T > result(*this);
+      Iterator< Key, T > result(*this);
       ++(*this);
       return result;
     }
 
-    bool operator==(Iterator< T > rhs)
+    bool operator==(Iterator< Key, T > rhs)
     {
       return node_ == rhs.node_;
     }
 
-    bool operator!=(Iterator< T > rhs)
+    bool operator!=(Iterator< Key, T > rhs)
     {
       return !(*this == rhs);
     }
 
     private:
-      Node< T >* node_;
+      detail::Node< Key, T >* node_;
   };
 }
 

@@ -1,11 +1,11 @@
 #include "commands.hpp"
 #include <iostream>
 
-void strelyaev::print(std::istream& in, std::map< std::string, std::map< int, std::string > >& map, std::ostream& out)
+void strelyaev::print(std::istream& in, Tree< std::string, Tree< int, std::string > >& map, std::ostream& out)
 {
   std::string inner_map_name = "";
   in >> inner_map_name;
-  std::map< int, std::string > inner_map = map[inner_map_name];
+  Tree< int, std::string > inner_map = map[inner_map_name];
   if (inner_map.empty())
   {
     out << "<EMPTY>";
@@ -19,15 +19,15 @@ void strelyaev::print(std::istream& in, std::map< std::string, std::map< int, st
   out << "\n";
 }
 
-void strelyaev::getComplement(std::istream& in, std::map< std::string, std::map< int, std::string > >& map)
+void strelyaev::getComplement(std::istream& in, Tree< std::string, Tree< int, std::string > >& map)
 {
   std::string new_name = "";
   std::string first_name = "";
   std::string second_name = "";
   in >> new_name >> first_name >> second_name;
-  std::map< int, std::string > result;
-  std::map< int, std::string > first = map[first_name];
-  std::map< int, std::string > second = map[second_name];
+  Tree< int, std::string > result;
+  Tree< int, std::string > first = map[first_name];
+  Tree< int, std::string > second = map[second_name];
   for (auto it = first.cbegin(); it != first.cend(); it++)
   {
     if (second.find(it->first) == second.end())
@@ -38,15 +38,15 @@ void strelyaev::getComplement(std::istream& in, std::map< std::string, std::map<
   map[new_name] = result;
 }
 
-void strelyaev::getIntersect(std::istream& in, std::map< std::string, std::map< int, std::string > >& map)
+void strelyaev::getIntersect(std::istream& in, Tree< std::string, Tree< int, std::string > >& map)
 {
   std::string new_name = "";
   std::string first_name = "";
   std::string second_name = "";
   in >> new_name >> first_name >> second_name;
-  std::map< int, std::string > result;
-  std::map< int, std::string > first = map[first_name];
-  std::map< int, std::string > second = map[second_name];
+  Tree< int, std::string > result;
+  Tree< int, std::string > first = map[first_name];
+  Tree< int, std::string > second = map[second_name];
   for (auto it = first.cbegin(); it != first.cend(); it++)
   {
     if (second.find(it->first) != second.end())
@@ -57,15 +57,15 @@ void strelyaev::getIntersect(std::istream& in, std::map< std::string, std::map< 
   map[new_name] = result;
 }
 
-void strelyaev::getUnion(std::istream& in, std::map< std::string, std::map< int, std::string > >& map)
+void strelyaev::getUnion(std::istream& in, Tree< std::string, Tree< int, std::string > >& map)
 {
   std::string new_name = "";
   std::string first_name = "";
   std::string second_name = "";
   in >> new_name >> first_name >> second_name;
-  std::map< int, std::string > result;
-  std::map< int, std::string > first = map[first_name];
-  std::map< int, std::string > second = map[second_name];
+  Tree< int, std::string > result;
+  Tree< int, std::string > first = map[first_name];
+  Tree< int, std::string > second = map[second_name];
   for (auto it = first.cbegin(); it != first.cend(); it++)
   {
     result.insert(*it);

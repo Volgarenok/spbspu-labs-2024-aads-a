@@ -1,15 +1,15 @@
 #ifndef COMMANDS_HPP
 #define COMMANDS_HPP
 #include <iosfwd>
-#include <map>
 #include <string>
+#include "binarySearchTree.hpp"
 
 namespace strelyaev
 {
-  void print(std::istream&, std::map< std::string, std::map< int, std::string > >&, std::ostream&);
-  void getComplement(std::istream&, std::map< std::string, std::map< int, std::string > >&);
-  void getIntersect(std::istream&, std::map< std::string, std::map< int, std::string > >&);
-  void getUnion(std::istream&, std::map< std::string, std::map< int, std::string > >&);
+  void print(std::istream&, Tree< std::string, Tree< int, std::string > >&, std::ostream&);
+  void getComplement(std::istream&, Tree< std::string, Tree< int, std::string > >&);
+  void getIntersect(std::istream&, Tree< std::string, Tree< int, std::string > >&);
+  void getUnion(std::istream&, Tree< std::string, Tree< int, std::string > >&);
 }
 
 #endif
