@@ -39,6 +39,7 @@ int main(int argc, char* argv[])
       try
       {
         it->second(treeOfdic, std::cin);
+        std::cout << "\n";
       }
       catch (const std::logic_error& e)
       {
@@ -46,7 +47,6 @@ int main(int argc, char* argv[])
         std::cin.clear();
         std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
       }
-      std::cout << "\n";
     }
     else
     {
