@@ -16,8 +16,7 @@ int main()
   list.push_back(-40);
 
   List< int > list2;
-  list2 = list;
-
+  list2 = static_cast<List< int > &&>(list);
 
   std::cout << "=============\n";
   list.outputList(std::cout);
