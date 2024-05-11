@@ -17,7 +17,12 @@ namespace lebedev
     using const_iterator = ConstListIterator< T >;
 
     List();
+    List(const List< T > & list);
+    //List(List< T > && list);
     ~List();
+
+    //List< T > & operator=(const List< T > & list);
+    //List< T > & operator=(List< T > && list);
 
     void push_back(const T & val);
     void push_back(T && val);
@@ -65,6 +70,22 @@ namespace lebedev
     head_(nullptr),
     tail_(nullptr)
   {}
+  template<class T >
+  List< T >::List(const List< T > & list):
+    List()
+  {
+    if (!list.empty())
+    {
+      const_iterator iter = list.cbegin();
+      const_iterator end = list.cend();
+      while (iter != end)
+      {
+        push_back(*iter);
+        iter++;
+      }
+      push_back(*iter);
+    }
+  }
 
   template<class T >
   List< T >::~List()
