@@ -33,8 +33,36 @@ namespace strelyaev
         }
       }
 
-      Tree(tree_t&& other)
-      {}
+      Tree(tree_t&& other):
+        root_(other.root_),
+        cmp_(other.cmp_),
+        size_(other.size_)
+      {
+        other.root_ = nullptr;
+        other.cmp_ = Compare();
+        other.size_ = 0;
+      }
+
+      tree_t& operator=(const tree_t& other)
+      {
+        tree_t temp(other);
+        if (this != std::addressof(temp))
+        {
+          std::swap(root_, temp.root_);
+        }
+        return *this;
+      }
+
+      tree_t& operator=(tree_t&& other)
+      {
+        tree_t temp(std::move(other));
+        if (this != std::addressof(temp))
+        {
+          clear(root_);
+          std::swap(root_, temp.root_);
+        }
+        return *this;
+      }
 
       ~Tree()
       {
@@ -189,13 +217,6 @@ namespace strelyaev
       Compare cmp_;
       size_t size_;
 
-      void node_swap(node_t* lhs, node_t* rhs)
-      {
-        std::pair< Key, T > buffer = lhs->data_;
-        lhs->data_ = rhs->data_;
-        rhs->data_ = buffer;
-      }
-
       int getHeight(node_t* node)
       {
         if (!node)
@@ -221,7 +242,7 @@ namespace strelyaev
 
       void rotateRight(node_t* node)
       {
-        node_swap(node->left_, node);
+        std::swap(node->left_->data_, node->data_);
         node_t* buffer = node->right_;
         node->right_ = node->left_;
 
@@ -245,7 +266,7 @@ namespace strelyaev
 
       void rotateLeft(node_t* node)
       {
-        node_swap(node->right_, node);
+        std::swap(node->right_->data_, node->data_);
         node_t* buffer = node->left_;
         node->left_ = node->right_;
 

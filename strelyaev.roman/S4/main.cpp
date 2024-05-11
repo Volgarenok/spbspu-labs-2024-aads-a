@@ -5,7 +5,7 @@
 #include <limits>
 #include "binarySearchTree.hpp"
 #include "inputMap.hpp"
-//#include "commands.hpp"
+#include "commands.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -28,8 +28,7 @@ int main(int argc, char* argv[])
     std::cerr << "Invalid command line arguments\n";
     return 2;
   }
-  //print(std::cin, dictionaries, std::cout);
-  /*Tree< std::string, std::function< void(std::istream&, Tree< std::string, Tree< int, std::string > >&) > > commands;
+  Tree< std::string, std::function< void(std::istream&, Tree< std::string, Tree< int, std::string > >&) > > commands;
   {
     using namespace std::placeholders;
     using namespace strelyaev;
@@ -37,11 +36,6 @@ int main(int argc, char* argv[])
     commands["complement"] = std::bind(getComplement, _1, _2);
     commands["intersect"] = std::bind(getIntersect, _1, _2);
     commands["union"] = std::bind(getUnion, _1, _2);
-  }
-  Tree< std::string, std::function< void(std::istream&, Tree< std::string, Tree< int, std::string > >&) > > commands;
-  {
-    using namespace std::placeholders;
-    commands["complement"] = 
   }
   std::string command_name = "";
   while (std::cin >> command_name)
@@ -56,5 +50,5 @@ int main(int argc, char* argv[])
     }
     std::cin.clear();
     std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
-  }*/
+  }
 }
