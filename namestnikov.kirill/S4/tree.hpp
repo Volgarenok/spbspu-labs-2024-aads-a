@@ -106,17 +106,17 @@ namespace namestnikov
       {
         if (node->right->height > 0)
         {
-          rotateRight(node->right);
+          node->right = rotateRight(node->right);
         }
-        rotateLeft(node);
+        node = rotateLeft(node);
       }
       else
       {
         if (node->left->height < 0)
         {
-          rotateLeft(node->left);
+          node->left = rotateLeft(node->left);
         }
-        rotateRight(node);
+        node = rotateRight(node);
       }
     }
 
@@ -273,7 +273,35 @@ namespace namestnikov
       }
       return result;
     }
-    void rotateLeft(node_t * node)
+    node_t * rotateLeft(node_t * node)
+    {
+      node_t * newRoot = node->right;
+      node->right = newRoot->left;
+      if (newRoot->left)
+      {
+        newRoot->left->parent = node;
+      }
+      newRoot->left = node;
+      node->parent = newRoot;
+      node->height = node->height + 1 - std::min(newRoot->height, 0);
+      newRoot->height = newRoot->height + 1 + std::max(node->height, 0);
+      return newRoot;
+    }
+    node_t * rotateRight(node_t * node)
+    {
+      node_t * newRoot = node->left;
+      node->left = newRoot->right;
+      if (newRoot->right)
+      {
+        newRoot->right->parent = node;
+      }
+      newRoot->right = node;
+      node->parent = newRoot;
+      node->height = node->height - 1 - std::max(0, newRoot->height);
+      newRoot->height = newRoot->height - 1 + std::min(0, node->height);
+      return newRoot;
+    }
+    /*void rotateLeft(node_t * node)
     {
       node_t * newRoot = node->right;
       node->right = newRoot->left;
@@ -330,7 +358,7 @@ namespace namestnikov
       node->parent = newRoot;
       node->height = node->height - 1 - std::max(0, newRoot->height);
       newRoot->height = newRoot->height - 1 + std::min(0, node->height);
-    }
+    }*/
     node_t * search_impl(node_t * node, const Key & key)
     {
       if (!node)

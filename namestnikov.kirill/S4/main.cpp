@@ -19,6 +19,7 @@ int main(int argc, char * argv[])
   tree_t tree2;
   tree.insert(100, "2000");
   tree[200] = "100";
+  tree[300] = "3000";
   std::cout << myMap.size();
   std::cout << tree.size();
   myMap.insert("name2", tree2);
