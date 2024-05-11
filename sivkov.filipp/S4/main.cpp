@@ -40,6 +40,12 @@ int main(int argc, char* argv[])
       {
         it->second(treeOfdic, std::cin);
       }
+      catch (const std::out_of_range&)
+      {
+        std::cout << "<INVALID COMMAND>" << "\n";
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+      }
       catch (const std::logic_error& e)
       {
         std::cout << e.what() << "\n";
@@ -49,7 +55,7 @@ int main(int argc, char* argv[])
     }
     else
     {
-      std::cout << "<INVALID COMMAND>\n";
+      std::cout << "<INVALID COMMAND>" << "\n";
       std::cin.clear();
       std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
