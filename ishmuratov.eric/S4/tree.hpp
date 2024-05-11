@@ -11,18 +11,36 @@ namespace ishmuratov
   {
     using tnode = detail::TNode< Key, Value >;
     using Iter = Iterator< Key, Value, Compare >;
+    using ConstIter = ConstIterator< Key, Value, Compare >;
   public:
     AVLTree():
       root_(nullptr),
       comp_(Compare()),
       size_(0)
     {}
+
+    //doesn't work
+    AVLTree(AVLTree & other):
+      AVLTree(other.begin(), other.end())
+    {}
+
+    AVLTree(Iter begin, Iter end):
+      root_(nullptr),
+      size_(0)
+    {
+      while (begin != end)
+      {
+        push(begin.node_->data.first, begin.node_->data.second);
+        ++begin;
+      }
+    }
+
     ~AVLTree()
     {
       clear();
     }
 
-    tnode * min_elem(tnode * root)
+    tnode * min_elem(tnode * root) const
     {
       if (root == nullptr || root->left == nullptr)
       {
@@ -39,6 +57,16 @@ namespace ishmuratov
     Iter end() noexcept
     {
       return Iter(nullptr);
+    }
+
+    ConstIter cbegin() const noexcept
+    {
+      return ConstIter(min_elem(root_));
+    }
+
+    ConstIter cend() const noexcept
+    {
+      return ConstIter(nullptr);
     }
 
     size_t size() noexcept
@@ -79,18 +107,33 @@ namespace ishmuratov
 
     void clear()
     {
-      size_ = 0;
       delete_node(root_);
+      root_ = nullptr;
+      size_ = 0;
     }
 
     void swap(AVLTree & other)
     {
       std::swap(other.root_, root_);
+      std::swap(other.comp_, comp_);
+      std::swap(other.size_, size_);
     }
 
     Iter find(const Key & key)
     {
       for (auto search = this->begin(); search != this->end(); ++search)
+      {
+        if (search.node_->data.first == key)
+        {
+          return search;
+        }
+      }
+      return this->end();
+    }
+
+    ConstIter find(const Key & key) const
+    {
+      for (auto search = this->cbegin(); search != this->cend(); ++search)
       {
         if (search.node_->data.first == key)
         {
