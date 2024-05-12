@@ -9,6 +9,8 @@ namespace piyavkin
   {
   public:
     void operator()(const std::pair< int, std::string >& val);
+    int getKey() const;
+    std::string getVal() const;
   private:
     std::string str;
     int key;
