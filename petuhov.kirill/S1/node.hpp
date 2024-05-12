@@ -8,6 +8,9 @@ namespace petuhov
     template < typename T >
     struct Node
     {
+      T value_;
+      Node *next_;
+      
       Node();
       Node(const T& value):
         value_(value),
@@ -17,8 +20,6 @@ namespace petuhov
         value_(value),
         next_(next)
       {}
-      T value_;
-      Node *next_;
       ~Node() = default;
     };
   }
