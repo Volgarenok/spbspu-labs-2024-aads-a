@@ -6,18 +6,22 @@
 #include <functional>
 #include <utility>
 #include "AVLtreeNode.hpp"
+#include "IteratorTree.hpp"
 
 namespace novokhatskiy
 {
+  template< class Key, class Value, class Compare >
+  struct IteratorTree;
+  
   template< class Key, class Value, class Compare >
   class Tree;
 
   template< class Key, class Value, class Compare  = std::less< Key > >
   struct ConstIteratorTree: public std::iterator< std::bidirectional_iterator_tag, Value >
   {
-    friend class Tree< Key, Value,Compare >;
     using node_t = detail::NodeTree< Key, Value >;
     using constIter = ConstIteratorTree< Key, Value, Compare >;
+    using iter = IteratorTree< Key, Value, Compare >;
 
     ConstIteratorTree(node_t* node):
       node_(node)
@@ -82,10 +86,22 @@ namespace novokhatskiy
     {
       assert(node_ != nullptr);
       return std::addressof(node_->value);
-    }  
+    }
+
+    bool operator==(const iter it) const
+    {
+      return node_ == it.node_;
+    }
+    
+    bool operator!=(const iter it) const
+    {
+      return node_ != it.node_;
+    }
 
   private:
     node_t* node_;
+    friend class Tree< Key, Value, Compare >;
+    friend struct IteratorTree< Key, Value, Compare >;
 
     void goLastRight()
     {

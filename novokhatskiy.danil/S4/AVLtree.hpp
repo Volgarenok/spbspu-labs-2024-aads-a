@@ -66,7 +66,7 @@ namespace novokhatskiy
       return *this;
     }
 
-    node_t* find(node_t* node, const Key& key)
+    /*node_t* find(node_t* node, const Key& key)
     {
       node_t* root = (node->height < 0) ? node->left : node;
       while (root)
@@ -93,7 +93,36 @@ namespace novokhatskiy
         }
       }
       return nullptr;
+    }*/
+
+    iter find(const Key& key)
+    {
+      node_t* curr = root_;
+      while (curr)
+      {
+        if (curr->value.first == key)
+        {
+          return iter(curr);
+        }
+        curr = (cmp_(curr->value.first, key)) ? curr->right : curr->left;
+      }
+      return end();
     }
+
+    /*constIter find(const Key& key)
+    {
+      node_t* curr = root_;
+      while (curr)
+      {
+        if (curr->value.first == key)
+        {
+          return constIter(curr);
+        }
+        curr = (cmp_(curr->value.first, key)) ? curr->right : curr->left;
+      }
+      return cend();
+    }*/
+
 
     Value& at(const Key& key)
     {
@@ -193,9 +222,85 @@ namespace novokhatskiy
       std::swap(cmp_, other.cmp_);
     }
 
+    iter erase(iter pos)
+    {
+      iter res = pos;
+      res++;
+      node_t* node = nullptr;
+      node_t* delElement = nullptr;
+      if (!pos.node_->left || !pos.node_->right)
+      {
+        delElement = pos.node_;
+        node = delElement->parent;
+        if (!pos.node_->left && !pos.node_->right)  
+        {
+          if (node->left = delElement)
+          {
+            node->left = nullptr;
+          }
+          else if (node->right == delElement)
+          {
+            node->right = nullptr;
+          }
+        }
+        else if (!pos.node_->left && pos.node_->right)
+        {
+          if (delElement == node->left)
+          {
+            node->left = delElement->right;
+          }
+          if (delElement == node->right)
+          {
+            node->right = delElement->right;
+          }
+          delElement->right->parent = node;
+        }
+        else if (!pos.node_->right && pos.node_->left)
+        {
+          if (delElement == node->left)
+          {
+            node->left = delElement->left;
+          }
+          else if (delElement == node->right)
+          {
+            node->left = delElement->right;
+          }
+          delElement->left->parent = node;
+        }
+      }
+      else
+      {
+        auto tmp = pos.node_;
+        --pos;
+        tmp->value = *pos;
+        delElement = pos.node_;
+        node = delElement->parent;
+        if (delElement == node->right)
+        {
+          node->right = delElement->left;
+        }
+        else
+        {
+          node->left = delElement->left;
+        }
+        if (delElement->left)
+        {
+          delElement->left->parent = node;
+        }
+      }
+      delete delElement;
+      balance(res.node_);
+      return iter(res.node_);
+    }
+
+    size_t count(const Key& key)
+    {
+      return (find(key) != end());
+    }
+
     constIter cbegin() const
     {
-      return constIter(minN());
+      return constIter(minN(root_));
     }
 
     constIter cend() const
@@ -205,7 +310,7 @@ namespace novokhatskiy
 
     iter begin()
     {
-      return iter(minN());
+      return iter(minN(root_));
     }
 
     iter end()
@@ -296,15 +401,16 @@ namespace novokhatskiy
       return newRoot;
     }
 
-    node_t* minN()
+    node_t* minN(node_t* p)
     {
-      auto tmp = root_->left;
+      return (p->left) ? minN(p->left) : p;
+      /*auto tmp = root_->left;
       while (tmp->left)
       {
         tmp = tmp->left;
       }
       root_ = tmp;
-      return root_;
+      return root_;*/
     }
 
   };
