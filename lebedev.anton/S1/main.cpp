@@ -1,13 +1,8 @@
 #include <iostream>
 #include "list.hpp"
 
-struct isPos {
-  bool operator() (const int & value) { return (value > 0); }
-};
-
 int main()
 {
-  
   using namespace lebedev;
   List< int > list;
   list.push_back(10);
@@ -22,7 +17,7 @@ int main()
 
   List< int > list2(list);
 
-  list2.remove_if(isPos());
+  list2.remove(-10);
 
   std::cout << "=============\n";
   list.outputList(std::cout);

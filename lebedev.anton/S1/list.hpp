@@ -45,7 +45,7 @@ namespace lebedev
 
     //void assign(size_t n, const T & val);
 
-    //void remove(const T & val);
+    void remove(const T & val);
     template< class Predicate >
     void remove_if(Predicate pred);
 
@@ -71,6 +71,7 @@ namespace lebedev
   private:
     detail::Node< T > * head_;
     detail::Node< T > * tail_;
+    detail::Node< T > * remove_node(detail::Node< T > * node);
   };
 
   template< class T >
@@ -277,6 +278,22 @@ namespace lebedev
   }
 
   template< class T >
+  void List< T >::remove(const T & val)
+  {
+    detail::Node< T > * node = head_;
+    while (node)
+    {
+      if (node->data_ == val)
+      {
+        node = remove_node(node);
+      }
+      else
+      {
+        node = node->next_;
+      }
+    }
+  }
+  template< class T >
   template< class Predicate >
   void List< T >::remove_if(Predicate pred)
   {
@@ -285,31 +302,38 @@ namespace lebedev
     {
       if (pred(node->data_))
       {
-        detail::Node< T > * prev_node = node->prev_;
-        detail::Node< T > * next_node = node->next_;
-        if (node == head_)
-        {
-          pop_front();
-          node = next_node;
-        }
-        else if (node == tail_)
-        {
-          pop_back();
-          node = prev_node;
-        }
-        else
-        { 
-          prev_node->next_ = next_node;
-          next_node->prev_ = prev_node;
-          delete node;
-          node = prev_node;
-        }
+        node = remove_node(node);
       }
       else
       {
         node = node->next_;
       }
     }
+  }
+
+  template< class T >
+  detail::Node< T > * List< T >::remove_node(detail::Node< T > * node)
+  {
+    detail::Node< T > * prev_node = node->prev_;
+    detail::Node< T > * next_node = node->next_;
+    if (node == head_)
+    {
+      pop_front();
+      node = next_node;
+    }
+    else if (node == tail_)
+    {
+      pop_back();
+      node = prev_node;
+    }
+    else
+    {
+      prev_node->next_ = next_node;
+      next_node->prev_ = prev_node;
+      delete node;
+      node = prev_node;
+    }
+    return node;
   }
 
   template< class T >
