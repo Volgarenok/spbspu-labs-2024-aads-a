@@ -1,11 +1,12 @@
 #include <iostream>
+#include <fstream>
 #include <tree.hpp>
 
 struct Sumkey
 {
   void operator()(const std::pair< int, std::string >& val)
   {
-    str += val.second;
+    str += " " + val.second;
     key += val.first;
   }
   std::string str;
@@ -26,5 +27,17 @@ int main(int argc, char* argv[])
   {
     std::cerr << "The file is not open\n";
     return 2;
+  }
+  Tree< int, std::string > tree;
+  int key = 0;
+  std::string val = "";
+  while (in >> key >> val)
+  {
+    tree.insert(std::pair< int, std::string >(key, val));
+  }
+  if (!in.eof())
+  {
+    std::cerr << "Bad input\n";
+    return 3;
   }
 }
