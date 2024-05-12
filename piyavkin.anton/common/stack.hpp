@@ -8,6 +8,14 @@ namespace piyavkin
   class Stack
   {
   public:
+    bool operator==(const Stack& stack) const
+    {
+      return stack.list == list;
+    }
+    bool operator!=(const Stack& stack) const
+    {
+      return *this != stack;
+    }
     void push(const T& value)
     {
       list.push_back(value);

@@ -21,6 +21,11 @@ int main()
   {
     std::cout << (*i).second << ' ';
   }
+  std::cout << '\n';
   std::cout << tree.traverse_lnr(Sumkey()).key << ' ' << tree.traverse_lnr(Sumkey()).str;
+  std::cout << '\n';
   std::cout << tree.traverse_rnl(Sumkey()).key << ' ' << tree.traverse_rnl(Sumkey()).str;
+  std::cout << '\n';
+  std::cout << tree.traverse_breadth(Sumkey()).key << ' ' << tree.traverse_breadth(Sumkey()).str;
+  std::cout << '\n';
 }

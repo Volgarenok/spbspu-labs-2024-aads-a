@@ -8,6 +8,14 @@ namespace piyavkin
   class Queue
   {
   public:
+    bool operator==(const Queue& queue) const
+    {
+      return queue.list == list;
+    }
+    bool operator!=(const Queue& queue) const
+    {
+      return *this != queue;
+    }
     void push(const T& value)
     {
       list.push_back(value);
