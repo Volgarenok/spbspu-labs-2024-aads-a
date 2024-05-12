@@ -1,25 +1,20 @@
 #include <iostream>
+#include "io_datastruct.hpp"
 #include "list.hpp"
 
 int main()
 {
   using namespace lebedev;
-  List< int > list;
-  list.push_back(10);
-  List< int > listC(list);
-  list.push_back(20);
-  list.push_back(30);
+  listOfPairs list_of_pairs;
+  inputDS(std::cin, list_of_pairs);
+  if (list_of_pairs.empty())
+  {
+    std::cout << "0\n";
+    return 0;
+  }
 
-  list.push_back(-10);
-  list.push_back(25);
-  list.push_back(-30);
-  list.push_back(-40);
+  std::cout << list_of_pairs.front().first << "\n";
+  list_of_pairs.front().second.outputList(std::cout);
 
-  List< int > list2(10, 666);
-
-  std::cout << "=============\n";
-  list.outputList(std::cout);
-  std::cout << "=============\n";
-  list2.outputList(std::cout);
   return 0;
 }
