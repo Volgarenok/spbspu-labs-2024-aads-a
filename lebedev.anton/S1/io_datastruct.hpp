@@ -10,7 +10,7 @@ namespace lebedev
 {
   using listOfPairs = List< std::pair< std::string, List< size_t > > >;
   void inputDS(std::istream & input, listOfPairs & pairs);
-  //
+  void outputPairsNames(std::ostream & output, listOfPairs & pairs);;
 }
 
 #endif

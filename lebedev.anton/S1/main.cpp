@@ -12,9 +12,8 @@ int main()
     std::cout << "0\n";
     return 0;
   }
-
-  std::cout << list_of_pairs.front().first << "\n";
-  list_of_pairs.front().second.outputList(std::cout);
+  outputPairsNames(std::cout, list_of_pairs);
+  std::cout << '\n';
 
   return 0;
 }

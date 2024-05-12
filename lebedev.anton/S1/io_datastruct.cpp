@@ -21,3 +21,16 @@ void lebedev::inputDS(std::istream & input, listOfPairs & pairs)
     pairs.push_back(pair);
   }
 }
+
+void lebedev::outputPairsNames(std::ostream & output, listOfPairs & pairs)
+{
+  for (auto pairs_iter = pairs.cbegin(); pairs_iter != pairs.cend(); ++pairs_iter)
+  {
+    if (pairs_iter != pairs.cbegin())
+    {
+      output << ' ';
+    }
+    output << pairs_iter->first;
+  }
+  output << ' ' << pairs.cend()->first;
+}
