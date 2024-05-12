@@ -498,6 +498,10 @@ namespace piyavkin
     template< class F >
     F traverse_lnr(F f) const
     {
+      if (empty())
+      {
+        throw std::logic_error("<EMPTY>");
+      }
       for (auto it = clbegin(); it != clend(); ++it)
       {
         f(*it);
@@ -512,6 +516,10 @@ namespace piyavkin
     template< class F >
     F traverse_rnl(F f) const
     {
+      if (empty())
+      {
+        throw std::logic_error("<EMPTY>");
+      }
       for (auto it = clrbegin(); it != clrend(); ++it)
       {
         f(*it);
@@ -526,6 +534,10 @@ namespace piyavkin
     template< class F >
     F traverse_breadth(F f) const
     {
+      if (empty())
+      {
+        throw std::logic_error("<EMPTY>");
+      }
       for (auto it = cbbegin(); it != cbend(); ++it)
       {
         f(*it);
