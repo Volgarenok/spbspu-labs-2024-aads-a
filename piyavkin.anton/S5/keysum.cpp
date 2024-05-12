@@ -11,7 +11,10 @@ bool isOverflow(int lhs, int rhs)
 
 void piyavkin::KeySum::operator()(const std::pair< int, std::string >& val)
 {
-  str += " " + val.second;
+  if (val.second != "")
+  {
+    str += " " + val.second;
+  }
   if (isOverflow(key, val.first))
   {
     throw std::overflow_error("Owerflow");
