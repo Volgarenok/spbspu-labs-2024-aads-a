@@ -19,6 +19,8 @@ namespace lebedev
     List();
     List(const List< T > & list);
     List(List< T > && list) noexcept;
+    //explicit List(size_t n);
+    //List(size_t n, const T & val);
     ~List();
 
     List< T > & operator=(const List< T > & list);
@@ -40,6 +42,12 @@ namespace lebedev
     T & back();
     const T & front() const;
     const T & back() const;
+
+    //void assign(size_t n, const T & val);
+
+    //void remove(const T & val);
+    template< class Predicate >
+    void remove_if(Predicate pred);
 
     iterator begin() noexcept;
     iterator end() noexcept;
@@ -65,28 +73,26 @@ namespace lebedev
     detail::Node< T > * tail_;
   };
 
-  template<class T >
+  template< class T >
   List< T >::List():
     head_(nullptr),
     tail_(nullptr)
   {}
-  template<class T >
+  template< class T >
   List< T >::List(const List< T > & list):
     List()
   {
     if (!list.empty())
     {
-      const_iterator iter = list.cbegin();
-      const_iterator end = list.cend();
-      while (iter != end)
+      detail::Node< T > * node = list.head_;
+      while (node)
       {
-        push_back(*iter);
-        iter++;
+        push_back(node->data_);
+        node = node->next_;
       }
-      push_back(*iter);
     }
   }
-  template<class T >
+  template< class T >
   List< T >::List(List< T > && list) noexcept:
     head_(list.head_),
     tail_(list.tail_)
@@ -95,13 +101,13 @@ namespace lebedev
     list.tail_ = nullptr;
   }
 
-  template<class T >
+  template< class T >
   List< T >::~List()
   {
     clear();
   }
 
-  template < typename T >
+  template< class T >
   List< T > & List< T >::operator=(const List< T > & list)
   {
     if (head_ != list.head_)
@@ -111,7 +117,7 @@ namespace lebedev
     }
     return *this;
   }
-  template < typename T >
+  template< class T >
   List< T > & List< T >::operator=(List< T > && list) noexcept
   {
     if (head_ != list.head_)
@@ -125,7 +131,7 @@ namespace lebedev
     return *this;
   }
 
-  template<class T >
+  template< class T >
   void List< T >::push_back(const T & val)
   {
     detail::Node< T > * node = new detail::Node< T >(val, nullptr, tail_);
@@ -141,7 +147,7 @@ namespace lebedev
       tail_ = node;
     }
   }
-  template<class T >
+  template< class T >
   void List< T >::push_back(T && val)
   {
     detail::Node< T > * node = new detail::Node< T >(std::move(val), nullptr, tail_);
@@ -157,7 +163,7 @@ namespace lebedev
       tail_ = node;
     }
   }
-  template<class T >
+  template< class T >
   void List< T >::push_front(const T & val)
   {
     detail::Node< T > * node = new detail::Node< T >(val, head_, nullptr);
@@ -173,7 +179,7 @@ namespace lebedev
       head_ = node;
     }
   }
-  template<class T >
+  template< class T >
   void List< T >::push_front(T && val)
   {
     detail::Node< T > * node = new detail::Node< T >(std::move(val), head_, nullptr);
@@ -190,7 +196,7 @@ namespace lebedev
     }
   }
 
-  template<class T >
+  template< class T >
   void List< T >::pop_back()
   {
     if (tail_ == nullptr)
@@ -209,7 +215,7 @@ namespace lebedev
     delete tail_;
     tail_ = newtail;
   }
-  template<class T >
+  template< class T >
   void List< T >::pop_front()
   {
     if (head_ == nullptr)
@@ -229,12 +235,12 @@ namespace lebedev
     head_ = newhead;
   }
 
-  template<class T >
+  template< class T >
   bool List< T >::empty() const noexcept
   {
     return head_ == nullptr;
   }
-  template<class T >
+  template< class T >
   void List< T >::clear() noexcept
   {
     while (tail_)
@@ -242,32 +248,68 @@ namespace lebedev
       pop_back();
     }
   }
-  template<class T >
+  template< class T >
   void List< T >::swap(List< T > & list)
   {
     std::swap(list.head_, head_);
     std::swap(list.tail_, tail_);
   }
 
-  template<class T >
+  template< class T >
   T & List< T >::front()
   {
     return head_->data_;
   }
-  template<class T >
+  template< class T >
   T & List< T >::back()
   {
     return tail_->data_;
   }
-  template<class T >
+  template< class T >
   const T & List< T >::front() const
   {
     return head_->data_;
   }
-  template<class T >
+  template< class T >
   const T & List< T >::back() const
   {
     return tail_->data_;
+  }
+
+  template< class T >
+  template< class Predicate >
+  void List< T >::remove_if(Predicate pred)
+  {
+    detail::Node< T > * node = head_;
+    while (node)
+    {
+      if (pred(node->data_))
+      {
+        detail::Node< T > * prev_node = node->prev_;
+        detail::Node< T > * next_node = node->next_;
+        if (node == head_)
+        {
+          pop_front();
+          node = next_node;
+        }
+        else if (node == tail_)
+        {
+          pop_back();
+          node = prev_node;
+        }
+        else
+        { 
+          prev_node->next_ = next_node;
+          next_node->prev_ = prev_node;
+          delete node;
+          node = prev_node;
+        }
+      }
+      else
+      {
+        node = node->next_;
+      }
+    }
   }
 
   template< class T >
