@@ -306,6 +306,55 @@ namespace novokhatskiy
       balance(res.node_);
       return iter(res.node_);
     }
+    iter lower_bound(const Key& key)
+    {
+      iter curr = find(key);
+      if (cmp_(curr.node_->value.first, key))
+      {
+        return ++curr;
+      }
+      return curr;
+    }
+
+    constIter lower_bound(const Key& key) const
+    {
+      iter curr = find(key);
+      if (cmp_(curr.node_->value.first, key))
+      {
+        return ++curr;
+      }
+      return curr;
+    }
+
+    iter upper_bound(const Key& key)
+    {
+      iter res = lower_bound(key);
+      if (res.node_->value.first == key && res != end())
+      {
+        return ++res;
+      }
+      return res;
+    }
+
+    constIter upper_bound(const Key& key) const
+    {
+      constIter res = lower_bound(key);
+      if (res.node_->value.first == key && res != cend())
+      {
+        return ++res;
+      }
+      return res;
+    }
+
+    std::pair< iter, iter > equal_range(const Key& key)
+    {
+      return std::make_pair(lower_bound(key), upper_bound(key));
+    }
+
+    std::pair< constIter, constIter > equal_range(const Key& key) const
+    {
+      return std::make_pair(lower_bound(key), upper_bound(key));
+    }
 
     size_t count(const Key& key)
     {
