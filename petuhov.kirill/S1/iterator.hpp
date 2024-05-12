@@ -1,6 +1,7 @@
 #ifndef ITERATOR_HPP
 #define ITERATOR_HPP
 
+#include <cassert>
 #include "node.hpp"
 
 namespace petuhov
@@ -16,11 +17,15 @@ namespace petuhov
     public:
       Iterator();
       Iterator(const Iterator &iter) = default;
-      T &operator*();
+
+      T &operator*() const;
+      const T &operator->() const;
       Iterator &operator++();
       Iterator operator++(int);
       bool operator==(const Iterator &other) const;
       bool operator!=(const Iterator &other) const;
+
+      ~Iterator() = default;
 
     private:
       Node< T > *node_;
@@ -32,7 +37,13 @@ namespace petuhov
   {}
 
   template < typename T >
-  T &Iterator< T >::operator*()
+  T &Iterator< T >::operator*() const
+  {
+    return node_->value_;
+  }
+
+  template < typename T >
+  const T &Iterator< T >::operator->() const
   {
     return node_->value_;
   }
@@ -40,6 +51,7 @@ namespace petuhov
   template < typename T >
   Iterator< T > &Iterator< T >::operator++()
   {
+    assert(node_ != nullptr);
     node_ = node_->next_;
     return *this;
   }
@@ -47,7 +59,8 @@ namespace petuhov
   template < typename T >
   Iterator< T > Iterator< T >::operator++(int)
   {
-    Iterator< T > temp(*this);
+    assert(node_ != nullptr);
+    Iterator< T > temp = *this;
     node_ = node_->next_;
     return temp;
   }
