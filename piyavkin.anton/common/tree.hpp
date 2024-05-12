@@ -479,10 +479,41 @@ namespace piyavkin
     {
       return ConstLnrIterator< Key, T, Compare >(root_, const_cast< detail::TreeNode< Key, T >* >(std::addressof(end_node_)), true);
     }
-    template< class F >
-    F traverse_breadth(F f) const
+    ConstRnlIterator< Key, T, Compare > clrbegin() const noexcept
     {
-
+      return ConstRnlIterator< Key, T, Compare >(root_, end_node_.parent_, false);
+    }
+    ConstRnlIterator< Key, T, Compare > clrend() const noexcept
+    {
+      return ConstRnlIterator< Key, T, Compare >(root_, const_cast< detail::TreeNode< Key, T >* >(std::addressof(before_min_)), true);
+    }
+    template< class F >
+    F traverse_lnr(F f) const
+    {
+      for (auto it = clbegin(); it != clend(); ++it)
+      {
+        f(*it);
+      }
+      return f;
+    }
+    template< class F >
+    F traverse_lnr(F f)
+    {
+      return static_cast< const Tree< Key, T, Compare >& >(*this).traverse_lnr(f);
+    }
+    template< class F >
+    F traverse_rnl(F f) const
+    {
+      for (auto it = clrbegin(); it != clrend(); ++it)
+      {
+        f(*it);
+      }
+      return f;
+    }
+    template< class F >
+    F traverse_rnl(F f)
+    {
+      return static_cast< const Tree< Key, T, Compare >& >(*this).traverse_rnl(f);
     }
   private:
     detail::TreeNode< Key, T >* root_;
