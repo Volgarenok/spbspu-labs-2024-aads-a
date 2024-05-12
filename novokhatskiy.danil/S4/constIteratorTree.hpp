@@ -12,7 +12,7 @@ namespace novokhatskiy
 {
   template< class Key, class Value, class Compare >
   struct IteratorTree;
-  
+
   template< class Key, class Value, class Compare >
   class Tree;
 
@@ -92,7 +92,7 @@ namespace novokhatskiy
     {
       return node_ == it.node_;
     }
-    
+
     bool operator!=(const iter it) const
     {
       return node_ != it.node_;

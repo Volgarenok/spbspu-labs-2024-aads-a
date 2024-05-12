@@ -38,7 +38,7 @@ namespace novokhatskiy
       cmp_()
     {}
 
-    Tree(Tree&& other): 
+    Tree(Tree&& other):
       root_(other.root_),
       size_(other.size_),
       cmp_(std::move(other.cmp_))
@@ -232,7 +232,7 @@ namespace novokhatskiy
       {
         delElement = pos.node_;
         node = delElement->parent;
-        if (!pos.node_->left && !pos.node_->right)  
+        if (!pos.node_->left && !pos.node_->right)
         {
           if (node->left = delElement)
           {
