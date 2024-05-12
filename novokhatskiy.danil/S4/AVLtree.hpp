@@ -1,36 +1,25 @@
 #ifndef AVL_TREE_HPP
 #define AVL_TREE_HPP
 
-#include <functional>
 #include <cstddef>
+#include <functional>
 #include <iostream>
 #include <stdexcept>
 #include <utility>
 #include "AVLtreeNode.hpp"
-#include "constIteratorTree.hpp"
 #include "IteratorTree.hpp"
+#include "constIteratorTree.hpp"
 
 namespace novokhatskiy
 {
-  template <class Key, class Value, class Compare = std::less<Key>>
+  template < class Key, class Value, class Compare = std::less< Key > >
   class Tree
   {
   public:
-    using node_t = detail::NodeTree<Key, Value>;
-    using v_type = std::pair<Key, Value>;
+    using node_t = detail::NodeTree< Key, Value >;
+    using v_type = std::pair< Key, Value >;
     using constIter = ConstIteratorTree< Key, Value, Compare >;
     using iter = IteratorTree< Key, Value, Compare >;
-    /*int getBalanceFactor(node_t* node)
-    {
-      if (node == nullptr)
-      {
-        return -1;
-      }
-      else
-      {
-        return;
-      }
-    }*/
 
     Tree():
       root_(nullptr),
@@ -51,7 +40,7 @@ namespace novokhatskiy
     {
       if (this != std::addressof(other))
       {
-        Tree<Key, Value> tmp(other);
+        Tree< Key, Value > tmp(other);
         swap(tmp);
       }
       return *this;
@@ -123,7 +112,6 @@ namespace novokhatskiy
       return cend();
     }*/
 
-
     Value& at(const Key& key)
     {
       node_t* curr = find(root_->left, key);
@@ -146,6 +134,32 @@ namespace novokhatskiy
 
     Value& operator[](const Key& key)
     {
+      iter tmp = find(key);
+      if (tmp.node_->value.first == key)
+      {
+        return tmp.node_->value.second;
+      }
+      else
+      {
+        insert(std::make_pair(key, Value()));
+        iter res = find(key);
+        return res.node_->value.second;
+      }
+    }
+
+    const Value& operator[](const Key& key) const
+    {
+      iter tmp = find(key);
+      if (tmp.node_->value.first == key)
+      {
+        return tmp.node_->value.second;
+      }
+      else
+      {
+        insert(std::make_pair(key, Value()));
+        iter res = find(key);
+        return res.node_->value.second;
+      }
     }
 
     void prePrint(node_t* root)
@@ -412,7 +426,6 @@ namespace novokhatskiy
       root_ = tmp;
       return root_;*/
     }
-
   };
 }
 
