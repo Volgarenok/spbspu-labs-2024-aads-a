@@ -581,7 +581,7 @@ namespace piyavkin
     }
     bool operator==(const ConstBreadthIterator< Key, T, Compare >& rhs) const
     {
-      return stack == rhs.stack && queue == rhs.queue;
+      return stack == rhs.stack;
     }
     bool operator!=(const ConstBreadthIterator< Key, T, Compare >& rhs) const
     {

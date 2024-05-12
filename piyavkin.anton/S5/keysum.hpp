@@ -12,8 +12,8 @@ namespace piyavkin
     int getKey() const;
     std::string getVal() const;
   private:
-    std::string str;
-    int key;
+    std::string str_;
+    int key_;
   };
 }
 #endif

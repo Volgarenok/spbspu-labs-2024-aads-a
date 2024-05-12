@@ -13,21 +13,21 @@ void piyavkin::KeySum::operator()(const std::pair< int, std::string >& val)
 {
   if (val.second != "")
   {
-    str += " " + val.second;
+    str_ += " " + val.second;
   }
-  if (isOverflow(key, val.first))
+  if (isOverflow(key_, val.first))
   {
     throw std::overflow_error("Owerflow");
   }
-  key += val.first;
+  key_ += val.first;
 }
 
 int piyavkin::KeySum::getKey() const
 {
-  return key;
+  return key_;
 }
 
 std::string piyavkin::KeySum::getVal() const
 {
-  return str;
+  return str_;
 }
