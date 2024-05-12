@@ -43,7 +43,7 @@ namespace lebedev
     const T & front() const;
     const T & back() const;
 
-    //void assign(size_t n, const T & val);
+    void assign(size_t n, const T & val);
 
     void remove(const T & val);
     template< class Predicate >
@@ -275,6 +275,16 @@ namespace lebedev
   const T & List< T >::back() const
   {
     return tail_->data_;
+  }
+
+  template< class T >
+  void List< T >::assign(size_t n, const T & val)
+  {
+    clear();
+    for (size_t i = 0; i < n; i++)
+    {
+      push_back(val);
+    }
   }
 
   template< class T >

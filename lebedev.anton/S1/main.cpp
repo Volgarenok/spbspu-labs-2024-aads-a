@@ -17,7 +17,7 @@ int main()
 
   List< int > list2(list);
 
-  list2.remove(-10);
+  list2.assign(10, 666);
 
   std::cout << "=============\n";
   list.outputList(std::cout);
