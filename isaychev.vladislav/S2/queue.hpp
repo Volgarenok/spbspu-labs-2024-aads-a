@@ -12,21 +12,21 @@ namespace isaychev
    public:
     Queue() = default;
     Queue(const Container & rhs);
-    Queue(Container && rhs);
+    Queue(Container && rhs) noexcept;
 
     void push(const T & rhs);
     void pop();
-    T & front();
-    const T & front() const;
-    T & back();
-    const T & back() const;
+    T & front() noexcept;
+    const T & front() const noexcept;
+    T & back() noexcept;
+    const T & back() const noexcept;
 
     template < class... Args >
     void emplace(Args&&... args);
 
-    bool empty() const;
-    size_t size() const;
-    void swap(Queue & rhs);
+    bool empty() const noexcept;
+    size_t size() const noexcept;
+    void swap(Queue & rhs) noexcept;
 
    private:
     Container con_;
@@ -38,7 +38,7 @@ namespace isaychev
   {}
 
   template < class T, class Container >
-  Queue< T, Container >::Queue(Container && rhs):
+  Queue< T, Container >::Queue(Container && rhs) noexcept:
    con_(rhs)
   {}
 
@@ -55,25 +55,25 @@ namespace isaychev
   }
 
   template < class T, class Container >
-  T & Queue< T, Container >::front()
+  T & Queue< T, Container >::front() noexcept
   {
     return con_.front();
   }
 
   template < class T, class Container >
-  const T & Queue< T, Container >::front() const
+  const T & Queue< T, Container >::front() const noexcept
   {
     return con_.front();
   }
 
   template < class T, class Container >
-  T & Queue< T, Container >::back()
+  T & Queue< T, Container >::back() noexcept
   {
     return con_.back();
   }
 
   template < class T, class Container >
-  const T & Queue< T, Container >::back() const
+  const T & Queue< T, Container >::back() const noexcept
   {
     return con_.back();
   }
@@ -86,19 +86,19 @@ namespace isaychev
   }
 
   template < class T, class Container >
-  bool Queue< T, Container >::empty() const
+  bool Queue< T, Container >::empty() const noexcept
   {
     return con_.empty();
   }
 
   template < class T, class Container >
-  size_t Queue< T, Container >::size() const
+  size_t Queue< T, Container >::size() const noexcept
   {
     return con_.size();
   }
 
   template < class T, class Container >
-  void Queue< T, Container >::swap(Queue & rhs)
+  void Queue< T, Container >::swap(Queue & rhs) noexcept
   {
     con_.swap(rhs.con_);
   }

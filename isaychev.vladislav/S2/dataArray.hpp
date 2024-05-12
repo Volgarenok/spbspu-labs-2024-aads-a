@@ -13,25 +13,29 @@ namespace isaychev
     DataArray();
     ~DataArray();
     DataArray(const DataArray & rhs);
-    DataArray(DataArray && rhs);
+    DataArray(DataArray && rhs) noexcept;
     DataArray & operator=(const DataArray & rhs);
-    DataArray & operator=(DataArray && rhs);
+    DataArray & operator=(DataArray && rhs) noexcept;
 
     void push_back(const T & rhs);
     void pop_front();
     void pop_back();
 
-    T & front();
-    const T & front() const;
-    T & back();
-    const T & back() const;
+    T & front() noexcept;
+    const T & front() const noexcept;
+    T & back() noexcept;
+    const T & back() const noexcept;
+    T & operator[](size_t n) noexcept;
+    const T & operator[](size_t n) const noexcept;
+    T & at(size_t n);
+    const T & at(size_t n) const;
 
     template < class... Args >
     void emplace_back(Args &&... args);
 
-    size_t size() const;
-    bool empty() const;
-    void swap(DataArray & rhs);
+    size_t size() const noexcept;
+    bool empty() const noexcept;
+    void swap(DataArray & rhs) noexcept;
 
    private:
     size_t capacity_;
@@ -39,6 +43,8 @@ namespace isaychev
     T * data_;
 
     void double_capacity();
+    void checkToPop(size_t elemNum);
+    void checkBoundaries(size_t pos, size_t size);
   };
 
   template < class T >
@@ -73,7 +79,7 @@ namespace isaychev
   }
 
   template < class T >
-  DataArray< T >::DataArray(DataArray< T > && rhs):
+  DataArray< T >::DataArray(DataArray< T > && rhs) noexcept:
    capacity_(rhs.capacity_),
    elem_count_(rhs.elem_count_),
    data_(rhs.data_)
@@ -92,7 +98,7 @@ namespace isaychev
   }
 
   template < class T >
-  DataArray< T > & DataArray< T >::operator=(DataArray< T > && rhs)
+  DataArray< T > & DataArray< T >::operator=(DataArray< T > && rhs) noexcept
   {
     if (std::addressof(rhs) != this)
     {
@@ -106,12 +112,19 @@ namespace isaychev
   }
 
   template < class T >
+  void DataArray< T >::checkToPop(size_t elemNum)
+  {
+    if (elemNum == 0)
+    {
+      throw std::out_of_range("No more data to pop");
+    }
+  }
+
+  template < class T >
   void DataArray< T >::pop_front()
   {
-    if (elem_count_ == 0)
-    {
-      throw std::out_of_range("No more data_ to pop");
-    }
+    checkToPop(elem_count_);
+
     for (size_t i = 0; i < elem_count_ - 1; ++i)
     {
       data_[i] = data_[i + 1];
@@ -133,10 +146,7 @@ namespace isaychev
   template < class T >
   void DataArray< T >::pop_back()
   {
-    if (elem_count_ == 0)
-    {
-      throw std::out_of_range("No more data_ to pop");
-    }
+    checkToPop(elem_count_);
     --elem_count_;
   }
 
@@ -151,28 +161,64 @@ namespace isaychev
   }
 
   template < class T >
-  T & DataArray< T >::front()
+  T & DataArray< T >::front() noexcept
   {
     return data_[0];
   }
 
   template < class T >
-  const T & DataArray< T >::front() const
+  const T & DataArray< T >::front() const noexcept
   {
     return data_[0];
   }
 
   template < class T >
-  T & DataArray< T >::back()
+  T & DataArray< T >::back() noexcept
   {
     return data_[elem_count_ - 1];
   }
 
   template < class T >
-  const T & DataArray< T >::back() const
+  const T & DataArray< T >::back() const noexcept
   {
     return data_[elem_count_ - 1];
   }
+
+  template < class T >
+  T & DataArray< T >::operator[](size_t n) noexcept
+  {
+    return data_[n];
+  }
+
+  template < class T >
+  const T & DataArray< T >::operator[](size_t n) const noexcept
+  {
+    return data_[n];
+  }
+
+  template < class T >
+  void DataArray< T >::checkBoundaries(size_t pos, size_t size)
+  {
+    if (pos >= size)
+    {
+      throw std::out_of_range("out of bounds");
+    }
+  }
+
+  template < class T >
+  T & DataArray< T >::at(size_t n)
+  {
+    checkBoundaries(n, elem_count_);
+    return data_[n];
+  }
+
+  template < class T >
+  const T & DataArray< T >::at(size_t n) const
+  {
+    checkBoundaries(n, elem_count_);
+    return data_[n];
+  }
+
 
   template < class T >
   template < class... Args >
@@ -183,19 +229,19 @@ namespace isaychev
   }
 
   template < class T >
-  size_t DataArray< T >::size() const
+  size_t DataArray< T >::size() const noexcept
   {
     return elem_count_;
   }
 
   template < class T >
-  bool DataArray< T >::empty() const
+  bool DataArray< T >::empty() const noexcept
   {
     return (elem_count_ == 0);
   }
 
   template < class T >
-  void DataArray< T >::swap(DataArray & rhs)
+  void DataArray< T >::swap(DataArray & rhs) noexcept
   {
     std::swap(capacity_, rhs.capacity_);
     std::swap(elem_count_, rhs.elem_count_);

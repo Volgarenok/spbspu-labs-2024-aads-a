@@ -12,19 +12,19 @@ namespace isaychev
    public:
     Stack() = default;
     Stack(const Container & rhs);
-    Stack(Container && rhs);
+    Stack(Container && rhs) noexcept;
 
     void push(const T & rhs);
     void pop();
-    T & top();
-    const T & top() const;
+    T & top() noexcept;
+    const T & top() const noexcept;
 
     template < class... Args >
     void emplace(Args&&... args);
 
-    bool empty() const;
-    size_t size() const;
-    void swap(Stack & rhs);
+    bool empty() const noexcept;
+    size_t size() const noexcept;
+    void swap(Stack & rhs) noexcept;
 
    private:
     Container con_;
@@ -36,7 +36,7 @@ namespace isaychev
   {}
 
   template < class T, class Container >
-  Stack< T, Container >::Stack(Container && rhs):
+  Stack< T, Container >::Stack(Container && rhs) noexcept:
    con_(rhs)
   {}
 
@@ -53,13 +53,13 @@ namespace isaychev
   }
 
   template < class T, class Container >
-  T & Stack< T, Container >::top()
+  T & Stack< T, Container >::top() noexcept
   {
     return con_.back();
   }
 
   template < class T, class Container >
-  const T & Stack< T, Container >::top() const
+  const T & Stack< T, Container >::top() const noexcept
   {
     return con_.back();
   }
@@ -72,19 +72,19 @@ namespace isaychev
   }
 
   template < class T, class Container >
-  bool Stack< T, Container >::empty() const
+  bool Stack< T, Container >::empty() const noexcept
   {
     return con_.empty();
   }
 
   template < class T, class Container >
-  size_t Stack< T, Container >::size() const
+  size_t Stack< T, Container >::size() const noexcept
   {
     return con_.size();
   }
 
   template < class T, class Container >
-  void Stack< T, Container >::swap(Stack & rhs)
+  void Stack< T, Container >::swap(Stack & rhs) noexcept
   {
     con_.swap(rhs.con_);
   }
