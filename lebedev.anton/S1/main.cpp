@@ -15,9 +15,7 @@ int main()
   list.push_back(-30);
   list.push_back(-40);
 
-  List< int > list2(list);
-
-  list2.assign(10, 666);
+  List< int > list2(10, 666);
 
   std::cout << "=============\n";
   list.outputList(std::cout);

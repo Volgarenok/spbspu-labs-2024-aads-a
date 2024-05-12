@@ -19,8 +19,8 @@ namespace lebedev
     List();
     List(const List< T > & list);
     List(List< T > && list) noexcept;
-    //explicit List(size_t n);
-    //List(size_t n, const T & val);
+    explicit List(size_t n);
+    List(size_t n, const T & val);
     ~List();
 
     List< T > & operator=(const List< T > & list);
@@ -100,6 +100,16 @@ namespace lebedev
   {
     list.head_ = nullptr;
     list.tail_ = nullptr;
+  }
+  template< class T >
+  List< T >::List(size_t n):
+    List(n, T())
+  {}
+  template< class T >
+  List< T >::List(size_t n, const T & val):
+    List()
+  {
+    assign(n, val);
   }
 
   template< class T >
