@@ -1,18 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <tree.hpp>
-
-struct Sumkey
-{
-  void operator()(const std::pair< int, std::string >& val)
-  {
-    str += " " + val.second;
-    key += val.first;
-  }
-  std::string str;
-  long long int key;
-};
-
+#include "keysum.hpp"
 
 int main(int argc, char* argv[])
 {
