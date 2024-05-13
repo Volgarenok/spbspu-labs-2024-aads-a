@@ -31,16 +31,16 @@ namespace sivkov
 
   private:
     detail::Node< T >* node_;
-    ConstIterator(detail::Node< T >* node);
+    explicit ConstIterator(detail::Node< T >* node);
   };
 
   template< typename T >
-  ConstIterator< T >::ConstIterator(detail::Node< T >* node) :
+  ConstIterator< T >::ConstIterator(detail::Node< T >* node):
     node_(node)
   {}
 
   template< typename T >
-  ConstIterator< T >::ConstIterator() :
+  ConstIterator< T >::ConstIterator():
     node_(nullptr)
   {}
 

@@ -91,6 +91,7 @@ namespace sivkov
     List< T > prev(other);
     if (std::addressof(other) != this)
     {
+      List< T > prev(other);
       swap(prev);
     }
     return *this;
@@ -99,9 +100,9 @@ namespace sivkov
   template< typename T >
   List< T >& List< T >::operator=(List< T >&& other) noexcept
   {
-    List< T > prev(std::move(other));
     if (std::addressof(other) != this)
     {
+      List< T > prev(std::move(other));
       swap(prev);
     }
     return *this;
@@ -143,7 +144,6 @@ namespace sivkov
     {
       pop_front();
     }
-    size_ = 0;
   }
 
   template< typename T >
@@ -196,9 +196,9 @@ namespace sivkov
   void List< T >::remove(const T& value)
   {
     auto pred = [&value](const T& elem)
-      {
-        return elem == value;
-      };
+    {
+      return elem == value;
+    };
     remove_if(pred);
   }
 
@@ -236,11 +236,12 @@ namespace sivkov
   template< typename T >
   void List< T >::assign(size_t count, const T& value)
   {
-    clear();
+    List< T > assignList;
     for (size_t i = 0; i < count; ++i)
     {
-      push_back(value);
+      assignList.push_back(value);
     }
+    swap(assignList);
   }
 
   template< typename T >
