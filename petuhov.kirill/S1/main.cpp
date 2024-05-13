@@ -56,7 +56,7 @@ int main()
     }
   }
 
-  if (max_length == 0) 
+  if (max_length == 0)
   {
     std::cout << "0\n";
     return 0;
