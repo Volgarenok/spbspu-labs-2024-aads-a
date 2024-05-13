@@ -27,9 +27,12 @@ namespace strelyaev
       Tree(const tree_t& other):
         Tree()
       {
-        for (auto it = other.cbegin(); it != other.cend(); it++)
+        if (other.root_)
         {
-          insert(*it);
+          for (auto it = other.cbegin(); it != other.cend(); it++)
+          {
+            insert(*it);
+          }
         }
       }
 

@@ -5,10 +5,10 @@ void strelyaev::print(std::istream& in, Tree< std::string, Tree< int, std::strin
 {
   std::string inner_map_name = "";
   in >> inner_map_name;
-  Tree< int, std::string > inner_map = map[inner_map_name];
+  Tree< int, std::string > inner_map = map.at(inner_map_name);
   if (inner_map.empty())
   {
-    out << "<EMPTY>";
+    out << "<EMPTY>\n";
     return;
   }
   out << inner_map_name;
@@ -26,8 +26,8 @@ void strelyaev::getComplement(std::istream& in, Tree< std::string, Tree< int, st
   std::string second_name = "";
   in >> new_name >> first_name >> second_name;
   Tree< int, std::string > result;
-  Tree< int, std::string > first = map[first_name];
-  Tree< int, std::string > second = map[second_name];
+  Tree< int, std::string > first = map.at(first_name);
+  Tree< int, std::string > second = map.at(second_name);
   for (auto it = first.cbegin(); it != first.cend(); it++)
   {
     if (second.find(it->first) == second.end())
@@ -45,8 +45,8 @@ void strelyaev::getIntersect(std::istream& in, Tree< std::string, Tree< int, std
   std::string second_name = "";
   in >> new_name >> first_name >> second_name;
   Tree< int, std::string > result;
-  Tree< int, std::string > first = map[first_name];
-  Tree< int, std::string > second = map[second_name];
+  Tree< int, std::string > first = map.at(first_name);
+  Tree< int, std::string > second = map.at(second_name);
   for (auto it = first.cbegin(); it != first.cend(); it++)
   {
     if (second.find(it->first) != second.end())
@@ -64,8 +64,8 @@ void strelyaev::getUnion(std::istream& in, Tree< std::string, Tree< int, std::st
   std::string second_name = "";
   in >> new_name >> first_name >> second_name;
   Tree< int, std::string > result;
-  Tree< int, std::string > first = map[first_name];
-  Tree< int, std::string > second = map[second_name];
+  Tree< int, std::string > first = map.at(first_name);
+  Tree< int, std::string > second = map.at(second_name);
   for (auto it = first.cbegin(); it != first.cend(); it++)
   {
     result.insert(*it);
