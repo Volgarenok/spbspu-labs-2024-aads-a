@@ -1,7 +1,7 @@
 #ifndef INPUTFILE_HPP
 #define INPUTFILE_HPP
 #include <istream>
-#include "tree.hpp"
+#include <tree.hpp>
 
 namespace piyavkin
 {
