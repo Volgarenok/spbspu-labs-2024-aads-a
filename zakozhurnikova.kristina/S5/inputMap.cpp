@@ -1,5 +1,6 @@
 #include "inputMap.hpp"
 #include <istream>
+#include <stdexcept>
 
 void zakozhurnikova::inputMap(std::istream& in, BinarySearchTree< int, std::string >& map)
 {
@@ -15,7 +16,7 @@ void zakozhurnikova::inputMap(std::istream& in, BinarySearchTree< int, std::stri
     }
     if (!in.eof())
     {
-      in.clear();
+      throw std::logic_error("Incorrect input");
     }
     map = tree;
   }

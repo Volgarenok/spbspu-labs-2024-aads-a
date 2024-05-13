@@ -14,8 +14,16 @@ int main(int argc, char* argv[])
   BinarySearchTree< int, std::string > map;
   if (argc == 3)
   {
-    std::ifstream file(argv[2]);
-    inputMap(file, map);
+    try
+    {
+      std::ifstream file(argv[2]);
+      inputMap(file, map);
+    }
+    catch (...)
+    {
+      std::cerr << "Bad input\n";
+      return 1;
+    }
   }
   else
   {
