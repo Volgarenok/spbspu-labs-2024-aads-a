@@ -14,7 +14,7 @@ int main() {
   }
 
   if (sequences.empty()) {
-    std::cout << 0 << "\n";
+    std::cout << "0\n";
     return 0;
   }
 
@@ -22,6 +22,7 @@ int main() {
   for (petuhov::ConstIterator< std::pair< std::string, petuhov::List< int > > > it = sequences.cbegin(); it != sequences.cend(); ++it) {
     names.push_front(it->first);
   }
+  names.reverse();
 
   for (petuhov::ConstIterator< std::string > it = names.cbegin(); it != names.cend(); ++it) {
     std::cout << *it << " ";
@@ -55,6 +56,7 @@ int main() {
         column.push_front(-1);
       }
     }
+    column.reverse();
     columns.push_front(column);
   }
   columns.reverse();
@@ -62,19 +64,18 @@ int main() {
   petuhov::List< int > sums;
   for (petuhov::ConstIterator< petuhov::List< int > > col_it = columns.cbegin(); col_it != columns.cend(); ++col_it) {
     int sum = 0;
-    petuhov::List< int > temp_col;
+    bool has_numbers = false;
     for (petuhov::ConstIterator< int > num_it = col_it->cbegin(); num_it != col_it->cend(); ++num_it) {
       if (*num_it != -1) {
-        temp_col.push_front(*num_it);
+        std::cout << *num_it << " ";
         sum += *num_it;
+        has_numbers = true;
       }
     }
-    temp_col.reverse();
-    for (petuhov::ConstIterator< int > temp_it = temp_col.cbegin(); temp_it != temp_col.cend(); ++temp_it) {
-      std::cout << *temp_it << " ";
+    if (has_numbers) {
+      sums.push_front(sum);
     }
     std::cout << "\n";
-    sums.push_front(sum);
   }
   sums.reverse();
 
