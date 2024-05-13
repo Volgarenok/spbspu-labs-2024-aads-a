@@ -8,10 +8,10 @@
 
 namespace sivkov
 {
-  Queue<std::string> infixToPostfix(Queue<std::string>& infix)
+  Queue< std::string > infixToPostfix(Queue< std::string >& infix)
   {
-    Queue<std::string> postfix;
-    Stack<std::string> operators;
+    Queue< std::string > postfix;
+    Stack< std::string > operators;
 
     while (!infix.empty())
     {
