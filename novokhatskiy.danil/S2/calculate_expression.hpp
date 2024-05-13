@@ -7,11 +7,11 @@
 namespace novokhatskiy
 {
   long long calculatePostExp(Queue< Postfix >&& inQueue);
-  long long Addition(const long long& op1, const long long& op2);
-  long long Substraction(const long long& op1, const long long& op2);
-  long long Multiplication(const long long& op1, const long long& op2);
-  long long Division(const long long& op1, const long long& op2);
-  long long Mod(const long long& op1, const long long& op2);
+  long long doAddition(long long op1, long long op2);
+  long long doSubstraction(long long op1, long long op2);
+  long long doMultiplication(long long op1, long long op2);
+  long long doDivision(long long op1, long long op2);
+  long long doMod(long long op1, long long op2);
 }
 
 #endif

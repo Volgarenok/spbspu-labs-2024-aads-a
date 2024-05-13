@@ -10,19 +10,11 @@ namespace novokhatskiy
   class Stack
   {
   public:
-    Stack() = default;
-    Stack(const Stack< T >& other) = default;
-    Stack(Stack< T >&& other) noexcept;
-    Stack< T >& operator=(const Stack< T >& other) = default;
-    Stack< T >& operator=(Stack< T >&& other) noexcept;
-
     T& top();
     bool empty() const noexcept;
     size_t size() const noexcept;
     void push(const T& value);
     void pop();
-    T drop();
-    ~Stack() = default;
 
   private:
     ForwardList< T > data_;
@@ -48,14 +40,6 @@ namespace novokhatskiy
   size_t Stack< T >::size() const noexcept
   {
     return data_.size();
-  }
-
-  template < class T >
-  T Stack< T >::drop()
-  {
-    T value = data_.front();
-    data_.pop_front();
-    return value;
   }
 
   template < class T >

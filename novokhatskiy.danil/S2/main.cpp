@@ -1,6 +1,7 @@
 #include <exception>
 #include <fstream>
 #include <iostream>
+#include <list>
 #include <string>
 #include "calculate_expression.hpp"
 #include "convert_expression.hpp"
@@ -12,7 +13,7 @@
 int main(int argc, char** argv)
 {
   using namespace novokhatskiy;
-  Queue< Queue< InfixType > > infixQueue;
+  Queue<Queue<InfixType>> infixQueue;
   try
   {
     if (argc == 2)
@@ -29,13 +30,13 @@ int main(int argc, char** argv)
       std::cerr << "Wrong input arguments\n";
       return 1;
     }
-    Stack< long long > stack;
+    Stack<long long> stack;
     while (!infixQueue.empty())
     {
-      Queue< InfixType > tmp = infixQueue.drop();
-      Queue< Postfix > res = convertExpression(std::move(tmp));
+      Queue<InfixType> tmp = infixQueue.front();
+      infixQueue.pop();
+      Queue<Postfix> res = convertExpression(std::move(tmp));
       stack.push(calculatePostExp(std::move(res)));
-      // std::cout << calculatePostExp(std::move(res)) << '\n';
     }
     bool firstExpression = true;
     while (!stack.empty())
@@ -45,7 +46,8 @@ int main(int argc, char** argv)
         std::cout << ' ';
       }
       firstExpression = false;
-      std::cout << stack.drop();
+      std::cout << stack.top();
+      stack.pop();
     }
     std::cout << '\n';
   }

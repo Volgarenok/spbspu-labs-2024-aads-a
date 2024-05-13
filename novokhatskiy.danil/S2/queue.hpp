@@ -10,19 +10,11 @@ namespace novokhatskiy
   class Queue
   {
   public:
-    Queue() = default;
-    Queue(const Queue< T >& other) = default;
-    Queue(Queue< T >&& other) noexcept;
-    Queue< T >& operator=(const Queue< T >& other) = default;
-    Queue< T >& operator=(Queue< T >&& other) noexcept;
-
     void push(const T& value);
     bool empty() const noexcept;
     size_t size() const noexcept;
     void pop();
     T& front();
-    T drop();
-    ~Queue() = default;
 
   private:
     ForwardList< T > data_;
@@ -52,14 +44,6 @@ namespace novokhatskiy
       other.data_.clear();
     }
     return *this;
-  }
-
-  template < class T >
-  T Queue< T >::drop()
-  {
-    T value = data_.front();
-    data_.pop_front();
-    return value;
   }
 
   template < class T >

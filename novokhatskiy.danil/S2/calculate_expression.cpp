@@ -3,7 +3,7 @@
 #include <stdexcept>
 #include "stack.hpp"
 
-long long novokhatskiy::Addition(const long long& op1, const long long& op2)
+long long novokhatskiy::doAddition(long long op1, long long op2)
 {
   constexpr long long maxSize = std::numeric_limits< long long >::max();
   if (maxSize - op1 < op2)
@@ -13,7 +13,7 @@ long long novokhatskiy::Addition(const long long& op1, const long long& op2)
   return op1 + op2;
 }
 
-long long novokhatskiy::Substraction(const long long& op1, const long long& op2)
+long long novokhatskiy::doSubstraction(long long op1, long long op2)
 {
   constexpr long long minSize = std::numeric_limits< long long >::min();
   if (minSize + op1 > op2)
@@ -23,7 +23,7 @@ long long novokhatskiy::Substraction(const long long& op1, const long long& op2)
   return op1 - op2;
 }
 
-long long novokhatskiy::Multiplication(const long long& op1, const long long& op2)
+long long novokhatskiy::doMultiplication(long long op1, long long op2)
 {
   constexpr long long minSize = std::numeric_limits< long long >::min();
   constexpr long long maxSize = std::numeric_limits< long long >::max();
@@ -38,7 +38,7 @@ long long novokhatskiy::Multiplication(const long long& op1, const long long& op
   return op1 * op2;
 }
 
-long long novokhatskiy::Division(const long long& op1, const long long& op2)
+long long novokhatskiy::doDivision(long long op1, long long op2)
 {
   constexpr long long minSize = std::numeric_limits< long long >::min();
   if (op2 == 0)
@@ -52,7 +52,7 @@ long long novokhatskiy::Division(const long long& op1, const long long& op2)
   return op1 / op2;
 }
 
-long long novokhatskiy::Mod(const long long& op1, const long long& op2)
+long long novokhatskiy::doMod(long long op1, long long op2)
 {
   long long res = op1 % op2;
   if (res < 0)
@@ -65,9 +65,12 @@ long long novokhatskiy::Mod(const long long& op1, const long long& op2)
 long long novokhatskiy::calculatePostExp(novokhatskiy::Queue< Postfix >&& inQueue)
 {
   novokhatskiy::Stack< long long > stack;
+  constexpr long long minSize = std::numeric_limits< long long >::min();
+  constexpr long long maxSize = std::numeric_limits< long long >::max();
   while (!inQueue.empty())
   {
-    novokhatskiy::Postfix token = inQueue.drop();
+    novokhatskiy::Postfix token = inQueue.front();
+    inQueue.pop();
     switch (token.type)
     {
     case TokenType::OPERATION:
@@ -76,23 +79,24 @@ long long novokhatskiy::calculatePostExp(novokhatskiy::Queue< Postfix >&& inQueu
       {
         throw std::runtime_error("Stack is empty");
       }
-      long long secondOperand = stack.drop();
+      long long secondOperand = stack.top();
+      stack.pop();
       switch (token.operation)
       {
       case Operation::ADD:
-        stack.top() = Addition(stack.top(), secondOperand);
+        stack.top() = doAddition(stack.top(), secondOperand);
         break;
       case Operation::SUB:
-        stack.top() = Substraction(stack.top(), secondOperand);
+        stack.top() = doSubstraction(stack.top(), secondOperand);
         break;
       case Operation::MUL:
-        stack.top() = Multiplication(stack.top(), secondOperand);
+        stack.top() = doMultiplication(stack.top(), secondOperand);
         break;
       case Operation::DIV:
-        stack.top() = Division(stack.top(), secondOperand);
+        stack.top() = doDivision(stack.top(), secondOperand);
         break;
       case Operation::MOD:
-        stack.top() = Mod(stack.top(),secondOperand);
+        stack.top() = doMod(stack.top(),secondOperand);
         break;
       }
       break;
@@ -105,5 +109,7 @@ long long novokhatskiy::calculatePostExp(novokhatskiy::Queue< Postfix >&& inQueu
       break;
     }
   }
-  return stack.drop();
+  long long res = stack.top();
+  stack.pop();
+  return res;
 }
