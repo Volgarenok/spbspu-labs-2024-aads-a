@@ -15,13 +15,17 @@ int main()
   }
   try
   {
-    outputPairsNames(std::cout, list_of_pairs);
-    std::cout << '\n';
+    List< size_t > sums;
+    countSums(list_of_pairs, sums, max_pair_size);
     if (max_pair_size != 0)
     {
-      outputSequences(std::cout, list_of_pairs, max_pair_size);
+      outputPairsNames(std::cout, list_of_pairs);
       std::cout << '\n';
     }
+    outputSequences(std::cout, list_of_pairs, max_pair_size);
+    std::cout << '\n';
+    outputSums(std::cout, sums);
+    std::cout << '\n';
   }
   catch (const std::overflow_error & e)
   {
