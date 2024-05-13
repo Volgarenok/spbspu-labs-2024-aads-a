@@ -14,10 +14,6 @@ belokurskaya::SequenceVector belokurskaya::readSequences(std::istream & in)
     while (in >> number)
     {
       sequence.push_back(number);
-      if (in.peek() == '\n')
-      {
-        break;
-      }
     }
     if (!in.eof())
     {
