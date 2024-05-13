@@ -17,12 +17,12 @@ namespace petuhov
     List(const List< T > &other);
     List(List< T > &&other) noexcept;
     ~List();
-    
+
     Iterator< T > begin() noexcept;
     Iterator< T > end() noexcept;
     ConstIterator< T > cbegin() const noexcept;
     ConstIterator< T > cend() const noexcept;
-    
+
     T &front();
     const T &front() const;
     bool empty() const noexcept;
