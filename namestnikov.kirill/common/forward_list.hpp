@@ -2,7 +2,6 @@
 #define FORWARD_LIST_HPP
 
 #include <cstddef>
-#include <iostream>
 #include <algorithm>
 #include <stdexcept>
 #include <node.hpp>
@@ -26,7 +25,7 @@ namespace namestnikov
     using const_iterator = ConstForwardIterator< T >;
     using node_t = detail::Node< T >;
   public:
-    ForwardList() :
+    ForwardList():
       head_(nullptr)
     {}
     ForwardList(size_t count, const T & value):

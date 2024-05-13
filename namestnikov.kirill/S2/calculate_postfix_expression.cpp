@@ -7,8 +7,8 @@
 
 void calculateExpression(long long & num1, long long num2, char op)
 {
-  const long long maxLong = std::numeric_limits< long long >::max();
-  const long long minLong = std::numeric_limits< long long >::min();
+  constexpr long long maxLong = std::numeric_limits< long long >::max();
+  constexpr long long minLong = std::numeric_limits< long long >::min();
   if (op == '+')
   {
     if (maxLong - num2 < num1)

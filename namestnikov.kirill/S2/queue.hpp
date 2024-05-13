@@ -9,7 +9,6 @@ namespace namestnikov
   template< class T >
   class Queue
   {
-    using queue_t = Queue< T >;
   public:
     T & front()
     {

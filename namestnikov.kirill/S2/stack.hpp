@@ -9,7 +9,6 @@ namespace namestnikov
   template< class T >
   class Stack
   {
-    using stack_t = Stack< T >;
   public:
     void push(const T & value)
     {

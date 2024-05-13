@@ -1,5 +1,4 @@
 #include "input_expressions.hpp"
-#include <iostream>
 #include <string>
 #include "data_types.hpp"
 
@@ -32,11 +31,11 @@ void namestnikov::inputExpression(std::string s, Queue< namestnikov::Key > & exp
     if (!std::isspace(s[i]))
     {
       std::string temp = "";
-        while ((s[i] != ' ') && (s[i] != '\n') && (i < s.size()))
-        {
-          temp += s[i];
-          ++i;
-        }
+      while ((s[i] != ' ') && (s[i] != '\n') && (i < s.size()))
+      {
+        temp += s[i];
+        ++i;
+      }
       try
       {
         long long operand = std::stoll(temp);
