@@ -4,6 +4,7 @@
 #include "getMaps.hpp"
 #include "mapMaster.hpp"
 #include "twoThreeTree.hpp"
+#include "commands.hpp"
 
 int main(int argc, char *argv[])
 {
@@ -21,6 +22,10 @@ int main(int argc, char *argv[])
   }
 
   MapMaster master(maps);
+  master.addCommand("print", commands::printCmd);
+  master.addCommand("complement", commands::complementCmd);
+  master.addCommand("intersect", commands::intersectCmd);
+  master.addCommand("union", commands::unionCmd);
   std::string cmdOutput;
   while (!std::cin.eof())
   {

@@ -2,15 +2,9 @@
 
 #include <iostream>
 
-zhalilov::MapMaster::MapMaster(TwoThree < std::string, primaryMap > &maps):
-  maps_(maps),
-  commands_()
-{
-  commands_["print"] = &MapMaster::printCmd;
-  commands_["complement"] = &MapMaster::complementCmd;
-  commands_["intersect"] = &MapMaster::intersectCmd;
-  commands_["union"] = &MapMaster::unionCmd;
-}
+zhalilov::MapMaster::MapMaster(TwoThree < std::string, intStringMap > &maps):
+  maps_(maps)
+{}
 
 void zhalilov::MapMaster::doCommandLine(std::istream &input, std::string &result)
 {
@@ -48,7 +42,7 @@ void zhalilov::MapMaster::doCommandLine(std::istream &input, std::string &result
   {
     std::string cmdName = cmdSource.front();
     cmdSource.pop_front();
-    (this->*commands_.at(cmdName))(cmdSource, result);
+    commands_.at(cmdName)(maps_, cmdSource, result);
   }
   catch (const std::out_of_range &e)
   {
@@ -56,131 +50,7 @@ void zhalilov::MapMaster::doCommandLine(std::istream &input, std::string &result
   }
 }
 
-void zhalilov::MapMaster::printCmd(List < std::string > &cmdSource, std::string &result)
+void zhalilov::MapMaster::addCommand(std::string name, commandFunc func)
 {
-  if (cmdSource.capacity() != 1)
-  {
-    throw std::invalid_argument("incorrect command source");
-  }
-
-  std::string mapName = cmdSource.back();
-  if (!maps_.at(mapName).empty())
-  {
-    auto it = maps_[mapName].cbegin();
-    auto end = maps_[mapName].cend();
-    end--;
-    result = mapName + ' ';
-    while (it != end)
-    {
-      result += std::to_string(it->first) + ' ';
-      result += it->second + ' ';
-      it++;
-    }
-    result += std::to_string(it->first) + ' ';
-    result += it->second;
-  }
-  else
-  {
-    result = "<EMPTY>";
-  }
-}
-
-void zhalilov::MapMaster::complementCmd(List < std::string > &cmdSource, std::string &result)
-{
-  if (cmdSource.capacity() != 3)
-  {
-    throw std::invalid_argument("incorrect command source");
-  }
-
-  primaryMap &secondMap = maps_.at(cmdSource.back());
-  cmdSource.pop_back();
-  primaryMap &firstMap = maps_.at(cmdSource.back());
-  primaryMap resultMap;
-
-  auto firstIt = firstMap.cbegin();
-  auto firstEnd = firstMap.cend();
-  while (firstIt != firstEnd)
-  {
-    if (secondMap.find(firstIt->first) == secondMap.end())
-    {
-      int currKey = firstIt->first;
-      std::string currValue = firstIt->second;
-      resultMap.insert(std::pair < int, std::string >(currKey, currValue));
-    }
-    firstIt++;
-  }
-
-  addMap(cmdSource.front(), resultMap);
-  result = std::string();
-}
-
-void zhalilov::MapMaster::intersectCmd(List < std::string > &cmdSource, std::string &result)
-{
-  if (cmdSource.capacity() != 3)
-  {
-    throw std::invalid_argument("incorrect command source");
-  }
-
-  primaryMap &secondMap = maps_.at(cmdSource.back());
-  cmdSource.pop_back();
-  primaryMap &firstMap = maps_.at(cmdSource.back());
-  primaryMap resultMap;
-
-  auto firstIt = firstMap.cbegin();
-  auto firstEnd = firstMap.cend();
-  while (firstIt != firstEnd)
-  {
-    if (secondMap.find(firstIt->first) != secondMap.end())
-    {
-      int currKey = firstIt->first;
-      std::string currValue = firstIt->second;
-      resultMap.insert(std::pair < int, std::string >(currKey, currValue));
-    }
-    firstIt++;
-  }
-
-  addMap(cmdSource.front(), resultMap);
-  result = std::string();
-}
-
-void zhalilov::MapMaster::unionCmd(List < std::string > &cmdSource, std::string &result)
-{
-  if (cmdSource.capacity() != 3)
-  {
-    throw std::invalid_argument("incorrect command source");
-  }
-
-  primaryMap &secondMap = maps_.at(cmdSource.back());
-  cmdSource.pop_back();
-  primaryMap &firstMap = maps_.at(cmdSource.back());
-  primaryMap resultMap;
-
-  auto firstIt = firstMap.cbegin();
-  auto firstEnd = firstMap.cend();
-  while (firstIt != firstEnd)
-  {
-    resultMap.insert(std::pair < int, std::string >(firstIt->first, firstIt->second));
-    firstIt++;
-  }
-
-  auto secondIt = secondMap.cbegin();
-  auto secondEnd = secondMap.cend();
-  while (secondIt != secondEnd)
-  {
-    resultMap.insert(std::pair < int, std::string >(secondIt->first, secondIt->second));
-    secondIt++;
-  }
-
-  addMap(cmdSource.front(), resultMap);
-  result = std::string();
-}
-
-void zhalilov::MapMaster::addMap(std::string &mapName, primaryMap &map)
-{
-  std::pair < std::string, primaryMap > mapsPair = std::make_pair(mapName, map);
-  auto mapItAndInsertResult = maps_.insert(mapsPair);
-  if (!mapItAndInsertResult.second)
-  {
-    (mapItAndInsertResult.first)->second = mapsPair.second;
-  }
+  commands_[name] = func;
 }

@@ -13,23 +13,17 @@ namespace zhalilov
   class MapMaster
   {
   public:
-    using primaryMap = TwoThree < int, std::string >;
+    using intStringMap = TwoThree < int, std::string >;
+    using mapOfMaps = TwoThree < std::string, intStringMap >;
+    using commandFunc = void (*)(mapOfMaps &, List < std::string > &, std::string &);
 
-    explicit MapMaster(TwoThree < std::string, primaryMap > &maps);
+    explicit MapMaster(TwoThree < std::string, intStringMap > &maps);
     void doCommandLine(std::istream &input, std::string &result);
+    void addCommand(std::string name, commandFunc func);
 
   private:
-    using commandFunc = void (MapMaster::*)(List < std::string > &, std::string &);
-
-    TwoThree < std::string, primaryMap > &maps_;
+    mapOfMaps &maps_;
     TwoThree < std::string, commandFunc > commands_;
-
-    void printCmd(List < std::string > &cmdSource, std::string &result);
-    void complementCmd(List < std::string > &cmdSource, std::string &result);
-    void intersectCmd(List < std::string > &cmdSource, std::string &result);
-    void unionCmd(List < std::string > &cmdSource, std::string &result);
-
-    void addMap(std::string &mapName, primaryMap &map);
   };
 }
 
