@@ -6,7 +6,7 @@
 
 namespace namestnikov
 {
-  long long calculatePostfixExpression(Queue< namestnikov::Key > & resultQueue);
+  long long calculatePostfixExpression(Queue< Key > & resultQueue);
 }
 
 #endif

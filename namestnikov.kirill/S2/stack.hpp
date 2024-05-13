@@ -26,10 +26,6 @@ namespace namestnikov
     {
       return data_.front();
     }
-    size_t size()
-    {
-      return data_.get_size();
-    }
     bool empty() const noexcept
     {
       return data_.empty();

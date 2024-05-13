@@ -8,8 +8,8 @@
 
 namespace namestnikov
 {
-  void inputExpressions(std::istream & in, Queue< Queue< namestnikov::Key > > & expressionsStack);
-  void inputExpression(std::string s, Queue< namestnikov::Key > & expression);
+  void inputExpressions(std::istream & in, Queue< Queue< Key > > & expressionsStack);
+  void inputExpression(std::string s, Queue< Key > & expression);
 }
 
 #endif

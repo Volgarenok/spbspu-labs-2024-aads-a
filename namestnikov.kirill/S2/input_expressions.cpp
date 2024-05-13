@@ -2,14 +2,14 @@
 #include <string>
 #include "data_types.hpp"
 
-void namestnikov::inputExpressions(std::istream & in, Queue< Queue< namestnikov::Key > > & expressionsStack)
+void namestnikov::inputExpressions(std::istream & in, Queue< Queue< Key > > & expressionsStack)
 {
   std::string s = "";
   while (std::getline(in, s, '\n'))
   {
     if (s.size() != 0)
     {
-      Queue< namestnikov::Key > expression;
+      Queue< Key > expression;
       inputExpression(s, expression);
       expressionsStack.push(expression);
     }
@@ -21,11 +21,11 @@ bool isOperation(char sym)
   return ((sym == '+') || (sym == '-') || (sym == '*') || (sym == '/') || (sym == '%'));
 }
 
-void namestnikov::inputExpression(std::string s, Queue< namestnikov::Key > & expression)
+void namestnikov::inputExpression(std::string s, Queue< Key > & expression)
 {
   size_t i = 0;
-  namestnikov::PartValue value(0ll);
-  namestnikov::PartType type = namestnikov::PartType::DEFAULT;
+  PartValue value(0ll);
+  PartType type = PartType::DEFAULT;
   while (i < s.size())
   {
     if (!std::isspace(s[i]))
@@ -39,9 +39,9 @@ void namestnikov::inputExpression(std::string s, Queue< namestnikov::Key > & exp
       try
       {
         long long operand = std::stoll(temp);
-        value = namestnikov::PartValue(operand);
-        type = namestnikov::PartType::OPERAND;
-        namestnikov::Key key{type, value};
+        value = PartValue(operand);
+        type = PartType::OPERAND;
+        Key key{type, value};
         expression.push(key);
       }
       catch (const std::invalid_argument &)
@@ -49,22 +49,22 @@ void namestnikov::inputExpression(std::string s, Queue< namestnikov::Key > & exp
         char sym = temp[0];
         if (isOperation(sym))
         {
-          type = namestnikov::PartType::OPERATION;
-          value = namestnikov::PartValue(sym);
+          type = PartType::OPERATION;
+          value = PartValue(sym);
         }
         else
         {
           if (sym == '(')
           {
-            type = namestnikov::PartType::OPEN_BRACKET;
+            type = PartType::OPEN_BRACKET;
           }
           else
           {
-            type = namestnikov::PartType::CLOSE_BRACKET;
+            type = PartType::CLOSE_BRACKET;
           }
-          value = namestnikov::PartValue(sym);
+          value = PartValue(sym);
         }
-        namestnikov::Key key{type, value};
+        Key key{type, value};
         expression.push(key);
       }
     }

@@ -26,26 +26,26 @@ bool hasHigherPriority(char op1, char op2)
   return (((getPrecedence(op1) == 2) && getPrecedence(op2) == 2) || getPrecedence(op2) == 1);
 }
 
-void namestnikov::convertToPostfix(Queue< namestnikov::Key > & currentQueue, Queue< namestnikov::Key > & resultQueue)
+void namestnikov::convertToPostfix(Queue< Key > & currentQueue, Queue< Key > & resultQueue)
 {
-  Stack< namestnikov::Key > processStack;
+  Stack< Key > processStack;
   while (!currentQueue.empty())
   {
-    namestnikov::Key temp = currentQueue.front();
+    Key temp = currentQueue.front();
     currentQueue.pop();
-    if (temp.type == namestnikov::PartType::OPERAND)
+    if (temp.type == PartType::OPERAND)
     {
       resultQueue.push(temp);
     }
-    else if (temp.type == namestnikov::PartType::OPEN_BRACKET)
+    else if (temp.type == PartType::OPEN_BRACKET)
     {
       processStack.push(temp);
     }
-    else if (temp.type == namestnikov::PartType::CLOSE_BRACKET)
+    else if (temp.type == PartType::CLOSE_BRACKET)
     {
-      while (!processStack.empty() && processStack.top().type != namestnikov::PartType::OPEN_BRACKET)
+      while (!processStack.empty() && processStack.top().type != PartType::OPEN_BRACKET)
       {
-        namestnikov::Key temp = processStack.top();
+        Key temp = processStack.top();
         resultQueue.push(temp);
         processStack.pop();
       }
@@ -55,9 +55,9 @@ void namestnikov::convertToPostfix(Queue< namestnikov::Key > & currentQueue, Que
       }
       processStack.pop();
     }
-    else if (temp.type == namestnikov::PartType::OPERATION)
+    else if (temp.type == PartType::OPERATION)
     {
-      while ((!processStack.empty()) && (processStack.top().type != namestnikov::PartType::OPEN_BRACKET) &&
+      while ((!processStack.empty()) && (processStack.top().type != PartType::OPEN_BRACKET) &&
        (hasHigherPriority(processStack.top().value.operation, temp.value.operation)))
       {
         resultQueue.push(processStack.top());

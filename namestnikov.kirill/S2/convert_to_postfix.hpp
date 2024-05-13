@@ -6,7 +6,7 @@
 
 namespace namestnikov
 {
-  void convertToPostfix(Queue< namestnikov::Key > & currentQueue, Queue< namestnikov::Key > & resultQueue);
+  void convertToPostfix(Queue< Key > & currentQueue, Queue< Key > & resultQueue);
 }
 
 #endif
