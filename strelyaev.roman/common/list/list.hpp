@@ -1,6 +1,7 @@
 #ifndef LIST_HPP
 #define LIST_HPP
 #include <initializer_list>
+#include <cassert>
 #include "node.hpp"
 #include "iterator.hpp"
 #include "constIterator.hpp"
@@ -47,40 +48,37 @@ namespace strelyaev
       ConstIterator< T > cend() const noexcept;
 
     private:
-      detail::Node< T >* imaginary_node;
-      detail::Node< T >* head_;
       detail::Node< T >* tail_;
+      detail::Node< T >* head_;
       size_t size_;
   };
 
   template< typename T >
   List< T >::List():
-    imaginary_node(new detail::Node< T >(tail_, nullptr, T())),
-    head_(nullptr),
-    tail_(nullptr),
+    tail_(new strelyaev::detail::Node< T >(nullptr, nullptr, T())),
+    head_(tail_),
     size_(0)
-  {}
+  {
+    assert(head_ == tail_);
+  }
 
   template< typename T >
   List< T >::List(const List& other):
     List()
   {
-    detail::Node< T >* node = other.head_;
-    while (size_ != other.size_)
+    for (auto it = other.cbegin(); it != other.cend(); it++)
     {
-      push_back(node->value_);
-      node = node->next_;
+      push_back(*it);
     }
+    size_ = other.size_;
   }
 
   template< typename T >
   List< T >::List(List< T >&& other):
-    imaginary_node(other.imaginary_node),
-    head_(other.head_),
     tail_(other.tail_),
+    head_(other.head_),
     size_(other.size_)
   {
-    other.imaginary_node = nullptr;
     other.head_ = nullptr;
     other.tail_ = nullptr;
     other.size_ = 0;
@@ -97,7 +95,7 @@ namespace strelyaev
   List< T >::~List()
   {
     clear();
-    delete imaginary_node;
+    delete tail_;
   }
 
   template< typename T >
@@ -125,10 +123,10 @@ namespace strelyaev
   template< typename T >
   void List< T >::assign(size_t n, const T& value)
   {
-    List< T > temp{};
+    List< T > temp;
     for (size_t i = 0; i < n; i++)
     {
-      temp.push_front(value);
+      temp.push_back(value);
     }
     swap(temp);
   }
@@ -136,38 +134,42 @@ namespace strelyaev
   template< typename T >
   void List< T >::swap(List< T >& other) noexcept
   {
-    std::swap(other.imaginary_node, imaginary_node);
-    std::swap(other.head_, head_);
     std::swap(other.tail_, tail_);
+    std::swap(other.head_, head_);
     std::swap(other.size_, size_);
   }
 
   template< typename T >
   Iterator< T > List< T >::insert(ConstIterator< T > it, const T& value)
   {
+    detail::Node< T >* node = nullptr;
     if (size_ == 0)
     {
-      detail::Node< T >* node = new detail::Node< T >{nullptr, imaginary_node, value};
-      imaginary_node->prev_ = node;
+      node = new detail::Node< T >(nullptr, tail_, value);
+      tail_->prev_ = node;
       head_ = node;
-      tail_ = node;
       size_++;
       return Iterator< T >(head_);
     }
-    detail::Node< T >* node = new detail::Node< T >{it.node_->prev_, it.node_, value};
-    it.node_->prev_ = node;
     if (it.node_ == head_)
     {
+      node = new detail::Node< T >(nullptr, head_, value);
+      head_->prev_ = node;
       head_ = node;
+      size_++;
+      return Iterator< T >(node);
     }
-    if (it.node_ == tail_->next_)
+    else if (it.node_ == tail_)
     {
-      tail_ = node;
-      node->prev_->next_ = node;
+      node = new detail::Node< T >(tail_->prev_, tail_, value);
+      tail_->prev_->next_ = node;
+      tail_->prev_ = node;
     }
     else
     {
-      node->prev_->next_ = node;
+      node = new detail::Node< T >(it.node_->prev_, it.node_, value);
+      it.node_->prev_->next_ = node;
+      it.node_->prev_ = node;
     }
     size_++;
     return Iterator< T >(node);
@@ -177,18 +179,19 @@ namespace strelyaev
   ConstIterator< T > List< T >::erase(ConstIterator< T > it)
   {
     ConstIterator< T > result(it.node_->next_);
-    it.node_->next_->prev_ = it.node_->prev_;
     if (it.node_ == head_)
     {
       head_ = head_->next_;
+      head_->prev_ = nullptr;
     }
     else if (it.node_ == tail_)
     {
-      tail_ = tail_->prev_;
+      return result;
     }
     else
     {
       it.node_->prev_->next_ = it.node_->next_;
+      it.node_->next_->prev_ = it.node_->prev_;
     }
     delete it.node_;
     size_--;
@@ -204,14 +207,7 @@ namespace strelyaev
   template< typename T >
   void List< T >::push_back(const T& value)
   {
-    if (!tail_)
-    {
-      push_front(value);
-    }
-    else
-    {
-      insert(cend(), value);
-    }
+    insert(cend(), value);
   }
 
   template< typename T >
@@ -244,33 +240,28 @@ namespace strelyaev
   template< typename T >
   void List< T >::remove(const T& value)
   {
+    remove_if(
+      [&](const T& el)
+      {
+        return (el == value);
+      }
+    );
+  }
+
+  template< typename T >
+  template< typename Predicate >
+  void List< T >::remove_if(Predicate p)
+  {
     for (auto it = cbegin(); it != cend(); it++)
     {
-      if (*it == value)
+      if (p(*it))
       {
-        auto prev_it = it;
-        prev_it--;
         erase(it);
-        it = prev_it;
+        break;
       }
     }
   }
 
-  template< typename T >
-  template< typename P >
-  void List< T >::remove_if(P predicate)
-  {
-    for (auto it = cbegin(); it != cend(); it++)
-    {
-      if (predicate(*it))
-      {
-        auto temp_it = it;
-        temp_it--;
-        erase(it);
-        it = temp_it;
-      }
-    }
-  }
 
   template< typename T >
   size_t List< T >::size() noexcept
@@ -281,19 +272,19 @@ namespace strelyaev
   template< typename T >
   T& List< T >::back()
   {
-    return tail_->value_;
-  }
-
-  template< typename T >
-  const T& List< T >::back() const
-  {
-    return tail_->value_;
+    return tail_->prev_->value_;
   }
 
   template< typename T >
   T& List< T >::front()
   {
     return head_->value_;
+  }
+
+  template< typename T >
+  const T& List< T >::back() const
+  {
+    return tail_->prev_->value_;
   }
 
   template< typename T >
@@ -311,7 +302,7 @@ namespace strelyaev
   template< typename T >
   Iterator< T > List< T >::end() noexcept
   {
-    return Iterator< T >(imaginary_node);
+    return Iterator< T >(tail_);
   }
 
   template< typename T >
@@ -323,7 +314,8 @@ namespace strelyaev
   template< typename T >
   ConstIterator< T > List< T >::cend() const noexcept
   {
-    return ConstIterator< T >(const_cast< detail::Node< T >* >(imaginary_node));
+    return ConstIterator< T >(tail_);
   }
+
 }
 #endif
