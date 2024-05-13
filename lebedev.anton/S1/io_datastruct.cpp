@@ -1,11 +1,15 @@
 #include "io_datastruct.hpp"
+#include <iterator>
+#include <limits>
 
-void lebedev::inputDS(std::istream & input, listOfPairs & pairs)
+size_t lebedev::inputDS(std::istream & input, listOfPairs & pairs)
 {
   std::string seq_name = "";
   size_t curr_num = 0;
+  size_t max_pair_size = 0;
   while (!input.eof())
   {
+    size_t pair_size = 0;
     input.clear();
     List< size_t > numbers;
     input >> seq_name;
@@ -16,21 +20,120 @@ void lebedev::inputDS(std::istream & input, listOfPairs & pairs)
     while (input >> curr_num)
     {
       numbers.push_back(curr_num);
+      pair_size++;
     }
+    max_pair_size = std::max(max_pair_size, pair_size);
     auto pair = std::make_pair(seq_name, numbers);
     pairs.push_back(pair);
   }
+  return max_pair_size;
 }
 
 void lebedev::outputPairsNames(std::ostream & output, listOfPairs & pairs)
 {
+  bool is_first_name = true;
   for (auto pairs_iter = pairs.cbegin(); pairs_iter != pairs.cend(); ++pairs_iter)
   {
-    if (pairs_iter != pairs.cbegin())
+    if (is_first_name)
+    {
+      is_first_name = false;
+    }
+    else
     {
       output << ' ';
     }
     output << pairs_iter->first;
   }
-  output << ' ' << pairs.cend()->first;
+  if (!is_first_name)
+  {
+    output << ' ';
+  }
+  output << pairs.cend()->first;
+}
+
+void lebedev::outputSequences(std::ostream & output, listOfPairs & pairs, size_t max_pair_size)
+{
+  List< size_t > sums;
+  bool is_overflow = false;
+  size_t max = std::numeric_limits< size_t >::max();
+  for (size_t i = 0; i < max_pair_size; i++)
+  {
+    size_t sum = 0;
+    bool is_first_num = true;
+    for (auto pairs_iter = pairs.cbegin(); pairs_iter != pairs.cend(); pairs_iter++)
+    {
+      auto list_iter = pairs_iter->second.cbegin();
+      if (i < pairs_iter->second.capacity())
+      {
+        std::advance(list_iter, i);
+        size_t num = *list_iter;
+        if (is_first_num)
+        {
+          is_first_num = false;
+        }
+        else
+        {
+          output << ' ';
+        }
+        output << num;
+        if (max - num < sum)
+        {
+          throw std::overflow_error("Size_t overflow!");
+        }
+        else
+        {
+          sum += num;
+        }
+
+      }
+    }
+    auto list_iter = pairs.cend()->second.cbegin();
+    if (i < pairs.cend()->second.capacity())
+    {
+      std::advance(list_iter, i);
+      size_t num = *list_iter;
+      if (is_first_num)
+      {
+        is_first_num = false;
+      }
+      else
+      {
+        output << ' ';
+      }
+      output << num;
+      if (max - num < sum)
+      {
+        throw std::overflow_error("Size_t overflow");
+      }
+      else
+      {
+        sum += num;
+      }
+    }
+    output << '\n';
+    sums.push_back(sum);
+  }
+
+  bool is_first_sum = true;
+  for (auto sums_iter = sums.cbegin(); sums_iter != sums.cend(); sums_iter++)
+  {
+    if (is_first_sum)
+    {
+      is_first_sum = false;
+    }
+    else
+    {
+      output << ' ';
+    }
+    output << *sums_iter;
+  }
+  if (is_first_sum)
+  {
+    is_first_sum = false;
+  }
+  else
+  {
+    output << ' ';
+  }
+  output << *(sums.cend());
 }

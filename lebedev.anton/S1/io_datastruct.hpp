@@ -9,8 +9,9 @@
 namespace lebedev
 {
   using listOfPairs = List< std::pair< std::string, List< size_t > > >;
-  void inputDS(std::istream & input, listOfPairs & pairs);
-  void outputPairsNames(std::ostream & output, listOfPairs & pairs);;
+  size_t inputDS(std::istream & input, listOfPairs & pairs);
+  void outputPairsNames(std::ostream & output, listOfPairs & pairs);
+  void outputSequences(std::ostream & output, listOfPairs & pairs, size_t max_pair_size);
 }
 
 #endif

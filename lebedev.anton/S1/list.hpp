@@ -37,6 +37,7 @@ namespace lebedev
     bool empty() const noexcept;
     void clear() noexcept;
     void swap(List< T > & list);
+    size_t capacity() const noexcept;
 
     T & front();
     T & back();
@@ -56,28 +57,18 @@ namespace lebedev
     const_iterator cbegin() const noexcept;
     const_iterator cend() const noexcept;
 
-    /////////////////////////////////
-    void outputList(std::ostream & out) const
-    {
-      detail::Node< T > * head = head_;
-      while (head)
-      {
-        out << head->data_ << '\n';
-        head = head->next_;
-      }
-    }
-    ///////////////////////////////////
-
   private:
     detail::Node< T > * head_;
     detail::Node< T > * tail_;
+    size_t size_;
     detail::Node< T > * remove_node(detail::Node< T > * node);
   };
 
   template< class T >
   List< T >::List():
     head_(nullptr),
-    tail_(nullptr)
+    tail_(nullptr),
+    size_(0)
   {}
   template< class T >
   List< T >::List(const List< T > & list):
@@ -96,10 +87,12 @@ namespace lebedev
   template< class T >
   List< T >::List(List< T > && list) noexcept:
     head_(list.head_),
-    tail_(list.tail_)
+    tail_(list.tail_),
+    size_(list.size_)
   {
     list.head_ = nullptr;
     list.tail_ = nullptr;
+    list.size_ = 0;
   }
   template< class T >
   List< T >::List(size_t n):
@@ -136,8 +129,10 @@ namespace lebedev
       clear();
       head_ = list.head_;
       tail_ = list.tail_;
+      size_ = list.size_;
       list.head_ = nullptr;
       list.tail_ = nullptr;
+      list.size_ = 0;
     }
     return *this;
   }
@@ -157,6 +152,7 @@ namespace lebedev
       tail_->next_ = node;
       tail_ = node;
     }
+    ++size_;
   }
   template< class T >
   void List< T >::push_back(T && val)
@@ -173,6 +169,7 @@ namespace lebedev
       tail_->next_ = node;
       tail_ = node;
     }
+    ++size_;
   }
   template< class T >
   void List< T >::push_front(const T & val)
@@ -189,6 +186,7 @@ namespace lebedev
       head_->prev_ = node;
       head_ = node;
     }
+    ++size_;
   }
   template< class T >
   void List< T >::push_front(T && val)
@@ -205,6 +203,7 @@ namespace lebedev
       head_->prev_ = node;
       head_ = node;
     }
+    ++size_;
   }
 
   template< class T >
@@ -225,6 +224,7 @@ namespace lebedev
     }
     delete tail_;
     tail_ = newtail;
+    --size_;
   }
   template< class T >
   void List< T >::pop_front()
@@ -244,12 +244,13 @@ namespace lebedev
     }
     delete head_;
     head_ = newhead;
+    --size_;
   }
 
   template< class T >
   bool List< T >::empty() const noexcept
   {
-    return head_ == nullptr;
+    return size_ == 0;
   }
   template< class T >
   void List< T >::clear() noexcept
@@ -264,6 +265,12 @@ namespace lebedev
   {
     std::swap(list.head_, head_);
     std::swap(list.tail_, tail_);
+    std::swap(list.size_, size_);
+  }
+  template< class T >
+  size_t List< T >::capacity() const noexcept
+  {
+    return size_;
   }
 
   template< class T >
@@ -352,6 +359,7 @@ namespace lebedev
       next_node->prev_ = prev_node;
       delete node;
       node = prev_node;
+      size_--;
     }
     return node;
   }
