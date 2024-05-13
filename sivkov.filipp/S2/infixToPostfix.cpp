@@ -1,6 +1,7 @@
 #include "infixToPostfix.hpp"
 #include <cctype>
 #include <string>
+#include <stdexcept>
 #include "queue.hpp"
 #include "stack.hpp"
 #include "utilities.hpp"
@@ -10,8 +11,7 @@ namespace sivkov
   Queue< std::string > infixToPostfix(Queue< std::string >& infix)
   {
     Queue< std::string > postfix;
-    Stack< std::string > operators;
-
+    Stack <std::string > operators;
 
     while (!infix.empty())
     {
@@ -27,28 +27,23 @@ namespace sivkov
       {
         if (token == "(")
         {
-          operators.push("(");
+          operators.push(token);
         }
         else if (token == ")")
         {
           while (!operators.empty() && operators.top() != "(")
           {
-            std::string op = operators.top();
-            operators.pop();
-            postfix.push(op);
-          }
-          if (!operators.empty() && operators.top() == "(")
-          {
+            postfix.push(operators.top());
             operators.pop();
           }
+          operators.pop();
         }
         else
         {
-          while (!operators.empty() && (operators.top() == "*" || operators.top() == "/"))
+          while (!operators.empty() && compareOperators(operators.top(), token))
           {
-            std::string op = operators.top();
+            postfix.push(operators.top());
             operators.pop();
-            postfix.push(op);
           }
           operators.push(token);
         }
