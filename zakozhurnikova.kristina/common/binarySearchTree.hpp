@@ -195,18 +195,19 @@ namespace zakozhurnikova
       Node* wanted = root_;
       while (wanted)
       {
-        if (wanted->data.first == key)
-        {
-          break;
-        }
-        else if (compare_(wanted->data.first, key))
+        if (compare_(wanted->data.first, key))
         {
           wanted = wanted->rightChild;
         }
-        else
+        else if (compare_(key, wanted->data.first))
         {
           wanted = wanted->leftChild;
         }
+        else
+        {
+          break;
+        }
+
       }
       return ConstIteratorTree< Key, Value >(wanted);
     }

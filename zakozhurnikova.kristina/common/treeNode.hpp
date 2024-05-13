@@ -18,7 +18,7 @@ namespace zakozhurnikova
       int balanceFactor;
 
       TreeNode(const Key& key, const Value& val, TreeNode* parent):
-        data(std::make_pair< Key, Value >(key, val)),
+        data(std::pair< Key, Value >(key, val)),
         leftChild(nullptr),
         rightChild(nullptr),
         parent(parent),
@@ -26,7 +26,7 @@ namespace zakozhurnikova
       {}
 
       TreeNode(const Key& key, const Value& val):
-        data(std::make_pair< Key, Value >(key, val)),
+        data(std::pair< Key, Value >(key, val)),
         leftChild(nullptr),
         rightChild(nullptr),
         parent(nullptr),
