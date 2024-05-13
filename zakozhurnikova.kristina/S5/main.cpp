@@ -6,6 +6,7 @@
 #include "implementedCommands.hpp"
 #include "inputMap.hpp"
 #include "getSum.hpp"
+#include "commands.hpp"
 
 int main(int argc, char *argv[])
 {
@@ -23,6 +24,9 @@ int main(int argc, char *argv[])
   }
 
   ImplementedCommands master(map);
+  master.addCommand("ascending", &ascending);
+  master.addCommand("descending", &descending);
+  master.addCommand("breadth", &breadth);
   std::string command = argv[1];
   std::string cmdOutput;
   int amount = 0;
