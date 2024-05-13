@@ -20,7 +20,7 @@ int main()
   if (!namedLists.empty())
   {
     std::cout << namedLists.cbegin()->first;
-    for (auto namedIter = namedLists.cbegin()++; namedIter != namedLists.cend(); namedIter++)
+    for (auto namedIter = ++namedLists.cbegin(); namedIter != namedLists.cend(); namedIter++)
     {
       std::cout << ' ' << namedIter->first;
     }
