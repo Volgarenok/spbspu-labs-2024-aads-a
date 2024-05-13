@@ -88,9 +88,13 @@ void belokurskaya::printSums(const SequenceVector& sequences, std::ostream& out)
     sumsList.push_back(sum);
   }
 
-  for (const auto& sum : sumsList)
+  if (!sumsList.empty())
   {
-    out << sum << " ";
+    out << sumsList.at(0);
+    for (size_t i = 1; i < sumsList.size(); ++i)
+    {
+      out << " " << sumsList.at(i);
+    }
   }
   out << "\n";
 }
