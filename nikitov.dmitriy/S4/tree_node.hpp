@@ -235,7 +235,7 @@ namespace nikitov
     template< class Key, class T, class Compare >
     void TreeNode< Key, T, Compare >::fixErase()
     {
-      if ((!left_ && right_) || (!right_ && left_) || (!middle_ && left_ && size_ == 2))
+      if (!left_ || !right_ || (!middle_ && left_ && size_ == 2))
       {
         if (!right_)
         {
@@ -298,9 +298,16 @@ namespace nikitov
             }
           }
         }
-        else if (parent_->right_ == this)
+        else
         {
-          parent_->right_ = nullptr;
+          if (parent_->right_ == this)
+          {
+            parent_->right_ = nullptr;
+          }
+          else
+          {
+            parent_->middle_ = nullptr;
+          }
           if (neighbour->size_ == 2)
           {
             if (parent_->size_ == 1)
@@ -327,27 +334,6 @@ namespace nikitov
             }
           }
         }
-        else
-        {
-          parent_->middle_ = nullptr;
-          if (neighbour->size_ == 2)
-          {
-            if (parent_->size_ == 1)
-            {
-              parent_->rotateRight();
-            }
-            else
-            {
-              parent_->littleRotateRight();
-            }
-            parent_->right_->fixNeighbour(nodes);
-          }
-          else
-          {
-            parent_->littleRotateRight();
-            parent_->right_->connect(*iterator++, *iterator++, *iterator++);
-          }
-        }
       }
       if (parent_->findNeighbour() && (parent_->findNeighbour()->countHeight() != parent_->countHeight()))
       {
@@ -361,37 +347,36 @@ namespace nikitov
       if (!right_)
       {
         right_ = new TreeNode< Key, T, Compare >(secondValue_);
+        right_->parent_ = this;
+        free(false);
       }
       else if (right_->size_ == 1)
       {
         right_->add(secondValue_);
-      }
-      if (right_->size_ != 2)
-      {
         right_->parent_ = this;
         free(false);
-        if (middle_)
-        {
-          if (middle_->size_ == 2)
-          {
-            right_->add(middle_->secondValue_);
-            middle_->free(false);
-          }
-          else
-          {
-            right_->add(middle_->firstValue_);
-            delete middle_;
-            middle_ = nullptr;
-          }
-        }
       }
-      else
+      else if (right_->size_ == 2)
       {
         middle_ = new TreeNode< Key, T, Compare >(secondValue_);
         middle_->parent_ = this;
         free(false);
         add(right_->firstValue_);
         right_->free(true);
+      }
+      else
+      {
+        if (middle_->size_ == 2)
+        {
+          right_->add(middle_->secondValue_);
+          middle_->free(false);
+        }
+        else
+        {
+          right_->add(middle_->firstValue_);
+          delete middle_;
+          middle_ = nullptr;
+        }
       }
     }
 
