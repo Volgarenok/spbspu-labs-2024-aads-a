@@ -39,6 +39,10 @@ namespace petuhov
     void splice(Iterator< T > pos, List< T > &other);
     void reverse() noexcept;
 
+    List< T >& operator=(const List< T > &other);
+    List< T >& operator=(List< T >&& other) noexcept;
+    List< T >& operator=(std::initializer_list< T > ilist);
+
   private:
     Node *head_;
     Node *tail_;
@@ -48,8 +52,7 @@ namespace petuhov
   List< T >::List():
     head_(nullptr),
     tail_(nullptr)
-  {
-  }
+  {}
 
   template < typename T >
   List< T >::~List()
@@ -205,7 +208,7 @@ namespace petuhov
   }
 
   template < typename T >
-  template <typename Predicate>
+  template < typename Predicate >
   void List< T >::remove_if(Predicate pred)
   {
     Node< T > *current = head_;
@@ -238,6 +241,217 @@ namespace petuhov
     }
   }
 
+  template < typename T >
+  List< T >::List(std::initializer_list< T > ilist):
+    head_(nullptr),
+    tail_(nullptr)
+  {
+    for (auto it = ilist.begin(); it != ilist.end(); ++it)
+    {
+      Node< T > *newNode = new Node< T >(*it);
+      if (!tail_)
+      {
+        head_ = tail_ = newNode;
+      }
+      else
+      {
+        tail_->next_ = newNode;
+        tail_ = newNode;
+      }
+    }
+  }
+
+  template < typename T >
+  template < typename InputIterator >
+  List< T >::List(InputIterator first, InputIterator last):
+    head_(nullptr),
+    tail_(nullptr)
+  {
+    for (; first != last; ++first)
+    {
+      Node< T > *newNode = new Node< T >(*first);
+      if (!tail_)
+      {
+        head_ = tail_ = newNode;
+      }
+      else
+      {
+        tail_->next_ = newNode;
+        tail_ = newNode;
+      }
+    }
+  }
+
+  template < typename T >
+  Iterator< T > List< T >::insert(Iterator< T > pos, const T &value)
+  {
+    Node< T > *newNode = new Node< T >(value);
+    if (pos.node_ == head_)
+    {
+      newNode->next_ = head_;
+      head_ = newNode;
+      if (!tail_)
+        tail_ = newNode;
+    }
+    else
+    {
+      Node< T > *current = head_;
+      while (current && current->next_ != pos.node_)
+      {
+        current = current->next_;
+      }
+      newNode->next_ = current->next_;
+      current->next_ = newNode;
+      if (newNode->next_ == nullptr)
+        tail_ = newNode;
+    }
+    return Iterator< T >(newNode);
+  }
+
+  template < typename T >
+  Iterator< T > List< T >::erase(Iterator< T > pos)
+  {
+    if (!head_ || !pos.node_)
+      return Iterator< T >(nullptr);
+    Node< T > *toDelete = pos.node_;
+    if (toDelete == head_)
+    {
+      head_ = head_->next_;
+      if (head_ == nullptr)
+        tail_ = nullptr;
+    }
+    else
+    {
+      Node< T > *prev = head_;
+      while (prev && prev->next_ != toDelete)
+      {
+        prev = prev->next_;
+      }
+      if (prev)
+      {
+        prev->next_ = toDelete->next_;
+        if (prev->next_ == nullptr)
+          tail_ = prev;
+      }
+    }
+    delete toDelete;
+    return Iterator< T >(toDelete->next_);
+  }
+
+  template < typename T >
+  template < typename InputIterator >
+  void List< T >::assign(InputIterator first, InputIterator last)
+  {
+    clear();
+    for (; first != last; ++first)
+    {
+      Node< T > *newNode = new Node< T >(*first);
+      if (!tail_)
+      {
+        head_ = tail_ = newNode;
+      }
+      else
+      {
+        tail_->next_ = newNode;
+        tail_ = newNode;
+      }
+    }
+  }
+
+  template < typename T >
+  void List< T >::assign(std::initializer_list< T > ilist)
+  {
+    assign(ilist.begin(), ilist.end());
+  }
+
+  template < typename T >
+  void List< T >::splice(Iterator< T > pos, List< T > &other)
+  {
+    if (!other.head_)
+      return;
+    if (pos.node_ == head_)
+    {
+      other.tail_->next_ = head_;
+      head_ = other.head_;
+    }
+    else
+    {
+      Node< T > *current = head_;
+      while (current && current->next_ != pos.node_)
+      {
+        current = current->next_;
+      }
+      if (current)
+      {
+        other.tail_->next_ = current->next_;
+        current->next_ = other.head_;
+        if (other.tail_->next_ == nullptr)
+          tail_ = other.tail_;
+      }
+    }
+    other.head_ = other.tail_ = nullptr;
+  }
+
+  template < typename T >
+  void List< T >::reverse() noexcept
+  {
+    Node< T > *prev = nullptr, *current = head_, *next = nullptr;
+    tail_ = head_;
+    while (current)
+    {
+      next = current->next_;
+      current->next_ = prev;
+      prev = current;
+      current = next;
+    }
+    head_ = prev;
+  }
+
+  template < typename T >
+  List< T > &List< T >::operator=(const List< T > &other)
+  {
+    if (this != &other)
+    {
+      List< T > temp(other);
+      swap(temp);
+    }
+    return *this;
+  }
+
+  template < typename T >
+  List< T > &List< T >::operator=(List< T > &&other) noexcept
+  {
+    if (this != &other)
+    {
+      clear();
+      head_ = other.head_;
+      tail_ = other.tail_;
+      other.head_ = other.tail_ = nullptr;
+    }
+    return *this;
+  }
+
+  template < typename T >
+  List< T > &List< T >::operator=(std::initializer_list< T > ilist)
+  {
+    clear();
+    Node< T > *lastNode = nullptr;
+    for (const T &item : ilist)
+    {
+      Node< T > *newNode = new Node< T >(item);
+      if (!head_)
+      {
+        head_ = newNode;
+      }
+      else
+      {
+        lastNode->next_ = newNode;
+      }
+      lastNode = newNode;
+    }
+    tail_ = lastNode;
+    return *this;
+  }
 }
 
 #endif
