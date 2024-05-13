@@ -1,4 +1,9 @@
 #include "getPostfixForm.hpp"
+#include <cctype>
+#include <iostream>
+#include "stack.hpp"
+#include "queue.hpp"
+#include "input.hpp"
 
 void marishin::getPostfixForm(std::istream& in, Queue< std::string >& queue)
 {

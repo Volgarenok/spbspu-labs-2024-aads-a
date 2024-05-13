@@ -62,7 +62,7 @@ long long marishin::calculate(long long num1, long long num2, const std::string&
   long long result = 0;
   long long maxLong = std::numeric_limits< long long >::max();
   long long minLong = std::numeric_limits< long long >::min();
-  if (op == '+')
+  if (op == "+")
   {
     if (maxLong - num1 < num2)
     {
@@ -70,7 +70,7 @@ long long marishin::calculate(long long num1, long long num2, const std::string&
     }
     result = num1 + num2;
   }
-  else if (op == '-')
+  else if (op == "-")
   {
     if (minLong + num1 > num2)
     {
@@ -78,7 +78,7 @@ long long marishin::calculate(long long num1, long long num2, const std::string&
     }
     result = num1 - num2;
   }
-  else if (op == '*')
+  else if (op == "*")
   {
     result = num1 * num2;
     if (num2 != && result / num2 < num1)
@@ -87,7 +87,7 @@ long long marishin::calculate(long long num1, long long num2, const std::string&
     }
     num1 *= num2;
   }
-  else if (op == '/')
+  else if (op == "/")
   {
     if (num2 == 0)
     {
@@ -99,7 +99,7 @@ long long marishin::calculate(long long num1, long long num2, const std::string&
     }
     result = num1 / num2;
   }
-  else if (op == '%')
+  else if (op == "%")
   {
     result = num1 % num2;
     if (result < 0)
