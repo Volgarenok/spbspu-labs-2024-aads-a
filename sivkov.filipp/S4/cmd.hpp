@@ -1,7 +1,7 @@
 #ifndef CMD_HPP
 #define CMD_HPP
 
-#include "AVLTree.hpp"
+#include <AVLTree.hpp>
 
 namespace sivkov
 {
