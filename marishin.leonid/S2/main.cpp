@@ -17,12 +17,12 @@ int main(int argc, char* argv[])
     if (argc == 2)
     {
       std::ifstream in(argv[1]);
-      input(in, queue);
+      getPostfixForm(in, queue);
       checksPostfix(result, queue);
     }
     else
     {
-      input(std::cin, queue);
+      getPostfixForm(std::cin, queue);
       checksPostfix(result, queue);
     }
     output(std::cout, result);
