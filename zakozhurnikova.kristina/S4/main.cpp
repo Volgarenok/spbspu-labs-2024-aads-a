@@ -5,6 +5,7 @@
 #include <binarySearchTree.hpp>
 #include "implementedCommands.hpp"
 #include "inputMaps.hpp"
+#include "commands.hpp"
 
 int main(int argc, char *argv[])
 {
@@ -23,6 +24,10 @@ int main(int argc, char *argv[])
   }
 
   ImplementedCommands master(maps);
+  master.addCommand("print", &print);
+  master.addCommand("union", &doUnion);
+  master.addCommand("complement", &complement);
+  master.addCommand("intersect", &intersect);
   std::string cmdOutput;
   while (!std::cin.eof())
   {
