@@ -26,8 +26,7 @@ namespace spiridonov
     }
     catch (...)
     {
-      std::cerr << "Error: overflow" << "\n";
-      return 1;
+      throw std::overflow_error("Error: overflow");
     }
 
     return result;
