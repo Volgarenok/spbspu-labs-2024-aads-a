@@ -20,3 +20,5 @@ void strelyaev::inputMap(std::istream& in, Tree< std::string, Tree< int, std::st
     map.insert(std::make_pair(map_name, temp_map));
   }
 }
+
+

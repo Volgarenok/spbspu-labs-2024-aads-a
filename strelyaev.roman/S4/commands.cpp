@@ -79,3 +79,4 @@ void strelyaev::getUnion(std::istream& in, Tree< std::string, Tree< int, std::st
   }
   map[new_name] = result;
 }
+
