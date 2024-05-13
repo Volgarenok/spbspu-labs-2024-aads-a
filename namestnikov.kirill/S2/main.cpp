@@ -48,6 +48,11 @@ int main(int argc, char * argv[])
       convertToPostfix(tmp, res);
       results.push(calculatePostfixExpression(res));
     }
+    if (results.empty())
+    {
+      std::cout << "\n";
+      return 0;
+    }
     std::cout << results.top();
     results.pop();
     while (!results.empty())
