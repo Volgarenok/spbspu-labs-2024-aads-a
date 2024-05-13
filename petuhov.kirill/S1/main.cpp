@@ -33,7 +33,7 @@ int main()
   bool first = true;
   for (petuhov::ConstIterator< std::string > it = names.cbegin(); it != names.cend(); ++it)
   {
-    if (!first)
+    if (!first) 
     {
       std::cout << " ";
     }
@@ -54,6 +54,12 @@ int main()
     {
       max_length = length;
     }
+  }
+
+  if (max_length == 0) 
+  {
+    std::cout << "0\n";
+    return 0;
   }
 
   petuhov::List< petuhov::List< int > > columns;
@@ -106,6 +112,10 @@ int main()
     if (has_numbers)
     {
       sums.push_front(sum);
+    }
+    else
+    {
+      sums.push_front(0);
     }
     std::cout << "\n";
   }
