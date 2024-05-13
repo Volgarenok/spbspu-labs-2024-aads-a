@@ -40,7 +40,7 @@ namespace sivkov
         }
         else if (isOeprator(token))
         {
-          while (!operators.empty() && compareOperators(operators.top(), token))
+          while (compareOperators(operators.top(), token) && !operators.empty())
           {
             postfix.push(operators.top());
             operators.pop();
