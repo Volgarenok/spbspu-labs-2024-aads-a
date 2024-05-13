@@ -39,8 +39,8 @@ namespace zhalilov
     bool isPtrToLeft_;
 
     explicit TwoThreeIterator(detail::TreeNode < T > *node, bool isPtrToLeft = true);
-    static detail::TreeNode < T > *findMin(detail::TreeNode < T > *);
-    static detail::TreeNode < T > *findMax(detail::TreeNode < T > *);
+    static detail::TreeNode < T > *findDeepestLeft(detail::TreeNode < T > *);
+    static detail::TreeNode < T > *findDeepestRight(detail::TreeNode < T > *);
   };
 
   template < class T >
@@ -50,7 +50,7 @@ namespace zhalilov
     {
       if (isPtrToLeft_)
       {
-        detail::TreeNode < T > *minMid = findMin(node_->mid);
+        detail::TreeNode < T > *minMid = findDeepestLeft(node_->mid);
         if (minMid)
         {
           node_ = minMid;
@@ -63,7 +63,7 @@ namespace zhalilov
       }
     }
 
-    detail::TreeNode < T > *minRight = findMin(node_->right);
+    detail::TreeNode < T > *minRight = findDeepestLeft(node_->right);
     if (!minRight)
     {
       if (node_ != node_->parent)
@@ -92,7 +92,7 @@ namespace zhalilov
     {
       if (!isPtrToLeft_)
       {
-        detail::TreeNode < T > *maxMid = findMax(node_->mid);
+        detail::TreeNode < T > *maxMid = findDeepestRight(node_->mid);
         if (maxMid == node_)
         {
           isPtrToLeft_ = true;
@@ -102,7 +102,7 @@ namespace zhalilov
       }
     }
 
-    detail::TreeNode < T > *maxLeft = findMax(node_->left);
+    detail::TreeNode < T > *maxLeft = findDeepestRight(node_->left);
     if (!maxLeft)
     {
       if (node_ != node_->parent)
@@ -202,7 +202,7 @@ namespace zhalilov
   {}
 
   template < class T >
-  detail::TreeNode < T > *TwoThreeIterator < T >::findMin(detail::TreeNode < T > *nodeFrom)
+  detail::TreeNode < T > *TwoThreeIterator < T >::findDeepestLeft(detail::TreeNode < T > *nodeFrom)
   {
     detail::TreeNode < T > *minNode = nodeFrom;
     while (minNode && minNode->left && minNode->left != minNode)
@@ -213,7 +213,7 @@ namespace zhalilov
   }
 
   template < class T >
-  detail::TreeNode < T > *TwoThreeIterator < T >::findMax(detail::TreeNode < T > *nodeFrom)
+  detail::TreeNode < T > *TwoThreeIterator < T >::findDeepestRight(detail::TreeNode < T > *nodeFrom)
   {
     detail::TreeNode < T > *maxNode = nodeFrom;
     while (maxNode && maxNode->right)

@@ -171,19 +171,19 @@ namespace zhalilov
   template < class Key, class T, class Compare >
   typename TwoThree < Key, T, Compare >::iterator TwoThree < Key, T, Compare >::begin()
   {
-    return iterator(iterator::findMin(head_->left), true);
+    return iterator(iterator::findDeepestLeft(head_->left), true);
   }
 
   template < class Key, class T, class Compare >
   typename TwoThree < Key, T, Compare >::const_iterator TwoThree < Key, T, Compare >::begin() const
   {
-    return const_iterator(const_iterator::findMin(head_->left), true);
+    return const_iterator(const_iterator::findDeepestLeft(head_->left), true);
   }
 
   template < class Key, class T, class Compare >
   typename TwoThree < Key, T, Compare >::const_iterator TwoThree < Key, T, Compare >::cbegin() const noexcept
   {
-    return const_iterator(const_iterator::findMin(head_->left), true);
+    return const_iterator(const_iterator::findDeepestLeft(head_->left), true);
   }
 
   template < class Key, class T, class Compare >
@@ -211,7 +211,7 @@ namespace zhalilov
   }
 
   template < class Key, class T, class Compare >
-  size_t TwoThree < Key, T, Compare >::size() const
+  size_t TwoThree < Key, T, Compare >::size() const noexcept
   {
     return size_;
   }
@@ -306,7 +306,7 @@ namespace zhalilov
       {
         nodeFrom = it.node_->left;
       }
-      iterator toSwapIt(iterator::findMax(nodeFrom), false);
+      iterator toSwapIt(iterator::findDeepestRight(nodeFrom), false);
       std::swap(*it, *toSwapIt);
       it = toSwapIt;
     }
@@ -351,7 +351,7 @@ namespace zhalilov
   template < class Key, class T, class Compare >
   void TwoThree < Key, T, Compare >::clear() noexcept
   {
-    Node *currNode = iterator::findMin(head_);
+    Node *currNode = iterator::findDeepestLeft(head_);
     while (currNode && currNode != head_)
     {
       Node *nextNode = nullptr;
@@ -359,11 +359,11 @@ namespace zhalilov
       if (parentNode->left == currNode)
       {
         nextNode = parentNode->mid ? parentNode->mid : parentNode->right;
-        nextNode = iterator::findMin(nextNode);
+        nextNode = iterator::findDeepestLeft(nextNode);
       }
       else if (parentNode->mid == currNode)
       {
-        nextNode = iterator::findMin(parentNode->right);
+        nextNode = iterator::findDeepestLeft(parentNode->right);
       }
       else
       {
