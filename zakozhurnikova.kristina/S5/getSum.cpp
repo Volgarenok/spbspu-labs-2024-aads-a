@@ -1,4 +1,5 @@
 #include "getSum.hpp"
+#include <stdexcept>
 
 void zakozhurnikova::KeySum::operator()(int data)
 {
