@@ -9,14 +9,15 @@ namespace petuhov
   template < typename T >
   class List
   {
-    List();
-    T &front();
-    const T &front() const;
-    bool empty() const;
-    void push_front(const T &value);
-    void pop_front();
-    void clear();
-    void swap(List &other);
+    public:
+      List();
+      T &front();
+      const T &front() const;
+      bool empty() const;
+      void push_front(const T &value);
+      void pop_front();
+      void clear();
+      void swap(List &other);
 
     Iterator< T > begin() noexcept;
     Iterator< T > end() noexcept;
@@ -30,7 +31,8 @@ namespace petuhov
 
   template < typename T >
   List< T >::List():
-    head_(nullptr)
+    head_(nullptr),
+    tail_(nullptr)
   {}
 
   template < typename T >
