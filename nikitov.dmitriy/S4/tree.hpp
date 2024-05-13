@@ -277,12 +277,17 @@ namespace nikitov
   TreeIterator< Key, T, Compare > Tree< Key, T, Compare >::erase(constTreeIterator position)
   {
     treeIterator iterator(position.node_, position.isFirst_);
-    if (!iterator.node_->isLeaf())
+    if (size_ == 1)
+    {
+      root_ = root_->parent_;
+      delete root_->middle_;
+    }
+    else if (!iterator.node_->isLeaf())
     {
       treeIterator toSwap = iterator--;
       std::swap(*iterator, *toSwap);
     }
-    if (iterator.node_->size_ == 2)
+    else if (iterator.node_->size_ == 2)
     {
       iterator.node_->free(iterator.isFirst_);
     }
