@@ -16,12 +16,19 @@ namespace petuhov {
         continue;
       }
       List< int > numbers;
-      int num;
-      while (iss >> num) {
-        if (num < 0 || num > std::numeric_limits<int>::max()) {
+      std::string num_str;
+      while (iss >> num_str) {
+        try {
+          unsigned long long num = std::stoull(num_str);
+          if (num > static_cast<unsigned long long>(std::numeric_limits<int>::max())) {
+            throw std::overflow_error("Number out of range");
+          }
+          numbers.push_front(static_cast<int>(num));
+        } catch (const std::invalid_argument&) {
+          throw std::overflow_error("Invalid number format");
+        } catch (const std::out_of_range&) {
           throw std::overflow_error("Number out of range");
         }
-        numbers.push_front(num);
       }
       numbers.reverse();
       sequences.push_front(std::make_pair(name, numbers));
