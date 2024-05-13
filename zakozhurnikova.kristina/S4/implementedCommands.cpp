@@ -1,6 +1,6 @@
+#include "implementedCommands.hpp"
 #include <iostream>
 #include <scopeGuard.hpp>
-#include "implementedCommands.hpp"
 
 namespace zak = zakozhurnikova;
 using map = zak::BinarySearchTree< int, std::string >;

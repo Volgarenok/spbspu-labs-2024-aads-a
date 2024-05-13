@@ -1,4 +1,5 @@
 #include "commands.hpp"
+#include <stdexcept>
 #include "implementedCommands.hpp"
 
 namespace zak = zakozhurnikova;
@@ -22,7 +23,7 @@ void zak::print(List< std::string >& args, std::string& result, tree& maps)
     throw std::invalid_argument("incorrect command source");
   }
 
-  std::string mapName = args.back();
+  const std::string mapName = args.back();
   if (!maps.at(mapName).empty())
   {
     result = mapName + ' ';

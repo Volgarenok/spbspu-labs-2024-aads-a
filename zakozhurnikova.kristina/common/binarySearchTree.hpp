@@ -1,12 +1,12 @@
 #ifndef BINARYSEARCHTREE_HPP
 #define BINARYSEARCHTREE_HPP
 #include <algorithm>
-#include <constIteratorTree.hpp>
 #include <cstddef>
 #include <cstdlib>
 #include <functional>
-#include <iostream>
+#include <stdexcept>
 #include <treeNode.hpp>
+#include <constIteratorTree.hpp>
 
 namespace zakozhurnikova
 {
@@ -16,14 +16,12 @@ namespace zakozhurnikova
     using Node = detail::TreeNode< Key, Value >;
     BinarySearchTree():
       root_(nullptr),
-      size_(0),
-      compare_(Compare())
+      size_(0)
     {}
 
     BinarySearchTree(const BinarySearchTree& rhs):
       root_(nullptr),
-      size_(0),
-      compare_(rhs.compare_)
+      size_(0)
     {
       try
       {
@@ -41,8 +39,7 @@ namespace zakozhurnikova
 
     BinarySearchTree(BinarySearchTree&& rhs):
       root_(rhs.root_),
-      size_(rhs.size_),
-      compare_(rhs.compare_)
+      size_(rhs.size_)
     {
       rhs.root_ = nullptr;
       rhs.size_ = 0;
@@ -73,7 +70,7 @@ namespace zakozhurnikova
       clear();
     }
 
-    int size() const noexcept
+    size_t size() const noexcept
     {
       return this->size_;
     }
@@ -82,7 +79,6 @@ namespace zakozhurnikova
     {
       std::swap(root_, other.root_);
       std::swap(size_, other.size_);
-      std::swap(compare_, other.compare_);
     }
 
     bool empty() const noexcept
@@ -105,7 +101,7 @@ namespace zakozhurnikova
 
     void put(const Key& key, const Value& val, Node* currentNode)
     {
-      if (compare_(key, currentNode->data.first))
+      if (Compare()(key, currentNode->data.first))
       {
         if (currentNode->hasLeftChild())
         {
@@ -143,7 +139,7 @@ namespace zakozhurnikova
         }
         else
         {
-          std::cerr << "Error, key not in tree" << '\n';
+          throw std::out_of_range("Error, key not in tree\n");
         }
       }
       else if (size_ == 1 && root_->data.first == key)
@@ -153,7 +149,7 @@ namespace zakozhurnikova
       }
       else
       {
-        std::cerr << "Error, key not in tree" << '\n';
+        throw std::out_of_range("Error, key not in tree\n");
       }
     }
 
@@ -190,16 +186,26 @@ namespace zakozhurnikova
       throw std::out_of_range("No such element");
     }
 
+    const Value& at(const Key& key) const
+    {
+      Node* traverser = get(key, root_);
+      if (traverser)
+      {
+        return traverser->data.second;
+      }
+      throw std::out_of_range("No such element");
+    }
+
     ConstIteratorTree< Key, Value > find(const Key& key) const
     {
       Node* wanted = root_;
       while (wanted)
       {
-        if (compare_(wanted->data.first, key))
+        if (Compare()(wanted->data.first, key))
         {
           wanted = wanted->rightChild;
         }
-        else if (compare_(key, wanted->data.first))
+        else if (Compare()(key, wanted->data.first))
         {
           wanted = wanted->leftChild;
         }
@@ -207,7 +213,6 @@ namespace zakozhurnikova
         {
           break;
         }
-
       }
       return ConstIteratorTree< Key, Value >(wanted);
     }
@@ -215,7 +220,6 @@ namespace zakozhurnikova
   private:
     Node* root_;
     size_t size_;
-    Compare compare_;
 
     void clear()
     {
@@ -256,7 +260,7 @@ namespace zakozhurnikova
       {
         return currentNode;
       }
-      else if (compare_(key, currentNode->data.first))
+      else if (Compare()(key, currentNode->data.first))
       {
         return get(key, currentNode->leftChild);
       }
