@@ -13,6 +13,7 @@ namespace sivkov
     Queue<std::string> postfix;
     Stack<std::string> operators;
 
+
     while (!infix.empty())
     {
       std::string token = infix.front();
@@ -22,6 +23,10 @@ namespace sivkov
       {
         std::stoll(token);
         postfix.push(token);
+      }
+      catch (const std::out_of_range&)
+      {
+        throw std::out_of_range("overflow");
       }
       catch (...)
       {
@@ -40,7 +45,7 @@ namespace sivkov
         }
         else if (isOeprator(token))
         {
-          while (compareOperators(operators.top(), token) && !operators.empty())
+          while (!operators.empty() && compareOperators(operators.top(), token))
           {
             postfix.push(operators.top());
             operators.pop();
@@ -66,3 +71,4 @@ namespace sivkov
     return postfix;
   }
 }
+
