@@ -38,7 +38,7 @@ namespace zhalilov
     const_iterator cend() const noexcept;
 
     bool empty() const noexcept;
-    size_t size() const;
+    size_t size() const noexcept;
 
     std::pair < iterator, bool > insert(const MapPair &);
     iterator erase(iterator);
