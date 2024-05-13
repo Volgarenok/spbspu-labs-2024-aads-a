@@ -9,42 +9,16 @@ namespace sivkov
   class Queue
   {
   public:
-    Queue();
-    Queue(const Queue& other);
-    Queue(Queue&& other) noexcept;
-    ~Queue() = default;
-
     void push(const T& value);
     void pop();
     T& front();
-    bool empty() const;
-    size_t size() const;
-    void swap(Queue< T >& other);
+    const T& front() const;
+    bool empty() const noexcept;
+    void swap(Queue< T >& other) noexcept;
     void reverse();
-
-    Queue& operator=(const Queue& other);
-    Queue& operator=(Queue && other) noexcept;
-
   private:
     List< T > list_;
   };
-
-  template< typename T >
-  Queue< T >::Queue():
-    list_()
-  {}
-
-  template< typename T >
-  Queue< T >::Queue(const Queue& other):
-    list_(other.list_)
-  {}
-
-  template< typename T >
-  Queue< T >::Queue(Queue&& other) noexcept:
-    list_(std::move(other.list_))
-  {
-    other.list_ = List< T >();
-  }
 
   template< typename T >
   void Queue< T >::push(const T& value)
@@ -65,19 +39,19 @@ namespace sivkov
   }
 
   template< typename T >
-  bool Queue< T >::empty() const
+  const T& Queue<T>::front() const
+  {
+    return list_.front();
+  }
+
+  template< typename T >
+  bool Queue< T >::empty() const noexcept
   {
     return list_.empty();
   }
 
   template< typename T >
-  size_t Queue< T >::size() const
-  {
-    return list_.getSize();
-  }
-
-  template< typename T >
-  void Queue< T >::swap(Queue< T >& other)
+  void Queue< T >::swap(Queue< T >& other) noexcept
   {
     std::swap(list_, other.list_);
   }
@@ -93,21 +67,5 @@ namespace sivkov
     }
     list_.swap(temp);
   }
-
-  template< typename T >
-  Queue< T >& Queue< T >::operator=(const Queue< T >& other)
-  {
-    list_ = other.list_;
-    return *this;
-  }
-
-  template< typename T >
-  Queue< T >& Queue< T >::operator=(Queue< T >&& other) noexcept
-  {
-    list_(std::move(other.list_));
-    other.list_ = list_();
-    return *this;
-  }
 }
-
 #endif
