@@ -6,7 +6,6 @@
 namespace sivkov
 {
   bool isOeprator(std::string c);
-  int getPriority(std::string op);
 }
 
 #endif
