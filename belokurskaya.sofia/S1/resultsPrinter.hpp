@@ -1,5 +1,5 @@
-#ifndef SEQUENCE_PRINTER_HPP
-#define SEQUENCE_PRINTER_HPP
+#ifndef RESULTS_PRINTER_HPP
+#define RESULTS_PRINTER_HPP
 
 #include "SequenceVector.hpp"
 

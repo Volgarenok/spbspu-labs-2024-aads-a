@@ -67,44 +67,30 @@ void belokurskaya::printSums(const SequenceVector& sequences, std::ostream& out)
     out << "0\n";
     return;
   }
-  unsigned long long* sums = new unsigned long long[maxLength] {};
-  if (sums == nullptr)
-  {
-    std::cerr << "Failed to allocate memory\n";
-    return;
-  }
+
+  List< unsigned long long > sumsList;
+  
   for (size_t i = 0; i < maxLength; ++i)
   {
-    sums[i] = 0;
-  }
-
-  for (size_t i = 0; i < sequences.getSize(); ++i)
-  {
-    const List< unsigned long long >& seq = sequences[i].getSequence();
-    for (size_t j = 0; j < seq.size(); ++j)
+    unsigned long long sum = 0;
+    for (size_t j = 0; j < sequences.getSize(); ++j)
     {
-      if (j < maxLength)
+      const List< unsigned long long >& seq = sequences[j].getSequence();
+      if (i < seq.size())
       {
-        int max = std::numeric_limits< int >::max() - seq.at(j);
-        if (sums[j] > max - seq.at(j))
+        if (sum > std::numeric_limits< unsigned long long >::max() - seq.at(i))
         {
-          delete[] sums;
           throw std::overflow_error("Overflow");
         }
-        sums[j] += seq.at(j);
+        sum += seq.at(i);
       }
     }
+    sumsList.push_back(sum);
   }
 
-  for (size_t i = 0; i < maxLength; ++i)
+  for (const auto& sum : sumsList)
   {
-    out << sums[i];
-    if (i < maxLength - 1)
-    {
-      out << " ";
-    }
+    out << sum << " ";
   }
   out << "\n";
-
-  delete[] sums;
 }
