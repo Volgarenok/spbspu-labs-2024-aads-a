@@ -77,14 +77,14 @@ namespace nikitov
   };
 
   template< class Key, class T, class Compare >
-  Tree< Key, T, Compare >::Tree():
+  Tree< Key, T, Compare >::Tree() :
     root_(new detail::TreeNode< Key, T, Compare >()),
     size_(0),
     cmp_(Compare())
   {}
 
   template< class Key, class T, class Compare >
-  Tree< Key, T, Compare >::Tree(constTreeIterator first, constTreeIterator second):
+  Tree< Key, T, Compare >::Tree(constTreeIterator first, constTreeIterator second) :
     Tree()
   {
     for (auto i = first; i != second; ++i)
@@ -94,7 +94,7 @@ namespace nikitov
   }
 
   template< class Key, class T, class Compare >
-  Tree< Key, T, Compare >::Tree(std::initializer_list< std::pair< Key, T > > initList):
+  Tree< Key, T, Compare >::Tree(std::initializer_list< std::pair< Key, T > > initList) :
     Tree()
   {
     for (auto i = initList.begin(); i != initList.end(); ++i)
@@ -104,12 +104,12 @@ namespace nikitov
   }
 
   template< class Key, class T, class Compare >
-  Tree< Key, T, Compare >::Tree(const Tree< Key, T, Compare >& other):
+  Tree< Key, T, Compare >::Tree(const Tree< Key, T, Compare >& other) :
     Tree(other.cbegin(), other.cend())
   {}
 
   template< class Key, class T, class Compare >
-  Tree< Key, T, Compare >::Tree(Tree< Key, T, Compare >&& other) noexcept:
+  Tree< Key, T, Compare >::Tree(Tree< Key, T, Compare >&& other) noexcept :
     root_(other.root_),
     size_(other.size_),
     cmp_(other.cmp_)
@@ -292,19 +292,17 @@ namespace nikitov
       if (parent->left_ == iterator.node_)
       {
         parent->left_ = nullptr;
-        parent->rotateLeft();
       }
       else if (parent->right_ == iterator.node_)
       {
         parent->right_ = nullptr;
-        parent->rotateRight();
       }
       else
       {
         parent->middle_ = nullptr;
-        parent->rotateLeft();
       }
       delete iterator.node_;
+      parent->fixErase();
     }
     --size_;
     return upperBound((*position).first);
