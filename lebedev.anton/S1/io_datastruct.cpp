@@ -54,7 +54,6 @@ void lebedev::outputPairsNames(std::ostream & output, listOfPairs & pairs)
 void lebedev::outputSequences(std::ostream & output, listOfPairs & pairs, size_t max_pair_size)
 {
   List< size_t > sums;
-  bool is_overflow = false;
   size_t max = std::numeric_limits< size_t >::max();
   for (size_t i = 0; i < max_pair_size; i++)
   {
