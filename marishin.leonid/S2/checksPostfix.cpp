@@ -15,15 +15,15 @@ marishin::Stack< long long >& marishin::checksPostfix(Stack< long long >& result
   return result;
 }
 
-long long checksPostfixIn(const std::string& postfix)
+long long marishin::checksPostfixIn(const std::string& postfix)
 {
   using input_it_t = std::string::const_iterator;
-  marishin::Stack< long long > stack;
+  Stack< long long > stack;
   input_it_t it = postfix.cbegin();
   while (it != postfix.cend())
   {
     std::string str;
-    it = marishin::input(it, postfix.cend(), str);
+    it = input(it, postfix.cend(), str);
     try
     {
       stack.push(std::stoll(str));
@@ -57,7 +57,7 @@ long long checksPostfixIn(const std::string& postfix)
   return result;
 }
 
-long long calculate(long long num1, long long num2, const std::string& operation)
+long long marishin::calculate(long long num1, long long num2, const std::string& operation)
 {
   long long result = 0;
   long long maxLong = std::numeric_limits< long long >::max();
