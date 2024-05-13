@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
   {
     input = &std::cin;
   }
-  Queue< long long int > results;
+  Stack< long long int > results;
   std::string in = "";
   std::string token = "";
   try
@@ -46,7 +46,7 @@ int main(int argc, char* argv[])
         }
       }
       Queue< std::string > postfix = infixToPostfix(queuecheck);
-      long long result = evaluatePostfix(postfix);
+      long long int result = evaluatePostfix(postfix);
       results.push(result);
     }
   }
@@ -55,15 +55,14 @@ int main(int argc, char* argv[])
     std::cerr << e.what() << "\n";
     return 1;
   }
-  results.reverse();
   if (!results.empty())
   {
-    std::cout << results.back();
+    std::cout << results.top();
     results.pop();
   }
   while (!results.empty())
   {
-    std::cout << " " << results.back();
+    std::cout << " " << results.top();
     results.pop();
   }
   std::cout << "\n";

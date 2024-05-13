@@ -29,10 +29,6 @@ namespace gladyshev
     {
       array_.push_front(other);
     }
-    void reverse() noexcept
-    {
-      array_.reverse();
-    }
   private:
     DynArray< T > array_;
   };

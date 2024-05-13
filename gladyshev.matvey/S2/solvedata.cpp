@@ -6,7 +6,7 @@
 #include "checkdata.hpp"
 #include "stack.hpp"
 
-long long int gladyshev::evaluatePostfix(Queue< std::string > postfix)
+long long int gladyshev::evaluatePostfix(Queue< std::string >& postfix)
 {
   Stack < long long int > operands;
   while (!postfix.empty())

@@ -5,7 +5,7 @@
 #include "stack.hpp"
 #include "checkdata.hpp"
 
-gladyshev::Queue< std::string > gladyshev::infixToPostfix(Queue< std::string > expression)
+gladyshev::Queue< std::string > gladyshev::infixToPostfix(Queue< std::string >& expression)
 {
   Stack< std::string > ops;
   Queue< std::string > output;
