@@ -199,7 +199,11 @@ namespace namestnikov
     }
     void remove(const T & value)
     {
-      remove_if([=](const T & number){return number == value;});
+      auto pred = [=](const T & number)
+      {
+        return number == value;
+      };
+      remove_if(pred);
     }
     template < class Predicate >
     void remove_if(Predicate p)
@@ -485,29 +489,6 @@ namespace namestnikov
         }
         other.clear();
       }
-    }
-    const T & operator[](size_t index)
-    {
-      size_t counter = 0;
-      auto temp = head_;
-      while (temp)
-      {
-        if (counter == index)
-        {
-          break;
-        }
-        temp = temp->next_;
-        ++counter;
-      }
-      return temp->data_;
-    }
-    const T & at(size_t index)
-    {
-      if ((index < 0) || (index >= get_size()))
-      {
-        throw std::out_of_range("Can not give you access to this element");
-      }
-      return operator[](index);
     }
     bool operator==(ForwardList< T > & other)
     {
