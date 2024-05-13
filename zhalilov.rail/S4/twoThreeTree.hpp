@@ -852,6 +852,6 @@ namespace zhalilov
     }
     return std::make_pair(doFind(lastRemovedPair.first).first, true);
   }
-} // namespace zhalilov
+}
 
 #endif
