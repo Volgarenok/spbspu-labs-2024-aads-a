@@ -57,7 +57,7 @@ long long marishin::checksPostfixIn(const std::string& postfix)
   return result;
 }
 
-long long marishin::calculate(long long num1, long long num2, const std::string& operation)
+long long marishin::calculate(long long num1, long long num2, const std::string& op)
 {
   long long result = 0;
   long long maxLong = std::numeric_limits< long long >::max();
