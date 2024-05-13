@@ -7,20 +7,7 @@ namespace zakozhurnikova
 {
   struct KeySum
   {
-    int maxNum = std::numeric_limits< int >::max();
-    int minNum = std::numeric_limits< int >::min();
-    void operator()(int data)
-    {
-      if (data < 0 && result_ < minNum - data)
-      {
-        throw std::out_of_range("Error: Addition overflow");
-      }
-      else if (data > 0 && result_ > maxNum - data)
-      {
-        throw std::out_of_range("Error: Addition underflow");
-      }
-      result_ += data;
-    }
+    void operator()(int data);
 
     int result_ = 0;
   };
