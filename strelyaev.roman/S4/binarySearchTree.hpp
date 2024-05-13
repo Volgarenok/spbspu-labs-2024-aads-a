@@ -172,23 +172,20 @@ namespace strelyaev
 
       T& at(const Key& key)
       {
-        auto it_find = find(key);
-        if (it_find.node_ == nullptr)
+        if (find(key) == end())
         {
           throw std::out_of_range("Out of range");
         }
-        return it_find->second;
+        return find(key)->second;
       }
 
       T& operator[](const Key& key) noexcept
       {
-        auto it_find = find(key);
-        if (it_find.node_ == nullptr)
+        if (find(key) == end())
         {
           insert(key, T());
-          it_find = find(key);
         }
-        return it_find->second;
+        return find(key)->second;
       }
 
       bool empty() noexcept

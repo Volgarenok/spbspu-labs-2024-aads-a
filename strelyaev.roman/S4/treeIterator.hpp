@@ -17,7 +17,7 @@ namespace strelyaev
       node_(node)
     {}
 
-    Iterator(Iterator< Key, T >& val):
+    Iterator(const Iterator< Key, T >& val):
       node_(val.node_)
     {}
 
@@ -57,12 +57,12 @@ namespace strelyaev
       return result;
     }
 
-    bool operator==(Iterator< Key, T > rhs)
+    bool operator==(const Iterator< Key, T >& rhs)
     {
       return node_ == rhs.node_;
     }
 
-    bool operator!=(Iterator< Key, T > rhs)
+    bool operator!=(const Iterator< Key, T >& rhs)
     {
       return !(*this == rhs);
     }
