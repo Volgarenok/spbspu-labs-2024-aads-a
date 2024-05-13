@@ -23,7 +23,7 @@ namespace piyavkin
     {
       while (first != second)
       {
-        insert(*first++, true);
+        insert(*first++);
       }
     }
     Tree(std::initializer_list< val_type > il):
@@ -32,7 +32,7 @@ namespace piyavkin
       auto it = il.begin();
       while (it != il.end())
       {
-        insert(*it++, true);
+        insert(*it++);
       }
     }
     Tree(const Tree& rhs):
@@ -115,14 +115,15 @@ namespace piyavkin
         mp.end_node_.parent_->right_ = std::addressof(mp.end_node_);
       }
     }
-    std::pair< TreeIterator< Key, T, Compare >, bool > insert(const val_type& val, bool makeSplay)
+    std::pair< TreeIterator< Key, T, Compare >, bool > insert(const val_type& val)
     {
       auto res = insert_impl(val);
-      if (makeSplay)
-      {
-        splay(res.first.node_);
-      }
+      splay(res.first.node_);
       return res;
+    }
+    std::pair< TreeIterator< Key, T, Compare >, bool > unsplay_insert(const val_type& val)
+    {
+      return insert_impl(val);
     }
     TreeIterator< Key, T, Compare > insert(ConstTreeIterator< Key, T, Compare > pos, const val_type& val)
     {
@@ -162,14 +163,14 @@ namespace piyavkin
         splay(node);
         return TreeIterator< Key, T, Compare >(node);
       }
-      return insert(val, true).first;
+      return insert(val).first;
     }
     template< class Iterator >
     void insert(Iterator start, Iterator finish)
     {
       while (start != finish)
       {
-        insert(*start++, true);
+        insert(*start++);
       }
     }
     TreeIterator< Key, T, Compare > begin() noexcept
@@ -259,7 +260,7 @@ namespace piyavkin
     }
     T& operator[](const Key& key)
     {
-      return (((this->insert(std::make_pair(key, T(), true))).first)->second);
+      return (((this->insert(std::make_pair(key, T()))).first)->second);
     }
     T& at(const Key& key)
     {
@@ -467,12 +468,12 @@ namespace piyavkin
     template< class... Args >
     std::pair< TreeIterator< Key, T, Compare >, bool > emplace(Args&&... args)
     {
-      return insert(val_type(std::forward< Args >(args)...), true);
+      return insert(val_type(std::forward< Args >(args)...));
     }
     template< class... Args >
     TreeIterator< Key, T, Compare > emplace_hint(TreeIterator< Key, T, Compare > pos, Args&&... args)
     {
-      return insert(pos, val_type(std::forward< Args >(args)...), true);
+      return insert(pos, val_type(std::forward< Args >(args)...));
     }
     ConstLnrIterator< Key, T, Compare > clbegin() const noexcept
     {
