@@ -2,7 +2,7 @@
 #define CALCULTPOSTFIX_HPP
 
 #include <string>
-#include "queue.hpp"
+#include <queue.hpp>
 
 namespace sivkov
 {

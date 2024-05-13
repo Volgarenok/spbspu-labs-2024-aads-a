@@ -1,9 +1,9 @@
 #include "expressionEvaluation.hpp"
 #include <stdexcept>
 #include <limits>
+#include <queue.hpp>
+#include <stack.hpp>
 #include "utilities.hpp"
-#include "queue.hpp"
-#include "stack.hpp"
 
 namespace sivkov
 {

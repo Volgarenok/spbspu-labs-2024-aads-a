@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include "queue.hpp"
+#include <queue.hpp>
 #include "infixToPostfix.hpp"
 #include "utilities.hpp"
 #include "expressionEvaluation.hpp"

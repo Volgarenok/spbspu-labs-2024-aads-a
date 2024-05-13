@@ -2,8 +2,8 @@
 #include <cctype>
 #include <string>
 #include <stdexcept>
-#include "queue.hpp"
-#include "stack.hpp"
+#include <queue.hpp>
+#include <stack.hpp>
 #include "utilities.hpp"
 
 namespace sivkov
