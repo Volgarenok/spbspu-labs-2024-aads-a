@@ -193,21 +193,21 @@ namespace piyavkin
     {
       return ConstTreeIterator< Key, T, Compare >(const_cast< detail::TreeNode< Key, T >* >(std::addressof(end_node_)));
     }
-    TreeReverseIterator< Key, T, Compare > rbegin() noexcept
+    std::reverse_iterator< TreeIterator< Key, T, Compare > > rbegin() noexcept
     {
-      return TreeReverseIterator< Key, T, Compare >(end_node_.parent_);
+      return std::reverse_iterator< TreeIterator< Key, T, Compare > >(end());
     }
-    TreeReverseIterator< Key, T, Compare > rend() noexcept
+    std::reverse_iterator< TreeIterator< Key, T, Compare > > rend() noexcept
     {
-      return TreeReverseIterator< Key, T, Compare >(std::addressof(before_min_));
+      return std::reverse_iterator< TreeIterator< Key, T, Compare > >(begin());
     }
-    ConstTreeReverseIterator< Key, T, Compare > crbegin() const noexcept
+    std::reverse_iterator< ConstTreeIterator< Key, T, Compare > > crbegin() const noexcept
     {
-      return ConstTreeReverseIterator< Key, T, Compare >(end_node_.parent_);
+      return std::reverse_iterator< ConstTreeIterator< Key, T, Compare > >(cend());
     }
-    ConstTreeReverseIterator< Key, T, Compare > crend() const noexcept
+    std::reverse_iterator< ConstTreeIterator< Key, T, Compare > > crend() const noexcept
     {
-      return ConstTreeReverseIterator< Key, T, Compare >(const_cast< detail::TreeNode< Key, T >* >(std::addressof(before_min_)));
+      return std::reverse_iterator< ConstTreeIterator< Key, T, Compare > >(cbegin());
     }
     TreeIterator< Key, T, Compare > find(const Key& key)
     {

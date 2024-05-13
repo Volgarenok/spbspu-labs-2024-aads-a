@@ -7,15 +7,14 @@ namespace piyavkin
 {
   template< class Key, class T, class Compare >
   class Tree;
-  template< class Key, class T, class Compare >
-  class TreeReverseIterator;
   template< class Key, class T, class Compare = std::less< Key > >
   class TreeIterator: public std::iterator< std::bidirectional_iterator_tag, T >
   {
     using val_type = std::pair< Key, T >;
     friend class Tree< Key, T, Compare >;
-    friend class TreeReverseIterator< Key, T, Compare >;
   public:
+    using reference = std::pair< Key, T >&;
+    using pointer = std::pair< Key, T >*;
     TreeIterator():
       node_(nullptr)
     {}
@@ -78,11 +77,11 @@ namespace piyavkin
     {
       return !(node_ == rhs.node_);
     }
-    val_type* operator->()
+    pointer operator->()
     {
       return std::addressof(node_->val_type);
     }
-    val_type& operator*()
+    reference operator*()
     {
       return node_->val_type;
     }
@@ -100,15 +99,14 @@ namespace piyavkin
       node_(node)
     {}
   };
-  template< class Key, class T, class Compare >
-  class ConstTreeReverseIterator;
   template< class Key, class T, class Compare = std::less< Key > >
   class ConstTreeIterator: public std::iterator< std::bidirectional_iterator_tag, T >
   {
     using val_type = std::pair< Key, T >;
     friend class Tree< Key, T, Compare >;
-    friend class ConstTreeReverseIterator< Key, T, Compare >;
   public:
+    using reference = const std::pair< Key, T >&;
+    using pointer = const std::pair< Key, T >*;
     ConstTreeIterator():
       node_(nullptr)
     {}
@@ -171,11 +169,11 @@ namespace piyavkin
     {
       return !(node_ == rhs.node_);
     }
-    const val_type* operator->() const
+    pointer operator->() const
     {
       return std::addressof(node_->val_type);
     }
-    const val_type& operator*() const
+    reference operator*() const
     {
       return node_->val_type;
     }
@@ -183,122 +181,6 @@ namespace piyavkin
     detail::TreeNode< Key, T >* node_;
     explicit ConstTreeIterator(detail::TreeNode< Key, T >* node):
       node_(node)
-    {}
-  };
-  template< class Key, class T, class Compare = std::less< Key > >
-  class TreeReverseIterator: public std::iterator< std::bidirectional_iterator_tag, T >
-  {
-    using val_type = std::pair< Key, T >;
-    friend class Tree< Key, T, Compare >;
-  public:
-    TreeReverseIterator() = default;
-    TreeReverseIterator(const TreeReverseIterator< Key, T, Compare >&) = default;
-    TreeReverseIterator< Key, T, Compare >& operator=(const TreeReverseIterator< Key, T, Compare >&) = default;
-    ~TreeReverseIterator() = default;
-    TreeReverseIterator< Key, T, Compare >& operator--()
-    {
-      ++it_;
-      return *this;
-    }
-    TreeReverseIterator< Key, T, Compare >& operator++()
-    {
-      --it_;
-      return *this;
-    }
-    TreeReverseIterator< Key, T, Compare > operator++(int)
-    {
-      TreeReverseIterator< Key, T, Compare > result(*this);
-      ++(*this);
-      return result;
-    }
-    TreeReverseIterator< Key, T, Compare > operator--(int)
-    {
-      TreeReverseIterator< Key, T, Compare > result(*this);
-      --(*this);
-      return result;
-    }
-    bool operator==(const TreeReverseIterator< Key, T, Compare >& rhs) const
-    {
-      return it_ == rhs.it_;
-    }
-    bool operator!=(const TreeReverseIterator< Key, T, Compare >& rhs) const
-    {
-      return !(it_ == rhs);
-    }
-    val_type* operator->()
-    {
-      return std::addressof(it_.node_->val_type);
-    }
-    val_type& operator*()
-    {
-      return it_.node_->val_type;
-    }
-    const val_type* operator->() const
-    {
-      return std::addressof(it_.node_->val_type);
-    }
-    const val_type& operator*() const
-    {
-      return it_.node_->val_type;
-    }
-  private:
-    TreeIterator< Key, T, Compare > it_;
-    explicit TreeReverseIterator(detail::TreeNode< Key, T >* node):
-      it_(node)
-    {}
-  };
-  template< class Key, class T, class Compare = std::less< Key > >
-  class ConstTreeReverseIterator: public std::iterator< std::bidirectional_iterator_tag, T >
-  {
-    using val_type = std::pair< Key, T >;
-    friend class Tree< Key, T, Compare >;
-  public:
-    ConstTreeReverseIterator() = default;
-    ConstTreeReverseIterator(const ConstTreeReverseIterator< Key, T, Compare >&) = default;
-    ConstTreeReverseIterator< Key, T, Compare >& operator=(const ConstTreeReverseIterator< Key, T, Compare >&) = default;
-    ~ConstTreeReverseIterator() = default;
-    ConstTreeReverseIterator< Key, T, Compare >& operator--()
-    {
-      ++it_;
-      return *this;
-    }
-    ConstTreeReverseIterator< Key, T, Compare >& operator++()
-    {
-      --it_;
-      return *this;
-    }
-    ConstTreeReverseIterator< Key, T, Compare > operator++(int)
-    {
-      ConstTreeReverseIterator< Key, T, Compare > result(*this);
-      ++(*this);
-      return result;
-    }
-    ConstTreeReverseIterator< Key, T, Compare > operator--(int)
-    {
-      ConstTreeReverseIterator< Key, T, Compare > result(*this);
-      --(*this);
-      return result;
-    }
-    bool operator==(const ConstTreeReverseIterator< Key, T, Compare >& rhs) const
-    {
-      return it_ == rhs.it_;
-    }
-    bool operator!=(const ConstTreeReverseIterator< Key, T, Compare >& rhs) const
-    {
-      return !(it_ == rhs.it_);
-    }
-    const val_type* operator->() const
-    {
-      return std::addressof(it_.node_->val_type);
-    }
-    const val_type& operator*() const
-    {
-      return it_.node_->val_type;
-    }
-  private:
-    ConstTreeIterator< Key, T, Compare > it_;
-    explicit ConstTreeReverseIterator(detail::TreeNode< Key, T >* node):
-      it_(node)
     {}
   };
 }
