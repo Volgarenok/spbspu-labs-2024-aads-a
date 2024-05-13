@@ -6,7 +6,7 @@
 
 namespace zakozhurnikova
 {
-  void inputMap(std::istream& in, BinarySearchTree< long long, std::string >& map);
+  void inputMap(std::istream& in, BinarySearchTree< int, std::string >& map);
 }
 
 #endif

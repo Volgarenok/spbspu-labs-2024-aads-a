@@ -7,9 +7,9 @@ namespace zakozhurnikova
 {
   struct KeySum
   {
-    long long maxNum = std::numeric_limits< long long >::max();
-    long long minNum = std::numeric_limits< long long >::min();
-    void operator()(long long data)
+    int maxNum = std::numeric_limits< int >::max();
+    int minNum = std::numeric_limits< int >::min();
+    void operator()(int data)
     {
       if (data < 0 && result_ < minNum - data)
       {
@@ -22,7 +22,7 @@ namespace zakozhurnikova
       result_ += data;
     }
 
-    long long result_ = 0;
+    int result_ = 0;
   };
 }
 

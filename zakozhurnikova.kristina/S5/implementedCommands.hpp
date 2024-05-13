@@ -6,20 +6,17 @@
 
 namespace zakozhurnikova
 {
-  using map = BinarySearchTree< long long, std::string >;
+  using map = BinarySearchTree< int, std::string >;
   struct ImplementedCommands
   {
-    explicit ImplementedCommands(BinarySearchTree< long long, std::string >& map);
-    long long executeCommand(std::string& command, std::string& result);
+    using Command = int(*)(std::string&, map&);
+    explicit ImplementedCommands(BinarySearchTree< int, std::string >& map);
+    int executeCommand(std::string& command, std::string& result);
+    void addCommand(const std::string& nameCommand, Command command);
 
   private:
-    using command = long long(ImplementedCommands::*)(std::string&);
-    BinarySearchTree< long long, std::string >& map_;
-    BinarySearchTree< std::string, command > commands_;
-
-    long long ascending(std::string& result);
-    long long descending(std::string& result);
-    long long breadth(std::string& result);
+    BinarySearchTree< int, std::string >& map_;
+    BinarySearchTree< std::string, Command > commands_;
   };
 }
 
