@@ -188,7 +188,7 @@ namespace petuhov
   }
 
   template < typename T >
-  List< T >::List(size_t count, const T &value): 
+  List< T >::List(size_t count, const T &value):
     head_(nullptr),
     tail_(nullptr)
   {
