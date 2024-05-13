@@ -13,14 +13,7 @@ zak::ImplementedCommands::ImplementedCommands(BinarySearchTree< int, std::string
 int zak::ImplementedCommands::executeCommand(std::string& command, std::string& result)
 {
   int sum = 0;
-  try
-  {
-    sum = (*commands_.at(command))(result, map_);
-  }
-  catch (...)
-  {
-    throw;
-  }
+  sum = (*commands_.at(command))(result, map_);
   return sum;
 }
 
