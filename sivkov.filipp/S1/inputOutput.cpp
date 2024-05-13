@@ -4,61 +4,59 @@
 #include <limits>
 #include <iterator>
 #include <stdexcept>
-#include "list.hpp"
+#include <list.hpp>
 
-void sivkov::outputNames(const List< std::pair< std::string, List< size_t > > >& list)
+void sivkov::outputNames(List< std::pair< std::string, List< size_t > > >& list, std::ostream& out)
 {
+  if (list.empty())
+  {
+    throw std::logic_error("list is empty");
+  }
+  list.reverse();
   for (auto it = list.cbegin(); it != list.cend(); ++it)
   {
-    std::cout << it->first;
-    auto temp = it;
-    ++temp;
-    if (temp != list.cend())
+    if (it != list.cbegin())
     {
-      std::cout << " ";
+      out << ' ';
     }
+    out << it->first;
   }
-  std::cout << "\n";
+  out << "\n";
 }
 
-void sivkov::outputSums(const List< size_t > &numbers)
+void sivkov::outputSums(const List< size_t >& numbers, std::ostream& out)
 {
   for (auto it = numbers.cbegin(); it != numbers.cend(); ++it)
   {
-    std::cout << *it;
-    auto temp = it;
-    ++temp;
-    if (temp != numbers.cend())
+    if (it != numbers.cbegin())
     {
-      std::cout << " ";
+      out << ' ';
     }
+    out << *it;
   }
-  std::cout << "\n";
 }
 
 void sivkov::input(std::istream& input, List< std::pair< std::string, List< size_t > > >& list)
 {
-  std::string line = "";
-  input >> line;
-  while (input)
+  while (!input.eof())
   {
-    list.push_front({ line, List< size_t >{} });
-    while (input >> line)
+    input.clear();
+    std::pair< std::string, List< size_t > > temp;
+    input >> temp.first;
+    if (temp.first.empty())
     {
-      try
-      {
-        size_t number = std::stoull(line);
-        list.front().second.push_back(number);
-      }
-      catch (std::invalid_argument&)
-      {
-        break;
-      }
+      break;
     }
+    size_t number = 0;
+    while (input >> number)
+    {
+      temp.second.push_front(number);
+    }
+    list.push_front(temp);
   }
 }
 
-void sivkov::outputNums(const List< std::pair< std::string, List< size_t > > >& list, List< size_t >& numbers)
+void sivkov::outputNums(const List< std::pair< std::string, List< size_t > > >& list, List< size_t >& numbers, std::ostream& out)
 {
   bool overflowFlag = false;
   bool allData = true;
@@ -95,9 +93,9 @@ void sivkov::outputNums(const List< std::pair< std::string, List< size_t > > >& 
       {
         if (allData)
         {
-          std::cout << " ";
+          out << " ";
         }
-        if (std::numeric_limits<size_t>::max() - sum >= *iteratorForNums)
+        if (std::numeric_limits< size_t >::max() - sum >= *iteratorForNums)
         {
           sum += *iteratorForNums;
         }
@@ -105,14 +103,14 @@ void sivkov::outputNums(const List< std::pair< std::string, List< size_t > > >& 
         {
           overflowFlag = true;
         }
-        std::cout << *iteratorForNums;
+        out << *iteratorForNums;
         allData = true;
       }
       ++size;
     }
     if (allData)
     {
-      std::cout << "\n";
+      out << "\n";
       numbers.push_front(sum);
     }
   }
@@ -120,9 +118,9 @@ void sivkov::outputNums(const List< std::pair< std::string, List< size_t > > >& 
   {
     numbers.push_front(sum);
   }
+  numbers.reverse();
   if (overflowFlag == true)
   {
     throw (std::overflow_error("overflow"));
   }
 }
-

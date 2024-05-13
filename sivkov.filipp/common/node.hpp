@@ -10,7 +10,7 @@ namespace sivkov
     {
       T data;
       Node* next;
-      Node(const T& data_) :
+      Node(const T& data_):
         data(data_),
         next(nullptr)
       {}
@@ -19,4 +19,3 @@ namespace sivkov
 }
 
 #endif
-

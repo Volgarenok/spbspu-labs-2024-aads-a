@@ -26,21 +26,21 @@ namespace sivkov
     bool operator==(const ConstIterator< T >& other) const;
     const T& operator*() const;
     const T* operator->() const;
-    ConstIterator<T>& operator++();
-    ConstIterator<T> operator++(int);
+    ConstIterator< T >& operator++();
+    ConstIterator< T > operator++(int);
 
   private:
     detail::Node< T >* node_;
-    ConstIterator(detail::Node< T >* node);
+    explicit ConstIterator(detail::Node< T >* node);
   };
 
   template< typename T >
   ConstIterator< T >::ConstIterator(detail::Node< T >* node):
-  node_(node)
+    node_(node)
   {}
 
-  template<typename T>
-  ConstIterator<T>::ConstIterator():
+  template< typename T >
+  ConstIterator< T >::ConstIterator():
     node_(nullptr)
   {}
 
@@ -57,13 +57,13 @@ namespace sivkov
   }
 
   template< typename T >
-  bool ConstIterator< T >::operator!=(const ConstIterator<T>& other) const
+  bool ConstIterator< T >::operator!=(const ConstIterator< T >& other) const
   {
     return !(node_ == other.node_);
   }
 
   template< typename T >
-  bool ConstIterator< T >::operator==(const ConstIterator<T>& other) const
+  bool ConstIterator< T >::operator==(const ConstIterator< T >& other) const
   {
     return (node_ == other.node_);
   }
@@ -96,3 +96,4 @@ namespace sivkov
   }
 }
 #endif
+
