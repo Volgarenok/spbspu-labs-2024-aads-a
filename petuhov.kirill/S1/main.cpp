@@ -1,11 +1,17 @@
 #include <iostream>
 #include <string>
+#include <limits>
 #include "list.hpp"
 #include "readinput.hpp"
 
 int main() {
   petuhov::List< std::pair< std::string, petuhov::List< int > > > sequences;
-  petuhov::readInput(sequences, std::cin);
+  try {
+    petuhov::readInput(sequences, std::cin);
+  } catch (const std::overflow_error &e) {
+    std::cerr << e.what() << "\n";
+    return 1;
+  }
 
   if (sequences.empty()) {
     std::cout << 0 << "\n";
