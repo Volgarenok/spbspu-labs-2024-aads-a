@@ -19,7 +19,7 @@ void marishin::getPostfixForm(std::istream& in, Queue< std::string >& queue)
   }
 }
 
-void marishin::getFromStack(marishin::Stack<std::string> &stack, std::string &value)
+void marishin::getFromStack(Stack<std::string> &stack, std::string &value)
 {
   while (!stack.empty())
   {
@@ -66,7 +66,7 @@ bool marishin::priority(const std::string& stack, const std::string& current)
   return (stack != "(") && (((current == "*" || current == "/") && (stack == "*" || stack == "/")) || (current == "+" || current == "-"));
 }
 
-void marishin::operations(marishin::Stack<std::string> &stack, const std::string &str, std::string &value)
+void marishin::operations(Stack<std::string> &stack, const std::string &str, std::string &value)
 {
   if (binary(str))
   {

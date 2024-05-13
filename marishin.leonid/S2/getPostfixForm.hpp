@@ -8,7 +8,7 @@
 namespace marishin
 {
   void getPostfixForm(std::istream& in, Queue< std::string >& queue);
-  void getFromStack(marishin::Stack<std::string> &stack, std::string &value);
+  void getFromStack(Stack<std::string> &stack, std::string &value);
   std::string& getPostfixFormIn(std::istream& in, std::string& result);
   bool binary(const std::string& p);
   bool priority(const std::string& stack, const std::string& current);
