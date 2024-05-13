@@ -63,7 +63,7 @@ void lebedev::countSums(listOfPairs & pairs, List< size_t > & sums, size_t max_p
       size_t num = *list_iter;
       if (max - num < sum)
       {
-        throw std::overflow_error("Size_t overflow");
+        throw std::overflow_error("Size_t overflow!");
       }
       else
       {
