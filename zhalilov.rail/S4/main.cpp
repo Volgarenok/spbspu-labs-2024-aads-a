@@ -7,11 +7,12 @@
 
 int main(int argc, char *argv[])
 {
-  zhalilov::TwoThree < std::string, zhalilov::primaryMap > maps;
+  using namespace zhalilov;
+  TwoThree < std::string, primaryMap > maps;
   if (argc == 2)
   {
     std::ifstream file(argv[1]);
-    zhalilov::getMaps(maps, file);
+    getMaps(maps, file);
   }
   else
   {
@@ -19,7 +20,7 @@ int main(int argc, char *argv[])
     return 1;
   }
 
-  zhalilov::MapMaster master(maps);
+  MapMaster master(maps);
   std::string cmdOutput;
   while (!std::cin.eof())
   {
