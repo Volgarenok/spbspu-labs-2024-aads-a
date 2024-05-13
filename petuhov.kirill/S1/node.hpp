@@ -10,7 +10,7 @@ namespace petuhov
     {
       T value_;
       Node *next_;
-      
+
       Node();
       Node(const T& value):
         value_(value),

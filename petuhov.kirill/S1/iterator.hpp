@@ -14,27 +14,27 @@ namespace petuhov
   {
     friend class List< T >;
 
-    public:
-      Iterator();
-      Iterator(const Iterator &iter) = default;
+  public:
+    Iterator();
+    Iterator(const Iterator &iter) = default;
 
-      T &operator*() const;
-      const T &operator->() const;
-      Iterator &operator++();
-      Iterator operator++(int);
-      bool operator==(const Iterator &other) const;
-      bool operator!=(const Iterator &other) const;
+    T &operator*() const;
+    T *operator->() const;
+    Iterator &operator++();
+    Iterator operator++(int);
+    bool operator==(const Iterator &other) const;
+    bool operator!=(const Iterator &other) const;
 
-      ~Iterator() = default;
+    ~Iterator() = default;
 
-    private:
-      Node< T > *node_;
+  private:
+    Node< T > *node_;
   };
 
   template < typename T >
-  Iterator< T >::Iterator():
-    node_(nullptr)
-  {}
+  Iterator< T >::Iterator() : node_(nullptr)
+  {
+  }
 
   template < typename T >
   T &Iterator< T >::operator*() const
@@ -43,9 +43,9 @@ namespace petuhov
   }
 
   template < typename T >
-  const T &Iterator< T >::operator->() const
+  T *Iterator< T >::operator->() const
   {
-    return node_->value_;
+    return &(operator*());
   }
 
   template < typename T >
