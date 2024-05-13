@@ -2,7 +2,7 @@
 
 namespace sivkov
 {
-  void print(AVLTree<std::string, AVLTree<size_t, std::string>>& treeOfdic, std::istream& in, std::ostream& out)
+  void print(AVLTree< std::string, AVLTree< size_t, std::string > >& treeOfdic, std::istream& in, std::ostream& out)
   {
     std::string dataset = "";
     in >> dataset;
@@ -19,7 +19,7 @@ namespace sivkov
     out << "\n";
   }
 
-  void complement(AVLTree<std::string, AVLTree<size_t, std::string>>& treeOfdic, std::istream& in)
+  void complement(AVLTree< std::string, AVLTree< size_t, std::string > >& treeOfdic, std::istream& in)
   {
     std::string newDataset = "", dataset1 = "", dataset2 = "";
     in >> newDataset >> dataset1 >> dataset2;
@@ -41,7 +41,7 @@ namespace sivkov
     treeOfdic.push(newDataset, result);
   }
 
-  void intersect(AVLTree<std::string, AVLTree<size_t, std::string>>& treeOfdic, std::istream& in)
+  void intersect(AVLTree< std::string, AVLTree< size_t, std::string > >& treeOfdic, std::istream& in)
   {
     std::string newDataset = "", dataset1 = "", dataset2 = "";
     in >> newDataset >> dataset1 >> dataset2;
@@ -59,14 +59,14 @@ namespace sivkov
     treeOfdic.push(newDataset, result);
   }
 
-  void unionCMD(AVLTree<std::string, AVLTree<size_t, std::string>>& treeOfdic, std::istream& in)
+  void unionCMD(AVLTree<std::string, AVLTree< size_t, std::string > >& treeOfdic, std::istream& in)
   {
     std::string newDataset, dataset1, dataset2;
     in >> newDataset >> dataset1 >> dataset2;
 
-    AVLTree<size_t, std::string> data1 = treeOfdic.get(dataset1);
-    AVLTree<size_t, std::string> data2 = treeOfdic.get(dataset2);
-    AVLTree<size_t, std::string> result;
+    AVLTree< size_t, std::string > data1 = treeOfdic.get(dataset1);
+    AVLTree< size_t, std::string > data2 = treeOfdic.get(dataset2);
+    AVLTree< size_t, std::string > result;
     for (auto it = data1.cbegin(); it != data1.cend(); ++it)
     {
       result.push(it->first, it->second);
