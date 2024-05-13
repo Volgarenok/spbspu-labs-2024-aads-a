@@ -50,7 +50,7 @@ namespace zhalilov
     iterator find(const Key &);
     const_iterator find(const Key &) const;
 
-    char count(const Key &) const;
+    size_t count(const Key &) const;
     std::pair < iterator, iterator > equal_range(const Key &);
     std::pair < const_iterator, const_iterator > equal_range(const Key &) const;
 
@@ -401,7 +401,7 @@ namespace zhalilov
   }
 
   template < class Key, class T, class Compare >
-  char TwoThree < Key, T, Compare >::count(const Key &key) const
+  size_t TwoThree < Key, T, Compare >::count(const Key &key) const
   {
     auto it = find(key);
     if (it == cend())
