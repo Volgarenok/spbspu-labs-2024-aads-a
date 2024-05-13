@@ -69,7 +69,7 @@ void belokurskaya::printSums(const SequenceVector& sequences, std::ostream& out)
   }
 
   List< unsigned long long > sumsList;
-  
+
   for (size_t i = 0; i < maxLength; ++i)
   {
     unsigned long long sum = 0;
