@@ -49,6 +49,7 @@ namespace nikitov
     void insert(std::initializer_list< std::pair< Key, T > > initList);
 
     treeIterator erase(constTreeIterator position);
+    treeIterator erase(constTreeIterator first, constTreeIterator last);
 
     void clear() noexcept;
     void swap(Tree< Key, T, Compare >& other) noexcept;
@@ -315,6 +316,29 @@ namespace nikitov
     }
     --size_;
     return upperBound((*position).first);
+  }
+
+  template< class Key, class T, class Compare >
+  TreeIterator< Key, T, Compare > Tree< Key, T, Compare >::erase(constTreeIterator first, constTreeIterator last)
+  {
+    if (last == cend())
+    {
+      while (first != cend())
+      {
+        treeIterator iterator = erase(first);
+        first = constTreeIterator(iterator.node_, iterator.isFirst_);
+      }
+    }
+    else
+    {
+      Key key = (*last).first;
+      while ((*first).first != key)
+      {
+        treeIterator iterator = erase(first);
+        first = constTreeIterator(iterator.node_, iterator.isFirst_);
+      }
+    }
+    return treeIterator(first.node_);
   }
 
   template< class Key, class T, class Compare >

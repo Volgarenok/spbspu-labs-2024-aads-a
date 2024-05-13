@@ -235,7 +235,7 @@ namespace nikitov
     template< class Key, class T, class Compare >
     void TreeNode< Key, T, Compare >::fixErase()
     {
-      if (!left_ || !right_ || (!middle_ && left_ && size_ == 2))
+      if ((!left_ && right_) || (!right_ && left_) || (!middle_ && left_ && size_ == 2))
       {
         if (!right_)
         {
@@ -269,6 +269,7 @@ namespace nikitov
         }
         nodes.sort(CompareNodes< Key, T, Compare >());
         auto iterator = nodes.cbegin();
+
         if (parent_->left_ == this)
         {
           parent_->left_ = nullptr;
