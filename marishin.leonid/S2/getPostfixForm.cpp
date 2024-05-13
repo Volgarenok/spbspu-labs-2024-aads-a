@@ -19,7 +19,7 @@ void marishin::getPostfixForm(std::istream& in, Queue< std::string >& queue)
   }
 }
 
-void getFromStack(marishin::Stack<std::string> &stack, std::string &value)
+void marishin::getFromStack(marishin::Stack<std::string> &stack, std::string &value)
 {
   while (!stack.empty())
   {
@@ -32,16 +32,16 @@ void getFromStack(marishin::Stack<std::string> &stack, std::string &value)
   }
 }
 
-std::string& getPostfixFormIn(std::istream& in, std::string& result)
+std::string& marishin::getPostfixFormIn(std::istream& in, std::string& result)
 {
-  marishin::Stack<std::string> stack;
+  Stack<std::string> stack;
   std::string name;
   std::getline(in, name, '\n');
   input_it_t it = name.cbegin();
   while (it != name.cend())
   {
     std::string str;
-    it = marishin::input(it, name.cend(), str);
+    it = input(it, name.cend(), str);
     try
     {
       std::stoll(str);
@@ -56,23 +56,23 @@ std::string& getPostfixFormIn(std::istream& in, std::string& result)
   return result;
 }
 
-bool binary(const std::string& p)
+bool marishin::binary(const std::string& p)
 {
   return (p == "+") || (p == "-") || (p == "/") || (p == "*") || (p == "%");
 }
 
-bool priority(const std::string& stack, const std::string& current)
+bool marishin::priority(const std::string& stack, const std::string& current)
 {
   return (stack != "(") && (((current == "*" || current == "/") && (stack == "*" || stack == "/")) || (current == "+" || current == "-"));
 }
 
-void operations(marishin::Stack<std::string> &stack, const std::string &str, std::string &value)
+void marishin::operations(marishin::Stack<std::string> &stack, const std::string &str, std::string &value)
 {
   if (binary(str))
   {
     while (!stack.empty() && priority(stack.top(), str))
     {
-      dest += stack.top() + " ";
+      value += stack.top() + " ";
       stack.drop();
     }
     stack.push(str);
@@ -85,7 +85,7 @@ void operations(marishin::Stack<std::string> &stack, const std::string &str, std
   {
     while (stack.top() != "(")
     {
-      dest += stack.top() + " ";
+      value += stack.top() + " ";
       stack.drop();
     }
     stack.drop();
