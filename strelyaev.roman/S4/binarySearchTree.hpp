@@ -145,6 +145,10 @@ namespace strelyaev
 
       iterator_t begin() noexcept
       {
+        if (root_ == nullptr)
+        {
+          return iterator_t(nullptr);
+        }
         node_t* current = root_;
         while (current->left_)
         {
@@ -160,6 +164,10 @@ namespace strelyaev
 
       c_iterator_t cbegin() const noexcept
       {
+        if (root_ == nullptr)
+        {
+          return c_iterator_t(nullptr);
+        }
         node_t* current = root_;
         while (current->left_)
         {
