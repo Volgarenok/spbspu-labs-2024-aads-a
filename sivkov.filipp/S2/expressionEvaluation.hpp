@@ -6,7 +6,7 @@
 
 namespace sivkov
 {
-  long long calcult(Queue< std::string > postfix);
+  long long expressionEvaluation(Queue< std::string > postfix);
 }
 #endif
 

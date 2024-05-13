@@ -7,7 +7,7 @@
 
 namespace sivkov
 {
-  long long int calcult(Queue< std::string > postfix)
+  long long int expressionEvaluation(Queue< std::string > postfix)
   {
     postfix.reverse();
     Stack< long long int > infix;

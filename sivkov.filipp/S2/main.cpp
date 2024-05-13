@@ -4,7 +4,7 @@
 #include "queue.hpp"
 #include "infixToPostfix.hpp"
 #include "utilities.hpp"
-#include "calcultPostfix.hpp"
+#include "expressionEvaluation.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -54,7 +54,7 @@ int main(int argc, char* argv[])
     }
     while (!postfix.empty())
     {
-      res.push(calcult(postfix.front()));
+      res.push(expressionEvaluation(postfix.front()));
       postfix.pop();
     }
   }
