@@ -12,49 +12,51 @@ namespace sivkov
     Queue< std::string > postfix;
     Stack< std::string > operators;
 
+
     while (!infix.empty())
     {
       std::string token = infix.front();
       infix.pop();
 
-      if (std::isdigit(token[0]) || (std::isdigit(token[1]) && token[0] == '-'))
+      try
       {
+        std::stoll(token);
         postfix.push(token);
       }
-      else if (token == "(")
+      catch (...)
       {
-        operators.push("(");
-      }
-      else if (token == ")")
-      {
-        while (!operators.empty() && operators.top() != "(")
+        if (token == "(")
         {
-          std::string op = operators.top();
-          operators.pop();
-          postfix.push(op);
+          operators.push("(");
         }
-        if (!operators.empty() && operators.top() == "(")
+        else if (token == ")")
         {
-          operators.pop();
+          while (!operators.empty() && operators.top() != "(")
+          {
+            std::string op = operators.top();
+            operators.pop();
+            postfix.push(op);
+          }
+          if (!operators.empty() && operators.top() == "(")
+          {
+            operators.pop();
+          }
         }
-      }
-      else
-      {
-        while (!operators.empty() && getPriority(operators.top()) >= getPriority(token))
+        else
         {
-          std::string op = operators.top();
-          operators.pop();
-          postfix.push(op);
+          while (!operators.empty() && (operators.top() == "*" || operators.top() == "/"))
+          {
+            std::string op = operators.top();
+            operators.pop();
+            postfix.push(op);
+          }
+          operators.push(token);
         }
-        operators.push(token);
       }
     }
+
     while (!operators.empty())
     {
-      if (operators.top() == "(")
-      {
-        throw std::logic_error("error line");
-      }
       std::string op = operators.top();
       operators.pop();
       postfix.push(op);
