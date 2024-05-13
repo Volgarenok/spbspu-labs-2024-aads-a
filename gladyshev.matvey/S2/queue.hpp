@@ -5,28 +5,25 @@
 
 namespace gladyshev
 {
-  template < class T, class Container = DynArray< T > >
+  template < class T >
   class Queue
   {
   public:
-    Queue():
-      array_(Container())
-    {}
-    Queue(const Queue& other):
-      array_(other.array_)
-    {}
-    Queue(Queue&& other) noexcept:
-      array_(std::move(other.array_))
-    {}
     bool empty() const noexcept
     {
       return array_.empty();
     }
-    T drop()
+    T& back()
     {
-      T temp = array_.back();
+      return array_.back();
+    }
+    const T& back() const
+    {
+      return array_.back();
+    }
+    void pop()
+    {
       array_.pop_back();
-      return temp;
     }
     void push(const T& other)
     {
@@ -37,7 +34,7 @@ namespace gladyshev
       array_.reverse();
     }
   private:
-    Container array_;
+    DynArray< T > array_;
   };
 }
 

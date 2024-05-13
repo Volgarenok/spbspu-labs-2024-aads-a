@@ -5,19 +5,10 @@
 
 namespace gladyshev
 {
-  template < class T, class Container = DynArray< T > >
+  template < class T >
   class Stack
   {
   public:
-    Stack():
-      array_(Container())
-    {}
-    Stack(const Stack& other):
-      array_(other.array_)
-    {}
-    Stack(Stack&& other) noexcept:
-      array_(std::move(other.array_))
-    {}
     T& top()
     {
       return array_.front();
@@ -30,18 +21,16 @@ namespace gladyshev
     {
       return array_.empty();
     }
-    T drop()
+    void pop()
     {
-      T temp = array_.front();
       array_.pop_front();
-      return temp;
     }
     void push(const T& other)
     {
       array_.push_front(other);
     }
   private:
-    Container array_;
+    DynArray< T > array_;
   };
 }
 

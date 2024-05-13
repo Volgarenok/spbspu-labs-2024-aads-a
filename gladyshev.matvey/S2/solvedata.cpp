@@ -11,7 +11,8 @@ long long int gladyshev::evaluatePostfix(Queue< std::string > postfix)
   Stack < long long int > operands;
   while (!postfix.empty())
   {
-    std::string token = postfix.drop();
+    std::string token = postfix.back();
+    postfix.pop();
     try
     {
       long long int value = std::stoll(token);
@@ -19,8 +20,10 @@ long long int gladyshev::evaluatePostfix(Queue< std::string > postfix)
     }
     catch (...)
     {
-      long long int right = operands.drop();
-      long long int left = operands.drop();
+      long long int right = operands.top();
+      operands.pop();
+      long long int left = operands.top();
+      operands.pop();
       if (token == "+")
       {
         if (std::numeric_limits< long long int >::max() - left < right)
@@ -33,7 +36,7 @@ long long int gladyshev::evaluatePostfix(Queue< std::string > postfix)
       {
         if (std::numeric_limits < long long int >::min() + left > right)
         {
-          throw std::overflow_error("overflow detected");
+          throw std::underflow_error("overflow detected");
         }
         operands.push(left - right);
       }
@@ -50,7 +53,7 @@ long long int gladyshev::evaluatePostfix(Queue< std::string > postfix)
       {
         if (right == 0)
         {
-          throw std::overflow_error("division by 0");
+          throw std::logic_error("division by 0");
         }
         operands.push(left / right);
       }
@@ -58,7 +61,7 @@ long long int gladyshev::evaluatePostfix(Queue< std::string > postfix)
       {
         if (right == 0)
         {
-          throw std::overflow_error("division by 0");
+          throw std::logic_error("division by 0");
         }
         left %= right;
         if (left < 0)
