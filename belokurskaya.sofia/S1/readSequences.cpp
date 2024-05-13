@@ -1,10 +1,8 @@
 #include "readSequences.hpp"
 
-#include <iostream>
-
-belokurskaya::SequenceVector belokurskaya::readSequences(std::istream & in)
+belokurskaya::List< belokurskaya::SequencePair > belokurskaya::readSequences(std::istream& in)
 {
-  SequenceVector sequences;
+  List< SequencePair > sequences;
   std::string name = "";
 
   while (in >> name)
@@ -19,7 +17,8 @@ belokurskaya::SequenceVector belokurskaya::readSequences(std::istream & in)
     {
       in.clear();
     }
-    sequences.push_back({ name, sequence });
+    SequencePair pair(name, sequence);
+    sequences.push_back(pair);
   }
   return sequences;
 }

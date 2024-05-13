@@ -1,66 +1,44 @@
 #include "resultsPrinter.hpp"
 
-#include <iostream>
 #include <limits>
 
-#include "list.hpp"
-
-void belokurskaya::printNames(const SequenceVector& sequences, std::ostream& out)
+void belokurskaya::printNames(const List< SequencePair >& sequences, std::ostream& out)
 {
-  for (size_t i = 0; i < sequences.getSize(); ++i)
+  for (const auto& sequence : sequences)
   {
-    out << sequences[i].getName();
-    if (i < sequences.getSize() - 1)
-    {
-      out << " ";
-    }
+    out << sequence.getName() << " ";
   }
-  if (sequences.getSize() > 0)
-  {
-    out << "\n";
-  }
+  out << "\n";
 }
 
-void belokurskaya::printSequences(const SequenceVector& sequences, std::ostream& out)
+void belokurskaya::printSequences(const List< SequencePair >& sequences, std::ostream& out)
 {
   size_t maxLength = 0;
-  for (size_t i = 0; i < sequences.getSize(); ++i)
+  for (const auto& sequence : sequences)
   {
-    maxLength = std::max(maxLength, sequences[i].getSequence().size());
+    maxLength = std::max(maxLength, sequence.getSequence().size());
   }
 
   for (size_t j = 0; j < maxLength; ++j)
   {
-    bool hasOutput = false;
-    for (size_t i = 0; i < sequences.getSize(); ++i)
+    for (const auto& sequence : sequences)
     {
-      const List< unsigned long long >& seq = sequences[i].getSequence();
-      if (j < seq.size())
+      const List< unsigned long long >& seq = sequence.getSequence();
+      if (j < seq.size() && seq.at(j) != 0)
       {
-        if (seq.at(j) != 0)
-        {
-          if (hasOutput)
-          {
-            out << " ";
-          }
-          out << seq.at(j);
-          hasOutput = true;
-        }
+        out << seq.at(j) << " ";
       }
     }
-    if (hasOutput)
-    {
-      out << "\n";
-    }
+    out << "\n";
   }
 }
 
-void belokurskaya::printSums(const SequenceVector& sequences, std::ostream& out)
+void belokurskaya::printSums(const List< SequencePair >& sequences, std::ostream& out)
 {
   size_t maxLength = 0;
-  for (size_t i = 0; i < sequences.getSize(); ++i)
+  for (const auto& sequence : sequences)
   {
-    maxLength = std::max(maxLength, sequences[i].getSequence().size());
+    maxLength = std::max(maxLength, sequence.getSequence().size());
   }
   if (maxLength == 0)
   {
@@ -73,9 +51,9 @@ void belokurskaya::printSums(const SequenceVector& sequences, std::ostream& out)
   for (size_t i = 0; i < maxLength; ++i)
   {
     unsigned long long sum = 0;
-    for (size_t j = 0; j < sequences.getSize(); ++j)
+    for (const auto& sequence : sequences)
     {
-      const List< unsigned long long >& seq = sequences[j].getSequence();
+      const List< unsigned long long >& seq = sequence.getSequence();
       if (i < seq.size())
       {
         if (sum > std::numeric_limits< unsigned long long >::max() - seq.at(i))

@@ -1,11 +1,14 @@
-#ifndef READSEQUENCES_HPP
-#define READSEQUENCES_HPP
+#ifndef READ_SEQUENCES_HPP
+#define READ_SEQUENCES_HPP
 
-#include "SequenceVector.hpp"
+#include <iostream>
+
+#include "list.hpp"
+#include "SequencePair.hpp"
 
 namespace belokurskaya
 {
-  SequenceVector readSequences(std::istream & in);
+  List< SequencePair > readSequences(std::istream& in);
 }
 
 #endif
