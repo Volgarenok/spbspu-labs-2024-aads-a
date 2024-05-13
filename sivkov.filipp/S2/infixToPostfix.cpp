@@ -8,10 +8,10 @@
 
 namespace sivkov
 {
-  Queue< std::string > infixToPostfix(Queue< std::string >& infix)
+  Queue<std::string> infixToPostfix(Queue<std::string>& infix)
   {
-    Queue< std::string > postfix;
-    Stack <std::string > operators;
+    Queue<std::string> postfix;
+    Stack<std::string> operators;
 
     while (!infix.empty())
     {
@@ -38,7 +38,7 @@ namespace sivkov
           }
           operators.pop();
         }
-        else
+        else if (isOeprator(token))
         {
           while (!operators.empty() && compareOperators(operators.top(), token))
           {
@@ -47,14 +47,21 @@ namespace sivkov
           }
           operators.push(token);
         }
+        else
+        {
+          throw std::logic_error("error data");
+        }
       }
     }
 
     while (!operators.empty())
     {
-      std::string op = operators.top();
+      if (operators.top() == "(")
+      {
+        throw std::logic_error("error line");
+      }
+      infix.push(operators.top());
       operators.pop();
-      postfix.push(op);
     }
     return postfix;
   }
