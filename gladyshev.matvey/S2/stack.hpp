@@ -1,7 +1,7 @@
 #ifndef STACK_HPP
 #define STACK_HPP
 
-#include "array.hpp"
+#include <list.hpp>
 
 namespace gladyshev
 {
@@ -11,26 +11,26 @@ namespace gladyshev
   public:
     T& top()
     {
-      return array_.front();
+      return list_.front();
     }
     const T& top() const
     {
-      return array_.front();
+      return list_.front();
     }
     bool empty() const noexcept
     {
-      return array_.empty();
+      return list_.empty();
     }
     void pop()
     {
-      array_.pop_front();
+      list_.pop_front();
     }
     void push(const T& other)
     {
-      array_.push_front(other);
+      list_.push_front(other);
     }
   private:
-    DynArray< T > array_;
+    List< T > list_;
   };
 }
 

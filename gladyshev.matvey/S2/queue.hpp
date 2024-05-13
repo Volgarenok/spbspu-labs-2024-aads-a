@@ -1,7 +1,7 @@
 #ifndef QUEUE_HPP
 #define QUEUE_HPP
 
-#include "array.hpp"
+#include <list.hpp>
 
 namespace gladyshev
 {
@@ -11,26 +11,26 @@ namespace gladyshev
   public:
     bool empty() const noexcept
     {
-      return array_.empty();
+      return list_.empty();
     }
     T& back()
     {
-      return array_.back();
+      return list_.back();
     }
     const T& back() const
     {
-      return array_.back();
+      return list_.back();
     }
     void pop()
     {
-      array_.pop_back();
+      list_.pop_back();
     }
     void push(const T& other)
     {
-      array_.push_front(other);
+      list_.push_front(other);
     }
   private:
-    DynArray< T > array_;
+    List< T > list_;
   };
 }
 
