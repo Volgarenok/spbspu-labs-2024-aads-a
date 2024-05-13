@@ -1,5 +1,10 @@
 #include <iostream>
 #include <fstream>
+#include "queue.hpp"
+#include "stack.hpp"
+#include "input.hpp"
+#include "checksPostfix.hpp"
+#include "output.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -11,15 +16,15 @@ int main(int argc, char* argv[])
     if (argc == 2)
     {
       std::ifstream in(argv[1]);
-      getPostfixFromInfix(input, queue);
-      evaluatePostfix(result, queue);
+      input(input, queue);
+      checksPostfix(result, queue);
     }
     else
     {
-      getPostfixFromInfix(std::cin, queue);
-      evaluatePostfix(result, queue);
+      input(std::cin, queue);
+      checksPostfix(result, queue);
     }
-    outputResult(std::cout, result);
+    output(std::cout, result);
     std::cout << '\n';
   }
   catch (const std::exception& e)
