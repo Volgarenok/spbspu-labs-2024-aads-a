@@ -16,7 +16,7 @@ int main()
   try
   {
     List< size_t > sums;
-    countSums(list_of_pairs, sums, max_pair_size); 
+    countSums(list_of_pairs, sums, max_pair_size);
     outputPairsNames(std::cout, list_of_pairs);
     std::cout << '\n';
     if (max_pair_size != 0)
