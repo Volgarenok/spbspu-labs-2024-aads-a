@@ -9,14 +9,12 @@ namespace sivkov
   class Stack
   {
   public:
-
     void push(const T& value);
     void pop();
     T& top();
     const T& top() const;
     bool empty() const noexcept;
     void swap(Stack< T >& other) noexcept;
-
   private:
     List< T > list_;
   };
