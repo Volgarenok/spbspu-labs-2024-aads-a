@@ -39,7 +39,6 @@ void lebedev::countSums(listOfPairs & pairs, List< size_t > & sums, size_t max_p
   for (size_t i = 0; i < max_pair_size; i++)
   {
     size_t sum = 0;
-    bool is_first_num = true;
     for (auto pairs_iter = pairs.cbegin(); pairs_iter != pairs.cend(); pairs_iter++)
     {
       auto list_iter = pairs_iter->second.cbegin();
