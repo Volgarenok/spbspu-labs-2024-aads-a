@@ -5,7 +5,7 @@
 
 namespace spiridonov
 {
-  using nameList = std::pair<std::string, List<int>>;
+  using nameList = std::pair<std::string, List< size_t >>;
 
   nameList inputLine(std::istream& in)
   {
@@ -15,11 +15,21 @@ namespace spiridonov
     {
       throw std::invalid_argument("Name is empty");
     }
-    int inNum = 0;
-    while (in >> inNum)
+
+    size_t inNum = 0;
+    try
     {
-      result.second.push_back(inNum);
+      while (in >> inNum)
+      {
+        result.second.push_back(inNum);
+      }
     }
+    catch (...)
+    {
+      std::cerr << "Error: overflow" << "\n";
+      return 1;
+    }
+
     return result;
   }
 
