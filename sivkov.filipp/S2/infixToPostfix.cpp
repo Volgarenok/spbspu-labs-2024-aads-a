@@ -60,7 +60,7 @@ namespace sivkov
       {
         throw std::logic_error("error line");
       }
-      infix.push(operators.top());
+      postfix.push(operators.top());
       operators.pop();
     }
     return postfix;
