@@ -50,7 +50,6 @@ int main(int argc, char * argv[])
     }
     if (results.empty())
     {
-      std::cout << "\n";
       return 0;
     }
     std::cout << results.top();
