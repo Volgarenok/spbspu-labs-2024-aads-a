@@ -17,6 +17,7 @@ namespace petuhov
   public:
     Iterator();
     Iterator(const Iterator &iter) = default;
+    Iterator(detail::Node< T > *node); // Конструктор
 
     T &operator*() const;
     T *operator->() const;
@@ -28,13 +29,16 @@ namespace petuhov
     ~Iterator() = default;
 
   private:
-    Node< T > *node_;
+    detail::Node< T > *node_;
   };
 
   template < typename T >
   Iterator< T >::Iterator() : node_(nullptr)
-  {
-  }
+  {}
+
+  template < typename T >
+  Iterator< T >::Iterator(detail::Node< T > *node) : node_(node)  // Реализация конструктора
+  {}
 
   template < typename T >
   T &Iterator< T >::operator*() const

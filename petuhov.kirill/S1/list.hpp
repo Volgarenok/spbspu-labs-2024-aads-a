@@ -1,6 +1,8 @@
 #ifndef LIST_HPP
 #define LIST_HPP
 
+#include <initializer_list>
+#include <utility>
 #include "node.hpp"
 #include "iterator.hpp"
 #include "constiterator.hpp"
@@ -12,6 +14,8 @@ namespace petuhov
   {
   public:
     List();
+    List(const List< T > &other);
+    List(List< T > &&other) noexcept;
     ~List();
     
     Iterator< T > begin() noexcept;
@@ -49,8 +53,8 @@ namespace petuhov
     List< T >& operator=(std::initializer_list< T > ilist);
 
   private:
-    Node< T > *head_;
-    Node< T > *tail_;
+    detail::Node< T > *head_;
+    detail::Node< T > *tail_;
   };
 
   template < typename T >
@@ -63,6 +67,25 @@ namespace petuhov
   List< T >::~List()
   {
     clear();
+  }
+
+  template < typename T >
+  List< T >::List(const List< T > &other): head_(nullptr), tail_(nullptr)
+  {
+    detail::Node< T > *current = other.head_;
+    while (current)
+    {
+      push_front(current->value_);
+      current = current->next_;
+    }
+    reverse();
+  }
+
+  template < typename T >
+  List< T >::List(List< T > &&other) noexcept : head_(other.head_), tail_(other.tail_)
+  {
+    other.head_ = nullptr;
+    other.tail_ = nullptr;
   }
 
   template < typename T >
@@ -110,7 +133,7 @@ namespace petuhov
   template < typename T >
   void List< T >::push_front(const T &value)
   {
-    Node< T > *newNode = new Node< T >{value, head_};
+    detail::Node< T > *newNode = new detail::Node< T >{value, head_};
     head_ = newNode;
     if (tail_ == nullptr)
     {
@@ -123,7 +146,7 @@ namespace petuhov
   {
     if (head_)
     {
-      Node< T > *temp = head_;
+      detail::Node< T > *temp = head_;
       head_ = head_->next_;
       delete temp;
       if (head_ == nullptr)
@@ -150,14 +173,29 @@ namespace petuhov
   }
 
   template < typename T >
+  void List< T >::reverse() noexcept
+  {
+    detail::Node< T > *prev = nullptr, *current = head_, *next = nullptr;
+    tail_ = head_;
+    while (current)
+    {
+      next = current->next_;
+      current->next_ = prev;
+      prev = current;
+      current = next;
+    }
+    head_ = prev;
+  }
+
+  template < typename T >
   List< T >::List(size_t count, const T &value): 
     head_(nullptr),
     tail_(nullptr)
   {
-    Node< T > *lastNode = nullptr;
+    detail::Node< T > *lastNode = nullptr;
     for (size_t i = 0; i < count; ++i)
     {
-      Node< T > *newNode = new Node< T >(value);
+      detail::Node< T > *newNode = new detail::Node< T >(value);
       if (!head_)
       {
         head_ = newNode;
@@ -175,10 +213,10 @@ namespace petuhov
   void List< T >::assign(size_t count, const T &value)
   {
     clear();
-    Node< T > *lastNode = nullptr;
+    detail::Node< T > *lastNode = nullptr;
     for (size_t i = 0; i < count; ++i)
     {
-      Node< T > *newNode = new Node< T >(value);
+      detail::Node< T > *newNode = new detail::Node< T >(value);
       if (!head_)
       {
         head_ = newNode;
@@ -195,13 +233,13 @@ namespace petuhov
   template < typename T >
   void List< T >::remove(const T &value)
   {
-    Node< T > *current = head_;
-    Node< T > *prev = nullptr;
+    detail::Node< T > *current = head_;
+    detail::Node< T > *prev = nullptr;
     while (current)
     {
       if (current->value_ == value)
       {
-        Node< T > *toDelete = current;
+        detail::Node< T > *toDelete = current;
         current = current->next_;
         if (prev)
         {
@@ -229,13 +267,13 @@ namespace petuhov
   template < typename Predicate >
   void List< T >::remove_if(Predicate pred)
   {
-    Node< T > *current = head_;
-    Node< T > *prev = nullptr;
+    detail::Node< T > *current = head_;
+    detail::Node< T > *prev = nullptr;
     while (current)
     {
       if (pred(current->value_))
       {
-        Node< T > *toDelete = current;
+        detail::Node< T > *toDelete = current;
         current = current->next_;
         if (prev)
         {
@@ -264,9 +302,9 @@ namespace petuhov
     head_(nullptr),
     tail_(nullptr)
   {
-    for (auto it = ilist.begin(); it != ilist.end(); ++it)
+    for (const T &item : ilist)
     {
-      Node< T > *newNode = new Node< T >(*it);
+      detail::Node< T > *newNode = new detail::Node< T >(item);
       if (!tail_)
       {
         head_ = tail_ = newNode;
@@ -287,7 +325,7 @@ namespace petuhov
   {
     for (; first != last; ++first)
     {
-      Node< T > *newNode = new Node< T >(*first);
+      detail::Node< T > *newNode = new detail::Node< T >(*first);
       if (!tail_)
       {
         head_ = tail_ = newNode;
@@ -303,7 +341,7 @@ namespace petuhov
   template < typename T >
   Iterator< T > List< T >::insert(Iterator< T > pos, const T &value)
   {
-    Node< T > *newNode = new Node< T >(value);
+    detail::Node< T > *newNode = new detail::Node< T >(value);
     if (pos.node_ == head_)
     {
       newNode->next_ = head_;
@@ -313,7 +351,7 @@ namespace petuhov
     }
     else
     {
-      Node< T > *current = head_;
+      detail::Node< T > *current = head_;
       while (current && current->next_ != pos.node_)
       {
         current = current->next_;
@@ -331,7 +369,7 @@ namespace petuhov
   {
     if (!head_ || !pos.node_)
       return Iterator< T >(nullptr);
-    Node< T > *toDelete = pos.node_;
+    detail::Node< T > *toDelete = pos.node_;
     if (toDelete == head_)
     {
       head_ = head_->next_;
@@ -340,7 +378,7 @@ namespace petuhov
     }
     else
     {
-      Node< T > *prev = head_;
+      detail::Node< T > *prev = head_;
       while (prev && prev->next_ != toDelete)
       {
         prev = prev->next_;
@@ -363,7 +401,7 @@ namespace petuhov
     clear();
     for (; first != last; ++first)
     {
-      Node< T > *newNode = new Node< T >(*first);
+      detail::Node< T > *newNode = new detail::Node< T >(*first);
       if (!tail_)
       {
         head_ = tail_ = newNode;
@@ -380,49 +418,6 @@ namespace petuhov
   void List< T >::assign(std::initializer_list< T > ilist)
   {
     assign(ilist.begin(), ilist.end());
-  }
-
-  template < typename T >
-  void List< T >::splice(Iterator< T > pos, List< T > &other)
-  {
-    if (!other.head_)
-      return;
-    if (pos.node_ == head_)
-    {
-      other.tail_->next_ = head_;
-      head_ = other.head_;
-    }
-    else
-    {
-      Node< T > *current = head_;
-      while (current && current->next_ != pos.node_)
-      {
-        current = current->next_;
-      }
-      if (current)
-      {
-        other.tail_->next_ = current->next_;
-        current->next_ = other.head_;
-        if (other.tail_->next_ == nullptr)
-          tail_ = other.tail_;
-      }
-    }
-    other.head_ = other.tail_ = nullptr;
-  }
-
-  template < typename T >
-  void List< T >::reverse() noexcept
-  {
-    Node< T > *prev = nullptr, *current = head_, *next = nullptr;
-    tail_ = head_;
-    while (current)
-    {
-      next = current->next_;
-      current->next_ = prev;
-      prev = current;
-      current = next;
-    }
-    head_ = prev;
   }
 
   template < typename T >
@@ -453,10 +448,10 @@ namespace petuhov
   List< T > &List< T >::operator=(std::initializer_list< T > ilist)
   {
     clear();
-    Node< T > *lastNode = nullptr;
+    detail::Node< T > *lastNode = nullptr;
     for (const T &item : ilist)
     {
-      Node< T > *newNode = new Node< T >(item);
+      detail::Node< T > *newNode = new detail::Node< T >(item);
       if (!head_)
       {
         head_ = newNode;

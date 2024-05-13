@@ -16,7 +16,7 @@ namespace petuhov
 
   public:
     ConstIterator() : node_(nullptr) {}
-    ConstIterator(const Node< T > *node) : node_(node) {}
+    ConstIterator(const detail::Node< T > *node) : node_(node) {}
     ConstIterator(const ConstIterator &other) = default;
 
     const T &operator*() const
@@ -56,7 +56,7 @@ namespace petuhov
     }
 
   private:
-    const Node< T > *node_;
+    const detail::Node< T > *node_;
   };
 }
 
