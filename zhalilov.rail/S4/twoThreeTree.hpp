@@ -70,14 +70,16 @@ namespace zhalilov
   };
 
   template < class Key, class T, class Compare >
-  TwoThree < Key, T, Compare >::TwoThree() :
-    compare_(Compare{}), head_(createTwoNode(MapPair())), size_(0)
+  TwoThree < Key, T, Compare >::TwoThree():
+    compare_(Compare{}),
+    head_(createTwoNode(MapPair())),
+    size_(0)
   {
     connectNodes(head_, head_, nullptr);
   }
 
   template < class Key, class T, class Compare >
-  TwoThree < Key, T, Compare >::TwoThree(const TwoThree &other) :
+  TwoThree < Key, T, Compare >::TwoThree(const TwoThree &other):
     TwoThree()
   {
     auto it = other.cbegin();
