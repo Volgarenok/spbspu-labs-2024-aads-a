@@ -3,7 +3,7 @@
 
 namespace sivkov
 {
-  bool isOeprator(std::string c)
+  bool isOeprator(std::string& c)
   {
     return (c == "+" || c == "-" || c == "*" || c == "/" || c == "%");
   }
