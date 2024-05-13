@@ -7,14 +7,17 @@
 
 namespace baranov
 {
+  template < class T >
+  class List;
+
   template< class T >
   class Iterator: public std::iterator < std::bidirectional_iterator_tag, T >
   {
     public:
+      friend class List< T >;
       using this_t = Iterator< T >;
 
       Iterator();
-      explicit Iterator(Node< T > * node);
       ~Iterator() = default;
       Iterator(const this_t &) = default;
       this_t & operator=(const this_t &) = default;
@@ -25,16 +28,16 @@ namespace baranov
       this_t & operator--();
       this_t operator --(int);
 
-      this_t operator+(size_t);
-      this_t operator-(size_t);
-
       T & operator*();
       T * operator->();
+      const T & operator*() const;
+      const T * operator->() const;
 
       bool operator==(const this_t &) const;
       bool operator!=(const this_t &) const;
     private:
       Node< T > * node_;
+      explicit Iterator(Node< T > * node);
   };
 
   template< class T >
@@ -82,28 +85,6 @@ namespace baranov
   }
 
   template< class T >
-  Iterator< T > Iterator< T >::operator+(size_t rhs)
-  {
-    assert(node_ != nullptr);
-    for (size_t i = 0; i < rhs; ++i)
-    {
-      ++(*this);
-    }
-    return * this;
-  }
-
-  template< class T >
-  Iterator< T > Iterator< T >::operator-(size_t rhs)
-  {
-    assert(node_ != nullptr);
-    for (size_t i = 0; i < rhs; ++i)
-    {
-      --(*this);
-    }
-    return * this;
-  }
-
-  template< class T >
   T & Iterator< T >::operator*()
   {
     assert(node_ != nullptr);
@@ -112,6 +93,20 @@ namespace baranov
 
   template< class T >
   T * Iterator< T >::operator->()
+  {
+    assert(node_ != nullptr);
+    return std::addressof(node_->data_);
+  }
+
+  template< class T >
+  const T & Iterator< T >::operator*() const
+  {
+    assert(node_ != nullptr);
+    return node_->data_;
+  }
+
+  template< class T >
+  const T * Iterator< T >::operator->() const
   {
     assert(node_ != nullptr);
     return std::addressof(node_->data_);
