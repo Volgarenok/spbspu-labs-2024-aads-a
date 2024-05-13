@@ -33,7 +33,7 @@ int main()
   bool first = true;
   for (petuhov::ConstIterator< std::string > it = names.cbegin(); it != names.cend(); ++it)
   {
-    if (!first) 
+    if (!first)
     {
       std::cout << " ";
     }
