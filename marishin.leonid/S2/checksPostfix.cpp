@@ -81,7 +81,7 @@ long long marishin::calculate(long long num1, long long num2, const std::string&
   else if (op == "*")
   {
     result = num1 * num2;
-    if (num2 != && result / num2 < num1)
+    if (num2 != 0 && result / num2 != num1)
     {
       throw std::out_of_range("Overflow!");
     }
