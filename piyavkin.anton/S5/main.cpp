@@ -22,7 +22,7 @@ int main(int argc, char* argv[])
   std::string val = "";
   while (in >> key >> val)
   {
-    tree.insert(std::pair< int, std::string >(key, val));
+    tree.insert(std::pair< int, std::string >(key, val), false);
   }
   if (!in.eof())
   {

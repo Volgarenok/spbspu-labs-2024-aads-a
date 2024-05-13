@@ -105,6 +105,8 @@ namespace piyavkin
   template< class Key, class T, class Compare >
   class ConstLnrIterator;
   template< class Key, class T, class Compare >
+  class ConstBreadthIterator;
+  template< class Key, class T, class Compare >
   class ConstTreeReverseIterator;
   template< class Key, class T, class Compare = std::less< Key > >
   class ConstTreeIterator: public std::iterator< std::bidirectional_iterator_tag, T >
@@ -119,9 +121,16 @@ namespace piyavkin
     ConstTreeIterator(const ConstLnrIterator< Key, T, Compare >& it):
       ConstTreeIterator(it.stack.top())
     {}
+    ConstTreeIterator(const ConstBreadthIterator< Key, T, Compare >& it):
+      ConstTreeIterator(it.stack.top())
+    {}
     ConstTreeIterator(const ConstTreeIterator< Key, T, Compare >&) = default;
     ConstTreeIterator< Key, T, Compare >& operator=(const ConstTreeIterator< Key, T, Compare >&) = default;
     ConstTreeIterator< Key, T, Compare >& operator=(const ConstLnrIterator< Key, T, Compare >& it)
+    {
+      node_ = it.stack.top();
+    }
+    ConstTreeIterator< Key, T, Compare >& operator=(const ConstBreadthIterator< Key, T, Compare >& it)
     {
       node_ = it.stack.top();
     }
