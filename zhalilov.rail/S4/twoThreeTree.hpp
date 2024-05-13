@@ -110,8 +110,11 @@ namespace zhalilov
   template < class Key, class T, class Compare >
   TwoThree < Key, T, Compare > &TwoThree < Key, T, Compare >::operator=(const TwoThree &other)
   {
-    TwoThree temp(other);
-    swap(temp);
+    if (head_ != other.head_)
+    {
+      TwoThree temp(other);
+      swap(temp);
+    }
     return *this;
   }
 
