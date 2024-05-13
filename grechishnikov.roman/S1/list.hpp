@@ -410,14 +410,14 @@ namespace grechishnikov
   template< typename T >
   void List< T >::reverse() noexcept
   {
-    List< T > temp;
-    auto iter = Iterator< T >(tail_);
-    while (iter !=  nullptr)
+    auto head = head_;
+    while(head)
     {
-      temp.push_back(*iter);
-      iter--;
+      auto nextNode = head->next_;
+      std::swap(head->next_, head->prev_);
+      head = nextNode;
     }
-    swap(temp);
+    std::swap(head_, tail_);
   }
 
   template< typename T >
