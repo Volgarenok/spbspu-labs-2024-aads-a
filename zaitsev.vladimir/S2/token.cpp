@@ -5,7 +5,7 @@
 bool zaitsev::areBraketsPaired(const Token& lhs, const Token& rhs)
 {
   bool both_brackets = (lhs.type_ == token_type::bracket && rhs.type_ == token_type::bracket);
-  return  both_brackets && (int(lhs.value_.bracket_) + int(rhs.value_.bracket_) == 0);
+  return (both_brackets && (int(lhs.value_.bracket_) + int(rhs.value_.bracket_) == 0));
 }
 
 size_t binOperatorPriority(const zaitsev::Token& token)
