@@ -1,6 +1,7 @@
 #ifndef LIST_HPP
 #define LIST_HPP
 
+#include <cstddef>
 #include <initializer_list>
 #include <utility>
 #include "node.hpp"
@@ -31,8 +32,8 @@ namespace petuhov
     void clear() noexcept;
     void swap(List &other) noexcept;
 
-    List(size_t size, const T &value);
-    void assign(size_t count, const T &value);
+    List(std::size_t size, const T &value);
+    void assign(std::size_t count, const T &value);
     void remove(const T &value);
     template < typename Predicate >
     void remove_if(Predicate pred);
@@ -188,12 +189,12 @@ namespace petuhov
   }
 
   template < typename T >
-  List< T >::List(size_t count, const T &value):
+  List< T >::List(std::size_t count, const T &value):
     head_(nullptr),
     tail_(nullptr)
   {
     detail::Node< T > *lastNode = nullptr;
-    for (size_t i = 0; i < count; ++i)
+    for (std::size_t i = 0; i < count; ++i)
     {
       detail::Node< T > *newNode = new detail::Node< T >(value);
       if (!head_)
@@ -210,11 +211,11 @@ namespace petuhov
   }
 
   template < typename T >
-  void List< T >::assign(size_t count, const T &value)
+  void List< T >::assign(std::size_t count, const T &value)
   {
     clear();
     detail::Node< T > *lastNode = nullptr;
-    for (size_t i = 0; i < count; ++i)
+    for (std::size_t i = 0; i < count; ++i)
     {
       detail::Node< T > *newNode = new detail::Node< T >(value);
       if (!head_)
