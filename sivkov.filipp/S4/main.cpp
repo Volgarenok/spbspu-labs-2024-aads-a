@@ -4,7 +4,7 @@
 #include <fstream>
 #include <stdexcept>
 #include <functional>
-#include <AVLTree.hpp>
+#include "AVLTree.hpp"
 #include "cmd.hpp"
 #include "input.hpp"
 
@@ -12,7 +12,8 @@
 int main(int argc, char* argv[])
 {
   using namespace sivkov;
-  AVLTree< std::string, AVLTree< size_t, std::string > > treeOfdic;
+  using avlTree = AVLTree< std::string, AVLTree< size_t, std::string > >;
+  avlTree treeOfdic;
   if (argc != 2)
   {
     std::cerr << "Error CMD line\n";
@@ -23,39 +24,44 @@ int main(int argc, char* argv[])
     std::ifstream file(argv[1]);
     inputDictionary(treeOfdic, file);
   }
-
-  AVLTree< std::string, std::function< void(AVLTree< std::string, AVLTree< size_t, std::string > >&, std::istream&) > > cmd;
-  cmd.push("print", std::bind(print, std::placeholders::_1, std::placeholders::_2, std::ref(std::cout)));
+  using func = std::function< void(avlTree&, std::istream&)>;
+  AVLTree< std::string, func > cmd;
   cmd.push("complement", complement);
-  cmd.push("intersect",intersect);
+  cmd.push("intersect", intersect);
   cmd.push("union", unionCMD);
   std::string inputCommand = "";
 
-  while (std::cin >> inputCommand)
+  while (!std::cin.eof())
   {
-    auto it = cmd.find(inputCommand);
-    if (it != cmd.cend())
+    std::cin >> inputCommand;
+    try
     {
-      try
+      if (inputCommand == "print")
       {
-        it->second(treeOfdic, std::cin);
+        print(treeOfdic, std::cin, std::cout);
       }
-      catch (const std::out_of_range&)
+      else
       {
-        std::cout << "<INVALID COMMAND>" << "\n";
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
-      }
-      catch (const std::logic_error& e)
-      {
-        std::cout << e.what() << "\n";
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+        auto it = cmd.find(inputCommand);
+        if (it != cmd.cend())
+        {
+          it->second(treeOfdic, std::cin);
+        }
+        else
+        {
+          throw std::out_of_range("INVALID COMMAND");
+        }
       }
     }
-    else
+    catch (const std::out_of_range&)
     {
       std::cout << "<INVALID COMMAND>" << "\n";
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    }
+    catch (const std::logic_error& e)
+    {
+      std::cout << e.what() << "\n";
       std::cin.clear();
       std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
