@@ -52,6 +52,7 @@ namespace petuhov
 
     columns.reverse();
 
+    bool overflow = false;
     for (ConstIterator< List< size_t > > col_it = columns.cbegin(); col_it != columns.cend(); ++col_it)
     {
       size_t sum = 0;
@@ -64,9 +65,9 @@ namespace petuhov
           out << " ";
         }
         out << *num_it;
-        if (*num_it > 0 && sum > std::numeric_limits<size_t>::max() - *num_it)
+        if (*num_it > 0 && sum > std::numeric_limits< size_t >::max() - *num_it)
         {
-          throw std::overflow_error("Overflow occurred during summing");
+          overflow = true;
         }
         sum += *num_it;
         has_numbers = true;
@@ -79,6 +80,11 @@ namespace petuhov
       }
     }
     sums.reverse();
+
+    if (overflow)
+    {
+      throw std::overflow_error("Overflow occurred during summing");
+    }
 
     if (sums.empty())
     {
