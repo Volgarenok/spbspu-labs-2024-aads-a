@@ -3,8 +3,7 @@
 #include <string>
 #include <fstream>
 #include <stdexcept>
-#include <functional>
-#include "AVLTree.hpp"
+#include <AVLTree.hpp>
 #include "cmd.hpp"
 #include "input.hpp"
 
@@ -31,9 +30,8 @@ int main(int argc, char* argv[])
   cmd.push("union", unionCMD);
   std::string inputCommand = "";
 
-  while (!std::cin.eof())
+  while (std::cin >> inputCommand)
   {
-    std::cin >> inputCommand;
     try
     {
       if (inputCommand == "print")
