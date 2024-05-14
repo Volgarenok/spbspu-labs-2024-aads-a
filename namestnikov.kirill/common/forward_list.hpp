@@ -175,6 +175,18 @@ namespace namestnikov
     {
       std::swap(head_, other.head_);
     }
+    size_t get_size()
+    {
+      size_t size = 0;
+      node_t * temp = head_;
+      while (head_)
+      {
+        ++size;
+        head_ = head_->next_;
+      }
+      head_ = temp;
+      return size;
+    }
     void pop_front()
     {
       if (empty())
