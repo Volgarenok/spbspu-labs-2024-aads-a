@@ -55,8 +55,16 @@ namespace baranov
     Node< T > * current = rhs.head_;
     while (current)
     {
-      push_back(current->data_);
-      current = current->next_;
+      try
+      {
+        push_back(current->data_);
+        current = current->next_;
+      }
+      catch (...)
+      {
+        clear();
+        throw;
+      }
     }
   }
 
@@ -79,7 +87,15 @@ namespace baranov
   {
     for (size_t i = 0; i < count; ++i)
     {
-      push_front(data);
+      try
+      {
+        push_front(data);
+      }
+      catch (...)
+      {
+        clear();
+        throw;
+      }
     }
   }
 
