@@ -5,22 +5,21 @@
 #include "infixToPostfix.hpp"
 #include "utilities.hpp"
 #include "expressionEvaluation.hpp"
+#incldue "input.hpp"
 
 int main(int argc, char* argv[])
 {
   using namespace sivkov;
-  Queue< Queue< std::string > > postfix;
-  std::istream* input;
+  Queue< Queue< std::string > > queueOfString;
   std::ifstream file;
-
   if (argc == 1)
   {
-    input = &std::cin;
+    inputString(std::cin, queueOfString);
   }
   else if (argc == 2)
   {
     file.open(argv[1]);
-    input = &file;
+    inputString(file, queueOfString);
   }
   else
   {
@@ -28,29 +27,14 @@ int main(int argc, char* argv[])
     return 2;
   }
 
-  std::string in = "";
-  std::string token = "";
-  Queue< std::string > infix1;
   Queue< long long > res;
+  Queue< Queue< std::string > > postfix;
   try
   {
-    while (std::getline(*input, in))
+    while (!queueOfString.empty())
     {
-      if (in == "")
-      {
-        continue;
-      }
-      for (size_t i = 0; i < in.length(); ++i)
-      {
-        token = "";
-        while (i < in.length() && !std::isspace(in[i]))
-        {
-          token += in[i];
-          ++i;
-        }
-        infix1.push(token);
-      }
-      postfix.push(infixToPostfix(infix1));
+      postfix.push(infixToPostfix(queueOfString.front()));
+      queueOfString.pop();
     }
     while (!postfix.empty())
     {
@@ -78,4 +62,3 @@ int main(int argc, char* argv[])
   std::cout << "\n";
   return 0;
 }
-
