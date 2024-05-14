@@ -6,7 +6,7 @@
 
 namespace petuhov
 {
-  void readInput(List< std::pair< std::string, List< int > > > &sequences, std::istream &input);
+  void readInput(List< std::pair< std::string, List< int > > >& sequences, std::istream& input, bool& overflow_occurred);
 }
 
 #endif
