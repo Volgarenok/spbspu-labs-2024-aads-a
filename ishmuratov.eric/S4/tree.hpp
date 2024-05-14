@@ -15,38 +15,42 @@ namespace ishmuratov
   public:
     AVLTree():
       root_(nullptr),
-      comp_(Compare()),
       size_(0)
     {}
 
-    //doesn't work
-    AVLTree(AVLTree & other):
-      AVLTree(other.begin(), other.end())
+    AVLTree(const AVLTree & other):
+      AVLTree(other.cbegin(), other.cend())
     {}
 
-    AVLTree(Iter begin, Iter end):
+    AVLTree(ConstIter begin, ConstIter end):
       root_(nullptr),
       size_(0)
     {
-      while (begin != end)
+      try
       {
-        push(begin.node_->data.first, begin.node_->data.second);
-        ++begin;
+        while (begin != end)
+        {
+          push(begin->first, begin->second);
+          ++begin;
+        }
       }
+      catch(...)
+      {
+        clear();
+      }
+    }
+
+    AVLTree(AVLTree && other) noexcept:
+      root_(other.root_),
+      size_(other.size_)
+    {
+      other.root_ = nullptr;
+      other.size_ = 0;
     }
 
     ~AVLTree()
     {
       clear();
-    }
-
-    tnode * min_elem(tnode * root) const
-    {
-      if (root == nullptr || root->left == nullptr)
-      {
-        return root;
-      }
-      return min_elem(root->left);
     }
 
     Iter begin() noexcept
@@ -143,7 +147,30 @@ namespace ishmuratov
       return this->end();
     }
 
-    long long get_height(tnode * node)
+    void push(Key k, Value v)
+    {
+      if (root_ == nullptr)
+      {
+        root_ = new tnode(k, v);
+        size_ += 1;
+      }
+      else
+      {
+        root_ = place(k, v, root_);
+      }
+    }
+
+    void print(std::ostream & output)
+    {
+      print_impl(root_, 0, output);
+    }
+
+  private:
+    detail::TNode< Key, Value> * root_;
+    Compare comp_;
+    size_t size_;
+
+    int get_height(tnode * node)
     {
       if (node == nullptr)
       {
@@ -152,63 +179,59 @@ namespace ishmuratov
       return node->height;
     }
 
-    long long get_balance(detail::TNode< Key, Value > * node)
+    tnode * min_elem(tnode * root) const
     {
-      if (node == nullptr)
+      if (root == nullptr || root->left == nullptr)
       {
-        return 0;
+        return root;
       }
-      return get_height(node->left) - get_height(node->right);
+      return min_elem(root->left);
     }
 
-    void push(Key k, Value v)
+    tnode * place(Key key, Value value, tnode * node)
     {
-      if (root_ == nullptr)
+      if (comp_(key, node->data.first))
       {
-        root_ = new tnode(k, v);
-        size_ += 1;
-        return;
-      }
-      else
-      {
-        place(k, v, root_);
-      }
-    }
-
-    void print(std::ostream & output)
-    {
-      printUtil(root_, 0, output);
-    }
-
-  private:
-    detail::TNode< Key, Value> * root_;
-    Compare comp_;
-    size_t size_;
-
-    void place(Key k, Value v, tnode * curr)
-    {
-      if (comp_(k, curr->data.first))
-      {
-        if (curr->left == nullptr)
+        if (node->left == nullptr)
         {
-          curr->left = new tnode(k, v);
-          curr->left->parent = curr;
+          node->left = new tnode(key, value);
           size_ += 1;
-          return;
         }
-        place(k, v, curr->left);
-      }
-      else if (comp_(curr->data.first, k))
-      {
-        if (curr->right == nullptr)
+        node->left = place(key, value, node->left);
+        if (get_height(node->left) - get_height(node->right) == 2)
         {
-          curr->right = new tnode(k, v);
-          curr->right->parent = curr;
-          size_ += 1;
-          return;
+          if (comp_(key, node->left->data.first))
+          {
+            node = rotate_right(node);
+          }
+          else
+          {
+            node = rotate_double_right(node);
+          }
         }
-        place(k, v, curr->right);
       }
+      else if (comp_(node->data.first, key))
+      {
+        if (node->right == nullptr)
+        {
+          node->right = new tnode(key, value);
+          size_ += 1;
+        }
+        node->right = place(key, value, node->right);
+        if (get_height(node->right) - get_height(node->left) == 2)
+        {
+          if (comp_(node->right->data.first, key))
+          {
+            node = rotate_left(node);
+          }
+          else
+          {
+            node = rotate_double_left(node);
+          }
+        }
+      }
+      node->height = std::max(get_height(node->left), get_height(node->right)) + 1;
+      return node;
     }
 
     void delete_node(tnode * node)
@@ -222,14 +245,54 @@ namespace ishmuratov
       delete node;
     }
 
-    void printUtil(tnode * root, int space, std::ostream & output)
+    tnode * rotate_left(tnode * node)
+    {
+      tnode * rot_node = node->right;
+      node->right = rot_node->left;
+      rot_node->left = node;
+
+      rot_node->left->parent = node;
+      node->parent = rot_node;
+
+      node->height = std::max(get_height(node->left), get_height(node->right)) + 1;
+      rot_node->height = std::max(get_height(node->right), node->height) + 1 ;
+      return rot_node;
+    }
+
+    tnode * rotate_right(tnode * node)
+    {
+      tnode * rot_node = node->left;
+      node->left = rot_node->right;
+      rot_node->right = node;
+
+      rot_node->right->parent = node;
+      node->parent = rot_node;
+
+      node->height = std::max(get_height(node->left), get_height(node->right)) + 1;
+      rot_node->height = std::max(get_height(rot_node->left), node->height) + 1;
+      return rot_node;
+    }
+
+    tnode * rotate_double_left(tnode * node)
+    {
+      node->right = rotate_right(node->right);
+      return rotate_left(node);
+    }
+
+    tnode * rotate_double_right(tnode * node)
+    {
+      node->left = rotate_left(node->left);
+      return rotate_right(node);
+    }
+
+    void print_impl(tnode * root, int space, std::ostream & output)
     {
       if (root == nullptr)
         return;
 
       space += 5;
 
-      printUtil(root->right, space, output);
+      print_impl(root->right, space, output);
 
       output << "\n";
       for (int i = 5; i < space; i++)
@@ -238,7 +301,7 @@ namespace ishmuratov
       }
       output << root->data.first << "\n";
 
-      printUtil(root->left, space, output);
+      print_impl(root->left, space, output);
     }
   };
 }

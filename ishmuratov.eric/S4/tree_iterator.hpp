@@ -14,9 +14,9 @@ namespace ishmuratov
   template< class Key, class Value, class Comparator >
   class Iterator
   {
+    using tnode = detail::TNode< Key, Value >;
     using Iter = Iterator< Key, Value, Comparator >;
     using pair = std::pair< Key, Value >;
-    using tnode = detail::TNode< Key, Value >;
   public:
     Iterator():
       node_(nullptr)
@@ -25,15 +25,6 @@ namespace ishmuratov
     ~Iterator() = default;
     Iterator(const Iter &) = default;
     Iter & operator=(const Iter &) = default;
-
-    tnode * min_elem(tnode * root)
-    {
-      if (root == nullptr || root->left == nullptr)
-      {
-        return root;
-      }
-      return min_elem(root->left);
-    }
 
     Iter & operator++()
     {
@@ -131,22 +122,6 @@ namespace ishmuratov
     explicit Iterator(detail::TNode< Key, Value > * node):
       node_(node)
     {}
-  };
-
-  template< class Key, class Value, class Comparator >
-  class ConstIterator
-  {
-    using ConstIter = ConstIterator< Key, Value, Comparator >;
-    using pair = std::pair< Key, Value >;
-    using tnode = detail::TNode< Key, Value >;
-  public:
-    ConstIterator():
-      node_(nullptr)
-    {}
-
-    ~ConstIterator() = default;
-    ConstIterator(const ConstIter &) = default;
-    ConstIter & operator=(const ConstIter &) = default;
 
     tnode * min_elem(tnode * root) const
     {
@@ -156,6 +131,22 @@ namespace ishmuratov
       }
       return min_elem(root->left);
     }
+  };
+
+  template< class Key, class Value, class Comparator >
+  class ConstIterator
+  {
+    using tnode = detail::TNode< Key, Value >;
+    using ConstIter = ConstIterator< Key, Value, Comparator >;
+    using pair = std::pair< Key, Value >;
+  public:
+    ConstIterator():
+      node_(nullptr)
+    {}
+
+    ~ConstIterator() = default;
+    ConstIterator(const ConstIter &) = default;
+    ConstIter & operator=(const ConstIter &) = default;
 
     ConstIter & operator++()
     {
@@ -243,6 +234,15 @@ namespace ishmuratov
     explicit ConstIterator(const detail::TNode< Key, Value > * node):
       node_(node)
     {}
+
+    tnode * min_elem(tnode * root) const
+    {
+      if (root == nullptr || root->left == nullptr)
+      {
+        return root;
+      }
+      return min_elem(root->left);
+    }
   };
 }
 
