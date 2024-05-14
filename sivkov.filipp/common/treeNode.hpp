@@ -7,7 +7,7 @@ namespace sivkov
 {
   namespace detail
   {
-    template <typename Key, typename Value>
+    template < typename Key, typename Value >
     struct TreeNode
     {
       TreeNode* left;
