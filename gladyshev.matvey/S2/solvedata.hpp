@@ -4,6 +4,7 @@
 #include <istream>
 
 #include "stack.hpp"
+#include "queue.hpp"
 
 namespace gladyshev
 {
