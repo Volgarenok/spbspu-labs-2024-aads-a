@@ -15,7 +15,7 @@ bool priority(const std::string& stack, const std::string& current)
   return (stack != "(") && (((current == "*" || current == "/") && (stack == "*" || stack == "/")) || (current == "+" || current == "-"));
 }
 
-void operations(marishin::Stack<std::string> &stack, const std::string &str, std::string &value)
+void operations(marishin::Stack< std::string > &stack, const std::string &str, std::string &value)
 {
   if (binary(str))
   {
@@ -41,7 +41,7 @@ void operations(marishin::Stack<std::string> &stack, const std::string &str, std
   }
 }
 
-void getFromStack(marishin::Stack<std::string> &stack, std::string &value)
+void getFromStack(marishin::Stack< std::string > &stack, std::string &value)
 {
   while (!stack.empty())
   {
