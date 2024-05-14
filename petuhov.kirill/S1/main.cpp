@@ -12,7 +12,15 @@ int main()
   petuhov::List< std::pair< std::string, petuhov::List< int > > > sequences;
   bool overflow_occurred = false;
 
-  petuhov::readInput(sequences, std::cin, overflow_occurred);
+  try
+  {
+    petuhov::readInput(sequences, std::cin, overflow_occurred);
+  }
+  catch (const std::exception& e)
+  {
+    std::cerr << "Error: " << e.what() << "\n";
+    return 1;
+  }
 
   if (sequences.empty())
   {
@@ -30,7 +38,7 @@ int main()
   }
   catch (const std::overflow_error& e)
   {
-    std::cerr << "Error: " << e.what() << "\n";
+    std::cerr << "Formed lists with exit code 1 and error message in standard error because of overflow: " << e.what() << "\n";
     return 1;
   }
 
