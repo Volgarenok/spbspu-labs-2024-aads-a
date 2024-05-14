@@ -3,11 +3,15 @@
 
 #include <iosfwd>
 #include <string>
+#include <dynamic_array.hpp>
+#include "red_black_tree.hpp"
 #include "input_output_collection.hpp"
 
 namespace erohin
 {
-  void inputArguments(std::istream & input, std::string * dest, size_t size);
+  using dict_func = std::function< void(std::istream &, std::ostream &) >;
+  using commands_source = RedBlackTree< std::string, dict_func >;
+  void inputArguments(std::istream & input, DynamicArray< std::string > & args, size_t size);
   void print(const collection & context, std::istream & input, std::ostream & output);
   void complement(collection & context, std::istream & input, std::ostream &);
   void intersect(collection & context, std::istream & input, std::ostream &);

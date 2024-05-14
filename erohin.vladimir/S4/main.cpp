@@ -20,14 +20,13 @@ int main(int argc, char ** argv)
   std::fstream file(argv[1]);
   collection context;
   inputCollection(file, context);
-  using dict_func = std::function< void(std::istream &, std::ostream &) >;
-  std::map< std::string, dict_func > command;
+  commands_source command;
   {
     using namespace std::placeholders;
-    command["print"] = std::bind(print, std::ref(context), _1, _2);
-    command["complement"] = std::bind(complement, std::ref(context), _1, _2);
-    command["intersect"] = std::bind(intersect, std::ref(context), _1, _2);
-    command["union"] = std::bind(unite, std::ref(context), _1, _2);
+    command.insert(std::make_pair("print", std::bind(print, std::ref(context), _1, _2)));
+    command.insert(std::make_pair("complement", std::bind(complement, std::ref(context), _1, _2)));
+    command.insert(std::make_pair("intersect", std::bind(intersect, std::ref(context), _1, _2)));
+    command.insert(std::make_pair("union", std::bind(unite, std::ref(context), _1, _2)));
   }
   std::string command_name;
   std::cin >> command_name;
