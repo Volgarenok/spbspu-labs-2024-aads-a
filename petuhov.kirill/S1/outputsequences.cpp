@@ -64,6 +64,10 @@ namespace petuhov
           out << " ";
         }
         out << *num_it;
+        if (*num_it > 0 && sum > std::numeric_limits<size_t>::max() - *num_it)
+        {
+          throw std::overflow_error("Overflow occurred during summing");
+        }
         sum += *num_it;
         has_numbers = true;
         first = false;
