@@ -6,8 +6,8 @@ namespace sivkov
   {
     std::string dataset = "";
     in >> dataset;
-    AVLTree< size_t, std::string > data = treeOfdic.get(dataset);
-    if (data.emty())
+    AVLTree< size_t, std::string > data = treeOfdic.at(dataset);
+    if (data.empty())
     {
       throw std::logic_error("<EMPTY>");
     }
@@ -23,15 +23,15 @@ namespace sivkov
   {
     std::string newDataset = "", dataset1 = "", dataset2 = "";
     in >> newDataset >> dataset1 >> dataset2;
-    AVLTree< size_t, std::string > data1 = treeOfdic.get(dataset1);
-    AVLTree< size_t, std::string > data2 = treeOfdic.get(dataset2);
+    AVLTree< size_t, std::string > data1 = treeOfdic.at(dataset1);
+    AVLTree< size_t, std::string > data2 = treeOfdic.at(dataset2);
     AVLTree< size_t, std::string > result;
 
     for (auto it = data1.cbegin(); it != data1.cend(); ++it)
     {
       try
       {
-        data2.get(it->first);
+        data2.at(it->first);
       }
       catch (...)
       {
@@ -45,8 +45,8 @@ namespace sivkov
   {
     std::string newDataset = "", dataset1 = "", dataset2 = "";
     in >> newDataset >> dataset1 >> dataset2;
-    AVLTree< size_t, std::string > data1 = treeOfdic.get(dataset1);
-    AVLTree< size_t, std::string > data2 = treeOfdic.get(dataset2);
+    AVLTree< size_t, std::string > data1 = treeOfdic.at(dataset1);
+    AVLTree< size_t, std::string > data2 = treeOfdic.at(dataset2);
     AVLTree< size_t, std::string > result;
     for (auto it = data1.cbegin(); it != data1.cend(); ++it)
     {
@@ -64,8 +64,8 @@ namespace sivkov
     std::string newDataset, dataset1, dataset2;
     in >> newDataset >> dataset1 >> dataset2;
 
-    AVLTree< size_t, std::string > data1 = treeOfdic.get(dataset1);
-    AVLTree< size_t, std::string > data2 = treeOfdic.get(dataset2);
+    AVLTree< size_t, std::string > data1 = treeOfdic.at(dataset1);
+    AVLTree< size_t, std::string > data2 = treeOfdic.at(dataset2);
     AVLTree< size_t, std::string > result;
     for (auto it = data1.cbegin(); it != data1.cend(); ++it)
     {
