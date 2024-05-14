@@ -2,9 +2,11 @@
 
 #include <limits>
 #include <stdexcept>
+#include <string>
 
 #include "checkdata.hpp"
 #include "stack.hpp"
+#include "queue.hpp"
 
 long long int gladyshev::evaluatePostfix(Queue< std::string >& postfix)
 {
@@ -73,4 +75,34 @@ long long int gladyshev::evaluatePostfix(Queue< std::string >& postfix)
     }
   }
   return operands.top();
+}
+
+void gladyshev::inputExpression(std::istream& input, Stack< long long int >& results)
+{
+  std::string in = "";
+  std::string token = "";
+  while (std::getline(input, in))
+  {
+    if (in == "")
+    {
+      continue;
+    }
+    Queue< std::string > queuecheck;
+    for (size_t i = 0; i < in.length(); ++i)
+    {
+      token = "";
+      while (i < in.length() && !std::isspace(in[i]))
+      {
+        token += in[i];
+        ++i;
+      }
+      if (!token.empty())
+      {
+        queuecheck.push(token);
+      }
+    }
+    Queue< std::string > postfix = infixToPostfix(queuecheck);
+    long long int result = evaluatePostfix(postfix);
+    results.push(result);
+  }
 }

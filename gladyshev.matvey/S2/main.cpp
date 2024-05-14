@@ -1,53 +1,22 @@
 #include <iostream>
 #include <fstream>
 
-#include "queue.hpp"
-#include "stack.hpp"
-#include "topostfix.hpp"
-#include "solvedata.hpp"
+#include "inputexpression.hpp"
 
 int main(int argc, char* argv[])
 {
   using namespace gladyshev;
-  std::istream* input;
-  std::ifstream file;
-  if (argc == 2)
-  {
-    file.open(argv[1]);
-    input = &file;
-  }
-  else
-  {
-    input = &std::cin;
-  }
   Stack< long long int > results;
-  std::string in = "";
-  std::string token = "";
   try
   {
-    while (std::getline(*input, in))
+     if (argc == 2)
     {
-      if (in == "")
-      {
-        continue;
-      }
-      Queue< std::string > queuecheck;
-      for (size_t i = 0; i < in.length(); ++i)
-      {
-        token = "";
-        while (i < in.length() && !std::isspace(in[i]))
-        {
-          token += in[i];
-          ++i;
-        }
-        if (!token.empty())
-        {
-          queuecheck.push(token);
-        }
-      }
-      Queue< std::string > postfix = infixToPostfix(queuecheck);
-      long long int result = evaluatePostfix(postfix);
-      results.push(result);
+      std::ifstream file(argv[1]);
+      inputExpression(file, results);
+    }
+    else
+    {
+      inputExpression(std::cin, results);
     }
   }
   catch (const std::exception& e)
