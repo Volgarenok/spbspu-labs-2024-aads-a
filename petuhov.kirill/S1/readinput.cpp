@@ -29,6 +29,7 @@ namespace petuhov
           if (num > static_cast<unsigned long long>(std::numeric_limits<int>::max()))
           {
             overflow_occurred = true;
+            sequences.clear();
             throw std::out_of_range("Number out of range");
           }
           numbers.push_front(static_cast<int>(num));

@@ -38,7 +38,7 @@ int main()
   }
   catch (const std::overflow_error& e)
   {
-    std::cerr << "Formed lists with exit code 1 and error message in standard error because of overflow: " << e.what() << "\n";
+    std::cerr << "Error: " << e.what() << "\n";
     return 1;
   }
 
