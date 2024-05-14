@@ -20,7 +20,7 @@ int main()
   if (!namedLists.empty())
   {
     std::cout << namedLists.cbegin()->first;
-    for (auto namedIter = advance(namedLists.cbegin(), 1); namedIter != namedLists.cend(); namedIter++)
+    for (auto namedIter = ++namedLists.cbegin(); namedIter != namedLists.cend(); namedIter++)
     {
       std::cout << ' ' << namedIter->first;
     }
@@ -42,7 +42,9 @@ int main()
     {
       if (i < iter->second.size())
       {
-        outIter->push_back(*(advance(iter->second.cbegin(), i)));
+        auto temp = iter->second.cbegin();
+        std::advance(temp, i);
+        outIter->push_back(*temp);
       }
     }
     outIter++;

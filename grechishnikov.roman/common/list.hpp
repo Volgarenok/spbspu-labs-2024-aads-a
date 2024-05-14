@@ -7,7 +7,6 @@
 #include "node.hpp"
 #include "iterator.hpp"
 #include "constIterator.hpp"
-#include "iteratorFunctions.hpp"
 
 namespace grechishnikov
 {
@@ -72,6 +71,10 @@ namespace grechishnikov
 
   private:
     void safe_push_back(const T&);
+
+    void sew(ConstIterator< T > first, ConstIterator< T > last);
+    void doSplice(ConstIterator< T > where, List< T >& other, ConstIterator< T > iter);
+    ConstIterator< T > doSlice(List< T >& other, ConstIterator< T > pos);
 
     size_t size_;
     detail::Node< T >* head_;
@@ -318,11 +321,12 @@ namespace grechishnikov
     auto first = cbegin();
     while (first != cend())
     {
-      if (p(*first))
-      {
-        erase(first);
-      }
+      auto temp = first;
       first++;
+      if (p(*temp))
+      {
+        erase(temp);
+      }
     }
   }
 
@@ -359,13 +363,14 @@ namespace grechishnikov
   template< typename T >
   Iterator< T > List< T >::insert(ConstIterator< T > where, T&& value)
   {
-    auto nextNode = advance(where, 1);
+    auto nextNode = where;
+    nextNode++;
     if (nextNode == cend())
     {
       push_back(value);
       return Iterator< T >(tail_);
     }
-    auto temp = new detail::Node< T > (value, nullptr, nullptr);
+    auto temp = new detail::Node< T >(std::move(value), nullptr, nullptr);
     where.node_->next_ = temp;
     nextNode.node_->prev_ = temp;
     temp->prev_ = where.node_;
@@ -405,51 +410,55 @@ namespace grechishnikov
   template< typename T >
   void List< T >::reverse() noexcept
   {
-    List< T > temp;
-    auto iter = Iterator< T >(tail_);
-    while (iter !=  nullptr)
+    auto head = head_;
+    while(head)
     {
-      temp.push_back(*iter);
-      iter--;
+      auto nextNode = head->next_;
+      std::swap(head->next_, head->prev_);
+      head = nextNode;
     }
-    swap(temp);
+    std::swap(head_, tail_);
   }
 
   template< typename T >
   void List< T >::splice(ConstIterator< T > where, List< T >& other)
   {
-    insert(where, other.cbegin(), other.cend());
-    other.clear();
+    splice(where, other, other.cbegin(), other.cend());
   }
 
   template< typename T >
   void List< T >::splice(ConstIterator< T > where, List< T >&& other)
   {
-    insert(where, other.cbegin(), other.cend());
+    splice(where, other, other.cbegin(), other.cend());
   }
 
   template< typename T >
   void List< T >::splice(ConstIterator< T > where, List< T >& other, ConstIterator< T > iter)
   {
-    insert(where, *iter);
-    other.erase(iter);
+    if (where == cend())
+    {
+      push_back(T());
+      doSplice(ConstIterator< T >(tail_), other, iter);
+      pop_back();
+      return;
+    }
+    doSplice(where, other, iter);
   }
 
   template< typename T >
   void List< T >::splice(ConstIterator< T > where, List< T >&& other, ConstIterator< T > iter)
   {
-    insert(where, *iter);
+    splice(where, other, iter);
   }
 
   template< typename T >
   void List< T >::splice(ConstIterator< T > where, List< T >& other, ConstIterator< T > first, ConstIterator< T > last)
   {
-    insert(where, first, last);
     auto temp = first;
     while (first != last)
     {
-      temp = advance(first, 1);
-      other.erase(first);
+      temp++;
+      splice(where, other, first);
       first = temp;
     }
   }
@@ -472,6 +481,66 @@ namespace grechishnikov
       clear();
       throw;
     }
+  }
+
+  template< typename T >
+  void List< T >::sew(ConstIterator< T > first, ConstIterator< T > second)
+  {
+    if (first.node_ && second.node_)
+    {
+      first.node_->next_ = second.node_;
+      second.node_->prev_ = first.node_;
+    }
+  }
+
+  template< typename T >
+  void List< T >::doSplice(ConstIterator< T > where, List< T >& other, ConstIterator< T > iter)
+  {
+    auto prev = where;
+    prev--;
+
+    auto slice = doSlice(other, iter);
+    sew(prev, slice);
+    sew(slice, where);
+
+    if (where.node_ == head_)
+    {
+      head_ = slice.node_;
+    }
+    size_++;
+  }
+
+  template< typename T >
+  ConstIterator< T > List< T >::doSlice(List< T >& other, ConstIterator< T > pos)
+  {
+    if (pos.node_ == other.head_ && pos.node_ == other.tail_)
+    {
+      other.head_ = nullptr;
+      other.tail_ = nullptr;
+      other.size_ = 0;
+      return pos;
+    }
+
+    if (pos.node_ == other.head_)
+    {
+      other.head_ = pos.node_->next_;
+    }
+    if (pos.node_ == other.tail_)
+    {
+      other.tail_ = pos.node_->prev_;
+    }
+    auto prev = pos.node_->prev_;
+    auto next = pos.node_->next_;
+    if (prev)
+    {
+      prev->next_ = next;
+    }
+    if (next)
+    {
+      next->prev_ = prev;
+    }
+    other.size_--;
+    return pos;
   }
 }
 
