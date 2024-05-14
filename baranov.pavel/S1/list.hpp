@@ -16,15 +16,15 @@ namespace baranov
       List(const List && rhs) noexcept;
       List(size_t count, const T & data);
       ~List();
-      Iterator< T > begin();
-      Iterator< T > end();
-      ConstIterator< T > cbegin();
-      ConstIterator< T > cend();
-      bool empty() const;
-      size_t size() const;
-      void push_back(T data);
+      Iterator< T > begin() noexcept;
+      Iterator< T > end() noexcept;
+      ConstIterator< T > cbegin() const noexcept;
+      ConstIterator< T > cend() const noexcept;
+      bool empty() const noexcept;
+      size_t size() const noexcept;
+      void push_back(const T & data);
       void pop_back();
-      void push_front(T data);
+      void push_front(const T & data);
       void pop_front();
       void assign(size_t count, const T & data);
       void clear();
@@ -90,43 +90,43 @@ namespace baranov
   }
 
   template< class T >
-  Iterator< T > List< T >::begin()
+  Iterator< T > List< T >::begin() noexcept
   {
     return Iterator< T >(head_);
   }
 
   template< class T >
-  Iterator< T > List< T >::end()
+  Iterator< T > List< T >::end() noexcept
   {
     return Iterator< T >();
   }
 
   template< class T >
-  ConstIterator< T > List< T >::cbegin()
+  ConstIterator< T > List< T >::cbegin() const noexcept
   {
     return ConstIterator< T >(head_);
   }
 
   template< class T >
-  ConstIterator< T > List< T >::cend()
+  ConstIterator< T > List< T >::cend() const noexcept
   {
     return ConstIterator< T >();
   }
 
   template< class T >
-  bool List< T >::empty() const
+  bool List< T >::empty() const noexcept
   {
     return head_ == nullptr || tail_ == nullptr;
   }
 
   template< class T >
-  size_t List< T >::size() const
+  size_t List< T >::size() const noexcept
   {
     return size_;
   }
 
   template< class T >
-  void List< T >::push_back(T data)
+  void List< T >::push_back(const T & data)
   {
     Node< T > * topush = new Node< T >{ data };
     if (empty())
@@ -164,7 +164,7 @@ namespace baranov
   }
 
   template< class T >
-  void List< T >::push_front(T data)
+  void List< T >::push_front(const T & data)
   {
     Node< T > * topush = new Node< T >{ data };
     if (empty())
