@@ -9,7 +9,6 @@ namespace sivkov
   void inputString(std::istream& input, Queue< Queue< std::string > >& queueOfString)
   {
     std::string in = "";
-    std::string token = "";
     while (std::getline(input, in))
     {
       if (in == "")
@@ -19,7 +18,7 @@ namespace sivkov
       Queue< std::string > infix1;
       for (size_t i = 0; i < in.length(); ++i)
       {
-        token = "";
+        std::string token = "";
         while (i < in.length() && !std::isspace(in[i]))
         {
           token += in[i];
