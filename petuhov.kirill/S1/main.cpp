@@ -9,7 +9,7 @@
 
 int main()
 {
-  petuhov::List< std::pair< std::string, petuhov::List< unsigned long long > > > sequences;
+  petuhov::List< std::pair< std::string, petuhov::List< size_t > > > sequences;
 
   petuhov::readInput(sequences, std::cin);
 
@@ -19,7 +19,7 @@ int main()
     return 0;
   }
 
-  petuhov::List< unsigned long long > sums;
+  petuhov::List< size_t > sums;
 
   try
   {

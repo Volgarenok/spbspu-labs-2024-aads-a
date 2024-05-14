@@ -6,7 +6,7 @@
 
 namespace petuhov
 {
-  void outputSums(std::ostream& out, const List< unsigned long long >& sums);
+  void outputSums(std::ostream& out, const List< size_t >& sums);
 }
 
 #endif

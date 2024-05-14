@@ -5,10 +5,10 @@
 
 namespace petuhov
 {
-  void outputSums(std::ostream& out, const List< unsigned long long >& sums)
+  void outputSums(std::ostream& out, const List< size_t >& sums)
   {
     bool first = true;
-    for (ConstIterator< unsigned long long > sum_it = sums.cbegin(); sum_it != sums.cend(); ++sum_it)
+    for (ConstIterator< size_t > sum_it = sums.cbegin(); sum_it != sums.cend(); ++sum_it)
     {
       if (!first)
       {
@@ -22,10 +22,10 @@ namespace petuhov
       out << "\n";
     }
 
-    unsigned long long total_sum = 0;
-    for (ConstIterator<unsigned long long> sum_it = sums.cbegin(); sum_it != sums.cend(); ++sum_it)
+    size_t total_sum = 0;
+    for (ConstIterator<size_t> sum_it = sums.cbegin(); sum_it != sums.cend(); ++sum_it)
     {
-      if (*sum_it > 0 && total_sum > std::numeric_limits<unsigned long long>::max() - *sum_it)
+      if (*sum_it > 0 && total_sum > std::numeric_limits<size_t>::max() - *sum_it)
       {
         throw std::overflow_error("Overflow occurred during summing");
       }

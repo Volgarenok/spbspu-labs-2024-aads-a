@@ -4,10 +4,10 @@
 
 namespace petuhov
 {
-  void outputNames(std::ostream& out, const List< std::pair< std::string, List< unsigned long long > > >& sequences)
+  void outputNames(std::ostream& out, const List< std::pair< std::string, List< size_t > > >& sequences)
   {
     bool first = true;
-    for (ConstIterator< std::pair< std::string, List< unsigned long long > > > it = sequences.cbegin(); it != sequences.cend(); ++it)
+    for (ConstIterator< std::pair< std::string, List< size_t > > > it = sequences.cbegin(); it != sequences.cend(); ++it)
     {
       if (!first)
       {

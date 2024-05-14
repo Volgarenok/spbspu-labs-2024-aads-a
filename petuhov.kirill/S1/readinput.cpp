@@ -8,7 +8,7 @@
 
 namespace petuhov
 {
-  void readInput(List< std::pair< std::string, List< unsigned long long > > >& sequences, std::istream& input)
+  void readInput(List< std::pair< std::string, List< size_t > > >& sequences, std::istream& input)
   {
     std::string line;
     while (std::getline(input, line))
@@ -19,11 +19,11 @@ namespace petuhov
       {
         continue;
       }
-      List< unsigned long long > numbers;
+      List< size_t > numbers;
       std::string num_str;
       while (iss >> num_str)
       {
-        unsigned long long num = std::stoull(num_str);
+        size_t num = std::stoull(num_str);
         numbers.push_front(num);
       }
       numbers.reverse();
