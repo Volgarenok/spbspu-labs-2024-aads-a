@@ -2,38 +2,16 @@
 #include <iostream>
 #include <cstring>
 
-void erohin::inputArguments(std::istream & input, DynamicArray< std::string > & args, size_t size)
-{
-  std::string current_arg;
-  for (size_t i = 0; i < size; ++i)
-  {
-    if (!input || input.peek() == '\n')
-    {
-      throw std::invalid_argument("Wrong number of arguments to command");
-    }
-    input >> current_arg;
-    args.push_back(current_arg);
-  }
-  if (input.peek() != '\n')
-  {
-    throw std::invalid_argument("Wrong number of arguments to command");
-  }
-}
-
 void erohin::print(const collection & context, std::istream & input, std::ostream & output)
 {
-  DynamicArray< std::string > dict_name;
-  inputArguments(input, dict_name, 1);
-  if (!input)
-  {
-    throw std::runtime_error("Not goodbit was found");
-  }
-  const dictionary & dict = context.at(dict_name[0]);
+  std::string dict_name;
+  input >> dict_name;
+  const dictionary & dict = context.at(dict_name);
   if (dict.empty())
   {
     throw std::underflow_error("Dictionary is empty");
   }
-  output << dict_name[0];
+  output << dict_name;
   auto iter = dict.cbegin();
   auto end_iter = dict.cend();
   while (iter != end_iter)
@@ -46,8 +24,8 @@ void erohin::print(const collection & context, std::istream & input, std::ostrea
 
 void erohin::complement(collection & context, std::istream & input, std::ostream &)
 {
-  DynamicArray< std::string > dict_name;
-  inputArguments(input, dict_name, 3);
+  std::string dict_name[3];
+  input >> dict_name[0] >> dict_name[1] >> dict_name[2];
   dictionary temp_dict;
   const dictionary & source1 = context.at(dict_name[1]);
   const dictionary & source2 = context.at(dict_name[2]);
@@ -74,8 +52,8 @@ void erohin::complement(collection & context, std::istream & input, std::ostream
 
 void erohin::intersect(collection & context, std::istream & input, std::ostream &)
 {
-  DynamicArray< std::string > dict_name;
-  inputArguments(input, dict_name, 3);
+  std::string dict_name[3];
+  input >> dict_name[0] >> dict_name[1] >> dict_name[2];
   dictionary temp_dict;
   const dictionary & source1 = context.at(dict_name[1]);
   const dictionary & source2 = context.at(dict_name[2]);
@@ -102,8 +80,8 @@ void erohin::intersect(collection & context, std::istream & input, std::ostream 
 
 void erohin::unite(collection & context, std::istream & input, std::ostream &)
 {
-  DynamicArray< std::string > dict_name;
-  inputArguments(input, dict_name, 3);
+  std::string dict_name[3];
+  input >> dict_name[0] >> dict_name[1] >> dict_name[2];
   dictionary temp_dict;
   const dictionary & source1 = context.at(dict_name[1]);
   const dictionary & source2 = context.at(dict_name[2]);
