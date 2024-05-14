@@ -201,6 +201,20 @@ namespace zaitsev
     {
       freeNodes(head_);
     }
+    ForwardList& operator=(const ForwardList& other)
+    {
+      ForwardList temp_list(other);
+      freeNodes(head_);
+      *this = std::move(temp_list);
+      return *this;
+    }
+    ForwardList& operator=(ForwardList&& other)
+    {
+      freeNodes(head_);
+      head_ = other.head_;
+      other.head_ = nullptr;
+      return *this;
+    }
 
     friend bool operator==(const ForwardList& first, const ForwardList& second)
     {
@@ -271,8 +285,8 @@ namespace zaitsev
         throw std::runtime_error("List is empty");
       }
       Node* temp = head_;
-      head_ = head_->next;
-      delete head_;
+      head_ = head_->next_;
+      delete temp;
     }
     void assign(size_t count, const T& value)
     {
