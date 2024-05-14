@@ -4,7 +4,6 @@
 #include <utility>
 #include <iterator>
 #include "tree_node.hpp"
-#include "traversal_strategy.hpp"
 
 namespace erohin
 {
