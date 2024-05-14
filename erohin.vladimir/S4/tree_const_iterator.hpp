@@ -48,7 +48,7 @@ namespace erohin
   template< class Key, class T >
   TreeConstIterator< Key, T > & TreeConstIterator< Key, T >::operator++()
   {
-    node_ = node_->next();
+    node_ = const_cast< detail::Node< Key, T > * >(node_)->next();
     return *this;
   }
 
@@ -56,14 +56,14 @@ namespace erohin
   TreeConstIterator< Key, T > TreeConstIterator< Key, T >::operator++(int)
   {
     TreeConstIterator< Key, T > temp = *this;
-    node_ = node_->next();
+    operator++();
     return temp;
   }
 
   template< class Key, class T >
   TreeConstIterator< Key, T > & TreeConstIterator< Key, T >::operator--()
   {
-    node_ = node_->prev();
+    node_ = const_cast< detail::Node< Key, T > * >(node_)->prev();
     return *this;
   }
 
@@ -71,7 +71,7 @@ namespace erohin
   TreeConstIterator< Key, T > TreeConstIterator< Key, T >::operator--(int)
   {
     TreeConstIterator< Key, T > temp = *this;
-    node_ = node_->prev();
+    operator--();
     return temp;
   }
 

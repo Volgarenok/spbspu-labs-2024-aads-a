@@ -26,9 +26,7 @@ namespace erohin
       Node(std::pair< Key, T > && value, Node * parent, Node * left, Node * right);
       ~Node() = default;
       Node * next();
-      const Node * next() const;
       Node * prev();
-      const Node * prev() const;
     };
 
     template< class Key, class T >
@@ -63,7 +61,7 @@ namespace erohin
       }
       else
       {
-        if (!node->parent_)
+        if (!parent_)
         {
           return nullptr;
         }
@@ -81,12 +79,6 @@ namespace erohin
         }
       }
       return node;
-    }
-
-    template< class Key, class T >
-    const Node< Key, T > * Node< Key, T >::next() const
-    {
-      return const_cast< const Node< Key, T > * >(this->next());
     }
 
     template< class Key, class T >
@@ -117,12 +109,6 @@ namespace erohin
         }
       }
       return node;
-    }
-
-    template< class Key, class T >
-    const Node< Key, T > * Node< Key, T >::prev() const
-    {
-      return const_cast< const Node< Key, T > * >(this->prev());
     }
   }
 }

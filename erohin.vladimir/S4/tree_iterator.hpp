@@ -57,7 +57,7 @@ namespace erohin
   TreeIterator< Key, T > TreeIterator< Key, T >::operator++(int)
   {
     TreeIterator< Key, T > temp = *this;
-    node_ = node_->next();
+    operator++();
     return temp;
   }
 
@@ -72,7 +72,7 @@ namespace erohin
   TreeIterator< Key, T > TreeIterator< Key, T >::operator--(int)
   {
     TreeIterator< Key, T > temp = *this;
-    node_ = node_->prev();
+    operator--();
     return temp;
   }
 
