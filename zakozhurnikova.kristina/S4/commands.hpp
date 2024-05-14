@@ -1,8 +1,8 @@
 #ifndef COMMANDS_HPP
 #define COMMANDS_HPP
-#include <list.hpp>
 #include <string>
-#include "binarySearchTree.hpp"
+#include <binarySearchTree.hpp>
+#include <list.hpp>
 
 namespace zakozhurnikova
 {
