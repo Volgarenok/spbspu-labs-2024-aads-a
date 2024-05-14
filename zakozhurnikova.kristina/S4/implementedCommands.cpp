@@ -32,19 +32,31 @@ void zak::ImplementedCommands::executeCommand(std::istream& input, std::string& 
     return;
   }
 
+  std::string cmdName = args.front();
+  args.pop_front();
   try
   {
-    std::string cmdName = args.front();
-    args.pop_front();
     (*commands_.at(cmdName))(args, result, maps_);
   }
   catch (const std::out_of_range& e)
   {
-    throw std::invalid_argument("invalid command name");
+    try
+    {
+      (*printCmd_.at(cmdName))(args, result, maps_);
+    }
+    catch (const std::out_of_range&)
+    {
+      throw std::invalid_argument("invalid command name");
+    }
   }
 }
 
 void zak::ImplementedCommands::addCommand(const std::string& nameCommand, Command command)
 {
   commands_[nameCommand] = command;
+}
+
+void zak::ImplementedCommands::addCommand(const std::string& nameCommand, PrintCmd command)
+{
+  printCmd_[nameCommand] = command;
 }

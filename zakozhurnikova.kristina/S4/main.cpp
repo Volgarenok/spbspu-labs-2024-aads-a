@@ -24,6 +24,7 @@ int main(int argc, char *argv[])
   }
 
   ImplementedCommands implementer(maps);
+  using namespace std::placeholders;
   implementer.addCommand("print", &print);
   implementer.addCommand("union", &doUnion);
   implementer.addCommand("complement", &complement);

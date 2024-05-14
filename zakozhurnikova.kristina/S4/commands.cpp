@@ -16,18 +16,18 @@ void addMap(std::string& mapName, zak::map& toAdd, zak::tree& maps)
   }
 }
 
-void zak::print(List< std::string >& args, std::string& result, tree& maps)
+void zak::print(const List< std::string >& args, std::string& result, const tree& maps)
 {
   if (args.size() != 1)
   {
     throw std::invalid_argument("incorrect command source");
   }
 
-  const std::string mapName = args.back();
+  std::string mapName = args.back();
   if (!maps.at(mapName).empty())
   {
     result = mapName + ' ';
-    for (auto it = maps[mapName].cbegin(); it != maps[mapName].cend(); ++it)
+    for (auto it = maps.at(mapName).cbegin(); it != maps.at(mapName).cend(); ++it)
     {
       result += std::to_string(it->first) + ' ';
       result += it->second + ' ';

@@ -1,12 +1,12 @@
 #ifndef BINARYSEARCHTREE_HPP
 #define BINARYSEARCHTREE_HPP
 #include <algorithm>
+#include <constIteratorTree.hpp>
 #include <cstddef>
 #include <cstdlib>
 #include <functional>
 #include <stdexcept>
 #include <treeNode.hpp>
-#include <constIteratorTree.hpp>
 
 namespace zakozhurnikova
 {
@@ -176,6 +176,20 @@ namespace zakozhurnikova
       }
     }
 
+    const Value& operator[](const Key& key) const
+    {
+      Node* traverser = get(key, root_);
+      if (traverser)
+      {
+        return traverser->data.second;
+      }
+      else
+      {
+        push(key, Value());
+        return get(key, root_)->data.second;
+      }
+    }
+
     Value& at(const Key& key)
     {
       Node* traverser = get(key, root_);
@@ -250,7 +264,40 @@ namespace zakozhurnikova
       }
     }
 
+    const Value& get(const Key& key) const
+    {
+      Node* res = get(key, root_);
+      if (res)
+      {
+        return res->data.second;
+      }
+      else
+      {
+        return res->data.second;
+      }
+    }
+
     Node* get(const Key& key, Node* currentNode)
+    {
+      if (!currentNode)
+      {
+        return nullptr;
+      }
+      else if (currentNode->data.first == key)
+      {
+        return currentNode;
+      }
+      else if (Compare()(key, currentNode->data.first))
+      {
+        return get(key, currentNode->leftChild);
+      }
+      else
+      {
+        return get(key, currentNode->rightChild);
+      }
+    }
+
+    Node* get(const Key& key, Node* currentNode) const
     {
       if (!currentNode)
       {
