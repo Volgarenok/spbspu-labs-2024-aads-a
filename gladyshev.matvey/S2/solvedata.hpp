@@ -8,7 +8,7 @@
 
 namespace gladyshev
 {
-  long long int gladyshev::evaluatePostfix(Queue< std::string >& postfix);
+  long long int evaluatePostfix(Queue< std::string >& postfix);
   void inputExpression(std::istream& in, Stack< long long int >& results);
 }
 
