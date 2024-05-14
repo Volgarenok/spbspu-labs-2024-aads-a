@@ -55,6 +55,8 @@ namespace petuhov
 
     columns.reverse();
 
+    bool all_columns_empty = true;
+
     for (auto col_it = columns.cbegin(); col_it != columns.cend(); ++col_it)
     {
       int sum = 0;
@@ -78,8 +80,15 @@ namespace petuhov
       {
         sums.push_front(sum);
         out << "\n";
+        all_columns_empty = false;
       }
     }
+
+    if (all_columns_empty)
+    {
+      out << "0\n";
+    }
+
     sums.reverse();
   }
 }
