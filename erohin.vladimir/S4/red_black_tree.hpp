@@ -17,8 +17,8 @@ namespace erohin
   public:
     using iterator = TreeIterator< Key, T >;
     using const_iterator = TreeConstIterator< Key, T >;
-    using reverse_iterator = TreeIterator< Key, T, detail::ReverseInfixTraversal< Key, T > >;
-    using const_reverse_iterator = TreeConstIterator< Key, T, detail::ReverseInfixTraversal< Key, T > >;
+    using reverse_iterator = std::reverse_iterator< TreeIterator< Key, T > >;
+    using const_reverse_iterator = std::reverse_iterator< TreeConstIterator< Key, T > >;
     using value_type = std::pair< Key, T >;
     RedBlackTree();
     RedBlackTree(const RedBlackTree< Key, T, Compare > & rhs);
@@ -603,7 +603,6 @@ namespace erohin
   {
     if (!subtree)
     {
-      delete subtree;
       return;
     }
     clear_subtree(subtree->left_);

@@ -25,6 +25,10 @@ namespace erohin
       Node(const std::pair< Key, T > & value, Node * parent, Node * left, Node * right);
       Node(std::pair< Key, T > && value, Node * parent, Node * left, Node * right);
       ~Node() = default;
+      Node * next();
+      const Node * next() const;
+      Node * prev();
+      const Node * prev() const;
     };
 
     template< class Key, class T >
@@ -44,6 +48,82 @@ namespace erohin
       right_(right),
       color_(color_t::RED)
     {}
+
+    template< class Key, class T >
+    Node< Key, T > * Node< Key, T >::next()
+    {
+      Node< Key, T > * node = this;
+      if (node->right_)
+      {
+        node = node->right_;
+        while (node->left_)
+        {
+          node = node->left_;
+        }
+      }
+      else
+      {
+        if (!node->parent_)
+        {
+          return nullptr;
+        }
+        while (node->parent_->right_ == node)
+        {
+          node = node->parent_;
+          if (!node->parent_)
+          {
+            return nullptr;
+          }
+        }
+        while (node->parent_ && node->parent_->left_ == node)
+        {
+          node = node->parent_;
+        }
+      }
+      return node;
+    }
+
+    template< class Key, class T >
+    const Node< Key, T > * Node< Key, T >::next() const
+    {
+      return const_cast< const Node< Key, T > * >(this->next());
+    }
+
+    template< class Key, class T >
+    Node< Key, T > * Node< Key, T >::prev()
+    {
+      Node< Key, T > * node = this;
+      if (node->left_)
+      {
+        node = node->left_;
+        while (node->right_)
+        {
+          node = node->right_;
+        }
+      }
+      else
+      {
+        while (node->parent_->left_ == node)
+        {
+          node = node->parent_;
+          if (!(node->parent_))
+          {
+            return nullptr;
+          }
+        }
+        while (node->parent_ && node->parent_->right_ == node)
+        {
+          node = node->parent_;
+        }
+      }
+      return node;
+    }
+
+    template< class Key, class T >
+    const Node< Key, T > * Node< Key, T >::prev() const
+    {
+      return const_cast< const Node< Key, T > * >(this->prev());
+    }
   }
 }
 

@@ -11,104 +11,103 @@ namespace erohin
   template < class Key, class T, class Compare >
   class RedBlackTree;
 
-  template< class Key, class T, class S = detail::InfixTraversal< Key, T > >
+  template< class Key, class T >
   class TreeIterator: public std::iterator< std::bidirectional_iterator_tag, T >
   {
     template < class T1, class T2, class T3 >
     friend class RedBlackTree;
   public:
     TreeIterator();
-    TreeIterator(const TreeIterator< Key, T, S > &) = default;
+    TreeIterator(const TreeIterator< Key, T > &) = default;
     ~TreeIterator() = default;
-    TreeIterator< Key, T, S > & operator=(const TreeIterator< Key, T, S > &) = default;
-    TreeIterator< Key, T, S > & operator++();
-    TreeIterator< Key, T, S > operator++(int);
-    TreeIterator< Key, T, S > & operator--();
-    TreeIterator< Key, T, S > operator--(int);
+    TreeIterator< Key, T > & operator=(const TreeIterator< Key, T > &) = default;
+    TreeIterator< Key, T > & operator++();
+    TreeIterator< Key, T > operator++(int);
+    TreeIterator< Key, T > & operator--();
+    TreeIterator< Key, T > operator--(int);
     std::pair< Key, T > & operator*();
     const std::pair< Key, T > & operator*() const;
     std::pair< Key, T > * operator->();
     const std::pair< Key, T > * operator->() const;
-    bool operator==(const TreeIterator< Key, T, S > & rhs) const;
-    bool operator!=(const TreeIterator< Key, T, S > & rhs) const;
+    bool operator==(const TreeIterator< Key, T > & rhs) const;
+    bool operator!=(const TreeIterator< Key, T > & rhs) const;
   private:
     detail::Node< Key, T > * node_;
-    S strategy_;
     explicit TreeIterator(detail::Node< Key, T > * node_ptr);
   };
 
-  template< class Key, class T, class S >
-  TreeIterator< Key, T, S >::TreeIterator():
+  template< class Key, class T >
+  TreeIterator< Key, T >::TreeIterator():
     node_(nullptr)
   {}
 
-  template< class Key, class T, class S >
-  TreeIterator< Key, T, S >::TreeIterator(detail::Node< Key, T > * node_ptr):
+  template< class Key, class T >
+  TreeIterator< Key, T >::TreeIterator(detail::Node< Key, T > * node_ptr):
     node_(node_ptr)
   {}
 
-  template< class Key, class T, class S >
-  TreeIterator< Key, T, S > & TreeIterator< Key, T, S >::operator++()
+  template< class Key, class T >
+  TreeIterator< Key, T > & TreeIterator< Key, T >::operator++()
   {
-    node_ = strategy_.next(node_);
+    node_ = node_->next();
     return *this;
   }
 
-  template< class Key, class T, class S >
-  TreeIterator< Key, T, S > TreeIterator< Key, T, S >::operator++(int)
+  template< class Key, class T >
+  TreeIterator< Key, T > TreeIterator< Key, T >::operator++(int)
   {
-    TreeIterator< Key, T, S > temp = *this;
-    node_ = strategy_.next(node_);
+    TreeIterator< Key, T > temp = *this;
+    node_ = node_->next();
     return temp;
   }
 
-  template< class Key, class T, class S >
-  TreeIterator< Key, T, S > & TreeIterator< Key, T, S >::operator--()
+  template< class Key, class T >
+  TreeIterator< Key, T > & TreeIterator< Key, T >::operator--()
   {
-    node_ = strategy_.prev(node_);
+    node_ = node_->prev();
     return *this;
   }
 
-  template< class Key, class T, class S >
-  TreeIterator< Key, T, S > TreeIterator< Key, T, S >::operator--(int)
+  template< class Key, class T >
+  TreeIterator< Key, T > TreeIterator< Key, T >::operator--(int)
   {
-    TreeIterator< Key, T, S > temp = *this;
-    node_ = strategy_.prev(node_);
+    TreeIterator< Key, T > temp = *this;
+    node_ = node_->prev();
     return temp;
   }
 
-  template< class Key, class T, class S >
-  std::pair< Key, T > & TreeIterator< Key, T, S>::operator*()
+  template< class Key, class T >
+  std::pair< Key, T > & TreeIterator< Key, T>::operator*()
   {
     return node_->data_;
   }
 
-  template< class Key, class T, class S >
-  const std::pair< Key, T > & TreeIterator< Key, T, S>::operator*() const
+  template< class Key, class T >
+  const std::pair< Key, T > & TreeIterator< Key, T>::operator*() const
   {
     return node_->data_;
   }
 
-  template< class Key, class T, class S >
-  std::pair< Key, T > * TreeIterator< Key, T, S >::operator->()
+  template< class Key, class T >
+  std::pair< Key, T > * TreeIterator< Key, T >::operator->()
   {
     return std::addressof(node_->data_);
   }
 
-  template< class Key, class T, class S >
-  const std::pair< Key, T > * TreeIterator< Key, T, S >::operator->() const
+  template< class Key, class T >
+  const std::pair< Key, T > * TreeIterator< Key, T >::operator->() const
   {
     return std::addressof(node_->data_);
   }
 
-  template< class Key, class T, class S >
-  bool TreeIterator< Key, T, S >::operator==(const TreeIterator< Key, T, S > & rhs) const
+  template< class Key, class T >
+  bool TreeIterator< Key, T >::operator==(const TreeIterator< Key, T > & rhs) const
   {
     return (node_ == rhs.node_);
   }
 
-  template< class Key, class T, class S >
-  bool TreeIterator< Key, T, S >::operator!=(const TreeIterator< Key, T, S > & rhs) const
+  template< class Key, class T >
+  bool TreeIterator< Key, T >::operator!=(const TreeIterator< Key, T > & rhs) const
   {
     return !(*this == rhs);
   }
