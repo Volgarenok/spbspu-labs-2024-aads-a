@@ -1,11 +1,9 @@
 #include "readinput.hpp"
-
 #include <iostream>
 #include <limits>
 #include <sstream>
 #include <stdexcept>
 #include <string>
-
 #include "list.hpp"
 
 namespace petuhov
@@ -14,6 +12,7 @@ namespace petuhov
   void readInput(List< std::pair< std::string, List< int > > >& sequences, std::istream& input)
   {
     std::string line;
+    bool overflow_occurred = false;
     while (std::getline(input, line))
     {
       std::istringstream iss(line);
@@ -29,25 +28,31 @@ namespace petuhov
         try
         {
           unsigned long long num = std::stoull(num_str);
-          if (num > static_cast<unsigned long long>(std::numeric_limits< int >::max()))
+          if (num > static_cast<unsigned long long>(std::numeric_limits<int>::max()))
           {
             throw std::overflow_error("Number out of range");
           }
-          numbers.push_front(static_cast< int >(num));
+          numbers.push_front(static_cast<int>(num));
         }
         catch (const std::invalid_argument&)
         {
-          throw std::overflow_error("Invalid number format");
+          overflow_occurred = true;
+          break;
         }
         catch (const std::out_of_range&)
         {
-          throw std::overflow_error("Number out of range");
+          overflow_occurred = true;
+          break;
         }
       }
       numbers.reverse();
       sequences.push_front(std::make_pair(name, numbers));
     }
     sequences.reverse();
+    if (overflow_occurred)
+    {
+      throw std::overflow_error("Number out of range");
+    }
   }
 
 }
