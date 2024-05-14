@@ -9,6 +9,11 @@ bool isOverflow(int lhs, int rhs)
   return (lhs > 0 && max - lhs < rhs) || (lhs < 0 && rhs < 0 && min - lhs > rhs);
 }
 
+piyavkin::KeySum::KeySum():
+  key_(0),
+  str_()
+{}
+
 void piyavkin::KeySum::operator()(const std::pair< int, std::string >& val)
 {
   if (val.second != "")

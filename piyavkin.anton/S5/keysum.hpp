@@ -8,6 +8,7 @@ namespace piyavkin
   struct KeySum
   {
   public:
+    KeySum();
     void operator()(const std::pair< int, std::string >& val);
     int getKey() const;
     std::string getVal() const;
