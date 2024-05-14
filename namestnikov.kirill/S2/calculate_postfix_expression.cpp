@@ -61,14 +61,14 @@ void calculateExpression(long long & num1, long long num2, char op)
   }
 }
 
-long long namestnikov::calculatePostfixExpression(Queue< namestnikov::Key > & resultQueue)
+long long namestnikov::calculatePostfixExpression(Queue< Key > & resultQueue)
 {
   Stack< long long > operandsStack;
   while (!resultQueue.empty())
   {
-    namestnikov::Key token = resultQueue.front();
+    Key token = resultQueue.front();
     resultQueue.pop();
-    if (token.type == namestnikov::PartType::OPERATION)
+    if (token.getType() == PartType::OPERATION)
     {
       if (operandsStack.empty())
       {
@@ -76,13 +76,13 @@ long long namestnikov::calculatePostfixExpression(Queue< namestnikov::Key > & re
       }
       long long secondNum = operandsStack.top();
       operandsStack.pop();
-      calculateExpression(operandsStack.top(), secondNum, token.value.operand);
+      calculateExpression(operandsStack.top(), secondNum, token.getOperand());
     }
-    else if (token.type == namestnikov::PartType::OPERAND)
+    else if (token.getType() == PartType::OPERAND)
     {
-      operandsStack.push(token.value.operand);
+      operandsStack.push(token.getOperand());
     }
-    else if ((token.type == namestnikov::PartType::OPEN_BRACKET) || (token.type == namestnikov::PartType::CLOSE_BRACKET))
+    else if ((token.getType() == PartType::OPEN_BRACKET) || (token.getType() == PartType::CLOSE_BRACKET))
     {
       throw std::invalid_argument("Wrong bracket");
     }

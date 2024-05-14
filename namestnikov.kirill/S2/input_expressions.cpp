@@ -41,7 +41,7 @@ void namestnikov::inputExpression(std::string s, Queue< Key > & expression)
         long long operand = std::stoll(temp);
         value = PartValue(operand);
         type = PartType::OPERAND;
-        Key key{type, value};
+        Key key(type, value);
         expression.push(key);
       }
       catch (const std::invalid_argument &)
@@ -64,7 +64,7 @@ void namestnikov::inputExpression(std::string s, Queue< Key > & expression)
           }
           value = PartValue(sym);
         }
-        Key key{type, value};
+        Key key(type, value);
         expression.push(key);
       }
     }

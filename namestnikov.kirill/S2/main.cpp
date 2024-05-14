@@ -7,7 +7,6 @@
 #include "calculate_postfix_expression.hpp"
 #include "input_expressions.hpp"
 #include "data_types.hpp"
-#include "forward_list.hpp"
 
 int main(int argc, char * argv[])
 {
@@ -31,6 +30,7 @@ int main(int argc, char * argv[])
       if (infixQueue.empty())
       {
         std::cout << "\n";
+        return 0;
       }
       in.close();
     }
@@ -47,10 +47,6 @@ int main(int argc, char * argv[])
       Queue< Key > res;
       convertToPostfix(tmp, res);
       results.push(calculatePostfixExpression(res));
-    }
-    if (results.empty())
-    {
-      return 0;
     }
     std::cout << results.top();
     results.pop();

@@ -33,17 +33,17 @@ void namestnikov::convertToPostfix(Queue< Key > & currentQueue, Queue< Key > & r
   {
     Key temp = currentQueue.front();
     currentQueue.pop();
-    if (temp.type == PartType::OPERAND)
+    if (temp.getType() == PartType::OPERAND)
     {
       resultQueue.push(temp);
     }
-    else if (temp.type == PartType::OPEN_BRACKET)
+    else if (temp.getType() == PartType::OPEN_BRACKET)
     {
       processStack.push(temp);
     }
-    else if (temp.type == PartType::CLOSE_BRACKET)
+    else if (temp.getType() == PartType::CLOSE_BRACKET)
     {
-      while (!processStack.empty() && processStack.top().type != PartType::OPEN_BRACKET)
+      while (!processStack.empty() && processStack.top().getType() != PartType::OPEN_BRACKET)
       {
         Key temp = processStack.top();
         resultQueue.push(temp);
@@ -55,10 +55,10 @@ void namestnikov::convertToPostfix(Queue< Key > & currentQueue, Queue< Key > & r
       }
       processStack.pop();
     }
-    else if (temp.type == PartType::OPERATION)
+    else if (temp.getType() == PartType::OPERATION)
     {
-      while ((!processStack.empty()) && (processStack.top().type != PartType::OPEN_BRACKET) &&
-       (hasHigherPriority(processStack.top().value.operation, temp.value.operation)))
+      while ((!processStack.empty()) && (processStack.top().getType() != PartType::OPEN_BRACKET) &&
+       (hasHigherPriority(processStack.top().getOperation(), temp.getOperation())))
       {
         resultQueue.push(processStack.top());
         processStack.pop();

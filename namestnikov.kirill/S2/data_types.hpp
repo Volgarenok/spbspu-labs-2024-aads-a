@@ -5,10 +5,15 @@ namespace namestnikov
 {
   union PartValue
   {
-    long long operand;
-    char operation;
+  friend class Key;
+  public:
+    PartValue();
     explicit PartValue(long long number);
     explicit PartValue(char symbol);
+    ~PartValue() = default;
+  private:
+    long long operand_;
+    char operation_;
   };
   enum PartType: char
   {
@@ -18,12 +23,19 @@ namespace namestnikov
     CLOSE_BRACKET,
     DEFAULT
   };
-  struct Key
+  class Key
   {
-    PartType type;
-    PartValue value;
+  public:
+    Key() = default;
+    Key(PartType type, PartValue value);
     Key(const Key & other) = default;
     Key & operator=(const Key & other) = default;
+    long long getOperand() const;
+    PartType getType() const;
+    char getOperation() const;
+  private:
+    PartType type_;
+    PartValue value_;
   };
 }
 
