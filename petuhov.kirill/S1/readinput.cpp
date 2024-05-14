@@ -21,7 +21,6 @@ namespace petuhov
       }
       List< int > numbers;
       std::string num_str;
-      bool has_numbers = false;
       while (iss >> num_str)
       {
         try
@@ -33,7 +32,6 @@ namespace petuhov
             continue;
           }
           numbers.push_front(static_cast<int>(num));
-          has_numbers = true;
         }
         catch (const std::invalid_argument&)
         {
@@ -45,10 +43,6 @@ namespace petuhov
           overflow_occurred = true;
           continue;
         }
-      }
-      if (!has_numbers)
-      {
-        numbers.push_front(0);
       }
       numbers.reverse();
       sequences.push_front(std::make_pair(name, numbers));
