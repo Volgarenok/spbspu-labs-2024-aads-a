@@ -3,6 +3,7 @@
 #include <string>
 #include <fstream>
 #include <stdexcept>
+#include <functional>
 #include <AVLTree.hpp>
 #include "cmd.hpp"
 #include "input.hpp"
