@@ -19,12 +19,15 @@ int main()
     }
 
     printNames(std::cout, sequences);
+    std::cout << '\n';
 
     List< List < size_t > > numbers;
     readByElement(numbers, sequences);
     printLists(std::cout, numbers);
+    std::cout << '\n';
 
     printSums(std::cout, numbers);
+    std::cout << '\n';
   }
   catch (const std::exception & e)
   {
