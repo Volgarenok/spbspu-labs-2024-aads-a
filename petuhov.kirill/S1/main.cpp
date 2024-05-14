@@ -27,7 +27,6 @@ int main()
     petuhov::outputNames(std::cout, sequences);
     petuhov::outputSequences(std::cout, sequences, sums);
     petuhov::outputSums(std::cout, sums);
-    std::cout << "\n";
   }
   catch (const std::overflow_error& e)
   {
