@@ -17,7 +17,7 @@ namespace petuhov
         max_length = length;
       }
     }
-  
+
     List< List< int > > columns;
     for (int i = 0; i < max_length; ++i)
     {
@@ -44,7 +44,7 @@ namespace petuhov
       columns.push_front(column);
     }
     columns.reverse();
-  
+
     for (auto col_it = columns.cbegin(); col_it != columns.cend(); ++col_it)
     {
       int sum = 0;
