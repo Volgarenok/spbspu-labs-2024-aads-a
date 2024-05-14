@@ -23,8 +23,11 @@ int main()
 
     List< List < size_t > > numbers;
     readByElement(numbers, sequences);
-    printLists(std::cout, numbers);
-    std::cout << '\n';
+    if (!numbers.empty())
+    {
+      printLists(std::cout, numbers);
+      std::cout << '\n';
+    }
 
     printSums(std::cout, numbers);
     std::cout << '\n';
