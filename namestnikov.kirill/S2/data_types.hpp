@@ -27,9 +27,7 @@ namespace namestnikov
   {
   public:
     Key() = default;
-    Key(PartType type, PartValue value);
-    Key(const Key & other) = default;
-    Key & operator=(const Key & other) = default;
+    Key(PartType type, const PartValue & value);
     long long getOperand() const;
     PartType getType() const;
     char getOperation() const;

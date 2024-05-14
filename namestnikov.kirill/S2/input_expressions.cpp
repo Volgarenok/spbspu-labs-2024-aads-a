@@ -24,7 +24,7 @@ bool isOperation(char sym)
 void namestnikov::inputExpression(std::string s, Queue< Key > & expression)
 {
   size_t i = 0;
-  PartValue value(0ll);
+  PartValue value;
   PartType type = PartType::DEFAULT;
   while (i < s.size())
   {

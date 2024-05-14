@@ -13,14 +13,14 @@ namestnikov::PartValue::PartValue(char symbol):
   operation_(symbol)
 {}
 
-namestnikov::Key::Key(PartType type, PartValue value):
+namestnikov::Key::Key(PartType type, const PartValue & value):
   type_(type),
   value_(value)
 {}
 
 long long namestnikov::Key::getOperand() const
 {
-  return value_.operation_;
+  return value_.operand_;
 }
 
 namestnikov::PartType namestnikov::Key::getType() const
