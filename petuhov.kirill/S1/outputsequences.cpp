@@ -45,6 +45,7 @@ namespace petuhov
     }
     columns.reverse();
 
+    bool first_column = true;
     for (auto col_it = columns.cbegin(); col_it != columns.cend(); ++col_it)
     {
       int sum = 0;
@@ -67,7 +68,11 @@ namespace petuhov
       if (has_numbers)
       {
         sums.push_front(sum);
-        out << "\n";
+        if (!first_column)
+        {
+          out << "\n";
+        }
+        first_column = false;
       }
     }
     sums.reverse();
