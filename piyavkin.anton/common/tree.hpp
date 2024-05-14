@@ -2,6 +2,7 @@
 #define TREE_HPP
 #include <cstddef>
 #include "treeiterator.hpp"
+#include "../S5/specialiterator.hpp"
 
 namespace piyavkin
 {
