@@ -1,6 +1,7 @@
 #ifndef CONST_ITERATORS_HPP
 #define CONST_ITERATORS_HPP
 
+#include <memory>
 #include "node.hpp"
 
 namespace skuratov
@@ -13,38 +14,38 @@ namespace skuratov
   {
     public:
       ConstIterator():
-        nodePointer(nullptr)
+        nodePointer_(nullptr)
       {}
       ~ConstIterator() = default;
       ConstIterator(const ConstIterator< T >&) = default;
 
       const T& operator*() const
       {
-        return nodePointer->value_;
+        return nodePointer_->value_;
       }
       const T* operator->() const
       {
-        return &(nodePointer->value_);
+        return std::addressof(nodePointer_->value_);
       }
 
       bool operator==(const ConstIterator< T >& diff) const
       {
-        return nodePointer == diff.nodePointer;
+        return nodePointer_ == diff.nodePointer_;
       }
       bool operator!=(const ConstIterator< T >& diff) const
       {
-        return nodePointer != diff.nodePointer;
+        return nodePointer_ != diff.nodePointer_;
       }
 
       ConstIterator< T >& operator=(const ConstIterator< T >&) = default;
       ConstIterator< T >& operator++()
       {
-        nodePointer = nodePointer->next;
+        nodePointer_ = nodePointer_->next;
         return *this;
       }
       ConstIterator< T >& operator--()
       {
-        nodePointer = nodePointer->prev;
+        nodePointer_ = nodePointer_->prev;
         return *this;
       }
       ConstIterator< T > operator++(int)
@@ -62,9 +63,9 @@ namespace skuratov
 
     private:
       friend List< T >;
-      detail::Node< T >* nodePointer;
-      explicit ConstIterator(detail::Node< T >* nodePointer_) :
-        nodePointer(nodePointer_)
+      detail::Node< T >* nodePointer_;
+      explicit ConstIterator(detail::Node< T >* nodePointer):
+        nodePointer_(nodePointer)
       {}
   };
 }

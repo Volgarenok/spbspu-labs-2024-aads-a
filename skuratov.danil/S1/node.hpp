@@ -9,7 +9,7 @@ namespace skuratov
     class Node
     {
     public:
-      Node(const T & value):
+      Node(const T& value):
         value_(value),
         prev(nullptr),
         next(nullptr)

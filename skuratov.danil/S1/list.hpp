@@ -32,9 +32,17 @@ namespace skuratov
         tail(nullptr),
         size(0)
       {
-        for (size_t i = 0; i < n; ++i)
+        try
         {
-          pushBack(value);
+          for (size_t i = 0; i < n; ++i)
+          {
+            pushBack(value);
+          }
+        }
+        catch (...)
+        {
+          clear();
+          throw;
         }
       }
 
@@ -45,7 +53,7 @@ namespace skuratov
       {
         try
         {
-          detail::Node<T>* current = diff.head;
+          detail::Node< T >* current = diff.head;
           while (current)
           {
             pushBack(current->value_);
@@ -61,11 +69,12 @@ namespace skuratov
 
       List& operator=(const List& diff)
       {
-        if (this == &diff)
+        if (this != std::addressof(diff))
         {
-          return *this;
+          List tempList(diff);
+          swap(tempList);
         }
-        clear();
+        return *this;
       }
 
       List(List&& diff) noexcept:
@@ -80,7 +89,7 @@ namespace skuratov
 
       List& operator=(List&& diff)
       {
-        if (this != &diff)
+        if (this != std::addressof(diff))
         {
           clear();
           swap(diff);
@@ -98,12 +107,22 @@ namespace skuratov
         return ConstIterator< T >(nullptr);
       }
 
-      T & front()
+      T& front()
       {
         return head->value_;
       }
 
-      T & back()
+      const T& front() const
+      {
+        return head->value_;
+      }
+
+      T& back()
+      {
+        return tail->value_;
+      }
+
+      const T& back() const
       {
         return tail->value_;
       }
@@ -189,9 +208,8 @@ namespace skuratov
       {
         while (!empty())
         {
-          popBack();
+          popFront();
         }
-        size = 0;
       }
 
       void assign(size_t n, const T& value)
@@ -199,7 +217,7 @@ namespace skuratov
         clear();
         for (size_t i = 0; i < n; ++i)
         {
-          push_back(value);
+          pushBack(value);
         }
       }
 
@@ -212,9 +230,9 @@ namespace skuratov
 
       void remove(const T& value)
       {
-        detail::Node< T > dummyNode(0);
+        detail::Node< T > dummyNode;
         dummyNode.next = head;
-        detail::Node< T >* prev = &dummyNode;
+        detail::Node< T >* prev = std::addressof(dummyNode);
         detail::Node< T >* current = head;
 
         while (current)
@@ -237,9 +255,9 @@ namespace skuratov
       template< typename UnaryPredicate >
       void removeIf(UnaryPredicate predicate)
       {
-        detail::Node< T > dummyNode(0);
+        detail::Node< T > dummyNode;
         dummyNode.next = head;
-        detail::Node< T >* prev = &dummyNode;
+        detail::Node< T >* prev = std::addressof(dummyNode);
         detail::Node< T >* current = head;
 
         while (current)
