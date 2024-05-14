@@ -1,10 +1,11 @@
-#include "list.hpp"
+#include "outputsequences.hpp"
 #include <iostream>
-#include <string>
+#include <stdexcept>
+#include <limits>
 
 namespace petuhov
 {
-  void outputSequences(std::ostream& out, const List< std::pair< std::string, List< int > > >& sequences, List< int >& sums)
+  void outputSequences(std::ostream& out, const List< std::pair< std::string, List< unsigned long long > > >& sequences, List< unsigned long long >& sums)
   {
     if (sequences.empty())
     {
@@ -13,10 +14,10 @@ namespace petuhov
     }
 
     int max_length = 0;
-    for (auto seq_it = sequences.cbegin(); seq_it != sequences.cend(); ++seq_it)
+    for (ConstIterator< std::pair< std::string, List< unsigned long long > > > seq_it = sequences.cbegin(); seq_it != sequences.cend(); ++seq_it)
     {
       int length = 0;
-      for (auto num_it = seq_it->second.cbegin(); num_it != seq_it->second.cend(); ++num_it)
+      for (ConstIterator< unsigned long long > num_it = seq_it->second.cbegin(); num_it != seq_it->second.cend(); ++num_it)
       {
         ++length;
       }
@@ -26,13 +27,13 @@ namespace petuhov
       }
     }
 
-    List< List< int > > columns;
+    List< List< unsigned long long > > columns;
     for (int i = 0; i < max_length; ++i)
     {
-      List< int > column;
-      for (auto seq_it = sequences.cbegin(); seq_it != sequences.cend(); ++seq_it)
+      List< unsigned long long > column;
+      for (ConstIterator< std::pair< std::string, List< unsigned long long > > > seq_it = sequences.cbegin(); seq_it != sequences.cend(); ++seq_it)
       {
-        auto num_it = seq_it->second.cbegin();
+        ConstIterator< unsigned long long > num_it = seq_it->second.cbegin();
         for (int j = 0; j < i; ++j)
         {
           if (num_it != seq_it->second.cend())
@@ -46,7 +47,7 @@ namespace petuhov
         }
         else
         {
-          column.push_front(-1);
+          column.push_front(static_cast< unsigned long long >(-1));
         }
       }
       column.reverse();
@@ -55,16 +56,14 @@ namespace petuhov
 
     columns.reverse();
 
-    bool all_columns_empty = true;
-
-    for (auto col_it = columns.cbegin(); col_it != columns.cend(); ++col_it)
+    for (ConstIterator< List< unsigned long long > > col_it = columns.cbegin(); col_it != columns.cend(); ++col_it)
     {
-      int sum = 0;
+      unsigned long long sum = 0;
       bool first = true;
       bool has_numbers = false;
-      for (auto num_it = col_it->cbegin(); num_it != col_it->cend(); ++num_it)
+      for (ConstIterator< unsigned long long > num_it = col_it->cbegin(); num_it != col_it->cend(); ++num_it)
       {
-        if (*num_it != -1)
+        if (*num_it != static_cast< unsigned long long >(-1))
         {
           if (!first)
           {
@@ -80,15 +79,8 @@ namespace petuhov
       {
         sums.push_front(sum);
         out << "\n";
-        all_columns_empty = false;
       }
     }
-
-    if (all_columns_empty)
-    {
-      out << "0\n";
-    }
-
     sums.reverse();
   }
 }

@@ -6,7 +6,7 @@
 
 namespace petuhov
 {
-  void outputSequences(std::ostream& out, const List< std::pair< std::string, List< int > > >& sequences, List< int >& sums);
+  void outputSequences(std::ostream& out, const List< std::pair< std::string, List< unsigned long long > > >& sequences, List< unsigned long long >& sums);
 }
 
 #endif

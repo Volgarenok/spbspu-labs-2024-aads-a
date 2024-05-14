@@ -9,18 +9,9 @@
 
 int main()
 {
-  petuhov::List< std::pair< std::string, petuhov::List< int > > > sequences;
-  bool overflow_occurred = false;
+  petuhov::List< std::pair< std::string, petuhov::List< unsigned long long > > > sequences;
 
-  try
-  {
-    petuhov::readInput(sequences, std::cin, overflow_occurred);
-  }
-  catch (const std::exception& e)
-  {
-    std::cerr << "Error: " << e.what() << "\n";
-    return 1;
-  }
+  petuhov::readInput(sequences, std::cin);
 
   if (sequences.empty())
   {
@@ -28,7 +19,7 @@ int main()
     return 0;
   }
 
-  petuhov::List< int > sums;
+  petuhov::List< unsigned long long > sums;
 
   try
   {
@@ -39,12 +30,6 @@ int main()
   catch (const std::overflow_error& e)
   {
     std::cerr << "Error: " << e.what() << "\n";
-    return 1;
-  }
-
-  if (overflow_occurred)
-  {
-    std::cerr << "Number out of range\n";
     return 1;
   }
 
