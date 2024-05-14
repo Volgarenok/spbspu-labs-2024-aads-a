@@ -1,4 +1,4 @@
-#include "outputsequences.hpp"
+#include "list.hpp"
 #include <iostream>
 #include <stdexcept>
 #include <limits>
@@ -45,10 +45,6 @@ namespace petuhov
         {
           column.push_front(*num_it);
         }
-        else
-        {
-          column.push_front(static_cast< size_t >(-1));
-        }
       }
       column.reverse();
       columns.push_front(column);
@@ -63,17 +59,14 @@ namespace petuhov
       bool has_numbers = false;
       for (ConstIterator< size_t > num_it = col_it->cbegin(); num_it != col_it->cend(); ++num_it)
       {
-        if (*num_it != static_cast< size_t >(-1))
+        if (!first)
         {
-          if (!first)
-          {
-            out << " ";
-          }
-          out << *num_it;
-          sum += *num_it;
-          has_numbers = true;
-          first = false;
+          out << " ";
         }
+        out << *num_it;
+        sum += *num_it;
+        has_numbers = true;
+        first = false;
       }
       if (has_numbers)
       {
@@ -82,5 +75,10 @@ namespace petuhov
       }
     }
     sums.reverse();
+
+    if (sums.empty())
+    {
+      out << "0\n";
+    }
   }
 }
