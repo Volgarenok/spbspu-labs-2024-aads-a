@@ -265,13 +265,21 @@ namespace erohin
         }
       }
       node = new detail::Node< Key, T >(std::move(value), prev, nullptr, nullptr);
-      if (cmp_(node->data_.first, prev->data_.first))
+      try
       {
-        prev->left_ = node;
+        if (cmp_(node->data_.first, prev->data_.first))
+        {
+          prev->left_ = node;
+        }
+        else
+        {
+          prev->right_ = node;
+        }
       }
-      else
+      catch (...)
       {
-        prev->right_ = node;
+        delete node;
+        throw;
       }
     }
     insert_balance_case1(node);
@@ -303,13 +311,21 @@ namespace erohin
       }
     }
     node = new detail::Node< Key, T >(std::move(value), prev, nullptr, nullptr);
-    if (cmp_(node->data_.first, prev->data_.first))
+    try
     {
-      prev->left_ = node;
+      if (cmp_(node->data_.first, prev->data_.first))
+      {
+        prev->left_ = node;
+      }
+      else
+      {
+        prev->right_ = node;
+      }
     }
-    else
+    catch (...)
     {
-      prev->right_ = node;
+      delete node;
+      throw;
     }
     insert_balance_case1(node);
     ++size_;
@@ -454,7 +470,7 @@ namespace erohin
     size_t size = 0;
     while (citer != cend())
     {
-      if (!cmp_(key, citer->first) || !cmp_(citer->first, key))
+      if (!cmp_(key, citer->first) && !cmp_(citer->first, key))
       {
         ++size;
       }
