@@ -27,9 +27,9 @@ int main()
     outputSums(std::cout, sums);
     std::cout << '\n';
   }
-  catch (const std::overflow_error & e)
+  catch (const std::exception & e)
   {
-    std::cerr << e.what() << "\n";
+    std::cerr << e.what() << '\n';
     return 1;
   }
   return 0;
