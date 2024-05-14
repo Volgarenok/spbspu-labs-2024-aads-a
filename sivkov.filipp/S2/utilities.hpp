@@ -5,8 +5,8 @@
 
 namespace sivkov
 {
-  bool isOeprator(std::string& c);
-  bool compareOperators(std::string& first, std::string& second);
+  bool isOeprator(const std::string& c);
+  bool compareOperators(const std::string& first, const std::string& second);
 }
 
 #endif
