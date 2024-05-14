@@ -5,7 +5,6 @@
 #include <string>
 
 #include "checkdata.hpp"
-#include "stack.hpp"
 #include "queue.hpp"
 
 long long int gladyshev::evaluatePostfix(Queue< std::string >& postfix)

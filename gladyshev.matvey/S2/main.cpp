@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 
-#include "inputexpression.hpp"
+#include "solvedata.hpp"
 
 int main(int argc, char* argv[])
 {
