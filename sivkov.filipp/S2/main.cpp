@@ -5,7 +5,7 @@
 #include "infixToPostfix.hpp"
 #include "utilities.hpp"
 #include "expressionEvaluation.hpp"
-#incldue "input.hpp"
+#include "input.hpp"
 
 int main(int argc, char* argv[])
 {
