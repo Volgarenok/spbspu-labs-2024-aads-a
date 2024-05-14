@@ -15,10 +15,6 @@ namespace sivkov
   public:
     using Node = detail::TreeNode< Key, Value >;
 
-    ConstIterator(Node* node):
-      current_(node)
-    {}
-
     std::pair< Key, Value >& operator*() const
     {
       return current_->data;
@@ -26,7 +22,7 @@ namespace sivkov
 
     std::pair< Key, Value >* operator->() const
     {
-      return &(current_->data);
+      return std::addressof(current_->data);
     }
 
     ConstIterator< Key, Value, Comp >& operator++()
@@ -74,6 +70,9 @@ namespace sivkov
 
   private:
     Node* current_;
+    ConstIterator(Node* node):
+      current_(node)
+    {}
   };
 }
 #endif
