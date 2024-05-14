@@ -1,4 +1,6 @@
-#include "outputnames.hpp"
+#include "list.hpp"
+#include <iostream>
+#include <string>
 
 namespace petuhov
 {
@@ -9,7 +11,6 @@ namespace petuhov
     {
       names.push_front(it->first);
     }
-    names.reverse();
 
     bool first = true;
     for (auto it = names.cbegin(); it != names.cend(); ++it)
@@ -18,8 +19,8 @@ namespace petuhov
       {
         out << " ";
       }
-      first = false;
       out << *it;
+      first = false;
     }
     out << "\n";
   }

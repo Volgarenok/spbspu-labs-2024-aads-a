@@ -1,14 +1,16 @@
-#include "outputsequences.hpp"
+#include "list.hpp"
+#include <iostream>
+#include <string>
 
 namespace petuhov
 {
   void outputSequences(std::ostream& out, const List< std::pair< std::string, List< int > > >& sequences, List< int >& sums)
   {
     int max_length = 0;
-    for (auto it = sequences.cbegin(); it != sequences.cend(); ++it)
+    for (auto seq_it = sequences.cbegin(); seq_it != sequences.cend(); ++seq_it)
     {
       int length = 0;
-      for (auto num_it = it->second.cbegin(); num_it != it->second.cend(); ++num_it)
+      for (auto num_it = seq_it->second.cbegin(); num_it != seq_it->second.cend(); ++num_it)
       {
         ++length;
       }
@@ -22,16 +24,17 @@ namespace petuhov
     for (int i = 0; i < max_length; ++i)
     {
       List< int > column;
-      for (auto it = sequences.cbegin(); it != sequences.cend(); ++it)
+      for (auto seq_it = sequences.cbegin(); seq_it != sequences.cend(); ++seq_it)
       {
-        auto num_it = it->second.cbegin();
-        int index = 0;
-        while (num_it != it->second.cend() && index < i)
+        auto num_it = seq_it->second.cbegin();
+        for (int j = 0; j < i; ++j)
         {
-          ++num_it;
-          ++index;
+          if (num_it != seq_it->second.cend())
+          {
+            ++num_it;
+          }
         }
-        if (num_it != it->second.cend() && index == i)
+        if (num_it != seq_it->second.cend())
         {
           column.push_front(*num_it);
         }
@@ -43,13 +46,14 @@ namespace petuhov
       column.reverse();
       columns.push_front(column);
     }
+
     columns.reverse();
 
     for (auto col_it = columns.cbegin(); col_it != columns.cend(); ++col_it)
     {
       int sum = 0;
-      bool has_numbers = false;
       bool first = true;
+      bool has_numbers = false;
       for (auto num_it = col_it->cbegin(); num_it != col_it->cend(); ++num_it)
       {
         if (*num_it != -1)
@@ -58,10 +62,10 @@ namespace petuhov
           {
             out << " ";
           }
-          first = false;
           out << *num_it;
           sum += *num_it;
           has_numbers = true;
+          first = false;
         }
       }
       if (has_numbers)
