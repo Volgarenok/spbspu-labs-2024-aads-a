@@ -14,7 +14,7 @@ namespace petuhov
       first = false;
       out << *sum_it;
     }
-    if (!first)
+    if (!sums.empty())
     {
       out << "\n";
     }

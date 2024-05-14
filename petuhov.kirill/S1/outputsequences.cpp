@@ -8,7 +8,7 @@ namespace petuhov
   {
     if (sequences.empty())
     {
-      out << "0";
+      out << "0\n";
       return;
     }
 
@@ -86,7 +86,7 @@ namespace petuhov
 
     if (all_columns_empty)
     {
-      out << "0";
+      out << "0\n";
     }
 
     sums.reverse();
