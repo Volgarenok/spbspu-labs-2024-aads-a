@@ -13,6 +13,6 @@ namespace sivkov
     bool isFirst = (first == "*" || first == "/" || first == "%");
     bool isSecond = (second == "+" || second == "-");
     bool isClosedBracket = (first != "(");
-    return isFirst && isSecond && isClosedBracket;
+    return (isFirst || isSecond) && isClosedBracket;
   }
 }
