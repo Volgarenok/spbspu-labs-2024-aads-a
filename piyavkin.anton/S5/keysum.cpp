@@ -10,8 +10,8 @@ bool isOverflow(int lhs, int rhs)
 }
 
 piyavkin::KeySum::KeySum():
-  key_(0),
-  str_()
+  str_(),
+  key_(0)
 {}
 
 void piyavkin::KeySum::operator()(const std::pair< int, std::string >& val)

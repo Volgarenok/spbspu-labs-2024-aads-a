@@ -509,7 +509,7 @@ namespace piyavkin
       return ConstBreadthIterator< Key, T, Compare >(root_, root_, true);
     }
     template< class F >
-    F traverse_lnr(F f) const
+    F& traverse_lnr(F& f) const
     {
       if (empty())
       {
@@ -522,12 +522,12 @@ namespace piyavkin
       return f;
     }
     template< class F >
-    F traverse_lnr(F f)
+    F& traverse_lnr(F& f)
     {
       return static_cast< const Tree< Key, T, Compare >& >(*this).traverse_lnr(f);
     }
     template< class F >
-    F traverse_rnl(F f) const
+    F& traverse_rnl(F& f) const
     {
       if (empty())
       {
@@ -540,12 +540,12 @@ namespace piyavkin
       return f;
     }
     template< class F >
-    F traverse_rnl(F f)
+    F& traverse_rnl(F& f)
     {
       return static_cast< const Tree< Key, T, Compare >& >(*this).traverse_rnl(f);
     }
     template< class F >
-    F traverse_breadth(F f) const
+    F& traverse_breadth(F& f) const
     {
       if (empty())
       {
@@ -558,7 +558,7 @@ namespace piyavkin
       return f;
     }
     template< class F >
-    F traverse_breadth(F f)
+    F& traverse_breadth(F& f)
     {
       return static_cast< const Tree< Key, T, Compare >& >(*this).traverse_breadth(f);
     }
