@@ -2,7 +2,7 @@
 #include <utility>
 #include <string>
 #include <iostream>
-#include "list.hpp"
+#include <list/list.hpp>
 
 void strelyaev::makeSequence(std::istream& in, List < std::pair < std::string, List< size_t > > >& list_of_lists)
 {
