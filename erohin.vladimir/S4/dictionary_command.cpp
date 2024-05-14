@@ -4,13 +4,15 @@
 
 void erohin::inputArguments(std::istream & input, DynamicArray< std::string > & args, size_t size)
 {
+  std::string current_arg;
   for (size_t i = 0; i < size; ++i)
   {
     if (!input || input.peek() == '\n')
     {
       throw std::invalid_argument("Wrong number of arguments to command");
     }
-    input >> args[i];
+    input >> current_arg;
+    args.push_back(current_arg);
   }
   if (input.peek() != '\n')
   {
