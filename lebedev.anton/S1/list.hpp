@@ -372,7 +372,7 @@ namespace lebedev
   template< class T >
   ListIterator< T > List< T >::end() noexcept
   {
-    return iterator(tail_);
+    return iterator(tail_->next_);
   }
   template< class T >
   ConstListIterator< T > List< T >::begin() const noexcept
@@ -382,7 +382,7 @@ namespace lebedev
   template< class T >
   ConstListIterator< T > List< T >::end() const noexcept
   {
-    return const_iterator(tail_);
+    return const_iterator(tail_->next_);
   }
   template< class T >
   ConstListIterator< T > List< T >::cbegin() const noexcept
@@ -392,7 +392,7 @@ namespace lebedev
   template< class T >
   ConstListIterator< T > List< T >::cend() const noexcept
   {
-    return const_iterator(tail_);
+    return const_iterator(tail_->next_);
   }
 }
 

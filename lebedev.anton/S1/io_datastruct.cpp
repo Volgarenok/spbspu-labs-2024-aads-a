@@ -56,20 +56,6 @@ void lebedev::countSums(listOfPairs & pairs, List< size_t > & sums, size_t max_p
         }
       }
     }
-    auto list_iter = pairs.cend()->second.cbegin();
-    if (i < pairs.cend()->second.capacity())
-    {
-      std::advance(list_iter, i);
-      size_t num = *list_iter;
-      if (max - num < sum)
-      {
-        throw std::overflow_error("Size_t overflow!");
-      }
-      else
-      {
-        sum += num;
-      }
-    }
     sums.push_back(sum);
   }
 }
@@ -89,11 +75,6 @@ void lebedev::outputPairsNames(std::ostream & output, listOfPairs & pairs)
     }
     output << pairs_iter->first;
   }
-  if (!is_first_name)
-  {
-    output << ' ';
-  }
-  output << pairs.cend()->first;
 }
 
 void lebedev::outputSequences(std::ostream & output, listOfPairs & pairs, size_t max_pair_size)
@@ -119,21 +100,6 @@ void lebedev::outputSequences(std::ostream & output, listOfPairs & pairs, size_t
         output << num;
       }
     }
-    auto list_iter = pairs.cend()->second.cbegin();
-    if (i < pairs.cend()->second.capacity())
-    {
-      std::advance(list_iter, i);
-      size_t num = *list_iter;
-      if (is_first_num)
-      {
-        is_first_num = false;
-      }
-      else
-      {
-        output << ' ';
-      }
-      output << num;
-    }
     if ((i + 1) != max_pair_size)
     {
       output << '\n';
@@ -156,13 +122,4 @@ void lebedev::outputSums(std::ostream & output, List< size_t > sums)
     }
     output << *sums_iter;
   }
-  if (is_first_sum)
-  {
-    is_first_sum = false;
-  }
-  else
-  {
-    output << ' ';
-  }
-  output << *(sums.cend());
 }
