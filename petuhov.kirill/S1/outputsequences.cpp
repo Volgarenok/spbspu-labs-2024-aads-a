@@ -1,12 +1,17 @@
-#include "outputsequences.hpp"
+#include "list.hpp"
 #include <iostream>
 #include <string>
-#include "list.hpp"
 
 namespace petuhov
 {
   void outputSequences(std::ostream& out, const List< std::pair< std::string, List< int > > >& sequences, List< int >& sums)
   {
+    if (sequences.empty())
+    {
+      out << "0\n";
+      return;
+    }
+
     int max_length = 0;
     for (auto seq_it = sequences.cbegin(); seq_it != sequences.cend(); ++seq_it)
     {
@@ -41,7 +46,7 @@ namespace petuhov
         }
         else
         {
-          column.push_front(-1); // заменим -1 на какой-то другой маркер, если -1 может быть в данных
+          column.push_front(-1);
         }
       }
       column.reverse();
@@ -57,7 +62,7 @@ namespace petuhov
       bool has_numbers = false;
       for (auto num_it = col_it->cbegin(); num_it != col_it->cend(); ++num_it)
       {
-        if (*num_it != -1) // проверяем на маркер
+        if (*num_it != -1)
         {
           if (!first)
           {
