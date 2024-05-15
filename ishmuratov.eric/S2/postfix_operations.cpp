@@ -13,14 +13,22 @@ void ishmuratov::calculate_postfix(Queue< std::string > & result_queue, Stack< l
     {
       long long num = std::stoll(temp);
       operands.push(num);
-      continue;
     }
-    catch (std::invalid_argument &)
+    catch (...)
     {
-      long long int n2 = operands.top();
-      operands.pop();
-      long long int n1 = operands.top();
-      operands.pop();
+      long long int n1 = 0;
+      long long int n2 = 0;
+      if (operands.size() >= 2)
+      {
+        n2 += operands.top();
+        operands.pop();
+        n1 += operands.top();
+        operands.pop();
+      }
+      else
+      {
+        throw std::invalid_argument("Invalid expression!");
+      }
       long long int res = 0;
       long long int max_value = std::numeric_limits< long long int >::max();
       long long int min_value = std::numeric_limits< long long int >::min();
@@ -73,9 +81,11 @@ void ishmuratov::calculate_postfix(Queue< std::string > & result_queue, Stack< l
           res += n2;
         }
       }
+      else
+      {
+        throw std::invalid_argument("Invalid expression!");
+      }
       operands.push(res);
-      continue;
     }
-    throw std::invalid_argument("Unexpected token!");
   }
 }
