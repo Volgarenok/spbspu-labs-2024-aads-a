@@ -4,19 +4,23 @@ void ishmuratov::print(ishmuratov::data_t &data, std::istream &input, std::ostre
 {
   std::string dict_name;
   input >> dict_name;
-  if (data.find(dict_name) == data.cend())
+  if (data.find(dict_name) == data.end())
   {
     throw std::runtime_error("Key not found!");
   }
   output << dict_name << " " << data[dict_name].cbegin()->first << " " << data[dict_name].cbegin()->second;
-  for (auto pair = ++data[dict_name].cbegin(); pair != data[dict_name].cend(); pair++)
+//  for (const auto & pair = data[dict_name].begin(); pair != data[dict_name].end(); ++pair)
+//  {
+//    output << " " << pair->first << " " << pair->second;
+//  }
+  for (const auto& pair : data[dict_name])
   {
-    output << " " << pair->first << " " << pair->second;
+    output << " " << pair.first << " " << pair.second;
   }
   output << "\n";
 }
 
-void ishmuratov::complement(ishmuratov::data_t &data, std::istream &input, std::ostream &output)
+void ishmuratov::complement(ishmuratov::data_t &data, std::istream &input)
 {
   std::string new_name;
   std::string first_name;
@@ -24,29 +28,45 @@ void ishmuratov::complement(ishmuratov::data_t &data, std::istream &input, std::
   dataset_t new_dict;
 
   input >> new_name >> first_name >> second_name;
-  if (data.find(first_name) == data.cend() || data.find(second_name) == data.cend())
+  if (data.find(first_name) == data.end() || data.find(second_name) == data.end())
   {
     throw std::runtime_error("Key not found!");
   }
 
-  for (auto dict = data[first_name].cbegin(); dict != data[first_name].cend(); ++dict)
+//  for (auto dict = data[first_name].cbegin(); dict != data[first_name].cend(); ++dict)
+//  {
+//    if (data[second_name].find(dict->first) == data[second_name].end())
+//    {
+//      new_dict[dict->first] = data[first_name][dict->first];
+//    }
+//  }
+//  for (auto dict = data[second_name].cbegin(); dict != data[second_name].cend(); ++dict)
+//  {
+//    if (data[first_name].find(dict->first) == data[first_name].end())
+//    {
+//      new_dict[dict->first] = data[second_name][dict->first];
+//    }
+//  }
+
+  for (const auto & dict : data[first_name])
   {
-    if (data[second_name].find(dict->first) == data[second_name].cend())
+    if (data[second_name].find(dict.first) == data[second_name].end())
     {
-      new_dict[dict->first] = data[first_name][dict->first];
+      new_dict.push(dict.first, data[first_name][dict.first]);
     }
   }
-  for (auto dict = data[second_name].cbegin(); dict != data[second_name].cend(); ++dict)
+
+  for (const auto & dict: data[second_name])
   {
-    if (data[first_name].find(dict->first) == data[first_name].cend())
+    if (data[first_name].find(dict.first) == data[first_name].end())
     {
-      new_dict[dict->first] = data[second_name][dict->first];
+      new_dict.push(dict.first, data[second_name][dict.first]);
     }
   }
-  data[new_name] = new_dict;
+  data.push(new_name, new_dict);
 }
 
-void ishmuratov::intersect(ishmuratov::data_t &data, std::istream &input, std::ostream &output)
+void ishmuratov::intersect(ishmuratov::data_t &data, std::istream &input)
 {
   std::string new_name;
   std::string first_name;
@@ -54,21 +74,21 @@ void ishmuratov::intersect(ishmuratov::data_t &data, std::istream &input, std::o
   dataset_t new_dict;
 
   input >> new_name >> first_name >> second_name;
-  if (data.find(first_name) == data.cend() || data.find(second_name) == data.cend())
+  if (data.find(first_name) == data.end() || data.find(second_name) == data.end())
   {
     throw std::runtime_error("Key not found!");
   }
   for (auto dict = data[first_name].cbegin(); dict != data[first_name].cend(); ++dict)
   {
-    if (data[second_name].find(dict->first) != data[second_name].cend())
+    if (data[second_name].find(dict->first) != data[second_name].end())
     {
       new_dict[dict->first] = data[first_name][dict->first];
     }
   }
-  data[new_name] = new_dict;
+  data.push(new_name, new_dict);
 }
 
-void ishmuratov::uniond(ishmuratov::data_t &data, std::istream &input, std::ostream &output)
+void ishmuratov::uniond(ishmuratov::data_t &data, std::istream &input)
 {
   std::string new_name;
   std::string first_name;
@@ -76,7 +96,7 @@ void ishmuratov::uniond(ishmuratov::data_t &data, std::istream &input, std::ostr
   dataset_t new_dict;
 
   input >> new_name >> first_name >> second_name;
-  if (data.find(first_name) == data.cend() || data.find(second_name) == data.cend())
+  if (data.find(first_name) == data.end() || data.find(second_name) == data.end())
   {
     throw std::runtime_error("Key not found!");
   }
@@ -87,10 +107,10 @@ void ishmuratov::uniond(ishmuratov::data_t &data, std::istream &input, std::ostr
   }
   for (auto dict = data[second_name].cbegin(); dict != data[second_name].cend(); ++dict)
   {
-    if (data[first_name].find(dict->first) == data[first_name].cend())
+    if (data[first_name].find(dict->first) == data[first_name].end())
     {
       new_dict[dict->first] = data[second_name][dict->first];
     }
   }
-  data[new_name] = new_dict;
+  data.push(new_name, new_dict);
 }

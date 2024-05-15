@@ -1,11 +1,12 @@
 #include <iostream>
-#include <map>
 #include <fstream>
 #include <functional>
 #include <limits>
 
 #include "cmd.hpp"
 #include "iodata.hpp"
+
+#include "tree.hpp"
 
 int main(int argc, char * argv[])
 {
@@ -19,13 +20,17 @@ int main(int argc, char * argv[])
   data_t data;
   input_dict(data, file);
 
-  std::map< std::string, std::function< void(std::istream &, std::ostream &) > > cmds;
+  AVLTree< std::string, std::function< void(std::istream &, std::ostream &) > > cmds;
   {
     using namespace std::placeholders;
-    cmds["print"] = std::bind(print, std::ref(data), _1, _2);
-    cmds["complement"] = std::bind(complement, std::ref(data), _1, _2);
-    cmds["intersect"] = std::bind(intersect, std::ref(data), _1, _2);
-    cmds["union"] = std::bind(uniond, std::ref(data), _1, _2);
+    cmds.push("print", std::bind(print, std::ref(data), _1, _2));
+    cmds.push("complement", std::bind(complement, std::ref(data), _1));
+    cmds.push("intersect", std::bind(intersect, std::ref(data), _1));
+    cmds.push("union", std::bind(uniond, std::ref(data), _1));
+//    cmds["print"] = std::bind(print, std::ref(data), _1, _2);
+//    cmds["complement"] = std::bind(complement, std::ref(data), _1);
+//    cmds["intersect"] = std::bind(intersect, std::ref(data), _1);
+//    cmds["union"] = std::bind(uniond, std::ref(data), _1);
   }
 
   std::string cmd;
