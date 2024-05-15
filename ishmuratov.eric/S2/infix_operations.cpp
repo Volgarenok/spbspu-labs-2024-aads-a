@@ -25,56 +25,53 @@ void ishmuratov::topostfix(Queue< std::string > & process_queue, Queue< std::str
   Stack< std::string > process_stack;
   while (!process_queue.empty())
   {
-    std::string temp = process_queue.drop();
-    if (std::isdigit(temp[0]))
+    std::string temp = process_queue.back();
+    process_queue.pop();
+    try
     {
+      std::stoll(temp);
       result_queue.push(temp);
     }
-    else if (temp == "(")
+    catch (...)
     {
-      process_stack.push(temp);
-    }
-    else if (temp == ")")
-    {
-      while (process_stack.top() != "(")
-      {
-        result_queue.push(process_stack.drop());
-      }
-      process_stack.drop();
-    }
-    else if ((temp == "+") || (temp == "-"))
-    {
-      if (process_stack.empty())
+      if (temp == "(")
       {
         process_stack.push(temp);
       }
-      else
+      else if (temp == ")")
       {
-        while (!process_stack.empty() && low_priority(process_stack.top()))
+        while (!process_stack.empty() && process_stack.top() != "(")
         {
-          result_queue.push(process_stack.drop());
+          result_queue.push(process_stack.top());
+          process_stack.pop();
         }
-        process_stack.push(temp);
+        process_stack.pop();
       }
-    }
-    else if (temp == "*" || temp == "/" || temp == "%")
-    {
-      if (process_stack.empty())
+      else if (is_operator(temp))
       {
-        process_stack.push(temp);
-      }
-      else
-      {
-        while (!process_stack.empty() && high_priority(process_stack.top()))
+        if (process_stack.empty())
         {
-          result_queue.push(process_stack.drop());
+          process_stack.push(temp);
         }
-        process_stack.push(temp);
+        else
+        {
+          while (!process_stack.empty() && (get_priority(process_stack.top()) == 2 || get_priority(temp) == 1))
+          {
+            if (process_stack.top() == "(")
+            {
+              break;
+            }
+            result_queue.push(process_stack.top());
+            process_stack.pop();
+          }
+          process_stack.push(temp);
+        }
       }
     }
   }
   while(!process_stack.empty())
   {
-    result_queue.push(process_stack.drop());
+    result_queue.push(process_stack.top());
+    process_stack.pop();
   }
 }

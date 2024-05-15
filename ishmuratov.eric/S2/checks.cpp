@@ -1,16 +1,19 @@
 #include "checks.hpp"
 
-bool ishmuratov::isOperator(const std::string & opr)
+bool ishmuratov::is_operator(const std::string & opr)
 {
   return opr == "+" || opr == "-" || opr == "*" || opr == "/" || opr == "%";
 }
 
-bool ishmuratov::high_priority(const std::string & opr)
+int ishmuratov::get_priority(const std::string & opr)
 {
-  return (opr == "*" || opr == "/" || opr == "%");
-}
-
-bool ishmuratov::low_priority(const std::string & opr)
-{
-  return (high_priority(opr) || (opr == "+") || (opr == "-"));
+  if (opr == "+" || opr == "-")
+  {
+    return 1;
+  }
+  else if (opr == "*" || opr == "/" || opr == "%")
+  {
+    return 2;
+  }
+  return 0;
 }

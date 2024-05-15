@@ -14,11 +14,9 @@ namespace ishmuratov
         c_.pushFront(rhs);
       }
 
-      T drop()
+      void pop()
       {
-        T value = c_.back();
         c_.popBack();
-        return value;
       }
 
       T & front()

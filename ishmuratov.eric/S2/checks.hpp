@@ -5,9 +5,8 @@
 
 namespace ishmuratov
 {
-  bool isOperator(const std::string & opr);
-  bool high_priority(const std::string & opr);
-  bool low_priority(const std::string & opr);
+  bool is_operator(const std::string & opr);
+  int get_priority(const std::string & opr);
 }
 
 #endif

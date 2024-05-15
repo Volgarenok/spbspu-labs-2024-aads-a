@@ -7,15 +7,19 @@ void ishmuratov::calculate_postfix(Queue< std::string > & result_queue, Stack< l
 {
   while (!result_queue.empty())
   {
-    std::string temp = result_queue.drop();
-    if (isdigit(temp[0]))
+    std::string temp = result_queue.back();
+    result_queue.pop();
+    try
     {
-      operands.push(std::stoll(temp));
+      long long num = std::stoll(temp);
+      operands.push(num);
     }
-    else if (isOperator(temp))
+    catch (std::invalid_argument &)
     {
-      long long int n2 = operands.drop();
-      long long int n1 = operands.drop();
+      long long int n2 = operands.top();
+      operands.pop();
+      long long int n1 = operands.top();
+      operands.pop();
       long long int res = 0;
       long long int max_value = std::numeric_limits< long long int >::max();
       long long int min_value = std::numeric_limits< long long int >::min();
@@ -70,7 +74,7 @@ void ishmuratov::calculate_postfix(Queue< std::string > & result_queue, Stack< l
       }
       operands.push(res);
     }
-    else
+    catch (...)
     {
       throw std::invalid_argument("Unexpected token!");
     }

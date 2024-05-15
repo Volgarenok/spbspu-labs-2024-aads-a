@@ -55,11 +55,13 @@ int main(int argc, char * argv[])
 
   if (!results.empty())
   {
-    std::cout << results.drop();
+    std::cout << results.top();
+    results.pop();
   }
   while (!results.empty())
   {
-    std::cout << " " << results.drop();
+    std::cout << " " << results.top();
+    results.pop();
   }
   std::cout << "\n";
   return 0;
