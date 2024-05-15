@@ -13,6 +13,7 @@ void ishmuratov::calculate_postfix(Queue< std::string > & result_queue, Stack< l
     {
       long long num = std::stoll(temp);
       operands.push(num);
+      continue;
     }
     catch (std::invalid_argument &)
     {
