@@ -25,31 +25,40 @@ int main(int argc, char* argv[])
     return 1;
   }
 
-  Tree< std::string, std::function< void(TreeOfDict&, std::istream&) > > commands;
   using namespace std::placeholders;
-  commands["print"] = std::bind(printCmd, _1, _2, std::ref(std::cout));
-  commands["complement"] = complementCmd;
-  commands["intersect"] = intersectCmd;
-  commands["union"] = unionCmd;
+  Tree< std::string, std::function< void(const TreeOfDict&, std::istream&) > > outputCommands;
+  outputCommands["print"] = std::bind(printCmd, _1, _2, std::ref(std::cout));
+
+  Tree< std::string, std::function< void(TreeOfDict&, std::istream&) > > creationCommands;
+  creationCommands["complement"] = complementCmd;
+  creationCommands["intersect"] = intersectCmd;
+  creationCommands["union"] = unionCmd;
 
   std::string cmd = {};
   while (std::cin >> cmd)
   {
     try
     {
-      commands.at(cmd)(treeOfDictionaries, std::cin);
+      outputCommands.at(cmd)(treeOfDictionaries, std::cin);
     }
     catch (const std::out_of_range&)
     {
-      std::cout << "<INVALID COMMAND>" << '\n';
-      std::cin.clear();
-      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
-    }
-    catch (const std::logic_error& e)
-    {
-      std::cout << e.what() << '\n';
-      std::cin.clear();
-      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+      try
+      {
+        creationCommands.at(cmd)(treeOfDictionaries, std::cin);
+      }
+      catch (const std::out_of_range&)
+      {
+        std::cout << "<INVALID COMMAND>" << '\n';
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+      }
+      catch (const std::logic_error& e)
+      {
+        std::cout << e.what() << '\n';
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+      }
     }
   }
 
