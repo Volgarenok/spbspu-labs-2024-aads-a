@@ -7,6 +7,10 @@ void ishmuratov::input_infix(std::istream & input, Queue< Queue< std::string > >
   std::string line;
   while (std::getline(input, line))
   {
+    if (line.empty())
+    {
+      continue;
+    }
     Queue< std::string > temp;
     std::string token;
     for (size_t i = 0; i < line.size(); ++i)
