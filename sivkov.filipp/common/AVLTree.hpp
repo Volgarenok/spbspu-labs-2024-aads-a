@@ -30,9 +30,9 @@ namespace sivkov
     Value& operator[](const Key& key);
     const Value& operator[](const Key& key) const;
 
-    ConstIterator< Key, Value, Comp > cbegin() const;
-    ConstIterator< Key, Value, Comp > cend() const;
-    ConstIterator< Key, Value, Comp > find(const Key& key) const;
+    ConstIteratorTree< Key, Value, Comp > cbegin() const;
+    ConstIteratorTree< Key, Value, Comp > cend() const;
+    ConstIteratorTree< Key, Value, Comp > find(const Key& key) const;
 
   private:
     size_t size_;
@@ -53,7 +53,6 @@ namespace sivkov
     detail::TreeNode< Key, Value >* get(detail::TreeNode< Key, Value >* node, const Key& key) const;
     Value& get(const Key& key);
     detail::TreeNode< Key, Value >* get(detail::TreeNode< Key, Value >* node, const Key& key);
-
     detail::TreeNode< Key, Value >* insert(detail::TreeNode< Key, Value >* root, const Key& key, const Value& value);
   };
 
@@ -230,31 +229,31 @@ namespace sivkov
   }
 
   template< typename Key, typename Value, typename Comp >
-  ConstIterator< Key, Value, Comp > AVLTree< Key, Value, Comp >::cbegin() const
+  ConstIteratorTree< Key, Value, Comp > AVLTree< Key, Value, Comp >::cbegin() const
   {
     if (root_ != nullptr)
     {
-      return ConstIterator< Key, Value, Comp >(find_min(root_));
+      return ConstIteratorTree< Key, Value, Comp >(find_min(root_));
     }
     else
     {
-      return ConstIterator< Key, Value, Comp >(nullptr);
+      return ConstIteratorTree< Key, Value, Comp >(nullptr);
     }
   }
 
   template< typename Key, typename Value, typename Comp >
-  ConstIterator< Key, Value, Comp > AVLTree< Key, Value, Comp >::cend() const
+  ConstIteratorTree< Key, Value, Comp > AVLTree< Key, Value, Comp >::cend() const
   {
-    return ConstIterator< Key, Value, Comp >(nullptr);
+    return ConstIteratorTree< Key, Value, Comp >(nullptr);
   }
 
   template< typename Key, typename Value, typename Comp >
-  ConstIterator< Key, Value, Comp > AVLTree< Key, Value, Comp >::find(const Key& key) const
+  ConstIteratorTree< Key, Value, Comp > AVLTree< Key, Value, Comp >::find(const Key& key) const
   {
     detail::TreeNode< Key, Value >* node = get(root_, key);
     if (node)
     {
-      ConstIterator< Key, Value, Comp > it(node);
+      ConstIteratorTree< Key, Value, Comp > it(node);
       if (it.current_->data.first == key)
       {
         return it;
