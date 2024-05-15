@@ -9,42 +9,39 @@
 int main(int argc, char * argv[])
 {
   using namespace ishmuratov;
-  std::istream * input;
-  std::ifstream input_file;
 
-  if (argc == 1)
-  {
-    input = &std::cin;
-  }
-  else if (argc == 2)
-  {
-    input_file.open(argv[1]);
-    input = &input_file;
-  }
-  else
-  {
-    std::cerr << "Too many arguments!\n";
-    return 1;
-  }
-
-  Stack< std::string > process_stack;
-  Queue< std::string > process_queue;
-  Queue< std::string > result_queue;
+  Queue< Queue< std::string > > expr_queue;
   Stack< long long int > operands;
   Stack< long long int > results;
-  std::string line;
 
   try
   {
-    while (std::getline(*input, line))
+    if (argc == 1)
     {
-      if (!line.empty())
-      {
-        input_infix(line, process_queue);
-        topostfix(process_queue, result_queue);
-        calculate_postfix(result_queue, operands);
-        results.push(operands.top());
-      }
+      input_infix(std::cin, expr_queue);
+    }
+    else if (argc == 2)
+    {
+      std::ifstream input_file;
+      input_file.open(argv[1]);
+      input_infix(input_file, expr_queue);
+    }
+    else
+    {
+      std::cerr << "Too many arguments!\n";
+      return 1;
+    }
+    while (!expr_queue.empty())
+    {
+      Queue< std::string > process_queue;
+      Queue< std::string > result_queue;
+      process_queue = expr_queue.back();
+      expr_queue.pop();
+
+      topostfix(process_queue, result_queue);
+      calculate_postfix(result_queue, operands);
+      results.push(operands.top());
+      operands.pop();
     }
   }
   catch (std::exception & e)

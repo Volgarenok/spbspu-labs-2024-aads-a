@@ -2,22 +2,28 @@
 #include "stack.hpp"
 #include "checks.hpp"
 
-void ishmuratov::input_infix(const std::string & line, Queue< std::string > & input_queue)
+void ishmuratov::input_infix(std::istream & input, Queue< Queue< std::string > > & input_queue)
 {
-  std::string token;
-  for (char i : line)
+  std::string line;
+  while (std::getline(input, line))
   {
-    if (!std::isspace(i))
+    Queue< std::string > temp;
+    std::string token;
+    for (size_t i = 0; i < line.size(); ++i)
     {
-      token += i;
+      if (!std::isspace(line[i]))
+      {
+        token += line[i];
+      }
+      else
+      {
+        temp.push(token);
+        token = "";
+      }
     }
-    else
-    {
-      input_queue.push(token);
-      token = "";
-    }
+    temp.push(token);
+    input_queue.push(temp);
   }
-  input_queue.push(token);
 }
 
 void ishmuratov::topostfix(Queue< std::string > & process_queue, Queue< std::string > & result_queue)
@@ -69,7 +75,7 @@ void ishmuratov::topostfix(Queue< std::string > & process_queue, Queue< std::str
       }
     }
   }
-  while(!process_stack.empty())
+  while (!process_stack.empty())
   {
     result_queue.push(process_stack.top());
     process_stack.pop();
