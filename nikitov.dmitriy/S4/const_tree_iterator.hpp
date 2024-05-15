@@ -14,9 +14,6 @@ namespace nikitov
   class ConstTreeIterator: public std::iterator< std::bidirectional_iterator_tag, T >
   {
     friend class Tree< Key, T, Compare >;
-  private:
-    explicit ConstTreeIterator(detail::TreeNode< Key, T, Compare >* node, bool isFirst = true);
-
   public:
     ConstTreeIterator(const ConstTreeIterator< Key, T, Compare >&) = default;
     ~ConstTreeIterator() = default;
@@ -37,6 +34,8 @@ namespace nikitov
   private:
     detail::TreeNode< Key, T, Compare >* node_;
     bool isFirst_;
+
+    explicit ConstTreeIterator(detail::TreeNode< Key, T, Compare >* node, bool isFirst = true);
 
     void fallLeft();
     void fallRight();
