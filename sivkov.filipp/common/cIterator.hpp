@@ -8,8 +8,8 @@ namespace sivkov
   template< typename Key, typename Value, typename Comp >
   class AVLTree;
 
-  template< typename Key, typename Value, typename Comp >
-  class ConstIterator
+  template < typename Key, typename Value, typename Comp = std::less<Key> >
+  class ConstIteratorTree
   {
     friend class AVLTree< Key, Value, Comp >;
   public:
@@ -25,7 +25,7 @@ namespace sivkov
       return std::addressof(current_->data);
     }
 
-    ConstIterator< Key, Value, Comp >& operator++()
+    ConstIteratorTree< Key, Value, Comp >& operator++()
     {
       if (current_ == nullptr)
       {
@@ -51,28 +51,29 @@ namespace sivkov
       return *this;
     }
 
-    ConstIterator< Key, Value, Comp > operator++(int)
+    ConstIteratorTree< Key, Value, Comp > operator++(int)
     {
-      ConstIterator tmp = *this;
+      ConstIteratorTree tmp = *this;
       ++(*this);
       return tmp;
     }
 
-    bool operator==(const ConstIterator& other) const
+    bool operator==(const ConstIteratorTree& other) const
     {
       return current_ == other.current_;
     }
 
-    bool operator!=(const ConstIterator& other) const
+    bool operator!=(const ConstIteratorTree& other) const
     {
       return !(*this == other);
     }
 
   private:
     Node* current_;
-    ConstIterator(Node* node):
+    ConstIteratorTree(Node* node):
       current_(node)
     {}
   };
 }
 #endif
+
