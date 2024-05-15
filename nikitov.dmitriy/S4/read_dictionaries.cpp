@@ -3,7 +3,7 @@
 
 void nikitov::readDictionaries(Tree< std::string, Tree< size_t, std::string > >& treeOfDictionaries, std::istream& input)
 {
-  while(!input.eof())
+  while (!input.eof())
   {
     input.clear();
     std::string nameOfDictionary = {};
