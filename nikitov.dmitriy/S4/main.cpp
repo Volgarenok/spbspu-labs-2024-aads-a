@@ -28,9 +28,9 @@ int main(int argc, char* argv[])
   Tree< std::string, std::function< void(TreeOfDict&, std::istream&) > > commands;
   using namespace std::placeholders;
   commands["print"] = std::bind(printCmd, _1, _2, std::ref(std::cout));
-  commands["complement"] = std::bind(inputCmd, _1, _2, "complement");
-  commands["intersect"] = std::bind(inputCmd, _1, _2, "intersect");
-  commands["union"] = std::bind(inputCmd, _1, _2, "union");
+  commands["complement"] = complementCmd;
+  commands["intersect"] = intersectCmd;
+  commands["union"] = unionCmd;
 
   std::string cmd = {};
   while (std::cin >> cmd)
