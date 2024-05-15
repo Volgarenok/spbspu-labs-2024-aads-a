@@ -68,7 +68,7 @@ namespace nikitov
     };
 
     template< class Key, class T, class Compare >
-    TreeNode< Key, T, Compare >::TreeNode() :
+    TreeNode< Key, T, Compare >::TreeNode():
       firstValue_(std::pair< Key, T >()),
       secondValue_(std::pair< Key, T >()),
       left_(nullptr),
@@ -80,7 +80,7 @@ namespace nikitov
     {}
 
     template< class Key, class T, class Compare >
-    TreeNode< Key, T, Compare >::TreeNode(const std::pair< Key, T >& value) :
+    TreeNode< Key, T, Compare >::TreeNode(const std::pair< Key, T >& value):
       TreeNode()
     {
       add(value);
