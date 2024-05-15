@@ -26,10 +26,10 @@ int main(int argc, char* argv[])
   }
 
   using namespace std::placeholders;
-  Tree< std::string, std::function< void(const TreeOfDict&, std::istream&) > > outputCommands;
-  outputCommands["print"] = std::bind(printCmd, _1, _2, std::ref(std::cout));
+  Tree< std::string, std::function< void(const TreeOfDict&, const std::string&, std::ostream&) > > outputCommands;
+  outputCommands["print"] = printCmd;
 
-  Tree< std::string, std::function< void(TreeOfDict&, std::istream&) > > creationCommands;
+  Tree< std::string, std::function< void(TreeOfDict&, const std::string&, const std::string&, const std::string&) > > creationCommands;
   creationCommands["complement"] = complementCmd;
   creationCommands["intersect"] = intersectCmd;
   creationCommands["union"] = unionCmd;
@@ -37,15 +37,21 @@ int main(int argc, char* argv[])
   std::string cmd = {};
   while (std::cin >> cmd)
   {
+    std::string newDictName = {};
+    std::cin >> newDictName;
     try
     {
-      outputCommands.at(cmd)(treeOfDictionaries, std::cin);
+      outputCommands.at(cmd)(treeOfDictionaries, newDictName, std::cout);
     }
     catch (const std::out_of_range&)
     {
       try
       {
-        creationCommands.at(cmd)(treeOfDictionaries, std::cin);
+        std::string firstDictName = {};
+        std::cin >> firstDictName;
+        std::string secondDictName = {};
+        std::cin >> secondDictName;
+        creationCommands.at(cmd)(treeOfDictionaries, newDictName, firstDictName, secondDictName);
       }
       catch (const std::out_of_range&)
       {

@@ -1,17 +1,14 @@
 #include "commands.hpp"
 #include <istream>
 
-void nikitov::printCmd(const Tree< std::string, Tree< size_t, std::string > >& tree, std::istream& input, std::ostream& output)
+void nikitov::printCmd(const Tree< std::string, Tree< size_t, std::string > >& tree, const std::string& dictName, std::ostream& output)
 {
-  std::string nameOfDict = {};
-  input >> nameOfDict;
-
-  Tree< size_t, std::string > dict = tree.at(nameOfDict);
+  Tree< size_t, std::string > dict = tree.at(dictName);
   if (dict.empty())
   {
     throw std::logic_error("<EMPTY>");
   }
-  output << nameOfDict;
+  output << dictName;
   for (auto i = dict.cbegin(); i != dict.cend(); ++i)
   {
     output << ' ' << (*i).first << ' ' << (*i).second;
@@ -19,14 +16,9 @@ void nikitov::printCmd(const Tree< std::string, Tree< size_t, std::string > >& t
   output << '\n';
 }
 
-void nikitov::complementCmd(Tree< std::string, Tree< size_t, std::string > >& tree, std::istream& input)
+void nikitov::complementCmd(Tree< std::string, Tree< size_t, std::string > >& tree, const std::string& newDictName,
+  const std::string& firstDictName, const std::string& secondDictName)
 {
-  std::string newDictName = {};
-  input >> newDictName;
-  std::string firstDictName = {};
-  input >> firstDictName;
-  std::string secondDictName = {};
-  input >> secondDictName;
   Tree< size_t, std::string > newDict;
   Tree< size_t, std::string > dict1 = tree.at(firstDictName);
   Tree< size_t, std::string > dict2 = tree.at(secondDictName);
@@ -44,15 +36,9 @@ void nikitov::complementCmd(Tree< std::string, Tree< size_t, std::string > >& tr
   tree[newDictName] = newDict;
 }
 
-void nikitov::intersectCmd(Tree< std::string, Tree< size_t, std::string > >& tree, std::istream& input)
+void nikitov::intersectCmd(Tree< std::string, Tree< size_t, std::string > >& tree, const std::string& newDictName,
+  const std::string& firstDictName, const std::string& secondDictName)
 {
-  std::string newDictName = {};
-  input >> newDictName;
-  std::string firstDictName = {};
-  input >> firstDictName;
-  std::string secondDictName = {};
-  input >> secondDictName;
-
   Tree< size_t, std::string > newDict;
   Tree< size_t, std::string > dict1 = tree.at(firstDictName);
   Tree< size_t, std::string > dict2 = tree.at(secondDictName);
@@ -70,15 +56,9 @@ void nikitov::intersectCmd(Tree< std::string, Tree< size_t, std::string > >& tre
   tree[newDictName] = newDict;
 }
 
-void nikitov::unionCmd(Tree< std::string, Tree< size_t, std::string > >& tree, std::istream& input)
+void nikitov::unionCmd(Tree< std::string, Tree< size_t, std::string > >& tree, const std::string& newDictName,
+  const std::string& firstDictName, const std::string& secondDictName)
 {
-  std::string newDictName = {};
-  input >> newDictName;
-  std::string firstDictName = {};
-  input >> firstDictName;
-  std::string secondDictName = {};
-  input >> secondDictName;
-
   Tree< size_t, std::string > newDict;
   Tree< size_t, std::string > dict1 = tree.at(firstDictName);
   Tree< size_t, std::string > dict2 = tree.at(secondDictName);

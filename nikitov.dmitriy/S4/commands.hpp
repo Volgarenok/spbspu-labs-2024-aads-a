@@ -6,12 +6,15 @@
 
 namespace nikitov
 {
-  void printCmd(const Tree< std::string, Tree< size_t, std::string > >& tree, std::istream& input, std::ostream& output);
+  void printCmd(const Tree< std::string, Tree< size_t, std::string > >& tree, const std::string& dictName, std::ostream& output);
 
-  void complementCmd(Tree< std::string, Tree< size_t, std::string > >& tree, std::istream& input);
+  void complementCmd(Tree< std::string, Tree< size_t, std::string > >& tree, const std::string& newDictName,
+    const std::string& firstDictName, const std::string& secondDictName);
 
-  void intersectCmd(Tree< std::string, Tree< size_t, std::string > >& tree, std::istream& input);
+  void intersectCmd(Tree< std::string, Tree< size_t, std::string > >& tree, const std::string& newDictName,
+    const std::string& firstDictName, const std::string& secondDictName);
 
-  void unionCmd(Tree< std::string, Tree< size_t, std::string > >& tree, std::istream& input);
+  void unionCmd(Tree< std::string, Tree< size_t, std::string > >& tree, const std::string& newDictName,
+    const std::string& firstDictName, const std::string& secondDictName);
 }
 #endif
