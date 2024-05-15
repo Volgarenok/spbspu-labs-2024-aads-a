@@ -1,6 +1,7 @@
 #ifndef CITERATOR_HPP
 #define CITERATOR_HPP
 
+#include <functional>
 #include "treeNode.hpp"
 
 namespace sivkov
