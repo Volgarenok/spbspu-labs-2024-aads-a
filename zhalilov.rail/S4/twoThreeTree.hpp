@@ -631,6 +631,7 @@ namespace zhalilov
     parentNode->left->type = detail::NodeType::Three;
     delete emptyNode;
     parentNode->left = nullptr;
+    return true;
   }
 
   template < class Key, class T, class Compare >
