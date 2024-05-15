@@ -11,7 +11,7 @@ namespace nikitov
   class Tree;
 
   template< class Key, class T, class Compare = std::less< Key > >
-  class ConstTreeIterator : public std::iterator< std::bidirectional_iterator_tag, T >
+  class ConstTreeIterator: public std::iterator< std::bidirectional_iterator_tag, T >
   {
     friend class Tree< Key, T, Compare >;
   private:
