@@ -59,12 +59,12 @@ int main(int argc, char* argv[])
         std::cin.clear();
         std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
       }
-      catch (const std::logic_error& e)
-      {
-        std::cout << e.what() << '\n';
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
-      }
+    }
+    catch (const std::logic_error& e)
+    {
+      std::cout << e.what() << '\n';
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
   }
 
