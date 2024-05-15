@@ -40,8 +40,8 @@ namespace nikitov
     treeIterator end() noexcept;
     constTreeIterator cend() const noexcept;
 
-    size_t size() const;
-    bool empty() const;
+    size_t size() const noexcept;
+    bool empty() const noexcept;
 
     std::pair< treeIterator, bool > insert(const std::pair< Key, T >& value);
     std::pair< treeIterator, bool > insert(std::pair< Key, T >&& value);
