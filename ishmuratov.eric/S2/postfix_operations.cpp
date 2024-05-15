@@ -73,10 +73,8 @@ void ishmuratov::calculate_postfix(Queue< std::string > & result_queue, Stack< l
         }
       }
       operands.push(res);
+      continue;
     }
-    catch (...)
-    {
-      throw std::invalid_argument("Unexpected token!");
-    }
+    throw std::invalid_argument("Unexpected token!");
   }
 }
