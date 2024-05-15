@@ -3,7 +3,6 @@
 #include <string>
 #include <stdexcept>
 
-#include "list.hpp"
 #include "readSequences.hpp"
 #include "resultsPrinter.hpp"
 
@@ -12,11 +11,14 @@ int main()
   using namespace belokurskaya;
   try
   {
-    List< SequencePair > sequences = readSequences(std::cin);
+    List< std::pair< std::string, List< size_t > > > sequences;
 
-    printNames(sequences, std::cout);
-    printSequences(sequences, std::cout);
-    printSums(sequences, std::cout);
+    readSequences(std::cin, sequences);
+
+    printNames(std::cout, sequences);
+
+    printSequences(std::cout, sequences);
+    printSums(std::cout, sequences);
   }
 
   catch (const std::exception & e)

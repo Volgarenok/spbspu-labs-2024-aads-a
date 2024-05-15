@@ -4,11 +4,10 @@
 #include <iostream>
 
 #include "list.hpp"
-#include "SequencePair.hpp"
 
 namespace belokurskaya
 {
-  List< SequencePair > readSequences(std::istream& in);
+  void readSequences(std::istream& in, List< std::pair< std::string, List< size_t > > >& sequences);
 }
 
 #endif

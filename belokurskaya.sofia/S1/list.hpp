@@ -279,6 +279,30 @@ namespace belokurskaya
         return current2 != nullptr;
       }
 
+      operator List< size_t >() const
+      {
+        List< size_t > convertedList;
+        Node* current = head;
+        while (current)
+        {
+          convertedList.push_back(current->value);
+          current = current->next;
+        }
+        return convertedList;
+      }
+
+      operator List< List< size_t > >() const
+      {
+        List< List< size_t > > resultList;
+        Node* current = head;
+        while (current)
+        {
+          resultList.push_back(current->value);
+          current = current->next;
+        }
+        return resultList;
+      }
+
       bool operator<=(const List< T > & other) const noexcept
       {
         return * this < other || * this == other;

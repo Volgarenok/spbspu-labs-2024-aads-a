@@ -1,13 +1,12 @@
 #include "readSequences.hpp"
 
-belokurskaya::List< belokurskaya::SequencePair > belokurskaya::readSequences(std::istream& in)
+void belokurskaya::readSequences(std::istream& in, List< std::pair< std::string, List< size_t > > >& sequences)
 {
-  List< SequencePair > sequences;
   std::string name = "";
 
   while (in >> name)
   {
-    List< unsigned long long > sequence;
+    List< size_t > sequence;
     size_t number = 0;
     while (in >> number)
     {
@@ -17,8 +16,6 @@ belokurskaya::List< belokurskaya::SequencePair > belokurskaya::readSequences(std
     {
       in.clear();
     }
-    SequencePair pair(name, sequence);
-    sequences.push_back(pair);
+    sequences.push_back({name, sequence});
   }
-  return sequences;
 }

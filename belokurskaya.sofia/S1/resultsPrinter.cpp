@@ -2,77 +2,74 @@
 
 #include <limits>
 
-void belokurskaya::printNames(const List< SequencePair >& sequences, std::ostream& out)
+#include "list.hpp"
+
+void belokurskaya::printNames(std::ostream& out, const List < std::pair< std::string, List< size_t > > >& list)
 {
-  for (const auto& sequence : sequences)
+  auto end = list.end();
+  auto i = list.begin();
+  out << i++->first;
+  for (; i != end; ++i)
   {
-    out << sequence.getName() << " ";
+    out << ' ' << i->first;
   }
-  out << "\n";
+  out << '\n';
 }
 
-void belokurskaya::printSequences(const List< SequencePair >& sequences, std::ostream& out)
+void belokurskaya::printSequences(std::ostream& out, const List< size_t >& list)
 {
-  size_t maxLength = 0;
-  for (const auto& sequence : sequences)
-  {
-    maxLength = std::max(maxLength, sequence.getSequence().size());
-  }
+  auto endOfList = list.end();
+  auto i = list.begin();
 
-  for (size_t j = 0; j < maxLength; ++j)
+  while (i != endOfList)
   {
-    for (const auto& sequence : sequences)
+    auto subList = *i;
+    auto subEndOfList = subList.end();
+    auto subListIterator = subList.begin();
+
+    out << *(subListIterator++);
+    for (; subListIterator != subEndOfList; ++subListIterator)
     {
-      const List< unsigned long long >& seq = sequence.getSequence();
-      if (j < seq.size() && seq.at(j) != 0)
-      {
-        out << seq.at(j) << " ";
-      }
+      out << ' ' << *subListIterator;
     }
-    out << "\n";
+
+    out << '\n';
+    ++i;
   }
 }
 
-void belokurskaya::printSums(const List< SequencePair >& sequences, std::ostream& out)
+void belokurskaya::printSums(std::ostream& output, const List< List< size_t > >& lists)
 {
-  size_t maxLength = 0;
-  for (const auto& sequence : sequences)
+  size_t maxNum = std::numeric_limits< size_t >::max();
+  List< size_t > sums;
+
+  if (lists.empty())
   {
-    maxLength = std::max(maxLength, sequence.getSequence().size());
-  }
-  if (maxLength == 0)
-  {
-    out << "0\n";
+    output << 0 << '\n';
     return;
   }
 
-  List< unsigned long long > sumsList;
-
-  for (size_t i = 0; i < maxLength; ++i)
+  for (const auto& list : lists)
   {
-    unsigned long long sum = 0;
-    for (const auto& sequence : sequences)
+    size_t sum = 0;
+    for (const auto& num : list)
     {
-      const List< unsigned long long >& seq = sequence.getSequence();
-      if (i < seq.size())
+      if (maxNum - sum < num)
       {
-        if (sum > std::numeric_limits< unsigned long long >::max() - seq.at(i))
-        {
-          throw std::overflow_error("Overflow");
-        }
-        sum += seq.at(i);
+        throw std::overflow_error("Overflow");
       }
+      sum += num;
     }
-    sumsList.push_back(sum);
+    sums.push_back(sum);
   }
 
-  if (!sumsList.empty())
-  {
-    out << sumsList.at(0);
-    for (size_t i = 1; i < sumsList.size(); ++i)
-    {
-      out << " " << sumsList.at(i);
-    }
+  auto sumsEnd = sums.end();
+  auto i = sums.begin();
+
+  output << *(i++);
+  for (; i != sumsEnd; ++i) {
+    output << ' ' << *i;
   }
-  out << "\n";
+
+  output << '\n';
 }

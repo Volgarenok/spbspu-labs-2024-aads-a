@@ -3,13 +3,11 @@
 
 #include <iostream>
 
-#include "SequencePair.hpp"
-
 namespace belokurskaya
 {
-  void printNames(const List< SequencePair >& sequences, std::ostream& out);
-  void printSequences(const List< SequencePair >& sequences, std::ostream& out);
-  void printSums(const List< SequencePair >& sequences, std::ostream& out);
+  void printNames(std::ostream& out, const List < std::pair< std::string, List< size_t > > >& list);
+  void printSequences(std::ostream& out, const List< size_t >& list);
+  void printSums(std::ostream& output, const List< List< size_t > >& lists);
 }
 
 #endif
