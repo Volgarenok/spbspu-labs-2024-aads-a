@@ -4,7 +4,7 @@ void namestnikov::print(std::istream & in, Tree< std::string, Tree< size_t, std:
 {
   std::string name = "";
   in >> name;
-  Tree< size_t, std::string > map = myMap[name];
+  Tree< size_t, std::string > map = myMap.at(name);
   if (map.empty())
   {
     out << "<EMPTY>\n";
@@ -29,8 +29,8 @@ void namestnikov::makeIntersect(std::istream & in, Tree< std::string, Tree< size
   std::string secondName = "";
   in >> secondName;
   Tree< size_t, std::string > res;
-  Tree< size_t, std::string > left = myMap[firstName];
-  Tree< size_t, std::string > right = myMap[secondName];
+  Tree< size_t, std::string > left = myMap.at(firstName);
+  Tree< size_t, std::string > right = myMap.at(secondName);
   for (const auto & key1: left)
   {
     for (const auto & key2: right)
@@ -53,8 +53,8 @@ void namestnikov::makeUnion(std::istream & in, Tree< std::string, Tree< size_t, 
   std::string secondName = "";
   in >> secondName;
   Tree< size_t, std::string > res;
-  Tree< size_t, std::string > left = myMap[firstName];
-  Tree< size_t, std::string > right = myMap[secondName];
+  Tree< size_t, std::string > left = myMap.at(firstName);
+  Tree< size_t, std::string > right = myMap.at(secondName);
   for (const auto & key1: left)
   {
     res.insert(key1.first, key1.second);
@@ -78,8 +78,8 @@ void namestnikov::makeComplement(std::istream & in, Tree< std::string, Tree< siz
   std::string secondName = "";
   in >> secondName;
   Tree< size_t, std::string > res;
-  Tree< size_t, std::string > left = myMap[firstName];
-  Tree< size_t, std::string > right = myMap[secondName];
+  Tree< size_t, std::string > left = myMap.at(firstName);
+  Tree< size_t, std::string > right = myMap.at(secondName);
   for (const auto & key1: left)
   {
     if (right.find(key1.first) == right.cend())
