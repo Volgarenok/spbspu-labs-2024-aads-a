@@ -237,7 +237,7 @@ namespace strelyaev
         {
           it = insert(key, T());
         }
-        return it->second;
+        return find(key)->second;
       }
 
       bool empty() noexcept
