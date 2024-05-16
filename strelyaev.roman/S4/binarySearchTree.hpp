@@ -233,8 +233,6 @@ namespace strelyaev
         {
           it = insert(key, T());
         }
-        auto it2 = find(key);
-        assert(it == it2);
         return it->second;
       }
 
