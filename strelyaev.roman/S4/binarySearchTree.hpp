@@ -1,12 +1,11 @@
 #ifndef BINARYSEARCHTREE_HPP
 #define BINARYSEARCHTREE_HPP
 #include <functional>
+#include <cassert>
+#include <stdexcept>
 #include "node.hpp"
 #include "treeIterator.hpp"
 #include "constTreeIterator.hpp"
-
-
-#include <iostream>
 
 namespace strelyaev
 {
@@ -110,12 +109,10 @@ namespace strelyaev
         if (cmp_(key, parent->data_.first))
         {
           parent->left_ = new node_t(nullptr, parent, nullptr, key, value);
-          result.node_ = parent->left_;
         }
         else
         {
           parent->right_ = new node_t(nullptr, parent, nullptr, key, value);
-          result.node_ = parent->right_;
         }
         size_++;
         while (parent)
@@ -124,7 +121,7 @@ namespace strelyaev
           balance(parent);
           parent = parent->parent_;
         }
-        return result;
+        return find(key);
       }
 
       iterator_t find(const Key& key)
@@ -181,7 +178,6 @@ namespace strelyaev
         return std::make_pair(it, next);
       }
 
-
       iterator_t begin() noexcept
       {
         if (root_ == nullptr)
@@ -237,7 +233,9 @@ namespace strelyaev
         {
           it = insert(key, T());
         }
-        return find(key)->second;
+        auto it2 = find(key);
+        assert(it == it2);
+        return it->second;
       }
 
       bool empty() noexcept
