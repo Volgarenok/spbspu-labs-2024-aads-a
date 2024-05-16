@@ -268,12 +268,12 @@ namespace strelyaev
         return it->second;
       }
 
-      bool empty() const noexcept
+      bool empty() noexcept
       {
         return size_ == 0;
       }
 
-      size_t size() const noexcept
+      size_t size() noexcept
       {
         return size_;
       }
