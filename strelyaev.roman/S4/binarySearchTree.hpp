@@ -143,7 +143,7 @@ namespace strelyaev
         return end();
       }
 
-      c_iterator_t find(const Key& key)
+      c_iterator_t const_find(const Key& key)
       {
         node_t* current = root_;
         while (current)
@@ -267,7 +267,7 @@ namespace strelyaev
 
       std::pair< c_iterator_t, c_iterator_t > equal_range(const Key& key) const
       {
-        c_iterator_t it = find(key);
+        c_iterator_t it = const_find(key);
         if (it == cend())
         {
           return std::make_pair(cend(), cend());
