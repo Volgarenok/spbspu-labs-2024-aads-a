@@ -10,9 +10,19 @@ namespace sivkov
 
   bool compareOperators(const std::string& first, const std::string& second)
   {
-    bool isFirst = (first == "*" || first == "/" || first == "%");
-    bool isSecond = (second == "+" || second == "-");
-    bool isClosedBracket = (first != "(");
-    return (isFirst || isSecond) && isClosedBracket;
+    if (first == "*" || first == "/" || first == "%")
+    {
+      return true;
+    }
+    if (second == "+" || second == "-")
+    {
+      return true;
+    }
+    if (first != "(")
+    {
+      return true;
+    }
+    return false;
   }
+
 }
