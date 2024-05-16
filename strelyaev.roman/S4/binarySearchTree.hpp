@@ -235,9 +235,9 @@ namespace strelyaev
         auto it = find(key);
         if (it == end())
         {
-          insert(key, T());
+          it = insert(key, T());
         }
-        return find(key)->second;
+        return it->second;
       }
 
       bool empty() noexcept
