@@ -67,6 +67,11 @@ namespace strelyaev
       return !(*this == rhs);
     }
 
+    Iterator< Key, T > operator=(const Iterator< Key, T>& rhs)
+    {
+      node_ = rhs.node_;
+    }
+
     private:
       detail::Node< Key, T >* node_;
   };
