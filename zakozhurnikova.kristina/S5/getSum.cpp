@@ -1,6 +1,10 @@
 #include "getSum.hpp"
 #include <stdexcept>
 
+zakozhurnikova::KeySum::KeySum():
+  result_(0)
+{}
+
 void zakozhurnikova::KeySum::operator()(int data)
 {
   int maxNum = std::numeric_limits< int >::max();
@@ -10,4 +14,9 @@ void zakozhurnikova::KeySum::operator()(int data)
     throw std::overflow_error("Error: Addition overflow");
   }
   result_ += data;
+}
+
+int zakozhurnikova::KeySum::getResult() const
+{
+  return result_;
 }

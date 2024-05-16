@@ -7,9 +7,12 @@ namespace zakozhurnikova
 {
   struct KeySum
   {
+    KeySum();
     void operator()(int data);
+    int getResult() const;
 
-    int result_ = 0;
+  private:
+    int result_;
   };
 }
 
