@@ -6,18 +6,17 @@ namespace skuratov
   namespace detail
   {
     template< typename T >
-    class Node
+    struct Node
     {
-    public:
       Node(const T& value):
         value_(value),
-        prev(nullptr),
-        next(nullptr)
+        prev_(nullptr),
+        next_(nullptr)
       {}
       ~Node() = default;
       T value_;
-      Node* prev;
-      Node* next;
+      Node* prev_;
+      Node* next_;
     };
   }
 }

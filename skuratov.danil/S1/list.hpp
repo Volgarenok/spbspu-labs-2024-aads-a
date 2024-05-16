@@ -14,23 +14,23 @@ namespace skuratov
   {
     public:
       List():
-        head(nullptr),
-        tail(nullptr),
-        size(0)
+        head_(nullptr),
+        tail_(nullptr),
+        size_(0)
       {}
 
       ~List()
       {
-        while (head != nullptr)
+        while (head_ != nullptr)
         {
           popFront();
         }
       }
 
       List(const T& value, size_t n):
-        head(nullptr),
-        tail(nullptr),
-        size(0)
+        head_(nullptr),
+        tail_(nullptr),
+        size_(0)
       {
         try
         {
@@ -47,17 +47,17 @@ namespace skuratov
       }
 
       List(const List& diff):
-        head(nullptr),
-        tail(nullptr),
-        size(0)
+        head_(nullptr),
+        tail_(nullptr),
+        size_(0)
       {
         try
         {
-          detail::Node< T >* current = diff.head;
+          detail::Node< T >* current = diff.head_;
           while (current)
           {
             pushBack(current->value_);
-            current = current->next;
+            current = current->next_;
           }
         }
         catch (...)
@@ -78,13 +78,13 @@ namespace skuratov
       }
 
       List(List&& diff) noexcept:
-        head(diff.head),
-        tail(diff.tail),
-        size(diff.size)
+        head_(diff.head_),
+        tail_(diff.tail_),
+        size_(diff.size_)
       {
-        diff.head = nullptr;
-        diff.tail = nullptr;
-        diff.size = 0;
+        diff.head_ = nullptr;
+        diff.tail_ = nullptr;
+        diff.size_ = 0;
       }
 
       List& operator=(List&& diff)
@@ -99,7 +99,7 @@ namespace skuratov
 
       ConstIterator< T > cbegin() const noexcept
       {
-        return ConstIterator< T >(head);
+        return ConstIterator< T >(head_);
       }
 
       ConstIterator< T > cend() const noexcept
@@ -109,99 +109,99 @@ namespace skuratov
 
       T& front()
       {
-        return head->value_;
+        return head_->value_;
       }
 
       const T& front() const
       {
-        return head->value_;
+        return head_->value_;
       }
 
       T& back()
       {
-        return tail->value_;
+        return tail_->value_;
       }
 
       const T& back() const
       {
-        return tail->value_;
+        return tail_->value_;
       }
 
       bool empty() const noexcept
       {
-        return !size;
+        return !size_;
       }
 
       void pushFront(const T& value)
       {
         detail::Node< T >* ptr = new detail::Node< T >(value);
-        ptr->next = head;
-        if (head != nullptr)
+        ptr->next_ = head_;
+        if (head_ != nullptr)
         {
-          head->prev = ptr;
+          head_->prev_ = ptr;
         }
-        if (tail == nullptr)
+        if (tail_ == nullptr)
         {
-          tail = ptr;
+          tail_ = ptr;
         }
-        head = ptr;
-        ++size;
+        head_ = ptr;
+        ++size_;
       }
 
       void pushBack(const T& value)
       {
         detail::Node< T >* ptr = new detail::Node< T >(value);
-        ptr->prev = tail;
-        if (tail != nullptr)
+        ptr->prev_ = tail_;
+        if (tail_ != nullptr)
         {
-          tail->next = ptr;
+          tail_->next_ = ptr;
         }
-        if (head == nullptr)
+        if (head_ == nullptr)
         {
-          head = ptr;
+          head_ = ptr;
         }
-        tail = ptr;
-        ++size;
+        tail_ = ptr;
+        ++size_;
       }
 
       void popFront()
       {
-        if (head == nullptr)
+        if (head_ == nullptr)
         {
           return;
         }
-        detail::Node< T >* ptr = head->next;
+        detail::Node< T >* ptr = head_->next_;
         if (ptr != nullptr)
         {
-          ptr->prev = nullptr;
+          ptr->prev_ = nullptr;
         }
         else
         {
-          tail = nullptr;
+          tail_ = nullptr;
         }
-        delete head;
-        head = ptr;
-        --size;
+        delete head_;
+        head_ = ptr;
+        --size_;
       }
 
       void popBack()
       {
-        if (tail == nullptr)
+        if (tail_ == nullptr)
         {
           return;
         }
-        detail::Node< T >* ptr = tail->prev;
+        detail::Node< T >* ptr = tail_->prev_;
         if (ptr != nullptr)
         {
-          ptr->next = nullptr;
+          ptr->next_ = nullptr;
         }
         else
         {
-          head = nullptr;
+          head_ = nullptr;
         }
-        delete tail;
-        tail = ptr;
-        --size;
+        delete tail_;
+        tail_ = ptr;
+        --size_;
       }
 
       void clear() noexcept
@@ -223,69 +223,69 @@ namespace skuratov
 
       void swap(List& diff)
       {
-        std::swap(head, diff.head);
-        std::swap(tail, diff.tail);
-        std::swap(size, diff.size);
+        std::swap(head_, diff.head_);
+        std::swap(tail_, diff.tail_);
+        std::swap(size_, diff.size_);
       }
 
       void remove(const T& value)
       {
         detail::Node< T > dummyNode;
-        dummyNode.next = head;
-        detail::Node< T >* prev = std::addressof(dummyNode);
-        detail::Node< T >* current = head;
+        dummyNode.next_ = head_;
+        detail::Node< T >* prev_ = std::addressof(dummyNode);
+        detail::Node< T >* current = head_;
 
         while (current)
         {
           if (current->data == value)
           {
-            prev->next = current->next;
+            prev_->next_ = current->next_;
             delete current;
-            current = prev->next;
+            current = prev_->next_;
           }
           else
           {
-            prev = current;
-            current = current->next;
+            prev_ = current;
+            current = current->next_;
           }
         }
-        head = dummyNode.next;
+        head_ = dummyNode.next_;
       }
 
       template< typename UnaryPredicate >
       void removeIf(UnaryPredicate predicate)
       {
         detail::Node< T > dummyNode;
-        dummyNode.next = head;
-        detail::Node< T >* prev = std::addressof(dummyNode);
-        detail::Node< T >* current = head;
+        dummyNode.next_ = head_;
+        detail::Node< T >* prev_ = std::addressof(dummyNode);
+        detail::Node< T >* current = head_;
 
         while (current)
         {
           if (predicate(current->value_))
           {
-            prev->next = current->next;
+            prev_->next_ = current->next_;
             delete current;
-            current = prev->next;
+            current = prev_->next_;
           }
           else
           {
-            prev = current;
-            current = current->next;
+            prev_ = current;
+            current = current->next_;
           }
         }
-        head = dummyNode.next;
+        head_ = dummyNode.next_;
       }
 
       size_t getSize() const
       {
-        return size;
+        return size_;
       }
 
     private:
-      detail::Node< T >* head;
-      detail::Node< T >* tail;
-      size_t size;
+      detail::Node< T >* head_;
+      detail::Node< T >* tail_;
+      size_t size_;
   };
 }
 

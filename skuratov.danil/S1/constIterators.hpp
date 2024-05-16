@@ -40,7 +40,7 @@ namespace skuratov
       ConstIterator< T >& operator=(const ConstIterator< T >&) = default;
       ConstIterator< T >& operator++()
       {
-        nodePointer_ = nodePointer_->next;
+        nodePointer_ = nodePointer_->next_;
         return *this;
       }
       ConstIterator< T >& operator--()
