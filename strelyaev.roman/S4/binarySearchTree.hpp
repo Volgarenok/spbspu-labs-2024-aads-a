@@ -45,7 +45,7 @@ namespace strelyaev
 
       tree_t& operator=(const tree_t& other)
       {
-        if (this != std::addressof(temp))
+        if (this != std::addressof(other))
         {
           tree_t temp(other);
           std::swap(root_, temp.root_);
@@ -103,7 +103,7 @@ namespace strelyaev
             current = current->right_;
           }
         }
-        iterator_t result;
+        iterator_t result(nullptr);
         if (cmp_(key, parent->data_.first))
         {
           parent->left_ = new node_t(nullptr, parent, nullptr, key, value);
