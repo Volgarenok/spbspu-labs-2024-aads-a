@@ -20,6 +20,7 @@ void shaker(Iterator& begin, size_t size)
   int leftMark = 1;
   int rightMark = size - 1;
   auto end = begin;
+  size_t count = 0;
   for (size_t i = 1; i < size; ++i)
   {
     ++end;
@@ -28,6 +29,11 @@ void shaker(Iterator& begin, size_t size)
   {
     auto tempEnd = end;
     auto tempBegin = begin;
+    for (size_t i = 0; i < count; i++)
+    {
+      --tempEnd;
+      ++tempBegin;
+    }
     for (int i = rightMark; i >= leftMark; --i)
     {
       auto curr = tempEnd;
@@ -44,8 +50,6 @@ void shaker(Iterator& begin, size_t size)
     leftMark++;
     tempBegin++;
 
-    tempEnd = end;
-    tempBegin = begin;
     for (int i = leftMark; i <= rightMark; ++i)
     {
       auto curr = tempBegin;
@@ -61,6 +65,7 @@ void shaker(Iterator& begin, size_t size)
     }
     rightMark--;
     tempEnd--;
+    count++;
   }
 }
 
