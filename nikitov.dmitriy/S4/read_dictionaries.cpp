@@ -10,7 +10,7 @@ void nikitov::readDictionaries(Tree< std::string, Tree< size_t, std::string > >&
     input >> nameOfDictionary;
     Tree< size_t, std::string > dictionary;
     size_t key = {};
-    while(input >> key)
+    while (input >> key)
     {
       std::string value = {};
       input >> value;
