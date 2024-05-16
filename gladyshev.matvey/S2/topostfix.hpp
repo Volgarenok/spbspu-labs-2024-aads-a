@@ -7,7 +7,7 @@
 
 namespace gladyshev
 {
-  Queue< std::string > infixToPostfix(Queue< std::string > expression);
+  Queue< std::string > infixToPostfix(Queue< std::string >& expression);
 }
 
 #endif

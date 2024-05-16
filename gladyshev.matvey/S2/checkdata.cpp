@@ -1,8 +1,8 @@
 #include "checkdata.hpp"
 
-bool gladyshev::isOperator(const std::string& s)
+bool gladyshev::isOperator(const std::string& op)
 {
-  return s ==  "-" || s == "+" || s == "*" || s == "/" || s == "%";
+  return op ==  "-" || op == "+" || op == "*" || op == "/" || op == "%";
 }
 
 bool gladyshev::checkQuality(const std::string& top, const std::string& now)

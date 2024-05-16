@@ -5,7 +5,7 @@
 
 namespace gladyshev
 {
-  bool isOperator(const std::string& s);
+  bool isOperator(const std::string& op);
   bool checkQuality(const std::string& top, const std::string& now);
 }
 

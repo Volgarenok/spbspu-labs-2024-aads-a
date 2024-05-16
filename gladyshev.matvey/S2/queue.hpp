@@ -1,43 +1,36 @@
 #ifndef QUEUE_HPP
 #define QUEUE_HPP
 
-#include "array.hpp"
+#include <list.hpp>
 
 namespace gladyshev
 {
-  template < class T, class Container = DynArray< T > >
+  template < class T >
   class Queue
   {
   public:
-    Queue():
-      array_(Container())
-    {}
-    Queue(const Queue& other):
-      array_(other.array_)
-    {}
-    Queue(Queue&& other) noexcept:
-      array_(std::move(other.array_))
-    {}
     bool empty() const noexcept
     {
-      return array_.empty();
+      return list_.empty();
     }
-    T drop()
+    T& back()
     {
-      T temp = array_.back();
-      array_.pop_back();
-      return temp;
+      return list_.back();
+    }
+    const T& back() const
+    {
+      return list_.back();
+    }
+    void pop()
+    {
+      list_.pop_back();
     }
     void push(const T& other)
     {
-      array_.push_front(other);
-    }
-    void reverse() noexcept
-    {
-      array_.reverse();
+      list_.push_front(other);
     }
   private:
-    Container array_;
+    List< T > list_;
   };
 }
 

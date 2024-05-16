@@ -1,47 +1,36 @@
 #ifndef STACK_HPP
 #define STACK_HPP
 
-#include "array.hpp"
+#include <list.hpp>
 
 namespace gladyshev
 {
-  template < class T, class Container = DynArray< T > >
+  template < class T >
   class Stack
   {
   public:
-    Stack():
-      array_(Container())
-    {}
-    Stack(const Stack& other):
-      array_(other.array_)
-    {}
-    Stack(Stack&& other) noexcept:
-      array_(std::move(other.array_))
-    {}
     T& top()
     {
-      return array_.front();
+      return list_.front();
     }
     const T& top() const
     {
-      return array_.front();
+      return list_.front();
     }
     bool empty() const noexcept
     {
-      return array_.empty();
+      return list_.empty();
     }
-    T drop()
+    void pop()
     {
-      T temp = array_.front();
-      array_.pop_front();
-      return temp;
+      list_.pop_front();
     }
     void push(const T& other)
     {
-      array_.push_front(other);
+      list_.push_front(other);
     }
   private:
-    Container array_;
+    List< T > list_;
   };
 }
 

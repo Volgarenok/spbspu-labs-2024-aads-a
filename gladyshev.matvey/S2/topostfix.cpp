@@ -5,14 +5,15 @@
 #include "stack.hpp"
 #include "checkdata.hpp"
 
-gladyshev::Queue< std::string > gladyshev::infixToPostfix(Queue< std::string > expression)
+gladyshev::Queue< std::string > gladyshev::infixToPostfix(Queue< std::string >& expression)
 {
   Stack< std::string > ops;
   Queue< std::string > output;
   std::string token = "";
   while (!expression.empty())
   {
-    std::string value = expression.drop();
+    std::string value = expression.back();
+    expression.pop();
     try
     {
       std::stoll(value);
@@ -24,7 +25,8 @@ gladyshev::Queue< std::string > gladyshev::infixToPostfix(Queue< std::string > e
       {
         while (!ops.empty() && checkQuality(ops.top(), value))
         {
-          output.push(ops.drop());
+          output.push(ops.top());
+          ops.pop();
         }
         ops.push(value);
       }
@@ -36,9 +38,10 @@ gladyshev::Queue< std::string > gladyshev::infixToPostfix(Queue< std::string > e
       {
         while (!ops.empty() && ops.top() != "(")
         {
-          output.push(ops.drop());
+          output.push(ops.top());
+          ops.pop();
         }
-        ops.drop();
+        ops.pop();
       }
       else
       {
@@ -52,7 +55,8 @@ gladyshev::Queue< std::string > gladyshev::infixToPostfix(Queue< std::string > e
     {
       throw std::logic_error("bad bracket");
     }
-    output.push(ops.drop());
+    output.push(ops.top());
+    ops.pop();
   }
   return output;
 }
