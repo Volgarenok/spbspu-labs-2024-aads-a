@@ -113,7 +113,7 @@ bigdic complement(const std::string& s, const dic& dict1, const dic& dict2)
 
 bigdic union_dictionaries(const std::string& s, const dic& dict1, const dic& dict2)
 {
-  dic result = dict2;
+  dic result = dict1;
   bigdic finres;
   for (auto it1 = dict1.cbegin(); it1 != dict1.cend(); ++it1)
   {
