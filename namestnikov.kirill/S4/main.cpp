@@ -34,7 +34,7 @@ int main(int argc, char * argv[])
     using namespace std::placeholders;
     commands["union"] = makeUnion;
     commands["intersect"] = makeIntersect;
-    commands["complement"] = makeComplement, _1, _2;
+    commands["complement"] = makeComplement;
     commands["print"] = std::bind(print, _1, _2, std::ref(std::cout));
   }
   std::string commandName = "";
