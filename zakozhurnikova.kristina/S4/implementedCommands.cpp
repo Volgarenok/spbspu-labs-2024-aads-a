@@ -53,10 +53,10 @@ void zak::ImplementedCommands::executeCommand(std::istream& input, std::string& 
 
 void zak::ImplementedCommands::addCommand(const std::string& nameCommand, Command command)
 {
-  commands_[nameCommand] = command;
+  commands_.push(nameCommand, command);
 }
 
 void zak::ImplementedCommands::addCommand(const std::string& nameCommand, PrintCmd command)
 {
-  printCmd_[nameCommand] = command;
+  printCmd_.push(nameCommand, command);
 }
