@@ -1,10 +1,12 @@
 #ifndef BINARYSEARCHTREE_HPP
 #define BINARYSEARCHTREE_HPP
 #include <functional>
-#include <stdexcept>
 #include "node.hpp"
 #include "treeIterator.hpp"
 #include "constTreeIterator.hpp"
+
+
+#include <iostream>
 
 namespace strelyaev
 {
@@ -46,9 +48,9 @@ namespace strelyaev
 
       tree_t& operator=(const tree_t& other)
       {
-        if (this != std::addressof(other))
+        tree_t temp(other);
+        if (this != std::addressof(temp))
         {
-          tree_t temp(other);
           std::swap(root_, temp.root_);
         }
         return *this;
@@ -146,6 +148,27 @@ namespace strelyaev
         return iterator_t(current);
       }
 
+      c_iterator_t const_find(const Key& key)
+      {
+        node_t* current = root_;
+        while (current)
+        {
+          if (current->data_.first == key)
+          {
+            return c_iterator_t(current);
+          }
+          else if (cmp_(current->data_.first, key))
+          {
+            current = current->right_;
+          }
+          else
+          {
+            current = current->left_;
+          }
+        }
+        return c_iterator_t(current);
+      }
+
       size_t count(const Key& key) const
       {
         node_t* current = root_;
@@ -175,6 +198,18 @@ namespace strelyaev
           return std::make_pair(end(), end());
         }
         iterator_t next = it;
+        ++next;
+        return std::make_pair(it, next);
+      }
+
+      std::pair< c_iterator_t, c_iterator_t > equal_range(const Key& key) const
+      {
+        c_iterator_t it = const_find(key);
+        if (it == cend())
+        {
+          return std::make_pair(cend(), cend());
+        }
+        c_iterator_t next = it;
         ++next;
         return std::make_pair(it, next);
       }
@@ -219,12 +254,11 @@ namespace strelyaev
 
       T& at(const Key& key)
       {
-        auto it = find(key);
-        if (it == end())
+        if (find(key) == end())
         {
           throw std::out_of_range("Out of range");
         }
-        return it->second;
+        return find(key)->second;
       }
 
       T& operator[](const Key& key) noexcept
@@ -232,9 +266,9 @@ namespace strelyaev
         auto it = find(key);
         if (it == end())
         {
-          it = insert(key, T());
+          insert(key, T());
         }
-        return it->second;
+        return find(key)->second;
       }
 
       bool empty() noexcept
