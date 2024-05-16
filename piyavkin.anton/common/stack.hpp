@@ -1,36 +1,36 @@
-#ifndef QUEUE_HPP
-#define QUEUE_HPP
+#ifndef STACK_HPP
+#define STACK_HPP
 #include <list.hpp>
 
 namespace piyavkin
 {
   template< class T >
-  class Queue
+  class Stack
   {
   public:
+    bool operator==(const Stack& stack) const
+    {
+      return stack.list == list;
+    }
+    bool operator!=(const Stack& stack) const
+    {
+      return *this != stack;
+    }
     void push(const T& value)
     {
       list.push_back(value);
     }
-    T& back()
+    T& top()
     {
       return list.back();
     }
-    T& front()
-    {
-      return list.front();
-    }
-    const T& back() const
+    const T& top() const
     {
       return list.back();
-    }
-    const T& front() const
-    {
-      return list.front();
     }
     void pop()
     {
-      list.pop_front();
+      list.pop_back();
     }
     bool empty() const noexcept
     {
@@ -40,9 +40,9 @@ namespace piyavkin
     {
       return list.size();
     }
-    void swap(Queue< T >& queue) noexcept
+    void swap(Stack< T >& stack) noexcept
     {
-      list.swap(queue.list);
+      list.swap(stack.list);
     }
     template< class... Args >
     void emplace(Args&&... args)
