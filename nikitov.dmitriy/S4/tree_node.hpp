@@ -61,7 +61,8 @@ namespace nikitov
       size_t countHeight() const;
       bool isLeaf() const;
 
-      void free(bool isFirst);
+      void freeFirst();
+      void freeSecond();
 
       void connect(treeNode* left, treeNode* middle, treeNode* right);
       void clear();
@@ -349,28 +350,28 @@ namespace nikitov
       {
         right_ = new TreeNode< Key, T, Compare >(secondValue_);
         right_->parent_ = this;
-        free(false);
+        freeSecond();
       }
       else if (right_->size_ == 1)
       {
         right_->add(secondValue_);
         right_->parent_ = this;
-        free(false);
+        freeSecond();
       }
       else if (right_->size_ == 2)
       {
         middle_ = new TreeNode< Key, T, Compare >(secondValue_);
         middle_->parent_ = this;
-        free(false);
+        freeSecond();
         add(right_->firstValue_);
-        right_->free(true);
+        right_->freeFirst();
       }
       else
       {
         if (middle_->size_ == 2)
         {
           right_->add(middle_->secondValue_);
-          middle_->free(false);
+          middle_->freeSecond();
         }
         else
         {
@@ -386,12 +387,12 @@ namespace nikitov
     {
       left_ = new TreeNode< Key, T, Compare >(firstValue_);
       left_->parent_ = this;
-      free(true);
+      freeFirst();
       left_->add(middle_->firstValue_);
-      middle_->free(true);
+      middle_->freeFirst();
       if (middle_->size_ == 2)
       {
-        middle_->free(true);
+        middle_->freeFirst();
       }
       else
       {
@@ -408,30 +409,30 @@ namespace nikitov
         if (size_ == 2)
         {
           right_ = new TreeNode< Key, T, Compare >(secondValue_);
-          free(false);
+          freeSecond();
         }
         else
         {
           right_ = new TreeNode< Key, T, Compare >(firstValue_);
-          free(true);
+          freeFirst();
         }
         right_->parent_ = this;
         if (middle_ && middle_->size_ == 2)
         {
           add(middle_->secondValue_);
-          middle_->free(false);
+          middle_->freeSecond();
         }
         else if (middle_)
         {
           right_->add(middle_->firstValue_);
-          middle_->free(true);
+          middle_->freeFirst();
           delete middle_;
           middle_ = nullptr;
         }
         else
         {
           add(left_->secondValue_);
-          left_->free(false);
+          left_->freeSecond();
         }
         fixOwn(nullptr);
       }
@@ -440,7 +441,7 @@ namespace nikitov
         if (size_ == 2)
         {
           left_->add(firstValue_);
-          free(true);
+          freeFirst();
         }
         else
         {
@@ -465,23 +466,23 @@ namespace nikitov
           left_ = new TreeNode< Key, T, Compare >(firstValue_);
           left_->parent_ = this;
         }
-        free(true);
+        freeFirst();
         if (middle_ && middle_->size_ == 2)
         {
           add(middle_->firstValue_);
-          middle_->free(true);
+          middle_->freeFirst();
         }
         else if (middle_)
         {
           left_->add(middle_->firstValue_);
-          middle_->free(true);
+          middle_->freeFirst();
           delete middle_;
           middle_ = nullptr;
         }
         else
         {
           add(right_->firstValue_);
-          right_->free(true);
+          right_->freeFirst();
         }
         fixOwn(nullptr);
       }
@@ -490,7 +491,7 @@ namespace nikitov
         if (size_ == 2)
         {
           right_->add(secondValue_);
-          free(false);
+          freeSecond();
         }
         else
         {
@@ -544,12 +545,16 @@ namespace nikitov
     }
 
     template< class Key, class T, class Compare >
-    void TreeNode< Key, T, Compare >::free(bool isFirst)
+    void TreeNode< Key, T, Compare >::freeFirst()
     {
-      if (isFirst)
-      {
-        std::swap(firstValue_, secondValue_);
-      }
+      std::swap(firstValue_, secondValue_);
+      secondValue_ = std::pair< Key, T >{};
+      --size_;
+    }
+
+    template< class Key, class T, class Compare >
+    void TreeNode< Key, T, Compare >::freeSecond()
+    {
       secondValue_ = std::pair< Key, T >{};
       --size_;
     }
