@@ -1,6 +1,7 @@
 #ifndef BINARYSEARCHTREE_HPP
 #define BINARYSEARCHTREE_HPP
 #include <functional>
+#include <stdexcept>
 #include "node.hpp"
 #include "treeIterator.hpp"
 #include "constTreeIterator.hpp"
