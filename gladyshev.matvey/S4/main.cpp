@@ -163,7 +163,7 @@ std::ostream& process_commands(std::istream& in, std::ostream& out, bigdic& main
       }
       catch (const std::overflow_error& e)
       {
-        std::cerr << e.what() << "\n";
+        std::cout << e.what() << "\n";
       }
     }
     else
