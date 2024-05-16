@@ -115,14 +115,11 @@ bigdic union_dictionaries(const std::string& s, const dic& dict1, const dic& dic
 {
   dic result = dict1;
   bigdic finres;
-  for (auto it1 = dict1.cbegin(); it1 != dict1.cend(); ++it1)
+  for (auto it2 = dict2.cbegin(); it2 != dict2.cend(); ++it2)
   {
-    for (auto it2 = dict2.cbegin(); it2 != dict2.cend(); ++it2)
+    if (result.find(it2->first) == result.end())
     {
-      if ((it1->first != it2->first) && (it1->second != it2->second))
-      {
-        result.insert(it1->first, it1->second);
-      }
+      result.insert(it2->first, it2->second);
     }
   }
   finres.insert(s, result);
