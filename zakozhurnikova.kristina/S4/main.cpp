@@ -23,17 +23,18 @@ int main(int argc, char *argv[])
     return 1;
   }
 
-  ImplementedCommands master(maps);
-  master.addCommand("print", &print);
-  master.addCommand("union", &doUnion);
-  master.addCommand("complement", &complement);
-  master.addCommand("intersect", &intersect);
+  ImplementedCommands implementer(maps);
+  using namespace std::placeholders;
+  implementer.addCommand("print", &print);
+  implementer.addCommand("union", &doUnion);
+  implementer.addCommand("complement", &complement);
+  implementer.addCommand("intersect", &intersect);
   std::string cmdOutput;
   while (!std::cin.eof())
   {
     try
     {
-      master.executeCommand(std::cin, cmdOutput);
+      implementer.executeCommand(std::cin, cmdOutput);
       if (!cmdOutput.empty())
       {
         std::cout << cmdOutput << '\n';

@@ -5,7 +5,7 @@
 #include <cstddef>
 #include <cstdlib>
 #include <functional>
-#include <iostream>
+#include <stdexcept>
 #include <treeNode.hpp>
 #include <queue.hpp>
 
@@ -17,14 +17,12 @@ namespace zakozhurnikova
     using Node = detail::TreeNode< Key, Value >;
     BinarySearchTree():
       root_(nullptr),
-      size_(0),
-      compare_(Compare())
+      size_(0)
     {}
 
     BinarySearchTree(const BinarySearchTree& rhs):
       root_(nullptr),
-      size_(0),
-      compare_(rhs.compare_)
+      size_(0)
     {
       try
       {
@@ -42,8 +40,7 @@ namespace zakozhurnikova
 
     BinarySearchTree(BinarySearchTree&& rhs):
       root_(rhs.root_),
-      size_(rhs.size_),
-      compare_(rhs.compare_)
+      size_(rhs.size_)
     {
       rhs.root_ = nullptr;
       rhs.size_ = 0;
@@ -74,7 +71,7 @@ namespace zakozhurnikova
       clear();
     }
 
-    int size() const noexcept
+    size_t size() const noexcept
     {
       return this->size_;
     }
@@ -83,7 +80,6 @@ namespace zakozhurnikova
     {
       std::swap(root_, other.root_);
       std::swap(size_, other.size_);
-      std::swap(compare_, other.compare_);
     }
 
     bool empty() const noexcept
@@ -91,45 +87,52 @@ namespace zakozhurnikova
       return size_ == 0;
     }
 
-    void push(const Key& key, const Value& val)
+    Node* push(const Key& key, const Value& val)
     {
+      Node* curr;
       if (root_)
       {
-        put(key, val, root_);
+        curr = put(key, val, root_);
       }
       else
       {
         root_ = new Node(key, val);
+        curr = root_;
       }
       size_ = size_ + 1;
+      return curr;
     }
 
-    void put(const Key& key, const Value& val, Node* currentNode)
+    Node* put(const Key& key, const Value& val, Node* currentNode)
     {
-      if (compare_(key, currentNode->data.first))
+      Node* curr;
+      if (Compare()(key, currentNode->data.first))
       {
         if (currentNode->hasLeftChild())
         {
-          put(key, val, currentNode->leftChild);
+          curr = put(key, val, currentNode->leftChild);
         }
         else
         {
           currentNode->leftChild = new Node(key, val, currentNode);
           updateBalance(currentNode->leftChild);
+          return currentNode->leftChild;
         }
       }
       else
       {
         if (currentNode->hasRightChild())
         {
-          put(key, val, currentNode->rightChild);
+          curr = put(key, val, currentNode->rightChild);
         }
         else
         {
           currentNode->rightChild = new Node(key, val, currentNode);
           updateBalance(currentNode->rightChild);
+          return currentNode->rightChild;
         }
       }
+      return curr;
     }
 
     void del(const Key& key)
@@ -144,7 +147,7 @@ namespace zakozhurnikova
         }
         else
         {
-          std::cerr << "Error, key not in tree" << '\n';
+          throw std::out_of_range("Error, key not in tree\n");
         }
       }
       else if (size_ == 1 && root_->data.first == key)
@@ -154,7 +157,7 @@ namespace zakozhurnikova
       }
       else
       {
-        std::cerr << "Error, key not in tree" << '\n';
+        throw std::out_of_range("Error, key not in tree\n");
       }
     }
     Node* getLowestRight(Node* prev) const
@@ -188,18 +191,30 @@ namespace zakozhurnikova
     Value& operator[](const Key& key)
     {
       Node* traverser = get(key, root_);
+      if (!traverser)
+      {
+        traverser = push(key, Value());
+      }
+      return traverser->data.second;
+    }
+
+    const Value& operator[](const Key& key) const
+    {
+      Node* traverser = get(key, root_);
+      return traverser->data.second;
+    }
+
+    Value& at(const Key& key)
+    {
+      Node* traverser = get(key, root_);
       if (traverser)
       {
         return traverser->data.second;
       }
-      else
-      {
-        push(key, Value());
-        return get(key, root_)->data.second;
-      }
+      throw std::out_of_range("No such element");
     }
 
-    Value& at(const Key& key)
+    const Value& at(const Key& key) const
     {
       Node* traverser = get(key, root_);
       if (traverser)
@@ -288,17 +303,17 @@ namespace zakozhurnikova
       Node* wanted = root_;
       while (wanted)
       {
-        if (wanted->data.first == key)
-        {
-          break;
-        }
-        else if (compare_(wanted->data.first, key))
+        if (Compare()(wanted->data.first, key))
         {
           wanted = wanted->rightChild;
         }
-        else
+        else if (Compare()(key, wanted->data.first))
         {
           wanted = wanted->leftChild;
+        }
+        else
+        {
+          break;
         }
       }
       return ConstIteratorTree< Key, Value >(wanted);
@@ -307,7 +322,6 @@ namespace zakozhurnikova
   private:
     Node* root_;
     size_t size_;
-    Compare compare_;
 
     void clear()
     {
@@ -338,6 +352,19 @@ namespace zakozhurnikova
       }
     }
 
+    const Value& get(const Key& key) const
+    {
+      Node* res = get(key, root_);
+      if (res)
+      {
+        return res->data.second;
+      }
+      else
+      {
+        return res->data.second;
+      }
+    }
+
     Node* get(const Key& key, Node* currentNode)
     {
       if (!currentNode)
@@ -348,7 +375,27 @@ namespace zakozhurnikova
       {
         return currentNode;
       }
-      else if (compare_(key, currentNode->data.first))
+      else if (Compare()(key, currentNode->data.first))
+      {
+        return get(key, currentNode->leftChild);
+      }
+      else
+      {
+        return get(key, currentNode->rightChild);
+      }
+    }
+
+    Node* get(const Key& key, Node* currentNode) const
+    {
+      if (!currentNode)
+      {
+        return nullptr;
+      }
+      else if (currentNode->data.first == key)
+      {
+        return currentNode;
+      }
+      else if (Compare()(key, currentNode->data.first))
       {
         return get(key, currentNode->leftChild);
       }
