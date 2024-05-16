@@ -5,9 +5,6 @@
 #include "treeIterator.hpp"
 #include "constTreeIterator.hpp"
 
-
-#include <iostream>
-
 namespace strelyaev
 {
   template< typename Key, typename T, typename Compare = std::less< Key > >
@@ -48,9 +45,9 @@ namespace strelyaev
 
       tree_t& operator=(const tree_t& other)
       {
-        tree_t temp(other);
         if (this != std::addressof(temp))
         {
+          tree_t temp(other);
           std::swap(root_, temp.root_);
         }
         return *this;
@@ -79,18 +76,18 @@ namespace strelyaev
         std::swap(other.size_, size_);
       }
 
-      void insert(const std::pair< Key, T >& pair)
+      iterator_t insert(const std::pair< Key, T >& pair)
       {
-        insert(pair.first, pair.second);
+        return insert(pair.first, pair.second);
       }
 
-      void insert(const Key& key, const T& value)
+      iterator_t insert(const Key& key, const T& value)
       {
         if (!root_)
         {
           root_ = new node_t(nullptr, nullptr, nullptr, key, value);
           size_++;
-          return;
+          return iterator_t(root_);
         }
         node_t* current = root_;
         node_t* parent = nullptr;
@@ -106,13 +103,16 @@ namespace strelyaev
             current = current->right_;
           }
         }
+        iterator_t result;
         if (cmp_(key, parent->data_.first))
         {
           parent->left_ = new node_t(nullptr, parent, nullptr, key, value);
+          result.node_ = parent->left_;
         }
         else
         {
           parent->right_ = new node_t(nullptr, parent, nullptr, key, value);
+          result.node_ = parent->right_;
         }
         size_++;
         while (parent)
@@ -121,6 +121,7 @@ namespace strelyaev
           balance(parent);
           parent = parent->parent_;
         }
+        return result;
       }
 
       iterator_t find(const Key& key)
@@ -142,27 +143,6 @@ namespace strelyaev
           }
         }
         return iterator_t(current);
-      }
-
-      c_iterator_t const_find(const Key& key)
-      {
-        node_t* current = root_;
-        while (current)
-        {
-          if (current->data_.first == key)
-          {
-            return c_iterator_t(current);
-          }
-          else if (cmp_(current->data_.first, key))
-          {
-            current = current->right_;
-          }
-          else
-          {
-            current = current->left_;
-          }
-        }
-        return c_iterator_t(current);
       }
 
       size_t count(const Key& key) const
@@ -250,11 +230,12 @@ namespace strelyaev
 
       T& at(const Key& key)
       {
-        if (find(key) == end())
+        auto it = find(key);
+        if (it == end())
         {
           throw std::out_of_range("Out of range");
         }
-        return find(key)->second;
+        return it->second;
       }
 
       T& operator[](const Key& key) noexcept
@@ -262,9 +243,9 @@ namespace strelyaev
         auto it = find(key);
         if (it == end())
         {
-          insert(key, T());
+          it = insert(key, T());
         }
-        return find(key)->second;
+        return it->second;
       }
 
       bool empty() noexcept
