@@ -1,10 +1,12 @@
-#include <iostream>
-#include <forward_list>
-#include <list.hpp>
-#include <deque>
-#include <string>
 #include <algorithm>
+#include <cstdlib>
+#include <deque>
+#include <forward_list>
+#include <iostream>
+#include <list.hpp>
+#include <string>
 #include "generate.hpp"
+#include "sorting.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -15,30 +17,52 @@ int main(int argc, char* argv[])
     return 1;
   }
 
-  std::string type = argv[3];
+  std::string type = argv[2];
+  size_t size = std::atoi(argv[3]);
   if (type == "ints")
   {
-    int array[10];
-    std::generate_n(array, 10, RandomNumberInt);
+    int array[10000];
+    std::generate_n(array, size, RandomNumberInt);
+
     List< int > countOne;
     std::deque< int > countTwo;
     std::forward_list< int > countThree;
-    for (int i = 0; i < 10; ++i)
+
+    for (size_t i = 0; i < size; ++i)
     {
       int number = array[i];
       countOne.push_back(number);
       countTwo.push_front(number);
       countThree.push_front(number);
-      countThree.sort(std::less< int >());
+    }
+    auto it = countOne.begin();
+    for (size_t i = 1; i < size; ++i)
+    {
+      ++it;
+    }
+    auto beg = countOne.begin();
+    shaker(beg, it, size);
+    countThree.sort(std::less< int >());
+    for (auto it = countOne.begin(); it != countOne.end(); ++it)
+    {
+      std::cout << *it;
+      auto temp = it;
+      std::advance(temp, 1);
+      if (temp != countOne.end())
+      {
+        std::cout << ' ';
+      }
+    }
+    if (countOne.size() != 0)
+    {
+      std::cout << '\n';
     }
   }
   else if (type == "floats")
   {}
   else
   {
-    std::cerr << "No right argument";
+    std::cerr << "No right type";
     return 1;
   }
-
-
 }
