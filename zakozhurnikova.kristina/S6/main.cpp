@@ -19,6 +19,11 @@ int main(int argc, char* argv[])
 
   std::string type = argv[2];
   size_t size = std::atoi(argv[3]);
+  if (size == 0)
+  {
+    std::cerr << "You stupid";
+    return 1;
+  }
   if (type == "ints")
   {
     int array[10000];
@@ -34,6 +39,20 @@ int main(int argc, char* argv[])
       countOne.push_back(number);
       countTwo.push_front(number);
       countThree.push_front(number);
+    }
+    for (auto it = countOne.begin(); it != countOne.end(); ++it)
+    {
+      std::cout << *it;
+      auto temp = it;
+      std::advance(temp, 1);
+      if (temp != countOne.end())
+      {
+        std::cout << ' ';
+      }
+    }
+    if (countOne.size() != 0)
+    {
+      std::cout << '\n';
     }
     auto beg = countOne.begin();
     shaker(beg, size);
