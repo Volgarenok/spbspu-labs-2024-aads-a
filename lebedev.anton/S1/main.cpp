@@ -29,10 +29,8 @@ int main()
   }
   catch (const std::overflow_error & e)
   {
-    {
-      std::cerr << e.what() << "\n";
-      return 1;
-    }
+    std::cerr << e.what() << "\n";
+    return 1;
   }
   catch (const std::exception & e)
   {
