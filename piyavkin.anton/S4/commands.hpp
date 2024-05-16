@@ -1,7 +1,7 @@
 #ifndef COMANDS_HPP
 #define COMANDS_HPP
 #include <ostream>
-#include "tree.hpp"
+#include <tree.hpp>
 
 namespace piyavkin
 {
