@@ -156,7 +156,7 @@ namespace nikitov
   template< class Key, class T, class Compare >
   std::pair< Key, T >& TreeIterator< Key, T, Compare >::operator*()
   {
-    assert(node_->parent_);
+    assert(node_->size_ != 0);
     if (isFirst_)
     {
       return node_->firstValue_;
@@ -170,7 +170,7 @@ namespace nikitov
   template< class Key, class T, class Compare >
   const std::pair< Key, T >& TreeIterator< Key, T, Compare >::operator*() const
   {
-    assert(node_->parent_);
+    assert(node_->size_ != 0);
     if (isFirst_)
     {
       return node_->firstValue_;
@@ -184,7 +184,7 @@ namespace nikitov
   template< class Key, class T, class Compare >
   std::pair< Key, T >* TreeIterator< Key, T, Compare >::operator->()
   {
-    assert(node_->parent_);
+    assert(node_->size_ != 0);
     if (isFirst_)
     {
       return std::addressof(node_->firstValue_);
@@ -198,7 +198,7 @@ namespace nikitov
   template< class Key, class T, class Compare >
   const std::pair< Key, T >* TreeIterator< Key, T, Compare >::operator->() const
   {
-    assert(node_->parent_);
+    assert(node_->size_ != 0);
     if (isFirst_)
     {
       return std::addressof(node_->firstValue_);
