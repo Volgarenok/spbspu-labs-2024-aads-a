@@ -178,18 +178,6 @@ namespace strelyaev
         return std::make_pair(it, next);
       }
 
-      std::pair< c_iterator_t, c_iterator_t > equal_range(const Key& key) const
-      {
-        c_iterator_t it = const_find(key);
-        if (it == cend())
-        {
-          return std::make_pair(cend(), cend());
-        }
-        c_iterator_t next = it;
-        ++next;
-        return std::make_pair(it, next);
-      }
-
       iterator_t begin() noexcept
       {
         if (root_ == nullptr)
