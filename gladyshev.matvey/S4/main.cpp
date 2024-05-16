@@ -111,7 +111,7 @@ bigdic complement(const std::string& s, const dic& dict1, const dic& dict2)
   return finres;
 }
 
-bigdic union_dictionaries(const std::string& s,const dic& dict1,const dic& dict2)
+bigdic union_dictionaries(const std::string& s, const dic& dict1, const dic& dict2)
 {
   dic result = dict2;
   bigdic finres;
@@ -185,7 +185,7 @@ std::ostream& process_commands(std::istream& in, std::ostream& out, bigdic& main
       //}
       catch (const std::out_of_range&)
       {
-        std::cout << "<INVALID COMMAND>";
+        std::cout << "<INVALID COMMAND>\n";
         std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
       }
     }
