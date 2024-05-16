@@ -70,6 +70,7 @@ namespace strelyaev
     Iterator< Key, T > operator=(const Iterator< Key, T>& rhs)
     {
       node_ = rhs.node_;
+      return *this;
     }
 
     private:
