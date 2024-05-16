@@ -259,7 +259,8 @@ namespace strelyaev
 
       T& operator[](const Key& key) noexcept
       {
-        if (find(key) == end())
+        auto it = find(key);
+        if (it == end())
         {
           insert(key, T());
         }
