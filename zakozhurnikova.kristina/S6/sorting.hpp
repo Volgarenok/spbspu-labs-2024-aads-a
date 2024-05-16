@@ -44,6 +44,8 @@ void shaker(Iterator& begin, size_t size)
     leftMark++;
     tempBegin++;
 
+    tempEnd = end;
+    tempBegin = begin;
     for (int i = leftMark; i <= rightMark; ++i)
     {
       auto curr = tempBegin;
