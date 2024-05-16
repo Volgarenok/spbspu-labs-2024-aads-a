@@ -1,7 +1,7 @@
 #ifndef SORTING_HPP
 #define SOTRING_HPP
-#include <list.hpp>
 #include <iterator.hpp>
+#include <list.hpp>
 
 using namespace zakozhurnikova;
 
@@ -15,10 +15,15 @@ void swap(Iterator right, Iterator left)
 }
 
 template < class Iterator >
-void shaker(Iterator& begin, Iterator& end, size_t size)
+void shaker(Iterator& begin, size_t size)
 {
   int leftMark = 1;
   int rightMark = size - 1;
+  auto end = begin;
+  for (size_t i = 1; i < size; ++i)
+  {
+    ++end;
+  }
   while (leftMark <= rightMark)
   {
     for (int i = rightMark; i >= leftMark; --i)
@@ -40,7 +45,7 @@ void shaker(Iterator& begin, Iterator& end, size_t size)
     for (int i = leftMark; i <= rightMark; ++i)
     {
       auto curr = begin;
-      --curr;
+      ++curr;
       if (*(curr) > *(begin))
       {
         int buff;

@@ -35,13 +35,8 @@ int main(int argc, char* argv[])
       countTwo.push_front(number);
       countThree.push_front(number);
     }
-    auto it = countOne.begin();
-    for (size_t i = 1; i < size; ++i)
-    {
-      ++it;
-    }
     auto beg = countOne.begin();
-    shaker(beg, it, size);
+    shaker(beg, size);
     countThree.sort(std::less< int >());
     for (auto it = countOne.begin(); it != countOne.end(); ++it)
     {
@@ -56,6 +51,16 @@ int main(int argc, char* argv[])
     if (countOne.size() != 0)
     {
       std::cout << '\n';
+    }
+    for (auto it = countThree.begin(); it != countThree.end(); ++it)
+    {
+      std::cout << *it;
+      auto temp = it;
+      std::advance(temp, 1);
+      if (temp != countThree.end())
+      {
+        std::cout << ' ';
+      }
     }
   }
   else if (type == "floats")
