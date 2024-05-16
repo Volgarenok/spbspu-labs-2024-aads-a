@@ -40,11 +40,14 @@ int main(int argc, char* argv[])
       throw std::out_of_range("error comand");
     }
   }
-  catch (const std::exception& e)
+  catch (const std::logic_error& e)
   {
     std::cout << e.what() << "\n";
-    std::cin.clear();
-    std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+  }
+  catch (const out_of_range&)
+  {
+    std::cerr << e.what() << "\n"
+    return 2;
   }
 
   int a = f.key_;
