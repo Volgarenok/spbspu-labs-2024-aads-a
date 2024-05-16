@@ -61,7 +61,9 @@ namespace strelyaev
         if (this != std::addressof(other))
         {
           clear(root_);
-          std::swap(root_, temp.root_);
+          std::swap(root_, other.root_);
+          std::swap(size_, other.size_);
+          std::swap(cmp_, other.cmp_);
         }
         return *this;
       }
