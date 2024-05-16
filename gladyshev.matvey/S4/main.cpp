@@ -1,7 +1,6 @@
 #include "inputdata.hpp"
 #include "processcommands.hpp"
 #include "commands.hpp"
-#include "avltree.hpp"
 
 int main(int argc, char* argv[])
 {
