@@ -58,8 +58,7 @@ namespace strelyaev
 
       tree_t& operator=(tree_t&& other)
       {
-        tree_t temp(std::move(other));
-        if (this != std::addressof(temp))
+        if (this != std::addressof(other))
         {
           clear(root_);
           std::swap(root_, temp.root_);
