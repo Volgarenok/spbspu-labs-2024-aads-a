@@ -71,7 +71,7 @@ long long novokhatskiy::calculatePostExp(novokhatskiy::Queue< Postfix >&& inQueu
   {
     novokhatskiy::Postfix token = inQueue.front();
     inQueue.pop();
-    switch (token.type)
+    switch (token.getPostix())
     {
     case TokenType::OPERATION:
     {

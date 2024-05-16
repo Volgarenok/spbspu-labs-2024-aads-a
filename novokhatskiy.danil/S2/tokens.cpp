@@ -1,7 +1,8 @@
 #include "tokens.hpp"
 #include <stdexcept>
 
-novokhatskiy::Postfix::Postfix(InfixType&& inf)
+novokhatskiy::Postfix::Postfix(InfixType&& inf):
+  type()
 {
   switch (inf.type)
   {
@@ -36,4 +37,14 @@ novokhatskiy::Postfix novokhatskiy::Postfix::convertToPostfix(const InfixType& i
     operation = inf.operation;
   }
   return *this;
+}
+
+novokhatskiy::TokenType novokhatskiy::InfixType::getInfix() noexcept
+{
+  return type;
+}
+
+novokhatskiy::TokenType novokhatskiy::Postfix::getPostix() noexcept
+{
+  return type;
 }

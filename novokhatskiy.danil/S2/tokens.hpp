@@ -36,6 +36,7 @@ namespace novokhatskiy
 
   class InfixType
   {
+    TokenType getInfix() noexcept;
     friend class Postfix;
     friend void inputInfix(Queue<Queue<InfixType>>& infixQueue, std::istream& in);
     TokenType type;
@@ -49,6 +50,7 @@ namespace novokhatskiy
 
   struct Postfix
   {
+    TokenType getPostix() noexcept;
     friend class InfixType;
     friend long long calculatePostExp(Queue< Postfix >&& inQueue);
     friend Queue<Postfix> convertExpression(Queue<InfixType>&& infixQueue);
