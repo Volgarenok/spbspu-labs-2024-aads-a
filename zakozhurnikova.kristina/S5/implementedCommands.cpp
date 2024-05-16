@@ -19,5 +19,5 @@ int zak::ImplementedCommands::executeCommand(std::string& command, std::string& 
 
 void zak::ImplementedCommands::addCommand(const std::string& nameCommand, Command command)
 {
-  commands_[nameCommand] = command;
+  commands_.push(nameCommand, command);
 }
