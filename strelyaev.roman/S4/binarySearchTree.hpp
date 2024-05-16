@@ -250,28 +250,30 @@ namespace strelyaev
 
       T& at(const Key& key)
       {
-        if (find(key) == end())
+        auto it = find(key);
+        if (it == end())
         {
           throw std::out_of_range("Out of range");
         }
-        return find(key)->second;
+        return it->second;
       }
 
       T& operator[](const Key& key) noexcept
       {
-        if (find(key) == end())
+        auto it = find(key);
+        if (it == end())
         {
           insert(key, T());
         }
-        return find(key)->second;
+        return it->second;
       }
 
-      bool empty() noexcept
+      bool empty() const noexcept
       {
         return size_ == 0;
       }
 
-      size_t size() noexcept
+      size_t size() const noexcept
       {
         return size_;
       }
