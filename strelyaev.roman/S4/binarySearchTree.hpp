@@ -143,6 +143,72 @@ namespace strelyaev
         return iterator_t(current);
       }
 
+      c_iterator_t const_find(const Key& key)
+      {
+        node_t* current = root_;
+        while (current)
+        {
+          if (current->data_.first == key)
+          {
+            return c_iterator_t(current);
+          }
+          else if (cmp_(current->data_.first, key))
+          {
+            current = current->right_;
+          }
+          else
+          {
+            current = current->left_;
+          }
+        }
+        return c_iterator_t(current);
+      }
+
+      size_t count(const Key& key) const
+      {
+        node_t* current = root_;
+        while (current)
+        {
+          if (current->data_.first == key)
+          {
+            return 1;
+          }
+          else if (cmp_(key, current->data_.first))
+          {
+            current = current->left_;
+          }
+          else
+          {
+            current = current->right_;
+          }
+        }
+        return 0;
+      }
+
+      std::pair< iterator_t, iterator_t > equal_range(const Key& key)
+      {
+        iterator_t it = find(key);
+        if (it == end())
+        {
+          return std::make_pair(end(), end());
+        }
+        iterator_t next = it;
+        ++next;
+        return std::make_pair(it, next);
+      }
+
+      std::pair< c_iterator_t, c_iterator_t > equal_range(const Key& key) const
+      {
+        c_iterator_t it = const_find(key);
+        if (it == cend())
+        {
+          return std::make_pair(cend(), cend());
+        }
+        c_iterator_t next = it;
+        ++next;
+        return std::make_pair(it, next);
+      }
+
       iterator_t begin() noexcept
       {
         if (root_ == nullptr)
