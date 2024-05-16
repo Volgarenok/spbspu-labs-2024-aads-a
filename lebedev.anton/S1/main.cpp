@@ -1,6 +1,6 @@
 #include <iostream>
-#include "io_datastruct.hpp"
-#include "list.hpp"
+#include <list/list.hpp>
+#include "io_datastruct.hpp""
 
 int main()
 {
