@@ -31,7 +31,7 @@ namespace strelyaev
         {
           for (auto it = other.cbegin(); it != other.cend(); it++)
           {
-            insert(*it);
+            insert(it->first, it->second);
           }
         }
       }
@@ -48,9 +48,9 @@ namespace strelyaev
 
       tree_t& operator=(const tree_t& other)
       {
-        tree_t temp(other);
-        if (this != std::addressof(temp))
+        if (this != std::addressof(other))
         {
+          tree_t temp(other);
           std::swap(root_, temp.root_);
         }
         return *this;
@@ -69,7 +69,7 @@ namespace strelyaev
 
       ~Tree()
       {
-        clear(root_);
+        clear();
       }
 
       void swap(tree_t& other)
@@ -140,7 +140,28 @@ namespace strelyaev
             current = current->left_;
           }
         }
-        return iterator_t(current);
+        return end();
+      }
+
+      c_iterator_t find(const Key& key)
+      {
+        node_t* current = root_;
+        while (current)
+        {
+          if (current->data_.first == key)
+          {
+            return c_iterator_t(current);
+          }
+          else if (cmp_(current->data_.first, key))
+          {
+            current = current->right_;
+          }
+          else
+          {
+            current = current->left_;
+          }
+        }
+        return cend();
       }
 
       iterator_t begin() noexcept
@@ -183,31 +204,90 @@ namespace strelyaev
 
       T& at(const Key& key)
       {
-        if (find(key) == end())
+        auto it = find(key);
+        if (it == end())
         {
           throw std::out_of_range("Out of range");
         }
-        return find(key)->second;
+        return it->second;
       }
 
       T& operator[](const Key& key) noexcept
       {
-        if (find(key) == end())
+        auto it = find(key);
+        if (it == end())
         {
           insert(key, T());
         }
-        return find(key)->second;
+        return it->second;
       }
 
-      bool empty() noexcept
+      bool empty() const noexcept
       {
         return size_ == 0;
       }
 
-      size_t size() noexcept
+      size_t size() const noexcept
       {
         return size_;
       }
+
+      size_t count(const Key& key) const
+      {
+        node_t* current = root_;
+        while (current)
+        {
+          if (current->data_.first == key)
+          {
+            return 1;
+          }
+          else if (cmp_(key, current->data_.first))
+          {
+            current = current->left_;
+          }
+          else
+          {
+            current = current->right_;
+          }
+        }
+        return 0;
+      }
+
+      std::pair< iterator_t, iterator_t > equal_range(const Key& key)
+      {
+        iterator_t it = find(key);
+        if (it == end())
+        {
+          return std::make_pair(end(), end());
+        }
+        iterator_t next = it;
+        ++next;
+        return std::make_pair(it, next);
+      }
+
+      std::pair< c_iterator_t, c_iterator_t > equal_range(const Key& key) const
+      {
+        c_iterator_t it = find(key);
+        if (it == cend())
+        {
+          return std::make_pair(cend(), cend());
+        }
+        c_iterator_t next = it;
+        ++next;
+        return std::make_pair(it, next);
+      }
+
+      void clear() noexcept
+      {
+        clear(root_);
+        root_ = nullptr;
+        size_ = 0;
+      }
+
+    private:
+      node_t* root_;
+      Compare cmp_;
+      size_t size_;
 
       void clear(node_t* node) noexcept
       {
@@ -217,13 +297,7 @@ namespace strelyaev
           clear (node->left_);
           delete node;
         }
-        root_ = nullptr;
       }
-
-    private:
-      node_t* root_;
-      Compare cmp_;
-      size_t size_;
 
       int getHeight(node_t* node)
       {
