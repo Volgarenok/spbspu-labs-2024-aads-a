@@ -86,45 +86,52 @@ namespace zakozhurnikova
       return size_ == 0;
     }
 
-    void push(const Key& key, const Value& val)
+    Node* push(const Key& key, const Value& val)
     {
+      Node* curr;
       if (root_)
       {
-        put(key, val, root_);
+        curr = put(key, val, root_);
       }
       else
       {
         root_ = new Node(key, val);
+        curr = root_;
       }
       size_ = size_ + 1;
+      return curr;
     }
 
-    void put(const Key& key, const Value& val, Node* currentNode)
+    Node* put(const Key& key, const Value& val, Node* currentNode)
     {
+      Node* curr;
       if (Compare()(key, currentNode->data.first))
       {
         if (currentNode->hasLeftChild())
         {
-          put(key, val, currentNode->leftChild);
+          curr = put(key, val, currentNode->leftChild);
         }
         else
         {
           currentNode->leftChild = new Node(key, val, currentNode);
           updateBalance(currentNode->leftChild);
+          return currentNode->leftChild;
         }
       }
       else
       {
         if (currentNode->hasRightChild())
         {
-          put(key, val, currentNode->rightChild);
+          curr = put(key, val, currentNode->rightChild);
         }
         else
         {
           currentNode->rightChild = new Node(key, val, currentNode);
           updateBalance(currentNode->rightChild);
+          return currentNode->rightChild;
         }
       }
+      return curr;
     }
 
     void del(const Key& key)
@@ -165,29 +172,17 @@ namespace zakozhurnikova
     Value& operator[](const Key& key)
     {
       Node* traverser = get(key, root_);
-      if (traverser)
+      if (!traverser)
       {
-        return traverser->data.second;
+        traverser = push(key, Value());
       }
-      else
-      {
-        push(key, Value());
-        return get(key, root_)->data.second;
-      }
+      return traverser->data.second;
     }
 
     const Value& operator[](const Key& key) const
     {
       Node* traverser = get(key, root_);
-      if (traverser)
-      {
-        return traverser->data.second;
-      }
-      else
-      {
-        push(key, Value());
-        return get(key, root_)->data.second;
-      }
+      return traverser->data.second;
     }
 
     Value& at(const Key& key)

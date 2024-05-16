@@ -27,7 +27,7 @@ void zak::print(const List< std::string >& args, std::string& result, const tree
   if (!maps.at(mapName).empty())
   {
     result = mapName + ' ';
-    for (auto it = maps.at(mapName).cbegin(); it != maps.at(mapName).cend(); ++it)
+    for (auto it = maps[mapName].cbegin(); it != maps[mapName].cend(); ++it)
     {
       result += std::to_string(it->first) + ' ';
       result += it->second + ' ';
