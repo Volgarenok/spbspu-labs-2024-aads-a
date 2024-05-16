@@ -185,7 +185,7 @@ std::ostream& process_commands(std::istream& in, std::ostream& out, bigdic& main
       //}
       catch (const std::out_of_range&)
       {
-        std::cerr << "<INVALID COMMAND>";
+        std::cout << "<INVALID COMMAND>";
         std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
       }
     }
