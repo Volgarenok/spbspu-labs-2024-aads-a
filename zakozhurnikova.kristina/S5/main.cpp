@@ -40,6 +40,7 @@ int main(int argc, char* argv[])
   std::string command(argv[1]);
   std::string cmdOutput;
   int amount = 0;
+
   try
   {
     amount = commands.at(command)(cmdOutput, map);
