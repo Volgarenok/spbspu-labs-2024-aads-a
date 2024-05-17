@@ -225,7 +225,7 @@ namespace zakozhurnikova
     }
 
     template < typename F >
-    F& traverse_lnr(F& f, std::string& result) const
+    F traverse_lnr(F f, std::string& result) const
     {
       for (auto it = cbegin(); it != cend(); ++it)
       {
@@ -244,7 +244,7 @@ namespace zakozhurnikova
     }
 
     template < typename F >
-    F& traverse_rnl(F& f, std::string& result) const
+    F traverse_rnl(F f, std::string& result) const
     {
       for (auto it = cbeginR(); it != cend(); --it)
       {
@@ -263,7 +263,7 @@ namespace zakozhurnikova
     }
 
     template < typename F >
-    F& traverse_breadth(F& f, std::string& result) const
+    F traverse_breadth(F f, std::string& result) const
     {
       if (empty())
       {
