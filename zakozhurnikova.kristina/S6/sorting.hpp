@@ -65,11 +65,11 @@ void shell(Iterator begin, size_t size)
   auto spacing = begin + size / 2;
   for (size_t gap = size / 2; gap > 0; gap /= 2)
   {
+    auto temp = spacing;
     for (size_t i = gap; i < size; ++i)
     {
-      auto temp = spacing;
 //      int temp = arr[i];
-      auto tmp = spacing;
+      auto tmp = temp;
       for (size_t j = i; j >= gap && *(tmp - gap) > *temp; j -= gap)
       {
         auto next = tmp - gap;

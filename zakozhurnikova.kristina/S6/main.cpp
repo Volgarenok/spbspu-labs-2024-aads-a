@@ -47,6 +47,7 @@ int main(int argc, char* argv[])
     shell(begs, size);
     countThree.sort(std::less< int >());
     print(std::cout, countOne);
+    print(std::cout, countTwo);
     print(std::cout, countThree);
   }
   else if (type == "floats")
