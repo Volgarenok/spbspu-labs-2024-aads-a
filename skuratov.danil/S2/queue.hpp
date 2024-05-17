@@ -10,13 +10,13 @@ namespace skuratov
   {
   public:
     void push(T& diff);
-    T drop();
+    void drop();
     bool empty();
     size_t size();
     T& top();
   private:
     List< T > queue_;
-	};
+  };
 }
 
 #endif
