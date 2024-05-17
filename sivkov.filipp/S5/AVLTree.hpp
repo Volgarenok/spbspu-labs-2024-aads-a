@@ -48,11 +48,11 @@ namespace sivkov
     ConstIteratorTree< Key, Value, Comp > find(const Key& key) const;
 
     template< typename F >
-    F& iterLnr(F& f);
+    F& iterLnr(F& f) const;
     template< typename F >
-    F& iterRnl(F& f);
+    F& iterRnl(F& f) const;
     template< typename F >
-    F& iterBfs(F& f);
+    F& iterBfs(F& f) const;
 
   private:
     size_t size_;
@@ -531,7 +531,7 @@ namespace sivkov
   }
   template< typename Key, typename Value, typename Comp >
   template< typename F >
-  F& AVLTree< Key, Value, Comp >::iterLnr(F& f)
+  F& AVLTree< Key, Value, Comp >::iterLnr(F& f) const
   {
     if (empty())
     {
@@ -545,7 +545,7 @@ namespace sivkov
   }
   template< typename Key, typename Value, typename Comp >
   template< typename F >
-  F& AVLTree< Key, Value, Comp >::iterRnl(F& f)
+  F& AVLTree< Key, Value, Comp >::iterRnl(F& f) const
   {
     if (empty())
     {
@@ -559,7 +559,7 @@ namespace sivkov
   }
   template< typename Key, typename Value, typename Comp >
   template< typename F >
-  F& AVLTree< Key, Value, Comp >::iterBfs(F& f)
+  F& AVLTree< Key, Value, Comp >::iterBfs(F& f) const
   {
     if (empty())
     {
