@@ -7,7 +7,7 @@
 #include "cIterator.hpp"
 #include "constIteratorLnr.hpp"
 #include "constIteratorRnl.hpp"
-#include "constIteratorBfc.hpp"
+#include "constIteratorBfs.hpp"
 
 namespace sivkov
 {
