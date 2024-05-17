@@ -4,17 +4,17 @@
 #include "key_summ.hpp"
 namespace sivkov
 {
-  void ascending(AVLTree< int, std::string >& tree, KeySum& f)
+  void ascending(const AVLTree< int, std::string >& tree, KeySum& f)
   {
     tree.iterLnr(f);
   }
 
-  void descending(AVLTree< int, std::string >& tree, KeySum& f)
+  void descending(const AVLTree< int, std::string >& tree, KeySum& f)
   {
     tree.iterRnl(f);
   }
 
-  void breadth(AVLTree< int, std::string >& tree, KeySum& f)
+  void breadth(const AVLTree< int, std::string >& tree, KeySum& f)
   {
     tree.iterBfs(f);
   }
