@@ -7,6 +7,7 @@
 #include <string>
 #include "generate.hpp"
 #include "sorting.hpp"
+#include "print.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -40,48 +41,12 @@ int main(int argc, char* argv[])
       countTwo.push_front(number);
       countThree.push_front(number);
     }
-    for (auto it = countOne.begin(); it != countOne.end(); ++it)
-    {
-      std::cout << *it;
-      auto temp = it;
-      std::advance(temp, 1);
-      if (temp != countOne.end())
-      {
-        std::cout << ' ';
-      }
-    }
-    if (countOne.size() != 0)
-    {
-      std::cout << '\n';
-    }
     auto beg = countOne.begin();
     ++beg;
     shaker(beg, size, std::less< int >());
     countThree.sort(std::less< int >());
-    for (auto it = countOne.begin(); it != countOne.end(); ++it)
-    {
-      std::cout << *it;
-      auto temp = it;
-      std::advance(temp, 1);
-      if (temp != countOne.end())
-      {
-        std::cout << ' ';
-      }
-    }
-    if (countOne.size() != 0)
-    {
-      std::cout << '\n';
-    }
-    for (auto it = countThree.begin(); it != countThree.end(); ++it)
-    {
-      std::cout << *it;
-      auto temp = it;
-      std::advance(temp, 1);
-      if (temp != countThree.end())
-      {
-        std::cout << ' ';
-      }
-    }
+    print(std::cout, countOne);
+    print(std::cout, countThree);
   }
   else if (type == "floats")
   {}
