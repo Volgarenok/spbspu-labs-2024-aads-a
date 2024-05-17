@@ -18,10 +18,10 @@ namespace ishmuratov
 
       TNode(const Key key, const Value value):
         data(std::make_pair(key, value)),
+        height(0),
         parent(nullptr),
         left(nullptr),
-        right(nullptr),
-        height(0)
+        right(nullptr)
       {}
     };
   }
