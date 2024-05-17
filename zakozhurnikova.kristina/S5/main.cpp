@@ -45,6 +45,7 @@ int main(int argc, char* argv[])
     amount = commands.at(command)(cmdOutput, map);
     if (!cmdOutput.empty())
     {
+      cmdOutput.pop_back();
       if (cmdOutput != "<EMPTY>")
       {
         std::cout << amount << " ";

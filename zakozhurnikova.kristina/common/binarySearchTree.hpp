@@ -5,9 +5,9 @@
 #include <cstddef>
 #include <cstdlib>
 #include <functional>
+#include <queue.hpp>
 #include <stdexcept>
 #include <treeNode.hpp>
-#include <queue.hpp>
 
 namespace zakozhurnikova
 {
@@ -225,50 +225,39 @@ namespace zakozhurnikova
     }
 
     template < typename F >
-    F traverse_lnr(F f, std::string& result) const
-    {
-      for (auto it = cbegin(); it != cend(); ++it)
-      {
-        f(it->first);
-        result += it->second + ' ';
-      }
-      if (!empty())
-      {
-        result.pop_back();
-      }
-      else
-      {
-        result = "<EMPTY>";
-      }
-      return f;
-    }
-
-    template < typename F >
-    F traverse_rnl(F f, std::string& result) const
-    {
-      for (auto it = cbeginR(); it != cend(); --it)
-      {
-        f(it->first);
-        result += it->second + ' ';
-      }
-      if (!empty())
-      {
-        result.pop_back();
-      }
-      else
-      {
-        result = "<EMPTY>";
-      }
-      return f;
-    }
-
-    template < typename F >
-    F traverse_breadth(F f, std::string& result) const
+    F traverse_lnr(F f) const
     {
       if (empty())
       {
-        result = "<EMPTY>";
-        return f;
+        throw std::logic_error("<EMPTY>");
+      }
+      for (auto it = cbegin(); it != cend(); ++it)
+      {
+        f(*it);
+      }
+      return f;
+    }
+
+    template < typename F >
+    F traverse_rnl(F f) const
+    {
+      if (empty())
+      {
+        throw std::logic_error("<EMPTY>");
+      }
+      for (auto it = cbeginR(); it != cend(); --it)
+      {
+        f(*it);
+      }
+      return f;
+    }
+
+    template < typename F >
+    F traverse_breadth(F f) const
+    {
+      if (empty())
+      {
+        throw std::logic_error("<EMPTY>");
       }
       Queue< const Node* > queue;
       queue.push(root_);
@@ -276,8 +265,7 @@ namespace zakozhurnikova
       {
         const Node* curr = queue.top();
         queue.drop();
-        f(curr->data.first);
-        result += curr->data.second + ' ';
+        f(curr->data);
         if (curr->leftChild)
         {
           queue.push(curr->leftChild);
@@ -286,14 +274,6 @@ namespace zakozhurnikova
         {
           queue.push(curr->rightChild);
         }
-      }
-      if (!empty())
-      {
-        result.pop_back();
-      }
-      else
-      {
-        result = "<EMPTY>";
       }
       return f;
     }

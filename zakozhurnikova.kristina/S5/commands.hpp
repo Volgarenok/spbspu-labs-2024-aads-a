@@ -3,6 +3,7 @@
 #include <string>
 #include <binarySearchTree.hpp>
 #include <list.hpp>
+#include <utility>
 
 namespace zakozhurnikova
 {
