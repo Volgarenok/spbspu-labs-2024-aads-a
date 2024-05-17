@@ -12,7 +12,6 @@
 int main(int argc, char ** argv)
 {
   using namespace erohin;
-
   if (argc != 2)
   {
     std::cerr << "Wrong CLA number\n";
