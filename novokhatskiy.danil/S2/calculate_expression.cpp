@@ -65,8 +65,6 @@ long long novokhatskiy::doMod(long long op1, long long op2)
 long long novokhatskiy::calculatePostExp(novokhatskiy::Queue< Postfix >&& inQueue)
 {
   novokhatskiy::Stack< long long > stack;
-  constexpr long long minSize = std::numeric_limits< long long >::min();
-  constexpr long long maxSize = std::numeric_limits< long long >::max();
   while (!inQueue.empty())
   {
     novokhatskiy::Postfix token = inQueue.front();
