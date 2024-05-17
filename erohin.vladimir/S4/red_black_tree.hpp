@@ -251,7 +251,7 @@ namespace erohin
       while (node)
       {
         prev = node;
-        if (node->data_.first == value.first)
+        if (!cmp_(value.first, node->data_.first) && !cmp_(node->data_.first, value.first))
         {
           return std::make_pair(iterator(node), false);
         }
@@ -352,14 +352,99 @@ namespace erohin
   template< class... Args >
   std::pair< TreeIterator< Key, T >, bool > RedBlackTree< Key, T, Compare >::emplace(Args &&... args)
   {
-    return insert(T(std::forward< Args... >(args...)));
+    detail::Node< Key, T > * emplaced = new detail::Node< Key, T >(nullptr, nullptr, nullptr, std::forward< Args... >(args...));
+    try
+    {
+      if (empty())
+      {
+        root_ = emplaced;
+      }
+      else
+      {
+        detail::Node< Key, T > * node = root_;
+        detail::Node< Key, T > * prev = node;
+        while (node)
+        {
+          prev = node;
+          if (!cmp_(emplaced->first, node->data_.first) && !cmp_(node->data_.first, emplaced->first))
+          {
+            delete emplaced;
+            return std::make_pair(iterator(node), false);
+          }
+          else if (cmp_(emplaced->first, node->data_.first))
+          {
+            node = node->left_;
+          }
+          else
+          {
+            node = node->right_;
+          }
+        }
+        emplaced->parent_ = prev;
+        if (cmp_(emplaced->data_.first, prev->data_.first))
+        {
+          prev->left_ = emplaced;
+        }
+        else
+        {
+          prev->right_ = emplaced;
+        }
+      }
+    }
+    catch (...)
+    {
+      delete emplaced;
+      throw;
+    }
+    insert_balance_case1(emplaced);
+    ++size_;
+    return std::make_pair(iterator(emplaced), true);
   }
 
   template< class Key, class T, class Compare >
   template< class... Args >
   TreeIterator< Key, T > RedBlackTree< Key, T, Compare >::emplace_hint(const_iterator pos, Args &&... args)
   {
-    return insert(iterator(pos.node_), T(std::forward< Args... >(args...)));
+    detail::Node< Key, T > * emplaced = new detail::Node< Key, T >(nullptr, nullptr, nullptr, std::forward< Args... >(args...));
+    try
+    {
+      detail::Node< Key, T > * node = pos.node_;
+      detail::Node< Key, T > * prev = node;
+      while (node)
+      {
+        prev = node;
+        if (!cmp_(emplaced->first, node->data_.first) && !cmp_(node->data_.first, emplaced->first))
+        {
+          delete emplaced;
+          return std::make_pair(iterator(node), false);
+        }
+        else if (cmp_(emplaced->first, node->data_.first))
+        {
+          node = node->left_;
+        }
+        else
+        {
+          node = node->right_;
+        }
+      }
+      emplaced->parent_ = prev;
+      if (cmp_(emplaced->data_.first, prev->data_.first))
+      {
+        prev->left_ = emplaced;
+      }
+      else
+      {
+        prev->right_ = emplaced;
+      }
+    }
+    catch (...)
+    {
+      delete emplaced;
+      throw;
+    }
+    insert_balance_case1(emplaced);
+    ++size_;
+    return std::make_pair(iterator(emplaced), true);
   }
 
   template< class Key, class T, class Compare >
