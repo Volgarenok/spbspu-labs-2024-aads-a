@@ -62,14 +62,9 @@ void lebedev::countSums(listOfPairs & pairs, List< size_t > & sums, size_t max_p
 
 void lebedev::outputPairsNames(std::ostream & output, listOfPairs & pairs)
 {
-  bool is_first_name = true;
   for (auto pairs_iter = pairs.cbegin(); pairs_iter != pairs.cend(); ++pairs_iter)
   {
-    if (is_first_name)
-    {
-      is_first_name = false;
-    }
-    else
+    if (!(pairs_iter == pairs.cbegin()))
     {
       output << ' ';
     }
@@ -81,7 +76,6 @@ void lebedev::outputSequences(std::ostream & output, listOfPairs & pairs, size_t
 {
   for (size_t i = 0; i < max_pair_size; i++)
   {
-    bool is_first_num = true;
     for (auto pairs_iter = pairs.cbegin(); pairs_iter != pairs.cend(); pairs_iter++)
     {
       auto list_iter = pairs_iter->second.cbegin();
@@ -89,11 +83,7 @@ void lebedev::outputSequences(std::ostream & output, listOfPairs & pairs, size_t
       {
         std::advance(list_iter, i);
         size_t num = *list_iter;
-        if (is_first_num)
-        {
-          is_first_num = false;
-        }
-        else
+        if (!(pairs_iter == pairs.cbegin()))
         {
           output << ' ';
         }
@@ -109,14 +99,9 @@ void lebedev::outputSequences(std::ostream & output, listOfPairs & pairs, size_t
 
 void lebedev::outputSums(std::ostream & output, List< size_t > sums)
 {
-  bool is_first_sum = true;
   for (auto sums_iter = sums.cbegin(); sums_iter != sums.cend(); sums_iter++)
   {
-    if (is_first_sum)
-    {
-      is_first_sum = false;
-    }
-    else
+    if (!(sums_iter == sums.cbegin()))
     {
       output << ' ';
     }

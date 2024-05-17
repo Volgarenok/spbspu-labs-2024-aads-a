@@ -297,10 +297,20 @@ namespace lebedev
   template< class T >
   void List< T >::assign(size_t n, const T & val)
   {
-    clear();
-    for (size_t i = 0; i < n; i++)
+    List< T > new_list;
+    try
     {
-      push_back(val);
+      for (size_t i = 0; i < n; i++)
+      {
+        new_list.push_back(val);
+      }
+      this->swap(new_list);
+      new_list.clear();
+    }
+    catch (const std::exception & e)
+    {
+      new_list.clear();
+      throw;
     }
   }
 
