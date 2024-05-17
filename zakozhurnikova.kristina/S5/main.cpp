@@ -11,6 +11,7 @@
 int main(int argc, char* argv[])
 {
   using namespace zakozhurnikova;
+  using Map = BinarySearchTree< int, std::string >;
   BinarySearchTree< int, std::string > map;
   if (argc == 3)
   {
@@ -31,16 +32,22 @@ int main(int argc, char* argv[])
     return 1;
   }
 
-  ImplementedCommands master(map);
-  master.addCommand("ascending", &ascending);
-  master.addCommand("descending", &descending);
-  master.addCommand("breadth", &breadth);
+//  ImplementedCommands master(map);
+//  master.addCommand("ascending", &ascending);
+//  master.addCommand("descending", &descending);
+//  master.addCommand("breadth", &breadth);
+
+  BinarySearchTree< std::string, std::function< int(std::string& result, Map& tree) > > cmds;
+  cmds["ascending"] = ascending;
+  cmds["descending"] = descending;
+  cmds["breadth"] = breadth;
+
   std::string command(argv[1]);
   std::string cmdOutput;
   int amount = 0;
   try
   {
-    amount = master.executeCommand(command, cmdOutput);
+    amount = cmds.at(command)(cmdOutput, map);
     if (!cmdOutput.empty())
     {
       if (cmdOutput != "<EMPTY>")
