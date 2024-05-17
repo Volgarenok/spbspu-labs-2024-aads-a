@@ -39,6 +39,7 @@ int main(int argc, char* argv[])
     if (it != cmd.cend())
     {
       it->second(tree, f);
+      std::cout << f.key_ << f.string_ << "\n";
     }
     else
     {
@@ -54,8 +55,5 @@ int main(int argc, char* argv[])
   {
     std::cout << e.what() << "\n";
   }
-
-  std::cout << f.key_ << f.string_ << "\n";
-
   return 0;
 }
