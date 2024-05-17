@@ -2,7 +2,6 @@
 #define TREE_ITERATOR_HPP
 
 #include "comparator.hpp"
-#include "tree.hpp"
 #include "tree_node.hpp"
 #include <memory>
 
