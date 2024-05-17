@@ -32,7 +32,7 @@ void shaker(Iterator& begin, size_t size, Compare cmp)
     {
       auto curr = tempEnd;
       --curr;
-      if (cmp(*(curr),*(tempEnd)))
+      if (cmp(*(curr), *(tempEnd)))
       {
         std::swap(*curr, *tempEnd);
       }
@@ -45,7 +45,7 @@ void shaker(Iterator& begin, size_t size, Compare cmp)
     {
       auto curr = tmpBegin;
       --curr;
-      if (cmp(*(curr),*(tmpBegin)))
+      if (cmp(*(curr), *(tmpBegin)))
       {
         int buff;
         buff = *curr;
@@ -56,6 +56,32 @@ void shaker(Iterator& begin, size_t size, Compare cmp)
     }
     rightMark--;
     count++;
+  }
+}
+
+template< class Iterator >
+void shell(Iterator begin, size_t size)
+{
+  auto spacing = begin + size / 2;
+  for (size_t gap = size / 2; gap > 0; gap /= 2)
+  {
+    for (size_t i = gap; i < size; ++i)
+    {
+      auto temp = spacing;
+//      int temp = arr[i];
+      auto tmp = spacing;
+      for (size_t j = i; j >= gap && *(tmp - gap) > *temp; j -= gap)
+      {
+        auto next = tmp - gap;
+        *tmp = *(next);
+//        arr[j] = arr[j - gap];
+        tmp = next;
+      }
+//      arr[j] = temp;
+      *tmp = *temp;
+    ++spacing;
+    }
+  spacing = spacing - std::distance(begin, spacing) / 2;
   }
 }
 

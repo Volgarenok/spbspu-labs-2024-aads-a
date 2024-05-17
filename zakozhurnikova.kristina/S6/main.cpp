@@ -42,8 +42,9 @@ int main(int argc, char* argv[])
       countThree.push_front(number);
     }
     auto beg = countOne.begin();
-    ++beg;
-    shaker(beg, size, std::less< int >());
+    shaker(++beg, size, std::less< int >());
+    auto begs = countTwo.begin();
+    shell(begs, size);
     countThree.sort(std::less< int >());
     print(std::cout, countOne);
     print(std::cout, countThree);
