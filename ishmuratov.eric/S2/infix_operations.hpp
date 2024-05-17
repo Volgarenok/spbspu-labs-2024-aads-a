@@ -8,7 +8,7 @@
 namespace ishmuratov
 {
   void input_infix(std::istream & input, Queue< Queue< std::string > > & input_queue);
-  void topostfix(Queue< std::string > & process_queue, Queue< std::string > & result_queue);
+  void to_postfix(Queue< std::string > & process_queue, Queue< std::string > & result_queue);
 }
 
 #endif

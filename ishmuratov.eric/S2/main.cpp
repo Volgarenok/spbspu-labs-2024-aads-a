@@ -38,13 +38,13 @@ int main(int argc, char * argv[])
       process_queue = expr_queue.back();
       expr_queue.pop();
 
-      topostfix(process_queue, result_queue);
+      to_postfix(process_queue, result_queue);
       calculate_postfix(result_queue, operands);
       results.push(operands.top());
       operands.pop();
     }
   }
-  catch (std::exception & e)
+  catch (const std::exception & e)
   {
     std::cerr << e.what() << "\n";
     return 1;

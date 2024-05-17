@@ -30,8 +30,8 @@ void ishmuratov::calculate_postfix(Queue< std::string > & result_queue, Stack< l
         throw std::invalid_argument("Invalid expression!");
       }
       long long int res = 0;
-      long long int max_value = std::numeric_limits< long long int >::max();
-      long long int min_value = std::numeric_limits< long long int >::min();
+      constexpr long long int max_value = std::numeric_limits< long long int >::max();
+      constexpr long long int min_value = std::numeric_limits< long long int >::min();
 
       if (temp == "+")
       {

@@ -30,7 +30,7 @@ void ishmuratov::input_infix(std::istream & input, Queue< Queue< std::string > >
   }
 }
 
-void ishmuratov::topostfix(Queue< std::string > & process_queue, Queue< std::string > & result_queue)
+void ishmuratov::to_postfix(Queue< std::string > & process_queue, Queue< std::string > & result_queue)
 {
   Stack< std::string > process_stack;
   while (!process_queue.empty())

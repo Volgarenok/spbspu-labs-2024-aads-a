@@ -19,22 +19,32 @@ namespace ishmuratov
         c_.popBack();
       }
 
-      T & front()
+      T & front() noexcept
       {
         return c_.front();
       }
 
-      T & back()
+      const T & front() const noexcept
+      {
+        return c_.front();
+      }
+
+      T & back() noexcept
       {
         return c_.back();
       }
 
-      bool empty() const
+      const T & back() const noexcept
+      {
+        return c_.back();
+      }
+
+      bool empty() const noexcept
       {
         return c_.empty();
       }
 
-      size_t size()
+      size_t size() const noexcept
       {
         return c_.size();
       }
