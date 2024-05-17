@@ -9,23 +9,27 @@ namespace skuratov
   class Stack
   {
   public:
-    void push(T& diff)
+    void push(const T& diff)
     {
       stack_.pushBack(diff);
     }
     void drop()
     {
-      stack_.popBack(diff);
+      stack_.popBack();
     }
-    bool empty() noexcept
+    bool empty() const noexcept
     {
       return stack_.empty();
     }
-    size_t size() noexcept
+    size_t size() const noexcept
     {
-      return stack_.size();
+      return stack_.getSize();
     }
     T& top() noexcept
+    {
+      return stack_.back();
+    }
+    const T& top() const noexcept
     {
       return stack_.back();
     }

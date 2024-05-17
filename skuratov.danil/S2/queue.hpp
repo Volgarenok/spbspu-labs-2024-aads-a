@@ -9,15 +9,33 @@ namespace skuratov
   class Queue
   {
   public:
-    void push(T& diff);
-    void drop();
-    bool empty();
-    size_t size();
-    T& top();
+    void push(const T& diff)
+    {
+      queue_.pushFront(diff);
+    }
+    void drop()
+    {
+      queue_.popBack();
+    }
+    bool empty() const noexcept
+    {
+      return queue_.empty();
+    }
+    size_t size() const noexcept
+    {
+      return queue_.getSize();
+    }
+    T& top() noexcept
+    {
+      return queue_.back();
+    }
+    const T& top() const noexcept
+    {
+      return queue_.back();
+    }
   private:
     List< T > queue_;
   };
 }
 
 #endif
-
