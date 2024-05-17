@@ -76,6 +76,7 @@ void lebedev::outputSequences(std::ostream & output, listOfPairs & pairs, size_t
 {
   for (size_t i = 0; i < max_pair_size; i++)
   {
+    size_t counter = 0;
     for (auto pairs_iter = pairs.cbegin(); pairs_iter != pairs.cend(); pairs_iter++)
     {
       auto list_iter = pairs_iter->second.cbegin();
@@ -83,11 +84,12 @@ void lebedev::outputSequences(std::ostream & output, listOfPairs & pairs, size_t
       {
         std::advance(list_iter, i);
         size_t num = *list_iter;
-        if (!(pairs_iter == pairs.cbegin()))
+        if (counter != 0)
         {
           output << ' ';
         }
         output << num;
+        ++counter;
       }
     }
     if ((i + 1) != max_pair_size)
