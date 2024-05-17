@@ -126,11 +126,20 @@ namespace ishmuratov
 
     Iter find(const Key & key)
     {
-      for (auto search = begin(); search != end(); ++search)
+      tnode * node = root_;
+      while (node)
       {
-        if (search.node_->data.first == key)
+        if (comp_(key, node->data.first))
         {
-          return search;
+          node = node->left;
+        }
+        else if (comp_(node->data.first, key))
+        {
+          node = node->right;
+        }
+        else
+        {
+          return Iter(node);
         }
       }
       return end();
@@ -138,11 +147,20 @@ namespace ishmuratov
 
     ConstIter find(const Key & key) const
     {
-      for (auto search = cbegin(); search != cend(); ++search)
+      tnode * node = root_;
+      while (node)
       {
-        if (search.node_->data.first == key)
+        if (comp_(key, node->data.first))
         {
-          return search;
+          node = node->left;
+        }
+        else if (comp_(node->data.first, key))
+        {
+          node = node->right;
+        }
+        else
+        {
+          return ConstIter(node);
         }
       }
       return cend();
