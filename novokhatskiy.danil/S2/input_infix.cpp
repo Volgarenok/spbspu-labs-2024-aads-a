@@ -27,16 +27,23 @@ void novokhatskiy::inputInfix(Queue<Queue<InfixType>>& infixQueue, std::istream&
         res.getBracket() = static_cast<Bracket>(symb);
         break;
       default:
-        res.getType() = TokenType::OPERAND;
-        std::string str = {};
-        while (symb != ' ' && symb != '\n')
+        try
         {
-          str += symb;
-          in >> symb;
+          res.getType() = TokenType::OPERAND;
+          std::string str = {};
+          while (symb != ' ' && symb != '\n')
+          {
+            str += symb;
+            in >> symb;
+          }
+          res.getOperand().num = std::stoll(str);
+          currQ.push(res);
+          break;
         }
-        res.getOperand().num = std::stoll(str);
-        currQ.push(res);
-        break;
+        catch (const std::exception&)
+        {
+          break;
+        }
       }
       if (symb != ' ' && symb != '\n')
       {
