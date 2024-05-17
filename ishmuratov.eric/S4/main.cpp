@@ -40,6 +40,10 @@ int main(int argc, char * argv[])
       std::cerr << "<INVALID COMMAND>\n";
       std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
+    catch (const std::underflow_error &)
+    {
+      std::cerr << "<EMPTY>\n";
+    }
     catch (const std::runtime_error & e)
     {
       std::cerr << "<ERROR: " << e.what() << ">\n";

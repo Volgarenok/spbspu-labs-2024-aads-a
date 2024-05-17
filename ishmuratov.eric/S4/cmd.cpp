@@ -6,7 +6,11 @@ void ishmuratov::print(ishmuratov::data_t &data, std::istream &input, std::ostre
   input >> dict_name;
   if (data.find(dict_name) == data.cend())
   {
-    throw std::runtime_error("Key not found!");
+    throw std::out_of_range("Non existent dictionary!");
+  }
+  if (data[dict_name].empty())
+  {
+    throw std::underflow_error("Dictionary is empty!");
   }
   output << dict_name << " " << data[dict_name].cbegin()->first << " " << data[dict_name].cbegin()->second;
   for (auto pair = ++data[dict_name].cbegin(); pair != data[dict_name].cend(); pair++)
@@ -26,7 +30,7 @@ void ishmuratov::complement(ishmuratov::data_t &data, std::istream &input)
   input >> new_name >> first_name >> second_name;
   if (data.find(first_name) == data.cend() || data.find(second_name) == data.cend())
   {
-    throw std::runtime_error("Key not found!");
+    throw std::out_of_range("Non existent dictionary!");
   }
 
   for (auto dict = data[first_name].cbegin(); dict != data[first_name].cend(); ++dict)
@@ -56,7 +60,7 @@ void ishmuratov::intersect(ishmuratov::data_t &data, std::istream &input)
   input >> new_name >> first_name >> second_name;
   if (data.find(first_name) == data.cend() || data.find(second_name) == data.cend())
   {
-    throw std::runtime_error("Key not found!");
+    throw std::out_of_range("Non existent dictionary!");
   }
   for (auto dict = data[first_name].cbegin(); dict != data[first_name].cend(); ++dict)
   {
@@ -78,7 +82,7 @@ void ishmuratov::uniond(ishmuratov::data_t &data, std::istream &input)
   input >> new_name >> first_name >> second_name;
   if (data.find(first_name) == data.cend() || data.find(second_name) == data.cend())
   {
-    throw std::runtime_error("Key not found!");
+    throw std::out_of_range("Non existent dictionary!");
   }
 
   for (auto dict = data[first_name].cbegin(); dict != data[first_name].cend(); ++dict)
