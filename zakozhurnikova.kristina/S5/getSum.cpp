@@ -1,5 +1,5 @@
-#include "getSum.hpp"
 #include <stdexcept>
+#include "getSum.hpp"
 
 zakozhurnikova::KeySum::KeySum():
   result_(0)

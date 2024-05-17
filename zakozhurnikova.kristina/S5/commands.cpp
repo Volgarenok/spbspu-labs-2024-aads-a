@@ -6,7 +6,7 @@ namespace zak = zakozhurnikova;
 int zak::ascending(std::string& result, map& tree)
 {
   KeySum amount;
-  tree.traverse_lnr(amount, result);
+  amount = tree.traverse_lnr(amount, result);
   int sum = amount.getResult();
   return sum;
 }
@@ -14,7 +14,7 @@ int zak::ascending(std::string& result, map& tree)
 int zak::descending(std::string& result, map& tree)
 {
   KeySum amount;
-  tree.traverse_rnl(amount, result);
+  amount = tree.traverse_rnl(amount, result);
   int sum = amount.getResult();
   return sum;
 }
@@ -22,7 +22,7 @@ int zak::descending(std::string& result, map& tree)
 int zak::breadth(std::string& result, map& tree)
 {
   KeySum amount;
-  tree.traverse_breadth(amount, result);
+  amount = tree.traverse_breadth(amount, result);
   int sum = amount.getResult();
   return sum;
 }
