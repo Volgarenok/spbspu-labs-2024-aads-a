@@ -18,16 +18,16 @@ void novokhatskiy::inputInfix(Queue<Queue<InfixType>>& infixQueue, std::istream&
       case '*':
       case '/':
       case '%':
-        res.getInfix() = TokenType::OPERATION;
-        res.getOperation() = static_cast<Operation>(symb);
+        res.getType() = TokenType::OPERATION;
+        res.getOp() = static_cast<Operation>(symb);
         break;
       case '(':
       case ')':
-        res.getInfix() = TokenType::BRACKET;
+        res.getType() = TokenType::BRACKET;
         res.getBracket() = static_cast<Bracket>(symb);
         break;
       default:
-        res.getInfix() = TokenType::OPERAND;
+        res.getType() = TokenType::OPERAND;
         std::string str = {};
         while (symb != ' ' && symb != '\n')
         {

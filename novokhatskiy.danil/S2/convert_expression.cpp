@@ -28,15 +28,15 @@ novokhatskiy::Queue<novokhatskiy::Postfix> novokhatskiy::convertExpression(Queue
 	{
 		novokhatskiy::InfixType curr = infixQueue.front();
 		infixQueue.pop();
-		switch (curr.getInfix())
+		switch (curr.getType())
 		{
 		case TokenType::OPERAND:
 			resultQueue.push(novokhatskiy::Postfix(std::move(curr)));
 			break;
 		case TokenType::OPERATION:
-			while (!stack.empty() && stack.top().getInfix() != TokenType::BRACKET && getPriority(stack.top().getOperation()) >= getPriority(stack.top().getOperation()))
+			while (!stack.empty() && stack.top().getType() != TokenType::BRACKET && getPriority(stack.top().getOp()) >= getPriority(stack.top().getOp()))
 			{
-				resultQueue.push({ TokenType::OPERATION, stack.top().getOperation()});
+				resultQueue.push({ TokenType::OPERATION, stack.top().getOp()});
 				stack.pop();
 			}
 			stack.push(curr);
@@ -48,7 +48,7 @@ novokhatskiy::Queue<novokhatskiy::Postfix> novokhatskiy::convertExpression(Queue
 			}
 			else
 			{
-				while (!stack.empty() && stack.top().getInfix() != TokenType::BRACKET)
+				while (!stack.empty() && stack.top().getType() != TokenType::BRACKET)
 				{
 					resultQueue.push(novokhatskiy::Postfix(std::move(stack.top())));
 					stack.pop();
@@ -69,7 +69,7 @@ novokhatskiy::Queue<novokhatskiy::Postfix> novokhatskiy::convertExpression(Queue
 	{
 		InfixType curr = stack.top();
 		stack.pop();
-		switch (curr.getInfix())
+		switch (curr.getType())
 		{
 		case TokenType::OPERATION:
 			resultQueue.push(Postfix(std::move(curr)));

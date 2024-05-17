@@ -36,12 +36,12 @@ namespace novokhatskiy
   class InfixType
   {
   public:
-    TokenType getInfix() const noexcept;
-    TokenType& getInfix() noexcept;
+    TokenType getType() const noexcept;
+    TokenType& getType() noexcept;
     Operand getOperand() const noexcept;
     Operand& getOperand() noexcept;
-    Operation getOperation() const noexcept;
-    Operation& getOperation() noexcept;
+    Operation getOp() const noexcept;
+    Operation& getOp() noexcept;
     Bracket getBracket() const noexcept;
     Bracket& getBracket() noexcept;
   private:

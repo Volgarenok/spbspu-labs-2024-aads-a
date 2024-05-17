@@ -2,15 +2,15 @@
 #include <stdexcept>
 
 novokhatskiy::Postfix::Postfix(InfixType&& inf):
-  type(inf.getInfix())
+  type(inf.getType())
 {
-  switch (inf.getInfix())
+  switch (inf.getType())
   {
   case TokenType::OPERAND:
     operand = inf.getOperand();
     break;
   case TokenType::OPERATION:
-    operation = inf.getOperation();
+    operation = inf.getOp();
     break;
   default:
     throw std::invalid_argument("Constuctor doesn't work");
@@ -26,25 +26,25 @@ novokhatskiy::Postfix::Postfix(TokenType inType, Operation inOperation):
 
 novokhatskiy::Postfix novokhatskiy::Postfix::convertToPostfix(const InfixType& inf)
 {
-  if (inf.getInfix() == TokenType::OPERAND)
+  if (inf.getType() == TokenType::OPERAND)
   {
     operand.num = inf.getOperand().num;
-    type = inf.getInfix();
+    type = inf.getType();
   }
-  else if (inf.getInfix() == TokenType::OPERATION)
+  else if (inf.getType() == TokenType::OPERATION)
   {
-    type = inf.getInfix();
-    operation = inf.getOperation();
+    type = inf.getType();
+    operation = inf.getOp();
   }
   return *this;
 }
 
-novokhatskiy::TokenType novokhatskiy::InfixType::getInfix() const noexcept
+novokhatskiy::TokenType novokhatskiy::InfixType::getType() const noexcept
 {
   return type;
 }
 
-novokhatskiy::TokenType& novokhatskiy::InfixType::getInfix() noexcept
+novokhatskiy::TokenType& novokhatskiy::InfixType::getType() noexcept
 {
   return type;
 }
@@ -59,12 +59,12 @@ novokhatskiy::Operand& novokhatskiy::InfixType::getOperand() noexcept
   return operand;
 }
 
-novokhatskiy::Operation novokhatskiy::InfixType::getOperation() const noexcept
+novokhatskiy::Operation novokhatskiy::InfixType::getOp() const noexcept
 {
   return operation;
 }
 
-novokhatskiy::Operation& novokhatskiy::InfixType::getOperation() noexcept
+novokhatskiy::Operation& novokhatskiy::InfixType::getOp() noexcept
 {
   return operation;
 }
