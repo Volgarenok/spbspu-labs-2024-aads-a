@@ -13,6 +13,7 @@ int main(int argc, char* argv[])
   using avlTree = AVLTree< int, std::string >;
   avlTree tree;
   std::string command = "";
+  std::string filename = "";
   if (argc != 3)
   {
     std::cerr << "Error CMD line\n";
@@ -20,10 +21,10 @@ int main(int argc, char* argv[])
   }
   else
   {
-    std::ifstream file(argv[2]);
-    inputDictionary(tree, file);
     command = argv[1];
+    filename = argv[2];
   }
+
   using func = std::function< void(avlTree&, KeySum&)>;
   AVLTree< std::string, func > cmd;
   cmd.push("ascending", ascending);
@@ -32,6 +33,8 @@ int main(int argc, char* argv[])
   KeySum f;
   try
   {
+    std::fstream file(filename);
+    inputDictionary(tree, file);
     auto it = cmd.find(command);
     if (it != cmd.cend())
     {
@@ -39,23 +42,21 @@ int main(int argc, char* argv[])
     }
     else
     {
-      throw std::out_of_range("error comand");
+      throw std::out_of_range("error commnd");
     }
   }
   catch (const std::out_of_range& e)
   {
     std::cerr << e.what() << "\n";
-    return 2;
+    return 1;
   }
   catch (const std::logic_error& e)
   {
     std::cout << e.what() << "\n";
+    return 1;
   }
 
-  int a = f.key_;
-  std::string str = f.string_;
-
-  std::cout << a << str << "\n";
+  std::cout << f.key_ << f.string_ << "\n";
 
   return 0;
 }
