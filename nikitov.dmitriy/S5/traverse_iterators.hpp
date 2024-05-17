@@ -21,6 +21,9 @@ namespace nikitov
 
     LNRIterator< Key, T, Compare >& operator=(const LNRIterator< Key, T, Compare >&) = default;
 
+    const std::pair< Key, T >& operator*() const;
+    const std::pair< Key, T >* operator->() const;
+
   private:
     Stack< std::pair < detail::TreeNode< Key, T, Compare >* > > data_;
     bool isFirst_;
@@ -49,6 +52,36 @@ namespace nikitov
         root = root->middle_;
       }
       data_.push(root);
+    }
+  }
+
+  template< class Key, class T, class Compare >
+  const std::pair< Key, T >& LNRIterator< Key, T, Compare >::operator*() const
+  {
+    detail::TreeNode< Key, T, Compare >* node = data_.top();
+    assert(node->size_ != 0);
+    if (isFirst_)
+    {
+      return node->firstValue_;
+    }
+    else
+    {
+      return node->secondValue_;
+    }
+  }
+
+  template< class Key, class T, class Compare >
+  const std::pair< Key, T >* LNRIterator< Key, T, Compare >::operator->() const
+  {
+    detail::TreeNode< Key, T, Compare >* node = data_.top();
+    assert(node->size_ != 0);
+    if (isFirst_)
+    {
+      return std::addressof(node->firstValue_);
+    }
+    else
+    {
+      return std::addressof(node->secondValue_);
     }
   }
 
