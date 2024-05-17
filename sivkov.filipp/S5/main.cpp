@@ -48,12 +48,11 @@ int main(int argc, char* argv[])
   catch (const std::out_of_range& e)
   {
     std::cerr << e.what() << "\n";
-    return 2;
+    return 1;
   }
   catch (const std::logic_error& e)
   {
     std::cout << e.what() << "\n";
-    return 1;
   }
 
   std::cout << f.key_ << f.string_ << "\n";
