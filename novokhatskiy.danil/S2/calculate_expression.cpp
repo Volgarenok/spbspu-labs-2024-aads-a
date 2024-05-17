@@ -81,7 +81,7 @@ long long novokhatskiy::calculatePostExp(novokhatskiy::Queue< Postfix >&& inQueu
       }
       long long secondOperand = stack.top();
       stack.pop();
-      switch (token.operation)
+      switch (token.getOperation())
       {
       case Operation::ADD:
         stack.top() = doAddition(stack.top(), secondOperand);
@@ -102,7 +102,7 @@ long long novokhatskiy::calculatePostExp(novokhatskiy::Queue< Postfix >&& inQueu
       break;
     }
     case TokenType::OPERAND:
-      stack.push(token.operand.num);
+      stack.push(token.getOperand().num);
       break;
     case TokenType::BRACKET:
       throw std::invalid_argument("Can't calculate a bracket");

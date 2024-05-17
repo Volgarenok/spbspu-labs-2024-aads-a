@@ -3,7 +3,6 @@
 
 #include <cstddef>
 #include "queue.hpp"
-#include "calculate_expression.hpp"
 
 namespace novokhatskiy
 {
@@ -38,8 +37,13 @@ namespace novokhatskiy
   {
   public:
     TokenType getInfix() const noexcept;
-    friend void inputInfix(Queue<Queue<InfixType>> &infixQueue, std::istream &in);
-
+    TokenType& getInfix() noexcept;
+    Operand getOperand() const noexcept;
+    Operand& getOperand() noexcept;
+    Operation getOperation() const noexcept;
+    Operation& getOperation() noexcept;
+    Bracket getBracket() const noexcept;
+    Bracket& getBracket() noexcept;
   private:
     TokenType type;
     union
@@ -52,13 +56,13 @@ namespace novokhatskiy
 
   struct Postfix
   {
-    TokenType getPostix() noexcept;
     Postfix() = default;
-    Postfix(InfixType &&inf);
+    Postfix(InfixType&& inf);
     Postfix(TokenType inType, Operation inOperation);
-    Postfix convertToPostfix(const InfixType &inf);
-    char getOperation() const noexcept;
-
+    Postfix convertToPostfix(const InfixType& inf);
+    TokenType getPostix() const noexcept;
+    Operand getOperand() const noexcept;
+    Operation getOperation() const noexcept;
   private:
     TokenType type;
     union
