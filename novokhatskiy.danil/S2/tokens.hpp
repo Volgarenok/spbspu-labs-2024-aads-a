@@ -36,9 +36,11 @@ namespace novokhatskiy
 
   class InfixType
   {
-    TokenType getInfix() noexcept;
-    friend class Postfix;
-    friend void inputInfix(Queue<Queue<InfixType>>& infixQueue, std::istream& in);
+  public:
+    TokenType getInfix() const noexcept;
+    friend void inputInfix(Queue<Queue<InfixType>> &infixQueue, std::istream &in);
+
+  private:
     TokenType type;
     union
     {
@@ -51,13 +53,12 @@ namespace novokhatskiy
   struct Postfix
   {
     TokenType getPostix() noexcept;
-    friend class InfixType;
-    friend long long calculatePostExp(Queue< Postfix >&& inQueue);
-    friend Queue<Postfix> convertExpression(Queue<InfixType>&& infixQueue);
     Postfix() = default;
-    Postfix(InfixType&& inf);
+    Postfix(InfixType &&inf);
     Postfix(TokenType inType, Operation inOperation);
-    Postfix convertToPostfix(const InfixType& inf);
+    Postfix convertToPostfix(const InfixType &inf);
+    char getOperation() const noexcept;
+
   private:
     TokenType type;
     union
