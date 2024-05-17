@@ -2,9 +2,9 @@
 #define TREE_HPP
 
 #include <functional>
-#include "tree_node.hpp"
-#include "tree_iterator.hpp"
-#include "const_tree_iterator.hpp"
+#include <tree_node.hpp>
+#include <tree_iterator.hpp>
+#include <const_tree_iterator.hpp>
 
 namespace namestnikov
 {

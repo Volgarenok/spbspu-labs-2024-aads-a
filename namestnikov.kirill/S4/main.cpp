@@ -4,9 +4,9 @@
 #include <map>
 #include <functional>
 #include <limits>
+#include <tree.hpp>
 #include "commands.hpp"
 #include "input_dicts.hpp"
-#include "tree.hpp"
 
 int main(int argc, char * argv[])
 {

@@ -4,7 +4,7 @@
 #include <string>
 #include <map>
 #include <iostream>
-#include "tree.hpp"
+#include <tree.hpp>
 
 namespace namestnikov
 {
