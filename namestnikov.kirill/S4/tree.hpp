@@ -215,19 +215,23 @@ namespace namestnikov
     }
     const_iterator find(const Key & key) const
     {
-      node_t * wanted = root_;
-      while ((wanted) && (wanted->data.first != key))
+      node_t * result = root_;
+      while (result)
       {
-        if (compare_(wanted->data.first, key))
+        if (compare_(result->data.first, key))
         {
-          wanted = wanted->right;
+          result = result->right;
+        }
+        else if (compare_(key, result->data.first))
+        {
+          result = result->left;
         }
         else
         {
-          wanted = wanted->left;
+          break;
         }
       }
-      return const_iterator(wanted);
+      return const_iterator(result);
     }
     size_t size() const noexcept
     {
@@ -307,17 +311,17 @@ namespace namestnikov
       {
         return nullptr;
       }
-      else if (node->data.first == key)
-      {
-        return node;
-      }
       else if (compare_(key, node->data.first))
       {
         return search_impl(node->left, key);
       }
-      else
+      else if (compare_(node->data.first, key))
       {
         return search_impl(node->right, key);
+      }
+      else
+      {
+        return node;
       }
     }
     void insert_impl(const Key & key, const Value & val, node_t * currentNode)
