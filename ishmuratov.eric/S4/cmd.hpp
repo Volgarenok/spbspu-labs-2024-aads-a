@@ -2,18 +2,18 @@
 #define CMD_HPP
 
 #include <iostream>
-
-#include "tree.hpp"
+#include <map>
+#include <list>
 
 namespace ishmuratov
 {
-  using dataset_t = AVLTree< int, std::string >;
-  using data_t = AVLTree< std::string, dataset_t >;
+  using dataset_t = std::map< int, std::string >;
+  using data_t = std::map< std::string, dataset_t >;
 
   void print(data_t & data, std::istream & input, std::ostream & output);
-  void complement(data_t & data, std::istream & input);
-  void intersect(data_t & data, std::istream & input);
-  void uniond(data_t & data, std::istream & input);
+  void complement(data_t & data, std::istream & input, std::ostream & output);
+  void intersect(data_t & data, std::istream & input, std::ostream & output);
+  void uniond(data_t & data, std::istream & input, std::ostream & output);
 }
 
 #endif

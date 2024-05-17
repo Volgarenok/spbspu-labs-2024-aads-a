@@ -11,12 +11,25 @@ void ishmuratov::input_dict(ishmuratov::data_t & data, std::istream &input)
 
     while (input >> key >> value)
     {
-      dict.push(key, value);
+      dict[key] = value;
     }
     if (!input.eof())
     {
       input.clear();
     }
-    data.push(name, dict);
+    data[name] = dict;
+  }
+}
+
+void ishmuratov::output_dict(ishmuratov::data_t & data, std::ostream &output)
+{
+  for (auto dict : data)
+  {
+    output << dict.first << " ";
+    for (auto key : dict.second)
+    {
+      output << key.first << " " << key.second << " ";
+    }
+    output << "\n";
   }
 }
