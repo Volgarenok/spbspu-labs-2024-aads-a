@@ -77,6 +77,10 @@ namespace erohin
     detail::Node< Key, T > * find_grandparent(detail::Node< Key, T > * subtree);
     detail::Node< Key, T > * find_uncle(detail::Node< Key, T > * subtree);
     detail::Node< Key, T > * find_brother(detail::Node< Key, T > * subtree);
+    template< detail::color_t C >
+    bool is_color(detail::Node< Key, T > * node);
+    template< detail::color_t C >
+    void colorize(detail::Node< Key, T > * node);
     bool is_leaf(detail::Node< Key, T > * node);
     void rotate_left(detail::Node< Key, T > * subtree);
     void rotate_right(detail::Node< Key, T > * subtree);
@@ -737,6 +741,21 @@ namespace erohin
     return subtree;
   }
 
+
+  template< class Key, class T, class Compare >
+  template< detail::color_t C >
+  bool RedBlackTree< Key, T, Compare >::is_color(detail::Node< Key, T > * node)
+  {
+    return (node->color_ == C);
+  }
+
+  template< class Key, class T, class Compare >
+  template< detail::color_t C >
+  void RedBlackTree< Key, T, Compare >::colorize(detail::Node< Key, T > * node)
+  {
+    node->color_ = C;
+  }
+
   template< class Key, class T, class Compare >
   bool RedBlackTree< Key, T, Compare >::is_leaf(detail::Node< Key, T > * node)
   {
@@ -850,7 +869,7 @@ namespace erohin
   {
     if (!subtree->parent_)
     {
-      subtree->color_ = detail::color_t::BLACK;
+      colorize< detail::BLACK >(subtree);
     }
     else
     {
@@ -861,7 +880,7 @@ namespace erohin
   template< class Key, class T, class Compare >
   void RedBlackTree< Key, T, Compare >::insert_balance_case2(detail::Node< Key, T > * subtree)
   {
-    if (subtree->parent_->color_ == detail::color_t::RED)
+    if (is_color< detail::RED >(subtree->parent_))
     {
       insert_balance_case3(subtree);
     }
@@ -871,12 +890,12 @@ namespace erohin
   void RedBlackTree< Key, T, Compare >::insert_balance_case3(detail::Node< Key, T > * subtree)
   {
     detail::Node< Key, T > * uncle = find_uncle(subtree);
-    if (uncle && uncle->color_ == detail::color_t::RED)
+    if (uncle && is_color< detail::RED >(uncle))
     {
-      subtree->parent_->color_ = detail::color_t::BLACK;
+      colorize< detail::BLACK >(subtree->parent_);
       uncle->color_ = detail::color_t::BLACK;
       detail::Node< Key, T > * grand = find_grandparent(subtree);
-      grand->color_ = detail::color_t::RED;
+      colorize< detail::RED >(grand);
       insert_balance_case1(grand);
     }
     else
@@ -906,8 +925,8 @@ namespace erohin
   void RedBlackTree< Key, T, Compare >::insert_balance_case5(detail::Node< Key, T > * subtree)
   {
     detail::Node< Key, T > * grand = find_grandparent(subtree);
-    subtree->parent_->color_ = detail::color_t::BLACK;
-    grand->color_ = detail::color_t::RED;
+    colorize< detail::BLACK >(subtree->parent_);
+    colorize< detail::RED >(grand);
     if (subtree == subtree->parent_->left_ && subtree->parent_ == grand->left_)
     {
       rotate_right(grand);
@@ -921,12 +940,12 @@ namespace erohin
   template< class Key, class T, class Compare >
   void RedBlackTree< Key, T, Compare >::erase_balance_case1(detail::Node< Key, T > * subtree)
   {
-    if (subtree->color_ == detail::color_t::BLACK && !is_leaf(subtree))
+    if (is_color< detail::BLACK >(subtree) && !is_leaf(subtree))
     {
       detail::Node< Key, T > * child = (subtree->right_) ? subtree->left_ : subtree->right_;
-      if (child->color_ == detail::color_t::RED)
+      if (is_color< detail::RED >(child))
       {
-        child->color_ = detail::color_t::BLACK;
+        colorize< detail::BLACK >(child);
       }
       else if (subtree->parent_)
       {
@@ -939,10 +958,10 @@ namespace erohin
   void RedBlackTree< Key, T, Compare >::erase_balance_case2(detail::Node< Key, T > * subtree)
   {
     detail::Node< Key, T > * brother = find_brother(subtree);
-    if (brother->color_ == detail::color_t::RED)
+    if (is_color< detail::RED >(brother))
     {
-      subtree->parent_->color_ = detail::color_t::RED;
-      brother->color_ = detail::color_t::BLACK;
+      colorize< detail::RED >(subtree->parent_);
+      colorize< detail::BLACK >(brother);
       if (subtree == subtree->parent_->left_)
       {
         rotate_left(subtree->parent_);
@@ -959,12 +978,10 @@ namespace erohin
   void RedBlackTree< Key, T, Compare >::erase_balance_case3(detail::Node< Key, T > * subtree)
   {
     detail::Node< Key, T > * brother = find_brother(subtree);
-    bool is_left_black = (brother->left_->color_ == detail::color_t::BLACK);
-    bool is_right_black = (brother->right_->color_ == detail::color_t::BLACK);
-    bool is_black = (brother->color_ == detail::color_t::BLACK);
-    if (subtree->parent_->color_ == detail::color_t::BLACK && is_black && is_left_black && is_right_black)
+    bool is_any_child_black = is_color< detail::BLACK >(brother->left_) && is_color< detail::BLACK >(brother->right_);
+    if (is_color< detail::BLACK >(subtree->parent_) && is_color< detail::BLACK >(brother) && is_any_child_black)
     {
-      brother->color_ = detail::color_t::RED;
+      colorize< detail::RED >(brother);
       erase_balance_case1(subtree->parent_);
     }
     else
@@ -977,13 +994,11 @@ namespace erohin
   void RedBlackTree< Key, T, Compare >::erase_balance_case4(detail::Node< Key, T > * subtree)
   {
     detail::Node< Key, T > * brother = find_brother(subtree);
-    bool is_left_black = (brother->left_->color_ == detail::color_t::BLACK);
-    bool is_right_black = (brother->right_->color_ == detail::color_t::BLACK);
-    bool is_black = (brother->color_ == detail::color_t::BLACK);
-    if (subtree->parent_->color_ == detail::color_t::RED && is_black && is_left_black && is_right_black)
+    bool is_any_child_black = is_color< detail::BLACK >(brother->left_) && is_color< detail::BLACK >(brother->right_);
+    if (is_color< detail::RED >(subtree->parent_) && is_color< detail::BLACK >(brother) && is_any_child_black)
     {
-      brother->color_ = detail::color_t::RED;
-      subtree->parent_->color_ = detail::color_t::BLACK;
+      colorize< detail::RED >(brother);
+      colorize< detail::BLACK >(subtree->parent_);
     }
     else
     {
@@ -997,18 +1012,18 @@ namespace erohin
     detail::Node< Key, T > * brother = find_brother(subtree);
     bool is_left_black = (brother->left_->color_ == detail::color_t::BLACK);
     bool is_right_black = (brother->right_->color_ == detail::color_t::BLACK);
-    if (brother->color_ == detail::color_t::BLACK)
+    if (is_color< detail::BLACK >(brother))
     {
-      if (subtree == subtree->parent_->left_ && is_right_black && !is_left_black)
+      if (subtree == subtree->parent_->left_ && is_color< detail::BLACK >(brother->right_) && is_color< detail::RED >(brother->left_))
       {
-        brother->color_ = detail::color_t::RED;
-        brother->left_->color_ = detail::color_t::BLACK;
+        colorize< detail::RED >(brother);
+        colorize< detail::BLACK >(brother->left_);
         rotate_right(brother);
       }
-      else if (subtree == subtree->parent_->right_ && is_left_black && !is_right_black)
+      else if (subtree == subtree->parent_->right_ && is_color< detail::RED >(brother->right_) && is_color< detail::BLACK >(brother->left_))
       {
-        brother->color_ = detail::color_t::RED;
-        brother->right_->color_ = detail::color_t::BLACK;
+        colorize< detail::RED >(brother);
+        colorize< detail::BLACK >(brother->right_);
         rotate_left(brother);
       }
     }
@@ -1020,15 +1035,15 @@ namespace erohin
   {
     detail::Node< Key, T > * brother = find_brother(subtree);
     brother->color_ = subtree->parent_->color_;
-    subtree->parent_->color_ = detail::color_t::BLACK;
+    colorize< detail::BLACK >(subtree->parent_);
     if (subtree == subtree->parent_->left_)
     {
-      brother->right_->color_ = detail::color_t::BLACK;
+      colorize< detail::BLACK >(brother->right_);
       rotate_left(subtree->parent_);
     }
     else
     {
-      brother->left_->color_ = detail::color_t::BLACK;
+      colorize< detail::BLACK >(brother->left_);
       rotate_right(subtree->parent_);
     }
   }
