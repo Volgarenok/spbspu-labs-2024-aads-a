@@ -16,7 +16,7 @@ namespace sivkov
     }
     if (!in.eof())
     {
-      throw std::logic_error("error data");
+      throw std::out_of_range("error data");
     }
   }
 }
