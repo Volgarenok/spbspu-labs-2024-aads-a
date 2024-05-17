@@ -6,14 +6,14 @@
 
 using namespace zakozhurnikova;
 
-template < class Iterator >
-void shaker(Iterator& begin, size_t size)
+template < class Iterator, class Compare >
+void shaker(Iterator& begin, size_t size, Compare cmp)
 {
   int leftMark = 1;
   int rightMark = size - 1;
   auto end = begin;
   size_t count = 0;
-  for (size_t i = 2; i < size; ++i)
+  for (size_t i = 1; i < size - 1; ++i)
   {
     ++end;
   }
@@ -32,7 +32,7 @@ void shaker(Iterator& begin, size_t size)
     {
       auto curr = tempEnd;
       --curr;
-      if (*(curr) > *(tempEnd))
+      if (cmp(*(curr),*(tempEnd)))
       {
         std::swap(*curr, *tempEnd);
       }
@@ -45,7 +45,7 @@ void shaker(Iterator& begin, size_t size)
     {
       auto curr = tmpBegin;
       --curr;
-      if (*(curr) > *(tmpBegin))
+      if (cmp(*(curr),*(tmpBegin)))
       {
         int buff;
         buff = *curr;
