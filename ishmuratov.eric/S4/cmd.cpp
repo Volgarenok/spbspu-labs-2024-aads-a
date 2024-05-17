@@ -12,15 +12,12 @@ void ishmuratov::print(ishmuratov::data_t &data, std::istream &input, std::ostre
   {
     throw std::underflow_error("Dictionary is empty!");
   }
-//  AVLTree< int, std::string > to_print = data[dict_name];
+
+  AVLTree< int, std::string > to_print = data[dict_name];
   output << dict_name << " " << data[dict_name].cbegin()->first << " " << data[dict_name].cbegin()->second;
-//  for (auto pair = ++to_print.cbegin(); pair != to_print.cend(); ++pair)
-//  {
-//    output << " " << pair->first << " " << pair->second;
-//  }
-  for (const auto& pair: data[dict_name])
+  for (auto pair = ++to_print.cbegin(); pair != to_print.cend(); ++pair)
   {
-    output << " " << pair.first << " " << pair.second;
+    output << " " << pair->first << " " << pair->second;
   }
   output << "\n";
 }
@@ -38,20 +35,24 @@ void ishmuratov::complement(ishmuratov::data_t &data, std::istream &input)
     throw std::out_of_range("Non existent dictionary!");
   }
 
-  for (auto dict = data[first_name].cbegin(); dict != data[first_name].cend(); ++dict)
+  AVLTree< int, std::string > first_dict = data[first_name];
+  AVLTree< int, std::string > second_dict = data[second_name];
+
+  for (auto dict = first_dict.cbegin(); dict != first_dict.cend(); ++dict)
   {
-    if (data[second_name].find(dict->first) == data[second_name].end())
+    if (second_dict.find(dict->first) == second_dict.end())
     {
-      new_dict.push(dict->first, data[first_name][dict->first]);
+      new_dict.push(dict->first, first_dict[dict->first]);
     }
   }
-  for (auto dict = data[second_name].cbegin(); dict != data[second_name].cend(); ++dict)
+  for (auto dict = second_dict.cbegin(); dict != second_dict.cend(); ++dict)
   {
-    if (data[first_name].find(dict->first) == data[first_name].end())
+    if (first_dict.find(dict->first) == first_dict.end())
     {
-      new_dict.push(dict->first, data[second_name][dict->first]);
+      new_dict.push(dict->first, second_dict[dict->first]);
     }
   }
+
   data.push(new_name, new_dict);
 }
 
@@ -67,13 +68,18 @@ void ishmuratov::intersect(ishmuratov::data_t &data, std::istream &input)
   {
     throw std::out_of_range("Non existent dictionary!");
   }
-  for (auto dict = data[first_name].cbegin(); dict != data[first_name].cend(); ++dict)
+
+  AVLTree< int, std::string > first_dict = data[first_name];
+  AVLTree< int, std::string > second_dict = data[second_name];
+
+  for (auto dict = first_dict.cbegin(); dict != first_dict.cend(); ++dict)
   {
-    if (data[second_name].find(dict->first) != data[second_name].end())
+    if (second_dict.find(dict->first) != second_dict.end())
     {
-      new_dict.push(dict->first, data[first_name][dict->first]);
+      new_dict.push(dict->first, first_dict[dict->first]);
     }
   }
+
   data.push(new_name, new_dict);
 }
 
@@ -90,16 +96,20 @@ void ishmuratov::uniond(ishmuratov::data_t &data, std::istream &input)
     throw std::out_of_range("Non existent dictionary!");
   }
 
-  for (auto dict = data[first_name].cbegin(); dict != data[first_name].cend(); ++dict)
+  AVLTree< int, std::string > first_dict = data[first_name];
+  AVLTree< int, std::string > second_dict = data[second_name];
+
+  for (auto dict = first_dict.cbegin(); dict != first_dict.cend(); ++dict)
   {
-    new_dict.push(dict->first, data[first_name][dict->first]);
+    new_dict.push(dict->first, first_dict[dict->first]);
   }
-  for (auto dict = data[second_name].cbegin(); dict != data[second_name].cend(); ++dict)
+  for (auto dict = second_dict.cbegin(); dict != second_dict.cend(); ++dict)
   {
-    if (data[first_name].find(dict->first) == data[first_name].end())
+    if (first_dict.find(dict->first) == first_dict.end())
     {
-      new_dict.push(dict->first, data[second_name][dict->first]);
+      new_dict.push(dict->first, second_dict[dict->first]);
     }
   }
+
   data.push(new_name, new_dict);
 }
