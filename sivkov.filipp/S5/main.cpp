@@ -46,7 +46,7 @@ int main(int argc, char* argv[])
   {
     std::cout << e.what() << "\n";
   }
-  catch (const out_of_range&)
+  catch (const std::out_of_range&)
   {
     std::cerr << e.what() << "\n"
     return 2;
