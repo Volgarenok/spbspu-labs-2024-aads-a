@@ -2,12 +2,11 @@
 #define FORWARD_LIST_HPP
 
 #include <cstddef>
-#include <iostream>
 #include <algorithm>
 #include <stdexcept>
-#include "node.hpp"
-#include "iterators.hpp"
-#include "const_iterators.hpp"
+#include <node.hpp>
+#include <iterators.hpp>
+#include <const_iterators.hpp>
 
 namespace namestnikov
 {
@@ -26,7 +25,7 @@ namespace namestnikov
     using const_iterator = ConstForwardIterator< T >;
     using node_t = detail::Node< T >;
   public:
-    ForwardList() :
+    ForwardList():
       head_(nullptr)
     {}
     ForwardList(size_t count, const T & value):
@@ -200,7 +199,11 @@ namespace namestnikov
     }
     void remove(const T & value)
     {
-      remove_if([=](const T & number){return number == value;});
+      auto pred = [=](const T & number)
+      {
+        return number == value;
+      };
+      remove_if(pred);
     }
     template < class Predicate >
     void remove_if(Predicate p)
@@ -470,97 +473,62 @@ namespace namestnikov
     }
     void splice_after(const_iterator pos, ForwardList< T > && other, const_iterator first, const_iterator last)
     {
-      if (pos == cend())
+      const_iterator nextIt = pos.node_->next_;
+      const_iterator currentIt = first.node_->next_;
+      pos.node_->next_ = currentIt.node_;
+      while (currentIt.node_->next_ != last.node_)
       {
-        throw std::out_of_range("Can not splice here");
+        ++currentIt;
       }
-      else
-      {
-        auto start = first;
-        auto end = last;
-        while (start != end)
-        {
-          insert_after(pos, std::move(*start));
-          ++start;
-          ++pos;
-        }
-        other.clear();
-      }
+      currentIt.node_->next_ = nextIt.node_;
+      const_iterator del = other.cbegin();
+      del.node_->next_ = nullptr;
     }
-    const T & operator[](size_t index)
-    {
-      size_t counter = 0;
-      auto temp = head_;
-      while (temp)
-      {
-        if (counter == index)
-        {
-          break;
-        }
-        temp = temp->next_;
-        ++counter;
-      }
-      return temp->data_;
-    }
-    const T & at(size_t index)
-    {
-      if ((index < 0) || (index >= get_size()))
-      {
-        throw std::out_of_range("Can not give you access to this element");
-      }
-      return operator[](index);
-    }
-    bool operator==(ForwardList< T > & other)
+    bool operator==(const ForwardList< T > & other) const
     {
       bool check = true;
-      size_t size = std::min(get_size(), other.get_size());
-      node_t * ourNode = head_;
-      node_t * otherNode = other.head_;
-      for (size_t i = 0; i < size; ++i)
+      auto otherIterator = other.cbegin();
+      auto myIterator = cbegin();
+      for (; myIterator != cend(); ++myIterator)
       {
-        check = check && (ourNode->data_ == otherNode->data_);
-        ourNode = ourNode->next_;
-        otherNode = otherNode->next_;
+        check = check && (*myIterator == *otherIterator);
+        ++otherIterator;
       }
       return check;
     }
-    bool operator<(ForwardList< T > & other)
+    bool operator<(const ForwardList< T > & other) const
     {
       bool check = true;
-      size_t size = std::min(get_size(), other.get_size());
-      node_t * ourNode = head_;
-      node_t * otherNode = other.head_;
-      for (size_t i = 0; i < size; ++i)
+      auto otherIterator = other.cbegin();
+      auto myIterator = cbegin();
+      for (; myIterator != cend(); ++myIterator)
       {
-        check = check && (ourNode->data_ < otherNode->data_);
-        ourNode = ourNode->next_;
-        otherNode = otherNode->next_;
+        check = check && (*myIterator < *otherIterator);
+        ++otherIterator;
       }
       return check;
     }
-    bool operator!=(ForwardList< T > & other)
+    bool operator!=(const ForwardList< T > & other) const
     {
       return !(*this == other);
     }
-    bool operator>(ForwardList< T > & other)
+    bool operator>(const ForwardList< T > & other) const
     {
       bool check = true;
-      size_t size = std::min(get_size(), other.get_size());
-      node_t * ourNode = head_;
-      node_t * otherNode = other.head_;
-      for (size_t i = 0; i < size; ++i)
+      auto otherIterator = other.cbegin();
+      auto myIterator = cbegin();
+      for (; myIterator != cend(); ++myIterator)
       {
-        check = check && (ourNode->data_ > otherNode->data_);
-        ourNode = ourNode->next_;
-        otherNode = otherNode->next_;
+        check = check && (*myIterator > *otherIterator);
+        ++otherIterator;
       }
       return check;
     }
-    bool operator<=(ForwardList< T > & other)
+    bool operator<=(const ForwardList< T > & other) const
     {
       return !(*this > other);
     }
-    bool operator>=(ForwardList< T > & other)
+    bool operator>=(const ForwardList< T > & other) const
     {
       return !(*this < other);
     }
