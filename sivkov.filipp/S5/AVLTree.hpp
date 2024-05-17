@@ -5,6 +5,9 @@
 #include <iostream>
 #include "treeNode.hpp"
 #include "cIterator.hpp"
+#include <constIteratorLnr.hpp>
+#include <constIteratorRnl.hpp>
+#include <constIteratorBfc.hpp>
 
 namespace sivkov
 {
@@ -30,9 +33,26 @@ namespace sivkov
     Value& operator[](const Key& key);
     const Value& operator[](const Key& key) const;
 
+    ConstIteratorLnr< Key, Value, Comp > cbeginLnr() const;
+    ConstIteratorLnr< Key, Value, Comp > cendLnr() const;
+
+    ConstIteratorRnl< Key, Value, Comp > cbeginRnl() const;
+    ConstIteratorRnl< Key, Value, Comp > cendRnl() const;
+
+    ConstIteratorBfs< Key, Value, Comp > cbeginBfs() const;
+    ConstIteratorBfs< Key, Value, Comp > cendBfs() const;
+
     ConstIteratorTree< Key, Value, Comp > cbegin() const;
     ConstIteratorTree< Key, Value, Comp > cend() const;
+
     ConstIteratorTree< Key, Value, Comp > find(const Key& key) const;
+
+    template< typename F >
+    F& iterLnr(F& f);
+    template< typename F >
+    F& iterRnl(F& f);
+    template< typename F >
+    F& iterBfs(F& f);
 
   private:
     size_t size_;
@@ -184,8 +204,8 @@ namespace sivkov
     ++size_;
   }
 
-  template<typename Key, typename Value, typename Comp>
-  void AVLTree<Key, Value, Comp>::deleteKey(const Key& key)
+  template< typename Key, typename Value, typename Comp >
+  void AVLTree< Key, Value, Comp >::deleteKey(const Key& key)
   {
     if (contains(key))
     {
@@ -226,6 +246,42 @@ namespace sivkov
       push(key, Value());
       return get(key, root_)->data.second;
     }
+  }
+
+  template< typename Key, typename Value, typename Comp >
+  ConstIteratorLnr< Key, Value, Comp > AVLTree< Key, Value, Comp >::cbeginLnr() const
+  {
+    return ConstIteratorLnr< Key, Value, Comp >(root_);
+  }
+
+  template< typename Key, typename Value, typename Comp >
+  ConstIteratorLnr< Key, Value, Comp > AVLTree< Key, Value, Comp >::cendLnr() const
+  {
+    return ConstIteratorLnr< Key, Value, Comp >(nullptr);
+  }
+
+  template< typename Key, typename Value, typename Comp >
+  ConstIteratorRnl< Key, Value, Comp > AVLTree< Key, Value, Comp >::cbeginRnl() const
+  {
+    return ConstIteratorRnl< Key, Value, Comp >(root_);
+  }
+
+  template< typename Key, typename Value, typename Comp >
+  ConstIteratorRnl< Key, Value, Comp > AVLTree< Key, Value, Comp >::cendRnl() const
+  {
+    return ConstIteratorRnl< Key, Value, Comp >(nullptr);
+  }
+
+  template< typename Key, typename Value, typename Comp >
+  ConstIteratorBfs< Key, Value, Comp > AVLTree< Key, Value, Comp >::cbeginBfs() const
+  {
+    return ConstIteratorBfs< Key, Value, Comp >(root_);
+  }
+
+  template< typename Key, typename Value, typename Comp >
+  ConstIteratorBfs< Key, Value, Comp > AVLTree< Key, Value, Comp >::cendBfs() const
+  {
+    return ConstIteratorBfs< Key, Value, Comp >(nullptr);
   }
 
   template< typename Key, typename Value, typename Comp >
@@ -472,6 +528,48 @@ namespace sivkov
       root->data.second = value;
     }
     return balance(root);
+  }
+  template< typename Key, typename Value, typename Comp >
+  template< typename F >
+  F& AVLTree< Key, Value, Comp >::iterLnr(F& f)
+  {
+    if (empty())
+    {
+      throw std::logic_error("<EMPTY>");
+    }
+    for (auto i = cbeginLnr(); i != cendLnr(); ++i)
+    {
+      f(*i);
+    }
+    return f;
+  }
+  template< typename Key, typename Value, typename Comp >
+  template< typename F >
+  F& AVLTree< Key, Value, Comp >::iterRnl(F& f)
+  {
+    if (empty())
+    {
+      throw std::logic_error("<EMPTY>");
+    }
+    for (auto i = cbeginRnl(); i != cendRnl(); ++i)
+    {
+      f(*i);
+    }
+    return f;
+  }
+  template< typename Key, typename Value, typename Comp >
+  template< typename F >
+  F& AVLTree< Key, Value, Comp >::iterBfs(F& f)
+  {
+    if (empty())
+    {
+      throw std::logic_error("<EMPTY>");
+    }
+    for (auto i = cbeginBfs(); i != cendBfs(); ++i)
+    {
+      f(*i);
+    }
+    return f;
   }
 }
 #endif
