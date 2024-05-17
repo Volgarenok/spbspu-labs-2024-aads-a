@@ -37,16 +37,16 @@ int main(int argc, char * argv[])
     }
     catch (const std::out_of_range &)
     {
-      std::cerr << "<INVALID COMMAND>\n";
+      std::cout << "<INVALID COMMAND>\n";
       std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
     catch (const std::underflow_error &)
     {
-      std::cerr << "<EMPTY>\n";
+      std::cout << "<EMPTY>\n";
     }
     catch (const std::runtime_error & e)
     {
-      std::cerr << "<ERROR: " << e.what() << ">\n";
+      std::cout << "<ERROR: " << e.what() << ">\n";
     }
   }
 }
