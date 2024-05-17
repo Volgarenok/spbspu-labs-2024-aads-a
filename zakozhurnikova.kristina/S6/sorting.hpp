@@ -21,7 +21,7 @@ void shaker(Iterator& begin, size_t size)
   int rightMark = size - 1;
   auto end = begin;
   size_t count = 0;
-  for (size_t i = 1; i < size; ++i)
+  for (size_t i = 2; i < size; ++i)
   {
     ++end;
   }
