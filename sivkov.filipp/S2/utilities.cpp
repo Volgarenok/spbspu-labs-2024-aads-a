@@ -10,7 +10,7 @@ namespace sivkov
 
   bool compareOperators(const std::string& first, const std::string& second)
   {
-    return (first == "*" || first == "%" || second == "+" || second == "-") && (first != "(");;
+    return (first == "*" || first == "/" || first == "%") || ((second == "+" || second == "-") && first != "(");
   }
 
 }
