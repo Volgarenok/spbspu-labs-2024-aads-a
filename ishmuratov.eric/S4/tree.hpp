@@ -49,6 +49,26 @@ namespace ishmuratov
       other.size_ = 0;
     }
 
+    AVLTree & operator=(const AVLTree & other)
+    {
+      if (this != std::addressof(other))
+      {
+        AVLTree temp(other);
+        swap(temp);
+      }
+      return *this;
+    }
+
+    AVLTree & operator=(AVLTree && other) noexcept
+    {
+      if (this != std::addressof(other))
+      {
+        clear();
+        swap(other);
+      }
+      return *this;
+    }
+
     ~AVLTree()
     {
       clear();
@@ -74,12 +94,12 @@ namespace ishmuratov
       return ConstIter(nullptr);
     }
 
-    size_t size() noexcept
+    size_t size() const noexcept
     {
       return size_;
     }
 
-    bool empty() noexcept
+    bool empty() const noexcept
     {
       return size_ == 0;
     }
@@ -166,7 +186,7 @@ namespace ishmuratov
       return cend();
     }
 
-    void push(Key k, Value v)
+    void push(const Key & k, const Value & v)
     {
       if (root_ == nullptr)
       {
@@ -175,10 +195,7 @@ namespace ishmuratov
       }
       else
       {
-        if (find(k) == end())
-        {
-          root_ = place(k, v, root_);
-        }
+        root_ = place(k, v, root_);
       }
     }
 
@@ -210,7 +227,7 @@ namespace ishmuratov
       return min_elem(root->left);
     }
 
-    tnode * place(Key key, Value value, tnode * node)
+    tnode * place(const Key & key, const Value & value, tnode * node)
     {
       if (comp_(key, node->data.first))
       {
@@ -251,6 +268,10 @@ namespace ishmuratov
             node = rotate_double_left(node);
           }
         }
+      }
+      else
+      {
+        node->data.second = value;
       }
       node->height = std::max(get_height(node->left), get_height(node->right)) + 1;
       return node;
