@@ -1,7 +1,9 @@
 #include <iostream>
 #include <fstream>
 #include <functional>
+#include <stdexcept>
 #include <AVLTree.hpp>
+#include "cmd.hpp"
 #include "input.hpp"
 #include "key_summ.hpp"
 
