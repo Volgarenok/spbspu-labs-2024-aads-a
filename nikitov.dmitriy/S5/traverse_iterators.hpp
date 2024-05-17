@@ -15,6 +15,12 @@ namespace nikitov
   class LNRIterator: public std::iterator< std::bidirectional_iterator_tag, T >
   {
     friend class Tree< Key, T, Compare >;
+  public:
+    LNRIterator(const LNRIterator< Key, T, Compare >&) = default;
+    ~LNRIterator() = default;
+
+    LNRIterator< Key, T, Compare >& operator=(const LNRIterator< Key, T, Compare >&) = default;
+
   private:
     Stack< std::pair < detail::TreeNode< Key, T, Compare >* > > data_;
     bool isFirst_;
