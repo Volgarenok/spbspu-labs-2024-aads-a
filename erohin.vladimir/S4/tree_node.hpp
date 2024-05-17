@@ -21,16 +21,18 @@ namespace erohin
       Node * parent_;
       Node * left_;
       Node * right_;
-      unsigned short int color_;
-      Node(const std::pair< Key, T > & value, Node * parent, Node * left, Node * right);
-      Node(std::pair< Key, T > && value, Node * parent, Node * left, Node * right);
+      color_t color_;
+      Node(Node * parent, Node * left, Node * right, const std::pair< Key, T > & value);
+      Node(Node * parent, Node * left, Node * right, std::pair< Key, T > && value);
+      template< class... Args >
+      Node(Node * parent, Node * left, Node * right, Args &&... args);
       ~Node() = default;
       Node * next();
       Node * prev();
     };
 
     template< class Key, class T >
-    Node< Key, T >::Node(const std::pair< Key, T > & value, Node * parent, Node * left, Node * right):
+    Node< Key, T >::Node(Node * parent, Node * left, Node * right, const std::pair< Key, T > & value):
       data_(value),
       parent_(parent),
       left_(left),
@@ -39,13 +41,24 @@ namespace erohin
     {}
 
     template< class Key, class T >
-    Node< Key, T >::Node(std::pair< Key, T > && value, Node * parent, Node * left, Node * right):
+    Node< Key, T >::Node(Node * parent, Node * left, Node * right, std::pair< Key, T > && value):
       data_(std::move(value)),
       parent_(parent),
       left_(left),
       right_(right),
       color_(color_t::RED)
     {}
+
+    template< class Key, class T >
+    template< class... Args >
+    Node< Key, T >::Node(Node * parent, Node * left, Node * right, Args &&... args):
+      parent_(parent),
+      left_(left),
+      right_(right),
+      color_(color_t::RED)
+    {
+      new (std::addressof(data_)) std::pair< Key, T >(std::forward< Args... >(args...));
+    }
 
     template< class Key, class T >
     Node< Key, T > * Node< Key, T >::next()

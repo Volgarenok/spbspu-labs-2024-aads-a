@@ -242,7 +242,7 @@ namespace erohin
     detail::Node< Key, T > * node = root_;
     if (empty())
     {
-      root_ = new detail::Node< Key, T >(std::move(value), nullptr, nullptr, nullptr);
+      root_ = new detail::Node< Key, T >(nullptr, nullptr, nullptr, std::move(value));
       node = root_;
     }
     else
@@ -264,7 +264,7 @@ namespace erohin
           node = node->right_;
         }
       }
-      node = new detail::Node< Key, T >(std::move(value), prev, nullptr, nullptr);
+      node = new detail::Node< Key, T >(prev, nullptr, nullptr, std::move(value));
       try
       {
         if (cmp_(node->data_.first, prev->data_.first))
@@ -310,7 +310,7 @@ namespace erohin
         node = node->right_;
       }
     }
-    node = new detail::Node< Key, T >(std::move(value), prev, nullptr, nullptr);
+    node = new detail::Node< Key, T >(prev, nullptr, nullptr, std::move(value));
     try
     {
       if (cmp_(node->data_.first, prev->data_.first))
