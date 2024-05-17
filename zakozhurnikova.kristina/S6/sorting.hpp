@@ -2,17 +2,9 @@
 #define SOTRING_HPP
 #include <iterator.hpp>
 #include <list.hpp>
+#include <utility>
 
 using namespace zakozhurnikova;
-
-template < class Iterator >
-void swap(Iterator right, Iterator left)
-{
-  int buff;
-  buff = *left;
-  *left = *right;
-  *right = buff;
-}
 
 template < class Iterator >
 void shaker(Iterator& begin, size_t size)
@@ -42,10 +34,7 @@ void shaker(Iterator& begin, size_t size)
       --curr;
       if (*(curr) > *(tempEnd))
       {
-        int buff;
-        buff = *curr;
-        *curr = *tempEnd;
-        *tempEnd = buff;
+        std::swap(*curr, *tempEnd);
       }
       --tempEnd;
     }
