@@ -55,6 +55,7 @@ int main(int argc, char* argv[])
       std::cout << '\n';
     }
     auto beg = countOne.begin();
+    ++beg;
     shaker(beg, size);
     countThree.sort(std::less< int >());
     for (auto it = countOne.begin(); it != countOne.end(); ++it)
