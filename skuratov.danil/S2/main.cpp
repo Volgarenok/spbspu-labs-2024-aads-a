@@ -2,6 +2,6 @@
 
 int main()
 {
-	std::cout << "Initial commit for S2\n";
-	return 0;
+  std::cout << "Initial commit for S2\n";
+  return 0;
 }
