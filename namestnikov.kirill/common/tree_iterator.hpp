@@ -15,7 +15,7 @@ namespace namestnikov
   class ConstIteratorTree;
 
   template< class Key, class Value, class Compare >
-  class IteratorTree: public std::iterator< std::bidirectional_iterator_tag, Value >
+  class IteratorTree:
   {
     friend class Tree< Key, Value, Compare >;
     friend class ConstIteratorTree< Key, Value, Compare >;
