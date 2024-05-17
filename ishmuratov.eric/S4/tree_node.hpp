@@ -23,8 +23,6 @@ namespace ishmuratov
         left(nullptr),
         right(nullptr)
       {}
-
-      ~TNode() = default;
     };
   }
 }

@@ -12,11 +12,15 @@ void ishmuratov::print(ishmuratov::data_t &data, std::istream &input, std::ostre
   {
     throw std::underflow_error("Dictionary is empty!");
   }
-  AVLTree< int, std::string > to_print = data[dict_name];
-  output << dict_name << " " << to_print.cbegin()->first << " " << to_print.cbegin()->second;
-  for (auto pair = ++to_print.cbegin(); pair != to_print.cend(); ++pair)
+//  AVLTree< int, std::string > to_print = data[dict_name];
+  output << dict_name << " " << data[dict_name].cbegin()->first << " " << data[dict_name].cbegin()->second;
+//  for (auto pair = ++to_print.cbegin(); pair != to_print.cend(); ++pair)
+//  {
+//    output << " " << pair->first << " " << pair->second;
+//  }
+  for (const auto& pair: data[dict_name])
   {
-    output << " " << pair->first << " " << pair->second;
+    output << " " << pair.first << " " << pair.second;
   }
   output << "\n";
 }
