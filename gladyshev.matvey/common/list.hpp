@@ -39,6 +39,7 @@ namespace gladyshev
         push_front(curr->data);
         curr = curr->next;
       }
+      reverse();
     }
     List(List&& other) noexcept:
       head_(other.head_)
@@ -168,6 +169,7 @@ namespace gladyshev
       if (!head_->next)
       {
         delete head_;
+        head_ = nullptr;
       }
       else
       {
@@ -177,6 +179,7 @@ namespace gladyshev
           temp = temp->next;
         }
         delete temp->next;
+        temp->next = nullptr;
       }
     }
     void swap(List& other)

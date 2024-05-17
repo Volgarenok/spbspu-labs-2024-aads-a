@@ -2,7 +2,7 @@
 #define CONST_ITERATORS_HPP
 
 #include <iterator>
-#include "iterators.hpp"
+#include <iterators.hpp>
 
 namespace namestnikov
 {
@@ -64,7 +64,7 @@ namespace namestnikov
     }
     ~ConstForwardIterator() = default;
   private:
-    const node_t * node_;
+    node_t * node_;
     explicit ConstForwardIterator(node_t * node):
       node_(node)
     {}

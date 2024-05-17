@@ -2,6 +2,7 @@
 #define TREE_HPP
 #include <cstddef>
 #include "treeiterator.hpp"
+#include "../S5/specialiterator.hpp"
 
 namespace piyavkin
 {
@@ -128,6 +129,10 @@ namespace piyavkin
       auto res = insert_impl(val);
       splay(res.first.node_);
       return res;
+    }
+    std::pair< TreeIterator< Key, T, Compare >, bool > unsplay_insert(const val_type& val)
+    {
+      return insert_impl(val);
     }
     TreeIterator< Key, T, Compare > insert(ConstTreeIterator< Key, T, Compare > pos, const val_type& val)
     {
@@ -478,6 +483,84 @@ namespace piyavkin
     TreeIterator< Key, T, Compare > emplace_hint(TreeIterator< Key, T, Compare > pos, Args&&... args)
     {
       return insert(pos, val_type(std::forward< Args >(args)...));
+    }
+    ConstLnrIterator< Key, T, Compare > clbegin() const noexcept
+    {
+      return ConstLnrIterator< Key, T, Compare >(root_, before_min_.parent_, false);
+    }
+    ConstLnrIterator< Key, T, Compare > clend() const noexcept
+    {
+      return ConstLnrIterator< Key, T, Compare >(root_, const_cast< detail::TreeNode< Key, T >* >(std::addressof(end_node_)), true);
+    }
+    ConstRnlIterator< Key, T, Compare > clrbegin() const noexcept
+    {
+      return ConstRnlIterator< Key, T, Compare >(root_, end_node_.parent_, false);
+    }
+    ConstRnlIterator< Key, T, Compare > clrend() const noexcept
+    {
+      return ConstRnlIterator< Key, T, Compare >(root_, const_cast< detail::TreeNode< Key, T >* >(std::addressof(before_min_)), true);
+    }
+    ConstBreadthIterator< Key, T, Compare > cbbegin() const noexcept
+    {
+      return ConstBreadthIterator< Key, T, Compare >(root_, root_, false);
+    }
+    ConstBreadthIterator< Key, T, Compare > cbend() const noexcept
+    {
+      return ConstBreadthIterator< Key, T, Compare >(root_, root_, true);
+    }
+    template< class F >
+    F& traverse_lnr(F& f) const
+    {
+      if (empty())
+      {
+        throw std::logic_error("<EMPTY>");
+      }
+      for (auto it = clbegin(); it != clend(); ++it)
+      {
+        f(*it);
+      }
+      return f;
+    }
+    template< class F >
+    F& traverse_lnr(F& f)
+    {
+      return static_cast< const Tree< Key, T, Compare >& >(*this).traverse_lnr(f);
+    }
+    template< class F >
+    F& traverse_rnl(F& f) const
+    {
+      if (empty())
+      {
+        throw std::logic_error("<EMPTY>");
+      }
+      for (auto it = clrbegin(); it != clrend(); ++it)
+      {
+        f(*it);
+      }
+      return f;
+    }
+    template< class F >
+    F& traverse_rnl(F& f)
+    {
+      return static_cast< const Tree< Key, T, Compare >& >(*this).traverse_rnl(f);
+    }
+    template< class F >
+    F& traverse_breadth(F& f) const
+    {
+      if (empty())
+      {
+        throw std::logic_error("<EMPTY>");
+      }
+      for (auto it = cbbegin(); it != cbend(); ++it)
+      {
+        f(*it);
+      }
+      return f;
+    }
+    template< class F >
+    F& traverse_breadth(F& f)
+    {
+      return static_cast< const Tree< Key, T, Compare >& >(*this).traverse_breadth(f);
     }
   private:
     detail::TreeNode< Key, T >* root_;
