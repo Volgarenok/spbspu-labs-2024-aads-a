@@ -60,8 +60,8 @@ void shaker(Iterator& begin, size_t size)
       {
         int buff;
         buff = *curr;
-        *curr = *tmpEnd;
-        *tmpEnd = buff;
+        *curr = *tmpBegin;
+        *tmpBegin = buff;
       }
       ++tmpBegin;
     }
