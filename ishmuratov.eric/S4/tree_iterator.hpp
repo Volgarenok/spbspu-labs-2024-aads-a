@@ -24,6 +24,7 @@ namespace ishmuratov
     ~Iterator() = default;
     Iterator(const Iter &) = default;
     Iter & operator=(const Iter &) = default;
+    Iter & operator=(Iter &&) = default;
 
     Iter & operator++()
     {
@@ -146,6 +147,7 @@ namespace ishmuratov
     ~ConstIterator() = default;
     ConstIterator(const ConstIter &) = default;
     ConstIter & operator=(const ConstIter &) = default;
+    ConstIter & operator=(ConstIter &&) = default;
 
     ConstIter & operator++()
     {
