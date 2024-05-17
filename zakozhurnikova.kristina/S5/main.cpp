@@ -63,6 +63,10 @@ int main(int argc, char* argv[])
     std::cerr << e.what();
     return 1;
   }
+  catch (const std::logic_error& e)
+  {
+    std::cout << e.what() << '\n';
+  }
   catch (const std::exception& e)
   {
     std::cerr << e.what();
