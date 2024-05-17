@@ -14,4 +14,10 @@ int main(int, char**)
   {
     std::cout << x << ' ';
   }
+  std::cout << '\n';
+  sort_merge(list.begin(), list.end(), std::less< int >());
+  for (auto x: list)
+  {
+    std::cout << x << ' ';
+  }
 }

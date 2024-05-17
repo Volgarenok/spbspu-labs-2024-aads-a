@@ -1,5 +1,6 @@
 #ifndef MERGE_HPP
 #define MERGE_HPP
+#include <algorithm>
 #include <list.hpp>
 
 namespace piyavkin
@@ -23,6 +24,21 @@ namespace piyavkin
   template< class BiIter, class Cmp >
   void sort_merge(BiIter begin, BiIter end, Cmp cmp)
   {
+    size_t size = std::distance(begin, end);
+    List< typename BiIter::val_t > res;
+    for (size_t i = 1; i < size; i *= 2)
+    {
+      BiIter second = begin;
+      for (size_t j = 0; j < size - i; j += 2 * i)
+      {
+        BiIter first = second;
+        BiIter border = std::next(first, i);
+        second = (j + 2 * i < size) ? std::next(second, 2 * i) : end;
+        merge(first, border, second, cmp, res);
+      }
+      std::move(res.begin(), res.end(), begin);
+      res.clear();
+    }
   }
 }
 #endif
