@@ -126,26 +126,26 @@ namespace ishmuratov
 
     Iter find(const Key & key)
     {
-      for (auto search = this->begin(); search != this->end(); ++search)
+      for (auto search = begin(); search != end(); ++search)
       {
         if (search.node_->data.first == key)
         {
           return search;
         }
       }
-      return this->end();
+      return end();
     }
 
     ConstIter find(const Key & key) const
     {
-      for (auto search = this->cbegin(); search != this->cend(); ++search)
+      for (auto search = cbegin(); search != cend(); ++search)
       {
         if (search.node_->data.first == key)
         {
           return search;
         }
       }
-      return this->end();
+      return cend();
     }
 
     void push(Key k, Value v)
@@ -157,7 +157,10 @@ namespace ishmuratov
       }
       else
       {
-        root_ = place(k, v, root_);
+        if (find(k) == end())
+        {
+          root_ = place(k, v, root_);
+        }
       }
     }
 
