@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <utility>
+#include <functional>
 #include "commands.hpp"
 #include "getSum.hpp"
 #include "implementedCommands.hpp"
@@ -38,9 +39,9 @@ int main(int argc, char* argv[])
 //  master.addCommand("breadth", &breadth);
 
   BinarySearchTree< std::string, std::function< int(std::string& result, Map& tree) > > cmds;
-  cmds["ascending"] = ascending;
-  cmds["descending"] = descending;
-  cmds["breadth"] = breadth;
+  cmds.push("ascending", &ascending);
+  cmds.push("descending", &descending);
+  cmds.push("breadth", &breadth);
 
   std::string command(argv[1]);
   std::string cmdOutput;
