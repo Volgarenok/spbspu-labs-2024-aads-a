@@ -6,7 +6,6 @@
 namespace ishmuratov
 {
   void input_dict(data_t & data, std::istream & input);
-  void output_dict(data_t & data, std::ostream & output);
 }
 
 #endif

@@ -20,16 +20,3 @@ void ishmuratov::input_dict(ishmuratov::data_t & data, std::istream &input)
     data[name] = dict;
   }
 }
-
-void ishmuratov::output_dict(ishmuratov::data_t & data, std::ostream &output)
-{
-  for (auto dict : data)
-  {
-    output << dict.first << " ";
-    for (auto key : dict.second)
-    {
-      output << key.first << " " << key.second << " ";
-    }
-    output << "\n";
-  }
-}

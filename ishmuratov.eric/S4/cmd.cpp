@@ -16,7 +16,7 @@ void ishmuratov::print(ishmuratov::data_t &data, std::istream &input, std::ostre
   output << "\n";
 }
 
-void ishmuratov::complement(ishmuratov::data_t &data, std::istream &input, std::ostream &output)
+void ishmuratov::complement(ishmuratov::data_t &data, std::istream &input)
 {
   std::string new_name;
   std::string first_name;
@@ -46,7 +46,7 @@ void ishmuratov::complement(ishmuratov::data_t &data, std::istream &input, std::
   data[new_name] = new_dict;
 }
 
-void ishmuratov::intersect(ishmuratov::data_t &data, std::istream &input, std::ostream &output)
+void ishmuratov::intersect(ishmuratov::data_t &data, std::istream &input)
 {
   std::string new_name;
   std::string first_name;
@@ -68,7 +68,7 @@ void ishmuratov::intersect(ishmuratov::data_t &data, std::istream &input, std::o
   data[new_name] = new_dict;
 }
 
-void ishmuratov::uniond(ishmuratov::data_t &data, std::istream &input, std::ostream &output)
+void ishmuratov::uniond(ishmuratov::data_t &data, std::istream &input)
 {
   std::string new_name;
   std::string first_name;

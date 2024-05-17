@@ -23,9 +23,9 @@ int main(int argc, char * argv[])
   {
     using namespace std::placeholders;
     cmds["print"] = std::bind(print, std::ref(data), _1, _2);
-    cmds["complement"] = std::bind(complement, std::ref(data), _1, _2);
-    cmds["intersect"] = std::bind(intersect, std::ref(data), _1, _2);
-    cmds["union"] = std::bind(uniond, std::ref(data), _1, _2);
+    cmds["complement"] = std::bind(complement, std::ref(data), _1);
+    cmds["intersect"] = std::bind(intersect, std::ref(data), _1);
+    cmds["union"] = std::bind(uniond, std::ref(data), _1);
   }
 
   std::string cmd;

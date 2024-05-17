@@ -1,6 +1,7 @@
 #ifndef TREE_HPP
 #define TREE_HPP
 
+#include <iostream>
 #include "tree_node.hpp"
 #include "tree_iterator.hpp"
 
