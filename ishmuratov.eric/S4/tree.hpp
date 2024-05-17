@@ -234,6 +234,7 @@ namespace ishmuratov
         if (node->left == nullptr)
         {
           node->left = new tnode(key, value);
+          node->left->parent = node;
           size_ += 1;
         }
         node->left = place(key, value, node->left);
@@ -254,6 +255,7 @@ namespace ishmuratov
         if (node->right == nullptr)
         {
           node->right = new tnode(key, value);
+          node->right->parent = node;
           size_ += 1;
         }
         node->right = place(key, value, node->right);
@@ -294,7 +296,7 @@ namespace ishmuratov
       node->right = rot_node->left;
       rot_node->left = node;
 
-      rot_node->left->parent = node;
+      rot_node->parent = node->parent;
       node->parent = rot_node;
 
       node->height = std::max(get_height(node->left), get_height(node->right)) + 1;
@@ -308,7 +310,7 @@ namespace ishmuratov
       node->left = rot_node->right;
       rot_node->right = node;
 
-      rot_node->right->parent = node;
+      rot_node->parent = node->parent;
       node->parent = rot_node;
 
       node->height = std::max(get_height(node->left), get_height(node->right)) + 1;

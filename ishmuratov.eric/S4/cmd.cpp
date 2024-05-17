@@ -105,7 +105,7 @@ void ishmuratov::uniond(ishmuratov::data_t &data, std::istream &input)
   }
   for (auto dict = second_dict.cbegin(); dict != second_dict.cend(); ++dict)
   {
-    if (first_dict.find(dict->first) == first_dict.end())
+    if (new_dict.find(dict->first) == new_dict.end())
     {
       new_dict.push(dict->first, second_dict[dict->first]);
     }
