@@ -27,8 +27,10 @@ namespace sivkov
 
     ConstIteratorLnr< Key, Value, Comp >& operator++()
     {
-      if (current_ == nullptr) return *this;
-
+      if (current_ == nullptr)
+      {
+        return *this;
+      }
       if (!stack_.empty())
       {
         current_ = stack_.top();
