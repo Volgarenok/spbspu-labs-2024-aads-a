@@ -48,6 +48,36 @@ namespace marishin
       return *this;
     }
 
+    BinarySearchTree& operator=(BinarySearchTree&& rhs) noexcept
+    {
+      Tree< Key, Value > temp(std::move(rhs));
+      if (this != std::addressof(rhs))
+      {
+        swap(temp);
+      }
+      return *this;
+    }
+
+    size_t size() const noexcept
+    {
+      return this->size_;
+    }
+
+    ~BinarySearchTree()
+    {
+      clear();
+    }
+
+    void swap(BinarySearchTree< Key, Value, Compare >& rhs) noexcept
+    {
+      std::swap(root_, rhs.root_);
+      std::swap(size_, rhs.size_);
+    }
+
+    node_t* insert(const Key& key, const Value& val)
+    {
+      
+    }
 
 
   };
