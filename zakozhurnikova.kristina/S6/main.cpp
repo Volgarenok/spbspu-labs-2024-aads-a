@@ -9,6 +9,7 @@
 #include "generate.hpp"
 #include "sorting.hpp"
 #include "print.hpp"
+#include "sortingSheets.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -27,55 +28,13 @@ int main(int argc, char* argv[])
     std::cerr << "You stupid";
     return 1;
   }
-  if (type == "ints")
+  try
   {
-    int array[10000];
-    std::generate_n(array, size, RandomNumberInt);
-
-    List< int > biListRealization;
-    std::list< int > biListStandart;
-    std::deque< int > dequeSort;
-    std::deque< int > dequeShaker;
-    std::deque< int > dequeShell;
-    std::forward_list< int > forwardList;
-
-    for (size_t i = 0; i < size; ++i)
-    {
-      int number = array[i];
-      biListRealization.push_back(number);
-      biListStandart.push_front(number);
-      dequeSort.push_front(number);
-      dequeShaker.push_front(number);
-      dequeShell.push_front(number);
-      forwardList.push_front(number);
-    }
-    print(std::cout, forwardList);
-
-    auto beginBiR = biListRealization.begin();
-    auto beginDeqSort = dequeSort.begin();
-    auto endDeqSort = dequeSort.end();
-    auto beginDeqShaker = dequeShaker.begin();
-    auto beginDeqShell = dequeShell.begin();
-
-    shaker(++beginBiR, size, std::less< int >());
-    biListStandart.sort(std::less< int >());
-    std::sort(beginDeqSort, endDeqSort, std::less< int >());
-    shaker(++beginDeqShaker, size, std::less< int >());
-    shell(beginDeqShell, size, std::less< int >());
-    forwardList.sort(std::less< int >());
-
-    print(std::cout, biListRealization);
-    print(std::cout, biListStandart);
-    print(std::cout, dequeSort);
-    print(std::cout, dequeShaker);
-    print(std::cout, dequeShell);
-    print(std::cout, forwardList);
+    sortingSheets< int >(sort, type, size);
   }
-  else if (type == "floats")
-  {}
-  else
+  catch (std::exception& e)
   {
-    std::cerr << "No right type";
+    std::cerr << e.what();
     return 1;
   }
 }

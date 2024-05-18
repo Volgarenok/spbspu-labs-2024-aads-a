@@ -1,5 +1,5 @@
 #ifndef SORTING_HPP
-#define SOTRING_HPP
+#define SORTING_HPP
 #include <iterator.hpp>
 #include <list.hpp>
 #include <utility>
