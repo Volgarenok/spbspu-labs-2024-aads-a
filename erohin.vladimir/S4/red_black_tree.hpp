@@ -167,9 +167,9 @@ namespace erohin
   TreeIterator< Key, T > RedBlackTree< Key, T, Compare >::begin()
   {
     detail::Node< Key, T > * result = root_;
-    while (result && result->left_)
+    while (result && result->left)
     {
-      result = result->left_;
+      result = result->left;
     }
     return iterator(result);
   }
@@ -184,9 +184,9 @@ namespace erohin
   TreeConstIterator< Key, T > RedBlackTree< Key, T, Compare >::cbegin() const
   {
     const detail::Node< Key, T > * result = root_;
-    while (result && result->left_)
+    while (result && result->left)
     {
-      result = result->left_;
+      result = result->left;
     }
     return const_iterator(result);
   }
@@ -213,9 +213,9 @@ namespace erohin
   typename RedBlackTree< Key, T, Compare >::const_reverse_iterator RedBlackTree< Key, T, Compare >::crbegin() const
   {
     detail::Node< Key, T > * result = root_;
-    while (result->right_)
+    while (result->right)
     {
-      result = result->right_;
+      result = result->right;
     }
     return const_reverse_iterator(result);
   }
@@ -255,29 +255,29 @@ namespace erohin
       while (node)
       {
         prev = node;
-        if (!cmp_(value.first, node->data_.first) && !cmp_(node->data_.first, value.first))
+        if (!cmp_(value.first, node->data.first) && !cmp_(node->data.first, value.first))
         {
           return std::make_pair(iterator(node), false);
         }
-        else if (cmp_(value.first, node->data_.first))
+        else if (cmp_(value.first, node->data.first))
         {
-          node = node->left_;
+          node = node->left;
         }
         else
         {
-          node = node->right_;
+          node = node->right;
         }
       }
       node = new detail::Node< Key, T >(prev, nullptr, nullptr, std::move(value));
       try
       {
-        if (cmp_(node->data_.first, prev->data_.first))
+        if (cmp_(node->data.first, prev->data.first))
         {
-          prev->left_ = node;
+          prev->left = node;
         }
         else
         {
-          prev->right_ = node;
+          prev->right = node;
         }
       }
       catch (...)
@@ -305,25 +305,25 @@ namespace erohin
     while (node)
     {
       prev = node;
-      if (cmp_(value.first, node->data_.first))
+      if (cmp_(value.first, node->data.first))
       {
-        node = node->left_;
+        node = node->left;
       }
       else
       {
-        node = node->right_;
+        node = node->right;
       }
     }
     node = new detail::Node< Key, T >(prev, nullptr, nullptr, std::move(value));
     try
     {
-      if (cmp_(node->data_.first, prev->data_.first))
+      if (cmp_(node->data.first, prev->data.first))
       {
-        prev->left_ = node;
+        prev->left = node;
       }
       else
       {
-        prev->right_ = node;
+        prev->right = node;
       }
     }
     catch (...)
@@ -370,28 +370,28 @@ namespace erohin
         while (node)
         {
           prev = node;
-          if (!cmp_(emplaced->first, node->data_.first) && !cmp_(node->data_.first, emplaced->first))
+          if (!cmp_(emplaced->data.first, node->data.first) && !cmp_(node->data.first, emplaced->data.first))
           {
             delete emplaced;
             return std::make_pair(iterator(node), false);
           }
-          else if (cmp_(emplaced->first, node->data_.first))
+          else if (cmp_(emplaced->data.first, node->data.first))
           {
-            node = node->left_;
+            node = node->left;
           }
           else
           {
-            node = node->right_;
+            node = node->right;
           }
         }
-        emplaced->parent_ = prev;
-        if (cmp_(emplaced->data_.first, prev->data_.first))
+        emplaced->parent = prev;
+        if (cmp_(emplaced->data.first, prev->data.first))
         {
-          prev->left_ = emplaced;
+          prev->left = emplaced;
         }
         else
         {
-          prev->right_ = emplaced;
+          prev->right = emplaced;
         }
       }
     }
@@ -417,28 +417,28 @@ namespace erohin
       while (node)
       {
         prev = node;
-        if (!cmp_(emplaced->first, node->data_.first) && !cmp_(node->data_.first, emplaced->first))
+        if (!cmp_(emplaced->first, node->data.first) && !cmp_(node->data.first, emplaced->first))
         {
           delete emplaced;
           return std::make_pair(iterator(node), false);
         }
-        else if (cmp_(emplaced->first, node->data_.first))
+        else if (cmp_(emplaced->first, node->data.first))
         {
-          node = node->left_;
+          node = node->left;
         }
         else
         {
-          node = node->right_;
+          node = node->right;
         }
       }
-      emplaced->parent_ = prev;
-      if (cmp_(emplaced->data_.first, prev->data_.first))
+      emplaced->parent = prev;
+      if (cmp_(emplaced->data.first, prev->data.first))
       {
-        prev->left_ = emplaced;
+        prev->left = emplaced;
       }
       else
       {
-        prev->right_ = emplaced;
+        prev->right = emplaced;
       }
     }
     catch (...)
@@ -458,17 +458,17 @@ namespace erohin
     detail::Node< Key, T > * to_delete = nullptr;
     while (!to_delete && node)
     {
-      if (node->data_.first == key)
+      if (node->data.first == key)
       {
         to_delete = node;
       }
-      else if (cmp_(key, node->data_.first))
+      else if (cmp_(key, node->data.first))
       {
-        node = node->left_;
+        node = node->left;
       }
       else
       {
-        node = node->right_;
+        node = node->right;
       }
     }
     if (!to_delete)
@@ -492,17 +492,17 @@ namespace erohin
     {
       found = to_delete;
     }
-    if (found->parent_->left_ == found)
+    if (found->parent->left == found)
     {
-      found->parent_->left_ = found->left_;
+      found->parent->left = found->left;
     }
-    else if (found->parent_->right_ == found)
+    else if (found->parent->right == found)
     {
-      found->parent_->right_ = found->right_;
+      found->parent->right = found->right;
     }
     if (found != to_delete)
     {
-      std::swap(found->data_, to_delete->data_);
+      std::swap(found->data, to_delete->data);
     }
     erase_balance_case1(found);
     auto iter = ++pos;
@@ -573,13 +573,13 @@ namespace erohin
     detail::Node< Key, T > * node = root_;
     while (node)
     {
-      if (cmp_(key, node->data_.first))
+      if (cmp_(key, node->data.first))
       {
-        node = node->left_;
+        node = node->left;
       }
-      else if (cmp_(node->data_.first, key))
+      else if (cmp_(node->data.first, key))
       {
-        node = node->right_;
+        node = node->right;
       }
       else
       {
@@ -595,13 +595,13 @@ namespace erohin
     const detail::Node< Key, T > * node = root_;
     while (node)
     {
-      if (cmp_(key, node->data_.first))
+      if (cmp_(key, node->data.first))
       {
-        node = node->left_;
+        node = node->left;
       }
-      else if (cmp_(node->data_.first, key))
+      else if (cmp_(node->data.first, key))
       {
-        node = node->right_;
+        node = node->right;
       }
       else
       {
@@ -641,15 +641,15 @@ namespace erohin
     while (node)
     {
       prev = node;
-      if (cmp_(key, node->data_.first))
+      if (cmp_(key, node->data.first))
       {
-        node = node->left_;
+        node = node->left;
       }
       else
       {
-        node = node->right_;
+        node = node->right;
       }
-      if (!cmp_(prev->data_.first, key))
+      if (!cmp_(prev->data.first, key))
       {
         return iterator(node);
       }
@@ -669,17 +669,17 @@ namespace erohin
     detail::Node< Key, T > * node = root_;
     while (node)
     {
-      if (cmp_(node->data_.first, key))
+      if (cmp_(node->data.first, key))
       {
         return iterator(node);
       }
-      else if (cmp_(key, node->data_.first))
+      else if (cmp_(key, node->data.first))
       {
-        node = node->left_;
+        node = node->left;
       }
       else
       {
-        node = node->right_;
+        node = node->right;
       }
     }
     return end();
@@ -710,28 +710,28 @@ namespace erohin
     {
       return;
     }
-    clear_subtree(subtree->left_);
-    clear_subtree(subtree->right_);
+    clear_subtree(subtree->left);
+    clear_subtree(subtree->right);
     delete subtree;
   }
 
   template< class Key, class T, class Compare >
   detail::Node< Key, T > * RedBlackTree< Key, T, Compare >::find_to_change_erased(detail::Node< Key, T > * subtree)
   {
-    if (subtree->left_)
+    if (subtree->left)
     {
-      subtree = subtree->left_;
-      while (subtree->right_)
+      subtree = subtree->left;
+      while (subtree->right)
       {
-        subtree = subtree->right_;
+        subtree = subtree->right;
       }
     }
-    else if (subtree->right_)
+    else if (subtree->right)
     {
-      subtree = subtree->right_;
-      while (subtree->left_)
+      subtree = subtree->right;
+      while (subtree->left)
       {
-        subtree = subtree->left_;
+        subtree = subtree->left;
       }
     }
     else
@@ -746,28 +746,28 @@ namespace erohin
   template< detail::color_t C >
   bool RedBlackTree< Key, T, Compare >::is_color(detail::Node< Key, T > * node)
   {
-    return (node->color_ == C);
+    return (node->color == C);
   }
 
   template< class Key, class T, class Compare >
   template< detail::color_t C >
   void RedBlackTree< Key, T, Compare >::colorize(detail::Node< Key, T > * node)
   {
-    node->color_ = C;
+    node->color = C;
   }
 
   template< class Key, class T, class Compare >
   bool RedBlackTree< Key, T, Compare >::is_leaf(detail::Node< Key, T > * node)
   {
-    return !(node->left_ && node->right_);
+    return !(node->left && node->right);
   }
 
   template< class Key, class T, class Compare >
   detail::Node< Key, T > * RedBlackTree< Key, T, Compare >::find_grandparent(detail::Node< Key, T > * subtree)
   {
-    if (subtree && subtree->parent_)
+    if (subtree && subtree->parent)
     {
-      return subtree->parent_->parent_;
+      return subtree->parent->parent;
     }
     else
     {
@@ -783,92 +783,92 @@ namespace erohin
     {
       return nullptr;
     }
-    if (node->parent_ == node->left_)
+    if (node->parent == node->left)
     {
-      return node->right_;
+      return node->right;
     }
     else
     {
-      return node->left_;
+      return node->left;
     }
   }
 
   template< class Key, class T, class Compare >
   detail::Node< Key, T > * RedBlackTree< Key, T, Compare >::find_brother(detail::Node< Key, T > * subtree)
   {
-    if (subtree == subtree->parent_->left_)
+    if (subtree == subtree->parent->left)
     {
-      return subtree->parent_->right_;
+      return subtree->parent->right;
     }
     else
     {
-      return subtree->parent_->left_;
+      return subtree->parent->left;
     }
   }
 
   template< class Key, class T, class Compare >
   void RedBlackTree< Key, T, Compare >::rotate_left(detail::Node< Key, T > * subtree)
   {
-    detail::Node< Key, T > * node = subtree->right_;
-    node->parent_ = subtree->parent_;
-    if (!node->parent_)
+    detail::Node< Key, T > * node = subtree->right;
+    node->parent = subtree->parent;
+    if (!node->parent)
     {
       root_ = node;
     }
-    if (subtree->parent_)
+    if (subtree->parent)
     {
-      if (subtree->parent_->left_ == subtree)
+      if (subtree->parent->left == subtree)
       {
-        subtree->parent_->left_ = node;
+        subtree->parent->left = node;
       }
       else
       {
-        subtree->parent_->right_ = node;
+        subtree->parent->right = node;
       }
     }
-    subtree->right_ = node->left_;
-    if (node->left_)
+    subtree->right = node->left;
+    if (node->left)
     {
-      node->left_->parent_ = subtree;
+      node->left->parent = subtree;
     }
-    subtree->parent_ = node;
-    node->left_ = subtree;
+    subtree->parent = node;
+    node->left = subtree;
   }
 
   template< class Key, class T, class Compare >
   void RedBlackTree< Key, T, Compare >::rotate_right(detail::Node< Key, T > * subtree)
   {
-    detail::Node< Key, T > * node = subtree->left_;
-    node->parent_ = subtree->parent_;
-    if (!node->parent_)
+    detail::Node< Key, T > * node = subtree->left;
+    node->parent = subtree->parent;
+    if (!node->parent)
     {
       root_ = node;
     }
-    if (subtree->parent_)
+    if (subtree->parent)
     {
-      if (subtree->parent_->left_ == subtree)
+      if (subtree->parent->left == subtree)
       {
-        subtree->parent_->left_ = node;
+        subtree->parent->left = node;
       }
       else
       {
-        subtree->parent_->right_ = node;
+        subtree->parent->right = node;
       }
     }
-    subtree->left_ = node->right_;
-    if (node->right_)
+    subtree->left = node->right;
+    if (node->right)
     {
-      node->right_->parent_ = subtree;
+      node->right->parent = subtree;
     }
-    subtree->parent_ = node;
-    node->right_ = subtree;
+    subtree->parent = node;
+    node->right = subtree;
   }
 
   template< class Key, class T, class Compare >
   void RedBlackTree< Key, T, Compare >::insert_balance_case1(detail::Node< Key, T > * subtree)
   {
     using namespace detail;
-    if (!subtree->parent_)
+    if (!subtree->parent)
     {
       colorize< BLACK >(subtree);
     }
@@ -882,7 +882,7 @@ namespace erohin
   void RedBlackTree< Key, T, Compare >::insert_balance_case2(detail::Node< Key, T > * subtree)
   {
     using namespace detail;
-    if (is_color< RED >(subtree->parent_))
+    if (is_color< RED >(subtree->parent))
     {
       insert_balance_case3(subtree);
     }
@@ -895,7 +895,7 @@ namespace erohin
     Node< Key, T > * uncle = find_uncle(subtree);
     if (uncle && is_color< RED >(uncle))
     {
-      colorize< BLACK >(subtree->parent_);
+      colorize< BLACK >(subtree->parent);
       colorize< BLACK >(uncle);
       Node< Key, T > * grand = find_grandparent(subtree);
       colorize< RED >(grand);
@@ -912,15 +912,15 @@ namespace erohin
   {
     using namespace detail;
     Node< Key, T > * grand = find_grandparent(subtree);
-    if (subtree == subtree->parent_->right_ && subtree->parent_ == grand->left_)
+    if (subtree == subtree->parent->right && subtree->parent == grand->left)
     {
-      rotate_left(subtree->parent_);
-      subtree = subtree->left_;
+      rotate_left(subtree->parent);
+      subtree = subtree->left;
     }
-    else if (subtree == subtree->parent_->left_ && subtree->parent_ == grand->right_)
+    else if (subtree == subtree->parent->left && subtree->parent == grand->right)
     {
-      rotate_right(subtree->parent_);
-      subtree = subtree->right_;
+      rotate_right(subtree->parent);
+      subtree = subtree->right;
     }
     insert_balance_case5(subtree);
   }
@@ -930,9 +930,9 @@ namespace erohin
   {
     using namespace detail;
     Node< Key, T > * grand = find_grandparent(subtree);
-    colorize< BLACK >(subtree->parent_);
+    colorize< BLACK >(subtree->parent);
     colorize< RED >(grand);
-    if (subtree == subtree->parent_->left_ && subtree->parent_ == grand->left_)
+    if (subtree == subtree->parent->left && subtree->parent == grand->left)
     {
       rotate_right(grand);
     }
@@ -948,12 +948,12 @@ namespace erohin
     using namespace detail;
     if (is_color< BLACK >(subtree) && !is_leaf(subtree))
     {
-      Node< Key, T > * child = (subtree->right_) ? subtree->left_ : subtree->right_;
+      Node< Key, T > * child = (subtree->right) ? subtree->left : subtree->right;
       if (is_color< RED >(child))
       {
         colorize< BLACK >(child);
       }
-      else if (subtree->parent_)
+      else if (subtree->parent)
       {
         erase_balance_case2(child);
       }
@@ -967,15 +967,15 @@ namespace erohin
     Node< Key, T > * brother = find_brother(subtree);
     if (is_color< RED >(brother))
     {
-      colorize< RED >(subtree->parent_);
+      colorize< RED >(subtree->parent);
       colorize< BLACK >(brother);
-      if (subtree == subtree->parent_->left_)
+      if (subtree == subtree->parent->left)
       {
-        rotate_left(subtree->parent_);
+        rotate_left(subtree->parent);
       }
       else
       {
-        rotate_right(subtree->parent_);
+        rotate_right(subtree->parent);
       }
     }
     erase_balance_case3(subtree);
@@ -986,11 +986,11 @@ namespace erohin
   {
     using namespace detail;
     Node< Key, T > * brother = find_brother(subtree);
-    bool is_any_child_black = is_color< BLACK >(brother->left_) && is_color< BLACK >(brother->right_);
-    if (is_color< BLACK >(subtree->parent_) && is_color< BLACK >(brother) && is_any_child_black)
+    bool is_any_child_black = is_color< BLACK >(brother->left) && is_color< BLACK >(brother->right);
+    if (is_color< BLACK >(subtree->parent) && is_color< BLACK >(brother) && is_any_child_black)
     {
       colorize< RED >(brother);
-      erase_balance_case1(subtree->parent_);
+      erase_balance_case1(subtree->parent);
     }
     else
     {
@@ -1003,11 +1003,11 @@ namespace erohin
   {
     using namespace detail;
     Node< Key, T > * brother = find_brother(subtree);
-    bool is_any_child_black = is_color< BLACK >(brother->left_) && is_color< BLACK >(brother->right_);
-    if (is_color< RED >(subtree->parent_) && is_color< BLACK >(brother) && is_any_child_black)
+    bool is_any_child_black = is_color< BLACK >(brother->left) && is_color< BLACK >(brother->right);
+    if (is_color< RED >(subtree->parent) && is_color< BLACK >(brother) && is_any_child_black)
     {
       colorize< RED >(brother);
-      colorize< BLACK >(subtree->parent_);
+      colorize< BLACK >(subtree->parent);
     }
     else
     {
@@ -1022,16 +1022,16 @@ namespace erohin
     Node< Key, T > * brother = find_brother(subtree);
     if (is_color< BLACK >(brother))
     {
-      if (subtree == subtree->parent_->left_ && is_color< BLACK >(brother->right_) && is_color< RED >(brother->left_))
+      if (subtree == subtree->parent->left && is_color< BLACK >(brother->right) && is_color< RED >(brother->left))
       {
         colorize< RED >(brother);
-        colorize< BLACK >(brother->left_);
+        colorize< BLACK >(brother->left);
         rotate_right(brother);
       }
-      else if (subtree == subtree->parent_->right_ && is_color< RED >(brother->right_) && is_color< BLACK >(brother->left_))
+      else if (subtree == subtree->parent->right && is_color< RED >(brother->right) && is_color< BLACK >(brother->left))
       {
         colorize< RED >(brother);
-        colorize< BLACK >(brother->right_);
+        colorize< BLACK >(brother->right);
         rotate_left(brother);
       }
     }
@@ -1043,17 +1043,17 @@ namespace erohin
   {
     using namespace detail;
     Node< Key, T > * brother = find_brother(subtree);
-    brother->color_ = subtree->parent_->color_;
-    colorize< BLACK >(subtree->parent_);
-    if (subtree == subtree->parent_->left_)
+    brother->color = subtree->parent->color;
+    colorize< BLACK >(subtree->parent);
+    if (subtree == subtree->parent->left)
     {
-      colorize< BLACK >(brother->right_);
-      rotate_left(subtree->parent_);
+      colorize< BLACK >(brother->right);
+      rotate_left(subtree->parent);
     }
     else
     {
-      colorize< BLACK >(brother->left_);
-      rotate_right(subtree->parent_);
+      colorize< BLACK >(brother->left);
+      rotate_right(subtree->parent);
     }
   }
 }

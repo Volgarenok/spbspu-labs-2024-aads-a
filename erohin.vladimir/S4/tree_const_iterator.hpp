@@ -77,13 +77,13 @@ namespace erohin
   template< class Key, class T >
   const std::pair< Key, T > & TreeConstIterator< Key, T>::operator*() const
   {
-    return node_->data_;
+    return node_->data;
   }
 
   template< class Key, class T >
   const std::pair< Key, T > * TreeConstIterator< Key, T >::operator->() const
   {
-    return std::addressof(node_->data_);
+    return std::addressof(node_->data);
   }
 
   template< class Key, class T >

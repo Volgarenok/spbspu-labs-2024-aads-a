@@ -78,25 +78,25 @@ namespace erohin
   template< class Key, class T >
   std::pair< Key, T > & TreeIterator< Key, T>::operator*()
   {
-    return node_->data_;
+    return node_->data;
   }
 
   template< class Key, class T >
   const std::pair< Key, T > & TreeIterator< Key, T>::operator*() const
   {
-    return node_->data_;
+    return node_->data;
   }
 
   template< class Key, class T >
   std::pair< Key, T > * TreeIterator< Key, T >::operator->()
   {
-    return std::addressof(node_->data_);
+    return std::addressof(node_->data);
   }
 
   template< class Key, class T >
   const std::pair< Key, T > * TreeIterator< Key, T >::operator->() const
   {
-    return std::addressof(node_->data_);
+    return std::addressof(node_->data);
   }
 
   template< class Key, class T >
