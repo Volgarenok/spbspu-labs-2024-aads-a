@@ -18,25 +18,51 @@ namespace piyavkin
       return n + end_one;
     }
     template< class RandIt, class Cmp >
-    void sort_ins(RandIt begin, RandIt end, Cmp cmp)
+    void sort_ins(RandIt begin, size_t n, Cmp cmp)
     {
-      RandIt start = ++begin;
-      for (; start != end; ++start)
+      for (size_t i = 1; i != n; ++i)
       {
-        RandIt temp = start--;
-        while (start != begin && cmp(*temp, *start))
+        RandIt temp = begin + i;
+        size_t j = i;
+        while (j > 0 && cmp(temp[i], temp[i + 1]))
         {
-          std::swap(temp, start);
-          --start;
+          std::swap(temp[i], temp[i + 1]);
+          --j;
         }
-        ++start;
       }
+    }
+    template< class RandIt, class Cmp >
+    size_t find_subarr(RandIt begin, Cmp cmp, size_t max_size)
+    {
+      size_t count = 0;
+      while (max_size > count && cmp(*begin, *(begin + 1)))
+      {
+        ++begin;
+        ++count;
+      }
+      if (count == 0)
+      {
+        while (max_size > count && !cmp(*begin, *(begin + 1)))
+        {
+          ++begin;
+          ++count;
+        }
+        sort_ins(begin - count, begin, cmp);
+      }
+      return count;
     }
   }
   template< class RandIt, class Cmp >
   void timsort(RandIt it, size_t n, Cmp cmp)
   {
     size_t size_min = detail::get_min_size(n);
+    size_t pass = 0;
+    RandIt start = it;
+    while (pass < n - 1)
+    {
+      pass += detail::find_subarr(start, cmp, n);
+      start += pass;
+    }
   }
 }
 #endif
