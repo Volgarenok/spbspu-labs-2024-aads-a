@@ -76,10 +76,95 @@ namespace marishin
 
     node_t* insert(const Key& key, const Value& val)
     {
-      
+      node_t* node;
+      if (root_)
+      {
+        node = insert_p(key, val, root_);
+        ++size_;
+      }
+      else
+      {
+        root_ = new node_t(key, val);
+        node = root_;
+        ++size_;
+      }
+      return node;
     }
 
+    node_t* insert_p(const Key& key, const Value& val, node_t* currNode)
+    {
+      node_t* node;
+      if (compare()(key, currNode->data.first))
+      {
+        if (currNode->hasLeft())
+        {
+          node = insert_p(key, val, currNode->left);
+        }
+        else
+        {
+          currNode->left = new node_t(key, val, currNode);
+          getBalabce(currNode->left);
+          return currNode->left;
+        }
+      }
+      else
+      {
+        if (currNode->hasRight())
+        {
+          node = insert_p(key, val, currNode->right);
+        }
+        else
+        {
+          currNode->right = new node_t(key, val, currNode);
+          getBalabce(currNode->right);
+          return currNode->right;
+        }
+      }
+      return node;
+    }
 
+    bool empty() const noexcept
+    {
+      return size_ == 0;
+    }
+
+    void del(const Key& key)
+    {
+      if (size_ == 1 && root_->data.first == key)
+      {
+        --size_;
+        root_ = nullptr;
+      }
+      else if (size_ > 1)
+      {
+        node_t* nodeRemove = get(key, root_);
+        if (nodeRemove)
+        {
+          remove(nodeRemove);
+          --size_;
+        }
+        else
+        {
+          throw std::out_of_range("Error\n");
+        }
+      }
+      else
+      {
+        throw std::out_of_range("Error\n");
+      }
+    }
+
+    const_iterator_tree< Key, Value, Compare > cbegin() const noexcept
+    {
+      return const_iterator_tree< Key, Value, Comparee >(getMin(root_));
+    }
+
+    const_iterator_tree< Key, Value, Compare > cend() const noexcept
+    {
+      return const_iterator_tree< Key, Value, Comparee >();
+    }
+
+    Value& operator
   };
 
 }
