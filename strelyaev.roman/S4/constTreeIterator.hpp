@@ -17,6 +17,8 @@ namespace strelyaev
       node_(val.node_)
     {}
 
+    ConstIterator< Key, T >& operator=(const ConstIterator< Key, T>& rhs) = default;
+
     std::pair< Key, T >& operator*()
     {
       return node_->data_;

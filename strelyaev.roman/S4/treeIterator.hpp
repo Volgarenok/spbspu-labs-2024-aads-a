@@ -17,7 +17,7 @@ namespace strelyaev
       node_(val.node_)
     {}
 
-    Iterator< Key, T > operator=(const Iterator< Key, T>& rhs) = default;
+    Iterator< Key, T >& operator=(const Iterator< Key, T>& rhs) = default;
 
     std::pair< Key, T >& operator*()
     {
