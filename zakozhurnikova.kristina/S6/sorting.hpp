@@ -72,12 +72,12 @@ void shell(Iterator begin, size_t size)
 //      int temp = arr[i];
       auto tmp = temp;
       size_t j = i;
-      for (; j >= gap && *(tmp - gap) > *temp; j -= gap)
+      for (; j >= gap && *(tmp - gap) > *number; j -= gap)
       {
         auto next = tmp - gap;
-        *tmp = *next;
+        *tmp = *(tmp - gap);
 //        arr[j] = arr[j - gap];
-        tmp = next;
+        tmp = tmp - gap;
       }
 //      arr[j] = temp;
       *tmp = *number;
