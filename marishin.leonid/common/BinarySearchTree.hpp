@@ -22,6 +22,13 @@ namespace marishin
         {
           insert(begin->first, begin->second);
         }
+      }
+      catch (...)
+      {
+        clear();
+        throw;
+      }
+    }
   };
 
 }
