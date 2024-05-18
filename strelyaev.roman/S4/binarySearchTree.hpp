@@ -142,7 +142,7 @@ namespace strelyaev
             current = current->left_;
           }
         }
-        return iterator_t(current);
+        return end();
       }
 
       c_iterator_t find(const Key& key) const
@@ -163,7 +163,7 @@ namespace strelyaev
             current = current->left_;
           }
         }
-        return c_iterator_t(current);
+        return cend();
       }
 
       size_t count(const Key& key) const
@@ -239,8 +239,8 @@ namespace strelyaev
 
       T& at(const Key& key)
       {
-        c_iterator_t it = find(key);
-        if (it == cend())
+        iterator_t it = find(key);
+        if (it == end())
         {
           throw std::out_of_range("Out of range");
         }
