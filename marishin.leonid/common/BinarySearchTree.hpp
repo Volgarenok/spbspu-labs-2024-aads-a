@@ -164,7 +164,49 @@ namespace marishin
       return const_iterator_tree< Key, Value, Comparee >();
     }
 
-    Value& operator
+    const Value& operator[](const Key& key) const
+    {
+      node_t* traverser = get(key, root_);
+      return traverser->data.second;
+    }
+
+    Value& operator[](const Key& key)
+    {
+      node_t* traverser = get(key, root_);
+      if (traverser)
+      {
+        return traverser->data.second;
+      }
+      else
+      {
+        traverser = insert(key, Value());
+      }
+    }
+
+    Value& at(const Key& key)
+    {
+      node_t* traverser = get(key, root_);
+      if (traverser)
+      {
+        return traverser->data.second;
+      }
+      throw std::out_of_range("No such element");
+    }
+
+    const Value& at(const Key& key) const
+    {
+      node_t* traverser = get(key, root_);
+      if (traverser)
+      {
+        return traverser->data.second;
+      }
+      throw std::out_of_range("No such element");
+    }
+
+    const_iterator< Key, Value > find(const Key& key) const
+    {
+      
+    }
   };
 
 }
