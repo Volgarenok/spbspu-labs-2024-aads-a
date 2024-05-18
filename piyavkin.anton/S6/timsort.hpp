@@ -1,6 +1,7 @@
 #ifndef TIMSORT_HPP
 #define TIMSORT_HPP
 #include <cstddef>
+#include <utility>
 
 namespace piyavkin
 {
@@ -8,16 +9,28 @@ namespace piyavkin
   {
     size_t get_min_size(size_t n)
     {
-      bool is_no_power_of_two = false;
+      size_t end_one = 0;
       while (n > 64)
       {
-        if (n % 2 != 0)
-        {
-          is_no_power_of_two = true;
-        }
-        n /= 2;
+        end_one |= n & 1;
+        n >>= 1;
       }
-      return n + is_no_power_of_two;
+      return n + end_one;
+    }
+    template< class RandIt, class Cmp >
+    void sort_ins(RandIt begin, RandIt end, Cmp cmp)
+    {
+      RandIt start = ++begin;
+      for (; start != end; ++start)
+      {
+        RandIt temp = start--;
+        while (start != begin && cmp(*temp, *start))
+        {
+          std::swap(temp, start);
+          --start;
+        }
+        ++start;
+      }
     }
   }
   template< class RandIt, class Cmp >
