@@ -418,7 +418,7 @@ namespace novokhatskiy
         delete root;
       }
     }
-    
+
     node_t* insert_imp(const std::pair< Key, Value >& value, node_t* curr)
     {
       if (curr == nullptr)
