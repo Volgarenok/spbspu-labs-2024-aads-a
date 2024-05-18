@@ -82,7 +82,7 @@ void shell(Iterator begin, size_t size)
       *tmp = *number;
     ++temp;
     }
-  spacing = spacing - std::distance(begin, spacing) / 2;
+  spacing = begin + std::distance(begin, spacing) / 2;
   }
 }
 
