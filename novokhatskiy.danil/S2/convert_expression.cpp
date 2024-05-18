@@ -34,7 +34,8 @@ novokhatskiy::Queue< novokhatskiy::Postfix > novokhatskiy::convertExpression(Que
       resultQueue.push(novokhatskiy::Postfix(std::move(curr)));
       break;
     case TokenType::OPERATION:
-      while (!stack.empty() && stack.top().getType() != TokenType::BRACKET && getPriority(stack.top().getOp()) >= getPriority(stack.top().getOp()))
+      while (!stack.empty() && stack.top().getType() != TokenType::BRACKET &&
+             getPriority(stack.top().getOp()) >= getPriority(stack.top().getOp()))
       {
         resultQueue.push({ TokenType::OPERATION, stack.top().getOp() });
         stack.pop();
