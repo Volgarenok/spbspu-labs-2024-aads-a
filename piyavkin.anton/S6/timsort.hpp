@@ -2,6 +2,8 @@
 #define TIMSORT_HPP
 #include <cstddef>
 #include <utility>
+#include <../common/stack.hpp>
+#include "merge.hpp"
 
 namespace piyavkin
 {
@@ -34,22 +36,58 @@ namespace piyavkin
     template< class RandIt, class Cmp >
     size_t find_subarr(RandIt begin, Cmp cmp, size_t max_size)
     {
-      size_t count = 0;
+      size_t count = 1;
       while (max_size > count && cmp(*begin, *(begin + 1)))
       {
         ++begin;
         ++count;
       }
-      if (count == 0)
+      if (count == 1)
       {
         while (max_size > count && !cmp(*begin, *(begin + 1)))
         {
           ++begin;
           ++count;
         }
-        sort_ins(begin - count, count + 1, cmp);
+        sort_ins(begin - (count - 1), count, cmp);
       }
       return count;
+    }
+    template< class RandIt, class Cmp >
+    void merge_timsort(Stack< std::pair< RandIt, size_t > > stack, Cmp cmp, List< typename RandIt::value_type >& res)
+    {
+      while (stack.size() > 1)
+      {
+        std::pair< RandIt, size_t > first_pair = stack.top();
+        stack.pop();
+        std::pair< RandIt, size_t > second_pair = stack.top();
+        stack.pop();
+        if (!stack.empty())
+        {
+          std::pair< RandIt, size_t > third_pair = stack.top();
+          stack.pop();
+          if (first_pair.second < third_pair.second)
+          {
+            merge(second_pair.first, first_pair.first, first_pair.first + first_pair.second, cmp, res);
+            std::move(res.begin(), res.end(), second_pair.first);
+            second_pair.second += first_pair.second;
+            stack.push(third_pair);
+            stack.push(second_pair);
+          }
+          else
+          {
+            merge(third_pair.first, second_pair.first, second_pair.first + second_pair.second, cmp, res);
+            std::move(res.begin(), res.end(), third_pair.first);
+            third_pair.second += second_pair.second;
+            stack.push(second_pair);
+            stack.push(first_pair);
+          }
+        }
+        else
+        {
+          merge(second_pair.first, first_pair.first, first_pair.first + first_pair.second, cmp, res);
+        }
+      }
     }
   }
   template< class RandIt, class Cmp >
@@ -58,13 +96,25 @@ namespace piyavkin
     size_t size_min = detail::get_min_size(n);
     size_t pass = 0;
     RandIt start = it;
-    while (pass < n - 1)
+    size_t size_subarr = 0;
+    Stack< std::pair< RandIt, size_t > > subarrs;
+    while (pass + 1 < n)
     {
-      pass += detail::find_subarr(start, cmp, n);
-      start += pass;
-      detail::sort_ins(start + 1, size_min - pass - 1, cmp);
-      pass += size_min - pass - 1;
+      size_subarr = detail::find_subarr(start, cmp, n);
+      subarrs.push(std::pair< RandIt, size_t >(start, size_subarr));
+      start += size_subarr;
+      pass += size_subarr;
+      if (size_subarr < size_min)
+      {
+        detail::sort_ins(start, size_min - size_subarr, cmp);
+        subarrs.push(std::pair< RandIt, size_t >(start, size_min - size_subarr));
+        start += size_min - size_subarr - 1;
+        pass += size_min - size_subarr - 1;
+      }
     }
+    List< typename RandIt::value_type > res;
+    detail::merge_timsort(subarrs, cmp, res);
+    std::move(res.begin(), res.end(), it);
   }
 }
 #endif
