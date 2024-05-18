@@ -283,6 +283,9 @@ namespace nikitov
 
     RNLIterator< Key, T, Compare >& operator=(const RNLIterator< Key, T, Compare >&) = default;
 
+    const std::pair< Key, T >& operator*() const;
+    const std::pair< Key, T >* operator->() const;
+
     bool operator==(const RNLIterator< Key, T, Compare >& other) const;
     bool operator!=(const RNLIterator< Key, T, Compare >& other) const;
 
@@ -296,6 +299,18 @@ namespace nikitov
   RNLIterator< Key, T, Compare >::RNLIterator(detail::TreeNode< Key, T, Compare >* root, detail::TreeNode< Key, T, Compare >* node, bool isFirst):
     iterator_(root, node, isFirst)
   {}
+
+  template< class Key, class T, class Compare >
+  const std::pair< Key, T >& RNLIterator< Key, T, Compare >::operator*() const
+  {
+    return *iterator_;
+  }
+
+  template< class Key, class T, class Compare >
+  const std::pair< Key, T >* RNLIterator< Key, T, Compare >::operator->() const
+  {
+    return iterator_.operator->();
+  }
 
   template< class Key, class T, class Compare >
   bool RNLIterator< Key, T, Compare >::operator==(const RNLIterator< Key, T, Compare >& other) const
