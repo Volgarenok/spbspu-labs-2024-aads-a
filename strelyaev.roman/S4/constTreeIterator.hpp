@@ -65,7 +65,7 @@ namespace strelyaev
 
     private:
       detail::Node< Key, T >* node_;
-      
+
       ConstIterator(detail::Node< Key, T >* node):
       node_(node)
     {}
