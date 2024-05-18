@@ -33,13 +33,14 @@ namespace novokhatskiy
         parent(nullptr)
       {}
 
-      NodeTree(const val_type& val, NodeTree* node):
-        value(val),
-        parent(node),
-        left(nullptr),
-        right(nullptr),
-        height(0)
-      {}
+      NodeTree(const val_type& val, NodeTree* node)
+      {
+        value = val;
+        height = 0;
+        parent = node;
+        left = nullptr;
+        right = nullptr;
+      }
 
       NodeTree(const NodeTree& other):
         value(other.value),
