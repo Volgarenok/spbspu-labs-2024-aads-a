@@ -13,12 +13,12 @@ int main(int argc, char* argv[])
   }
   size_t size = std::stoull(argv[3]);
   using namespace piyavkin;
-  if (argv[2] == "ints")
+  if (std::string(argv[2]) == "ints")
   {
     std::forward_list< int > list;
     List< int > bi_list;
     std::deque< int > deque;
-    create_containers(deque, bi_list, list, n);
-    print_sort_containers(std::cout, deque, bi_list, list);
+    create_containers(deque, bi_list, list, size);
+    print_sort_containers(std::cout, deque, bi_list, list, std::less< int >());
   }
 }
