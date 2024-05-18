@@ -73,6 +73,19 @@ namespace nikitov
     std::pair< treeIterator, treeIterator > equalRange(const Key& key);
     std::pair< constTreeIterator, constTreeIterator > equalRange(const Key& key) const;
 
+    template< class F >
+    F traverseLNR(F f);
+    template< class F >
+    F traverseLNR(F f) const;
+    template< class F >
+    F traverseRNL(F f);
+    template< class F >
+    F traverseRNL(F f) const;
+    template< class F >
+    F traverseBreadth(F f);
+    template< class F >
+    F traverseBreadth(F f) const;
+
   private:
     detail::TreeNode< Key, T, Compare >* root_;
     size_t size_;
@@ -507,6 +520,72 @@ namespace nikitov
     Tree< Key, T, Compare >::equalRange(const Key& key) const
   {
     return { lowerBound(key), upperBound(key) };
+  }
+
+  template< class Key, class T, class Compare >
+  template< class F >
+  F Tree< Key, T, Compare >::traverseLNR(F f)
+  {
+    for (auto i = LNRCbegin(); i != LNRCend(); ++i)
+    {
+      f(*i);
+    }
+    return f;
+  }
+
+  template< class Key, class T, class Compare >
+  template< class F >
+  F Tree< Key, T, Compare >::traverseLNR(F f) const
+  {
+    for (auto i = LNRCbegin(); i != LNRCend(); ++i)
+    {
+      f(*i);
+    }
+    return f;
+  }
+
+  template< class Key, class T, class Compare >
+  template< class F >
+  F Tree< Key, T, Compare >::traverseRNL(F f)
+  {
+    for (auto i = RNLCbegin(); i != RNLCend(); ++i)
+    {
+      f(*i);
+    }
+    return f;
+  }
+
+  template< class Key, class T, class Compare >
+  template< class F >
+  F Tree< Key, T, Compare >::traverseRNL(F f) const
+  {
+    for (auto i = RNLCbegin(); i != RNLCend(); ++i)
+    {
+      f(*i);
+    }
+    return f;
+  }
+
+  template< class Key, class T, class Compare >
+  template< class F >
+  F Tree< Key, T, Compare >::traverseBreadth(F f)
+  {
+    for (auto i = BreadthCbegin(); i != BreadthCend(); ++i)
+    {
+      f(*i);
+    }
+    return f;
+  }
+
+  template< class Key, class T, class Compare >
+  template< class F >
+  F Tree< Key, T, Compare >::traverseBreadth(F f) const
+  {
+    for (auto i = BreadthCbegin(); i != BreadthCend(); ++i)
+    {
+      f(*i);
+    }
+    return f;
   }
 
   template< class Key, class T, class Compare >
