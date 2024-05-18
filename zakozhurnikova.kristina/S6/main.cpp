@@ -23,6 +23,18 @@ int main(int argc, char* argv[])
   std::string sort = argv[1];
   std::string type = argv[2];
   size_t size = std::atoi(argv[3]);
+  if (type == "ints")
+  {
+    std::list< std::list< int > > listOfLists;
+  }
+  else if (type == "floats")
+  {
+    std::list< std::list< float > > listOfLists;
+  }
+  else
+  {
+    throw std::logic_error("No right type");
+  }
   if (size == 0)
   {
     std::cerr << "You stupid";

@@ -55,7 +55,7 @@ void sortingSheets(std::string sort, std::string kind, size_t size)
   auto beginDeqShaker = dequeShaker.begin();
   auto beginDeqShell = dequeShell.begin();
 
-  if (sort == "asceding")
+  if (sort == "ascending")
   {
     shaker(++beginBiR, size, std::less< Type >());
     biListStandart.sort(std::less< Type >());
@@ -64,7 +64,7 @@ void sortingSheets(std::string sort, std::string kind, size_t size)
     shell(beginDeqShell, size, std::less< Type >());
     forwardList.sort(std::less< Type >());
   }
-  else if (sort == "desceding")
+  else if (sort == "descending")
   {
     shaker(++beginBiR, size, std::greater< Type >());
     biListStandart.sort(std::greater< Type >());
