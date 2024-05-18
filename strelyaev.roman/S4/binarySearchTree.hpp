@@ -145,6 +145,27 @@ namespace strelyaev
         return iterator_t(current);
       }
 
+      c_iterator_t find (const Key& key) const
+      {
+        node_t* current = root_;
+        while (current)
+        {
+          if (current->data_.first == key)
+          {
+            return c_iterator_t(current);
+          }
+          else if (cmp_(current->data_.first, key))
+          {
+            current = current->right_;
+          }
+          else
+          {
+            current = current->left_;
+          }
+        }
+        return c_iterator_t(current);
+      }
+
       size_t count(const Key& key) const
       {
         node_t* current = root_;
