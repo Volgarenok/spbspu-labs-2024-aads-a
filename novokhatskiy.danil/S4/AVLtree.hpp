@@ -27,6 +27,26 @@ namespace novokhatskiy
       cmp_()
     {}
 
+    Tree(const Tree& other) :
+      root_(nullptr),
+      size_(0),
+      cmp_(other.cmp_)
+    {
+      try
+      {
+        constIter begin = other.cbegin();
+        for (; begin != other.cend(); begin++)
+        {
+          insert2(*begin);
+        }
+      }
+      catch (const std::exception&)
+      {
+        clear();
+        throw;
+      }
+    }
+
     Tree(Tree&& other):
       root_(other.root_),
       size_(other.size_),
@@ -38,21 +58,28 @@ namespace novokhatskiy
 
     Tree& operator=(const Tree& other)
     {
-      if (this != std::addressof(other))
+      Tree map(other);
+      clear();
+      this->swap(map);
+      return *this;
+      /*if (this != std::addressof(other))
       {
         Tree<Key, Value> tmp(other);
         swap(tmp);
       }
-      return *this;
+      return *this;*/
     }
 
     Tree& operator=(Tree&& other)
     {
-      if (this != std::addressof(other))
+      clear();
+      this->swap(other);
+      return *this;
+      /*if (this != std::addressof(other))
       {
         swap(other);
       }
-      return *this;
+      return *this;*/
     }
 
     node_t* find(node_t* node, const Key& key)

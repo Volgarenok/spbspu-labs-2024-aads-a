@@ -1,21 +1,78 @@
 #include "commands.hpp"
 #include <stdexcept>
 
-void novokhatskiy::print(mainMap& dict, std::istream& in, std::ostream& out)
+void novokhatskiy::unionCmd(mainMap& dict, std::istream& in, std::ostream&)
 {
-  std::string nameOfDict = {};
-  in >> nameOfDict;
-  novokhatskiy::Tree< size_t, std::string > tmp = dict.at(nameOfDict);
-  if (tmp.empty())
+  std::string resName = {};
+  std::string first = {};
+  std::string second = {};
+  in >> resName >> first >> second;
+  map resDict;
+  map dict1 = dict.at(first);
+  map dict2 = dict.at(second);
+  for (const auto& key1 : dict1)
   {
-    throw std::logic_error("<EMPTY>");
+    resDict.insert2(key1);
   }
-  out << nameOfDict;
-  for (auto i = tmp.cbegin(); i != tmp.cend(); i++)
+  for (const auto& key2 : dict2)
   {
-    out << ' ' << (*i).first << ' ' << (*i).second;
+    if (resDict.find(key2.first) == resDict.cend())
+    {
+      resDict.insert2(key2);
+    }
   }
-  out << '\n';
+  dict[resName] = resDict;
+  /*auto begin1 = dict1.cbegin();
+  auto end1 = dict1.cend();
+  while (begin1 != end1)
+  {
+    resDict.insert({ begin1->first, begin1->second });
+    begin1++;
+  }
+  auto begin2 = dict2.cbegin();
+  auto end2 = dict2.cend();
+  while (begin2 != end2)
+  {
+    resDict.insert({ begin2->first, begin2->second });
+    begin2++;
+  }
+  
+  if (dict.find(resName) != dict.end())
+  {
+    dict.erase(resName);
+  }
+  dict.insert2({ resName, resDict });*/
+}
+
+void novokhatskiy::intersectCmd(mainMap& dict, std::istream& in, std::ostream&)
+{
+  std::string resName = {};
+  std::string first = {};
+  std::string second = {};
+  in >> resName >> first >> second;
+  map resDict;
+  map dict1 = dict.at(first);
+  map dict2 = dict.at(second);
+  auto begin = dict1.cbegin();
+  auto end = dict1.cend();
+  while (begin != end)
+  {
+    if (dict2.find(begin->first) != dict2.cend())
+    {
+      resDict.insert(*begin);
+    }
+    begin++;
+  }
+  if (dict.find(resName) != dict.cend())
+  {
+    dict.at(resName).clear();
+    dict.at(resName) = std::move(resDict);
+  }
+  else
+  {
+    dict[resName] = resDict;
+    //dict.insert(std::make_pair< std::string, map >(resName, resDict) );
+  }
 }
 
 void novokhatskiy::complement(mainMap& dict, std::istream& in, std::ostream&)
@@ -25,8 +82,8 @@ void novokhatskiy::complement(mainMap& dict, std::istream& in, std::ostream&)
   std::string second = {};
   in >> resName >> first >> second;
   map resDict;
-  map& dict1 = dict.at(first);
-  map& dict2 = dict.at(second);
+  map dict1 = dict.at(first);
+  map dict2 = dict.at(second);
 
   auto begin = dict1.cbegin();
   auto end = dict1.cend();
@@ -55,66 +112,24 @@ void novokhatskiy::complement(mainMap& dict, std::istream& in, std::ostream&)
   }
   else
   {
-    dict.insert({ resName, resDict });
+    dict[resName] = resDict;
+    //dict.insert({ resName, resDict });
   }
 }
 
-void novokhatskiy::intersectCmd(mainMap& dict, std::istream& in, std::ostream&)
+void novokhatskiy::print(mainMap& dict, std::istream& in, std::ostream& out)
 {
-  std::string resName = {};
-  std::string first = {};
-  std::string second = {};
-  in >> resName >> first >> second;
-  map resDict;
-  map& dict1 = dict.at(first);
-  map& dict2 = dict.at(second);
-  auto begin = dict1.cbegin();
-  auto end = dict1.cend();
-  while (begin != end)
+  std::string nameOfDict = {};
+  in >> nameOfDict;
+  map tmp = dict.at(nameOfDict);
+  if (tmp.empty())
   {
-    if (dict2.find(begin->first) != dict2.cend())
-    {
-      resDict.insert(*begin);
-    }
-    begin++;
+    throw std::logic_error("<EMPTY>");
   }
-  if (dict.find(resName) != dict.cend())
+  out << nameOfDict;
+  for (auto i = tmp.cbegin(); i != tmp.cend(); i++)
   {
-    dict.at(resName).clear();
-    dict.at(resName) = std::move(resDict);
+    out << ' ' << (*i).first << ' ' << (*i).second;
   }
-  else
-  {
-    dict.insert({ resName, resDict });
-  }
-}
-
-void novokhatskiy::unionCmd(mainMap& dict, std::istream& in, std::ostream&)
-{
-  std::string resName = {};
-  std::string first = {};
-  std::string second = {};
-  in >> resName >> first >> second;
-  map resDict;
-  map& dict1 = dict.at(first);
-  map& dict2 = dict.at(second);
-  auto begin1 = dict1.cbegin();
-  auto end1 = dict1.cend();
-  while (begin1 != end1)
-  {
-    resDict.insert({ begin1->first, begin1->second });
-    begin1++;
-  }
-  auto begin2 = dict2.cbegin();
-  auto end2 = dict2.cend();
-  while (begin2 != end2)
-  {
-    resDict.insert({ begin2->first, begin2->second });
-    begin2++;
-  }
-  if (dict.find(resName) != dict.end())
-  {
-    dict.erase(resName);
-  }
-  dict.insert({ resName, resDict });
+  out << '\n';
 }
