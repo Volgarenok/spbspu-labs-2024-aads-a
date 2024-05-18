@@ -26,23 +26,13 @@ namespace zakozhurnikova
     {
       std::generate_n(array, size, RandomNumberFloat);
     }
-    List< Type > biListRealization;
-    std::list< Type > biListStandart;
-    std::deque< Type > dequeSort;
-    std::deque< Type > dequeShaker;
-    std::deque< Type > dequeShell;
-    std::forward_list< Type > forwardList;
+    List< Type > biListRealization(array, array + size);
+    std::list< Type > biListStandart(array, array + size);
+    std::deque< Type > dequeSort(array, array + size);
+    std::deque< Type > dequeShaker(array, array + size);
+    std::deque< Type > dequeShell(array, array + size);
+    std::forward_list< Type > forwardList(array, array + size);
 
-    for (size_t i = 0; i < size; ++i)
-    {
-      Type number = array[i];
-      biListRealization.push_back(number);
-      biListStandart.push_front(number);
-      dequeSort.push_front(number);
-      dequeShaker.push_front(number);
-      dequeShell.push_front(number);
-      forwardList.push_front(number);
-    }
     print(std::cout, forwardList);
 
     auto beginBiR = biListRealization.begin();

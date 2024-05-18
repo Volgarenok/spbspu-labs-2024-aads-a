@@ -25,7 +25,7 @@ int main(int argc, char* argv[])
   size_t size = std::atoi(argv[3]);
   if (size == 0)
   {
-    std::cerr << "You stupid";
+    std::cerr << "Why 0? The size must be greater than zero";
     return 1;
   }
   try
