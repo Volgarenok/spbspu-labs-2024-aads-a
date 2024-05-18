@@ -145,7 +145,7 @@ namespace strelyaev
         return iterator_t(current);
       }
 
-      c_iterator_t find (const Key& key) const
+      c_iterator_t find(const Key& key) const
       {
         node_t* current = root_;
         while (current)
@@ -239,8 +239,8 @@ namespace strelyaev
 
       T& at(const Key& key)
       {
-        auto it = find(key);
-        if (it == end())
+        c_iterator_t it = find(key);
+        if (it == cend())
         {
           throw std::out_of_range("Out of range");
         }
@@ -249,8 +249,8 @@ namespace strelyaev
 
       T& at(const Key& key) const
       {
-        auto it = find(key);
-        if (it == end())
+        c_iterator_t it = find(key);
+        if (it == cend())
         {
           throw std::out_of_range("Out of range");
         }
