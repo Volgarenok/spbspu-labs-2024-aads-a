@@ -5,9 +5,9 @@
 #include <deque>
 #include <forward_list>
 #include <iostream>
-#include <list.hpp>
 #include <list>
 #include <string>
+#include <list.hpp>
 #include "generate.hpp"
 #include "print.hpp"
 #include "sorting.hpp"
