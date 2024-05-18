@@ -13,10 +13,9 @@ int main(int argc, char* argv[])
   {
     std::ifstream input(argv[2]);
     int key = {};
-    while (input >> key)
+    std::string value = {};
+    while (input >> key >> value)
     {
-      std::string value = {};
-      input >> value;
       dictionary.insert({ key, value });
     }
     if (!input.eof())
@@ -46,6 +45,10 @@ int main(int argc, char* argv[])
   {
     std::cerr << "Error: Wrong input parameters" << '\n';
     return 1;
+  }
+  catch (const std::logic_error&e)
+  {
+    std::cout << e.what() << '\n';
   }
   catch (const std::exception& e)
   {
