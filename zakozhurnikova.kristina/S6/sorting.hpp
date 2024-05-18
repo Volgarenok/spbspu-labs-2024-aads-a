@@ -68,18 +68,19 @@ void shell(Iterator begin, size_t size)
     auto temp = spacing;
     for (size_t i = gap; i < size; ++i)
     {
+      auto number = temp;
 //      int temp = arr[i];
       auto tmp = temp;
       size_t j = i;
       for (; j >= gap && *(tmp - gap) > *temp; j -= gap)
       {
         auto next = tmp - gap;
-        *tmp = *(next);
+        *tmp = *next;
 //        arr[j] = arr[j - gap];
         tmp = next;
       }
 //      arr[j] = temp;
-      *tmp = *temp;
+      *tmp = *number;
     ++temp;
     }
   spacing = spacing - std::distance(begin, spacing) / 2;
