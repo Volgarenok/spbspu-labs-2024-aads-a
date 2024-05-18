@@ -105,7 +105,6 @@ namespace strelyaev
             current = current->right_;
           }
         }
-        iterator_t result(nullptr);
         if (cmp_(key, parent->data_.first))
         {
           parent->left_ = new node_t(nullptr, parent, nullptr, key, value);
@@ -168,23 +167,11 @@ namespace strelyaev
 
       size_t count(const Key& key) const
       {
-        node_t* current = root_;
-        while (current)
+        if (find(key) == cend())
         {
-          if (current->data_.first == key)
-          {
-            return 1;
-          }
-          else if (cmp_(key, current->data_.first))
-          {
-            current = current->left_;
-          }
-          else
-          {
-            current = current->right_;
-          }
+          return 0;
         }
-        return 0;
+        return 1;
       }
 
       std::pair< iterator_t, iterator_t > equal_range(const Key& key)
