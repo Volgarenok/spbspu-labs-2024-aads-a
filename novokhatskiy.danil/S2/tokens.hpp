@@ -44,10 +44,10 @@ namespace novokhatskiy
     Operation& getOp() noexcept;
     Bracket getBracket() const noexcept;
     Bracket& getBracket() noexcept;
+
   private:
     TokenType type;
-    union
-    {
+    union {
       Operand operand;
       Operation operation;
       Bracket bracket;
@@ -63,10 +63,10 @@ namespace novokhatskiy
     TokenType getPostix() const noexcept;
     Operand getOperand() const noexcept;
     Operation getOperation() const noexcept;
+
   private:
     TokenType type;
-    union
-    {
+    union {
       Operand operand;
       Operation operation;
     };

@@ -2,6 +2,7 @@
 #define QUEUE_HPP
 
 #include <forward_list.hpp>
+#include <stdexcept>
 #include "tokens.hpp"
 
 namespace novokhatskiy
@@ -34,6 +35,7 @@ namespace novokhatskiy
       }
       return data_.front();
     }
+
   private:
     ForwardList< T > data_;
   };

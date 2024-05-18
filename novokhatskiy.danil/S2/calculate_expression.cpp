@@ -57,7 +57,7 @@ long long novokhatskiy::doMod(long long op1, long long op2)
   long long res = op1 % op2;
   if (res < 0)
   {
-     res+= op2;
+    res += op2;
   }
   return res;
 }
@@ -94,7 +94,7 @@ long long novokhatskiy::calculatePostExp(novokhatskiy::Queue< Postfix >&& inQueu
         stack.top() = doDivision(stack.top(), secondOperand);
         break;
       case Operation::MOD:
-        stack.top() = doMod(stack.top(),secondOperand);
+        stack.top() = doMod(stack.top(), secondOperand);
         break;
       }
       break;

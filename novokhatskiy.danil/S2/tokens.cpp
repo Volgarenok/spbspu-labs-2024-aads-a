@@ -16,7 +16,6 @@ novokhatskiy::Postfix::Postfix(InfixType&& inf):
     throw std::invalid_argument("Constuctor doesn't work");
     break;
   }
-  //type = inf.type;
 }
 
 novokhatskiy::Postfix::Postfix(TokenType inType, Operation inOperation):

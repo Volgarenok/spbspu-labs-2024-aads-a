@@ -1,5 +1,5 @@
-#include <stdexcept>
 #include "convert_expression.hpp"
+#include <stdexcept>
 #include "stack.hpp"
 
 unsigned novokhatskiy::getPriority(Operation operation)
@@ -20,9 +20,9 @@ unsigned novokhatskiy::getPriority(Operation operation)
   return 0;
 }
 
-Queue< novokhatskiy::Postfix > novokhatskiy::convertExpression(Queue< InfixType >&& infixQueue)
+novokhatskiy::Queue< novokhatskiy::Postfix > novokhatskiy::convertExpression(Queue< InfixType >&& infixQueue)
 {
-  novokhatskiy::Queue< Postfix > resultQueue;
+  novokhatskiy::Queue< novokhatskiy::Postfix > resultQueue;
   novokhatskiy::Stack< novokhatskiy::InfixType > stack;
   while (!infixQueue.empty())
   {
@@ -34,8 +34,7 @@ Queue< novokhatskiy::Postfix > novokhatskiy::convertExpression(Queue< InfixType 
       resultQueue.push(novokhatskiy::Postfix(std::move(curr)));
       break;
     case TokenType::OPERATION:
-      while (!stack.empty() && stack.top().getType() != TokenType::BRACKET &&
-             getPriority(stack.top().getOp()) >= getPriority(stack.top().getOp()))
+      while (!stack.empty() && stack.top().getType() != TokenType::BRACKET && getPriority(stack.top().getOp()) >= getPriority(stack.top().getOp()))
       {
         resultQueue.push({ TokenType::OPERATION, stack.top().getOp() });
         stack.pop();

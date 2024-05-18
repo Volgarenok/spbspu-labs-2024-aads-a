@@ -1,8 +1,8 @@
 #ifndef STACK_HPP
 #define STACK_HPP
 
-#include <stdexcept>
 #include <forward_list.hpp>
+#include <stdexcept>
 
 namespace novokhatskiy
 {
@@ -10,7 +10,6 @@ namespace novokhatskiy
   class Stack
   {
   public:
-
     T& top()
     {
       if (empty())
@@ -35,6 +34,7 @@ namespace novokhatskiy
     {
       data_.pop_front();
     }
+
   private:
     ForwardList< T > data_;
   };
