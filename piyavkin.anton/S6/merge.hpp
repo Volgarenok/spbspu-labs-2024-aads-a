@@ -1,23 +1,25 @@
 #ifndef MERGE_HPP
 #define MERGE_HPP
-#include <algorithm>
 #include <list.hpp>
 
 namespace piyavkin
 {
-  template< class BiIter, class Cmp >
-  void merge(BiIter first, BiIter second, BiIter end, Cmp cmp, List< typename BiIter::val_t >& res)
+  namespace detail
   {
-    BiIter border = second;
-    while (first != border || second != end)
+    template< class BiIter, class Cmp >
+    void merge(BiIter first, BiIter second, BiIter end, Cmp cmp, List< typename BiIter::value_type >& res)
     {
-      if (second == end || (first != border && cmp(*first, *second)))
+      BiIter border = second;
+      while (first != border || second != end)
       {
-        res.push_back(*first++);
-      }
-      else
-      {
-        res.push_back(*second++);
+        if (second == end || (first != border && cmp(*first, *second)))
+        {
+          res.push_back(*first++);
+        }
+        else
+        {
+          res.push_back(*second++);
+        }
       }
     }
   }
@@ -25,7 +27,7 @@ namespace piyavkin
   void sort_merge(BiIter begin, BiIter end, Cmp cmp)
   {
     size_t size = std::distance(begin, end);
-    List< typename BiIter::val_t > res;
+    List< typename BiIter::value_type > res;
     for (size_t i = 1; i < size; i *= 2)
     {
       BiIter second = begin;
@@ -34,7 +36,7 @@ namespace piyavkin
         BiIter first = second;
         BiIter border = std::next(first, i);
         second = (j + 2 * i < size) ? std::next(second, 2 * i) : end;
-        merge(first, border, second, cmp, res);
+        detail::merge(first, border, second, cmp, res);
       }
       std::move(res.begin(), res.end(), begin);
       res.clear();

@@ -1,20 +1,16 @@
 #include <iostream>
 #include "merge.hpp"
+#include "timsort.hpp"
 
-int main(int, char**)
+int main(int argc, char**)
 {
+  if (argc != 4)
+  {
+    std::cerr << "File entered incorrectly\n";
+    return 1;
+  }
   using namespace piyavkin;
   List< int > list({1,4,7,2,5,6});
-  auto it = ++list.begin();
-  ++it;
-  ++it;
-  List< int > list2;
-  merge(list.begin(), it, list.end(), std::less< int >(), list2);
-  for (auto x: list2)
-  {
-    std::cout << x << ' ';
-  }
-  std::cout << '\n';
   sort_merge(list.begin(), list.end(), std::less< int >());
   for (auto x: list)
   {
