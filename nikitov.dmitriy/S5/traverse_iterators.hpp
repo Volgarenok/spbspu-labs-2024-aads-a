@@ -373,7 +373,9 @@ namespace nikitov
     BreadthIterator< Key, T, Compare >& operator=(const BreadthIterator< Key, T, Compare >&) = default;
     
     BreadthIterator< Key, T, Compare >& operator++();
+    BreadthIterator< Key, T, Compare > operator++(int);
     BreadthIterator< Key, T, Compare >& operator--();
+    BreadthIterator< Key, T, Compare > operator--(int);
 
     bool operator==(const BreadthIterator< Key, T, Compare >& other) const;
     bool operator!=(const BreadthIterator< Key, T, Compare >& other) const;
@@ -452,6 +454,14 @@ namespace nikitov
   }
 
   template< class Key, class T, class Compare >
+  BreadthIterator< Key, T, Compare > BreadthIterator< Key, T, Compare >::operator++(int)
+  {
+    BreadthIterator< Key, T, Compare > temp(*this);
+    ++*this;
+    return temp;
+  }
+
+  template< class Key, class T, class Compare >
   BreadthIterator< Key, T, Compare >& BreadthIterator< Key, T, Compare >::operator--()
   {
     detail::TreeNode< Key, T, Compare >* node = queue_.top();
@@ -469,6 +479,14 @@ namespace nikitov
       }
     }
     return *this;
+  }
+
+  template< class Key, class T, class Compare >
+  BreadthIterator< Key, T, Compare > BreadthIterator< Key, T, Compare >::operator--(int)
+  {
+    BreadthIterator< Key, T, Compare > temp(*this);
+    --*this;
+    return temp;
   }
 
   template< class Key, class T, class Compare >
