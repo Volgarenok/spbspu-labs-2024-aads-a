@@ -401,7 +401,7 @@ namespace novokhatskiy
 
     ~Tree()
     {
-      clear(root_);
+      clear();
     }
 
   private:

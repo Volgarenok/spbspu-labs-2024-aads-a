@@ -31,7 +31,8 @@ void inputDict(mainMap& dict, std::istream& in)
       in >> val;
       tmp.insert({ key, val });
     }
-    dict.insert({ name, tmp });
+    dict[name] = tmp;
+    //dict.insert({ name, tmp });
   }
   in.clear();
 }

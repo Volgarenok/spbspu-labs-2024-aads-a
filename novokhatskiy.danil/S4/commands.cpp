@@ -5,7 +5,7 @@ void novokhatskiy::print(mainMap& dict, std::istream& in, std::ostream& out)
 {
   std::string nameOfDict = {};
   in >> nameOfDict;
-  std::map< size_t, std::string > tmp = dict.at(nameOfDict);
+  novokhatskiy::Tree< size_t, std::string > tmp = dict.at(nameOfDict);
   if (tmp.empty())
   {
     throw std::logic_error("<EMPTY>");
@@ -112,7 +112,6 @@ void novokhatskiy::unionCmd(mainMap& dict, std::istream& in, std::ostream&)
     resDict.insert({ begin2->first, begin2->second });
     begin2++;
   }
-
   if (dict.find(resName) != dict.end())
   {
     dict.erase(resName);
