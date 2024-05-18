@@ -11,10 +11,14 @@ namespace nikitov
   template< class Key, class T, class Compare >
   class Tree;
 
+  template< class Key, class T, class Compare >
+  class RNLIterator;
+
   template< class Key, class T, class Compare = std::less< Key > >
   class LNRIterator: public std::iterator< std::bidirectional_iterator_tag, T >
   {
     friend class Tree< Key, T, Compare >;
+    friend class RNLIterator< Key, T, Compare >;
   public:
     LNRIterator(const LNRIterator< Key, T, Compare >&) = default;
     ~LNRIterator() = default;
@@ -71,7 +75,6 @@ namespace nikitov
   template< class Key, class T, class Compare >
   LNRIterator< Key, T, Compare >& LNRIterator< Key, T, Compare >::operator++()
   {
-    assert(data_.size() != 1);
     detail::TreeNode< Key, T, Compare >* node = data_.top();
     if (node->size_ == 1 || !isFirst_)
     {
