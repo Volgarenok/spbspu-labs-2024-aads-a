@@ -46,7 +46,8 @@ namespace nikitov
   };
 
   template< class Key, class T, class Compare >
-  LNRIterator< Key, T, Compare >::LNRIterator(detail::TreeNode< Key, T, Compare >* root, detail::TreeNode< Key, T, Compare >* node, bool isFirst):
+  LNRIterator< Key, T, Compare >::LNRIterator(detail::TreeNode< Key, T, Compare >* root,
+    detail::TreeNode< Key, T, Compare >* node, bool isFirst):
     data_(),
     isFirst_(isFirst)
   {
@@ -306,7 +307,8 @@ namespace nikitov
   };
 
   template< class Key, class T, class Compare >
-  RNLIterator< Key, T, Compare >::RNLIterator(detail::TreeNode< Key, T, Compare >* root, detail::TreeNode< Key, T, Compare >* node, bool isFirst):
+  RNLIterator< Key, T, Compare >::RNLIterator(detail::TreeNode< Key, T, Compare >* root,
+    detail::TreeNode< Key, T, Compare >* node, bool isFirst):
     iterator_(root, node, isFirst)
   {}
 
@@ -373,7 +375,7 @@ namespace nikitov
     ~BreadthIterator() = default;
 
     BreadthIterator< Key, T, Compare >& operator=(const BreadthIterator< Key, T, Compare >&) = default;
-    
+
     BreadthIterator< Key, T, Compare >& operator++();
     BreadthIterator< Key, T, Compare > operator++(int);
     BreadthIterator< Key, T, Compare >& operator--();
@@ -394,7 +396,8 @@ namespace nikitov
   };
 
   template< class Key, class T, class Compare >
-  BreadthIterator< Key, T, Compare >::BreadthIterator(detail::TreeNode< Key, T, Compare >* root, detail::TreeNode< Key, T, Compare >* node, bool isFirst):
+  BreadthIterator< Key, T, Compare >::BreadthIterator(detail::TreeNode< Key, T, Compare >* root,
+    detail::TreeNode< Key, T, Compare >* node, bool isFirst):
     stack_(),
     queue_(),
     isFirst_(isFirst)
