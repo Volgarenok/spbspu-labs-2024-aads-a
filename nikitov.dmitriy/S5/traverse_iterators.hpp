@@ -177,7 +177,6 @@ namespace nikitov
       else
       {
         isFirst_ = true;
-
         data_.pop();
         detail::TreeNode< Key, T, Compare >* parent = data_.top();
         while (parent->left_ == node)
@@ -278,9 +277,22 @@ namespace nikitov
   class RNLIterator: public std::iterator< std::bidirectional_iterator_tag, T >
   {
     friend class Tree< Key, T, Compare >;
+  public:
+    RNLIterator(const RNLIterator< Key, T, Compare >&) = default;
+    ~RNLIterator() = default;
+
+    RNLIterator< Key, T, Compare >& operator=(const RNLIterator< Key, T, Compare >&) = default;
+
   private:
-    Stack< detail::TreeNode< Key, T, Compare > > data;
+    LNRIterator< Key, T, Compare > iterator_;
+
+    explicit RNLIterator(detail::TreeNode< Key, T, Compare >* root, detail::TreeNode< Key, T, Compare >* node, bool isFirst = true);
   };
+
+  template< class Key, class T, class Compare >
+  RNLIterator< Key, T, Compare >::RNLIterator(detail::TreeNode< Key, T, Compare >* root, detail::TreeNode< Key, T, Compare >* node, bool isFirst):
+    iterator_(root, node, isFirst)
+  {}
 
   template< class Key, class T, class Compare = std::less< Key > >
   class BreadthIterator: public std::iterator< std::bidirectional_iterator_tag, T >
