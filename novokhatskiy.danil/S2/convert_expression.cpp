@@ -20,9 +20,9 @@ unsigned novokhatskiy::getPriority(Operation operation)
   return 0;
 }
 
-novokhatskiy::Queue< novokhatskiy::Postfix > novokhatskiy::convertExpression(Queue< InfixType >&& infixQueue)
+Queue< novokhatskiy::Postfix > novokhatskiy::convertExpression(Queue< InfixType >&& infixQueue)
 {
-  novokhatskiy::Queue< novokhatskiy::Postfix > resultQueue;
+  novokhatskiy::Queue< Postfix > resultQueue;
   novokhatskiy::Stack< novokhatskiy::InfixType > stack;
   while (!infixQueue.empty())
   {
