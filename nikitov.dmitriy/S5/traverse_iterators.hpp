@@ -6,6 +6,8 @@
 #include <queue.hpp>
 #include <tree_node.hpp>
 
+#include <iostream>
+
 namespace nikitov
 {
   template< class Key, class T, class Compare >
@@ -398,23 +400,54 @@ namespace nikitov
     isFirst_(isFirst)
   {
     queue_.push(root);
-    while (root != node)
+    if (root != node)
     {
-      root = queue_.top();
-      if (root->left_)
+      while (root != node)
       {
-        queue_.push(root->left_);
+        root = queue_.top();
+        if (root->left_)
+        {
+          queue_.push(root->left_);
+        }
+        if (root->middle_)
+        {
+          queue_.push(root->middle_);
+        }
+        if (root->right_)
+        {
+          queue_.push(root->right_);
+        }
+        queue_.pop();
+        stack_.push(root);
+        root = queue_.top();
       }
-      if (root->middle_)
+    }
+    else
+    {
+      detail::TreeNode< Key, T, Compare >* newRoot = queue_.top();
+      while (!queue_.empty())
       {
-        queue_.push(root->middle_);
+        root = queue_.top();
+        if (root->left_)
+        {
+          queue_.push(root->left_);
+        }
+        if (root->middle_)
+        {
+          queue_.push(root->middle_);
+        }
+        if (root->right_)
+        {
+          queue_.push(root->right_);
+        }
+        queue_.pop();
+        stack_.push(root);
+        if (!queue_.empty())
+        {
+          root = queue_.top();
+        }
       }
-      if (root->right_)
-      {
-        queue_.push(root->right_);
-      }
-      queue_.pop();
-      stack_.push(root);
+      queue_.push(newRoot);
     }
   }
 
@@ -447,6 +480,30 @@ namespace nikitov
         }
         queue_.push(stack_.top());
         stack_.pop();
+        detail::TreeNode< Key, T, Compare >* newRoot = queue_.top();
+        while (!queue_.empty())
+        {
+          node = queue_.top();
+          if (node->left_)
+          {
+            queue_.push(node->left_);
+          }
+          if (node->middle_)
+          {
+            queue_.push(node->middle_);
+          }
+          if (node->right_)
+          {
+            queue_.push(node->right_);
+          }
+          queue_.pop();
+          stack_.push(node);
+          if (!queue_.empty())
+          {
+            node = queue_.top();
+          }
+        }
+        queue_.push(newRoot);
       }
     }
     else
@@ -467,13 +524,16 @@ namespace nikitov
   template< class Key, class T, class Compare >
   BreadthIterator< Key, T, Compare >& BreadthIterator< Key, T, Compare >::operator--()
   {
-    detail::TreeNode< Key, T, Compare >* node = queue_.top();
     if (!isFirst_)
     {
       isFirst_ = true;
     }
     else
     {
+      if (queue_.size() == 1)
+      {
+        queue_.pop();
+      }
       queue_.push(stack_.top());
       stack_.pop();
       if (queue_.top()->size_ == 2)
@@ -525,13 +585,13 @@ namespace nikitov
   template< class Key, class T, class Compare >
   bool BreadthIterator< Key, T, Compare >::operator==(const BreadthIterator< Key, T, Compare >& other) const
   {
-    return (isFirst_ == other.isFirst_) && (queue_.top() == other.queue_.top());
+    return (isFirst_ == other.isFirst_) && (queue_.top() == other.queue_.top()) && (stack_.size() == other.stack_.size());
   }
 
   template< class Key, class T, class Compare >
   bool BreadthIterator< Key, T, Compare >::operator!=(const BreadthIterator< Key, T, Compare >& other) const
   {
-    return (isFirst_ != other.isFirst_) || (queue_.top() != other.queue_.top());
+    return (isFirst_ != other.isFirst_) || (queue_.top() != other.queue_.top()) || (stack_.size() != other.stack_.size());
   }
 }
 #endif

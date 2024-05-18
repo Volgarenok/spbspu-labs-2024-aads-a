@@ -45,6 +45,8 @@ namespace nikitov
     LNRIterator< Key, T, Compare > LNRCend() const noexcept;
     RNLIterator< Key, T, Compare > RNLCbegin() const noexcept;
     RNLIterator< Key, T, Compare > RNLCend() const noexcept;
+    BreadthIterator< Key, T, Compare > BreadthCbegin() const noexcept;
+    BreadthIterator< Key, T, Compare > BreadthCend() const noexcept;
 
     size_t size() const noexcept;
     bool empty() const noexcept;
@@ -243,9 +245,9 @@ namespace nikitov
   }
 
   template< class Key, class T, class Compare >
-  RNLIterator< Key, T, Compare > Tree< Key, T, Compare >::RNLCend() const noexcept
+  LNRIterator< Key, T, Compare > Tree< Key, T, Compare >::LNRCend() const noexcept
   {
-    return RNLIterator< Key, T, Compare >(cend().node_, cend().node_);
+    return LNRIterator< Key, T, Compare >(cend().node_, cend().node_);
   }
 
   template< class Key, class T, class Compare >
@@ -255,9 +257,21 @@ namespace nikitov
   }
 
   template< class Key, class T, class Compare >
-  LNRIterator< Key, T, Compare > Tree< Key, T, Compare >::LNRCend() const noexcept
+  RNLIterator< Key, T, Compare > Tree< Key, T, Compare >::RNLCend() const noexcept
   {
-    return LNRIterator< Key, T, Compare >(cend().node_, cend().node_);
+    return RNLIterator< Key, T, Compare >(cend().node_, cend().node_);
+  }
+
+  template< class Key, class T, class Compare >
+  BreadthIterator< Key, T, Compare > Tree< Key, T, Compare >::BreadthCbegin() const noexcept
+  {
+    return BreadthIterator< Key, T, Compare >(cend().node_, root_);
+  }
+
+  template< class Key, class T, class Compare >
+  BreadthIterator< Key, T, Compare > Tree< Key, T, Compare >::BreadthCend() const noexcept
+  {
+    return BreadthIterator< Key, T, Compare >(cend().node_, cend().node_);
   }
 
   template< class Key, class T, class Compare >
