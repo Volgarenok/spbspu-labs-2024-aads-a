@@ -19,6 +19,20 @@ int main(int argc, char* argv[])
     List< int > bi_list;
     std::deque< int > deque;
     create_containers(deque, bi_list, list, size);
+    print_containers(std::cout, deque);
     print_sort_containers(std::cout, deque, bi_list, list, std::less< int >());
+  }
+  else if (std::string(argv[2]) == "float")
+  {
+    std::forward_list< float > list;
+    List< float > bi_list;
+    std::deque< float > deque;
+    create_containers(deque, bi_list, list, size);
+    print_sort_containers(std::cout, deque, bi_list, list, std::less< float >());
+  }
+  else
+  {
+    std::cerr << "Bad type\n";
+    return 1;
   }
 }
