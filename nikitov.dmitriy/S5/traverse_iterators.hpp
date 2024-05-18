@@ -2,8 +2,8 @@
 #define TRAVERSE_ITERATORS_HPP
 
 #include <iterator>
-#include <cassert>
 #include <stack.hpp>
+#include <queue.hpp>
 #include <tree_node.hpp>
 
 namespace nikitov
@@ -366,9 +366,46 @@ namespace nikitov
   class BreadthIterator: public std::iterator< std::bidirectional_iterator_tag, T >
   {
     friend class Tree< Key, T, Compare >;
+  public:
+    BreadthIterator(const BreadthIterator< Key, T, Compare >&) = default;
+    ~BreadthIterator() = default;
+
+    BreadthIterator< Key, T, Compare >& operator=(const BreadthIterator< Key, T, Compare >&) = default;
+
   private:
-    Stack< detail::TreeNode< Key, T, Compare > > data;
+    Stack< detail::TreeNode< Key, T, Compare >* > stack_;
+    Queue< detail::TreeNode< Key, T, Compare >* > queue_;
+    bool isFirst_;
+
+    explicit BreadthIterator(detail::TreeNode< Key, T, Compare >* root, detail::TreeNode< Key, T, Compare >* node, bool isFirst = true);
   };
+
+  template< class Key, class T, class Compare >
+  BreadthIterator< Key, T, Compare >::BreadthIterator(detail::TreeNode< Key, T, Compare >* root, detail::TreeNode< Key, T, Compare >* node, bool isFirst):
+    stack_(),
+    queue_(),
+    isFirst_(isFirst)
+  {
+    queue_.push(root);
+    while (root != node)
+    {
+      root = queue_.top();
+      if (root->left_)
+      {
+        queue_.push(root->left_);
+      }
+      if (root->middle_)
+      {
+        queue_.push(root->middle_);
+      }
+      if (root->right_)
+      {
+        queue_.push(root->right_);
+      }
+      queue_.pop();
+      stack_.push(root);
+    }
+  }
 
 }
 #endif
