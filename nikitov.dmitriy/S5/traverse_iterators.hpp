@@ -373,6 +373,7 @@ namespace nikitov
     BreadthIterator< Key, T, Compare >& operator=(const BreadthIterator< Key, T, Compare >&) = default;
     
     BreadthIterator< Key, T, Compare >& operator++();
+    BreadthIterator< Key, T, Compare >& operator--();
 
     bool operator==(const BreadthIterator< Key, T, Compare >& other) const;
     bool operator!=(const BreadthIterator< Key, T, Compare >& other) const;
@@ -416,29 +417,58 @@ namespace nikitov
   BreadthIterator< Key, T, Compare >& BreadthIterator< Key, T, Compare >::operator++()
   {
     detail::TreeNode< Key, T, Compare >* node = queue_.top();
-    if (node->left_)
+    if (node->size_ == 1 || !isFirst_)
     {
-      queue_.push(node->left_);
-    }
-    if (node->middle_)
-    {
-      queue_.push(node->middle_);
-    }
-    if (node->right_)
-    {
-      queue_.push(node->right_);
-    }
-    queue_.pop();
-    stack_.push(node);
-    if (queue_.empty())
-    {
-      while (stack_.size() != 1)
+      isFirst_ = true;
+      if (node->left_)
       {
+        queue_.push(node->left_);
+      }
+      if (node->middle_)
+      {
+        queue_.push(node->middle_);
+      }
+      if (node->right_)
+      {
+        queue_.push(node->right_);
+      }
+      queue_.pop();
+      stack_.push(node);
+      if (queue_.empty())
+      {
+        while (stack_.size() != 1)
+        {
+          stack_.pop();
+        }
+        queue_.push(stack_.top());
         stack_.pop();
       }
+    }
+    else
+    {
+      isFirst_ = false;
+    }
+    return *this;
+  }
+
+  template< class Key, class T, class Compare >
+  BreadthIterator< Key, T, Compare >& BreadthIterator< Key, T, Compare >::operator--()
+  {
+    detail::TreeNode< Key, T, Compare >* node = queue_.top();
+    if (!isFirst_)
+    {
+      isFirst_ = true;
+    }
+    else
+    {
       queue_.push(stack_.top());
       stack_.pop();
+      if (queue_.top()->size_ == 2)
+      {
+        isFirst_ = false;
+      }
     }
+    return *this;
   }
 
   template< class Key, class T, class Compare >
