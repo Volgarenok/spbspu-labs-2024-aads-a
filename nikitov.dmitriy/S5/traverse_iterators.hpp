@@ -22,6 +22,7 @@ namespace nikitov
     LNRIterator< Key, T, Compare >& operator=(const LNRIterator< Key, T, Compare >&) = default;
 
     LNRIterator< Key, T, Compare >& operator++();
+    LNRIterator< Key, T, Compare >& operator--();
 
     const std::pair< Key, T >& operator*() const;
     const std::pair< Key, T >* operator->() const;
@@ -116,6 +117,98 @@ namespace nikitov
       else
       {
         isFirst_ = false;
+      }
+    }
+    return *this;
+  }
+
+  template< class Key, class T, class Compare >
+  LNRIterator< Key, T, Compare >& LNRIterator< Key, T, Compare >::operator--()
+  {
+    detail::TreeNode< Key, T, Compare >* node = data_.top();
+    if (data_.size() == 1)
+    {
+      node = node->middle_;
+      data_.push(node);
+      while (node->right_)
+      {
+        node = node->right_;
+        data_.push(node);
+      }
+      if (node->size_ == 2)
+      {
+        isFirst_ = false;
+      }
+      else
+      {
+        isFirst_ = true;
+      }
+    }
+    else if (node->size_ == 1 || isFirst_)
+    {
+      if (node->left_)
+      {
+        node = node->left_;
+        data_.push(node);
+        while (node->right_)
+        {
+          node = node->right_;
+          data_.push(node);
+        }
+        if (node->size_ == 2)
+        {
+          isFirst_ = false;
+        }
+        else
+        {
+          isFirst_ = true;
+        }
+      }
+      else
+      {
+        isFirst_ = true;
+
+        data_.pop();
+        detail::TreeNode< Key, T, Compare >* parent = data_.top();
+        while (parent->left_ == node)
+        {
+          node = parent;
+          data_.pop();
+          parent = data_.top();
+        }
+        if (parent->size_ == 2)
+        {
+          isFirst_ = false;
+        }
+        if (parent->middle_ == node)
+        {
+          isFirst_ = true;
+        }
+      }
+    }
+    else
+    {
+      if (node->middle_)
+      {
+        node = node->middle_;
+        data_.push(node);
+        while (node->right_)
+        {
+          node = node->right_;
+          data_.push(node);
+        }
+        if (node->size_ == 2)
+        {
+          isFirst_ = false;
+        }
+        else
+        {
+          isFirst_ = true;
+        }
+      }
+      else
+      {
+        isFirst_ = true;
       }
     }
     return *this;
