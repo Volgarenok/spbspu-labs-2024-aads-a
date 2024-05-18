@@ -1,23 +1,23 @@
 #ifndef AVL_TREE_HPP
 #define AVL_TREE_HPP
 
-#include <cstddef>
 #include <functional>
+#include <cstddef>
 #include <iostream>
 #include <stdexcept>
 #include <utility>
 #include "AVLtreeNode.hpp"
-#include "IteratorTree.hpp"
 #include "constIteratorTree.hpp"
+#include "IteratorTree.hpp"
 
 namespace novokhatskiy
 {
-  template < class Key, class Value, class Compare = std::less< Key > >
+  template <class Key, class Value, class Compare = std::less<Key>>
   class Tree
   {
   public:
-    using node_t = detail::NodeTree< Key, Value >;
-    using v_type = std::pair< Key, Value >;
+    using node_t = detail::NodeTree<Key, Value>;
+    using v_type = std::pair<Key, Value>;
     using constIter = ConstIteratorTree< Key, Value, Compare >;
     using iter = IteratorTree< Key, Value, Compare >;
 
@@ -40,7 +40,7 @@ namespace novokhatskiy
     {
       if (this != std::addressof(other))
       {
-        Tree< Key, Value > tmp(other);
+        Tree<Key, Value> tmp(other);
         swap(tmp);
       }
       return *this;
@@ -55,7 +55,7 @@ namespace novokhatskiy
       return *this;
     }
 
-    /*node_t* find(node_t* node, const Key& key)
+    node_t* find(node_t* node, const Key& key)
     {
       node_t* root = (node->height < 0) ? node->left : node;
       while (root)
@@ -82,7 +82,7 @@ namespace novokhatskiy
         }
       }
       return nullptr;
-    }*/
+    }
 
     iter find(const Key& key)
     {
@@ -98,7 +98,7 @@ namespace novokhatskiy
       return end();
     }
 
-    /*constIter find(const Key& key)
+    constIter find(const Key& key) const
     {
       node_t* curr = root_;
       while (curr)
@@ -110,7 +110,8 @@ namespace novokhatskiy
         curr = (cmp_(curr->value.first, key)) ? curr->right : curr->left;
       }
       return cend();
-    }*/
+    }
+
 
     Value& at(const Key& key)
     {
@@ -209,7 +210,28 @@ namespace novokhatskiy
       return root_;
     }
 
-    size_t size() const
+    void insert2(const std::pair< Key, Value >& value)
+    {
+      try
+      {
+        if (root_)
+        {
+          insert_imp2(value, root_);
+          size_++;
+        }
+        else
+        {
+          root_ = new node_t(value);
+          size_++;
+        }
+      }
+      catch (const std::exception&)
+      {
+        clear();
+        throw;
+      }
+    }
+    size_t size() const noexcept
     {
       return size_;
     }
@@ -219,14 +241,9 @@ namespace novokhatskiy
       return !size_;
     }
 
-    void clear(node_t* root)
+    void clear()
     {
-      if (root)
-      {
-        clear(root->left);
-        clear(root->right);
-        delete root;
-      }
+      clear_imp(root_);
     }
 
     void swap(Tree& other)
@@ -306,6 +323,7 @@ namespace novokhatskiy
       balance(res.node_);
       return iter(res.node_);
     }
+
     iter lower_bound(const Key& key)
     {
       iter curr = find(key);
@@ -391,6 +409,16 @@ namespace novokhatskiy
     size_t size_;
     Compare cmp_;
 
+    void clear_imp(node_t* root)
+    {
+      if (root)
+      {
+        clear_imp(root->left);
+        clear_imp(root->right);
+        delete root;
+      }
+    }
+    
     node_t* insert_imp(const std::pair< Key, Value >& value, node_t* curr)
     {
       if (curr == nullptr)
@@ -410,6 +438,45 @@ namespace novokhatskiy
         curr->left = insert_imp(value, curr->left);
       }
       return balance(curr);
+    }
+
+    void insert_imp2(const std::pair< Key, Value >& value, node_t* curr)
+    {
+      try
+      {
+        if (cmp_(value.first, curr->value.first))
+        {
+          if (curr->left)
+          {
+            insert_imp2(value, curr->left);
+          }
+          else
+          {
+            curr->left = new node_t(value, curr);
+            balance(curr->left);
+          }
+        }
+        else
+        {
+          if (cmp_(curr->value.first, value.first))
+          {
+            if (curr->right)
+            {
+              insert_imp2(value, curr->right);
+            }
+            else
+            {
+              curr->right = new node_t(value, curr);
+              balance(curr->right);
+            }
+          }
+        }
+      }
+      catch (...)
+      {
+        clear();
+        throw;
+      }
     }
 
     node_t* balance(node_t* node)
@@ -475,6 +542,7 @@ namespace novokhatskiy
       root_ = tmp;
       return root_;*/
     }
+
   };
 }
 
