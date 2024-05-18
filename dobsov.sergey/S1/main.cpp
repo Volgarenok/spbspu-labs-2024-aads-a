@@ -25,7 +25,7 @@ named_list_t read_named(std::istream & in)
   auto ulls = read_ulls(in);
   if (in.fail())
   {
-    in.clear(std::ios::failbit);
+    in.clear(in.rdstate() & std::ios::eofbit);
   }
   return std::make_pair(name, ulls);
 }
