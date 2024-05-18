@@ -1,27 +1,23 @@
 #include <iostream>
-#include <deque>
-#include "merge.hpp"
-#include "timsort.hpp"
+#include <string>
 
-int main(int argc, char**)
+#include "timsort.hpp"
+#include "createcontainer.hpp"
+
+int main(int argc, char* argv[])
 {
   if (argc != 4)
   {
     std::cerr << "File entered incorrectly\n";
     return 1;
   }
+  size_t size = std::stoull(argv[3]);
   using namespace piyavkin;
-  List< int > list({1,4,7,2,5,6});
-  sort_merge(list.begin(), list.end(), std::less< int >());
-  for (auto x: list)
+  if (argv[2] == "ints")
   {
-    std::cout << x << ' ';
-  }
-  std::cout << '\n' << detail::get_min_size(68);
-  std::deque< int > deq({7,1,5,2,6,0,3});
-  timsort(deq.begin(), 7, std::less< int >());
-  for (auto x: deq)
-  {
-    std::cout << x << ' ';
+    std::forward_list< int > list;
+    List< int > bi_list;
+    std::deque< int > deque;
+    create_container(deque, bi_list, list, n); 
   }
 }

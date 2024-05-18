@@ -2,7 +2,7 @@
 #define TIMSORT_HPP
 #include <cstddef>
 #include <utility>
-#include <../common/stack.hpp>
+#include <stack.hpp>
 #include "merge.hpp"
 
 namespace piyavkin
