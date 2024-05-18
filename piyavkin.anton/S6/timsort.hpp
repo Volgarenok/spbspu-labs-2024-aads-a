@@ -24,9 +24,9 @@ namespace piyavkin
       {
         RandIt temp = begin + i;
         size_t j = i;
-        while (j > 0 && cmp(temp[i], temp[i + 1]))
+        while (j > 0 && cmp(*temp, *(temp - 1)))
         {
-          std::swap(temp[i], temp[i + 1]);
+          std::swap(*temp, *temp--);
           --j;
         }
       }
@@ -47,7 +47,7 @@ namespace piyavkin
           ++begin;
           ++count;
         }
-        sort_ins(begin - count, begin, cmp);
+        sort_ins(begin - count, count + 1, cmp);
       }
       return count;
     }
@@ -62,6 +62,8 @@ namespace piyavkin
     {
       pass += detail::find_subarr(start, cmp, n);
       start += pass;
+      detail::sort_ins(start + 1, size_min - pass - 1, cmp);
+      pass += size_min - pass - 1;
     }
   }
 }

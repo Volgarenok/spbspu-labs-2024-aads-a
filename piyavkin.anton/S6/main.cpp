@@ -19,9 +19,8 @@ int main(int argc, char**)
   }
   std::cout << '\n' << detail::get_min_size(68);
   std::deque< int > deq({7,1,5,2,6,0,3});
-  detail::sort_ins(deq.begin(), 7, std::less< int >());
-  // timsort(deq.begin(), 7, std::less< int >());
-  for (auto x: list)
+  timsort(deq.begin(), 7, std::less< int >());
+  for (auto x: deq)
   {
     std::cout << x << ' ';
   }
