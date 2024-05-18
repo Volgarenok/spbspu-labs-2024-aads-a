@@ -26,13 +26,12 @@ void shaker(Iterator& begin, size_t size, Compare cmp)
       --tempEnd;
       ++tempBegin;
     }
-    auto tmpEnd = tempEnd;
     auto tmpBegin = tempBegin;
     for (int i = rightMark; i >= leftMark; --i)
     {
       auto curr = tempEnd;
       --curr;
-      if (cmp(*(curr), *(tempEnd)))
+      if (cmp(*(tempEnd), *(curr)))
       {
         std::swap(*curr, *tempEnd);
       }
@@ -45,7 +44,7 @@ void shaker(Iterator& begin, size_t size, Compare cmp)
     {
       auto curr = tmpBegin;
       --curr;
-      if (cmp(*(curr), *(tmpBegin)))
+      if (cmp(*(tmpBegin), *(curr)))
       {
         int buff;
         buff = *curr;
@@ -72,7 +71,7 @@ void shell(Iterator begin, size_t s, Compare cmp)
       auto number = *temp;
       auto tmp = temp;
       int j = i;
-      for (; j >= interval && cmp(*(tmp - interval), number); j -= interval)
+      for (; j >= interval && cmp(number, *(tmp - interval)); j -= interval)
       {
         auto next = tmp - interval;
         *tmp = *next;
