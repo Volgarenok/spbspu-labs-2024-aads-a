@@ -13,10 +13,6 @@ namespace strelyaev
   {
     friend class Tree< Key, T, std::less< Key > >;
     public:
-    ConstIterator(detail::Node< Key, T >* node):
-      node_(node)
-    {}
-
     ConstIterator(const ConstIterator< Key, T >& val):
       node_(val.node_)
     {}
@@ -42,7 +38,7 @@ namespace strelyaev
         }
         return *this;
       }
-      while(!node_->isRoot() && node_->isRightChild())
+      while (!node_->isRoot() && node_->isRightChild())
       {
         node_ = node_->parent_;
       }
@@ -69,6 +65,10 @@ namespace strelyaev
 
     private:
       detail::Node< Key, T >* node_;
+      
+      ConstIterator(detail::Node< Key, T >* node):
+      node_(node)
+    {}
   };
 
 }

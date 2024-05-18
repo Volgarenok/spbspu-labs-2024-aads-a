@@ -1,7 +1,7 @@
 #include "commands.hpp"
 #include <iostream>
 
-void strelyaev::print(std::istream& in, Tree< std::string, Tree< int, std::string > >& map, std::ostream& out)
+void strelyaev::print(std::istream& in, const Tree< std::string, Tree< int, std::string > >& map, std::ostream& out)
 {
   std::string inner_map_name = "";
   in >> inner_map_name;

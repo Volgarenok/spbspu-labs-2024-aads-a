@@ -13,13 +13,11 @@ namespace strelyaev
   {
     friend class Tree< Key, T, std::less< Key > >;
     public:
-    Iterator(detail::Node< Key, T >* node):
-      node_(node)
-    {}
-
     Iterator(const Iterator< Key, T >& val):
       node_(val.node_)
     {}
+
+    Iterator< Key, T > operator=(const Iterator< Key, T>& rhs) = default;
 
     std::pair< Key, T >& operator*()
     {
@@ -42,7 +40,7 @@ namespace strelyaev
         }
         return *this;
       }
-      while(!node_->isRoot() && node_->isRightChild())
+      while (!node_->isRoot() && node_->isRightChild())
       {
         node_ = node_->parent_;
       }
@@ -67,14 +65,12 @@ namespace strelyaev
       return !(*this == rhs);
     }
 
-    Iterator< Key, T > operator=(const Iterator< Key, T>& rhs)
-    {
-      node_ = rhs.node_;
-      return *this;
-    }
-
     private:
       detail::Node< Key, T >* node_;
+      
+      Iterator(detail::Node< Key, T >* node):
+      node_(node)
+    {}
   };
 }
 

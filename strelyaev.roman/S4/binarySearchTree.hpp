@@ -59,7 +59,7 @@ namespace strelyaev
       {
         if (this != std::addressof(other))
         {
-          clear(root_);
+          clear();
           std::swap(root_, other.root_);
           std::swap(size_, other.size_);
           std::swap(cmp_, other.cmp_);
@@ -226,7 +226,27 @@ namespace strelyaev
         return it->second;
       }
 
+      T& at(const Key& key) const
+      {
+        auto it = find(key);
+        if (it == end())
+        {
+          throw std::out_of_range("Out of range");
+        }
+        return it->second;
+      }
+
       T& operator[](const Key& key) noexcept
+      {
+        auto it = find(key);
+        if (it == end())
+        {
+          it = insert(key, T());
+        }
+        return it->second;
+      }
+
+      T& operator[](const Key& key) const noexcept
       {
         auto it = find(key);
         if (it == end())
