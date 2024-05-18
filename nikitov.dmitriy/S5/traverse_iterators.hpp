@@ -22,7 +22,9 @@ namespace nikitov
     LNRIterator< Key, T, Compare >& operator=(const LNRIterator< Key, T, Compare >&) = default;
 
     LNRIterator< Key, T, Compare >& operator++();
+    LNRIterator< Key, T, Compare > operator++(int);
     LNRIterator< Key, T, Compare >& operator--();
+    LNRIterator< Key, T, Compare > operator--(int);
 
     const std::pair< Key, T >& operator*() const;
     const std::pair< Key, T >* operator->() const;
@@ -123,6 +125,14 @@ namespace nikitov
   }
 
   template< class Key, class T, class Compare >
+  LNRIterator< Key, T, Compare > LNRIterator< Key, T, Compare >::operator++(int)
+  {
+    LNRIterator< Key, T, Compare > temp(*this);
+    ++*this;
+    return temp;
+  }
+
+  template< class Key, class T, class Compare >
   LNRIterator< Key, T, Compare >& LNRIterator< Key, T, Compare >::operator--()
   {
     detail::TreeNode< Key, T, Compare >* node = data_.top();
@@ -212,6 +222,14 @@ namespace nikitov
       }
     }
     return *this;
+  }
+
+  template< class Key, class T, class Compare >
+  LNRIterator< Key, T, Compare > LNRIterator< Key, T, Compare >::operator--(int)
+  {
+    LNRIterator< Key, T, Compare > temp(*this);
+    --*this;
+    return temp;
   }
 
   template< class Key, class T, class Compare >
