@@ -371,6 +371,9 @@ namespace nikitov
     ~BreadthIterator() = default;
 
     BreadthIterator< Key, T, Compare >& operator=(const BreadthIterator< Key, T, Compare >&) = default;
+    
+    bool operator==(const BreadthIterator< Key, T, Compare >& other) const;
+    bool operator!=(const BreadthIterator< Key, T, Compare >& other) const;
 
   private:
     Stack< detail::TreeNode< Key, T, Compare >* > stack_;
@@ -407,5 +410,16 @@ namespace nikitov
     }
   }
 
+  template< class Key, class T, class Compare >
+  bool BreadthIterator< Key, T, Compare >::operator==(const BreadthIterator< Key, T, Compare >& other) const
+  {
+    return (isFirst_ == other.isFirst_) && (queue_.top() == other.queue_.top());
+  }
+
+  template< class Key, class T, class Compare >
+  bool BreadthIterator< Key, T, Compare >::operator!=(const BreadthIterator< Key, T, Compare >& other) const
+  {
+    return (isFirst_ != other.isFirst_) || (queue_.top() != other.queue_.top());
+  }
 }
 #endif
