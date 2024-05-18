@@ -19,6 +19,11 @@ int main(int argc, char* argv[])
       input >> value;
       dictionary.insert({ key, value });
     }
+    if (!input.eof())
+    {
+      std::cerr << "Error: Wrong input" << '\n';
+      return 2;
+    }
   }
   else
   {
