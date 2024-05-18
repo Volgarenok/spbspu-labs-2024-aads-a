@@ -283,6 +283,9 @@ namespace nikitov
 
     RNLIterator< Key, T, Compare >& operator=(const RNLIterator< Key, T, Compare >&) = default;
 
+    bool operator==(const RNLIterator< Key, T, Compare >& other) const;
+    bool operator!=(const RNLIterator< Key, T, Compare >& other) const;
+
   private:
     LNRIterator< Key, T, Compare > iterator_;
 
@@ -293,6 +296,18 @@ namespace nikitov
   RNLIterator< Key, T, Compare >::RNLIterator(detail::TreeNode< Key, T, Compare >* root, detail::TreeNode< Key, T, Compare >* node, bool isFirst):
     iterator_(root, node, isFirst)
   {}
+
+  template< class Key, class T, class Compare >
+  bool RNLIterator< Key, T, Compare >::operator==(const RNLIterator< Key, T, Compare >& other) const
+  {
+    return iterator_ == other.iterator_;
+  }
+
+  template< class Key, class T, class Compare >
+  bool RNLIterator< Key, T, Compare >::operator!=(const RNLIterator< Key, T, Compare >& other) const
+  {
+    return iterator_ != other.iterator_;
+  }
 
   template< class Key, class T, class Compare = std::less< Key > >
   class BreadthIterator: public std::iterator< std::bidirectional_iterator_tag, T >
