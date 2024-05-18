@@ -74,7 +74,6 @@ void shell(Iterator begin, size_t size)
       size_t j = i;
       for (; j >= gap && *(tmp - gap) > *number; j -= gap)
       {
-        auto next = tmp - gap;
         *tmp = *(tmp - gap);
 //        arr[j] = arr[j - gap];
         tmp = tmp - gap;
