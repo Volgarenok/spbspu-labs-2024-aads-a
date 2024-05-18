@@ -29,6 +29,27 @@ namespace marishin
         throw;
       }
     }
+
+    BinarySearchTree(BinarySearchTree&& rhs):
+      root_(rhs.root_),
+      size_(rhs.size_)
+    {
+      rhs.root_ = nullptr;
+      rhs.size_ = 0;
+    }
+
+    BinarySearchTree& operator=(const BinarySearchTree& rhs)
+    {
+      BinarySearchTree< Key, Value > temp(rhs);
+      if (this != std::addressof(rhs))
+      {
+        swap(temp);
+      }
+      return *this;
+    }
+
+
+
   };
 
 }
