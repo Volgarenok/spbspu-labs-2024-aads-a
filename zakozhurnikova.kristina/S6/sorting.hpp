@@ -4,84 +4,84 @@
 #include <list.hpp>
 #include <utility>
 
-using namespace zakozhurnikova;
-
-template < class Iterator, class Compare >
-void shaker(Iterator& begin, size_t size, Compare cmp)
+namespace zakozhurnikova
 {
-  int leftMark = 1;
-  int rightMark = size - 1;
-  auto end = begin;
-  size_t count = 0;
-  for (size_t i = 1; i < size - 1; ++i)
+  template < class Iterator, class Compare >
+  void shaker(Iterator& begin, size_t size, Compare cmp)
   {
-    ++end;
-  }
-  while (leftMark <= rightMark)
-  {
-    auto tempEnd = end;
-    auto tempBegin = begin;
-    for (size_t i = 0; i < count; i++)
+    int leftMark = 1;
+    int rightMark = size - 1;
+    auto end = begin;
+    size_t count = 0;
+    for (size_t i = 1; i < size - 1; ++i)
     {
-      --tempEnd;
-      ++tempBegin;
+      ++end;
     }
-    auto tmpBegin = tempBegin;
-    for (int i = rightMark; i >= leftMark; --i)
+    while (leftMark <= rightMark)
     {
-      auto curr = tempEnd;
-      --curr;
-      if (cmp(*(tempEnd), *(curr)))
+      auto tempEnd = end;
+      auto tempBegin = begin;
+      for (size_t i = 0; i < count; i++)
       {
-        std::swap(*curr, *tempEnd);
+        --tempEnd;
+        ++tempBegin;
       }
-      --tempEnd;
-    }
-    leftMark++;
-    tmpBegin++;
+      auto tmpBegin = tempBegin;
+      for (int i = rightMark; i >= leftMark; --i)
+      {
+        auto curr = tempEnd;
+        --curr;
+        if (cmp(*(tempEnd), *(curr)))
+        {
+          std::swap(*curr, *tempEnd);
+        }
+        --tempEnd;
+      }
+      leftMark++;
+      tmpBegin++;
 
-    for (int i = leftMark; i <= rightMark; ++i)
-    {
-      auto curr = tmpBegin;
-      --curr;
-      if (cmp(*(tmpBegin), *(curr)))
+      for (int i = leftMark; i <= rightMark; ++i)
       {
-        int buff;
-        buff = *curr;
-        *curr = *tmpBegin;
-        *tmpBegin = buff;
+        auto curr = tmpBegin;
+        --curr;
+        if (cmp(*(tmpBegin), *(curr)))
+        {
+          int buff;
+          buff = *curr;
+          *curr = *tmpBegin;
+          *tmpBegin = buff;
+        }
+        ++tmpBegin;
       }
-      ++tmpBegin;
+      rightMark--;
+      count++;
     }
-    rightMark--;
-    count++;
+  }
+
+  template < class Iterator, class Compare >
+  void shell(Iterator begin, size_t s, Compare cmp)
+  {
+    int size = s;
+    auto spacing = begin + size / 2;
+    for (int interval = size / 2; interval > 0; interval /= 2)
+    {
+      auto temp = begin + interval;
+      for (int i = interval; i < size; ++i)
+      {
+        auto number = *temp;
+        auto tmp = temp;
+        int j = i;
+        for (; j >= interval && cmp(number, *(tmp - interval)); j -= interval)
+        {
+          auto next = tmp - interval;
+          *tmp = *next;
+          tmp = next;
+        }
+        *tmp = number;
+        ++temp;
+      }
+      spacing = begin + interval / 2;
+    }
   }
 }
-
-template< class Iterator, class Compare >
-void shell(Iterator begin, size_t s, Compare cmp)
-{
-  int size = s;
-  auto spacing = begin + size / 2;
-  for (int interval = size / 2; interval > 0; interval /= 2)
-  {
-    auto temp = begin + interval;
-    for (int i = interval; i < size; ++i)
-    {
-      auto number = *temp;
-      auto tmp = temp;
-      int j = i;
-      for (; j >= interval && cmp(number, *(tmp - interval)); j -= interval)
-      {
-        auto next = tmp - interval;
-        *tmp = *next;
-        tmp = next;
-      }
-      *tmp = number;
-    ++temp;
-    }
-  spacing = begin + interval / 2;
-  }
-}
-
 #endif

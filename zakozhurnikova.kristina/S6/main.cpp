@@ -42,7 +42,6 @@ int main(int argc, char* argv[])
     {
       throw std::logic_error("No right type");
     }
-    std::cout << '\n';
   }
   catch (std::exception& e)
   {

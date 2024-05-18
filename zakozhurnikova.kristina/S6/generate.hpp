@@ -4,7 +4,7 @@
 
 int RandomNumberInt()
 {
-  return (std::rand()%100);
+  return (std::rand() % 100);
 }
 
 int RandomNumberFloat()
