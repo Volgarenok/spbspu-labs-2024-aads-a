@@ -13,7 +13,7 @@ namespace piyavkin
     float get_value(float);
   }
   template< class T >
-  void create_container(std::deque< T >& deque, List< T >& bi_list, std::forward_list< T >& list, size_t n)
+  void create_containers(std::deque< T >& deque, List< T >& bi_list, std::forward_list< T >& list, size_t n)
   {
     for (size_t i = 0; i < n; ++i)
     {

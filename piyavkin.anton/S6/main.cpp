@@ -1,8 +1,8 @@
 #include <iostream>
 #include <string>
-
 #include "timsort.hpp"
 #include "createcontainer.hpp"
+#include "printsortcontainers.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -18,6 +18,7 @@ int main(int argc, char* argv[])
     std::forward_list< int > list;
     List< int > bi_list;
     std::deque< int > deque;
-    create_container(deque, bi_list, list, n); 
+    create_containers(deque, bi_list, list, n);
+    print_sort_containers(std::cout, deque, bi_list, list);
   }
 }
