@@ -558,7 +558,7 @@ namespace novokhatskiy
       return newRoot;
     }
 
-    node_t* minN(node_t* p)
+    node_t* minN(node_t* p) const
     {
       return (p->left) ? minN(p->left) : p;
       /*auto tmp = root_->left;
