@@ -8,7 +8,7 @@ namespace nikitov
   class SumKeys
   {
   public:
-    SumKeys() = default;
+    SumKeys();
     void operator()(const std::pair< int, std::string >& value);
 
     int getKey() const;
