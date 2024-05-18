@@ -18,6 +18,7 @@ int main(int argc, char* argv[])
     return 1;
   }
 
+  std::string sort = argv[1];
   std::string type = argv[2];
   size_t size = std::atoi(argv[3]);
   if (size == 0)
@@ -44,7 +45,7 @@ int main(int argc, char* argv[])
     auto beg = countOne.begin();
     shaker(++beg, size, std::less< int >());
     auto begs = countTwo.begin();
-    shell(begs, size);
+    shell(begs, size, std::less< int >());
     countThree.sort(std::less< int >());
     print(std::cout, countOne);
     print(std::cout, countTwo);

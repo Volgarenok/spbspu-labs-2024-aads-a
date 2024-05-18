@@ -59,30 +59,29 @@ void shaker(Iterator& begin, size_t size, Compare cmp)
   }
 }
 
-template< class Iterator >
-void shell(Iterator begin, size_t size)
+template< class Iterator, class Compare >
+void shell(Iterator begin, size_t s, Compare cmp)
 {
+  int size = s;
   auto spacing = begin + size / 2;
-  for (size_t gap = size / 2; gap > 0; gap /= 2)
+  for (int interval = size / 2; interval > 0; interval /= 2)
   {
-    auto temp = spacing;
-    for (size_t i = gap; i < size; ++i)
+    auto temp = begin + interval;
+    for (int i = interval; i < size; ++i)
     {
-      auto number = temp;
-//      int temp = arr[i];
+      auto number = *temp;
       auto tmp = temp;
-      size_t j = i;
-      for (; j >= gap && *(tmp - gap) > *number; j -= gap)
+      int j = i;
+      for (; j >= interval && cmp(*(tmp - interval), number); j -= interval)
       {
-        *tmp = *(tmp - gap);
-//        arr[j] = arr[j - gap];
-        tmp = tmp - gap;
+        auto next = tmp - interval;
+        *tmp = *next;
+        tmp = next;
       }
-//      arr[j] = temp;
-      *tmp = *number;
+      *tmp = number;
     ++temp;
     }
-  spacing = begin + gap / 2;
+  spacing = begin + interval / 2;
   }
 }
 
