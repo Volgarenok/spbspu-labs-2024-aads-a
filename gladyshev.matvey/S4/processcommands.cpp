@@ -1,6 +1,8 @@
 #include "processcommands.hpp"
+
 #include <functional>
 #include <limits>
+
 std::ostream& gladyshev::process_commands(std::istream& in, std::ostream& out, mainDic& findic)
 {
   Tree < std::string, std::function < mainDic(const std::string&, const dic&, const dic&) > > cmds;
@@ -14,13 +16,21 @@ std::ostream& gladyshev::process_commands(std::istream& in, std::ostream& out, m
   std::string name3 = "";
   while (in >> command)
   {
-    try
+    if (command == "print")
     {
-      if (command == "print")
+      in >> dataset;
+      try
       {
-          print_dictionaries(dataset, findic);
+        print_dictionaries(dataset, findic);
       }
-      else
+      catch (const std::overflow_error& e)
+      {
+        std::cout << e.what() << "\n";
+      }
+    }
+    else
+    {
+      try
       {
         in >> name1 >> name2 >> name3;
         dic supdic1 = findName(findic, name2);
@@ -31,15 +41,11 @@ std::ostream& gladyshev::process_commands(std::istream& in, std::ostream& out, m
           findic.insert(pair.first, pair.second);
         }
       }
-    }
-    catch (const std::overflow_error& e)
-    {
-      std::cout << e.what() << "\n";
-    }
-    catch (const std::out_of_range&)
-    {
-      std::cout << "<INVALID COMMAND>\n";
-      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+      catch (const std::out_of_range&)
+      {
+        std::cout << "<INVALID COMMAND>\n";
+        std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+      }
     }
   }
   return out;
