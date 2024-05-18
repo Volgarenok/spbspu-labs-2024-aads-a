@@ -8,14 +8,13 @@
 #include <functional>
 #include <stdexcept>
 #include <algorithm>
-#include <map>
 #include <string>
 #include "AVLtree.hpp"
 #include "AVLtreeNode.hpp"
 #include "commands.hpp"
 
-using mainMap = std::map< std::string, std::map< size_t, std::string > >;
-using map = std::map< size_t, std::string >;
+using mainMap = novokhatskiy::Tree< std::string, novokhatskiy::Tree< size_t, std::string > >;
+using map = novokhatskiy::Tree< size_t, std::string >;
 
 void inputDict(mainMap& dict, std::istream& in)
 {
@@ -24,7 +23,7 @@ void inputDict(mainMap& dict, std::istream& in)
     in.clear();
     std::string name = {};
     in >> name;
-    std::map< size_t, std::string> tmp;
+    novokhatskiy::Tree< size_t, std::string> tmp;
     size_t key = {};
     while (in >> key)
     {
@@ -40,7 +39,7 @@ void inputDict(mainMap& dict, std::istream& in)
 int main(int argc, char** argv)
 {
   using namespace novokhatskiy;
-  std::map< std::string, std::map< size_t, std::string > > maps;
+  Tree< std::string, Tree< size_t, std::string > > maps;
   if (argc != 2)
   {
     std::cerr << "Wrong input file\n";
@@ -52,7 +51,7 @@ int main(int argc, char** argv)
     inputDict(maps, fileinp);
   }
   using namespace std::placeholders;
-  std::map< std::string, std::function< void(mainMap&, std::istream&, std::ostream&) > > commands;
+  Tree< std::string, std::function< void(mainMap&, std::istream&, std::ostream&) > > commands;
   commands["print"] = std::bind(print, _1, _2, std::ref(std::cout));
   commands["complement"] = std::bind(complement, _1, _2, _3);
   commands["intersect"] = intersectCmd;
