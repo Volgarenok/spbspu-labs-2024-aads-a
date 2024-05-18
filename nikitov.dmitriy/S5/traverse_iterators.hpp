@@ -30,7 +30,7 @@ namespace nikitov
     bool operator!=(const LNRIterator< Key, T, Compare >& other) const;
 
   private:
-    Stack< std::pair < detail::TreeNode< Key, T, Compare >* > > data_;
+    Stack< detail::TreeNode< Key, T, Compare >* > data_;
     bool isFirst_;
 
     explicit LNRIterator(detail::TreeNode< Key, T, Compare >* root, detail::TreeNode< Key, T, Compare >* node, bool isFirst = true);
@@ -42,13 +42,18 @@ namespace nikitov
     isFirst_(isFirst)
   {
     data_.push(root);
+    Compare cmp;
     while (root != node)
     {
-      if (cmp_(node.value, root->firstValue_.first))
+      if (root->size_ == 0)
+      {
+        root = root->middle_;
+      }
+      else if (cmp(node->firstValue_.first, root->firstValue_.first))
       {
         root = root->left_;
       }
-      else if (root->size_ == 1 || cmp_(root->secondValue_.first, node.value))
+      else if (root->size_ == 1 || cmp(root->secondValue_.first, node->firstValue_.first))
       {
         root = root->right_;
       }
@@ -64,7 +69,7 @@ namespace nikitov
   LNRIterator< Key, T, Compare >& LNRIterator< Key, T, Compare >::operator++()
   {
     assert(data_.size() != 1);
-    detail::TreeNode< Key, T, Compare > node = data_.top();
+    detail::TreeNode< Key, T, Compare >* node = data_.top();
     if (node->size_ == 1 || !isFirst_)
     {
       if (node->right_)
@@ -82,7 +87,7 @@ namespace nikitov
       {
         isFirst_ = true;
         data_.pop();
-        detail::TreeNode< Key, T, Compare > parent = data_.top();
+        detail::TreeNode< Key, T, Compare >* parent = data_.top();
         while (parent->right_ == node)
         {
           node = parent;
@@ -93,7 +98,6 @@ namespace nikitov
         {
           isFirst_ = false;
         }
-        node = parent;
       }
     }
     else

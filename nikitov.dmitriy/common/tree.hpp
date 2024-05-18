@@ -10,6 +10,7 @@
 #include "tree_node.hpp"
 #include "tree_iterator.hpp"
 #include "const_tree_iterator.hpp"
+#include "../S5/traverse_iterators.hpp"
 
 namespace nikitov
 {
@@ -39,6 +40,9 @@ namespace nikitov
     constTreeIterator cbegin() const noexcept;
     treeIterator end() noexcept;
     constTreeIterator cend() const noexcept;
+
+    LNRIterator< Key, T, Compare > inOrderCbegin() const noexcept;
+    LNRIterator< Key, T, Compare > inOrderCend() const noexcept;
 
     size_t size() const noexcept;
     bool empty() const noexcept;
@@ -228,6 +232,18 @@ namespace nikitov
       return constTreeIterator(root_);
     }
     return constTreeIterator(root_->parent_);
+  }
+
+  template< class Key, class T, class Compare >
+  LNRIterator< Key, T, Compare > Tree< Key, T, Compare >::inOrderCbegin() const noexcept
+  {
+    return LNRIterator< Key, T, Compare >(cend().node_, cbegin().node_);
+  }
+
+  template< class Key, class T, class Compare >
+  LNRIterator< Key, T, Compare > Tree< Key, T, Compare >::inOrderCend() const noexcept
+  {
+    return LNRIterator< Key, T, Compare >(cend().node_, cend().node_);
   }
 
   template< class Key, class T, class Compare >
