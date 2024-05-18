@@ -6,8 +6,6 @@
 #include <queue.hpp>
 #include <tree_node.hpp>
 
-#include <iostream>
-
 namespace nikitov
 {
   template< class Key, class T, class Compare >

@@ -2,8 +2,6 @@
 #include <limits>
 #include <stdexcept>
 
-#include <iostream>
-
 nikitov::SumKeys::SumKeys():
   key_(0),
   line_()
