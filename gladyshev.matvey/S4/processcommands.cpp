@@ -1,8 +1,6 @@
 #include "processcommands.hpp"
-
 #include <functional>
 #include <limits>
-
 std::ostream& gladyshev::process_commands(std::istream& in, std::ostream& out, mainDic& findic)
 {
   Tree < std::string, std::function < mainDic(const std::string&, const dic&, const dic&) > > cmds;
@@ -20,7 +18,7 @@ std::ostream& gladyshev::process_commands(std::istream& in, std::ostream& out, m
     {
       if (command == "print")
       {
-        print_dictionaries(dataset, findic);
+          print_dictionaries(dataset, findic);
       }
       else
       {
@@ -34,13 +32,14 @@ std::ostream& gladyshev::process_commands(std::istream& in, std::ostream& out, m
         }
       }
     }
-    catch (const std::out_of_range&)
-    {
-      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
-    }
     catch (const std::overflow_error& e)
     {
       std::cout << e.what() << "\n";
+    }
+    catch (const std::out_of_range&)
+    {
+      std::cout << "<INVALID COMMAND>\n";
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
   }
   return out;
