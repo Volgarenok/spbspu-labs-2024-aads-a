@@ -23,6 +23,10 @@ namespace ishmuratov
       AVLTree(other.cbegin(), other.cend())
     {}
 
+    AVLTree(std::initializer_list< std::pair< Key, Value > > init_list):
+      AVLTree(init_list.begin(), init_list.end())
+    {}
+
     AVLTree(ConstIter begin, ConstIter end):
       root_(nullptr),
       size_(0)
@@ -31,7 +35,7 @@ namespace ishmuratov
       {
         while (begin != end)
         {
-          push(begin->first, begin->second);
+          push(std::make_pair(begin->first, begin->second));
           ++begin;
         }
       }
@@ -186,16 +190,16 @@ namespace ishmuratov
       return cend();
     }
 
-    void push(const Key & k, const Value & v)
+    void push(const std::pair< Key, Value > & pair)
     {
       if (root_ == nullptr)
       {
-        root_ = new tnode(k, v);
+        root_ = new tnode(pair.first, pair.second);
         size_ += 1;
       }
       else
       {
-        root_ = place(k, v, root_);
+        root_ = place(pair.first, pair.second, root_);
       }
     }
 

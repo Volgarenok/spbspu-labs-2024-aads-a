@@ -42,18 +42,18 @@ void ishmuratov::complement(ishmuratov::data_t &data, std::istream &input)
   {
     if (second_dict.find(dict->first) == second_dict.end())
     {
-      new_dict.push(dict->first, first_dict[dict->first]);
+      new_dict.push(std::make_pair(dict->first, first_dict[dict->first]));
     }
   }
   for (auto dict = second_dict.cbegin(); dict != second_dict.cend(); ++dict)
   {
     if (first_dict.find(dict->first) == first_dict.end())
     {
-      new_dict.push(dict->first, second_dict[dict->first]);
+      new_dict.push(std::make_pair(dict->first, second_dict[dict->first]));
     }
   }
 
-  data.push(new_name, new_dict);
+  data.push(std::make_pair(new_name, new_dict));
 }
 
 void ishmuratov::intersect(ishmuratov::data_t &data, std::istream &input)
@@ -76,11 +76,11 @@ void ishmuratov::intersect(ishmuratov::data_t &data, std::istream &input)
   {
     if (second_dict.find(dict->first) != second_dict.end())
     {
-      new_dict.push(dict->first, first_dict[dict->first]);
+      new_dict.push(std::make_pair(dict->first, first_dict[dict->first]));
     }
   }
 
-  data.push(new_name, new_dict);
+  data.push(std::make_pair(new_name, new_dict));
 }
 
 void ishmuratov::uniond(ishmuratov::data_t &data, std::istream &input)
@@ -101,15 +101,15 @@ void ishmuratov::uniond(ishmuratov::data_t &data, std::istream &input)
 
   for (auto dict = first_dict.cbegin(); dict != first_dict.cend(); ++dict)
   {
-    new_dict.push(dict->first, first_dict[dict->first]);
+    new_dict.push(std::make_pair(dict->first, first_dict[dict->first]));
   }
   for (auto dict = second_dict.cbegin(); dict != second_dict.cend(); ++dict)
   {
     if (new_dict.find(dict->first) == new_dict.end())
     {
-      new_dict.push(dict->first, second_dict[dict->first]);
+      new_dict.push(std::make_pair(dict->first, second_dict[dict->first]));
     }
   }
 
-  data.push(new_name, new_dict);
+  data.push(std::make_pair(new_name, new_dict));
 }

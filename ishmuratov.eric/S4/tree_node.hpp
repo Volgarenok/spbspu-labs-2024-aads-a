@@ -17,7 +17,7 @@ namespace ishmuratov
       TNode *right;
 
       TNode(const Key key, const Value value):
-        data(std::make_pair(key, value)),
+        data(std::pair< Key, Value >(key, value)),
         height(0),
         parent(nullptr),
         left(nullptr),
