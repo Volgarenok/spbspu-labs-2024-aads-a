@@ -11,7 +11,7 @@ using namespace skuratov;
 int operatorPrecedence(char op)
 {
   if (op == '-' || op == '+')
-  { 
+  {
     return 1;
   }
   else if (op == '%' || op == '*' || op == '/')
