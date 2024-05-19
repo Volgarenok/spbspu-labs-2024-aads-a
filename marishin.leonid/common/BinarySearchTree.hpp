@@ -244,7 +244,32 @@ namespace marishin
       }
     }
 
-    
+    Value& get(const Key& key) const
+    {
+      node_t* result = get(key, root_);
+      return result->data.second;
+    }
+
+    node_t* get(const Key& key, node_t* currNode) const
+    {
+      if (!currNode)
+      {
+        return nullptr;
+      }
+      else if (currNode->data.first == key)
+      {
+        return currNode;
+      }
+      else if (compare()(key, currNode->data.first))
+      {
+        return get(key, currNode->left);
+      }
+      else
+      {
+        return get(key, currentNode->right);
+      }
+    }
+
   };
 
 }
