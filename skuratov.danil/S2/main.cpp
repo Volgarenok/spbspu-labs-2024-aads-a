@@ -66,7 +66,12 @@ long long int applyOperation(long long int a, long long int b, char op)
     {
       throw std::runtime_error("Division by zero");
     }
-    return a % b;
+    long long int res = a % b;
+    if (res < 0)
+    {
+      res += std::abs(b);
+    }
+    return res;
   }
   throw std::invalid_argument("Invalid operator");
 }
