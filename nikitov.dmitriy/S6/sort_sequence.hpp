@@ -12,16 +12,22 @@
 namespace nikitov
 {
   template< class T >
-  void sortSequence(std::string sorting, std::string, size_t size, std::ostream& output)
+  void sortSequence(std::string sorting, std::string type, size_t size, std::ostream& output)
   {
-    output << std::setprecision(1) << std::fixed;
-
     std::forward_list< T > fList;
     List< T > firstBiList;
     std::deque< T > firstDeque;
     for (size_t i = 0; i != size; ++i)
     {
-      T value = std::rand();
+      T value = 0;
+      if (type == "ints")
+      {
+        value = rand();
+      }
+      else
+      {
+        value = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/RAND_MAX));
+      }
       fList.push_front(value);
       firstBiList.push_back(value);
       firstDeque.push_back(value);
@@ -29,6 +35,8 @@ namespace nikitov
     List< T > secondBiList = firstBiList;
     std::deque< T > secondDeque = firstDeque;
     std::deque< T > thirdDeque = firstDeque;
+
+    output << std::setprecision(1) << std::fixed;
     printRange(fList.cbegin(), fList.cend(), output);
 
     if (sorting == "ascending")
