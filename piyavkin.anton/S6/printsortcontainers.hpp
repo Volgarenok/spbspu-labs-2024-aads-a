@@ -12,7 +12,7 @@
 namespace piyavkin
 {
   template< class T >
-  void print_containers(std::ostream& out, const T& container)
+  void print_container(std::ostream& out, const T& container)
   {
     StreamGuard guard(out);
     out << std::fixed << std::setprecision(1);
@@ -38,12 +38,12 @@ namespace piyavkin
     bi_list.sort(cmp);
     list.sort(cmp);
     std::sort(deque.begin(), deque.end(), cmp);
-    print_containers(out, deq_mer);
-    print_containers(out, deq_tim);
-    print_containers(out, deque);
-    print_containers(out, list);
-    print_containers(out, bi_list);
-    print_containers(out, bi_list_mer);
+    print_container(out, deq_mer);
+    print_container(out, deq_tim);
+    print_container(out, deque);
+    print_container(out, list);
+    print_container(out, bi_list);
+    print_container(out, bi_list_mer);
   }
 }
 #endif

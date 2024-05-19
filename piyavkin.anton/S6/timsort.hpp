@@ -70,6 +70,7 @@ namespace piyavkin
           {
             merge(second_pair.first, first_pair.first, first_pair.first + first_pair.second, cmp, res);
             std::move(res.begin(), res.end(), second_pair.first);
+            res.clear();
             second_pair.second += first_pair.second;
             stack.push(third_pair);
             stack.push(second_pair);
@@ -78,6 +79,7 @@ namespace piyavkin
           {
             merge(third_pair.first, second_pair.first, second_pair.first + second_pair.second, cmp, res);
             std::move(res.begin(), res.end(), third_pair.first);
+            res.clear();
             third_pair.second += second_pair.second;
             stack.push(second_pair);
             stack.push(first_pair);
@@ -98,7 +100,7 @@ namespace piyavkin
     RandIt start = it;
     size_t size_subarr = 0;
     Stack< std::pair< RandIt, size_t > > subarrs;
-    while (pass + 1 < n)
+    while (pass < n)
     {
       size_subarr = detail::find_subarr(start, cmp, n);
       subarrs.push(std::pair< RandIt, size_t >(start, size_subarr));
@@ -108,11 +110,11 @@ namespace piyavkin
       {
         detail::sort_ins(start, size_min - size_subarr, cmp);
         subarrs.push(std::pair< RandIt, size_t >(start, size_min - size_subarr));
-        start += size_min - size_subarr - 1;
-        pass += size_min - size_subarr - 1;
+        start += size_min - size_subarr;
+        pass += size_min - size_subarr;
       }
     }
-    if (pass != 0 )
+    if (pass != 0)
     {
       List< typename RandIt::value_type > res;
       detail::merge_timsort(subarrs, cmp, res);
