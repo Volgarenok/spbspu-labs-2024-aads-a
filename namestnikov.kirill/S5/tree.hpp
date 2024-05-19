@@ -300,6 +300,35 @@ namespace namestnikov
       }
       return f;
     }
+    template< class F >
+    F traverse_breadth(F f)
+    {
+      if (empty())
+      {
+        throw std::logic_error("Tree is empty");
+      }
+      else
+      {
+        std::queue< node_t > traverseQueue;
+        node_t current = root_;
+        traverseQueue.push(current);
+        while (!traverseQueue.empty())
+        {
+          current = traverseQueue.front();
+          traverseQueue.pop();
+          f(current->data);
+          if (current->left)
+          {
+            traverseQueue.push(current->left);
+          }
+          if (current->right)
+          {
+            traverseQueue.push(current->right);
+          }
+        }
+        return f;
+      }
+    }
     ~Tree()
     {
       clear();
