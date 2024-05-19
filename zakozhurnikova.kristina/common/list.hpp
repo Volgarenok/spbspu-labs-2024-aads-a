@@ -51,7 +51,10 @@ namespace zakozhurnikova
     }
 
     template < typename InputIt >
-    List(InputIt first, InputIt last)
+    List(InputIt first, InputIt last):
+      head_(nullptr),
+      tail_(nullptr),
+      size_(0)
     {
       while(first != last)
       {
