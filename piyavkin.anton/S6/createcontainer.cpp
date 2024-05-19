@@ -2,8 +2,8 @@
 
 float piyavkin::detail::get_value(float)
 {
-  std::default_random_engine generator;
-  std::uniform_real_distribution<> dis(-1.0, 1.0);
+  static std::default_random_engine generator;
+  static std::uniform_real_distribution<> dis(-1.0, 1.0);
   return dis(generator);
 }
 

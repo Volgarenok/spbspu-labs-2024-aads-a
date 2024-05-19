@@ -51,6 +51,7 @@ int main(int argc, char* argv[])
       List< float > bi_list;
       std::deque< float > deque;
       create_containers(deque, bi_list, list, size);
+      print_containers(std::cout, deque);
       choose_function(std::string(argv[1]), deque, bi_list, list);
     }
     else
