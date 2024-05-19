@@ -46,7 +46,7 @@ namespace nikitov
     }
     else
     {
-      std::cerr << "Error: Wrong sorting parameter" << '\n';
+      throw std::invalid_argument("Error: Wrong sorting parameter");
     }
     printRange(fList.cbegin(), fList.cend(), std::cout);
     printRange(firstBiList.cbegin(), firstBiList.cend(), std::cout);
