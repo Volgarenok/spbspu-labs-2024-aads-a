@@ -205,8 +205,46 @@ namespace marishin
 
     const_iterator< Key, Value > find(const Key& key) const
     {
-      
+      node_t* result = root_;
+      while (result)
+      {
+        if (compare()(result->data.first, key))
+        {
+          result = result->right;
+        }
+        else if (compare()(key, result->data.first))
+        {
+          result = result->left;
+        }
+        else
+        {
+          break;
+        }
+      }
+      return const_iterator_tree< Key, Value >(result);
     }
+
+  private:
+    node_t* root_;
+    size_t size_;
+
+    void clear()
+    {
+      clear(root_);
+      root_ = nullptr;
+    }
+
+    void clear(node_t* node)
+    {
+      if (node)
+      {
+        clear(node->right);
+        clear (node->left);
+        delete node;
+      }
+    }
+
+    
   };
 
 }
