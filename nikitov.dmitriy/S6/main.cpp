@@ -14,4 +14,19 @@ int main(int argc, char* argv[])
     std::cerr << "Error: Wrong size parameter" << '\n';
     return 1;
   }
+
+  std::string sorting = argv[1];
+  std::string type = argv[2];
+  if (type == "ints")
+  {
+  }
+  else if (type == "floats")
+  {
+  }
+  else
+  {
+    std::cerr << "Error: Wrong type parameter" << '\n';
+    return 1;
+  }
+  return 0;
 }
