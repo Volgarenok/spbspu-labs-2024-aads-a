@@ -21,6 +21,18 @@ void choose_function(const std::string& str, std::deque< T >& deque, piyavkin::L
   }
 }
 
+template< class T >
+void choose_type(const T&, const std::string& type_trav, size_t size)
+{
+  using namespace piyavkin;
+  std::forward_list< T > list;
+  List< T > bi_list;
+  std::deque< T > deque;
+  create_containers(deque, bi_list, list, size);
+  print_container(std::cout, deque);
+  choose_function(type_trav, deque, bi_list, list);
+}
+
 int main(int argc, char* argv[])
 {
   if (argc != 4)
@@ -38,21 +50,11 @@ int main(int argc, char* argv[])
     using namespace piyavkin;
     if (std::string(argv[2]) == "ints")
     {
-      std::forward_list< int > list;
-      List< int > bi_list;
-      std::deque< int > deque;
-      create_containers(deque, bi_list, list, size);
-      print_containers(std::cout, deque);
-      choose_function(std::string(argv[1]), deque, bi_list, list);
+      choose_type(0, std::string(argv[1]), size);
     }
     else if (std::string(argv[2]) == "floats")
     {
-      std::forward_list< float > list;
-      List< float > bi_list;
-      std::deque< float > deque;
-      create_containers(deque, bi_list, list, size);
-      print_containers(std::cout, deque);
-      choose_function(std::string(argv[1]), deque, bi_list, list);
+      choose_type(0.0f, std::string(argv[1]), size);
     }
     else
     {
