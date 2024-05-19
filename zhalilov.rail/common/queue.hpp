@@ -9,8 +9,9 @@ namespace zhalilov
   class Queue
   {
   public:
-    template < typename ...Args >
-    Queue(Args && ...);
+    Queue();
+    Queue(const Queue &);
+    Queue(Queue &&) noexcept;
 
     ~Queue() = default;
 
@@ -39,10 +40,21 @@ namespace zhalilov
   };
 
   template < typename T, typename Container >
-  template < typename ...Args >
-  Queue < T, Container >::Queue(Args && ...args):
-    container_(std::forward < Args >(args) ...)
+  Queue < T, Container >::Queue():
+    container_()
   {}
+
+  template < typename T, typename Container >
+  Queue < T, Container >::Queue(const Queue &other):
+    container_(other.container_)
+  {}
+
+  template < typename T, typename Container >
+  Queue < T, Container >::Queue(Queue &&other) noexcept:
+    container_(std::move(other.container_))
+  {
+    other.container_ = Container();
+  }
 
   template < typename T, typename Container >
   Queue < T, Container > &Queue < T, Container >::operator=(const Queue &other)
