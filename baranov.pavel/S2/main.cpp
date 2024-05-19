@@ -23,6 +23,6 @@ int main()
     return 1;
   }
 
-  std::cout << result;
+  std::cout << result << '\n';
 }
 
