@@ -9,7 +9,7 @@
 namespace marishin
 {
   template< typename Key, typename Value, typename Compare >
-  class BinarySearchTree:
+  class BinarySearchTree;
 
   template< typename Key, typename Value, typename Compare = std::less< Key > >
   struct ConstIteratorTree
