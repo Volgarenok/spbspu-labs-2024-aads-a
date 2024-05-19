@@ -1,43 +1,75 @@
 #include "outputFunctions.hpp"
+#include <limits>
+#include <cassert>
+#include "list.hpp"
 
-void baranov::printNames(std::ostream & output, ds_t & list)
+void baranov::printNames(std::ostream & output, const ds_t & sequences)
 {
-  auto end = list.end();
-  for (auto i = list.begin(); i != end; ++i)
+  assert(!sequences.empty());
+  auto end = sequences.cend();
+  auto i = sequences.cbegin();
+  output << i++->first;
+  for (; i != end; ++i)
   {
-    output << i->first;
-    output << ' ';
+    output << ' ' << i->first;
   }
   output << '\n';
 }
 
-void baranov::printLists(std::ostream & output, listOfLists & lists)
+void baranov::printList(std::ostream & output, const List< size_t > & list)
 {
-  auto listsEnd = lists.end();
-  for (auto i = lists.begin(); i != listsEnd; ++i)
+  assert(!list.empty());
+  auto end = list.cend();
+  auto i = list.cbegin();
+  output << *(i++);
+  for (; i != end; ++i)
   {
-    auto listEnd = (*i).end();
-    for (auto j = (*i).begin(); j != listEnd; ++j)
-    {
-      output << *j << ' ';
-    }
+    output << ' ' << *i;
+  }
+}
+
+void baranov::printLists(std::ostream & output, const listOfLists & lists)
+{
+  assert(!lists.empty());
+  auto end = lists.cend();
+  auto i = lists.cbegin();
+  printList(output, *i++);
+  for (; i != end; ++i)
+  {
     output << '\n';
+    printList(output, *i);
   }
 }
 
-void baranov::printSums(std::ostream & output, listOfLists & lists)
+size_t baranov::getSum(const List< size_t > & list)
 {
-  auto listsEnd = lists.end();
-  for (auto i = lists.begin(); i != listsEnd; ++i)
+  size_t maxNum = std::numeric_limits< size_t >::max();
+  size_t result = 0;
+  auto end = list.cend();
+  for (auto i = list.cbegin(); i != end; ++i)
   {
-    size_t result = 0;
-    auto listEnd = (*i).end();
-    for (auto j = (*i).begin(); j != listEnd; ++j)
+    if (maxNum - result < *i)
     {
-      result += *j;
+      throw std::overflow_error("Overflow");
     }
-    output << result << ' ';
+    result += *i;
   }
-  output << '\n';
+  return result;
+}
+
+void baranov::printSums(std::ostream & output, const listOfLists & lists)
+{
+  auto end = lists.cend();
+  if (lists.empty())
+  {
+    output << 0;
+    return;
+  }
+  List< size_t > sums;
+  for (auto i = lists.cbegin(); i != end; ++i)
+  {
+    sums.push_back(getSum(*i));
+  }
+  printList(output, sums);
 }
 
