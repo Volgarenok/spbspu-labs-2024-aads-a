@@ -70,7 +70,7 @@ int main(int argc, char* argv[])
     printRange(secondBiList.cbegin(), secondBiList.cend(), std::cout);
     printRange(firstDeque.cbegin(), firstDeque.cend(), std::cout);
     printRange(secondDeque.cbegin(), secondDeque.cend(), std::cout);
-printRange(thirdDeque.cbegin(), thirdDeque.cend(), std::cout);
+    printRange(thirdDeque.cbegin(), thirdDeque.cend(), std::cout);
   }
   else if (type == "floats")
   {

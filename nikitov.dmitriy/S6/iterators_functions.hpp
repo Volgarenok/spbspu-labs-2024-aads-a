@@ -10,8 +10,12 @@ namespace nikitov
   {
     while (begin != end)
     {
-      output << *begin << ' ';
+      output << *begin;
       ++begin;
+      if (begin != end)
+      {
+        output << ' ';
+      }
     }
     output << '\n';
   }
