@@ -62,10 +62,8 @@ void lebedev::countSums(listOfPairs & pairs, List< size_t > & sums, size_t max_p
 
 void lebedev::outputPairsNames(std::ostream & output, listOfPairs & pairs)
 {
-  auto pairs_iter = pairs.cbegin();
-  output << pairs_iter->first;
-  pairs_iter++;
-  for (pairs_iter; pairs_iter != pairs.cend(); pairs_iter++)
+  output << pairs.cbegin()->first;
+  for (auto pairs_iter = ++pairs.cbegin(); pairs_iter != pairs.cend(); pairs_iter++)
   {
     output << ' ' << pairs_iter->first;
   }
@@ -100,10 +98,8 @@ void lebedev::outputSequences(std::ostream & output, listOfPairs & pairs, size_t
 
 void lebedev::outputSums(std::ostream & output, List< size_t > sums)
 {
-  auto sums_iter = sums.cbegin();
-  output << *sums_iter;
-  ++sums_iter;
-  for (sums_iter; sums_iter != sums.cend(); sums_iter++)
+  output << *sums.cbegin();
+  for (auto sums_iter = ++sums.cbegin(); sums_iter != sums.cend(); sums_iter++)
   {
     output << ' ' << *sums_iter;
   }
