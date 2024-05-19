@@ -22,7 +22,7 @@ int operatorPrecedence(char op)
   return 0;
 }
 
-int applyOperation(int a, int b, char op)
+long long int applyOperation(long long int a, long long int b, char op)
 {
   if (op == '+')
   {
@@ -107,25 +107,25 @@ std::string infixToPostfix(const std::string& exp)
   return postfixExp;
 }
 
-void evaluatePostfixExpression(const std::string& exp, Queue< int >& resultQueue)
+void evaluatePostfixExpression(const std::string& exp, Queue< long long int >& resultQueue)
 {
   std::istringstream iss(exp);
-  Stack< int > operands;
+  Stack< long long int > operands;
 
   std::string op;
   while (iss >> op)
   {
     if (op == "+" || op == "-" || op == "*" || op == "/" || op == "%")
     {
-      int b = operands.top();
+      long long int b = operands.top();
       operands.drop();
-      int a = operands.top();
+      long long int a = operands.top();
       operands.drop();
       operands.push(applyOperation(a, b, op[0]));
     }
     else
     {
-      operands.push(std::stoi(op));
+      operands.push(std::stoll(op));
     }
   }
   resultQueue.push(operands.top());
@@ -163,14 +163,14 @@ int main(int argc, char* argv[])
     }
   }
 
-  List< Queue< int > > results;
+  List< Queue< long long int > > results;
 
   for (auto it = exp.cbegin(); it != exp.cend(); ++it)
   {
     try
     {
       std::string postfixExp = infixToPostfix(*it);
-      Queue< int > resultQueue;
+      Queue< long long int > resultQueue;
       evaluatePostfixExpression(postfixExp, resultQueue);
       results.pushBack(resultQueue);
     }
@@ -183,7 +183,7 @@ int main(int argc, char* argv[])
 
   for (auto it = results.cbegin(); it != results.cend(); ++it)
   {
-    Queue< int > resultQueue = *it;
+    Queue< long long int > resultQueue = *it;
     while (!resultQueue.empty())
     {
       std::cout << resultQueue.front() << " ";
