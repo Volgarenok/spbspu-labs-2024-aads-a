@@ -39,6 +39,11 @@ int main(int argc, char *argv[])
     {
       summator = map.traverse_breadth(summator);
     }
+    else
+    {
+      std::cerr << "Incorrect traverse arg";
+      return 1;
+    }
   }
   catch (const std::logic_error &e)
   {
