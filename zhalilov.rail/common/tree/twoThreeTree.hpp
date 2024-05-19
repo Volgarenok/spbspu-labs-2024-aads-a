@@ -494,7 +494,7 @@ namespace zhalilov
     {
       throw std::logic_error("travers_breadth: tree empty");
     }
-    Queue < Node > nodeQueue;
+    Queue < Node * > nodeQueue;
     nodeQueue.push(head_->left);
     while (!nodeQueue.empty())
     {
@@ -517,8 +517,8 @@ namespace zhalilov
       {
         nodeQueue.push(currNode->right);
       }
-      return f;
     }
+    return f;
   }
 
   template < class Key, class T, class Compare >
@@ -526,7 +526,7 @@ namespace zhalilov
   F TwoThree < Key, T, Compare >::traverse_breadth(F f)
   {
     const TwoThree < Key, T, Compare > constThis = const_cast < TwoThree < Key, T, Compare > & >(*this);
-    return constThis.traverse_rnl(f);
+    return constThis.traverse_breadth(f);
   }
 
   template < class Key, class T, class Compare >
