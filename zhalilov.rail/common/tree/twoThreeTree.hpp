@@ -458,12 +458,13 @@ namespace zhalilov
     auto itCurr = cend();
     itCurr--;
     auto itBegin = cbegin();
-    do
+    while (itCurr != itBegin)
     {
       f(*itCurr);
       itCurr--;
     }
-    while (itCurr != itBegin);
+    f(*itCurr);
+    itCurr--;
     return f;
   }
 
