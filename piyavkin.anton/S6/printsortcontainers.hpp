@@ -4,14 +4,18 @@
 #include <deque>
 #include <forward_list>
 #include <algorithm>
+#include <iomanip>
 #include <list.hpp>
 #include "timsort.hpp"
+#include "streamguard.hpp"
 
 namespace piyavkin
 {
   template< class T >
   void print_containers(std::ostream& out, const T& container)
   {
+    StreamGuard guard(out);
+    out << std::fixed << std::setprecision(1);
     for (auto i = container.cbegin(); i != container.cend(); ++i)
     {
       if (i != container.cbegin())
