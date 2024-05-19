@@ -26,7 +26,7 @@ namespace novokhatskiy
     ConstIteratorTree():
       node_(nullptr)
     {}
-    
+
     explicit ConstIteratorTree(node_t* node):
       node_(node)
     {}
@@ -34,13 +34,11 @@ namespace novokhatskiy
 
     bool operator!=(const constIter& other) const
     {
-      assert(node_ != nullptr);
       return !(*this == other);
     }
 
     bool operator==(const constIter& other) const
     {
-      assert(node_ != nullptr);
       return node_ == other.node_;
     }
 
@@ -87,8 +85,6 @@ namespace novokhatskiy
         node_ = node_->parent;
       }
       return *this;
-      /*node_ = predecessor(node_);
-      return *this;*/
     }
 
     constIter operator--(int)
@@ -137,7 +133,7 @@ namespace novokhatskiy
 
     void goLastLeft()
     {
-      auto tmp = node_; //node_->left
+      auto tmp = node_;
       while (tmp->left)
       {
         tmp = tmp->left;
