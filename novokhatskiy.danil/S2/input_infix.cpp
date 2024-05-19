@@ -10,7 +10,6 @@ void novokhatskiy::inputInfix(Queue< Queue< InfixType > >& infixQueue, std::istr
     Queue< InfixType > currQ;
     while (in >> symb && symb != '\n' && !in.eof())
     {
-      InfixType res;
       switch (symb)
       {
       case '+':
@@ -18,36 +17,35 @@ void novokhatskiy::inputInfix(Queue< Queue< InfixType > >& infixQueue, std::istr
       case '*':
       case '/':
       case '%':
-        res.getType() = TokenType::OPERATION;
-        res.getOp() = static_cast< Operation >(symb);
+        currQ.push(InfixType(symb));
         break;
       case '(':
       case ')':
-        res.getType() = TokenType::BRACKET;
-        res.getBracket() = static_cast< Bracket >(symb);
+        if (symb == '(')
+        {
+          currQ.push(InfixType::openBracket());
+        }
+        else
+        {
+          currQ.push(InfixType::closeBracket());
+        }
         break;
       default:
         try
         {
-          res.getType() = TokenType::OPERAND;
           std::string str = {};
           while (symb != ' ' && symb != '\n')
           {
             str += symb;
             in >> symb;
           }
-          res.getOperand().num = std::stoll(str);
-          currQ.push(res);
+          currQ.push(InfixType(std::stoll(str)));
           break;
         }
         catch (const std::exception&)
         {
           break;
         }
-      }
-      if (symb != ' ' && symb != '\n')
-      {
-        currQ.push(res);
       }
       if (symb == '\n')
       {

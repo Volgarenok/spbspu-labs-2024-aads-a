@@ -238,24 +238,6 @@ namespace novokhatskiy
       head_ = ptr;
     }
 
-    void push_back(const T& value)
-    {
-      node_t* new_node = new node_t{ value, nullptr };
-      if (head_ == nullptr)
-      {
-        head_ = new_node;
-      }
-      else
-      {
-        node_t* curr = head_;
-        while (curr->next_ != nullptr)
-        {
-          curr = curr->next_;
-        }
-        curr->next_ = new_node;
-      }
-    }
-
     void push_front(T&& value)
     {
       node_t* ptr = new node_t(std::move(value));

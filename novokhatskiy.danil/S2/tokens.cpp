@@ -38,12 +38,37 @@ novokhatskiy::Postfix novokhatskiy::Postfix::convertToPostfix(const InfixType& i
   return *this;
 }
 
-novokhatskiy::TokenType novokhatskiy::InfixType::getType() const noexcept
+novokhatskiy::InfixType::InfixType(long long val):
+  type(TokenType::OPERAND),
+  operand(val)
+{}
+
+novokhatskiy::InfixType novokhatskiy::InfixType::openBracket()
 {
-  return type;
+  return InfixType(true);
 }
 
-novokhatskiy::TokenType& novokhatskiy::InfixType::getType() noexcept
+novokhatskiy::InfixType novokhatskiy::InfixType::closeBracket()
+{
+  return InfixType(false);
+}
+
+novokhatskiy::InfixType::InfixType(char val):
+  type(TokenType::OPERATION),
+  operation(val)
+{}
+
+bool novokhatskiy::InfixType::isOpenBracket() const
+{
+  return bracket.isOpen;
+}
+
+bool novokhatskiy::InfixType::isCloseBracket() const
+{
+  return !bracket.isOpen;
+}
+
+novokhatskiy::TokenType novokhatskiy::InfixType::getType() const noexcept
 {
   return type;
 }
@@ -53,17 +78,7 @@ novokhatskiy::Operand novokhatskiy::InfixType::getOperand() const noexcept
   return operand;
 }
 
-novokhatskiy::Operand& novokhatskiy::InfixType::getOperand() noexcept
-{
-  return operand;
-}
-
 novokhatskiy::Operation novokhatskiy::InfixType::getOp() const noexcept
-{
-  return operation;
-}
-
-novokhatskiy::Operation& novokhatskiy::InfixType::getOp() noexcept
 {
   return operation;
 }
@@ -73,10 +88,10 @@ novokhatskiy::Bracket novokhatskiy::InfixType::getBracket() const noexcept
   return bracket;
 }
 
-novokhatskiy::Bracket& novokhatskiy::InfixType::getBracket() noexcept
-{
-  return bracket;
-}
+novokhatskiy::InfixType::InfixType(bool val):
+  bracket(val),
+  type(TokenType::BRACKET)
+{}
 
 novokhatskiy::TokenType novokhatskiy::Postfix::getPostix() const noexcept
 {
@@ -92,3 +107,15 @@ novokhatskiy::Operation novokhatskiy::Postfix::getOperation() const noexcept
 {
   return operation;
 }
+
+novokhatskiy::Operand::Operand(long long val):
+  num(val)
+{}
+
+novokhatskiy::Operation::Operation(char val):
+  operation(val)
+{}
+
+novokhatskiy::Bracket::Bracket(bool val):
+  isOpen(val)
+{}

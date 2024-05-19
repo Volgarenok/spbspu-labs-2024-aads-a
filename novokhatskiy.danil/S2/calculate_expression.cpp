@@ -57,7 +57,7 @@ long long novokhatskiy::doMod(long long op1, long long op2)
   long long res = op1 % op2;
   if (res < 0)
   {
-    res += op2;
+     res+= op2;
   }
   return res;
 }
@@ -79,22 +79,22 @@ long long novokhatskiy::calculatePostExp(novokhatskiy::Queue< Postfix >&& inQueu
       }
       long long secondOperand = stack.top();
       stack.pop();
-      switch (token.getOperation())
+      switch (token.getOperation().operation)
       {
-      case Operation::ADD:
+      case '+':
         stack.top() = doAddition(stack.top(), secondOperand);
         break;
-      case Operation::SUB:
+      case '-':
         stack.top() = doSubstraction(stack.top(), secondOperand);
         break;
-      case Operation::MUL:
+      case '*':
         stack.top() = doMultiplication(stack.top(), secondOperand);
         break;
-      case Operation::DIV:
+      case '/':
         stack.top() = doDivision(stack.top(), secondOperand);
         break;
-      case Operation::MOD:
-        stack.top() = doMod(stack.top(), secondOperand);
+      case '%':
+        stack.top() = doMod(stack.top(),secondOperand);
         break;
       }
       break;

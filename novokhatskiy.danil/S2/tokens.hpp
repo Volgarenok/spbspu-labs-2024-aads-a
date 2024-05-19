@@ -13,37 +13,41 @@ namespace novokhatskiy
     BRACKET,
   };
 
+  struct Bracket
+  {
+    bool isOpen;
+    Bracket() = default;
+    Bracket(bool val);
+  };
+
   struct Operand
   {
     long long num;
+    Operand() = default;
+    Operand(long long val);
   };
 
-  enum class Operation
+  struct Operation
   {
-    ADD = '+',
-    SUB = '-',
-    MUL = '*',
-    DIV = '/',
-    MOD = '%',
-  };
-
-  enum class Bracket
-  {
-    OPEN = '(',
-    CLOSE = ')',
+    char operation;
+    Operation() = default;
+    Operation(char val);
   };
 
   class InfixType
   {
   public:
+    InfixType() = default;
+    explicit InfixType(long long val);
+    static InfixType openBracket();
+    static InfixType closeBracket();
+    explicit InfixType(char val);
+    bool isOpenBracket() const;
+    bool isCloseBracket() const;
     TokenType getType() const noexcept;
-    TokenType& getType() noexcept;
     Operand getOperand() const noexcept;
-    Operand& getOperand() noexcept;
     Operation getOp() const noexcept;
-    Operation& getOp() noexcept;
     Bracket getBracket() const noexcept;
-    Bracket& getBracket() noexcept;
 
   private:
     TokenType type;
@@ -52,6 +56,7 @@ namespace novokhatskiy
       Operation operation;
       Bracket bracket;
     };
+    explicit InfixType(bool val);
   };
 
   struct Postfix

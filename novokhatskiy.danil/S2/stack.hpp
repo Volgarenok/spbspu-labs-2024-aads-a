@@ -18,6 +18,16 @@ namespace novokhatskiy
       }
       return data_.front();
     }
+
+    const T& top() const
+    {
+      if (empty())
+      {
+        throw std::invalid_argument("Stack is empty");
+      }
+      return data_.front();
+    }
+
     bool empty() const noexcept
     {
       return data_.empty();

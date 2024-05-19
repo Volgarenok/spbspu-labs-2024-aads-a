@@ -6,8 +6,9 @@
 
 namespace novokhatskiy
 {
-  Queue< Postfix > convertExpression(Queue< InfixType >&& infixQueue);
+  Queue< novokhatskiy::Postfix > convertExpression(Queue< InfixType >&& infixQueue);
   unsigned getPriority(Operation operation);
+  bool checkPriority(InfixType type);
 }
 
 #endif

@@ -4,20 +4,25 @@
 
 unsigned novokhatskiy::getPriority(Operation operation)
 {
-  switch (operation)
+  switch (operation.operation)
   {
-  case Operation::ADD:
-  case Operation::SUB:
+  case '+':
+  case '-':
     return 1;
-  case Operation::MUL:
-  case Operation::DIV:
-  case Operation::MOD:
+  case '*':
+  case '/':
+  case '%':
     return 2;
 
   default:
     throw std::invalid_argument("It's not an operation");
   }
   return 0;
+}
+
+bool novokhatskiy::checkPriority(InfixType type)
+{
+  return type.getType() != TokenType::BRACKET && getPriority(type.getOp()) >= getPriority(type.getOp());
 }
 
 novokhatskiy::Queue< novokhatskiy::Postfix > novokhatskiy::convertExpression(Queue< InfixType >&& infixQueue)
@@ -34,8 +39,7 @@ novokhatskiy::Queue< novokhatskiy::Postfix > novokhatskiy::convertExpression(Que
       resultQueue.push(novokhatskiy::Postfix(std::move(curr)));
       break;
     case TokenType::OPERATION:
-      while (!stack.empty() && stack.top().getType() != TokenType::BRACKET &&
-             getPriority(stack.top().getOp()) >= getPriority(stack.top().getOp()))
+      while (!stack.empty() && stack.top().getType() != TokenType::BRACKET && checkPriority(stack.top()))
       {
         resultQueue.push({ TokenType::OPERATION, stack.top().getOp() });
         stack.pop();
@@ -43,7 +47,7 @@ novokhatskiy::Queue< novokhatskiy::Postfix > novokhatskiy::convertExpression(Que
       stack.push(curr);
       break;
     case TokenType::BRACKET:
-      if (curr.getBracket() == Bracket::OPEN)
+      if (curr.getBracket().isOpen)
       {
         stack.push(curr);
       }
