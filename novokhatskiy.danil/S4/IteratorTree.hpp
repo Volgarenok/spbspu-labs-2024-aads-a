@@ -26,7 +26,7 @@ namespace novokhatskiy
     IteratorTree():
       node_(nullptr)
     {}
-    
+
     IteratorTree(node_t* other) :
       node_(other)
     {}
