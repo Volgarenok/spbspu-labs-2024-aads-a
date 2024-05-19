@@ -11,6 +11,7 @@ int main(int argc, char *argv[])
   if (argc != 3)
   {
     std::cerr << "Incorrect args";
+    return 1;
   }
 
   using namespace zhalilov;
@@ -24,17 +25,24 @@ int main(int argc, char *argv[])
   }
 
   Summator summator;
-  if (std::strcmp(argv[1], "ascending") == 0)
+  try
   {
-    summator = map.traverse_lnr(summator);
+    if (std::strcmp(argv[1], "ascending") == 0)
+    {
+      summator = map.traverse_lnr(summator);
+    }
+    else if (std::strcmp(argv[1], "descending") == 0)
+    {
+      summator = map.traverse_rnl(summator);
+    }
+    else if (std::strcmp(argv[1], "breadth") == 0)
+    {
+      summator = map.traverse_breadth(summator);
+    }
   }
-  else if (std::strcmp(argv[1], "descending") == 0)
+  catch (const std::logic_error &e)
   {
-    summator = map.traverse_rnl(summator);
-  }
-  else if (std::strcmp(argv[1], "breadth") == 0)
-  {
-    summator = map.traverse_breadth(summator);
+    std::cerr << "<EMPTY>";
   }
   std::cout << summator.result_;
   std::cout << summator.values_;
