@@ -6,9 +6,9 @@
 
 namespace namestnikov
 {
-  void ascending(int & result, std::string & line, namestnikov::Tree< int, std::string > & map);
-  void descending(int & result, std::string & line, namestnikov::Tree< int, std::string > & map);
-  void breadth(int & result, std::string & line, namestnikov::Tree< int, std::string > & map);
+  void ascending(int & result, std::string & line, Tree< int, std::string > & map);
+  void descending(int & result, std::string & line, Tree< int, std::string > & map);
+  void breadth(int & result, std::string & line, Tree< int, std::string > & map);
 }
 
 #endif

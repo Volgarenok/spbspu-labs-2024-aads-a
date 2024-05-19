@@ -28,5 +28,5 @@ void namestnikov::SumFunc::operator()(const std::pair< const int, std::string > 
     throw std::overflow_error("Numeric overflow");
   }
   result_ += data.first;
-  line_ = line_ + data.second + " ";
+  line_ += " " + data.second;
 }
