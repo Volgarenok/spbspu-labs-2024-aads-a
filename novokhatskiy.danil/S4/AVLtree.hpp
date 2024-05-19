@@ -162,31 +162,31 @@ namespace novokhatskiy
 
     Value& operator[](const Key& key)
     {
-      iter tmp = search(key);
-      if (tmp.node_->value.first == key)
+      node_t* tmp = search(key);
+      if (tmp->value.first == key)
       {
-        return tmp.node_->value.second;
+        return tmp->value.second;
       }
       else
       {
         insert3(std::make_pair(key, Value()));
-        iter res = find(key);
-        return res.node_->value.second;
+        node_t* res = search(key);
+        return res->value.second;
       }
     }
 
     const Value& operator[](const Key& key) const
     {
-      iter tmp = search(key);
-      if (tmp.node_->value.first == key)
+      node_t* tmp = search(key);
+      if (tmp->value.first == key)
       {
-        return tmp.node_->value.second;
+        return tmp->value.second;
       }
       else
       {
         insert3(std::make_pair(key, Value()));
-        iter res = find(key);
-        return res.node_->value.second;
+        node_t* res = search(key);
+        return res->value.second;
       }
     }
 
