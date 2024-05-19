@@ -11,7 +11,7 @@ void zhalilov::Summator::operator()(const std::pair < int, std::string > pair)
   {
     throw std::overflow_error("addition overflow");
   }
-  if (result_ < 0 && min - result_ > pair.first)
+  if (result_ < 0 && pair.first < 0 && min + result_ > pair.first)
   {
     throw std::underflow_error("addition underflow");
   }
