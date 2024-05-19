@@ -2,7 +2,9 @@
 #include <iostream>
 #include <string>
 #include <utility>
-#include <BinarySearchTree.hpp>
+#include <binarySearchTree.hpp>
+#include "inputMaps.hpp"
+#include "command.hpp"
 
 int main(int argc, char *argv[])
 {
