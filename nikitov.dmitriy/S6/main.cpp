@@ -7,4 +7,11 @@ int main(int argc, char* argv[])
     std::cerr << "Error: Wrong input parameters" << '\n';
     return 1;
   }
+
+  size_t size = std::stoull(argv[3]);
+  if (size == 0)
+  {
+    std::cerr << "Error: Wrong size parameter" << '\n';
+    return 1;
+  }
 }
