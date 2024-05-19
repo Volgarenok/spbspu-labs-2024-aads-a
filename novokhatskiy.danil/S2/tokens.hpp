@@ -50,7 +50,7 @@ namespace novokhatskiy
     Bracket getBracket() const noexcept;
 
   private:
-    union 
+    union
     {
       Operand operand;
       Operation operation;
@@ -72,7 +72,7 @@ namespace novokhatskiy
 
   private:
     TokenType type;
-    union 
+    union
     {
       Operand operand;
       Operation operation;
