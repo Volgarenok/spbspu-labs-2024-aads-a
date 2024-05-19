@@ -9,10 +9,8 @@ namespace zhalilov
   class Stack
   {
   public:
-    Stack();
-    Stack(const Stack &);
-    Stack(Stack &&) noexcept;
-
+    template < typename... Args >
+    Stack(Args &&...);
     ~Stack() = default;
 
     Stack &operator=(const Stack &);
@@ -38,21 +36,10 @@ namespace zhalilov
   };
 
   template < typename T, typename Container >
-  Stack< T, Container >::Stack():
-    container_()
+  template < typename... Args>
+  Stack< T, Container >::Stack(Args &&... args):
+    container_(std::forward< Args >(args)...)
   {}
-
-  template < typename T, typename Container >
-  Stack< T, Container >::Stack(const Stack &other):
-    container_(other.container_)
-  {}
-
-  template < typename T, typename Container >
-  Stack< T, Container >::Stack(Stack &&other) noexcept:
-    container_(std::move(other.container_))
-  {
-    other.container_ = Container();
-  }
 
   template < typename T, typename Container >
   Stack< T, Container > &Stack< T, Container >::operator=(const Stack &other)
