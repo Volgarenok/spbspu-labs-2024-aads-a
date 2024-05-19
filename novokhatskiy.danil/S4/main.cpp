@@ -29,10 +29,10 @@ void inputDict(mainMap& dict, std::istream& in)
     {
       std::string val = {};
       in >> val;
-      tmp.insert({ key, val });
+      tmp.insert3({ key, val });
     }
-    dict[name] = tmp;
-    //dict.insert({ name, tmp });
+    //dict[name] = tmp;
+    dict.insert3(std::make_pair(std::move(name), std::move(tmp)));
   }
   in.clear();
 }
