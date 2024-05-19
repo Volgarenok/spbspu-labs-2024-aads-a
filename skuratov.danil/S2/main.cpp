@@ -244,10 +244,16 @@ int main(int argc, char* argv[])
     reverseStack.push(*it);
   }
 
+  bool isFirstResult = true;
   while (!reverseStack.empty())
   {
-    std::cout << reverseStack.top() << ' ';
+    if (!isFirstResult)
+    {
+      std::cout << ' ';
+    }
+    std::cout << reverseStack.top();
     reverseStack.drop();
+    isFirstResult = false;
   }
   std::cout << '\n';
   return 0;
