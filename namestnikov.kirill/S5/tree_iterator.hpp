@@ -59,6 +59,33 @@ namespace namestnikov
       return temp;
 
     }
+    iterator & operator--()
+    {
+      if (node_->left)
+      {
+        node_ = node_->left;
+        while (node_->right)
+        {
+          node_ = node_->right;
+        }
+        return *this;
+      }
+      else
+      {
+        while (node_->isLeftChild())
+        {
+          node_ = node_->parent;
+        }
+        node_ = node_->parent;
+        return *this;
+      }
+    }
+    iterator operator--(int)
+    {
+      iterator temp(*this);
+      --(*this);
+      return temp;
+    }
     bool operator==(const iterator & other) const
     {
       return (node_ == other.node_);
