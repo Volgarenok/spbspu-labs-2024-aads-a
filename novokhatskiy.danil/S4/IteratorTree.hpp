@@ -23,6 +23,10 @@ namespace novokhatskiy
     using iter = IteratorTree< Key, Value, Compare >;
     using constIter = ConstIteratorTree< Key, Value, Compare >;
 
+    IteratorTree():
+      node_(nullptr)
+    {}
+    
     IteratorTree(node_t* other) :
       node_(other)
     {}
@@ -75,12 +79,15 @@ namespace novokhatskiy
         //goLastLeft();
         return *this;
       }
-      while (node_->parent && node_->parent->right == node_)
+      else
       {
+        while (node_->parent && node_->parent->right == node_)
+        {
+          node_ = node_->parent;
+        }
         node_ = node_->parent;
+        return *this;
       }
-      node_ = node_->parent;
-      return *this;
     }
 
     iter operator++(int)
@@ -92,7 +99,16 @@ namespace novokhatskiy
 
     iter operator--()
     {
-      node_ = predecessor(node_);
+      if (node_->left)
+      {
+        node_ = node_->left;
+        for (; node_->right; node_ = node_->right);
+      }
+      else
+      {
+        for (; node_ == node_->parent->left; node_ = node_->parent);
+        node_ = node_->parent;
+      }
       return *this;
     }
 

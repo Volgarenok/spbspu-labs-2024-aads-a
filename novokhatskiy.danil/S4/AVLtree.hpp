@@ -34,8 +34,7 @@ namespace novokhatskiy
     {
       try
       {
-        constIter begin = other.cbegin();
-        for (; begin != other.cend(); begin++)
+        for (auto begin = other.cbegin(); begin != other.cend(); begin++)
         {
           insert2(*begin);
         }
@@ -142,7 +141,7 @@ namespace novokhatskiy
 
     Value& at(const Key& key)
     {
-      node_t* curr = find(root_->left, key);
+      node_t* curr = search(key);
       if (curr && curr->value.first == key)
       {
         return curr->value.second;
@@ -152,7 +151,7 @@ namespace novokhatskiy
 
     const Value& at(const Key& key) const
     {
-      node_t* curr = find(root_->left, key);
+      node_t* curr = search(key); //find(root_->left, key)
       if (curr && curr->value.first == key)
       {
         return curr->value.second;
@@ -162,14 +161,14 @@ namespace novokhatskiy
 
     Value& operator[](const Key& key)
     {
-      iter tmp = find(key);
+      iter tmp = search(key);
       if (tmp.node_->value.first == key)
       {
         return tmp.node_->value.second;
       }
       else
       {
-        insert(std::make_pair(key, Value()));
+        insert2(std::make_pair(key, Value()));
         iter res = find(key);
         return res.node_->value.second;
       }
@@ -177,14 +176,14 @@ namespace novokhatskiy
 
     const Value& operator[](const Key& key) const
     {
-      iter tmp = find(key);
+      iter tmp = search(key);
       if (tmp.node_->value.first == key)
       {
         return tmp.node_->value.second;
       }
       else
       {
-        insert(std::make_pair(key, Value()));
+        insert2(std::make_pair(key, Value()));
         iter res = find(key);
         return res.node_->value.second;
       }
@@ -208,21 +207,31 @@ namespace novokhatskiy
       prePrint(root_);
     }
 
-    void fixedHeight(node_t* node)
+    void fixedHeight(node_t* node, int h)
     {
-      int rightH = getHeight(node->right);
-      int leftH = getHeight(node->left);
-      node->height = (rightH > leftH ? rightH : leftH) + 1;
-    }
-
-    int getHeight(node_t* root)
-    {
-      return root ? root->height : 0;
+      if (h + 1 > node->height)
+      {
+        node->height++;
+      }
+      if (node->parent)
+      {
+        fixedHeight(node->parent, node->height);
+      }
     }
 
     int getBalanceFactor(node_t* node)
     {
-      return getHeight(node->right) - getHeight(node->left);
+      int rightH = 0;
+      int leftH = 0;
+      if (node->right)
+      {
+        rightH = node->right->height;
+      }
+      if (node->left)
+      {
+        leftH = node->left->height;
+      }
+      return rightH - leftH;
     }
 
     node_t* updateHeight(node_t* node)
@@ -408,22 +417,32 @@ namespace novokhatskiy
 
     constIter cbegin() const
     {
-      return constIter(minN(root_));
+      node_t* curr = root_;
+      for (; curr->left; curr = curr->left);
+      return constIter(curr);
     }
 
     constIter cend() const
     {
-      return constIter(nullptr);
+      return constIter();
     }
 
     iter begin()
     {
-      return iter(minN(root_));
+      node_t* curr = root_;
+      for (; curr->left; curr = curr->left);
+      return iter(curr);
     }
 
     iter end()
     {
-      return iter(nullptr);
+      return iter(root_);
+    }
+
+    node_t* search(const Key& key)
+    {
+      node_t* result = search_imp(root_, key);
+      return result;
     }
 
     ~Tree()
@@ -478,23 +497,37 @@ namespace novokhatskiy
             insert_imp2(value, curr->left);
           }
           else
-          {
+          {           
             curr->left = new node_t(value, curr);
-            balance(curr->left);
+            fixedHeight(curr, 0);
+            if (curr->parent)
+            {
+              node_t* tmp = balance(curr->parent);
+              if (root_->parent)
+              {
+                root_ = tmp;
+              }
+            }
           }
         }
         else
         {
-          if (cmp_(curr->value.first, value.first))
+          if (curr->right)
           {
-            if (curr->right)
+            insert_imp2(value, curr->right);
+          }
+          else
+          {
+            curr->right = new node_t(value, curr);
+            fixedHeight(curr, 0);
+            if (curr->parent)
             {
-              insert_imp2(value, curr->right);
-            }
-            else
-            {
-              curr->right = new node_t(value, curr);
-              balance(curr->right);
+              balance(curr->parent);
+              node_t* tmp = balance(curr->parent);
+              if (root_->parent)
+              {
+                root_ = tmp;
+              }
             }
           }
         }
@@ -508,16 +541,15 @@ namespace novokhatskiy
 
     node_t* balance(node_t* node)
     {
-      fixedHeight(node);
-      if (getBalanceFactor(node) == 2)
+      if (getBalanceFactor(node) == 1)
       {
-        if (getBalanceFactor(node->right) < 0)
-        {
+        //if (getBalanceFactor(node->right) < 0)
+        //{
           node->right = rotate_right(node->right);
-        }
+        //}
         return rotate_left(node);
       }
-      if (getBalanceFactor(node) == -2)
+      if (getBalanceFactor(node) == -1)
       {
         if (getBalanceFactor(node->left) > 0)
         {
@@ -537,9 +569,15 @@ namespace novokhatskiy
         newRoot->left->parent = currRoot;
       }
       newRoot->left = currRoot;
+      newRoot->parent = currRoot->parent;
+      if (currRoot->parent)
+      {
+        currRoot->parent->left = newRoot;
+      }
       currRoot->parent = newRoot;
-      fixedHeight(currRoot);
-      fixedHeight(newRoot);
+      //std::swap(newRoot->height, currRoot->height);
+      //fixedHeight(currRoot);
+      //fixedHeight(newRoot);
       return newRoot;
     }
 
@@ -552,9 +590,11 @@ namespace novokhatskiy
         newRoot->right->parent = currRoot;
       }
       newRoot->right = currRoot;
+      newRoot->parent = currRoot->parent;
+      currRoot->parent->right = newRoot;
       currRoot->parent = newRoot;
-      fixedHeight(currRoot);
-      fixedHeight(newRoot);
+      //fixedHeight(currRoot);
+      //fixedHeight(newRoot);
       return newRoot;
     }
 
@@ -570,6 +610,25 @@ namespace novokhatskiy
       return root_;*/
     }
 
+    node_t* search_imp(node_t* node, const Key& key)
+    {
+      if (!node)
+      {
+        return nullptr;
+      }
+      else if (cmp_(key, node->value.first))
+      {
+        return search_imp(node->left, key);
+      }
+      else if (cmp_(node->value.first, key))
+      {
+        return search_imp(node->right, key);
+      }
+      else
+      {
+        return node;
+      }
+    }
   };
 }
 

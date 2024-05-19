@@ -23,7 +23,11 @@ namespace novokhatskiy
     using constIter = ConstIteratorTree< Key, Value, Compare >;
     using iter = IteratorTree< Key, Value, Compare >;
 
-    ConstIteratorTree(node_t* node):
+    ConstIteratorTree():
+      node_(nullptr)
+    {}
+    
+    explicit ConstIteratorTree(node_t* node):
       node_(node)
     {}
     constIter& operator=(const constIter& other) = default;
@@ -45,15 +49,22 @@ namespace novokhatskiy
       if (node_->right)
       {
         node_ = node_->right;
-        goLastLeft();
+        while (node_->left)
+        {
+          node_ = node_->left;
+        }
+        //goLastLeft();
         return *this;
       }
-      while (node_->parent && node_->parent->right == node_)
+      else
       {
+        while (node_->parent && node_->parent->right == node_)
+        {
+          node_ = node_->parent;
+        }
         node_ = node_->parent;
+        return *this;
       }
-      node_ = node_->parent;
-      return *this;
     }
 
     constIter operator++(int)
@@ -65,8 +76,19 @@ namespace novokhatskiy
 
     constIter operator--()
     {
-      node_ = predecessor(node_);
+      if (node_->left)
+      {
+        node_ = node_->left;
+        for (; node_->right; node_ = node_->right);
+      }
+      else
+      {
+        for (; node_ == node_->parent->left; node_ = node_->parent);
+        node_ = node_->parent;
+      }
       return *this;
+      /*node_ = predecessor(node_);
+      return *this;*/
     }
 
     constIter operator--(int)
@@ -115,7 +137,7 @@ namespace novokhatskiy
 
     void goLastLeft()
     {
-      auto tmp = node_->left;
+      auto tmp = node_; //node_->left
       while (tmp->left)
       {
         tmp = tmp->left;
