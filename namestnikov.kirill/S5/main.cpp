@@ -3,6 +3,7 @@
 #include <functional>
 #include <utility>
 #include <map>
+#include "tree.hpp"
 
 namespace namestnikov
 {
@@ -38,6 +39,14 @@ void namestnikov::SumFunc::operator()(const std::pair< const int, std::string > 
 {
   result_ += data.first;
   line_ = line_ + data.second + " ";
+}
+
+void ascending(int & result, std::string & line, const Tree< int, std::string > & map)
+{
+  namestnikov::SumFunc sumAmount;
+  sumAmount = map.traverse_lnr(sumAmount);
+  result = sumAmount.getResult();
+  line = sumAmount.getLine();
 }
 
 int main()
