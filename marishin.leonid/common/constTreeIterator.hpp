@@ -14,30 +14,26 @@ namespace marishin
   template< typename Key, typename Value, typename Compare = std::less< Key > >
   struct ConstIteratorTree
   {
-    friend class BinarySearchTree< Key, Value, std::less< Key > >;
+    friend class BinarySearchTree< Key, Value, Compare >;
     using TreeNode = detail::TreeNode< Key, Value >;
 
     ConstIteratorTree() = default;
     ConstIteratorTree< Key, Value, Compare >& operator=(const ConstIteratorTree< Key, Value, Compare >&) = default;
 
-    template< typename Key, typename Value, typename Compare >
     ConstIteratorTree(detail::TreeNode< Key, Value >* node):
       node_(node)
     {}
 
-    template< typename Key, typename Value, typename Compare >
     const std::pair< Key, Value >& operator*() const
     {
       return node_->data;
     }
 
-    template< typename Key, typename Value, typename Compare >
     const std::pair< Key, Value >* operator->() const
     {
       return std::addressof(node_->data);
     }
 
-    template< typename Key, typename Value, typename Compare >
     ConstIteratorTree< Key, Value, Compare >& operator++()
     {
       if (node_->right)
@@ -57,7 +53,6 @@ namespace marishin
       return *this;
     }
 
-    template< typename Key, typename Value, typename Compare >
     ConstIteratorTree< Key, Value, Compare >& operator++(int)
     {
       ConstIteratorTree< Key, Value > result(*this);
@@ -65,13 +60,11 @@ namespace marishin
       return result;
     }
 
-    template< typename Key, typename Value, typename Compare >
     bool operator==(const ConstIteratorTree< Key, Value, Compare >& rhs) const
     {
       return node_ == rhs.node_;
     }
 
-    template < typename Key, typename Value, typename Compare >
     bool operator!=(const ConstIteratorTree< Key, Value, Compare >& rhs) const
     {
       return !(*this == rhs);
