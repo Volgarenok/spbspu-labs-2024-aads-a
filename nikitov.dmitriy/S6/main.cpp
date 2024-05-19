@@ -2,6 +2,7 @@
 #include <deque>
 #include <forward_list>
 #include <algorithm>
+#include <iomanip>
 #include <list.hpp>
 #include "sortings.hpp"
 #include "iterators_functions.hpp"
@@ -21,6 +22,8 @@ int main(int argc, char* argv[])
     std::cerr << "Error: Wrong size parameter" << '\n';
     return 1;
   }
+
+  std::cout << std::setprecision(1) << std::fixed;
 
   std::string sorting = argv[1];
   std::string type = argv[2];
