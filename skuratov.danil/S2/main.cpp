@@ -133,6 +133,11 @@ void evaluatePostfixExpression(const std::string& exp, Queue< long long int >& r
   {
     if (op == "+" || op == "-" || op == "*" || op == "/" || op == "%")
     {
+      if (operands.size() < 2)
+      {
+        throw std::runtime_error("Not enough operands for operation");
+      }
+
       long long int b = operands.top();
       operands.drop();
       long long int a = operands.top();
@@ -144,27 +149,29 @@ void evaluatePostfixExpression(const std::string& exp, Queue< long long int >& r
       operands.push(std::stoll(op));
     }
   }
+  if (operands.size() != 1)
+  {
+    throw std::runtime_error("Invalid postfix expression");
+  }
   resultQueue.push(operands.top());
 }
 
-void printReverse(const Queue<long long int>& queue)
+void printReverse(const Queue< long long int >& queue)
 {
-  List< long long int > temp;
-  Queue< long long int > copyQueue = queue;
+  Queue< long long int > temp = queue;
+  Stack< long long int > stack;
 
-  while (!copyQueue.empty())
+  while (!temp.empty())
   {
-    temp.pushBack(copyQueue.front());
-    copyQueue.drop();
+    stack.push(temp.front());
+    temp.drop();
   }
 
-  auto it = temp.cend();
-  while (it != temp.cbegin())
+  while (!stack.empty())
   {
-    --it;
-    std::cout << *it << " ";
+    std::cout << stack.top() << ' ';
+    stack.drop();
   }
-  std::cout << '\n';
 }
 
 int main(int argc, char* argv[])
@@ -217,9 +224,25 @@ int main(int argc, char* argv[])
     }
   }
 
+  List< long long int > finalResults;
   for (auto it = results.cbegin(); it != results.cend(); ++it)
   {
-    printReverse(*it);
+    if (!it->empty())
+    {
+      finalResults.pushBack(it->front());
+    }
+  }
+
+  Stack< long long int > reverseStack;
+  for (auto it = finalResults.cbegin(); it != finalResults.cend(); ++it)
+  {
+    reverseStack.push(*it);
+  }
+
+  while (!reverseStack.empty())
+  {
+    std::cout << reverseStack.top() << ' ';
+    reverseStack.drop();
   }
   std::cout << '\n';
   return 0;
