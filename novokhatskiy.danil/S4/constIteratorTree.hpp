@@ -94,6 +94,11 @@ namespace novokhatskiy
       return tmp;
     }
 
+    const Key& getKey() const
+    {
+      return node_->value.first;
+    }
+
     const std::pair< Key, Value > operator*() const
     {
       assert(node_ != nullptr);

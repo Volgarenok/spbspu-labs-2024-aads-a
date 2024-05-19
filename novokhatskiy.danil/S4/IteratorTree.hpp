@@ -27,43 +27,43 @@ namespace novokhatskiy
       node_(nullptr)
     {}
 
-    IteratorTree(node_t* other) :
+    explicit IteratorTree(node_t* other) :
       node_(other)
     {}
 
     bool operator!=(const iter& other) const
     {
-      assert(node_ != nullptr);
+      //assert(node_ != nullptr);
       return !(*this == other);
     }
 
     bool operator==(const iter& other) const
     {
-      assert(node_ != nullptr);
+      //assert(node_ != nullptr);
       return node_ == other.node_;
     }
 
     bool operator==(const constIter& other) const
     {
-      assert(node_ != nullptr);
+      //assert(node_ != nullptr);
       return node_ == other.node_;
     }
 
     bool operator!=(const constIter& other) const
     {
-      assert(node_ != nullptr);
+      //assert(node_ != nullptr);
       return !(node_ == other.node_);
     }
 
     std::pair< Key, Value > operator*() const
     {
-      assert(node_ != nullptr);
+      //assert(node_ != nullptr);
       return node_->value;
     }
 
     std::pair< Key, Value >* operator->() const
     {
-      assert(node_ != nullptr);
+      //assert(node_ != nullptr);
       return std::addressof(node_->value);
     }
 

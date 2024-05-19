@@ -10,15 +10,15 @@ void novokhatskiy::unionCmd(mainMap& dict, std::istream& in, std::ostream&)
   map resDict;
   map dict1 = dict.at(first);
   map dict2 = dict.at(second);
-  for (const auto& key1 : dict1)
+  for (auto i = dict1.cbegin(); i != dict1.cend(); i++)
   {
-    resDict.insert3(key1);
+    resDict.insert3(*i);
   }
-  for (const auto& key2 : dict2)
+  for (auto i = dict2.cbegin(); i != dict2.cend(); i++)
   {
-    if (resDict.find(key2.first) == resDict.cend())
+    if (resDict.find(i.getKey()) == resDict.cend())
     {
-      resDict.insert3(key2);
+      resDict.insert3(*i);
     }
   }
   dict.insert3(std::make_pair(std::move(resName), std::move(resDict)));

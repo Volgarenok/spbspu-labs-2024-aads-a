@@ -121,7 +121,7 @@ namespace novokhatskiy
         }
         curr = (cmp_(curr->value.first, key)) ? curr->right : curr->left;
       }
-      return end();
+      return iter(curr);
     }
 
     constIter find(const Key& key) const
@@ -135,14 +135,15 @@ namespace novokhatskiy
         }
         curr = (cmp_(curr->value.first, key)) ? curr->right : curr->left;
       }
-      return cend();
+      return constIter(curr);
     }
 
+    size_t erase(const Key& key);
 
     Value& at(const Key& key)
     {
       node_t* curr = search(key);
-      if (curr && curr->value.first == key)
+      if (curr)
       {
         return curr->value.second;
       }
@@ -152,7 +153,7 @@ namespace novokhatskiy
     const Value& at(const Key& key) const
     {
       node_t* curr = search(key); //find(root_->left, key)
-      if (curr && curr->value.first == key)
+      if (curr) //&& curr->value.first == key
       {
         return curr->value.second;
       }
