@@ -49,6 +49,11 @@ int main(int argc, char *argv[])
   {
     std::cerr << "<EMPTY>";
   }
+  catch (const std::exception &e)
+  {
+    std::cerr << e.what();
+    return 1;
+  }
   std::cout << summator.result_;
   std::cout << summator.values_;
   std::cout << '\n';
