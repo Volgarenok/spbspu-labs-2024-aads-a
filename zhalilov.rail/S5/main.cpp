@@ -32,6 +32,10 @@ int main(int argc, char *argv[])
   {
     summator = map.traverse_rnl(summator);
   }
+  else if (std::strcmp(argv[1], "breadth"))
+  {
+    summator = map.traverse_breadth(summator);
+  }
   std::cout << summator.result_;
   auto itCurr = summator.values_.cbegin();
   auto itEnd = summator.values_.cend();

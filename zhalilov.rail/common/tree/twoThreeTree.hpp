@@ -3,6 +3,8 @@
 
 #include <functional>
 
+#include <queue.hpp>
+
 #include "const_treeIterator.hpp"
 #include "treeIterator.hpp"
 #include "treeNode.hpp"
@@ -58,6 +60,10 @@ namespace zhalilov
     F traverse_rnl(F f) const;
     template < class F >
     F traverse_rnl(F f);
+    template < class F >
+    F traverse_breadth(F f) const;
+    template < class F >
+    F traverse_breadth(F f);
 
     size_t count(const Key &) const;
     std::pair < iterator, iterator > equal_range(const Key &);
@@ -478,6 +484,49 @@ namespace zhalilov
       return 0;
     }
     return 1;
+  }
+
+  template < class Key, class T, class Compare >
+  template < class F >
+  F TwoThree < Key, T, Compare >::traverse_breadth(F f) const
+  {
+    if (empty())
+    {
+      throw std::logic_error("travers_breadth: tree empty");
+    }
+    Queue < Node > nodeQueue;
+    nodeQueue.push(head_->left);
+    while (!nodeQueue.empty())
+    {
+      Node *currNode = nodeQueue.front();
+      nodeQueue.pop();
+      f(currNode->one);
+      if (currNode->type == detail::NodeType::Three)
+      {
+        f(currNode->two);
+      }
+      if (currNode->left)
+      {
+        nodeQueue.push(currNode->left);
+      }
+      if (currNode->mid)
+      {
+        nodeQueue.push(currNode->mid);
+      }
+      if (currNode->right)
+      {
+        nodeQueue.push(currNode->right);
+      }
+      return f;
+    }
+  }
+
+  template < class Key, class T, class Compare >
+  template < class F >
+  F TwoThree < Key, T, Compare >::traverse_breadth(F f)
+  {
+    const TwoThree < Key, T, Compare > constThis = const_cast < TwoThree < Key, T, Compare > & >(*this);
+    return constThis.traverse_rnl(f);
   }
 
   template < class Key, class T, class Compare >
