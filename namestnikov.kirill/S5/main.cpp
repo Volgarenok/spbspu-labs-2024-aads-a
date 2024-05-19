@@ -5,30 +5,7 @@
 #include <map>
 #include "tree.hpp"
 #include "sum_func.hpp"
-
-void ascending(int & result, std::string & line, namestnikov::Tree< int, std::string > & map)
-{
-  namestnikov::SumFunc sumAmount;
-  sumAmount = map.traverse_lnr(sumAmount);
-  result = sumAmount.getResult();
-  line = sumAmount.getLine();
-}
-
-void descending(int & result, std::string & line, namestnikov::Tree< int, std::string > & map)
-{
-  namestnikov::SumFunc sumAmount;
-  sumAmount = map.traverse_rnl(sumAmount);
-  result = sumAmount.getResult();
-  line = sumAmount.getLine();
-}
-
-void breadth(int & result, std::string & line, namestnikov::Tree< int, std::string > & map)
-{
-  namestnikov::SumFunc sumAmount;
-  sumAmount = map.traverse_breadth(sumAmount);
-  result = sumAmount.getResult();
-  line = sumAmount.getLine();
-}
+#include "commands.hpp"
 
 int main()
 {
