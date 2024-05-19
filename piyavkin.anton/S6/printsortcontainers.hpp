@@ -23,7 +23,7 @@ namespace piyavkin
     out << '\n';
   }
   template< class T, class Cmp >
-  void print_sort_containers(std::ostream& out, std::deque< T >& deque, List< T >& bi_list, std::forward_list< T >& list, Cmp cmp)
+  void print_sorted_containers(std::ostream& out, std::deque< T >& deque, List< T >& bi_list, std::forward_list< T >& list, Cmp cmp)
   {
     std::deque< T > deq_tim = deque;
     std::deque< T > deq_mer = deque;

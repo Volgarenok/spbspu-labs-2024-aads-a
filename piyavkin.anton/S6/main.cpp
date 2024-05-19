@@ -11,28 +11,58 @@ int main(int argc, char* argv[])
     std::cerr << "File entered incorrectly\n";
     return 1;
   }
-  size_t size = std::stoull(argv[3]);
-  using namespace piyavkin;
-  if (std::string(argv[2]) == "ints")
+  try
   {
-    std::forward_list< int > list;
-    List< int > bi_list;
-    std::deque< int > deque;
-    create_containers(deque, bi_list, list, size);
-    print_containers(std::cout, deque);
-    print_sort_containers(std::cout, deque, bi_list, list, std::less< int >());
+    size_t size = std::stoull(argv[3]);
+    using namespace piyavkin;
+    if (std::string(argv[2]) == "ints")
+    {
+      std::forward_list< int > list;
+      List< int > bi_list;
+      std::deque< int > deque;
+      create_containers(deque, bi_list, list, size);
+      print_containers(std::cout, deque);
+      if (std::string(argv[1]) == "ascending")
+      {
+        print_sorted_containers(std::cout, deque, bi_list, list, std::less< int >());
+      }
+      else if (std::string(argv[1]) == "descending")
+      {
+        print_sorted_containers(std::cout, deque, bi_list, list, std::greater< int >());
+      }
+      else
+      {
+        throw std::logic_error("Invalid traversal order");
+      }
+    }
+    else if (std::string(argv[2]) == "float")
+    {
+      std::forward_list< float > list;
+      List< float > bi_list;
+      std::deque< float > deque;
+      create_containers(deque, bi_list, list, size);
+      if (std::string(argv[1]) == "ascending")
+      {
+        print_sorted_containers(std::cout, deque, bi_list, list, std::less< float >());
+      }
+      else if (std::string(argv[1]) == "descending")
+      {
+        print_sorted_containers(std::cout, deque, bi_list, list, std::greater< float >());
+      }
+      else
+      {
+        throw std::logic_error("Invalid traversal order");
+      }
+    }
+    else
+    {
+      std::cerr << "Bad type\n";
+      return 1;
+    }
   }
-  else if (std::string(argv[2]) == "float")
+  catch (const std::exception& e)
   {
-    std::forward_list< float > list;
-    List< float > bi_list;
-    std::deque< float > deque;
-    create_containers(deque, bi_list, list, size);
-    print_sort_containers(std::cout, deque, bi_list, list, std::less< float >());
-  }
-  else
-  {
-    std::cerr << "Bad type\n";
-    return 1;
+    std::cerr << e.what() << '\n';
+    return 2;
   }
 }
