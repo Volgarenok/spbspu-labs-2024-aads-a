@@ -2,6 +2,9 @@
 #include <iostream>
 #include <string>
 #include <utility>
+#include <map>
+#include <functional>
+#include <limits>
 #include <binarySearchTree.hpp>
 #include "inputMaps.hpp"
 #include "command.hpp"
@@ -25,30 +28,23 @@ int main(int argc, char *argv[])
   BinarySearchTree< std::string, std::function< void(std::istream&, maps&) > > commands;
   {
     using namespace std::placeholders;
-    commands.add("print", &print);
-    commands.add("union", &doUnion);
-    commands.add("complement", &complement)
-    commands.add("intersect", &intersect);
+    commands["print"] = std::bind(print, _1, _2, std::ref(std::cout));
+    commands["union"] = doUnion;
+    commands["complement"] = doComplement;
+    commands["intersect"] = doIntersect;
   }
   std::string commandName = "";
   while (std::cin >> commandName)
   {
     try
     {
-      command(std::cin, commandName);
-      if (!commandName.empty())
-      {
-        std::cout << commandName << '\n';
-      }
+      commands.at(commandName)(std::cin, maps);
     }
-    catch (const std::invalid_argument &e)
+    catch (const std::exception& e)
     {
       std::cout << "<INVALID COMMAND>\n";
     }
-    catch (const std::exception &e)
-    {
-      std::cerr << e.what();
-      return 1;
-    }
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
 }
