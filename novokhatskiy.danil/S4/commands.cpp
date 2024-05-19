@@ -12,36 +12,16 @@ void novokhatskiy::unionCmd(mainMap& dict, std::istream& in, std::ostream&)
   map dict2 = dict.at(second);
   for (const auto& key1 : dict1)
   {
-    resDict.insert2(key1);
+    resDict.insert3(key1);
   }
   for (const auto& key2 : dict2)
   {
     if (resDict.find(key2.first) == resDict.cend())
     {
-      resDict.insert2(key2);
+      resDict.insert3(key2);
     }
   }
-  dict[resName] = resDict;
-  /*auto begin1 = dict1.cbegin();
-  auto end1 = dict1.cend();
-  while (begin1 != end1)
-  {
-    resDict.insert({ begin1->first, begin1->second });
-    begin1++;
-  }
-  auto begin2 = dict2.cbegin();
-  auto end2 = dict2.cend();
-  while (begin2 != end2)
-  {
-    resDict.insert({ begin2->first, begin2->second });
-    begin2++;
-  }
-
-  if (dict.find(resName) != dict.end())
-  {
-    dict.erase(resName);
-  }
-  dict.insert2({ resName, resDict });*/
+  dict.insert3(std::make_pair(std::move(resName), std::move(resDict)));
 }
 
 void novokhatskiy::intersectCmd(mainMap& dict, std::istream& in, std::ostream&)
@@ -59,7 +39,7 @@ void novokhatskiy::intersectCmd(mainMap& dict, std::istream& in, std::ostream&)
   {
     if (dict2.find(begin->first) != dict2.cend())
     {
-      resDict.insert(*begin);
+      resDict.insert3(*begin);
     }
     begin++;
   }
@@ -70,8 +50,7 @@ void novokhatskiy::intersectCmd(mainMap& dict, std::istream& in, std::ostream&)
   }
   else
   {
-    dict[resName] = resDict;
-    //dict.insert(std::make_pair< std::string, map >(resName, resDict) );
+    dict.insert3(std::make_pair(std::move(resName), std::move(resDict)));
   }
 }
 
@@ -91,7 +70,7 @@ void novokhatskiy::complement(mainMap& dict, std::istream& in, std::ostream&)
   {
     if (dict2.find(begin->first) == dict2.cend())
     {
-      resDict.insert(*begin);
+      resDict.insert3(*begin);
     }
     begin++;
   }
@@ -101,7 +80,7 @@ void novokhatskiy::complement(mainMap& dict, std::istream& in, std::ostream&)
   {
     if (dict1.find(begin->first) == dict1.cend())
     {
-      resDict.insert(*begin);
+      resDict.insert3(*begin);
     }
     begin++;
   }
@@ -112,8 +91,7 @@ void novokhatskiy::complement(mainMap& dict, std::istream& in, std::ostream&)
   }
   else
   {
-    dict[resName] = resDict;
-    //dict.insert({ resName, resDict });
+    dict.insert3(std::make_pair(std::move(resName), std::move(resDict)));
   }
 }
 

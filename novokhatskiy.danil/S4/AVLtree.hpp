@@ -168,7 +168,7 @@ namespace novokhatskiy
       }
       else
       {
-        insert2(std::make_pair(key, Value()));
+        insert3(std::make_pair(key, Value()));
         iter res = find(key);
         return res.node_->value.second;
       }
@@ -183,7 +183,7 @@ namespace novokhatskiy
       }
       else
       {
-        insert2(std::make_pair(key, Value()));
+        insert3(std::make_pair(key, Value()));
         iter res = find(key);
         return res.node_->value.second;
       }
