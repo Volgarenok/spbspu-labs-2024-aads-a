@@ -73,7 +73,7 @@ namespace marishin
     private:
       detail::TreeNode< Key, Value >* node_;
 
-      ConstIterator(detail::TreeNode< Key, Value >* node):
+      ConstIteratorTree(detail::TreeNode< Key, Value >* node):
         node_(node)
       {}
   };
