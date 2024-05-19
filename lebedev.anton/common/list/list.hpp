@@ -305,11 +305,9 @@ namespace lebedev
         new_list.push_back(val);
       }
       this->swap(new_list);
-      new_list.clear();
     }
     catch (const std::exception & e)
     {
-      new_list.clear();
       throw;
     }
   }
