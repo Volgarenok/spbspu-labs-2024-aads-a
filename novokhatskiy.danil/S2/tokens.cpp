@@ -39,8 +39,8 @@ novokhatskiy::Postfix novokhatskiy::Postfix::convertToPostfix(const InfixType& i
 }
 
 novokhatskiy::InfixType::InfixType(long long val):
-  type(TokenType::OPERAND),
-  operand(val)
+  operand(val),
+  type(TokenType::OPERAND)
 {}
 
 novokhatskiy::InfixType novokhatskiy::InfixType::openBracket()
@@ -54,8 +54,8 @@ novokhatskiy::InfixType novokhatskiy::InfixType::closeBracket()
 }
 
 novokhatskiy::InfixType::InfixType(char val):
-  type(TokenType::OPERATION),
-  operation(val)
+  operation(val),
+  type(TokenType::OPERATION)
 {}
 
 bool novokhatskiy::InfixType::isOpenBracket() const
@@ -77,6 +77,7 @@ novokhatskiy::Operand novokhatskiy::InfixType::getOperand() const noexcept
 {
   return operand;
 }
+
 
 novokhatskiy::Operation novokhatskiy::InfixType::getOp() const noexcept
 {
