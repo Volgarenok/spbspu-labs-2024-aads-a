@@ -49,6 +49,14 @@ void ascending(int & result, std::string & line, const Tree< int, std::string > 
   line = sumAmount.getLine();
 }
 
+void descending(int & result, std::string & line, const Tree< int, std::string > & map)
+{
+  namestnikov::SumFunc sumAmount;
+  sumAmount = map.traverse_rnl(sumAmount);
+  result = sumAmount.getResult();
+  line = sumAmount.getLine();
+}
+
 int main()
 {
   std::map< int, std::string > myMap;
