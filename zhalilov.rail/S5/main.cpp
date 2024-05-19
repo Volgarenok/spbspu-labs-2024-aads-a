@@ -37,11 +37,5 @@ int main(int argc, char *argv[])
     summator = map.traverse_breadth(summator);
   }
   std::cout << summator.result_;
-  auto itCurr = summator.values_.cbegin();
-  auto itEnd = summator.values_.cend();
-  while (itCurr != itEnd)
-  {
-    std::cout << ' ' << *itCurr;
-    itCurr++;
-  }
+  std::cout << summator.values_;
 }
