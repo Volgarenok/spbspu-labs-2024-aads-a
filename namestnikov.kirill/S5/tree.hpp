@@ -1,11 +1,10 @@
 #ifndef TREE_HPP
 #define TREE_HPP
 
-#include <functional>
-#include <iostream>
 #include "tree_node.hpp"
 #include "tree_iterator.hpp"
 #include "const_tree_iterator.hpp"
+#include <functional>
 #include <stack>
 #include <queue>
 
