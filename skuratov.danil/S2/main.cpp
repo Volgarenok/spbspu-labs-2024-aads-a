@@ -63,9 +63,13 @@ int evaluateExpression(const std::string& exp)
 
   while (iss >> op)
   {
-    if (op == "+" || op == "-" || op == "*" || op == "/" || op == "%")
+    if (op == "(")
     {
-      while (!operators.empty() && operatorPrecedence(operators.top()) >= operatorPrecedence(op[0]))
+      operators.push('(');
+    }
+    else if (op == "+" || op == "-" || op == "*" || op == "/" || op == "%")
+    {
+      while (!operators.empty() && operators.top() != '(' && operatorPrecedence(operators.top()) >= operatorPrecedence(op[0]))
       {
         char op = operators.top();
         operators.drop();
@@ -76,6 +80,23 @@ int evaluateExpression(const std::string& exp)
         operands.push(applyOperation(a, b, op));
       }
       operators.push(op[0]);
+    }
+    else if (op == ")")
+    {
+      while (!operators.empty() && operators.top() != '(')
+      {
+        char op = operators.top();
+        operators.drop();
+        int b = operands.top();
+        operands.drop();
+        int a = operands.top();
+        operands.drop();
+        operands.push(applyOperation(a, b, op));
+      }
+      if (!operators.empty() && operators.top() == '(')
+      {
+        operators.drop();
+      }
     }
     else
     {
@@ -94,6 +115,12 @@ int evaluateExpression(const std::string& exp)
     operands.push(applyOperation(a, b, op));
   }
   return operands.top();
+}
+
+int evaluateSubexpression(const std::string& subexp)
+{
+  std::string exp = subexp.substr(1, subexp.size() - 2);
+  return evaluateExpression(exp);
 }
 
 int main(int argc, char* argv[])
