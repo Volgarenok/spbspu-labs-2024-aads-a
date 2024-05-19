@@ -10,7 +10,7 @@ namespace zaitsev
   template< typename Key, typename T, typename Compare = std::less< Key > >
   class Map
   {
-    using val_t = std::pair<const Key, T>;
+    using val_t = std::pair< const Key, T >;
     struct Node;
     Node* fakeroot_;
     size_t size_;
@@ -18,7 +18,7 @@ namespace zaitsev
 
     struct Node
     {
-      std::pair< const Key, T > val_;
+      val_t val_;
       int height_;
       Node* left_;
       Node* right_;
@@ -31,16 +31,17 @@ namespace zaitsev
         right_(nullptr),
         parent_(nullptr)
       {}
-      explicit Node(bool):
+  /*    explicit Node(bool):
         val_(),
         height_(-1),
         left_(nullptr),
-        right_(nullptr),
+        right_(nullptr),  
         parent_(nullptr)
-      {}
-      explicit Node(const val_t& val):
-        val_(val),
-        height_(0),
+      {}*/
+      template< class... Args  >
+      Node(int height, Args&&... args):
+        val_(std::forward< Args >(args)...),
+        height_(height),
         left_(nullptr),
         right_(nullptr),
         parent_(nullptr)
@@ -264,7 +265,7 @@ namespace zaitsev
       hint = find_hint((hint == nullptr || !cmp_(hint->val_.first, key)) ? root : hint, key);
       if (!hint)
       {
-        root->left_ = new Node(std::make_pair(key, new_val));
+        root->left_ = new Node(0, std::forward< val_t >(std::make_pair(key, new_val)));
         root->left_->parent_ = root;
         return root->left_;
       }
@@ -273,7 +274,7 @@ namespace zaitsev
         hint->val_.second = new_val;
         return hint;
       }
-      Node* new_node = new Node(std::make_pair(key, new_val));
+      Node* new_node = new Node(0, std::forward< val_t >(std::make_pair(key, new_val)));
       (cmp_(hint->val_.first, key) ? hint->right_ : hint->left_) = new_node;
       new_node->parent_ = hint;
       rebalance_tree(hint);
@@ -325,9 +326,9 @@ namespace zaitsev
       bool fake_given = fakeroot;
       if (!fakeroot)
       {
-        fakeroot_ = new Node(false);
+        fakeroot_ = new Node(-1);
       }
-      fakeroot->left_ = new Node(*begin);
+      fakeroot->left_ = new Node(0, std::forward(*begin));
       fakeroot->left_->parent_ = fakeroot;
       ++begin;
       ++nmb_of_added;
@@ -439,12 +440,12 @@ namespace zaitsev
     using reverse_iterator = std::reverse_iterator< iterator >;
     using const_reverse_iterator = std::reverse_iterator< const_iterator >;
     Map():
-      fakeroot_(new Node(false)),
+      fakeroot_(new Node(-1)),
       size_(0),
       cmp_()
     {}
     Map(const Map& other):
-      fakeroot_(new Node(false)),
+      fakeroot_(new Node(-1)),
       size_(other.size_),
       cmp_(other.cmp_)
     {
@@ -492,7 +493,7 @@ namespace zaitsev
       other.size_ = 0;
     }
     Map(std::initializer_list< std::pair< const Key, T > > init_list):
-      fakeroot_(new Node(false)),
+      fakeroot_(new Node(-1)),
       size_(0),
       cmp_()
     {
@@ -507,7 +508,7 @@ namespace zaitsev
     }
     template< typename InputIt >
     Map(InputIt begin, InputIt end):
-      fakeroot_(new Node(false)),
+      fakeroot_(new Node(-1)),
       size_(0),
       cmp_()
     {
@@ -747,6 +748,20 @@ namespace zaitsev
       ++size_;
       return std::make_pair(iterator(added), true);
     }
+    //template< class... Args >
+    //std::pair< iterator, bool > emplace_hint(const iterator pos, Args&&... args)
+    //{
+    //  val_t new_val(std::forward< Args >(args)...);
+    //  if (cmp_(new_val.first, pos->second)||);
+    //  Node* hint = find_hint(fakeroot_, new_val.first);
+    //  if (hint && hint->val_.first == new_val.first)
+    //  {
+    //    return std::make_pair(iterator(hint), false);
+    //  }
+    //  Node* added = addNode(fakeroot_, hint, new_val.first, new_val.second);
+    //  ++size_;
+    //  return std::make_pair(iterator(added), true);
+    //}
     std::pair< iterator, bool > insert(const val_t& val)
     {
       Node* hint = find_hint(fakeroot_, val.first);
