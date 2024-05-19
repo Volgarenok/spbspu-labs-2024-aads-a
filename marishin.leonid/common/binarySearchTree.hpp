@@ -58,7 +58,7 @@ namespace marishin
 
     BinarySearchTree& operator=(BinarySearchTree&& rhs) noexcept
     {
-      Tree< Key, Value > temp(std::move(rhs));
+      BinarySearchTree< Key, Value > temp(std::move(rhs));
       if (this != std::addressof(rhs))
       {
         swap(temp);
