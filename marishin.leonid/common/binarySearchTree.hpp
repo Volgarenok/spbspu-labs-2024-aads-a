@@ -28,7 +28,7 @@ namespace marishin
       {
         for (auto begin = rhs.cbegin(); begin != rhs.cend(); ++begin)
         {
-          insert(begin->first, begin->second);
+          push(begin->first, begin->second);
         }
       }
       catch (...)
@@ -162,14 +162,14 @@ namespace marishin
       }
     }
 
-    const_iterator_tree< Key, Value, Compare > cbegin() const noexcept
+    ConstIteratorTree< Key, Value, Compare > cbegin() const noexcept
     {
-      return const_iterator_tree< Key, Value, Comparee >(getMin(root_));
+      return ConstIteratorTree< Key, Value, Comparee >(getMin(root_));
     }
 
-    const_iterator_tree< Key, Value, Compare > cend() const noexcept
+    ConstIteratorTree< Key, Value, Compare > cend() const noexcept
     {
-      return const_iterator_tree< Key, Value, Comparee >();
+      return ConstIteratorTree< Key, Value, Comparee >();
     }
 
     const Value& operator[](const Key& key) const
@@ -211,7 +211,7 @@ namespace marishin
       throw std::out_of_range("No such element");
     }
 
-    const_iterator< Key, Value > find(const Key& key) const
+    ConstIteratorTree< Key, Value > find(const Key& key) const
     {
       node_t* result = root_;
       while (result)
@@ -229,7 +229,7 @@ namespace marishin
           break;
         }
       }
-      return const_iterator_tree< Key, Value >(result);
+      return ConstIteratorTree< Key, Value >(result);
     }
 
   private:
@@ -274,7 +274,7 @@ namespace marishin
       }
       else
       {
-        return get(key, currentNode->right);
+        return get(key, currNode->right);
       }
     }
 
