@@ -2,6 +2,7 @@
 #define TREE_HPP
 
 #include <functional>
+#include <iostream>
 #include "tree_node.hpp"
 #include "tree_iterator.hpp"
 #include "const_tree_iterator.hpp"
@@ -259,17 +260,20 @@ namespace namestnikov
       {
         std::stack< node_t * > traverseStack;
         node_t * current = root_;
-        while (current)
+        while (current || (!traverseStack.empty()))
         {
-          traverseStack.push(current);
-          current = current->left;
-        }
-        while (!traverseStack.empty())
-        {
-          current = traverseStack.top();
-          traverseStack.pop();
-          f(current->data);
-          current = current->right;
+          if (current)
+          {
+            traverseStack.push(current);
+            current = current->left;
+          }
+          else
+          {
+            current = traverseStack.top();
+            traverseStack.pop();
+            f(current->data);
+            current = current->right;
+          }
         }
         return f;
       }
@@ -285,17 +289,20 @@ namespace namestnikov
       {
         std::stack< node_t * > traverseStack;
         node_t * current = root_;
-        while (current)
+        while (current || (!traverseStack.empty()))
         {
-          traverseStack.push(current);
-          current = current->right;
-        }
-        while (!traverseStack.empty())
-        {
-          current = traverseStack.top();
-          traverseStack.pop();
-          f(current->data);
-          current = current->left;
+          if (current)
+          {
+            traverseStack.push(current);
+            current = current->right;
+          }
+          else
+          {
+            current = traverseStack.top();
+            traverseStack.pop();
+            f(current->data);
+            current = current->left;
+          }
         }
       }
       return f;
