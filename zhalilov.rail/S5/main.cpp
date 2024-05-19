@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
   }
   catch (const std::logic_error &e)
   {
-    std::cerr << "<EMPTY>\n";
+    std::cout << "<EMPTY>\n";
     return 0;
   }
   catch (const std::exception &e)
