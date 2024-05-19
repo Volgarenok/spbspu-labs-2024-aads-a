@@ -5,7 +5,6 @@
 #include <forward_list>
 #include <algorithm>
 #include <iomanip>
-#include <list.hpp>
 #include "timsort.hpp"
 #include "streamguard.hpp"
 
@@ -15,7 +14,7 @@ namespace piyavkin
   void print_container(std::ostream& out, const T& container)
   {
     StreamGuard guard(out);
-    out << std::fixed << std::setprecision(5);
+    out << std::fixed << std::setprecision(1);
     for (auto i = container.cbegin(); i != container.cend(); ++i)
     {
       if (i != container.cbegin())

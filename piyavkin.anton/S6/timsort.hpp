@@ -114,10 +114,10 @@ namespace piyavkin
         pass += size_min - size_subarr;
       }
     }
-    if (pass != 0)
+    List< typename RandIt::value_type > res;
+    detail::merge_timsort(subarrs, cmp, res);
+    if (!res.empty())
     {
-      List< typename RandIt::value_type > res;
-      detail::merge_timsort(subarrs, cmp, res);
       std::move(res.begin(), res.end(), it);
     }
   }
