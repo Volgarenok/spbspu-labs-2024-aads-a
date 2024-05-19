@@ -33,6 +33,14 @@ namespace skuratov
     {
       return queue_.back();
     }
+    T& front() noexcept
+    {
+      return queue_.front();
+    }
+    const T& front() const noexcept
+    {
+      return queue_.front();
+    }
   private:
     List< T > queue_;
   };

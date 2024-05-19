@@ -5,6 +5,7 @@
 #include <stdexcept>
 #include <list.hpp>
 #include "stack.hpp"
+#include "queue.hpp"
 
 using namespace skuratov;
 
@@ -54,13 +55,13 @@ int applyOperation(int a, int b, char op)
   throw std::invalid_argument("Invalid operator");
 }
 
-int evaluateExpression(const std::string& exp)
+std::string infixToPostfix(const std::string& exp)
 {
   std::istringstream iss(exp);
-  std::string op;
-  Stack< int > operands;
+  std::string postfixExp;
   Stack< char > operators;
 
+  std::string op;
   while (iss >> op)
   {
     if (op == "(")
@@ -71,13 +72,9 @@ int evaluateExpression(const std::string& exp)
     {
       while (!operators.empty() && operators.top() != '(' && operatorPrecedence(operators.top()) >= operatorPrecedence(op[0]))
       {
-        char op = operators.top();
+        postfixExp += operators.top();
+        postfixExp += ' ';
         operators.drop();
-        int b = operands.top();
-        operands.drop();
-        int a = operands.top();
-        operands.drop();
-        operands.push(applyOperation(a, b, op));
       }
       operators.push(op[0]);
     }
@@ -85,13 +82,9 @@ int evaluateExpression(const std::string& exp)
     {
       while (!operators.empty() && operators.top() != '(')
       {
-        char op = operators.top();
+        postfixExp += operators.top();
+        postfixExp += ' ';
         operators.drop();
-        int b = operands.top();
-        operands.drop();
-        int a = operands.top();
-        operands.drop();
-        operands.push(applyOperation(a, b, op));
       }
       if (!operators.empty() && operators.top() == '(')
       {
@@ -100,27 +93,42 @@ int evaluateExpression(const std::string& exp)
     }
     else
     {
-      operands.push(std::stoi(op));
+      postfixExp += op;
+      postfixExp += ' ';
     }
   }
 
   while (!operators.empty())
   {
-    char op = operators.top();
+    postfixExp += operators.top();
+    postfixExp += ' ';
     operators.drop();
-    int b = operands.top();
-    operands.drop();
-    int a = operands.top();
-    operands.drop();
-    operands.push(applyOperation(a, b, op));
   }
-  return operands.top();
+  return postfixExp;
 }
 
-int evaluateSubexpression(const std::string& subexp)
+void evaluatePostfixExpression(const std::string& exp, Queue< int >& resultQueue)
 {
-  std::string exp = subexp.substr(1, subexp.size() - 2);
-  return evaluateExpression(exp);
+  std::istringstream iss(exp);
+  Stack< int > operands;
+
+  std::string op;
+  while (iss >> op)
+  {
+    if (op == "+" || op == "-" || op == "*" || op == "/" || op == "%")
+    {
+      int b = operands.top();
+      operands.drop();
+      int a = operands.top();
+      operands.drop();
+      operands.push(applyOperation(a, b, op[0]));
+    }
+    else
+    {
+      operands.push(std::stoi(op));
+    }
+  }
+  resultQueue.push(operands.top());
 }
 
 int main(int argc, char* argv[])
@@ -155,14 +163,16 @@ int main(int argc, char* argv[])
     }
   }
 
-  List< int > results;
+  List< Queue< int > > results;
 
   for (auto it = exp.cbegin(); it != exp.cend(); ++it)
   {
     try
     {
-      int result = evaluateExpression(*it);
-      results.pushBack(result);
+      std::string postfixExp = infixToPostfix(*it);
+      Queue< int > resultQueue;
+      evaluatePostfixExpression(postfixExp, resultQueue);
+      results.pushBack(resultQueue);
     }
     catch (const std::exception& e)
     {
@@ -173,7 +183,12 @@ int main(int argc, char* argv[])
 
   for (auto it = results.cbegin(); it != results.cend(); ++it)
   {
-    std::cout << *it << " ";
+    Queue< int > resultQueue = *it;
+    while (!resultQueue.empty())
+    {
+      std::cout << resultQueue.front() << " ";
+      resultQueue.drop();
+    }
   }
   std::cout << '\n';
   return 0;
