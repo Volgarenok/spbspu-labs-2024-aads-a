@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <functional>
 #include <map>
 #include "inputTree.hpp"
 
@@ -23,3 +24,4 @@ int main(int argc, char * argv[])
     return 1;
   }
 }
+
