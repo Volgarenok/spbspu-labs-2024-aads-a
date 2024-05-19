@@ -30,7 +30,7 @@ long long int applyOperation(long long int a, long long int b, char op)
 
   if (op == '+')
   {
-    if (a > maxValue - b)
+    if (((b > 0) && (a > maxValue - b)) || ((b < 0) && (a < minValue - b)))
     {
       throw std::overflow_error("Invalid addition");
     }
@@ -38,7 +38,7 @@ long long int applyOperation(long long int a, long long int b, char op)
   }
   else if (op == '-')
   {
-    if (a < minValue + b)
+    if (((b < 0) && (a > maxValue + b)) || ((b > 0) && (a < minValue + b)))
     {
       throw std::overflow_error("Invalid subtraction");
     }
@@ -46,7 +46,7 @@ long long int applyOperation(long long int a, long long int b, char op)
   }
   else if (op == '*')
   {
-    if (a > maxValue / b || a < minValue / b)
+    if (a != 0 && (b > maxValue / a || b < minValue / a))
     {
       throw std::overflow_error("Invalid multiplication");
     }
@@ -147,6 +147,26 @@ void evaluatePostfixExpression(const std::string& exp, Queue< long long int >& r
   resultQueue.push(operands.top());
 }
 
+void printReverse(const Queue<long long int>& queue)
+{
+  List< long long int > temp;
+  Queue< long long int > copyQueue = queue;
+
+  while (!copyQueue.empty())
+  {
+    temp.pushBack(copyQueue.front());
+    copyQueue.drop();
+  }
+
+  auto it = temp.cend();
+  while (it != temp.cbegin())
+  {
+    --it;
+    std::cout << *it << " ";
+  }
+  std::cout << '\n';
+}
+
 int main(int argc, char* argv[])
 {
   List< std::string > exp;
@@ -199,12 +219,7 @@ int main(int argc, char* argv[])
 
   for (auto it = results.cbegin(); it != results.cend(); ++it)
   {
-    Queue< long long int > resultQueue = *it;
-    while (!resultQueue.empty())
-    {
-      std::cout << resultQueue.front() << " ";
-      resultQueue.drop();
-    }
+    printReverse(*it);
   }
   std::cout << '\n';
   return 0;
