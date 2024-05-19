@@ -35,7 +35,7 @@ namespace zaitsev
         val_(),
         height_(-1),
         left_(nullptr),
-        right_(nullptr),  
+        right_(nullptr),
         parent_(nullptr)
       {}*/
       template< class... Args  >
