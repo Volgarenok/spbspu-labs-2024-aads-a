@@ -1,19 +1,41 @@
+#include <iostream>
 #include "list.hpp"
 #include "inputList.hpp"
 #include "listFunctions.hpp"
 #include "outputFunctions.hpp"
-#include <iostream>
 
 int main()
 {
   using namespace baranov;
-  List< std::pair< std::string, List< size_t > > > sequences;
-  inputList(std::cin, sequences);
-  printNames(std::cout, sequences);
+  try
+  {
+    List< std::pair< std::string, List< size_t > > > sequences;
 
-  List< List < size_t > > numbers;
-  readByElement(numbers, sequences);
-  printLists(std::cout, numbers);
-  printSums(std::cout, numbers);
+    inputList(std::cin, sequences);
+    if (sequences.empty())
+    {
+      std::cout << 0 << '\n';
+      return 0;
+    }
+
+    printNames(std::cout, sequences);
+    std::cout << '\n';
+
+    List< List < size_t > > numbers;
+    readByElement(numbers, sequences);
+    if (!numbers.empty())
+    {
+      printLists(std::cout, numbers);
+      std::cout << '\n';
+    }
+
+    printSums(std::cout, numbers);
+    std::cout << '\n';
+  }
+  catch (const std::exception & e)
+  {
+    std::cerr << "Error: " << e.what();
+    return 1;
+  }
 }
 

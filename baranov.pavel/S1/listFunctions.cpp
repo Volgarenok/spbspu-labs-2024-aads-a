@@ -11,7 +11,9 @@ void baranov::readByElement(listOfLists & outList, ds_t & inList)
     {
       if (ind < i->second.size())
       {
-        numbers.push_back(*(i->second.begin() + ind));
+        auto temp_i = i->second.begin();
+        std::advance(temp_i, ind);
+        numbers.push_back(*temp_i);
       }
     }
     if (!numbers.empty())

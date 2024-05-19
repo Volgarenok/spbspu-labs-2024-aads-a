@@ -3,6 +3,7 @@
 
 #include "node.hpp"
 #include "iterator.hpp"
+#include "constIterator.hpp"
 
 namespace baranov
 {
@@ -11,17 +12,25 @@ namespace baranov
   {
     public:
       List();
-      List(const List &);
+      List(const List & rhs);
+      List(const List && rhs) noexcept;
+      List(size_t count, const T & data);
       ~List();
-      Iterator< T > begin();
-      Iterator< T > end();
-      bool empty() const;
-      size_t size();
-      void push_back(T data);
+      Iterator< T > begin() noexcept;
+      Iterator< T > end() noexcept;
+      ConstIterator< T > cbegin() const noexcept;
+      ConstIterator< T > cend() const noexcept;
+      bool empty() const noexcept;
+      size_t size() const noexcept;
+      void push_back(const T & data);
       void pop_back();
-      void push_front(T data);
+      void push_front(const T & data);
       void pop_front();
+      void assign(size_t count, const T & data);
       void clear();
+      template < class UPredicate >
+      void remove_if(UPredicate p);
+      void remove(const T & data);
       void swap(List &);
     private:
       Node< T > * head_;
@@ -38,16 +47,55 @@ namespace baranov
   {}
 
   template< class T >
-  List< T >::List(const List & other):
+  List< T >::List(const List & rhs):
     head_(nullptr),
     tail_(nullptr),
     size_(0)
   {
-    Node< T > * current = other.head_;
+    Node< T > * current = rhs.head_;
     while (current)
     {
-      push_back(current->data_);
-      current = current->next_;
+      try
+      {
+        push_back(current->data_);
+        current = current->next_;
+      }
+      catch (...)
+      {
+        clear();
+        throw;
+      }
+    }
+  }
+
+  template< class T >
+  List< T >::List(const List && rhs) noexcept:
+    head_(rhs.head_),
+    tail_(rhs.tail_),
+    size_(rhs.size_)
+  {
+    rhs.head_ = nullptr;
+    rhs.tail_ = nullptr;
+    rhs.size_ = nullptr;
+  }
+
+  template< class T >
+  List< T >::List(size_t count, const T & data):
+    head_(nullptr),
+    tail_(nullptr),
+    size_(0)
+  {
+    for (size_t i = 0; i < count; ++i)
+    {
+      try
+      {
+        push_front(data);
+      }
+      catch (...)
+      {
+        clear();
+        throw;
+      }
     }
   }
 
@@ -58,37 +106,43 @@ namespace baranov
   }
 
   template< class T >
-  Iterator< T > List< T >::begin()
+  Iterator< T > List< T >::begin() noexcept
   {
     return Iterator< T >(head_);
   }
 
   template< class T >
-  Iterator< T > List< T >::end()
+  Iterator< T > List< T >::end() noexcept
   {
-    if (tail_->next_ == nullptr)
-    {
-      Node< T > * imagNode = new Node< T >{ tail_->data_ };
-      imagNode->prev_ = tail_;
-      tail_->next_ = imagNode;
-    }
-    return tail_->next_;
+    return Iterator< T >();
   }
 
   template< class T >
-  bool List< T >::empty() const
+  ConstIterator< T > List< T >::cbegin() const noexcept
+  {
+    return ConstIterator< T >(head_);
+  }
+
+  template< class T >
+  ConstIterator< T > List< T >::cend() const noexcept
+  {
+    return ConstIterator< T >();
+  }
+
+  template< class T >
+  bool List< T >::empty() const noexcept
   {
     return head_ == nullptr || tail_ == nullptr;
   }
 
   template< class T >
-  size_t List< T >::size()
+  size_t List< T >::size() const noexcept
   {
     return size_;
   }
 
   template< class T >
-  void List< T >::push_back(T data)
+  void List< T >::push_back(const T & data)
   {
     Node< T > * topush = new Node< T >{ data };
     if (empty())
@@ -126,7 +180,7 @@ namespace baranov
   }
 
   template< class T >
-  void List< T >::push_front(T data)
+  void List< T >::push_front(const T & data)
   {
     Node< T > * topush = new Node< T >{ data };
     if (empty())
@@ -161,6 +215,53 @@ namespace baranov
       head_->prev_ = nullptr;
     }
     --size_;
+  }
+
+  template< class T >
+  void List< T >::assign(size_t count, const T & data)
+  {
+    List< T > newlist(count, data);
+    swap(newlist);
+  }
+
+  template< class T >
+  template < class UPredicate >
+  void List< T >::remove_if(UPredicate p)
+  {
+    if (empty())
+    {
+      return;
+    }
+    auto i = begin();
+    auto end = end();
+    while (i != end)
+    {
+      if (p(*i))
+      {
+        Node< T > * todel = i;
+        if (i->prev != nullptr)
+        {
+          i->prev_->next_=i->next_;
+        }
+        if (i->next_ != end)
+        {
+          i->next_->prev_ = i->prev_;
+        }
+        delete todel;
+        ++i;
+      }
+    }
+  }
+
+  template< class T >
+  void List< T >::remove(const T & data)
+  {
+    remove_if(
+      [&](const T & other)
+      {
+        return other == data;
+      }
+    );
   }
 
   template< class T >
