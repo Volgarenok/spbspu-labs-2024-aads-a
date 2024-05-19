@@ -1,6 +1,6 @@
 #include "command.hpp"
 
-void marishin::print(std::istream& in, const BinarySearchTree< std::string, BinarySearchTree< int, std::string > >& myMap, std::ostream& out)
+void marishin::print(std::istream& in, const tree& myMap, std::ostream& out)
 {
   std::string name = "";
   in >> name;
@@ -20,7 +20,7 @@ void marishin::print(std::istream& in, const BinarySearchTree< std::string, Bina
   }
 }
 
-void marishin::doUnion(std::istream& in,& in, BinarySearchTree< std::string, BinarySearchTree< int, std::string > >& myMap)
+void marishin::doUnion(std::istream& in,& in, tree& myMap)
 {
   std::string newName = "";
   in >> newName;
@@ -45,7 +45,7 @@ void marishin::doUnion(std::istream& in,& in, BinarySearchTree< std::string, Bin
   myMap[newName] = res;
 }
 
-void marishin::doComplement(std::istream& in, BinarySearchTree< std::string, BinarySearchTree< int, std::string > >& myMap)
+void marishin::doComplement(std::istream& in, tree& myMap)
 {
   std::string newName = "";
   in >> newName;
@@ -66,7 +66,7 @@ void marishin::doComplement(std::istream& in, BinarySearchTree< std::string, Bin
   myMap[newName] = res;
 }
 
-void marishin::doIntersect(std::istream& in, BinarySearchTree< std::string, BinarySearchTree< int, std::string > >& myMap)
+void marishin::doIntersect(std::istream& in, tree& myMap)
 {
   std::string newName = "";
   in >> newName;
