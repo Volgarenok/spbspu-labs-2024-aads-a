@@ -3,6 +3,7 @@
 #include <sstream>
 #include <string>
 #include <stdexcept>
+#include <limits>
 #include <list.hpp>
 #include "stack.hpp"
 #include "queue.hpp"
@@ -24,16 +25,31 @@ int operatorPrecedence(char op)
 
 long long int applyOperation(long long int a, long long int b, char op)
 {
+  constexpr long long int minValue = std::numeric_limits< long long int >::min();
+  constexpr long long int maxValue = std::numeric_limits< long long int >::max();
+
   if (op == '+')
   {
+    if (a > maxValue - b)
+    {
+      throw std::overflow_error("Invalid addition");
+    }
     return a + b;
   }
   else if (op == '-')
   {
+    if (a < minValue + b)
+    {
+      throw std::overflow_error("Invalid subtraction");
+    }
     return a - b;
   }
   else if (op == '*')
   {
+    if (a > maxValue / b || a < minValue / b)
+    {
+      throw std::overflow_error("Invalid multiplication");
+    }
     return a * b;
   }
   else if (op == '/')
