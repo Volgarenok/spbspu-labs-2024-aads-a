@@ -5,7 +5,6 @@
 #include <memory>
 #include <stdexcept>
 
-
 namespace zaitsev
 {
   template< typename Key, typename T, typename Compare = std::less< Key > >

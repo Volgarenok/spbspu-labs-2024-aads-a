@@ -3,258 +3,45 @@
 #include <map>
 #include <limits>
 #include <string>
+#include <functional>
 #include "map.hpp"
+#include "commands_processing.hpp"
 
-using namespace std;
-
-class Supervisor
+int main(int argc, char** argv)
 {
-public:
-  Supervisor(int argc, char** argv):
-    lib()
+  using namespace zaitsev;
+  library lib;
+  try
   {
-    if (argc < 2)
+    init_lib(argc, argv, lib);
+    zaitsev::Map< std::string, void(*)(std::istream&, library&) > commands;
+    commands["print"] = print_ds;
+    commands["intersect"] = intersect_ds;
+    commands["complement"] = complement_ds;
+    commands["union"] = union_ds;
+    while (std::cin)
     {
-      throw std::runtime_error("No file with datasets");
-    }
-    fstream input(argv[1]);
-    if (!input)
-    {
-      throw std::runtime_error("File opening failed");
-    }
-    while (input)
-    {
-      read_ds(input);
-    }
-  }
-  void execute(istream& in, ostream& out)
-  {
-    while (in)
-    {
-      string command;
-      in >> command;
-      if (!in)
+      std::string command;
+      std::cin >> command;
+      if (!std::cin)
       {
         break;
       }
       try
       {
-        if (commands.count(command))
+        auto it = commands.find(command);
+        if (it == commands.end())
         {
-          string arg1, arg2, arg3;
-          switch (commands[command])
-          {
-          case com_nmb::print_c:
-            in >> arg1;
-            if (!lib.count(arg1))
-            {
-              throw std::invalid_argument("<INVALID COMMAND>");
-            }
-            else
-            {
-              print_ds(arg1, out) << '\n';
-            }
-            break;
-          case com_nmb::intersect_c:
-            in >> arg1 >> arg2 >> arg3;
-            if (!lib.count(arg2) || !lib.count(arg3))
-            {
-              throw std::invalid_argument("<INVALID COMMAND>");
-            }
-            else
-            {
-              intersect_ds(arg1, arg2, arg3);
-            }
-            break;
-          case com_nmb::complement_c:
-            in >> arg1 >> arg2 >> arg3;
-            if (!lib.count(arg2) || !lib.count(arg3))
-            {
-              throw std::invalid_argument("<INVALID COMMAND>");
-            }
-            else
-            {
-              complement_ds(arg1, arg2, arg3);
-            }
-            break;
-          case com_nmb::union_c:
-            in >> arg1 >> arg2 >> arg3;
-            if (!lib.count(arg2) || !lib.count(arg3))
-            {
-              throw std::invalid_argument("<INVALID COMMAND>");
-            }
-            else
-            {
-              union_ds(arg1, arg2, arg3);
-            }
-          }
+          throw std::invalid_argument("");
         }
-        else
-        {
-          throw std::invalid_argument("<INVALID COMMAND>");
-        }
+        it->second(std::cin, lib);
       }
-      catch (const std::invalid_argument& e)
+      catch (const std::invalid_argument&)
       {
-        out << e.what() << '\n';
+        std::cout << "<INVALID COMMAND>" << '\n';
       }
-      in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
-  }
-private:
-  using dictionary = zaitsev::Map<int, string>;
-  using ds_it = zaitsev::Map<int, string>::const_iterator;
-  using library = zaitsev::Map< string, dictionary>;
-  library lib;
-
-  enum struct com_nmb
-  {
-    print_c,
-    complement_c,
-    intersect_c,
-    union_c
-  };
-  zaitsev::Map<string, com_nmb> commands = {
-    {"print", com_nmb::print_c},
-    {"intersect", com_nmb::intersect_c },
-    {"complement", com_nmb::complement_c},
-    { "union", com_nmb::union_c } };
-
-  bool check_args(const string& arg1, const string& arg2, const string& arg3)
-  {
-    return arg1 == arg2 || arg2 == arg3 || arg3 == arg1;
-  }
-  void read_ds(istream& in)
-  {
-    string name;
-    in >> name;
-    if (!in)
-    {
-      return;
-    }
-    dictionary new_dict;
-    string value;
-    int key;
-    while (in.peek() != '\n' && in)
-    {
-      in >> key >> value;
-      new_dict[key] = value;
-    }
-    lib[name] = std::move(new_dict);
-  }
-  ostream& print_ds(string ds_name, ostream& out)
-  {
-    if (lib[ds_name].empty())
-    {
-      out << "<EMPTY>";
-      return out;
-    }
-    out << ds_name;
-    for (auto i : lib[ds_name])
-    {
-      out << " " << i.first << " " << i.second;
-    }
-    return out;
-  }
-  void complement_ds(string new_ds_name, string ds1_name, string ds2_name)
-  {
-    ds_it ds1_beg = lib[ds1_name].cbegin();
-    ds_it ds2_beg = lib[ds2_name].cbegin();
-    ds_it ds1_end = lib[ds1_name].cend();
-    ds_it ds2_end = lib[ds2_name].cend();
-    dictionary new_dict;
-    while (ds1_beg != ds1_end && ds2_beg != ds2_end)
-    {
-      if ((*ds1_beg).first == (*ds2_beg).first)
-      {
-        ++ds1_beg;
-        ++ds2_beg;
-      }
-      else if ((*ds1_beg).first < (*ds2_beg).first)
-      {
-        new_dict.insert(*ds1_beg);
-        ++ds1_beg;
-      }
-      else
-      {
-        ++ds2_beg;
-      }
-    }
-    while (ds1_beg != ds1_end)
-    {
-      new_dict.insert(*ds1_beg);
-      ++ds1_beg;
-    }
-    lib[new_ds_name] = std::move(new_dict);
-  }
-  void intersect_ds(string new_ds_name, string ds1_name, string ds2_name)
-  {
-    ds_it ds1_beg = lib[ds1_name].cbegin();
-    ds_it ds2_beg = lib[ds2_name].cbegin();
-    ds_it ds1_end = lib[ds1_name].end();
-    ds_it ds2_end = lib[ds2_name].end();
-    dictionary new_dict;
-    while (ds1_beg != ds1_end && ds2_beg != ds2_end)
-    {
-      if ((*ds1_beg).first == (*ds2_beg).first)
-      {
-        new_dict.insert(*ds1_beg);
-        ++ds1_beg;
-        ++ds2_beg;
-      }
-      else
-      {
-        (*ds1_beg).first < (*ds2_beg).first ? ++ds1_beg : ++ds2_beg;
-      }
-    }
-    lib[new_ds_name] = std::move(new_dict);
-  }
-  void union_ds(string new_ds_name, string ds1_name, string ds2_name)
-  {
-    ds_it ds1_beg = lib[ds1_name].cbegin();
-    ds_it ds2_beg = lib[ds2_name].cbegin();
-    ds_it ds1_end = lib[ds1_name].end();
-    ds_it ds2_end = lib[ds2_name].end();
-    dictionary new_dict;
-    while (ds1_beg != ds1_end && ds2_beg != ds2_end)
-    {
-      if ((*ds1_beg).first == (*ds2_beg).first)
-      {
-        new_dict.insert(*ds1_beg);
-        ++ds1_beg;
-        ++ds2_beg;
-      }
-      else if ((*ds1_beg).first < (*ds2_beg).first)
-      {
-        new_dict.insert(*ds1_beg);
-        ++ds1_beg;
-      }
-      else
-      {
-        new_dict.insert(*ds2_beg);
-        ++ds2_beg;
-      }
-    }
-    while (ds1_beg != ds1_end)
-    {
-      new_dict.insert(*ds1_beg);
-      ++ds1_beg;
-    }
-    while (ds2_beg != ds2_end)
-    {
-      new_dict.insert(*ds2_beg);
-      ++ds2_beg;
-    }
-    lib[new_ds_name] = std::move(new_dict);
-  }
-};
-
-int main(int argc, char** argv)
-{
-  try
-  {
-    Supervisor supervisor(argc, argv);
-    supervisor.execute(std::cin, std::cout);
   }
   catch (const std::exception& e)
   {
