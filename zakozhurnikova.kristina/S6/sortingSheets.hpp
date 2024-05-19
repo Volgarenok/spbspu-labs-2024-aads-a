@@ -12,10 +12,31 @@
 #include "print.hpp"
 #include "sorting.hpp"
 
+
 namespace zakozhurnikova
 {
-  template < class Type >
-  void sortingSheets(std::string sort, std::string kind, size_t size)
+  template < class type, class Compare >
+  void sortingAndPrintSheets(std::string kind, size_t size, Compare cmp);
+
+  template< class Type >
+  void selectSorting(std::string sort, std::string kind, size_t size)
+  {
+    if (sort == "ascending")
+    {
+      sortingAndPrintSheets< Type >(kind, size, std::less< Type >());
+    }
+    else if (sort == "descending")
+    {
+      sortingAndPrintSheets< Type >(kind, size, std::greater< Type >());
+    }
+    else
+    {
+      throw std::logic_error("Invalid sort");
+    }
+  }
+
+  template < class Type, class Compare >
+  void sortingAndPrintSheets(std::string kind, size_t size, Compare cmp)
   {
     Type array[10000];
     if (kind == "ints")
@@ -41,28 +62,13 @@ namespace zakozhurnikova
     auto beginDeqShaker = dequeShaker.begin();
     auto beginDeqShell = dequeShell.begin();
 
-    if (sort == "ascending")
-    {
-      shaker(++beginBiR, size, std::less< Type >());
-      biListStandart.sort(std::less< Type >());
-      std::sort(beginDeqSort, endDeqSort, std::less< Type >());
-      shaker(++beginDeqShaker, size, std::less< Type >());
-      shell(beginDeqShell, size, std::less< Type >());
-      forwardList.sort(std::less< Type >());
-    }
-    else if (sort == "descending")
-    {
-      shaker(++beginBiR, size, std::greater< Type >());
-      biListStandart.sort(std::greater< Type >());
-      std::sort(beginDeqSort, endDeqSort, std::greater< Type >());
-      shaker(++beginDeqShaker, size, std::greater< Type >());
-      shell(beginDeqShell, size, std::greater< Type >());
-      forwardList.sort(std::greater< Type >());
-    }
-    else
-    {
-      throw std::logic_error("Bad sort");
-    }
+    shaker(++beginBiR, size, cmp);
+    biListStandart.sort(cmp);
+    std::sort(beginDeqSort, endDeqSort, cmp);
+    shaker(++beginDeqShaker, size, cmp);
+    shell(beginDeqShell, size, cmp);
+    forwardList.sort(cmp);
+
     print(std::cout, biListRealization);
     print(std::cout, biListStandart);
     print(std::cout, dequeSort);
@@ -70,5 +76,6 @@ namespace zakozhurnikova
     print(std::cout, dequeShell);
     print(std::cout, forwardList);
   }
+
 }
 #endif

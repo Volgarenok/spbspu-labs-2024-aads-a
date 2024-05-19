@@ -32,11 +32,11 @@ int main(int argc, char* argv[])
   {
     if (type == "ints")
     {
-      sortingSheets< int >(sort, type, size);
+      selectSorting< int >(sort, type, size);
     }
     else if (type == "floats")
     {
-      sortingSheets< float >(sort, type, size);
+      selectSorting< float >(sort, type, size);
     }
     else
     {
