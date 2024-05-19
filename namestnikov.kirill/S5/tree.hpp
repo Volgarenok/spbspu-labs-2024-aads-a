@@ -2,9 +2,9 @@
 #define TREE_HPP
 
 #include <functional>
-#include <tree_node.hpp>
-#include <tree_iterator.hpp>
-#include <const_tree_iterator.hpp>
+#include "tree_node.hpp"
+#include "tree_iterator.hpp"
+#include "const_tree_iterator.hpp"
 #include <stack>
 #include <queue>
 
@@ -257,8 +257,8 @@ namespace namestnikov
       }
       else
       {
-        std::stack< node_t > traverseStack;
-        node_t current = root_;
+        std::stack< node_t * > traverseStack;
+        node_t * current = root_;
         while (current)
         {
           traverseStack.push(current);
@@ -283,8 +283,8 @@ namespace namestnikov
       }
       else
       {
-        std::stack< node_t > traverseStack;
-        node_t current = root_;
+        std::stack< node_t * > traverseStack;
+        node_t * current = root_;
         while (current)
         {
           traverseStack.push(current);
@@ -309,8 +309,8 @@ namespace namestnikov
       }
       else
       {
-        std::queue< node_t > traverseQueue;
-        node_t current = root_;
+        std::queue< node_t * > traverseQueue;
+        node_t * current = root_;
         traverseQueue.push(current);
         while (!traverseQueue.empty())
         {
