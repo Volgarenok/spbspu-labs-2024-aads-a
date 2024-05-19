@@ -7,7 +7,7 @@ void zhalilov::Summator::operator()(const std::pair < int, std::string > pair)
 {
   int max = std::numeric_limits < int >::max();
   int min = std::numeric_limits < int >::min();
-  if (result_ >= 0 && max - result_ < pair.first)
+  if (result_ > 0 && max - result_ < pair.first)
   {
     throw std::overflow_error("addition overflow");
   }

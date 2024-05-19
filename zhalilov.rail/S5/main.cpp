@@ -23,6 +23,11 @@ int main(int argc, char *argv[])
   {
     map[key] = value;
   }
+  if (!file.eof())
+  {
+    std::cerr << "Input failed";
+    return 1;
+  }
 
   Summator summator;
   try
