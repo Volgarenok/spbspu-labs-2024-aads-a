@@ -274,6 +274,32 @@ namespace namestnikov
         return f;
       }
     }
+    template< class F >
+    F traverse_rnl(F f)
+    {
+      if (empty())
+      {
+        throw std::logic_error("Tree is empty");
+      }
+      else
+      {
+        std::stack< node_t > traverseStack;
+        node_t current = root_;
+        while (current)
+        {
+          traverseStack.push(current);
+          current = current->right;
+        }
+        while (!traverseStack.empty())
+        {
+          current = traverseStack.top();
+          traverseStack.pop();
+          f(current->data);
+          current = current->left;
+        }
+      }
+      return f;
+    }
     ~Tree()
     {
       clear();
