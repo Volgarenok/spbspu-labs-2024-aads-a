@@ -11,7 +11,7 @@ namespace namestnikov
   {
   public:
     SumFunc();
-    void operator()(std::pair< int, std::string > data);
+    void operator()(const std::pair< const int, std::string > & data);
     int getResult() const;
     std::string getLine() const;
   private:
@@ -35,9 +35,8 @@ std::string namestnikov::SumFunc::getLine() const
   return line_;
 }
 
-void namestnikov::SumFunc::operator()(std::pair< int, std::string > data)
+void namestnikov::SumFunc::operator()(const std::pair< const int, std::string > & data)
 {
-  std::cout << "11111111111";
   result_ += data.first;
   line_ = line_ + data.second + " ";
 }
@@ -80,11 +79,9 @@ int main()
       myMap.insert(keyNumber, value);
     }
   }
-  std::cout << myMap.size();
-  std::cout << myMap[20] << "||||";
   std::string output = "";
   int result = 0;
   descending(result, output, myMap);
   std::cout << result;
-  std::cout << output;
+  std::cout << output << "\n";
 }

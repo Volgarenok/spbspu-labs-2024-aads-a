@@ -3,6 +3,7 @@
 
 #include "tree_node.hpp"
 #include "tree_iterator.hpp"
+#include <iterator>
 
 namespace namestnikov
 {
