@@ -1,11 +1,4 @@
 #include <iostream>
-#include <deque>
-#include <forward_list>
-#include <algorithm>
-#include <iomanip>
-#include <list.hpp>
-#include "sortings.hpp"
-#include "iterators_functions.hpp"
 #include "sort_sequence.hpp"
 
 int main(int argc, char* argv[])
@@ -29,11 +22,11 @@ int main(int argc, char* argv[])
     std::string type = argv[2];
     if (type == "ints")
     {
-      sortSequence< int >(sorting, type, size);
+      sortSequence< int >(sorting, type, size, std::cout);
     }
     else if (type == "floats")
     {
-      sortSequence< float >(sorting, type, size);
+      sortSequence< float >(sorting, type, size, std::cout);
     }
     else
     {

@@ -1,15 +1,20 @@
 #ifndef SORT_SEQUENCE_HPP
 #define SORT_SEQUENCE_HPP
 
-#include <string>
+#include <deque>
+#include <forward_list>
+#include <algorithm>
+#include <iomanip>
+#include <list.hpp>
+#include "sortings.hpp"
 #include "iterators_functions.hpp"
 
 namespace nikitov
 {
   template< class T >
-  void sortSequence(std::string sorting, std::string, size_t size)
+  void sortSequence(std::string sorting, std::string, size_t size, std::ostream& output)
   {
-    std::cout << std::setprecision(1) << std::fixed;
+    output << std::setprecision(1) << std::fixed;
 
     std::forward_list< T > fList;
     List< T > firstBiList;
@@ -24,7 +29,7 @@ namespace nikitov
     List< T > secondBiList = firstBiList;
     std::deque< T > secondDeque = firstDeque;
     std::deque< T > thirdDeque = firstDeque;
-    printRange(fList.cbegin(), fList.cend(), std::cout);
+    printRange(fList.cbegin(), fList.cend(), output);
 
     if (sorting == "ascending")
     {
@@ -48,12 +53,12 @@ namespace nikitov
     {
       throw std::invalid_argument("Error: Wrong sorting parameter");
     }
-    printRange(fList.cbegin(), fList.cend(), std::cout);
-    printRange(firstBiList.cbegin(), firstBiList.cend(), std::cout);
-    printRange(secondBiList.cbegin(), secondBiList.cend(), std::cout);
-    printRange(firstDeque.cbegin(), firstDeque.cend(), std::cout);
-    printRange(secondDeque.cbegin(), secondDeque.cend(), std::cout);
-    printRange(thirdDeque.cbegin(), thirdDeque.cend(), std::cout);
+    printRange(fList.cbegin(), fList.cend(), output);
+    printRange(firstBiList.cbegin(), firstBiList.cend(), output);
+    printRange(secondBiList.cbegin(), secondBiList.cend(), output);
+    printRange(firstDeque.cbegin(), firstDeque.cend(), output);
+    printRange(secondDeque.cbegin(), secondDeque.cend(), output);
+    printRange(thirdDeque.cbegin(), thirdDeque.cend(), output);
   }
 }
 #endif
