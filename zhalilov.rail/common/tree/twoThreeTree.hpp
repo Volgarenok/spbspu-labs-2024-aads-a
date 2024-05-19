@@ -50,6 +50,15 @@ namespace zhalilov
     iterator find(const Key &);
     const_iterator find(const Key &) const;
 
+    template < class F >
+    F traverse_lnr(F f) const;
+    template < class F >
+    F traverse_lnr(F f);
+    template < class F >
+    F traverse_rnl(F f) const;
+    template < class F >
+    F traverse_rnl(F f);
+
     size_t count(const Key &) const;
     std::pair < iterator, iterator > equal_range(const Key &);
     std::pair < const_iterator, const_iterator > equal_range(const Key &) const;
@@ -404,6 +413,60 @@ namespace zhalilov
       return std::make_pair(const_iterator(resultPair.first.node_, resultPair.first.isPtrToLeft_), true);
     }
     return std::make_pair(cend(), false);
+  }
+
+  template < class Key, class T, class Compare >
+  template < class F >
+  F TwoThree < Key, T, Compare >::traverse_lnr(F f) const
+  {
+    if (empty())
+    {
+      throw std::logic_error("travers_lnr: empty tree");
+    }
+    auto itCurr = cbegin();
+    auto itEnd = cend();
+    while (itCurr != itEnd)
+    {
+      f(*itCurr);
+      itCurr++;
+    }
+    return f;
+  }
+
+  template < class Key, class T, class Compare >
+  template < class F >
+  F TwoThree < Key, T, Compare >::traverse_lnr(F f)
+  {
+    const TwoThree < Key, T, Compare > constThis = const_cast < TwoThree < Key, T, Compare > & >(*this);
+    return constThis.traverse_lnr(f);
+  }
+
+  template < class Key, class T, class Compare >
+  template < class F >
+  F TwoThree < Key, T, Compare >::traverse_rnl(F f) const
+  {
+    if (empty())
+    {
+      throw std::logic_error("travers_lnr: empty tree");
+    }
+    auto itCurr = cend();
+    itCurr--;
+    auto itBegin = cbegin();
+    do
+    {
+      f(*itCurr);
+      itCurr--;
+    }
+    while (itCurr != itBegin);
+    return f;
+  }
+
+  template < class Key, class T, class Compare >
+  template < class F >
+  F TwoThree < Key, T, Compare >::traverse_rnl(F f)
+  {
+    const TwoThree < Key, T, Compare > constThis = const_cast < TwoThree < Key, T, Compare > & >(*this);
+    return constThis.traverse_rnl(f);
   }
 
   template < class Key, class T, class Compare >
