@@ -36,6 +36,15 @@ namespace novokhatskiy
       return data_.front();
     }
 
+    const T& front() const
+    {
+      if (empty())
+      {
+        throw std::invalid_argument("Queue is empty");
+      }
+      return data_.front();
+    }
+
   private:
     ForwardList< T > data_;
   };

@@ -50,12 +50,13 @@ namespace novokhatskiy
     Bracket getBracket() const noexcept;
 
   private:
-    TokenType type;
-    union {
+    union 
+    {
       Operand operand;
       Operation operation;
       Bracket bracket;
     };
+    TokenType type;
     explicit InfixType(bool val);
   };
 
@@ -71,7 +72,8 @@ namespace novokhatskiy
 
   private:
     TokenType type;
-    union {
+    union 
+    {
       Operand operand;
       Operation operation;
     };
