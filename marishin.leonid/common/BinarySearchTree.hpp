@@ -1,6 +1,12 @@
 #ifndef BINARYSEARCHTREE_HPP
 #define BINARYSEARCHTREE_HPP
 
+#include <algorithm>
+#include <cstddef>
+#include <cstdlib>
+#include <functional>
+#include <stdexcept>
+
 namespace marishin
 {
   template< typename Key, typename Value, typename Compare = std::less< Key > >
@@ -331,12 +337,141 @@ namespace marishin
       return result;
     }
 
-    
+    void updateBalance(node_t* balanceParent, int oldBal)
+    {
+      if (balanceParent->height == 0)
+      {
+        if (!balanceParent->isRoot())
+        {
+          int bal = balanceParent->parent->height;
+          if (balanceParent->isLeft())
+          {
+            --balanceParent->parent->height;
+          }
+          else
+          {
+            ++balanceParent->parent->height;
+          }
+          updateBalance(balanceParent->parent, bal);
+        }
+      }
+      else if (1 < balanceParent->height || -1 > balanceParent->height)
+      {
+        if (!balanceParent->isRoot())
+        {
+          node_t* grandParent = balanceParent->parent;
+          bool left = balanceParent->isLeft();
+          balance(balanceParent);
+          int newBal = 0;
+          if (left)
+          {
+            newBal = grandParent->left->height;
+          }
+          else
+          {
+            newBal = grandParent->right->height;
+          }
+          newBal = std::abs(newBal) - std::abs(oldBal);
+          if (std::abs(newBal) - std::abs(oldBal) != 0)
+          {
+            int balGrand = grandParent->height;
+            if (left)
+            {
+              --grandParent->height;
+            }
+            else
+            {
+              ++grandParent->height;
+            }
+            updateBalance(grandParent, balGrand);
+          }
+        }
+        else
+        {
+          balance(balanceParent);
+        }
+      }
+      return;
+    }
 
+    void remove(node_t* currNode)
+    {
+      if (currNode->isLeaf())
+      {
+        int oldBal = currNode->parent->height;
+        if (currNode->isLeft())
+        {
+          currNode->parent->left = nullptr;
+          --currNode->parent->height;
+        }
+        else
+        {
+          currNode->parent->right = nullptr;
+          ++currNode->parent->height;
+        }
+        node_t* balanceParent = currNode->parent;
+        delete currNode;
+        updateBalance(balanceParent, oldBal);
+      }
+      else if (currNode->hasBoth())
+      {
+        node_t* res = getMin(currNode->right);
+        currNode->data.first = res->data.first;
+        currNode->data.second = res->data.second;
+        remove(res);
+      }
+      else
+      {
+        if (currNode->hasLeft())
+        {
+          int oldBal = currNode->parent->height;
+          if (currNode->isLeft())
+          {
+            currNode->left->parent = currNode->parent;
+            currNode->parent->left = currNode->left;
+            --currNode->parent->height;
+          }
+          else if (currNode->isRight())
+          {
+            currNode->left->parent = currNode->parent;
+            currNode->parent->right = currNode->left;
+            ++currNode->parent->height;
+          }
+          updateBalance(currNode->parent, oldBal);
+
+          if (currNode->isRoot())
+          {
+            root_ = currNode->left;
+            root_->parent = nullptr;
+          }
+        }
+        else
+        {
+          int oldBal = currNode->parent->height;
+          if (currNode->isLeft())
+          {
+            currNode->right->parent = currNode->parent;
+            currNode->parent->left = currNode->right;
+            --currNode->parent->height;
+          }
+          else if (currNode->isRight())
+          {
+            currNode->right->parent = currNode->parent;
+            currNode->parent->right = currNode->right;
+            ++currNode->parent->height;
+          }
+          updateBalance(currNode->parent, oldBal);
+
+          if (currNode->isRoot())
+          {
+            root_ = currNode->right;
+            root_->parent = nullptr;
+          }
+        }
+        delete currNode;
+      }
+    }
   };
-
 }
-
-
 
 #endif
