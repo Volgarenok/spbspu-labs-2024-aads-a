@@ -4,6 +4,23 @@
 #include "createcontainer.hpp"
 #include "printsortcontainers.hpp"
 
+template< class T >
+void choose_function(const std::string& str, std::deque< T >& deque, piyavkin::List< T >& bi_list, std::forward_list< T >& list)
+{
+  if (str == "ascending")
+  {
+    print_sorted_containers(std::cout, deque, bi_list, list, std::less< T >());
+  }
+  else if (str == "descending")
+  {
+    print_sorted_containers(std::cout, deque, bi_list, list, std::greater< T >());
+  }
+  else
+  {
+    throw std::logic_error("Invalid traversal order");
+  }
+}
+
 int main(int argc, char* argv[])
 {
   if (argc != 4)
@@ -14,6 +31,10 @@ int main(int argc, char* argv[])
   try
   {
     size_t size = std::stoull(argv[3]);
+    if (size == 0)
+    {
+      throw std::logic_error("Zero size");
+    }
     using namespace piyavkin;
     if (std::string(argv[2]) == "ints")
     {
@@ -22,37 +43,15 @@ int main(int argc, char* argv[])
       std::deque< int > deque;
       create_containers(deque, bi_list, list, size);
       print_containers(std::cout, deque);
-      if (std::string(argv[1]) == "ascending")
-      {
-        print_sorted_containers(std::cout, deque, bi_list, list, std::less< int >());
-      }
-      else if (std::string(argv[1]) == "descending")
-      {
-        print_sorted_containers(std::cout, deque, bi_list, list, std::greater< int >());
-      }
-      else
-      {
-        throw std::logic_error("Invalid traversal order");
-      }
+      choose_function(std::string(argv[1]), deque, bi_list, list);
     }
-    else if (std::string(argv[2]) == "float")
+    else if (std::string(argv[2]) == "floats")
     {
       std::forward_list< float > list;
       List< float > bi_list;
       std::deque< float > deque;
       create_containers(deque, bi_list, list, size);
-      if (std::string(argv[1]) == "ascending")
-      {
-        print_sorted_containers(std::cout, deque, bi_list, list, std::less< float >());
-      }
-      else if (std::string(argv[1]) == "descending")
-      {
-        print_sorted_containers(std::cout, deque, bi_list, list, std::greater< float >());
-      }
-      else
-      {
-        throw std::logic_error("Invalid traversal order");
-      }
+      choose_function(std::string(argv[1]), deque, bi_list, list);
     }
     else
     {
