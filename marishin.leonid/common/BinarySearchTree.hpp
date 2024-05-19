@@ -270,6 +270,69 @@ namespace marishin
       }
     }
 
+    void balance(node_t* node)
+    {
+      if (node->height < 0)
+      {
+        if (node->right->height > 0)
+        {
+          node->right->rotateRight(&root_);
+        }
+        node->rotateLeft(&root_);
+      }
+      else
+      {
+        if (node->left->height < 0)
+        {
+          node->left->rotateLeft(&root_);
+        }
+        node->rotateRight(&root_);
+      }
+    }
+
+    void getBalance(node_t* node)
+    {
+      if (node->height > 1 || node->height < -1)
+      {
+        balance(node);
+        return;
+      }
+      else
+      {
+        if (node->parent)
+        {
+          if (node->left)
+          {
+            ++node->parent->height;
+          }
+          else if (node->right)
+          {
+            --node->parent->height;
+          }
+          if (node->parent->height != 0)
+          {
+            getBalance(node->parent);
+          }
+        }
+      }
+    }
+
+    node_t* getMin(node_t* node) const
+    {
+      node_t* result = node;
+      if (!result)
+      {
+        return nullptr;
+      }
+      while (result->left)
+      {
+        result = result->left;
+      }
+      return result;
+    }
+
+    
+
   };
 
 }
