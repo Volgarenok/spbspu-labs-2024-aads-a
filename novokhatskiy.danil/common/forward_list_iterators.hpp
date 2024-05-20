@@ -18,7 +18,6 @@ namespace novokhatskiy
   {
     friend class novokhatskiy::ForwardList< T >;
     friend class novokhatskiy::ConstForwardIterator< T >;
-
   public:
     using iter = ForwardIterator< T >;
     ForwardIterator():
