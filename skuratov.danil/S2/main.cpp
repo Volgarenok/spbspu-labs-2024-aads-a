@@ -1,12 +1,13 @@
 #include <fstream>
+#include <iostream>
 #include "processExpressions.hpp"
 
 int main(int argc, char* argv[])
 {
   using namespace skuratov;
   Queue< Queue< std::string > > exp;
+  Queue< std::string > lineQueue;
   std::string line;
-
   if (argc > 1)
   {
     std::ifstream infile(argv[1]);
@@ -15,24 +16,40 @@ int main(int argc, char* argv[])
       std::cerr << "Error reading file" << '\n';
       return 1;
     }
-    while (infile >> line)
+    while (infile)
     {
-      Queue< std::string > lineQueue;
-      for (char& ch : line)
+      char symb;
+      while (infile >> symb && symb != '\n')
       {
-        lineQueue.push(std::string(1, ch));
+        if (symb == ' ')
+        {
+          lineQueue.push(line);
+          line = "";
+        }
+        else
+        {
+          line += symb;
+        }
       }
       exp.push(lineQueue);
     }
   }
   else
   {
-    while (std::cin >> line)
+    while (std::cin)
     {
-      Queue< std::string > lineQueue;
-      for (char& ch : line)
+      char symb;
+      while (std::cin >> symb && symb != '\n')
       {
-        lineQueue.push(std::string(1, ch));
+        if (symb == ' ')
+        {
+          lineQueue.push(line);
+          line = "";
+        }
+        else
+        {
+          line += symb;
+        }
       }
       exp.push(lineQueue);
     }
