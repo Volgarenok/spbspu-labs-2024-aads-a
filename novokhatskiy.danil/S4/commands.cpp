@@ -1,7 +1,7 @@
 #include "commands.hpp"
 #include <stdexcept>
 
-void novokhatskiy::unionCmd(mainMap& dict, std::istream& in, std::ostream&)
+void novokhatskiy::unionCmd(mainMap& dict, std::istream& in)
 {
   std::string resName = {};
   std::string first = {};
@@ -24,7 +24,7 @@ void novokhatskiy::unionCmd(mainMap& dict, std::istream& in, std::ostream&)
   dict.insert3(std::make_pair(std::move(resName), std::move(resDict)));
 }
 
-void novokhatskiy::intersectCmd(mainMap& dict, std::istream& in, std::ostream&)
+void novokhatskiy::intersectCmd(mainMap& dict, std::istream& in)
 {
   std::string resName = {};
   std::string first = {};
@@ -54,7 +54,7 @@ void novokhatskiy::intersectCmd(mainMap& dict, std::istream& in, std::ostream&)
   }
 }
 
-void novokhatskiy::complement(mainMap& dict, std::istream& in, std::ostream&)
+void novokhatskiy::complement(mainMap& dict, std::istream& in)
 {
   std::string resName = {};
   std::string first = {};

@@ -163,7 +163,7 @@ namespace novokhatskiy
     Value& operator[](const Key& key)
     {
       node_t* tmp = search(key);
-      if (tmp->value.first == key)
+      if (tmp)
       {
         return tmp->value.second;
       }
@@ -178,7 +178,7 @@ namespace novokhatskiy
     const Value& operator[](const Key& key) const
     {
       node_t* tmp = search(key);
-      if (tmp->value.first == key)
+      if (tmp)
       {
         return tmp->value.second;
       }

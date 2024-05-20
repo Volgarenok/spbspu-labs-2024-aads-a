@@ -31,7 +31,6 @@ void inputDict(mainMap& dict, std::istream& in)
       in >> val;
       tmp.insert3({ key, val });
     }
-    //dict[name] = tmp;
     dict.insert3(std::make_pair(std::move(name), std::move(tmp)));
   }
   in.clear();
@@ -52,9 +51,9 @@ int main(int argc, char** argv)
     inputDict(maps, fileinp);
   }
   using namespace std::placeholders;
-  Tree< std::string, std::function< void(mainMap&, std::istream&, std::ostream&) > > commands;
+  Tree< std::string, std::function< void(mainMap&, std::istream&) > > commands;
   commands["print"] = std::bind(print, _1, _2, std::ref(std::cout));
-  commands["complement"] = std::bind(complement, _1, _2, _3);
+  commands["complement"] = complement;
   commands["intersect"] = intersectCmd;
   commands["union"] = unionCmd;
   std::string command = {};
@@ -62,7 +61,7 @@ int main(int argc, char** argv)
   {
     try
     {
-      commands.at(command)(maps, std::cin, std::cout);
+      commands.at(command)(maps, std::cin);
     }
     catch (const std::invalid_argument& e)
     {

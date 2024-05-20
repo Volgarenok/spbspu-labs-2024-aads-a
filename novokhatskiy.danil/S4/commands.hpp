@@ -10,9 +10,9 @@ namespace novokhatskiy
   using mainMap = Tree< std::string, Tree< size_t, std::string > >;
   using map = Tree< size_t, std::string >;
   void print(mainMap& dict, std::istream& in, std::ostream& out);
-  void complement(mainMap& dict, std::istream& in, std::ostream&);
-  void intersectCmd(mainMap& dict, std::istream& in, std::ostream&);
-  void unionCmd(mainMap& dict, std::istream& in, std::ostream&);
+  void complement(mainMap& dict, std::istream& in);
+  void intersectCmd(mainMap& dict, std::istream& in);
+  void unionCmd(mainMap& dict, std::istream& in);
 }
 
 #endif
