@@ -19,8 +19,7 @@ namespace novokhatskiy
         return;
       }
       auto it = data_.cbegin();
-      for (auto it2 = ++(data_.cbegin()); it2 != data_.cend(); it++, it2++)
-        ;
+      for (auto it2 = ++(data_.cbegin()); it2 != data_.cend(); it++, it2++);
       data_.insert_after(it, value);
     }
     bool empty() const noexcept
