@@ -1,12 +1,12 @@
 #include "inputMaps.hpp"
 #include <istream>
 
-void marishin::inputMaps(std::istream& in, BinarySearchTree< std::string, BinarySearchTree< int, std::string > >& maps)
+void marishin::inputMaps(std::istream& in, BinarySearchTree< std::string, BinarySearchTree< size_t, std::string > >& maps)
 {
   while (!in.eof())
   {
     in.clear();
-    Tree< int, std::string > tempMap;
+    Tree< size_t, std::string > tempMap;
     std::string mapName = "";
     in >> mapName;
     size_t keyNumber = 0;

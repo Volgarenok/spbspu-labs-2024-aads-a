@@ -4,7 +4,7 @@ void marishin::print(std::istream& in, const tree& myMap, std::ostream& out)
 {
   std::string name = "";
   in >> name;
-  BinarySearchTree< int, std::string > map = myMap.at(name);
+  BinarySearchTree< size_t, std::string > map = myMap.at(name);
   if (map.empty())
   {
     out << "<EMPTY>\n";
@@ -28,9 +28,9 @@ void marishin::doUnion(std::istream& in, tree& myMap)
   in >> firstName;
   std::string secondName = "";
   in >> secondName;
-  BinarySearchTree< int, std::string > res;
-  BinarySearchTree< int, std::string > left = myMap.at(firstName);
-  BinarySearchTree< int, std::string > right = myMap.at(secondName);
+  BinarySearchTree< size_t, std::string > res;
+  BinarySearchTree< size_t, std::string > left = myMap.at(firstName);
+  BinarySearchTree< size_t, std::string > right = myMap.at(secondName);
   for (const auto& key1: left)
   {
     res.insert(key1.first, key1.second);
@@ -53,9 +53,9 @@ void marishin::doComplement(std::istream& in, tree& myMap)
   in >> firstName;
   std::string secondName = "";
   in >> secondName;
-  BinarySearchTree< int, std::string > res;
-  BinarySearchTree< int, std::string > left = myMap.at(firstName);
-  BinarySearchTree< int, std::string > right = myMap.at(secondName);
+  BinarySearchTree< size_t, std::string > res;
+  BinarySearchTree< size_t, std::string > left = myMap.at(firstName);
+  BinarySearchTree< size_t, std::string > right = myMap.at(secondName);
   for (const auto& key1: left)
   {
     if (right.find(key1.first) == right.cend())
@@ -74,9 +74,9 @@ void marishin::doIntersect(std::istream& in, tree& myMap)
   in >> firstName;
   std::string secondName = "";
   in >> secondName;
-  BinarySearchTree< int, std::string > res;
-  BinarySearchTree< int, std::string > left = myMap.at(firstName);
-  BinarySearchTree< int, std::string > right = myMap.at(secondName);
+  BinarySearchTree< size_t, std::string > res;
+  BinarySearchTree< size_t, std::string > left = myMap.at(firstName);
+  BinarySearchTree< size_t, std::string > right = myMap.at(secondName);
   for (const auto& key1: left)
   {
     for (const auto& key2: right)
