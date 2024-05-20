@@ -1,34 +1,35 @@
-#ifndef CONSTTREEITERATOR_HPP
-#define CONSTTREEITERATOR_HPP
-
+#ifndef CONST_TREE_ITERATOR_HPP
+#define CONST_TREE_ITERATOR_HPP
 
 #include <treeNode.hpp>
 #include <treeIterator.hpp>
 
 namespace marishin
 {
-  template< typename Key, typename Value, typename Compare >
-  class BinarySearchTree;
+  template< class Key, class Value, class Compare >
+  class Tree;
 
-  template< typename Key, typename Value, typename Compare >
+  template< class Key, class Value, class Compare >
   class IteratorTree;
 
-  template< typename Key, typename Value, typename Compare >
+  template< class Key, class Value, class Compare >
   class ConstIteratorTree
   {
-    friend class BinarySearchTree< Key, Value, Compare >;
+    friend class Tree< Key, Value, Compare >;
     friend class IteratorTree< Key, Value, Compare >;
+    using pair_key_t = std::pair< Key, Value >;
+    using node_t = detail::TreeNode< Key, Value >;
+    using const_iterator = ConstIteratorTree< Key, Value, Compare >;
+    using iterator = IteratorTree< Key, Value, Compare >;
   public:
-
     ConstIteratorTree():
       node_(nullptr)
     {}
-    ConstIteratorTree(const ConstIteratorTree< Key, Value, Compare >&) = default;
-    ConstIteratorTree< Key, Value, Compare >& operator=(const ConstIteratorTree< Key, Value, Compare >&) = default;
-    ConstIteratorTree(ConstIteratorTree< Key, Value, Compare >&& rhs) noexcept = default;
-    ConstIteratorTree< Key, Value, Compare >& operator=(ConstIteratorTree< Key, Value, Compare >&& rhs) noexcept = default;
-
-    ConstIteratorTree< Key, Value, Compare >& operator++()
+    ConstIteratorTree(const const_iterator &) = default;
+    const_iterator & operator=(const const_iterator &) = default;
+    ConstIteratorTree(const_iterator && other) noexcept = default;
+    const_iterator & operator=(const_iterator && other) noexcept = default;
+    const_iterator & operator++()
     {
       if (node_->right)
       {
@@ -39,57 +40,51 @@ namespace marishin
         }
         return *this;
       }
-      while (node_->parent && node_->parent->right == node_)
+      else
       {
+        while ((node_->parent) && (node_->parent->right == node_))
+        {
+          node_ = node_->parent;
+        }
         node_ = node_->parent;
+        return *this;
       }
-      node_ = node_->parent;
-      return *this;
     }
-
-    ConstIteratorTree< Key, Value, Compare >& operator++(int)
+    const_iterator operator++(int)
     {
-      ConstIteratorTree< Key, Value, Compare > result(*this);
+      const_iterator temp(*this);
       ++(*this);
-      return result;
-    }
+      return temp;
 
-    bool operator==(const ConstIteratorTree< Key, Value, Compare >& rhs) const
+    }
+    bool operator==(const const_iterator & other) const
     {
-      return node_ == rhs.node_;
+      return (node_ == other.node_);
     }
-
-    bool operator==(IteratorTree< Key, Value, Compare >& rhs) const
+    bool operator==(iterator & other) const
     {
-      return node_ == rhs.node_;
+      return (node_ == other.node_);
     }
-
-    bool operator!=(const ConstIteratorTree< Key, Value, Compare >& rhs) const
+    bool operator!=(const const_iterator & other) const
     {
-      return node_ != rhs.node_;
+      return node_ != other.node_;
     }
-
-    bool operator!=(IteratorTree< Key, Value, Compare >& rhs) const
+    bool operator!=(iterator & other) const
     {
-      return node_ != rhs.node_;
+      return node_ != other.node_;
     }
-
-    const std::pair< Key, Value >& operator*() const
+    const pair_key_t & operator*() const
     {
       return node_->data;
     }
-
-    const std::pair< Key, Value >* operator->() const
+    const pair_key_t * operator->() const
     {
       return std::addressof(node_->data);
     }
-
     ~ConstIteratorTree() = default;
-
   private:
-    const detail::TreeNode< Key, Value >* node_;
-
-    explicit ConstIteratorTree(detail::TreeNode< Key, Value >* node):
+    const node_t * node_;
+    explicit ConstIteratorTree(node_t * node):
       node_(node)
     {}
   };

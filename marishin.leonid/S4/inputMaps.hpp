@@ -1,15 +1,14 @@
-#ifndef INPUTMAPS_HPP
-#define INPUTMAPS_HPP
+#ifndef INPUT_DICTS_HPP
+#define INPUT_DICTS_HPP
 
 #include <string>
-#include <iostream>
 #include <map>
-
+#include <iostream>
 #include <binarySearchTree.hpp>
 
 namespace marishin
 {
-  void inputMaps(std::istream& in, BinarySearchTree< std::string, BinarySearchTree< size_t, std::string > >& maps);
+  void inputMaps(std::istream & in, Tree< std::string, Tree< size_t, std::string > > & myMap);
 }
 
 #endif

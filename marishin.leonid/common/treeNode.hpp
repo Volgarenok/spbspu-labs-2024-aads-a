@@ -1,6 +1,5 @@
-#ifndef TREENODE_HPP
-#define TREENODE_HPP
-
+#ifndef TREE_NODE_HPP
+#define TREE_NODE_HPP
 
 #include <utility>
 
@@ -8,48 +7,43 @@ namespace marishin
 {
   namespace detail
   {
-    template< typename Key, typename Value >
+    template< class Key, class Value >
     struct TreeNode
     {
+      using node_t = detail::TreeNode< Key, Value >;
       std::pair< Key, Value > data;
-      detail::TreeNode< Key, Value >* left;
-      detail::TreeNode< Key, Value >* right;
-      detail::TreeNode< Key, Value >* parent;
+      node_t * parent;
+      node_t * left;
+      node_t * right;
       int height;
-
-      TreeNode(const Key& key, const Value& val)
+      TreeNode(const Key & key, const Value & value)
       {
-        data = std::make_pair(key, val);
-        left = nullptr;
-        right = nullptr;
+        data = std::make_pair(key, value);
+        height = 0;
         parent = nullptr;
-        height = 0;
-      }
-
-      TreeNode(const Key& key, const Value& val, TreeNode* newParent)
-      {
-        data = std::make_pair(key, val);
         left = nullptr;
         right = nullptr;
+      }
+      TreeNode(const Key & key, const Value & value, TreeNode * newParent)
+      {
+        data = std::make_pair(key, value);
         parent = newParent;
+        left = nullptr;
+        right = nullptr;
         height = 0;
       }
-
-      bool isLeft() const noexcept
+      bool isLeftChild() const
       {
-        return this->parent && this->parent->left == this;
+        return (this->parent) && (this->parent->left == this);
       }
-
-      bool isRight() const noexcept
+      bool isRightChild() const
       {
-        return this->parent && this->parent->right == this;
+        return (this->parent) && (this->parent->right == this);
       }
-
-      bool isRoot() const noexcept
+      bool isRoot() const
       {
         return !this->parent;
       }
-
     };
   }
 }

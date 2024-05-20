@@ -1,34 +1,36 @@
-#ifndef BINARYSEARCHTREE_HPP
-#define BINARYSEARCHTREE_HPP
+#ifndef TREE_HPP
+#define TREE_HPP
 
 #include <functional>
-#include <stdexcept>
 #include <treeNode.hpp>
 #include <treeIterator.hpp>
 #include <constTreeIterator.hpp>
 
 namespace marishin
 {
-  template< typename Key, typename Value, typename Compare = std::less< Key > >
-  class BinarySearchTree
+  template< class Key, class Value, class Compare = std::less< Key > >
+  class Tree
   {
   public:
-
-    BinarySearchTree():
+    using pair_key_t = std::pair< const Key, Value >;
+    using node_t = detail::TreeNode< Key, Value >;
+    using iterator = IteratorTree< Key, Value, Compare >;
+    using const_iterator = ConstIteratorTree< Key, Value, Compare >;
+    Tree():
       root_(nullptr),
       size_(0),
       compare_(Compare())
     {}
 
-    BinarySearchTree(const BinarySearchTree& rhs):
+    Tree(const Tree & other):
       root_(nullptr),
       size_(0),
-      compare_(rhs.compare_)
+      compare_(other.compare_)
     {
       try
       {
-        ConstIteratorTree< Key, Value, Compare > begin = rhs.cbegin();
-        ConstIteratorTree< Key, Value, Compare > end = rhs.cend();
+        const_iterator begin = other.cbegin();
+        const_iterator end = other.cend();
         for (; begin != end; ++begin)
         {
           insert(begin->first, begin->second);
@@ -41,54 +43,54 @@ namespace marishin
       }
     }
 
-    BinarySearchTree(BinarySearchTree&& rhs):
-      root_(rhs.root_),
-      size_(rhs.size_),
-      compare_(rhs.compare_)
+    Tree(Tree && other) noexcept:
+      root_(other.root_),
+      size_(other.size_),
+      compare_(other.compare_)
     {
-      rhs.root_ = nullptr;
-      rhs.size_ = 0;
+      other.root_ = nullptr;
+      other.size_ = 0;
     }
 
-    BinarySearchTree& operator=(const BinarySearchTree& rhs)
+    Tree & operator=(const Tree & other)
     {
-      BinarySearchTree< Key, Value > temp(rhs);
-      if (this != std::addressof(rhs))
+      Tree< Key, Value > temp(other);
+      if (this != std::addressof(other))
       {
         swap(temp);
       }
       return *this;
     }
 
-    BinarySearchTree& operator=(BinarySearchTree&& rhs) noexcept
+    Tree & operator=(Tree && other) noexcept
     {
-      BinarySearchTree< Key, Value > temp(std::move(rhs));
-      if (this != std::addressof(rhs))
+      Tree< Key, Value > temp(std::move(other));
+      if (this != std::addressof(other))
       {
         swap(temp);
       }
       return *this;
     }
 
-    void swap(BinarySearchTree< Key, Value, Compare >& rhs) noexcept
+    void swap(Tree< Key, Value, Compare > & other) noexcept
     {
-      std::swap(root_, rhs.root_);
-      std::swap(size_, rhs.size_);
-      std::swap(compare_, rhs.compare_);
+      std::swap(root_, other.root_);
+      std::swap(size_, other.size_);
+      std::swap(compare_, other.compare_);
     }
 
-    void insert(const Key& key, const Value& val)
+    void insert(const Key & key, const Value & val)
     {
       try
       {
         if (root_)
         {
-          insert_p(key, val, root_);
+          insert_impl(key, val, root_);
           ++size_;
         }
         else
         {
-          root_ = new detail::TreeNode< Key, Value >(key, val);
+          root_ = new node_t(key, val);
           ++size_;
         }
       }
@@ -98,8 +100,7 @@ namespace marishin
         throw;
       }
     }
-
-    void balance(detail::TreeNode< Key, Value >* node)
+    void balance(node_t * node)
     {
       if (node->height < 0)
       {
@@ -119,9 +120,9 @@ namespace marishin
       }
     }
 
-    void getBalance(detail::TreeNode< Key, Value >* node)
+    void getNewBalance(node_t * node)
     {
-      if (node->height > 1 || node->height < -1)
+      if ((node->height > 1) || (node->height < -1))
       {
         balance(node);
       }
@@ -139,41 +140,36 @@ namespace marishin
           }
           if (node->parent->height != 0)
           {
-            getBalance(node->parent);
+            getNewBalance(node->parent);
           }
         }
       }
     }
-
-    detail::TreeNode< Key, Value >* search(const Key& key)
+    node_t * search(const Key & key)
     {
-      detail::TreeNode< Key, Value >* res = search_p(root_, key);
+      node_t * res = search_impl(root_, key);
       return res;
     }
-
-    ConstIteratorTree< Key, Value, Compare > cbegin() const noexcept
+    const_iterator cbegin() const noexcept
     {
-      return ConstIteratorTree< Key, Value, Compare >(getMin(root_));
+      return const_iterator(get_min(root_));
+    }
+    iterator begin() const noexcept
+    {
+      return iterator(get_min(root_));
+    }
+    const_iterator cend() const noexcept
+    {
+      return const_iterator();
+    }
+    iterator end() const noexcept
+    {
+      return iterator();
     }
 
-    ConstIteratorTree< Key, Value, Compare > cend() const noexcept
+    Value & operator[](const Key & key)
     {
-      return ConstIteratorTree< Key, Value, Compare >();
-    }
-
-    IteratorTree< Key, Value, Compare > begin() const noexcept
-    {
-      return IteratorTree< Key, Value, Compare >(getMin(root_));
-    }
-
-    IteratorTree< Key, Value, Compare > end() const noexcept
-    {
-      return IteratorTree< Key, Value, Compare >();
-    }
-
-    const Value& operator[](const Key& key) const
-    {
-      detail::TreeNode< Key, Value >* traverser = search(key);
+      node_t * traverser = search(key);
       if (traverser)
       {
         return traverser->data.second;
@@ -181,14 +177,13 @@ namespace marishin
       else
       {
         insert(key, Value());
-        detail::TreeNode< Key, Value >* result = search(key);
+        node_t * result = search(key);
         return result->data.second;
       }
     }
-
-    Value& operator[](const Key& key)
+    const Value & operator[](const Key & key) const
     {
-      detail::TreeNode< Key, Value >* traverser = search(key);
+      node_t * traverser = search(key);
       if (traverser)
       {
         return traverser->data.second;
@@ -196,34 +191,31 @@ namespace marishin
       else
       {
         insert(key, Value());
-        detail::TreeNode< Key, Value >* result = search(key);
+        node_t * result = search(key);
         return result->data.second;
       }
     }
-
-    Value& at(const Key& key)
+    Value & at(const Key & key)
     {
-      detail::TreeNode< Key, Value >* traverser = search(key);
+      node_t * traverser = search(key);
       if (traverser)
       {
         return traverser->data.second;
       }
       throw std::out_of_range("No such element");
     }
-
-    const Value& at(const Key& key) const
+    const Value & at(const Key & key) const
     {
-      detail::TreeNode< Key, Value >* traverser = search(key);
+      node_t * traverser = search(key);
       if (traverser)
       {
         return traverser->data.second;
       }
       throw std::out_of_range("No such element");
     }
-
-    ConstIteratorTree< Key, Value, Compare > find(const Key& key) const
+    const_iterator find(const Key & key) const
     {
-      detail::TreeNode< Key, Value >* result = root_;
+      node_t * result = root_;
       while (result)
       {
         if (compare_(result->data.first, key))
@@ -239,49 +231,42 @@ namespace marishin
           break;
         }
       }
-      return ConstIteratorTree< Key, Value, Compare >(result);
+      return const_iterator(result);
     }
-
     size_t size() const noexcept
     {
       return size_;
     }
-
     bool empty() const noexcept
     {
-      return size_ == 0;
+      return (size_ == 0);
     }
-
     void clear()
     {
-      clear_p(root_);
+      clear_impl(root_);
       root_ = nullptr;
     }
-
-    ~BinarySearchTree()
+    ~Tree()
     {
       clear();
     }
-
   private:
-    detail::TreeNode< Key, Value >* root_;
+    node_t * root_;
     size_t size_;
     Compare compare_;
-
-    void clear_p(detail::TreeNode< Key, Value >* node)
+    void clear_impl(node_t * node)
     {
       if (node)
       {
-        --size;
-        clear_p(node->right);
-        clear_p(node->left);
+        --size_;
+        clear_impl(node->left);
+        clear_impl(node->right);
         delete node;
       }
     }
-
-    detail::TreeNode< Key, Value >* getMin(detail::TreeNode< Key, Value >* node) const
+    node_t * get_min(node_t * node) const
     {
-      detail::TreeNode< Key, Value >* result = node;
+      node_t * result = node;
       if (!result)
       {
         return nullptr;
@@ -292,10 +277,9 @@ namespace marishin
       }
       return result;
     }
-
-    detail::TreeNode< Key, Value >* rotateLeft(detail::TreeNode< Key, Value >* node)
+    node_t * rotateLeft(node_t * node)
     {
-      detail::TreeNode< Key, Value >* newRoot = node->right;
+      node_t * newRoot = node->right;
       node->right = newRoot->left;
       if (newRoot->left)
       {
@@ -307,10 +291,9 @@ namespace marishin
       newRoot->height = newRoot->height + 1 + std::max(node->height, 0);
       return newRoot;
     }
-
-    detail::TreeNode< Key, Value >* rotateRight(detail::TreeNode< Key, Value >* node)
+    node_t * rotateRight(node_t * node)
     {
-      detail::TreeNode< Key, Value >* newRoot = node->left;
+      node_t * newRoot = node->left;
       node->left = newRoot->right;
       if (newRoot->right)
       {
@@ -322,8 +305,7 @@ namespace marishin
       newRoot->height = newRoot->height - 1 + std::min(0, node->height);
       return newRoot;
     }
-
-    detail::TreeNode< Key, Value >* search_p(detail::TreeNode< Key, Value >* node, const Key& key)
+    node_t * search_impl(node_t * node, const Key & key)
     {
       if (!node)
       {
@@ -331,44 +313,43 @@ namespace marishin
       }
       else if (compare_(key, node->data.first))
       {
-        return search_p(node->left, key);
+        return search_impl(node->left, key);
       }
       else if (compare_(node->data.first, key))
       {
-        return search_p(node->right, key);
+        return search_impl(node->right, key);
       }
       else
       {
         return node;
       }
     }
-
-    void insert_p(const Key& key, const Value& val, detail::TreeNode< Key, Value >* currNode)
+    void insert_impl(const Key & key, const Value & val, node_t * currentNode)
     {
       try
       {
-        if (compare_(key, currNode->data.first))
+        if (compare_(key, currentNode->data.first))
         {
-          if (currNode->left)
+          if (currentNode->left)
           {
-            insert_p(key, val, currNode->left);
+            insert_impl(key, val, currentNode->left);
           }
           else
           {
-            currNode->left = new detail::TreeNode< Key, Value >(key, val, currNode);
-            getBalance(currNode->left);
+            currentNode->left = new node_t(key, val, currentNode);
+            getNewBalance(currentNode->left);
           }
         }
         else
         {
-          if (currNode->right)
+          if (currentNode->right)
           {
-            insert_p(key, val, currNode->right);
+            insert_impl(key, val, currentNode->right);
           }
           else
           {
-            currNode->right = new detail::TreeNode< Key, Value >(key, val, currNode);
-            getBalance(currNode->right);
+            currentNode->right = new node_t(key, val, currentNode);
+            getNewBalance(currentNode->right);
           }
         }
       }

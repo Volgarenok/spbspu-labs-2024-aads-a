@@ -1,37 +1,41 @@
-#include <fstream>
 #include <iostream>
+#include <fstream>
 #include <string>
-#include <utility>
 #include <map>
 #include <functional>
 #include <limits>
 #include <binarySearchTree.hpp>
-#include "inputMaps.hpp"
 #include "command.hpp"
+#include "inputMaps.hpp"
 
-int main(int argc, char *argv[])
+int main(int argc, char * argv[])
 {
   using namespace marishin;
-  using map = BinarySearchTree< std::string, BinarySearchTree< size_t, std::string > >;
-  map myMap;
+  using mapOfDicts = Tree< std::string, Tree< size_t, std::string > >;
+  mapOfDicts myMap;
   if (argc == 2)
   {
     std::ifstream in(argv[1]);
+    if (!in.is_open())
+    {
+      std::cerr << "Can not open the file\n";
+      return 1;
+    }
     inputMaps(in, myMap);
+    in.close();
   }
   else
   {
     std::cerr << "Wrong command line arguments\n";
-    return 1;
+    return 2;
   }
-
-  BinarySearchTree< std::string, std::function< void(std::istream&, map&) > > commands;
+  Tree< std::string, std::function< void(std::istream &, mapOfDicts &) > > commands;
   {
     using namespace std::placeholders;
+    commands["union"] = makeUnion;
+    commands["intersect"] = makeIntersect;
+    commands["complement"] = makeComplement;
     commands["print"] = std::bind(print, _1, _2, std::ref(std::cout));
-    commands["union"] = doUnion;
-    commands["complement"] = doComplement;
-    commands["intersect"] = doIntersect;
   }
   std::string commandName = "";
   while (std::cin >> commandName)
@@ -40,7 +44,7 @@ int main(int argc, char *argv[])
     {
       commands.at(commandName)(std::cin, myMap);
     }
-    catch (const std::exception& e)
+    catch (const std::out_of_range &)
     {
       std::cout << "<INVALID COMMAND>\n";
     }

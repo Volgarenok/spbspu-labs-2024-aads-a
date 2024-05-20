@@ -1,5 +1,5 @@
-#ifndef COMMAND_HPP
-#define COMMAND_HPP
+#ifndef COMMANDS_HPP
+#define COMMANDS_HPP
 
 #include <map>
 #include <string>
@@ -8,10 +8,10 @@
 
 namespace marishin
 {
-  void print(std::istream& in, BinarySearchTree< std::string, BinarySearchTree< size_t, std::string > >& myMap, std::ostream& out);
-  void doUnion(std::istream& in, BinarySearchTree< std::string, BinarySearchTree< size_t, std::string > >& myMap);
-  void doComplement(std::istream& in, BinarySearchTree< std::string, BinarySearchTree< size_t, std::string > >& myMap);
-  void doIntersect(std::istream& in, BinarySearchTree< std::string, BinarySearchTree< size_t, std::string > >& myMap);
+  void print(std::istream & in, Tree< std::string, Tree< size_t, std::string > > & myMap, std::ostream & out);
+  void makeIntersect(std::istream & in, Tree< std::string, Tree< size_t, std::string > > & myMap);
+  void makeUnion(std::istream & in, Tree< std::string, Tree< size_t, std::string > > & myMap);
+  void makeComplement(std::istream & in, Tree< std::string, Tree< size_t, std::string > > & myMap);
 }
 
 #endif
