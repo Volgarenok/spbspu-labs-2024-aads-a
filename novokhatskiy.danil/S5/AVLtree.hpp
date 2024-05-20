@@ -125,7 +125,7 @@ namespace novokhatskiy
       }
       return f;
     }
-    
+
     node_t* find(node_t* node, const Key& key)
     {
       node_t* root = (node->height < 0) ? node->left : node;

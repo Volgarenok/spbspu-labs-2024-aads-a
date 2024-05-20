@@ -46,8 +46,17 @@ int main(int argc, char** argv)
     commands.at(argv[1])(num, str, map);
     std::cout << num << str << '\n';
   }
+  catch (const std::out_of_range&)
+  {
+    std::cerr << "<INVALID ARGUMENT>\n";
+  }
   catch (const std::logic_error& e)
   {
     std::cout << e.what() << '\n';
+  }
+  catch (const std::exception& e)
+  {
+    std::cerr << e.what() << '\n';
+    return 1;
   }
 }
