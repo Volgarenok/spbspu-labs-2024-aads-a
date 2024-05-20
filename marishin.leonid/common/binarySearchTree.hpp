@@ -28,7 +28,9 @@ namespace marishin
     {
       try
       {
-        for (auto begin = rhs.cbegin(); begin != rhs.cend(); ++begin)
+        ConstIteratorTree< Key, Value, Compare > begin = other.cbegin();
+        ConstIteratorTree< Key, Value, Compare > end = other.cend();
+        for (; begin != end; ++begin)
         {
           insert(begin->first, begin->second);
         }
