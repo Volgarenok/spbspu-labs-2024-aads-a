@@ -1,16 +1,11 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include "SumStruct.hpp"
 #include <algorithm>
+#include <functional>
+#include "SumStruct.hpp"
+#include "commands.hpp"
 #include "AVLtree.hpp"
-#include "AVLtreeNode.hpp"
-#include "stack.hpp"
-#include "queue.hpp"
-#include "forward_list.hpp"
-
-template< class Key, class Value, class Compare = std::less< Key > >
-using node_t = novokhatskiy::detail::NodeTree< Key, Value >;
 
 void inputMaps(std::istream& in, novokhatskiy::Tree< int, std::string >& map)
 {
@@ -26,7 +21,6 @@ void inputMaps(std::istream& in, novokhatskiy::Tree< int, std::string >& map)
   }
 }
 
-
 int main(int argc, char** argv)
 {
   using namespace novokhatskiy;
@@ -41,10 +35,16 @@ int main(int argc, char** argv)
     std::ifstream inFile(argv[2]);
     inputMaps(inFile, map);
   }
-
+  Tree< std::string, std::function< void(int&, std::string&, Tree< int, std::string >&) > > commands;
+  commands["ascending"] = ascending;
+  commands["descending"] = descending;
+  commands["breadth"] = breadth;
   try
   {
-
+    int num{};
+    std::string str;
+    commands.at(argv[1])(num, str, map);
+    std::cout << num << str << '\n';
   }
   catch (const std::logic_error& e)
   {
