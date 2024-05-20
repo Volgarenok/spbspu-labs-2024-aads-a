@@ -47,6 +47,10 @@ namespace erohin
     lnr_iterator lnr_end();
     const_lnr_iterator lnr_cbegin() const;
     const_lnr_iterator lnr_cend() const;
+    rnl_iterator rnl_begin();
+    rnl_iterator rnl_end();
+    const_rnl_iterator rnl_cbegin() const;
+    const_rnl_iterator rnl_cend() const;
     void clear();
     bool empty() const noexcept;
     std::pair< iterator, bool > insert(const value_type & value);
@@ -262,6 +266,34 @@ namespace erohin
   ConstLnrIterator< Key, T > RedBlackTree< Key, T, Compare >::lnr_cend() const
   {
     return const_lnr_iterator(nullptr);
+  }
+
+  template< class Key, class T, class Compare >
+  typename RedBlackTree< Key, T, Compare >::rnl_iterator RedBlackTree< Key, T, Compare >::rnl_begin()
+  {
+    auto iter = rnl_iterator(root_);
+    iter.fall_right();
+    return iter;
+  }
+
+  template< class Key, class T, class Compare >
+  typename RedBlackTree< Key, T, Compare >::rnl_iterator RedBlackTree< Key, T, Compare >::rnl_end()
+  {
+    return rnl_iterator(nullptr);
+  }
+
+  template< class Key, class T, class Compare >
+  typename RedBlackTree< Key, T, Compare >::const_rnl_iterator RedBlackTree< Key, T, Compare >::rnl_cbegin() const
+  {
+    auto iter = const_rnl_iterator(root_);
+    iter.fall_right();
+    return iter;
+  }
+
+  template< class Key, class T, class Compare >
+  typename RedBlackTree< Key, T, Compare >::const_rnl_iterator RedBlackTree< Key, T, Compare >::rnl_cend() const
+  {
+    return const_rnl_iterator(nullptr);
   }
 
   template< class Key, class T, class Compare >
