@@ -50,6 +50,11 @@ int main(int argc, char** argv)
     commands.at(argv[1])(num, str, map);
     std::cout << num << str << '\n';
   }
+  catch (const std::overflow_error&)
+  {
+    std::cout << "Error input\n";
+    return 1;
+  }
   catch (const std::out_of_range&)
   {
     std::cerr << "<INVALID ARGUMENT>\n";
@@ -58,10 +63,5 @@ int main(int argc, char** argv)
   catch (const std::logic_error& e)
   {
     std::cout << e.what() << '\n';
-  }
-  catch (const std::exception& e)
-  {
-    std::cout << "Error input\n";
-    return 1;
   }
 }
