@@ -85,6 +85,16 @@ namespace zakozhurnikova
       return head_->data;
     }
 
+    T& back()
+    {
+      return tail_->data;
+    }
+
+    const T& back() const
+    {
+      return tail_->data;
+    }
+
     void push_back(const T& data)
     {
       detail::Node< T >* temp = new detail::Node< T >{ data };
