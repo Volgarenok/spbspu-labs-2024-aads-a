@@ -61,7 +61,7 @@ int main(int argc, char** argv)
   }
   catch (const std::exception& e)
   {
-    std::cerr << "Error input\n";
+    std::cout << "Error input\n";
     return 1;
   }
 }
