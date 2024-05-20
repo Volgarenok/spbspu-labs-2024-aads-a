@@ -1,9 +1,7 @@
 #include <iostream>
 #include <fstream>
-#include <map>
 #include <limits>
 #include <string>
-#include <functional>
 #include "map.hpp"
 #include "commands_processing.hpp"
 
@@ -13,12 +11,12 @@ int main(int argc, char** argv)
   library lib;
   try
   {
-    init_lib(argc, argv, lib);
+    initLib(argc, argv, lib);
     zaitsev::Map< std::string, void(*)(std::istream&, library&) > commands;
-    commands["print"] = print_ds;
-    commands["intersect"] = intersect_ds;
-    commands["complement"] = complement_ds;
-    commands["union"] = union_ds;
+    commands["print"] = printDs;
+    commands["intersect"] = intersectDs;
+    commands["complement"] = complementDs;
+    commands["union"] = uniteDs;
     while (std::cin)
     {
       std::string command;

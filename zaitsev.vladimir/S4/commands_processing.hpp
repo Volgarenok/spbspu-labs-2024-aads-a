@@ -10,11 +10,11 @@ namespace zaitsev
   using ds_it = zaitsev::Map<int, std::string>::const_iterator;
   using library = zaitsev::Map< std::string, dictionary>;
 
-  void init_lib(int argc, char** argv, library& dest);
-  void read_ds(std::istream& in, library& dest);
-  void print_ds(std::istream& in, library& lib);
-  void complement_ds(std::istream& in, library& lib);
-  void intersect_ds(std::istream& in, library& lib);
-  void union_ds(std::istream& in, library& lib);
+  void initLib(int argc, char** argv, library& dest);
+  void readDs(std::istream& in, library& dest);
+  void printDs(std::istream& in, library& lib);
+  void complementDs(std::istream& in, library& lib);
+  void intersectDs(std::istream& in, library& lib);
+  void uniteDs(std::istream& in, library& lib);
 }
 #endif

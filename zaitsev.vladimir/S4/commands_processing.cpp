@@ -1,11 +1,9 @@
 #include "commands_processing.hpp"
-#include <iostream>
 #include <fstream>
 #include <limits>
-#include <string>
 #include "map.hpp"
 
-  void zaitsev::read_ds(std::istream& in, library& dest)
+  void zaitsev::readDs(std::istream& in, library& dest)
   {
     std::string name;
     in >> name;
@@ -23,7 +21,7 @@
     }
     dest[name] = std::move(new_dict);
   }
-  void zaitsev::init_lib(int argc, char** argv, library& dest)
+  void zaitsev::initLib(int argc, char** argv, library& dest)
   {
     if (argc < 2)
     {
@@ -36,10 +34,10 @@
     }
     while (input)
     {
-      read_ds(input, dest);
+      readDs(input, dest);
     }
   }
-  void zaitsev::print_ds(std::istream& in, library& lib)
+  void zaitsev::printDs(std::istream& in, library& lib)
   {
     std::string ds_name;
     in >> ds_name;
@@ -59,7 +57,7 @@
     }
     std::cout << '\n';
   }
-  void zaitsev::complement_ds(std::istream& in, library& lib)
+  void zaitsev::complementDs(std::istream& in, library& lib)
   {
     std::string new_ds_name, ds1_name, ds2_name;
     in >> new_ds_name >> ds1_name >> ds2_name;
@@ -96,7 +94,7 @@
     }
     lib[new_ds_name] = std::move(new_dict);
   }
-  void zaitsev::intersect_ds(std::istream& in, library& lib)
+  void zaitsev::intersectDs(std::istream& in, library& lib)
   {
     std::string new_ds_name, ds1_name, ds2_name;
     in >> new_ds_name >> ds1_name >> ds2_name;
@@ -124,7 +122,7 @@
     }
     lib[new_ds_name] = std::move(new_dict);
   }
-  void zaitsev::union_ds(std::istream& in, library& lib)
+  void zaitsev::uniteDs(std::istream& in, library& lib)
   {
     std::string new_ds_name, ds1_name, ds2_name;
     in >> new_ds_name >> ds1_name >> ds2_name;
