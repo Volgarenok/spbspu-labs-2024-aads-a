@@ -200,21 +200,23 @@ namespace zaitsev
     }
     void rebalanceTree(Node* start)
     {
+      using std::abs;
+      using std::max;
       while (start && start->height_ != -1)
       {
         int depth_diff = Node::depth(start->left_) - Node::depth(start->right_);
-        if (start->height_ == std::max(Node::depth(start->left_), Node::depth(start->right_)) && std::abs(depth_diff) < 2)
+        if (start->height_ == max(Node::depth(start->left_), Node::depth(start->right_)) && abs(depth_diff) < 2)
         {
           return;
         }
         Node* parent = start->parent_;
-        if (std::abs(depth_diff) > 1)
+        if (abs(depth_diff) > 1)
         {
           start->rotate();
         }
         else
         {
-          start->height_ = std::max(Node::depth(start->left_), Node::depth(start->right_));
+          start->height_ = max(Node::depth(start->left_), Node::depth(start->right_));
         }
         start = parent;
       }
