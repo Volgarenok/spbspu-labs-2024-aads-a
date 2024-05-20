@@ -1,13 +1,13 @@
 #include <fstream>
-#include <iostream>
 #include "processExpressions.hpp"
 
 int main(int argc, char* argv[])
 {
   using namespace skuratov;
-  Queue< Queue< std::string > > exp;
-  Queue< std::string > lineQueue;
+  List< std::string > exp;
   std::string line;
+  char symb = {};
+
   if (argc > 1)
   {
     std::ifstream infile(argv[1]);
@@ -16,44 +16,49 @@ int main(int argc, char* argv[])
       std::cerr << "Error reading file" << '\n';
       return 1;
     }
-    while (infile)
+    while (infile.get(symb))
     {
-      char symb;
-      while (infile >> symb && symb != '\n')
+      if (symb == '\n')
       {
-        if (symb == ' ')
+        if (!line.empty())
         {
-          lineQueue.push(line);
-          line = "";
-        }
-        else
-        {
-          line += symb;
+          exp.pushBack(line);
+          line.clear();
         }
       }
-      exp.push(lineQueue);
+      else
+      {
+        line += symb;
+      }
+    }
+    if (!line.empty())
+    {
+      exp.pushBack(line);
     }
   }
   else
   {
-    while (std::cin)
+    while (std::cin.get(symb))
     {
-      char symb;
-      while (std::cin >> symb && symb != '\n')
+      if (symb == '\n')
       {
-        if (symb == ' ')
+        if (!line.empty())
         {
-          lineQueue.push(line);
-          line = "";
-        }
-        else
-        {
-          line += symb;
+          exp.pushBack(line);
+          line.clear();
         }
       }
-      exp.push(lineQueue);
+      else
+      {
+        line += symb;
+      }
+    }
+    if (!line.empty())
+    {
+      exp.pushBack(line);
     }
   }
+
   try
   {
     processExpressions(exp);

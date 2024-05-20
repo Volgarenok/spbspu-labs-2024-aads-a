@@ -18,29 +18,18 @@ void skuratov::printReverse(const Queue< long long int >& queue)
   }
 }
 
-void skuratov::processExpressions(const Queue< Queue < std::string > >& exp)
+void skuratov::processExpressions(const List< std::string >& exp)
 {
-  Queue< Queue< long long int > > results;
+  List< Queue< long long int > > results;
 
-  auto expCopy = exp;
-  while (!expCopy.empty())
+  for (auto it = exp.cbegin(); it != exp.cend(); ++it)
   {
     try
     {
-      auto lineQueue = expCopy.front();
-      expCopy.drop();
-
-      std::string expression;
-      while (!lineQueue.empty())
-      {
-        expression += lineQueue.front() + " ";
-        lineQueue.drop();
-      }
-
-      std::string postfixExp = infixToPostfix(lineQueue);
+      std::string postfixExp = infixToPostfix(*it);
       Queue< long long int > resultQueue;
-      evaluatePostfixExpression(postfixExp);
-      results.push(resultQueue);
+      evaluatePostfixExpression(postfixExp, resultQueue);
+      results.pushBack(resultQueue);
     }
     catch (...)
     {
@@ -48,27 +37,31 @@ void skuratov::processExpressions(const Queue< Queue < std::string > >& exp)
     }
   }
 
-  Queue< long long int > finalResults;
-  while (!results.empty())
+  List< long long int > finalResults;
+  for (auto it = results.cbegin(); it != results.cend(); ++it)
   {
-    if (!results.front().empty())
+    if (!it->empty())
     {
-      finalResults.push(results.front().front());
+      finalResults.pushBack(it->front());
     }
-    results.drop();
   }
 
   Stack< long long int > reverseStack;
-  while (!finalResults.empty())
+  for (auto it = finalResults.cbegin(); it != finalResults.cend(); ++it)
   {
-    reverseStack.push(finalResults.front());
-    finalResults.drop();
+    reverseStack.push(*it);
   }
 
+  bool isFirstResult = true;
   while (!reverseStack.empty())
   {
-    std::cout << reverseStack.top() << ' ';
+    if (!isFirstResult)
+    {
+      std::cout << ' ';
+    }
+    std::cout << reverseStack.top();
     reverseStack.drop();
+    isFirstResult = false;
   }
   std::cout << '\n';
 }

@@ -53,56 +53,35 @@ long long int skuratov::applyOperation(long long int a, long long int b, char op
   throw std::invalid_argument("Invalid operator");
 }
 
-long long int skuratov::evaluatePostfixExpression(const std::string& exp)
+void skuratov::evaluatePostfixExpression(const std::string& exp, Queue< long long int >& resultQueue)
 {
+  std::istringstream iss(exp);
   Stack< long long int > operands;
 
-  for (size_t i = 0; i < exp.size(); ++i)
+  std::string op;
+  while (iss >> op)
   {
-    if (isdigit(exp[i]) || (exp[i] == '-' && i + 1 < exp.size() && isdigit(exp[i + 1])))
-    {
-      bool isNegative = false;
-      if (exp[i] == '-')
-      {
-        isNegative = true;
-        i++;
-      }
-      long long int num = 0;
-      while (i < exp.size() && isdigit(exp[i]))
-      {
-        num = num * 10 + (exp[i] - '0');
-        i++;
-      }
-      if (isNegative)
-      {
-        num = -num;
-      }
-      operands.push(num);
-      i--;
-    }
-    else if (isspace(exp[i]))
-    {
-      continue;
-    }
-    else
+    if (op == "+" || op == "-" || op == "*" || op == "/" || op == "%")
     {
       if (operands.size() < 2)
       {
-        throw std::runtime_error("Invalid postfix expression");
+        throw std::runtime_error("Not enough operands for operation");
       }
+
       long long int b = operands.top();
       operands.drop();
-
       long long int a = operands.top();
       operands.drop();
-
-      long long int result = applyOperation(a, b, exp[i]);
-      operands.push(result);
+      operands.push(applyOperation(a, b, op[0]));
+    }
+    else
+    {
+      operands.push(std::stoll(op));
     }
   }
   if (operands.size() != 1)
   {
     throw std::runtime_error("Invalid postfix expression");
   }
-  return operands.top();
+  resultQueue.push(operands.top());
 }

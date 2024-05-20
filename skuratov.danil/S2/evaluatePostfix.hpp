@@ -9,7 +9,7 @@
 namespace skuratov
 {
   long long int applyOperation(long long int a, long long int b, char op);
-  long long int evaluatePostfixExpression(const std::string& exp);
+  void evaluatePostfixExpression(const std::string& exp, Queue< long long int >& resultQueue);
 }
 
 #endif
