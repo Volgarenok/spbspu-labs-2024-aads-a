@@ -14,16 +14,6 @@ int main(int argc, char *argv[])
 
   try
   {
-    size_t size = std::stoull(argv[3]);
-  }
-  catch (...)
-  {
-    std::cerr << "Incorrect args";
-    return 1;
-  }
-
-  try
-  {
     using namespace zhalilov;
     std::string direction = argv[1];
     std::string type = argv[2];
