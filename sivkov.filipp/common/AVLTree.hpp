@@ -102,10 +102,9 @@ namespace sivkov
   template< typename Key, typename Value, typename Comp >
   AVLTree< Key, Value, Comp >& AVLTree< Key, Value, Comp >::operator=(const AVLTree< Key, Value, Comp >& other)
   {
-    AVLTree< Key, Value, Comp > temp(other);
     if (this != std::addressof(other))
     {
-      AVLTree< Key, Value > temp(other);
+      AVLTree< Key, Value, Comp > temp(other);
       swap(temp);
     }
     return *this;
@@ -114,11 +113,10 @@ namespace sivkov
   template< typename Key, typename Value, typename Comp >
   AVLTree< Key, Value, Comp >& AVLTree< Key, Value, Comp >::operator=(AVLTree< Key, Value, Comp >&& other) noexcept
   {
-    AVLTree< Key, Value, Comp > temp(std::move(other));
     if (this != std::addressof(other))
     {
       clear();
-      swap(temp);
+      swap(other);
     }
     return *this;
   }
