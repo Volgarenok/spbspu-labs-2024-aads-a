@@ -47,10 +47,10 @@ namespace strelyaev
 
       tree_t& operator=(const tree_t& other)
       {
-        tree_t temp(other);
-        if (this != std::addressof(temp))
+        if (this != std::addressof(other))
         {
-          std::swap(root_, temp.root_);
+          tree_t temp(other);
+          swap(other);
         }
         return *this;
       }
@@ -60,9 +60,7 @@ namespace strelyaev
         if (this != std::addressof(other))
         {
           clear();
-          std::swap(root_, other.root_);
-          std::swap(size_, other.size_);
-          std::swap(cmp_, other.cmp_);
+          swap(other);
         }
         return *this;
       }
@@ -76,6 +74,7 @@ namespace strelyaev
       {
         std::swap(other.root_, root_);
         std::swap(other.size_, size_);
+        std::swap(other.cmp_, cmp_);
       }
 
       iterator_t insert(const std::pair< Key, T >& pair)
