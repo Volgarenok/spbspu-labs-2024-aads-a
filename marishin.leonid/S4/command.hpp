@@ -8,11 +8,10 @@
 
 namespace marishin
 {
-  using tree = BinarySearchTree< std::string, BinarySearchTree< int, std::string > >;
-  void print(std::istream& in, const tree& myMap, std::ostream& out);
-  void doUnion(std::istream& in, tree& myMap);
-  void doComplement(std::istream& in, tree& myMap);
-  void doIntersect(std::istream& in, tree& myMap);
+  void print(std::istream& in, BinarySearchTree< std::string, BinarySearchTree< size_t, std::string > >& myMap, std::ostream& out);
+  void doUnion(std::istream& in, BinarySearchTree< std::string, BinarySearchTree< size_t, std::string > >& myMap);
+  void doComplement(std::istream& in, BinarySearchTree< std::string, BinarySearchTree< size_t, std::string > >& myMap);
+  void doIntersect(std::istream& in, BinarySearchTree< std::string, BinarySearchTree< size_t, std::string > >& myMap);
 }
 
 #endif
