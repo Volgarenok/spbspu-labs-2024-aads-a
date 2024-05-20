@@ -6,6 +6,7 @@
 #include <treeNode.hpp>
 #include <treeIterator.hpp>
 #include <constTreeIterator.hpp>
+
 namespace marishin
 {
   template< typename Key, typename Value, typename Compare = std::less< Key > >
@@ -13,6 +14,7 @@ namespace marishin
   {
   public:
     using node_t = detail::TreeNode< Key, Value >;
+
     BinarySearchTree():
       root_(nullptr),
       size_(0),
@@ -67,16 +69,6 @@ namespace marishin
       return *this;
     }
 
-    size_t size() const noexcept
-    {
-      return size_;
-    }
-
-    ~BinarySearchTree()
-    {
-      clear();
-    }
-
     void swap(BinarySearchTree< Key, Value, Compare >& rhs) noexcept
     {
       std::swap(root_, rhs.root_);
@@ -106,45 +98,50 @@ namespace marishin
       }
     }
 
-    void insert_p(const Key& key, const Value& val, node_t* currNode)
+    void balance(node_t* node)
     {
-      try
+      if (node->height < 0)
       {
-        if (compare_(key, currNode->data.first))
+        if (node->right->height > 0)
         {
-          if (currNode->left)
-          {
-            insert_p(key, val, currNode->left);
-          }
-          else
-          {
-            currNode->left = new node_t(key, val, currNode);
-            getBalabce(currNode->left);
-          }
+          node->right = rotateRight(node->right);
         }
-        else
-        {
-          if (currNode->right)
-          {
-            insert_p(key, val, currNode->right);
-          }
-          else
-          {
-            currNode->right = new node_t(key, val, currNode);
-            getBalabce(currNode->right);
-          }
-        }
+        node = rotateLeft(node);
       }
-      catch (...)
+      else
       {
-        clear();
-        throw;
+        if (node->left->height < 0)
+        {
+          node->left = rotateLeft(node->left);
+        }
+        node = rotateRight(node);
       }
     }
 
-    bool empty() const noexcept
+    void getBalance(node_t* node)
     {
-      return size_ == 0;
+      if (node->height > 1 || node->height < -1)
+      {
+        balance(node);
+      }
+      else
+      {
+        if (node->parent)
+        {
+          if (node->left)
+          {
+            ++node->parent->height;
+          }
+          else if (node->right)
+          {
+            --node->parent->height;
+          }
+          if (node->parent->height != 0)
+          {
+            getBalance(node->parent);
+          }
+        }
+      }
     }
 
     node_t search(const Key& key)
@@ -244,10 +241,25 @@ namespace marishin
       return ConstIteratorTree< Key, Value, Compare >(result);
     }
 
+    size_t size() const noexcept
+    {
+      return size_;
+    }
+
+    bool empty() const noexcept
+    {
+      return size_ == 0;
+    }
+
     void clear()
     {
       clear_p(root_);
       root_ = nullptr;
+    }
+
+    ~BinarySearchTree()
+    {
+      clear();
     }
 
   private:
@@ -263,52 +275,6 @@ namespace marishin
         clear_p(node->right);
         clear_p(node->left);
         delete node;
-      }
-    }
-
-    void balance(node_t* node)
-    {
-      if (node->height < 0)
-      {
-        if (node->right->height > 0)
-        {
-          node->right = rotateRight(node->right);
-        }
-        node = rotateLeft(node);
-      }
-      else
-      {
-        if (node->left->height < 0)
-        {
-          node->left = rotateLeft(node->left);
-        }
-        node = rotateRight(node);
-      }
-    }
-
-    void getBalance(node_t* node)
-    {
-      if (node->height > 1 || node->height < -1)
-      {
-        balance(node);
-      }
-      else
-      {
-        if (node->parent)
-        {
-          if (node->left)
-          {
-            ++node->parent->height;
-          }
-          else if (node->right)
-          {
-            --node->parent->height;
-          }
-          if (node->parent->height != 0)
-          {
-            getBalance(node->parent);
-          }
-        }
       }
     }
 

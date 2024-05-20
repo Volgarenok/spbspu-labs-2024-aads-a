@@ -20,7 +20,7 @@ void marishin::print(std::istream& in, const tree& myMap, std::ostream& out)
   }
 }
 
-void marishin::doUnion(std::istream& in,& in, tree& myMap)
+void marishin::doUnion(std::istream& in, tree& myMap)
 {
   std::string newName = "";
   in >> newName;
