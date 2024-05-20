@@ -54,11 +54,11 @@ long long novokhatskiy::doDivision(long long op1, long long op2)
 
 long long novokhatskiy::doMod(long long op1, long long op2)
 {
-  long long res = op1 % op2;
-  if (res < 0)
+  if (op1 < 0)
   {
-     res+= op2;
+    return op2;
   }
+  long long res = op1 % op2;
   return res;
 }
 
