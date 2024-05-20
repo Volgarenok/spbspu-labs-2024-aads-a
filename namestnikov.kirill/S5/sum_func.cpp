@@ -19,8 +19,8 @@ std::string namestnikov::SumFunc::getLine() const
 
 void namestnikov::SumFunc::operator()(const std::pair< const int, std::string > & data)
 {
-  int maxNum = std::numeric_limits< int >::max();
-  int minNum = std::numeric_limits< int >::min();
+  constexpr int maxNum = std::numeric_limits< int >::max();
+  constexpr int minNum = std::numeric_limits< int >::min();
   bool isOverflow = ((result_ > 0) && (maxNum - result_ < data.first));
   isOverflow = isOverflow || ((result_ < 0) && (data.first < 0) && (minNum - result_ > data.first));
   if (isOverflow)
