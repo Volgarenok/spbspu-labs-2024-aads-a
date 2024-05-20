@@ -414,7 +414,7 @@ namespace novokhatskiy
     {
       if ((node->height > 1) || (node->height < -1))
       {
-        balance2(node);
+        balance(node);
       }
       else
       {
