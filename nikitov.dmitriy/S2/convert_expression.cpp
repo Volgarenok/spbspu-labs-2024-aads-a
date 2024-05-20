@@ -1,7 +1,7 @@
 #include "convert_expression.hpp"
 #include <exception>
-#include "queue.hpp"
-#include "stack.hpp"
+#include <queue.hpp>
+#include <stack.hpp>
 #include "infix_type.hpp"
 #include "stack_type.hpp"
 #include "postfix_type.hpp"
