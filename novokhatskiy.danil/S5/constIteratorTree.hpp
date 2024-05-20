@@ -17,26 +17,28 @@ namespace novokhatskiy
   class Tree;
 
   template< class Key, class Value, class Compare = std::less< Key > >
-  struct ConstIteratorTree: public std::iterator< std::bidirectional_iterator_tag, Value >
+  struct ConstIteratorTree : public std::iterator< std::bidirectional_iterator_tag, Value >
   {
     using node_t = detail::NodeTree< Key, Value >;
     using constIter = ConstIteratorTree< Key, Value, Compare >;
     using iter = IteratorTree< Key, Value, Compare >;
 
-    ConstIteratorTree(node_t* node) :
+    ConstIteratorTree() :
+      node_(nullptr)
+    {}
+
+    explicit ConstIteratorTree(node_t* node) :
       node_(node)
     {}
     constIter& operator=(const constIter& other) = default;
 
     bool operator!=(const constIter& other) const
     {
-      assert(node_ != nullptr);
       return !(*this == other);
     }
 
     bool operator==(const constIter& other) const
     {
-      assert(node_ != nullptr);
       return node_ == other.node_;
     }
 
@@ -45,15 +47,21 @@ namespace novokhatskiy
       if (node_->right)
       {
         node_ = node_->right;
-        goLastLeft();
+        while (node_->left)
+        {
+          node_ = node_->left;
+        }
         return *this;
       }
-      while (node_->parent && node_->parent->right == node_)
+      else
       {
+        while (node_->parent && node_->parent->right == node_)
+        {
+          node_ = node_->parent;
+        }
         node_ = node_->parent;
+        return *this;
       }
-      node_ = node_->parent;
-      return *this;
     }
 
     constIter operator++(int)
@@ -65,7 +73,16 @@ namespace novokhatskiy
 
     constIter operator--()
     {
-      node_ = predecessor(node_);
+      if (node_->left)
+      {
+        node_ = node_->left;
+        for (; node_->right; node_ = node_->right);
+      }
+      else
+      {
+        for (; node_ == node_->parent->left; node_ = node_->parent);
+        node_ = node_->parent;
+      }
       return *this;
     }
 
@@ -78,13 +95,11 @@ namespace novokhatskiy
 
     const std::pair< Key, Value > operator*() const
     {
-      assert(node_ != nullptr);
       return node_->value;
     }
 
     const std::pair< Key, Value >* operator->() const
     {
-      assert(node_ != nullptr);
       return std::addressof(node_->value);
     }
 
@@ -115,7 +130,7 @@ namespace novokhatskiy
 
     void goLastLeft()
     {
-      auto tmp = node_->left;
+      auto tmp = node_;
       while (tmp->left)
       {
         tmp = tmp->left;

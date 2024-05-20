@@ -17,49 +17,53 @@ namespace novokhatskiy
   struct ConstIteratorTree;
 
   template< class Key, class Value, class Compare = std::less< Key > >
-  struct IteratorTree : public std::iterator< std::bidirectional_iterator_tag, Value >
+  struct IteratorTree: public std::iterator< std::bidirectional_iterator_tag, Value >
   {
     using node_t = detail::NodeTree< Key, Value >;
     using iter = IteratorTree< Key, Value, Compare >;
     using constIter = ConstIteratorTree< Key, Value, Compare >;
 
-    IteratorTree(node_t* other) :
+    IteratorTree():
+      node_(nullptr)
+    {}
+
+    explicit IteratorTree(node_t* other) :
       node_(other)
     {}
 
     bool operator!=(const iter& other) const
     {
-      assert(node_ != nullptr);
+      //assert(node_ != nullptr);
       return !(*this == other);
     }
 
     bool operator==(const iter& other) const
     {
-      assert(node_ != nullptr);
+      //assert(node_ != nullptr);
       return node_ == other.node_;
     }
 
     bool operator==(const constIter& other) const
     {
-      assert(node_ != nullptr);
+      //assert(node_ != nullptr);
       return node_ == other.node_;
     }
 
     bool operator!=(const constIter& other) const
     {
-      assert(node_ != nullptr);
+      //assert(node_ != nullptr);
       return !(node_ == other.node_);
     }
 
     std::pair< Key, Value > operator*() const
     {
-      assert(node_ != nullptr);
+      //assert(node_ != nullptr);
       return node_->value;
     }
 
     std::pair< Key, Value >* operator->() const
     {
-      assert(node_ != nullptr);
+      //assert(node_ != nullptr);
       return std::addressof(node_->value);
     }
 
@@ -75,12 +79,15 @@ namespace novokhatskiy
         //goLastLeft();
         return *this;
       }
-      while (node_->parent && node_->parent->right == node_)
+      else
       {
+        while (node_->parent && node_->parent->right == node_)
+        {
+          node_ = node_->parent;
+        }
         node_ = node_->parent;
+        return *this;
       }
-      node_ = node_->parent;
-      return *this;
     }
 
     iter operator++(int)
@@ -92,7 +99,16 @@ namespace novokhatskiy
 
     iter operator--()
     {
-      node_ = predecessor(node_);
+      if (node_->left)
+      {
+        node_ = node_->left;
+        for (; node_->right; node_ = node_->right);
+      }
+      else
+      {
+        for (; node_ == node_->parent->left; node_ = node_->parent);
+        node_ = node_->parent;
+      }
       return *this;
     }
 

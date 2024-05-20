@@ -25,13 +25,22 @@ namespace novokhatskiy
         parent(nullptr)
       {}
 
-      NodeTree(const val_type& val) :
+      explicit NodeTree(const val_type& val) :
         value(val),
         height(0),
         left(nullptr),
         right(nullptr),
         parent(nullptr)
       {}
+
+      NodeTree(const val_type& val, NodeTree* node)
+      {
+        value = val;
+        height = 0;
+        parent = node;
+        left = nullptr;
+        right = nullptr;
+      }
 
       NodeTree(const NodeTree& other) :
         value(other.value),
