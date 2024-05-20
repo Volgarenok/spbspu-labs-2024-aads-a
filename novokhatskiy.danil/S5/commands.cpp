@@ -1,26 +1,39 @@
 #include "commands.hpp"
+#include <stdexcept>
 #include "SumStruct.hpp"
 
 void novokhatskiy::ascending(int& num, std::string& str, Tree<int, std::string>& map)
 {
+  if (map.empty())
+  {
+    throw std::logic_error("<EMPTY>");
+  }
   KeySum res;
-  map.traverse_lnr(res);
+  res = map.traverse_lnr(res);
   num = res.getKey();
   str = res.getStr();
 }
 
 void novokhatskiy::descending(int& num, std::string& str, Tree<int, std::string>& map)
 {
+  if (map.empty())
+  {
+    throw std::logic_error("<EMPTY>");
+  }
   KeySum res;
-  map.traverse_rnl(res);
+  res = map.traverse_rnl(res);
   num = res.getKey();
   str = res.getStr();
 }
 
 void novokhatskiy::breadth(int& num, std::string& str, Tree<int, std::string>& map)
 {
+  if (map.empty())
+  {
+    throw std::logic_error("<EMPTY>");
+  }
   KeySum res;
-  map.traverse_breadth(res);
+  res = map.traverse_breadth(res);
   num = res.getKey();
   str = res.getStr();
 }

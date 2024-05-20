@@ -14,17 +14,14 @@ bool isOverFlow(int val1, int val2)
   return (max - val1 < val2 && val1 > 0) || (val1 < 0 && val2 < 0 && min - val1 > val2);
 }
 
-void novokhatskiy::KeySum::operator()(const std::pair<int, std::string>& value)
+void novokhatskiy::KeySum::operator()(const std::pair< int, std::string>& value)
 {
-  if (!value.second.empty())
-  {
-    name_ += ' ' + value.second;
-  }
   if (isOverFlow(value_, value.first))
   {
     throw std::overflow_error("Overflow");
   }
   value_ += value.first;
+  name_ += ' ' + value.second;
 }
 
 int novokhatskiy::KeySum::getKey() const
