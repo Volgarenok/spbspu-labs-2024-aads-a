@@ -621,7 +621,7 @@ namespace nikitov
       detail::Node< T >* node = head_;
       while (node != tail_)
       {
-        if (cmp(node->value_, node->next_->value_))
+        if (!cmp(node->value_, node->next_->value_))
         {
           isSorted = false;
           if (node->next_ == tail_)
