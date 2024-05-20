@@ -13,57 +13,57 @@ namespace strelyaev
   {
     friend class Tree< Key, T, std::less< Key > >;
     public:
-    ConstIterator(const ConstIterator< Key, T >& val):
-      node_(val.node_)
-    {}
+      ConstIterator(const ConstIterator< Key, T >& val):
+        node_(val.node_)
+      {}
 
-    ConstIterator< Key, T >& operator=(const ConstIterator< Key, T>& rhs) = default;
+      ConstIterator< Key, T >& operator=(const ConstIterator< Key, T>& rhs) = default;
 
-    std::pair< Key, T >& operator*()
-    {
-      return node_->data_;
-    }
-
-    std::pair< Key, T >* operator->()
-    {
-      return std::addressof(node_->data_);
-    }
-
-    ConstIterator< Key, T >& operator++()
-    {
-      if (node_->right_)
+      std::pair< Key, T >& operator*()
       {
-        node_ = node_->right_;
-        while (node_->left_)
+        return node_->data_;
+      }
+
+      std::pair< Key, T >* operator->()
+      {
+        return std::addressof(node_->data_);
+      }
+
+      ConstIterator< Key, T >& operator++()
+      {
+        if (node_->right_)
         {
-          node_ = node_->left_;
+          node_ = node_->right_;
+          while (node_->left_)
+          {
+            node_ = node_->left_;
+          }
+          return *this;
         }
+        while (!node_->isRoot() && node_->isRightChild())
+        {
+          node_ = node_->parent_;
+        }
+        node_ = node_->parent_;
         return *this;
       }
-      while (!node_->isRoot() && node_->isRightChild())
+
+      ConstIterator< Key, T > operator++(int)
       {
-        node_ = node_->parent_;
+        ConstIterator< Key, T > result(*this);
+        ++(*this);
+        return result;
       }
-      node_ = node_->parent_;
-      return *this;
-    }
 
-    ConstIterator< Key, T > operator++(int)
-    {
-      ConstIterator< Key, T > result(*this);
-      ++(*this);
-      return result;
-    }
+      bool operator==(ConstIterator< Key, T > rhs)
+      {
+        return node_ == rhs.node_;
+      }
 
-    bool operator==(ConstIterator< Key, T > rhs)
-    {
-      return node_ == rhs.node_;
-    }
-
-    bool operator!=(ConstIterator< Key, T > rhs)
-    {
-      return !(*this == rhs);
-    }
+      bool operator!=(ConstIterator< Key, T > rhs)
+      {
+        return !(*this == rhs);
+      }
 
     private:
       detail::Node< Key, T >* node_;
