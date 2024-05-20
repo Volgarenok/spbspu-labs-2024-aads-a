@@ -36,8 +36,16 @@ int main(int argc, char** argv)
   }
   else
   {
-    std::ifstream inFile(argv[2]);
-    inputMaps(inFile, map);
+    try
+    {
+      std::ifstream inFile(argv[2]);
+      inputMaps(inFile, map);
+    }
+    catch (const std::overflow_error&)
+    {
+      std::cerr << "Overflow\n";
+      return 1;
+    }
   }
   Tree< std::string, std::function< void(int&, std::string&, Tree< int, std::string >&) > > commands;
   commands["ascending"] = ascending;
