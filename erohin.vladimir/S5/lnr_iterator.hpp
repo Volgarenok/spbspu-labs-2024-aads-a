@@ -4,7 +4,7 @@
 #include <utility>
 #include <iterator>
 #include "tree/tree_node.hpp"
-#include "dynamic_array/stack.hpp"
+#include "stack.hpp"
 
 namespace erohin
 {
