@@ -1,6 +1,7 @@
 #include "calculate_expression.hpp"
 #include <limits>
 #include <stdexcept>
+#include <cmath>
 #include "stack.hpp"
 
 long long novokhatskiy::doAddition(long long op1, long long op2)
@@ -54,16 +55,16 @@ long long novokhatskiy::doDivision(long long op1, long long op2)
 
 long long novokhatskiy::doMod(long long op1, long long op2)
 {
-  long long res = op1 % op2;
+  long long res = std::abs(op1) % op2;
   if (op1 < 0 && res == 0)
   {
     return op2;
   }
-  else
+  if (res > 0 && op1 < 0)
   {
-    res += op2;
-    return res;
+    res = op2 - res;
   }
+  return res;
 }
 
 long long novokhatskiy::calculatePostExp(novokhatskiy::Queue< Postfix >&& inQueue)
