@@ -33,13 +33,13 @@ void marishin::doUnion(std::istream& in,& in, tree& myMap)
   BinarySearchTree< int, std::string > right = myMap.at(secondName);
   for (const auto& key1: left)
   {
-    res.push(key1->first, key1->second);
+    res.insert(key1.first, key1.second);
   }
   for (const auto& key2: right)
   {
-    if (res.find(key2->first) == res.cend())
+    if (res.find(key2.first) == res.cend())
     {
-      res.push(key2->first, key2->second);
+      res.insert(key2.first, key2.second);
     }
   }
   myMap[newName] = res;
@@ -58,9 +58,9 @@ void marishin::doComplement(std::istream& in, tree& myMap)
   BinarySearchTree< int, std::string > right = myMap.at(secondName);
   for (const auto& key1: left)
   {
-    if (right.find(key1->first) == right.cend())
+    if (right.find(key1.first) == right.cend())
     {
-      res.push(key1->first, key1->second);
+      res.insert(key1.first, key1.second);
     }
   }
   myMap[newName] = res;
@@ -81,9 +81,9 @@ void marishin::doIntersect(std::istream& in, tree& myMap)
   {
     for (const auto& key2: right)
     {
-      if (key1->first == key2->first)
+      if (key1.first == key2.first)
       {
-        res.push(key1->first, key1->second);
+        res.insert(key1.first, key1.second);
       }
     }
   }
