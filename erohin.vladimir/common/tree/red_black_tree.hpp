@@ -21,7 +21,7 @@ namespace erohin
     using reverse_iterator = std::reverse_iterator< TreeIterator< Key, T > >;
     using const_reverse_iterator = std::reverse_iterator< TreeConstIterator< Key, T > >;
     using lnr_iterator = LnrIterator< Key, T >;
-    using lnr_const_iterator = LnrConstIterator< Key, T >;
+    using const_lnr_iterator = ConstLnrIterator< Key, T >;
     using value_type = std::pair< Key, T >;
     RedBlackTree();
     RedBlackTree(const RedBlackTree< Key, T, Compare > & rhs);
@@ -42,8 +42,8 @@ namespace erohin
     const_reverse_iterator crend() const;
     lnr_iterator lnr_begin();
     lnr_iterator lnr_end();
-    lnr_const_iterator lnr_cbegin() const;
-    lnr_const_iterator lnr_cend() const;
+    const_lnr_iterator lnr_cbegin() const;
+    const_lnr_iterator lnr_cend() const;
     void clear();
     bool empty() const noexcept;
     std::pair< iterator, bool > insert(const value_type & value);
@@ -236,12 +236,9 @@ namespace erohin
   template< class Key, class T, class Compare >
   LnrIterator< Key, T > RedBlackTree< Key, T, Compare >::lnr_begin()
   {
-    detail::Node< Key, T > * result = root_;
-    while (result && result->left)
-    {
-      result = result->left;
-    }
-    return lnr_iterator(result);
+    auto iter = lnr_iterator(root_);
+    iter.fall_left();
+    return iter;
   }
 
   template< class Key, class T, class Compare >
@@ -251,20 +248,17 @@ namespace erohin
   }
 
   template< class Key, class T, class Compare >
-  LnrConstIterator< Key, T > RedBlackTree< Key, T, Compare >::lnr_cbegin() const
+  ConstLnrIterator< Key, T > RedBlackTree< Key, T, Compare >::lnr_cbegin() const
   {
-    const detail::Node< Key, T > * result = root_;
-    while (result && result->left)
-    {
-      result = result->left;
-    }
-    return lnr_const_iterator(result);
+    auto iter = const_lnr_iterator(const_cast< const detail::Node< Key, T > * >(root_));
+    iter.fall_left();
+    return iter;
   }
 
   template< class Key, class T, class Compare >
-  LnrConstIterator< Key, T > RedBlackTree< Key, T, Compare >::lnr_cend() const
+  ConstLnrIterator< Key, T > RedBlackTree< Key, T, Compare >::lnr_cend() const
   {
-    return lnr_const_iterator(nullptr);
+    return const_lnr_iterator(nullptr);
   }
 
   template< class Key, class T, class Compare >

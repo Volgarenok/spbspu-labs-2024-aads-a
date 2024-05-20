@@ -21,13 +21,12 @@ int main(int argc, char ** argv)
   RedBlackTree< int, int > q;
   for (int i = 0; i < 5; ++i)
   {
-    q.insert(std::make_pair(0, 0));
+    q.emplace(std::make_pair(i, i));
   }
   auto iter = q.lnr_begin();
   for (int i = 0; i < 5; ++i)
   {
-    std::cout << (iter++)->first << " ";
+    std::cout << (iter++)->first << std::endl;
   }
-
   return 0;
 }

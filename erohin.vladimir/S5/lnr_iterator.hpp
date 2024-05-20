@@ -33,6 +33,7 @@ namespace erohin
     detail::Node< Key, T > * node_;
     Stack< detail::Node< Key, T > * > stack_;
     explicit LnrBasicIterator(detail::Node< Key, T > * node_ptr);
+    void fall_left();
   };
 
   template< class Key, class T >
@@ -60,7 +61,7 @@ namespace erohin
     }
     else
     {
-      if (!stack_.empty())
+      if (stack_.empty())
       {
         node_ = nullptr;
         return *this;
@@ -77,7 +78,8 @@ namespace erohin
       }
       while (!stack_.empty() && stack_.top()->left == node_)
       {
-        node_ = node_->parent;
+        node_ = stack_.top();
+        stack_.pop();
       }
     }
     return *this;
@@ -94,7 +96,39 @@ namespace erohin
   template< class Key, class T >
   LnrBasicIterator< Key, T > & LnrBasicIterator< Key, T >::operator--()
   {
-    node_ = node_->prev();
+    if (node_->left)
+    {
+      stack_.push(node_);
+      node_ = node_->left;
+      while (node_->right)
+      {
+        stack_.push(node_);
+        node_ = node_->right;
+      }
+    }
+    else
+    {
+      if (stack_.empty())
+      {
+        node_ = nullptr;
+        return *this;
+      }
+      while (stack_.top()->left == node_)
+      {
+        node_ = stack_.top();
+        stack_.pop();
+        if (stack_.empty())
+        {
+          node_ = nullptr;
+          return *this;
+        }
+      }
+      while (!stack_.empty() && stack_.top()->right == node_)
+      {
+        node_ = stack_.top();
+        stack_.pop();
+      }
+    }
     return *this;
   }
 
@@ -131,16 +165,26 @@ namespace erohin
   }
 
   template< class Key, class T >
+  void LnrBasicIterator< Key, T >::fall_left()
+  {
+    while (node_->left)
+    {
+      stack_.push(node_);
+      node_ = node_->left;
+    }
+  }
+
+  template< class Key, class T >
   using LnrIterator = LnrBasicIterator< Key, T >;
 
   template< class Key, class T >
-  using LnrConstIterator = LnrBasicIterator< const Key, const T >;
+  using ConstLnrIterator = LnrBasicIterator< const Key, const T >;
 
   template< class Key, class T >
   using RnlIterator = std::reverse_iterator< LnrBasicIterator< Key, T > >;
 
   template< class Key, class T >
-  using RnlConstIterator = std::reverse_iterator< LnrBasicIterator< const Key, const T > >;
+  using ConstRnlIterator = std::reverse_iterator< LnrBasicIterator< const Key, const T > >;
 
 }
 
