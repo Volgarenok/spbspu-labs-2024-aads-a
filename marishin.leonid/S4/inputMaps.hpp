@@ -9,7 +9,7 @@
 
 namespace marishin
 {
-  void inputMaps(std::istream& in, BinarySearchTree< std::string, BinarySearchTree< int, std::string > >& maps);
+  void inputMaps(std::istream& in, BinarySearchTree< std::string, BinarySearchTree< size_t, std::string > >& maps);
 }
 
 #endif
