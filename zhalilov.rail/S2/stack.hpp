@@ -13,6 +13,8 @@ namespace zhalilov
     Stack(const Stack &);
     Stack(Stack &&) noexcept;
 
+    ~Stack() = default;
+
     Stack &operator=(const Stack &);
     Stack &operator=(Stack &&) noexcept;
 
