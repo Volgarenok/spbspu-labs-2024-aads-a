@@ -1,23 +1,25 @@
 #ifndef AVL_TREE_HPP
 #define AVL_TREE_HPP
 
-#include <cstddef>
 #include <functional>
+#include <cstddef>
 #include <iostream>
 #include <stdexcept>
 #include <utility>
 #include "AVLtreeNode.hpp"
-#include "IteratorTree.hpp"
+#include "queue.hpp"
+#include "stack.hpp"
 #include "constIteratorTree.hpp"
+#include "IteratorTree.hpp"
 
 namespace novokhatskiy
 {
-  template < class Key, class Value, class Compare = std::less< Key > >
+  template <class Key, class Value, class Compare = std::less<Key>>
   class Tree
   {
   public:
-    using node_t = detail::NodeTree< Key, Value >;
-    using v_type = std::pair< Key, Value >;
+    using node_t = detail::NodeTree<Key, Value>;
+    using v_type = std::pair<Key, Value>;
     using constIter = ConstIteratorTree< Key, Value, Compare >;
     using iter = IteratorTree< Key, Value, Compare >;
 
@@ -26,6 +28,25 @@ namespace novokhatskiy
       size_(0),
       cmp_()
     {}
+
+    Tree(const Tree& other) :
+      root_(nullptr),
+      size_(0),
+      cmp_(other.cmp_)
+    {
+      try
+      {
+        for (auto begin = other.cbegin(); begin != other.cend(); begin++)
+        {
+          insert(*begin);
+        }
+      }
+      catch (const std::exception&)
+      {
+        clear();
+        throw;
+      }
+    }
 
     Tree(Tree&& other) :
       root_(other.root_),
@@ -38,24 +59,74 @@ namespace novokhatskiy
 
     Tree& operator=(const Tree& other)
     {
-      if (this != std::addressof(other))
-      {
-        Tree< Key, Value > tmp(other);
-        swap(tmp);
-      }
+      Tree map(other);
+      clear();
+      this->swap(map);
       return *this;
     }
 
     Tree& operator=(Tree&& other)
     {
-      if (this != std::addressof(other))
-      {
-        swap(other);
-      }
+      clear();
+      this->swap(other);
       return *this;
     }
 
-    /*node_t* find(node_t* node, const Key& key)
+    template< class F >
+    F traverse_lnr(F f) const
+    {
+      if (empty())
+      {
+        throw std::logic_error("<EMPTY>");
+      }
+      for (auto i = cbegin(); i != cend(); i++)
+      {
+        f(*i);
+      }
+      return f;
+    }
+
+    template< class F >
+    F traverse_rnl(F f) const
+    {
+      if (empty())
+      {
+        throw std::logic_error("<EMPTY>");
+      }
+      for (auto i = cbeginRight(); i != cend(); --i)
+      {
+        f(*i);
+      }
+      return f;
+    }
+
+    template< class F >
+    F traverse_breadth(F f) const
+    {
+      if (empty())
+      {
+        throw std::logic_error("<EMPTY>");
+      }
+      Queue< const node_t* > queue;
+      queue.push(root_);
+      while (!queue.empty())
+      {
+        node_t* node = queue.front();
+        queue.pop();
+        f(*node);
+        if (node->left)
+        {
+          queue.push(node->left);
+        }
+        if (node->right)
+        {
+          queue.push(node->right);
+        }
+      }
+      return f;
+    }
+    
+    node_t* find(node_t* node, const Key& key)
     {
       node_t* root = (node->height < 0) ? node->left : node;
       while (root)
@@ -82,7 +153,7 @@ namespace novokhatskiy
         }
       }
       return nullptr;
-    }*/
+    }
 
     iter find(const Key& key)
     {
@@ -95,10 +166,10 @@ namespace novokhatskiy
         }
         curr = (cmp_(curr->value.first, key)) ? curr->right : curr->left;
       }
-      return end();
+      return iter(curr);
     }
 
-    /*constIter find(const Key& key)
+    constIter find(const Key& key) const
     {
       node_t* curr = root_;
       while (curr)
@@ -109,13 +180,13 @@ namespace novokhatskiy
         }
         curr = (cmp_(curr->value.first, key)) ? curr->right : curr->left;
       }
-      return cend();
-    }*/
+      return constIter(curr);
+    }
 
     Value& at(const Key& key)
     {
-      node_t* curr = find(root_->left, key);
-      if (curr && curr->value.first == key)
+      node_t* curr = search(key);
+      if (curr)
       {
         return curr->value.second;
       }
@@ -124,8 +195,8 @@ namespace novokhatskiy
 
     const Value& at(const Key& key) const
     {
-      node_t* curr = find(root_->left, key);
-      if (curr && curr->value.first == key)
+      node_t* curr = search(key);
+      if (curr)
       {
         return curr->value.second;
       }
@@ -134,67 +205,32 @@ namespace novokhatskiy
 
     Value& operator[](const Key& key)
     {
-      iter tmp = find(key);
-      if (tmp.node_->value.first == key)
+      node_t* tmp = search(key);
+      if (tmp)
       {
-        return tmp.node_->value.second;
+        return tmp->value.second;
       }
       else
       {
         insert(std::make_pair(key, Value()));
-        iter res = find(key);
-        return res.node_->value.second;
+        node_t* res = search(key);
+        return res->value.second;
       }
     }
 
     const Value& operator[](const Key& key) const
     {
-      iter tmp = find(key);
-      if (tmp.node_->value.first == key)
+      node_t* tmp = search(key);
+      if (tmp)
       {
-        return tmp.node_->value.second;
+        return tmp->value.second;
       }
       else
       {
         insert(std::make_pair(key, Value()));
-        iter res = find(key);
-        return res.node_->value.second;
+        node_t* res = search(key);
+        return res->value.second;
       }
-    }
-
-    void prePrint(node_t* root)
-    {
-      if (root->left != nullptr)
-      {
-        prePrint(root->left);
-      }
-      std::cout << ' ' << root->value.second << ' ';
-      if (root->right != nullptr)
-      {
-        prePrint(root->right);
-      }
-    }
-
-    void print()
-    {
-      prePrint(root_);
-    }
-
-    void fixedHeight(node_t* node)
-    {
-      int rightH = getHeight(node->right);
-      int leftH = getHeight(node->left);
-      node->height = (rightH > leftH ? rightH : leftH) + 1;
-    }
-
-    int getHeight(node_t* root)
-    {
-      return root ? root->height : 0;
-    }
-
-    int getBalanceFactor(node_t* node)
-    {
-      return getHeight(node->right) - getHeight(node->left);
     }
 
     node_t* updateHeight(node_t* node)
@@ -203,13 +239,7 @@ namespace novokhatskiy
       return node;
     }
 
-    node_t* insert(const std::pair< Key, Value >& value)
-    {
-      root_ = insert_imp(value, root_);
-      return root_;
-    }
-
-    size_t size() const
+    size_t size() const noexcept
     {
       return size_;
     }
@@ -219,14 +249,10 @@ namespace novokhatskiy
       return !size_;
     }
 
-    void clear(node_t* root)
+    void clear()
     {
-      if (root)
-      {
-        clear(root->left);
-        clear(root->right);
-        delete root;
-      }
+      clear_imp(root_);
+      root_ = nullptr;
     }
 
     void swap(Tree& other)
@@ -306,6 +332,7 @@ namespace novokhatskiy
       balance(res.node_);
       return iter(res.node_);
     }
+
     iter lower_bound(const Key& key)
     {
       iter curr = find(key);
@@ -368,7 +395,7 @@ namespace novokhatskiy
 
     constIter cend() const
     {
-      return constIter(nullptr);
+      return constIter();
     }
 
     iter begin()
@@ -378,28 +405,45 @@ namespace novokhatskiy
 
     iter end()
     {
-      return iter(nullptr);
+      return iter();
     }
 
-     int& traverse(node_t* node, int& res)
+    constIter cbeginRight() const
     {
-      if (!node)
+      return constIter(lastRight(root_));
+    }
+
+    node_t* search(const Key& key)
+    {
+      node_t* result = search_imp(root_, key);
+      return result;
+    }
+
+    void insert(const std::pair< Key, Value >& val)
+    {
+      try
       {
-        return res;
+        if (root_)
+        {
+          insert_imp(val, root_);
+          ++size_;
+        }
+        else
+        {
+          root_ = new node_t(val);
+          ++size_;
+        }
       }
-      res += node->value.first;
-      //std::cout << node->value.first << ' ';
-      traverse(node->left, res);
-      traverse(node->right,res);
-      //std::cout << node->value.first << ' ';
+      catch (const std::exception&)
+      {
+        clear();
+        throw;
+      }
     }
-    node_t* getRoot() const
-    {
-      return root_;
-    }
+
     ~Tree()
     {
-      clear(root_);
+      clear();
     }
 
   private:
@@ -407,89 +451,175 @@ namespace novokhatskiy
     size_t size_;
     Compare cmp_;
 
-    node_t* insert_imp(const std::pair< Key, Value >& value, node_t* curr)
+    node_t* lastRight(node_t* node) const
     {
-      if (curr == nullptr)
+      node_t* res = node;
+      if (!res)
       {
-        curr = new node_t(value);
+        return nullptr;
       }
-      if (cmp_(curr->value.first, value.first))
+      while (res->right)
       {
-        curr->right = insert_imp(value, curr->right);
+        res = res->right;
       }
-      else if (curr->value.first == value.first)
-      {
-        return balance(curr);
-      }
-      else
-      {
-        curr->left = insert_imp(value, curr->left);
-      }
-      return balance(curr);
+      return res;
     }
 
-    node_t* balance(node_t* node)
+    void balance(node_t* node)
     {
-      fixedHeight(node);
-      if (getBalanceFactor(node) == 2)
+      if (node->height < 0)
       {
-        if (getBalanceFactor(node->right) < 0)
+        if (node->right->height > 0)
         {
           node->right = rotate_right(node->right);
         }
-        return rotate_left(node);
+        node = rotate_left(node);
       }
-      if (getBalanceFactor(node) == -2)
+      else
       {
-        if (getBalanceFactor(node->left) > 0)
+        if (node->left->height < 0)
         {
           node->left = rotate_left(node->left);
         }
-        return rotate_right(node);
+        node = rotate_right(node);
       }
-      return node;
     }
 
-    node_t* rotate_left(node_t* currRoot)
+    void getBalance(node_t* node)
     {
-      node_t* newRoot = currRoot->right;
-      currRoot->right = newRoot->left;
+      if ((node->height > 1) || (node->height < -1))
+      {
+        balance(node);
+      }
+      else
+      {
+        if (node->parent)
+        {
+          if (node->left)
+          {
+            ++node->parent->height;
+          }
+          else if (node->right)
+          {
+            --node->parent->height;
+          }
+          if (node->parent->height != 0)
+          {
+            getBalance(node->parent);
+          }
+        }
+      }
+    }
+
+    node_t* rotate_left(node_t* node)
+    {
+      node_t* newRoot = node->right;
+      node->right = newRoot->left;
       if (newRoot->left)
       {
-        newRoot->left->parent = currRoot;
+        newRoot->left->parent = node;
       }
-      newRoot->left = currRoot;
-      currRoot->parent = newRoot;
-      fixedHeight(currRoot);
-      fixedHeight(newRoot);
+      newRoot->left = node;
+      node->parent = newRoot;
+      node->height = node->height + 1 - std::min(newRoot->height, 0);
+      newRoot->height = newRoot->height + 1 + std::max(node->height, 0);
       return newRoot;
     }
 
-    node_t* rotate_right(node_t* currRoot)
+    node_t* rotate_right(node_t* node)
     {
-      node_t* newRoot = currRoot->left;
-      currRoot->left = newRoot->right;
+      node_t* newRoot = node->left;
+      node->left = newRoot->right;
       if (newRoot->right)
       {
-        newRoot->right->parent = currRoot;
+        newRoot->right->parent = node;
       }
-      newRoot->right = currRoot;
-      currRoot->parent = newRoot;
-      fixedHeight(currRoot);
-      fixedHeight(newRoot);
+      newRoot->right = node;
+      node->parent = newRoot;
+      node->height = node->height - 1 - std::max(0, newRoot->height);
+      newRoot->height = newRoot->height - 1 + std::min(0, node->height);
       return newRoot;
     }
 
-    node_t* minN(node_t* p)
+    void insert_imp(const std::pair< Key, Value >& value, node_t* node)
     {
-      return (p->left) ? minN(p->left) : p;
-      /*auto tmp = root_->left;
-      while (tmp->left)
+      try
       {
-        tmp = tmp->left;
+        if (cmp_(value.first, node->value.first))
+        {
+          if (node->left)
+          {
+            insert_imp(value, node->left);
+          }
+          else
+          {
+            node->left = new node_t(value, node);
+            getBalance(node->left);
+          }
+        }
+        else
+        {
+          if (node->right)
+          {
+            insert_imp(value, node->right);
+          }
+          else
+          {
+            node->right = new node_t(value, node);
+            getBalance(node->right);
+          }
+        }
       }
-      root_ = tmp;
-      return root_;*/
+      catch (const std::exception&)
+      {
+        clear();
+        throw;
+      }
+    }
+
+    void clear_imp(node_t* root)
+    {
+      if (root)
+      {
+        --size_;
+        clear_imp(root->left);
+        clear_imp(root->right);
+        delete root;
+      }
+    }
+
+    node_t* minN(node_t* p) const
+    {
+      node_t* res = p;
+      if (!res)
+      {
+        return nullptr;
+      }
+      while (res->left)
+      {
+        res = res->left;
+      }
+      return res;
+    }
+
+    node_t* search_imp(node_t* node, const Key& key)
+    {
+      if (!node)
+      {
+        return nullptr;
+      }
+      else if (cmp_(key, node->value.first))
+      {
+        return search_imp(node->left, key);
+      }
+      else if (cmp_(node->value.first, key))
+      {
+        return search_imp(node->right, key);
+      }
+      else
+      {
+        return node;
+      }
     }
   };
 }
