@@ -163,6 +163,16 @@ namespace marishin
       return ConstIteratorTree< Key, Value, Compare >();
     }
 
+    IteratorTree< Key, Value, Compare > begin() const noexcept
+    {
+      return IteratorTree< Key, Value, Compare >(getMin(root_));
+    }
+
+    IteratorTree< Key, Value, Compare > end() const noexcept
+    {
+      return IteratorTree< Key, Value, Compare >();
+    }
+
     const Value& operator[](const Key& key) const
     {
       node_t* traverser = search(key);
