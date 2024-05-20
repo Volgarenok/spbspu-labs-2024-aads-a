@@ -9,8 +9,8 @@ nikitov::SumKeys::SumKeys():
 
 void nikitov::SumKeys::operator()(const std::pair< int, std::string >& value)
 {
-  int maxNum = std::numeric_limits< int >::max();
-  int minNum = std::numeric_limits< int >::min();
+  constexpr int maxNum = std::numeric_limits< int >::max();
+  constexpr int minNum = std::numeric_limits< int >::min();
   if ((key_ > 0 && maxNum - key_ < value.first) || (key_ < 0 && value.first < 0 && minNum - key_ > value.first))
   {
     throw std::overflow_error("Error: numeric overflow");
