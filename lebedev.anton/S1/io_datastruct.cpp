@@ -71,10 +71,10 @@ void lebedev::outputPairsNames(std::ostream & output, listOfPairs & pairs)
 
 void lebedev::outputSequences(std::ostream & output, listOfPairs & pairs, size_t max_pair_size)
 {
-  List< List< int > > output_order;
+  List< List< size_t > > output_order;
   for (size_t i = 0; i < max_pair_size; i++)
   {
-    List< int > output_order_i;
+    List< size_t > output_order_i;
     for (auto pairs_iter = pairs.cbegin(); pairs_iter != pairs.cend(); pairs_iter++)
     {
       auto list_iter = pairs_iter->second.cbegin();
