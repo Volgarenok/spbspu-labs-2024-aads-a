@@ -8,6 +8,8 @@
 
 #include <list/list.hpp>
 
+#include "sortAlgorithms.hpp"
+
 namespace zhalilov
 {
   template < class InputIt >
@@ -47,6 +49,10 @@ namespace zhalilov
     std::deque< T > deqOddEven(nums.cbegin(), nums.cend());
     std::deque< T > deqBucket(nums.cbegin(), nums.cend());
     std::deque< T > deqSort(nums.cbegin(), nums.cend());
+
+    oddEvenSort(implForwardBucket.begin(), implForwardBucket.end(), comparer);
+    oddEvenSort(deqOddEven.begin(), deqOddEven.end(), comparer);
+
     printNums(nums.cbegin(), nums.cend(), out);
     printNums(implForwardOddEven.cbegin(), implForwardOddEven.cend(), out);
     printNums(implForwardBucket.cbegin(), implForwardBucket.cend(), out);
