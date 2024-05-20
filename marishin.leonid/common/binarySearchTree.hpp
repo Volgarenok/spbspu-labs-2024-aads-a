@@ -8,27 +8,31 @@
 #include <functional>
 #include <stdexcept>
 #include <treeNode.hpp>
+#include <treeIterator.hpp>
 
 namespace marishin
 {
   template< typename Key, typename Value, typename Compare = std::less< Key > >
-  struct BinarySearchTree
+  class BinarySearchTree
   {
+  public:
     using node_t = detail::TreeNode< Key, Value >;
     BinarySearchTree():
       root_(nullptr),
-      size_(0)
+      size_(0),
+      compare_(Compare());
     {}
 
     BinarySearchTree(const BinarySearchTree& rhs):
       root_(nullptr),
-      size_(0)
+      size_(0),
+      compare_(rhs.compare_)
     {
       try
       {
         for (auto begin = rhs.cbegin(); begin != rhs.cend(); ++begin)
         {
-          push(begin->first, begin->second);
+          insert(begin->first, begin->second);
         }
       }
       catch (...)
@@ -41,6 +45,7 @@ namespace marishin
     BinarySearchTree(BinarySearchTree&& rhs):
       root_(rhs.root_),
       size_(rhs.size_)
+      compare_(rhs.compare_)
     {
       rhs.root_ = nullptr;
       rhs.size_ = 0;
@@ -68,7 +73,7 @@ namespace marishin
 
     size_t size() const noexcept
     {
-      return this->size_;
+      return size_;
     }
 
     ~BinarySearchTree()
@@ -80,55 +85,65 @@ namespace marishin
     {
       std::swap(root_, rhs.root_);
       std::swap(size_, rhs.size_);
+      std::swap(compare_, rhs.compare_);
     }
 
-    node_t* insert(const Key& key, const Value& val)
+    void insert(const Key& key, const Value& val)
     {
-      node_t* node;
-      if (root_)
+      try
       {
-        node = insert_p(key, val, root_);
-        ++size_;
-      }
-      else
-      {
-        root_ = new node_t(key, val);
-        node = root_;
-        ++size_;
-      }
-      return node;
-    }
-
-    node_t* insert_p(const Key& key, const Value& val, node_t* currNode)
-    {
-      node_t* node;
-      if (compare()(key, currNode->data.first))
-      {
-        if (currNode->hasLeft())
+        if (root_)
         {
-          node = insert_p(key, val, currNode->left);
+          insert_p(key, val, root_);
+          ++size_;
         }
         else
         {
-          currNode->left = new node_t(key, val, currNode);
-          getBalabce(currNode->left);
-          return currNode->left;
+          root_ = new node_t(key, val);
+          ++size_;
         }
       }
-      else
+      catch (...)
       {
-        if (currNode->hasRight())
+        clear();
+        throw;
+      }
+    }
+
+    void insert_p(const Key& key, const Value& val, node_t* currNode)
+    {
+      try
+      {
+        if (compare_(key, currNode->data.first))
         {
-          node = insert_p(key, val, currNode->right);
+          if (currNode->left)
+          {
+            insert_p(key, val, currNode->left);
+          }
+          else
+          {
+            currNode->left = new node_t(key, val, currNode);
+            getBalabce(currNode->left);
+          }
         }
         else
         {
-          currNode->right = new node_t(key, val, currNode);
-          getBalabce(currNode->right);
-          return currNode->right;
+          if (currNode->right)
+          {
+            insert_p(key, val, currNode->right);
+          }
+          else
+          {
+            currNode->right = new node_t(key, val, currNode);
+            getBalabce(currNode->right);
+          }
         }
       }
-      return node;
+      catch (...)
+      {
+        clear();
+        throw;
+      }
     }
 
     bool empty() const noexcept
@@ -136,30 +151,10 @@ namespace marishin
       return size_ == 0;
     }
 
-    void del(const Key& key)
+    node_t search(const Key& key)
     {
-      if (size_ == 1 && root_->data.first == key)
-      {
-        --size_;
-        root_ = nullptr;
-      }
-      else if (size_ > 1)
-      {
-        node_t* nodeRemove = get(key, root_);
-        if (nodeRemove)
-        {
-          remove(nodeRemove);
-          --size_;
-        }
-        else
-        {
-          throw std::out_of_range("Error\n");
-        }
-      }
-      else
-      {
-        throw std::out_of_range("Error\n");
-      }
+      node_t* rhs = search_p(root_, key);
+      return rhs;
     }
 
     ConstIteratorTree< Key, Value, Compare > cbegin() const noexcept
@@ -174,26 +169,37 @@ namespace marishin
 
     const Value& operator[](const Key& key) const
     {
-      node_t* traverser = get(key, root_);
-      return traverser->data.second;
-    }
-
-    Value& operator[](const Key& key)
-    {
-      node_t* traverser = get(key, root_);
+      node_t* traverser = search(key);
       if (traverser)
       {
         return traverser->data.second;
       }
       else
       {
-        traverser = insert(key, Value());
+        insert(key, Value());
+        node_t* result = search(key);
+        return result->data.second;
+      }
+    }
+
+    Value& operator[](const Key& key)
+    {
+      node_t* traverser = search(key);
+      if (traverser)
+      {
+        return traverser->data.second;
+      }
+      else
+      {
+        insert(key, Value());
+        node_t* result = search(key);
+        return result->data.second;
       }
     }
 
     Value& at(const Key& key)
     {
-      node_t* traverser = get(key, root_);
+      node_t* traverser = search(key);
       if (traverser)
       {
         return traverser->data.second;
@@ -203,7 +209,7 @@ namespace marishin
 
     const Value& at(const Key& key) const
     {
-      node_t* traverser = get(key, root_);
+      node_t* traverser = search(key);
       if (traverser)
       {
         return traverser->data.second;
@@ -211,16 +217,16 @@ namespace marishin
       throw std::out_of_range("No such element");
     }
 
-    ConstIteratorTree< Key, Value > find(const Key& key) const
+    ConstIteratorTree< Key, Value, Compare > find(const Key& key) const
     {
       node_t* result = root_;
       while (result)
       {
-        if (compare()(result->data.first, key))
+        if (compare_(result->data.first, key))
         {
           result = result->right;
         }
-        else if (compare()(key, result->data.first))
+        else if (compare_(key, result->data.first))
         {
           result = result->left;
         }
@@ -229,52 +235,28 @@ namespace marishin
           break;
         }
       }
-      return ConstIteratorTree< Key, Value >(result);
+      return ConstIteratorTree< Key, Value, Compare >(result);
+    }
+
+    void clear()
+    {
+      clear_p(root_);
+      root_ = nullptr;
     }
 
   private:
     node_t* root_;
     size_t size_;
+    Compare compare_;
 
-    void clear()
-    {
-      clear(root_);
-      root_ = nullptr;
-    }
-
-    void clear(node_t* node)
+    void clear_p(node_t* node)
     {
       if (node)
       {
-        clear(node->right);
-        clear (node->left);
+        --size;
+        clear_p(node->right);
+        clear_p(node->left);
         delete node;
-      }
-    }
-
-    Value& get(const Key& key) const
-    {
-      node_t* result = get(key, root_);
-      return result->data.second;
-    }
-
-    node_t* get(const Key& key, node_t* currNode) const
-    {
-      if (!currNode)
-      {
-        return nullptr;
-      }
-      else if (currNode->data.first == key)
-      {
-        return currNode;
-      }
-      else if (compare()(key, currNode->data.first))
-      {
-        return get(key, currNode->left);
-      }
-      else
-      {
-        return get(key, currNode->right);
       }
     }
 
@@ -284,17 +266,17 @@ namespace marishin
       {
         if (node->right->height > 0)
         {
-          node->right->rotateRight(&root_);
+          node->right = rotateRight(node->right);
         }
-        node->rotateLeft(&root_);
+        node = rotateLeft(node);
       }
       else
       {
         if (node->left->height < 0)
         {
-          node->left->rotateLeft(&root_);
+          node->left = rotateLeft(node->left);
         }
-        node->rotateRight(&root_);
+        node = rotateRight(node);
       }
     }
 
@@ -303,7 +285,6 @@ namespace marishin
       if (node->height > 1 || node->height < -1)
       {
         balance(node);
-        return;
       }
       else
       {
@@ -339,138 +320,89 @@ namespace marishin
       return result;
     }
 
-    void updateBalance(node_t* balanceParent, int oldBal)
+    node_t* rotateLeft(node_t* node)
     {
-      if (balanceParent->height == 0)
+      node_t* newRoot = node->right;
+      node->right = newRoot->left;
+      if (newRoot->left)
       {
-        if (!balanceParent->isRoot())
-        {
-          int bal = balanceParent->parent->height;
-          if (balanceParent->isLeft())
-          {
-            --balanceParent->parent->height;
-          }
-          else
-          {
-            ++balanceParent->parent->height;
-          }
-          updateBalance(balanceParent->parent, bal);
-        }
+        newRoot->left->parent = node;
       }
-      else if (1 < balanceParent->height || -1 > balanceParent->height)
-      {
-        if (!balanceParent->isRoot())
-        {
-          node_t* grandParent = balanceParent->parent;
-          bool left = balanceParent->isLeft();
-          balance(balanceParent);
-          int newBal = 0;
-          if (left)
-          {
-            newBal = grandParent->left->height;
-          }
-          else
-          {
-            newBal = grandParent->right->height;
-          }
-          newBal = std::abs(newBal) - std::abs(oldBal);
-          if (std::abs(newBal) - std::abs(oldBal) != 0)
-          {
-            int balGrand = grandParent->height;
-            if (left)
-            {
-              --grandParent->height;
-            }
-            else
-            {
-              ++grandParent->height;
-            }
-            updateBalance(grandParent, balGrand);
-          }
-        }
-        else
-        {
-          balance(balanceParent);
-        }
-      }
-      return;
+      newRoot->left = node;
+      node->parent = newRoot;
+      node->height = node->height + 1 - std::min(newRoot->height, 0);
+      newRoot->height = newRoot->height + 1 + std::max(node->height, 0);
+      return newRoot;
     }
 
-    void remove(node_t* currNode)
+    node_t* rotateRight(node_t* node)
     {
-      if (currNode->isLeaf())
+      node_t* newRoot = node->left;
+      node->left = newRoot->right;
+      if (newRoot->right)
       {
-        int oldBal = currNode->parent->height;
-        if (currNode->isLeft())
-        {
-          currNode->parent->left = nullptr;
-          --currNode->parent->height;
-        }
-        else
-        {
-          currNode->parent->right = nullptr;
-          ++currNode->parent->height;
-        }
-        node_t* balanceParent = currNode->parent;
-        delete currNode;
-        updateBalance(balanceParent, oldBal);
+        newRoot->right->parent = node;
       }
-      else if (currNode->hasBoth())
+      newRoot->right = node;
+      node->parent = newRoot;
+      node->height = node->height - 1 - std::max(0, newRoot->height);
+      newRoot->height = newRoot->height - 1 + std::min(0, node->height);
+      return newRoot;
+    }
+
+    node_t* search_p(node_t* node, const Key& key)
+    {
+      if (!node)
       {
-        node_t* res = getMin(currNode->right);
-        currNode->data.first = res->data.first;
-        currNode->data.second = res->data.second;
-        remove(res);
+        return nullptr;
+      }
+      else if (compare_(key, node->data.first))
+      {
+        return search_p(node->left, key);
+      }
+      else if (compare_(node->data.first, key))
+      {
+        return search_p(node->right, key);
       }
       else
       {
-        if (currNode->hasLeft())
-        {
-          int oldBal = currNode->parent->height;
-          if (currNode->isLeft())
-          {
-            currNode->left->parent = currNode->parent;
-            currNode->parent->left = currNode->left;
-            --currNode->parent->height;
-          }
-          else if (currNode->isRight())
-          {
-            currNode->left->parent = currNode->parent;
-            currNode->parent->right = currNode->left;
-            ++currNode->parent->height;
-          }
-          updateBalance(currNode->parent, oldBal);
+        return node;
+      }
+    }
 
-          if (currNode->isRoot())
+    void insert_p(const Key& key, const Value& val, node_t* currNode)
+    {
+      try
+      {
+        if (compare_(key, currNode->data.first))
+        {
+          if (currNode->left)
           {
-            root_ = currNode->left;
-            root_->parent = nullptr;
+            insert_p(key, val, currNode->left);
+          }
+          else
+          {
+            currNode->left = new node_t(key, val, currNode);
+            getBalance(currNode->left);
           }
         }
         else
         {
-          int oldBal = currNode->parent->height;
-          if (currNode->isLeft())
+          if (currNode->right)
           {
-            currNode->right->parent = currNode->parent;
-            currNode->parent->left = currNode->right;
-            --currNode->parent->height;
+            insert_p(key, val, currNode->right);
           }
-          else if (currNode->isRight())
+          else
           {
-            currNode->right->parent = currNode->parent;
-            currNode->parent->right = currNode->right;
-            ++currNode->parent->height;
-          }
-          updateBalance(currNode->parent, oldBal);
-
-          if (currNode->isRoot())
-          {
-            root_ = currNode->right;
-            root_->parent = nullptr;
+            currNode->right = new node_t(key, val, currNode);
+            getBalance(currNode->right);
           }
         }
-        delete currNode;
+      }
+      catch (...)
+      {
+        clear();
+        throw;
       }
     }
   };
