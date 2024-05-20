@@ -281,6 +281,7 @@ namespace novokhatskiy
     void clear()
     {
       clear_imp(root_);
+      root_ = nullptr;
     }
 
     void swap(Tree& other)
@@ -418,9 +419,7 @@ namespace novokhatskiy
 
     constIter cbegin() const
     {
-      node_t* curr = root_;
-      for (; curr->left; curr = curr->left);
-      return constIter(curr);
+      return constIter(minN(root_));
     }
 
     constIter cend() const
@@ -430,14 +429,12 @@ namespace novokhatskiy
 
     iter begin()
     {
-      node_t* curr = root_;
-      for (; curr->left; curr = curr->left);
-      return iter(curr);
+      return iter(minN(root_));
     }
 
     iter end()
     {
-      return iter(root_);
+      return iter();
     }
 
     node_t* search(const Key& key)
@@ -594,6 +591,7 @@ namespace novokhatskiy
     {
       if (root)
       {
+        --size_;
         clear_imp(root->left);
         clear_imp(root->right);
         delete root;
@@ -735,7 +733,18 @@ namespace novokhatskiy
 
     node_t* minN(node_t* p) const
     {
-      return (p->left) ? minN(p->left) : p;
+      node_t* res = p;
+      if (!res)
+      {
+        return nullptr;
+      }
+      while (res->left)
+      {
+        res = res->left;
+      }
+      return res;
+      //return (p->left) ? minN(p->left) : p;
+
       /*auto tmp = root_->left;
       while (tmp->left)
       {
