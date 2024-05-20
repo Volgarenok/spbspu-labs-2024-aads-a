@@ -4,7 +4,7 @@
 #include <map>
 #include <string>
 #include <iostream>
-#include <treeNode.hpp>
+#include <BinarySearchTree.hpp>
 
 
 namespace marishin

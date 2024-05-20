@@ -1,14 +1,11 @@
 #ifndef BINARYSEARCHTREE_HPP
 #define BINARYSEARCHTREE_HPP
 
-#include <constTreeIterator.hpp>
-#include <algorithm>
-#include <cstddef>
-#include <cstdlib>
 #include <functional>
 #include <stdexcept>
 #include <treeNode.hpp>
 #include <treeIterator.hpp>
+#include <constTreeIterator.hpp>
 
 namespace marishin
 {
