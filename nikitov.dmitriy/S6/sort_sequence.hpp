@@ -43,7 +43,7 @@ namespace nikitov
     {
       fList.sort(std::less< T >());
       oddEvenSort(firstBiList.begin(), firstBiList.end(), std::less< T >());
-      secondBiList.sort(std::greater< T >());
+      secondBiList.sort(std::less< T >());
       oddEvenSort(firstDeque.begin(), firstDeque.end(), std::less< T >());
       QSort(secondDeque.begin(), secondDeque.end(), std::less< T >());
       std::sort(thirdDeque.begin(), thirdDeque.end(), std::less< T >());
@@ -52,7 +52,7 @@ namespace nikitov
     {
       fList.sort(std::greater< T >());
       oddEvenSort(firstBiList.begin(), firstBiList.end(), std::greater< T >());
-      secondBiList.sort(std::less< T >());
+      secondBiList.sort(std::greater< T >());
       oddEvenSort(firstDeque.begin(), firstDeque.end(), std::greater< T >());
       QSort(secondDeque.begin(), secondDeque.end(), std::greater< T >());
       std::sort(thirdDeque.begin(), thirdDeque.end(), std::greater< T >());
