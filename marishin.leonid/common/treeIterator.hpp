@@ -2,9 +2,7 @@
 #define CONSTTREEITERATOR_HPP
 
 #include <cassert>
-#include <functional>
 #include <iterator>
-#include <utility>
 #include <treeNode.hpp>
 #include <constTreeIterator.hpp>
 
@@ -17,7 +15,7 @@ namespace marishin
   class ConstIteratorTree;
 
   template< typename Key, typename Value, typename Compare >
-  class IteratorTree: public std::iterator< std::bidirectional_iterator_tag, Value >
+  class IteratorTree
   {
     friend class BinarySearchTree< Key, Value, Compare >;
     friend class ConstIteratorTree< Key, Value, Compare >;

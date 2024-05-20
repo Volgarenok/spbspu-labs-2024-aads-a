@@ -1,7 +1,7 @@
 #ifndef TREENODE_HPP
 #define TREENODE_HPP
 
-#include <algorithm>
+
 #include <utility>
 
 namespace marishin
