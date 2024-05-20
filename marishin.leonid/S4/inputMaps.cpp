@@ -6,7 +6,7 @@ void marishin::inputMaps(std::istream& in, BinarySearchTree< std::string, Binary
   while (!in.eof())
   {
     in.clear();
-    Tree< size_t, std::string > tempMap;
+    BinarySearchTree< size_t, std::string > tempMap;
     std::string mapName = "";
     in >> mapName;
     size_t keyNumber = 0;
