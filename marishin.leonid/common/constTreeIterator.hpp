@@ -89,9 +89,9 @@ namespace marishin
     ~ConstIteratorTree() = default;
 
   private:
-    const tree_node* node_;
+    const detail::TreeNode< Key, Value >* node_;
 
-    explicit ConstIteratorTree(tree_node* node):
+    explicit ConstIteratorTree(detail::TreeNode< Key, Value >* node):
       node_(node)
     {}
   };
