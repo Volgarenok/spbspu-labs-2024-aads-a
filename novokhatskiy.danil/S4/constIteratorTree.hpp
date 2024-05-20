@@ -1,7 +1,6 @@
 #ifndef CONST_ITERATOR_TREE
 #define CONST_ITERATOR_TREE
 
-#include <cassert>
 #include <iterator>
 #include <functional>
 #include <utility>
@@ -95,13 +94,11 @@ namespace novokhatskiy
 
     const std::pair< Key, Value > operator*() const
     {
-      assert(node_ != nullptr);
       return node_->value;
     }
 
     const std::pair< Key, Value >* operator->() const
     {
-      assert(node_ != nullptr);
       return std::addressof(node_->value);
     }
 
@@ -119,41 +116,6 @@ namespace novokhatskiy
     node_t* node_;
     friend class Tree< Key, Value, Compare >;
     friend struct IteratorTree< Key, Value, Compare >;
-
-    void goLastRight()
-    {
-      auto tmp = node_->right;
-      while (tmp->right)
-      {
-        tmp = tmp->right;
-      }
-      node_ = tmp;
-    }
-
-    void goLastLeft()
-    {
-      auto tmp = node_;
-      while (tmp->left)
-      {
-        tmp = tmp->left;
-      }
-      node_ = tmp;
-    }
-
-    node_t* predecessor(node_t* node)
-    {
-      if (node->left)
-      {
-        goLastRight(node->left);
-      }
-      node_t* tmp = node->parent;
-      while (tmp && node == tmp->left)
-      {
-        node = tmp;
-        tmp = tmp->parent;
-      }
-      return tmp;
-    }
   };
 }
 

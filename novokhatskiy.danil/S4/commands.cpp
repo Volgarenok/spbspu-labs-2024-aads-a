@@ -12,13 +12,13 @@ void novokhatskiy::unionCmd(mainMap& dict, std::istream& in)
   map dict2 = dict.at(second);
   for (auto i = dict1.cbegin(); i != dict1.cend(); i++)
   {
-    resDict.insert3(*i);
+    resDict.insert(*i);
   }
   for (auto i = dict2.cbegin(); i != dict2.cend(); i++)
   {
     if (resDict.find((*i).first) == resDict.cend())
     {
-      resDict.insert3(*i);
+      resDict.insert(*i);
     }
   }
   dict[resName] = resDict;
@@ -39,7 +39,7 @@ void novokhatskiy::intersectCmd(mainMap& dict, std::istream& in)
   {
     if (dict2.find(begin->first) != dict2.cend())
     {
-      resDict.insert3(*begin);
+      resDict.insert(*begin);
     }
     begin++;
   }
@@ -50,7 +50,7 @@ void novokhatskiy::intersectCmd(mainMap& dict, std::istream& in)
   }
   else
   {
-    dict.insert3(std::make_pair(std::move(resName), std::move(resDict)));
+    dict.insert(std::make_pair(std::move(resName), std::move(resDict)));
   }
 }
 
@@ -70,7 +70,7 @@ void novokhatskiy::complement(mainMap& dict, std::istream& in)
   {
     if (dict2.find(begin->first) == dict2.cend())
     {
-      resDict.insert3(*begin);
+      resDict.insert(*begin);
     }
     begin++;
   }
@@ -80,7 +80,7 @@ void novokhatskiy::complement(mainMap& dict, std::istream& in)
   {
     if (dict1.find(begin->first) == dict1.cend())
     {
-      resDict.insert3(*begin);
+      resDict.insert(*begin);
     }
     begin++;
   }
@@ -91,7 +91,7 @@ void novokhatskiy::complement(mainMap& dict, std::istream& in)
   }
   else
   {
-    dict.insert3(std::make_pair(std::move(resName), std::move(resDict)));
+    dict.insert(std::make_pair(std::move(resName), std::move(resDict)));
   }
 }
 

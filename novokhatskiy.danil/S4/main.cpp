@@ -29,9 +29,9 @@ void inputDict(mainMap& dict, std::istream& in)
     {
       std::string val = {};
       in >> val;
-      tmp.insert3({ key, val });
+      tmp.insert({ key, val });
     }
-    dict.insert3(std::make_pair(std::move(name), std::move(tmp)));
+    dict.insert(std::make_pair(std::move(name), std::move(tmp)));
   }
   in.clear();
 }
