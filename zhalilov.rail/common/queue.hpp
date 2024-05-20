@@ -29,8 +29,8 @@ namespace zhalilov
     void push(const T &);
     void push(T &&);
 
-    template < typename ...Args >
-    void emplace(Args && ...);
+    template < typename... Args >
+    void emplace(Args &&...);
 
     void pop();
     void swap(Queue &) noexcept;
@@ -120,10 +120,10 @@ namespace zhalilov
   }
 
   template < typename T, typename Container >
-  template < typename ...Args >
-  void Queue< T, Container >::emplace(Args && ...args)
+  template < typename... Args >
+  void Queue< T, Container >::emplace(Args &&... args)
   {
-    container_.emplace(std::forward< Args >(args) ...);
+    container_.emplace(std::forward< Args >(args)...);
   }
 
   template < typename T, typename Container >
