@@ -54,12 +54,16 @@ long long novokhatskiy::doDivision(long long op1, long long op2)
 
 long long novokhatskiy::doMod(long long op1, long long op2)
 {
-  if (op1 < 0)
+  long long res = op1 % op2;
+  if (op1 < 0 && res == 0)
   {
     return op2;
   }
-  long long res = op1 % op2;
-  return res;
+  else
+  {
+    res += op2;
+    return res;
+  }
 }
 
 long long novokhatskiy::calculatePostExp(novokhatskiy::Queue< Postfix >&& inQueue)
