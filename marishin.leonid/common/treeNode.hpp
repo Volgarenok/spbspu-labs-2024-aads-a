@@ -12,10 +12,9 @@ namespace marishin
     struct TreeNode
     {
       std::pair< Key, Value > data;
-      using node_t = detail::TreeNode< Key, Value >;
-      node_t* left;
-      node_t* right;
-      node_t* parent;
+      detail::TreeNode< Key, Value >* left;
+      detail::TreeNode< Key, Value >* right;
+      detail::TreeNode< Key, Value >* parent;
       int height;
 
       TreeNode(const Key& key, const Value& val)

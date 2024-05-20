@@ -13,7 +13,6 @@ namespace marishin
   class BinarySearchTree
   {
   public:
-    using node_t = detail::TreeNode< Key, Value >;
 
     BinarySearchTree():
       root_(nullptr),
@@ -89,7 +88,7 @@ namespace marishin
         }
         else
         {
-          root_ = new node_t(key, val);
+          root_ = new detail::TreeNode< Key, Value >(key, val);
           ++size_;
         }
       }
@@ -100,7 +99,7 @@ namespace marishin
       }
     }
 
-    void balance(node_t* node)
+    void balance(detail::TreeNode< Key, Value >* node)
     {
       if (node->height < 0)
       {
@@ -120,7 +119,7 @@ namespace marishin
       }
     }
 
-    void getBalance(node_t* node)
+    void getBalance(detail::TreeNode< Key, Value >* node)
     {
       if (node->height > 1 || node->height < -1)
       {
@@ -146,10 +145,10 @@ namespace marishin
       }
     }
 
-    node_t search(const Key& key)
+    detail::TreeNode< Key, Value >* search(const Key& key)
     {
-      node_t* rhs = search_p(root_, key);
-      return rhs;
+      detail::TreeNode< Key, Value >* res = search_p(root_, key);
+      return res;
     }
 
     ConstIteratorTree< Key, Value, Compare > cbegin() const noexcept
@@ -174,7 +173,7 @@ namespace marishin
 
     const Value& operator[](const Key& key) const
     {
-      node_t* traverser = search(key);
+      detail::TreeNode< Key, Value >* traverser = search(key);
       if (traverser)
       {
         return traverser->data.second;
@@ -182,14 +181,14 @@ namespace marishin
       else
       {
         insert(key, Value());
-        node_t* result = search(key);
+        detail::TreeNode< Key, Value >* result = search(key);
         return result->data.second;
       }
     }
 
     Value& operator[](const Key& key)
     {
-      node_t* traverser = search(key);
+      detail::TreeNode< Key, Value >* traverser = search(key);
       if (traverser)
       {
         return traverser->data.second;
@@ -197,14 +196,14 @@ namespace marishin
       else
       {
         insert(key, Value());
-        node_t* result = search(key);
+        detail::TreeNode< Key, Value >* result = search(key);
         return result->data.second;
       }
     }
 
     Value& at(const Key& key)
     {
-      node_t* traverser = search(key);
+      detail::TreeNode< Key, Value >* traverser = search(key);
       if (traverser)
       {
         return traverser->data.second;
@@ -214,7 +213,7 @@ namespace marishin
 
     const Value& at(const Key& key) const
     {
-      node_t* traverser = search(key);
+      detail::TreeNode< Key, Value >* traverser = search(key);
       if (traverser)
       {
         return traverser->data.second;
@@ -224,7 +223,7 @@ namespace marishin
 
     ConstIteratorTree< Key, Value, Compare > find(const Key& key) const
     {
-      node_t* result = root_;
+      detail::TreeNode< Key, Value >* result = root_;
       while (result)
       {
         if (compare_(result->data.first, key))
@@ -265,11 +264,11 @@ namespace marishin
     }
 
   private:
-    node_t* root_;
+    detail::TreeNode< Key, Value >* root_;
     size_t size_;
     Compare compare_;
 
-    void clear_p(node_t* node)
+    void clear_p(detail::TreeNode< Key, Value >* node)
     {
       if (node)
       {
@@ -280,9 +279,9 @@ namespace marishin
       }
     }
 
-    node_t* getMin(node_t* node) const
+    detail::TreeNode< Key, Value >* getMin(detail::TreeNode< Key, Value >* node) const
     {
-      node_t* result = node;
+      detail::TreeNode< Key, Value >* result = node;
       if (!result)
       {
         return nullptr;
@@ -294,9 +293,9 @@ namespace marishin
       return result;
     }
 
-    node_t* rotateLeft(node_t* node)
+    detail::TreeNode< Key, Value >* rotateLeft(detail::TreeNode< Key, Value >* node)
     {
-      node_t* newRoot = node->right;
+      detail::TreeNode< Key, Value >* newRoot = node->right;
       node->right = newRoot->left;
       if (newRoot->left)
       {
@@ -309,9 +308,9 @@ namespace marishin
       return newRoot;
     }
 
-    node_t* rotateRight(node_t* node)
+    detail::TreeNode< Key, Value >* rotateRight(detail::TreeNode< Key, Value >* node)
     {
-      node_t* newRoot = node->left;
+      detail::TreeNode< Key, Value >* newRoot = node->left;
       node->left = newRoot->right;
       if (newRoot->right)
       {
@@ -324,7 +323,7 @@ namespace marishin
       return newRoot;
     }
 
-    node_t* search_p(node_t* node, const Key& key)
+    detail::TreeNode< Key, Value >* search_p(detail::TreeNode< Key, Value >* node, const Key& key)
     {
       if (!node)
       {
@@ -344,7 +343,7 @@ namespace marishin
       }
     }
 
-    void insert_p(const Key& key, const Value& val, node_t* currNode)
+    void insert_p(const Key& key, const Value& val, detail::TreeNode< Key, Value >* currNode)
     {
       try
       {
@@ -356,7 +355,7 @@ namespace marishin
           }
           else
           {
-            currNode->left = new node_t(key, val, currNode);
+            currNode->left = new detail::TreeNode< Key, Value >(key, val, currNode);
             getBalance(currNode->left);
           }
         }
@@ -368,7 +367,7 @@ namespace marishin
           }
           else
           {
-            currNode->right = new node_t(key, val, currNode);
+            currNode->right = new detail::TreeNode< Key, Value >(key, val, currNode);
             getBalance(currNode->right);
           }
         }

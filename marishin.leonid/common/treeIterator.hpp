@@ -1,6 +1,7 @@
 #ifndef CONSTTREEITERATOR_HPP
 #define CONSTTREEITERATOR_HPP
 
+#include <cassert>
 #include <functional>
 #include <iterator>
 #include <utility>
@@ -20,18 +21,16 @@ namespace marishin
   {
     friend class BinarySearchTree< Key, Value, Compare >;
     friend class ConstIteratorTree< Key, Value, Compare >;
-    using TreeNode = detail::TreeNode< Key, Value >;
   public:
+
+    IteratorTree():
+      node_(nullptr)
+    {}
 
     IteratorTree(const IteratorTree< Key, Value, Compare >&) = default;
     IteratorTree< Key, Value, Compare >& operator=(const IteratorTree< Key, Value, Compare >&) = default;
     IteratorTree(IteratorTree< Key, Value, Compare >&& other) noexcept = default;
     IteratorTree< Key, Value, Compare >& operator=(IteratorTree< Key, Value, Compare >&& other) noexcept = default;
-
-
-    IteratorTree():
-      node_(nullptr)
-    {}
 
     std::pair< Key, Value >& operator*()
     {
@@ -91,19 +90,19 @@ namespace marishin
 
     bool operator!=(const IteratorTree< Key, Value, Compare >& rhs) const
     {
-      return !(*this == rhs);
+      return node_ != rhs.node_;
     }
 
     bool operator!=(ConstIteratorTree< Key, Value, Compare >& rhs) const
     {
-      return !(*this == rhs);
+      return node_ != rhs.node_;
     }
 
     ~IteratorTree() = default;
     private:
       detail::TreeNode< Key, Value >* node_;
 
-      IteratorTree(detail::TreeNode< Key, Value >* node):
+      explicit IteratorTree(detail::TreeNode< Key, Value >* node):
         node_(node)
       {}
   };

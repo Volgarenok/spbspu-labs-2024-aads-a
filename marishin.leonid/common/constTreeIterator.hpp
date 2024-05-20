@@ -20,27 +20,15 @@ namespace marishin
   {
     friend class BinarySearchTree< Key, Value, Compare >;
     friend class IteratorTree< Key, Value, Compare >;
-    using TreeNode = detail::TreeNode< Key, Value >;
   public:
-
-    ConstIteratorTree(const ConstIteratorTree< Key, Value, Compare >&) = default;
-    ConstIteratorTree< Key, Value, Compare >& operator=(const ConstIteratorTree< Key, Value, Compare >&) = default;
-    ConstIteratorTree(ConstIteratorTree< Key, Value, Compare >&& other) noexcept = default;
-    ConstIteratorTree< Key, Value, Compare >& operator=(ConstIteratorTree< Key, Value, Compare >&& other) noexcept = default;
 
     ConstIteratorTree():
       node_(nullptr)
     {}
-
-    const std::pair< Key, Value >& operator*() const
-    {
-      return node_->data;
-    }
-
-    const std::pair< Key, Value >* operator->() const
-    {
-      return std::addressof(node_->data);
-    }
+    ConstIteratorTree(const ConstIteratorTree< Key, Value, Compare >&) = default;
+    ConstIteratorTree< Key, Value, Compare >& operator=(const ConstIteratorTree< Key, Value, Compare >&) = default;
+    ConstIteratorTree(ConstIteratorTree< Key, Value, Compare >&& other) noexcept = default;
+    ConstIteratorTree< Key, Value, Compare >& operator=(ConstIteratorTree< Key, Value, Compare >&& other) noexcept = default;
 
     ConstIteratorTree< Key, Value, Compare >& operator++()
     {
@@ -80,21 +68,32 @@ namespace marishin
 
     bool operator!=(const ConstIteratorTree< Key, Value, Compare >& rhs) const
     {
-      return !(*this == rhs);
+      return node_ != rhs.node_;
     }
 
     bool operator!=(IteratorTree< Key, Value, Compare >& rhs) const
     {
-      return !(*this == rhs);
+      return node_ != rhs.node_;
+    }
+
+    const std::pair< Key, Value >& operator*() const
+    {
+      return node_->data;
+    }
+
+    const std::pair< Key, Value >* operator->() const
+    {
+      return std::addressof(node_->data);
     }
 
     ~ConstIteratorTree() = default;
-    private:
-      detail::TreeNode< Key, Value >* node_;
 
-      ConstIteratorTree(detail::TreeNode< Key, Value >* node):
-        node_(node)
-      {}
+  private:
+    const tree_node* node_;
+
+    explicit ConstIteratorTree(tree_node* node):
+      node_(node)
+    {}
   };
 }
 
