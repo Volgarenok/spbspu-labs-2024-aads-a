@@ -107,13 +107,13 @@ namespace novokhatskiy
       {
         throw std::logic_error("<EMPTY>");
       }
-      Queue< const node_t* > queue;
+      Queue< node_t* > queue;
       queue.push(root_);
       while (!queue.empty())
       {
         node_t* node = queue.front();
         queue.pop();
-        f(*node);
+        f(node->value);
         if (node->left)
         {
           queue.push(node->left);
