@@ -9,7 +9,7 @@
 
 void inputMaps(std::istream& in, novokhatskiy::Tree< int, std::string >& map)
 {
-  while (!in.eof())
+  while (in)
   {
     in.clear();
     int key{};
@@ -17,6 +17,10 @@ void inputMaps(std::istream& in, novokhatskiy::Tree< int, std::string >& map)
     while (in >> key >> val)
     {
       map.insert(std::make_pair(key, val));
+    }
+    if (!in.eof())
+    {
+      throw std::overflow_error("Error input");
     }
   }
 }
@@ -53,7 +57,7 @@ int main(int argc, char** argv)
   }
   catch (const std::logic_error& e)
   {
-    std::cerr << e.what() << '\n';
+    std::cout << e.what() << '\n';
   }
   catch (const std::exception& e)
   {
