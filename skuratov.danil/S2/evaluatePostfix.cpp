@@ -59,13 +59,23 @@ long long int skuratov::evaluatePostfixExpression(const std::string& exp)
 
   for (size_t i = 0; i < exp.size(); ++i)
   {
-    if (isdigit(exp[i]))
+    if (isdigit(exp[i]) || (exp[i] == '-' && i + 1 < exp.size() && isdigit(exp[i + 1])))
     {
+      bool isNegative = false;
+      if (exp[i] == '-')
+      {
+        isNegative = true;
+        i++;
+      }
       long long int num = 0;
       while (i < exp.size() && isdigit(exp[i]))
       {
         num = num * 10 + (exp[i] - '0');
         i++;
+      }
+      if (isNegative)
+      {
+        num = -num;
       }
       operands.push(num);
       i--;

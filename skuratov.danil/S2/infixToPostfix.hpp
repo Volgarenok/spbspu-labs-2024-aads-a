@@ -5,11 +5,12 @@
 #include <sstream>
 #include <cctype>
 #include "stack.hpp"
+#include "queue.hpp"
 
 namespace skuratov
 {
   bool priority(const std::string op1, const std::string op2);
-  std::string infixToPostfix(const std::string& exp);
+  std::string infixToPostfix(Queue< std::string >& expQueue);
 }
 
 #endif

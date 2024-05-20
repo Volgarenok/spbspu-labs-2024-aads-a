@@ -33,11 +33,11 @@ void skuratov::processExpressions(const Queue< Queue < std::string > >& exp)
       std::string expression;
       while (!lineQueue.empty())
       {
-        expression += lineQueue.front();
+        expression += lineQueue.front() + " ";
         lineQueue.drop();
       }
 
-      std::string postfixExp = infixToPostfix(expression);
+      std::string postfixExp = infixToPostfix(lineQueue);
       Queue< long long int > resultQueue;
       evaluatePostfixExpression(postfixExp);
       results.push(resultQueue);
