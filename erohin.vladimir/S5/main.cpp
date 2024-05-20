@@ -3,6 +3,7 @@
 
 int main(int argc, char ** argv)
 {
+  using namespace erohin;
   if (argc != 3)
   {
     std::cerr << "Wrong CLA number";
