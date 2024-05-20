@@ -12,6 +12,7 @@ int main(int argc, char ** argv)
   if (!file)
   {
     std::cerr << "Error in file opening";
+    return 2;
   }
   return 0;
 }
