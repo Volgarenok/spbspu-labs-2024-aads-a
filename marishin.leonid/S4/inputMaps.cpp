@@ -3,17 +3,19 @@
 
 void marishin::inputMaps(std::istream& in, BinarySearchTree< std::string, BinarySearchTree< int, std::string > >& maps)
 {
-  int key = 0;
-  std::string value;
-  std::string nameTree;
-  while (in && in.eof())
+  while (!in.eof())
   {
-    BinarySearchTree< int, std::string > tree;
-    in >> nameTree;
-    while (in >> key >> value)
+    in.clear();
+    Tree< int, std::string > tempMap;
+    std::string mapName = "";
+    in >> mapName;
+    size_t keyNumber = 0;
+    while (in >> keyNumber)
     {
-      tree.insert(key, value);
+      std::string value = "";
+      in >> value;
+      tempMap.insert(keyNumber, value);
     }
-    maps.insert(nameTree, tree);
+    maps.insert(mapName, tempMap);
   }
 }

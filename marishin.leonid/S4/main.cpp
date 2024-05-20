@@ -12,12 +12,12 @@
 int main(int argc, char *argv[])
 {
   using namespace marishin;
-  using map = BinarySearchTree< int, std::string >;
-  BinarySearchTree< std::string, map > maps;
+  using map = Tree< std::string, Tree< int, std::string > >;
+  map myMap;
   if (argc == 2)
   {
     std::ifstream in(argv[1]);
-    inputMaps(in, maps);
+    inputMaps(in, myMap);
   }
   else
   {
@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
     return 1;
   }
 
-  BinarySearchTree< std::string, std::function< void(std::istream&, maps&) > > commands;
+  BinarySearchTree< std::string, std::function< void(std::istream&, map&) > > commands;
   {
     using namespace std::placeholders;
     commands["print"] = std::bind(print, _1, _2, std::ref(std::cout));
@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
   {
     try
     {
-      commands.at(commandName)(std::cin, maps);
+      commands.at(commandName)(std::cin, myMap);
     }
     catch (const std::exception& e)
     {
