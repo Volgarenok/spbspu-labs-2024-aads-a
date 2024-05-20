@@ -3,6 +3,7 @@
 
 #include <string>
 #include <sstream>
+#include <cctype>
 #include "stack.hpp"
 
 namespace skuratov

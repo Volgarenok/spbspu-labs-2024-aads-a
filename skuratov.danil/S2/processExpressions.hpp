@@ -7,7 +7,7 @@
 namespace skuratov
 {
   void printReverse(const Queue< long long int >& queue);
-  void processExpressions(const List< std::string >& exp);
+  void processExpressions(const Queue< Queue < std::string > >& exp);
 }
 
 #endif

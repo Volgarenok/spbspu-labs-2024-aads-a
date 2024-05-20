@@ -18,18 +18,29 @@ void skuratov::printReverse(const Queue< long long int >& queue)
   }
 }
 
-void skuratov::processExpressions(const List<std::string>& exp)
+void skuratov::processExpressions(const Queue< Queue < std::string > >& exp)
 {
-  List< Queue< long long int > > results;
+  Queue< Queue< long long int > > results;
 
-  for (auto it = exp.cbegin(); it != exp.cend(); ++it)
+  auto expCopy = exp;
+  while (!expCopy.empty())
   {
     try
     {
-      std::string postfixExp = infixToPostfix(*it);
+      auto lineQueue = expCopy.front();
+      expCopy.drop();
+
+      std::string expression;
+      while (!lineQueue.empty())
+      {
+        expression += lineQueue.front();
+        lineQueue.drop();
+      }
+
+      std::string postfixExp = infixToPostfix(expression);
       Queue< long long int > resultQueue;
-      evaluatePostfixExpression(postfixExp, resultQueue);
-      results.pushBack(resultQueue);
+      evaluatePostfixExpression(postfixExp);
+      results.push(resultQueue);
     }
     catch (...)
     {
@@ -37,31 +48,27 @@ void skuratov::processExpressions(const List<std::string>& exp)
     }
   }
 
-  List< long long int > finalResults;
-  for (auto it = results.cbegin(); it != results.cend(); ++it)
+  Queue< long long int > finalResults;
+  while (!results.empty())
   {
-    if (!it->empty())
+    if (!results.front().empty())
     {
-      finalResults.pushBack(it->front());
+      finalResults.push(results.front().front());
     }
+    results.drop();
   }
 
   Stack< long long int > reverseStack;
-  for (auto it = finalResults.cbegin(); it != finalResults.cend(); ++it)
+  while (!finalResults.empty())
   {
-    reverseStack.push(*it);
+    reverseStack.push(finalResults.front());
+    finalResults.drop();
   }
 
-  bool isFirstResult = true;
   while (!reverseStack.empty())
   {
-    if (!isFirstResult)
-    {
-      std::cout << ' ';
-    }
-    std::cout << reverseStack.top();
+    std::cout << reverseStack.top() << ' ';
     reverseStack.drop();
-    isFirstResult = false;
   }
   std::cout << '\n';
 }

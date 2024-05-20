@@ -4,7 +4,7 @@
 int main(int argc, char* argv[])
 {
   using namespace skuratov;
-  List< std::string > exp;
+  Queue< Queue< std::string > > exp;
   std::string line;
 
   if (argc > 1)
@@ -15,22 +15,26 @@ int main(int argc, char* argv[])
       std::cerr << "Error reading file" << '\n';
       return 1;
     }
-    while (std::getline(infile, line))
+    while (infile >> line)
     {
-      if (!line.empty())
+      Queue< std::string > lineQueue;
+      for (char& ch : line)
       {
-        exp.pushBack(line);
+        lineQueue.push(std::string(1, ch));
       }
+      exp.push(lineQueue);
     }
   }
   else
   {
-    while (std::getline(std::cin, line))
+    while (std::cin >> line)
     {
-      if (!line.empty())
+      Queue< std::string > lineQueue;
+      for (char& ch : line)
       {
-        exp.pushBack(line);
+        lineQueue.push(std::string(1, ch));
       }
+      exp.push(lineQueue);
     }
   }
   try

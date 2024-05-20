@@ -11,11 +11,11 @@ namespace skuratov
   public:
     void push(const T& diff)
     {
-      queue_.pushFront(diff);
+      queue_.pushBack(diff);
     }
     void drop()
     {
-      queue_.popBack();
+      queue_.popFront();
     }
     bool empty() const noexcept
     {
@@ -24,14 +24,6 @@ namespace skuratov
     size_t size() const noexcept
     {
       return queue_.getSize();
-    }
-    T& top() noexcept
-    {
-      return queue_.back();
-    }
-    const T& top() const noexcept
-    {
-      return queue_.back();
     }
     T& front() noexcept
     {

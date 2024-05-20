@@ -7,28 +7,31 @@ bool skuratov::priority(const std::string op1, const std::string op2)
 
 std::string skuratov::infixToPostfix(const std::string& exp)
 {
-  std::istringstream iss(exp);
   std::string postfixExp;
   Stack < std::string > operators;
+  size_t i = {};
 
-  std::string op;
-  while (iss >> op)
+  while (i < exp.size())
   {
-    if (op == "(")
+    if (isdigit(exp[i]))
+    {
+      while (i < exp.size() && isdigit(exp[i]))
+      {
+        postfixExp += exp[i];
+        i++;
+      }
+      postfixExp += ' ';
+    }
+    else if (isspace(exp[i]))
+    {
+      i++;
+    }
+    else if (exp[i] == '(')
     {
       operators.push("(");
+      i++;
     }
-    else if (op == "+" || op == "-" || op == "*" || op == "/" || op == "%")
-    {
-      while (!operators.empty() && operators.top() != "(" && (priority(operators.top(), op)))
-      {
-        postfixExp += operators.top();
-        postfixExp += ' ';
-        operators.drop();
-      }
-      operators.push(op);
-    }
-    else if (op == ")")
+    else if (exp[i] == ')')
     {
       while (!operators.empty() && operators.top() != "(")
       {
@@ -40,11 +43,19 @@ std::string skuratov::infixToPostfix(const std::string& exp)
       {
         operators.drop();
       }
+      i++;
     }
     else
     {
-      postfixExp += op;
-      postfixExp += ' ';
+      std::string op(1, exp[i]);
+      while (!operators.empty() && priority(operators.top(), op))
+      {
+        postfixExp += operators.top();
+        postfixExp += ' ';
+        operators.drop();
+      }
+      operators.push(op);
+      i++;
     }
   }
 
