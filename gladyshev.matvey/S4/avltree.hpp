@@ -76,43 +76,11 @@ namespace gladyshev
     }
     citer find(const Key& value) const
     {
-      tnode* node = root_;
-      while (node)
-      {
-        if (Compare()(value, node->data.first))
-        {
-          node = node->left;
-        }
-        else if (Compare()(node->data.first, value))
-        {
-          node = node->right;
-        }
-        else
-        {
-          return citer(node);
-        }
-      }
-      return citer();
+      return citer(findNode(root_, value));
     }
     iter find(const Key& value)
     {
-      tnode* node = root_;
-      while (node)
-      {
-        if (Compare()(value, node->data.first))
-        {
-          node = node->left;
-        }
-        else if (Compare()(node->data.first, value))
-        {
-          node = node->right;
-        }
-        else
-        {
-          return iter(node);
-        }
-      }
-      return iter();
+      return iter(findNode(root_, value));
     }
     bool empty() const noexcept
     {
