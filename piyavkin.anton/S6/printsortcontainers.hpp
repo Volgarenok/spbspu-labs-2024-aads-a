@@ -15,13 +15,10 @@ namespace piyavkin
   {
     StreamGuard guard(out);
     out << std::fixed << std::setprecision(1);
-    for (auto i = container.cbegin(); i != container.cend(); ++i)
+    out << *container.cbegin();
+    for (auto i = ++container.cbegin(); i != container.cend(); ++i)
     {
-      if (i != container.cbegin())
-      {
-        out << ' ';
-      }
-      out << *i;
+      out << ' ' << *i;
     }
     out << '\n';
   }
