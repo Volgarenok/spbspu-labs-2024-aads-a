@@ -7,8 +7,8 @@
 
 namespace skuratov
 {
-	bool priority(const std::string op1, const std::string op2);
-	std::string infixToPostfix(const std::string& exp);
+  bool priority(const std::string op1, const std::string op2);
+  std::string infixToPostfix(const std::string& exp);
 }
 
 #endif
