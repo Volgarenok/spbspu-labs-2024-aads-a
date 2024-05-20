@@ -251,7 +251,7 @@ namespace namestnikov
       root_ = nullptr;
     }
     template< class F >
-    F traverse_lnr(F f)
+    F traverse_lnr(F f) 
     {
       if (empty())
       {
@@ -278,6 +278,11 @@ namespace namestnikov
         }
         return f;
       }
+    }
+    template< class F >
+    F traverse_lnr(F f) const
+    {
+      return static_cast< const F >(traverse_lnr(f));
     }
     template< class F >
     F traverse_rnl(F f)
@@ -309,6 +314,11 @@ namespace namestnikov
       return f;
     }
     template< class F >
+    F traverse_rnl(F f) const
+    {
+      return static_cast< const F >(traverse_rnl(f));
+    }
+    template< class F >
     F traverse_breadth(F f)
     {
       if (empty())
@@ -336,6 +346,11 @@ namespace namestnikov
         }
         return f;
       }
+    }
+    template< class F >
+    F traverse_breadth(F f) const
+    {
+      return static_cast< const F >(traverse_breadth(f));
     }
     ~Tree()
     {
