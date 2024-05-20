@@ -74,17 +74,17 @@ namespace nikitov
     std::pair< constTreeIterator, constTreeIterator > equalRange(const Key& key) const;
 
     template< class F >
-    F& traverseLNR(F& f);
+    F traverseLNR(F f);
     template< class F >
-    F& traverseLNR(F& f) const;
+    F traverseLNR(F f) const;
     template< class F >
-    F& traverseRNL(F& f);
+    F traverseRNL(F f);
     template< class F >
-    F& traverseRNL(F& f) const;
+    F traverseRNL(F f) const;
     template< class F >
-    F& traverseBreadth(F& f);
+    F traverseBreadth(F f);
     template< class F >
-    F& traverseBreadth(F& f) const;
+    F traverseBreadth(F f) const;
 
   private:
     detail::TreeNode< Key, T, Compare >* root_;
@@ -524,7 +524,7 @@ namespace nikitov
 
   template< class Key, class T, class Compare >
   template< class F >
-  F& Tree< Key, T, Compare >::traverseLNR(F& f)
+  F Tree< Key, T, Compare >::traverseLNR(F f)
   {
     for (auto i = LNRCbegin(); i != LNRCend(); ++i)
     {
@@ -535,7 +535,7 @@ namespace nikitov
 
   template< class Key, class T, class Compare >
   template< class F >
-  F& Tree< Key, T, Compare >::traverseLNR(F& f) const
+  F Tree< Key, T, Compare >::traverseLNR(F f) const
   {
     for (auto i = LNRCbegin(); i != LNRCend(); ++i)
     {
@@ -546,7 +546,7 @@ namespace nikitov
 
   template< class Key, class T, class Compare >
   template< class F >
-  F& Tree< Key, T, Compare >::traverseRNL(F& f)
+  F Tree< Key, T, Compare >::traverseRNL(F f)
   {
     for (auto i = RNLCbegin(); i != RNLCend(); ++i)
     {
@@ -557,7 +557,7 @@ namespace nikitov
 
   template< class Key, class T, class Compare >
   template< class F >
-  F& Tree< Key, T, Compare >::traverseRNL(F& f) const
+  F Tree< Key, T, Compare >::traverseRNL(F f) const
   {
     for (auto i = RNLCbegin(); i != RNLCend(); ++i)
     {
@@ -568,7 +568,7 @@ namespace nikitov
 
   template< class Key, class T, class Compare >
   template< class F >
-  F& Tree< Key, T, Compare >::traverseBreadth(F& f)
+  F Tree< Key, T, Compare >::traverseBreadth(F f)
   {
     for (auto i = BreadthCbegin(); i != BreadthCend(); ++i)
     {
@@ -579,7 +579,7 @@ namespace nikitov
 
   template< class Key, class T, class Compare >
   template< class F >
-  F& Tree< Key, T, Compare >::traverseBreadth(F& f) const
+  F Tree< Key, T, Compare >::traverseBreadth(F f) const
   {
     for (auto i = BreadthCbegin(); i != BreadthCend(); ++i)
     {
