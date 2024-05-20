@@ -12,86 +12,28 @@ namespace marishin
     struct TreeNode
     {
       std::pair< Key, Value > data;
-      TreeNode* left;
-      TreeNode* right;
-      TreeNode* parent;
+      using node_t = detail::TreeNode< Key, Value >;
+      node_t* left;
+      node_t* right;
+      node_t* parent;
       int height;
 
-      TreeNode(const Key& key, const Value& val, TreeNode* parent):
-        data(std::pair< Key, Value >(key, val)),
-        left(nullptr),
-        right(nullptr),
-        parent(parent),
-        height(0)
-      {}
-
-      TreeNode(const Key& key, const Value& val):
-        data(std::pair< Key, Value >(key, val)),
-        left(nullptr),
-        right(nullptr),
-        parent(nullptr),
-        height(0)
-      {}
-
-      TreeNode* rotateLeft(TreeNode** root)
+      TreeNode(const Key& key, const Value& val)
       {
-        TreeNode* newRoot = this->right;
-        this->right = newRoot->left;
-        if (newRoot->left)
-        {
-          newRoot->left->parent = this;
-        }
-        newRoot->parent = this->parent;
-        if (this->isRoot())
-        {
-          *root = newRoot;
-        }
-        else
-        {
-          auto& child = this->isLeft() ? this->parent->left : this->parent->right;
-          child = newRoot;
-        }
-        newRoot->left = this;
-        this->parent = newRoot;
-        this->height = this->height + 1 - std::min(newRoot->height, 0);
-        newRoot->height = newRoot->height + 1 + std::max(this->height, 0);
-        return newRoot;
+        data = std::make_pair(key, val);
+        left = nullptr;
+        right = nullptr;
+        parent = nullptr;
+        height = 0;
       }
 
-
-      TreeNode* rotateRight(TreeNode** root)
+      TreeNode(const Key& key, const Value& val, TreeNode* newParent)
       {
-        TreeNode* newRoot = this->left;
-        this->left = newRoot->right;
-        if (newRoot->right)
-        {
-          newRoot->right->parent = this;
-        }
-        newRoot->parent = this->parent;
-        if (this->isRoot())
-        {
-          *root = newRoot;
-        }
-        else
-        {
-          auto& child = this->isLeft() ? this->parent->left : this->parent->right;
-          child = newRoot;
-        }
-        newRoot->left = this;
-        this->parent = newRoot;
-        this->height = this->height + 1 - std::min(newRoot->height, 0);
-        newRoot->height = newRoot->height + 1 + std::max(this->height, 0);
-        return newRoot;
-      }
-
-      bool hasLeft() noexcept
-      {
-        return this->left != nullptr;
-      }
-
-      bool hasRight() noexcept
-      {
-        return this->right != nullptr;
+        data = std::make_pair(key, val);
+        left = nullptr;
+        right = nullptr;
+        parent = newParent;
+        height = 0;
       }
 
       bool isLeft() const noexcept
@@ -107,21 +49,6 @@ namespace marishin
       bool isRoot() const noexcept
       {
         return !this->parent;
-      }
-
-      bool isLeaf() const noexcept
-      {
-        return !(this->right || this->left);
-      }
-
-      bool hasAny() const noexcept
-      {
-        return this->right || this->left;
-      }
-
-      bool hasBoth() const noexcept
-      {
-        return this->right && this->left;
       }
 
     };
