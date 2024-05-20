@@ -12,7 +12,7 @@
 int main(int argc, char *argv[])
 {
   using namespace marishin;
-  using map = Tree< std::string, Tree< int, std::string > >;
+  using map = Tree< std::string, Tree< size_t, std::string > >;
   map myMap;
   if (argc == 2)
   {
