@@ -1,6 +1,6 @@
 #include "convert_expression.hpp"
 #include <stdexcept>
-#include "stack.hpp"
+#include <stack.hpp>
 
 unsigned novokhatskiy::getPriority(Operation operation)
 {
