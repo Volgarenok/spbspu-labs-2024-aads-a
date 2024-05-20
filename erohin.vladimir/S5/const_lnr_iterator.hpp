@@ -1,5 +1,5 @@
-#ifndef LNR_ITERATOR
-#define LNR_ITERATOR
+#ifndef CONST_LNR_ITERATOR
+#define CONST_LNR_ITERATOR
 
 #include <utility>
 #include <iterator>
@@ -12,45 +12,43 @@ namespace erohin
   class RedBlackTree;
 
   template< class Key, class T >
-  class LnrIterator: public std::iterator< std::bidirectional_iterator_tag, T >
+  class ConstLnrIterator: public std::iterator< std::bidirectional_iterator_tag, T >
   {
     template < class T1, class T2, class T3 >
     friend class RedBlackTree;
   public:
-    LnrIterator();
-    LnrIterator(const LnrIterator< Key, T > &) = default;
-    ~LnrIterator() = default;
-    LnrIterator< Key, T > & operator=(const LnrIterator< Key, T > &) = default;
-    LnrIterator< Key, T > & operator++();
-    LnrIterator< Key, T > operator++(int);
-    LnrIterator< Key, T > & operator--();
-    LnrIterator< Key, T > operator--(int);
-    std::pair< Key, T > & operator*();
+    ConstLnrIterator();
+    ConstLnrIterator(const ConstLnrIterator< Key, T > &) = default;
+    ~ConstLnrIterator() = default;
+    ConstLnrIterator< Key, T > & operator=(const ConstLnrIterator< Key, T > &) = default;
+    ConstLnrIterator< Key, T > & operator++();
+    ConstLnrIterator< Key, T > operator++(int);
+    ConstLnrIterator< Key, T > & operator--();
+    ConstLnrIterator< Key, T > operator--(int);
     const std::pair< Key, T > & operator*() const;
-    std::pair< Key, T > * operator->();
     const std::pair< Key, T > * operator->() const;
-    bool operator==(const LnrIterator< Key, T > & rhs) const;
-    bool operator!=(const LnrIterator< Key, T > & rhs) const;
+    bool operator==(const ConstLnrIterator< Key, T > & rhs) const;
+    bool operator!=(const ConstLnrIterator< Key, T > & rhs) const;
   private:
-    detail::Node< Key, T > * node_;
-    Stack< detail::Node< Key, T > * > stack_;
-    explicit LnrIterator(detail::Node< Key, T > * node_ptr);
+    const detail::Node< Key, T > * node_;
+    Stack< const detail::Node< Key, T > * > stack_;
+    explicit ConstLnrIterator(const detail::Node< Key, T > * node_ptr);
     void fall_left();
     void fall_right();
   };
 
   template< class Key, class T >
-  LnrIterator< Key, T >::LnrIterator():
+  ConstLnrIterator< Key, T >::ConstLnrIterator():
     node_(nullptr)
   {}
 
   template< class Key, class T >
-  LnrIterator< Key, T >::LnrIterator(detail::Node< Key, T > * node_ptr):
+  ConstLnrIterator< Key, T >::ConstLnrIterator(const detail::Node< Key, T > * node_ptr):
     node_(node_ptr)
   {}
 
   template< class Key, class T >
-  LnrIterator< Key, T > & LnrIterator< Key, T >::operator++()
+  ConstLnrIterator< Key, T > & ConstLnrIterator< Key, T >::operator++()
   {
     if (node_->right)
     {
@@ -89,15 +87,15 @@ namespace erohin
   }
 
   template< class Key, class T >
-  LnrIterator< Key, T > LnrIterator< Key, T >::operator++(int)
+  ConstLnrIterator< Key, T > ConstLnrIterator< Key, T >::operator++(int)
   {
-    LnrIterator< Key, T > temp = *this;
+    ConstLnrIterator< Key, T > temp = *this;
     operator++();
     return temp;
   }
 
   template< class Key, class T >
-  LnrIterator< Key, T > & LnrIterator< Key, T >::operator--()
+  ConstLnrIterator< Key, T > & ConstLnrIterator< Key, T >::operator--()
   {
     if (node_->left)
     {
@@ -136,51 +134,39 @@ namespace erohin
   }
 
   template< class Key, class T >
-  LnrIterator< Key, T > LnrIterator< Key, T >::operator--(int)
+  ConstLnrIterator< Key, T > ConstLnrIterator< Key, T >::operator--(int)
   {
-    LnrIterator< Key, T > temp = *this;
+    ConstLnrIterator< Key, T > temp = *this;
     operator--();
     return temp;
   }
 
   template< class Key, class T >
-  std::pair< Key, T > & LnrIterator< Key, T>::operator*()
+  const std::pair< Key, T > & ConstLnrIterator< Key, T>::operator*() const
   {
     return node_->data;
   }
 
   template< class Key, class T >
-  const std::pair< Key, T > & LnrIterator< Key, T>::operator*() const
-  {
-    return node_->data;
-  }
-
-  template< class Key, class T >
-  std::pair< Key, T > * LnrIterator< Key, T >::operator->()
+  const std::pair< Key, T > * ConstLnrIterator< Key, T >::operator->() const
   {
     return std::addressof(node_->data);
   }
 
   template< class Key, class T >
-  const std::pair< Key, T > * LnrIterator< Key, T >::operator->() const
-  {
-    return std::addressof(node_->data);
-  }
-
-  template< class Key, class T >
-  bool LnrIterator< Key, T >::operator==(const LnrIterator< Key, T > & rhs) const
+  bool ConstLnrIterator< Key, T >::operator==(const ConstLnrIterator< Key, T > & rhs) const
   {
     return (node_ == rhs.node_);
   }
 
   template< class Key, class T >
-  bool LnrIterator< Key, T >::operator!=(const LnrIterator< Key, T > & rhs) const
+  bool ConstLnrIterator< Key, T >::operator!=(const ConstLnrIterator< Key, T > & rhs) const
   {
     return !(*this == rhs);
   }
 
   template< class Key, class T >
-  void LnrIterator< Key, T >::fall_left()
+  void ConstLnrIterator< Key, T >::fall_left()
   {
     while (node_->left)
     {
@@ -190,7 +176,7 @@ namespace erohin
   }
 
   template< class Key, class T >
-  void LnrIterator< Key, T >::fall_right()
+  void ConstLnrIterator< Key, T >::fall_right()
   {
     while (node_->right)
     {

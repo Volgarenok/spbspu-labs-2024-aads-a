@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include "tree/red_black_tree.hpp"
-#include "lnr_iterator.hpp"
+#include "const_lnr_iterator.hpp"
 
 int main(int argc, char ** argv)
 {
@@ -23,7 +23,7 @@ int main(int argc, char ** argv)
   {
     q.emplace(std::make_pair(i, i));
   }
-  auto iter = q.lnr_begin();
+  auto iter = q.lnr_cbegin();
   for (int i = 0; i < 5; ++i)
   {
     std::cout << (iter++)->first << std::endl;

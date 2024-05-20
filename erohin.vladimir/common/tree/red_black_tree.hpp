@@ -6,6 +6,7 @@
 #include "tree_node.hpp"
 #include "tree_const_iterator.hpp"
 #include "tree_iterator.hpp"
+#include "../../S5/const_lnr_iterator.hpp"
 #include "../../S5/lnr_iterator.hpp"
 
 #include <iostream>
@@ -22,6 +23,8 @@ namespace erohin
     using const_reverse_iterator = std::reverse_iterator< TreeConstIterator< Key, T > >;
     using lnr_iterator = LnrIterator< Key, T >;
     using const_lnr_iterator = ConstLnrIterator< Key, T >;
+    using rnl_iterator = std::reverse_iterator< LnrIterator< Key, T > >;
+    using const_rnl_iterator = std::reverse_iterator< ConstLnrIterator< Key, T > >;
     using value_type = std::pair< Key, T >;
     RedBlackTree();
     RedBlackTree(const RedBlackTree< Key, T, Compare > & rhs);
@@ -250,7 +253,7 @@ namespace erohin
   template< class Key, class T, class Compare >
   ConstLnrIterator< Key, T > RedBlackTree< Key, T, Compare >::lnr_cbegin() const
   {
-    auto iter = const_lnr_iterator(const_cast< const detail::Node< Key, T > * >(root_));
+    auto iter = const_lnr_iterator(root_);
     iter.fall_left();
     return iter;
   }
