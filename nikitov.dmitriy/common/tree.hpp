@@ -10,7 +10,7 @@
 #include "tree_node.hpp"
 #include "tree_iterator.hpp"
 #include "const_tree_iterator.hpp"
-#include "../S5/traverse_iterators.hpp"
+#include "traverse_iterators.hpp"
 
 namespace nikitov
 {
