@@ -29,8 +29,8 @@ namespace marishin
 
     IteratorTree(const IteratorTree< Key, Value, Compare >&) = default;
     IteratorTree< Key, Value, Compare >& operator=(const IteratorTree< Key, Value, Compare >&) = default;
-    IteratorTree(IteratorTree< Key, Value, Compare >&& other) noexcept = default;
-    IteratorTree< Key, Value, Compare >& operator=(IteratorTree< Key, Value, Compare >&& other) noexcept = default;
+    IteratorTree(IteratorTree< Key, Value, Compare >&& rhs) noexcept = default;
+    IteratorTree< Key, Value, Compare >& operator=(IteratorTree< Key, Value, Compare >&& rhs) noexcept = default;
 
     std::pair< Key, Value >& operator*()
     {

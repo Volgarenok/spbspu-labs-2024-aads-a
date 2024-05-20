@@ -27,8 +27,8 @@ namespace marishin
     {}
     ConstIteratorTree(const ConstIteratorTree< Key, Value, Compare >&) = default;
     ConstIteratorTree< Key, Value, Compare >& operator=(const ConstIteratorTree< Key, Value, Compare >&) = default;
-    ConstIteratorTree(ConstIteratorTree< Key, Value, Compare >&& other) noexcept = default;
-    ConstIteratorTree< Key, Value, Compare >& operator=(ConstIteratorTree< Key, Value, Compare >&& other) noexcept = default;
+    ConstIteratorTree(ConstIteratorTree< Key, Value, Compare >&& rhs) noexcept = default;
+    ConstIteratorTree< Key, Value, Compare >& operator=(ConstIteratorTree< Key, Value, Compare >&& rhs) noexcept = default;
 
     ConstIteratorTree< Key, Value, Compare >& operator++()
     {
