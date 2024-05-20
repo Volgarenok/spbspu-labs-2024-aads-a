@@ -12,8 +12,8 @@ void marishin::inputMaps(std::istream& in, BinarySearchTree< std::string, Binary
     in >> nameTree;
     while (in >> key >> value)
     {
-      tree.push(key, value);
+      tree.insert(key, value);
     }
-    maps.push(nameTree, tree);
+    maps.insert(nameTree, tree);
   }
 }
