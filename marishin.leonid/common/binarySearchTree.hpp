@@ -6,7 +6,6 @@
 #include <treeNode.hpp>
 #include <treeIterator.hpp>
 #include <constTreeIterator.hpp>
-
 namespace marishin
 {
   template< typename Key, typename Value, typename Compare = std::less< Key > >
