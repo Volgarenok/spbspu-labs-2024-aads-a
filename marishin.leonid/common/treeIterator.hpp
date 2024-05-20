@@ -17,7 +17,7 @@ namespace marishin
   class ConstIteratorTree;
 
   template< typename Key, typename Value, typename Compare >
-  class IteratorTree
+  class IteratorTree: public std::iterator< std::bidirectional_iterator_tag, Value >
   {
     friend class BinarySearchTree< Key, Value, Compare >;
     friend class ConstIteratorTree< Key, Value, Compare >;
