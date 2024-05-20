@@ -50,7 +50,7 @@ namespace strelyaev
         if (this != std::addressof(other))
         {
           tree_t temp(other);
-          swap(other);
+          swap(temp);
         }
         return *this;
       }
