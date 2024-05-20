@@ -3,7 +3,7 @@
 
 #include <utility>
 #include <iterator>
-#include "tree/tree_node.hpp"
+#include "tree_node.hpp"
 #include "stack.hpp"
 
 namespace erohin

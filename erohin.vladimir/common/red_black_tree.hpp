@@ -6,8 +6,8 @@
 #include "tree_node.hpp"
 #include "tree_const_iterator.hpp"
 #include "tree_iterator.hpp"
-#include "../../S5/const_lnr_iterator.hpp"
-#include "../../S5/lnr_iterator.hpp"
+#include "../S5/const_lnr_iterator.hpp"
+#include "../S5/lnr_iterator.hpp"
 
 #include <iostream>
 

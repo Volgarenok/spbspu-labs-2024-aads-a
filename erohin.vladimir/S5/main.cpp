@@ -1,6 +1,6 @@
 #include <iostream>
 #include <fstream>
-#include "tree/red_black_tree.hpp"
+#include "red_black_tree.hpp"
 #include "const_lnr_iterator.hpp"
 
 int main(int argc, char ** argv)
