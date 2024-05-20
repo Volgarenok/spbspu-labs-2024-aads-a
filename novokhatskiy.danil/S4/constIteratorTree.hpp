@@ -51,7 +51,6 @@ namespace novokhatskiy
         {
           node_ = node_->left;
         }
-        //goLastLeft();
         return *this;
       }
       else
@@ -92,11 +91,6 @@ namespace novokhatskiy
       constIter tmp(*this);
       --(*this);
       return tmp;
-    }
-
-    const Key& getKey() const
-    {
-      return node_->value.first;
     }
 
     const std::pair< Key, Value > operator*() const

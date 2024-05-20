@@ -16,12 +16,12 @@ void novokhatskiy::unionCmd(mainMap& dict, std::istream& in)
   }
   for (auto i = dict2.cbegin(); i != dict2.cend(); i++)
   {
-    if (resDict.find(i.getKey()) == resDict.cend())
+    if (resDict.find((*i).first) == resDict.cend())
     {
       resDict.insert3(*i);
     }
   }
-  dict.insert3(std::make_pair(std::move(resName), std::move(resDict)));
+  dict[resName] = resDict;
 }
 
 void novokhatskiy::intersectCmd(mainMap& dict, std::istream& in)
