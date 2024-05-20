@@ -10,6 +10,7 @@
 #include "tree_node.hpp"
 #include "tree_iterator.hpp"
 #include "const_tree_iterator.hpp"
+#include "traverse_iterators.hpp"
 
 namespace nikitov
 {
@@ -40,6 +41,13 @@ namespace nikitov
     treeIterator end() noexcept;
     constTreeIterator cend() const noexcept;
 
+    LNRIterator< Key, T, Compare > LNRCbegin() const noexcept;
+    LNRIterator< Key, T, Compare > LNRCend() const noexcept;
+    RNLIterator< Key, T, Compare > RNLCbegin() const noexcept;
+    RNLIterator< Key, T, Compare > RNLCend() const noexcept;
+    BreadthIterator< Key, T, Compare > BreadthCbegin() const noexcept;
+    BreadthIterator< Key, T, Compare > BreadthCend() const noexcept;
+
     size_t size() const noexcept;
     bool empty() const noexcept;
 
@@ -64,6 +72,19 @@ namespace nikitov
     constTreeIterator upperBound(const Key& key) const;
     std::pair< treeIterator, treeIterator > equalRange(const Key& key);
     std::pair< constTreeIterator, constTreeIterator > equalRange(const Key& key) const;
+
+    template< class F >
+    F traverseLNR(F f);
+    template< class F >
+    F traverseLNR(F f) const;
+    template< class F >
+    F traverseRNL(F f);
+    template< class F >
+    F traverseRNL(F f) const;
+    template< class F >
+    F traverseBreadth(F f);
+    template< class F >
+    F traverseBreadth(F f) const;
 
   private:
     detail::TreeNode< Key, T, Compare >* root_;
@@ -228,6 +249,42 @@ namespace nikitov
       return constTreeIterator(root_);
     }
     return constTreeIterator(root_->parent_);
+  }
+
+  template< class Key, class T, class Compare >
+  LNRIterator< Key, T, Compare > Tree< Key, T, Compare >::LNRCbegin() const noexcept
+  {
+    return LNRIterator< Key, T, Compare >(cend().node_, cbegin().node_);
+  }
+
+  template< class Key, class T, class Compare >
+  LNRIterator< Key, T, Compare > Tree< Key, T, Compare >::LNRCend() const noexcept
+  {
+    return LNRIterator< Key, T, Compare >(cend().node_, cend().node_);
+  }
+
+  template< class Key, class T, class Compare >
+  RNLIterator< Key, T, Compare > Tree< Key, T, Compare >::RNLCbegin() const noexcept
+  {
+    return RNLIterator< Key, T, Compare >(cend().node_, (--cend()).node_);
+  }
+
+  template< class Key, class T, class Compare >
+  RNLIterator< Key, T, Compare > Tree< Key, T, Compare >::RNLCend() const noexcept
+  {
+    return RNLIterator< Key, T, Compare >(cend().node_, cend().node_);
+  }
+
+  template< class Key, class T, class Compare >
+  BreadthIterator< Key, T, Compare > Tree< Key, T, Compare >::BreadthCbegin() const noexcept
+  {
+    return BreadthIterator< Key, T, Compare >(cend().node_, root_);
+  }
+
+  template< class Key, class T, class Compare >
+  BreadthIterator< Key, T, Compare > Tree< Key, T, Compare >::BreadthCend() const noexcept
+  {
+    return BreadthIterator< Key, T, Compare >(cend().node_, cend().node_);
   }
 
   template< class Key, class T, class Compare >
@@ -463,6 +520,72 @@ namespace nikitov
     Tree< Key, T, Compare >::equalRange(const Key& key) const
   {
     return { lowerBound(key), upperBound(key) };
+  }
+
+  template< class Key, class T, class Compare >
+  template< class F >
+  F Tree< Key, T, Compare >::traverseLNR(F f)
+  {
+    for (auto i = LNRCbegin(); i != LNRCend(); ++i)
+    {
+      f(*i);
+    }
+    return f;
+  }
+
+  template< class Key, class T, class Compare >
+  template< class F >
+  F Tree< Key, T, Compare >::traverseLNR(F f) const
+  {
+    for (auto i = LNRCbegin(); i != LNRCend(); ++i)
+    {
+      f(*i);
+    }
+    return f;
+  }
+
+  template< class Key, class T, class Compare >
+  template< class F >
+  F Tree< Key, T, Compare >::traverseRNL(F f)
+  {
+    for (auto i = RNLCbegin(); i != RNLCend(); ++i)
+    {
+      f(*i);
+    }
+    return f;
+  }
+
+  template< class Key, class T, class Compare >
+  template< class F >
+  F Tree< Key, T, Compare >::traverseRNL(F f) const
+  {
+    for (auto i = RNLCbegin(); i != RNLCend(); ++i)
+    {
+      f(*i);
+    }
+    return f;
+  }
+
+  template< class Key, class T, class Compare >
+  template< class F >
+  F Tree< Key, T, Compare >::traverseBreadth(F f)
+  {
+    for (auto i = BreadthCbegin(); i != BreadthCend(); ++i)
+    {
+      f(*i);
+    }
+    return f;
+  }
+
+  template< class Key, class T, class Compare >
+  template< class F >
+  F Tree< Key, T, Compare >::traverseBreadth(F f) const
+  {
+    for (auto i = BreadthCbegin(); i != BreadthCend(); ++i)
+    {
+      f(*i);
+    }
+    return f;
   }
 
   template< class Key, class T, class Compare >
