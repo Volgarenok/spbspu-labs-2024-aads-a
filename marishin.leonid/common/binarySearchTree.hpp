@@ -16,7 +16,7 @@ namespace marishin
     BinarySearchTree():
       root_(nullptr),
       size_(0),
-      compare_(Compare());
+      compare_(Compare())
     {}
 
     BinarySearchTree(const BinarySearchTree& rhs):
@@ -155,12 +155,12 @@ namespace marishin
 
     ConstIteratorTree< Key, Value, Compare > cbegin() const noexcept
     {
-      return ConstIteratorTree< Key, Value, Comparee >(getMin(root_));
+      return ConstIteratorTree< Key, Value, Compare >(getMin(root_));
     }
 
     ConstIteratorTree< Key, Value, Compare > cend() const noexcept
     {
-      return ConstIteratorTree< Key, Value, Comparee >();
+      return ConstIteratorTree< Key, Value, Compare >();
     }
 
     const Value& operator[](const Key& key) const
