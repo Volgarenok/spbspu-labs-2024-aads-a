@@ -180,51 +180,53 @@ namespace gladyshev
       newNode->height = node->height;
       return newNode;
     }
-    tnode * insertImpl(const Key& key,const Value& value, tnode * node)
+     tnode * insertImpl(const Key& key,const Value& value, tnode * node)
     {
       if (Compare()(key, node->data.first))
       {
         if (!node->left)
         {
           node->left = new tnode(key, value);
+          node->left->parent = node;
         }
         node->left = insertImpl(key, value, node->left);
-        if (height(node->left) - height(node->right) > 1)
-        {
-          if (Compare()(key, node->left->data.first))
-          {
-            node = rotateRight(node);
-          }
-          else
-          {
-            node->left = rotateLeft(node->left);
-            node = rotateRight(node);
-          }
-        }
       }
       else if (Compare()(node->data.first, key))
       {
         if (!node->right)
         {
           node->right = new tnode(key, value);
+          node->right->parent = node;
         }
         node->right = insertImpl(key, value, node->right);
-        if (height(node->right) - height(node->left) > 1)
-        {
-          if (Compare()(node->right->data.first, key))
-          {
-            node = rotateLeft(node);
-          }
-          else
-          {
-            node->right = rotateRight(node->right);
-            node = rotateLeft(node);
-          }
-        }
       }
       else
       {
         node->data.second = value;
+      }
+      if (height(node->left) - height(node->right) > 1)
+      {
+        if (Compare()(key, node->left->data.first))
+        {
+          node = rotateRight(node);
+        }
+        else
+        {
+          node->left = rotateLeft(node->left);
+          node = rotateRight(node);
+        }
+      }
+      if (height(node->right) - height(node->left) > 1)
+      {
+        if (Compare()(node->right->data.first, key))
+        {
+          node = rotateLeft(node);
+        }
+        else
+        {
+          node->right = rotateRight(node->right);
+          node = rotateLeft(node);
+        }
       }
       node->height = std::max(height(node->left), height(node->right)) + 1;
       return node;
