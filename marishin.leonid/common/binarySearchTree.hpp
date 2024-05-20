@@ -40,7 +40,7 @@ namespace marishin
 
     BinarySearchTree(BinarySearchTree&& rhs):
       root_(rhs.root_),
-      size_(rhs.size_)
+      size_(rhs.size_),
       compare_(rhs.compare_)
     {
       rhs.root_ = nullptr;

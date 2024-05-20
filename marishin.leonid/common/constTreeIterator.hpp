@@ -19,7 +19,7 @@ namespace marishin
   class ConstIteratorTree
   {
     friend class BinarySearchTree< Key, Value, Compare >;
-    friend class IteratorTree< Key, Value, Compare >
+    friend class IteratorTree< Key, Value, Compare >;
     using TreeNode = detail::TreeNode< Key, Value >;
   public:
 
@@ -27,7 +27,6 @@ namespace marishin
     ConstIteratorTree< Key, Value, Compare >& operator=(const ConstIteratorTree< Key, Value, Compare >&) = default;
     ConstIteratorTree(ConstIteratorTree< Key, Value, Compare >&& other) noexcept = default;
     ConstIteratorTree< Key, Value, Compare >& operator=(ConstIteratorTree< Key, Value, Compare >&& other) noexcept = default;
-    ConstIteratorTree< Key, Value, Compare >&
 
     ConstIteratorTree():
       node_(nullptr)
@@ -64,7 +63,7 @@ namespace marishin
 
     ConstIteratorTree< Key, Value, Compare >& operator++(int)
     {
-      ConstIteratorTree< Key, Value > result(*this);
+      ConstIteratorTree< Key, Value, Compare > result(*this);
       ++(*this);
       return result;
     }
