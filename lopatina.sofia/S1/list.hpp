@@ -18,6 +18,11 @@ namespace lopatina
       tail(nullptr)
     {}
 
+    ~List()
+    {
+      clear();
+    }
+
     explicit List(size_t n, const T & val):
       head(nullptr),
       tail(nullptr)
@@ -183,4 +188,3 @@ namespace lopatina
 }
 
 #endif
-
