@@ -7,7 +7,7 @@ namespace zhalilov
 {
   struct Summator
   {
-    void operator()(const std::pair < int, std::string > pair);
+    void operator()(const std::pair< int, std::string > pair);
     int result_ = 0;
     std::string values_;
   };

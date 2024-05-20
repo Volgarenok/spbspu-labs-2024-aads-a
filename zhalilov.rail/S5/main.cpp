@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
   using namespace zhalilov;
   int key = 0;
   std::string value;
-  TwoThree < int, std::string > map;
+  TwoThree< int, std::string > map;
   std::ifstream file(argv[2]);
   while (file >> key >> value)
   {
