@@ -71,27 +71,33 @@ void lebedev::outputPairsNames(std::ostream & output, listOfPairs & pairs)
 
 void lebedev::outputSequences(std::ostream & output, listOfPairs & pairs, size_t max_pair_size)
 {
+  List< List< int > > output_order;
   for (size_t i = 0; i < max_pair_size; i++)
   {
-    size_t counter = 0;
+    List< int > output_order_i;
     for (auto pairs_iter = pairs.cbegin(); pairs_iter != pairs.cend(); pairs_iter++)
     {
       auto list_iter = pairs_iter->second.cbegin();
       if (i < pairs_iter->second.capacity())
       {
         std::advance(list_iter, i);
-        size_t num = *list_iter;
-        if (counter != 0)
-        {
-          output << ' ';
-        }
-        output << num;
-        ++counter;
+        output_order_i.push_back(*list_iter);
       }
     }
-    if ((i + 1) != max_pair_size)
+    output_order.push_back(output_order_i);
+  }
+
+  output << *(output_order.cbegin()->cbegin());
+  for (auto ooi_iter = ++(output_order.cbegin()->cbegin()); ooi_iter != output_order.cbegin()->cend(); ooi_iter++)
+  {
+    output << ' ' << *ooi_iter;
+  }
+  for (auto oo_iter = ++(output_order.cbegin()); oo_iter != output_order.cend(); oo_iter++)
+  {
+    output << '\n' << *(oo_iter->cbegin());
+    for (auto ooi_iter = ++(oo_iter->cbegin()); ooi_iter != oo_iter->cend(); ooi_iter++)
     {
-      output << '\n';
+      output << ' ' << *ooi_iter;
     }
   }
 }
