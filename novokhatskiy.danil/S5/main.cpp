@@ -52,7 +52,7 @@ int main(int argc, char** argv)
   }
   catch (const std::overflow_error&)
   {
-    std::cout << "Error input\n";
+    std::cerr << "Overflow\n";
     return 1;
   }
   catch (const std::out_of_range&)
@@ -60,8 +60,8 @@ int main(int argc, char** argv)
     std::cerr << "<INVALID ARGUMENT>\n";
     return 1;
   }
-  catch (const std::logic_error& e)
+  catch (const std::logic_error&)
   {
-    std::cout << e.what() << '\n';
+    std::cout << "<EMPTY>\n";
   }
 }
