@@ -1,10 +1,10 @@
 #include <iostream>
 #include <iterator>
 #include <random>
-#include <deque> 
+#include <deque>
 #include <list>
 #include <string>
-#include "list.hpp"
+#include <list.hpp>
 #include "sorts.hpp"
 
 
