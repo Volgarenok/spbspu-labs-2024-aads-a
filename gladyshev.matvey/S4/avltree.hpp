@@ -104,6 +104,24 @@ namespace gladyshev
       }
       return node->data.second;
     }
+    std::pair< iter, iter > equal_range(const Key& key)
+    {
+      iter it = find(key);
+      if (it != end())
+      {
+        return std::make_pair(it, ++it);
+      }
+      return std::make_pair(end(), end());
+    }
+    std::pair< citer, citer > equal_range(const Key& key) const
+    {
+      citer it = find(key);
+      if (it != cend())
+      {
+        return std::make_pair(it, ++it);
+      }
+      return std::make_pair(cend(), cend());
+    }
     Value& at(const Key& key)
     {
       tnode* node = findNode(root_, key);
