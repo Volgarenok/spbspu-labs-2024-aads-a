@@ -5,6 +5,7 @@
 #include <list>
 #include <string>
 #include <list.hpp>
+#include <algorithm>
 #include "sorts.hpp"
 
 
