@@ -827,6 +827,11 @@ namespace erohin
   template< class F >
   F RedBlackTree< Key, T, Compare >::traverse_rnl(F f) const
   {
+    auto citer = rnl_cbegin();
+    while (citer != rnl_cend())
+    {
+      f = f(*(citer++));
+    }
     return f;
   }
 
@@ -834,6 +839,11 @@ namespace erohin
   template< class F >
   F RedBlackTree< Key, T, Compare >::traverse_breadth(F f) const
   {
+    auto citer = breadth_cbegin();
+    while (citer != breadth_cend())
+    {
+      f = f(*(citer++));
+    }
     return f;
   }
 
