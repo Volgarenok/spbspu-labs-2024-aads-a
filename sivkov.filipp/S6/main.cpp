@@ -91,13 +91,28 @@ int main(int argc, char* argv[])
   deq2 = deq;
   deq3 = deq;
 
-  oddEvenSort(fwdList.begin(), fwdList.end(), std::less<int>());
-  shellSort(biList.begin(), biList.end(), std::less< int >());
-  biList2.sort(std::less< int >());
-  oddEvenSort(deq.begin(), deq.end(), std::less< int >());
-  shellSort(deq2.begin(), deq2.end(), std::less< int >());
-  std::sort(deq3.begin(), deq3.end(), std::less< int >());
-
+  if ("ascending")
+  {
+    oddEvenSort(fwdList.begin(), fwdList.end(), std::less<int>());
+    shellSort(biList.begin(), biList.end(), std::less< int >());
+    biList2.sort(std::less< int >());
+    oddEvenSort(deq.begin(), deq.end(), std::less< int >());
+    shellSort(deq2.begin(), deq2.end(), std::less< int >());
+    std::sort(deq3.begin(), deq3.end(), std::less< int >());
+  }
+  else if ("descending")
+  {
+    oddEvenSort(fwdList.begin(), fwdList.end(), std::greater<int>());
+    shellSort(biList.begin(), biList.end(), std::greater< int >());
+    biList2.sort(std::less< int >());
+    oddEvenSort(deq.begin(), deq.end(), std::greater< int >());
+    shellSort(deq2.begin(), deq2.end(), std::greater< int >());
+    std::sort(deq3.begin(), deq3.end(), std::greater< int >());
+  }
+  else
+  {
+    std::cerr << "error second arg\n";
+  }
 
   for (const auto& el : fwdList)
   {
