@@ -35,7 +35,7 @@ namespace ishmuratov
       {
         while (begin != end)
         {
-          push(std::make_pair(begin->first, begin->second));
+          insert(std::make_pair(begin->first, begin->second));
           ++begin;
         }
       }
@@ -190,7 +190,7 @@ namespace ishmuratov
       return cend();
     }
 
-    void push(const std::pair< Key, Value > & pair)
+    void insert(const std::pair< Key, Value > & pair)
     {
       if (root_ == nullptr)
       {
@@ -199,7 +199,30 @@ namespace ishmuratov
       }
       else
       {
-        root_ = place(pair.first, pair.second, root_);
+        root_ = insert_impl(pair, root_);
+      }
+    }
+
+    void insert(ConstIter begin, ConstIter end)
+    {
+      while (begin != end)
+      {
+        insert(*begin);
+        ++begin;
+      }
+    }
+
+    void erase(const Key & k)
+    {
+      erase_impl(k, root_);
+    }
+
+    void erase(ConstIter begin, ConstIter end)
+    {
+      while (begin != end)
+      {
+        erase(*begin->first);
+        ++begin;
       }
     }
 
@@ -231,20 +254,20 @@ namespace ishmuratov
       return min_elem(root->left);
     }
 
-    tnode * place(const Key & key, const Value & value, tnode * node)
+    tnode * insert_impl(const std::pair< Key, Value > & pair, tnode * node)
     {
-      if (comp_(key, node->data.first))
+      if (comp_(pair.first, node->data.first))
       {
         if (node->left == nullptr)
         {
-          node->left = new tnode(key, value);
+          node->left = new tnode(pair.first, pair.second);
           node->left->parent = node;
           size_ += 1;
         }
-        node->left = place(key, value, node->left);
+        node->left = insert_impl(pair, node->left);
         if (get_height(node->left) - get_height(node->right) == 2)
         {
-          if (comp_(key, node->left->data.first))
+          if (comp_(pair.first, node->left->data.first))
           {
             node = rotate_right(node);
           }
@@ -254,18 +277,18 @@ namespace ishmuratov
           }
         }
       }
-      else if (comp_(node->data.first, key))
+      else if (comp_(node->data.first, pair.first))
       {
         if (node->right == nullptr)
         {
-          node->right = new tnode(key, value);
+          node->right = new tnode(pair.first, pair.second);
           node->right->parent = node;
           size_ += 1;
         }
-        node->right = place(key, value, node->right);
+        node->right = insert_impl(pair, node->right);
         if (get_height(node->right) - get_height(node->left) == 2)
         {
-          if (comp_(node->right->data.first, key))
+          if (comp_(node->right->data.first, pair.first))
           {
             node = rotate_left(node);
           }
@@ -277,9 +300,74 @@ namespace ishmuratov
       }
       else
       {
-        node->data.second = value;
+        node->data.second = pair.second;
       }
       node->height = std::max(get_height(node->left), get_height(node->right)) + 1;
+      return node;
+    }
+
+    tnode * erase_impl(const Key & k, tnode * node)
+    {
+      tnode * temp;
+
+      if (node == nullptr)
+      {
+        return node;
+      }
+
+      else if (comp_(k, node->data.first))
+      {
+        node->left = erase_impl(k, node->left);
+      }
+      else if (comp_(node->data.first, k))
+      {
+        node->right = erase_impl(k, node->right);
+      }
+      else if (node->left && node->right)
+      {
+        temp = min_elem(node->right);
+        node->data = temp->data;
+        //delete node->right;
+        node->right = erase_impl(k, node->right);
+      }
+      else
+      {
+        temp = node;
+        if(node->left == nullptr)
+        {
+          node = node->right;
+        }
+        else if(node->right == nullptr)
+        {
+          node = node->left;
+        }
+        delete temp;
+      }
+
+      node->height = std::max(get_height(node->left), get_height(node->right))+1;
+
+      if (get_height(node->left) - get_height(node->right) == 2)
+      {
+        if (get_height(node->left->left) - get_height(node->left->right) == 1)
+        {
+          return rotate_left(node);
+        }
+        else
+        {
+          return rotate_double_left(node);
+        }
+      }
+      else if (get_height(node->right) - get_height(node->left) == 2)
+      {
+        if (get_height(node->right->right) - get_height(node->right->left) == 1)
+        {
+          return rotate_right(node);
+        }
+        else
+        {
+          return rotate_double_right(node);
+        }
+      }
       return node;
     }
 

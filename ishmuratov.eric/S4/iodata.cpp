@@ -11,12 +11,12 @@ void ishmuratov::input_dict(ishmuratov::data_t & data, std::istream &input)
 
     while (input >> key >> value)
     {
-      dict.push(std::make_pair(key, value));
+      dict.insert(std::make_pair(key, value));
     }
     if (!input.eof())
     {
       input.clear();
     }
-    data.push(std::make_pair(name, dict));
+    data.insert(std::make_pair(name, dict));
   }
 }
