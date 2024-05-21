@@ -812,6 +812,18 @@ namespace erohin
   }
 
   template< class Key, class T, class Compare >
+  template< class F >
+  F RedBlackTree< Key, T, Compare >::traverse_lnr(F f) const
+  {
+    auto citer = lnr_cbegin();
+    while (citer != lnr_cend())
+    {
+      f = f(*citer);
+    }
+    return f;
+  }
+
+  template< class Key, class T, class Compare >
   void RedBlackTree< Key, T, Compare >::clear_subtree(detail::Node< Key, T > * subtree)
   {
     if (!subtree)
