@@ -6,8 +6,10 @@
 #include "tree_node.hpp"
 #include "tree_const_iterator.hpp"
 #include "tree_iterator.hpp"
-#include "../S5/const_lnr_iterator.hpp"
 #include "../S5/lnr_iterator.hpp"
+#include "../S5/const_lnr_iterator.hpp"
+#include "../S5/breadth_iterator.hpp"
+#include "../S5/const_breadth_iterator.hpp"
 
 #include <iostream>
 
@@ -82,6 +84,12 @@ namespace erohin
     const_iterator upper_bound(const Key & key) const;
     std::pair< iterator, iterator > equal_range(const Key & key);
     std::pair< const_iterator, const_iterator > equal_range(const Key & key) const;
+    template< class F >
+    F traverse_lnr(F f) const;
+    template< class F >
+    F traverse_rnl(F f) const;
+    template< class F >
+    F traverse_breadth(F f) const;
   private:
     detail::Node< Key, T > * root_;
     Compare cmp_;
