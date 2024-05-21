@@ -8,6 +8,7 @@
 #include <cstdlib>
 #include <stdexcept>
 #include <iomanip>
+#include <random>
 #include <list.hpp>
 
 namespace sivkov
