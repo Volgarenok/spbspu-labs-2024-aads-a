@@ -3,8 +3,6 @@
 #include <limits>
 #include <stdexcept>
 
-#include <iostream>
-
 erohin::ComplementFunctor erohin::ComplementFunctor::operator()(const std::pair< int, std::string > & pair)
 {
   if (sum > 0 && std::numeric_limits< int >::max() - sum < pair.first)
@@ -15,7 +13,6 @@ erohin::ComplementFunctor erohin::ComplementFunctor::operator()(const std::pair<
   {
     throw std::underflow_error("Underflow of number");
   }
-  std::cout << sum << " " << pair.first << "\n";
   sum += pair.first;
   names += (' ' + pair.second);
   return *this;
