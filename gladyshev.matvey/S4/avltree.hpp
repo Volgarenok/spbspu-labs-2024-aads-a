@@ -60,6 +60,10 @@ namespace gladyshev
       }
       return iter(temp);
     }
+    void erase(const Key& key)
+    {
+      root_ = eraseImpl(root_, key);
+    }
     iter end() noexcept
     {
       return iter();
@@ -180,7 +184,72 @@ namespace gladyshev
       newNode->height = node->height;
       return newNode;
     }
-     tnode * insertImpl(const Key& key,const Value& value, tnode * node)
+    tnode* eraseImpl(tnode* t, const Key& key)
+    {
+      if (!t)
+      {
+        return t;
+      }
+      if (Compare()(key, t->data.first))
+      {
+        t->left = eraseImpl(t->left, key);
+      }
+      else if (Compare()(t->data.first, key))
+      {
+        t->right = eraseImpl(t->right, key);
+      }
+      else
+      {
+        if (!t->left || !t->right)
+        {
+          tnode* temp = t->left ? t->left : t->right;
+          delete t;
+          return temp;
+        }
+        else
+        {
+          tnode* m = t->left;
+          while (m->right)
+          {
+            m = m->right;
+          }
+          t->data = m->data;
+          t->left = eraseImpl(t->left, m->data.first);
+       }
+      }
+      t->height = 1 + std::max(height(t->left), height(t->right));
+      return rebalance(t);
+    }
+    tnode* rebalance(tnode* node)
+    {
+      int balance = height(node->left) - height(node->right);
+      if (balance > 1)
+      {
+        if (height(node->left->left) >= height(node->left->right))
+        {
+          node = rotateRight(node);
+        }
+        else
+        {
+          node->left = rotateLeft(node->left);
+          node = rotateRight(node);
+        }
+      }
+      else if (balance < -1)
+      {
+        if (height(node->right->right) >= height(node->right->left))
+        {
+          node = rotateLeft(node);
+        }
+        else
+        {
+          node->right = rotateRight(node->right);
+          node = rotateLeft(node);
+        }
+      }
+      return node;
+    }
+    tnode * insertImpl(const Key& key, const Value& value, tnode * node)
     {
       if (Compare()(key, node->data.first))
       {
@@ -204,31 +273,8 @@ namespace gladyshev
       {
         node->data.second = value;
       }
-      if (height(node->left) - height(node->right) > 1)
-      {
-        if (Compare()(key, node->left->data.first))
-        {
-          node = rotateRight(node);
-        }
-        else
-        {
-          node->left = rotateLeft(node->left);
-          node = rotateRight(node);
-        }
-      }
-      if (height(node->right) - height(node->left) > 1)
-      {
-        if (Compare()(node->right->data.first, key))
-        {
-          node = rotateLeft(node);
-        }
-        else
-        {
-          node->right = rotateRight(node->right);
-          node = rotateLeft(node);
-        }
-      }
-      node->height = std::max(height(node->left), height(node->right)) + 1;
+      node = rebalance(node);
+      node->height = 1 + std::max(height(node->left), height(node->right));
       return node;
     }
     tnode* findNode(tnode* node, const Key& key) const
