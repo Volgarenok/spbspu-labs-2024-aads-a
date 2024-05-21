@@ -1,6 +1,9 @@
 #ifndef SORTS_HPP
 #define SORTS_HPP
 
+#include <algorithm>
+#include <iterator>
+
 template <typename ForwardIt, typename Compare>
 void oddEvenSort(ForwardIt first, ForwardIt last, Compare comp)
 {
