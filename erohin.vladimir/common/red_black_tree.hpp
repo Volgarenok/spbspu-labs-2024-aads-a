@@ -258,7 +258,11 @@ namespace erohin
   LnrIterator< Key, T > RedBlackTree< Key, T, Compare >::lnr_begin()
   {
     auto iter = lnr_iterator(root_);
-    iter.fall_left();
+    while (iter.node_->left)
+    {
+      iter.stack_.push(iter.node_);
+      iter.node_ = iter.node_->left;
+    }
     return iter;
   }
 
@@ -272,7 +276,11 @@ namespace erohin
   ConstLnrIterator< Key, T > RedBlackTree< Key, T, Compare >::lnr_cbegin() const
   {
     auto iter = const_lnr_iterator(root_);
-    iter.fall_left();
+    while (iter.node_->left)
+    {
+      iter.stack_.push(iter.node_);
+      iter.node_ = iter.node_->left;
+    }
     return iter;
   }
 
@@ -285,29 +293,37 @@ namespace erohin
   template< class Key, class T, class Compare >
   typename RedBlackTree< Key, T, Compare >::rnl_iterator RedBlackTree< Key, T, Compare >::rnl_begin()
   {
-    auto iter = rnl_iterator(root_);
-    iter.fall_right();
-    return iter;
+    auto iter = lnr_iterator(root_);
+    while (iter.node_->right)
+    {
+      iter.stack_.push(iter.node_);
+      iter.node_ = iter.node_->right;
+    }
+    return rnl_iterator(iter);
   }
 
   template< class Key, class T, class Compare >
   typename RedBlackTree< Key, T, Compare >::rnl_iterator RedBlackTree< Key, T, Compare >::rnl_end()
   {
-    return rnl_iterator(nullptr);
+    return rnl_iterator(lnr_iterator(nullptr));
   }
 
   template< class Key, class T, class Compare >
   typename RedBlackTree< Key, T, Compare >::const_rnl_iterator RedBlackTree< Key, T, Compare >::rnl_cbegin() const
   {
-    auto iter = const_rnl_iterator(root_);
-    iter.fall_right();
-    return iter;
+    auto iter = const_lnr_iterator(root_);
+    while (iter.node_->right)
+    {
+      iter.stack_.push(iter.node_);
+      iter.node_ = iter.node_->right;
+    }
+    return const_rnl_iterator(iter);
   }
 
   template< class Key, class T, class Compare >
   typename RedBlackTree< Key, T, Compare >::const_rnl_iterator RedBlackTree< Key, T, Compare >::rnl_cend() const
   {
-    return const_rnl_iterator(nullptr);
+    return const_rnl_iterator(const_lnr_iterator(nullptr));
   }
 
   template< class Key, class T, class Compare >

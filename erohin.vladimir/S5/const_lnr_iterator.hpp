@@ -33,8 +33,6 @@ namespace erohin
     const detail::Node< Key, T > * node_;
     Stack< const detail::Node< Key, T > * > stack_;
     explicit ConstLnrIterator(const detail::Node< Key, T > * node_ptr);
-    void fall_left();
-    void fall_right();
   };
 
   template< class Key, class T >
@@ -163,26 +161,6 @@ namespace erohin
   bool ConstLnrIterator< Key, T >::operator!=(const ConstLnrIterator< Key, T > & rhs) const
   {
     return !(*this == rhs);
-  }
-
-  template< class Key, class T >
-  void ConstLnrIterator< Key, T >::fall_left()
-  {
-    while (node_->left)
-    {
-      stack_.push(node_);
-      node_ = node_->left;
-    }
-  }
-
-  template< class Key, class T >
-  void ConstLnrIterator< Key, T >::fall_right()
-  {
-    while (node_->right)
-    {
-      stack_.push(node_);
-      node_ = node_->right;
-    }
   }
 }
 
