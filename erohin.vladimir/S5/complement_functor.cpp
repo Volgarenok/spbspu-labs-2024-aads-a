@@ -3,6 +3,12 @@
 #include <limits>
 #include <stdexcept>
 
+erohin::ComplementFunctor::ComplementFunctor():
+  sum(0)
+{}
+
+erohin::ComplementFunctor::~ComplementFunctor() = default;
+
 erohin::ComplementFunctor erohin::ComplementFunctor::operator()(const std::pair< int, std::string > & pair)
 {
   if (sum > 0 && std::numeric_limits< int >::max() - sum < pair.first)

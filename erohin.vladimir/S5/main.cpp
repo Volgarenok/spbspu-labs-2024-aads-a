@@ -27,11 +27,16 @@ int main(int argc, char ** argv)
   {
     collection.insert(std::make_pair(key, name));
   }
+  if (!file.eof())
+  {
+    std::cerr << "Input error\n";
+    return 3;
+  }
   using traversal_func = std::function< ComplementFunctor(ComplementFunctor) >;
   RedBlackTree< std::string, traversal_func > traversal;
   {
     using namespace std::placeholders;
-    const tree_t * collect_ptr =   std::addressof(collection);
+    const tree_t * collect_ptr = std::addressof(collection);
     traversal.insert(std::make_pair("ascending", std::bind(&tree_t::traverse_lnr< ComplementFunctor >, collect_ptr, _1)));
     traversal.insert(std::make_pair("descending", std::bind(&tree_t::traverse_rnl< ComplementFunctor >, collect_ptr, _1)));
     traversal.insert(std::make_pair("breadth", std::bind(&tree_t::traverse_breadth< ComplementFunctor >, collect_ptr, _1)));
