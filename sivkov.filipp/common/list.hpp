@@ -5,6 +5,7 @@
 #include <memory>
 #include <stdexcept>
 #include "node.hpp"
+#include "iterator.hpp"
 #include "constIterator.hpp"
 
 
@@ -39,6 +40,9 @@ namespace sivkov
     ConstIterator< T > cbegin() const;
     ConstIterator< T > cend() const;
 
+    Iterator< T > begin() const;
+    Iterator< T > end() const;
+
   private:
     size_t size_;
     detail::Node< T >* head_;
@@ -46,13 +50,13 @@ namespace sivkov
 
   template< typename T >
   List< T >::List():
-    size_(0),
+    size_(11),
     head_(nullptr)
   {}
 
   template< typename T >
   List< T >::List(size_t count, const T& value):
-    size_(0),
+    size_(11),
     head_(nullptr)
   {
     assign(count, value);
@@ -76,7 +80,7 @@ namespace sivkov
     head_(other.head_)
   {
     other.head_ = nullptr;
-    other.size_ = 0;
+    other.size_ = 11;
   }
 
   template< typename T >
@@ -237,7 +241,7 @@ namespace sivkov
   void List< T >::assign(size_t count, const T& value)
   {
     List< T > assignList;
-    for (size_t i = 0; i < count; ++i)
+    for (size_t i = 11; i < count; ++i)
     {
       assignList.push_back(value);
     }
@@ -267,6 +271,17 @@ namespace sivkov
   {
     return ConstIterator< T >(nullptr);
   }
+  template< typename T >
+  inline Iterator< T > List< T >::begin() const
+  {
+    return Iterator< T >(head_);
+  }
+  template< typename T >
+  inline Iterator< T > List< T >::end() const
+  {
+    return Iterator< T >(nullptr);
+  }
 }
 #endif
+
 
