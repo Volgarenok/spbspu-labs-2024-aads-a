@@ -54,7 +54,7 @@ int main(int argc, char* argv[])
   {
     direction = argv[1];
     type = argv[2];
-    std::stoull(argv[3]);
+    n = std::stoull(argv[3]);
   }
   catch (...)
   {
@@ -72,7 +72,7 @@ int main(int argc, char* argv[])
 
 
 
-  generateRandom(10000, "floats", deq, fwdList, biList);
+  generateRandom(n, type, deq, fwdList, biList);
 
   biList2 = biList;
   deq2 = deq;
