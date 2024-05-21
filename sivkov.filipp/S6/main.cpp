@@ -73,7 +73,7 @@ int main(int argc, char* argv[])
 
   try
   {
-    generateRandom(10000, "floats", deq, fwdList, biList);
+    generateRandom(n, type, deq, fwdList, biList);
   }
   catch (std::exception& e)
   {
