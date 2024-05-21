@@ -3,6 +3,7 @@
 
 #include <list>
 #include <deque>
+#include <algorithm>
 #include <stdexcept>
 #include "outputInput.hpp"
 
