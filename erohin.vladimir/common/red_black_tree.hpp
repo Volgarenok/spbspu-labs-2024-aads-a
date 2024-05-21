@@ -6,10 +6,6 @@
 #include "tree_node.hpp"
 #include "tree_const_iterator.hpp"
 #include "tree_iterator.hpp"
-#include "../S5/rnl_iterator.hpp"
-#include "../S5/const_rnl_iterator.hpp"
-#include "../S5/breadth_iterator.hpp"
-#include "../S5/const_breadth_iterator.hpp"
 
 #include <iostream>
 
