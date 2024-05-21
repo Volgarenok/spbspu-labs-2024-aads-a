@@ -15,6 +15,10 @@ namespace sivkov
   template <typename T>
   void generateRandom(size_t numElements, const std::string& type, std::deque<T>& dq, List<T>& fwdList, std::list<T>& biList)
   {
+    if (numElements <= 0)
+    {
+      throw std::invalid_argument("empty");
+    }
     if (type == "ints" || type == "floats")
     {
       for (size_t i = 0; i < numElements; ++i)
