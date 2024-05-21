@@ -2,7 +2,6 @@
 #include <fstream>
 #include <functional>
 #include "red_black_tree.hpp"
-#include "const_lnr_iterator.hpp"
 #include "complement_functor.hpp"
 
 int main(int argc, char ** argv)
@@ -39,7 +38,7 @@ int main(int argc, char ** argv)
   if (collection.empty())
   {
     std::cout << "<EMPTY>\n";
-    return 3;
+    return 0;
   }
   try
   {
