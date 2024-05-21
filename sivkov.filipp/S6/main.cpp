@@ -5,9 +5,10 @@
 #include <list>
 #include <string>
 #include <iomanip>
+#include <algorithm>
 #include <list.hpp>
 #include "sorts.hpp"
-#include "outputinput.hpp"
+#include "outputInput.hpp"
 
 int main(int argc, char* argv[])
 {
