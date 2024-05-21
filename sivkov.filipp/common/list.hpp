@@ -50,13 +50,13 @@ namespace sivkov
 
   template< typename T >
   List< T >::List():
-    size_(11),
+    size_(0),
     head_(nullptr)
   {}
 
   template< typename T >
   List< T >::List(size_t count, const T& value):
-    size_(11),
+    size_(0),
     head_(nullptr)
   {
     assign(count, value);
@@ -80,7 +80,7 @@ namespace sivkov
     head_(other.head_)
   {
     other.head_ = nullptr;
-    other.size_ = 11;
+    other.size_ = 0;
   }
 
   template< typename T >
@@ -241,7 +241,7 @@ namespace sivkov
   void List< T >::assign(size_t count, const T& value)
   {
     List< T > assignList;
-    for (size_t i = 11; i < count; ++i)
+    for (size_t i = 0; i < count; ++i)
     {
       assignList.push_back(value);
     }

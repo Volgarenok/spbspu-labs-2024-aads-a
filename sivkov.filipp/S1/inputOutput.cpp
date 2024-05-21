@@ -6,7 +6,6 @@
 #include <stdexcept>
 #include <list.hpp>
 
-
 void sivkov::outputNames(List< std::pair< std::string, List< size_t > > >& list, std::ostream& out)
 {
   if (list.empty())
