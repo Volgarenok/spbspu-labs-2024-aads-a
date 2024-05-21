@@ -6,6 +6,7 @@
 #include "treenode.hpp"
 #include "treeiterator.hpp"
 
+
 namespace gladyshev
 {
   template < typename Key, typename Value, typename Compare = std::less< Key > >
