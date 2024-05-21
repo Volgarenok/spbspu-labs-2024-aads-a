@@ -5,11 +5,11 @@
 
 erohin::ComplementFunctor erohin::ComplementFunctor::operator()(const std::pair< int, std::string > & pair)
 {
-  if (sum > 0 && pair.first > std::numeric_limits< int >::max() - sum)
+  if (sum > 0 && std::numeric_limits< int >::max() - sum < pair.first)
   {
     throw std::overflow_error("Overflow of number");
   }
-  else if (sum < 0 && pair.first < 0 && pair.first < std::numeric_limits< int >::min() - sum)
+  else if (sum < 0 && pair.first < 0 && std::numeric_limits< int >::min() - sum > pair.first)
   {
     throw std::underflow_error("Underflow of number");
   }

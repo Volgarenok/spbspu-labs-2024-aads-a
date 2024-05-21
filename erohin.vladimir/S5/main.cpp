@@ -38,18 +38,20 @@ int main(int argc, char ** argv)
   if (collection.empty())
   {
     std::cout << "<EMPTY>\n";
-    return 0;
   }
-  try
+  else
   {
-    ComplementFunctor functor;
-    functor = traversal.at(argv[1])(functor);
-    std::cout << functor.sum << functor.names << "\n";
-  }
-  catch (const std::exception & e)
-  {
-    std::cerr << e.what() << "\n";
-    return 4;
+    try
+    {
+      ComplementFunctor functor;
+      functor = traversal.at(argv[1])(functor);
+      std::cout << functor.sum << functor.names << "\n";
+    }
+    catch (const std::exception & e)
+    {
+      std::cerr << e.what() << "\n";
+      return 4;
+    }
   }
   return 0;
 }
