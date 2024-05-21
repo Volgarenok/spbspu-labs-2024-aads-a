@@ -39,6 +39,18 @@ namespace sivkov
   }
 }
 
+template < typename T >
+void print(std::ostream& out, const T& con)
+{
+  out << std::fixed << std::setprecision(1);
+  out << *con.cbegin();
+  for (auto it = ++con.cbegin(); it != con.cend(); ++it)
+  {
+    out << ' ' << *it;
+  }
+  out << '\n';
+}
+
 int main(int argc, char* argv[])
 {
   using namespace sivkov;
@@ -81,11 +93,7 @@ int main(int argc, char* argv[])
     return 1;
   }
 
-  for (const auto& el : fwdList)
-  {
-    std::cout << el << " ";
-  }
-  std::cout << std::endl;
+  print(std::cout, deq);
 
   biList2 = biList;
   deq2 = deq;
@@ -112,43 +120,14 @@ int main(int argc, char* argv[])
   else
   {
     std::cerr << "error second arg\n";
+    return 1;
   }
 
-  for (const auto& el : fwdList)
-  {
-    std::cout << el << " ";
-  }
-  std::cout << std::endl;
-
-  for (const auto& el : biList)
-  {
-    std::cout << el << " ";
-  }
-  std::cout << std::endl;
-
-  for (const auto& el : biList2)
-  {
-    std::cout << el << " ";
-  }
-  std::cout << std::endl;
-
-  for (const auto& el : deq)
-  {
-    std::cout << el << " ";
-  }
-  std::cout << std::endl;
-
-  for (const auto& el : deq2)
-  {
-    std::cout << el << " ";
-  }
-  std::cout << std::endl;
-
-  for (const auto& el : deq3)
-  {
-    std::cout << el << " ";
-  }
-  std::cout << std::endl;
-
+  print(std::cout, fwdList);
+  print(std::cout, biList);
+  print(std::cout, biList2);
+  print(std::cout, deq);
+  print(std::cout, deq2);
+  print(std::cout, deq3);
   return 0;
 }
