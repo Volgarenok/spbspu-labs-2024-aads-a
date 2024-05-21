@@ -1,13 +1,13 @@
 #ifndef SORTINGS_HPP
 #define SORTINGS_HPP
 
-#include <list>
-#include <cstddef>
+#include <iterator>
+#include <algorithm> 
 
 namespace novokhatskiy
 {
   template< class Iter, class P >
-  void doShakerSort(Iter begin, Iter end, size_t size, P cmp)
+  void doShakerSort(Iter begin, Iter end, P cmp)
   {
     auto last = std::prev(end);
     bool swapped = true;
@@ -17,7 +17,7 @@ namespace novokhatskiy
       for (auto i = begin; i != last; i++)
       {
         auto next = std::next(i);
-        if (cmp(*i, *next))
+        if (!cmp(*i, *next))
         {
           std::swap(*i, *next);
           swapped = true;
@@ -32,7 +32,7 @@ namespace novokhatskiy
       for (auto i = last; i != begin; --i)
       {
         auto prev = std::prev(i);
-        if (!cmp(*i, *prev))
+        if (cmp(*i, *prev))
         {
           std::swap(*i, *prev);
           swapped = true;
@@ -74,6 +74,8 @@ namespace novokhatskiy
       it = std::next(it);
     }*/
   }
+
+
 }
 
 #endif
