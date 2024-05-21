@@ -6,7 +6,6 @@
 #include "treenode.hpp"
 #include "treeiterator.hpp"
 
-
 namespace gladyshev
 {
   template < typename Key, typename Value, typename Compare = std::less< Key > >
@@ -30,6 +29,10 @@ namespace gladyshev
         return 0;
       }
       return 1 + size(root_->right) + size(root_->left);
+    }
+    size_t count(const Key& key) const
+    {
+      return find(key) != cend();
     }
     citer cbegin() const noexcept
     {
