@@ -3,6 +3,7 @@
 #include "tree.hpp"
 #include "commands.hpp"
 #include "input_data.hpp"
+#include "key_summ.hpp"
 
 int main(int argc, char * argv[])
 {
@@ -24,6 +25,24 @@ int main(int argc, char * argv[])
     std::cerr << "Error while reading from file!";
     return 1;
   }
-  data.print(std::cout);
+  if (data.empty())
+  {
+    std::cerr << "<EMPTY>\n";
+    return 1;
+  }
+  std::pair< int, std::string > pair;
+  if (command == "ascending")
+  {
+    pair = ascend(data);
+  }
+  else if (command == "descending")
+  {
+    pair = descend(data);
+  }
+  else if (command == "breadth")
+  {
+    pair = breadth(data);
+  }
+  std::cout << pair.first << " " << pair.second;
   return 0;
 }
