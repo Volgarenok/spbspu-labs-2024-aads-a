@@ -11,11 +11,18 @@ namespace erohin
   template < class Key, class T, class Compare >
   class RedBlackTree;
 
+  template < class Key, class T >
+  class RnlIterator;
+
   template< class Key, class T >
   class LnrIterator: public std::iterator< std::bidirectional_iterator_tag, std::pair< Key, T > >
   {
     template < class T1, class T2, class T3 >
     friend class RedBlackTree;
+
+    template < class T1, class T2 >
+    friend class RnlIterator;
+
   public:
     LnrIterator();
     LnrIterator(const LnrIterator< Key, T > &) = default;

@@ -6,8 +6,8 @@
 #include "tree_node.hpp"
 #include "tree_const_iterator.hpp"
 #include "tree_iterator.hpp"
-#include "../S5/lnr_iterator.hpp"
-#include "../S5/const_lnr_iterator.hpp"
+#include "../S5/rnl_iterator.hpp"
+#include "../S5/const_rnl_iterator.hpp"
 #include "../S5/breadth_iterator.hpp"
 #include "../S5/const_breadth_iterator.hpp"
 
@@ -25,8 +25,8 @@ namespace erohin
     using const_reverse_iterator = std::reverse_iterator< TreeConstIterator< Key, T > >;
     using lnr_iterator = LnrIterator< Key, T >;
     using const_lnr_iterator = ConstLnrIterator< Key, T >;
-    using rnl_iterator = std::reverse_iterator< LnrIterator< Key, T > >;
-    using const_rnl_iterator = std::reverse_iterator< ConstLnrIterator< Key, T > >;
+    using rnl_iterator = RnlIterator< Key, T >;
+    using const_rnl_iterator = ConstRnlIterator< Key, T >;
     using breadth_iterator = BreadthIterator< Key, T >;
     using const_breadth_iterator = ConstBreadthIterator< Key, T >;
     using value_type = std::pair< Key, T >;
@@ -228,13 +228,13 @@ namespace erohin
   template< class Key, class T, class Compare >
   typename RedBlackTree< Key, T, Compare >::reverse_iterator RedBlackTree< Key, T, Compare >::rbegin()
   {
-    return reverse_iterator(crbegin().node_);
+    return reverse_iterator(iterator(crbegin().node_));
   }
 
   template< class Key, class T, class Compare >
   typename RedBlackTree< Key, T, Compare >::reverse_iterator RedBlackTree< Key, T, Compare >::rend()
   {
-    return reverse_iterator(nullptr);
+    return reverse_iterator(iterator(nullptr));
   }
 
   template< class Key, class T, class Compare >
@@ -245,13 +245,13 @@ namespace erohin
     {
       result = result->right;
     }
-    return const_reverse_iterator(result);
+    return const_reverse_iterator(const_iterator(result));
   }
 
   template< class Key, class T, class Compare >
   typename RedBlackTree< Key, T, Compare >::const_reverse_iterator RedBlackTree< Key, T, Compare >::crend() const
   {
-    return const_reverse_iterator(nullptr);
+    return const_reverse_iterator(const_iterator(nullptr));
   }
 
   template< class Key, class T, class Compare >
@@ -293,19 +293,13 @@ namespace erohin
   template< class Key, class T, class Compare >
   typename RedBlackTree< Key, T, Compare >::rnl_iterator RedBlackTree< Key, T, Compare >::rnl_begin()
   {
-    auto iter = lnr_iterator(root_);
-    while (iter.node_->right)
-    {
-      iter.stack_.push(iter.node_);
-      iter.node_ = iter.node_->right;
-    }
-    return rnl_iterator(iter);
+    return rnl_iterator(rnl_cbegin().iter_);
   }
 
   template< class Key, class T, class Compare >
   typename RedBlackTree< Key, T, Compare >::rnl_iterator RedBlackTree< Key, T, Compare >::rnl_end()
   {
-    return rnl_iterator(lnr_iterator(nullptr));
+    return rnl_iterator(rnl_cend().iter_);
   }
 
   template< class Key, class T, class Compare >
@@ -323,7 +317,7 @@ namespace erohin
   template< class Key, class T, class Compare >
   typename RedBlackTree< Key, T, Compare >::const_rnl_iterator RedBlackTree< Key, T, Compare >::rnl_cend() const
   {
-    return const_rnl_iterator(const_lnr_iterator(nullptr));
+    return const_rnl_iterator(nullptr);
   }
 
   template< class Key, class T, class Compare >
