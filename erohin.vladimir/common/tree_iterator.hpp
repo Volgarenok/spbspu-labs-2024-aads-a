@@ -11,7 +11,7 @@ namespace erohin
   class RedBlackTree;
 
   template< class Key, class T >
-  class TreeIterator: public std::iterator< std::bidirectional_iterator_tag, T >
+  class TreeIterator: public std::iterator< std::bidirectional_iterator_tag, std::pair< Key, T > >
   {
     template < class T1, class T2, class T3 >
     friend class RedBlackTree;
