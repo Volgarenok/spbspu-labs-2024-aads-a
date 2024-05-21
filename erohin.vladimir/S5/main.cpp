@@ -29,7 +29,6 @@ int main(int argc, char ** argv)
   }
   using traversal_func = std::function< ComplementFunctor(ComplementFunctor) >;
   RedBlackTree< std::string, traversal_func > traversal;
-
   {
     using namespace std::placeholders;
     const tree_t * collect_ptr =   std::addressof(collection);
@@ -37,9 +36,21 @@ int main(int argc, char ** argv)
     traversal.insert(std::make_pair("descending", std::bind(&tree_t::traverse_rnl< ComplementFunctor >, collect_ptr, _1)));
     traversal.insert(std::make_pair("breadth", std::bind(&tree_t::traverse_breadth< ComplementFunctor >, collect_ptr, _1)));
   }
-
-  ComplementFunctor functor;
-  traversal.at("ascending")(functor);
-  std::cout << functor.sum << functor.names;
+  if (collection.empty())
+  {
+    std::cout << "<EMPTY>\n";
+    return 3;
+  }
+  try
+  {
+    ComplementFunctor functor;
+    functor = traversal.at(argv[1])(functor);
+    std::cout << functor.sum << functor.names << "\n";
+  }
+  catch (const std::exception & e)
+  {
+    std::cerr << e.what() << "\n";
+    return 4;
+  }
   return 0;
 }
