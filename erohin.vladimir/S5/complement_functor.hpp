@@ -7,9 +7,9 @@ namespace erohin
 {
   struct ComplementFunctor
   {
-    long long sum = 0;
+    int sum = 0;
     std::string names;
-    void operator()(const std::pair< int, std::string > & pair);
+    ComplementFunctor operator()(const std::pair< int, std::string > & pair);
   };
 }
 

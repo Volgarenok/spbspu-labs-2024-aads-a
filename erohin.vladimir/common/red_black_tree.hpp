@@ -818,8 +818,22 @@ namespace erohin
     auto citer = lnr_cbegin();
     while (citer != lnr_cend())
     {
-      f = f(*citer);
+      f = f(*(citer++));
     }
+    return f;
+  }
+
+  template< class Key, class T, class Compare >
+  template< class F >
+  F RedBlackTree< Key, T, Compare >::traverse_rnl(F f) const
+  {
+    return f;
+  }
+
+  template< class Key, class T, class Compare >
+  template< class F >
+  F RedBlackTree< Key, T, Compare >::traverse_breadth(F f) const
+  {
     return f;
   }
 

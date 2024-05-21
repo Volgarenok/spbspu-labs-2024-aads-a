@@ -1,7 +1,9 @@
 #include <iostream>
 #include <fstream>
+#include <functional>
 #include "red_black_tree.hpp"
 #include "const_lnr_iterator.hpp"
+#include "complement_functor.hpp"
 
 int main(int argc, char ** argv)
 {
@@ -17,24 +19,23 @@ int main(int argc, char ** argv)
     std::cerr << "Error in file opening";
     return 2;
   }
-
-  RedBlackTree< int, int > q;
-  for (int i = 0; i < 10; ++i)
+  using tree_t = RedBlackTree< int, std::string >;
+  tree_t collection;
+  int key = 0;
+  std::string name;
+  while (file >> key >> name)
   {
-    q.emplace(std::make_pair(i, i));
+    collection.insert(std::make_pair(key, name));
   }
+  using traversal_func = std::function< ComplementFunctor(tree_t *, ComplementFunctor) >;
+  RedBlackTree< std::string, traversal_func > traversal;
 
-  auto iter = q.breadth_cbegin();
+  traversal.insert(std::make_pair("ascending", &tree_t::traverse_lnr< ComplementFunctor >));
+  traversal.insert(std::make_pair("descending", &tree_t::traverse_rnl< ComplementFunctor >));
+  traversal.insert(std::make_pair("breadth", &tree_t::traverse_breadth< ComplementFunctor >));
 
-  for (int i = 0; i < 9; ++i)
-  {
-    ++iter;
-  }
-
-  for (int i = 0; i < 10; ++i)
-  {
-    std::cout << (iter--)->first << std::endl;
-  }
-
+  ComplementFunctor functor;
+  traversal.at("ascending")(std::addressof(collection), functor);
+  std::cout << functor.sum;
   return 0;
 }
