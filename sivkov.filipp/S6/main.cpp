@@ -9,6 +9,7 @@
 #include <list>
 #include <list.hpp>
 
+template <typename ForwardIt, typename Compare>
 void oddEvenSort(ForwardIt first, ForwardIt last, Compare comp)
 {
   if (first == last) return;
