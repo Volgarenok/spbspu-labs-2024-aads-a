@@ -19,16 +19,22 @@ int main(int argc, char ** argv)
   }
 
   RedBlackTree< int, int > q;
-  for (int i = 0; i < 5; ++i)
+  for (int i = 0; i < 10; ++i)
   {
     q.emplace(std::make_pair(i, i));
   }
 
   auto iter = q.breadth_cbegin();
 
-  for (int i = 0; i < 5; ++i)
+  for (int i = 0; i < 9; ++i)
   {
-    std::cout << (iter++)->first << std::endl;
+    ++iter;
   }
+
+  for (int i = 0; i < 10; ++i)
+  {
+    std::cout << (iter--)->first << std::endl;
+  }
+
   return 0;
 }

@@ -56,13 +56,11 @@ namespace erohin
   {
     if (queue_.empty())
     {
-      stack_.push(nullptr);
+      node_ = nullptr;
     }
     else
     {
       node_ = queue_.front();
-      queue_.pop();
-      stack_.push(node_);
       if (node_->left)
       {
         queue_.push(node_->left);
@@ -71,8 +69,17 @@ namespace erohin
       {
         queue_.push(node_->right);
       }
+      stack_.push(node_);
+      queue_.pop();
+      if (queue_.empty())
+      {
+        node_ = nullptr;
+      }
+      else
+      {
+        node_ = queue_.front();
+      }
     }
-    node_ = stack_.top();
     return *this;
   }
 
@@ -87,9 +94,16 @@ namespace erohin
   template< class Key, class T >
   ConstBreadthIterator< Key, T > & ConstBreadthIterator< Key, T >::operator--()
   {
-    node_ = stack_.top();
-    stack_.pop();
-    queue_.push(node_);
+    if (stack_.empty())
+    {
+      node_ = nullptr;
+    }
+    else
+    {
+      node_ = stack_.top();
+      stack_.pop();
+      queue_.push(node_);
+    }
     return *this;
   }
 

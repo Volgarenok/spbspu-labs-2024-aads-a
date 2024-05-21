@@ -45,7 +45,7 @@ namespace erohin
   BreadthIterator< Key, T >::BreadthIterator(detail::Node< Key, T > * node_ptr):
     node_(node_ptr)
   {
-    layer_queue_.push(node_ptr);
+    queue_.push(node_ptr);
   }
 
   template< class Key, class T >
