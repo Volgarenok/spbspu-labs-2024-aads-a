@@ -1,9 +1,13 @@
 #include <iostream>
 #include <fstream>
-#include <tree.hpp>
+#include "tree.hpp"
+#include "commands.hpp"
+#include "input_data.hpp"
 
 int main(int argc, char * argv[])
 {
+  using namespace ishmuratov;
+  AVLTree< int, std::string > data;
   if (argc != 3)
   {
     std::cerr << "Incorrect number of arguments!\n";
@@ -13,12 +17,13 @@ int main(int argc, char * argv[])
   try
   {
     std::ifstream file(argv[2]);
+    input_data(data, file);
   }
   catch (...)
   {
     std::cerr << "Error while reading from file!";
     return 1;
   }
-  std::cout << command;
+  data.print(std::cout);
   return 0;
 }
