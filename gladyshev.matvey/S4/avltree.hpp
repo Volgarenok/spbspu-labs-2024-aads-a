@@ -271,7 +271,7 @@ namespace gladyshev
       }
       return node;
     }
-    tnode * insertImpl(const Key& key, const Value& value, tnode * node)
+    tnode* insertImpl(const Key& key, const Value& value, tnode* node)
     {
       if (Compare()(key, node->data.first))
       {
