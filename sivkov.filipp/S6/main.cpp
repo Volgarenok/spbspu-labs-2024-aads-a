@@ -63,7 +63,6 @@ int main(int argc, char* argv[])
   }
 
 
-  using namespace sivkov;
   List< int > fwdList;
   std::list< int > biList;
   std::list< int > biList2;
@@ -72,8 +71,21 @@ int main(int argc, char* argv[])
   std::deque< int > deq3;
 
 
+  try
+  {
+    generateRandom(10000, "floats", deq, fwdList, biList);
+  }
+  catch (std::exception& e)
+  {
+    std::cerr << e.what() << "\n";
+    return 1;
+  }
 
-  generateRandom(n, type, deq, fwdList, biList);
+  for (const auto& el : fwdList)
+  {
+    std::cout << el << " ";
+  }
+  std::cout << std::endl;
 
   biList2 = biList;
   deq2 = deq;
