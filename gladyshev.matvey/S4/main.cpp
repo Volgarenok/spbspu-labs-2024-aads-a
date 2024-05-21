@@ -17,5 +17,4 @@ int main(int argc, char* argv[])
     return 1;
   }
   process_commands(std::cin, std::cout, dictionaries);
-  return 0;
 }
