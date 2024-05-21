@@ -59,6 +59,35 @@ void oddEvenSort(ForwardIt first, ForwardIt last, Compare comp)
   }
 }
 
+template <typename RandomIt, typename Compare>
+void shellSort(RandomIt first, RandomIt last, Compare comp)
+{
+  auto n = std::distance(first, last);
+
+  for (auto gap = n / 2; gap > 0; gap /= 2)
+  {
+    for (auto i = first; std::distance(first, i) < n; ++i)
+    {
+      auto tempIt = i;
+      for (auto j = tempIt; std::distance(first, j) >= gap; std::advance(j, -gap))
+      {
+        auto prevGapIt = j;
+        std::advance(prevGapIt, -gap);
+
+        if (comp(*tempIt, *prevGapIt))
+        {
+          std::swap(*tempIt, *prevGapIt);
+          tempIt = prevGapIt;
+        }
+        else
+        {
+          break;
+        }
+      }
+    }
+  }
+}
+
 int main()
 {
 }
