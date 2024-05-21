@@ -27,6 +27,8 @@ namespace erohin
     using const_lnr_iterator = ConstLnrIterator< Key, T >;
     using rnl_iterator = std::reverse_iterator< LnrIterator< Key, T > >;
     using const_rnl_iterator = std::reverse_iterator< ConstLnrIterator< Key, T > >;
+    using breadth_iterator = BreadthIterator< Key, T >;
+    using const_breadth_iterator = ConstBreadthIterator< Key, T >;
     using value_type = std::pair< Key, T >;
     RedBlackTree();
     RedBlackTree(const RedBlackTree< Key, T, Compare > & rhs);
@@ -53,6 +55,10 @@ namespace erohin
     rnl_iterator rnl_end();
     const_rnl_iterator rnl_cbegin() const;
     const_rnl_iterator rnl_cend() const;
+    breadth_iterator breadth_begin();
+    breadth_iterator breadth_end();
+    const_breadth_iterator breadth_cbegin() const;
+    const_breadth_iterator breadth_cend() const;
     void clear();
     bool empty() const noexcept;
     std::pair< iterator, bool > insert(const value_type & value);
@@ -302,6 +308,30 @@ namespace erohin
   typename RedBlackTree< Key, T, Compare >::const_rnl_iterator RedBlackTree< Key, T, Compare >::rnl_cend() const
   {
     return const_rnl_iterator(nullptr);
+  }
+
+  template< class Key, class T, class Compare >
+  BreadthIterator< Key, T > RedBlackTree< Key, T, Compare >::breadth_begin()
+  {
+    return breadth_iterator(root_);
+  }
+
+  template< class Key, class T, class Compare >
+  BreadthIterator< Key, T > RedBlackTree< Key, T, Compare >::breadth_end()
+  {
+    return breadth_iterator(nullptr);
+  }
+
+  template< class Key, class T, class Compare >
+  ConstBreadthIterator< Key, T > RedBlackTree< Key, T, Compare >::breadth_cbegin() const
+  {
+    return const_breadth_iterator(root_);
+  }
+
+  template< class Key, class T, class Compare >
+  ConstBreadthIterator< Key, T > RedBlackTree< Key, T, Compare >::breadth_cend() const
+  {
+    return const_breadth_iterator(nullptr);
   }
 
   template< class Key, class T, class Compare >
