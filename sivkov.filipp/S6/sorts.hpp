@@ -4,7 +4,7 @@
 #include <list>
 #include <deque>
 #include <stdexcept>
-#include "outputinput.hpp"
+#include "outputInput.hpp"
 
 namespace sivkov
 {
