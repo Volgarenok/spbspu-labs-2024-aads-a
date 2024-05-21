@@ -23,7 +23,9 @@ int main(int argc, char ** argv)
   {
     q.emplace(std::make_pair(i, i));
   }
-  auto iter = q.lnr_cbegin();
+
+  auto iter = q.breadth_cbegin();
+
   for (int i = 0; i < 5; ++i)
   {
     std::cout << (iter++)->first << std::endl;

@@ -106,7 +106,7 @@ namespace erohin
   template< class InputIt >
   DynamicArray< T >::DynamicArray(InputIt first, InputIt last):
     capacity_(8),
-    size_(capacity_),
+    size_(0),
     begin_index_(0),
     data_(reinterpret_cast< T * >(new char[capacity_ * sizeof(T)]))
   {

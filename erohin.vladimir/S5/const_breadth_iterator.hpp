@@ -5,6 +5,9 @@
 #include <iterator>
 #include "tree_node.hpp"
 #include "queue.hpp"
+#include "stack.hpp"
+
+#include <iostream>
 
 namespace erohin
 {
@@ -12,7 +15,7 @@ namespace erohin
   class RedBlackTree;
 
   template< class Key, class T >
-  class ConstBreadthIterator: public std::iterator< std::forward_iterator_tag, T >
+  class ConstBreadthIterator: public std::iterator< std::bidirectional_iterator_tag, T >
   {
     template < class T1, class T2, class T3 >
     friend class RedBlackTree;
@@ -23,6 +26,8 @@ namespace erohin
     ConstBreadthIterator< Key, T > & operator=(const ConstBreadthIterator< Key, T > &) = default;
     ConstBreadthIterator< Key, T > & operator++();
     ConstBreadthIterator< Key, T > operator++(int);
+    ConstBreadthIterator< Key, T > & operator--();
+    ConstBreadthIterator< Key, T > operator--(int);
     const std::pair< Key, T > & operator*() const;
     const std::pair< Key, T > * operator->() const;
     bool operator==(const ConstBreadthIterator< Key, T > & rhs) const;
@@ -30,7 +35,7 @@ namespace erohin
   private:
     const detail::Node< Key, T > * node_;
     Queue< const detail::Node< Key, T > * > queue_;
-    Queue< const detail::Node< Key, T > * > layer_queue_;
+    Stack< const detail::Node< Key, T > * > stack_;
     explicit ConstBreadthIterator(const detail::Node< Key, T > * node_ptr);
   };
 
@@ -43,7 +48,7 @@ namespace erohin
   ConstBreadthIterator< Key, T >::ConstBreadthIterator(const detail::Node< Key, T > * node_ptr):
     node_(node_ptr)
   {
-    layer_queue_.push(node_ptr);
+    queue_.push(node_ptr);
   }
 
   template< class Key, class T >
@@ -51,30 +56,23 @@ namespace erohin
   {
     if (queue_.empty())
     {
-      while (!layer_queue_.empty())
+      stack_.push(nullptr);
+    }
+    else
+    {
+      node_ = queue_.front();
+      queue_.pop();
+      stack_.push(node_);
+      if (node_->left)
       {
-        if (layer_queue_.front()->left)
-        {
-          queue_.push(layer_queue_.front()->left);
-        }
-        if (layer_queue_.front()->right)
-        {
-          queue_.push(layer_queue_.front()->right);
-        }
-        layer_queue_.pop();
+        queue_.push(node_->left);
       }
-      if (queue_.empty())
+      if (node_->right)
       {
-        node_ = nullptr;
-        return *this;
-      }
-      else
-      {
-        layer_queue_ = queue_;
+        queue_.push(node_->right);
       }
     }
-    node_ = queue_.front();
-    queue_.pop();
+    node_ = stack_.top();
     return *this;
   }
 
@@ -83,6 +81,23 @@ namespace erohin
   {
     ConstBreadthIterator< Key, T > temp = *this;
     operator++();
+    return temp;
+  }
+
+  template< class Key, class T >
+  ConstBreadthIterator< Key, T > & ConstBreadthIterator< Key, T >::operator--()
+  {
+    node_ = stack_.top();
+    stack_.pop();
+    queue_.push(node_);
+    return *this;
+  }
+
+  template< class Key, class T >
+  ConstBreadthIterator< Key, T > ConstBreadthIterator< Key, T >::operator--(int)
+  {
+    ConstBreadthIterator< Key, T > temp = *this;
+    operator--();
     return temp;
   }
 
