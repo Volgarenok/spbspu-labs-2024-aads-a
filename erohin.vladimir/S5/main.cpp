@@ -27,15 +27,19 @@ int main(int argc, char ** argv)
   {
     collection.insert(std::make_pair(key, name));
   }
-  using traversal_func = std::function< ComplementFunctor(tree_t *, ComplementFunctor) >;
+  using traversal_func = std::function< ComplementFunctor(ComplementFunctor) >;
   RedBlackTree< std::string, traversal_func > traversal;
 
-  traversal.insert(std::make_pair("ascending", &tree_t::traverse_lnr< ComplementFunctor >));
-  traversal.insert(std::make_pair("descending", &tree_t::traverse_rnl< ComplementFunctor >));
-  traversal.insert(std::make_pair("breadth", &tree_t::traverse_breadth< ComplementFunctor >));
+  {
+    using namespace std::placeholders;
+    const tree_t * collect_ptr =   std::addressof(collection);
+    traversal.insert(std::make_pair("ascending", std::bind(&tree_t::traverse_lnr< ComplementFunctor >, collect_ptr, _1)));
+    traversal.insert(std::make_pair("descending", std::bind(&tree_t::traverse_rnl< ComplementFunctor >, collect_ptr, _1)));
+    traversal.insert(std::make_pair("breadth", std::bind(&tree_t::traverse_breadth< ComplementFunctor >, collect_ptr, _1)));
+  }
 
   ComplementFunctor functor;
-  traversal.at("ascending")(std::addressof(collection), functor);
-  std::cout << functor.sum;
+  traversal.at("ascending")(functor);
+  std::cout << functor.sum << functor.names;
   return 0;
 }
