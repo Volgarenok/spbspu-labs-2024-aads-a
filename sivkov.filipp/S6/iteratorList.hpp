@@ -1,8 +1,8 @@
-#ifndef ITERATOR_HPP
-#define ITERATOR_HPP
+#ifndef ITERATORLIST_HPP
+#define ITERATORLIST_HPP
 
 #include <memory>
-#include "node.hpp"
+#include <node.hpp>
 
 namespace sivkov
 {
@@ -101,4 +101,3 @@ namespace sivkov
 }
 
 #endif
-
