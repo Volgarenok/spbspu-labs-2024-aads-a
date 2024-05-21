@@ -7,8 +7,6 @@
 #include "queue.hpp"
 #include "stack.hpp"
 
-#include <iostream>
-
 namespace erohin
 {
   template < class Key, class T, class Compare >
