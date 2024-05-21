@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <functional>
+#include <stdexcept>
 #include "red_black_tree.hpp"
 #include "complement_functor.hpp"
 
