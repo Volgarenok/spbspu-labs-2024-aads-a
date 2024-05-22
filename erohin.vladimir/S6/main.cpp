@@ -23,11 +23,8 @@ int main(int argc, char ** argv)
     std::forward_list< int > random_seq;
     generate_random< int >(random_seq, size);
     random_seq.sort();
-    std::copy(
-      random_seq.cbegin(),
-      random_seq.cend(),
-      std::ostream_iterator< int >(std::cout, "\n")
-    );
+    print(std::cout, random_seq.begin(), random_seq.end());
+    std::cout << "\n";
   }
   catch (const std::exception & e)
   {

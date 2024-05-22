@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <iterator>
 #include <vector>
+#include <iostream>
 
 namespace erohin
 {
@@ -30,6 +31,20 @@ namespace erohin
     Container temp(seq.begin(), seq.end());
     cnt.clear();
     cnt = std::move(temp);
+  }
+
+  template< class OutputIt >
+  void print(std::ostream & output, OutputIt begin, OutputIt end)
+  {
+    if (begin == end)
+    {
+      return;
+    }
+    output << *(begin++);
+    while (begin != end)
+    {
+      output << " " << *(begin++);
+    }
   }
 }
 
