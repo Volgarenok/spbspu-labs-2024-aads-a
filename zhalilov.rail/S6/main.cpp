@@ -19,6 +19,10 @@ int main(int argc, char *argv[])
     std::string direction = argv[1];
     std::string type = argv[2];
     size_t size = std::stoull(argv[3]);
+    if (size == 0)
+    {
+      throw std::invalid_argument("main.cpp: size == 0");
+    }
     std::cout << std::fixed << std::setprecision(1);
     if (type == "ints")
     {
