@@ -688,11 +688,11 @@ namespace zaitsev
     {
       return std::make_reverse_iterator(cend());
     }
-    static iterator get_light_iterator(lnr_iterator it)
+    static iterator get_lite_iterator(lnr_iterator it)
     {
       return iterator(it.path_.top());
     }
-    static const_iterator get_light_iterator(const_lnr_iterator it)
+    static const_iterator get_lite_iterator(const_lnr_iterator it)
     {
       return const_iterator(it.path_.top());
     }
@@ -721,12 +721,12 @@ namespace zaitsev
     {
       return std::make_reverse_iterator(cbegin());
     }
-    static reverse_iterator get_light_iterator(rnl_iterator it)
+    static reverse_iterator get_lite_iterator(rnl_iterator it)
     {
       iterator forward_it(it.base().path_.top());
       return std::make_reverse_iterator(forward_it);
     }
-    static const_reverse_iterator get_light_iterator(const_rnl_iterator it)
+    static const_reverse_iterator get_lite_iterator(const_rnl_iterator it)
     {
       const_iterator forward_it(it.base().path_.top());
       return std::make_reverse_iterator(forward_it);
