@@ -16,9 +16,15 @@ namespace erohin
   {
     std::forward_list< T > random_seq;
     generateRandomSequence< T >(random_seq, n);
-    std::forward_list< T > forward_list_seq[2] = { std::forward_list< T >(random_seq.cbegin(), random_seq.cend()) };
-    std::list< T > bidirect_list_seq[2]{ std::list< T >(random_seq.cbegin(), random_seq.cend()) };
-    std::deque< T > deque_seq[2]{ std::deque< T >(random_seq.cbegin(), random_seq.cend()) };
+    std::forward_list< T > forward_list_seq[2];
+    std::list< T > bidirect_list_seq[2];
+    std::deque< T > deque_seq[2];
+    for (int i = 0; i < 2; ++i)
+    {
+      forward_list_seq[i].assign(random_seq.cbegin(), random_seq.cend());
+      bidirect_list_seq[i].assign(random_seq.cbegin(), random_seq.cend());
+      deque_seq[i].assign(random_seq.cbegin(), random_seq.cend());
+    }
     //sort1(forward_list_seq[0].begin(), forward_list_seq[0].end(), cmp);
     //sort2(forward_list_seq[1].begin(), forward_list_seq[1].end(), cmp);
     //sort1(bidirect_list_seq[0].begin(), bidirect_list_seq[0].end(), cmp);
