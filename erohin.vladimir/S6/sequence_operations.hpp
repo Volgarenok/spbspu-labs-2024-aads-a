@@ -9,24 +9,24 @@
 namespace erohin
 {
   template< class T >
-  T random(T min, T max)
+  T getRandom(T min, T max)
   {
     return (std::rand() % (max - min) + min);
   }
 
   template<>
-  float random< float >(float min, float max)
+  float getRandom< float >(float min, float max)
   {
     return ((static_cast< float >(std::rand()) / RAND_MAX) * (max - min) + min);
   }
 
   template< class T, class Container >
-  void generate_random(Container & cnt, size_t n)
+  void generateRandomSequence(Container & cnt, size_t n)
   {
     std::forward_list< T > seq;
     for (size_t i = 0; i < n; ++i)
     {
-      seq.push_front(random< T >(-1000, 1000));
+      seq.push_front(getRandom< T >(-1000, 1000));
     }
     Container temp(seq.begin(), seq.end());
     cnt.clear();
@@ -34,7 +34,7 @@ namespace erohin
   }
 
   template< class OutputIt >
-  void print(std::ostream & output, OutputIt begin, OutputIt end)
+  void printSequence(std::ostream & output, OutputIt begin, OutputIt end)
   {
     if (begin == end)
     {

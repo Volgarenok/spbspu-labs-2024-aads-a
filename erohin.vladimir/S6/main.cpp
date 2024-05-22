@@ -3,7 +3,7 @@
 #include <forward_list>
 #include <list>
 #include <algorithm>
-#include "sequence_operations.hpp"
+#include "sort_command.hpp"
 
 int main(int argc, char ** argv)
 {
@@ -20,11 +20,7 @@ int main(int argc, char ** argv)
     {
       throw std::invalid_argument("Invalid sequence size");
     }
-    std::forward_list< float > random_seq;
-    generate_random< float >(random_seq, size);
-    random_seq.sort();
-    print(std::cout, random_seq.begin(), random_seq.end());
-    std::cout << "\n";
+    doSortCommand< int >(std::cout, size, std::less< int >{});
   }
   catch (const std::exception & e)
   {
