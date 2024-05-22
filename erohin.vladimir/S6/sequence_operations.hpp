@@ -22,12 +22,14 @@ namespace erohin
   template< class T, class Container >
   void generate_random(Container & cnt, size_t n)
   {
-    std::vector< T > temp;
+    std::vector< T > seq;
     for (size_t i = 0; i < n; ++i)
     {
-      temp.push_back(random(std::make_pair(0, 100)));
+      seq.push_back(random(std::make_pair(0, 100)));
     }
-    cnt.assign(temp.begin(), temp.end());
+    Container temp(seq.begin(), seq.end());
+    cnt.clear();
+    cnt = std::move(temp);
   }
 }
 
