@@ -460,7 +460,7 @@ namespace erohin
       auto iter = begin();
       while (std::next(iter) != end())
       {
-        if (cmp(*std::next(iter), *iter))
+        if (!cmp(*iter, *std::next(iter)))
         {
           std::swap(*iter, *std::next(iter));
           is_sorted = false;
