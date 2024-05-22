@@ -226,6 +226,19 @@ namespace ishmuratov
       }
     }
 
+    size_t count(const Key & k)
+    {
+      size_t count = 0;
+      for (auto node = cbegin(); node != cend(); ++node)
+      {
+        if (!comp_(k, node->first) && !(comp_(node->first, k)))
+        {
+          ++count;
+        }
+      }
+      return count;
+    }
+
     void print(std::ostream & output)
     {
       print_impl(root_, 0, output);
