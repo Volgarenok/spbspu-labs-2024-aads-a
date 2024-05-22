@@ -131,7 +131,13 @@ namespace ishmuratov
 
     Value operator[](const Key & key)
     {
-      return at(key);
+      Iter node_iter = find(key);
+      if (node_iter == end())
+      {
+        insert(std::make_pair(key, Value()));
+        node_iter = find(key);
+      }
+      return node_iter->second;
     }
 
     void clear()
@@ -266,11 +272,6 @@ namespace ishmuratov
     std::pair< Iter, Iter > equal_range(const Key & k)
     {
       return std::make_pair(lower_bound(k), upper_bound(k));
-    }
-
-    void print(std::ostream & output)
-    {
-      print_impl(root_, 0, output);
     }
 
   private:
@@ -446,25 +447,6 @@ namespace ishmuratov
     {
       node->left = rotate_left(node->left);
       return rotate_right(node);
-    }
-
-    void print_impl(tnode * root, int space, std::ostream & output)
-    {
-      if (root == nullptr)
-        return;
-
-      space += 5;
-
-      print_impl(root->right, space, output);
-
-      output << "\n";
-      for (int i = 5; i < space; i++)
-      {
-        output << " ";
-      }
-      output << root->data.first << "\n";
-
-      print_impl(root->left, space, output);
     }
   };
 }
