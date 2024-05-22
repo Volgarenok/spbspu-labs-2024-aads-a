@@ -23,6 +23,8 @@ namespace erohin
     List(InputIt first, InputIt last);
     List(std::initializer_list< T > init_list);
     ~List();
+    List & operator=(const List & rhs);
+    List & operator=(List && rhs) noexcept;
     iterator begin();
     iterator end();
     const_iterator begin() const;
@@ -130,6 +132,28 @@ namespace erohin
   }
 
   template< class T >
+  List< T > & List< T >::operator=(const List< T > & rhs)
+  {
+    if (this != std::addressof(rhs))
+    {
+      List< T > temp(rhs);
+      swap(temp);
+    }
+    return *this;
+  }
+
+  template< class T >
+  List< T > & List< T >::operator=(List< T > && rhs) noexcept
+  {
+    if (this != std::addressof(rhs))
+    {
+      List< T > temp(std::move(rhs));
+      swap(temp);
+    }
+    return *this;
+  }
+
+  template< class T >
   ListIterator< T > List< T >::begin()
   {
     return iterator(head_);
@@ -222,13 +246,13 @@ namespace erohin
   template< class T >
   ListIterator< T > List< T >::insert_after(const_iterator pos, const T & value)
   {
-    insert_after(iterator(pos.node_), T(value));
+    return insert_after(pos, T(value));
   }
 
   template< class T >
   ListIterator< T > List< T >::insert_after(const_iterator pos, T && value) noexcept
   {
-    iterator iter_result(pos.node_);
+    iterator iter_result(const_cast< detail::Node< T > * >(pos.node_));
     detail::Node< T > * new_node = new detail::Node< T >(std::move(value), iter_result.node_->next_);
     iter_result.node_->next_ = new_node;
     return (++iter_result);
