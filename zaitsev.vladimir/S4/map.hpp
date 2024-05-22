@@ -374,8 +374,8 @@ namespace zaitsev
       explicit BaseIterator(node_t node):
         node_(node)
       {}
-      template< bool cond = IsConst, std::enable_if_t<cond, bool > = true >
-      BaseIterator(const BaseIterator<!cond>& other) :
+      template< bool cond = IsConst, std::enable_if_t< cond, bool > = true >
+      BaseIterator(const BaseIterator< !cond >& other):
         node_(other.node_)
       {}
       BaseIterator& operator=(const BaseIterator& other)
@@ -735,7 +735,7 @@ namespace zaitsev
     T& operator[](const Key& key)
     {
       Node* cur = findHint(fakeroot_, key);
-      if (cur&&cur->val_.first == key)
+      if (cur && cur->val_.first == key)
       {
         return cur->val_.second;
       }
@@ -831,12 +831,12 @@ namespace zaitsev
       erase(pos);
       return 1;
     }
-    iterator  erase(iterator first, iterator last)
+    iterator erase(iterator first, iterator last)
     {
       for (; first != last; first = erase(first));
       return first;
     }
-    const_iterator  erase(const_iterator first, const_iterator last)
+    const_iterator erase(const_iterator first, const_iterator last)
     {
       for (; first != last; first = erase(first));
       return first;
