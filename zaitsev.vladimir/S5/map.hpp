@@ -509,6 +509,7 @@ namespace zaitsev
         if (path_.top()->left_)
         {
           path_.push(path_.top()->left_);
+          for (; path_.top()->right_; path_.push(path_.top()->right_));
         }
         else
         {
