@@ -8,16 +8,15 @@ namespace nikitov
   template< class Iterator >
   void printRange(Iterator begin, Iterator end, std::ostream& output)
   {
-    while (begin != end)
+    if (begin != end)
     {
       output << *begin;
-      ++begin;
-      if (begin != end)
+      while (++begin != end)
       {
-        output << ' ';
+        output << ' ' << *begin;
       }
+      output << '\n';
     }
-    output << '\n';
   }
 }
 #endif
