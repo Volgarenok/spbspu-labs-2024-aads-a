@@ -50,8 +50,14 @@ namespace zhalilov
     std::deque< T > deqBucket(nums.cbegin(), nums.cend());
     std::deque< T > deqSort(nums.cbegin(), nums.cend());
 
-    oddEvenSort(implForwardBucket.begin(), implForwardBucket.end(), comparer);
+    oddEvenSort(implForwardOddEven.begin(), implForwardOddEven.end(), comparer);
     oddEvenSort(deqOddEven.begin(), deqOddEven.end(), comparer);
+
+    bucketSort(implForwardBucket.begin(), implForwardBucket.end(), comparer, 10);
+    bucketSort(myListBucket.begin(), myListBucket.end(), comparer, 10);
+    bucketSort(deqBucket.begin(), deqBucket.end(), comparer, 10);
+
+    std::sort(deqSort.begin(), deqSort.end(), comparer);
 
     printNums(nums.cbegin(), nums.cend(), out);
     printNums(implForwardOddEven.cbegin(), implForwardOddEven.cend(), out);

@@ -1,6 +1,8 @@
 #ifndef SORTALGORITHMS_HPP
 #define SORTALGORITHMS_HPP
 
+#include <algorithm>
+
 namespace zhalilov
 {
   namespace detail
@@ -37,6 +39,48 @@ namespace zhalilov
       bool isSortedByOddStep = detail::oddEvenSortStep(first, last, cmp, true);
       bool isSortedByEvenStep = detail::oddEvenSortStep(first, last, cmp, false);
       isSorted = isSortedByOddStep && isSortedByEvenStep;
+    }
+  }
+
+  template < class Iterator, class Compare >
+  void bucketSort(Iterator first, Iterator last, Compare cmp, size_t numOfBuckets)
+  {
+    using numType = typename Iterator::value_type;
+    auto minIt = std::min_element(first, last, cmp);
+    auto maxIt = std::max_element(first, last, cmp);
+    numType range = *maxIt - *minIt;
+    numType step = range / numOfBuckets;
+    List< List< numType > > buckets(numOfBuckets);
+    Iterator currIt = first;
+    while (currIt != last)
+    {
+      auto bucketsItCurr = buckets.begin();
+      numType steppingValue = step;
+      auto bucketsItAfterCurr = bucketsItCurr;
+      ++bucketsItAfterCurr;
+      while (cmp(steppingValue, *currIt) && bucketsItAfterCurr != buckets.end())
+      {
+        steppingValue += step;
+        ++bucketsItCurr;
+        ++bucketsItAfterCurr;
+      }
+      bucketsItCurr->push_back(*currIt);
+      ++currIt;
+    }
+
+    for (auto it = buckets.begin(); it != buckets.end(); ++it)
+    {
+      oddEvenSort(it->begin(), it->end(), cmp);
+    }
+
+    auto containerToSortIt = first;
+    for (auto it = buckets.begin(); it != buckets.end(); ++it)
+    {
+      for (auto currBucketIt = it->begin(); currBucketIt != it->end(); ++currBucketIt)
+      {
+        *containerToSortIt = *currBucketIt;
+        ++containerToSortIt;
+      }
     }
   }
 }
