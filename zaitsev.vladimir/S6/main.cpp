@@ -4,6 +4,7 @@
 #include <iterator>
 #include <forward_list.hpp>
 #include <vector>
+#include <deque>
 
 class int_generator
 {
@@ -75,18 +76,31 @@ void shellSort(ForwardIt begin, ForwardIt end, Comapare cmp, size_t size = 0)
   }
 }
 
-
-int main()
+template< class ForwardIt, class Comapare >
+void bucketSort(ForwardIt begin, ForwardIt end, Comapare cmp, size_t size = 0)
 {
-  constexpr size_t size = 300;
+
+}
+
+int main(int argc, char** argv)
+{
+  constexpr size_t size = 10;
   using namespace zaitsev;
-  int v[size];
-  int_generator gen(0, 1000);
+  float v[size];
+  float_generator gen(0, 1000);
   std::generate_n(v, size, gen);
-  ForwardList< int > lst(v, v + size);
-  std::copy(lst.begin(), lst.end(), std::ostream_iterator< int >(std::cout, " "));
+  ForwardList< float > lst1(v, v + size);
+  ForwardList< float > lst2(v, v + size);
+  std::deque< float > lst3(v, v + size);
+  std::copy(lst1.begin(), lst1.end(), std::ostream_iterator< float >(std::cout, " "));
   std::cout << '\n';
-  shellSort(lst.begin(), lst.end(), std::less< int >{});
-  std::copy(lst.begin(), lst.end(), std::ostream_iterator< int >(std::cout, " "));
+  shellSort(lst1.begin(), lst1.end(), std::less< float >{});
+  shellSort(lst3.begin(), lst3.end(), std::less< float >{});
+  lst2.sort(std::less< float >{});
+  std::copy(lst1.begin(), lst1.end(), std::ostream_iterator< float >(std::cout, " "));
+  std::cout << '\n';
+  std::copy(lst2.begin(), lst2.end(), std::ostream_iterator< float >(std::cout, " "));
+  std::cout << '\n';
+  std::copy(lst3.begin(), lst3.end(), std::ostream_iterator< float >(std::cout, " "));
   return 0;
 }
