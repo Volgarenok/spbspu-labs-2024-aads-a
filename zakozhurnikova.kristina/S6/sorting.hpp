@@ -8,7 +8,7 @@
 namespace zakozhurnikova
 {
   template < class Iterator, class Compare >
-  void shaker(Iterator& begin, size_t size, Compare cmp)
+  void shaker(Iterator begin, size_t size, Compare cmp)
   {
     ++begin;
     int leftMark = 1;
@@ -48,10 +48,7 @@ namespace zakozhurnikova
         --curr;
         if (cmp(*(tmpBegin), *(curr)))
         {
-          int buff;
-          buff = *curr;
-          *curr = *tmpBegin;
-          *tmpBegin = buff;
+          std::iter_swap(curr, tmpBegin);
         }
         ++tmpBegin;
       }

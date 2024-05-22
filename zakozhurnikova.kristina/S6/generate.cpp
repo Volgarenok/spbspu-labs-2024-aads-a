@@ -1,5 +1,6 @@
 #include "generate.hpp"
 #include <random>
+#include <cstdlib>
 
 int zakozhurnikova::detail::randomNumberInt()
 {
