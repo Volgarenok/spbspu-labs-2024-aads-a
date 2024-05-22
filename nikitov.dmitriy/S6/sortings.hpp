@@ -2,6 +2,7 @@
 #define SORTINGS_HPP
 
 #include <utility>
+#include <algorithm>
 
 namespace nikitov
 {

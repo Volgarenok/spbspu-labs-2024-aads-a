@@ -1,4 +1,5 @@
 #include <iostream>
+#include <tree.hpp>
 #include "sort_sequence.hpp"
 
 int main(int argc, char* argv[])
@@ -20,18 +21,10 @@ int main(int argc, char* argv[])
 
     std::string sorting = argv[1];
     std::string type = argv[2];
-    if (type == "ints")
-    {
-      sortSequence< int >(sorting, type, size, std::cout);
-    }
-    else if (type == "floats")
-    {
-      sortSequence< float >(sorting, type, size, std::cout);
-    }
-    else
-    {
-      throw std::invalid_argument("Error: Wrong type parameter");
-    }
+    Tree< std::string, std::function< void(std::string, std::string, size_t, std::ostream&) > > types;
+    types["ints"] = sortSequence< int >;
+    types["floats"] = sortSequence< float >;
+    types.at(type)(sorting, type, size, std::cout);
   }
   catch (const std::exception& e)
   {
