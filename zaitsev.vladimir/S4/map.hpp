@@ -677,7 +677,7 @@ namespace zaitsev
     iterator upper_bound(const Key& key)
     {
       iterator lb = lower_bound(key);
-      if (lb != end() && (*lb).first == key)
+      if (lb != end() && !comparator_((*lb).first, key))
       {
         return ++lb;
       }
@@ -686,7 +686,7 @@ namespace zaitsev
     const_iterator upper_bound(const Key& key) const
     {
       const_iterator lb = lower_bound(key);
-      if (lb != cend() && (*lb).first == key)
+      if (lb != cend() && !comparator_((*lb).first, key))
       {
         return ++lb;
       }
