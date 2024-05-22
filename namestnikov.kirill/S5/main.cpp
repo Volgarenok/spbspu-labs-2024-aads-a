@@ -39,7 +39,7 @@ int main(int argc, char * argv[])
     commands.at(argv[1])(result, output, myMap);
     std::cout << result << output << "\n";
   }
-  catch(const std::out_of_range &)
+  catch (const std::out_of_range &)
   {
     std::cerr << "Wrong command name\n";
     return 1;
