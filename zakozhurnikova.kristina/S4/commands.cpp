@@ -1,4 +1,5 @@
 #include "commands.hpp"
+#include <stdexcept>
 #include "implementedCommands.hpp"
 
 namespace zak = zakozhurnikova;
@@ -15,7 +16,7 @@ void addMap(std::string& mapName, zak::map& toAdd, zak::tree& maps)
   }
 }
 
-void zak::print(List< std::string >& args, std::string& result, tree& maps)
+void zak::print(const List< std::string >& args, std::string& result, const tree& maps)
 {
   if (args.size() != 1)
   {

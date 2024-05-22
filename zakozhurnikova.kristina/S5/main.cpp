@@ -1,16 +1,17 @@
-#include <binarySearchTree.hpp>
 #include <fstream>
 #include <iostream>
 #include <string>
 #include <utility>
+#include <functional>
+#include <binarySearchTree.hpp>
 #include "commands.hpp"
 #include "getSum.hpp"
-#include "implementedCommands.hpp"
 #include "inputMap.hpp"
 
 int main(int argc, char* argv[])
 {
   using namespace zakozhurnikova;
+  using Map = BinarySearchTree< int, std::string >;
   BinarySearchTree< int, std::string > map;
   if (argc == 3)
   {
@@ -31,18 +32,21 @@ int main(int argc, char* argv[])
     return 1;
   }
 
-  ImplementedCommands master(map);
-  master.addCommand("ascending", &ascending);
-  master.addCommand("descending", &descending);
-  master.addCommand("breadth", &breadth);
+  BinarySearchTree< std::string, std::function< int(std::string& result, Map& tree) > > commands;
+  commands.push("ascending", &ascending);
+  commands.push("descending", &descending);
+  commands.push("breadth", &breadth);
+
   std::string command(argv[1]);
   std::string cmdOutput;
   int amount = 0;
+
   try
   {
-    amount = master.executeCommand(command, cmdOutput);
+    amount = commands.at(command)(cmdOutput, map);
     if (!cmdOutput.empty())
     {
+      cmdOutput.pop_back();
       if (cmdOutput != "<EMPTY>")
       {
         std::cout << amount << " ";
@@ -59,6 +63,10 @@ int main(int argc, char* argv[])
   {
     std::cerr << e.what();
     return 1;
+  }
+  catch (const std::logic_error& e)
+  {
+    std::cout << e.what() << '\n';
   }
   catch (const std::exception& e)
   {

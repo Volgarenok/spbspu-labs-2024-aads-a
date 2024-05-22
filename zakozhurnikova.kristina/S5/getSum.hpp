@@ -2,14 +2,21 @@
 #define GETSUM_HPP
 #include <limits>
 #include <stdexcept>
+#include <string>
+#include <utility>
 
 namespace zakozhurnikova
 {
   struct KeySum
   {
-    void operator()(int data);
+    KeySum();
+    void operator()(std::pair< int, std::string > data);
+    int getResult() const;
+    std::string getLine() const;
 
-    int result_ = 0;
+  private:
+    int result_;
+    std::string line_;
   };
 }
 

@@ -17,16 +17,16 @@ namespace zakozhurnikova
       TreeNode* parent;
       int balanceFactor;
 
-      TreeNode(Key key, Value val, TreeNode* parent):
-        data(std::make_pair< Key, Value >(std::forward< Key >(key), std::forward< Value >(val))),
+      TreeNode(const Key& key, const Value& val, TreeNode* parent):
+        data(std::pair< Key, Value >(key, val)),
         leftChild(nullptr),
         rightChild(nullptr),
         parent(parent),
         balanceFactor(0)
       {}
 
-      TreeNode(Key key, Value val):
-        data(std::make_pair< Key, Value >(std::forward< Key >(key), std::forward< Value >(val))),
+      TreeNode(const Key& key, const Value& val):
+        data(std::pair< Key, Value >(key, val)),
         leftChild(nullptr),
         rightChild(nullptr),
         parent(nullptr),
@@ -95,14 +95,14 @@ namespace zakozhurnikova
         return newRoot;
       }
 
-      TreeNode* hasLeftChild() noexcept
+      bool hasLeftChild() noexcept
       {
-        return this->leftChild;
+        return this->leftChild != nullptr;
       }
 
-      TreeNode* hasRightChild() noexcept
+      bool hasRightChild() noexcept
       {
-        return this->rightChild;
+        return this->rightChild != nullptr;
       }
 
       bool isLeftChild() const noexcept
