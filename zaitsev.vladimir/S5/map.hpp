@@ -460,10 +460,10 @@ namespace zaitsev
       using pointer = prt_t;
       using reference = ref_t;
 
-      BaseLNRIterator():
+      BaseLNRIterator(Node* fakeroot):
         path_()
       {
-        path_.push(fakeroot_);
+        path_.push(fakeroot);
       }
       BaseLNRIterator(const BaseLNRIterator& other):
         path_(other.path_)
@@ -483,7 +483,7 @@ namespace zaitsev
       {
         if (path_.top()->right_)
         {
-          path_.push(path_.top()->right);
+          path_.push(path_.top()->right_);
           for (; path_.top()->left_; path_.push(path_.top()->left_));
         }
         else
@@ -514,7 +514,7 @@ namespace zaitsev
         {
           Node* cur = path_.top();
           path_.pop();
-          while (path_.top()->left_ == cur && path_.top() != fakeroot_)
+          while (path_.top()->left_ == cur && path_.size() != 1)
           {
             cur = path_.top();
             path_.pop();
@@ -538,11 +538,11 @@ namespace zaitsev
       }
       bool operator!=(const BaseLNRIterator& other) const
       {
-        return path_ != other.path_;
+        return path_.top() != other.path_.top();
       }
       bool operator==(const BaseLNRIterator& other) const
       {
-        return path_ == other.path_;
+        return path_.top() == other.path_.top();
       }
     };
   public:
@@ -715,7 +715,7 @@ namespace zaitsev
 
     lnr_iterator lnr_begin()
     {
-      lnr_iterator it;
+      lnr_iterator it(fakeroot_);
       for (; it.path_.top()->left_; it.path_.push(it.path_.top()->left_));
       return it;
     }
@@ -731,7 +731,7 @@ namespace zaitsev
     }
     lnr_iterator lnr_end()
     {
-      return lnr_iterator{};
+      return lnr_iterator(fakeroot_);
     }
     const_lnr_iterator lnr_end() const
     {
@@ -739,7 +739,7 @@ namespace zaitsev
     }
     const_lnr_iterator lnr_cend() const
     {
-      return const_lnr_iterator{};
+      return const_lnr_iterator(fakeroot_);
     }
     template< class F >
     F traverse_lnr(F f)
