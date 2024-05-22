@@ -22,9 +22,9 @@ namespace zaitsev
 
 int main(int argc, char** argv)
 {
-  if (argc < 3)
+  if (argc != 3)
   {
-    std::cerr << "Not enough arguments\n";
+    std::cerr << "Invalid number of arguments\n";
     return 1;
   }
   using namespace zaitsev;
@@ -65,7 +65,7 @@ int main(int argc, char** argv)
       }
       else
       {
-        std::cerr << "Invalid agrument\n";
+        throw std::invalid_argument("Invalid agrument");
       }
     }
   }
