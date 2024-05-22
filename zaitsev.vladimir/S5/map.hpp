@@ -688,6 +688,14 @@ namespace zaitsev
     {
       return std::make_reverse_iterator(cend());
     }
+    static iterator get_light_iterator(lnr_iterator it)
+    {
+      return iterator(it.path_.top());
+    }
+    static const_iterator get_light_iterator(const_lnr_iterator it)
+    {
+      return const_iterator(it.path_.top());
+    }
 
     iterator end()
     {
@@ -713,6 +721,16 @@ namespace zaitsev
     {
       return std::make_reverse_iterator(cbegin());
     }
+    static reverse_iterator get_light_iterator(rnl_iterator it)
+    {
+      iterator forward_it(it.base().path_.top());
+      return std::make_reverse_iterator(forward_it);
+    }
+    static const_reverse_iterator get_light_iterator(const_rnl_iterator it)
+    {
+      const_iterator forward_it(it.base().path_.top());
+      return std::make_reverse_iterator(forward_it);
+    }
 
     lnr_iterator lnr_begin()
     {
@@ -726,7 +744,7 @@ namespace zaitsev
     }
     const_lnr_iterator lnr_cbegin() const
     {
-      const_lnr_iterator it;
+      const_lnr_iterator it(fakeroot_);
       for (; it.path_.top()->left_; it.path_.push(it.path_.top()->left_));
       return it;
     }
