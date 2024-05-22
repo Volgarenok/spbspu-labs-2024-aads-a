@@ -6,19 +6,7 @@
 #include <stdexcept>
 #include <operators.hpp>
 #include "map.hpp"
-
-namespace zaitsev
-{
-  struct summator
-  {
-    void operator()(const std::pair< const long long, std::string >& key_value) {
-      key_sum_ = safePlus(key_sum_, key_value.first);
-      val_sum_ += (val_sum_.empty() ? key_value.second : " " + key_value.second);
-    }
-    long long key_sum_ = 0;
-    std::string val_sum_ = "";
-  };
-}
+#include "summator.hpp"
 
 int main(int argc, char** argv)
 {
