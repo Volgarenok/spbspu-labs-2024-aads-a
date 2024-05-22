@@ -1,12 +1,13 @@
 #include <iostream>
 #include <stdexcept>
-#include <deque>
 #include <forward_list>
 #include <list>
 #include <algorithm>
+#include "sequence_operations.hpp"
 
 int main(int argc, char ** argv)
 {
+  using namespace erohin;
   if (argc != 4)
   {
     std::cerr << "Wrong CLA's number\n";
@@ -19,13 +20,14 @@ int main(int argc, char ** argv)
     {
       throw std::invalid_argument("Invalid sequence size");
     }
-    std::deque< int > random_seq;
-    for (size_t i = 0; i < size; ++i)
-    {
-      random_seq.push_back(rand());
-      std::cout << random_seq.back() << std::endl;
-    }
-    std::sort(random_seq.begin(), random_seq.end());
+    std::forward_list< int > random_seq;
+    generate_random< int >(random_seq, size);
+    random_seq.sort();
+    std::copy(
+      random_seq.cbegin(),
+      random_seq.cend(),
+      std::ostream_iterator< int >(std::cout, "\n")
+    );
   }
   catch (const std::exception & e)
   {
