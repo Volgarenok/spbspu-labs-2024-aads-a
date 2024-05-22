@@ -6,13 +6,14 @@
 #include <algorithm>
 #include <iomanip>
 #include <list.hpp>
+#include <tree.hpp>
 #include "sortings.hpp"
 #include "iterators_functions.hpp"
 
 namespace nikitov
 {
-  template< class T >
-  void sortSequence(std::string sorting, std::string type, size_t size, std::ostream& output)
+  template< class T, class Compare >
+  void sortSequence(std::string type, size_t size, std::ostream& output)
   {
     std::forward_list< T > fList;
     List< T > firstBiList;
@@ -39,28 +40,13 @@ namespace nikitov
     output << std::setprecision(1) << std::fixed;
     printRange(fList.cbegin(), fList.cend(), output);
 
-    if (sorting == "ascending")
-    {
-      fList.sort(std::less< T >());
-      oddEvenSort(firstBiList.begin(), firstBiList.end(), std::less< T >());
-      secondBiList.sort(std::less< T >());
-      oddEvenSort(firstDeque.begin(), firstDeque.end(), std::less< T >());
-      QSort(secondDeque.begin(), secondDeque.end(), std::less< T >());
-      std::sort(thirdDeque.begin(), thirdDeque.end(), std::less< T >());
-    }
-    else if (sorting == "descending")
-    {
-      fList.sort(std::greater< T >());
-      oddEvenSort(firstBiList.begin(), firstBiList.end(), std::greater< T >());
-      secondBiList.sort(std::greater< T >());
-      oddEvenSort(firstDeque.begin(), firstDeque.end(), std::greater< T >());
-      QSort(secondDeque.begin(), secondDeque.end(), std::greater< T >());
-      std::sort(thirdDeque.begin(), thirdDeque.end(), std::greater< T >());
-    }
-    else
-    {
-      throw std::invalid_argument("Error: Wrong sorting parameter");
-    }
+    fList.sort(Compare());
+    oddEvenSort(firstBiList.begin(), firstBiList.end(), Compare());
+    secondBiList.sort(Compare());
+    oddEvenSort(firstDeque.begin(), firstDeque.end(), Compare());
+    QSort(secondDeque.begin(), secondDeque.end(), Compare());
+    std::sort(thirdDeque.begin(), thirdDeque.end(), Compare());
+
     printRange(fList.cbegin(), fList.cend(), output);
     printRange(firstBiList.cbegin(), firstBiList.cend(), output);
     printRange(secondBiList.cbegin(), secondBiList.cend(), output);

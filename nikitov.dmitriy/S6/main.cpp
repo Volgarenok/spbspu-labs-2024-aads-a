@@ -19,12 +19,15 @@ int main(int argc, char* argv[])
       throw std::invalid_argument("Error: Wrong size parameter");
     }
 
+    Tree< std::pair< std::string, std::string >, std::function< void(std::string, size_t, std::ostream&) > > types;
+    types[{ "ints", "ascending" }] = sortSequence< int, std::less< int > >;
+    types[{ "floats", "ascending" }] = sortSequence< float, std::less< float > >;
+    types[{ "ints", "descending" }] = sortSequence< int, std::greater< int > >;
+    types[{ "floats", "descending" }] = sortSequence< float, std::greater< float > >;
+
     std::string sorting = argv[1];
     std::string type = argv[2];
-    Tree< std::string, std::function< void(std::string, std::string, size_t, std::ostream&) > > types;
-    types["ints"] = sortSequence< int >;
-    types["floats"] = sortSequence< float >;
-    types.at(type)(sorting, type, size, std::cout);
+    types.at({ type, sorting })(type, size, std::cout);
   }
   catch (const std::exception& e)
   {
