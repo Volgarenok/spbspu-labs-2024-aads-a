@@ -10,28 +10,30 @@
 #include "sortings.hpp"
 #include "iterators_functions.hpp"
 
+int generateValue(int)
+{
+  return std::rand();
+}
+
+float generateValue(float)
+{
+  return static_cast <float> (std::rand());
+}
+
 namespace nikitov
 {
   template< class T, class Compare >
-  void sortSequence(std::string type, size_t size, std::ostream& output)
+  void sortSequence(size_t size, std::ostream& output)
   {
     std::forward_list< T > fList;
     List< T > firstBiList;
     std::deque< T > firstDeque;
     for (size_t i = 0; i != size; ++i)
     {
-      T value = 0;
-      if (type == "ints")
-      {
-        value = rand();
-      }
-      else
-      {
-        value = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/RAND_MAX));
-      }
+      T value = generateValue(T());
       fList.push_front(value);
-      firstBiList.push_back(value);
-      firstDeque.push_back(value);
+      firstBiList.push_front(value);
+      firstDeque.push_front(value);
     }
     List< T > secondBiList = firstBiList;
     std::deque< T > secondDeque = firstDeque;
