@@ -6,6 +6,7 @@
 #include <deque>
 #include <forward_list>
 #include <functional>
+#include "list.hpp"
 #include "sequence_operations.hpp"
 #include "sort_functions.hpp"
 

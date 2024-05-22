@@ -56,6 +56,9 @@ namespace erohin
     void splice_after(const_iterator pos, List< T > & other, const_iterator first, const_iterator last);
     void splice_after(const_iterator pos, List< T > && other, const_iterator first, const_iterator last) noexcept;
     void reverse() noexcept;
+    template< class Compare >
+    void sort(Compare cmp);
+    void sort();
   private:
     detail::Node< T > * head_;
   };
@@ -416,6 +419,37 @@ namespace erohin
       ++iter_current;
     }
     erase_after(iter_begin, iter_end);
+  }
+
+  template< class T >
+  template< class Compare >
+  void List< T >::sort(Compare cmp)
+  {
+    if (empty())
+    {
+      return;
+    }
+    bool is_sorted = false;
+    while (!is_sorted)
+    {
+      is_sorted = true;
+      auto iter = begin();
+      while (std::next(iter) != end())
+      {
+        if (cmp(*std::next(iter), *iter))
+        {
+          std::swap(*iter, *std::next(iter));
+          is_sorted = false;
+        }
+        ++iter;
+      }
+    }
+  }
+
+  template< class T >
+  void List< T >::sort()
+  {
+    sort(std::less< T >{});
   }
 
   namespace detail
