@@ -214,14 +214,14 @@ namespace ishmuratov
 
     void erase(const Key & k)
     {
-      erase_impl(k, root_);
+      root_ = erase_impl(k, root_);
     }
 
     void erase(ConstIter begin, ConstIter end)
     {
       while (begin != end)
       {
-        erase(*begin->first);
+        erase(begin->first);
         ++begin;
       }
     }
@@ -265,17 +265,6 @@ namespace ishmuratov
           size_ += 1;
         }
         node->left = insert_impl(pair, node->left);
-        if (get_height(node->left) - get_height(node->right) == 2)
-        {
-          if (comp_(pair.first, node->left->data.first))
-          {
-            node = rotate_right(node);
-          }
-          else
-          {
-            node = rotate_double_right(node);
-          }
-        }
       }
       else if (comp_(node->data.first, pair.first))
       {
@@ -286,36 +275,24 @@ namespace ishmuratov
           size_ += 1;
         }
         node->right = insert_impl(pair, node->right);
-        if (get_height(node->right) - get_height(node->left) == 2)
-        {
-          if (comp_(node->right->data.first, pair.first))
-          {
-            node = rotate_left(node);
-          }
-          else
-          {
-            node = rotate_double_left(node);
-          }
-        }
       }
       else
       {
         node->data.second = pair.second;
       }
+
       node->height = std::max(get_height(node->left), get_height(node->right)) + 1;
-      return node;
+      return balance(pair.first, node);
     }
 
     tnode * erase_impl(const Key & k, tnode * node)
     {
       tnode * temp;
-
       if (node == nullptr)
       {
         return node;
       }
-
-      else if (comp_(k, node->data.first))
+      if (comp_(k, node->data.first))
       {
         node->left = erase_impl(k, node->left);
       }
@@ -323,49 +300,56 @@ namespace ishmuratov
       {
         node->right = erase_impl(k, node->right);
       }
-      else if (node->left && node->right)
-      {
-        temp = min_elem(node->right);
-        node->data = temp->data;
-        //delete node->right;
-        node->right = erase_impl(k, node->right);
-      }
       else
       {
-        temp = node;
-        if(node->left == nullptr)
+        if ((node->left == nullptr) || (node->right == nullptr))
         {
-          node = node->right;
+          if (node->left)
+          {
+            temp = node->left;
+          }
+          else
+          {
+            temp = node->right;
+          }
+          delete node;
+          size_ -= 1;
+          return temp;
         }
-        else if(node->right == nullptr)
+        else
         {
-          node = node->left;
+          temp = min_elem(node->right);
+          node->data = temp->data;
+          node->right = erase_impl(node->data.first, node->right);
         }
-        delete temp;
       }
 
-      node->height = std::max(get_height(node->left), get_height(node->right))+1;
+      node->height = std::max(get_height(node->left), get_height(node->right)) + 1;
+      return balance(k, node);
+    }
 
+    tnode * balance(const Key k, tnode * node)
+    {
       if (get_height(node->left) - get_height(node->right) == 2)
       {
-        if (get_height(node->left->left) - get_height(node->left->right) == 1)
+        if (comp_(k, node->left->data.first))
         {
-          return rotate_left(node);
+          node = rotate_right(node);
         }
         else
         {
-          return rotate_double_left(node);
+          node = rotate_double_right(node);
         }
       }
-      else if (get_height(node->right) - get_height(node->left) == 2)
+      if (get_height(node->right) - get_height(node->left) == 2)
       {
-        if (get_height(node->right->right) - get_height(node->right->left) == 1)
+        if (comp_(node->right->data.first, k))
         {
-          return rotate_right(node);
+          node = rotate_left(node);
         }
         else
         {
-          return rotate_double_right(node);
+          node = rotate_double_left(node);
         }
       }
       return node;
