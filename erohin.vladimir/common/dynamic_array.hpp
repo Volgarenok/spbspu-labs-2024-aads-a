@@ -70,7 +70,7 @@ namespace erohin
     {
       for (size_t i = 0; i < size_; ++i)
       {
-        new (data_ + i) T(other[i + begin_index_]);
+        new (data_ + i) T(other.data_[i + begin_index_]);
       }
     }
     catch (...)
@@ -97,7 +97,7 @@ namespace erohin
   template< class T >
   DynamicArray< T >::DynamicArray(size_t capacity):
     capacity_(capacity),
-    size_(0),
+    size_(capacity),
     begin_index_(0),
     data_(reinterpret_cast< T * >(new char[capacity * sizeof(T)]))
   {}
@@ -106,7 +106,7 @@ namespace erohin
   template< class InputIt >
   DynamicArray< T >::DynamicArray(InputIt first, InputIt last):
     capacity_(8),
-    size_(capacity_),
+    size_(0),
     begin_index_(0),
     data_(reinterpret_cast< T * >(new char[capacity_ * sizeof(T)]))
   {
