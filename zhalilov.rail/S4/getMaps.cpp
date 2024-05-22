@@ -2,7 +2,7 @@
 
 #include <istream>
 
-#include "twoThreeTree.hpp"
+#include <tree/twoThreeTree.hpp>
 
 void zhalilov::getMaps(TwoThree < std::string, primaryMap > &maps, std::istream &input)
 {
