@@ -226,7 +226,7 @@ namespace ishmuratov
       }
     }
 
-    size_t count(const Key & k)
+    size_t count(const Key & k) const
     {
       size_t count = 0;
       for (auto node = cbegin(); node != cend(); ++node)
@@ -237,6 +237,35 @@ namespace ishmuratov
         }
       }
       return count;
+    }
+
+    Iter lower_bound(const Key & k)
+    {
+      for (auto node = begin(); node != end(); ++node)
+      {
+        if (!comp_(node->first, k))
+        {
+          return node;
+        }
+      }
+      return end();
+    }
+
+    Iter upper_bound(const Key & k)
+    {
+      for (auto node = begin(); node != end(); ++node)
+      {
+        if (comp_(k, node->first))
+        {
+          return node;
+        }
+      }
+      return end();
+    }
+
+    std::pair< Iter, Iter > equal_range(const Key & k)
+    {
+      return std::make_pair(lower_bound(k), upper_bound(k));
     }
 
     void print(std::ostream & output)
