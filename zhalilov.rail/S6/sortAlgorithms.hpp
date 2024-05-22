@@ -3,6 +3,8 @@
 
 #include <algorithm>
 
+#include <list/list.hpp>
+
 namespace zhalilov
 {
   namespace detail
