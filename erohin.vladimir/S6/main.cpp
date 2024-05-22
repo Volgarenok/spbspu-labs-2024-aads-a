@@ -20,8 +20,8 @@ int main(int argc, char ** argv)
     {
       throw std::invalid_argument("Invalid sequence size");
     }
-    std::forward_list< int > random_seq;
-    generate_random< int >(random_seq, size);
+    std::forward_list< float > random_seq;
+    generate_random< float >(random_seq, size);
     random_seq.sort();
     print(std::cout, random_seq.begin(), random_seq.end());
     std::cout << "\n";

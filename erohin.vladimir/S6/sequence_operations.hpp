@@ -15,7 +15,7 @@ namespace erohin
   }
 
   template<>
-  float random(std::pair< float, float > range)
+  float random< float >(std::pair< float, float > range)
   {
     return ((static_cast< float >(rand()) / RAND_MAX) * (range.second - range.first) + range.first);
   }
@@ -26,7 +26,7 @@ namespace erohin
     std::vector< T > seq;
     for (size_t i = 0; i < n; ++i)
     {
-      seq.push_back(random(std::make_pair(0, 100)));
+      seq.push_back(random< T >(std::make_pair(0, 100)));
     }
     Container temp(seq.begin(), seq.end());
     cnt.clear();
