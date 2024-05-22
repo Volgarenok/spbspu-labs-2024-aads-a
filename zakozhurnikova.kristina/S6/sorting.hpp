@@ -3,12 +3,14 @@
 #include <iterator.hpp>
 #include <list.hpp>
 #include <utility>
+#include <algorithm>
 
 namespace zakozhurnikova
 {
   template < class Iterator, class Compare >
   void shaker(Iterator& begin, size_t size, Compare cmp)
   {
+    ++begin;
     int leftMark = 1;
     int rightMark = size - 1;
     auto end = begin;
@@ -33,7 +35,7 @@ namespace zakozhurnikova
         --curr;
         if (cmp(*(tempEnd), *(curr)))
         {
-          std::swap(*curr, *tempEnd);
+          std::iter_swap(curr, tempEnd);
         }
         --tempEnd;
       }
@@ -59,18 +61,17 @@ namespace zakozhurnikova
   }
 
   template < class Iterator, class Compare >
-  void shell(Iterator begin, size_t s, Compare cmp)
+  void shell(Iterator begin, size_t size, Compare cmp)
   {
-    int size = s;
     auto spacing = begin + size / 2;
-    for (int interval = size / 2; interval > 0; interval /= 2)
+    for (size_t interval = size / 2; interval > 0; interval /= 2)
     {
       auto temp = begin + interval;
-      for (int i = interval; i < size; ++i)
+      for (size_t i = interval; i < size; ++i)
       {
         auto number = *temp;
         auto tmp = temp;
-        int j = i;
+        size_t j = i;
         for (; j >= interval && cmp(number, *(tmp - interval)); j -= interval)
         {
           auto next = tmp - interval;

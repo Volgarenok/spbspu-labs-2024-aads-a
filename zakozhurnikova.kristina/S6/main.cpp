@@ -19,7 +19,6 @@ int main(int argc, char* argv[])
     std::cerr << "No right argument";
     return 1;
   }
-
   std::string sort = argv[1];
   std::string type = argv[2];
   size_t size = std::atoi(argv[3]);
@@ -43,7 +42,7 @@ int main(int argc, char* argv[])
       throw std::logic_error("No right type");
     }
   }
-  catch (std::exception& e)
+  catch (const std::exception& e)
   {
     std::cerr << e.what();
     return 1;

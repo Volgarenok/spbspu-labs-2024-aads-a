@@ -1,15 +1,13 @@
 #ifndef GENERATE_HPP
 #define GENERATE_HPP
-#include <cstdlib>
+#include <random>
 
-int RandomNumberInt()
+namespace zakozhurnikova
 {
-  return (std::rand() % 100);
+  namespace detail
+  {
+    int randomNumberInt();
+    float randomNumberFloat();
+  }
 }
-
-int RandomNumberFloat()
-{
-  return static_cast < float > (rand()) / 1.2;
-}
-
 #endif

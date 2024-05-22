@@ -41,11 +41,11 @@ namespace zakozhurnikova
     Type array[10000];
     if (kind == "ints")
     {
-      std::generate_n(array, size, RandomNumberInt);
+      std::generate_n(array, size, detail::randomNumberInt);
     }
     else if (kind == "floats")
     {
-      std::generate_n(array, size, RandomNumberFloat);
+      std::generate_n(array, size, detail::randomNumberFloat);
     }
     List< Type > biListRealization(array, array + size);
     std::list< Type > biListStandart(array, array + size);
@@ -62,10 +62,10 @@ namespace zakozhurnikova
     auto beginDeqShaker = dequeShaker.begin();
     auto beginDeqShell = dequeShell.begin();
 
-    shaker(++beginBiR, size, cmp);
+    shaker(beginBiR, size, cmp);
     biListStandart.sort(cmp);
     std::sort(beginDeqSort, endDeqSort, cmp);
-    shaker(++beginDeqShaker, size, cmp);
+    shaker(beginDeqShaker, size, cmp);
     shell(beginDeqShell, size, cmp);
     forwardList.sort(cmp);
 
