@@ -16,18 +16,18 @@
 namespace zakozhurnikova
 {
   template < class type, class Compare >
-  void sortingAndPrintSheets(std::string kind, size_t size, Compare cmp);
+  void sortAndPrint(const std::string& kind, size_t size, Compare cmp);
 
   template< class Type >
   void selectSorting(std::string sort, std::string kind, size_t size)
   {
     if (sort == "ascending")
     {
-      sortingAndPrintSheets< Type >(kind, size, std::less< Type >());
+      sortAndPrint< Type >(kind, size, std::less< Type >());
     }
     else if (sort == "descending")
     {
-      sortingAndPrintSheets< Type >(kind, size, std::greater< Type >());
+      sortAndPrint< Type >(kind, size, std::greater< Type >());
     }
     else
     {
@@ -36,7 +36,7 @@ namespace zakozhurnikova
   }
 
   template < class Type, class Compare >
-  void sortingAndPrintSheets(std::string kind, size_t size, Compare cmp)
+  void sortAndPrint(const std::string& kind, size_t size, Compare cmp)
   {
     Type array[10000];
     if (kind == "ints")

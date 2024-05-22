@@ -2,13 +2,15 @@
 #include <cstdlib>
 #include <deque>
 #include <forward_list>
-#include <list>
+#include <functional>
 #include <iostream>
-#include <string>
 #include <list.hpp>
+#include <list>
+#include <map>
+#include <string>
 #include "generate.hpp"
-#include "sorting.hpp"
 #include "print.hpp"
+#include "sorting.hpp"
 #include "sortingSheets.hpp"
 
 int main(int argc, char* argv[])
@@ -21,6 +23,7 @@ int main(int argc, char* argv[])
   }
   std::string sort = argv[1];
   std::string type = argv[2];
+  auto condition = std::make_pair(sort, type);
   size_t size = std::atoi(argv[3]);
   if (size == 0)
   {
@@ -29,22 +32,22 @@ int main(int argc, char* argv[])
   }
   try
   {
-    if (type == "ints")
-    {
-      selectSorting< int >(sort, type, size);
-    }
-    else if (type == "floats")
-    {
-      selectSorting< float >(sort, type, size);
-    }
-    else
-    {
-      throw std::logic_error("No right type");
-    }
+    using namespace std::placeholders;
+    std::map< std::pair< std::string, std::string >, std::function< void(const std::string&, size_t) > > commands;
+    commands[std::make_pair("ascending", "ints")] =
+      std::bind(sortAndPrint< int, std::less< int > >, _1, _2, std::less< int >());
+    commands[std::make_pair("ascending", "floats")] =
+      std::bind(sortAndPrint< float, std::less< float > >, _1, _2, std::less< float >());
+    commands[std::make_pair("descending", "ints")] =
+      std::bind(sortAndPrint< int, std::greater< int > >, _1, _2, std::greater< int >());
+    commands[std::make_pair("descending", "floats")] =
+      std::bind(sortAndPrint< float, std::greater< float > >, _1, _2, std::greater< float >());
+
+    commands.at(condition)(type, size);
   }
   catch (const std::exception& e)
   {
-    std::cerr << e.what();
+    std::cout << "No right argument\n";
     return 1;
   }
 }
