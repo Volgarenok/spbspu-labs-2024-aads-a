@@ -36,25 +36,13 @@ int main(int argc, char** argv)
     }
     else
     {
-      if (strcmp(argv[1], "ascending") == 0)
-      {
-        summator res = key_vals.traverse_lnr(summator{});
-        std::cout << res.key_sum_ << " " << res.val_sum_ << '\n';
-      }
-      else if (strcmp(argv[1], "descending") == 0)
-      {
-        summator res = key_vals.traverse_rnl(summator{});
-        std::cout << res.key_sum_ << " " << res.val_sum_ << '\n';
-      }
-      else if (strcmp(argv[1], "breadth") == 0)
-      {
-        summator res = key_vals.traverse_breadth(summator{});
-        std::cout << res.key_sum_ << " " << res.val_sum_ << '\n';
-      }
-      else
-      {
-        throw std::invalid_argument("Invalid agrument");
-      }
+      Map<std::string, std::function< summator()>> commands;
+      using ll = long long;
+      commands["ascending"] = std::bind(&Map< ll, std::string >::traverse_lnr< summator >, &key_vals, summator{});
+      commands["descending"] = std::bind(&Map< ll, std::string >::traverse_rnl< summator >, &key_vals, summator{});
+      commands["breadth"] = std::bind(&Map< ll, std::string >::traverse_breadth< summator >, &key_vals, summator{});
+      summator res = commands.at(argv[1])();;
+      std::cout << res.key_sum_ << " " << res.val_sum_ << '\n';
     }
   }
   catch (const std::exception& e)

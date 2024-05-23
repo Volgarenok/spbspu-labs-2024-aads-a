@@ -769,7 +769,7 @@ namespace zaitsev
       return f;
     }
     template< class F >
-    F traverse_lnr(F f) const
+    F const_traverse_lnr(F f) const
     {
       for (const_lnr_iterator i = lnr_cbegin(); i != lnr_cend(); ++i)
       {
@@ -812,7 +812,7 @@ namespace zaitsev
       return f;
     }
     template< class F >
-    F traverse_rnl(F f) const
+    F const_traverse_rnl(F f) const
     {
       for (const_rnl_iterator i = rnl_cbegin(); i != rnl_cend(); ++i)
       {
@@ -844,7 +844,7 @@ namespace zaitsev
       return f;
     }
     template< class F >
-    F traverse_breadth(F f) const
+    F const_traverse_breadth(F f) const
     {
       Queue<const Node* > chord;
       if (size_)
