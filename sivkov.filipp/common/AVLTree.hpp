@@ -26,7 +26,6 @@ namespace sivkov
     void swap(AVLTree other);
     void push(const Key& key, const Value& value);
     void deleteKey(const Key& key);
-    Value& operator[](const Key& key);
     const Value& operator[](const Key& key) const;
 
     ConstIteratorTree< Key, Value, Comp > cbegin() const;
@@ -175,71 +174,20 @@ namespace sivkov
   }
 
   template< typename Key, typename Value, typename Comp >
-  void AVLTree< Key, Value, Comp >::deleteKey(const Key& key)
+  void AVLTree<Key, Value, Comp>::deleteKey(const Key& key)
   {
     root_ = remove(root_, key);
   }
 
   template< typename Key, typename Value, typename Comp >
-  Value& AVLTree< Key, Value, Comp >::operator[](const Key& key)
-  {
-    detail::TreeNode< Key, Value >* parent = nullptr;
-    detail::TreeNode< Key, Value >* current = root_;
-
-    while (current != nullptr)
-    {
-      if (current->data.first == key)
-      {
-        return current->data.second;
-      }
-      parent = current;
-      if (comp_(key, current->data.first))
-      {
-        current = current->left;
-      }
-      else
-      {
-        current = current->right;
-      }
-    }
-
-    detail::TreeNode< Key, Value >* new_node = new detail::TreeNode< Key, Value >();
-    new_node->data.first = key;
-    new_node->data.second = Value();
-    new_node->parent = parent;
-
-    if (parent == nullptr)
-    {
-      root_ = new_node;
-    }
-    else if (comp_(key, parent->data.first))
-    {
-      parent->left = new_node;
-    }
-    else
-    {
-      parent->right = new_node;
-    }
-
-    root_ = balance(root_);
-    ++size_;
-
-    return new_node->data.second;
-  }
-
-  template< typename Key, typename Value, typename Comp >
   const Value& AVLTree< Key, Value, Comp >::operator[](const Key& key) const
   {
-    detail::TreeNode< Key, Value >* data = get(key, root_);
-    if (data)
+    auto iter = find(key);
+    if (iter == cend())
     {
-      return data->data.second;
+      throw std::out_of_range("Key not found");
     }
-    else
-    {
-      push(key, Value());
-      return get(key, root_)->data.second;
-    }
+    return iter->second;
   }
 
   template< typename Key, typename Value, typename Comp >
@@ -482,5 +430,6 @@ namespace sivkov
     return balance(root);
   }
 }
+
 #endif
 
