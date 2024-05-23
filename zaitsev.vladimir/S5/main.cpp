@@ -36,17 +36,17 @@ int main(int argc, char** argv)
     }
     else
     {
-      if (std::strcmp(argv[1], "ascending") == 0)
+      if (strcmp(argv[1], "ascending") == 0)
       {
         summator res = key_vals.traverse_lnr(summator{});
         std::cout << res.key_sum_ << " " << res.val_sum_ << '\n';
       }
-      else if (std::strcmp(argv[1], "descending") == 0)
+      else if (strcmp(argv[1], "descending") == 0)
       {
         summator res = key_vals.traverse_rnl(summator{});
         std::cout << res.key_sum_ << " " << res.val_sum_ << '\n';
       }
-      else if (std::strcmp(argv[1], "breadth") == 0)
+      else if (strcmp(argv[1], "breadth") == 0)
       {
         summator res = key_vals.traverse_breadth(summator{});
         std::cout << res.key_sum_ << " " << res.val_sum_ << '\n';
