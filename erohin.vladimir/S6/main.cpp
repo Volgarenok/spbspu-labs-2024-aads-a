@@ -2,7 +2,8 @@
 #include <stdexcept>
 #include <forward_list>
 #include <list>
-#include <algorithm>
+#include <functional>
+#include "red_black_tree.hpp"
 #include "sort_command.hpp"
 
 int main(int argc, char ** argv)
@@ -20,7 +21,9 @@ int main(int argc, char ** argv)
     {
       throw std::invalid_argument("Invalid sequence size");
     }
-    doSortCommand< int >(std::cout, size, std::less< int >{});
+    using sort_func_cmd = std::function< void(std::ostream &) >;
+    RedBlackTree< std::pair< std::string, std::string >, sort_func_cmd > sort_case;
+    //sort_case.insert(std::make_pair(std::make_pair("ascending", "ints"), doSortCommand< int >(std::cout, size, std::less< int >{})));
   }
   catch (const std::exception & e)
   {
