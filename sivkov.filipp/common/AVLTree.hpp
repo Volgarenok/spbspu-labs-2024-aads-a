@@ -26,7 +26,7 @@ namespace sivkov
     void swap(AVLTree other);
     void push(const Key& key, const Value& value);
     void deleteKey(const Key& key);
-    const Value& operator[](const Key& key) const;
+    Value& operator[](const Key& key);
 
     ConstIteratorTree< Key, Value, Comp > cbegin() const;
     ConstIteratorTree< Key, Value, Comp > cend() const;
@@ -180,12 +180,12 @@ namespace sivkov
   }
 
   template< typename Key, typename Value, typename Comp >
-  const Value& AVLTree< Key, Value, Comp >::operator[](const Key& key) const
+  Value& AVLTree< Key, Value, Comp >::operator[](const Key& key)
   {
     auto iter = find(key);
     if (iter == cend())
     {
-      throw std::out_of_range("Key not found");
+      root_ = insert(root_, key, Value());
     }
     return iter->second;
   }
@@ -430,6 +430,5 @@ namespace sivkov
     return balance(root);
   }
 }
-
 #endif
 
