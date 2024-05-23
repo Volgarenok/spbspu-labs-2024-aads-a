@@ -22,7 +22,7 @@ namespace zhalilov
         if (shouldCheck && cmp(*next, *curr))
         {
           isSorted = false;
-          std::swap(*next, *curr);
+          std::iter_swap(next, curr);
         }
         ++curr;
         ++next;
@@ -80,7 +80,7 @@ namespace zhalilov
     {
       for (auto currBucketIt = it->begin(); currBucketIt != it->end(); ++currBucketIt)
       {
-        *containerToSortIt = *currBucketIt;
+        std::iter_swap(containerToSortIt, currBucketIt);
         ++containerToSortIt;
       }
     }
