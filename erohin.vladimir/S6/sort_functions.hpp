@@ -11,35 +11,39 @@ namespace erohin
     template< class RandomAccessIt, class Compare >
     RandomAccessIt partition(RandomAccessIt begin, RandomAccessIt end, Compare cmp)
     {
-      auto pivot = end;
-      auto iter = std::prev(begin);
-      while (begin != std::prev(end))
+      auto pivot = begin + (end - begin) / 2;
+      while (begin <= end)
       {
-        if (cmp(*begin, *pivot))
+        while (cmp(*begin, *pivot))
         {
-          iter++;
-          if (iter != begin)
-          {
-            std::swap(*begin, *begin);
-          }
+          begin++;
         }
+        while (cmp(*pivot, *end))
+        {
+          end--;
+        }
+        if (begin >= end)
+        {
+          break;
+        }
+        std::swap(*(begin++), *(end--));
         ++begin;
       }
-      std::swap(*std::next(iter), *end);
-      return std::next(iter);
+      return end;
+
+      //return (begin + (end - begin) / 2);
     }
   }
 
   template< class RandomAccessIt, class Compare >
   void doQuickSort(RandomAccessIt begin, RandomAccessIt end, Compare cmp)
   {
-    if (begin >= end)
+    if (begin < end)
     {
-      return;
+      auto pivot = detail::partition(begin, end, cmp);
+      doQuickSort(begin, pivot, cmp);
+      doQuickSort(std::next(pivot), end, cmp);
     }
-    auto pivot = detail::partition(begin, end, cmp);
-    doQuickSort(begin, pivot, cmp);
-    doQuickSort(pivot, end, cmp);
   }
 
   template< class BidirectionalIt, class Compare >
