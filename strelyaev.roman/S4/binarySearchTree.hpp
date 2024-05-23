@@ -233,7 +233,7 @@ namespace strelyaev
         return it->second;
       }
 
-      T& at(const Key& key) const
+      const T& at(const Key& key) const
       {
         c_iterator_t it = find(key);
         if (it == cend())
@@ -244,16 +244,6 @@ namespace strelyaev
       }
 
       T& operator[](const Key& key) noexcept
-      {
-        auto it = find(key);
-        if (it == end())
-        {
-          it = insert(key, T());
-        }
-        return it->second;
-      }
-
-      T& operator[](const Key& key) const noexcept
       {
         auto it = find(key);
         if (it == end())
