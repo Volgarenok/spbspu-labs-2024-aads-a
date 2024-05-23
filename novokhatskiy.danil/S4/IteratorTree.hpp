@@ -1,21 +1,21 @@
 #ifndef ITERATOR_TREE_HPP
 #define ITERATOR_TREE_HPP
 
-#include <iterator>
 #include <functional>
+#include <iterator>
 #include <utility>
 #include "AVLtreeNode.hpp"
 #include "constIteratorTree.hpp"
 
 namespace novokhatskiy
 {
-  template< class Key, class Value, class Compare >
+  template < class Key, class Value, class Compare >
   class Tree;
 
-  template< class Key, class Value, class Compare >
+  template < class Key, class Value, class Compare >
   struct ConstIteratorTree;
 
-  template< class Key, class Value, class Compare = std::less< Key > >
+  template < class Key, class Value, class Compare = std::less< Key > >
   struct IteratorTree: public std::iterator< std::bidirectional_iterator_tag, Value >
   {
     using node_t = detail::NodeTree< Key, Value >;
@@ -24,10 +24,6 @@ namespace novokhatskiy
 
     IteratorTree():
       node_(nullptr)
-    {}
-
-    explicit IteratorTree(node_t* other) :
-      node_(other)
     {}
 
     bool operator!=(const iter& other) const
@@ -94,11 +90,13 @@ namespace novokhatskiy
       if (node_->left)
       {
         node_ = node_->left;
-        for (; node_->right; node_ = node_->right);
+        for (; node_->right; node_ = node_->right)
+          ;
       }
       else
       {
-        for (; node_ == node_->parent->left; node_ = node_->parent);
+        for (; node_ == node_->parent->left; node_ = node_->parent)
+          ;
         node_ = node_->parent;
       }
       return *this;
@@ -115,6 +113,9 @@ namespace novokhatskiy
     node_t* node_;
     friend class Tree< Key, Value, Compare >;
     friend struct ConstIteratorTree< Key, Value, Compare >;
+    explicit IteratorTree(node_t* other):
+      node_(other)
+    {}
   };
 }
 

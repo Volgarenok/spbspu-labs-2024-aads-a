@@ -7,7 +7,7 @@ namespace novokhatskiy
 {
   namespace detail
   {
-    template< class Key, class Value >
+    template < class Key, class Value >
     struct NodeTree
     {
       using val_type = std::pair< Key, Value >;
@@ -60,14 +60,6 @@ namespace novokhatskiy
         other.left = nullptr;
         other.right = nullptr;
         other.parent = nullptr;
-      }
-
-      void clear()
-      {
-        height = 0;
-        left = nullptr;
-        right = nullptr;
-        parent = nullptr;
       }
 
       int getHeight(NodeTree* root)
