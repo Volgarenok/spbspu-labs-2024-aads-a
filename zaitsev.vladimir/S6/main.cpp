@@ -16,7 +16,6 @@ int main(int argc, char** argv)
   s[{"ints", "descending]"}] = sortirator< int, std::greater< int > >;
   s[{"floats", "ascending"}] = sortirator< float, std::less< float > >;
   s[{"floats", "descending"}] = sortirator< float, std::greater< float > >;
-  constexpr size_t size = 10;
   try
   {
     s[{argv[2], argv[1]}](std::cout, std::stoull(argv[3]));
