@@ -207,18 +207,18 @@ namespace marishin
       auto iter = find(key);
       if (iter == end())
       {
-        it = insert(key, Value());
+        iter = insert(key, Value());
       }
-      return it.second;
+      return iter.second;
     }
     const Value & operator[](const Key & key) const
     {
       auto iter = find(key);
       if (iter == end())
       {
-        it = insert(key, Value());
+        iter = insert(key, Value());
       }
-      return it.second;
+      return iter.second;
     }
     Value & at(const Key & key)
     {
@@ -227,7 +227,7 @@ namespace marishin
       {
         throw std::out_of_range("No such element");
       }
-      return data.second;
+      return iter.second;
     }
     const Value & at(const Key & key) const
     {
@@ -236,7 +236,7 @@ namespace marishin
       {
         throw std::out_of_range("No such element");
       }
-      return data.second;
+      return iter.second;
     }
     size_t size() const noexcept
     {
