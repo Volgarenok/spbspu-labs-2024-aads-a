@@ -15,11 +15,11 @@ int main(int argc, char *argv[])
 
   using namespace zhalilov;
   using testSortFuncType = void (*)(size_t, std::ostream &);
-  TwoThree< std::pair< std::string, std::string >, testSortFuncType > testSortVariantsMap;
-  testSortVariantsMap[{ "ints", "ascending" }] = testSorts< int, std::less< int > >;
-  testSortVariantsMap[{ "ints", "descending" }] = testSorts< int, std::greater< int > >;
-  testSortVariantsMap[{ "floats", "ascending" }] = testSorts< float, std::less< float > >;
-  testSortVariantsMap[{ "floats", "descending" }] = testSorts< float, std::greater< float > >;
+  TwoThree< std::string, testSortFuncType > testSortVariantsMap;
+  testSortVariantsMap["intsascending"] = testSorts< int, std::less< int > >;
+  testSortVariantsMap["intsdescending"] = testSorts< int, std::greater< int > >;
+  testSortVariantsMap["floatsascending"] = testSorts< float, std::less< float > >;
+  testSortVariantsMap["floatsdescending"] = testSorts< float, std::greater< float > >;
   try
   {
     std::string direction = argv[1];
@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
       throw std::invalid_argument("main.cpp: size == 0");
     }
     std::cout << std::fixed << std::setprecision(1);
-    testSortVariantsMap[{ type, direction }](size, std::cout);
+    testSortVariantsMap[type + direction](size, std::cout);
   }
   catch (const std::exception &e)
   {
