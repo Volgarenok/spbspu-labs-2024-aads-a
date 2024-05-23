@@ -21,7 +21,7 @@ int main(int argc, char * argv[])
       std::cerr << "Can not open the file\n";
       return 1;
     }
-    inputMaps(in, myMap);
+    myMap = inputMaps(in);
     in.close();
   }
   else

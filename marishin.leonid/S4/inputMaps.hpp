@@ -8,7 +8,7 @@
 
 namespace marishin
 {
-  void inputMaps(std::istream & in, Tree< std::string, Tree< size_t, std::string > > & myMap);
+  Tree< std::string, Tree< size_t, std::string > > inputMaps(std::istream & in);
 }
 
 #endif
