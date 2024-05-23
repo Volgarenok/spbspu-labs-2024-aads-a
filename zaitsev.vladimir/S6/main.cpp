@@ -20,12 +20,12 @@ int main(int argc, char** argv)
   try
   {
    // sorter_types[{argv[2], argv[1]}](std::cout, std::stoull(argv[3]));
-    if(strcmp(argv[1], "ints") == 0)
+    if(strcmp(argv[2], "ints") == 0)
       for (size_t i = 0; i < std::stoull(argv[3]); ++i)
       {
         std::cout << 1 << std::endl;
       }
-    else if (strcmp(argv[1], "floats") == 0)
+    else if (strcmp(argv[2], "floats") == 0)
       for (size_t i = 0; i < std::stoull(argv[3]); ++i)
       {
         std::cout << 1.0 << std::endl;
