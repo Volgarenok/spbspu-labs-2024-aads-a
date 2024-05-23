@@ -867,7 +867,6 @@ namespace zaitsev
       return f;
     }
 
-
     bool empty() const noexcept
     {
       return !size_;
