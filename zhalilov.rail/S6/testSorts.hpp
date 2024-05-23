@@ -5,6 +5,8 @@
 #include <deque>
 #include <forward_list>
 #include <functional>
+#include <random>
+#include <limits>
 
 #include <list/list.hpp>
 
@@ -12,36 +14,35 @@
 
 namespace zhalilov
 {
-  template < class InputIt >
-  void printNums(InputIt first, InputIt last, std::ostream &out)
+  template < class ForwardIt >
+  void printNums(ForwardIt first, ForwardIt last, std::ostream &out)
   {
-    InputIt next = first;
-    next++;
+    ForwardIt next = first;
+    ++next;
     while (next != last)
     {
       out << *first << ' ';
-      first++;
-      next++;
+      ++first;
+      ++next;
     }
     out << *first << '\n';
   }
 
   template < class T >
-  void testSorts(std::deque< T > nums, std::string direction, std::ostream &out)
+  T generateNumInRange(T first, T last)
   {
-    std::function< bool (const T &, const T &) > comparer;
-    if (direction == "ascending")
-    {
-      comparer = std::less< T >();
-    }
-    else if (direction == "descending")
-    {
-      comparer = std::greater< T >();
-    }
-    else
-    {
-      throw std::invalid_argument("testSorts: invalid direction");
-    }
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution< > dis(first, last);
+    return static_cast< T >(dis(gen));
+  }
+
+  template < class T, class Compare >
+  void testSorts(size_t size, std::ostream &out)
+  {
+    std::deque< T > nums(size);
+    auto generator = std::bind(generateNumInRange< T >, -1000, 1000);
+    std::generate(nums.begin(), nums.end(), generator);
 
     std::forward_list< T > implForwardOddEven(nums.cbegin(), nums.cend());
     std::forward_list< T > implForwardBucket(nums.cbegin(), nums.cend());
@@ -50,6 +51,7 @@ namespace zhalilov
     std::deque< T > deqBucket(nums.cbegin(), nums.cend());
     std::deque< T > deqSort(nums.cbegin(), nums.cend());
 
+    Compare comparer;
     oddEvenSort(implForwardOddEven.begin(), implForwardOddEven.end(), comparer);
     oddEvenSort(deqOddEven.begin(), deqOddEven.end(), comparer);
 
