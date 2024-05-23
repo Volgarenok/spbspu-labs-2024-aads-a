@@ -21,7 +21,6 @@ namespace sivkov
 
     Value& at(const Key& key);
     const Value& at(const Key& key) const;
-    void remove(const Key& key);
     bool empty() const noexcept;
     bool contains(const Key& key) const;
     void swap(AVLTree other) noexcept;
@@ -40,7 +39,6 @@ namespace sivkov
     Comp comp_;
 
     void clear();
-    void clear(detail::TreeNode< Key, Value >* node);
     detail::TreeNode< Key, Value >* remove(detail::TreeNode< Key, Value >* node, const Key& key);
 
     detail::TreeNode< Key, Value >* find_min(detail::TreeNode< Key, Value >* node) const;
@@ -150,12 +148,6 @@ namespace sivkov
   }
 
   template< typename Key, typename Value, typename Comp >
-  void AVLTree< Key, Value, Comp >::remove(const Key& key)
-  {
-    root_ = remove(root_, key);
-  }
-
-  template< typename Key, typename Value, typename Comp >
   bool AVLTree< Key, Value, Comp >::empty() const noexcept
   {
     return size_ == 0;
@@ -168,7 +160,7 @@ namespace sivkov
   }
 
   template< typename Key, typename Value, typename Comp >
-  void AVLTree< Key, Value, Comp >::swap(AVLTree other) noexcept
+  void AVLTree< Key, Value, Comp >::swap(AVLTree other)
   {
     std::swap(root_, other.root_);
     std::swap(size_, other.size_);
@@ -182,33 +174,57 @@ namespace sivkov
     ++size_;
   }
 
-  template<typename Key, typename Value, typename Comp>
-  void AVLTree<Key, Value, Comp>::deleteKey(const Key& key)
+  template< typename Key, typename Value, typename Comp >
+  void AVLTree< Key, Value, Comp >::deleteKey(const Key& key)
   {
-    if (contains(key))
-    {
-      root_ = remove(root_, key);
-      --size_;
-    }
-    else
-    {
-      throw std::out_of_range("Error key");
-    }
+    root_ = remove(root_, key);
   }
 
   template< typename Key, typename Value, typename Comp >
   Value& AVLTree< Key, Value, Comp >::operator[](const Key& key)
   {
-    detail::TreeNode< Key, Value >* data = get(key, root_);
-    if (data)
+    detail::TreeNode< Key, Value >* parent = nullptr;
+    detail::TreeNode< Key, Value >* current = root_;
+
+    while (current != nullptr)
     {
-      return data->data.second;
+      if (current->data.first == key)
+      {
+        return current->data.second;
+      }
+      parent = current;
+      if (comp_(key, current->data.first))
+      {
+        current = current->left;
+      }
+      else
+      {
+        current = current->right;
+      }
+    }
+
+    detail::TreeNode< Key, Value >* new_node = new detail::TreeNode< Key, Value >();
+    new_node->data.first = key;
+    new_node->data.second = Value();
+    new_node->parent = parent;
+
+    if (parent == nullptr)
+    {
+      root_ = new_node;
+    }
+    else if (comp_(key, parent->data.first))
+    {
+      parent->left = new_node;
     }
     else
     {
-      push(key, Value());
-      return get(key, root_)->data.second;
+      parent->right = new_node;
     }
+
+    root_ = balance(root_);
+    ++size_;
+
+    return new_node->data.second;
   }
 
   template< typename Key, typename Value, typename Comp >
@@ -260,23 +276,15 @@ namespace sivkov
     return cend();
   }
 
+
   template< typename Key, typename Value, typename Comp >
   void AVLTree< Key, Value, Comp >::clear()
   {
-    clear(root_);
-    root_ = nullptr;
-    size_ = 0;
-  }
-
-  template< typename Key, typename Value, typename Comp >
-  void AVLTree< Key, Value, Comp >::clear(detail::TreeNode< Key, Value >* node)
-  {
-    if (node != nullptr)
+    while (root_ != nullptr)
     {
-      clear(node->left);
-      clear(node->right);
-      delete node;
+      root_ = remove(root_, root_->data.first);
     }
+    size_ = 0;
   }
 
   template< typename Key, typename Value, typename Comp >
@@ -301,12 +309,14 @@ namespace sivkov
       {
         detail::TreeNode< Key, Value >* right_child = node->right;
         delete node;
+        --size_;
         return right_child;
       }
       else if (node->right == nullptr)
       {
         detail::TreeNode< Key, Value >* left_child = node->left;
         delete node;
+        --size_;
         return left_child;
       }
       else
