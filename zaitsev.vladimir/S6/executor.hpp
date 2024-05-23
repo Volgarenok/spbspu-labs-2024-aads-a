@@ -23,20 +23,18 @@ void sortirator(std::ostream& out, size_t size)
 {
   using namespace zaitsev;
   using namespace detail;
-  using std::deque;
-  using std::list;
   comparator cmp{};
   generator< value_type > gen(0, 1000);
-  deque< value_type > deque_sort;
+  std::deque< value_type > deque_sort;
   std::generate_n(std::back_inserter(deque_sort), size, gen);
   printer(out, deque_sort);
 
-  deque< value_type > deque_shell(deque_sort.cbegin(), deque_sort.cend());
+  std::deque< value_type > deque_shell(deque_sort.cbegin(), deque_sort.cend());
   //  deque< value_type > deque_bucket(deque_inbuild.cbegin(),deque_inbuild.cend());;
 
   ForwardList< value_type > forward_sort(deque_sort.cbegin(), deque_sort.cend());
   ForwardList< value_type > forward_shell(deque_sort.cbegin(), deque_sort.cend());
-  list< value_type > list_shell(deque_sort.cbegin(), deque_sort.cend());
+  std::list< value_type > list_shell(deque_sort.cbegin(), deque_sort.cend());
 
   std::sort(deque_sort.begin(), deque_sort.end(), cmp);
   forward_sort.sort(cmp);
