@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
-#include "queue.hpp"
-#include "stack.hpp"
+#include <queue.hpp>
+#include <stack.hpp>
 #include "infix_type.hpp"
 #include "postfix_expression.hpp"
 #include "input_expressions.hpp"

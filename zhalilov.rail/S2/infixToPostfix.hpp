@@ -1,7 +1,7 @@
 #ifndef INFIXTOPOSTFIX_HPP
 #define INFIXTOPOSTFIX_HPP
 
-#include "queue.hpp"
+#include <queue.hpp>
 
 namespace zhalilov
 {
