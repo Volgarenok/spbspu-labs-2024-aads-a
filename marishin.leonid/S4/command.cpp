@@ -1,6 +1,6 @@
 #include "command.hpp"
 
-void marishin::print(std::istream & in, Tree< std::string, Tree< size_t, std::string > > & myMap, std::ostream & out)
+void marishin::print(std::istream & in, const Tree< std::string, Tree< size_t, std::string > > & myMap, std::ostream & out)
 {
   std::string name = "";
   in >> name;
