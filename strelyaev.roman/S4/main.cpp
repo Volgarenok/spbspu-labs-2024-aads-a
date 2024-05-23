@@ -11,7 +11,6 @@ int main(int argc, char* argv[])
 {
   using namespace strelyaev;
   Tree< std::string, Tree< int, std::string > > dictionaries;
-
   if (argc == 2)
   {
     std::ifstream in(argv[1]);
@@ -20,7 +19,7 @@ int main(int argc, char* argv[])
       std::cerr << "Something is wrong with the input\n";
       return 1;
     }
-    inputMap(in, dictionaries);
+    dictionaries = inputMap(in);
     in.close();
   }
   else

@@ -7,7 +7,7 @@
 
 namespace strelyaev
 {
-  void inputMap(std::istream&, Tree< std::string, Tree< int, std::string > >&);
+ Tree< std::string, Tree< int, std::string > > inputMap(std::istream&);
 }
 
 #endif

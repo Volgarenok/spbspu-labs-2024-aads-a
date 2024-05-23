@@ -2,8 +2,9 @@
 #include <iostream>
 #include "binarySearchTree.hpp"
 
-void strelyaev::inputMap(std::istream& in, Tree< std::string, Tree< int, std::string > >& map)
+strelyaev::Tree< std::string, strelyaev::Tree< int, std::string > > strelyaev::inputMap(std::istream& in)
 {
+  Tree< std::string, Tree< int, std::string > > map;
   while (!in.eof())
   {
     in.clear();
@@ -19,6 +20,7 @@ void strelyaev::inputMap(std::istream& in, Tree< std::string, Tree< int, std::st
     }
     map.insert(std::make_pair(map_name, temp_map));
   }
+  return map;
 }
 
 
