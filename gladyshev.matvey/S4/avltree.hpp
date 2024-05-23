@@ -99,8 +99,7 @@ namespace gladyshev
       tnode* node = findNode(root_, key);
       if (!node)
       {
-        insert(key, Value());
-        node = findNode(root_, key);
+        node = insertImpl(key, Value(), node);
       }
       return node->data.second;
     }
@@ -273,6 +272,10 @@ namespace gladyshev
     }
     tnode* insertImpl(const Key& key, const Value& value, tnode* node)
     {
+      if (!node)
+      {
+        return new tnode(key, value);
+      }
       if (Compare()(key, node->data.first))
       {
         if (!node->left)
