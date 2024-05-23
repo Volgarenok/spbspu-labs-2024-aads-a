@@ -68,9 +68,9 @@ namespace strelyaev
     private:
       detail::Node< Key, T >* node_;
 
-    Iterator(detail::Node< Key, T >* node):
-      node_(node)
-    {}
+      explicit Iterator(detail::Node< Key, T >* node):
+        node_(node)
+      {}
   };
 }
 
