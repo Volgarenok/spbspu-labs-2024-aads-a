@@ -445,14 +445,14 @@ namespace zaitsev
     using reverse_iterator = std::reverse_iterator< iterator >;
     using const_reverse_iterator = std::reverse_iterator< const_iterator >;
     Map():
+      comparator_(),
       fakeroot_(new Node(-1)),
-      size_(0),
-      comparator_()
+      size_(0)
     {}
     Map(const Map& other):
+      comparator_(other.comparator_),
       fakeroot_(new Node(-1)),
-      size_(other.size_),
-      comparator_(other.comparator_)
+      size_(other.size_)
     {
       size_t added = 0;
       const Node* cur_other = other.fakeroot_;
@@ -498,11 +498,10 @@ namespace zaitsev
       other.size_ = 0;
     }
     Map(std::initializer_list< std::pair< const Key, T > > init_list):
-      fakeroot_(nullptr),
-      size_(0),
       comparator_()
+      fakeroot_(new Node(-1)),
+      size_(0),
     {
-      fakeroot_ = new Node(-1);
       try
       {
         createMap(fakeroot_, init_list.begin(), init_list.end(), size_);
@@ -514,11 +513,10 @@ namespace zaitsev
     }
     template< typename InputIt >
     Map(InputIt begin, InputIt end):
-      fakeroot_(nullptr),
+      comparator_(),
+      fakeroot_(new Node(-1)),
       size_(0),
-      comparator_()
     {
-      fakeroot_ = new Node(-1);
       try
       {
         createMap(fakeroot_, begin, end, size_);
