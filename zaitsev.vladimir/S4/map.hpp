@@ -12,10 +12,9 @@ namespace zaitsev
   {
     using val_t = std::pair< const Key, T >;
     struct Node;
+    Compare comparator_;
     Node* fakeroot_;
     size_t size_;
-    Compare comparator_;
-
     struct Node
     {
       val_t val_;
@@ -490,17 +489,17 @@ namespace zaitsev
       }
     }
     Map(Map&& other) noexcept:
+      comparator_(std::move(other.comparator_)),
       fakeroot_(other.fakeroot_),
-      size_(other.size_),
-      comparator_(std::move(other.comparator_))
+      size_(other.size_)
     {
       other.fakeroot_ = nullptr;
       other.size_ = 0;
     }
     Map(std::initializer_list< std::pair< const Key, T > > init_list):
-      comparator_()
+      comparator_(),
       fakeroot_(new Node(-1)),
-      size_(0),
+      size_(0)
     {
       try
       {
@@ -515,7 +514,7 @@ namespace zaitsev
     Map(InputIt begin, InputIt end):
       comparator_(),
       fakeroot_(new Node(-1)),
-      size_(0),
+      size_(0)
     {
       try
       {
