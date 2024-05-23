@@ -48,8 +48,9 @@ namespace zhalilov
   void bucketSort(Iterator first, Iterator last, Compare cmp, size_t numOfBuckets)
   {
     using numType = typename Iterator::value_type;
-    auto minIt = std::min_element(first, last, cmp);
-    auto maxIt = std::max_element(first, last, cmp);
+    auto minMax = std::minmax_element(first, last, cmp);
+    auto minIt = minMax.first;
+    auto maxIt = minMax.second;
     numType range = *maxIt - *minIt;
     numType step = range / numOfBuckets;
     List< List< numType > > buckets(numOfBuckets);
