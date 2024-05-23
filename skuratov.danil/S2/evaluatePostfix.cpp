@@ -106,9 +106,15 @@ void skuratov::printReverse(const Queue< long long int >& queue)
     stack.push(temp.front());
     temp.drop();
   }
+  bool isFirst = true;
   while (!stack.empty())
   {
-    std::cout << stack.top() << ' ';
+    if (!isFirst)
+    {
+      std::cout << ' ';
+    }
+    std::cout << stack.top();
     stack.drop();
+    isFirst = false;
   }
 }
