@@ -1,6 +1,7 @@
 #include "commands_processing.hpp"
 #include <fstream>
 #include <limits>
+#include "map.hpp"
 
   void zaitsev::readDs(std::istream& in, library& dest)
   {
