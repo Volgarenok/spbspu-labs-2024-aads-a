@@ -5,7 +5,7 @@
 #include <functional>
 #include <stdexcept>
 #include <operators.hpp>
-#include "map.hpp"
+#include <map.hpp>
 #include "summator.hpp"
 
 int main(int argc, char** argv)
