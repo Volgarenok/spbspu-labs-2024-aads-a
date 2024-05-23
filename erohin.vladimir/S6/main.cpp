@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <stdexcept>
 #include <forward_list>
 #include <list>
@@ -21,14 +22,17 @@ int main(int argc, char ** argv)
     {
       throw std::invalid_argument("Invalid sequence size");
     }
-    using sort_func_cmd = std::function< void(std::ostream &, size_t) >;
+    using sort_func_cmd = std::function< void(std::ostream &) >;
     RedBlackTree< std::pair< std::string, std::string >, sort_func_cmd > sort_case;
-    sort_case[{ "ascending", "ints" }] = doSortCommand< int, std::less< int > >;
-    sort_case[{ "ascending", "ints" }](std::cout, size);
-    //sort_case.insert(std::make_pair(std::make_pair("ascending", "ints"), doSortCommand< int, std::less< int > >));
-    //sort_case.insert(std::make_pair(std::make_pair("descending", "ints"), doSortCommand< int, std::less< int > >));
-    //sort_case.insert(std::make_pair(std::make_pair("ascending", "floats"), doSortCommand< int, std::less< int > >));
-    //sort_case.insert(std::make_pair(std::make_pair("descending", "floats"), doSortCommand< int, std::less< int > >));
+    {
+      using namespace std::placeholders;
+      sort_case[{ "ascending", "ints" }] = std::bind(doSortCommand< int, std::less< int > >, _1, size);
+      sort_case[{ "descending", "ints" }] = std::bind(doSortCommand< int, std::greater< int > >, _1, size);
+      sort_case[{ "ascending", "floats" }] = std::bind(doSortCommand< float, std::less< float > >, _1, size);
+      sort_case[{ "descending", "floats" }] = std::bind(doSortCommand< float, std::greater< float > >, _1, size);
+    }
+    std::cout << std::setprecision(1) << std::fixed;
+    sort_case.at({ argv[1], argv[2] })(std::cout);
   }
   catch (const std::exception & e)
   {
