@@ -47,7 +47,8 @@ namespace sivkov
         {
           prev = current_;
           current_ = current_->parent;
-        } while (current_ != nullptr && prev == current_->right);
+        }
+        while (current_ != nullptr && prev == current_->right);
       }
       return *this;
     }
@@ -71,7 +72,7 @@ namespace sivkov
 
   private:
     Node* current_;
-    ConstIteratorTree(Node* node):
+    explicit ConstIteratorTree(Node* node):
       current_(node)
     {}
   };
