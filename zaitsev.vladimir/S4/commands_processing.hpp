@@ -2,7 +2,7 @@
 #define COMMANDS_PROCESSING_HPP
 #include <iostream>
 #include <string>
-#include "map.hpp"
+#include <map.hpp>
 
 namespace zaitsev
 {
