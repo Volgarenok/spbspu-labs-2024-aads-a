@@ -99,8 +99,8 @@ namespace gladyshev
       tnode* node = findNode(root_, key);
       if (!node)
       {
-        tnode* temp = insertImpl(key, Value(), root_);
-        return temp->data.second;
+        root_ = insertImpl(key, Value(), root_);
+        return root_->data.second;
       }
       return node->data.second;
     }
@@ -299,9 +299,8 @@ namespace gladyshev
       {
         node->data.second = value;
       }
-      node = rebalance(node);
       node->height = 1 + std::max(height(node->left), height(node->right));
-      return node;
+      return rebalance(node);
     }
     tnode* findNode(tnode* node, const Key& key) const
     {
