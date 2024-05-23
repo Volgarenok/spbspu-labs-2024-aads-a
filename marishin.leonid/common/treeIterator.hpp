@@ -59,19 +59,11 @@ namespace marishin
       return temp;
 
     }
-    bool operator==(const iterator & other) const
+    bool operator==(const iterator & other)
     {
       return (node_ == other.node_);
     }
-    bool operator==(const_iterator & other) const
-    {
-      return (node_ == other.node_);
-    }
-    bool operator!=(const iterator & other) const
-    {
-      return node_ != other.node_;
-    }
-    bool operator!=(const_iterator & other) const
+    bool operator!=(const iterator & other)
     {
       return node_ != other.node_;
     }
