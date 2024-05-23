@@ -13,8 +13,8 @@ namespace detail
   template< typename Container, typename value_type = typename Container::const_iterator::value_type >
   void printer(std::ostream& out, const Container& container)
   {
-    std::copy(container.cbegin(), container.cend(), std::ostream_iterator< value_type >(std::cout, " "));
-    std::cout << '\n';
+    std::copy(container.cbegin(), container.cend(), std::ostream_iterator< value_type >(out, " "));
+    out << '\n';
   }
 }
 
