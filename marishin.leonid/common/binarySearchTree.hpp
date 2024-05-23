@@ -207,7 +207,7 @@ namespace marishin
       auto iter = find(key);
       if (iter == end())
       {
-        iter = insert(key, Value());
+        insert(key, Value());
       }
       return iter.second;
     }
@@ -216,7 +216,7 @@ namespace marishin
       auto iter = find(key);
       if (iter == end())
       {
-        iter = insert(key, Value());
+        insert(key, Value());
       }
       return iter.second;
     }
