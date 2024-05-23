@@ -27,14 +27,12 @@ namespace erohin
       deque_seq[i].assign(random_seq.cbegin(), random_seq.cend());
     }
     forward_list_seq[0].sort(cmp);
-    forward_list_seq[1].sort(cmp);
     bidirect_list_seq[0].sort(cmp);
+    doQuicksort(deque_seq[0].begin(), std::prev(deque_seq[0].end()), cmp);
+    forward_list_seq[1].sort(cmp);
     bidirect_list_seq[1].sort(cmp);
-    sort1(deque_seq[0].begin(), deque_seq[0].end(), cmp);
-    //sort2(deque_seq[1].begin(), deque_seq[1].end(), cmp);
-
-    doQuickSort(deque_seq[1].begin(), std::prev(deque_seq[1].end()), cmp);
-
+    //sort1(deque_seq[1].begin(), deque_seq[1].end(), cmp);
+    detail::doInsertsort(deque_seq[1].begin(), deque_seq[1].end(), cmp);
     printSequence(output, random_seq.begin(), random_seq.end());
     for (int i = 0; i < 2; ++i)
     {

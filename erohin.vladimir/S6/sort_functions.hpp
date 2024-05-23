@@ -11,7 +11,7 @@ namespace erohin
     template< class RandomAccessIt, class Compare >
     RandomAccessIt partition(RandomAccessIt begin, RandomAccessIt end, Compare cmp)
     {
-      auto pivot = begin + (end - begin) / 2;
+      auto pivot = begin;
       while (begin <= end)
       {
         while (cmp(*begin, *pivot))
@@ -27,29 +27,74 @@ namespace erohin
           break;
         }
         std::swap(*(begin++), *(end--));
-        ++begin;
       }
       return end;
-
-      //return (begin + (end - begin) / 2);
     }
   }
 
   template< class RandomAccessIt, class Compare >
-  void doQuickSort(RandomAccessIt begin, RandomAccessIt end, Compare cmp)
+  void doQuicksort(RandomAccessIt begin, RandomAccessIt end, Compare cmp)
   {
     if (begin < end)
     {
       auto pivot = detail::partition(begin, end, cmp);
-      doQuickSort(begin, pivot, cmp);
-      doQuickSort(std::next(pivot), end, cmp);
+      doQuicksort(begin, pivot, cmp);
+      doQuicksort(std::next(pivot), end, cmp);
     }
   }
 
-  template< class BidirectionalIt, class Compare >
-  void sort2(BidirectionalIt begin, BidirectionalIt end, Compare cmp)
+  namespace detail
   {
-    std::sort(begin, end, cmp);
+    template< class RandomAccessIt, class Compare >
+    void doInsertsort(RandomAccessIt begin, RandomAccessIt end, Compare cmp)
+    {
+      if (begin == end)
+      {
+        return;
+      }
+      auto cur_iter = std::next(begin);
+      while (cur_iter != end)
+      {
+        auto temp_iter = cur_iter;
+        auto start = std::prev(cur_iter);
+        while (start != begin)
+        {
+          if (cmp(*temp_iter, *start))
+          {
+            std::swap(*temp_iter, *start);
+            --temp_iter;
+          }
+          else
+          {
+            break;
+          }
+          start--;
+        }
+        ++cur_iter;
+      }
+    }
+  }
+
+  template< class RandomAccessIt, class Compare >
+  void doTimsort(RandomAccessIt begin, size_t size, Compare cmp)
+  {
+    if (size == 0)
+    {
+      return;
+    }
+    size_t step = 0;
+    size_t n = size;
+    while (n >= 64)
+    {
+      step |= n & 1;
+      n = n >> 1;
+    }
+    step = n + step;
+    for (size_t i = 0; i < size; i += step)
+    {
+
+    }
+    //std::sort(begin, end, cmp);
   }
 
   template< class BidirectionalIt, class Compare >
