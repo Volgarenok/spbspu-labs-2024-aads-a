@@ -3,6 +3,7 @@
 #include <string>
 #include <map>
 #include "executor.hpp"
+#include <string.h>
 
 int main(int argc, char** argv)
 {
@@ -11,14 +12,24 @@ int main(int argc, char** argv)
     std::cerr << "Invalid number of arguments\n";
     return 1;
   }
-  std::map< std::pair< std::string, std::string >, std::function< void(std::ostream&, size_t) > >s;
-  s[{"ints", "ascending"}] = sortirator< int, std::less< int > >;
-  s[{"ints", "descending]"}] = sortirator< int, std::greater< int > >;
-  s[{"floats", "ascending"}] = sortirator< float, std::less< float > >;
-  s[{"floats", "descending"}] = sortirator< float, std::greater< float > >;
+  std::map< std::pair< std::string, std::string >, std::function< void(std::ostream&, size_t) > >sorter_types;
+  sorter_types[{"ints", "ascending"}] = sortirator< int, std::less< int > >;
+  sorter_types[{"ints", "descending]"}] = sortirator< int, std::greater< int > >;
+  sorter_types[{"floats", "ascending"}] = sortirator< float, std::less< float > >;
+  sorter_types[{"floats", "descending"}] = sortirator< float, std::greater< float > >;
   try
   {
-    s[{argv[2], argv[1]}](std::cout, std::stoull(argv[3]));
+   // sorter_types[{argv[2], argv[1]}](std::cout, std::stoull(argv[3]));
+    if(strcmp(argv[1], "ints") == 0)
+      for (size_t i = 0; i < std::stoull(argv[3]); ++i)
+      {
+        std::cout << 1 << std::endl;
+      }
+    else if (strcmp(argv[1], "floats") == 0)
+      for (size_t i = 0; i < std::stoull(argv[3]); ++i)
+      {
+        std::cout << 1.0 << std::endl;
+      }
   }
   catch (const std::exception&)
   {
