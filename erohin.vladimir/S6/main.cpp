@@ -23,7 +23,7 @@ int main(int argc, char ** argv)
     }
     using sort_func_cmd = std::function< void(std::ostream &) >;
     RedBlackTree< std::pair< std::string, std::string >, sort_func_cmd > sort_case;
-    //sort_case.insert(std::make_pair(std::make_pair("ascending", "ints"), doSortCommand< int >(std::cout, size, std::less< int >{})));
+    sort_case.insert(std::make_pair(std::make_pair("ascending", "ints"), doSortCommand< int, std::less< int >));
   }
   catch (const std::exception & e)
   {

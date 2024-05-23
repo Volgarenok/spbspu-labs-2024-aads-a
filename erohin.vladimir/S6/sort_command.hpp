@@ -12,8 +12,9 @@
 namespace erohin
 {
   template< class T, class Compare >
-  void doSortCommand(std::ostream & output, size_t n, Compare cmp)
+  void doSortCommand(std::ostream & output, size_t n)
   {
+    Compare cmp;
     List< T > random_seq;
     generateRandomSequence< T >(random_seq, n);
     List< T > forward_list_seq[2];
