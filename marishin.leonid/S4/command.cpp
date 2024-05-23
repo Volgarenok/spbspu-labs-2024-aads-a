@@ -61,7 +61,7 @@ void marishin::makeUnion(std::istream & in, Tree< std::string, Tree< size_t, std
   }
   for (const auto & key2: right)
   {
-    if (res.find(key2.first) == res.cend())
+    if (res.find(key2.first) == res.end())
     {
       res.insert(key2.first, key2.second);
     }
@@ -82,7 +82,7 @@ void marishin::makeComplement(std::istream & in, Tree< std::string, Tree< size_t
   Tree< size_t, std::string > right = myMap.at(secondName);
   for (const auto & key1: left)
   {
-    if (right.find(key1.first) == right.cend())
+    if (right.find(key1.first) == right.end())
     {
       res.insert(key1.first, key1.second);
     }
