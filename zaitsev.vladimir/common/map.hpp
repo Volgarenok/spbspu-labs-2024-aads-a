@@ -843,6 +843,30 @@ namespace zaitsev
       }
       return f;
     }
+    template< class F >
+    F traverse_breadth(F f) const
+    {
+      Queue<const Node* > chord;
+      if (size_)
+      {
+        chord.push(fakeroot_->left_);
+      }
+      while (!chord.empty())
+      {
+        if (chord.front()->left_)
+        {
+          chord.push(chord.front()->left_);
+        }
+        if (chord.front()->right_)
+        {
+          chord.push(chord.front()->right_);
+        }
+        f(chord.front()->val_);
+        chord.pop();
+      }
+      return f;
+    }
+
 
     bool empty() const noexcept
     {
