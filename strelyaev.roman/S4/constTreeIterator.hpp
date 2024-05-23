@@ -19,12 +19,12 @@ namespace strelyaev
 
       ConstIterator< Key, T >& operator=(const ConstIterator< Key, T>& rhs) = default;
 
-      std::pair< Key, T >& operator*()
+      const std::pair< Key, T >& operator*() const
       {
         return node_->data_;
       }
 
-      std::pair< Key, T >* operator->()
+      const std::pair< Key, T >* operator->() const
       {
         return std::addressof(node_->data_);
       }
