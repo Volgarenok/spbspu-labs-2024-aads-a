@@ -3,7 +3,6 @@
 #include <string>
 #include <map>
 #include "executor.hpp"
-#include <string.h>
 
 int main(int argc, char** argv)
 {
@@ -19,17 +18,7 @@ int main(int argc, char** argv)
   sorter_types[{"floats", "descending"}] = sortirator< float, std::greater< float > >;
   try
   {
-   // sorter_types[{argv[2], argv[1]}](std::cout, std::stoull(argv[3]));
-    if(strcmp(argv[2], "ints") == 0)
-      for (size_t i = 0; i < 7; ++i)
-      {
-        std::cout << 1 << std::endl;
-      }
-    else if (strcmp(argv[2], "floats") == 0)
-      for (size_t i = 0; i < 7; ++i)
-      {
-        std::cout << 1.0 << std::endl;
-      }
+    sorter_types[{argv[2], argv[1]}](std::cout, std::stoull(argv[3]));
   }
   catch (const std::exception&)
   {
