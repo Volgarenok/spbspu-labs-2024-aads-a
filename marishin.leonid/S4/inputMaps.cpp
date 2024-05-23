@@ -1,6 +1,6 @@
 #include "inputMaps.hpp"
 
-marishin::Tree< std::string, Tree< size_t, std::string > > marishin::inputMaps(std::istream & in)
+marishin::Tree< std::string, marishin::Tree< size_t, std::string > > marishin::inputMaps(std::istream & in)
 {
   Tree< std::string, Tree< size_t, std::string > > myMap;
   while (!in.eof())
