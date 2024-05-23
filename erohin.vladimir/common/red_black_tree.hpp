@@ -35,6 +35,8 @@ namespace erohin
     ~RedBlackTree();
     RedBlackTree< Key, T, Compare > & operator=(const RedBlackTree< Key, T, Compare > & rhs);
     RedBlackTree< Key, T, Compare > & operator=(RedBlackTree< Key, T, Compare > && rhs) noexcept;
+    T & operator[](const Key & key);
+    const T & operator[](const Key & key) const;
     iterator begin();
     iterator end();
     const_iterator cbegin() const;
@@ -185,6 +187,24 @@ namespace erohin
       swap(temp);
     }
     return *this;
+  }
+
+  template< class Key, class T, class Compare >
+  T & RedBlackTree< Key, T, Compare >::operator[](const Key & key)
+  {
+    TreeIterator< Key, T > iter = find(key);
+    if (iter == end())
+    {
+      iter = insert(std::make_pair(key, T())).first;
+    }
+    return iter->second;
+  }
+
+  template< class Key, class T, class Compare >
+  const T & RedBlackTree< Key, T, Compare >::operator[](const Key & key) const
+  {
+    TreeConstIterator< Key, T > iter = find(key);
+    return iter->second;
   }
 
   template< class Key, class T, class Compare >

@@ -21,9 +21,14 @@ int main(int argc, char ** argv)
     {
       throw std::invalid_argument("Invalid sequence size");
     }
-    using sort_func_cmd = std::function< void(std::ostream &) >;
+    using sort_func_cmd = std::function< void(std::ostream &, size_t) >;
     RedBlackTree< std::pair< std::string, std::string >, sort_func_cmd > sort_case;
-    sort_case.insert(std::make_pair(std::make_pair("ascending", "ints"), doSortCommand< int, std::less< int >));
+    sort_case[{ "ascending", "ints" }] = doSortCommand< int, std::less< int > >;
+    sort_case[{ "ascending", "ints" }](std::cout, size);
+    //sort_case.insert(std::make_pair(std::make_pair("ascending", "ints"), doSortCommand< int, std::less< int > >));
+    //sort_case.insert(std::make_pair(std::make_pair("descending", "ints"), doSortCommand< int, std::less< int > >));
+    //sort_case.insert(std::make_pair(std::make_pair("ascending", "floats"), doSortCommand< int, std::less< int > >));
+    //sort_case.insert(std::make_pair(std::make_pair("descending", "floats"), doSortCommand< int, std::less< int > >));
   }
   catch (const std::exception & e)
   {
