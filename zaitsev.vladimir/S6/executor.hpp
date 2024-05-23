@@ -15,13 +15,10 @@ namespace detail
   void printer(std::ostream& out, const Container& container)
   {
     typename Container::const_iterator it = container.cbegin();
-    if (it != container.cend())
+    out << *it;
+    for (++it; it != container.cend(); ++it)
     {
-      out << *it;
-      for (++it; it != container.cend(); ++it)
-      {
-        out << ' ' << *it;
-      }
+      out << ' ' << *it;
     }
     out << '\n';
   }
