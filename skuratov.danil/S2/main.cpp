@@ -1,10 +1,11 @@
 #include <fstream>
-#include "processExpressions.hpp"
+#include "evaluatePostfix.hpp"
 
 int main(int argc, char* argv[])
 {
   using namespace skuratov;
-  List< std::string > exp;
+
+  Queue< long long int > resultQueue;
   std::string line;
   char symb = {};
 
@@ -22,7 +23,16 @@ int main(int argc, char* argv[])
       {
         if (!line.empty())
         {
-          exp.pushBack(line);
+          try
+          {
+            std::string postfixExp = infixToPostfix(line);
+            evaluatePostfixExpression(postfixExp, resultQueue);
+          }
+          catch (const std::exception& e)
+          {
+            std::cerr << "Error: " << e.what() << '\n';
+            return 1;
+          }
           line.clear();
         }
       }
@@ -33,7 +43,16 @@ int main(int argc, char* argv[])
     }
     if (!line.empty())
     {
-      exp.pushBack(line);
+      try
+      {
+        std::string postfixExp = infixToPostfix(line);
+        evaluatePostfixExpression(postfixExp, resultQueue);
+      }
+      catch (const std::exception& e)
+      {
+        std::cerr << "Error: " << e.what() << '\n';
+        return 1;
+      }
     }
   }
   else
@@ -44,7 +63,16 @@ int main(int argc, char* argv[])
       {
         if (!line.empty())
         {
-          exp.pushBack(line);
+          try
+          {
+            std::string postfixExp = infixToPostfix(line);
+            evaluatePostfixExpression(postfixExp, resultQueue);
+          }
+          catch (const std::exception& e)
+          {
+            std::cerr << "Error: " << e.what() << '\n';
+            return 1;
+          }
           line.clear();
         }
       }
@@ -55,18 +83,19 @@ int main(int argc, char* argv[])
     }
     if (!line.empty())
     {
-      exp.pushBack(line);
+      try
+      {
+        std::string postfixExp = infixToPostfix(line);
+        evaluatePostfixExpression(postfixExp, resultQueue);
+      }
+      catch (const std::exception& e)
+      {
+        std::cerr << "Error: " << e.what() << '\n';
+        return 1;
+      }
     }
   }
-
-  try
-  {
-    processExpressions(exp);
-  }
-  catch (const std::exception& e)
-  {
-    std::cerr << "Error: " << e.what() << '\n';
-    return 1;
-  }
+  printReverse(resultQueue);
+  std::cout << '\n';
   return 0;
 }

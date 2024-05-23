@@ -1,39 +1,42 @@
 #include "infixToPostfix.hpp"
 
-bool skuratov::priority(const std::string op1, const std::string op2)
+bool skuratov::priority(const std::string& op1, const std::string& op2)
 {
   return (op1 == "*" || op1 == "/" || op1 == "%") || ((op2 == "-" || op2 == "+"));
 }
 
 std::string skuratov::infixToPostfix(const std::string& exp)
 {
-  std::istringstream iss(exp);
   std::string postfixExp;
-  Stack < std::string > operators;
+  Stack< std::string > operators;
 
-  std::string op;
-  while (iss >> op)
+  size_t i = 0;
+  while (i < exp.size())
   {
-    if (op == "(")
+    if (exp[i] == ' ')
+    {
+      i++;
+      continue;
+    }
+    if (exp[i] == '(')
     {
       operators.push("(");
     }
-    else if (op == "+" || op == "-" || op == "*" || op == "/" || op == "%")
+    else if (exp[i] == '+' || exp[i] == '-' || exp[i] == '*' || exp[i] == '/' || exp[i] == '%')
     {
-      while (!operators.empty() && operators.top() != "(" && (priority(operators.top(), op)))
+      std::string op(1, exp[i]);
+      while (!operators.empty() && operators.top() != "(" && priority(operators.top(), op))
       {
-        postfixExp += operators.top();
-        postfixExp += ' ';
+        postfixExp += operators.top() + ' ';
         operators.drop();
       }
       operators.push(op);
     }
-    else if (op == ")")
+    else if (exp[i] == ')')
     {
       while (!operators.empty() && operators.top() != "(")
       {
-        postfixExp += operators.top();
-        postfixExp += ' ';
+        postfixExp += operators.top() + ' ';
         operators.drop();
       }
       if (!operators.empty() && operators.top() == "(")
@@ -43,15 +46,19 @@ std::string skuratov::infixToPostfix(const std::string& exp)
     }
     else
     {
-      postfixExp += op;
-      postfixExp += ' ';
+      std::string operand;
+      while (i < exp.size() && (isdigit(exp[i]) || exp[i] == '-'))
+      {
+        operand += exp[i++];
+      }
+      postfixExp += operand + ' ';
+      i--;
     }
+    i++;
   }
-
   while (!operators.empty())
   {
-    postfixExp += operators.top();
-    postfixExp += ' ';
+    postfixExp += operators.top() + ' ';
     operators.drop();
   }
   return postfixExp;
