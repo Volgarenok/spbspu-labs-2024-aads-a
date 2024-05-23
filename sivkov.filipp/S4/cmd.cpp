@@ -2,7 +2,7 @@
 
 namespace sivkov
 {
-  void print(AVLTree< std::string, AVLTree< size_t, std::string > >& treeOfdic, std::istream& in, std::ostream& out)
+  void print(const AVLTree< std::string, AVLTree< size_t, std::string > >& treeOfdic, std::istream& in, std::ostream& out)
   {
     std::string dataset = "";
     in >> dataset;
