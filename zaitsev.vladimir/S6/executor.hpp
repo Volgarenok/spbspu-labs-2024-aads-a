@@ -51,5 +51,6 @@ void sortirator(std::ostream& out, size_t size)
   printer(out, forward_sort);
   printer(out, forward_shell);
   printer(out, list_shell);
+  printer(out, list_shell); //for del
 }
 #endif
