@@ -459,7 +459,7 @@ namespace zaitsev
       using pointer = prt_t;
       using reference = ref_t;
 
-      BaseLNRIterator(Node* fakeroot):
+      explicit BaseLNRIterator(Node* fakeroot):
         path_()
       {
         path_.push(fakeroot);
@@ -467,11 +467,11 @@ namespace zaitsev
       BaseLNRIterator(const BaseLNRIterator& other):
         path_(other.path_)
       {}
-      BaseLNRIterator(BaseLNRIterator&& other):
+      BaseLNRIterator(BaseLNRIterator&& other) noexcept:
         path_(std::move(other.path_))
       {}
       template< bool cond = IsConst, std::enable_if_t<cond, bool > = true >
-      BaseLNRIterator(const BaseLNRIterator<!cond>& other) :
+      BaseLNRIterator(const BaseLNRIterator< !cond >& other) :
         path_(other.path_)
       {}
       BaseLNRIterator& operator=(const BaseLNRIterator& other)
@@ -823,46 +823,46 @@ namespace zaitsev
     template< class F >
     F traverse_breadth(F f)
     {
-      Queue< Node* > chord;
+      Queue< Node* > bf_queue;
       if (size_)
       {
-        chord.push(fakeroot_->left_);
+        bf_queue.push(fakeroot_->left_);
       }
-      while (!chord.empty())
+      while (!bf_queue.empty())
       {
-        if (chord.front()->left_)
+        if (bf_queue.front()->left_)
         {
-          chord.push(chord.front()->left_);
+          bf_queue.push(bf_queue.front()->left_);
         }
-        if (chord.front()->right_)
+        if (bf_queue.front()->right_)
         {
-          chord.push(chord.front()->right_);
+          bf_queue.push(bf_queue.front()->right_);
         }
-        f(chord.front()->val_);
-        chord.pop();
+        f(bf_queue.front()->val_);
+        bf_queue.pop();
       }
       return f;
     }
     template< class F >
     F const_traverse_breadth(F f) const
     {
-      Queue<const Node* > chord;
+      Queue< const Node* > bf_queue;
       if (size_)
       {
-        chord.push(fakeroot_->left_);
+        bf_queue.push(fakeroot_->left_);
       }
-      while (!chord.empty())
+      while (!bf_queue.empty())
       {
-        if (chord.front()->left_)
+        if (bf_queue.front()->left_)
         {
-          chord.push(chord.front()->left_);
+          bf_queue.push(bf_queue.front()->left_);
         }
-        if (chord.front()->right_)
+        if (bf_queue.front()->right_)
         {
-          chord.push(chord.front()->right_);
+          bf_queue.push(bf_queue.front()->right_);
         }
-        f(chord.front()->val_);
-        chord.pop();
+        f(bf_queue.front()->val_);
+        bf_queue.pop();
       }
       return f;
     }

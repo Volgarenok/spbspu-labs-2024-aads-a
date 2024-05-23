@@ -42,7 +42,7 @@ int main(int argc, char** argv)
       commands["descending"] = std::bind(&Map< ll, std::string >::traverse_rnl< summator >, &key_vals, summator{});
       commands["breadth"] = std::bind(&Map< ll, std::string >::traverse_breadth< summator >, &key_vals, summator{});
       summator res = commands.at(argv[1])();;
-      std::cout << res.key_sum_ << " " << res.val_sum_ << '\n';
+      std::cout << res.key_sum << " " << res.val_sum << '\n';
     }
   }
   catch (const std::exception& e)

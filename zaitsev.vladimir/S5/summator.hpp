@@ -7,8 +7,8 @@ namespace zaitsev
   struct summator
   {
     void operator()(const std::pair< const long long, std::string >& key_value);
-    long long key_sum_ = 0;
-    std::string val_sum_ = "";
+    long long key_sum = 0;
+    std::string val_sum = "";
   };
 }
 #endif
