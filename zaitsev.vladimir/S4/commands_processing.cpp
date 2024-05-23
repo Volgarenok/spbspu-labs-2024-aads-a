@@ -21,6 +21,7 @@
     }
     dest[name] = std::move(new_dict);
   }
+
   void zaitsev::initLib(int argc, char** argv, library& dest)
   {
     if (argc < 2)
@@ -37,6 +38,7 @@
       readDs(input, dest);
     }
   }
+
   void zaitsev::printDs(std::istream& in, library& lib)
   {
     std::string ds_name;
@@ -57,6 +59,7 @@
     }
     std::cout << '\n';
   }
+
   void zaitsev::complementDs(std::istream& in, library& lib)
   {
     std::string new_ds_name, ds1_name, ds2_name;
@@ -94,6 +97,7 @@
     }
     lib[new_ds_name] = std::move(new_dict);
   }
+
   void zaitsev::intersectDs(std::istream& in, library& lib)
   {
     std::string new_ds_name, ds1_name, ds2_name;
@@ -122,6 +126,7 @@
     }
     lib[new_ds_name] = std::move(new_dict);
   }
+
   void zaitsev::uniteDs(std::istream& in, library& lib)
   {
     std::string new_ds_name, ds1_name, ds2_name;

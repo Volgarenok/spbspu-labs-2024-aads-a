@@ -3,7 +3,8 @@
 
 #include <iosfwd>
 
-#include "queue.hpp"
+#include <queue.hpp>
+
 #include "expressionTokens.hpp"
 #include "stack.hpp"
 

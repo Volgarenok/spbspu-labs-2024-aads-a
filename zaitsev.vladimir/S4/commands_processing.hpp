@@ -6,9 +6,9 @@
 
 namespace zaitsev
 {
-  using dictionary = zaitsev::Map<int, std::string>;
-  using ds_it = zaitsev::Map<int, std::string>::const_iterator;
-  using library = zaitsev::Map< std::string, dictionary>;
+  using dictionary = zaitsev::Map< int, std::string >;
+  using ds_it = zaitsev::Map< int, std::string >::const_iterator;
+  using library = zaitsev::Map< std::string, dictionary >;
 
   void initLib(int argc, char** argv, library& dest);
   void readDs(std::istream& in, library& dest);

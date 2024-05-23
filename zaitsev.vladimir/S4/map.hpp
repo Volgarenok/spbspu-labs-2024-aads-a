@@ -12,10 +12,9 @@ namespace zaitsev
   {
     using val_t = std::pair< const Key, T >;
     struct Node;
+    Compare comparator_;
     Node* fakeroot_;
     size_t size_;
-    Compare comparator_;
-
     struct Node
     {
       val_t val_;
@@ -222,7 +221,7 @@ namespace zaitsev
       }
       return;
     }
-    void freeNodes(Node* root)
+    void freeNodes(Node* root) noexcept
     {
       if (!root)
       {
@@ -365,20 +364,20 @@ namespace zaitsev
       using pointer = prt_t;
       using reference = ref_t;
 
-      BaseIterator():
+      BaseIterator() noexcept:
         node_(nullptr)
       {}
-      BaseIterator(const BaseIterator& other):
+      BaseIterator(const BaseIterator& other) noexcept:
         node_(other.node_)
       {}
-      explicit BaseIterator(node_t node):
+      explicit BaseIterator(node_t node) noexcept:
         node_(node)
       {}
-      template< bool cond = IsConst, std::enable_if_t<cond, bool > = true >
-      BaseIterator(const BaseIterator<!cond>& other) :
+      template< bool cond = IsConst, std::enable_if_t< cond, bool > = true >
+      BaseIterator(const BaseIterator< !cond >& other) noexcept:
         node_(other.node_)
       {}
-      BaseIterator& operator=(const BaseIterator& other)
+      BaseIterator& operator=(const BaseIterator& other) noexcept
       {
         node_ = other.node_;
       }
@@ -430,11 +429,11 @@ namespace zaitsev
       {
         return std::addressof(node_->val_);
       }
-      bool operator!=(const BaseIterator& other) const
+      bool operator!=(const BaseIterator& other) const noexcept
       {
         return node_ != other.node_;
       }
-      bool operator==(const BaseIterator& other) const
+      bool operator==(const BaseIterator& other) const noexcept
       {
         return node_ == other.node_;
       }
@@ -445,14 +444,14 @@ namespace zaitsev
     using reverse_iterator = std::reverse_iterator< iterator >;
     using const_reverse_iterator = std::reverse_iterator< const_iterator >;
     Map():
+      comparator_(),
       fakeroot_(new Node(-1)),
-      size_(0),
-      comparator_()
+      size_(0)
     {}
     Map(const Map& other):
+      comparator_(other.comparator_),
       fakeroot_(new Node(-1)),
-      size_(other.size_),
-      comparator_(other.comparator_)
+      size_(other.size_)
     {
       size_t added = 0;
       const Node* cur_other = other.fakeroot_;
@@ -489,18 +488,18 @@ namespace zaitsev
         throw;
       }
     }
-    Map(Map&& other):
+    Map(Map&& other) noexcept:
+      comparator_(std::move(other.comparator_)),
       fakeroot_(other.fakeroot_),
-      size_(other.size_),
-      comparator_(std::move(other.comparator_))
+      size_(other.size_)
     {
       other.fakeroot_ = nullptr;
       other.size_ = 0;
     }
     Map(std::initializer_list< std::pair< const Key, T > > init_list):
+      comparator_(),
       fakeroot_(new Node(-1)),
-      size_(0),
-      comparator_()
+      size_(0)
     {
       try
       {
@@ -513,9 +512,9 @@ namespace zaitsev
     }
     template< typename InputIt >
     Map(InputIt begin, InputIt end):
+      comparator_(),
       fakeroot_(new Node(-1)),
-      size_(0),
-      comparator_()
+      size_(0)
     {
       try
       {
@@ -543,74 +542,74 @@ namespace zaitsev
       {
         return *this;
       }
-      clear();
       this->swap(other);
+      other.clear();
       return *this;
     }
 
-    iterator begin()
+    iterator begin() noexcept
     {
       Node* cur = fakeroot_;
       for (; cur->left_; cur = cur->left_);
       return iterator(cur);
     }
-    const_iterator begin() const
+    const_iterator begin() const noexcept
     {
       return cbegin();
     }
-    const_iterator cbegin() const
+    const_iterator cbegin() const noexcept
     {
       Node* cur = fakeroot_;
       for (; cur->left_; cur = cur->left_);
       return const_iterator(cur);
     }
-    reverse_iterator rbegin()
+    reverse_iterator rbegin() noexcept
     {
       return std::make_reverse_iterator(end());
     }
-    const_reverse_iterator rbegin() const
+    const_reverse_iterator rbegin() const noexcept
     {
       return std::make_reverse_iterator(cend());
     }
-    const_reverse_iterator crbegin() const
+    const_reverse_iterator crbegin() const noexcept
     {
       return std::make_reverse_iterator(cend());
     }
 
-    iterator end()
+    iterator end() noexcept
     {
       return iterator(fakeroot_);
     }
-    const_iterator end() const
+    const_iterator end() const noexcept
     {
       return const_iterator(fakeroot_);
     }
-    const_iterator cend() const
+    const_iterator cend() const noexcept
     {
       return const_iterator(fakeroot_);
     }
-    reverse_iterator rend()
+    reverse_iterator rend() noexcept
     {
       return std::make_reverse_iterator(begin());
     }
-    const_reverse_iterator rend() const
+    const_reverse_iterator rend() const noexcept
     {
       return std::make_reverse_iterator(cbegin());
     }
-    const_reverse_iterator crend() const
+    const_reverse_iterator crend() const noexcept
     {
       return std::make_reverse_iterator(cbegin());
     }
 
-    bool empty() const
+    bool empty() const noexcept
     {
       return !size_;
     }
-    size_t size() const
+    size_t size() const noexcept
     {
       return size_;
     }
-    void clear()
+    void clear() noexcept
     {
       freeNodes(fakeroot_->left_);
       fakeroot_->left_ = nullptr;
@@ -618,9 +617,9 @@ namespace zaitsev
     }
     void swap(Map& other)
     {
+      std::swap(comparator_, other.comparator_);
       std::swap(fakeroot_, other.fakeroot_);
       std::swap(size_, other.size_);
-      std::swap(comparator_, other.comparator_);
     }
 
     template< typename K>
@@ -677,7 +676,7 @@ namespace zaitsev
     iterator upper_bound(const Key& key)
     {
       iterator lb = lower_bound(key);
-      if (lb != end() && (*lb).first == key)
+      if (lb != end() && !comparator_((*lb).first, key))
       {
         return ++lb;
       }
@@ -686,7 +685,7 @@ namespace zaitsev
     const_iterator upper_bound(const Key& key) const
     {
       const_iterator lb = lower_bound(key);
-      if (lb != cend() && (*lb).first == key)
+      if (lb != cend() && !comparator_((*lb).first, key))
       {
         return ++lb;
       }
@@ -735,7 +734,7 @@ namespace zaitsev
     T& operator[](const Key& key)
     {
       Node* cur = findHint(fakeroot_, key);
-      if (cur&&cur->val_.first == key)
+      if (cur && cur->val_.first == key)
       {
         return cur->val_.second;
       }
@@ -831,12 +830,12 @@ namespace zaitsev
       erase(pos);
       return 1;
     }
-    iterator  erase(iterator first, iterator last)
+    iterator erase(iterator first, iterator last)
     {
       for (; first != last; first = erase(first));
       return first;
     }
-    const_iterator  erase(const_iterator first, const_iterator last)
+    const_iterator erase(const_iterator first, const_iterator last)
     {
       for (; first != last; first = erase(first));
       return first;
