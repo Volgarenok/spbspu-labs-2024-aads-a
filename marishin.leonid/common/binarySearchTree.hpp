@@ -74,6 +74,7 @@ namespace marishin
 
     void swap(Tree< Key, Value, Compare > & other) noexcept
     {
+      static_assert(std::is_nothrow_copy_constructible< Compare >::value);
       std::swap(root_, other.root_);
       std::swap(size_, other.size_);
       std::swap(compare_, other.compare_);
@@ -145,7 +146,6 @@ namespace marishin
         }
       }
     }
-
     const_iterator cbegin() const noexcept
     {
       return const_iterator(get_min(root_));
@@ -162,42 +162,43 @@ namespace marishin
     {
       return iterator();
     }
-    iterator find(const Key & key)
+    iterator find(const Key& key)
     {
-      node_t * result = root_;
-      while (result)
+      node_t* current = root_;
+      while (current)
       {
-        if (result->data.first == key)
+        if (current->data.first == key)
         {
-          return iterator(result);
+          return iterator(current);
         }
-        else if (compare_(result->data.first, key))
+        else if (compare_(current->data.first, key))
         {
-          result = result->right;
+          current = current->right;
         }
         else
         {
-          result = result->left;
+          current = current->left;
         }
       }
       return end();
     }
-    const_iterator find(const Key & key) const
+
+    const_iterator find(const Key& key) const
     {
-      node_t * result = root_;
-      while (result)
+      node_t* current = root_;
+      while (current)
       {
-        if (result->data.first == key)
+        if (current->data.first == key)
         {
-          return const_iterator(result);
+          return const_iterator(current);
         }
-        else if (compare_(result->data.first, key))
+        else if (compare_(current->data.first, key))
         {
-          result = result->right;
+          current = current->right;
         }
         else
         {
-          result = result->left;
+          current = current->left;
         }
       }
       return cend();
@@ -205,20 +206,20 @@ namespace marishin
     Value & operator[](const Key & key)
     {
       auto iter = find(key);
-      if (iter == end())
+      if (iter == cend())
       {
-        insert(key, Value());
+        root_ = insert(key, Value());
       }
-      return iter.second;
+      return iter->second;
     }
     const Value & operator[](const Key & key) const
     {
       auto iter = find(key);
-      if (iter == end())
+      if (iter == cend())
       {
-        insert(key, Value());
+        root_ = insert(key, Value());
       }
-      return iter.second;
+      return iter->second;
     }
     Value & at(const Key & key)
     {
@@ -227,7 +228,7 @@ namespace marishin
       {
         throw std::out_of_range("No such element");
       }
-      return iter.second;
+      return iter->second;
     }
     const Value & at(const Key & key) const
     {
@@ -236,7 +237,7 @@ namespace marishin
       {
         throw std::out_of_range("No such element");
       }
-      return iter.second;
+      return iter->second;
     }
     size_t size() const noexcept
     {
