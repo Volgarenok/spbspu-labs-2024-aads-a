@@ -3,8 +3,11 @@
 
 #include <functional>
 #include <type_traits>
+#include <cassert>
 #include <tree_node.hpp>
 #include <tree_iterator.hpp>
+#include <queue.hpp>
+#include <stack.hpp>
 #include <const_tree_iterator.hpp>
 
 namespace namestnikov
