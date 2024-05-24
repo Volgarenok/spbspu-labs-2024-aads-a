@@ -19,7 +19,7 @@ namespace nikitov
     typedef ListIterator< T > iterator;
     typedef ConstListIterator< T > iterator_const;
     List();
-    List(size_t n, const T& value);
+    List(size_t n, const T& value = T());
     List(constIterator first, constIterator second);
     List(std::initializer_list< T > initList);
     List(const List< T >& other);
