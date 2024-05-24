@@ -194,7 +194,6 @@ namespace marishin
       if (node == end())
       {
         insert(key, Value());
-        node = findNode(key);
       }
       return node->second;
     }
@@ -204,7 +203,6 @@ namespace marishin
       if (node == end())
       {
         insert(key, Value());
-        node = findNode(key);
       }
       return node->second;
     }
