@@ -97,12 +97,6 @@ namespace gladyshev
     Value& operator[](const Key& key)
     {
       tnode* node = findNode(root_, key);
-      if (!node)
-      {
-        insert(key, Value());
-        static auto temp = Value();
-        return temp;
-      }
       return node->data.second;
     }
     std::pair< iter, iter > equal_range(const Key& key)
