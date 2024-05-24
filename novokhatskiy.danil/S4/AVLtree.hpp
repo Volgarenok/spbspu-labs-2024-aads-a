@@ -29,7 +29,7 @@ namespace novokhatskiy
       cmp_()
     {}
 
-    Tree(const Tree &other) noexcept:
+    Tree(const Tree &other):
       root_(nullptr),
       size_(0),
       cmp_(other.cmp_)
