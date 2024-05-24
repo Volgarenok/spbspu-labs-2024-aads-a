@@ -54,9 +54,9 @@ namespace namestnikov
 
     Tree & operator=(const Tree & other)
     {
-      Tree< Key, Value > temp(other);
       if (this != std::addressof(other))
       {
+        Tree< Key, Value > temp(other);
         swap(temp);
       }
       return *this;
@@ -64,10 +64,10 @@ namespace namestnikov
 
     Tree & operator=(Tree && other) noexcept
     {
-      Tree< Key, Value > temp(std::move(other));
       if (this != std::addressof(other))
       {
-        swap(temp);
+        clear();
+        swap(other);
       }
       return *this;
     }

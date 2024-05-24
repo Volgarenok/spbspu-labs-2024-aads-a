@@ -1,7 +1,6 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <map>
 #include <functional>
 #include <limits>
 #include <tree.hpp>
