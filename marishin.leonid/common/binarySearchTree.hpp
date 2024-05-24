@@ -146,6 +146,12 @@ namespace marishin
         }
       }
     }
+
+    node_t * search(const Key & key)
+    {
+      node_t * res = search_impl(root_, key);
+      return res;
+    }
     const_iterator cbegin() const noexcept
     {
       return const_iterator(get_min(root_));
@@ -162,82 +168,104 @@ namespace marishin
     {
       return iterator();
     }
-    iterator find(const Key& key)
+    const_iterator find(const Key & key) const
     {
-      node_t* current = root_;
-      while (current)
+      node_t * result = root_;
+      while (result)
       {
-        if (current->data.first == key)
+        if (compare_(result->data.first, key))
         {
-          return iterator(current);
+          result = result->right;
         }
-        else if (compare_(current->data.first, key))
+        else if (compare_(key, result->data.first))
         {
-          current = current->right;
+          result = result->left;
         }
         else
         {
-          current = current->left;
+          break;
+        }
+      }
+      return const_iterator(result);
+    }
+    Value & operator[](const Key & key)
+    {
+      iterator node = findNode(key);
+      if (node == end())
+      {
+        insert(key, Value());
+        node = findNode(key);
+      }
+      return node->second;
+    }
+    const Value & operator[](const Key & key) const
+    {
+      iterator node = findNode(key);
+      if (node == end())
+      {
+        insert(key, Value());
+        node = findNode(key);
+      }
+      return node->second;
+    }
+    Value & at(const Key & key)
+    {
+      node_t * traverser = search(key);
+      if (traverser)
+      {
+        return traverser->data.second;
+      }
+      throw std::out_of_range("No such element");
+    }
+    const Value & at(const Key & key) const
+    {
+      node_t * traverser = search(key);
+      if (traverser)
+      {
+        return traverser->data.second;
+      }
+      throw std::out_of_range("No such element");
+    }
+    iterator findNode(const Key & key)
+    {
+      node_t * node = root_;
+      while (node)
+      {
+        if (compare_(key, node->data.first))
+        {
+          node = node->left;
+        }
+        else if (compare_(node->data.first, key))
+        {
+          node = node->right;
+        }
+        else
+        {
+          return iterator(node);
         }
       }
       return end();
     }
 
-    const_iterator find(const Key& key) const
+    const_iterator findNode(const Key & key) const
     {
-      node_t* current = root_;
-      while (current)
+      node_t * node = root_;
+      while (node)
       {
-        if (current->data.first == key)
+        if (compare_(key, node->data.first))
         {
-          return const_iterator(current);
+          node = node->left;
         }
-        else if (compare_(current->data.first, key))
+        else if (compare_(node->data.first, key))
         {
-          current = current->right;
+          node = node->right;
         }
         else
         {
-          current = current->left;
+          return const_iterator(node);
         }
       }
       return cend();
-    }
-    Value & operator[](const Key & key)
-    {
-      auto iter = find(key);
-      if (iter == cend())
-      {
-        root_ = insert(key, Value());
-      }
-      return iter->second;
-    }
-    const Value & operator[](const Key & key) const
-    {
-      auto iter = find(key);
-      if (iter == cend())
-      {
-        root_ = insert(key, Value());
-      }
-      return iter->second;
-    }
-    Value & at(const Key & key)
-    {
-      iterator iter = find(key);
-      if (iter == end())
-      {
-        throw std::out_of_range("No such element");
-      }
-      return iter->second;
-    }
-    const Value & at(const Key & key) const
-    {
-      const_iterator iter = find(key);
-      if (iter == end())
-      {
-        throw std::out_of_range("No such element");
-      }
-      return iter->second;
     }
     size_t size() const noexcept
     {
