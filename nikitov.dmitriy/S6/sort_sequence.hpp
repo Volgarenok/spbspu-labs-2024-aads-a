@@ -18,27 +18,21 @@ namespace nikitov
     float generateValue(float);
 
     template< class T, class Compare, class Container >
-    void createAndSort(const std::forward_list< T >& list, void(*sort)(typename Container::iterator, typename Container::iterator, Compare),
+    void createAndSort(const std::deque< T >& sequence, void(*sort)(typename Container::iterator, typename Container::iterator, Compare),
       std::ostream& output)
     {
       Container type;
-      for (auto i = list.cbegin(); i != list.cend(); ++i)
-      {
-        type.push_front(*i);
-      }
+      std::copy(sequence.cbegin(), sequence.cend(), type.end());
       sort(type.begin(), type.end(), Compare());
       printRange(type.cbegin(), type.cend(), output);
     }
 
     template< class T, class Compare, class Container >
-    void createAndSortByMethod(const std::forward_list< T >& list, std::ostream& output)
+    void createAndSortByMethod(const std::deque< T >& sequence, std::ostream& output)
     {
       Container type;
-      for (auto i = list.cbegin(); i != list.cend(); ++i)
-      {
-        type.push_front(*i);
-      }
-      type.sort();
+      std::copy(sequence.cbegin(), sequence.cend(), type.end());
+      type.sort(Compare());
       printRange(type.cbegin(), type.cend(), output);
     }
   }
@@ -46,22 +40,22 @@ namespace nikitov
   template< class T, class Compare >
   void sortSequence(size_t size, std::ostream& output)
   {
-    std::forward_list< T > values;
+    std::deque< T > sequence;
     for (size_t i = 0; i != size; ++i)
     {
-      T value = generateValue(T());
-      values.push_front(value);
+      T value = nikitov::detail::generateValue(T());
+      sequence.push_front(value);
     }
 
     output << std::setprecision(1) << std::fixed;
-    printRange(values.cbegin(), values.cend(), output);
+    printRange(sequence.cbegin(), sequence.cend(), output);
 
-    detail::createAndSortByMethod< T, Compare, std::forward_list< T > >(values, output);
-    detail::createAndSortByMethod< T, Compare, List< T > >(values, output);
-    detail::createAndSort< T, Compare, List< T > >(values, oddEvenSort, output);
-    detail::createAndSort< T, Compare, std::deque< T > >(values, oddEvenSort, output);
-    detail::createAndSort< T, Compare, std::deque< T > >(values, QSort, output);
-    detail::createAndSort< T, Compare, std::deque< T > >(values, std::sort, output);
+    detail::createAndSortByMethod< T, Compare, std::forward_list< T > >(sequence, output);
+    detail::createAndSortByMethod< T, Compare, List< T > >(sequence, output);
+    detail::createAndSort< T, Compare, List< T > >(sequence, oddEvenSort, output);
+    detail::createAndSort< T, Compare, std::deque< T > >(sequence, oddEvenSort, output);
+    detail::createAndSort< T, Compare, std::deque< T > >(sequence, QSort, output);
+    detail::createAndSort< T, Compare, std::deque< T > >(sequence, std::sort, output);
   }
 }
 #endif
