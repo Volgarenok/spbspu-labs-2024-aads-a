@@ -12,16 +12,18 @@ namespace belokurskaya
     struct Node
     {
       T value;
-      Node * next;
-      Node(T value):
+      Node* next;
+      Node(const T & value):
         value(value),
-        next(nullptr) {}
+        next(nullptr)
+      {}
     };
-    Node * head;
+    Node* head;
 
     public:
       List():
-        head(nullptr) {}
+        head(nullptr)
+      {}
 
       List(size_t count, const T & value):
         head(nullptr)
@@ -35,7 +37,7 @@ namespace belokurskaya
       List(const List< T > & other):
         head(nullptr)
       {
-        Node * current = other.head;
+        Node* current = other.head;
         while (current)
         {
           push_back(current->value);
@@ -56,7 +58,7 @@ namespace belokurskaya
       {
         while (head)
         {
-          Node * temp = head;
+          Node* temp = head;
           head = head->next;
           delete temp;
         }
@@ -67,16 +69,16 @@ namespace belokurskaya
         return head == nullptr;
       }
 
-      void push_back(unsigned long long value)
+      void push_back(const T & value)
       {
-        Node * newNode = new Node(value);
+        Node* newNode = new Node(value);
         if (!head)
         {
           head = newNode;
         }
         else
         {
-          Node * current = head;
+          Node* current = head;
           while (current->next)
           {
             current = current->next;
@@ -85,9 +87,9 @@ namespace belokurskaya
         }
       }
 
-      void push_front(T value)
+      void push_front(const T & value)
       {
-        Node * newNode = new Node(value);
+        Node* newNode = new Node(value);
         newNode->next = head;
         head = newNode;
       }
@@ -104,7 +106,7 @@ namespace belokurskaya
           head = nullptr;
           return;
         }
-        Node * current = head;
+        Node* current = head;
         while (current->next->next)
         {
           current = current->next;
@@ -121,20 +123,20 @@ namespace belokurskaya
         }
         else
         {
-          Node * temp = head;
+          Node* temp = head;
           head = head->next;
           delete temp;
         }
       }
 
-      void insert(size_t index, T value)
+      void insert(size_t index, const T & value)
       {
         if (index == 0)
         {
           push_front(value);
         }
-        Node * newNode = new Node(value);
-        Node * current = head;
+        Node* newNode = new Node(value);
+        Node* current = head;
         for (size_t i = 0; i < index - 1 && current; ++i)
         {
           current = current->next;
@@ -153,7 +155,7 @@ namespace belokurskaya
         {
           pop_front();
         }
-        Node * current = head;
+        Node* current = head;
         for (size_t i = 0; i < index - 1 && current; ++i)
         {
           current = current->next;
@@ -162,15 +164,15 @@ namespace belokurskaya
         {
           throw std::out_of_range("Index out of range");
         }
-        Node * temp = current->next;
+        Node* temp = current->next;
         current->next = current->next->next;
         delete temp;
       }
 
-      void remove(unsigned long long value)
+      void remove(const T & value)
       {
-        Node * current = head;
-        Node * prev = nullptr;
+        Node* current = head;
+        Node* prev = nullptr;
         while (current)
         {
           if (current->value == value)
@@ -197,7 +199,7 @@ namespace belokurskaya
 
       T & at(size_t index) const
       {
-        Node * current = head;
+        Node* current = head;
         for (size_t i = 0; i < index && current; ++i)
         {
           current = current->next;
@@ -212,7 +214,7 @@ namespace belokurskaya
       size_t size() const noexcept
       {
         size_t count = 0;
-        Node * current = head;
+        Node* current = head;
         while (current != nullptr)
         {
           ++count;
@@ -227,12 +229,12 @@ namespace belokurskaya
         {
           while (head)
           {
-            Node * temp = head;
+            Node* temp = head;
             head = head->next;
             delete temp;
           }
 
-          Node * current = other.head;
+          Node* current = other.head;
           while (current)
           {
             push_back(current->value);
@@ -244,8 +246,8 @@ namespace belokurskaya
 
       bool operator==(const List< T > & other) const noexcept
       {
-        Node * current1 = head;
-        Node * current2 = other.head;
+        Node* current1 = head;
+        Node* current2 = other.head;
         while (current1 && current2)
         {
           if (current1->value != current2->value)
@@ -260,13 +262,13 @@ namespace belokurskaya
 
       bool operator!=(const List< T > & other) const noexcept
       {
-        return !(* this == other);
+        return !(*this == other);
       }
 
       bool operator<(const List< T > & other) const noexcept
       {
-        Node * current1 = head;
-        Node * current2 = other.head;
+        Node* current1 = head;
+        Node* current2 = other.head;
         while (current1 && current2)
         {
           if (current1->value != current2->value)
@@ -291,9 +293,9 @@ namespace belokurskaya
         return convertedList;
       }
 
-      operator List< List< size_t > >() const
+      operator List< List< T > >() const
       {
-        List< List< size_t > > resultList;
+        List< List< T > > resultList;
         Node* current = head;
         while (current)
         {
@@ -305,38 +307,52 @@ namespace belokurskaya
 
       bool operator<=(const List< T > & other) const noexcept
       {
-        return * this < other || * this == other;
+        return *this < other || *this == other;
       }
 
       bool operator>(const List< T > & other) const noexcept
       {
-        return !(* this <= other);
+        return !(*this <= other);
       }
 
       bool operator>=(const List< T > & other) const noexcept
       {
-        return * this > other || * this == other;
+        return *this > other || *this == other;
       }
 
       class ConstIterator
       {
         private:
-          Node * current;
+          Node* current;
 
         public:
-          ConstIterator(Node * node):
-            current(node) {}
+          ConstIterator(Node* node):
+            current(node)
+          {}
 
           const T & operator*() const
           {
             return current->value;
           }
 
+          const T & operator->() const
+          {
+            return std::addressof(current->value);
+          }
+
           ConstIterator & operator++()
           {
             current = current->next;
-            return * this;
+            return *this;
           }
+
+          ConstIterator& operator++(int)
+          {
+            ConstIterator result = *this;
+            ++(*this);
+            return result;
+          }
+
 
           bool operator!=(const ConstIterator & other) const
           {

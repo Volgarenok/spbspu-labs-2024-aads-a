@@ -13,7 +13,6 @@ void belokurskaya::printNames(std::ostream& out, const List < std::pair< std::st
   {
     out << ' ' << i->first;
   }
-  out << '\n';
 }
 
 void belokurskaya::printSequences(std::ostream& out, const List< size_t >& list)
@@ -32,8 +31,6 @@ void belokurskaya::printSequences(std::ostream& out, const List< size_t >& list)
     {
       out << ' ' << *subListIterator;
     }
-
-    out << '\n';
     ++i;
   }
 }
@@ -67,9 +64,8 @@ void belokurskaya::printSums(std::ostream& output, const List< List< size_t > >&
   auto i = sums.begin();
 
   output << *(i++);
-  for (; i != sumsEnd; ++i) {
+  for (; i != sumsEnd; ++i)
+  {
     output << ' ' << *i;
   }
-
-  output << '\n';
 }

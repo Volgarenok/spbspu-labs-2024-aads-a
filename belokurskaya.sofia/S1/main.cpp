@@ -16,9 +16,13 @@ int main()
     readSequences(std::cin, sequences);
 
     printNames(std::cout, sequences);
+    std::cout << '\n';
 
     printSequences(std::cout, sequences);
+    std::cout << '\n';
+
     printSums(std::cout, sequences);
+    std::cout << '\n';
   }
 
   catch (const std::exception & e)
