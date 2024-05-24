@@ -16,7 +16,7 @@ namespace piyavkin
       std::uniform_int_distribution< T > dis(std::numeric_limits< T >::min(), std::numeric_limits< T >::max());
       return dis(gen);
     }
-    static float get_value(std::default_random_engine& gen, float);
+    float get_value(std::default_random_engine& gen, float);
   }
   template< class T >
   void create_containers(std::deque< T >& deque, List< T >& bi_list, std::forward_list< T >& list,
