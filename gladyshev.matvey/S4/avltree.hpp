@@ -99,7 +99,8 @@ namespace gladyshev
       tnode* node = findNode(root_, key);
       if (!node)
       {
-        std::cerr << "LOOOL";
+        insert(key, Value());
+        return nullptr;
       }
       return node->data.second;
     }
