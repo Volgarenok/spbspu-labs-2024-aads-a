@@ -7,7 +7,7 @@
 
 namespace ishmuratov
 {
-  template< class Key, class Value, class Compare = less< Key > >
+  template< class Key, class Value, class Compare = std::less< Key > >
   class AVLTree
   {
     using tnode = detail::TNode< Key, Value >;
@@ -39,9 +39,10 @@ namespace ishmuratov
           ++begin;
         }
       }
-      catch(...)
+      catch (...)
       {
         clear();
+        throw;
       }
     }
 
@@ -110,23 +111,28 @@ namespace ishmuratov
 
     Value & at(const Key & key)
     {
-      tnode * node = root_;
-      while (node != nullptr)
+      tnode * node = get(root_, key);
+      if (node == nullptr)
       {
-        if (comp_(key, node->data.first))
-        {
-          node = node->left;
-        }
-        else if (comp_(node->data.first, key))
-        {
-          node = node->right;
-        }
-        else
-        {
-          return node->data.second;
-        }
+        throw std::out_of_range("Key wasn't found!");
       }
-      throw std::out_of_range("Key wasn't found!");
+      else
+      {
+        return node->data.second;
+      }
+    }
+
+    const Value & at(const Key & key) const
+    {
+      tnode * node = get(root_, key);
+      if (node == nullptr)
+      {
+        throw std::out_of_range("Key wasn't found!");
+      }
+      else
+      {
+        return node->data.second;
+      }
     }
 
     Value operator[](const Key & key)
@@ -149,9 +155,9 @@ namespace ishmuratov
 
     void swap(AVLTree & other)
     {
-      std::swap(other.root_, root_);
-      std::swap(other.comp_, comp_);
-      std::swap(other.size_, size_);
+      std::swap(root_, other.root_);
+      std::swap(comp_, other.comp_);
+      std::swap(size_, other.size_);
     }
 
     Iter find(const Key & key)
@@ -286,6 +292,27 @@ namespace ishmuratov
         return 0;
       }
       return node->height;
+    }
+
+    tnode * get(tnode * node, const Key & key) const
+    {
+      node = root_;
+      while (node != nullptr)
+      {
+        if (comp_(key, node->data.first))
+        {
+          node = node->left;
+        }
+        else if (comp_(node->data.first, key))
+        {
+          node = node->right;
+        }
+        else
+        {
+          return node;
+        }
+      }
+      return nullptr;
     }
 
     tnode * min_elem(tnode * root) const

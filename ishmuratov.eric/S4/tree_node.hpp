@@ -7,10 +7,10 @@ namespace ishmuratov
 {
   namespace detail
   {
-    template<class Key, class Value>
+    template< class Key, class Value >
     struct TNode
     {
-      std::pair<Key, Value> data;
+      std::pair< Key, Value > data;
       int height;
       TNode *parent;
       TNode *left;

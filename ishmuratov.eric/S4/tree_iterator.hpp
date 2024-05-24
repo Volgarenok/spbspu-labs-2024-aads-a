@@ -1,7 +1,6 @@
 #ifndef TREE_ITERATOR_HPP
 #define TREE_ITERATOR_HPP
 
-#include "comparator.hpp"
 #include "tree_node.hpp"
 #include <memory>
 
@@ -10,7 +9,7 @@ namespace ishmuratov
   template< class Key, class Value, class Comparator >
   class AVLTree;
 
-  template< class Key, class Value, class Comparator >
+  template< class Key, class Value, class Comparator = std::less< Key > >
   class Iterator
   {
     using tnode = detail::TNode< Key, Value >;
@@ -133,7 +132,7 @@ namespace ishmuratov
     }
   };
 
-  template< class Key, class Value, class Comparator >
+  template< class Key, class Value, class Comparator = std::less< Key > >
   class ConstIterator
   {
     using tnode = detail::TNode< Key, Value >;

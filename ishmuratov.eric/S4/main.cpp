@@ -23,10 +23,10 @@ int main(int argc, char * argv[])
   AVLTree< std::string, std::function< void(std::istream &, std::ostream &) > > cmds;
   {
     using namespace std::placeholders;
-    cmds.insert(std::make_pair("print", std::bind(print, std::ref(data), _1, _2)));
-    cmds.insert(std::make_pair("complement", std::bind(complement, std::ref(data), _1)));
-    cmds.insert(std::make_pair("intersect", std::bind(intersect, std::ref(data), _1)));
-    cmds.insert(std::make_pair("union", std::bind(uniond, std::ref(data), _1)));
+    cmds.insert(std::make_pair("print", std::bind(cmd::print, std::ref(data), _1, _2)));
+    cmds.insert(std::make_pair("complement", std::bind(cmd::complement, std::ref(data), _1)));
+    cmds.insert(std::make_pair("intersect", std::bind(cmd::intersect, std::ref(data), _1)));
+    cmds.insert(std::make_pair("union", std::bind(cmd::uniond, std::ref(data), _1)));
   }
 
   std::string cmd;

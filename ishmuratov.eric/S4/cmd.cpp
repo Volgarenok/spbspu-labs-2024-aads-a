@@ -1,28 +1,27 @@
 #include "cmd.hpp"
 
-void ishmuratov::print(ishmuratov::data_t &data, std::istream &input, std::ostream &output)
+void ishmuratov::cmd::print(const data_t &data, std::istream &input, std::ostream &output)
 {
   std::string dict_name;
   input >> dict_name;
-  if (data.find(dict_name) == data.end())
+  if (data.find(dict_name) == data.cend())
   {
     throw std::out_of_range("Non existent dictionary!");
   }
-  if (data[dict_name].empty())
+  if (data.at(dict_name).empty())
   {
     throw std::underflow_error("Dictionary is empty!");
   }
 
-  AVLTree< int, std::string > to_print = data[dict_name];
-  output << dict_name << " " << data[dict_name].cbegin()->first << " " << data[dict_name].cbegin()->second;
-  for (auto pair = ++to_print.cbegin(); pair != to_print.cend(); ++pair)
+  output << dict_name << " " << data.at(dict_name).cbegin()->first << " " << data.at(dict_name).cbegin()->second;
+  for (auto pair = ++data.at(dict_name).cbegin(); pair != data.at(dict_name).cend(); ++pair)
   {
     output << " " << pair->first << " " << pair->second;
   }
   output << "\n";
 }
 
-void ishmuratov::complement(ishmuratov::data_t &data, std::istream &input)
+void ishmuratov::cmd::complement(data_t &data, std::istream &input)
 {
   std::string new_name;
   std::string first_name;
@@ -35,28 +34,25 @@ void ishmuratov::complement(ishmuratov::data_t &data, std::istream &input)
     throw std::out_of_range("Non existent dictionary!");
   }
 
-  AVLTree< int, std::string > first_dict = data[first_name];
-  AVLTree< int, std::string > second_dict = data[second_name];
-
-  for (auto dict = first_dict.cbegin(); dict != first_dict.cend(); ++dict)
+  for (auto dict = data.at(first_name).cbegin(); dict != data.at(first_name).cend(); ++dict)
   {
-    if (second_dict.find(dict->first) == second_dict.end())
+    if (data.at(second_name).find(dict->first) == data.at(second_name).end())
     {
-      new_dict.insert(std::make_pair(dict->first, first_dict[dict->first]));
+      new_dict.insert(std::make_pair(dict->first, data.at(first_name).at(dict->first)));
     }
   }
-  for (auto dict = second_dict.cbegin(); dict != second_dict.cend(); ++dict)
+  for (auto dict = data.at(second_name).cbegin(); dict != data.at(second_name).cend(); ++dict)
   {
-    if (first_dict.find(dict->first) == first_dict.end())
+    if (data.at(first_name).find(dict->first) == data.at(first_name).end())
     {
-      new_dict.insert(std::make_pair(dict->first, second_dict[dict->first]));
+      new_dict.insert(std::make_pair(dict->first, data.at(second_name).at(dict->first)));
     }
   }
 
   data.insert(std::make_pair(new_name, new_dict));
 }
 
-void ishmuratov::intersect(ishmuratov::data_t &data, std::istream &input)
+void ishmuratov::cmd::intersect(data_t &data, std::istream &input)
 {
   std::string new_name;
   std::string first_name;
@@ -69,21 +65,18 @@ void ishmuratov::intersect(ishmuratov::data_t &data, std::istream &input)
     throw std::out_of_range("Non existent dictionary!");
   }
 
-  AVLTree< int, std::string > first_dict = data[first_name];
-  AVLTree< int, std::string > second_dict = data[second_name];
-
-  for (auto dict = first_dict.cbegin(); dict != first_dict.cend(); ++dict)
+  for (auto dict = data.at(first_name).cbegin(); dict != data.at(first_name).cend(); ++dict)
   {
-    if (second_dict.find(dict->first) != second_dict.end())
+    if (data.at(second_name).find(dict->first) != data.at(second_name).end())
     {
-      new_dict.insert(std::make_pair(dict->first, first_dict[dict->first]));
+      new_dict.insert(std::make_pair(dict->first, data.at(first_name).at(dict->first)));
     }
   }
 
   data.insert(std::make_pair(new_name, new_dict));
 }
 
-void ishmuratov::uniond(ishmuratov::data_t &data, std::istream &input)
+void ishmuratov::cmd::uniond(data_t &data, std::istream &input)
 {
   std::string new_name;
   std::string first_name;
@@ -96,18 +89,15 @@ void ishmuratov::uniond(ishmuratov::data_t &data, std::istream &input)
     throw std::out_of_range("Non existent dictionary!");
   }
 
-  AVLTree< int, std::string > first_dict = data[first_name];
-  AVLTree< int, std::string > second_dict = data[second_name];
-
-  for (auto dict = first_dict.cbegin(); dict != first_dict.cend(); ++dict)
+  for (auto dict = data.at(first_name).cbegin(); dict != data.at(first_name).cend(); ++dict)
   {
-    new_dict.insert(std::make_pair(dict->first, first_dict[dict->first]));
+    new_dict.insert(std::make_pair(dict->first, data.at(first_name).at(dict->first)));
   }
-  for (auto dict = second_dict.cbegin(); dict != second_dict.cend(); ++dict)
+  for (auto dict = data.at(second_name).cbegin(); dict != data.at(second_name).cend(); ++dict)
   {
     if (new_dict.find(dict->first) == new_dict.end())
     {
-      new_dict.insert(std::make_pair(dict->first, second_dict[dict->first]));
+      new_dict.insert(std::make_pair(dict->first, data.at(second_name).at(dict->first)));
     }
   }
 
