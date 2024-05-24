@@ -101,13 +101,13 @@ namespace gladyshev
       {
         if (root_)
         {
-          root_ = insertImpl(key, Value(), root_);
+          node = insertImpl(key, Value(), root_);
         }
         else
         {
           root_ = new tnode(key, Value());
+          node = root_;
         }
-        return root_->data.second;
       }
       return node->data.second;
     }
