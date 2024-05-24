@@ -40,7 +40,7 @@ namespace nikitov
       }
       type.sort();
       printRange(type.cbegin(), type.cend(), output);
-    } 
+    }
   }
 
   template< class T, class Compare >
