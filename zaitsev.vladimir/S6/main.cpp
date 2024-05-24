@@ -1,7 +1,7 @@
 #include <iostream>
 #include <functional>
 #include <string>
-#include <map>
+#include <map.hpp>
 #include "executor.hpp"
 
 int main(int argc, char** argv)
@@ -11,7 +11,7 @@ int main(int argc, char** argv)
     std::cerr << "Invalid number of arguments\n";
     return 1;
   }
-  std::map< std::pair< std::string, std::string >, std::function< void(std::ostream&, size_t) > >sorter_types;
+  zaitsev::Map< std::pair< std::string, std::string >, std::function< void(std::ostream&, size_t) > >sorter_types;
   sorter_types[{"ints", "ascending"}] = sortirator< int, std::less< int > >;
   sorter_types[{"ints", "descending"}] = sortirator< int, std::greater< int > >;
   sorter_types[{"floats", "ascending"}] = sortirator< float, std::less< float > >;

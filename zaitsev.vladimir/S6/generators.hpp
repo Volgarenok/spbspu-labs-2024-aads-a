@@ -9,8 +9,8 @@ template<>
 class generator< int >
 {
 public:
-  generator(int a, int b):
-    gen(std::random_device()()),
+  generator(int a, int b, int seed):
+    gen(seed),
     distr(a, b)
   {}
   int operator()()
@@ -26,8 +26,8 @@ template<>
 class generator<float>
 {
 public:
-  generator(float a, float b):
-    gen(std::random_device()()),
+  generator(float a, float b, int seed):
+    gen(seed),
     distr(a, b)
   {}
   float operator()()
