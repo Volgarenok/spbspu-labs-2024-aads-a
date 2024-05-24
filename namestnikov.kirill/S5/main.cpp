@@ -48,6 +48,11 @@ int main(int argc, char * argv[])
   {
     std::cout << "<EMPTY>\n";
   }
+  catch (const std::out_of_range & e)
+  {
+    std::cerr << e.what() << "\n";
+    return 2;
+  }
   catch (const std::exception & e)
   {
     std::cerr << e.what() << "\n";
