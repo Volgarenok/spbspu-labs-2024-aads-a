@@ -18,19 +18,18 @@ namespace novokhatskiy
   public:
     using node_t = detail::NodeTree<Key, Value>;
     using v_type = std::pair<Key, Value>;
-    using constIter = ConstIteratorTree< Key, Value, Compare >;
-    using iter = IteratorTree< Key, Value, Compare >;
+    using constIter = ConstIteratorTree<Key, Value, Compare>;
+    using iter = IteratorTree<Key, Value, Compare>;
 
-    Tree():
-      root_(nullptr),
-      size_(0),
-      cmp_()
-    {}
+    Tree() : root_(nullptr),
+             size_(0),
+             cmp_()
+    {
+    }
 
-    Tree(const Tree& other) :
-      root_(nullptr),
-      size_(0),
-      cmp_(other.cmp_)
+    Tree(const Tree &other) : root_(nullptr),
+                              size_(0),
+                              cmp_(other.cmp_)
     {
       try
       {
@@ -39,23 +38,22 @@ namespace novokhatskiy
           insert(*begin);
         }
       }
-      catch (const std::exception&)
+      catch (const std::exception &)
       {
         clear();
         throw;
       }
     }
 
-    Tree(Tree&& other):
-      root_(other.root_),
-      size_(other.size_),
-      cmp_(std::move(other.cmp_))
+    Tree(Tree &&other) : root_(other.root_),
+                         size_(other.size_),
+                         cmp_(std::move(other.cmp_))
     {
       other.root_ = nullptr;
       other.size_ = 0;
     }
 
-    Tree& operator=(const Tree& other)
+    Tree &operator=(const Tree &other)
     {
       Tree map(other);
       clear();
@@ -63,16 +61,16 @@ namespace novokhatskiy
       return *this;
     }
 
-    Tree& operator=(Tree&& other)
+    Tree &operator=(Tree &&other)
     {
       clear();
       this->swap(other);
       return *this;
     }
 
-    node_t* find(node_t* node, const Key& key)
+    node_t *find(node_t *node, const Key &key)
     {
-      node_t* root = (node->height < 0) ? node->left : node;
+      node_t *root = (node->height < 0) ? node->left : node;
       while (root)
       {
         if (key == root->value.first)
@@ -99,37 +97,51 @@ namespace novokhatskiy
       return nullptr;
     }
 
-    iter find(const Key& key)
+    iter find(const Key &key)
     {
-      node_t* curr = root_;
+      node_t *curr = root_;
       while (curr)
       {
-        if (curr->value.first == key)
+        if (cmp_(curr->value.first, key))
+        {
+          curr = curr->right;
+        }
+        else if (cmp_(key, curr->value.first))
+        {
+          curr = curr->left;
+        }
+        else
         {
           return iter(curr);
         }
-        curr = (cmp_(curr->value.first, key)) ? curr->right : curr->left;
       }
       return iter(curr);
     }
 
-    constIter find(const Key& key) const
+    constIter find(const Key &key) const
     {
-      node_t* curr = root_;
+      node_t *curr = root_;
       while (curr)
       {
-        if (curr->value.first == key)
+        if (cmp_(curr->value.first, key))
         {
-          return constIter(curr);
+          curr = curr->right;
         }
-        curr = (cmp_(curr->value.first, key)) ? curr->right : curr->left;
+        else if (cmp_(key, curr->value.first))
+        {
+          curr = curr->left;
+        }
+        else
+        {
+          return iter(curr);
+        }
       }
       return constIter(curr);
     }
 
-    Value& at(const Key& key)
+    Value &at(const Key &key)
     {
-      node_t* curr = search(key);
+      node_t *curr = search(key);
       if (curr)
       {
         return curr->value.second;
@@ -137,9 +149,9 @@ namespace novokhatskiy
       throw std::out_of_range("No such element");
     }
 
-    const Value& at(const Key& key) const
+    const Value &at(const Key &key) const
     {
-      node_t* curr = search(key);
+      node_t *curr = search(key);
       if (curr)
       {
         return curr->value.second;
@@ -147,37 +159,29 @@ namespace novokhatskiy
       throw std::out_of_range("No such element");
     }
 
-    Value& operator[](const Key& key)
+    Value &operator[](const Key &key)
     {
-      node_t* tmp = search(key);
-      if (tmp)
-      {
-        return tmp->value.second;
-      }
-      else
+      node_t *tmp = search(key);
+      if (tmp == nullptr)
       {
         insert(std::make_pair(key, Value()));
-        node_t* res = search(key);
-        return res->value.second;
+        tmp = search(key);
       }
+      return tmp->value.second;
     }
 
-    const Value& operator[](const Key& key) const
+    const Value &operator[](const Key &key) const
     {
-      node_t* tmp = search(key);
-      if (tmp)
-      {
-        return tmp->value.second;
-      }
-      else
+      node_t *tmp = search(key);
+      if (tmp == nullptr)
       {
         insert(std::make_pair(key, Value()));
-        node_t* res = search(key);
-        return res->value.second;
+        tmp = search(key);
       }
+      return tmp->value.second;
     }
 
-    node_t* updateHeight(node_t* node)
+    node_t *updateHeight(node_t *node)
     {
       node->height = 1 + std::max(node->getHeight(node->left), node->getHeight(node->right));
       return node;
@@ -199,7 +203,7 @@ namespace novokhatskiy
       root_ = nullptr;
     }
 
-    void swap(Tree& other)
+    void swap(Tree &other)
     {
       std::swap(root_, other.root_);
       std::swap(size_, other.size_);
@@ -210,15 +214,15 @@ namespace novokhatskiy
     {
       iter res = pos;
       res++;
-      node_t* node = nullptr;
-      node_t* delElement = nullptr;
+      node_t *node = nullptr;
+      node_t *delElement = nullptr;
       if (!pos.node_->left || !pos.node_->right)
       {
         delElement = pos.node_;
         node = delElement->parent;
         if (!pos.node_->left && !pos.node_->right)
         {
-          if (node->left = delElement)
+          if (node->left == delElement)
           {
             node->left = nullptr;
           }
@@ -277,7 +281,7 @@ namespace novokhatskiy
       return iter(res.node_);
     }
 
-    iter lower_bound(const Key& key)
+    iter lower_bound(const Key &key)
     {
       iter curr = find(key);
       if (cmp_(curr.node_->value.first, key))
@@ -287,7 +291,7 @@ namespace novokhatskiy
       return curr;
     }
 
-    constIter lower_bound(const Key& key) const
+    constIter lower_bound(const Key &key) const
     {
       iter curr = find(key);
       if (cmp_(curr.node_->value.first, key))
@@ -297,7 +301,7 @@ namespace novokhatskiy
       return curr;
     }
 
-    iter upper_bound(const Key& key)
+    iter upper_bound(const Key &key)
     {
       iter res = lower_bound(key);
       if (res.node_->value.first == key && res != end())
@@ -307,7 +311,7 @@ namespace novokhatskiy
       return res;
     }
 
-    constIter upper_bound(const Key& key) const
+    constIter upper_bound(const Key &key) const
     {
       constIter res = lower_bound(key);
       if (res.node_->value.first == key && res != cend())
@@ -317,17 +321,17 @@ namespace novokhatskiy
       return res;
     }
 
-    std::pair< iter, iter > equal_range(const Key& key)
+    std::pair<iter, iter> equal_range(const Key &key)
     {
       return std::make_pair(lower_bound(key), upper_bound(key));
     }
 
-    std::pair< constIter, constIter > equal_range(const Key& key) const
+    std::pair<constIter, constIter> equal_range(const Key &key) const
     {
       return std::make_pair(lower_bound(key), upper_bound(key));
     }
 
-    size_t count(const Key& key)
+    size_t count(const Key &key)
     {
       return (find(key) != end());
     }
@@ -352,13 +356,13 @@ namespace novokhatskiy
       return iter();
     }
 
-    node_t* search(const Key& key)
+    node_t *search(const Key &key) const
     {
-      node_t* result = search_imp(root_, key);
+      node_t *result = search_imp(root_, key);
       return result;
     }
 
-    void insert(const std::pair< Key, Value >& val)
+    void insert(const std::pair<Key, Value> &val)
     {
       try
       {
@@ -373,7 +377,7 @@ namespace novokhatskiy
           ++size_;
         }
       }
-      catch (const std::exception&)
+      catch (const std::exception &)
       {
         clear();
         throw;
@@ -386,11 +390,11 @@ namespace novokhatskiy
     }
 
   private:
-    node_t* root_;
+    node_t *root_;
     size_t size_;
     Compare cmp_;
 
-    void balance(node_t* node)
+    void balance(node_t *node)
     {
       if (node->height < 0)
       {
@@ -410,7 +414,7 @@ namespace novokhatskiy
       }
     }
 
-    void getBalance(node_t* node)
+    void getBalance(node_t *node)
     {
       if ((node->height > 1) || (node->height < -1))
       {
@@ -436,9 +440,9 @@ namespace novokhatskiy
       }
     }
 
-    node_t* rotate_left(node_t* node)
+    node_t *rotate_left(node_t *node)
     {
-      node_t* newRoot = node->right;
+      node_t *newRoot = node->right;
       node->right = newRoot->left;
       if (newRoot->left)
       {
@@ -451,9 +455,9 @@ namespace novokhatskiy
       return newRoot;
     }
 
-    node_t* rotate_right(node_t* node)
+    node_t *rotate_right(node_t *node)
     {
-      node_t* newRoot = node->left;
+      node_t *newRoot = node->left;
       node->left = newRoot->right;
       if (newRoot->right)
       {
@@ -466,7 +470,7 @@ namespace novokhatskiy
       return newRoot;
     }
 
-    void insert_imp(const std::pair< Key, Value >& value, node_t* node)
+    void insert_imp(const std::pair<Key, Value> &value, node_t *node)
     {
       try
       {
@@ -495,14 +499,14 @@ namespace novokhatskiy
           }
         }
       }
-      catch (const std::exception&)
+      catch (const std::exception &)
       {
         clear();
         throw;
       }
     }
 
-    void clear_imp(node_t* root)
+    void clear_imp(node_t *root)
     {
       if (root)
       {
@@ -513,9 +517,9 @@ namespace novokhatskiy
       }
     }
 
-    node_t* minN(node_t* p) const
+    node_t *minN(node_t *p) const
     {
-      node_t* res = p;
+      node_t *res = p;
       if (!res)
       {
         return nullptr;
@@ -527,7 +531,7 @@ namespace novokhatskiy
       return res;
     }
 
-    node_t* search_imp(node_t* node, const Key& key)
+    node_t *search_imp(node_t *node, const Key &key) const
     {
       if (!node)
       {
