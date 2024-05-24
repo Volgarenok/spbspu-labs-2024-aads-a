@@ -23,7 +23,7 @@ namespace novokhatskiy
     using constIter = ConstIteratorTree< Key, Value, Compare >;
     using iter = IteratorTree< Key, Value, Compare >;
 
-    Tree(): 
+    Tree():
       root_(nullptr),
       size_(0),
       cmp_()
