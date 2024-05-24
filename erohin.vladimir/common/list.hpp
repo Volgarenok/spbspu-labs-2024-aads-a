@@ -23,6 +23,8 @@ namespace erohin
     List(InputIt first, InputIt last);
     List(std::initializer_list< T > init_list);
     ~List();
+    List & operator=(const List & rhs);
+    List & operator=(List && rhs) noexcept;
     iterator begin();
     iterator end();
     const_iterator begin() const;
@@ -56,6 +58,9 @@ namespace erohin
     void splice_after(const_iterator pos, List< T > & other, const_iterator first, const_iterator last);
     void splice_after(const_iterator pos, List< T > && other, const_iterator first, const_iterator last) noexcept;
     void reverse() noexcept;
+    template< class Compare >
+    void sort(Compare cmp);
+    void sort();
   private:
     detail::Node< T > * head_;
   };
@@ -124,6 +129,28 @@ namespace erohin
   List< T >::~List()
   {
     clear();
+  }
+
+  template< class T >
+  List< T > & List< T >::operator=(const List< T > & rhs)
+  {
+    if (this != std::addressof(rhs))
+    {
+      List< T > temp(rhs);
+      swap(temp);
+    }
+    return *this;
+  }
+
+  template< class T >
+  List< T > & List< T >::operator=(List< T > && rhs) noexcept
+  {
+    if (this != std::addressof(rhs))
+    {
+      List< T > temp(std::move(rhs));
+      swap(temp);
+    }
+    return *this;
   }
 
   template< class T >
@@ -219,13 +246,13 @@ namespace erohin
   template< class T >
   ListIterator< T > List< T >::insert_after(const_iterator pos, const T & value)
   {
-    insert_after(iterator(pos.node_), T(value));
+    return insert_after(pos, T(value));
   }
 
   template< class T >
   ListIterator< T > List< T >::insert_after(const_iterator pos, T && value) noexcept
   {
-    iterator iter_result(pos.node_);
+    iterator iter_result(const_cast< detail::Node< T > * >(pos.node_));
     detail::Node< T > * new_node = new detail::Node< T >(std::move(value), iter_result.node_->next_);
     iter_result.node_->next_ = new_node;
     return (++iter_result);
@@ -416,6 +443,37 @@ namespace erohin
       ++iter_current;
     }
     erase_after(iter_begin, iter_end);
+  }
+
+  template< class T >
+  template< class Compare >
+  void List< T >::sort(Compare cmp)
+  {
+    if (empty())
+    {
+      return;
+    }
+    bool is_sorted = false;
+    while (!is_sorted)
+    {
+      is_sorted = true;
+      auto iter = begin();
+      while (std::next(iter) != end())
+      {
+        if (!cmp(*iter, *std::next(iter)))
+        {
+          std::swap(*iter, *std::next(iter));
+          is_sorted = false;
+        }
+        ++iter;
+      }
+    }
+  }
+
+  template< class T >
+  void List< T >::sort()
+  {
+    sort(std::less< T >{});
   }
 
   namespace detail
