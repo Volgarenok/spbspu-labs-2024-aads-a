@@ -3,19 +3,21 @@
 
 #include <functional>
 
+#include <queue.hpp>
+
 #include "const_treeIterator.hpp"
 #include "treeIterator.hpp"
 #include "treeNode.hpp"
 
 namespace zhalilov
 {
-  template < class Key, class T, class Compare = std::less < Key > >
+  template < class Key, class T, class Compare = std::less< Key > >
   class TwoThree
   {
   public:
-    using MapPair = std::pair < Key, T >;
-    using iterator = TwoThreeIterator < MapPair >;
-    using const_iterator = ConstTwoThreeIterator < MapPair >;
+    using MapPair = std::pair< Key, T >;
+    using iterator = TwoThreeIterator< MapPair >;
+    using const_iterator = ConstTwoThreeIterator< MapPair >;
 
     TwoThree();
     TwoThree(const TwoThree &);
@@ -40,7 +42,7 @@ namespace zhalilov
     bool empty() const noexcept;
     size_t size() const noexcept;
 
-    std::pair < iterator, bool > insert(const MapPair &);
+    std::pair< iterator, bool > insert(const MapPair &);
     iterator erase(iterator);
     iterator erase(const_iterator);
     char erase(const Key &);
@@ -50,17 +52,30 @@ namespace zhalilov
     iterator find(const Key &);
     const_iterator find(const Key &) const;
 
+    template < class F >
+    F traverse_lnr(F f) const;
+    template < class F >
+    F traverse_lnr(F f);
+    template < class F >
+    F traverse_rnl(F f) const;
+    template < class F >
+    F traverse_rnl(F f);
+    template < class F >
+    F traverse_breadth(F f) const;
+    template < class F >
+    F traverse_breadth(F f);
+
     size_t count(const Key &) const;
-    std::pair < iterator, iterator > equal_range(const Key &);
-    std::pair < const_iterator, const_iterator > equal_range(const Key &) const;
+    std::pair< iterator, iterator > equal_range(const Key &);
+    std::pair< const_iterator, const_iterator > equal_range(const Key &) const;
 
   private:
     Compare compare_;
-    using Node = detail::TreeNode < MapPair >;
+    using Node = detail::TreeNode< MapPair >;
     Node *head_;
     size_t size_;
 
-    std::pair < iterator, bool > doFind(const Key &) const;
+    std::pair< iterator, bool > doFind(const Key &) const;
     Node *createTwoNode(const MapPair &) const;
     Node *createThreeNode(const MapPair &, const MapPair &) const;
     void connectNodes(Node *parent, Node *left, Node *right, Node *mid = nullptr);
@@ -76,7 +91,7 @@ namespace zhalilov
   };
 
   template < class Key, class T, class Compare >
-  TwoThree < Key, T, Compare >::TwoThree():
+  TwoThree< Key, T, Compare >::TwoThree():
     compare_(Compare{}),
     head_(createTwoNode(MapPair())),
     size_(0)
@@ -85,7 +100,7 @@ namespace zhalilov
   }
 
   template < class Key, class T, class Compare >
-  TwoThree < Key, T, Compare >::TwoThree(const TwoThree &other):
+  TwoThree< Key, T, Compare >::TwoThree(const TwoThree &other):
     TwoThree()
   {
     auto it = other.cbegin();
@@ -98,7 +113,7 @@ namespace zhalilov
   }
 
   template < class Key, class T, class Compare >
-  TwoThree < Key, T, Compare >::TwoThree(TwoThree &&other) noexcept:
+  TwoThree< Key, T, Compare >::TwoThree(TwoThree &&other) noexcept:
     head_(other.head_),
     size_(other.size_)
   {
@@ -107,14 +122,14 @@ namespace zhalilov
   }
 
   template < class Key, class T, class Compare >
-  TwoThree < Key, T, Compare >::~TwoThree()
+  TwoThree< Key, T, Compare >::~TwoThree()
   {
     clear();
     delete head_;
   }
 
   template < class Key, class T, class Compare >
-  TwoThree < Key, T, Compare > &TwoThree < Key, T, Compare >::operator=(const TwoThree &other)
+  TwoThree< Key, T, Compare > &TwoThree< Key, T, Compare >::operator=(const TwoThree &other)
   {
     if (head_ != other.head_)
     {
@@ -125,7 +140,7 @@ namespace zhalilov
   }
 
   template < class Key, class T, class Compare >
-  TwoThree < Key, T, Compare > &TwoThree < Key, T, Compare >::operator=(TwoThree &&other) noexcept
+  TwoThree< Key, T, Compare > &TwoThree< Key, T, Compare >::operator=(TwoThree &&other) noexcept
   {
     if (head_ != other.head_)
     {
@@ -139,7 +154,7 @@ namespace zhalilov
   }
 
   template < class Key, class T, class Compare >
-  T &TwoThree < Key, T, Compare >::at(const Key &key)
+  T &TwoThree< Key, T, Compare >::at(const Key &key)
   {
     auto it = find(key);
     if (it == end())
@@ -150,7 +165,7 @@ namespace zhalilov
   }
 
   template < class Key, class T, class Compare >
-  const T &TwoThree < Key, T, Compare >::at(const Key &key) const
+  const T &TwoThree< Key, T, Compare >::at(const Key &key) const
   {
     auto it = find(key);
     if (it == cend())
@@ -161,69 +176,69 @@ namespace zhalilov
   }
 
   template < class Key, class T, class Compare >
-  T &TwoThree < Key, T, Compare >::operator[](const Key &key)
+  T &TwoThree< Key, T, Compare >::operator[](const Key &key)
   {
     auto insertPair = insert(std::make_pair(key, T()));
     return insertPair.first->second;
   }
 
   template < class Key, class T, class Compare >
-  T &TwoThree < Key, T, Compare >::operator[](Key &&key)
+  T &TwoThree< Key, T, Compare >::operator[](Key &&key)
   {
     auto insertPair = insert(std::make_pair(std::move(key), T()));
     return insertPair.first->second;
   }
 
   template < class Key, class T, class Compare >
-  typename TwoThree < Key, T, Compare >::iterator TwoThree < Key, T, Compare >::begin()
+  typename TwoThree< Key, T, Compare >::iterator TwoThree< Key, T, Compare >::begin()
   {
     return iterator(iterator::findDeepestLeft(head_->left), true);
   }
 
   template < class Key, class T, class Compare >
-  typename TwoThree < Key, T, Compare >::const_iterator TwoThree < Key, T, Compare >::begin() const
+  typename TwoThree< Key, T, Compare >::const_iterator TwoThree< Key, T, Compare >::begin() const
   {
     return const_iterator(const_iterator::findDeepestLeft(head_->left), true);
   }
 
   template < class Key, class T, class Compare >
-  typename TwoThree < Key, T, Compare >::const_iterator TwoThree < Key, T, Compare >::cbegin() const noexcept
+  typename TwoThree< Key, T, Compare >::const_iterator TwoThree< Key, T, Compare >::cbegin() const noexcept
   {
     return const_iterator(const_iterator::findDeepestLeft(head_->left), true);
   }
 
   template < class Key, class T, class Compare >
-  typename TwoThree < Key, T, Compare >::iterator TwoThree < Key, T, Compare >::end()
+  typename TwoThree< Key, T, Compare >::iterator TwoThree< Key, T, Compare >::end()
   {
     return iterator(head_, true);
   }
 
   template < class Key, class T, class Compare >
-  typename TwoThree < Key, T, Compare >::const_iterator TwoThree < Key, T, Compare >::end() const
+  typename TwoThree< Key, T, Compare >::const_iterator TwoThree< Key, T, Compare >::end() const
   {
     return const_iterator(head_, true);
   }
 
   template < class Key, class T, class Compare >
-  typename TwoThree < Key, T, Compare >::const_iterator TwoThree < Key, T, Compare >::cend() const noexcept
+  typename TwoThree< Key, T, Compare >::const_iterator TwoThree< Key, T, Compare >::cend() const noexcept
   {
     return const_iterator(head_, true);
   }
 
   template < class Key, class T, class Compare >
-  bool TwoThree < Key, T, Compare >::empty() const noexcept
+  bool TwoThree< Key, T, Compare >::empty() const noexcept
   {
     return size_ == 0;
   }
 
   template < class Key, class T, class Compare >
-  size_t TwoThree < Key, T, Compare >::size() const noexcept
+  size_t TwoThree< Key, T, Compare >::size() const noexcept
   {
     return size_;
   }
 
   template < class Key, class T, class Compare >
-  std::pair < typename TwoThree < Key, T, Compare >::iterator, bool > TwoThree < Key, T, Compare >::insert(const MapPair &newPair)
+  std::pair< typename TwoThree< Key, T, Compare >::iterator, bool > TwoThree< Key, T, Compare >::insert(const MapPair &newPair)
   {
     auto resultPair = doFind(newPair.first);
     if (!resultPair.second)
@@ -291,7 +306,7 @@ namespace zhalilov
   }
 
   template < class Key, class T, class Compare >
-  typename TwoThree < Key, T, Compare >::iterator TwoThree < Key, T, Compare >::erase(iterator it)
+  typename TwoThree< Key, T, Compare >::iterator TwoThree< Key, T, Compare >::erase(iterator it)
   {
     if (size_ == 1)
     {
@@ -337,20 +352,20 @@ namespace zhalilov
   }
 
   template < class Key, class T, class Compare >
-  typename TwoThree < Key, T, Compare >::iterator TwoThree < Key, T, Compare >::erase(const_iterator it)
+  typename TwoThree< Key, T, Compare >::iterator TwoThree< Key, T, Compare >::erase(const_iterator it)
   {
     return erase(iterator(it.node_, it.isPtrToLeft_));
   }
 
   template < class Key, class T, class Compare >
-  char TwoThree < Key, T, Compare >::erase(const Key &key)
+  char TwoThree< Key, T, Compare >::erase(const Key &key)
   {
     erase(find(key));
     return doFind(key).second;
   }
 
   template < class Key, class T, class Compare >
-  void TwoThree < Key, T, Compare >::clear() noexcept
+  void TwoThree< Key, T, Compare >::clear() noexcept
   {
     Node *currNode = iterator::findDeepestLeft(head_);
     while (currNode && currNode != head_)
@@ -377,7 +392,7 @@ namespace zhalilov
   }
 
   template < class Key, class T, class Compare >
-  void TwoThree < Key, T, Compare >::swap(TwoThree &other) noexcept
+  void TwoThree< Key, T, Compare >::swap(TwoThree &other) noexcept
   {
     TwoThree temp(std::move(*this));
     *this = std::move(other);
@@ -385,7 +400,7 @@ namespace zhalilov
   }
 
   template < class Key, class T, class Compare >
-  typename TwoThree < Key, T, Compare >::iterator TwoThree < Key, T, Compare >::find(const Key &key)
+  typename TwoThree< Key, T, Compare >::iterator TwoThree< Key, T, Compare >::find(const Key &key)
   {
     auto resultPair = doFind(key);
     if (resultPair.second)
@@ -396,7 +411,7 @@ namespace zhalilov
   }
 
   template < class Key, class T, class Compare >
-  typename TwoThree < Key, T, Compare >::const_iterator TwoThree < Key, T, Compare >::find(const Key &key) const
+  typename TwoThree< Key, T, Compare >::const_iterator TwoThree< Key, T, Compare >::find(const Key &key) const
   {
     auto resultPair = doFind(key);
     if (resultPair.second)
@@ -407,7 +422,62 @@ namespace zhalilov
   }
 
   template < class Key, class T, class Compare >
-  size_t TwoThree < Key, T, Compare >::count(const Key &key) const
+  template < class F >
+  F TwoThree< Key, T, Compare >::traverse_lnr(F f) const
+  {
+    if (empty())
+    {
+      throw std::logic_error("travers_lnr: empty tree");
+    }
+    auto itCurr = cbegin();
+    auto itEnd = cend();
+    while (itCurr != itEnd)
+    {
+      f(*itCurr);
+      itCurr++;
+    }
+    return f;
+  }
+
+  template < class Key, class T, class Compare >
+  template < class F >
+  F TwoThree< Key, T, Compare >::traverse_lnr(F f)
+  {
+    const TwoThree< Key, T, Compare > constThis = const_cast< TwoThree< Key, T, Compare > & >(*this);
+    return constThis.traverse_lnr(f);
+  }
+
+  template < class Key, class T, class Compare >
+  template < class F >
+  F TwoThree< Key, T, Compare >::traverse_rnl(F f) const
+  {
+    if (empty())
+    {
+      throw std::logic_error("travers_lnr: empty tree");
+    }
+    auto itCurr = cend();
+    itCurr--;
+    auto itBegin = cbegin();
+    while (itCurr != itBegin)
+    {
+      f(*itCurr);
+      itCurr--;
+    }
+    f(*itCurr);
+    itCurr--;
+    return f;
+  }
+
+  template < class Key, class T, class Compare >
+  template < class F >
+  F TwoThree< Key, T, Compare >::traverse_rnl(F f)
+  {
+    const TwoThree< Key, T, Compare > constThis = const_cast< TwoThree< Key, T, Compare > & >(*this);
+    return constThis.traverse_rnl(f);
+  }
+
+  template < class Key, class T, class Compare >
+  size_t TwoThree< Key, T, Compare >::count(const Key &key) const
   {
     auto it = find(key);
     if (it == cend())
@@ -418,8 +488,51 @@ namespace zhalilov
   }
 
   template < class Key, class T, class Compare >
-  std::pair < typename TwoThree < Key, T, Compare >::iterator, typename TwoThree < Key, T, Compare >::iterator >
-  TwoThree < Key, T, Compare >::equal_range(const Key &key)
+  template < class F >
+  F TwoThree< Key, T, Compare >::traverse_breadth(F f) const
+  {
+    if (empty())
+    {
+      throw std::logic_error("travers_breadth: tree empty");
+    }
+    Queue< Node * > nodeQueue;
+    nodeQueue.push(head_->left);
+    while (!nodeQueue.empty())
+    {
+      Node *currNode = nodeQueue.front();
+      nodeQueue.pop();
+      f(currNode->one);
+      if (currNode->type == detail::NodeType::Three)
+      {
+        f(currNode->two);
+      }
+      if (currNode->left)
+      {
+        nodeQueue.push(currNode->left);
+      }
+      if (currNode->mid)
+      {
+        nodeQueue.push(currNode->mid);
+      }
+      if (currNode->right)
+      {
+        nodeQueue.push(currNode->right);
+      }
+    }
+    return f;
+  }
+
+  template < class Key, class T, class Compare >
+  template < class F >
+  F TwoThree< Key, T, Compare >::traverse_breadth(F f)
+  {
+    const TwoThree< Key, T, Compare > constThis = const_cast< TwoThree< Key, T, Compare > & >(*this);
+    return constThis.traverse_breadth(f);
+  }
+
+  template < class Key, class T, class Compare >
+  std::pair< typename TwoThree< Key, T, Compare >::iterator, typename TwoThree< Key, T, Compare >::iterator >
+  TwoThree< Key, T, Compare >::equal_range(const Key &key)
   {
     auto firstIt = doFind(key).first;
     if (key != firstIt->first)
@@ -436,8 +549,8 @@ namespace zhalilov
   }
 
   template < class Key, class T, class Compare >
-  std::pair < typename TwoThree < Key, T, Compare >::const_iterator, typename TwoThree < Key, T, Compare >::const_iterator >
-  TwoThree < Key, T, Compare >::equal_range(const Key &key) const
+  std::pair< typename TwoThree< Key, T, Compare >::const_iterator, typename TwoThree< Key, T, Compare >::const_iterator >
+  TwoThree< Key, T, Compare >::equal_range(const Key &key) const
   {
     auto nonConstIt = doFind(key).first;
     auto firstIt = const_iterator(nonConstIt.node_, nonConstIt.isPtrToLeft_);
@@ -455,7 +568,7 @@ namespace zhalilov
   }
 
   template < class Key, class T, class Compare >
-  std::pair < typename TwoThree < Key, T, Compare >::iterator, bool > TwoThree < Key, T, Compare >::doFind(const Key &key) const
+  std::pair< typename TwoThree< Key, T, Compare >::iterator, bool > TwoThree< Key, T, Compare >::doFind(const Key &key) const
   {
     if (empty())
     {
@@ -492,20 +605,20 @@ namespace zhalilov
   }
 
   template < class Key, class T, class Compare >
-  typename TwoThree < Key, T, Compare >::Node *TwoThree < Key, T, Compare >::createTwoNode(const MapPair &pair) const
+  typename TwoThree< Key, T, Compare >::Node *TwoThree< Key, T, Compare >::createTwoNode(const MapPair &pair) const
   {
     return new Node{ nullptr, nullptr, nullptr, nullptr, pair, pair, detail::NodeType::Two };
   }
 
   template < class Key, class T, class Compare >
-  typename TwoThree < Key, T, Compare >::Node *TwoThree < Key, T, Compare >::createThreeNode(
+  typename TwoThree< Key, T, Compare >::Node *TwoThree< Key, T, Compare >::createThreeNode(
     const MapPair &pair1, const MapPair &pair2) const
   {
     return new Node{ nullptr, nullptr, nullptr, nullptr, pair1, pair2, detail::NodeType::Three };
   }
 
   template < class Key, class T, class Compare >
-  void TwoThree < Key, T, Compare >::connectNodes(Node *parent, Node *left, Node *right, Node *mid)
+  void TwoThree< Key, T, Compare >::connectNodes(Node *parent, Node *left, Node *right, Node *mid)
   {
     parent->left = left;
     parent->right = right;
@@ -525,7 +638,7 @@ namespace zhalilov
   }
 
   template < class Key, class T, class Compare >
-  bool TwoThree < Key, T, Compare >::mergeParentsParentThree(iterator emptyIt)
+  bool TwoThree< Key, T, Compare >::mergeParentsParentThree(iterator emptyIt)
   {
     Node *parentNode = emptyIt.node_->parent;
     Node *emptyNode = emptyIt.node_;
@@ -590,7 +703,7 @@ namespace zhalilov
   }
 
   template < class Key, class T, class Compare >
-  bool TwoThree < Key, T, Compare >::mergeParentsLeft(iterator emptyIt)
+  bool TwoThree< Key, T, Compare >::mergeParentsLeft(iterator emptyIt)
   {
     Node *parentNode = emptyIt.node_->parent;
     Node *emptyNode = emptyIt.node_;
@@ -615,7 +728,7 @@ namespace zhalilov
   }
 
   template < class Key, class T, class Compare >
-  bool TwoThree < Key, T, Compare >::mergeParentsRight(iterator emptyIt)
+  bool TwoThree< Key, T, Compare >::mergeParentsRight(iterator emptyIt)
   {
     Node *parentNode = emptyIt.node_->parent;
     Node *emptyNode = emptyIt.node_;
@@ -635,7 +748,7 @@ namespace zhalilov
   }
 
   template < class Key, class T, class Compare >
-  bool TwoThree < Key, T, Compare >::mergeBros(iterator emptyIt)
+  bool TwoThree< Key, T, Compare >::mergeBros(iterator emptyIt)
   {
     bool isBalanced = false;
     if (mergeBrosMid(emptyIt))
@@ -654,7 +767,7 @@ namespace zhalilov
   }
 
   template < class Key, class T, class Compare >
-  void TwoThree < Key, T, Compare >::deleteAndBalance(iterator emptyIt)
+  void TwoThree< Key, T, Compare >::deleteAndBalance(iterator emptyIt)
   {
     Node *parentNode = emptyIt.node_->parent;
     Node *emptyNode = emptyIt.node_;
@@ -680,7 +793,7 @@ namespace zhalilov
   }
 
   template < class Key, class T, class Compare >
-  bool TwoThree < Key, T, Compare >::mergeBrosMid(iterator emptyIt)
+  bool TwoThree< Key, T, Compare >::mergeBrosMid(iterator emptyIt)
   {
     Node *parentNode = emptyIt.node_->parent;
     bool isBalanced = true;
@@ -732,7 +845,7 @@ namespace zhalilov
   }
 
   template < class Key, class T, class Compare >
-  bool TwoThree < Key, T, Compare >::mergeBrosLeft(iterator emptyIt)
+  bool TwoThree< Key, T, Compare >::mergeBrosLeft(iterator emptyIt)
   {
     Node *parentNode = emptyIt.node_->parent;
     bool isBalanced = true;
@@ -809,7 +922,7 @@ namespace zhalilov
   }
 
   template < class Key, class T, class Compare >
-  bool TwoThree < Key, T, Compare >::mergeBrosRight(iterator emptyIt)
+  bool TwoThree< Key, T, Compare >::mergeBrosRight(iterator emptyIt)
   {
     Node *parentNode = emptyIt.node_->parent;
     bool isBalanced = true;
