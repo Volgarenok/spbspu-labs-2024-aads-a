@@ -30,7 +30,7 @@ namespace erohin
     doTimsort(second_deque.begin(), size, cmp);
     std::sort(third_deque.begin(), third_deque.end(), cmp);
     printSequence(output, random_seq.cbegin(), random_seq.cend());
-    printSequence(output, first_forward_list.cbegin(), first_forward_list.cend());
+    printSequence(output << "\n", first_forward_list.cbegin(), first_forward_list.cend());
     printSequence(output << "\n", first_bi_list.cbegin(), first_bi_list.cend());
     printSequence(output << "\n", second_bi_list.cbegin(), second_bi_list.cend());
     printSequence(output << "\n", first_deque.cbegin(), first_deque.cend());

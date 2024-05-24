@@ -10,12 +10,6 @@ namespace erohin
   template< class T >
   T getRandom(T min, T max)
   {
-    return (std::rand() % (max - min) + min);
-  }
-
-  template<>
-  float getRandom< float >(float min, float max)
-  {
     return ((static_cast< float >(std::rand()) / RAND_MAX) * (max - min) + min);
   }
 
