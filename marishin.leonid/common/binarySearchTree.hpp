@@ -339,7 +339,7 @@ namespace marishin
       newRoot->height = newRoot->height - 1 + std::min(0, node->height);
       return newRoot;
     }
-    node_t * search_impl(node_t * node, const Key & key)
+    node_t * search_impl(node_t * node, const Key & key) const
     {
       if (!node)
       {
