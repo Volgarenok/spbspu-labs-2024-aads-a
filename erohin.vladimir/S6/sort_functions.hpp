@@ -4,9 +4,6 @@
 #include <algorithm>
 #include <iterator>
 
-#include <iostream>
-#include "queue.hpp"
-
 namespace erohin
 {
   namespace detail

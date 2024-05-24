@@ -1,10 +1,9 @@
 #ifndef SEQUENCE_OPERATIONS_HPP
 #define SEQUENCE_OPERATIONS_HPP
 
-#include <algorithm>
 #include <iterator>
-#include <forward_list>
 #include <iostream>
+#include "list.hpp"
 
 namespace erohin
 {
@@ -23,7 +22,7 @@ namespace erohin
   template< class T, class Container >
   void generateRandomSequence(Container & cnt, size_t n)
   {
-    std::forward_list< T > seq;
+    List< T > seq;
     for (size_t i = 0; i < n; ++i)
     {
       seq.push_front(getRandom< T >(-1000, 1000));

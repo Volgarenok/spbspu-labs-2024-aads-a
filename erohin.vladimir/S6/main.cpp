@@ -1,8 +1,6 @@
 #include <iostream>
 #include <iomanip>
 #include <stdexcept>
-#include <forward_list>
-#include <list>
 #include <functional>
 #include "red_black_tree.hpp"
 #include "sort_command.hpp"
