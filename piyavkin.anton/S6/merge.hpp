@@ -24,9 +24,8 @@ namespace piyavkin
     }
   }
   template< class BiIter, class Cmp >
-  void sort_merge(BiIter begin, BiIter end, Cmp cmp)
+  void sort_merge(BiIter begin, size_t size, Cmp cmp)
   {
-    size_t size = std::distance(begin, end);
     List< typename BiIter::value_type > res;
     for (size_t i = 1; i < size; i *= 2)
     {
@@ -35,7 +34,7 @@ namespace piyavkin
       {
         BiIter first = second;
         BiIter border = std::next(first, i);
-        second = (j + 2 * i < size) ? std::next(second, 2 * i) : end;
+        second = (j + 2 * i < size) ? std::next(second, 2 * i) : std::next(second, size - j);
         detail::merge(first, border, second, cmp, res);
       }
       std::move(res.begin(), res.end(), begin);

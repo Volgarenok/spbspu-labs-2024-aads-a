@@ -28,8 +28,8 @@ namespace piyavkin
     std::deque< T > deq_tim = deque;
     std::deque< T > deq_mer = deque;
     List< T > bi_list_mer = bi_list;
-    sort_merge(deq_mer.begin(), deq_mer.end(), cmp);
-    sort_merge(bi_list_mer.begin(), bi_list_mer.end(), cmp);
+    sort_merge(deq_mer.begin(), deq_mer.size(), cmp);
+    sort_merge(bi_list_mer.begin(), bi_list_mer.size(), cmp);
     timsort(deq_tim.begin(), deq_tim.size(), cmp);
     bi_list.sort(cmp);
     list.sort(cmp);

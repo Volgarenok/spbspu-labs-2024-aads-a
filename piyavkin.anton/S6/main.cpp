@@ -1,35 +1,20 @@
 #include <iostream>
 #include <string>
+#include <functional>
+#include <tree.hpp>
 #include "createcontainer.hpp"
 #include "printsortcontainers.hpp"
 
-template< class T >
-void choose_function(const std::string& str, std::deque< T >& deque, piyavkin::List< T >& bi_list, std::forward_list< T >& list)
-{
-  if (str == "ascending")
-  {
-    print_sorted_containers(std::cout, deque, bi_list, list, std::less< T >());
-  }
-  else if (str == "descending")
-  {
-    print_sorted_containers(std::cout, deque, bi_list, list, std::greater< T >());
-  }
-  else
-  {
-    throw std::logic_error("Invalid traversal order");
-  }
-}
-
-template< class T >
-void choose_type(const T&, const std::string& type_trav, size_t size)
+template< class T, class Cmp >
+void choose_type(std::ostream& out, size_t size, std::default_random_engine& gen)
 {
   using namespace piyavkin;
   std::forward_list< T > list;
   List< T > bi_list;
   std::deque< T > deque;
-  create_containers(deque, bi_list, list, size);
+  create_containers(deque, bi_list, list, size, gen);
   print_container(std::cout, deque);
-  choose_function(type_trav, deque, bi_list, list);
+  print_sorted_containers(out, deque, bi_list, list, Cmp());
 }
 
 int main(int argc, char* argv[])
@@ -46,20 +31,14 @@ int main(int argc, char* argv[])
     {
       throw std::logic_error("Zero size");
     }
+    std::default_random_engine generator;
     using namespace piyavkin;
-    if (std::string(argv[2]) == "ints")
-    {
-      choose_type(0, std::string(argv[1]), size);
-    }
-    else if (std::string(argv[2]) == "floats")
-    {
-      choose_type(0.0f, std::string(argv[1]), size);
-    }
-    else
-    {
-      std::cerr << "Bad type\n";
-      return 1;
-    }
+    Tree< std::pair< std::string, std::string >, std::function< void(std::ostream&, size_t, std::default_random_engine&) > > container;
+    container[std::make_pair< std::string, std::string >("ints", "ascending")] = choose_type< int, std::less< int > >;
+    container[std::make_pair< std::string, std::string >("ints", "descending")] = choose_type< int, std::greater< int > >;
+    container[std::make_pair< std::string, std::string >("floats", "ascending")] = choose_type< float, std::less< float > >;
+    container[std::make_pair< std::string, std::string >("floats", "descending")] = choose_type< float, std::greater< float > >;
+    container.at(std::make_pair(std::string(argv[2]), std::string(argv[1])))(std::cout, size, generator);
   }
   catch (const std::exception& e)
   {
