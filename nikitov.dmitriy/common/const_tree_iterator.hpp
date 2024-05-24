@@ -10,15 +10,30 @@ namespace nikitov
   template< class Key, class T, class Compare >
   class Tree;
 
+  template< class Key, class T, class Compare >
+  class LNRIterator;
+
+  template< class Key, class T, class Compare >
+  class RNLIterator;
+
+  template< class Key, class T, class Compare >
+  class BreadthIterator;
+
   template< class Key, class T, class Compare = std::less< Key > >
   class ConstTreeIterator: public std::iterator< std::bidirectional_iterator_tag, T >
   {
     friend class Tree< Key, T, Compare >;
   public:
     ConstTreeIterator(const ConstTreeIterator< Key, T, Compare >&) = default;
+    ConstTreeIterator(const LNRIterator< Key, T, Compare >& other);
+    ConstTreeIterator(const RNLIterator< Key, T, Compare >& other);
+    ConstTreeIterator(const BreadthIterator< Key, T, Compare >& other);
     ~ConstTreeIterator() = default;
 
     ConstTreeIterator< Key, T, Compare >& operator=(const ConstTreeIterator< Key, T, Compare >&) = default;
+    ConstTreeIterator< Key, T, Compare >& operator=(const LNRIterator< Key, T, Compare >& other);
+    ConstTreeIterator< Key, T, Compare >& operator=(const RNLIterator< Key, T, Compare >& other);
+    ConstTreeIterator< Key, T, Compare >& operator=(const BreadthIterator< Key, T, Compare >& other);
 
     ConstTreeIterator< Key, T, Compare >& operator++();
     ConstTreeIterator< Key, T, Compare > operator++(int);
@@ -46,6 +61,45 @@ namespace nikitov
     node_(node),
     isFirst_(isFirst)
   {}
+
+  template< class Key, class T, class Compare >
+  ConstTreeIterator< Key, T, Compare >::ConstTreeIterator(const LNRIterator< Key, T, Compare >& other):
+    node_(other.data_.top()),
+    isFirst_(other.isFirst_)
+  {}
+
+  template< class Key, class T, class Compare >
+  ConstTreeIterator< Key, T, Compare >::ConstTreeIterator(const RNLIterator< Key, T, Compare >& other):
+    node_(other.iterator_.data_.top()),
+    isFirst_(other.isFirst_)
+  {}
+
+  template< class Key, class T, class Compare >
+  ConstTreeIterator< Key, T, Compare >::ConstTreeIterator(const BreadthIterator< Key, T, Compare >& other):
+    node_(other.queue_.top()),
+    isFirst_(other.isFirst_)
+  {}
+
+  template< class Key, class T, class Compare >
+  ConstTreeIterator< Key, T, Compare >& ConstTreeIterator< Key, T, Compare >::operator=(const LNRIterator< Key, T, Compare >& other)
+  {
+    node_ = other.data_.top();
+    isFirst_ = other.isFirst_;
+  }
+
+  template< class Key, class T, class Compare >
+  ConstTreeIterator< Key, T, Compare >& ConstTreeIterator< Key, T, Compare >::operator=(const RNLIterator< Key, T, Compare >& other)
+  {
+    node_ = other.iterator_.data_.top();
+    isFirst_ = other.isFirst_;
+  }
+
+  template< class Key, class T, class Compare >
+  ConstTreeIterator< Key, T, Compare >& ConstTreeIterator< Key, T, Compare >::operator=(const BreadthIterator< Key, T, Compare >& other)
+  {
+    node_ = other.queue_.top();
+    isFirst_ = other.isFirst_;
+  }
 
   template< class Key, class T, class Compare >
   ConstTreeIterator< Key, T, Compare >& ConstTreeIterator< Key, T, Compare >::operator++()
