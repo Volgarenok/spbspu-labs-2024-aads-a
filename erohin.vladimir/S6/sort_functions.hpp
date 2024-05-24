@@ -9,7 +9,7 @@ namespace erohin
   namespace detail
   {
     template< class ForwardIt, class Compare >
-    ForwardIt do_partition(ForwardIt begin, ForwardIt end, Compare cmp)
+    ForwardIt doPartition(ForwardIt begin, ForwardIt end, Compare cmp)
     {
       auto pivot = begin;
       auto cur_iter = std::next(begin);
@@ -38,7 +38,7 @@ namespace erohin
   {
     if (begin != end)
     {
-      auto pivot = detail::do_partition(begin, end, cmp);
+      auto pivot = detail::doPartition(begin, end, cmp);
       doQuicksort(begin, pivot, cmp);
       doQuicksort(std::next(pivot), end, cmp);
     }
@@ -63,7 +63,7 @@ namespace erohin
         {
           if (cmp(*temp_iter, *start))
           {
-            std::swap(*temp_iter, *start);
+            std::iter_swap(temp_iter, start);
             --temp_iter;
           }
           else

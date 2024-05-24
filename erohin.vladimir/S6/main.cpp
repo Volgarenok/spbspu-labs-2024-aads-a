@@ -2,11 +2,13 @@
 #include <iomanip>
 #include <stdexcept>
 #include <functional>
+#include <cstdlib>
 #include "red_black_tree.hpp"
 #include "sort_command.hpp"
 
 int main(int argc, char ** argv)
 {
+  std::srand(std::time(0));
   using namespace erohin;
   if (argc != 4)
   {

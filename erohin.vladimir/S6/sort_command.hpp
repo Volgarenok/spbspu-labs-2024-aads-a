@@ -5,6 +5,7 @@
 #include <functional>
 #include <list>
 #include <deque>
+#include "dynamic_array.hpp"
 #include "list.hpp"
 #include "sequence_operations.hpp"
 #include "sort_functions.hpp"
@@ -15,8 +16,8 @@ namespace erohin
   void doSortCommand(std::ostream & output, size_t size)
   {
     Compare cmp;
-    List< T > random_seq;
-    generateRandomSequence< T >(random_seq, size);
+    DynamicArray< T > random_seq(size);
+    std::generate(random_seq.begin(), random_seq.end(), std::bind(getRandom< T >, -1000, 1000));
     List< T > first_forward_list(random_seq.cbegin(), random_seq.cend());
     std::list< T > first_bi_list(random_seq.cbegin(), random_seq.cend());
     std::list< T > second_bi_list(random_seq.cbegin(), random_seq.cend());
