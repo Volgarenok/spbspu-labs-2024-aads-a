@@ -1,24 +1,22 @@
 #ifndef PRINT_HPP
 #define PRINT_HPP
-#include <ostream>
+#include <forward_list>
 #include <iomanip>
 #include <list.hpp>
-#include <forward_list>
+#include <ostream>
 
-using namespace zakozhurnikova;
-
-template < class list >
-void print(std::ostream& out, const list& count)
+namespace zakozhurnikova
 {
-  for (auto it = count.begin(); it != count.end(); ++it)
+  template < class list >
+  void print(std::ostream& out, const list& count)
   {
-    out << std::fixed << std::setprecision(1) << *it;
-    if (std::next(it) != count.end())
+    out << std::fixed << std::setprecision(1);
+    out << *count.begin();
+    for (auto it = ++count.begin(); it != count.end(); ++it)
     {
-      out << ' ';
+      out << ' ' << *it;
     }
   }
-  out << '\n';
 }
 
 #endif

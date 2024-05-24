@@ -44,6 +44,7 @@ int main(int argc, char* argv[])
       std::bind(sortAndPrint< float, std::greater< float > >, _1, _2, std::greater< float >());
 
     commands.at(condition)(type, size);
+    std::cout << '\n';
   }
   catch (const std::exception& e)
   {

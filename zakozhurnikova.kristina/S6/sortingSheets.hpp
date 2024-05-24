@@ -35,6 +35,7 @@ namespace zakozhurnikova
     std::forward_list< Type > forwardList(array, array + size);
 
     print(std::cout, forwardList);
+    std::cout << '\n';
 
     auto beginBiR = biListRealization.begin();
     auto beginDeqSort = dequeSort.begin();
@@ -50,11 +51,17 @@ namespace zakozhurnikova
     forwardList.sort(cmp);
 
     print(std::cout, biListRealization);
+    std::cout << '\n';
     print(std::cout, biListStandart);
+    std::cout << '\n';
     print(std::cout, dequeSort);
+    std::cout << '\n';
     print(std::cout, dequeShaker);
+    std::cout << '\n';
     print(std::cout, dequeShell);
+    std::cout << '\n';
     print(std::cout, forwardList);
+    std::cout << '\n';
   }
 
 }
