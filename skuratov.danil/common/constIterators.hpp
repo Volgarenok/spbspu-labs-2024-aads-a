@@ -45,7 +45,7 @@ namespace skuratov
       }
       ConstIterator< T >& operator--()
       {
-        nodePointer_ = nodePointer_->prev;
+        nodePointer_ = nodePointer_->prev_;
         return *this;
       }
       ConstIterator< T > operator++(int)
