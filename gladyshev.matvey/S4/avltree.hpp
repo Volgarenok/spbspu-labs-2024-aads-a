@@ -100,8 +100,7 @@ namespace gladyshev
       if (!node)
       {
         insert(key, Value());
-        static Value temp = Value();
-        return temp;
+        node = findNode(root_, key);
       }
       return node->data.second;
     }
