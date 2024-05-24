@@ -1,5 +1,4 @@
 #include "generate.hpp"
-#include <random>
 #include <cstdlib>
 
 float zakozhurnikova::detail::randomNumber(std::default_random_engine& generate, float)

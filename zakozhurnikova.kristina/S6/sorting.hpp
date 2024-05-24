@@ -1,9 +1,9 @@
 #ifndef SORTING_HPP
 #define SORTING_HPP
-#include <iterator.hpp>
-#include <list.hpp>
 #include <utility>
 #include <algorithm>
+#include <iterator.hpp>
+#include <list.hpp>
 
 namespace zakozhurnikova
 {

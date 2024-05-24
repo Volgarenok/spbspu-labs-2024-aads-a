@@ -12,7 +12,7 @@ namespace zakozhurnikova
       std::uniform_int_distribution< T > dis(std::numeric_limits< T >::min(), std::numeric_limits< T >::max());
       return dis(generator);
     }
-    float randomNumber(std::default_random_engine& gen, float);
+    float randomNumber(std::default_random_engine& generate, float);
   }
 }
 

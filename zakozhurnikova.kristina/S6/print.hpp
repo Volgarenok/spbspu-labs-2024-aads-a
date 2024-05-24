@@ -2,8 +2,8 @@
 #define PRINT_HPP
 #include <forward_list>
 #include <iomanip>
-#include <list.hpp>
 #include <ostream>
+#include <list.hpp>
 
 namespace zakozhurnikova
 {
