@@ -2,7 +2,7 @@
 #define COMANDS_HPP
 
 #include <string>
-#include "tree.hpp"
+#include <tree.hpp>
 
 namespace namestnikov
 {

@@ -3,7 +3,7 @@
 #include <functional>
 #include <utility>
 #include <fstream>
-#include "tree.hpp"
+#include <tree.hpp>
 #include "sum_func.hpp"
 #include "commands.hpp"
 #include "input_dict.hpp"

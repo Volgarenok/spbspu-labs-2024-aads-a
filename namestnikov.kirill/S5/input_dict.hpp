@@ -2,7 +2,7 @@
 #define INPUT_DICT_HPP
 
 #include <istream>
-#include "tree.hpp"
+#include <tree.hpp>
 
 namespace namestnikov
 {
