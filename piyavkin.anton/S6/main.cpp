@@ -9,12 +9,10 @@ template< class T, class Cmp >
 void choose_type(std::ostream& out, size_t size, std::default_random_engine& gen)
 {
   using namespace piyavkin;
-  std::forward_list< T > list;
-  List< T > bi_list;
   std::deque< T > deque;
-  create_containers(deque, bi_list, list, size, gen);
-  print_container(std::cout, deque);
-  print_sorted_containers(out, deque, bi_list, list, Cmp());
+  create_container(deque, size, gen);
+  print_container(std::cout, deque.cbegin(), deque.cend());
+  print_sorted_containers(out, deque, Cmp());
 }
 
 int main(int argc, char* argv[])

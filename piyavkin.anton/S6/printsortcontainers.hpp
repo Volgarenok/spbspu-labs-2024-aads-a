@@ -10,36 +10,45 @@
 
 namespace piyavkin
 {
-  template< class T >
-  void print_container(std::ostream& out, const T& container)
+  template< class It >
+  void print_container(std::ostream& out, It begin, It end)
   {
     StreamGuard guard(out);
     out << std::fixed << std::setprecision(1);
-    out << *container.cbegin();
-    for (auto i = ++container.cbegin(); i != container.cend(); ++i)
+    out << *begin;
+    for (auto i = ++begin; i != end; ++i)
     {
       out << ' ' << *i;
     }
     out << '\n';
   }
+  template< class It, class Cmp >
+  void choose_sort(std::ostream& out, It begin, It end, Cmp cmp, void (*sort)(It, size_t, Cmp))
+  {
+    sort(begin, std::distance(begin, end), cmp);
+    print_container(out, begin, end);
+  }
+  template< class Cnt, class Cmp >
+  void choose_sort_m(std::ostream& out, Cnt& container, Cmp cmp)
+  {
+    container.sort(cmp);
+    print_container(out, container.cbegin(), container.cend());
+  }
   template< class T, class Cmp >
-  void print_sorted_containers(std::ostream& out, std::deque< T >& deque, List< T >& bi_list, std::forward_list< T >& list, Cmp cmp)
+  void print_sorted_containers(std::ostream& out, std::deque< T >& deque, Cmp cmp)
   {
     std::deque< T > deq_tim = deque;
     std::deque< T > deq_mer = deque;
+    std::forward_list< T > list(deque.cbegin(), deque.cend());
+    List< T > bi_list(deque.cbegin(), deque.cend());
     List< T > bi_list_mer = bi_list;
-    sort_merge(deq_mer.begin(), deq_mer.size(), cmp);
-    sort_merge(bi_list_mer.begin(), bi_list_mer.size(), cmp);
-    timsort(deq_tim.begin(), deq_tim.size(), cmp);
-    bi_list.sort(cmp);
-    list.sort(cmp);
+    choose_sort(out, deq_mer.begin(), deq_mer.end(), cmp, sort_merge);
+    choose_sort(out, bi_list_mer.begin(), bi_list_mer.end(), cmp, sort_merge);
+    choose_sort(out, deq_tim.begin(), deq_tim.end(), cmp, timsort);
+    choose_sort_m(out, bi_list, cmp);
+    choose_sort_m(out, list, cmp);
     std::sort(deque.begin(), deque.end(), cmp);
-    print_container(out, deq_mer);
-    print_container(out, deq_tim);
-    print_container(out, deque);
-    print_container(out, list);
-    print_container(out, bi_list);
-    print_container(out, bi_list_mer);
+    print_container(out, deque.cbegin(), deque.cend());
   }
 }
 #endif
