@@ -11,8 +11,8 @@ namespace zakozhurnikova
   void shaker(Iterator begin, size_t size, Compare cmp)
   {
     ++begin;
-    int leftMark = 1;
-    int rightMark = size - 1;
+    size_t leftMark = 1;
+    size_t rightMark = size - 1;
     auto end = begin;
     size_t count = 0;
     for (size_t i = 1; i < size - 1; ++i)
@@ -29,7 +29,7 @@ namespace zakozhurnikova
         ++tempBegin;
       }
       auto tmpBegin = tempBegin;
-      for (int i = rightMark; i >= leftMark; --i)
+      for (size_t i = rightMark; i >= leftMark; --i)
       {
         auto curr = tempEnd;
         --curr;
@@ -42,7 +42,7 @@ namespace zakozhurnikova
       leftMark++;
       tmpBegin++;
 
-      for (int i = leftMark; i <= rightMark; ++i)
+      for (size_t i = leftMark; i <= rightMark; ++i)
       {
         auto curr = tmpBegin;
         --curr;
