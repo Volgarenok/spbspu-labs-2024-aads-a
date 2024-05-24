@@ -14,50 +14,54 @@ namespace nikitov
 {
   namespace detail
   {
-    int generateValue(int)
+    int generateValue(int);
+    float generateValue(float);
+
+    template< class T, class Compare, class Container >
+    void createAndSort(const std::forward_list< T >& list, void(*sort)(typename Container::iterator, typename Container::iterator, Compare), 
+      std::ostream& output)
     {
-      return std::rand();
+      Container type;
+      for (auto i = list.cbegin(); i != list.cend(); ++i)
+      {
+        type.push_front(*i);
+      }
+      sort(type.begin(), type.end(), Compare());
+      printRange(type.cbegin(), type.cend(), output);
     }
 
-    float generateValue(float)
+    template< class T, class Compare, class Container >
+    void createAndSortByMethod(const std::forward_list< T >& list, std::ostream& output)
     {
-      return static_cast <float> (std::rand());
-    }
+      Container type;
+      for (auto i = list.cbegin(); i != list.cend(); ++i)
+      {
+        type.push_front(*i);
+      }
+      type.sort();
+      printRange(type.cbegin(), type.cend(), output);
+    } 
   }
 
   template< class T, class Compare >
   void sortSequence(size_t size, std::ostream& output)
   {
-    std::forward_list< T > fList;
-    List< T > firstBiList;
-    std::deque< T > firstDeque;
+    std::forward_list< T > values;
     for (size_t i = 0; i != size; ++i)
     {
-      T value = detail::generateValue(T());
-      fList.push_front(value);
-      firstBiList.push_front(value);
-      firstDeque.push_front(value);
+      T value = generateValue(T());
+      values.push_front(value);
     }
-    List< T > secondBiList = firstBiList;
-    std::deque< T > secondDeque = firstDeque;
-    std::deque< T > thirdDeque = firstDeque;
 
     output << std::setprecision(1) << std::fixed;
-    printRange(fList.cbegin(), fList.cend(), output);
+    printRange(values.cbegin(), values.cend(), output);
 
-    fList.sort(Compare());
-    oddEvenSort(firstBiList.begin(), firstBiList.end(), Compare());
-    secondBiList.sort(Compare());
-    oddEvenSort(firstDeque.begin(), firstDeque.end(), Compare());
-    QSort(secondDeque.begin(), secondDeque.end(), Compare());
-    std::sort(thirdDeque.begin(), thirdDeque.end(), Compare());
-
-    printRange(fList.cbegin(), fList.cend(), output);
-    printRange(firstBiList.cbegin(), firstBiList.cend(), output);
-    printRange(secondBiList.cbegin(), secondBiList.cend(), output);
-    printRange(firstDeque.cbegin(), firstDeque.cend(), output);
-    printRange(secondDeque.cbegin(), secondDeque.cend(), output);
-    printRange(thirdDeque.cbegin(), thirdDeque.cend(), output);
+    detail::createAndSortByMethod< T, Compare, std::forward_list< T > >(values, output);
+    detail::createAndSortByMethod< T, Compare, List< T > >(values, output);
+    detail::createAndSort< T, Compare, List< T > >(values, oddEvenSort, output);
+    detail::createAndSort< T, Compare, std::deque< T > >(values, oddEvenSort, output);
+    detail::createAndSort< T, Compare, std::deque< T > >(values, QSort, output);
+    detail::createAndSort< T, Compare, std::deque< T > >(values, std::sort, output);
   }
 }
 #endif

@@ -14,9 +14,10 @@ namespace nikitov
   template< class T >
   class List
   {
-    using iterator = ListIterator< T >;
     using constIterator = ConstListIterator< T >;
   public:
+    typedef ListIterator< T > iterator;
+    typedef ConstListIterator< T > iterator_const;
     List();
     List(size_t n, const T& value);
     List(constIterator first, constIterator second);
