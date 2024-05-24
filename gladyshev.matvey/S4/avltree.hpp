@@ -2,7 +2,7 @@
 #define AVLTREE_HPP
 
 #include <algorithm>
-
+#include <iostream>
 #include "treenode.hpp"
 #include "treeiterator.hpp"
 
@@ -97,6 +97,10 @@ namespace gladyshev
     Value& operator[](const Key& key)
     {
       tnode* node = findNode(root_, key);
+      if (!node)
+      {
+        std::cerr << "LOOOL";
+      }
       return node->data.second;
     }
     std::pair< iter, iter > equal_range(const Key& key)
