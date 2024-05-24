@@ -23,7 +23,7 @@ int main(int argc, char* argv[])
   }
   std::string sort = argv[1];
   std::string type = argv[2];
-  auto condition = std::make_pair(sort, type);
+  auto condition = sort + type;
   size_t size = std::atoi(argv[3]);
   if (size == 0)
   {
@@ -33,18 +33,17 @@ int main(int argc, char* argv[])
   try
   {
     using namespace std::placeholders;
-    std::map< std::pair< std::string, std::string >, std::function< void(const std::string&, size_t) > > commands;
-    commands[std::make_pair("ascending", "ints")] =
-      std::bind(sortAndPrint< int, std::less< int > >, _1, _2, std::less< int >());
-    commands[std::make_pair("ascending", "floats")] =
-      std::bind(sortAndPrint< float, std::less< float > >, _1, _2, std::less< float >());
-    commands[std::make_pair("descending", "ints")] =
-      std::bind(sortAndPrint< int, std::greater< int > >, _1, _2, std::greater< int >());
-    commands[std::make_pair("descending", "floats")] =
-      std::bind(sortAndPrint< float, std::greater< float > >, _1, _2, std::greater< float >());
+    std::map< std::string, std::function< void(const std::string&, size_t) > > commands;
+    commands["ascendingints"] =
+      std::bind(sortAndPrint< int, std::less< int > >, _1, _2, std::less< int >{});
+    commands["ascendingfloats"] =
+      std::bind(sortAndPrint< float, std::less< float > >, _1, _2, std::less< float >{});
+    commands["descendingints"] =
+      std::bind(sortAndPrint< int, std::greater< int > >, _1, _2, std::greater< int >{});
+    commands["descendingfloats"] =
+      std::bind(sortAndPrint< float, std::greater< float > >, _1, _2, std::greater< float >{});
 
     commands.at(condition)(type, size);
-    std::cout << '\n';
   }
   catch (const std::exception& e)
   {
