@@ -21,11 +21,13 @@ void namestnikov::SumFunc::operator()(const std::pair< const int, std::string > 
 {
   constexpr int maxNum = std::numeric_limits< int >::max();
   constexpr int minNum = std::numeric_limits< int >::min();
-  bool isOverflow = ((result_ > 0) && (maxNum - result_ < data.first));
-  isOverflow = isOverflow || ((result_ < 0) && (data.first < 0) && (minNum - result_ > data.first));
-  if (isOverflow)
+  if ((result_ > 0) && (maxNum - result_ < data.first))
   {
-    throw std::overflow_error("Numeric overflow");
+    throw std::overflow_error("Overflow error");
+  }
+  if ((result_ < 0) && (data.first < 0) && (minNum - result_ > data.first))
+  {
+    throw std::underflow_error("Underflow error");
   }
   result_ += data.first;
   line_ += " " + data.second;
