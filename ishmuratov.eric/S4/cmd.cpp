@@ -1,6 +1,6 @@
 #include "cmd.hpp"
 
-void ishmuratov::cmd::print(const data_t &data, std::istream &input, std::ostream &output)
+void ishmuratov::print(const data_t &data, std::istream &input, std::ostream &output)
 {
   std::string dict_name;
   input >> dict_name;
@@ -21,7 +21,7 @@ void ishmuratov::cmd::print(const data_t &data, std::istream &input, std::ostrea
   output << "\n";
 }
 
-void ishmuratov::cmd::complement(data_t &data, std::istream &input)
+void ishmuratov::complement(data_t &data, std::istream &input)
 {
   std::string new_name;
   std::string first_name;
@@ -52,7 +52,7 @@ void ishmuratov::cmd::complement(data_t &data, std::istream &input)
   data.insert(std::make_pair(new_name, new_dict));
 }
 
-void ishmuratov::cmd::intersect(data_t &data, std::istream &input)
+void ishmuratov::intersect(data_t &data, std::istream &input)
 {
   std::string new_name;
   std::string first_name;
@@ -76,7 +76,7 @@ void ishmuratov::cmd::intersect(data_t &data, std::istream &input)
   data.insert(std::make_pair(new_name, new_dict));
 }
 
-void ishmuratov::cmd::uniond(data_t &data, std::istream &input)
+void ishmuratov::uniond(data_t &data, std::istream &input)
 {
   std::string new_name;
   std::string first_name;
