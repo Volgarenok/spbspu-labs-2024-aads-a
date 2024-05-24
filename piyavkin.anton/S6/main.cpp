@@ -10,8 +10,13 @@ void choose_type(std::ostream& out, size_t size, std::default_random_engine& gen
 {
   using namespace piyavkin;
   std::deque< T > deque;
-  create_container(deque, size, gen);
-  print_container(std::cout, deque.cbegin(), deque.cend());
+  for (size_t i = 0; i < size; ++i)
+  {
+    T value = detail::get_value(gen, T());
+    deque.push_front(value);
+  }
+  print_container(out, deque.cbegin(), deque.cend());
+  out << '\n';
   print_sorted_containers(out, deque, Cmp());
 }
 
