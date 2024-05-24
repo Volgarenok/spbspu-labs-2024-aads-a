@@ -339,6 +339,25 @@ namespace marishin
       newRoot->height = newRoot->height - 1 + std::min(0, node->height);
       return newRoot;
     }
+    node_t * search_impl(node_t * node, const Key & key)
+    {
+      if (!node)
+      {
+        return nullptr;
+      }
+      else if (compare_(key, node->data.first))
+      {
+        return search_impl(node->left, key);
+      }
+      else if (compare_(node->data.first, key))
+      {
+        return search_impl(node->right, key);
+      }
+      else
+      {
+        return node;
+      }
+    }
     void insert_impl(const Key & key, const Value & val, node_t * currentNode)
     {
       try
