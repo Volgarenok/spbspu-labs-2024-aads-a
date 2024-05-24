@@ -7,8 +7,8 @@
 
 namespace novokhatskiy
 {
-  using mainMap = Tree<std::string, Tree<size_t, std::string>>;
-  using map = Tree<size_t, std::string>;
+  using mainMap = Tree< std::string, Tree< size_t, std::string > >;
+  using map = Tree< size_t, std::string >;
   void print(const mainMap &dict, std::istream &in, std::ostream &out);
   void complement(mainMap &dict, std::istream &in);
   void intersectCmd(mainMap &dict, std::istream &in);

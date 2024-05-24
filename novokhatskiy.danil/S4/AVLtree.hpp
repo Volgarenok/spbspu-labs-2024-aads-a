@@ -4,6 +4,8 @@
 #include <functional>
 #include <cstddef>
 #include <iostream>
+#include <cassert>
+#include <type_traits>
 #include <stdexcept>
 #include <utility>
 #include "AVLtreeNode.hpp"
@@ -12,24 +14,25 @@
 
 namespace novokhatskiy
 {
-  template <class Key, class Value, class Compare = std::less<Key>>
+  template < class Key, class Value, class Compare = std::less< Key > >
   class Tree
   {
   public:
-    using node_t = detail::NodeTree<Key, Value>;
-    using v_type = std::pair<Key, Value>;
-    using constIter = ConstIteratorTree<Key, Value, Compare>;
-    using iter = IteratorTree<Key, Value, Compare>;
+    using node_t = detail::NodeTree< Key, Value >;
+    using v_type = std::pair< Key, Value >;
+    using constIter = ConstIteratorTree< Key, Value, Compare >;
+    using iter = IteratorTree< Key, Value, Compare >;
 
-    Tree() : root_(nullptr),
-             size_(0),
-             cmp_()
-    {
-    }
+    Tree(): 
+      root_(nullptr),
+      size_(0),
+      cmp_()
+    {}
 
-    Tree(const Tree &other) : root_(nullptr),
-                              size_(0),
-                              cmp_(other.cmp_)
+    Tree(const Tree &other):
+      root_(nullptr),
+      size_(0),
+      cmp_(other.cmp_)
     {
       try
       {
@@ -45,9 +48,10 @@ namespace novokhatskiy
       }
     }
 
-    Tree(Tree &&other) : root_(other.root_),
-                         size_(other.size_),
-                         cmp_(std::move(other.cmp_))
+    Tree(Tree &&other):
+      root_(other.root_),
+      size_(other.size_),
+      cmp_(std::move(other.cmp_))
     {
       other.root_ = nullptr;
       other.size_ = 0;
@@ -203,8 +207,9 @@ namespace novokhatskiy
       root_ = nullptr;
     }
 
-    void swap(Tree &other)
+    void swap(Tree &other) noexcept
     {
+      static_assert(std::is_nothrow_copy_constructible<Compare>::value, "static_assert");
       std::swap(root_, other.root_);
       std::swap(size_, other.size_);
       std::swap(cmp_, other.cmp_);
@@ -321,12 +326,12 @@ namespace novokhatskiy
       return res;
     }
 
-    std::pair<iter, iter> equal_range(const Key &key)
+    std::pair< iter, iter > equal_range(const Key &key)
     {
       return std::make_pair(lower_bound(key), upper_bound(key));
     }
 
-    std::pair<constIter, constIter> equal_range(const Key &key) const
+    std::pair< constIter, constIter > equal_range(const Key &key) const
     {
       return std::make_pair(lower_bound(key), upper_bound(key));
     }
