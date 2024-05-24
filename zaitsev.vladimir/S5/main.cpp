@@ -1,7 +1,6 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <string.h>
 #include <functional>
 #include <stdexcept>
 #include <operators.hpp>
@@ -36,12 +35,12 @@ int main(int argc, char** argv)
     }
     else
     {
-      Map<std::string, std::function< summator()>> commands;
+      Map< std::string, std::function< summator()> > commands;
       using ll = long long;
       commands["ascending"] = std::bind(&Map< ll, std::string >::traverse_lnr< summator >, &key_vals, summator{});
       commands["descending"] = std::bind(&Map< ll, std::string >::traverse_rnl< summator >, &key_vals, summator{});
       commands["breadth"] = std::bind(&Map< ll, std::string >::traverse_breadth< summator >, &key_vals, summator{});
-      summator res = commands.at(argv[1])();;
+      summator res = commands.at(argv[1])();
       std::cout << res.key_sum << " " << res.val_sum << '\n';
     }
   }
