@@ -147,7 +147,7 @@ namespace marishin
       }
     }
 
-    node_t * search(const Key & key)
+    node_t * search(const Key & key) const
     {
       node_t * res = search_impl(root_, key);
       return res;
