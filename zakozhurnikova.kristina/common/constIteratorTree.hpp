@@ -2,8 +2,8 @@
 #define CONST_ITERATOR_TREE_HPP
 #include <functional>
 #include <iterator>
-#include <utility>
 #include <treeNode.hpp>
+#include <utility>
 
 namespace zakozhurnikova
 {
@@ -21,6 +21,8 @@ namespace zakozhurnikova
     this_t& operator=(const this_t&) = default;
     this_t& operator++();
     this_t operator++(int);
+    this_t& operator--();
+    this_t operator--(int);
     bool operator!=(const this_t&) const;
     bool operator==(const this_t&) const;
     const std::pair< Key, Value >& operator*() const;
@@ -61,6 +63,34 @@ namespace zakozhurnikova
   {
     ConstIteratorTree< Key, Value > result(*this);
     ++(*this);
+    return result;
+  }
+
+  template < class Key, class Value, class Compare >
+  ConstIteratorTree< Key, Value, Compare >& ConstIteratorTree< Key, Value, Compare >::operator--()
+  {
+    if (node_->leftChild)
+    {
+      node_ = node_->leftChild;
+      while (node_->rightChild)
+      {
+        node_ = node_->rightChild;
+      }
+      return *this;
+    }
+    while (node_->parent && node_->parent->leftChild == node_)
+    {
+      node_ = node_->parent;
+    }
+    node_ = node_->parent;
+    return *this;
+  }
+
+  template < class Key, class Value, class Compare >
+  ConstIteratorTree< Key, Value, Compare > ConstIteratorTree< Key, Value, Compare >::operator--(int)
+  {
+    ConstIteratorTree< Key, Value > result(*this);
+    --(*this);
     return result;
   }
 

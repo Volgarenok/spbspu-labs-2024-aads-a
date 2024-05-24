@@ -1,7 +1,7 @@
 #ifndef CALCULATEEXPR_HPP
 #define CALCULATEEXPR_HPP
 
-#include "queue.hpp"
+#include <queue.hpp>
 
 namespace zhalilov
 {
