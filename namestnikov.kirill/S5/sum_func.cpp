@@ -25,7 +25,7 @@ void namestnikov::SumFunc::operator()(const std::pair< const int, std::string > 
   isOverflow = isOverflow || ((result_ < 0) && (data.first < 0) && (minNum - result_ > data.first));
   if (isOverflow)
   {
-    throw std::overflow_error("Overflow error");  
+    throw std::overflow_error("Overflow error");
   }
   result_ += data.first;
   line_ += " " + data.second;
