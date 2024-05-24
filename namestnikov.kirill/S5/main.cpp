@@ -37,7 +37,6 @@ int main(int argc, char * argv[])
     std::string output = "";
     int result = 0;
     commands.at(argv[1])(result, output, myMap);
-    std::cout << result << output << "\n";
   }
   catch (const std::out_of_range &)
   {
@@ -58,4 +57,5 @@ int main(int argc, char * argv[])
     std::cerr << e.what() << "\n";
     return 1;
   }
+  std::cout << result << output << "\n";
 }
