@@ -28,7 +28,7 @@ namespace erohin
     }
     forward_list_seq[0].sort(cmp);
     bidirect_list_seq[0].sort(cmp);
-    doQuicksort(deque_seq[0].begin(), std::prev(deque_seq[0].end()), cmp);
+    doQuicksort_forward(deque_seq[0].begin(), std::prev(deque_seq[0].end()), cmp);
     forward_list_seq[1].sort(cmp);
     bidirect_list_seq[1].sort(cmp);
     //sort1(deque_seq[1].begin(), deque_seq[1].end(), cmp);

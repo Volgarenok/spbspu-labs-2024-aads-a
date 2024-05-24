@@ -32,6 +32,30 @@ namespace erohin
       }
       return end;
     }
+
+    template< class RandomAccessIt, class Compare >
+    RandomAccessIt forward_partition(RandomAccessIt begin, RandomAccessIt end, Compare cmp)
+    {
+      auto pivot = begin;
+      auto cur_iter = std::next(begin);
+      while (cur_iter != end)
+      {
+        if (cmp(*cur_iter, *pivot))
+        {
+          auto temp_iter = pivot;
+          using T = typename RandomAccessIt::value_type;
+          T temp(std::move(*cur_iter));
+          while (temp_iter != std::next(cur_iter))
+          {
+            std::swap(*temp_iter, temp);
+            ++temp_iter;
+          }
+          pivot = cur_iter;
+        }
+        ++cur_iter;
+      }
+      return begin;
+    }
   }
 
   template< class RandomAccessIt, class Compare >
@@ -42,6 +66,17 @@ namespace erohin
       auto pivot = detail::partition(begin, end, cmp);
       doQuicksort(begin, pivot, cmp);
       doQuicksort(std::next(pivot), end, cmp);
+    }
+  }
+
+  template< class RandomAccessIt, class Compare >
+  void doQuicksort_forward(RandomAccessIt begin, RandomAccessIt end, Compare cmp)
+  {
+    if (begin != end)
+    {
+      auto pivot = detail::forward_partition(begin, end, cmp);
+      doQuicksort_forward(begin, pivot, cmp);
+      doQuicksort_forward(std::next(pivot), end, cmp);
     }
   }
 
