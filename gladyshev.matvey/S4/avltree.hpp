@@ -97,9 +97,13 @@ namespace gladyshev
     Value& operator[](const Key& key)
     {
       tnode* node = findNode(root_, key);
-      if (!node)
+      if (root_)
       {
-        root_ = insertImpl(key, Value(), root_);
+        node = insertImpl(key, Value(), root_);
+      }
+      else
+      {
+        root_ = new tnode(key, Value());
         node = root_;
       }
       return node->data.second;
