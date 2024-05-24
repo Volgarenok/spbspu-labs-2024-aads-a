@@ -14,15 +14,21 @@ namespace nikitov
 {
   namespace detail
   {
-    int generateValue(int);
-    float generateValue(float);
+    template< class T >
+    T generateValue()
+    {
+      return static_cast< T > (std::rand());
+    }
 
     template< class T, class Compare, class Container >
     void createAndSort(const std::deque< T >& sequence, void(*sort)(typename Container::iterator, typename Container::iterator, Compare),
       std::ostream& output)
     {
       Container type;
-      std::copy(sequence.cbegin(), sequence.cend(), type.end());
+      for (auto i = sequence.cbegin(); i != sequence.cend(); ++i)
+      {
+        type.push_front(*i);
+      }
       sort(type.begin(), type.end(), Compare());
       printRange(type.cbegin(), type.cend(), output);
     }
@@ -31,7 +37,10 @@ namespace nikitov
     void createAndSortByMethod(const std::deque< T >& sequence, std::ostream& output)
     {
       Container type;
-      std::copy(sequence.cbegin(), sequence.cend(), type.end());
+      for (auto i = sequence.cbegin(); i != sequence.cend(); ++i)
+      {
+        type.push_front(*i);
+      }
       type.sort(Compare());
       printRange(type.cbegin(), type.cend(), output);
     }
@@ -41,11 +50,7 @@ namespace nikitov
   void sortSequence(size_t size, std::ostream& output)
   {
     std::deque< T > sequence;
-    for (size_t i = 0; i != size; ++i)
-    {
-      T value = nikitov::detail::generateValue(T());
-      sequence.push_front(value);
-    }
+    std::generate_n(std::back_inserter(sequence), size, nikitov::detail::generateValue< T >);
 
     output << std::setprecision(1) << std::fixed;
     printRange(sequence.cbegin(), sequence.cend(), output);
