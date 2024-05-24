@@ -36,6 +36,14 @@ namespace zhalilov
     return static_cast< T >(dis(gen));
   }
 
+  template < class ContainerType, class ForwardIt, class SortingAlgo >
+  void testContainerAndSort(ForwardIt first, ForwardIt last, SortingAlgo sort, std::ostream &out)
+  {
+    ContainerType container(first, last);
+    sort(container.begin(), container.end());
+    printNums(container.begin(), container.end(), out);
+  }
+
   template < class T, class Compare >
   void testSorts(size_t size, std::ostream &out)
   {
@@ -43,30 +51,31 @@ namespace zhalilov
     auto generator = std::bind(generateNumInRange< T >, -1000, 1000);
     std::generate(nums.begin(), nums.end(), generator);
 
-    std::forward_list< T > implForwardOddEven(nums.cbegin(), nums.cend());
-    std::forward_list< T > implForwardBucket(nums.cbegin(), nums.cend());
-    List< T > myListBucket(nums.cbegin(), nums.cend());
-    std::deque< T > deqOddEven(nums.cbegin(), nums.cend());
-    std::deque< T > deqBucket(nums.cbegin(), nums.cend());
-    std::deque< T > deqSort(nums.cbegin(), nums.cend());
-
     Compare comparer;
-    oddEvenSort(implForwardOddEven.begin(), implForwardOddEven.end(), comparer);
-    oddEvenSort(deqOddEven.begin(), deqOddEven.end(), comparer);
+    using fwdList = std::forward_list< T >;
+    using myList = List< T >;
+    using stdDeq = std::deque< T >;
 
-    bucketSort(implForwardBucket.begin(), implForwardBucket.end(), comparer, 10);
-    bucketSort(myListBucket.begin(), myListBucket.end(), comparer, 10);
-    bucketSort(deqBucket.begin(), deqBucket.end(), comparer, 10);
+    using fwdListItType = typename std::forward_list< T >::iterator;
+    using myListItType = typename List< T >::iterator;
+    using deqItType = typename std::deque< T >::iterator;
 
-    std::sort(deqSort.begin(), deqSort.end(), comparer);
+    using namespace std::placeholders;
+    auto fwdListOddEveSortFunc = std::bind(oddEvenSort< fwdListItType, Compare >, _1, _2, comparer);
+    auto fwdListBucketSortFunc = std::bind(bucketSort< fwdListItType, Compare >, _1, _2, comparer, 10);
+    auto myListBucketSortFunc = std::bind(bucketSort< myListItType, Compare >, _1, _2, comparer, 10);
+    auto deqOddEvenSortFunc = std::bind(oddEvenSort< deqItType, Compare >, _1, _2, comparer);
+    auto deqBucketSortFunc = std::bind(bucketSort< deqItType, Compare >, _1, _2, comparer, 10);
+    auto deqStdSortFunc = std::bind(std::sort< deqItType, Compare >, _1, _2, comparer);
 
     printNums(nums.cbegin(), nums.cend(), out);
-    printNums(implForwardOddEven.cbegin(), implForwardOddEven.cend(), out);
-    printNums(implForwardBucket.cbegin(), implForwardBucket.cend(), out);
-    printNums(myListBucket.cbegin(), myListBucket.cend(), out);
-    printNums(deqOddEven.cbegin(), deqOddEven.cend(), out);
-    printNums(deqBucket.cbegin(), deqBucket.cend(), out);
-    printNums(deqSort.cbegin(), deqSort.cend(), out);
+
+    testContainerAndSort< fwdList >(nums.cbegin(), nums.cend(), fwdListOddEveSortFunc, out);
+    testContainerAndSort< fwdList >(nums.cbegin(), nums.cend(), fwdListBucketSortFunc, out);
+    testContainerAndSort< myList >(nums.cbegin(), nums.cend(), myListBucketSortFunc, out);
+    testContainerAndSort< stdDeq >(nums.cbegin(), nums.cend(), deqOddEvenSortFunc, out);
+    testContainerAndSort< stdDeq >(nums.cbegin(), nums.cend(), deqBucketSortFunc, out);
+    testContainerAndSort< stdDeq >(nums.cbegin(), nums.cend(), deqStdSortFunc, out);
   }
 }
 
