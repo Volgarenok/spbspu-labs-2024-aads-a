@@ -18,7 +18,7 @@ namespace nikitov
     float generateValue(float);
 
     template< class T, class Compare, class Container >
-    void createAndSort(const std::forward_list< T >& list, void(*sort)(typename Container::iterator, typename Container::iterator, Compare), 
+    void createAndSort(const std::forward_list< T >& list, void(*sort)(typename Container::iterator, typename Container::iterator, Compare),
       std::ostream& output)
     {
       Container type;
