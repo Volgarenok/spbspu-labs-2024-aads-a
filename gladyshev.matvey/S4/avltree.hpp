@@ -277,10 +277,6 @@ namespace gladyshev
     }
     tnode* insertImpl(const Key& key, const Value& value, tnode* node)
     {
-      if (!node)
-      {
-        return new tnode(key, value);
-      }
       if (Compare()(key, node->data.first))
       {
         if (!node->left)
@@ -288,7 +284,10 @@ namespace gladyshev
           node->left = new tnode(key, value);
           node->left->parent = node;
         }
-        node->left = insertImpl(key, value, node->left);
+        else
+        {
+          node->left = insertImpl(key, value, node->left);
+        }
       }
       else if (Compare()(node->data.first, key))
       {
@@ -297,7 +296,10 @@ namespace gladyshev
           node->right = new tnode(key, value);
           node->right->parent = node;
         }
-        node->right = insertImpl(key, value, node->right);
+        else
+        {
+          node->right = insertImpl(key, value, node->right);
+        }
       }
       else
       {
