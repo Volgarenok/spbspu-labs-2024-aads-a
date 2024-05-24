@@ -96,20 +96,12 @@ namespace gladyshev
     }
     Value& operator[](const Key& key)
     {
-      tnode* node = findNode(root_, key);
-      if (!node)
+      auto it = find(key);
+      if (it == end())
       {
-        if (root_)
-        {
-          node = insertImpl(key, Value(), root_);
-        }
-        else
-        {
-          root_ = new tnode(key, Value());
-          node = root_;
-        }
+        it = insert(key, Value());
       }
-      return node->data.second;
+      return it->second;
     }
     std::pair< iter, iter > equal_range(const Key& key)
     {
@@ -164,7 +156,7 @@ namespace gladyshev
       }
       return *this;
     }
-    void insert(const Key& key, const Value& value)
+    iter insert(const Key& key, const Value& value)
     {
       if (!root_)
       {
@@ -174,6 +166,7 @@ namespace gladyshev
       {
         root_ = insertImpl(key, value, root_);
       }
+      return iter(root_);
     }
   private:
     tnode* rotateRight(tnode* node)
@@ -287,10 +280,7 @@ namespace gladyshev
           node->left = new tnode(key, value);
           node->left->parent = node;
         }
-        else
-        {
-          node->left = insertImpl(key, value, node->left);
-        }
+        node->left = insertImpl(key, value, node->left);
       }
       else if (Compare()(node->data.first, key))
       {
@@ -299,10 +289,7 @@ namespace gladyshev
           node->right = new tnode(key, value);
           node->right->parent = node;
         }
-        else
-        {
-          node->right = insertImpl(key, value, node->right);
-        }
+        node->right = insertImpl(key, value, node->right);
       }
       else
       {
