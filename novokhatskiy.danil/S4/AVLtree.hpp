@@ -29,7 +29,7 @@ namespace novokhatskiy
       cmp_()
     {}
 
-    Tree(const Tree &other):
+    Tree(const Tree &other) noexcept:
       root_(nullptr),
       size_(0),
       cmp_(other.cmp_)
@@ -48,11 +48,12 @@ namespace novokhatskiy
       }
     }
 
-    Tree(Tree &&other):
+    Tree(Tree &&other) noexcept:
       root_(other.root_),
       size_(other.size_),
       cmp_(std::move(other.cmp_))
     {
+      static_assert(std::is_nothrow_copy_constructible< Compare >::value, "static_assert");
       other.root_ = nullptr;
       other.size_ = 0;
     }
@@ -65,7 +66,7 @@ namespace novokhatskiy
       return *this;
     }
 
-    Tree &operator=(Tree &&other)
+    Tree &operator=(Tree &&other) noexcept
     {
       clear();
       this->swap(other);
@@ -209,7 +210,7 @@ namespace novokhatskiy
 
     void swap(Tree &other) noexcept
     {
-      static_assert(std::is_nothrow_copy_constructible<Compare>::value, "static_assert");
+      static_assert(std::is_nothrow_copy_constructible< Compare >::value, "static_assert");
       std::swap(root_, other.root_);
       std::swap(size_, other.size_);
       std::swap(cmp_, other.cmp_);
@@ -384,7 +385,6 @@ namespace novokhatskiy
       }
       catch (const std::exception &)
       {
-        clear();
         throw;
       }
     }
@@ -506,7 +506,6 @@ namespace novokhatskiy
       }
       catch (const std::exception &)
       {
-        clear();
         throw;
       }
     }

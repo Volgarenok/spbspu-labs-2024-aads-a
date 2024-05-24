@@ -73,12 +73,12 @@ namespace novokhatskiy
       {
         node_ = node_->left;
         for (; node_->right; node_ = node_->right)
-          ;
+        {}
       }
       else
       {
         for (; node_ == node_->parent->left; node_ = node_->parent)
-          ;
+        {}
         node_ = node_->parent;
       }
       return *this;
