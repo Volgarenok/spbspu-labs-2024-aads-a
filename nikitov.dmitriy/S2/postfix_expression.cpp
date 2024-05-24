@@ -1,6 +1,6 @@
 #include "postfix_expression.hpp"
 #include <limits>
-#include "stack.hpp"
+#include <stack.hpp>
 
 nikitov::PostfixExpression::PostfixExpression(const Queue< PostfixType >& postfixQueue):
   data_(postfixQueue)

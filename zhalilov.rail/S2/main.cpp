@@ -1,8 +1,9 @@
 #include <iostream>
 #include <fstream>
 
+#include <queue.hpp>
+
 #include "stack.hpp"
-#include "queue.hpp"
 #include "getInfix.hpp"
 #include "infixToPostfix.hpp"
 #include "calculateExpr.hpp"
