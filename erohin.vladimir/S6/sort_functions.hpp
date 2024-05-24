@@ -4,6 +4,8 @@
 #include <algorithm>
 #include <iterator>
 
+#include <iostream>
+
 namespace erohin
 {
   namespace detail
@@ -58,7 +60,7 @@ namespace erohin
       {
         auto temp_iter = cur_iter;
         auto start = std::prev(cur_iter);
-        while (start != begin)
+        while (temp_iter != begin)
         {
           if (cmp(*temp_iter, *start))
           {
@@ -125,7 +127,7 @@ namespace erohin
   template< class RandomAccessIt, class Compare >
   void doTimsort(RandomAccessIt begin, size_t size, Compare cmp)
   {
-    if (size == 0)
+    if (size <= 1)
     {
       return;
     }
@@ -139,9 +141,16 @@ namespace erohin
     min_run = n + min_run;
     for (size_t i = 0; i < size; i += min_run)
     {
-      detail::doInsertsort(begin + (size - i), size - i, cmp);
+      detail::doInsertsort(begin + i, min_run, cmp);
     }
     size_t run = min_run;
+    while (run < size)
+    {
+      for (size_t i = 0; i < size; i += (run * 2))
+      {
+        detail::doMergesort(begin + i, run * 2, cmp);
+      }
+      run *= 2;
     }
   }
 }
