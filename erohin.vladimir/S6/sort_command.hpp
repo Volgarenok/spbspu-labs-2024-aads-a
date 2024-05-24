@@ -17,29 +17,24 @@ namespace erohin
     Compare cmp;
     List< T > random_seq;
     generateRandomSequence< T >(random_seq, size);
-    List< T > forward_list_seq[2];
-    std::list< T > bidirect_list_seq[2];
-    std::deque< T > deque_seq[2];
-    for (int i = 0; i < 2; ++i)
-    {
-      forward_list_seq[i].assign(random_seq.cbegin(), random_seq.cend());
-      bidirect_list_seq[i].assign(random_seq.cbegin(), random_seq.cend());
-      deque_seq[i].assign(random_seq.cbegin(), random_seq.cend());
-    }
-    forward_list_seq[0].sort(cmp);
-    bidirect_list_seq[0].sort(cmp);
-    doQuicksort_forward(deque_seq[0].begin(), std::prev(deque_seq[0].end()), cmp);
-    forward_list_seq[1].sort(cmp);
-    bidirect_list_seq[1].sort(cmp);
-    //sort1(deque_seq[1].begin(), deque_seq[1].end(), cmp);
-    doTimsort(deque_seq[1].begin(), size, cmp);
-    printSequence(output, random_seq.begin(), random_seq.end());
-    for (int i = 0; i < 2; ++i)
-    {
-      printSequence(output << "\n", forward_list_seq[i].cbegin(), forward_list_seq[i].cend());
-      printSequence(output << "\n", bidirect_list_seq[i].cbegin(), bidirect_list_seq[i].cend());
-      printSequence(output << "\n", deque_seq[i].cbegin(), deque_seq[i].cend());
-    }
+    List< T > first_forward_list(random_seq.cbegin(), random_seq.cend());
+    std::list< T > first_bi_list(random_seq.cbegin(), random_seq.cend());
+    std::list< T > second_bi_list(random_seq.cbegin(), random_seq.cend());
+    std::deque< T > first_deque(random_seq.cbegin(), random_seq.cend());
+    std::deque< T > second_deque(random_seq.cbegin(), random_seq.cend());
+    std::deque< T > third_deque(random_seq.cbegin(), random_seq.cend());
+    doQuicksort(first_forward_list.begin(), first_forward_list.end(), cmp);
+    doQuicksort(first_bi_list.begin(), first_bi_list.end(), cmp);
+    second_bi_list.sort(cmp);
+    doQuicksort(first_deque.begin(), first_deque.end(), cmp);
+    doTimsort(second_deque.begin(), size, cmp);
+    std::sort(third_deque.begin(), third_deque.end(), cmp);
+    printSequence(output, first_forward_list.begin(), first_forward_list.end());
+    printSequence(output << "\n", first_bi_list.cbegin(), first_bi_list.cend());
+    printSequence(output << "\n", second_bi_list.cbegin(), second_bi_list.cend());
+    printSequence(output << "\n", first_deque.cbegin(), first_deque.cend());
+    printSequence(output << "\n", second_deque.cbegin(), second_deque.cend());
+    printSequence(output << "\n", third_deque.cbegin(), third_deque.cend());
     output << "\n";
   }
 }

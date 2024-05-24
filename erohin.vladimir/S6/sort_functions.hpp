@@ -5,78 +5,45 @@
 #include <iterator>
 
 #include <iostream>
+#include "queue.hpp"
 
 namespace erohin
 {
   namespace detail
   {
-    template< class RandomAccessIt, class Compare >
-    RandomAccessIt partition(RandomAccessIt begin, RandomAccessIt end, Compare cmp)
-    {
-      auto pivot = begin;
-      while (begin <= end)
-      {
-        while (cmp(*begin, *pivot))
-        {
-          begin++;
-        }
-        while (cmp(*pivot, *end))
-        {
-          end--;
-        }
-        if (begin >= end)
-        {
-          break;
-        }
-        std::swap(*(begin++), *(end--));
-      }
-      return end;
-    }
-
-    template< class RandomAccessIt, class Compare >
-    RandomAccessIt forward_partition(RandomAccessIt begin, RandomAccessIt end, Compare cmp)
+    template< class ForwardIt, class Compare >
+    ForwardIt do_partition(ForwardIt begin, ForwardIt end, Compare cmp)
     {
       auto pivot = begin;
       auto cur_iter = std::next(begin);
       while (cur_iter != end)
       {
-        if (cmp(*cur_iter, *pivot))
+        if (!cmp(*pivot, *cur_iter))
         {
           auto temp_iter = pivot;
-          using T = typename RandomAccessIt::value_type;
+          using T = typename ForwardIt::value_type;
           T temp(std::move(*cur_iter));
           while (temp_iter != std::next(cur_iter))
           {
             std::swap(*temp_iter, temp);
             ++temp_iter;
           }
-          pivot = cur_iter;
+          ++pivot;
         }
         ++cur_iter;
       }
-      return begin;
+      return pivot;
     }
   }
 
-  template< class RandomAccessIt, class Compare >
-  void doQuicksort(RandomAccessIt begin, RandomAccessIt end, Compare cmp)
-  {
-    if (begin < end)
-    {
-      auto pivot = detail::partition(begin, end, cmp);
-      doQuicksort(begin, pivot, cmp);
-      doQuicksort(std::next(pivot), end, cmp);
-    }
-  }
-
-  template< class RandomAccessIt, class Compare >
-  void doQuicksort_forward(RandomAccessIt begin, RandomAccessIt end, Compare cmp)
+  template< class ForwardIt, class Compare >
+  void doQuicksort(ForwardIt begin, ForwardIt end, Compare cmp)
   {
     if (begin != end)
     {
-      auto pivot = detail::forward_partition(begin, end, cmp);
-      doQuicksort_forward(begin, pivot, cmp);
-      doQuicksort_forward(std::next(pivot), end, cmp);
+      auto pivot = detail::do_partition(begin, end, cmp);
+      doQuicksort(begin, pivot, cmp);
+      doQuicksort(std::next(pivot), end, cmp);
     }
   }
 
