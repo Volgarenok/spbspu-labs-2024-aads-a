@@ -2,14 +2,14 @@
 
 void namestnikov::inputDict(std::istream & in, Tree< int, std::string > & myMap)
 {
-  while (!in.eof())
+  int keyNumber = 0;
+  std::string value = "";
+  while (in >> keyNumber >> value)
   {
-    in.clear();
-    int keyNumber = 0;
-    std::string value = "";
-    while (in >> keyNumber >> value)
-    {
-      myMap.insert(keyNumber, value);
-    }
+    myMap.insert(keyNumber, value);
+  }
+  if (!in.eof())
+  {
+    throw std::invalid_argument("Wrong input");
   }
 }

@@ -20,7 +20,15 @@ int main(int argc, char * argv[])
       std::cerr << "Can not open file\n";
       return 1;
     }
-    inputDict(file, myMap);
+    try
+    {
+      inputDict(file, myMap);
+    }
+    catch (...)
+    {
+      std::cerr << "Wrong input\n";
+      return 1;
+    }
     file.close();
   }
   else
