@@ -2,6 +2,7 @@
 #define TREE_HPP
 
 #include <functional>
+#include <type_traits>
 #include <tree_node.hpp>
 #include <tree_iterator.hpp>
 #include <const_tree_iterator.hpp>
@@ -74,6 +75,7 @@ namespace namestnikov
 
     void swap(Tree< Key, Value, Compare > & other) noexcept
     {
+      static_assert(std::is_nothrow_copy_constructible< Compare >::value);
       std::swap(root_, other.root_);
       std::swap(size_, other.size_);
       std::swap(compare_, other.compare_);
