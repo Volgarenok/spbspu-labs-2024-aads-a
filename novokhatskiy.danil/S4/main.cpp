@@ -63,15 +63,11 @@ int main(int argc, char** argv)
     {
       commands.at(command)(maps, std::cin);
     }
-    catch (const std::invalid_argument& e)
-    {
-      std::cout << e.what() << '\n';
-    }
     catch (const std::out_of_range&)
     {
       std::cout << "<INVALID COMMAND>\n";
     }
-    catch (const std::logic_error& e)
+    catch (const std::exception& e)
     {
       std::cout << e.what() << '\n';
     }

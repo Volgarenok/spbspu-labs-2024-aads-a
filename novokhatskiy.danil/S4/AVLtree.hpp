@@ -48,12 +48,11 @@ namespace novokhatskiy
       }
     }
 
-    Tree(Tree &&other) noexcept:
+    Tree(Tree &&other):
       root_(other.root_),
       size_(other.size_),
       cmp_(std::move(other.cmp_))
     {
-      static_assert(std::is_nothrow_copy_constructible< Compare >::value, "static_assert");
       other.root_ = nullptr;
       other.size_ = 0;
     }
@@ -66,7 +65,7 @@ namespace novokhatskiy
       return *this;
     }
 
-    Tree &operator=(Tree &&other) noexcept
+    Tree &operator=(Tree &&other)
     {
       clear();
       this->swap(other);
@@ -169,7 +168,8 @@ namespace novokhatskiy
       node_t *tmp = search(key);
       if (tmp == nullptr)
       {
-        tmp = insert_search(std::make_pair(key, Value()));
+        insert(std::make_pair(key, Value()));
+        tmp = search(key);
       }
       return tmp->value.second;
     }
@@ -179,7 +179,8 @@ namespace novokhatskiy
       node_t *tmp = search(key);
       if (tmp == nullptr)
       {
-        tmp = insert_search(std::make_pair(key, Value()));
+        insert(std::make_pair(key, Value()));
+        tmp = search(key);
       }
       return tmp->value.second;
     }
@@ -208,7 +209,7 @@ namespace novokhatskiy
 
     void swap(Tree &other) noexcept
     {
-      static_assert(std::is_nothrow_copy_constructible< Compare >::value, "static_assert");
+      static_assert(std::is_nothrow_copy_constructible<Compare>::value, "static_assert");
       std::swap(root_, other.root_);
       std::swap(size_, other.size_);
       std::swap(cmp_, other.cmp_);
@@ -383,28 +384,7 @@ namespace novokhatskiy
       }
       catch (const std::exception &)
       {
-        throw;
-      }
-    }
-
-    node_t* insert_search(const std::pair<Key, Value> &val)
-    {
-      try
-      {
-        if (root_)
-        {
-          insert_imp(val, root_);
-          ++size_;
-        }
-        else
-        {
-          root_ = new node_t(val);
-          ++size_;
-        }
-        return root_;
-      }
-      catch (const std::exception &)
-      {
+        clear();
         throw;
       }
     }
@@ -526,42 +506,7 @@ namespace novokhatskiy
       }
       catch (const std::exception &)
       {
-        throw;
-      }
-    }
-
-    node_t* insert_search_impl(const std::pair<Key, Value> &value, node_t *node)
-    {
-      try
-      {
-        if (cmp_(value.first, node->value.first))
-        {
-          if (node->left)
-          {
-            insert_imp(value, node->left);
-          }
-          else
-          {
-            node->left = new node_t(value, node);
-            getBalance(node->left);
-          }
-        }
-        else
-        {
-          if (node->right)
-          {
-            insert_imp(value, node->right);
-          }
-          else
-          {
-            node->right = new node_t(value, node);
-            getBalance(node->right);
-          }
-        }
-        return node;
-      }
-      catch (const std::exception &)
-      {
+        clear();
         throw;
       }
     }
