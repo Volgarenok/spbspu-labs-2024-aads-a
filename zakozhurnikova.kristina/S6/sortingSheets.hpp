@@ -5,64 +5,64 @@
 #include <deque>
 #include <forward_list>
 #include <iostream>
+#include <list.hpp>
 #include <list>
 #include <string>
-#include <list.hpp>
 #include "generate.hpp"
 #include "print.hpp"
 #include "sorting.hpp"
 
-
 namespace zakozhurnikova
 {
-  template < class Type, class Compare >
-  void sortAndPrint(const std::string& kind, size_t size, Compare cmp)
+  template < class It, class Cmp >
+  void chooseSort(std::ostream& out, It begin, It end, size_t size, Cmp cmp, void (*sort)(It, size_t, Cmp))
   {
-    Type array[10000];
-    if (kind == "ints")
-    {
-      std::generate_n(array, size, detail::randomNumberInt);
-    }
-    else if (kind == "floats")
-    {
-      std::generate_n(array, size, detail::randomNumberFloat);
-    }
-    List< Type > biListRealization(array, array + size);
-    std::list< Type > biListStandart(array, array + size);
+    sort(begin, size, cmp);
+    print(out, begin, end);
+    out << '\n';
+  }
+
+  template < class List, class Cmp >
+  void standartSort(std::ostream& out, List& list, Cmp cmp)
+  {
+    list.sort(cmp);
+    print(out, list.begin(), list.end());
+    out << '\n';
+  }
+
+  template < class Type, class Compare >
+  void sortAndPrint(std::ostream& out, size_t size, Type array[], Compare cmp)
+  {
+    List< Type > biListR(array, array + size);
+    std::list< Type > biListSt(array, array + size);
     std::deque< Type > dequeSort(array, array + size);
     std::deque< Type > dequeShaker(array, array + size);
     std::deque< Type > dequeShell(array, array + size);
     std::forward_list< Type > forwardList(array, array + size);
 
-    print(std::cout, forwardList);
-    std::cout << '\n';
+    print(out, forwardList.begin(), forwardList.end());
+    out << '\n';
 
-    auto beginBiR = biListRealization.begin();
-    auto beginDeqSort = dequeSort.begin();
-    auto endDeqSort = dequeSort.end();
-    auto beginDeqShaker = dequeShaker.begin();
-    auto beginDeqShell = dequeShell.begin();
+    chooseSort(out, biListR.begin(), biListR.end(), size, cmp, shaker);
+    chooseSort(out, dequeShaker.begin(), dequeShaker.end(), size, cmp, shaker);
+    chooseSort(out, dequeShell.begin(), dequeShell.end(), size, cmp, shell);
+    standartSort(out, biListSt, cmp);
+    standartSort(out, forwardList, cmp);
 
-    shaker(beginBiR, size, cmp);
-    biListStandart.sort(cmp);
-    std::sort(beginDeqSort, endDeqSort, cmp);
-    shaker(beginDeqShaker, size, cmp);
-    shell(beginDeqShell, size, cmp);
-    forwardList.sort(cmp);
-
-    print(std::cout, biListRealization);
-    std::cout << '\n';
-    print(std::cout, biListStandart);
-    std::cout << '\n';
-    print(std::cout, dequeSort);
-    std::cout << '\n';
-    print(std::cout, dequeShaker);
-    std::cout << '\n';
-    print(std::cout, dequeShell);
-    std::cout << '\n';
-    print(std::cout, forwardList);
-    std::cout << '\n';
+    std::sort(dequeSort.begin(), dequeSort.end(), cmp);
+    print(out, dequeSort.begin(), dequeSort.end());
+    out << '\n';
   }
 
+  template < class Type, class Compare >
+  void fillContainer(std::ostream& out, size_t size, std::default_random_engine& generate)
+  {
+    Type array[10000];
+    for (size_t i = 0; i < size; ++i)
+    {
+      array[i] = detail::randomNumber(generate, Type());
+    }
+    sortAndPrint(out, size, array, Compare());
+  }
 }
 #endif

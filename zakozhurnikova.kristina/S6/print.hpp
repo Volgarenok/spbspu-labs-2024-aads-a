@@ -7,12 +7,12 @@
 
 namespace zakozhurnikova
 {
-  template < class list >
-  void print(std::ostream& out, const list& count)
+  template < class It >
+  void print(std::ostream& out, It begin, It end)
   {
     out << std::fixed << std::setprecision(1);
-    out << *count.begin();
-    for (auto it = ++count.begin(); it != count.end(); ++it)
+    out << *begin;
+    for (auto it = ++begin; it != end; ++it)
     {
       out << ' ' << *it;
     }

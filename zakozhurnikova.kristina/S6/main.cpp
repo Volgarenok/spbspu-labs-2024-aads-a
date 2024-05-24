@@ -32,18 +32,15 @@ int main(int argc, char* argv[])
   }
   try
   {
+    std::default_random_engine generator;
     using namespace std::placeholders;
-    std::map< std::string, std::function< void(const std::string&, size_t) > > commands;
-    commands["ascendingints"] =
-      std::bind(sortAndPrint< int, std::less< int > >, _1, _2, std::less< int >{});
-    commands["ascendingfloats"] =
-      std::bind(sortAndPrint< float, std::less< float > >, _1, _2, std::less< float >{});
-    commands["descendingints"] =
-      std::bind(sortAndPrint< int, std::greater< int > >, _1, _2, std::greater< int >{});
-    commands["descendingfloats"] =
-      std::bind(sortAndPrint< float, std::greater< float > >, _1, _2, std::greater< float >{});
+    std::map< std::string, std::function< void(std::ostream&, size_t, std::default_random_engine&) > > commands;
+    commands["ascendingints"] = fillContainer< int, std::less< int > >;
+    commands["ascendingfloats"] = fillContainer< float, std::less< float > >;
+    commands["descendingints"] = fillContainer< int, std::greater< int > >;
+    commands["descendingfloats"] = fillContainer< float, std::greater< float > >;
 
-    commands.at(condition)(type, size);
+    commands.at(condition)(std::cout, size, generator);
   }
   catch (const std::exception& e)
   {
