@@ -96,10 +96,10 @@ namespace gladyshev
     }
     Value& operator[](const Key& key)
     {
-      tnode* node = findNode(key, root_);
+      tnode* node = findNode(root_, key);
       if (!node)
       {
-        node = insert(key, Value(), root_);
+        node = insertImpl(key, Value(), root_);
       }
       return node->data.second;
     }
