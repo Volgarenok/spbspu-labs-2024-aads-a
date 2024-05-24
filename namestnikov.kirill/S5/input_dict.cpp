@@ -1,6 +1,6 @@
 #include "input_dict.hpp"
 
-Tree< int, std::string > namestnikov::inputDict(std::istream & in)
+namestnikov::Tree< int, std::string > namestnikov::inputDict(std::istream & in)
 {
   Tree< int, std::string > myMap;
   int keyNumber = 0;
