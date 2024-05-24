@@ -169,8 +169,7 @@ namespace novokhatskiy
       node_t *tmp = search(key);
       if (tmp == nullptr)
       {
-        insert(std::make_pair(key, Value()));
-        tmp = search(key);
+        tmp = insert_search(std::make_pair(key, Value()));
       }
       return tmp->value.second;
     }
@@ -180,8 +179,7 @@ namespace novokhatskiy
       node_t *tmp = search(key);
       if (tmp == nullptr)
       {
-        insert(std::make_pair(key, Value()));
-        tmp = search(key);
+        tmp = insert_search(std::make_pair(key, Value()));
       }
       return tmp->value.second;
     }
@@ -389,6 +387,28 @@ namespace novokhatskiy
       }
     }
 
+    node_t* insert_search(const std::pair<Key, Value> &val)
+    {
+      try
+      {
+        if (root_)
+        {
+          insert_imp(val, root_);
+          ++size_;
+        }
+        else
+        {
+          root_ = new node_t(val);
+          ++size_;
+        }
+        return root_;
+      }
+      catch (const std::exception &)
+      {
+        throw;
+      }
+    }
+
     ~Tree()
     {
       clear();
@@ -503,6 +523,42 @@ namespace novokhatskiy
             getBalance(node->right);
           }
         }
+      }
+      catch (const std::exception &)
+      {
+        throw;
+      }
+    }
+
+    node_t* insert_search_impl(const std::pair<Key, Value> &value, node_t *node)
+    {
+      try
+      {
+        if (cmp_(value.first, node->value.first))
+        {
+          if (node->left)
+          {
+            insert_imp(value, node->left);
+          }
+          else
+          {
+            node->left = new node_t(value, node);
+            getBalance(node->left);
+          }
+        }
+        else
+        {
+          if (node->right)
+          {
+            insert_imp(value, node->right);
+          }
+          else
+          {
+            node->right = new node_t(value, node);
+            getBalance(node->right);
+          }
+        }
+        return node;
       }
       catch (const std::exception &)
       {
