@@ -33,10 +33,10 @@ namespace erohin
     bool operator==(const BreadthIterator< Key, T > & rhs) const;
     bool operator!=(const BreadthIterator< Key, T > & rhs) const;
   private:
-    detail::Node< Key, T > * node_;
-    Queue< detail::Node< Key, T > * > queue_;
-    Stack< detail::Node< Key, T > * > stack_;
-    explicit BreadthIterator(detail::Node< Key, T > * node_ptr);
+    detail::TreeNode< Key, T > * node_;
+    Queue< detail::TreeNode< Key, T > * > queue_;
+    Stack< detail::TreeNode< Key, T > * > stack_;
+    explicit BreadthIterator(detail::TreeNode< Key, T > * node_ptr);
   };
 
   template< class Key, class T >
@@ -45,7 +45,7 @@ namespace erohin
   {}
 
   template< class Key, class T >
-  BreadthIterator< Key, T >::BreadthIterator(detail::Node< Key, T > * node_ptr):
+  BreadthIterator< Key, T >::BreadthIterator(detail::TreeNode< Key, T > * node_ptr):
     node_(node_ptr)
   {
     queue_.push(node_ptr);

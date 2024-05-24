@@ -33,12 +33,12 @@ namespace erohin
     bool operator!=(const RnlIterator< Key, T > & rhs) const;
   private:
     LnrIterator< Key, T > iter_;
-    explicit RnlIterator(detail::Node< Key, T > * node_ptr);
+    explicit RnlIterator(detail::TreeNode< Key, T > * node_ptr);
     explicit RnlIterator(LnrIterator< Key, T > iter);
   };
 
   template< class Key, class T >
-  RnlIterator< Key, T >::RnlIterator(detail::Node< Key, T > * node_ptr):
+  RnlIterator< Key, T >::RnlIterator(detail::TreeNode< Key, T > * node_ptr):
     iter_(LnrIterator< Key, T >(node_ptr))
   {}
 
