@@ -54,20 +54,20 @@ namespace marishin
 
     Tree & operator=(const Tree & other)
     {
-      Tree< Key, Value > temp(other);
       if (this != std::addressof(other))
       {
+        Tree temp(other);
         swap(temp);
       }
       return *this;
     }
 
-    Tree & operator=(Tree && other) noexcept
+    Tree & operator=(Tree && other)
     {
-      Tree< Key, Value > temp(std::move(other));
       if (this != std::addressof(other))
       {
-        swap(temp);
+        clear();
+        swap(other);
       }
       return *this;
     }
@@ -145,11 +145,7 @@ namespace marishin
         }
       }
     }
-    node_t * search(const Key & key)
-    {
-      node_t * res = search_impl(root_, key);
-      return res;
-    }
+
     const_iterator cbegin() const noexcept
     {
       return const_iterator(get_min(root_));
@@ -166,72 +162,81 @@ namespace marishin
     {
       return iterator();
     }
-
-    Value & operator[](const Key & key)
+    iterator find(const Key & key)
     {
-      node_t * traverser = search(key);
-      if (traverser)
+      node_t * result = root_;
+      while (result)
       {
-        return traverser->data.second;
+        if (result->data.first == key)
+        {
+          return iterator(result);
+        }
+        else if (compare_(result->data.first, key))
+        {
+          result = result->right;
+        }
+        else
+        {
+          result = result->left;
+        }
       }
-      else
-      {
-        insert(key, Value());
-        node_t * result = search(key);
-        return result->data.second;
-      }
-    }
-    const Value & operator[](const Key & key) const
-    {
-      node_t * traverser = search(key);
-      if (traverser)
-      {
-        return traverser->data.second;
-      }
-      else
-      {
-        insert(key, Value());
-        node_t * result = search(key);
-        return result->data.second;
-      }
-    }
-    Value & at(const Key & key)
-    {
-      node_t * traverser = search(key);
-      if (traverser)
-      {
-        return traverser->data.second;
-      }
-      throw std::out_of_range("No such element");
-    }
-    const Value & at(const Key & key) const
-    {
-      node_t * traverser = search(key);
-      if (traverser)
-      {
-        return traverser->data.second;
-      }
-      throw std::out_of_range("No such element");
+      return end();
     }
     const_iterator find(const Key & key) const
     {
       node_t * result = root_;
       while (result)
       {
-        if (compare_(result->data.first, key))
+        if (result->data.first == key)
+        {
+          return const_iterator(result);
+        }
+        else if (compare_(result->data.first, key))
         {
           result = result->right;
         }
-        else if (compare_(key, result->data.first))
+        else
         {
           result = result->left;
         }
-        else
-        {
-          break;
-        }
       }
-      return const_iterator(result);
+      return cend();
+    }
+    Value & operator[](const Key & key)
+    {
+      auto iter = find(key);
+      if (iter == end())
+      {
+        insert(key, Value());
+      }
+      return iter.second;
+    }
+    const Value & operator[](const Key & key) const
+    {
+      auto iter = find(key);
+      if (iter == end())
+      {
+        insert(key, Value());
+      }
+      return iter.second;
+    }
+    Value & at(const Key & key)
+    {
+      iterator iter = find(key);
+      if (iter == end())
+      {
+        throw std::out_of_range("No such element");
+      }
+      return iter.second;
+    }
+    const Value & at(const Key & key) const
+    {
+      const_iterator iter = find(key);
+      if (iter == end())
+      {
+        throw std::out_of_range("No such element");
+      }
+      return iter.second;
     }
     size_t size() const noexcept
     {
@@ -304,25 +309,6 @@ namespace marishin
       node->height = node->height - 1 - std::max(0, newRoot->height);
       newRoot->height = newRoot->height - 1 + std::min(0, node->height);
       return newRoot;
-    }
-    node_t * search_impl(node_t * node, const Key & key)
-    {
-      if (!node)
-      {
-        return nullptr;
-      }
-      else if (compare_(key, node->data.first))
-      {
-        return search_impl(node->left, key);
-      }
-      else if (compare_(node->data.first, key))
-      {
-        return search_impl(node->right, key);
-      }
-      else
-      {
-        return node;
-      }
     }
     void insert_impl(const Key & key, const Value & val, node_t * currentNode)
     {
