@@ -46,14 +46,15 @@ namespace erohin
   namespace detail
   {
     template< class RandomAccessIt, class Compare >
-    void doInsertsort(RandomAccessIt begin, RandomAccessIt end, Compare cmp)
+    void doInsertsort(RandomAccessIt begin, size_t size, Compare cmp)
     {
-      if (begin == end)
+      if (size <= 1)
       {
         return;
       }
+      size_t i = 1;
       auto cur_iter = std::next(begin);
-      while (cur_iter != end)
+      while (i < size)
       {
         auto temp_iter = cur_iter;
         auto start = std::prev(cur_iter);
@@ -71,7 +72,53 @@ namespace erohin
           start--;
         }
         ++cur_iter;
+        ++i;
       }
+    }
+
+    template< class RandomAccessIt, class Compare >
+    void doMergesort(RandomAccessIt begin, size_t size, Compare cmp)
+    {
+      if (size <= 1)
+      {
+        return;
+      }
+      size_t left_size = size / 2;
+      size_t right_size = size - size / 2;
+      doMergesort(begin, left_size, cmp);
+      doMergesort(begin + left_size, right_size, cmp);
+      size_t l_size = left_size;
+      size_t r_size = right_size;
+      using T = typename RandomAccessIt::value_type;
+      T * temp_arr = new T[size]{ *begin };
+      try
+      {
+        while ((l_size > 0) || (r_size > 0))
+        {
+          size_t cur_index = size - l_size - r_size;
+          if (r_size == 0 || (l_size > 0 && cmp(begin[left_size - l_size], begin[left_size + right_size - r_size])))
+          {
+            temp_arr[cur_index] = std::move(begin[left_size - l_size]);
+            --l_size;
+          }
+          else
+          {
+            temp_arr[cur_index] = std::move(begin[left_size + right_size - r_size]);
+            --r_size;
+          }
+        }
+        for (size_t i = 0; i < size; ++i)
+        {
+          begin[i] = std::move(temp_arr[i]);
+        }
+        delete[] temp_arr;
+      }
+      catch (...)
+      {
+        delete[] temp_arr;
+        throw;
+      }
+
     }
   }
 
@@ -82,25 +129,20 @@ namespace erohin
     {
       return;
     }
-    size_t step = 0;
+    size_t min_run = 0;
     size_t n = size;
     while (n >= 64)
     {
-      step |= n & 1;
+      min_run |= n & 1;
       n = n >> 1;
     }
-    step = n + step;
-    for (size_t i = 0; i < size; i += step)
+    min_run = n + min_run;
+    for (size_t i = 0; i < size; i += min_run)
     {
-
+      detail::doInsertsort(begin + (size - i), size - i, cmp);
     }
-    //std::sort(begin, end, cmp);
-  }
-
-  template< class BidirectionalIt, class Compare >
-  void sort1(BidirectionalIt begin, BidirectionalIt end, Compare cmp)
-  {
-    std::sort(begin, end, cmp);
+    size_t run = min_run;
+    }
   }
 }
 

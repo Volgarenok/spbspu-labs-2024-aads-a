@@ -12,11 +12,11 @@
 namespace erohin
 {
   template< class T, class Compare >
-  void doSortCommand(std::ostream & output, size_t n)
+  void doSortCommand(std::ostream & output, size_t size)
   {
     Compare cmp;
     List< T > random_seq;
-    generateRandomSequence< T >(random_seq, n);
+    generateRandomSequence< T >(random_seq, size);
     List< T > forward_list_seq[2];
     std::list< T > bidirect_list_seq[2];
     std::deque< T > deque_seq[2];
@@ -32,7 +32,7 @@ namespace erohin
     forward_list_seq[1].sort(cmp);
     bidirect_list_seq[1].sort(cmp);
     //sort1(deque_seq[1].begin(), deque_seq[1].end(), cmp);
-    detail::doInsertsort(deque_seq[1].begin(), deque_seq[1].end(), cmp);
+    doTimsort(deque_seq[1].begin(), size, cmp);
     printSequence(output, random_seq.begin(), random_seq.end());
     for (int i = 0; i < 2; ++i)
     {
