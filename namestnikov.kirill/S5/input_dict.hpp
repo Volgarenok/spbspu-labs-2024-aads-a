@@ -6,7 +6,7 @@
 
 namespace namestnikov
 {
-  void inputDict(std::istream & in, Tree< int, std::string > & myMap);
+  Tree< int, std::string > inputDict(std::istream & in);
 }
 
 #endif

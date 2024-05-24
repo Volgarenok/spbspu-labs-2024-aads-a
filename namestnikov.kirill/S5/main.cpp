@@ -22,14 +22,13 @@ int main(int argc, char * argv[])
     }
     try
     {
-      inputDict(file, myMap);
+      myMap = inputDict(file);
     }
     catch (...)
     {
       std::cerr << "Wrong input\n";
       return 1;
     }
-    file.close();
   }
   else
   {
@@ -55,11 +54,6 @@ int main(int argc, char * argv[])
   catch (const std::logic_error & e)
   {
     std::cout << "<EMPTY>\n";
-  }
-  catch (const std::overflow_error & e)
-  {
-    std::cerr << e.what() << "\n";
-    return 2;
   }
   catch (const std::exception & e)
   {

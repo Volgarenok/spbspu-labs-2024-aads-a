@@ -1,7 +1,8 @@
 #include "input_dict.hpp"
 
-void namestnikov::inputDict(std::istream & in, Tree< int, std::string > & myMap)
+Tree< int, std::string > namestnikov::inputDict(std::istream & in)
 {
+  Tree< int, std::string > myMap;
   int keyNumber = 0;
   std::string value = "";
   while (in >> keyNumber >> value)
@@ -12,4 +13,5 @@ void namestnikov::inputDict(std::istream & in, Tree< int, std::string > & myMap)
   {
     throw std::invalid_argument("Wrong input");
   }
+  return myMap;
 }
