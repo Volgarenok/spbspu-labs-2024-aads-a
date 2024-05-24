@@ -48,11 +48,12 @@ namespace novokhatskiy
       }
     }
 
-    Tree(Tree &&other):
+    Tree(Tree &&other) noexcept:
       root_(other.root_),
       size_(other.size_),
       cmp_(std::move(other.cmp_))
     {
+      static_assert(std::is_nothrow_copy_constructible< Compare >::value, "static_assert");
       other.root_ = nullptr;
       other.size_ = 0;
     }
@@ -65,7 +66,7 @@ namespace novokhatskiy
       return *this;
     }
 
-    Tree &operator=(Tree &&other)
+    Tree &operator=(Tree &&other) noexcept
     {
       clear();
       this->swap(other);
