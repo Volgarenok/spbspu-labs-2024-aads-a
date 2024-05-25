@@ -17,6 +17,7 @@ namespace zhalilov
     explicit InfixToken(Operand aOperand);
     explicit InfixToken(Bracket aBracket);
     explicit InfixToken(VarExpression aVarExpr);
+    ~InfixToken();
 
     InfixToken &operator=(const InfixToken &tkn);
 
