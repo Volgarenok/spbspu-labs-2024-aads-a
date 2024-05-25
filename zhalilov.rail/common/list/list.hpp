@@ -477,13 +477,16 @@ namespace zhalilov
   template < typename T >
   typename List< T >::iterator List< T >::erase(const_iterator it) noexcept
   {
-    Node *prev = it.m_node->prev;
-    Node *next = it.m_node->next;
-    delete it.m_node;
-    prev->next = next;
-    next->prev = prev;
-    m_size--;
-    return iterator(next);
+    if (it.m_node)
+    {
+      Node *prev = it.m_node->prev;
+      Node *next = it.m_node->next;
+      delete it.m_node;
+      prev->next = next;
+      next->prev = prev;
+      m_size--;
+      return iterator(next);
+    }
   }
 
   template < typename T >
