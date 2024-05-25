@@ -104,7 +104,8 @@ namespace gladyshev
           root_ = new tnode(key, Value());
           return root_->data.second;
         }
-        node = insertImpl(key, Value(), root_).second;
+        std::pair< tnode*, tnode* > result = insertImpl(key, Value(), root_);
+        node = result.second;
       }
       return node->data.second;
     }
@@ -169,7 +170,8 @@ namespace gladyshev
       }
       else
       {
-        root_ = insertImpl(key, value, root_).first;
+        std::pair< tnode*, tnode* > result = insertImpl(key, value, root_);
+        root_ = result.first;
       }
     }
   private:
