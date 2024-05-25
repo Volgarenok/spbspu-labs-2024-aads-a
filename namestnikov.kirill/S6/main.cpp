@@ -25,28 +25,22 @@ std::vector< T > generateNumbers(size_t size)
   return data;
 }
 
+template< class Iter >
+void printData(Iter first, Iter last, std::ostream & out)
+{
+  auto temp = first;
+  ++temp;
+  for (; temp != last; ++temp)
+  {
+    out << *first << " ";
+    ++first;
+  }
+  out << *first << "\n";
+}
+
 int main()
 {
   using namespace namestnikov;
-  std::list< int > temp({4, 1, 3, 2});
-  doShellSort(temp.begin(), temp.size(), std::less< int >());
-  for (auto it = temp.begin(); it != temp.end(); ++it)
-  {
-    std::cout << *it;
-  }
-  doSelectionSort(temp.begin(), temp.size(), std::less< int >());
-  for (auto it = temp.begin(); it != temp.end(); ++it)
-  {
-    std::cout << *it;
-  }
   std::vector< int > vec = generateNumbers< int >(20);
-  for (auto it = vec.begin(); it != vec.end(); ++it)
-  {
-    std::cout << *it << "|||";
-  }
-  doSelectionSort(vec.begin(), vec.size(), std::less< int >());
-  for (auto it = vec.begin(); it != vec.end(); ++it)
-  {
-    std::cout << *it << "|||";
-  }
+  printData(vec.begin(), vec.end(), std::cout);
 }
