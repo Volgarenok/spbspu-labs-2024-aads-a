@@ -33,6 +33,8 @@ int main(int argc, char* argv[])
   commands["destruction"] = std::bind(destruction, _1, std::ref(result), std::ref(dictionary));
   commands["elimination"] = std::bind(elimination, _1, std::ref(result), std::ref(dictionary));
   commands["addition"] = std::bind(addition, _1, std::ref(result), std::ref(dictionary));
+  commands["palindrome"] = std::bind(palindrome, _1, std::ref(result), std::ref(dictionary));
+  commands["rider"] = std::bind(rider, _1, std::ref(result), std::ref(dictionary));
 
   std::string command;
   while (std::cin >> command)

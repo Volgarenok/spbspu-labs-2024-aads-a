@@ -189,7 +189,7 @@ void zakozhurnikova::destruction(List< std::string >& args, std::string& result,
     current.del(word);
     result = std::string();
   }
-  catch (const std::out_of_range &e)
+  catch (const std::out_of_range& e)
   {
     std::cout << "The word was not found\n";
   }
@@ -213,6 +213,71 @@ void zakozhurnikova::addition(List< std::string >& args, std::string& result, di
       (firstMap[it->first]).clear();
       firstMap[it->first] = it->second;
     }
+  }
+  result = std::string();
+}
+
+bool isPalindrome(const std::string& word)
+{
+  size_t len = word.length();
+  for (size_t i = 0; i < len / 2; ++i)
+  {
+    if (word[i] != word[len - i - 1])
+    {
+      return false;
+    }
+  }
+  return true;
+}
+
+void zakozhurnikova::palindrome(List< std::string >& args, std::string& result, dict& dictionary)
+{
+  if (args.size() != 2)
+  {
+    throw std::invalid_argument("incorrect command source");
+  }
+  dictionaryOne& current = dictionary.at(args.back());
+  dictionaryOne resultDictionary;
+  std::string nameDictionary = args.front();
+  for (auto it = current.cbegin(); it != current.cend(); ++it)
+  {
+    if (isPalindrome(it->first))
+    {
+      resultDictionary.push(it->first, it->second);
+    }
+  result = std::string();
+  }
+  addDictionary(nameDictionary, resultDictionary, dictionary);
+}
+
+void zakozhurnikova::rider(List< std::string >& args, std::string& result, dict& dictionary)
+{
+  if (args.size() != 3)
+  {
+    throw std::invalid_argument("Incorrect command source");
+  }
+  dictionaryOne& current = dictionary.at(args.front());
+  args.pop_front();
+  std::string word = args.front();
+  std::string translate = args.back();
+  try
+  {
+    List< std::string >& temp = current.at(word);
+    for (auto it = temp.begin(); it != temp.end(); ++it)
+    {
+      if (translate == *it)
+      {
+        std::cout << "there is already a translation of word";
+        return;
+      }
+    }
+    temp.push_back(translate);
+  }
+  catch(const std::out_of_range &e)
+  {
+    List< std::string > currentTranslate;
+    currentTranslate.push_back(translate);
+    current.push(word, currentTranslate);
   }
   result = std::string();
 }

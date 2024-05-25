@@ -20,6 +20,8 @@ namespace zakozhurnikova
   void elimination(List< std::string >& args, std::string& result, dict& dictionary);
   void destruction(List< std::string >& args, std::string& result, dict& dictionary);
   void addition(List< std::string >& args, std::string& result, dict& dictionary);
+  void palindrome(List< std::string >& args, std::string& result, dict& dictionary);
+  void rider(List< std::string >& args, std::string& result, dict& dictionary);
 }
 
 #endif
