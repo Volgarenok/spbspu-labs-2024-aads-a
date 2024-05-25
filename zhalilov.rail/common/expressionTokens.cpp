@@ -64,6 +64,15 @@ zhalilov::Bracket zhalilov::InfixToken::getBracket()
   return bracket_;
 }
 
+zhalilov::VarExpression zhalilov::InfixToken::GetVarExpression()
+{
+  if (type_ != PrimaryType::VarExpression)
+  {
+    throw std::logic_error("token doesn't store varexpr");
+  }
+  return varExpr_;
+}
+
 void zhalilov::InfixToken::assigner(const InfixToken &tkn)
 {
   switch (tkn.type_)

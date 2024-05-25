@@ -5,6 +5,7 @@
 #include "bracket.hpp"
 #include "operand.hpp"
 #include "binaryOperator.hpp"
+#include "varExpression.hpp"
 
 namespace zhalilov
 {
@@ -15,6 +16,7 @@ namespace zhalilov
     explicit InfixToken(BinOperator aBinOperator);
     explicit InfixToken(Operand aOperand);
     explicit InfixToken(Bracket aBracket);
+    explicit InfixToken(VarExpression aVarExpr);
 
     InfixToken &operator=(const InfixToken &tkn);
 
@@ -23,6 +25,7 @@ namespace zhalilov
     BinOperator getBinOperator();
     Operand getOperand();
     Bracket getBracket();
+    VarExpression GetVarExpression();
 
   private:
     union
@@ -30,6 +33,7 @@ namespace zhalilov
       BinOperator binOperator_;
       Operand operand_;
       Bracket bracket_;
+      VarExpression varExpr_;
     };
 
     PrimaryType type_;
