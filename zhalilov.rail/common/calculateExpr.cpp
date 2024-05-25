@@ -1,4 +1,4 @@
-#include "calculateExpr.hpp"
+#include <calc/calculateExpr.hpp>
 
 #include <calc/expressionTokens.hpp>
 #include <calc/primaryType.hpp>
