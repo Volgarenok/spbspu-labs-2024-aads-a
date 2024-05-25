@@ -276,7 +276,7 @@ namespace gladyshev
       }
       return node;
     }
-    std::pair < tnode*, tnode* > insertImpl(const Key& key, const Value& value, tnode* node)
+    std::pair< tnode*, tnode* > insertImpl(const Key& key, const Value& value, tnode* node)
     {
       tnode* temp;
       if (Compare()(key, node->data.first))
