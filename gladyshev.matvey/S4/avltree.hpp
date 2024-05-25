@@ -99,10 +99,15 @@ namespace gladyshev
       tnode* node = findNode(root_, key);
       if (!node)
       {
+        if (!root_)
+        {
+          root_ = new tnode(key, Value());
+          return root_->data.second;
+        }
         tnode* temp = insertImpl(key, Value(), root_);
         return temp->data.second;
       }
-      return findNode(root_, key)->data.second;
+      return node->data.second;
     }
     std::pair< iter, iter > equal_range(const Key& key)
     {
