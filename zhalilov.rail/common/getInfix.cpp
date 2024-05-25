@@ -3,8 +3,85 @@
 #include <string>
 #include <istream>
 
-void zhalilov::getInfixFromString(Queue< InfixToken > &queue, const std::string &str)
+namespace zhalilov
 {
+  bool isBracket(char symb)
+  {
+    if (symb == '(' || symb == ')')
+    {
+      return true;
+    }
+    return false;
+  }
+
+  bool isBinaryOp(char symb)
+  {
+    bool isOp = symb == '+' || symb == '-';
+    isOp = isOp || symb == '/' || symb == '*';
+    isOp = isOp || symb == '%';
+    return isOp;
+  }
+
+  size_t processVarExpr(const std::string &toProcess, VarExpression &varExpr)
+  {
+    std::string moduleName = "main";
+    size_t i = 0;
+    while (std::isalpha(toProcess[i]))
+    {
+      i++;
+    }
+    if (i != 0)
+    {
+      std::string varName;
+      if (toProcess[i] == ':')
+      {
+        moduleName = toProcess.substr(0, i);
+        size_t nameStartPos = i;
+        while (std::isalpha(toProcess[nameStartPos]))
+        {
+          nameStartPos++;
+        }
+        if (nameStartPos != i)
+        {
+          varName = toProcess.substr(nameStartPos, i - nameStartPos);
+        }
+      }
+      else
+      {
+        varName = toProcess.substr(0, i);
+      }
+      if (toProcess[i] == '(')
+      {
+        List< long long > args;
+        i++;
+        while (toProcess[i] != ')')
+        {
+          if (toProcess.size() == i)
+          {
+            throw std::invalid_argument("getInfix.cpp: toProcess.size() == i");
+          }
+          if (toProcess[i] != ',')
+          {
+            size_t tmp = 0;
+            args.push_back(std::stoll(toProcess.substr(i), &tmp));
+            i += tmp;
+          }
+          else
+          {
+            i++;
+          }
+        }
+        varExpr = VarExpression(moduleName, varName, args);
+      }
+    }
+    return i;
+  }
+}
+
+void zhalilov::getInfix(Queue< InfixToken > &queue, std::istream &in)
+{
+  std::string str;
+  std::getline(in, str);
   size_t i = 0;
   size_t tmp = 0;
   long long number = 0;
@@ -21,31 +98,23 @@ void zhalilov::getInfixFromString(Queue< InfixToken > &queue, const std::string 
       }
       catch (...)
       {
-        try
+        if (isBracket(str[i]))
         {
           undefinedTkn = InfixToken(Bracket(str[i]));
         }
-        catch (...)
+        else if (isBinaryOp(str[i]))
         {
           undefinedTkn = InfixToken(BinOperator(str[i]));
+        }
+        else
+        {
+          VarExpression varExpr;
+          i = processVarExpr(str.substr(i), varExpr);
+          undefinedTkn = InfixToken(varExpr);
         }
       }
       queue.push(undefinedTkn);
     }
     i++;
-  }
-}
-
-void zhalilov::getInfixesFromStream(Stack< Queue< InfixToken > > &stack, std::istream &in)
-{
-  std::string str;
-  while (std::getline(in, str))
-  {
-    Queue< InfixToken > temp;
-    getInfixFromString(temp, str);
-    if (!str.empty())
-    {
-      stack.push(temp);
-    }
   }
 }
