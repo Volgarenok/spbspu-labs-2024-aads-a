@@ -25,9 +25,9 @@ int main(int argc, char* argv[])
   using namespace std::placeholders;
   BinarySearchTree< std::string, std::function< void(List< std::string >&) > > commands;
 
+  commands["intersect"] = std::bind(intersect, _1, std::ref(result), std::ref(dictionary));
   commands["print"] = std::bind(print, _1, std::ref(result), std::cref(dictionary));
-  commands["complement"] = std::bind(complement, _1, result, std::ref(dictionary));
-  commands["intersect"] = std::bind(intersect, _1, result, std::ref(dictionary));
+  commands["complement"] = std::bind(complement, _1, std::ref(result), std::ref(dictionary));
 
   std::string command;
   while (std::cin >> command)
