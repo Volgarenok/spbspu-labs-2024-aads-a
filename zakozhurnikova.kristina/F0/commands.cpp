@@ -281,3 +281,26 @@ void zakozhurnikova::rider(List< std::string >& args, std::string& result, dict&
   }
   result = std::string();
 }
+
+void zakozhurnikova::interpreter(List< std::string >& args, std::string& result, dict& dictionary)
+{
+  if (args.size() != 2)
+  {
+    throw std::invalid_argument("incorrect command source");
+  }
+  dictionaryOne& current = dictionary.at(args.front());
+  args.pop_front();
+  std::string word = args.front();
+  if (current.find(word) != current.cend())
+  {
+    result += *current[word].cbegin();
+    for (auto it = ++current[word].cbegin(); it != current[word].cend(); ++it)
+    {
+      result += ' ' + *it;
+    }
+  }
+  else
+  {
+    result = "<EMPTY>";
+  }
+}

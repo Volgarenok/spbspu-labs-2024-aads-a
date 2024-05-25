@@ -22,6 +22,7 @@ namespace zakozhurnikova
   void addition(List< std::string >& args, std::string& result, dict& dictionary);
   void palindrome(List< std::string >& args, std::string& result, dict& dictionary);
   void rider(List< std::string >& args, std::string& result, dict& dictionary);
+  void interpreter(List< std::string >& args, std::string& result, dict& dictionary);
 }
 
 #endif
