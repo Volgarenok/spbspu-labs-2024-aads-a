@@ -35,7 +35,11 @@ int main(int argc, char * argv[])
       std::vector< float > vec = generateNumbers< float >(size);
       testSortings(std::cout, vec, vec.size(), sorting);
     }
-
+    else
+    {
+      std::cerr << "Wrong type\n";
+      return 1;
+    }
   }
   catch (const std::exception& e)
   {
