@@ -23,12 +23,39 @@ void printData(Iter first, Iter last, std::ostream & out)
   out << *first << "\n";
 }
 
+template< class T >
+struct Comparator
+{
+public:
+  explicit Comparator(const std::string & order):
+    order_(order)
+  {}
+  bool operator()(T a, T b) const
+  {
+    if (order_ == "ascending")
+    {
+      return std::less< T >()(a, b);
+    }
+    else if (order_ == "descending")
+    {
+      return std::greater< T >()(a, b);
+    }
+    else
+    {
+      throw std::invalid_argument("Wrong type of order");
+    }
+  }
+private:
+  std::string order_;
+};
+
 namespace namestnikov
 {
-  template< class T, class Compare >
-  void testSortings(std::ostream & out, std::vector< T > data, size_t size, Compare compare)
+  template< class T>
+  void testSortings(std::ostream & out, std::vector< T > data, size_t size, const std::string & order)
   {
     printData(data.begin(), data.end(), out);
+    Comparator< T > compare(order);
     std::forward_list< T > forwardlistSelection(data.begin(), data.end());
     std::list< T > listSelection(data.begin(), data.end());
     std::list< T > listShell(data.begin(), data.end());
