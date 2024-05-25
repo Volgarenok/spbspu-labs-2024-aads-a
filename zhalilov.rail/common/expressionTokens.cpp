@@ -26,6 +26,11 @@ zhalilov::InfixToken::InfixToken(Bracket aBracket):
   type_(bracket_.getType())
 {}
 
+zhalilov::InfixToken::InfixToken(VarExpression aVarExpr):
+  varExpr_(aVarExpr),
+  type_(PrimaryType::VarExpression)
+{}
+
 zhalilov::InfixToken &zhalilov::InfixToken::operator=(const InfixToken &tkn)
 {
   assigner(tkn);
@@ -92,6 +97,10 @@ void zhalilov::InfixToken::assigner(const InfixToken &tkn)
   case PrimaryType::OpenBracket:
     type_ = PrimaryType::OpenBracket;
     bracket_ = Bracket(PrimaryType::OpenBracket);
+    return;
+  case PrimaryType::VarExpression:
+    type_ = PrimaryType::VarExpression;
+    varExpr_ = tkn.varExpr_;
     return;
   default:
     return;
