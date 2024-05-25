@@ -248,7 +248,6 @@ namespace gladyshev
     }
     tnode* rebalance(tnode* node)
     {
-      node->height = 1 + std::max(height(node->left), height(node->right));
       int balance = height(node->left) - height(node->right);
       if (balance > 1)
       {
