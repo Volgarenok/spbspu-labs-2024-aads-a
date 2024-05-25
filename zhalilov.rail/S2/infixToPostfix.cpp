@@ -1,6 +1,7 @@
 #include "infixToPostfix.hpp"
 
-#include "queue.hpp"
+#include <queue.hpp>
+
 #include "stack.hpp"
 #include "expressionTokens.hpp"
 

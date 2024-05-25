@@ -5,6 +5,7 @@
 #include <cstddef>
 #include <cstdlib>
 #include <functional>
+#include <queue.hpp>
 #include <stdexcept>
 #include <treeNode.hpp>
 
@@ -159,6 +160,24 @@ namespace zakozhurnikova
         throw std::out_of_range("Error, key not in tree\n");
       }
     }
+    Node* getLowestRight(Node* prev) const
+    {
+      Node* lowest = prev;
+      if (!lowest)
+      {
+        return nullptr;
+      }
+      while (lowest->rightChild != nullptr)
+      {
+        lowest = lowest->rightChild;
+      }
+      return lowest;
+    }
+
+    ConstIteratorTree< Key, Value, Compare > cbeginR() const noexcept
+    {
+      return ConstIteratorTree< Key, Value, Compare >(getLowestRight(root_));
+    }
 
     ConstIteratorTree< Key, Value, Compare > cbegin() const noexcept
     {
@@ -203,6 +222,60 @@ namespace zakozhurnikova
         return traverser->data.second;
       }
       throw std::out_of_range("No such element");
+    }
+
+    template < typename F >
+    F traverse_lnr(F f) const
+    {
+      if (empty())
+      {
+        throw std::logic_error("<EMPTY>");
+      }
+      for (auto it = cbegin(); it != cend(); ++it)
+      {
+        f(*it);
+      }
+      return f;
+    }
+
+    template < typename F >
+    F traverse_rnl(F f) const
+    {
+      if (empty())
+      {
+        throw std::logic_error("<EMPTY>");
+      }
+      for (auto it = cbeginR(); it != cend(); --it)
+      {
+        f(*it);
+      }
+      return f;
+    }
+
+    template < typename F >
+    F traverse_breadth(F f) const
+    {
+      if (empty())
+      {
+        throw std::logic_error("<EMPTY>");
+      }
+      Queue< const Node* > queue;
+      queue.push(root_);
+      while (!queue.empty())
+      {
+        const Node* curr = queue.top();
+        queue.drop();
+        f(curr->data);
+        if (curr->leftChild)
+        {
+          queue.push(curr->leftChild);
+        }
+        if (curr->rightChild)
+        {
+          queue.push(curr->rightChild);
+        }
+      }
+      return f;
     }
 
     ConstIteratorTree< Key, Value > find(const Key& key) const
