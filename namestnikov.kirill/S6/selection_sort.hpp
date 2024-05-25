@@ -23,8 +23,8 @@ namespace namestnikov
       {
         std::swap(*std::next(begin, minIndex), *std::next(begin, i));
       }
+    }
   }
-}
 }
 
 #endif
