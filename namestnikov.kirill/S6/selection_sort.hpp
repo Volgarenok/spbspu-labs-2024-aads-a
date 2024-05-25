@@ -2,6 +2,7 @@
 #define SELECTION_SORT_HPP
 
 #include <cstddef>
+#include <iterator>
 
 namespace namestnikov
 {

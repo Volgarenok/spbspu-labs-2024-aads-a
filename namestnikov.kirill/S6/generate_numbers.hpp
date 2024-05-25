@@ -2,6 +2,8 @@
 #define GENERATE_NUMBERS_HPP
 
 #include <vector>
+#include <cstddef>
+#include <random>
 
 template< class T >
 T generateNumber(T minNumber, T maxNumber)
