@@ -467,7 +467,7 @@ namespace zhalilov
   template < typename T >
   void List< T >::remove(const T &value) noexcept
   {
-    auto predicate = [&value](const T &listValue)->bool
+    auto predicate = [&value](const T &listValue) -> bool
     {
       return listValue == value;
     };
