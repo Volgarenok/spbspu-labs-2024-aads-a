@@ -32,6 +32,7 @@ int main(int argc, char* argv[])
   commands["union"] = std::bind(doUnion, _1, std::ref(result), std::ref(dictionary));
   commands["destruction"] = std::bind(destruction, _1, std::ref(result), std::ref(dictionary));
   commands["elimination"] = std::bind(elimination, _1, std::ref(result), std::ref(dictionary));
+  commands["addition"] = std::bind(addition, _1, std::ref(result), std::ref(dictionary));
 
   std::string command;
   while (std::cin >> command)

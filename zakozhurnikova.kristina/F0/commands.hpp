@@ -19,6 +19,7 @@ namespace zakozhurnikova
   void specificLetter(List< std::string >& args, std::string& result, dict& dictionary);
   void elimination(List< std::string >& args, std::string& result, dict& dictionary);
   void destruction(List< std::string >& args, std::string& result, dict& dictionary);
+  void addition(List< std::string >& args, std::string& result, dict& dictionary);
 }
 
 #endif

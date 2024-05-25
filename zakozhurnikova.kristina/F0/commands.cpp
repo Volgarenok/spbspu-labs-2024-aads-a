@@ -194,3 +194,25 @@ void zakozhurnikova::destruction(List< std::string >& args, std::string& result,
     std::cout << "The word was not found\n";
   }
 }
+
+void zakozhurnikova::addition(List< std::string >& args, std::string& result, dict& dictionary)
+{
+  if (args.size() != 2)
+  {
+    throw std::invalid_argument("incorrect command source");
+  }
+
+  dictionaryOne& secondMap = dictionary.at(args.back());
+  args.pop_back();
+  dictionaryOne& firstMap = dictionary.at(args.back());
+
+  for (auto it = secondMap.cbegin(); it != secondMap.cend(); ++it)
+  {
+    if (firstMap.find(it->first) != firstMap.cend())
+    {
+      (firstMap[it->first]).clear();
+      firstMap[it->first] = it->second;
+    }
+  }
+  result = std::string();
+}
