@@ -23,10 +23,10 @@ void doShellSort(Iter begin, size_t size, Compare compare)
 template< class Iter, class Compare >
 void doSelectionSort(Iter begin, size_t size, Compare compare)
 {
-  for (size_t i = 0; i < n - 1; ++i)
+  for (size_t i = 0; i < size - 1; ++i)
   {
     size_t minIndex = i;
-    for (size_t j = i + 1; j < n; ++j)
+    for (size_t j = i + 1; j < size; ++j)
     {
       if (compare(*std::next(begin, j), *std::next(begin, minIndex)))
       {
@@ -44,6 +44,11 @@ int main()
 {
   std::list< int > temp({4, 1, 3, 2});
   doShellSort(temp.begin(), temp.size(), std::less< int >());
+  for (auto it = temp.begin(); it != temp.end(); ++it)
+  {
+    std::cout << *it;
+  }
+  doSelectionSort(temp.begin(), temp.size(), std::less< int >());
   for (auto it = temp.begin(); it != temp.end(); ++it)
   {
     std::cout << *it;
