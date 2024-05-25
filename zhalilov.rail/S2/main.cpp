@@ -3,10 +3,10 @@
 
 #include <queue.hpp>
 
-#include "stack.hpp"
-#include "getInfix.hpp"
-#include "infixToPostfix.hpp"
-#include "calculateExpr.hpp"
+#include <stack.hpp>
+#include <calc/getInfix.hpp>
+#include <calc/infixToPostfix.hpp>
+#include <calc/calculateExpr.hpp>
 
 int main(int argc, char *argv[])
 {
