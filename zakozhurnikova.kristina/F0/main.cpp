@@ -26,6 +26,8 @@ int main(int argc, char* argv[])
   BinarySearchTree< std::string, std::function< void(List< std::string >&) > > commands;
 
   commands["print"] = std::bind(print, _1, std::ref(result), std::cref(dictionary));
+  commands["complement"] = std::bind(complement, _1, result, std::ref(dictionary));
+  commands["intersect"] = std::bind(intersect, _1, result, std::ref(dictionary));
 
   std::string command;
   while (std::cin >> command)
@@ -36,11 +38,15 @@ int main(int argc, char* argv[])
       inputArgs(std::cin, args);
 
       commands.at(command)(args);
-      std::cout << result;
+      if (!result.empty())
+      {
+        std::cout << result << '\n';
+        result.clear();
+      }
     }
     catch (const std::invalid_argument& e)
     {
-      std::cout << "<INVALID COMMAND>\n";
+      std::cout << "<INVALID INPUT>\n";
     }
     catch (const std::exception& e)
     {

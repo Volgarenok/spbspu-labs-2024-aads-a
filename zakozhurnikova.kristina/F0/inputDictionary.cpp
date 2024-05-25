@@ -8,7 +8,7 @@ void zakozhurnikova::inputArgs(std::istream& in, List< std::string >& args)
   in >> std::noskipws;
   std::string tmp;
   char delim = 0;
-
+  in >> delim;
   while (in && delim != '\n')
   {
     in >> tmp;
@@ -44,6 +44,7 @@ void zakozhurnikova::inputDictionary(
     BinarySearchTree< std::string, List< std::string > > translation;
     in >> std::noskipws;
     char space;
+    in >> space;
     while (in && space != '\n')
     {
       in >> temp;
@@ -51,7 +52,7 @@ void zakozhurnikova::inputDictionary(
       {
         word = temp;
       }
-      else if (!isEnglish(temp))
+      else if (!isEnglish(temp) && !word.empty())
       {
         translate.push_back(temp);
       }
