@@ -288,7 +288,12 @@ namespace gladyshev
           node->left->parent = node;
           temp = node->left;
         }
-        node->left = insertImpl(key, value, node->left).first;
+        else
+        {
+          auto result = insertImpl(key, value, node->left);
+          node->left = result.first;
+          temp = node->left;
+        }
       }
       else if (Compare()(node->data.first, key))
       {
@@ -298,7 +303,12 @@ namespace gladyshev
           node->right->parent = node;
           temp = node->right;
         }
-        node->right = insertImpl(key, value, node->right).first;
+        else
+        {
+          auto result = insertImpl(key, value, node->right);
+          node->right = result.first;
+          temp = result.second;
+        }
       }
       else
       {
