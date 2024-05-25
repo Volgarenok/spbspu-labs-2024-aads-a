@@ -102,7 +102,7 @@ namespace gladyshev
         tnode* temp = insertImpl(key, Value(), root_);
         return temp->data.second;
       }
-      return node->data.second;
+      return findNode(root_, key)->data.second;
     }
     std::pair< iter, iter > equal_range(const Key& key)
     {
@@ -273,10 +273,6 @@ namespace gladyshev
     }
     tnode* insertImpl(const Key& key, const Value& value, tnode* node)
     {
-      if (!node)
-      {
-        node = new tnode(key, value);
-      }
       if (Compare()(key, node->data.first))
       {
         if (!node->left)
