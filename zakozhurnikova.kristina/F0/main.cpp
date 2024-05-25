@@ -28,7 +28,10 @@ int main(int argc, char* argv[])
   commands["print"] = std::bind(print, _1, std::ref(result), std::cref(dictionary));
   commands["intersect"] = std::bind(intersect, _1, std::ref(result), std::ref(dictionary));
   commands["complement"] = std::bind(complement, _1, std::ref(result), std::ref(dictionary));
+  commands["specificLetter"] = std::bind(specificLetter, _1, std::ref(result), std::ref(dictionary));
   commands["union"] = std::bind(doUnion, _1, std::ref(result), std::ref(dictionary));
+  commands["destruction"] = std::bind(destruction, _1, std::ref(result), std::ref(dictionary));
+  commands["elimination"] = std::bind(elimination, _1, std::ref(result), std::ref(dictionary));
 
   std::string command;
   while (std::cin >> command)

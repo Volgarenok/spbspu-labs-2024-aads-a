@@ -16,6 +16,9 @@ namespace zakozhurnikova
   void complement(List< std::string >& args, std::string& result, dict& dictionary);
   void intersect(List< std::string >& args, std::string& result, dict& dictionary);
   void doUnion(List< std::string >& args, std::string& result, dict& dictionary);
+  void specificLetter(List< std::string >& args, std::string& result, dict& dictionary);
+  void elimination(List< std::string >& args, std::string& result, dict& dictionary);
+  void destruction(List< std::string >& args, std::string& result, dict& dictionary);
 }
 
 #endif
