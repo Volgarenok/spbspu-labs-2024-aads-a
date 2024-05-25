@@ -273,6 +273,10 @@ namespace gladyshev
     }
     tnode* insertImpl(const Key& key, const Value& value, tnode* node)
     {
+      if (!node)
+      {
+        node = new tnode(key, value);
+      }
       if (Compare()(key, node->data.first))
       {
         if (!node->left)
