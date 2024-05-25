@@ -49,4 +49,19 @@ namespace sivkov
     }
     dictionary[englishWord] = russianWord;
   }
+
+  void create_dictionary(AVLTree< std::string, AVLTree< std::string, std::string > >& treeOfdic, std::istream& in)
+  {
+    std::string dictionaryName;
+    if (!(in >> dictionaryName))
+    {
+      throw std::logic_error("Error arguments");
+    }
+
+    if (treeOfdic.contains(dictionaryName))
+    {
+      throw std::logic_error("dictionary already exists");
+    }
+    treeOfdic.push(dictionaryName, AVLTree< std::string, std::string >());
+  }
 }
