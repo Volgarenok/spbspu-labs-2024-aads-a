@@ -2,7 +2,7 @@
 #define AVLTREE_HPP
 
 #include <algorithm>
-#include <iostream>
+
 #include "treenode.hpp"
 #include "treeiterator.hpp"
 
@@ -284,9 +284,11 @@ namespace gladyshev
         {
           node->left = new tnode(key, value);
           node->left->parent = node;
-          rebalance(node->left);
         }
-        node->left = insertImpl(key, value, node->left);
+        else
+        {
+          node->left = insertImpl(key, value, node->left);
+        }
       }
       else if (Compare()(node->data.first, key))
       {
@@ -294,16 +296,18 @@ namespace gladyshev
         {
           node->right = new tnode(key, value);
           node->right->parent = node;
-          rebalance(node->right);
         }
-        node->right = insertImpl(key, value, node->right);
+        else
+        {
+          node->right = insertImpl(key, value, node->right);
+        }
       }
       else
       {
         node->data.second = value;
       }
       node->height = 1 + std::max(height(node->left), height(node->right));
-      return node;
+      return rebalance(node);
     }
     tnode* findNode(tnode* node, const Key& key) const
     {
