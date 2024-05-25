@@ -3,7 +3,7 @@
 #include <stdexcept>
 #include <limits>
 
-#include "operand.hpp"
+#include <calc/operand.hpp>
 
 zhalilov::BinOperator::BinOperator():
   type_(BinOperator::Type::Undefined)

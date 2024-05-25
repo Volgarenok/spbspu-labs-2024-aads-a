@@ -1,4 +1,4 @@
-#include "getInfix.hpp"
+#include <calc/getInfix.hpp>
 
 #include <string>
 #include <istream>
