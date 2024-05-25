@@ -487,6 +487,7 @@ namespace zhalilov
       m_size--;
       return iterator(next);
     }
+    return iterator(it.m_node);
   }
 
   template < typename T >
