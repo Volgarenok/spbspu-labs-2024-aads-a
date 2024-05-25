@@ -8,6 +8,22 @@
 #include <calc/infixToPostfix.hpp>
 #include <calc/calculateExpr.hpp>
 
+namespace zhalilov
+{
+  void getInfixesFromStream(Stack< Queue< InfixToken > > &stack, std::istream &in)
+  {
+    while (in)
+    {
+      Queue< InfixToken > temp;
+      getInfix(temp, in);
+      if (!temp.empty())
+      {
+        stack.push(temp);
+      }
+    }
+  }
+}
+
 int main(int argc, char *argv[])
 {
   using namespace zhalilov;
