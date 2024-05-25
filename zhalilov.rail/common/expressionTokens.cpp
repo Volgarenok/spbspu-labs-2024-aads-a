@@ -32,9 +32,7 @@ zhalilov::InfixToken::InfixToken(VarExpression aVarExpr):
 {}
 
 zhalilov::InfixToken::~InfixToken()
-{
-  varExpr_.~VarExpression();
-}
+{}
 
 zhalilov::InfixToken &zhalilov::InfixToken::operator=(const InfixToken &tkn)
 {
