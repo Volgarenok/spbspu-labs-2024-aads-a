@@ -25,9 +25,10 @@ int main(int argc, char* argv[])
   using namespace std::placeholders;
   BinarySearchTree< std::string, std::function< void(List< std::string >&) > > commands;
 
-  commands["intersect"] = std::bind(intersect, _1, std::ref(result), std::ref(dictionary));
   commands["print"] = std::bind(print, _1, std::ref(result), std::cref(dictionary));
+  commands["intersect"] = std::bind(intersect, _1, std::ref(result), std::ref(dictionary));
   commands["complement"] = std::bind(complement, _1, std::ref(result), std::ref(dictionary));
+  commands["union"] = std::bind(doUnion, _1, std::ref(result), std::ref(dictionary));
 
   std::string command;
   while (std::cin >> command)
@@ -43,6 +44,7 @@ int main(int argc, char* argv[])
         std::cout << result << '\n';
         result.clear();
       }
+      args.clear();
     }
     catch (const std::invalid_argument& e)
     {

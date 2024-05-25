@@ -90,3 +90,32 @@ void zakozhurnikova::intersect(List< std::string >& args, std::string& result, d
   addDictionary(args.front(), resultDictionary, dictionary);
   result = std::string();
 }
+
+void zakozhurnikova::doUnion(List< std::string >& args, std::string& result, dict& dictionary)
+{
+  if (args.size() != 3)
+  {
+    throw std::invalid_argument("incorrect command source");
+  }
+
+  dictionaryOne& secondMap = dictionary.at(args.back());
+  args.pop_back();
+  dictionaryOne& firstMap = dictionary.at(args.back());
+  dictionaryOne resultDictionary;
+
+  for (auto it = firstMap.cbegin(); it != firstMap.cend(); ++it)
+  {
+    resultDictionary.push(it->first, it->second);
+  }
+
+  for (auto it = secondMap.cbegin(); it != secondMap.cend(); ++it)
+  {
+    if (resultDictionary.find(it->first) == resultDictionary.cend())
+    {
+      resultDictionary.push(it->first, it->second);
+    }
+  }
+
+  addDictionary(args.front(), resultDictionary, dictionary);
+  result = std::string();
+}
