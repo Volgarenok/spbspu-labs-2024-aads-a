@@ -99,13 +99,7 @@ namespace gladyshev
       tnode* node = findNode(root_, key);
       if (!node)
       {
-        if (!root_)
-        {
-          root_ = new tnode(key, Value());
-          return root_->data.second;
-        }
-        tnode* temp = insertImpl(key, Value(), root_);
-        return temp->data.second;
+        node = insertImpl(key, Value(), root_);
       }
       return node->data.second;
     }
@@ -170,7 +164,7 @@ namespace gladyshev
       }
       else
       {
-        root_ = insertImpl(key, value, root_);
+        insertImpl(key, value, root_);
       }
     }
   private:
@@ -249,6 +243,7 @@ namespace gladyshev
     }
     tnode* rebalance(tnode* node)
     {
+      node->height = 1 + std::max(height(node->left), height(node->right));
       int balance = height(node->left) - height(node->right);
       if (balance > 1)
       {
@@ -284,11 +279,10 @@ namespace gladyshev
         {
           node->left = new tnode(key, value);
           node->left->parent = node;
+          node->left = rebalance(node->left);
+          return node->left;
         }
-        else
-        {
-          node->left = insertImpl(key, value, node->left);
-        }
+        return insertImpl(key, value, node->left);
       }
       else if (Compare()(node->data.first, key))
       {
@@ -296,18 +290,16 @@ namespace gladyshev
         {
           node->right = new tnode(key, value);
           node->right->parent = node;
+          node->right = rebalance(node->right);
+          return node->right;
         }
-        else
-        {
-          node->right = insertImpl(key, value, node->right);
-        }
+        return insertImpl(key, value, node->right);
       }
       else
       {
         node->data.second = value;
+        return node;
       }
-      node->height = 1 + std::max(height(node->left), height(node->right));
-      return rebalance(node);
     }
     tnode* findNode(tnode* node, const Key& key) const
     {
