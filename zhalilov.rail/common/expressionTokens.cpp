@@ -8,7 +8,30 @@ zhalilov::InfixToken::InfixToken():
 
 zhalilov::InfixToken::InfixToken(const InfixToken &tkn)
 {
-  assigner(tkn);
+  switch (tkn.type_)
+  {
+  case PrimaryType::Operand:
+    type_ = PrimaryType::Operand;
+    operand_ = tkn.operand_;
+    return;
+  case PrimaryType::BinOperator:
+    type_ = PrimaryType::BinOperator;
+    binOperator_ = tkn.binOperator_;
+    return;
+  case PrimaryType::CloseBracket:
+    type_ = PrimaryType::CloseBracket;
+    bracket_ = Bracket(PrimaryType::CloseBracket);
+    return;
+  case PrimaryType::OpenBracket:
+    type_ = PrimaryType::OpenBracket;
+    bracket_ = Bracket(PrimaryType::OpenBracket);
+    return;
+  case PrimaryType::VarExpression:
+    InfixToken(tkn.varExpr_);
+    return;
+  default:
+    return;
+  }
 }
 
 zhalilov::InfixToken::InfixToken(BinOperator aBinOperator):
@@ -33,12 +56,6 @@ zhalilov::InfixToken::InfixToken(VarExpression aVarExpr):
 
 zhalilov::InfixToken::~InfixToken()
 {}
-
-zhalilov::InfixToken &zhalilov::InfixToken::operator=(const InfixToken &tkn)
-{
-  assigner(tkn);
-  return *this;
-}
 
 zhalilov::PrimaryType zhalilov::InfixToken::getType() const
 {
@@ -79,35 +96,6 @@ zhalilov::VarExpression zhalilov::InfixToken::GetVarExpression()
     throw std::logic_error("token doesn't store varexpr");
   }
   return varExpr_;
-}
-
-void zhalilov::InfixToken::assigner(const InfixToken &tkn)
-{
-  switch (tkn.type_)
-  {
-  case PrimaryType::Operand:
-    type_ = PrimaryType::Operand;
-    operand_ = tkn.operand_;
-    return;
-  case PrimaryType::BinOperator:
-    type_ = PrimaryType::BinOperator;
-    binOperator_ = tkn.binOperator_;
-    return;
-  case PrimaryType::CloseBracket:
-    type_ = PrimaryType::CloseBracket;
-    bracket_ = Bracket(PrimaryType::CloseBracket);
-    return;
-  case PrimaryType::OpenBracket:
-    type_ = PrimaryType::OpenBracket;
-    bracket_ = Bracket(PrimaryType::OpenBracket);
-    return;
-  case PrimaryType::VarExpression:
-    type_ = PrimaryType::VarExpression;
-    varExpr_ = tkn.varExpr_;
-    return;
-  default:
-    return;
-  }
 }
 
 zhalilov::PostfixToken::PostfixToken():

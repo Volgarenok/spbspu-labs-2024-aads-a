@@ -19,8 +19,6 @@ namespace zhalilov
     explicit InfixToken(VarExpression aVarExpr);
     ~InfixToken();
 
-    InfixToken &operator=(const InfixToken &tkn);
-
     PrimaryType getType() const;
 
     BinOperator getBinOperator();
@@ -38,8 +36,6 @@ namespace zhalilov
     };
 
     PrimaryType type_;
-
-    void assigner(const InfixToken &tkn);
   };
 
   struct PostfixToken
