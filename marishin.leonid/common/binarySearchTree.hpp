@@ -303,7 +303,7 @@ namespace marishin
           else
           {
             current = traverseStack.top();
-            traverseStack.pop();
+            traverseStack.drop();
             f(current->data);
             current = current->right;
           }
@@ -337,7 +337,7 @@ namespace marishin
           else
           {
             current = traverseStack.top();
-            traverseStack.pop();
+            traverseStack.drop();
             f(current->data);
             current = current->left;
           }
@@ -365,7 +365,7 @@ namespace marishin
         while (!traverseQueue.empty())
         {
           current = traverseQueue.front();
-          traverseQueue.pop();
+          traverseQueue.drop();
           f(current->data);
           if (current->left)
           {
