@@ -2,8 +2,8 @@
 #include <string>
 #include <limits>
 #include <stdexcept>
-#include "list.hpp"
-#include "constIterators.hpp"
+#include <list.hpp>
+#include <constIterators.hpp>
 
 void skuratov::inputAll(std::istream& in, List< std::pair< std::string, List< size_t > > >& sequences)
 {

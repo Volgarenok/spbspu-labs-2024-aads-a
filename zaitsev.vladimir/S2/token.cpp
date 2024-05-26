@@ -1,6 +1,6 @@
 #include "token.hpp"
 #include <stdexcept>
-#include "operators.hpp"
+#include <operators.hpp>
 
 bool zaitsev::areBraketsPaired(const Token& lhs, const Token& rhs)
 {
