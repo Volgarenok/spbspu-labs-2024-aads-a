@@ -166,24 +166,14 @@ namespace novokhatskiy
 
     Value &operator[](const Key &key)
     {
-      node_t *tmp = search(key);
-      if (tmp == nullptr)
-      {
-        insert(std::make_pair(key, Value()));
-        tmp = search(key);
-      }
-      return tmp->value.second;
+      auto tmp = std::make_pair(key, Value());
+      return (insert(tmp).first)->second;
     }
 
     const Value &operator[](const Key &key) const
     {
-      node_t *tmp = search(key);
-      if (tmp == nullptr)
-      {
-        insert(std::make_pair(key, Value()));
-        tmp = search(key);
-      }
-      return tmp->value.second;
+      auto tmp = std::make_pair(key, Value());
+      return (insert(tmp).first)->second;
     }
 
     node_t *updateHeight(node_t *node)
@@ -368,26 +358,17 @@ namespace novokhatskiy
       return result;
     }
 
-    void insert(const std::pair<Key, Value> &val)
+    std::pair< iter, bool > insert(const std::pair<Key, Value>& val)
     {
-      try
+      node_t* tmp = search(val.first);
+      bool isInsert = false;
+      if (!tmp)
       {
-        if (root_)
-        {
-          insert_imp(val, root_);
-          ++size_;
-        }
-        else
-        {
-          root_ = new node_t(val);
-          ++size_;
-        }
+        insert_imp(val, root_);
+        ++size_;
+        isInsert = true;
       }
-      catch (const std::exception &)
-      {
-        clear();
-        throw;
-      }
+      return std::pair< iter, bool >(find(val.first), isInsert);
     }
 
     ~Tree()
@@ -476,39 +457,35 @@ namespace novokhatskiy
       return newRoot;
     }
 
-    void insert_imp(const std::pair<Key, Value> &value, node_t *node)
+    void insert_imp(const std::pair<Key, Value>& value, node_t* node)
     {
-      try
+      if (!node)
       {
-        if (cmp_(value.first, node->value.first))
+        root_ = new node_t(value);
+      }
+      else if (cmp_(value.first, node->value.first))
+      {
+        if (node->left)
         {
-          if (node->left)
-          {
-            insert_imp(value, node->left);
-          }
-          else
-          {
-            node->left = new node_t(value, node);
-            getBalance(node->left);
-          }
+          insert_imp(value, node->left);
         }
         else
         {
-          if (node->right)
-          {
-            insert_imp(value, node->right);
-          }
-          else
-          {
-            node->right = new node_t(value, node);
-            getBalance(node->right);
-          }
+          node->left = new node_t(value, node);
+          getBalance(node->left);
         }
       }
-      catch (const std::exception &)
+      else
       {
-        clear();
-        throw;
+        if (node->right)
+        {
+          insert_imp(value, node->right);
+        }
+        else
+        {
+          node->right = new node_t(value, node);
+          getBalance(node->right);
+        }
       }
     }
 
