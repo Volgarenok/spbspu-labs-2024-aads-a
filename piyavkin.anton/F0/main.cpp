@@ -15,6 +15,7 @@ int main()
   cmdsForCreate["mkd"] = makeDict;
   cmdsForCreate["intersect"] = intersect;
   cmdsForCreate["union"] = unionD;
+  cmdsForCreate["unique"] = uniqueD;
   std::string name = "";
   while (std::cin >> name)
   {
