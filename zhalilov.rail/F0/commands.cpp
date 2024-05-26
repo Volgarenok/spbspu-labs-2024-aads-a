@@ -5,7 +5,6 @@
 #include <calc/calculateExpr.hpp>
 #include <calc/getInfix.hpp>
 #include <calc/infixToPostfix.hpp>
-#include <listQueueCasting.hpp>
 
 namespace zhalilov
 {
@@ -23,6 +22,9 @@ void zhalilov::calc(const modulesMap &modules, std::ostream &historyFile, std::i
 
   List< InfixToken > infWithReplacedVars;
   replaceVars(modules, infix, infWithReplacedVars);
+  List< PostfixToken > postfix;
+  infixToPostfix(infWithReplacedVars, postfix);
+  out << calculateExpr(postfix);
 }
 
 void zhalilov::modulesadd(modulesMap &modules, std::istream &in, std::ostream &out)
@@ -70,6 +72,17 @@ void zhalilov::modulesvarradd(modulesMap &modules, std::istream &in, std::ostrea
   {
     throw std::invalid_argument("module doesn't exist");
   }
+}
+
+void zhalilov::modulesshow(const modulesMap &modules, std::istream &in, std::ostream &out)
+{
+  std::string checkStream;
+  in >> checkStream;
+  if (in)
+  {
+    throw std::invalid_argument("too many args");
+  }
+  in.clear();
 }
 
 void zhalilov::replaceVars(const modulesMap &modules, List< InfixToken > &oldInf, List< InfixToken > &newInf)

@@ -14,6 +14,7 @@ namespace zhalilov
   void calc(const modulesMap &, std::ostream &, std::istream &, std::ostream &);
   void modulesadd(modulesMap &, std::istream &, std::ostream &);
   void modulesvarradd(modulesMap &, std::istream &, std::ostream &);
+  void modulesshow(const modulesMap &, std::istream &, std::ostream &);
 }
 
 #endif
