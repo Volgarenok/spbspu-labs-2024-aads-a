@@ -7,6 +7,7 @@ namespace zhalilov
 {
   struct PostfixToken;
   long long calculateExpr(Queue< PostfixToken > expr);
+  long long calculateExpr(List< PostfixToken > expr);
 }
 
 #endif

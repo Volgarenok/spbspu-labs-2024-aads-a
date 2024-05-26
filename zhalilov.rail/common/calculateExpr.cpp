@@ -4,6 +4,7 @@
 #include <calc/primaryType.hpp>
 #include <calc/operand.hpp>
 #include <calc/binaryOperator.hpp>
+#include <listQueueCasting.hpp>
 #include <stack.hpp>
 
 long long zhalilov::calculateExpr(Queue< PostfixToken > expr)
@@ -35,4 +36,11 @@ long long zhalilov::calculateExpr(Queue< PostfixToken > expr)
     throw std::invalid_argument("incorrect expression");
   }
   return operands.top().getNum();
+}
+
+long long zhalilov::calculateExpr(List< PostfixToken > expr)
+{
+  Queue< PostfixToken > queue;
+  listToQueue(expr, queue);
+  return calculateExpr(queue);
 }

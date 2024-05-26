@@ -3,6 +3,8 @@
 #include <string>
 #include <istream>
 
+#include <listQueueCasting.hpp>
+
 namespace zhalilov
 {
   bool isBracket(char symb)
@@ -125,4 +127,11 @@ void zhalilov::getInfix(Queue< InfixToken > &queue, std::istream &in)
     }
     i++;
   }
+}
+
+void zhalilov::getInfix(List< InfixToken > &list, std::istream &in)
+{
+  Queue< InfixToken > queue;
+  getInfix(queue, in);
+  queueToList(queue, list);
 }

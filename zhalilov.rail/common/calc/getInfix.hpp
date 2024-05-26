@@ -10,6 +10,7 @@
 namespace zhalilov
 {
   void getInfix(Queue< InfixToken > &queue, std::istream &in);
+  void getInfix(List< InfixToken > &list, std::istream &in);
 }
 
 #endif
