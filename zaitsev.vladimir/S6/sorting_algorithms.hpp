@@ -41,11 +41,10 @@ namespace zaitsev
   {
     constexpr size_t buckets_nmb = 2;
     using T = typename std::iterator_traits< RandomIt >::value_type;
-    size_t size = std::distance(begin, end);
-    std::pair< RandomIt, RandomIt > bounds = std::minmax_element(begin, end);
     using Flist_T = ForwardList< T >;
     using bucket_it_t = typename ForwardList< std::pair< T, Flist_T > >::iterator;
     using list_it_t = typename Flist_T::const_iterator;
+    std::pair< RandomIt, RandomIt > bounds = std::minmax_element(begin, end);
     ForwardList< std::pair< T, Flist_T > > sups(1, { *bounds.second , Flist_T{} });
     T step = (*bounds.second - *bounds.first) / buckets_nmb;
     for (size_t i = buckets_nmb - 1; i > 0; --i)
