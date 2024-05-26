@@ -7,27 +7,23 @@ int main()
 {
   using namespace piyavkin;
   dic_t dicts;
-  Tree< std::string, std::function< void(std::ostream&, const std::string&, const dic_t&) > > cmdsForOutput;
-  cmdsForOutput["printdictionary"] = print;
-  // Tree< std::string, std::function< void(map_t&, const std::string&, const std::string&, const std::string&) > > cmdsForCreate;
+  Tree< std::string, std::function< void(std::istream&, std::ostream&, const dic_t&) > > cmdsForOutput;
+  cmdsForOutput["prntd"] = print;
+  Tree< std::string, std::function< void(std::istream&, dic_t&) > > cmdsForCreate;
+  cmdsForCreate["addd"] = addDict;
   std::string name = "";
-  std::string nameDict = "";
   while (std::cin >> name)
   {
-    std::cin >> nameDict;
     try
     {
-      std::string nameFile = "";
-      std::cin >> nameFile;
-      std::ofstream out(nameFile);
-      cmdsForOutput.at(name)(out, nameDict, dicts);
+      cmdsForCreate.at(name)(std::cin, dicts);
     }
-    // catch (const std::out_of_range&)
-    // {
-      // try
-      // {
-        // cmdsForCreate.at(name)(map, nameDict, lhsName, rhsName);
-      // }
+    catch (const std::out_of_range&)
+    {
+      try
+      {
+        cmdsForOutput.at(name)(std::cin, std::cout, dicts);
+      }
       catch (const std::out_of_range&)
       {
         std::cout << "<INVALID COMMAND>\n";
@@ -37,6 +33,6 @@ int main()
         std::cerr << e.what() << '\n';
         return 1;
       }
-    // }
+    }
   }
 }

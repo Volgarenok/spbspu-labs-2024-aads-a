@@ -1,7 +1,9 @@
 #include "commands.hpp"
 
-void piyavkin::print(std::ostream& out, const std::string& nameDict, const dic_t& dicts)
+void piyavkin::print(std::istream& in, std::ostream& out, const dic_t& dicts)
 {
+  std::string nameDict = "";
+  in >> nameDict;
   auto it = dicts.find(nameDict);
   if (it != dicts.cend())
   {
@@ -19,4 +21,15 @@ void piyavkin::print(std::ostream& out, const std::string& nameDict, const dic_t
   {
     throw std::out_of_range("");
   }
+}
+
+void piyavkin::addDict(std::istream& in, dic_t& dicts)
+{
+  std::string name = "";
+  in >> name;
+  if (dicts.find(name) != dicts.end())
+  {
+    throw std::out_of_range("");
+  }
+  dicts.insert(std::make_pair(name, Tree< std::string, size_t >()));
 }
