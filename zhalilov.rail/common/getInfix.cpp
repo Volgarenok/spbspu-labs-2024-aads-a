@@ -22,10 +22,11 @@ namespace zhalilov
     return isOp;
   }
 
-  size_t processVarExpr(const std::string &toProcess, VarExpression &varExpr)
+  size_t processVarExpr(const std::string &toProcess, VarExpression &varExpr, size_t &newIndex)
   {
     std::string moduleName = "main";
     size_t i = 0;
+    bool isVarExpr = false;
     while (std::isalpha(toProcess[i]))
     {
       i++;
@@ -72,9 +73,11 @@ namespace zhalilov
           }
         }
         varExpr = VarExpression(moduleName, varName, args);
+        isVarExpr = true;
       }
     }
-    return i;
+    newIndex = i;
+    return isVarExpr;
   }
 }
 
@@ -109,8 +112,11 @@ void zhalilov::getInfix(Queue< InfixToken > &queue, std::istream &in)
         else
         {
           VarExpression varExpr;
-          i = processVarExpr(str.substr(i), varExpr);
-          undefinedTkn = InfixToken(varExpr);
+          size_t newIndex = 0;
+          if (processVarExpr(str.substr(i), varExpr, newIndex))
+          {
+            undefinedTkn = InfixToken(varExpr);
+          }
         }
       }
       queue.push(undefinedTkn);
