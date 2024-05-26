@@ -38,7 +38,7 @@ long long zhalilov::calculateExpr(Queue< PostfixToken > expr)
   return operands.top().getNum();
 }
 
-long long zhalilov::calculateExpr(List< PostfixToken > expr)
+long long zhalilov::calculateExpr(const List< PostfixToken > &expr)
 {
   Queue< PostfixToken > queue;
   listToQueue(expr, queue);
