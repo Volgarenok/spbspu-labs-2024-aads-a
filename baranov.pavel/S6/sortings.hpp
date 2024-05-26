@@ -20,22 +20,19 @@ namespace baranov
     }
   }
 
-  template< typename BiDirIterator, typename Cmp >
-  void quickSort(BiDirIterator first, BiDirIterator last, Cmp cmp) {
-    size_t distance = std::distance(first, last);
-    if (distance <= 1)
+  template< typename RandomAccessIterator, typename Cmp >
+  void quickSort(RandomAccessIterator first, RandomAccessIterator last, Cmp cmp) {
+    size_t dist = std::distance(first, last);
+    if (dist <= 1)
     {
       return;
     }
-    BiDirIterator pivot = first;
-    for (size_t i = 0; i < distance / 2; ++i)
-    {
-      ++pivot;
-    }
+    using iter_t = RandomAccessIterator;
+    iter_t pivot = first + dist / 2;
     auto pivotVal = *pivot;
 
-    BiDirIterator left = first;
-    BiDirIterator right = std::prev(last);
+    iter_t left = first;
+    iter_t right = last - 1;
     while (left <= right)
     {
       while (cmp(*left, pivotVal))
@@ -54,9 +51,10 @@ namespace baranov
       }
     }
 
-    quickSort(first, right, cmp);
+    quickSort(first, right + 1, cmp);
     quickSort(left, last, cmp);
   }
 }
+
 #endif
 
