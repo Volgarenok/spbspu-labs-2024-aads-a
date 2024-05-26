@@ -55,11 +55,26 @@ void zakozhurnikova::inputDictionary(
       }
       else if (!isEnglish(temp) && !word.empty())
       {
-        translate.push_back(temp);
+        bool exists = false;
+        for (auto it = translate.cbegin(); it != translate.cend(); ++it)
+        {
+          if (temp == *it)
+          {
+            exists = true;
+            break;
+          }
+        }
+        if (!exists)
+        {
+          translate.push_back(temp);
+        }
       }
       else if (!word.empty() && !translate.empty())
       {
-        translation.push(word, translate);
+        if (translation.find(word) == translation.cend())
+        {
+          translation.push(word, translate);
+        }
         word.clear();
         translate.clear();
         word = temp;
@@ -72,7 +87,10 @@ void zakozhurnikova::inputDictionary(
     }
     if (!word.empty() && !translate.empty())
     {
-      translation.push(word, translate);
+      if (translation.find(word) == translation.cend())
+      {
+        translation.push(word, translate);
+      }
     }
     if (!in.eof())
     {
