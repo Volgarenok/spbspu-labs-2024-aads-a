@@ -30,7 +30,7 @@ namespace detail
 namespace zaitsev
 {
   template< typename value_type, typename Compare >
-  void sortirator(std::ostream& out, size_t size)
+  void check_sorts(std::ostream& out, size_t size)
   {
     std::vector< value_type > vals(size);
     generator< value_type > gen(0, 1000, 43);
