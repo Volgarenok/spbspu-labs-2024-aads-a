@@ -35,7 +35,6 @@ int main(int argc, char* argv[])
   commands["palindrome"] = std::bind(palindrome, _1, std::ref(dictionary));
   commands["rider"] = std::bind(rider, _1, std::ref(dictionary));
   commands["interpreter"] = std::bind(interpreter, _1, std::ref(dictionary));
-  commands["save"] = std::bind(save, _1, std::ref(dictionary));
 
   std::string command;
   while (std::cin >> command)
@@ -51,9 +50,13 @@ int main(int argc, char* argv[])
     {
       std::cout << "<INVALID INPUT>\n";
     }
+    catch (const std::out_of_range& e)
+    {
+      std::cerr << e.what() << '\n';
+    }
     catch (const std::exception& e)
     {
-      std::cerr << e.what();
+      std::cerr << e.what() << '\n';
       return 1;
     }
   }

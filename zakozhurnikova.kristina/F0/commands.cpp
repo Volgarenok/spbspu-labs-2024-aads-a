@@ -1,5 +1,4 @@
 #include <iostream>
-#include <fstream>
 #include "commands.hpp"
 
 void addDictionary(std::string& dictionaryName, dictionaryOne& toAdd, dict& dictionary)
@@ -267,7 +266,7 @@ void zakozhurnikova::rider(List< std::string >& args, dict& dictionary)
     }
     temp.push_back(translate);
   }
-  catch (const std::out_of_range& e)
+  catch(const std::out_of_range &e)
   {
     List< std::string > currentTranslate;
     currentTranslate.push_back(translate);
@@ -298,33 +297,4 @@ void zakozhurnikova::interpreter(List< std::string >& args, dict& dictionary)
     result = "<EMPTY>";
   }
   std::cout << result << '\n';
-}
-
-void zakozhurnikova::save(List< std::string >& args, dict& dictionary)
-{
-  if (args.size() != 1)
-  {
-    throw std::invalid_argument("incorrect command source");
-  }
-  std::string fileName = args.back();
-  std::ofstream file(fileName);
-  file.open(fileName, std::ofstream::out | std::ofstream::trunc);
-  if (!file.is_open())
-  {
-    throw std::logic_error("Couldn't open file");
-  }
-  for (auto it = dictionary.cbegin(); it !=dictionary.cend(); ++it)
-  {
-    file << it->first;
-    for (auto itDict = (it->second).cbegin(); itDict != (it->second).cend(); ++itDict)
-    {
-      file << " " << itDict->first;
-      for (auto itList = (itDict->second).cbegin(); itList != (itDict->second).cend(); ++itList)
-      {
-        file << " " << *itList;
-      }
-    }
-    std::cout << '\n';
-  }
-  file.close();
 }

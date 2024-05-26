@@ -1,4 +1,5 @@
 #include <iostream>
+#include <limits>
 #include <scopeGuard.hpp>
 #include "inputDictionary.hpp"
 

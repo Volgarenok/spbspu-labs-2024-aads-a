@@ -23,7 +23,6 @@ namespace zakozhurnikova
   void palindrome(List< std::string >& args, dict& dictionary);
   void rider(List< std::string >& args, dict& dictionary);
   void interpreter(List< std::string >& args, dict& dictionary);
-  void save(List< std::string >& args, dict& dictionary);
 }
 
 #endif
