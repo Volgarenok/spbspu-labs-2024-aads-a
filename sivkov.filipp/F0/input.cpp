@@ -3,9 +3,9 @@
 
 namespace sivkov
 {
-  AVLTree<std::string, AVLTree<std::string, std::string>> inputDictionary(std::istream& in)
+  AVLTree< std::string, AVLTree< std::string, std::string > > inputDictionary(std::istream& in)
   {
-    AVLTree<std::string, AVLTree<std::string, std::string>> treeOfdic;
+    AVLTree< std::string, AVLTree< std::string, std::string > > treeOfdic;
     std::string line;
 
     while (std::getline(in, line))
@@ -19,7 +19,7 @@ namespace sivkov
 
       std::string name = line.substr(0, pos);
 
-      AVLTree<std::string, std::string> dictionary;
+      AVLTree< std::string, std::string > dictionary;
 
       size_t start = pos + 1;
       while (start < line.length())
