@@ -467,7 +467,7 @@ namespace zhalilov
   template < typename T >
   void List< T >::remove(const T &value) noexcept
   {
-    auto predicate = [&value](const T &listValue) -> bool
+    auto predicate = [&value](const T &listValue) ->bool
     {
       return listValue == value;
     };
@@ -477,17 +477,13 @@ namespace zhalilov
   template < typename T >
   typename List< T >::iterator List< T >::erase(const_iterator it) noexcept
   {
-    if (it.m_node)
-    {
-      Node *prev = it.m_node->prev;
-      Node *next = it.m_node->next;
-      delete it.m_node;
-      prev->next = next;
-      next->prev = prev;
-      m_size--;
-      return iterator(next);
-    }
-    return iterator(it.m_node);
+    Node *prev = it.m_node->prev;
+    Node *next = it.m_node->next;
+    delete it.m_node;
+    prev->next = next;
+    next->prev = prev;
+    m_size--;
+    return iterator(next);
   }
 
   template < typename T >
