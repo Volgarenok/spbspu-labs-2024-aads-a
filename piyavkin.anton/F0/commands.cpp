@@ -18,12 +18,15 @@ void change(std::istream& in, piyavkin::Tree< std::string, size_t >& dic)
   size_t val = 0;
   std::string key = "";
   in >> key >> val;
-  auto dicIt = dic.find(key);
-  if (dicIt != dic.end())
+  if (in)
   {
-    dic.erase(key);
+    auto dicIt = dic.find(key);
+    if (dicIt != dic.end())
+    {
+      dic.erase(key);
+    }
+    dic.insert(std::pair< std::string, size_t >(key, val));
   }
-  dic.insert(std::pair< std::string, size_t >(key, val));
 }
 
 void piyavkin::print(std::istream& in, std::ostream& out, const dic_t& dicts)
@@ -52,7 +55,7 @@ piyavkin::iterator piyavkin::addDict(std::istream& in, dic_t& dicts)
   in >> name;
   if (dicts.find(name) != dicts.end())
   {
-    throw std::out_of_range("");
+    throw std::out_of_range(name);
   }
   return dicts.insert(std::make_pair(name, Tree< std::string, size_t >())).first;
 }
@@ -66,7 +69,16 @@ piyavkin::iterator piyavkin::cmdChange(std::istream& in, dic_t& dicts)
 
 piyavkin::iterator piyavkin::makeDict(std::istream& in, dic_t& dicts)
 {
-  auto it = addDict(in, dicts);
+  iterator it;
+  try
+  {
+    it = addDict(in, dicts);
+  }
+  catch(const std::exception& e)
+  {
+    it = dicts.find(e.what());
+    it->second.clear();
+  }
   std::string nameFile = "";
   in >> nameFile;
   std::ifstream file(nameFile);
