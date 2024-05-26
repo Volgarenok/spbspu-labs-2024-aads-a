@@ -1,5 +1,5 @@
-#ifndef INPUT_DICTS_HPP
-#define INPUT_DICTS_HPP
+#ifndef INPUT_MAPS_HPP
+#define INPUT_MAPS_HPP
 
 #include <string>
 #include <iostream>
