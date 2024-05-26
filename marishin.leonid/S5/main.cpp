@@ -5,6 +5,8 @@
 #include <limits>
 #include <binarySearchTree.hpp>
 #include "command.hpp"
+#include "sumFunc.hpp"
+#include "inputMaps.hpp"
 
 int main(int argc, char * argv[])
 {
