@@ -73,8 +73,8 @@ namespace zhalilov
           }
         }
         varExpr = VarExpression(moduleName, varName, args);
-        isVarExpr = true;
       }
+      isVarExpr = true;
     }
     newIndex = i;
     return isVarExpr;
@@ -92,22 +92,21 @@ void zhalilov::getInfix(Queue< InfixToken > &queue, std::istream &in)
   {
     if (!std::isspace(str[i]))
     {
-      InfixToken undefinedTkn;
       try
       {
         number = std::stoll(str.substr(i), &tmp);
-        undefinedTkn = InfixToken(Operand(number));
+        queue.push(InfixToken(Operand(number)));
         i += tmp;
       }
       catch (...)
       {
         if (isBracket(str[i]))
         {
-          undefinedTkn = InfixToken(Bracket(str[i]));
+          queue.push(InfixToken(Bracket(str[i])));
         }
         else if (isBinaryOp(str[i]))
         {
-          undefinedTkn = InfixToken(BinOperator(str[i]));
+          queue.push(InfixToken(BinOperator(str[i])));
         }
         else
         {
@@ -115,7 +114,7 @@ void zhalilov::getInfix(Queue< InfixToken > &queue, std::istream &in)
           size_t newIndex = 0;
           if (processVarExpr(str.substr(i), varExpr, newIndex))
           {
-            undefinedTkn = InfixToken(varExpr);
+            queue.push(InfixToken(varExpr));
           }
           else
           {
@@ -123,7 +122,6 @@ void zhalilov::getInfix(Queue< InfixToken > &queue, std::istream &in)
           }
         }
       }
-      queue.push(undefinedTkn);
     }
     i++;
   }
