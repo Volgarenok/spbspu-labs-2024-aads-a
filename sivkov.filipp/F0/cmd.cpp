@@ -2,6 +2,7 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
+
 namespace sivkov
 {
   void add_word(AVLTree< std::string, AVLTree< std::string, std::string > >& treeOfdic, std::istream& in)
@@ -10,12 +11,12 @@ namespace sivkov
     std::string englishWord = "";
     if (!(in >> dictionaryName >> englishWord))
     {
-      throw std::logic_error("Error arguments");
+      throw std::logic_error("Invalid arguments");
     }
 
     if (!treeOfdic.contains(dictionaryName))
     {
-      throw std::logic_error("no dict");
+      throw std::logic_error("Dictionary not found");
     }
 
     AVLTree< std::string, std::string >& dictionary = treeOfdic.at(dictionaryName);
@@ -33,19 +34,19 @@ namespace sivkov
     std::string russianWord = "";
     if (!(in >> dictionaryName >> englishWord >> russianWord))
     {
-      throw std::logic_error("Error arguments");
+      throw std::logic_error("Invalid arguments");
     }
 
     if (!treeOfdic.contains(dictionaryName))
     {
-      throw std::logic_error("no dict");
+      throw std::logic_error("Dictionary not found");
     }
 
     AVLTree< std::string, std::string >& dictionary = treeOfdic.at(dictionaryName);
 
     if (!dictionary.contains(englishWord))
     {
-      throw std::logic_error("no word");
+      throw std::logic_error("Word not found");
     }
     dictionary[englishWord] = russianWord;
   }
@@ -55,12 +56,12 @@ namespace sivkov
     std::string dictionaryName;
     if (!(in >> dictionaryName))
     {
-      throw std::logic_error("Error arguments");
+      throw std::logic_error("Invalid arguments");
     }
 
     if (treeOfdic.contains(dictionaryName))
     {
-      throw std::logic_error("dictionary already exists");
+      throw std::logic_error("Dictionary already exists");
     }
     treeOfdic.push(dictionaryName, AVLTree< std::string, std::string >());
   }
@@ -70,19 +71,19 @@ namespace sivkov
     std::string dictionaryName, englishWord;
     if (!(in >> dictionaryName >> englishWord))
     {
-      throw std::logic_error("Error arguments");
+      throw std::logic_error("Invalid arguments");
     }
 
     if (!treeOfdic.contains(dictionaryName))
     {
-      throw std::logic_error("");
+      throw std::logic_error("Dictionary not found");
     }
 
     AVLTree< std::string, std::string >& dictionary = treeOfdic.at(dictionaryName);
 
     if (!dictionary.contains(englishWord))
     {
-      throw std::logic_error("");
+      throw std::logic_error("Word not found");
     }
 
     dictionary.deleteKey(englishWord);
@@ -93,46 +94,72 @@ namespace sivkov
     std::string dictionaryName;
     if (!(in >> dictionaryName))
     {
-      throw std::logic_error("Error arguments");
+      throw std::logic_error("Invalid arguments");
     }
 
     if (!treeOfdic.contains(dictionaryName))
     {
-      throw std::logic_error("");
+      throw std::logic_error("Dictionary not found");
     }
 
     const AVLTree< std::string, std::string >& dictionary = treeOfdic.at(dictionaryName);
     for (auto it = dictionary.cbegin(); it != dictionary.cend(); ++it)
     {
-      out << it->first << " - " << it->second << std::endl;
+      out << it->first << " - " << it->second << "\n";
     }
   }
 
   void search_words(const AVLTree< std::string, AVLTree< std::string, std::string > >& treeOfdic, std::istream& in, std::ostream& out)
   {
-    std::string dictionaryName;
-    if (!(in >> dictionaryName))
+    std::string line;
+
+    if (!std::getline(in, line))
     {
-      throw std::logic_error("Error arguments");
+      throw std::logic_error("Invalid arguments");
     }
+
+    std::vector< std::string > words;
+    std::string word;
+    size_t pos = 0, prev_pos = 0;
+
+    while ((pos = line.find(' ', prev_pos)) != std::string::npos)
+    {
+      word = line.substr(prev_pos, pos - prev_pos);
+      if (!word.empty())
+      {
+        words.push_back(word);
+      }
+      prev_pos = pos + 1;
+    }
+    word = line.substr(prev_pos);
+    if (!word.empty())
+    {
+      words.push_back(word);
+    }
+
+    if (words.empty())
+    {
+      throw std::logic_error("No dictionary name provided");
+    }
+    std::string dictionaryName = words[0];
 
     if (!treeOfdic.contains(dictionaryName))
     {
-      throw std::logic_error("");
+      throw std::logic_error("Dictionary not found");
     }
 
     const AVLTree< std::string, std::string >& dictionary = treeOfdic.at(dictionaryName);
 
-    std::string word;
-    while (in >> word)
+    for (size_t i = 1; i < words.size(); ++i)
     {
-      if (dictionary.contains(word))
+      const std::string& searchWord = words[i];
+      if (dictionary.contains(searchWord))
       {
-        out << dictionary.at(word) << std::endl;
+        out << searchWord << " - " << dictionary.at(searchWord) << "\n";
       }
       else
       {
-        throw std::logic_error("error");
+        throw std::logic_error("Invalid arguments");
       }
     }
   }
@@ -142,12 +169,12 @@ namespace sivkov
     std::string dictionaryName;
     if (!(in >> dictionaryName))
     {
-      throw std::logic_error("Error arguments");
+      throw std::logic_error("Invalid arguments");
     }
 
     if (!treeOfdic.contains(dictionaryName))
     {
-      throw std::logic_error("");
+      throw std::logic_error("Dictionary not found");
     }
 
     treeOfdic.deleteKey(dictionaryName);
@@ -159,12 +186,12 @@ namespace sivkov
     std::string newDictionaryName = "";
     if (!(in >> dictionaryName >> newDictionaryName))
     {
-      throw std::logic_error("Error arguments");
+      throw std::logic_error("Invalid arguments");
     }
 
     if (!treeOfdic.contains(dictionaryName) || treeOfdic.contains(newDictionaryName))
     {
-      throw std::logic_error("");
+      throw std::logic_error("Dictionary not found or new name already exists");
     }
 
     AVLTree< std::string, std::string > dictionary = treeOfdic.at(dictionaryName);
@@ -177,84 +204,132 @@ namespace sivkov
     std::string dictionaryName = "";
     if (!(in >> dictionaryName))
     {
-      throw std::logic_error("Error arguments");
+      throw std::logic_error("Invalid arguments");
     }
 
     if (!treeOfdic.contains(dictionaryName))
     {
-      throw std::logic_error("");
+      throw std::logic_error("Dictionary not found");
     }
 
     const AVLTree< std::string, std::string >& dictionary = treeOfdic.at(dictionaryName);
-    out << dictionary.size() << std::endl;
+    out << dictionary.size() << "\n";
   }
 
   void merge_dictionaries(AVLTree< std::string, AVLTree< std::string, std::string > >& treeOfdic, std::istream& in)
   {
-    std::string newDictionaryName = "";
-    if (!(in >> newDictionaryName))
+    std::string line;
+
+    if (!std::getline(in, line) || line.empty())
     {
-      throw std::logic_error("Error arguments");
+      throw std::out_of_range("Invalid arguments");
     }
+
+    std::vector< std::string > words;
+    std::string word;
+    size_t pos = 0, prev_pos = 0;
+
+    while ((pos = line.find(' ', prev_pos)) != std::string::npos)
+    {
+      word = line.substr(prev_pos, pos - prev_pos);
+      if (!word.empty())
+      {
+        words.push_back(word);
+      }
+      prev_pos = pos + 1;
+    }
+
+    word = line.substr(prev_pos);
+    if (!word.empty())
+    {
+      words.push_back(word);
+    }
+
+    if (words.empty())
+    {
+      throw std::out_of_range("Invalid arguments");
+    }
+
+    std::string newDictionaryName = words.front();
+    words.erase(words.begin());
 
     if (treeOfdic.contains(newDictionaryName))
     {
-      throw std::logic_error("");
+      throw std::out_of_range("New dictionary name already exists");
     }
 
     AVLTree< std::string, std::string > newDictionary;
-    std::string dictionaryName = "";
-    bool invalidDictionary = false;
 
-    while (in >> dictionaryName)
+    for (const std::string& dictionaryName : words)
     {
       if (!treeOfdic.contains(dictionaryName))
       {
-        invalidDictionary = true;
-        continue;
+        throw std::out_of_range("Invalid arguments");
       }
 
-      const AVLTree< std::string, std::string >& dictionary = treeOfdic.at(dictionaryName);
+      AVLTree< std::string, std::string >& dictionary = treeOfdic.at(dictionaryName);
 
       for (auto it = dictionary.cbegin(); it != dictionary.cend(); ++it)
       {
-        newDictionary[it->first] = it->second;
+        newDictionary.push(it->first, it->second);
       }
     }
 
     treeOfdic.push(newDictionaryName, newDictionary);
-
-    if (invalidDictionary)
-    {
-      throw std::logic_error("error dict");
-    }
   }
 
-  void repeating_words(const AVLTree<std::string, AVLTree<std::string, std::string>>& treeOfdic, std::istream& in, std::ostream& out)
+  void repeating_words(const AVLTree< std::string, AVLTree< std::string, std::string > >& treeOfdic, std::istream& in, std::ostream& out)
   {
-    std::vector<std::string> dictionaryNames;
-    std::string dictionaryName = "";
+    std::string line;
 
-    while (in >> dictionaryName)
+    if (!std::getline(in, line))
     {
-      if (!treeOfdic.contains(dictionaryName))
+      throw std::logic_error("Error reading dictionaries");
+    }
+
+    if (line.empty())
+    {
+      throw std::out_of_range("No dictionaries specified");
+    }
+
+    std::vector< std::string > dictionaryNames;
+    std::string dictionaryName;
+    size_t pos = 0, prev_pos = 0;
+
+    while ((pos = line.find(' ', prev_pos)) != std::string::npos)
+    {
+      dictionaryName = line.substr(prev_pos, pos - prev_pos);
+      if (!dictionaryName.empty())
       {
-        throw std::logic_error("Error arguments");
+        dictionaryNames.push_back(dictionaryName);
       }
+      prev_pos = pos + 1;
+    }
+
+    dictionaryName = line.substr(prev_pos);
+    if (!dictionaryName.empty())
+    {
       dictionaryNames.push_back(dictionaryName);
     }
 
     if (dictionaryNames.empty())
     {
-      throw std::logic_error("empty");
+      throw std::out_of_range("No dictionaries specified");
     }
 
-    AVLTree<std::string, int> wordCount;
-
-    for (size_t i = 0; i < dictionaryNames.size(); ++i)
+    for (const auto& name : dictionaryNames)
     {
-      const std::string& name = dictionaryNames[i];
-      const AVLTree<std::string, std::string>& dictionary = treeOfdic.at(name);
+      if (!treeOfdic.contains(name))
+      {
+        throw std::out_of_range("One or more dictionaries not found");
+      }
+    }
+
+    AVLTree< std::string, int > wordCount;
+
+    for (const std::string& name : dictionaryNames)
+    {
+      const AVLTree< std::string, std::string >& dictionary = treeOfdic.at(name);
       for (auto it = dictionary.cbegin(); it != dictionary.cend(); ++it)
       {
         const std::string& word = it->first;
@@ -278,16 +353,15 @@ namespace sivkov
       }
     }
 
-    out << commonWordCount << std::endl;
+    out << commonWordCount << "\n";
   }
-
 
   void save(const AVLTree< std::string, AVLTree< std::string, std::string > >& treeOfdic, const std::string& filename)
   {
     std::ofstream outFile(filename);
     if (!outFile.is_open())
     {
-      throw std::logic_error("cant open file");
+      throw std::logic_error("Cannot open file");
     }
 
     for (auto it = treeOfdic.cbegin(); it != treeOfdic.cend(); ++it)
@@ -302,6 +376,21 @@ namespace sivkov
 
       outFile << "\n";
     }
+  }
+
+  void help(std::ostream& out)
+  {
+    out << "add_translation <словарь> <слово> <перевод> - Добавить перевод\n";
+    out << "add_word <словарь> <слово> - Добавить слово\n";
+    out << "count_words <словарь> - Вывод кол-ва слов\n";
+    out << "create <словарь> - Создать словарь\n";
+    out << "delete_dictionary <словарь> - Удалить словарь\n";
+    out << "list_words <словарь> - Вывод списка слов\n";
+    out << "merge <новый_словарь> <словарь1> <словарь2> ... <словарьN> - Создать новый словарь из старых\n";
+    out << "remove_word <словарь> <слово> - Удалить слово\n";
+    out << "rename_dictionary <словарь> <новое_название> - Переименовать словарь\n";
+    out << "repeating_words <словарь1> <словарь2> ... <словарьN> - Поиск одинаковых слов в указанных словарях\n";
+    out << "search <словарь> <слово1> <слово2> ... <словоN> - Поиск слова\n";
   }
 
 }
