@@ -6,7 +6,7 @@
 #include <vector>
 #include <list>
 #include <deque>
-#include <forward_list>
+#include <forward_list.hpp>
 #include "shell_sort.hpp"
 #include "selection_sort.hpp"
 
@@ -56,7 +56,11 @@ namespace namestnikov
   {
     printData(data.begin(), data.end(), out);
     Comparator< T > compare(order);
-    std::forward_list< T > forwardlistSelection(data.begin(), data.end());
+    ForwardList< T > forwardlistSelection;
+    for (size_t i = 0; i < size; ++i)
+    {
+      forwardlistSelection.push_front(data[i]);
+    }
     std::list< T > listSelection(data.begin(), data.end());
     std::list< T > listShell(data.begin(), data.end());
     std::deque< T > dequeSelection(data.begin(), data.end());
