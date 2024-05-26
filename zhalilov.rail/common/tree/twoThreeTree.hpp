@@ -172,7 +172,7 @@ namespace zhalilov
     {
       throw std::out_of_range("TwoThree: accessing element doesn't exist");
     }
-    return *it;
+    return it->second;
   }
 
   template < class Key, class T, class Compare >
@@ -416,9 +416,9 @@ namespace zhalilov
     auto resultPair = doFind(key);
     if (resultPair.second)
     {
-      return std::make_pair(const_iterator(resultPair.first.node_, resultPair.first.isPtrToLeft_), true);
+      return const_iterator(resultPair.first.node_, resultPair.first.isPtrToLeft_);
     }
-    return std::make_pair(cend(), false);
+    return cend();
   }
 
   template < class Key, class T, class Compare >
