@@ -19,8 +19,8 @@ namespace detail
     }
     out << '\n';
   }
-  template< class Container, typename Comparator, typename InputIt, class Iter = typename Container::iterator >
-  void execute(std::ostream& out, InputIt begin, InputIt end, void (*sort)(Iter, Iter, Comparator))
+  template< class Container, typename Comparator, typename InputIt, class Sort >
+  void execute(std::ostream& out, InputIt begin, InputIt end, Sort sort)
   {
     Container container(begin, end);
     sort(container.begin(), container.end(), Comparator{});
@@ -39,9 +39,11 @@ namespace zaitsev
     using dq = std::deque < value_type >;
     using lst = std::list < value_type >;
     using Flist = zaitsev::ForwardList< value_type >;
+    using namespace std::placeholders;
+    auto binded_bucketsort = std::bind(&bucketSort< typename dq::iterator, Compare >, _1, _2, _3, 2);
     detail::execute< dq, Compare >(out, vals.cbegin(), vals.cend(), std::sort< typename dq::iterator, Compare >);
     detail::execute< dq, Compare >(out, vals.cbegin(), vals.cend(), shellSort< typename dq::iterator, Compare >);
-    detail::execute< dq, Compare >(out, vals.cbegin(), vals.cend(), bucketSort< typename dq::iterator, Compare >);
+    detail::execute< dq, Compare >(out, vals.cbegin(), vals.cend(), binded_bucketsort);
     detail::execute< lst, Compare >(out, vals.cbegin(), vals.cend(), shellSort< typename lst::iterator, Compare >);
     detail::execute< Flist, Compare >(out, vals.cbegin(), vals.cend(), shellSort< typename Flist::iterator, Compare >);
     Flist flist(vals.cbegin(), vals.cend());

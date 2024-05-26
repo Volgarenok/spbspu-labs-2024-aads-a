@@ -37,9 +37,8 @@ namespace zaitsev
   }
 
   template< class RandomIt, class Comapare >
-  void bucketSort(RandomIt begin, RandomIt end, Comapare cmp)
+  void bucketSort(RandomIt begin, RandomIt end, Comapare cmp, size_t buckets_nmb = 2)
   {
-    constexpr size_t buckets_nmb = 2;
     using T = typename std::iterator_traits< RandomIt >::value_type;
     using Flist_T = ForwardList< T >;
     using bucket_it_t = typename ForwardList< std::pair< T, Flist_T > >::iterator;
