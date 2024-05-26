@@ -1,6 +1,6 @@
 #include "iodata.hpp"
 
-void ishmuratov::input_dict(ishmuratov::data_t & data, std::istream &input)
+ishmuratov::data_t & ishmuratov::input_dict(ishmuratov::data_t & data, std::istream &input)
 {
   std::string name;
   while (input >> name)
@@ -19,4 +19,5 @@ void ishmuratov::input_dict(ishmuratov::data_t & data, std::istream &input)
     }
     data.insert(std::make_pair(name, dict));
   }
+  return data;
 }
