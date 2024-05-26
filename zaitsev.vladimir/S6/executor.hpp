@@ -22,37 +22,37 @@ namespace detail
     }
     out << '\n';
   }
+
+
+  template< class Container, typename Comparator, typename InputIt >
+  void execute(InputIt begin, InputIt end, size_t size, void (*sort)(typename Container::iterator, typename Container::iterator, Comparator))
+  {
+    Container container(begin, end);
+    sort(container.begin(), container.end(), Comparator{});
+    print(std::cout, container);
+  }
 }
-
-template< typename value_type, typename comparator >
-void sortirator(std::ostream& out, size_t size)
+namespace zaitsev
 {
-  using namespace zaitsev;
-  using namespace detail;
-  generator< value_type > gen(0, 1000);
-  std::deque< value_type > deque_sort;
-  std::generate_n(std::back_inserter(deque_sort), size, gen);
-  print(out, deque_sort);
-
-  std::deque< value_type > deque_shell(deque_sort.cbegin(), deque_sort.cend());
-  std::deque< value_type > deque_bucket(deque_inbuild.cbegin(),deque_inbuild.cend());;
-
-  ForwardList< value_type > forward_sort(deque_sort.cbegin(), deque_sort.cend());
-  ForwardList< value_type > forward_shell(deque_sort.cbegin(), deque_sort.cend());
-  std::list< value_type > list_shell(deque_sort.cbegin(), deque_sort.cend());
-
-  std::sort(deque_sort.begin(), deque_sort.end(), comparator{});
-  forward_sort.sort(comparator{});
-  shellSort(deque_shell.begin(), deque_shell.end(), comparator{});
-  shellSort(forward_shell.begin(), forward_shell.end(), comparator{});
-  shellSort(list_shell.begin(), list_shell.end(), comparator{});
-  bucketSort(deque_sort.begin(), deque_sort.end(), comparator{});
-
-  print(out, deque_sort);
-  print(out, deque_shell);
-  printer(out, deque_bucket);
-  print(out, forward_sort);
-  print(out, forward_shell);
-  print(out, list_shell);
+  template< typename value_type, typename Compare >
+  void sortirator(std::ostream& out, size_t size)
+  {
+    using namespace detail;
+    std::vector< value_type > vals(size);
+    generator< value_type > gen(0, 1000, std::random_device{}());
+    std::generate_n(vals.begin(), size, gen);
+    print(out, vals);
+    using dq = std::deque < value_type >;
+    using lst = std::list < value_type >;
+    using Flist = zaitsev::ForwardList< value_type >;
+    execute< dq, Compare >(vals.cbegin(), vals.cend(), size, std::sort< typename dq::iterator, Compare >);
+    execute< dq, Compare >(vals.cbegin(), vals.cend(), size, shellSort< typename dq::iterator, Compare >);
+    execute< dq, Compare >(vals.cbegin(), vals.cend(), size, shellSort< typename dq::iterator, Compare >);
+    execute< lst, Compare >(vals.cbegin(), vals.cend(), size, shellSort< typename lst::iterator, Compare >);
+    execute< Flist, Compare >(vals.cbegin(), vals.cend(), size, shellSort< typename Flist::iterator, Compare >);
+    Flist flist(vals.cbegin(), vals.cend());
+    flist.sort(Compare{});
+    detail::print(out, flist);
+  }
 }
 #endif

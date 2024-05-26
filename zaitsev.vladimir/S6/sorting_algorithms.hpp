@@ -8,8 +8,9 @@
 #include <forward_list.hpp>
 
 template< class ForwardIt, class Comapare >
-void shellSort(ForwardIt begin, ForwardIt end, Comapare cmp, size_t size = 0)
+void shellSort(ForwardIt begin, ForwardIt end, Comapare cmp)//, size_t size = 0)
 {
+  size_t size = 0;
   if (size == 0)
   {
     ForwardIt copy = begin;
@@ -46,8 +47,9 @@ void shellSort(ForwardIt begin, ForwardIt end, Comapare cmp, size_t size = 0)
 }
 
 template< class RandomIt, class Comapare >
-void bucketSort(RandomIt begin, RandomIt end, Comapare cmp, size_t buckets_nmb = 2)
+void bucketSort(RandomIt begin, RandomIt end, Comapare cmp) //, size_t buckets_nmb = 2)
 {
+  size_t buckets_nmb = 2;
   using T = decltype (*begin);
   if (begin == end)
   {
@@ -73,7 +75,7 @@ void bucketSort(RandomIt begin, RandomIt end, Comapare cmp, size_t buckets_nmb =
   {
     return;
   }
-  using namespace zaitsev;
+ /* using namespace zaitsev;
   ForwardList< std::pair< T, std::multiset< T, Comapare > > > sups(1, { max_val, std::multiset< T, Comapare > });
   using bucket_it_t = typename ForwardList< std::pair< T, std::multiset< T, Comapare > > >::iterator;
   T step = (max_val - min_val) / buckets_nmb;
@@ -94,7 +96,7 @@ void bucketSort(RandomIt begin, RandomIt end, Comapare cmp, size_t buckets_nmb =
       }
       ++it;
     }
-  }
+  }*/
 }
 #endif
 

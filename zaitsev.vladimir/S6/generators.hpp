@@ -23,7 +23,7 @@ private:
 };
 
 template<>
-class generator<float>
+class generator< float >
 {
 public:
   generator(float a, float b, int seed):
