@@ -1,6 +1,7 @@
 #ifndef SORTINGS_HPP
 #define SORTINGS_HPP
 #include <iterator>
+#include <iostream>
 
 namespace baranov
 {
@@ -12,7 +13,7 @@ namespace baranov
     {
       auto val = *i;
       iter_t j = std::prev(i);
-      for (; j != last && !cmp(*j, val); --j)
+      for (; j != first && cmp(val, *j); --j)
       {
         *(std::next(j)) = *j;
       }
