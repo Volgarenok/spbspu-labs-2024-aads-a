@@ -16,6 +16,7 @@ namespace ishmuratov
   public:
     AVLTree():
       root_(nullptr),
+      comp_(new Compare()),
       size_(0)
     {}
 
@@ -29,6 +30,7 @@ namespace ishmuratov
 
     AVLTree(ConstIter begin, ConstIter end):
       root_(nullptr),
+      comp_(new Compare()),
       size_(0)
     {
       try
@@ -48,6 +50,7 @@ namespace ishmuratov
 
     AVLTree(AVLTree && other) noexcept:
       root_(other.root_),
+      comp_(other.comp_),
       size_(other.size_)
     {
       other.root_ = nullptr;
@@ -137,19 +140,15 @@ namespace ishmuratov
 
     Value operator[](const Key & key)
     {
-      Iter node_iter = find(key);
-      if (node_iter == end())
-      {
-        insert(std::make_pair(key, Value()));
-        node_iter = find(key);
-      }
-      return node_iter->second;
+      auto nodes = insert_impl(std::make_pair(key, Value()), root_, false);
+      return nodes.second->data.second;
     }
 
     void clear()
     {
       delete_node(root_);
       root_ = nullptr;
+      comp_ = nullptr;
       size_ = 0;
     }
 
@@ -165,11 +164,11 @@ namespace ishmuratov
       tnode * node = root_;
       while (node)
       {
-        if (comp_(key, node->data.first))
+        if ((*comp_)(key, node->data.first))
         {
           node = node->left;
         }
-        else if (comp_(node->data.first, key))
+        else if ((*comp_)(node->data.first, key))
         {
           node = node->right;
         }
@@ -186,11 +185,11 @@ namespace ishmuratov
       tnode * node = root_;
       while (node)
       {
-        if (comp_(key, node->data.first))
+        if ((*comp_)(key, node->data.first))
         {
           node = node->left;
         }
-        else if (comp_(node->data.first, key))
+        else if ((*comp_)(node->data.first, key))
         {
           node = node->right;
         }
@@ -211,7 +210,8 @@ namespace ishmuratov
       }
       else
       {
-        root_ = insert_impl(pair, root_);
+        std::pair< tnode *, tnode * > nodes = insert_impl(pair, root_, true);
+        root_ = nodes.first;
       }
     }
 
@@ -243,7 +243,7 @@ namespace ishmuratov
       size_t count = 0;
       for (auto node = cbegin(); node != cend(); ++node)
       {
-        if (!comp_(k, node->first) && !(comp_(node->first, k)))
+        if (!(*comp_)(k, node->first) && !((*comp_)(node->first, k)))
         {
           ++count;
         }
@@ -255,7 +255,7 @@ namespace ishmuratov
     {
       for (auto node = begin(); node != end(); ++node)
       {
-        if (!comp_(node->first, k))
+        if (!(*comp_)(node->first, k))
         {
           return node;
         }
@@ -267,7 +267,7 @@ namespace ishmuratov
     {
       for (auto node = begin(); node != end(); ++node)
       {
-        if (comp_(k, node->first))
+        if ((*comp_)(k, node->first))
         {
           return node;
         }
@@ -282,7 +282,7 @@ namespace ishmuratov
 
   private:
     detail::TNode< Key, Value> * root_;
-    Compare comp_;
+    Compare * comp_;
     size_t size_;
 
     int get_height(tnode * node)
@@ -299,11 +299,11 @@ namespace ishmuratov
       node = root_;
       while (node != nullptr)
       {
-        if (comp_(key, node->data.first))
+        if ((*comp_)(key, node->data.first))
         {
           node = node->left;
         }
-        else if (comp_(node->data.first, key))
+        else if ((*comp_)(node->data.first, key))
         {
           node = node->right;
         }
@@ -324,35 +324,52 @@ namespace ishmuratov
       return min_elem(root->left);
     }
 
-    tnode * insert_impl(const std::pair< Key, Value > & pair, tnode * node)
+    std::pair< tnode *, tnode * > insert_impl(const std::pair< Key, Value > & pair, tnode * node, bool rewrite)
     {
-      if (comp_(pair.first, node->data.first))
+      tnode * inserted;
+      if ((*comp_)(pair.first, node->data.first))
       {
         if (node->left == nullptr)
         {
           node->left = new tnode(pair.first, pair.second);
+          inserted = node->left;
           node->left->parent = node;
           size_ += 1;
         }
-        node->left = insert_impl(pair, node->left);
+        else
+        {
+          auto node_pair = insert_impl(pair, node->left, rewrite);
+          node->left = node_pair.first;
+          inserted = node_pair.second;
+        }
       }
-      else if (comp_(node->data.first, pair.first))
+      else if ((*comp_)(node->data.first, pair.first))
       {
         if (node->right == nullptr)
         {
           node->right = new tnode(pair.first, pair.second);
+          inserted = node->right;
           node->right->parent = node;
           size_ += 1;
         }
-        node->right = insert_impl(pair, node->right);
+        else
+        {
+          auto node_pair = insert_impl(pair, node->right, rewrite);
+          node->right = node_pair.first;
+          inserted = node_pair.second;
+        }
       }
       else
       {
-        node->data.second = pair.second;
+        if (rewrite)
+        {
+          node->data.second = pair.second;
+        }
+        inserted = node;
       }
 
       node->height = std::max(get_height(node->left), get_height(node->right)) + 1;
-      return balance(pair.first, node);
+      return std::make_pair(balance(pair.first, node), inserted);
     }
 
     tnode * erase_impl(const Key & k, tnode * node)
@@ -362,11 +379,11 @@ namespace ishmuratov
       {
         return node;
       }
-      if (comp_(k, node->data.first))
+      if ((*comp_)(k, node->data.first))
       {
         node->left = erase_impl(k, node->left);
       }
-      else if (comp_(node->data.first, k))
+      else if ((*comp_)(node->data.first, k))
       {
         node->right = erase_impl(k, node->right);
       }
@@ -402,7 +419,7 @@ namespace ishmuratov
     {
       if (get_height(node->left) - get_height(node->right) == 2)
       {
-        if (comp_(k, node->left->data.first))
+        if ((*comp_)(k, node->left->data.first))
         {
           node = rotate_right(node);
         }
@@ -413,7 +430,7 @@ namespace ishmuratov
       }
       if (get_height(node->right) - get_height(node->left) == 2)
       {
-        if (comp_(node->right->data.first, k))
+        if ((*comp_)(node->right->data.first, k))
         {
           node = rotate_left(node);
         }
