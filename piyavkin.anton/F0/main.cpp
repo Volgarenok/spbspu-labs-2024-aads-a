@@ -11,6 +11,7 @@ int main()
   cmdsForOutput["prntd"] = print;
   Tree< std::string, std::function< void(std::istream&, dic_t&) > > cmdsForCreate;
   cmdsForCreate["addd"] = addDict;
+  cmdsForCreate["chng"] = changeDict;
   std::string name = "";
   while (std::cin >> name)
   {
