@@ -14,5 +14,6 @@ namespace piyavkin
   iterator cmdChange(std::istream& in, dic_t& dicts);
   iterator makeDict(std::istream& in, dic_t& dicts);
   iterator intersect(std::istream& in, dic_t& dicts);
+  iterator unionD(std::istream& in, dic_t& dicts);
 }
 #endif

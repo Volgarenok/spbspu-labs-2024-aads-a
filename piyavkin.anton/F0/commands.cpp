@@ -80,6 +80,10 @@ piyavkin::iterator piyavkin::makeDict(std::istream& in, dic_t& dicts)
   std::string nameFile = "";
   in >> nameFile;
   std::ifstream file(nameFile);
+  if (!file.is_open())
+  {
+    throw std::out_of_range("");
+  }
   while (file)
   {
     change(file, it->second);
@@ -112,6 +116,42 @@ piyavkin::iterator piyavkin::intersect(std::istream& in, dic_t& dicts)
       while (rhsIt != rhsTree.cend() && rhsIt->first < it->first)
       {
         ++rhsIt;
+      }
+    }
+  }
+  if (dicts.find(newDic) != dicts.end())
+  {
+    dicts.erase(newDic);
+  }
+  return dicts.insert(std::pair< std::string, tree_t >(newDic, newTree)).first;
+}
+
+piyavkin::iterator piyavkin::unionD(std::istream& in, dic_t& dicts)
+{
+  std::string newDic = "";
+  std::string lhs = "";
+  std::string rhs = "";
+  in >> newDic >> lhs >> rhs;
+  const tree_t rhsTree = dicts.at(rhs);
+  const tree_t lhsTree = dicts.at(lhs);
+  tree_t newTree;
+  for (auto lhsIt = lhsTree.cbegin(); lhsIt != lhsTree.cend(); ++lhsIt)
+  {
+    newTree.insert(std::pair< std::string, size_t >(*lhsIt));
+  }
+  for (auto it = rhsTree.cbegin(); it != rhsTree.cend(); ++it)
+  {
+    auto lhsVal = newTree.find(it->first);
+    if (lhsVal == newTree.end())
+    {
+      newTree.insert(std::pair< std::string, size_t >(*it));
+    }
+    else
+    {
+      if (lhsVal->second < it->second)
+      {
+        newTree.erase(it->first);
+        newTree.insert(std::pair< std::string, size_t >(*it));
       }
     }
   }

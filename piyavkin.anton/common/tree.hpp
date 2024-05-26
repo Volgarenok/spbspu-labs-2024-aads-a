@@ -316,18 +316,19 @@ namespace piyavkin
         }
         if (node)
         {
+          detail::TreeNode< Key, T >* temp = node->left_;
           if (node != delete_node.node_->left_)
           {
             node->left_ = delete_node.node_->left_;
             delete_node.node_->left_->parent_ = node;
           }
-          if (isLeftChild(node))
+          if (isRightChild(node))
           {
-            node->parent_->left_ = nullptr;
-          }
-          else
-          {
-            node->parent_->right_ = nullptr;
+            node->parent_->right_ = temp;
+            if (temp)
+            {
+              temp->parent_ = node->parent_;
+            }
           }
           node->parent_ = delete_node.node_->parent_;
           if (delete_node.node_->right_)
@@ -419,7 +420,8 @@ namespace piyavkin
     size_t erase(const Key& key)
     {
       size_t count = 0;
-      while (erase(find(key)) != end())
+      const Key key_cp = key;
+      while (erase(find(key_cp)) != end())
       {
         ++count;
       }
