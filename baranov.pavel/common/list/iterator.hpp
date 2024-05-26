@@ -3,7 +3,7 @@
 
 #include <memory>
 #include <cassert>
-#include "node.hpp"
+#include <list/node.hpp>
 
 namespace baranov
 {
