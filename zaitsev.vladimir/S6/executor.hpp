@@ -1,6 +1,7 @@
 #ifndef EXECUTOR_HPP
 #define EXECUTOR_HPP
 #include <ostream>
+#include <functional>
 #include <deque>
 #include <list>
 #include "generators.hpp"
