@@ -8,20 +8,21 @@
 #include <windows.h>
 #include <list>
 #include <set>
+#include "AVLtree.hpp"
 
 using val_t = std::pair< std::string, std::list< std::string > >;
-using mainDict = std::map< std::string, val_t >;
-using dictionaries = std::map < std::string, mainDict >;
+using mainDict = novokhatskiy::Tree< std::string, val_t >;
+using dictionaries = novokhatskiy::Tree < std::string, mainDict >;
 
 mainDict unique(mainDict& dict1, mainDict& dict2)
 {
   mainDict res;
   std::set< std::string > uniqueKeys;
-  for (const auto& key: dict1)
+  for (const auto& key : dict1)
   {
     uniqueKeys.insert(key.first);
   }
-  for (const auto& key: dict2)
+  for (const auto& key : dict2)
   {
     uniqueKeys.insert(key.first);
   }
@@ -50,7 +51,7 @@ mainDict search(mainDict& res, mainDict& dict1, mainDict& dict2, std::istream& i
     throw std::logic_error("The range can't be empty");
   }
   auto begin1 = dict1.find(line1);
-  while (begin1 != dict1.end()  && begin1->first != line2)
+  while (begin1 != dict1.end() && begin1->first != line2)
   {
     res.insert(*begin1);
     begin1++;
@@ -70,7 +71,7 @@ T randomNumber(T min, T max)
   std::random_device random;
   std::mt19937 num(random());
   std::uniform_real_distribution< float > dist(min, max);
-  return static_cast< T >(dist(num));
+  return static_cast<T>(dist(num));
 }
 
 void random(mainDict& res, size_t count, mainDict& dict1, mainDict& dict2)
@@ -313,7 +314,7 @@ void inputDict(std::istream& in, mainDict& dict)
     }
   }
   in.clear();
-  
+
   /*while (!in.eof())
   {
     in.clear();
@@ -328,7 +329,7 @@ void inputDict(std::istream& in, mainDict& dict)
       pair.first = translation;
       pair.second.push_back(example);
       dict[word] = pair;
-      in >> word;  
+      in >> word;
     }
   }
   in.clear();*/
@@ -385,5 +386,5 @@ int main()
   {
     std::cout << e.what() << '\n';
     return 1;
-  } 
+  }
 }
