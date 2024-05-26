@@ -13,6 +13,7 @@ int main()
   cmdsForCreate["addd"] = addDict;
   cmdsForCreate["chng"] = cmdChange;
   cmdsForCreate["mkd"] = makeDict;
+  cmdsForCreate["intersect"] = intersect;
   std::string name = "";
   while (std::cin >> name)
   {
