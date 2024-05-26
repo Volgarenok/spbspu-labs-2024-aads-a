@@ -9,6 +9,7 @@ int main()
   dic_t dicts;
   Tree< std::string, std::function< void(std::istream&, const dic_t&) > > cmdsForOutput;
   cmdsForOutput["print"] = std::bind(print, std::placeholders::_1, std::ref(std::cout), std::placeholders::_2);
+  cmdsForOutput["topfreq"] = std::bind(topFreq, std::placeholders::_1, std::ref(std::cout), std::placeholders::_2);
   Tree< std::string, std::function< iterator(std::istream&, dic_t&) > > cmdsForCreate;
   cmdsForCreate["addd"] = addDict;
   cmdsForCreate["chng"] = cmdChange;

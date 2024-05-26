@@ -1,5 +1,6 @@
 #include "commands.hpp"
 #include <fstream>
+#include <list.hpp>
 
 piyavkin::iterator getDict(std::istream& in, piyavkin::dic_t dicts)
 {
@@ -53,6 +54,31 @@ void piyavkin::print(std::istream& in, std::ostream& out, const dic_t& dicts)
   else
   {
     throw std::out_of_range("");
+  }
+}
+
+void piyavkin::topFreq(std::istream& in, std::ostream& out, const dic_t& dicts)
+{
+  std::string nameDic = "";
+  size_t n = 0;
+  in >> nameDic >> n;
+  auto it = dicts.find(nameDic);
+  const tree_t dic = it->second;
+  if (n > dic.size())
+  {
+    throw std::out_of_range("");
+  }
+  List< std::pair< size_t, std::string > > res;
+  for (auto dicIt = dic.cbegin(); dicIt != dic.cend(); ++dicIt)
+  {
+    res.push_back(std::pair< size_t, std::string >(dicIt->second, dicIt->first));
+  }
+  res.sort();
+  auto listIt = res.cbegin();
+  for (size_t i = 0; i != n; ++i)
+  {
+    out << listIt->first << ' ' << listIt->second << '\n';
+    ++listIt;
   }
 }
 
