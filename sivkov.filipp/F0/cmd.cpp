@@ -5,7 +5,9 @@
 
 namespace sivkov
 {
-  void add_word(AVLTree< std::string, AVLTree< std::string, std::string > >& treeOfdic, std::istream& in)
+  using tree = AVLTree< std::string, AVLTree< std::string, std::string > >;
+
+  void add_word(tree& treeOfdic, std::istream& in)
   {
     std::string dictionaryName = "";
     std::string englishWord = "";
@@ -13,7 +15,6 @@ namespace sivkov
     {
       throw std::logic_error("Invalid arguments");
     }
-
     if (!treeOfdic.contains(dictionaryName))
     {
       throw std::logic_error("Dictionary not found");
@@ -27,7 +28,7 @@ namespace sivkov
     }
   }
 
-  void add_translation(AVLTree< std::string, AVLTree< std::string, std::string > >& treeOfdic, std::istream& in)
+  void add_translation(tree& treeOfdic, std::istream& in)
   {
     std::string dictionaryName = "";
     std::string englishWord = "";
@@ -51,7 +52,7 @@ namespace sivkov
     dictionary[englishWord] = russianWord;
   }
 
-  void create_dictionary(AVLTree< std::string, AVLTree< std::string, std::string > >& treeOfdic, std::istream& in)
+  void create_dictionary(tree& treeOfdic, std::istream& in)
   {
     std::string dictionaryName;
     if (!(in >> dictionaryName))
@@ -66,7 +67,7 @@ namespace sivkov
     treeOfdic.push(dictionaryName, AVLTree< std::string, std::string >());
   }
 
-  void remove_word(AVLTree< std::string, AVLTree< std::string, std::string > >& treeOfdic, std::istream& in)
+  void remove_word(tree& treeOfdic, std::istream& in)
   {
     std::string dictionaryName, englishWord;
     if (!(in >> dictionaryName >> englishWord))
@@ -89,7 +90,7 @@ namespace sivkov
     dictionary.deleteKey(englishWord);
   }
 
-  void list_words(const AVLTree< std::string, AVLTree< std::string, std::string > >& treeOfdic, std::istream& in, std::ostream& out)
+  void list_words(const tree& treeOfdic, std::istream& in, std::ostream& out)
   {
     std::string dictionaryName;
     if (!(in >> dictionaryName))
@@ -109,7 +110,7 @@ namespace sivkov
     }
   }
 
-  void search_words(const AVLTree< std::string, AVLTree< std::string, std::string > >& treeOfdic, std::istream& in, std::ostream& out)
+  void search_words(const tree& treeOfdic, std::istream& in, std::ostream& out)
   {
     std::string line;
 
@@ -164,7 +165,7 @@ namespace sivkov
     }
   }
 
-  void delete_dictionary(AVLTree< std::string, AVLTree< std::string, std::string > >& treeOfdic, std::istream& in)
+  void delete_dictionary(tree& treeOfdic, std::istream& in)
   {
     std::string dictionaryName;
     if (!(in >> dictionaryName))
@@ -180,7 +181,7 @@ namespace sivkov
     treeOfdic.deleteKey(dictionaryName);
   }
 
-  void rename_dictionary(AVLTree< std::string, AVLTree< std::string, std::string > >& treeOfdic, std::istream& in)
+  void rename_dictionary(tree& treeOfdic, std::istream& in)
   {
     std::string dictionaryName = "";
     std::string newDictionaryName = "";
@@ -199,7 +200,7 @@ namespace sivkov
     treeOfdic.push(newDictionaryName, dictionary);
   }
 
-  void count_words(const AVLTree< std::string, AVLTree< std::string, std::string > >& treeOfdic, std::istream& in, std::ostream& out)
+  void count_words(const tree& treeOfdic, std::istream& in, std::ostream& out)
   {
     std::string dictionaryName = "";
     if (!(in >> dictionaryName))
@@ -216,7 +217,7 @@ namespace sivkov
     out << dictionary.size() << "\n";
   }
 
-  void merge_dictionaries(AVLTree< std::string, AVLTree< std::string, std::string > >& treeOfdic, std::istream& in)
+  void merge_dictionaries(tree& treeOfdic, std::istream& in)
   {
     std::string line;
 
@@ -274,11 +275,10 @@ namespace sivkov
         newDictionary.push(it->first, it->second);
       }
     }
-
     treeOfdic.push(newDictionaryName, newDictionary);
   }
 
-  void repeating_words(const AVLTree< std::string, AVLTree< std::string, std::string > >& treeOfdic, std::istream& in, std::ostream& out)
+  void repeating_words(const tree& treeOfdic, std::istream& in, std::ostream& out)
   {
     std::string line;
 
@@ -324,8 +324,7 @@ namespace sivkov
         throw std::out_of_range("One or more dictionaries not found");
       }
     }
-
-    AVLTree< std::string, int > wordCount;
+    AVLTree< std::string, size_t > wordCount;
 
     for (const std::string& name : dictionaryNames)
     {
@@ -343,7 +342,6 @@ namespace sivkov
         }
       }
     }
-
     size_t commonWordCount = 0;
     for (auto it = wordCount.cbegin(); it != wordCount.cend(); ++it)
     {
@@ -356,7 +354,7 @@ namespace sivkov
     out << commonWordCount << "\n";
   }
 
-  void save(const AVLTree< std::string, AVLTree< std::string, std::string > >& treeOfdic, const std::string& filename)
+  void save(const tree& treeOfdic, const std::string& filename)
   {
     std::ofstream outFile(filename);
     if (!outFile.is_open())
@@ -386,12 +384,12 @@ namespace sivkov
     out << "create <словарь> - Создать словарь\n";
     out << "delete_dictionary <словарь> - Удалить словарь\n";
     out << "list_words <словарь> - Вывод списка слов\n";
-    out << "merge <новый_словарь> <словарь1> <словарь2> ... <словарьN> - Создать новый словарь из старых\n";
+    out << "merge <новый_словарь> <словарь1> <словарь2> ... <словарьN> -";
+    out << "Создать новый словарь из старых\n";
     out << "remove_word <словарь> <слово> - Удалить слово\n";
     out << "rename_dictionary <словарь> <новое_название> - Переименовать словарь\n";
-    out << "repeating_words <словарь1> <словарь2> ... <словарьN> - Поиск одинаковых слов в указанных словарях\n";
+    out << "repeating_words <словарь1> <словарь2> ... <словарьN> -";
+    out << "Поиск одинаковых слов в указанных словарях\n";
     out << "search <словарь> <слово1> <слово2> ... <словоN> - Поиск слова\n";
   }
-
 }
-
