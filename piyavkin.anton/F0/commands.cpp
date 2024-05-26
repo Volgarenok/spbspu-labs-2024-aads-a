@@ -126,12 +126,9 @@ piyavkin::iterator piyavkin::intersect(std::istream& in, dic_t& dicts)
   return dicts.insert(std::pair< std::string, tree_t >(newDic, newTree)).first;
 }
 
-piyavkin::iterator piyavkin::unionD(std::istream& in, dic_t& dicts)
+piyavkin::iterator unionImpl(piyavkin::dic_t& dicts, const std::string& newDic, const std::string& lhs, const std::string& rhs)
 {
-  std::string newDic = "";
-  std::string lhs = "";
-  std::string rhs = "";
-  in >> newDic >> lhs >> rhs;
+  using namespace piyavkin;
   const tree_t rhsTree = dicts.at(rhs);
   const tree_t lhsTree = dicts.at(lhs);
   tree_t newTree;
@@ -160,6 +157,15 @@ piyavkin::iterator piyavkin::unionD(std::istream& in, dic_t& dicts)
     dicts.erase(newDic);
   }
   return dicts.insert(std::pair< std::string, tree_t >(newDic, newTree)).first;
+}
+
+piyavkin::iterator piyavkin::unionD(std::istream& in, dic_t& dicts)
+{
+  std::string newDic = "";
+  std::string lhs = "";
+  std::string rhs = "";
+  in >> newDic >> lhs >> rhs;
+  return unionImpl(dicts, newDic, lhs, rhs);
 }
 
 piyavkin::iterator piyavkin::uniqueD(std::istream& in, dic_t& dicts)
@@ -199,4 +205,12 @@ piyavkin::iterator piyavkin::uniqueD(std::istream& in, dic_t& dicts)
     dicts.erase(newDic);
   }
   return dicts.insert(std::pair< std::string, tree_t >(newDic, newTree)).first;
+}
+
+piyavkin::iterator piyavkin::addDtoD(std::istream& in, dic_t& dicts)
+{
+  std::string lhs = "";
+  std::string rhs = "";
+  in >> lhs >> rhs;
+  return unionImpl(dicts, lhs, lhs, rhs);
 }

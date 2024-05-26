@@ -16,6 +16,7 @@ int main()
   cmdsForCreate["intersect"] = intersect;
   cmdsForCreate["union"] = unionD;
   cmdsForCreate["unique"] = uniqueD;
+  cmdsForCreate["adddic"] = addDtoD;
   std::string name = "";
   while (std::cin >> name)
   {
