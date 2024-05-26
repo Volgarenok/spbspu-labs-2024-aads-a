@@ -32,5 +32,10 @@ int main(int argc, char * argv[])
   {
     std::cout << *i << '\n';
   }
+  quickSort(nums.begin(), nums.end(), std::greater< int >());
+  for (auto i = nums.cbegin(); i != nums.cend(); ++i)
+  {
+    std::cout << *i << '\n';
+  }
 }
 
