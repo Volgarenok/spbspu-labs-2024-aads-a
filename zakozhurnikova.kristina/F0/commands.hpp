@@ -1,8 +1,8 @@
 #ifndef COMMANDS_HPP
 #define COMMANDS_HPP
-#include <list.hpp>
 #include <binarySearchTree.hpp>
 #include <iosfwd>
+#include <list.hpp>
 #include <string>
 #include <utility>
 
@@ -12,17 +12,17 @@ using dictionaryOne = zak::BinarySearchTree< std::string, zak::List< std::string
 
 namespace zakozhurnikova
 {
-  void print(const List< std::string >& args, std::string& result, const dict& dictionary);
-  void complement(List< std::string >& args, std::string& result, dict& dictionary);
-  void intersect(List< std::string >& args, std::string& result, dict& dictionary);
-  void doUnion(List< std::string >& args, std::string& result, dict& dictionary);
-  void specificLetter(List< std::string >& args, std::string& result, dict& dictionary);
-  void elimination(List< std::string >& args, std::string& result, dict& dictionary);
-  void destruction(List< std::string >& args, std::string& result, dict& dictionary);
-  void addition(List< std::string >& args, std::string& result, dict& dictionary);
-  void palindrome(List< std::string >& args, std::string& result, dict& dictionary);
-  void rider(List< std::string >& args, std::string& result, dict& dictionary);
-  void interpreter(List< std::string >& args, std::string& result, dict& dictionary);
+  void print(const List< std::string >& args, const dict& dictionary);
+  void complement(List< std::string >& args, dict& dictionary);
+  void intersect(List< std::string >& args, dict& dictionary);
+  void doUnion(List< std::string >& args, dict& dictionary);
+  void specificLetter(List< std::string >& args, dict& dictionary);
+  void elimination(List< std::string >& args, dict& dictionary);
+  void destruction(List< std::string >& args, dict& dictionary);
+  void addition(List< std::string >& args, dict& dictionary);
+  void palindrome(List< std::string >& args, dict& dictionary);
+  void rider(List< std::string >& args, dict& dictionary);
+  void interpreter(List< std::string >& args, dict& dictionary);
 }
 
 #endif

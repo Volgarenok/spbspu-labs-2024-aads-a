@@ -77,6 +77,13 @@ void zakozhurnikova::inputDictionary(
     {
       in.clear();
     }
-    maps.push(nameDictionary, translation);
+    if (!translation.empty() && !nameDictionary.empty())
+    {
+      maps.push(nameDictionary, translation);
+    }
+    else if (!nameDictionary.empty())
+    {
+      std::cout << "The dictionary is empty:" << nameDictionary << '\n';
+    }
   }
 }
