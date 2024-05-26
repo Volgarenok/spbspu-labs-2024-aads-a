@@ -18,6 +18,17 @@ void zhalilov::calc(const modulesMap &modules, std::ostream &historyFile, std::i
   replaceVars(modules, infix, infWithReplacedVars);
 }
 
+void zhalilov::modulesadd(modulesMap &modules, std::istream &in, std::ostream &out)
+{
+  std::string moduleName;
+  in >> moduleName;
+  auto insertPair = modules.insert(std::make_pair(moduleName, varModule{}));
+  if (!insertPair.second)
+  {
+    throw std::invalid_argument("module already exists");
+  }
+}
+
 void zhalilov::replaceVars(const modulesMap &modules, List< InfixToken > &oldInf, List< InfixToken > &newInf)
 {
   for (auto it = oldInf.begin(); it != oldInf.end(); ++it)
@@ -36,7 +47,7 @@ void zhalilov::replaceVars(const modulesMap &modules, List< InfixToken > &oldInf
         {
           if (args.empty())
           {
-            throw std::invalid_argument("commands.cpp: args.empty()");
+            throw std::invalid_argument("not enough args");
           }
           replaced.push_back(InfixToken(Operand(args.front())));
           args.pop_front();
