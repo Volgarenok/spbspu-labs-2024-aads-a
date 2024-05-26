@@ -24,7 +24,7 @@ namespace zhalilov
     BinOperator getBinOperator();
     Operand getOperand();
     Bracket getBracket();
-    VarExpression GetVarExpression();
+    VarExpression getVarExpression();
 
   private:
     union

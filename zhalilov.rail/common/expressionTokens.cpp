@@ -89,7 +89,7 @@ zhalilov::Bracket zhalilov::InfixToken::getBracket()
   return bracket_;
 }
 
-zhalilov::VarExpression zhalilov::InfixToken::GetVarExpression()
+zhalilov::VarExpression zhalilov::InfixToken::getVarExpression()
 {
   if (type_ != PrimaryType::VarExpression)
   {
