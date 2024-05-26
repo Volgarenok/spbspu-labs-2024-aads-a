@@ -9,9 +9,10 @@ int main()
   dic_t dicts;
   Tree< std::string, std::function< void(std::istream&, std::ostream&, const dic_t&) > > cmdsForOutput;
   cmdsForOutput["prntd"] = print;
-  Tree< std::string, std::function< void(std::istream&, dic_t&) > > cmdsForCreate;
+  Tree< std::string, std::function< iterator(std::istream&, dic_t&) > > cmdsForCreate;
   cmdsForCreate["addd"] = addDict;
-  cmdsForCreate["chng"] = changeDict;
+  cmdsForCreate["chng"] = cmdChange;
+  cmdsForCreate["mkd"] = makeDict;
   std::string name = "";
   while (std::cin >> name)
   {

@@ -7,8 +7,10 @@
 namespace piyavkin
 {
   using dic_t = Tree< std::string, Tree< std::string, size_t > >;
+  using iterator = TreeIterator< std::string, Tree< std::string, size_t > >;
   void print(std::istream& in, std::ostream& out, const dic_t& dicts);
-  void addDict(std::istream& in, dic_t& dicts);
-  void changeDict(std::istream& in, dic_t& dicts);
+  iterator addDict(std::istream& in, dic_t& dicts);
+  iterator cmdChange(std::istream& in, dic_t& dicts);
+  iterator makeDict(std::istream& in, dic_t& dicts);
 }
 #endif
