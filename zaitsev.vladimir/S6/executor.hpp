@@ -22,7 +22,7 @@ namespace detail
     out << '\n';
   }
   template< class Container, typename Comparator, typename InputIt >
-  void execute(InputIt begin, InputIt end, size_t size, void (*sort)(typename Container::iterator, typename Container::iterator, Comparator))
+  void execute(InputIt begin, InputIt end, void (*sort)(typename Container::iterator, typename Container::iterator, Comparator))
   {
     Container container(begin, end);
     sort(container.begin(), container.end(), Comparator{});
@@ -42,11 +42,11 @@ namespace zaitsev
     using dq = std::deque < value_type >;
     using lst = std::list < value_type >;
     using Flist = zaitsev::ForwardList< value_type >;
-    execute< dq, Compare >(vals.cbegin(), vals.cend(), size, std::sort< typename dq::iterator, Compare >);
-    execute< dq, Compare >(vals.cbegin(), vals.cend(), size, shellSort< typename dq::iterator, Compare >);
-    execute< dq, Compare >(vals.cbegin(), vals.cend(), size, shellSort< typename dq::iterator, Compare >);
-    execute< lst, Compare >(vals.cbegin(), vals.cend(), size, shellSort< typename lst::iterator, Compare >);
-    execute< Flist, Compare >(vals.cbegin(), vals.cend(), size, shellSort< typename Flist::iterator, Compare >);
+    execute< dq, Compare >(vals.cbegin(), vals.cend(), std::sort< typename dq::iterator, Compare >);
+    execute< dq, Compare >(vals.cbegin(), vals.cend(), shellSort< typename dq::iterator, Compare >);
+    execute< dq, Compare >(vals.cbegin(), vals.cend(), shellSort< typename dq::iterator, Compare >);
+    execute< lst, Compare >(vals.cbegin(), vals.cend(), shellSort< typename lst::iterator, Compare >);
+    execute< Flist, Compare >(vals.cbegin(), vals.cend(), shellSort< typename Flist::iterator, Compare >);
     Flist flist(vals.cbegin(), vals.cend());
     flist.sort(Compare{});
     detail::print(out, flist);
