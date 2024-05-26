@@ -1,5 +1,7 @@
 #include "commands.hpp"
 
+#include <iostream>
+
 #include <calc/calculateExpr.hpp>
 #include <calc/getInfix.hpp>
 #include <calc/infixToPostfix.hpp>
@@ -14,6 +16,11 @@ void zhalilov::calc(const modulesMap &modules, std::ostream &historyFile, std::i
 {
   List< InfixToken > infix;
   getInfix(infix, in);
+  if (!in)
+  {
+    throw std::invalid_argument("bad input");
+  }
+
   List< InfixToken > infWithReplacedVars;
   replaceVars(modules, infix, infWithReplacedVars);
 }
@@ -22,10 +29,46 @@ void zhalilov::modulesadd(modulesMap &modules, std::istream &in, std::ostream &o
 {
   std::string moduleName;
   in >> moduleName;
+  if (!in)
+  {
+    throw std::invalid_argument("bad input");
+  }
+
   auto insertPair = modules.insert(std::make_pair(moduleName, varModule{}));
   if (!insertPair.second)
   {
     throw std::invalid_argument("module already exists");
+  }
+}
+
+void zhalilov::modulesvarradd(modulesMap &modules, std::istream &in, std::ostream &out)
+{
+  std::string moduleName;
+  std::string varName;
+  in >> varName;
+  if (!in)
+  {
+    throw std::invalid_argument("bad input");
+  }
+
+  auto moduleIt = modules.find(moduleName);
+  if (moduleIt != modules.end())
+  {
+    List< InfixToken > infix;
+    getInfix(infix, in);
+    auto varIt = moduleIt->second.find(varName);
+    if (varIt != moduleIt->second.end())
+    {
+      varIt->second = infix;
+    }
+    else
+    {
+      moduleIt->second.insert(std::make_pair(varName, infix));
+    }
+  }
+  else
+  {
+    throw std::invalid_argument("module doesn't exist");
   }
 }
 
