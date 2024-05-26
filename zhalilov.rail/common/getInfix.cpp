@@ -117,6 +117,10 @@ void zhalilov::getInfix(Queue< InfixToken > &queue, std::istream &in)
           {
             undefinedTkn = InfixToken(varExpr);
           }
+          else
+          {
+            throw std::invalid_argument("getInfix.cpp: processVarExpr == false");
+          }
         }
       }
       queue.push(undefinedTkn);
