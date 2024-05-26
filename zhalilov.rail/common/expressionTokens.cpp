@@ -104,7 +104,19 @@ zhalilov::PostfixToken::PostfixToken():
 
 zhalilov::PostfixToken::PostfixToken(const PostfixToken &tkn)
 {
-  assigner(tkn);
+  switch (tkn.type_)
+  {
+  case PrimaryType::Operand:
+    type_ = PrimaryType::Operand;
+    operand_ = tkn.operand_;
+    return;
+  case PrimaryType::BinOperator:
+    type_ = PrimaryType::BinOperator;
+    binOperator_ = tkn.binOperator_;
+    return;
+  default:
+    return;
+  }
 }
 
 zhalilov::PostfixToken::PostfixToken(BinOperator aBinOperator):
@@ -116,12 +128,6 @@ zhalilov::PostfixToken::PostfixToken(Operand aOperand):
   operand_(aOperand),
   type_(PrimaryType::Operand)
 {}
-
-zhalilov::PostfixToken &zhalilov::PostfixToken::operator=(const PostfixToken &tkn)
-{
-  assigner(tkn);
-  return *this;
-}
 
 zhalilov::PrimaryType zhalilov::PostfixToken::getType() const
 {
@@ -146,30 +152,29 @@ zhalilov::Operand zhalilov::PostfixToken::getOperand()
   return operand_;
 }
 
-void zhalilov::PostfixToken::assigner(const PostfixToken &tkn)
-{
-  switch (tkn.type_)
-  {
-  case PrimaryType::Operand:
-    type_ = PrimaryType::Operand;
-    operand_ = tkn.operand_;
-    return;
-  case PrimaryType::BinOperator:
-    type_ = PrimaryType::BinOperator;
-    binOperator_ = tkn.binOperator_;
-    return;
-  default:
-    return;
-  }
-}
-
 zhalilov::TransferToken::TransferToken():
   type_(PrimaryType::Undefined)
 {}
 
 zhalilov::TransferToken::TransferToken(const TransferToken &tkn)
 {
-  assigner(tkn);
+  switch (tkn.type_)
+  {
+  case PrimaryType::BinOperator:
+    type_ = PrimaryType::BinOperator;
+    binOperator_ = tkn.binOperator_;
+    return;
+  case PrimaryType::CloseBracket:
+    type_ = PrimaryType::CloseBracket;
+    bracket_ = Bracket(PrimaryType::CloseBracket);
+    return;
+  case PrimaryType::OpenBracket:
+    type_ = PrimaryType::OpenBracket;
+    bracket_ = Bracket(PrimaryType::CloseBracket);
+    return;
+  default:
+    return;
+  }
 }
 
 zhalilov::TransferToken::TransferToken(BinOperator aBinOperator):
@@ -181,12 +186,6 @@ zhalilov::TransferToken::TransferToken(Bracket aBracket):
   bracket_(aBracket),
   type_(aBracket.getType())
 {}
-
-zhalilov::TransferToken &zhalilov::TransferToken::operator=(const TransferToken &tkn)
-{
-  assigner(tkn);
-  return *this;
-}
 
 zhalilov::PrimaryType zhalilov::TransferToken::getType() const
 {
@@ -209,25 +208,4 @@ zhalilov::Bracket zhalilov::TransferToken::getBracket()
     throw std::logic_error("token doesn't store bracket");
   }
   return bracket_;
-}
-
-void zhalilov::TransferToken::assigner(const TransferToken &tkn)
-{
-  switch (tkn.type_)
-  {
-  case PrimaryType::BinOperator:
-    type_ = PrimaryType::BinOperator;
-    binOperator_ = tkn.binOperator_;
-    return;
-  case PrimaryType::CloseBracket:
-    type_ = PrimaryType::CloseBracket;
-    bracket_ = Bracket(PrimaryType::CloseBracket);
-    return;
-  case PrimaryType::OpenBracket:
-    type_ = PrimaryType::OpenBracket;
-    bracket_ = Bracket(PrimaryType::CloseBracket);
-    return;
-  default:
-    return;
-  }
 }

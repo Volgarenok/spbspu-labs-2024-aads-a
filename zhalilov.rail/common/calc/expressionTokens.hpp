@@ -45,8 +45,6 @@ namespace zhalilov
     explicit PostfixToken(BinOperator aBinOperator);
     explicit PostfixToken(Operand aOperand);
 
-    PostfixToken &operator=(const PostfixToken &tkn);
-
     PrimaryType getType() const;
 
     BinOperator getBinOperator();
@@ -60,8 +58,6 @@ namespace zhalilov
     };
 
     PrimaryType type_;
-
-    void assigner(const PostfixToken &tkn);
   };
 
   struct TransferToken
@@ -70,8 +66,6 @@ namespace zhalilov
     TransferToken(const TransferToken &tkn);
     explicit TransferToken(BinOperator aBinOperator);
     explicit TransferToken(Bracket aBracket);
-
-    TransferToken &operator=(const TransferToken &tkn);
 
     PrimaryType getType() const;
 
@@ -86,8 +80,6 @@ namespace zhalilov
     };
 
     PrimaryType type_;
-
-    void assigner(const TransferToken &tkn);
   };
 }
 
