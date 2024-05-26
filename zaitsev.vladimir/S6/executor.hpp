@@ -4,7 +4,6 @@
 #include <deque>
 #include <list>
 #include <algorithm>
-#include <random>
 #include <forward_list.hpp>
 #include "generators.hpp"
 #include "sorting_algorithms.hpp"
@@ -22,8 +21,6 @@ namespace detail
     }
     out << '\n';
   }
-
-
   template< class Container, typename Comparator, typename InputIt >
   void execute(InputIt begin, InputIt end, size_t size, void (*sort)(typename Container::iterator, typename Container::iterator, Comparator))
   {
@@ -39,7 +36,7 @@ namespace zaitsev
   {
     using namespace detail;
     std::vector< value_type > vals(size);
-    generator< value_type > gen(0, 1000, std::random_device{}());
+    generator< value_type > gen(0, 1000, 43);
     std::generate_n(vals.begin(), size, gen);
     print(out, vals);
     using dq = std::deque < value_type >;
