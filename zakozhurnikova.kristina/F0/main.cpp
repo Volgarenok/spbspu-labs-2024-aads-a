@@ -24,17 +24,18 @@ int main(int argc, char* argv[])
   using namespace std::placeholders;
   BinarySearchTree< std::string, std::function< void(List< std::string >&) > > commands;
 
-  commands["print"] = std::bind(print, _1, std::cref(dictionary));
-  commands["intersect"] = std::bind(intersect, _1, std::ref(dictionary));
-  commands["complement"] = std::bind(complement, _1, std::ref(dictionary));
-  commands["specificLetter"] = std::bind(specificLetter, _1, std::ref(dictionary));
-  commands["union"] = std::bind(doUnion, _1, std::ref(dictionary));
-  commands["destruction"] = std::bind(destruction, _1, std::ref(dictionary));
-  commands["elimination"] = std::bind(elimination, _1, std::ref(dictionary));
-  commands["addition"] = std::bind(addition, _1, std::ref(dictionary));
-  commands["palindrome"] = std::bind(palindrome, _1, std::ref(dictionary));
-  commands["rider"] = std::bind(rider, _1, std::ref(dictionary));
-  commands["interpreter"] = std::bind(interpreter, _1, std::ref(dictionary));
+  commands.push("print", std::bind(print, _1, std::cref(dictionary)));
+  commands.push("intersect", std::bind(intersect, _1, std::ref(dictionary)));
+  commands.push("complement", std::bind(complement, _1, std::ref(dictionary)));
+  commands.push("specificLetter", std::bind(specificLetter, _1, std::ref(dictionary)));
+  commands.push("union", std::bind(doUnion, _1, std::ref(dictionary)));
+  commands.push("destruction",std::bind(destruction, _1, std::ref(dictionary)));
+  commands.push("elimination", std::bind(elimination, _1, std::ref(dictionary)));
+  commands.push("addition", std::bind(addition, _1, std::ref(dictionary)));
+  commands.push("palindrome", std::bind(palindrome, _1, std::ref(dictionary)));
+  commands.push("rider", std::bind(rider, _1, std::ref(dictionary)));
+  commands.push("interpreter", std::bind(interpreter, _1, std::ref(dictionary)));
+  commands.push("save", std::bind(save, _1, std::ref(dictionary)));
 
   std::string command;
   while (std::cin >> command)
