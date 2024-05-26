@@ -2,11 +2,11 @@
 #define TREE_HPP
 
 #include <functional>
-#include <treeNode.hpp>
-#include <treeIterator.hpp>
-#include <queue.hpp>
-#include <stack.hpp>
-#include <constTreeIterator.hpp>
+#include "treeNode.hpp"
+#include "treeIterator.hpp"
+#include "queue.hpp"
+#include "stack.hpp"
+#include "constTreeIterator.hpp"
 
 namespace marishin
 {
