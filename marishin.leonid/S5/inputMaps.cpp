@@ -2,7 +2,7 @@
 
 marishin::Tree< int, std::string > marishin::inputMaps(std::istream & in)
 {
-  Tree< int, std::string > > myMap;
+  Tree< int, std::string > myMap;
   int num = 0;
   std::string value = "";
   while (in >> num >> value)
