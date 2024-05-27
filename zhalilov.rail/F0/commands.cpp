@@ -105,12 +105,19 @@ void zhalilov::modulesshow(const modulesMap &modules, std::istream &in, std::ost
   for (auto it = modules.cbegin(); it != modules.cend(); ++it)
   {
     out << it->first << ":\n";
-    for (auto inModuleIt = it->second.cbegin(); inModuleIt != it->second.cend(); ++inModuleIt)
+    if (!it->second.empty())
     {
-      out << inModuleIt->first << " =";
-      outputInfix(inModuleIt->second, out);
-      out << '\n';
+      for (auto inModuleIt = it->second.cbegin(); inModuleIt != it->second.cend(); ++inModuleIt)
+      {
+        out << inModuleIt->first << " =";
+        outputInfix(inModuleIt->second, out);
+      }
     }
+    else
+    {
+      out << "No vars saved :/";
+    }
+    out << '\n';
   }
 }
 
