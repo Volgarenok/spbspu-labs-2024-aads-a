@@ -1,6 +1,6 @@
+#include "commands.hpp"
 #include <iostream>
 #include <fstream>
-#include "commands.hpp"
 
 void addDictionary(std::string& dictionaryName, dictionaryOne& toAdd, dict& dictionary)
 {
@@ -29,16 +29,15 @@ void zakozhurnikova::print(const List< std::string >& args, const dict& dictiona
   std::string mapName = args.back();
   if (!dictionary.at(mapName).empty())
   {
-    result = mapName + ' ';
+    result = mapName;
     for (auto it = dictionary[mapName].cbegin(); it != dictionary[mapName].cend(); ++it)
     {
-      result += it->first + ' ';
+      result += ' ' + it->first;
       for (auto itList = (it->second).begin(); itList != (it->second).end(); ++itList)
       {
-        result += *itList + ' ';
+        result += ' ' + *itList;
       }
     }
-    result.pop_back();
   }
   else
   {

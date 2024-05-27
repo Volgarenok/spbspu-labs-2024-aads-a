@@ -1,8 +1,8 @@
-#include <binarySearchTree.hpp>
 #include <fstream>
 #include <iostream>
 #include <string>
 #include <utility>
+#include <binarySearchTree.hpp>
 #include "commands.hpp"
 #include "inputDictionary.hpp"
 

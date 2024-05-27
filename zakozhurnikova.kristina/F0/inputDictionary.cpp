@@ -1,7 +1,7 @@
+#include "inputDictionary.hpp"
 #include <iostream>
 #include <limits>
 #include <scopeGuard.hpp>
-#include "inputDictionary.hpp"
 
 void zakozhurnikova::inputArgs(std::istream& in, List< std::string >& args)
 {
@@ -81,7 +81,7 @@ void zakozhurnikova::inputDictionary(
       }
       else
       {
-        std::cout << "incorret(empty) input translate word: " << word << " - the word is not written in the dictionary";
+        std::cout << "incorret(empty) input translate word: " << temp << " - the word is not written in the dictionary\n";
       }
       in >> space;
     }
