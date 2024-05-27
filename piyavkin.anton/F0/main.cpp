@@ -8,17 +8,17 @@ int main()
   using namespace piyavkin;
   dic_t dicts;
   Tree< std::string, std::function< void(std::istream&, const dic_t&) > > cmdsForOutput;
-  cmdsForOutput["print"] = print;
+  cmdsForOutput["printdictionary"] = print;
   cmdsForOutput["topfreq"] = std::bind(topFreq, std::placeholders::_1, std::ref(std::cout), std::placeholders::_2);
   Tree< std::string, std::function< iterator(std::istream&, dic_t&) > > cmdsForCreate;
-  cmdsForCreate["addd"] = addDict;
-  cmdsForCreate["chng"] = cmdChange;
-  cmdsForCreate["mkd"] = makeDict;
-  cmdsForCreate["intersect"] = intersect;
-  cmdsForCreate["union"] = unionD;
-  cmdsForCreate["unique"] = uniqueD;
-  cmdsForCreate["adddic"] = addDtoD;
-  cmdsForCreate["sub"] = subD;
+  cmdsForCreate["adddictionary"] = addDict;
+  cmdsForCreate["changedictionary"] = cmdChange;
+  cmdsForCreate["makedictionary"] = makeDict;
+  cmdsForCreate["intersectdictionaries"] = intersect;
+  cmdsForCreate["uniondictionaries"] = unionD;
+  cmdsForCreate["uniquedictionaries"] = uniqueD;
+  cmdsForCreate["adddictionarytodictionary"] = addDtoD;
+  cmdsForCreate["subdictionarytodictionary"] = subD;
   std::string name = "";
   while (std::cin >> name)
   {
@@ -42,5 +42,7 @@ int main()
         return 1;
       }
     }
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
 }

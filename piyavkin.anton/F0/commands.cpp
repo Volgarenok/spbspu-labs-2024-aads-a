@@ -1,5 +1,6 @@
 #include "commands.hpp"
 #include <fstream>
+#include <functional>
 #include <list.hpp>
 
 piyavkin::iterator getDict(std::istream& in, piyavkin::dic_t dicts)
@@ -80,7 +81,7 @@ void piyavkin::topFreq(std::istream& in, std::ostream& out, const dic_t& dicts)
   {
     res.push_back(std::pair< size_t, std::string >(dicIt->second, dicIt->first));
   }
-  res.sort();
+  res.sort(std::greater< >());
   auto listIt = res.cbegin();
   for (size_t i = 0; i != n; ++i)
   {
@@ -136,17 +137,17 @@ piyavkin::iterator piyavkin::intersect(std::istream& in, dic_t& dicts)
   tree_t newTree;
   for (auto it = lhsTree.cbegin(); it != lhsTree.cend(); ++it)
   {
-    if (rhsIt->first == it->first)
+    if (rhsIt->first < it->first)
     {
-      newTree.insert(std::pair< std::string, size_t >(it->first, std::min(it->second, rhsIt->second)));
-      if (rhsIt != rhsTree.cend())
+      while (rhsIt != rhsTree.cend() && rhsIt->first < it->first)
       {
         ++rhsIt;
       }
     }
-    else if (rhsIt->first < it->first)
+    if (rhsIt->first == it->first)
     {
-      while (rhsIt != rhsTree.cend() && rhsIt->first < it->first)
+      newTree.insert(std::pair< std::string, size_t >(it->first, std::min(it->second, rhsIt->second)));
+      if (rhsIt != rhsTree.cend())
       {
         ++rhsIt;
       }
