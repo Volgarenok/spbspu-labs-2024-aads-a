@@ -1,7 +1,8 @@
 #include "iodata.hpp"
 
-ishmuratov::data_t & ishmuratov::input_dict(ishmuratov::data_t & data, std::istream &input)
+ishmuratov::data_t ishmuratov::input_dict(std::istream &input)
 {
+  data_t data;
   std::string name;
   while (input >> name)
   {

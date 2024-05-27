@@ -10,15 +10,14 @@
 
 int main(int argc, char * argv[])
 {
+  using namespace ishmuratov;
   if (argc != 2)
   {
     std::cerr << "Incorrect number of arguments!\n";
     return 1;
   }
   std::ifstream file(argv[1]);
-  using namespace ishmuratov;
-  data_t data;
-  input_dict(data, file);
+  data_t data = input_dict(file);
 
   AVLTree< std::string, std::function< void(std::istream &, std::ostream &) > > cmds;
   {

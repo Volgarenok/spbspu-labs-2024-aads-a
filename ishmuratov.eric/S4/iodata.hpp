@@ -5,7 +5,7 @@
 
 namespace ishmuratov
 {
-  data_t & input_dict(data_t & data, std::istream & input);
+  data_t input_dict(std::istream & input);
 }
 
 #endif
