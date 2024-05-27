@@ -11,6 +11,7 @@ namespace zhalilov
 {
   InfixToken replaceVars(const modulesMap &modules, InfixToken infToReplace);
   void outputInfix(List< InfixToken > infix, std::ostream &out);
+  void checkExtraArgs(std::istream &in);
   std::ostream &coutOperand(std::ostream &out, const Operand &op);
   std::ostream &coutBracket(std::ostream &out, const Bracket &br);
   std::ostream &coutBinOp(std::ostream &out, const BinOperator &binOp);
@@ -56,6 +57,7 @@ void zhalilov::modulesadd(modulesMap &modules, std::istream &in, std::ostream &)
   {
     throw std::invalid_argument("bad input");
   }
+  checkExtraArgs(in);
 
   auto insertPair = modules.insert(std::make_pair(moduleName, varModule{}));
   if (!insertPair.second)
@@ -73,6 +75,7 @@ void zhalilov::modulesvarradd(modulesMap &modules, std::istream &in, std::ostrea
   {
     throw std::invalid_argument("bad input");
   }
+  checkExtraArgs(in);
 
   auto moduleIt = modules.find(moduleName);
   if (moduleIt != modules.end())
@@ -101,12 +104,7 @@ void zhalilov::modulesvarradd(modulesMap &modules, std::istream &in, std::ostrea
 
 void zhalilov::modulesshow(const modulesMap &modules, std::istream &in, std::ostream &out)
 {
-  std::string checkStream;
-  std::getline(in, checkStream);
-  if (!checkStream.empty())
-  {
-    throw std::invalid_argument("too many args");
-  }
+  checkExtraArgs(in);
 
   for (auto it = modules.cbegin(); it != modules.cend(); ++it)
   {
@@ -115,7 +113,7 @@ void zhalilov::modulesshow(const modulesMap &modules, std::istream &in, std::ost
     {
       for (auto inModuleIt = it->second.cbegin(); inModuleIt != it->second.cend(); ++inModuleIt)
       {
-        out << inModuleIt->first << " =";
+        out << inModuleIt->first << " = ";
         outputInfix(inModuleIt->second, out);
       }
     }
@@ -127,14 +125,31 @@ void zhalilov::modulesshow(const modulesMap &modules, std::istream &in, std::ost
   }
 }
 
+void zhalilov::modulevardelete(modulesMap &modules, std::istream &in, std::ostream &)
+{
+  std::string moduleName;
+  std::string varName;
+  in >> moduleName >> varName;
+  if (!in)
+  {
+    throw std::invalid_argument("bad input");
+  }
+  checkExtraArgs(in);
+
+  auto moduleIt = modules.find(moduleName);
+  if (moduleIt != modules.end())
+  {
+    moduleIt->second.erase(varName);
+  }
+  else
+  {
+    throw std::invalid_argument("module doesn't exist");
+  }
+}
+
 void zhalilov::historyshow(const std::string &filename, std::istream &in, std::ostream &out)
 {
-  std::string checkStream;
-  std::getline(in, checkStream);
-  if (!checkStream.empty())
-  {
-    throw std::invalid_argument("too many args");
-  }
+  checkExtraArgs(in);
 
   std::ifstream file(filename);
   List< std::string > history;
@@ -154,13 +169,7 @@ void zhalilov::historyshow(const std::string &filename, std::istream &in, std::o
 
 void zhalilov::historyclear(const std::string &filename, std::istream &in, std::ostream &)
 {
-  std::string checkStream;
-  std::getline(in, checkStream);
-  if (!checkStream.empty())
-  {
-    throw std::invalid_argument("too many args");
-  }
-
+  checkExtraArgs(in);
   std::ifstream file(filename, std::ios::out | std::ios::trunc);
 }
 
@@ -226,6 +235,16 @@ void zhalilov::outputInfix(List< InfixToken > infix, std::ostream &out)
       coutBracket(out, it->getBracket());
       break;
     }
+  }
+}
+
+void zhalilov::checkExtraArgs(std::istream &in)
+{
+  std::string checkStream;
+  std::getline(in, checkStream);
+  if (!checkStream.empty())
+  {
+    throw std::invalid_argument("too many args");
   }
 }
 

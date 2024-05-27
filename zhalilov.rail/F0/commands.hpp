@@ -15,6 +15,7 @@ namespace zhalilov
   void modulesadd(modulesMap &, std::istream &, std::ostream &);
   void modulesvarradd(modulesMap &, std::istream &, std::ostream &);
   void modulesshow(const modulesMap &, std::istream &, std::ostream &);
+  void modulevardelete(modulesMap &, std::istream &, std::ostream &);
   void historyshow(const std::string &, std::istream &, std::ostream &);
   void historyclear(const std::string &, std::istream &, std::ostream &);
 }
