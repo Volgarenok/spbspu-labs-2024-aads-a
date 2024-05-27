@@ -148,7 +148,7 @@ namespace ishmuratov
     {
       delete_node(root_);
       root_ = nullptr;
-      comp_ = nullptr;
+      delete comp_;
       size_ = 0;
     }
 
