@@ -210,7 +210,7 @@ namespace ishmuratov
       }
       else
       {
-        std::pair< tnode *, tnode * > nodes = insert_impl(pair, root_, true);
+        auto nodes = insert_impl(pair, root_, true);
         root_ = nodes.first;
       }
     }
