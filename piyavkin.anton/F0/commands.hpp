@@ -18,5 +18,6 @@ namespace piyavkin
   iterator unionD(std::istream& in, dic_t& dicts);
   iterator uniqueD(std::istream& in, dic_t& dicts);
   iterator addDtoD(std::istream& in, dic_t& dicts);
+  iterator subD(std::istream& in, dic_t& dicts);
 }
 #endif

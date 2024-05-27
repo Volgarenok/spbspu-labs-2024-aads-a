@@ -240,3 +240,46 @@ piyavkin::iterator piyavkin::addDtoD(std::istream& in, dic_t& dicts)
   in >> lhs >> rhs;
   return unionImpl(dicts, lhs, lhs, rhs);
 }
+
+piyavkin::iterator piyavkin::subD(std::istream& in, dic_t& dicts)
+{
+  std::string lhs = "";
+  std::string rhs = "";
+  in >> lhs >> rhs;
+  tree_t rhsTree = dicts.at(rhs);
+  auto res = dicts.find(lhs);
+  auto rhsIt = rhsTree.begin();
+  for (auto it = res->second.begin(); it != res->second.end(); ++it)
+  {
+    if (rhsIt->first < it->first)
+    {
+      while (rhsIt != rhsTree.end() && rhsIt->first < it->first)
+      {
+        ++rhsIt;
+      }
+    }
+    if (rhsIt->first == it->first)
+    {
+      if (rhsIt->second < it->second)
+      {
+        auto pair = std::pair< std::string, size_t >(it->first, it->second - rhsIt->second);
+        res->second.erase(it->first);
+        it = res->second.insert(pair).first;
+      }
+      else
+      {
+        res->second.erase(it++);
+        if (it == res->second.end())
+        {
+          break;
+        }
+        --it;
+      }
+      if (rhsIt != rhsTree.end())
+      {
+        ++rhsIt;
+      }
+    }
+  }
+  return res;
+}

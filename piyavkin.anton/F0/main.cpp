@@ -18,6 +18,7 @@ int main()
   cmdsForCreate["union"] = unionD;
   cmdsForCreate["unique"] = uniqueD;
   cmdsForCreate["adddic"] = addDtoD;
+  cmdsForCreate["sub"] = subD;
   std::string name = "";
   while (std::cin >> name)
   {
