@@ -24,8 +24,8 @@ int main(int argc, char* argv[])
     }
   }
 
-  Tree< std::pair< std::string, std::string >, std::function< void(const Tree< std::string, Dictionary >&, 
-    std::istream&, std::ostream&) > > constCommands;
+  Tree< std::pair< std::string, std::string >, std::function< void(const Tree< std::string, Dictionary >&, std::istream&,
+    std::ostream&) > > constCommands;
   constCommands[{ "print", "dictionary" }] = printDictCmd;
   constCommands[{ "print", "all" }] = printAllCmd;
   constCommands[{ "find", "translation" }] = findTranslationCmd;
