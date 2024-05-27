@@ -4,22 +4,22 @@
 #include <fstream>
 #include "dictionary.hpp"
 
-void nikitov::printDictCmd(const std::map< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream& output)
+void nikitov::printDictCmd(const Tree< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream& output)
 {
   std::string dictName;
   input >> dictName;
   dictOfDicts.at(dictName).printDictionary(output);
 }
 
-void nikitov::printAllCmd(const std::map< std::string, Dictionary >& dictOfDicts, std::istream&, std::ostream& output)
+void nikitov::printAllCmd(const Tree< std::string, Dictionary >& dictOfDicts, std::istream&, std::ostream& output)
 {
-  for (auto i = dictOfDicts.begin(); i != dictOfDicts.end(); ++i)
+  for (auto i = dictOfDicts.cbegin(); i != dictOfDicts.cend(); ++i)
   {
     i->second.printDictionary(output);
   }
 }
 
-void nikitov::findTranslationCmd(const std::map< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream& output)
+void nikitov::findTranslationCmd(const Tree< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream& output)
 {
   std::string dictionaryName;
   input >> dictionaryName;
@@ -28,7 +28,7 @@ void nikitov::findTranslationCmd(const std::map< std::string, Dictionary >& dict
   dictOfDicts.at(dictionaryName).printTranslation(word, output);
 }
 
-void nikitov::findAntonymCmd(const std::map< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream& output)
+void nikitov::findAntonymCmd(const Tree< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream& output)
 {
   std::string dictionaryName;
   input >> dictionaryName;
@@ -37,7 +37,7 @@ void nikitov::findAntonymCmd(const std::map< std::string, Dictionary >& dictOfDi
   dictOfDicts.at(dictionaryName).printAntonym(word, output);
 }
 
-void nikitov::translateSentenceCmd(const std::map< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream& output)
+void nikitov::translateSentenceCmd(const Tree< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream& output)
 {
   std::string dictionaryName;
   input >> dictionaryName;
@@ -89,7 +89,7 @@ void nikitov::translateSentenceCmd(const std::map< std::string, Dictionary >& di
   output << '\n';
 }
 
-void nikitov::translateFileCmd(const std::map< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream&)
+void nikitov::translateFileCmd(const Tree< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream&)
 {
   std::string dictionaryName;
   input >> dictionaryName;
@@ -148,7 +148,7 @@ void nikitov::translateFileCmd(const std::map< std::string, Dictionary >& dictOf
   fileOutput << '\n';
 }
 
-void nikitov::saveCmd(const std::map< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream&)
+void nikitov::saveCmd(const Tree< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream&)
 {
   std::string dictName;
   input >> dictName;
@@ -158,7 +158,7 @@ void nikitov::saveCmd(const std::map< std::string, Dictionary >& dictOfDicts, st
   dictOfDicts.at(dictName).printDictionary(fileOutput);
 }
 
-void nikitov::createCmd(std::map< std::string, Dictionary >& dictOfDicts, std::istream& input)
+void nikitov::createCmd(Tree< std::string, Dictionary >& dictOfDicts, std::istream& input)
 {
   std::string dictionaryName;
   input >> dictionaryName;
@@ -168,7 +168,7 @@ void nikitov::createCmd(std::map< std::string, Dictionary >& dictOfDicts, std::i
   }
 }
 
-void nikitov::addTranslationCmd(std::map< std::string, Dictionary >& dictOfDicts, std::istream& input)
+void nikitov::addTranslationCmd(Tree< std::string, Dictionary >& dictOfDicts, std::istream& input)
 {
   std::string dictionaryName;
   input >> dictionaryName;
@@ -178,7 +178,7 @@ void nikitov::addTranslationCmd(std::map< std::string, Dictionary >& dictOfDicts
   dictOfDicts.at(dictionaryName).addTranslation(word, translation);
 }
 
-void nikitov::addAntonymCmd(std::map< std::string, Dictionary >& dictOfDicts, std::istream& input)
+void nikitov::addAntonymCmd(Tree< std::string, Dictionary >& dictOfDicts, std::istream& input)
 {
   std::string dictionaryName;
   input >> dictionaryName;
@@ -188,7 +188,7 @@ void nikitov::addAntonymCmd(std::map< std::string, Dictionary >& dictOfDicts, st
   dictOfDicts.at(dictionaryName).addAntonym(word, translation);
 }
 
-void nikitov::editPrimaryCmd(std::map< std::string, Dictionary >& dictOfDicts, std::istream& input)
+void nikitov::editPrimaryCmd(Tree< std::string, Dictionary >& dictOfDicts, std::istream& input)
 {
   std::string dictionaryName;
   input >> dictionaryName;
@@ -199,7 +199,7 @@ void nikitov::editPrimaryCmd(std::map< std::string, Dictionary >& dictOfDicts, s
   dictOfDicts.at(dictionaryName).editPrimaryTranslation(word, translation);
 }
 
-void nikitov::editSecondaryCmd(std::map< std::string, Dictionary >& dictOfDicts, std::istream& input)
+void nikitov::editSecondaryCmd(Tree< std::string, Dictionary >& dictOfDicts, std::istream& input)
 {
   std::string dictionaryName;
   input >> dictionaryName;
@@ -210,7 +210,7 @@ void nikitov::editSecondaryCmd(std::map< std::string, Dictionary >& dictOfDicts,
   dictOfDicts.at(dictionaryName).editSecondaryTranslation(word, translation);
 }
 
-void nikitov::deletePrimaryCmd(std::map< std::string, Dictionary >& dictOfDicts, std::istream& input)
+void nikitov::deletePrimaryCmd(Tree< std::string, Dictionary >& dictOfDicts, std::istream& input)
 {
   std::string dictionaryName;
   input >> dictionaryName;
@@ -219,7 +219,7 @@ void nikitov::deletePrimaryCmd(std::map< std::string, Dictionary >& dictOfDicts,
   dictOfDicts.at(dictionaryName).deletePrimaryTranslation(word);
 }
 
-void nikitov::deleteSecondaryCmd(std::map< std::string, Dictionary >& dictOfDicts, std::istream& input)
+void nikitov::deleteSecondaryCmd(Tree< std::string, Dictionary >& dictOfDicts, std::istream& input)
 {
   std::string dictionaryName;
   input >> dictionaryName;
@@ -228,7 +228,7 @@ void nikitov::deleteSecondaryCmd(std::map< std::string, Dictionary >& dictOfDict
   dictOfDicts.at(dictionaryName).deleteSecondaryTranslation(word);
 }
 
-void nikitov::deleteAntonymCmd(std::map< std::string, Dictionary >& dictOfDicts, std::istream& input)
+void nikitov::deleteAntonymCmd(Tree< std::string, Dictionary >& dictOfDicts, std::istream& input)
 {
   std::string dictionaryName;
   input >> dictionaryName;
@@ -237,7 +237,7 @@ void nikitov::deleteAntonymCmd(std::map< std::string, Dictionary >& dictOfDicts,
   dictOfDicts.at(dictionaryName).deleteAntonym(word);
 }
 
-void nikitov::mergeCmd(std::map< std::string, Dictionary >& dictOfDicts, std::istream& input)
+void nikitov::mergeCmd(Tree< std::string, Dictionary >& dictOfDicts, std::istream& input)
 {
   std::string firstDictionaryName;
   input >> firstDictionaryName;

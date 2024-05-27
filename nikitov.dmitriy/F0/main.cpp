@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <map>
+#include <tree.hpp>
 #include <limits>
 #include "dictionary.hpp"
 #include "commands.hpp"
@@ -12,7 +12,7 @@ int main(int argc, char* argv[])
   setlocale(LC_ALL, "Russian");
   using namespace nikitov;
 
-  std::map< std::string, Dictionary > dictOfDicts;
+  Tree< std::string, Dictionary > dictOfDicts;
   for (int i = 1; i != argc + 1; ++i)
   {
     std::ifstream fileInput(argv[i]);
@@ -24,7 +24,7 @@ int main(int argc, char* argv[])
     }
   }
 
-  std::map< std::pair< std::string, std::string >, std::function< void(const std::map< std::string, Dictionary >&, std::istream&, std::ostream&) > > constCommands;
+  Tree< std::pair< std::string, std::string >, std::function< void(const Tree< std::string, Dictionary >&, std::istream&, std::ostream&) > > constCommands;
   constCommands[{ "print", "dictionary" }] = printDictCmd;
   constCommands[{ "print", "all" }] = printAllCmd;
   constCommands[{ "find", "translation" }] = findTranslationCmd;
@@ -33,7 +33,7 @@ int main(int argc, char* argv[])
   constCommands[{ "translate", "file" }] = translateFileCmd;
   constCommands[{ "save", "dictionary" }] = saveCmd;
 
-  std::map< std::pair< std::string, std::string >, std::function< void(std::map< std::string, Dictionary >&, std::istream&) > > commands;
+  Tree< std::pair< std::string, std::string >, std::function< void(Tree< std::string, Dictionary >&, std::istream&) > > commands;
   commands[{ "create", "dictionary" }] = createCmd;
   commands[{ "add", "translation" }] = addTranslationCmd;
   commands[{ "add", "antonym" }] = addAntonymCmd;

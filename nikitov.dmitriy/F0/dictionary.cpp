@@ -122,7 +122,7 @@ void nikitov::Dictionary::deleteAntonym(const std::string& word)
 void nikitov::Dictionary::printTranslation(const std::string& word, std::ostream& output) const
 {
   auto iterToWord = data_.find(word);
-  if (iterToWord != data_.end())
+  if (iterToWord != data_.cend())
   {
     output << word << " - " << iterToWord->second << '\n';
   }
@@ -135,7 +135,7 @@ void nikitov::Dictionary::printTranslation(const std::string& word, std::ostream
 void nikitov::Dictionary::printAntonym(const std::string& word, std::ostream& output) const
 {
   auto iterToWord = data_.find(word);
-  if (iterToWord != data_.end())
+  if (iterToWord != data_.cend())
   {
     if (!iterToWord->second.getAntonym().empty())
     {
