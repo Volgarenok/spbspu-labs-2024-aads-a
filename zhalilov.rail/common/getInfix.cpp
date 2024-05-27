@@ -53,9 +53,9 @@ namespace zhalilov
       {
         varName = toProcess.substr(0, i);
       }
+      List< long long > args;
       if (toProcess[i] == '(')
       {
-        List< long long > args;
         i++;
         while (toProcess[i] != ')')
         {
@@ -74,8 +74,8 @@ namespace zhalilov
             i++;
           }
         }
-        varExpr = VarExpression(moduleName, varName, args);
       }
+      varExpr = VarExpression(moduleName, varName, args);
       isVarExpr = true;
     }
     newIndex = i;
@@ -116,7 +116,7 @@ void zhalilov::getInfix(Queue< InfixToken > &queue, std::istream &in)
           size_t newIndex = 0;
           if (processVarExpr(str.substr(i), varExpr, newIndex))
           {
-            queue.push(InfixToken(varExpr));
+            queue.push(InfixToken(VarExpression(varExpr)));
             i = newIndex;
           }
           else
