@@ -1,7 +1,6 @@
 #ifndef BINARYOPERATOR_HPP
 #define BINARYOPERATOR_HPP
 
-
 namespace zhalilov
 {
   class Operand;
@@ -30,6 +29,8 @@ namespace zhalilov
     bool operator!=(const BinOperator &other) const;
     bool operator<=(const BinOperator &other) const;
     bool operator>=(const BinOperator &other) const;
+
+    Type getType();
 
   private:
     Type type_;

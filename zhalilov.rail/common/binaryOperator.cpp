@@ -107,6 +107,11 @@ bool zhalilov::BinOperator::operator>=(const BinOperator &other) const
   return getPriority() >= other.getPriority();
 }
 
+zhalilov::BinOperator::Type zhalilov::BinOperator::getType()
+{
+  return type_;
+}
+
 zhalilov::Operand zhalilov::BinOperator::doAddition(const Operand &a, const Operand &b) const
 {
   long long max = std::numeric_limits< long long >::max();
