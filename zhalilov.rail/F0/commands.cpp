@@ -8,7 +8,7 @@
 
 namespace zhalilov
 {
-  void replaceVars(const modulesMap &modules, List< InfixToken > &oldInf, List< InfixToken > &newInf);
+  InfixToken replaceVars(const modulesMap &modules, InfixToken infToReplace);
   void outputInfix(List< InfixToken > infix, std::ostream &out);
   std::ostream &operator<<(std::ostream &out, Operand op);
   std::ostream &operator<<(std::ostream &out, Bracket br);
@@ -25,7 +25,17 @@ void zhalilov::calc(const modulesMap &modules, std::ostream &historyFile, std::i
   }
 
   List< InfixToken > infWithReplacedVars;
-  replaceVars(modules, infix, infWithReplacedVars);
+  for (auto it = infix.begin(); it != infix.end(); ++it)
+  {
+    if (it->getType() == PrimaryType::VarExpression)
+    {
+      infWithReplacedVars.push_back(replaceVars(modules, *it));
+    }
+    else
+    {
+      infWithReplacedVars.push_back(*it);
+    }
+  }
   List< PostfixToken > postfix;
   infixToPostfix(infWithReplacedVars, postfix);
   out << calculateExpr(postfix);
@@ -89,41 +99,31 @@ void zhalilov::modulesshow(const modulesMap &modules, std::istream &in, std::ost
   in.clear();
 }
 
-void zhalilov::replaceVars(const modulesMap &modules, List< InfixToken > &oldInf, List< InfixToken > &newInf)
+zhalilov::InfixToken zhalilov::replaceVars(const modulesMap &modules, InfixToken infToReplace)
 {
-  for (auto it = oldInf.begin(); it != oldInf.end(); ++it)
+  std::string moduleName = infToReplace.getVarExpression().getModuleName();
+  std::string varName = infToReplace.getVarExpression().gerVarName();
+  varModule module = modules.at(moduleName);
+  List< InfixToken > varList = module.at(varName);
+  List< InfixToken > replaced;
+  List< long long > args = infToReplace.getVarExpression().getArgs();
+  for (auto exprIt = varList.cbegin(); exprIt != varList.cend(); ++exprIt)
   {
-    if (it->getType() == PrimaryType::VarExpression)
+    if (exprIt->getType() == PrimaryType::VarExpression)
     {
-      std::string moduleName = it->getVarExpression().getModuleName();
-      std::string varName = it->getVarExpression().gerVarName();
-      varModule module = modules.at(moduleName);
-      List< InfixToken > varList = module.at(varName);
-      List< InfixToken > replaced;
-      List< long long > args = it->getVarExpression().getArgs();
-      for (auto exprIt = varList.cbegin(); exprIt != varList.cend(); ++it)
+      if (args.empty())
       {
-        if (exprIt->getType() == PrimaryType::VarExpression)
-        {
-          if (args.empty())
-          {
-            throw std::invalid_argument("not enough args");
-          }
-          replaced.push_back(InfixToken(Operand(args.front())));
-          args.pop_front();
-        }
-        replaced.push_back(*exprIt);
+        throw std::invalid_argument("not enough args");
       }
-      List< PostfixToken > postfixReplaced;
-      infixToPostfix(replaced, postfixReplaced);
-      long long calculated = calculateExpr(postfixReplaced);
-      newInf.push_back(InfixToken(Operand(calculated)));
+      replaced.push_back(InfixToken(Operand(args.front())));
+      args.pop_front();
     }
-    else
-    {
-      newInf.push_back(*it);
-    }
+    replaced.push_back(*exprIt);
   }
+  List< PostfixToken > postfixReplaced;
+  infixToPostfix(replaced, postfixReplaced);
+  long long calculated = calculateExpr(postfixReplaced);
+  return InfixToken(Operand(calculated));
 }
 
 void zhalilov::outputInfix(List< InfixToken > infix, std::ostream &out)
