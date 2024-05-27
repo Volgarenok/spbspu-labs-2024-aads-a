@@ -27,13 +27,10 @@ namespace zhalilov
     VarExpression getVarExpression();
 
   private:
-    union
-    {
-      BinOperator binOperator_;
-      Operand operand_;
-      Bracket bracket_;
-      VarExpression varExpr_;
-    };
+    BinOperator binOperator_;
+    Operand operand_;
+    Bracket bracket_;
+    VarExpression varExpr_;
 
     PrimaryType type_;
   };

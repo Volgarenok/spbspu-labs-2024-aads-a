@@ -1,12 +1,18 @@
 #include <calc/expressionTokens.hpp>
 
 #include <stdexcept>
+#include <utility>
 
 zhalilov::InfixToken::InfixToken():
-  type_(PrimaryType::Undefined)
+  binOperator_{},
+  operand_{},
+  bracket_{ PrimaryType::CloseBracket },
+  varExpr_{},
+  type_{ PrimaryType::Undefined }
 {}
 
-zhalilov::InfixToken::InfixToken(const InfixToken &tkn)
+zhalilov::InfixToken::InfixToken(const InfixToken &tkn):
+  InfixToken{}
 {
   switch (tkn.type_)
   {
@@ -27,7 +33,8 @@ zhalilov::InfixToken::InfixToken(const InfixToken &tkn)
     bracket_ = Bracket(PrimaryType::OpenBracket);
     return;
   case PrimaryType::VarExpression:
-    InfixToken(tkn.varExpr_);
+    type_ = PrimaryType::VarExpression;
+    varExpr_ = tkn.varExpr_;
     return;
   default:
     return;
@@ -35,14 +42,18 @@ zhalilov::InfixToken::InfixToken(const InfixToken &tkn)
 }
 
 zhalilov::InfixToken::InfixToken(BinOperator aBinOperator):
-  binOperator_(aBinOperator),
-  type_(PrimaryType::BinOperator)
-{}
+  InfixToken{}
+{
+  binOperator_ = aBinOperator;
+  type_ = PrimaryType::BinOperator;
+}
 
 zhalilov::InfixToken::InfixToken(Operand aOperand):
-  operand_(aOperand),
-  type_(PrimaryType::Operand)
-{}
+  InfixToken{}
+{
+  operand_ = aOperand,
+    type_ = PrimaryType::Operand;
+}
 
 zhalilov::InfixToken::InfixToken(Bracket aBracket):
   bracket_(aBracket),
@@ -50,9 +61,11 @@ zhalilov::InfixToken::InfixToken(Bracket aBracket):
 {}
 
 zhalilov::InfixToken::InfixToken(VarExpression aVarExpr):
-  varExpr_(aVarExpr),
-  type_(PrimaryType::VarExpression)
-{}
+  InfixToken{}
+{
+  varExpr_ = aVarExpr;
+  type_ = PrimaryType::VarExpression;
+}
 
 zhalilov::InfixToken::~InfixToken()
 {}
