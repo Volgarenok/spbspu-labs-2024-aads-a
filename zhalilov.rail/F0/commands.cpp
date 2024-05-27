@@ -87,7 +87,7 @@ void zhalilov::modulesdelete(modulesMap &modules, std::istream &in, std::ostream
   }
 }
 
-void zhalilov::modulesvarradd(modulesMap &modules, std::istream &in, std::ostream &)
+void zhalilov::modulesvaradd(modulesMap &modules, std::istream &in, std::ostream &)
 {
   std::string moduleName;
   std::string varName;
@@ -122,7 +122,7 @@ void zhalilov::modulesvarradd(modulesMap &modules, std::istream &in, std::ostrea
   }
 }
 
-void zhalilov::modulevardelete(modulesMap &modules, std::istream &in, std::ostream &)
+void zhalilov::modulesvardelete(modulesMap &modules, std::istream &in, std::ostream &)
 {
   std::string moduleName;
   std::string varName;
