@@ -9,6 +9,10 @@
 namespace zhalilov
 {
   void replaceVars(const modulesMap &modules, List< InfixToken > &oldInf, List< InfixToken > &newInf);
+  void outputInfix(List< InfixToken > infix, std::ostream &out);
+  std::ostream &operator<<(std::ostream &out, Operand op);
+  std::ostream &operator<<(std::ostream &out, Bracket br);
+  std::ostream &operator<<(std::ostream &out, BinOperator binOp);
 }
 
 void zhalilov::calc(const modulesMap &modules, std::ostream &historyFile, std::istream &in, std::ostream &out)
@@ -119,5 +123,41 @@ void zhalilov::replaceVars(const modulesMap &modules, List< InfixToken > &oldInf
     {
       newInf.push_back(*it);
     }
+  }
+}
+
+void zhalilov::outputInfix(List< InfixToken > infix, std::ostream &out)
+{}
+
+std::ostream &zhalilov::operator<<(std::ostream &out, Operand op)
+{
+  return out << op.getNum();
+}
+
+std::ostream &zhalilov::operator<<(std::ostream &out, Bracket br)
+{
+  if (br.getType() == PrimaryType::CloseBracket)
+  {
+    return out << '(';
+  }
+  return out << ')';
+}
+
+std::ostream &zhalilov::operator<<(std::ostream &out, BinOperator binOp)
+{
+  switch (binOp.getType())
+  {
+  case BinOperator::Type::Addition:
+    return out << '+';
+  case BinOperator::Type::Subtraction:
+    return out << '-';
+  case BinOperator::Type::Multiplication:
+    return out << '*';
+  case BinOperator::Type::Division:
+    return out << '/';
+  case BinOperator::Type::Mod:
+    return out << '%';
+  default:
+    return out;
   }
 }
