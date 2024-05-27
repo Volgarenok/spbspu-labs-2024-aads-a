@@ -155,6 +155,10 @@ void zhalilov::modulesshow(const modulesMap &modules, std::istream &in, std::ost
     {
       for (auto inModuleIt = it->second.cbegin(); inModuleIt != it->second.cend(); ++inModuleIt)
       {
+        if (inModuleIt != it->second.cend())
+        {
+          out << '\n';
+        }
         out << inModuleIt->first << " = ";
         outputInfix(inModuleIt->second, out);
       }
@@ -164,6 +168,61 @@ void zhalilov::modulesshow(const modulesMap &modules, std::istream &in, std::ost
       out << "No vars saved :/";
     }
     out << '\n';
+  }
+}
+
+void zhalilov::modulesimport(modulesMap &modules, std::istream &in, std::ostream &)
+{
+  std::string moduleName;
+  std::string fileName;
+  in >> moduleName >> fileName;
+  if (!in)
+  {
+    throw std::invalid_argument("bad input");
+  }
+  checkExtraArgs(in);
+
+  std::ifstream file(fileName);
+  if (!file)
+  {
+    throw std::invalid_argument("bad filename");
+  }
+
+  varModule imported;
+  while (!file.eof())
+  {
+    std::string name;
+    file >> name;
+    List< InfixToken > infix;
+    getInfix(infix, file);
+    imported.insert(std::make_pair(name, infix));
+  }
+  modules.erase(moduleName);
+  modules.insert(std::make_pair(moduleName, imported));
+}
+
+void zhalilov::modulesexport(const modulesMap &modules, std::istream &in, std::ostream &)
+{
+  std::string moduleName;
+  std::string fileName;
+  in >> moduleName >> fileName;
+  if (!in)
+  {
+    throw std::invalid_argument("bad input");
+  }
+  checkExtraArgs(in);
+
+  auto module = modules.find(moduleName);
+  if (module == modules.end())
+  {
+    throw std::invalid_argument("module doesn't exist");
+  }
+
+  std::ofstream file(fileName);
+  for (auto it = module->second.cbegin(); it != module->second.cend(); ++it)
+  {
+    file << it->first << ' ';
+    outputInfix(it->second, file);
   }
 }
 
