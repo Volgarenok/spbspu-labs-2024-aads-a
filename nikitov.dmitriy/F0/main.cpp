@@ -16,7 +16,7 @@ int main(int argc, char* argv[])
   for (int i = 1; i != argc + 1; ++i)
   {
     std::ifstream fileInput(argv[i]);
-    if (fileInput)
+    if (fileInput.is_open())
     {
       Dictionary dict;
       fileInput >> dict;
