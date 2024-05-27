@@ -3,36 +3,24 @@
 #include <deque>
 #include "bdlist.hpp"
 
-#include "sort.hpp"
+#include "merge_sort.hpp"
+#include "quick_sort.hpp"
 
 int main()
 {
   using namespace ishmuratov;
-  std::forward_list< int > forwardList;
-  std::deque< int > deque;
-  List< int > biList;
 
-  biList.pushBack(1);
-  biList.pushBack(2);
-  biList.pushBack(3);
-  biList.pushBack(4);
-  biList.pushBack(5);
-  biList.pushBack(6);
-  biList.pushBack(7);
-  biList.pushBack(8);
-  biList.pushBack(9);
-  biList.pushBack(10);
+  List< int > bilist;
+  bilist.pushBack(20);
+  bilist.pushBack(4);
+  bilist.pushBack(3);
+  bilist.pushBack(12);
+  bilist.pushBack(11);
+  bilist.pushBack(50);
 
-  Iterator< int > end = biList.begin();
-  for (int i = 0; i != biList.size() - 1; ++i)
+  merge_sort(bilist.begin(), bilist.end());
+  for (auto value : bilist)
   {
-    end++;
+    std::cout << value << " ";
   }
-
-  quick_sort(biList.begin(), end, std::less< int >());
-  for (auto node = biList.begin(); node != biList.end(); ++node)
-  {
-    std::cout << *node << " ";
-  }
-
 }
