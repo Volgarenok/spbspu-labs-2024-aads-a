@@ -155,7 +155,7 @@ void zhalilov::modulesshow(const modulesMap &modules, std::istream &in, std::ost
     {
       for (auto inModuleIt = it->second.cbegin(); inModuleIt != it->second.cend(); ++inModuleIt)
       {
-        if (inModuleIt != it->second.cend())
+        if (inModuleIt != it->second.cbegin())
         {
           out << '\n';
         }
