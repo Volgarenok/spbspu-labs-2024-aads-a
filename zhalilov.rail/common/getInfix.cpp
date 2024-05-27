@@ -39,10 +39,10 @@ namespace zhalilov
       if (toProcess[i] == ':')
       {
         moduleName = toProcess.substr(0, i);
-        size_t nameStartPos = i;
-        while (std::isalpha(toProcess[nameStartPos]))
+        size_t nameStartPos = ++i;
+        while (std::isalpha(toProcess[i]))
         {
-          nameStartPos++;
+          i++;
         }
         if (nameStartPos != i)
         {
@@ -117,7 +117,7 @@ void zhalilov::getInfix(Queue< InfixToken > &queue, std::istream &in)
           if (processVarExpr(str.substr(i), varExpr, newIndex))
           {
             queue.push(InfixToken(VarExpression(varExpr)));
-            i = newIndex;
+            i += newIndex;
           }
           else
           {
