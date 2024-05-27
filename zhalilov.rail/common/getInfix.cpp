@@ -117,6 +117,7 @@ void zhalilov::getInfix(Queue< InfixToken > &queue, std::istream &in)
           if (processVarExpr(str.substr(i), varExpr, newIndex))
           {
             queue.push(InfixToken(varExpr));
+            i = newIndex;
           }
           else
           {
