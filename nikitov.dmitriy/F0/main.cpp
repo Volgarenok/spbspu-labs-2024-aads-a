@@ -13,15 +13,14 @@ int main(int argc, char* argv[])
   using namespace nikitov;
 
   Tree< std::string, Dictionary > dictOfDicts;
-  for (int i = 1; i != argc + 1; ++i)
+  for (int i = 2; i != argc; ++i)
   {
     std::ifstream fileInput(argv[i]);
-    if (fileInput.is_open())
+    if (fileInput)
     {
       Dictionary dict;
       fileInput >> dict;
       dictOfDicts.insert({ argv[i], dict });
-      fileInput.close();
     }
   }
 
