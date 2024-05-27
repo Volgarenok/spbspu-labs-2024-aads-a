@@ -37,10 +37,17 @@ std::pair< piyavkin::iterator, bool > add(std::istream& in, piyavkin::dic_t& dic
   return dicts.insert(std::make_pair(name, piyavkin::tree_t()));
 }
 
-void piyavkin::print(std::istream& in, std::ostream& out, const dic_t& dicts)
+void piyavkin::print(std::istream& in, const dic_t& dicts)
 {
   std::string nameDict = "";
-  in >> nameDict;
+  std::string nameFile = "";
+  in >> nameDict >> nameFile;
+  std::ifstream file(nameFile);
+  if (!file.is_open())
+  {
+    throw std::out_of_range("");
+  }
+  std::ofstream out(nameFile);
   auto it = dicts.find(nameDict);
   if (it != dicts.cend())
   {

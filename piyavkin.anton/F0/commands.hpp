@@ -9,7 +9,7 @@ namespace piyavkin
   using tree_t = Tree< std::string, size_t >;
   using dic_t = Tree< std::string, tree_t >;
   using iterator = TreeIterator< std::string, tree_t >;
-  void print(std::istream& in, std::ostream& out, const dic_t& dicts);
+  void print(std::istream& in, const dic_t& dicts);
   void topFreq(std::istream& in, std::ostream& out, const dic_t& dicts);
   iterator addDict(std::istream& in, dic_t& dicts);
   iterator cmdChange(std::istream& in, dic_t& dicts);
