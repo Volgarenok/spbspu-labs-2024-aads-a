@@ -3,7 +3,7 @@
 
 namespace ishmuratov
 {
-  template < typename BidirIt >
+  template < class BidirIt >
   BidirIt get_middle(BidirIt begin, BidirIt end)
   {
     BidirIt slow = begin;
@@ -24,15 +24,15 @@ namespace ishmuratov
     return ++slow;
   }
 
-  template < typename BidirIt >
-  void merge_impl(BidirIt begin, BidirIt middle, BidirIt end)
+  template < class BidirIt, class Compare >
+  void merge_impl(BidirIt begin, BidirIt middle, BidirIt end, Compare comp)
   {
     BidirIt left = begin;
     BidirIt right = middle;
 
     while (left != middle && right != end)
     {
-      if (*left < *right)
+      if (comp(*left, *right))
       {
         ++left;
       }
@@ -58,8 +58,8 @@ namespace ishmuratov
     }
   }
 
-  template <typename BidirIt>
-  void merge_sort(BidirIt begin, BidirIt end)
+  template < class BidirIt, class Compare >
+  void merge_sort(BidirIt begin, BidirIt end, Compare comp)
   {
     if (begin == end)
     {
@@ -73,9 +73,9 @@ namespace ishmuratov
     }
 
     BidirIt middle = get_middle(begin, end);
-    merge_sort(begin, middle);
-    merge_sort(middle, end);
-    merge_impl(begin, middle, end);
+    merge_sort(begin, middle, comp);
+    merge_sort(middle, end, comp);
+    merge_impl(begin, middle, end, comp);
   }
 }
 
