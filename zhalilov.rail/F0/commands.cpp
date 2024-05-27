@@ -96,7 +96,6 @@ void zhalilov::modulesvarradd(modulesMap &modules, std::istream &in, std::ostrea
   {
     throw std::invalid_argument("bad input");
   }
-  checkExtraArgs(in);
 
   auto moduleIt = modules.find(moduleName);
   if (moduleIt != modules.end())
