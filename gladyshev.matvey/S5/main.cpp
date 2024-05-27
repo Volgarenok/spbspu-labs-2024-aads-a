@@ -46,9 +46,14 @@ int main(int argc, char* argv[])
     }
     std::cout << func.result << func.elems << "\n";
   }
-  catch (const std::exception& e)
+  catch (const std::logic_error& e)
   {
     std::cout << e.what() << "\n";
+    return 1;
+  }
+  catch (const std::overflow_error& e)
+  {
+    std::cerr << e.what() << "\n";
     return 1;
   }
 }
