@@ -5,6 +5,7 @@
 
 #include "treenode.hpp"
 #include "treeiterator.hpp"
+#include "queue.hpp"
 
 namespace gladyshev
 {
@@ -173,6 +174,64 @@ namespace gladyshev
         std::pair< tnode*, tnode* > result = insertImpl(key, value, root_);
         root_ = result.first;
       }
+    }
+    template< typename F >
+    F traverse_lnr(F f) const
+    {
+      if (empty())
+      {
+        throw std::logic_error("<EMPTY>");
+      }
+      for (auto it = cbegin(); it != cend(); ++it)
+      {
+        f(*it);
+      }
+      return f;
+    }
+    template< typename F >
+    F traverse_rnl(F f) const
+    {
+      if (empty())
+      {
+        throw std::logic_error("<EMPTY>");
+      }
+      tnode* temp = root_;
+      while (temp->right)
+      {
+        temp = temp->right;
+      }
+      auto begin = citer(temp);
+      while (begin != cend())
+      {
+        f(*begin);
+        --begin;
+      }
+      return f;
+    }
+    template< typename F >
+    F traverse_breadth(F f) const
+    {
+      if (empty())
+      {
+        throw std::logic_error("<EMPTY>");
+      }
+      Queue< tnode * > nod;
+      nod.push(root_);
+      while (!nod.empty())
+      {
+        tnode* curr = nod.back();
+        nod.pop();
+        f(curr->data);
+        if (curr->left)
+        {
+          nod.push(curr->left);
+        }
+        if (curr->right)
+        {
+          nod.push(curr->right);
+        }
+      }
+      return f;
     }
   private:
     tnode* rotateRight(tnode* node)
