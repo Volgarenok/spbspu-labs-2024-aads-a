@@ -9,7 +9,7 @@ void gladyshev::Key_summ::operator()(const std::pair< const int, std::string >& 
   bool secCheck = (result < 0 && value.first < std::numeric_limits< int >::min() - result);
   if (firstCheck || secCheck)
   {
-    throw std::logic_error("overflow");
+    throw std::overflow_error("overflow");
   }
   result += value.first;
   elems += ' ' + value.second;
