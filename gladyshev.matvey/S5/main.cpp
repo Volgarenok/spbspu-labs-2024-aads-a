@@ -39,6 +39,11 @@ int main(int argc, char* argv[])
     {
       func = dict.traverse_breadth(func);
     }
+    else
+    {
+      std::cerr << "Bad data\n";
+      return 1;
+    }
     std::cout << func.result << func.elems << "\n";
   }
   catch (const std::exception& e)
