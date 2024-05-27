@@ -22,6 +22,7 @@ int main(int argc, char* argv[])
       fileInput >> dict;
       dictOfDicts.insert({ argv[i], dict });
     }
+    fileInput.close();
   }
 
   Tree< std::pair< std::string, std::string >, std::function< void(const Tree< std::string, Dictionary >&, std::istream&,
