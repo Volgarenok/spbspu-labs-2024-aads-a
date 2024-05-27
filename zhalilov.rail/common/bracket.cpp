@@ -22,7 +22,7 @@ zhalilov::Bracket::Bracket(char symb)
   }
 }
 
-zhalilov::PrimaryType zhalilov::Bracket::getType()
+zhalilov::PrimaryType zhalilov::Bracket::getType() const
 {
   return type_;
 }

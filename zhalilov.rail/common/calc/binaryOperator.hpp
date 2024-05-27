@@ -30,7 +30,7 @@ namespace zhalilov
     bool operator<=(const BinOperator &other) const;
     bool operator>=(const BinOperator &other) const;
 
-    Type getType();
+    Type getType() const;
 
   private:
     Type type_;

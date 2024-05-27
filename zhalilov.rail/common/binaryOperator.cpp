@@ -107,7 +107,7 @@ bool zhalilov::BinOperator::operator>=(const BinOperator &other) const
   return getPriority() >= other.getPriority();
 }
 
-zhalilov::BinOperator::Type zhalilov::BinOperator::getType()
+zhalilov::BinOperator::Type zhalilov::BinOperator::getType() const
 {
   return type_;
 }

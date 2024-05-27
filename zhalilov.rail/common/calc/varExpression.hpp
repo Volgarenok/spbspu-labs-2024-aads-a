@@ -12,9 +12,9 @@ namespace zhalilov
   public:
     VarExpression();
     VarExpression(const std::string &, const std::string &, const List< long long > &);
-    std::string getModuleName();
-    std::string gerVarName();
-    List< long long > getArgs();
+    std::string getModuleName() const;
+    std::string gerVarName() const;
+    List< long long > getArgs() const;
 
   private:
     std::string moduleName_;

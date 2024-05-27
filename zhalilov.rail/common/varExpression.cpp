@@ -10,17 +10,17 @@ zhalilov::VarExpression::VarExpression(const std::string &module, const std::str
   args_{ args }
 {}
 
-std::string zhalilov::VarExpression::getModuleName()
+std::string zhalilov::VarExpression::getModuleName() const
 {
   return moduleName_;
 }
 
-std::string zhalilov::VarExpression::gerVarName()
+std::string zhalilov::VarExpression::gerVarName() const
 {
   return varName_;
 }
 
-zhalilov::List< long long > zhalilov::VarExpression::getArgs()
+zhalilov::List< long long > zhalilov::VarExpression::getArgs() const
 {
   return args_;
 }

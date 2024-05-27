@@ -10,7 +10,8 @@ namespace zhalilov
   public:
     explicit Bracket(PrimaryType type);
     explicit Bracket(char symb);
-    PrimaryType getType();
+    PrimaryType getType() const;
+
   private:
     PrimaryType type_;
   };
