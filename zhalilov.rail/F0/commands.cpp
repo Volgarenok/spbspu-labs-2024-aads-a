@@ -66,6 +66,27 @@ void zhalilov::modulesadd(modulesMap &modules, std::istream &in, std::ostream &)
   }
 }
 
+void zhalilov::modulesdelete(modulesMap &modules, std::istream &in, std::ostream &)
+{
+  std::string moduleName;
+  in >> moduleName;
+  if (!in)
+  {
+    throw std::invalid_argument("bad input");
+  }
+  checkExtraArgs(in);
+
+  if (moduleName == "main")
+  {
+    auto mainIt = modules.find(moduleName);
+    mainIt->second.clear();
+  }
+  else
+  {
+    modules.erase(moduleName);
+  }
+}
+
 void zhalilov::modulesvarradd(modulesMap &modules, std::istream &in, std::ostream &)
 {
   std::string moduleName;
@@ -102,6 +123,28 @@ void zhalilov::modulesvarradd(modulesMap &modules, std::istream &in, std::ostrea
   }
 }
 
+void zhalilov::modulevardelete(modulesMap &modules, std::istream &in, std::ostream &)
+{
+  std::string moduleName;
+  std::string varName;
+  in >> moduleName >> varName;
+  if (!in)
+  {
+    throw std::invalid_argument("bad input");
+  }
+  checkExtraArgs(in);
+
+  auto moduleIt = modules.find(moduleName);
+  if (moduleIt != modules.end())
+  {
+    moduleIt->second.erase(varName);
+  }
+  else
+  {
+    throw std::invalid_argument("module doesn't exist");
+  }
+}
+
 void zhalilov::modulesshow(const modulesMap &modules, std::istream &in, std::ostream &out)
 {
   checkExtraArgs(in);
@@ -122,28 +165,6 @@ void zhalilov::modulesshow(const modulesMap &modules, std::istream &in, std::ost
       out << "No vars saved :/";
     }
     out << '\n';
-  }
-}
-
-void zhalilov::modulevardelete(modulesMap &modules, std::istream &in, std::ostream &)
-{
-  std::string moduleName;
-  std::string varName;
-  in >> moduleName >> varName;
-  if (!in)
-  {
-    throw std::invalid_argument("bad input");
-  }
-  checkExtraArgs(in);
-
-  auto moduleIt = modules.find(moduleName);
-  if (moduleIt != modules.end())
-  {
-    moduleIt->second.erase(varName);
-  }
-  else
-  {
-    throw std::invalid_argument("module doesn't exist");
   }
 }
 
