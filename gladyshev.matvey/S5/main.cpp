@@ -2,7 +2,7 @@
 #include <string>
 #include <fstream>
 #include <cstring>
-#include "fintree.hpp"
+#include "avltree.hpp"
 #include "sumfunc.hpp"
 
 int main(int argc, char* argv[])
