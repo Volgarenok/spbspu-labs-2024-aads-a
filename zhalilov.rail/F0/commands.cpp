@@ -1,5 +1,6 @@
 #include "commands.hpp"
 
+#include <fstream>
 #include <iostream>
 
 #include <calc/calculateExpr.hpp>
@@ -16,7 +17,7 @@ namespace zhalilov
   std::ostream &coutVarExpr(std::ostream &out, const VarExpression &varExpr);
 }
 
-void zhalilov::calc(const modulesMap &modules, std::ostream &historyFile, std::istream &in, std::ostream &out)
+void zhalilov::calc(const modulesMap &modules, const std::string &filename, std::istream &in, std::ostream &out)
 {
   List< InfixToken > infix;
   getInfix(infix, in);
@@ -39,7 +40,12 @@ void zhalilov::calc(const modulesMap &modules, std::ostream &historyFile, std::i
   }
   List< PostfixToken > postfix;
   infixToPostfix(infWithReplacedVars, postfix);
-  out << calculateExpr(postfix);
+  long long result = calculateExpr(postfix);
+  out << result << '\n';
+
+  std::ofstream historyFile(filename, std::ios::app);
+  outputInfix(infWithReplacedVars, historyFile);
+  historyFile << " = " << result << '\n';
 }
 
 void zhalilov::modulesadd(modulesMap &modules, std::istream &in, std::ostream &)
@@ -121,6 +127,43 @@ void zhalilov::modulesshow(const modulesMap &modules, std::istream &in, std::ost
   }
 }
 
+void zhalilov::historyshow(const std::string &filename, std::istream &in, std::ostream &out)
+{
+  std::string checkStream;
+  std::getline(in, checkStream);
+  if (!checkStream.empty())
+  {
+    throw std::invalid_argument("too many args");
+  }
+
+  std::ifstream file(filename);
+  List< std::string > history;
+  while (!file.eof())
+  {
+    std::string temp;
+    std::getline(file, temp);
+    history.push_back(temp);
+  }
+  history.pop_back();
+  while (!history.empty())
+  {
+    out << history.back() << '\n';
+    history.pop_back();
+  }
+}
+
+void zhalilov::historyclear(const std::string &filename, std::istream &in, std::ostream &)
+{
+  std::string checkStream;
+  std::getline(in, checkStream);
+  if (!checkStream.empty())
+  {
+    throw std::invalid_argument("too many args");
+  }
+
+  std::ifstream file(filename, std::ios::out | std::ios::trunc);
+}
+
 zhalilov::InfixToken zhalilov::replaceVars(const modulesMap &modules, InfixToken infToReplace)
 {
   std::string moduleName = infToReplace.getVarExpression().getModuleName();
@@ -164,22 +207,22 @@ void zhalilov::outputInfix(List< InfixToken > infix, std::ostream &out)
 {
   for (auto it = infix.begin(); it != infix.end(); ++it)
   {
+    if (it != infix.begin())
+    {
+      out << ' ';
+    }
     switch (it->getType())
     {
     case PrimaryType::Operand:
-      out << ' ';
       coutOperand(out, it->getOperand());
       break;
     case PrimaryType::BinOperator:
-      out << ' ';
       coutBinOp(out, it->getBinOperator());
       break;
     case PrimaryType::VarExpression:
-      out << ' ';
       coutVarExpr(out, it->getVarExpression());
       break;
     default:
-      out << ' ';
       coutBracket(out, it->getBracket());
       break;
     }
