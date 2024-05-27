@@ -149,7 +149,10 @@ zhalilov::InfixToken zhalilov::replaceVars(const modulesMap &modules, InfixToken
       replaced.push_back(InfixToken(Operand(args.front())));
       args.pop_front();
     }
-    replaced.push_back(*exprIt);
+    else
+    {
+      replaced.push_back(*exprIt);
+    }
   }
   List< PostfixToken > postfixReplaced;
   infixToPostfix(replaced, postfixReplaced);
