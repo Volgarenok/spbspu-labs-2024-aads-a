@@ -42,7 +42,7 @@ void zhalilov::calc(const modulesMap &modules, std::ostream &historyFile, std::i
   out << calculateExpr(postfix);
 }
 
-void zhalilov::modulesadd(modulesMap &modules, std::istream &in, std::ostream &out)
+void zhalilov::modulesadd(modulesMap &modules, std::istream &in, std::ostream &)
 {
   std::string moduleName;
   in >> moduleName;
@@ -58,7 +58,7 @@ void zhalilov::modulesadd(modulesMap &modules, std::istream &in, std::ostream &o
   }
 }
 
-void zhalilov::modulesvarradd(modulesMap &modules, std::istream &in, std::ostream &out)
+void zhalilov::modulesvarradd(modulesMap &modules, std::istream &in, std::ostream &)
 {
   std::string moduleName;
   std::string varName;
