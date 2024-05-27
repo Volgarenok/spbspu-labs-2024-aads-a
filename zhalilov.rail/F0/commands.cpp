@@ -73,6 +73,10 @@ void zhalilov::modulesvarradd(modulesMap &modules, std::istream &in, std::ostrea
   {
     List< InfixToken > infix;
     getInfix(infix, in);
+    if (infix.empty())
+    {
+      throw std::invalid_argument("not enough args");
+    }
     auto varIt = moduleIt->second.find(varName);
     if (varIt != moduleIt->second.end())
     {
@@ -103,7 +107,7 @@ void zhalilov::modulesshow(const modulesMap &modules, std::istream &in, std::ost
     out << it->first << ":\n";
     for (auto inModuleIt = it->second.cbegin(); inModuleIt != it->second.cend(); ++inModuleIt)
     {
-      out << inModuleIt->first << " = ";
+      out << inModuleIt->first << " =";
       outputInfix(inModuleIt->second, out);
       out << '\n';
     }
@@ -138,7 +142,26 @@ zhalilov::InfixToken zhalilov::replaceVars(const modulesMap &modules, InfixToken
 }
 
 void zhalilov::outputInfix(List< InfixToken > infix, std::ostream &out)
-{}
+{
+  for (auto it = infix.begin(); it != infix.end(); ++it)
+  {
+    switch (it->getType())
+    {
+    case PrimaryType::Operand:
+      out << ' ' << it->getOperand();
+      return;
+    case PrimaryType::BinOperator:
+      out << ' ' << it->getBinOperator();
+      return;
+    case PrimaryType::VarExpression:
+      out << ' ' << it->getVarExpression();
+      return;
+    default:
+      out << ' ' << it->getBracket();
+      return;
+    }
+  }
+}
 
 std::ostream &zhalilov::operator<<(std::ostream &out, const Operand &op)
 {
