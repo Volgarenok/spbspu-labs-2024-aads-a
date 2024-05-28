@@ -4,6 +4,7 @@
 #include <functional>
 #include <iomanip>
 #include <string>
+#include <limits>
 #include <map>
 #include <string.h>
 #include "delimiter.hpp"
