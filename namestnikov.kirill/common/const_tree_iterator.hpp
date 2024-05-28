@@ -1,6 +1,7 @@
 #ifndef CONST_TREE_ITERATOR_HPP
 #define CONST_TREE_ITERATOR_HPP
 
+#include <iterator>
 #include <tree_node.hpp>
 #include <tree_iterator.hpp>
 
@@ -13,7 +14,7 @@ namespace namestnikov
   class IteratorTree;
 
   template< class Key, class Value, class Compare >
-  class ConstIteratorTree
+  class ConstIteratorTree: public std::iterator< std::bidirectional_iterator_tag, Value >
   {
     friend class Tree< Key, Value, Compare >;
     friend class IteratorTree< Key, Value, Compare >;
@@ -56,6 +57,33 @@ namespace namestnikov
       ++(*this);
       return temp;
 
+    }
+    const_iterator & operator--()
+    {
+      if (node_->left)
+      {
+        node_ = node_->left;
+        while (node_->right)
+        {
+          node_ = node_->right;
+        }
+        return *this;
+      }
+      else
+      {
+        while (node_->isLeftChild())
+        {
+          node_ = node_->parent;
+        }
+        node_ = node_->parent;
+        return *this;
+      }
+    }
+    const_iterator operator--(int)
+    {
+      const_iterator temp(*this);
+      --(*this);
+      return temp;
     }
     bool operator==(const const_iterator & other) const
     {
