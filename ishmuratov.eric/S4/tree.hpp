@@ -80,6 +80,7 @@ namespace ishmuratov
     ~AVLTree()
     {
       clear();
+      delete comp_;
     }
 
     Iter begin() noexcept
@@ -148,7 +149,6 @@ namespace ishmuratov
     {
       delete_node(root_);
       root_ = nullptr;
-      delete comp_;
       size_ = 0;
     }
 
@@ -326,7 +326,7 @@ namespace ishmuratov
 
     std::pair< tnode *, tnode * > insert_impl(const std::pair< Key, Value > & pair, tnode * node, bool rewrite)
     {
-      tnode * inserted;
+      tnode * inserted = nullptr;
       if ((*comp_)(pair.first, node->data.first))
       {
         if (node->left == nullptr)
