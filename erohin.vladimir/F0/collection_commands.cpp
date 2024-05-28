@@ -272,7 +272,7 @@ void erohin::createDictionary(dictionary & dict, const std::string & file_name)
   dictionary temp_dict;
   std::string word;
   size_t max_size = std::numeric_limits< size_t >::max();
-  file >> WordInContextFormat{ word, max_size};
+  file >> WordInContextFormat{ word, max_size };
   while (!file.eof())
   {
     if (file.fail())
@@ -282,8 +282,7 @@ void erohin::createDictionary(dictionary & dict, const std::string & file_name)
     else
     {
       ++temp_dict[word];
-    }
-    file >> WordInContextFormat{ word, max_size};
+    file >> WordInContextFormat{ word, max_size };
   }
   dict = std::move(temp_dict);
   file.close();
