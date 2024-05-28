@@ -7,8 +7,11 @@
 
 namespace zakozhurnikova
 {
-  void inputDictionary(std::istream& in, BinarySearchTree< std::string, BinarySearchTree< std::string, List< std::string > > >& maps);
+  using subDict = BinarySearchTree< std::string, List< std::string > >;
+  using dict = BinarySearchTree< std::string, subDict >;
+  void inputDictionary(std::istream& in, dict& maps);
   void inputArgs(std::istream& in, List< std::string >& args);
+  std::istream& operator>>(std::istream& in, subDict& dict);
 }
 
 #endif
