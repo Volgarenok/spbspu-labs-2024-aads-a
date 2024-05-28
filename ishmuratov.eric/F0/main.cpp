@@ -1,6 +1,7 @@
 #include <iostream>
 #include <limits>
 #include <functional>
+#include <fstream>
 #include "tree.hpp"
 #include "bdlist.hpp"
 
@@ -13,6 +14,8 @@ int main()
   dict_t dict;
 //  input_dictionary(dict, std::cin);
 
+  std::ofstream file("file.txt");
+
   AVLTree< std::string, std::function< void(std::istream &, std::ostream &) > > cmds;
   {
     using namespace std::placeholders;
@@ -22,6 +25,7 @@ int main()
     cmds.insert(std::make_pair("addvalue", std::bind(add_value, std::ref(dict), _1)));
     cmds.insert(std::make_pair("removekey", std::bind(remove_key, std::ref(dict), _1)));
     cmds.insert(std::make_pair("printdict", std::bind(print_dict, std::ref(dict), _1, _2)));
+    cmds.insert(std::make_pair("getvalue", std::bind(get_value, std::ref(dict), _1, _2)));
   }
 
   AVLTree< int, int > lol;

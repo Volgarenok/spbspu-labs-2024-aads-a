@@ -72,14 +72,18 @@ void ishmuratov::remove_key(dict_t & dictionaries, std::istream & input)
   dictionaries.at(name).erase(key);
 }
 
-void ishmuratov::print_dict(dict_t & dictionaries, std::istream & input, std::ostream & output)
+void ishmuratov::print_dict(const dict_t & dictionaries, std::istream & input, std::ostream & output)
 {
   std::string name;
   input >> name;
 
-  if (dictionaries.find(name) == dictionaries.end())
+  if (dictionaries.find(name) == dictionaries.cend())
   {
     throw std::out_of_range("Dictionary doesn't exists!");
+  }
+  if (dictionaries.at(name).empty())
+  {
+    throw std::underflow_error("This dictionary is empty!");
   }
 
   for (auto pair = dictionaries.at(name).cbegin(); pair != dictionaries.at(name).cend(); ++pair)
@@ -91,6 +95,33 @@ void ishmuratov::print_dict(dict_t & dictionaries, std::istream & input, std::os
       output << count << ". " << *value << "\n";
       ++count;
     }
-    output << "\n";
+    auto check = pair;
+    if (++check != dictionaries.at(name).cend())
+    {
+      output << "\n";
+    }
+  }
+}
+
+void ishmuratov::get_value(const dict_t & dictionaries, std::istream & input, std::ostream & output)
+{
+  std::string name;
+  std::string key;
+  input >> name >> key;
+  if (dictionaries.find(name) == dictionaries.cend())
+  {
+    throw std::out_of_range("Dictionary doesn't exists!");
+  }
+  if (dictionaries.at(name).find(key) == dictionaries.at(name).cend())
+  {
+    throw std::out_of_range("Key wasn't found!");
+  }
+
+  auto found_key = dictionaries.at(name).at(key);
+  size_t count = 1;
+  for (auto value = found_key.cbegin(); value != found_key.cend(); ++value)
+  {
+    output << count << ". " << *value << "\n";
+    ++count;
   }
 }
