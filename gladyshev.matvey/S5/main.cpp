@@ -2,7 +2,10 @@
 #include <string>
 #include <fstream>
 #include <cstring>
-#include "avltree.hpp"
+#include <stdexcept>
+
+#include <avltree.hpp>
+
 #include "sumfunc.hpp"
 
 int main(int argc, char* argv[])
@@ -17,6 +20,11 @@ int main(int argc, char* argv[])
     while (file >> key >> value)
     {
       dict.insert(key, value);
+    }
+    if (!file.eof())
+    {
+      std::cerr << "Bad input file\n";
+      return 1;
     }
   }
   else
