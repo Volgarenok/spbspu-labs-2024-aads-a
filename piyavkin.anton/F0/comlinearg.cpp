@@ -8,7 +8,7 @@ void piyavkin::help(std::ostream& out)
   out << "Создать объект с именем <dictionary name>. Если объект с таким именем уже существует,";
   out << " то вывести сообщение <INVALID COMMAND>\n";
   out << "2. changedictionary <dictionary name> <key> <value>\n";
-  out << "Изменение словаря. Если ключ существует в словаре, то изменить его значение на <value>,"
+  out << "Изменение словаря. Если ключ существует в словаре, то изменить его значение на <value>,";
   out << " иначе добавить новый <key>";
   out << " с значением <value>\n" << "3. makedictionary <dictionary name> <file.txt>\n";
   out << "Построить словарь по текстовому файлу. Если словарь с таким именем существует,";
@@ -27,7 +27,7 @@ void piyavkin::help(std::ostream& out)
   out << "Найти объединения словарей. Сохранить объединения словарей, то есть все уникальные ключи и их";
   out << " максимальное";
   out << " значение из двух словарей в <new dictionary name>. Если словарей с таким именем нет,";
-  put << " то вывести сообщение";
+  out << " то вывести сообщение";
   out << " <INVALID COMMAND>\n" << "7. uniquedictionaries <new dictionary name> <dictionary name1>";
   out << " <dictionary name2>";
   out << "Найти и сохранить в <new dictionary name> все ключи, которые есть в <dictionary name1>,";
