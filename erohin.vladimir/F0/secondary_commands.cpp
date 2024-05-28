@@ -2,7 +2,6 @@
 #include <iostream>
 #include <fstream>
 #include "format.hpp"
-#include "input_output_collection.hpp"
 
 void erohin::printHelp(std::ostream & output)
 {
@@ -43,7 +42,7 @@ void erohin::printHelp(std::ostream & output)
   output << "\tCreate a frequency dictionary <new_dict> based on the intersection between <dict1> and <dirt2>.\n\n";
 }
 
-void erohin::checkDictionary(const char * file_name, std::ostream & output)
+void erohin::checkDictionary(const char *, std::ostream &)
 {
 
 }
