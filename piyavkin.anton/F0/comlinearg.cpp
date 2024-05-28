@@ -15,8 +15,8 @@ void piyavkin::help(std::ostream& out)
   out << "4. topfreq <dictionary name> <n>\n" << "Вывести топ n часто встречающихся значений, то есть value с наибольшим key,";
   out << " если n больше размера словаря или такого словаря не существует, то вывести сообщение <INVALID COMMAND>\n";
   out << "5. intersectdictionaries <new dictionary name> <dictionary name1> <dictionary name2>\n";
-  out << "Найти пересечение словарей. Сохранить все совпадающие ключи, а также минимальное значение из них в <new dictionary name>.";
-  out << " Если словарей с таким именем нет, то вывести сообщение <INVALID COMMAND>\n";
+  out << "Найти пересечение словарей. Сохранить все совпадающие ключи, а также минимальное значение из них в"
+  out << " <new dictionary name>." << " Если словарей с таким именем нет, то вывести сообщение <INVALID COMMAND>\n";
   out << "6. uniondictionaries <new dictionary name> <dictionary name1> <dictionary name2>\n";
   out << "Найти объединения словарей. Сохранить объединения словарей, то есть все уникальные ключи и их максимальное";
   out << " значение из двух словарей в <new dictionary name>. Если словарей с таким именем нет, то вывести сообщение";
