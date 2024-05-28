@@ -18,6 +18,10 @@ int main()
     using namespace std::placeholders;
     cmds.insert(std::make_pair("createdict", std::bind(create_dict, std::ref(dict), _1)));
     cmds.insert(std::make_pair("deletedict", std::bind(delete_dict, std::ref(dict), _1)));
+    cmds.insert(std::make_pair("addkey", std::bind(add_key, std::ref(dict), _1)));
+    cmds.insert(std::make_pair("addvalue", std::bind(add_value, std::ref(dict), _1)));
+    cmds.insert(std::make_pair("removekey", std::bind(remove_key, std::ref(dict), _1)));
+    cmds.insert(std::make_pair("printdict", std::bind(print_dict, std::ref(dict), _1, _2)));
   }
 
   AVLTree< int, int > lol;
