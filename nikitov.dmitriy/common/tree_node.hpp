@@ -18,7 +18,7 @@ namespace nikitov
       bool operator()(const TreeNode< Key, T, Compare >* lhs, const TreeNode< Key, T, Compare >* rhs)
       {
         Compare cmp;
-        return cmp(lhs->firstValue_.first, rhs->firstValue_.first);
+        return !cmp(lhs->firstValue_.first, rhs->firstValue_.first);
       }
     };
 
