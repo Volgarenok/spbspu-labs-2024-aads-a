@@ -26,7 +26,7 @@ void erohin::printHelp(std::ostream & output)
   output << "\t5. print <dict>\n";
   output << "\tВывести частотный словарь с именем <dict>.\n\n";
   output << "\t6. count <dict>\n";
-  output << "\tВывести общее количество слов и количество уникальных слов в частотном словаре с именем <dict>.\n\n";
+  output << "\tВывести общее количество слов и количество уникальных слов в словаре <dict>.\n\n";
   output << "\t7. sort <dict>\n";
   output << "\tВывести частотный словарь <dict>, отсортированный по частоте встречающихся слов.\n\n";
   output << "\t8. find <dict> <word>\n";
