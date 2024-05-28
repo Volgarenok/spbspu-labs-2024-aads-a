@@ -55,7 +55,7 @@ int main(int argc, char* argv[])
   catch (const std::logic_error& e)
   {
     std::cout << e.what() << "\n";
-    return 1;
+    return 0;
   }
   catch (const std::overflow_error& e)
   {
