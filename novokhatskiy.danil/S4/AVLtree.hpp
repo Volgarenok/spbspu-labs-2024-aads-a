@@ -73,35 +73,6 @@ namespace novokhatskiy
       return *this;
     }
 
-    node_t *find(node_t *node, const Key &key)
-    {
-      node_t *root = (node->height < 0) ? node->left : node;
-      while (root)
-      {
-        if (key == root->value.first)
-        {
-          return root;
-        }
-        if (cmp_(key, root->value.first))
-        {
-          if (!root->left)
-          {
-            return root;
-          }
-          root = root->left;
-        }
-        else
-        {
-          if (!root->right)
-          {
-            return root;
-          }
-          root = root->right;
-        }
-      }
-      return nullptr;
-    }
-
     iter find(const Key &key)
     {
       node_t *curr = root_;
@@ -168,18 +139,6 @@ namespace novokhatskiy
     {
       auto tmp = std::make_pair(key, Value());
       return (insert(tmp).first)->second;
-    }
-
-    const Value &operator[](const Key &key) const
-    {
-      auto tmp = std::make_pair(key, Value());
-      return (insert(tmp).first)->second;
-    }
-
-    node_t *updateHeight(node_t *node)
-    {
-      node->height = 1 + std::max(node->getHeight(node->left), node->getHeight(node->right));
-      return node;
     }
 
     size_t size() const noexcept
@@ -401,6 +360,12 @@ namespace novokhatskiy
       }
     }
 
+    node_t *updateHeight(node_t *node)
+    {
+      node->height = 1 + std::max(node->getHeight(node->left), node->getHeight(node->right));
+      return node;
+    }
+
     void getBalance(node_t *node)
     {
       if ((node->height > 1) || (node->height < -1))
@@ -498,6 +463,35 @@ namespace novokhatskiy
         clear_imp(root->right);
         delete root;
       }
+    }
+
+    node_t *find(node_t *node, const Key &key)
+    {
+      node_t *root = (node->height < 0) ? node->left : node;
+      while (root)
+      {
+        if (key == root->value.first)
+        {
+          return root;
+        }
+        if (cmp_(key, root->value.first))
+        {
+          if (!root->left)
+          {
+            return root;
+          }
+          root = root->left;
+        }
+        else
+        {
+          if (!root->right)
+          {
+            return root;
+          }
+          root = root->right;
+        }
+      }
+      return nullptr;
     }
 
     node_t *minN(node_t *p) const
