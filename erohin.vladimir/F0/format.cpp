@@ -1,8 +1,6 @@
 #include "format.hpp"
 #include <iostream>
 #include <cctype>
-#include <locale>
-#include <functional>
 #include "delimiter.hpp"
 
 std::istream & erohin::operator>>(std::istream & input, DoubleFormat && dest)
