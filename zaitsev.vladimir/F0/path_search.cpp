@@ -25,7 +25,7 @@ struct edge
 unordered_map< string, size_t > convert_to_indexes(const zaitsev::graph_t& graph);
 vector<vector<int>> create_adjacency_matrix(const zaitsev::graph_t& graph);
 vector< edge > extract_edges(const zaitsev::graph_t& graph);
-vector< vector< int > > calc_paths_floyd(const vector< vector< int > >& matrix);
+vector< vector< int > > calc_paths_floyd(vector< vector< int > >& matrix);
 pair< vector< int >, vector< size_t >  > calc_paths_ford(const vector< edge >& edges, size_t begin, size_t vert_nmb);
 
 void zaitsev::shortest_distance(const base_t& graphs, std::istream& in, std::ostream& out)
