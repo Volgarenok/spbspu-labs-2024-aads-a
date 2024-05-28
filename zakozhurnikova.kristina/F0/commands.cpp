@@ -329,6 +329,11 @@ void zakozhurnikova::save(List< std::string >& args, dict& dictionary)
   file.close();
 }
 
+bool isDictionary(const std::string& nameDictionary, const dict& dictionary)
+{
+  return (dictionary.find(nameDictionary) == dictionary.cend());
+}
+
 void zakozhurnikova::doAddDictionary(List< std::string >&, std::istream& in, dict& dictionary)
 {
   ScopeGuard guard(in);
@@ -337,11 +342,11 @@ void zakozhurnikova::doAddDictionary(List< std::string >&, std::istream& in, dic
   subDict translation;
   in >> std::noskipws;
   in >> translation;
-  if (!translation.empty() && !nameDictionary.empty())
+  if (!translation.empty() && !nameDictionary.empty() && isDictionary(nameDictionary, dictionary))
   {
     dictionary.push(nameDictionary, translation);
   }
-  else if (!nameDictionary.empty())
+  else if (!nameDictionary.empty() && translation.empty())
   {
     std::cout << "The dictionary is empty:" << nameDictionary << '\n';
   }

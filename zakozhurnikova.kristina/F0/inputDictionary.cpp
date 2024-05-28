@@ -51,11 +51,26 @@ std::istream& zakozhurnikova::operator>>(std::istream& in, subDict& dict)
       }
       else if (!isEnglish(temp) && !word.empty())
       {
-        translate.push_back(temp);
+        bool exists = false;
+        for (auto it = translate.cbegin(); it != translate.cend(); ++it)
+        {
+          if (temp == *it)
+          {
+            exists = true;
+            break;
+          }
+        }
+        if (!exists)
+        {
+          translate.push_back(temp);
+        }
       }
       else if (!word.empty() && !translate.empty())
       {
-        dict.push(word, translate);
+        if (dict.find(word) == dict.cend())
+        {
+          dict.push(word, translate);
+        }
         word.clear();
         translate.clear();
         word = temp;
