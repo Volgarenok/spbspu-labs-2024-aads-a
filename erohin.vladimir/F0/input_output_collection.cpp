@@ -7,11 +7,12 @@
 void erohin::inputDictionary(dictionary & dict, std::istream & input)
 {
   dictionary temp_dict;
-  while (!input)
+  Record record;
+  input >> record;
+  while (input.good())
   {
-    Record record;
-    input >> record;
     temp_dict.insert(record.data);
+    input >> record;
   }
   dict = std::move(temp_dict);
 }
