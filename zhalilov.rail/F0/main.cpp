@@ -1,10 +1,17 @@
 #include <iostream>
 #include <functional>
+#include <limits>
 
 #include <calc/getInfix.hpp>
 #include <tree/twoThreeTree.hpp>
 
 #include "commands.hpp"
+
+void clearStream(std::istream &in)
+{
+  in.clear();
+  in.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+}
 
 int main()
 {
@@ -45,10 +52,12 @@ int main()
     catch (const std::out_of_range &e)
     {
       std::cerr << "command doesn't exist\n";
+      clearStream(std::cin);
     }
     catch (const std::exception &e)
     {
       std::cerr << e.what() << '\n';
+      clearStream(std::cin);
     }
   }
 }
