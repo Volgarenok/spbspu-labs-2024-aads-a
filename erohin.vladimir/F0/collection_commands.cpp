@@ -6,12 +6,10 @@
 #include <numeric>
 #include <limits>
 #include <iterator>
-#include <forward_list>
+#include "list.hpp"
 #include "format.hpp"
 #include "dictionary_record.hpp"
 #include "number_format.hpp"
-
-#include <map>
 
 void erohin::addTextCommand(texts_source & text_context, std::istream & input, std::ostream &)
 {
@@ -29,7 +27,7 @@ void erohin::removeTextCommand(texts_source & text_context, std::istream & input
   std::string text_name;
   input >> text_name;
   auto found_iter = text_context.find(text_name);
-  if (found_iter == text_context.cend())
+  if (found_iter == text_context.end())
   {
     throw std::logic_error("removetext: bad removal from texts source");
   }
@@ -64,7 +62,7 @@ void erohin::removeDictCommand(collection & dict_context, std::istream & input, 
   std::string dict_name;
   input >> dict_name;
   auto found_iter = dict_context.find(dict_name);
-  if (found_iter == dict_context.cend())
+  if (found_iter == dict_context.end())
   {
     throw std::logic_error("removetext: bad removal from dictionary collection");
   }
@@ -106,7 +104,7 @@ void erohin::sortCommand(const collection & dict_context, std::istream & input, 
   std::string dict_name;
   input >> dict_name;
   const dictionary & dict = dict_context.at(dict_name);
-  std::multimap< size_t, std::string > sorted_dict;
+  sorted_dictionary sorted_dict;
   createSortedDictionary(sorted_dict, dict);
   printSortedDictionary(sorted_dict, output, numformat);
 }
@@ -117,7 +115,7 @@ void erohin::findCommand(const collection & dict_context, std::istream & input, 
   input >> dict_name >> word;
   const dictionary & dict = dict_context.at(dict_name);
   auto found_iter = dict.find(word);
-  if (found_iter != dict.end())
+  if (found_iter != dict.cend())
   {
     size_t total_number = detail::countTotalNumber(dict);
     output << createFormattedRecord(Record(*found_iter), total_number, numformat) << "\n";
@@ -138,7 +136,7 @@ void erohin::topCommand(collection & dict_context, std::istream & input, std::os
     throw std::logic_error("top: wrong argument input");
   }
   const dictionary & dict = dict_context.at(dict_name);
-  std::multimap< size_t, std::string > sorted_dict;
+  sorted_dictionary sorted_dict;
   createSortedDictionary(sorted_dict, dict);
   dictionary new_dict;
   detail::insertNumRecords(new_dict, num, sorted_dict.crbegin(), sorted_dict.crend());
@@ -155,7 +153,7 @@ void erohin::bottomCommand(collection & dict_context, std::istream & input, std:
     throw std::logic_error("bottom: wrong argument input");
   }
   const dictionary & dict = dict_context.at(dict_name);
-  std::multimap< size_t, std::string > sorted_dict;
+  sorted_dictionary sorted_dict;
   createSortedDictionary(sorted_dict, dict);
   dictionary new_dict;
   detail::insertNumRecords(new_dict, num, sorted_dict.cbegin(), sorted_dict.cend());
@@ -185,11 +183,11 @@ void erohin::differCommand(collection & dict_context, std::istream & input, std:
     temp_dict.insert(makeDifference(*begin, second_dict));
     ++begin;
   }
-  if (new_dict.empty())
+  if (temp_dict.empty())
   {
     throw std::underflow_error("differ: Empty difference of two dictionaries");
   }
-  dict_context[new_dict_name] = std::move(new_dict);
+  dict_context[new_dict_name] = std::move(temp_dict);
 }
 
 void erohin::uniteCommand(collection & dict_context, std::istream & input, std::ostream &)
@@ -202,6 +200,7 @@ void erohin::uniteCommand(collection & dict_context, std::istream & input, std::
   }
   const dictionary & first_dict = dict_context.at(first_dict_name);
   const dictionary & second_dict = dict_context.at(second_dict_name);
+  dictionary temp_dict;
   auto begin = first_dict.cbegin();
   auto end = first_dict.cend();
   while (begin != end)
@@ -214,17 +213,17 @@ void erohin::uniteCommand(collection & dict_context, std::istream & input, std::
   while (begin != end)
   {
     auto iter_pair = temp_dict.insert(*begin);
-    if (!iter->second)
+    if (!iter_pair.second)
     {
       temp_dict[begin->first] += begin->second;
     }
     ++begin;
   }
-  if (new_dict.empty())
+  if (temp_dict.empty())
   {
     throw std::underflow_error("unite: Empty union of two dictionaries");
   }
-  dict_context[new_dict_name] = std::move(new_dict);
+  dict_context[new_dict_name] = std::move(temp_dict);
 }
 
 void erohin::intersectCommand(collection & dict_context, std::istream & input, std::ostream &)
@@ -249,11 +248,11 @@ void erohin::intersectCommand(collection & dict_context, std::istream & input, s
     }
     ++begin;
   }
-  if (new_dict.empty())
+  if (temp_dict.empty())
   {
     throw std::underflow_error("differ: Empty difference of two dictionaries");
   }
-  dict_context[new_dict_name] = std::move(new_dict);
+  dict_context[new_dict_name] = std::move(temp_dict);
 }
 
 bool erohin::isNewDictionary(const collection & dict_context, const std::string & new_dict_name)
@@ -293,23 +292,37 @@ void erohin::createDictionary(dictionary & dict, const std::string & file_name)
 void erohin::printDictionary(const dictionary & dict, std::ostream & output, numformat_t numformat)
 {
   size_t total_number = detail::countTotalNumber(dict);
-  using namespace std::placeholders;
-  std::transform(
-    dict.cbegin(),
-    dict.cend(),
-    std::ostream_iterator< FormattedRecord >(output, "\n"),
-    std::bind(createFormattedRecord, std::bind(createRecord< std::string, size_t >, _1), total_number, numformat)
-  );
+  auto begin = dict.cbegin();
+  auto end = dict.cend();
+  while (begin != end)
+  {
+    output << FormattedRecord(*begin, total_number, numformat) << "\n";
+    ++begin;
+  }
 }
 
 void erohin::createSortedDictionary(sorted_dictionary & sorted_dict, const dictionary & source)
 {
-  std::transform(
-    source.cbegin(),
-    source.cend(),
-    std::inserter(sorted_dict, sorted_dict.end()),
-    detail::invertPair< std::string, size_t >
-  );
+  auto begin = source.cbegin();
+  auto end = source.cend();
+  sorted_dictionary temp_dict;
+  while (begin != end)
+  {
+    auto iter_pair = temp_dict.insert(std::make_pair(begin->second, List< std::string >({ begin->first })));
+    if (!iter_pair.second)
+    {
+      temp_dict[begin->second].push_front(begin->first);
+    }
+    ++begin;
+  }
+  auto sort_begin = temp_dict.begin();
+  auto sort_end = temp_dict.end();
+  while (sort_begin != sort_end)
+  {
+    sort_begin->second.sort(std::less< std::string >{});
+    ++sort_begin;
+  }
+  sorted_dict = std::move(temp_dict);
 }
 
 void erohin::printSortedDictionary(const sorted_dictionary & sorted_dict, std::ostream & output, numformat_t numformat)
@@ -323,7 +336,7 @@ void erohin::printSortedDictionary(const sorted_dictionary & sorted_dict, std::o
     auto list_end = begin->second.cend();
     while (list_begin != list_end)
     {
-      std::cout << FormattedRecord(std::make_pair(*list_begin, list_begin->first), total_number, numformat) << "\n";
+      output << FormattedRecord(std::make_pair(*list_begin, begin->first), total_number, numformat) << "\n";
       ++list_begin;
     }
     ++begin;

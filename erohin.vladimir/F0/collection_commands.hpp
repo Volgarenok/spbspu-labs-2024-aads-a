@@ -16,7 +16,7 @@
 namespace erohin
 {
   using texts_source = RedBlackTree< std::string, std::string >;
-  using record_pair = RedBlackTree< std::string, size_t >;
+  using record_pair = std::pair< std::string, size_t >;
 
   void addTextCommand(texts_source & text_context, std::istream & input, std::ostream &);
   void removeTextCommand(texts_source & text_context, std::istream & input, std::ostream &);
@@ -46,31 +46,34 @@ namespace erohin
       return std::get< size_t >(pair);
     }
 
-    template< class Dictionary >
-    size_t countTotalNumber(const Dictionary & dict)
+    template< class T1, class T2 >
+    size_t countTotalNumber(const RedBlackTree< T1, T2 > & dict)
     {
-      std::forward_list< size_t > number_seq;
-      using T1 = typename Dictionary::key_type;
-      using T2 = typename Dictionary::mapped_type;
-      std::transform(dict.cbegin(), dict.cend(), std::front_inserter(number_seq), getNumber< T1, T2 >);
-      size_t total_number = std::accumulate(number_seq.cbegin(), number_seq.cend(), 0);
+      size_t total_number = 0;
+      auto begin = dict.cbegin();
+      auto end = dict.cend();
+      while (begin != end)
+      {
+        total_number += getNumber< T1, T2 >(*(begin++));
+      }
       return total_number;
     }
 
     template< class Dictionary, class DictIter >
     void insertNumRecords(Dictionary & dict, size_t count, DictIter begin, DictIter end)
     {
-      size_t prev_num = 0;
       size_t current_count = 0;
-      while (begin != end && current_count != count)
+      while (begin != end && current_count < count)
       {
-        dict.insert(invertPair(*begin));
-        if (begin->first != prev_num)
+        auto list_begin = begin->second.cbegin();
+        auto list_end = begin->second.cend();
+        while (list_begin != list_end)
         {
-          ++current_count;
-          prev_num = begin->first;
+          dict.insert(std::make_pair(*list_begin, begin->first));
+          ++list_begin;
         }
         ++begin;
+        ++current_count;
       }
     }
   }
