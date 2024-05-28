@@ -1,8 +1,6 @@
 #include <iostream>
-#include <string>
 #include <fstream>
 #include <cstring>
-#include <stdexcept>
 
 #include <avltree.hpp>
 
