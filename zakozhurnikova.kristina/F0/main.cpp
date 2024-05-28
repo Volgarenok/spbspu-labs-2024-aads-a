@@ -36,6 +36,7 @@ int main(int argc, char* argv[])
   commands.push("rider", std::bind(rider, _1, std::ref(dictionary)));
   commands.push("interpreter", std::bind(interpreter, _1, std::ref(dictionary)));
   commands.push("save", std::bind(save, _1, std::ref(dictionary)));
+  commands.push("addDictionary", std::bind(doAddDictionary, _1, std::ref(std::cin), std::ref(dictionary)));
 
   std::string command;
   while (std::cin >> command)
@@ -43,7 +44,10 @@ int main(int argc, char* argv[])
     try
     {
       List< std::string > args;
-      inputArgs(std::cin, args);
+      if (command != "addDictionary")
+      {
+        inputArgs(std::cin, args);
+      }
       commands.at(command)(args);
       args.clear();
     }

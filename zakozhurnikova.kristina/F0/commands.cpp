@@ -1,6 +1,8 @@
 #include "commands.hpp"
 #include <iostream>
 #include <fstream>
+#include <scopeGuard.hpp>
+#include "inputDictionary.hpp"
 
 void addDictionary(std::string& dictionaryName, dictionaryOne& toAdd, dict& dictionary)
 {
@@ -325,4 +327,22 @@ void zakozhurnikova::save(List< std::string >& args, dict& dictionary)
     file << '\n';
   }
   file.close();
+}
+
+void zakozhurnikova::doAddDictionary(List< std::string >&, std::istream& in, dict& dictionary)
+{
+  ScopeGuard guard(in);
+  std::string nameDictionary;
+  in >> nameDictionary;
+  subDict translation;
+  in >> std::noskipws;
+  in >> translation;
+  if (!translation.empty() && !nameDictionary.empty())
+  {
+    dictionary.push(nameDictionary, translation);
+  }
+  else if (!nameDictionary.empty())
+  {
+    std::cout << "The dictionary is empty:" << nameDictionary << '\n';
+  }
 }

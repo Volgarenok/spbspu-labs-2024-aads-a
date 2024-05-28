@@ -24,6 +24,7 @@ namespace zakozhurnikova
   void rider(List< std::string >& args, dict& dictionary);
   void interpreter(List< std::string >& args, dict& dictionary);
   void save(List< std::string >& args, dict& dictionary);
+  void doAddDictionary(List< std::string >&, std::istream& in, dict& dictionary);
 }
 
 #endif
