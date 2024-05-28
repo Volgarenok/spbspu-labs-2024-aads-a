@@ -21,7 +21,7 @@ void addDictionary(std::string& dictionaryName, dictionaryOne& toAdd, dict& dict
   }
 }
 
-void zakozhurnikova::print(const List< std::string >& args, const dict& dictionary)
+void zakozhurnikova::print(const List< std::string >& args, std::ostream& out, const dict& dictionary)
 {
   if (args.size() != 1)
   {
@@ -31,21 +31,21 @@ void zakozhurnikova::print(const List< std::string >& args, const dict& dictiona
   std::string mapName = args.back();
   if (!dictionary.at(mapName).empty())
   {
-    result = mapName;
+    out << mapName;
     for (auto it = dictionary[mapName].cbegin(); it != dictionary[mapName].cend(); ++it)
     {
-      result += ' ' + it->first;
+      out << ' ' << it->first;
       for (auto itList = (it->second).begin(); itList != (it->second).end(); ++itList)
       {
-        result += ' ' + *itList;
+        out << ' ' << *itList;
       }
     }
   }
   else
   {
-    result = "<EMPTY>";
+    out << "<EMPTY>";
   }
-  std::cout << result << '\n';
+  out << '\n';
 }
 
 void zakozhurnikova::complement(List< std::string >& args, dict& dictionary)
@@ -327,11 +327,6 @@ void zakozhurnikova::save(List< std::string >& args, dict& dictionary)
     file << '\n';
   }
   file.close();
-}
-
-bool isDictionary(const std::string& nameDictionary, const dict& dictionary)
-{
-  return (dictionary.find(nameDictionary) == dictionary.cend());
 }
 
 void zakozhurnikova::doAddDictionary(List< std::string >&, std::istream& in, dict& dictionary)

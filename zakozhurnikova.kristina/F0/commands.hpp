@@ -12,7 +12,7 @@ using dictionaryOne = zak::BinarySearchTree< std::string, zak::List< std::string
 
 namespace zakozhurnikova
 {
-  void print(const List< std::string >& args, const dict& dictionary);
+  void print(const List< std::string >& args, std::ostream& out, const dict& dictionary);
   void complement(List< std::string >& args, dict& dictionary);
   void intersect(List< std::string >& args, dict& dictionary);
   void doUnion(List< std::string >& args, dict& dictionary);

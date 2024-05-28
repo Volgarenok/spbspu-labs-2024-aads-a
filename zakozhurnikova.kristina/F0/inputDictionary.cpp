@@ -30,6 +30,11 @@ bool isEnglish(const std::string& temp)
   return false;
 }
 
+bool zakozhurnikova::isDictionary(const std::string& nameDictionary, const dict& dictionary)
+{
+  return (dictionary.find(nameDictionary) == dictionary.cend());
+}
+
 std::istream& zakozhurnikova::operator>>(std::istream& in, subDict& dict)
 {
   std::istream::sentry guard(in);
@@ -102,7 +107,7 @@ void zakozhurnikova::inputDictionary(std::istream& in, dict& maps)
     subDict translation;
     in >> std::noskipws;
     in >> translation;
-    if (!translation.empty() && !nameDictionary.empty())
+    if (!translation.empty() && !nameDictionary.empty() && isDictionary(nameDictionary, maps))
     {
       maps.push(nameDictionary, translation);
     }
