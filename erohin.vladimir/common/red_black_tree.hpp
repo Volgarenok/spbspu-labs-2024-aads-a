@@ -192,11 +192,7 @@ namespace erohin
   template< class Key, class T, class Compare >
   T & RedBlackTree< Key, T, Compare >::operator[](const Key & key)
   {
-    TreeIterator< Key, T > iter = find(key);
-    if (iter == end())
-    {
-      iter = insert(std::make_pair(key, T())).first;
-    }
+    auto iter = insert(std::make_pair(key, T())).first;
     return iter->second;
   }
 

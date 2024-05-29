@@ -50,11 +50,14 @@ void erohin::createDictCommand(collection & dict_context, const texts_source & t
   }
   dictionary temp_dict;
   createDictionary(temp_dict, text_context.at(text_name));
+  /*
   auto iter_pair = dict_context.insert(std::make_pair(dict_name, std::move(temp_dict)));
   if (!iter_pair.second)
   {
     throw std::logic_error("createdict: bad insertion into dictionary collection");
   }
+  */
+  dict_context[dict_name] = std::move(temp_dict);
 }
 
 void erohin::removeDictCommand(collection & dict_context, std::istream & input, std::ostream &)
@@ -282,6 +285,7 @@ void erohin::createDictionary(dictionary & dict, const std::string & file_name)
     else
     {
       ++temp_dict[word];
+    }
     file >> WordInContextFormat{ word, max_size };
   }
   dict = std::move(temp_dict);

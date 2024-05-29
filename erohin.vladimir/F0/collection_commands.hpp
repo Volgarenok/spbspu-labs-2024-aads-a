@@ -4,10 +4,6 @@
 #include <iostream>
 #include <string>
 #include <numeric>
-#include <algorithm>
-#include <forward_list>
-#include <iterator>
-#include <functional>
 #include "red_black_tree.hpp"
 #include "input_output_collection.hpp"
 #include "dictionary_record.hpp"
