@@ -311,18 +311,14 @@ void erohin::createSortedDictionary(sorted_dictionary & sorted_dict, const dicti
   sorted_dictionary temp_dict;
   while (begin != end)
   {
-    auto iter_pair = temp_dict.insert(std::make_pair(begin->second, List< std::string >({ begin->first })));
-    if (!iter_pair.second)
-    {
-      temp_dict[begin->second].push_front(begin->first);
-    }
+    temp_dict[begin->second].push_front(begin->first);
     ++begin;
   }
   auto sort_begin = temp_dict.begin();
   auto sort_end = temp_dict.end();
   while (sort_begin != sort_end)
   {
-    sort_begin->second.sort(std::less< std::string >{});
+    sort_begin->second.sort();
     ++sort_begin;
   }
   sorted_dict = std::move(temp_dict);
@@ -335,11 +331,12 @@ void erohin::printSortedDictionary(const sorted_dictionary & sorted_dict, std::o
   auto end = sorted_dict.crend();
   while (begin != end)
   {
+    std::cout << "//" << begin->first << "//" << std::endl;
     auto list_begin = begin->second.cbegin();
     auto list_end = begin->second.cend();
     while (list_begin != list_end)
     {
-      output << FormattedRecord(std::make_pair(*list_begin, begin->first), total_number, numformat) << "\n";
+      output << FormattedRecord(std::make_pair(*list_begin, begin->first), total_number, numformat) << std::endl;
       ++list_begin;
     }
     ++begin;

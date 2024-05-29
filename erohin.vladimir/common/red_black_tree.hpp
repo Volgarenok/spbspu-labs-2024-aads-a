@@ -246,7 +246,7 @@ namespace erohin
   template< class Key, class T, class Compare >
   typename RedBlackTree< Key, T, Compare >::reverse_iterator RedBlackTree< Key, T, Compare >::rend()
   {
-    return reverse_iterator(iterator(nullptr));
+    return reverse_iterator(iterator(crend().node_));
   }
 
   template< class Key, class T, class Compare >

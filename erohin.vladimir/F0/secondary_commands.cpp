@@ -9,8 +9,8 @@ void erohin::printHelp(std::ostream & output)
   output << "Use: program [options] <freqdict> — starting with use a file <freqdict>\n";
   output << "Creation and store a frequency dictionary based on the text.";
   output << "The opportunity to change and view the contents of several frequency dictionaries.\n\n";
-  output << "Аргументы командной строки:\n";
-  output << "\t--help — \"помощь\" по программе\n";
+  output << "Command line arguments:\n";
+  output << "\t--help — show this help\n";
   output << "\t--check — check the data correctness\n";
   output << "\t--numformat=<format> — starting with use a file <freqdict> with style <format>\n";
   output << "\t<format> = { NUMBER, PROPORTION, FRACTIONAL, PERCANTAGE }\n\n";
