@@ -11,19 +11,6 @@
 int main(int argc, char ** argv)
 {
   using namespace erohin;
-
-  RedBlackTree< int, int > q;
-  for (int i = 0; i < 100; ++i)
-  {
-    q[i] = i;
-  }
-  for (auto iter = q.crbegin(); iter != q.crend(); ++iter)
-  {
-    std::cout << iter->first << "\n";
-  }
-  return 0;
-
-
   if (argc == 2 && !strcmp(argv[1], "--help"))
   {
     printHelp(std::cout);

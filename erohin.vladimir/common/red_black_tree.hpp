@@ -98,6 +98,7 @@ namespace erohin
     detail::TreeNode< Key, T > * root_;
     Compare cmp_;
     size_t size_;
+    char fake_[sizeof(detail::TreeNode< Key, T >)];
     void clear_subtree(detail::TreeNode< Key, T > * subtree);
     detail::TreeNode< Key, T > * find_to_change_erased(detail::TreeNode< Key, T > * subtree);
     detail::TreeNode< Key, T > * find_grandparent(detail::TreeNode< Key, T > * subtree);
@@ -252,18 +253,21 @@ namespace erohin
   template< class Key, class T, class Compare >
   typename RedBlackTree< Key, T, Compare >::const_reverse_iterator RedBlackTree< Key, T, Compare >::crbegin() const
   {
-    detail::TreeNode< Key, T > * result = root_;
-    while (result->right)
+    detail::TreeNode< Key, T > * prev = root_;
+    while (prev->right)
     {
-      result = result->right;
+      prev = prev->right;
     }
+    detail::TreeNode< Key, T > * result = reinterpret_cast< detail::TreeNode< Key, T > * >(const_cast< char * >(fake_));
+    result->left = prev;
+    result->right = nullptr;
     return const_reverse_iterator(const_iterator(result));
   }
 
   template< class Key, class T, class Compare >
   typename RedBlackTree< Key, T, Compare >::const_reverse_iterator RedBlackTree< Key, T, Compare >::crend() const
   {
-    return const_reverse_iterator(const_iterator(nullptr));
+    return const_reverse_iterator(const_iterator(cbegin().node_));
   }
 
   template< class Key, class T, class Compare >

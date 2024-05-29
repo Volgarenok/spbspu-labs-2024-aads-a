@@ -331,12 +331,11 @@ void erohin::printSortedDictionary(const sorted_dictionary & sorted_dict, std::o
   auto end = sorted_dict.crend();
   while (begin != end)
   {
-    std::cout << "//" << begin->first << "//" << std::endl;
     auto list_begin = begin->second.cbegin();
     auto list_end = begin->second.cend();
     while (list_begin != list_end)
     {
-      output << FormattedRecord(std::make_pair(*list_begin, begin->first), total_number, numformat) << std::endl;
+      output << FormattedRecord(std::make_pair(*list_begin, begin->first), total_number, numformat) << "\n";
       ++list_begin;
     }
     ++begin;
