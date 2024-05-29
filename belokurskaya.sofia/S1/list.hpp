@@ -13,48 +13,84 @@ namespace belokurskaya
     {
       T value;
       Node* next;
-      Node(const T & value):
+      Node(const T& value):
         value(value),
         next(nullptr)
       {}
     };
     Node* head;
+    size_t list_size;
 
     public:
       List():
-        head(nullptr)
+        head(nullptr), list_size(0)
       {}
 
-      List(size_t count, const T & value):
-        head(nullptr)
+      List(size_t count, const T& value) : head(nullptr), list_size(0)
       {
-        for (size_t i = 0; i < count; ++i)
+        try
         {
-          push_back(value);
+          for (size_t i = 0; i < count; ++i)
+          {
+            push_back(value);
+          }
+        }
+        catch (...)
+        {
+          clear();
+          throw;
         }
       }
 
-      List(const List< T > & other):
-        head(nullptr)
+      List(const List< T >& other):
+        head(nullptr), list_size(0)
       {
-        Node* current = other.head;
-        while (current)
+        try
         {
-          push_back(current->value);
-          current = current->next;
+          Node* current = other.head;
+          while (current)
+          {
+            push_back(current->value);
+            current = current->next;
+          }
+        }
+        catch (...)
+        {
+          clear();
+          throw;
         }
       }
 
-      List(const std::initializer_list< T > & ilist):
-        head(nullptr)
+      List(List< T >&& other) noexcept:
+        head(other.head), list_size(other.list_size)
       {
-        for (const T & value: ilist)
+        other.head = nullptr;
+        other.list_size = 0;
+      }
+
+      List(const std::initializer_list< T >& ilist):
+        head(nullptr), list_size(0)
+      {
+        try
         {
-          push_back(value);
+          for (const T& value : ilist)
+          {
+            push_back(value);
+          }
+        }
+        catch (...)
+        {
+          clear();
+          throw;
         }
       }
 
       ~List()
+      {
+        clear();
+      }
+
+      void clear()
       {
         while (head)
         {
@@ -62,6 +98,7 @@ namespace belokurskaya
           head = head->next;
           delete temp;
         }
+        list_size = 0;
       }
 
       bool empty() const noexcept
@@ -69,7 +106,7 @@ namespace belokurskaya
         return head == nullptr;
       }
 
-      void push_back(const T & value)
+      void push_back(const T& value)
       {
         Node* newNode = new Node(value);
         if (!head)
@@ -85,13 +122,15 @@ namespace belokurskaya
           }
           current->next = newNode;
         }
+        ++list_size;
       }
 
-      void push_front(const T & value)
+      void push_front(const T& value)
       {
         Node* newNode = new Node(value);
         newNode->next = head;
         head = newNode;
+        ++list_size;
       }
 
       void pop_back()
@@ -104,15 +143,18 @@ namespace belokurskaya
         {
           delete head;
           head = nullptr;
-          return;
         }
-        Node* current = head;
-        while (current->next->next)
+        else
         {
-          current = current->next;
+          Node* current = head;
+          while (current->next->next)
+          {
+            current = current->next;
+          }
+          delete current->next;
+          current->next = nullptr;
         }
-        delete current->next;
-        current->next = nullptr;
+        --list_size;
       }
 
       void pop_front()
@@ -121,32 +163,10 @@ namespace belokurskaya
         {
           throw std::out_of_range("List is empty");
         }
-        else
-        {
-          Node* temp = head;
-          head = head->next;
-          delete temp;
-        }
-      }
-
-      void insert(size_t index, const T & value)
-      {
-        if (index == 0)
-        {
-          push_front(value);
-        }
-        Node* newNode = new Node(value);
-        Node* current = head;
-        for (size_t i = 0; i < index - 1 && current; ++i)
-        {
-          current = current->next;
-        }
-        if (!current)
-        {
-          throw std::out_of_range("Index out of range");
-        }
-        newNode->next = current->next;
-        current->next = newNode;
+        Node* temp = head;
+        head = head->next;
+        delete temp;
+        --list_size;
       }
 
       void erase(size_t index)
@@ -154,6 +174,7 @@ namespace belokurskaya
         if (index == 0)
         {
           pop_front();
+          return;
         }
         Node* current = head;
         for (size_t i = 0; i < index - 1 && current; ++i)
@@ -167,9 +188,10 @@ namespace belokurskaya
         Node* temp = current->next;
         current->next = current->next->next;
         delete temp;
+        --list_size;
       }
 
-      void remove(const T & value)
+      void remove(const T& value)
       {
         Node* current = head;
         Node* prev = nullptr;
@@ -197,7 +219,7 @@ namespace belokurskaya
         }
       }
 
-      T & at(size_t index) const
+      const T& at(size_t index) const
       {
         Node* current = head;
         for (size_t i = 0; i < index && current; ++i)
@@ -213,38 +235,22 @@ namespace belokurskaya
 
       size_t size() const noexcept
       {
-        size_t count = 0;
-        Node* current = head;
-        while (current != nullptr)
-        {
-          ++count;
-          current = current->next;
-        }
-        return count;
+        return list_size;
       }
 
-      List & operator=(const List & other)
+      List& operator=(List other) noexcept
       {
-        if (this != &other)
-        {
-          while (head)
-          {
-            Node* temp = head;
-            head = head->next;
-            delete temp;
-          }
-
-          Node* current = other.head;
-          while (current)
-          {
-            push_back(current->value);
-            current = current->next;
-          }
-        }
+        swap(*this, other);
         return *this;
       }
 
-      bool operator==(const List< T > & other) const noexcept
+      friend void swap(List& first, List& second) noexcept
+      {
+        std::swap(first.head, second.head);
+        std::swap(first.list_size, second.list_size);
+      }
+
+      bool operator==(const List< T >& other) const noexcept
       {
         Node* current1 = head;
         Node* current2 = other.head;
@@ -260,12 +266,12 @@ namespace belokurskaya
         return !current1 && !current2;
       }
 
-      bool operator!=(const List< T > & other) const noexcept
+      bool operator!=(const List< T >& other) const noexcept
       {
         return !(*this == other);
       }
 
-      bool operator<(const List< T > & other) const noexcept
+      bool operator<(const List< T >& other) const noexcept
       {
         Node* current1 = head;
         Node* current2 = other.head;
@@ -281,93 +287,144 @@ namespace belokurskaya
         return current2 != nullptr;
       }
 
-      operator List< size_t >() const
-      {
-        List< size_t > convertedList;
-        Node* current = head;
-        while (current)
-        {
-          convertedList.push_back(current->value);
-          current = current->next;
-        }
-        return convertedList;
-      }
-
-      operator List< List< T > >() const
-      {
-        List< List< T > > resultList;
-        Node* current = head;
-        while (current)
-        {
-          resultList.push_back(current->value);
-          current = current->next;
-        }
-        return resultList;
-      }
-
-      bool operator<=(const List< T > & other) const noexcept
+      bool operator<=(const List< T >& other) const noexcept
       {
         return *this < other || *this == other;
       }
 
-      bool operator>(const List< T > & other) const noexcept
+      bool operator>(const List< T >& other) const noexcept
       {
         return !(*this <= other);
       }
 
-      bool operator>=(const List< T > & other) const noexcept
+      bool operator>=(const List< T >& other) const noexcept
       {
         return *this > other || *this == other;
       }
 
-      class ConstIterator
+      class Iterator
       {
         private:
           Node* current;
 
         public:
-          ConstIterator(Node* node):
-            current(node)
+          using pointer = T*;
+          using reference = T&;
+
+          Iterator():
+            current(nullptr)
           {}
 
-          const T & operator*() const
+          reference operator*() const
           {
             return current->value;
           }
 
-          const T & operator->() const
+          pointer operator->() const
           {
             return std::addressof(current->value);
           }
 
-          ConstIterator & operator++()
+          Iterator& operator++()
           {
             current = current->next;
             return *this;
           }
 
-          ConstIterator& operator++(int)
+          Iterator operator++(int)
+          {
+            Iterator result = *this;
+            ++(*this);
+            return result;
+          }
+
+          bool operator!=(const Iterator& other) const
+          {
+            return current != other.current;
+          }
+
+          bool operator==(const Iterator& other) const
+          {
+            return current == other.current;
+          }
+
+        private:
+          friend class List;
+          explicit Iterator(Node* node):
+            current(node)
+          {}
+      };
+
+      Iterator begin()
+      {
+        return Iterator(head);
+      }
+
+      Iterator end()
+      {
+        return Iterator(nullptr);
+      }
+
+      class ConstIterator
+      {
+        private:
+          const Node* current;
+          friend class List;
+          explicit ConstIterator(const Node* node):
+            current(node)
+          {}
+
+        public:
+          using pointer = const T*;
+          using reference = const T&;
+
+          ConstIterator():
+            current(nullptr)
+          {}
+
+          reference operator*() const
+          {
+            return current->value;
+          }
+
+          pointer operator->() const
+          {
+            return std::addressof(current->value);
+          }
+
+          ConstIterator& operator++()
+          {
+            current = current->next;
+            return *this;
+          }
+
+          ConstIterator operator++(int)
           {
             ConstIterator result = *this;
             ++(*this);
             return result;
           }
 
-
-          bool operator!=(const ConstIterator & other) const
+          bool operator!=(const ConstIterator& other) const
           {
             return current != other.current;
           }
+
+          bool operator==(const ConstIterator& other) const
+          {
+            return current == other.current;
+          }
       };
 
-      ConstIterator begin() const
-      {
-        return ConstIterator(head);
-      }
-      ConstIterator end() const
-      {
-        return ConstIterator(nullptr);
-      }
+        ConstIterator begin() const
+        {
+          return ConstIterator(head);
+        }
+
+        ConstIterator end() const
+        {
+          return ConstIterator(nullptr);
+        }
   };
 }
 
