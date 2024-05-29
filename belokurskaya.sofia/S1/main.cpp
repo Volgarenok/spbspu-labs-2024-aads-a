@@ -16,7 +16,7 @@ int main()
     readSequences(std::cin, sequences);
     if (sequences.empty())
     {
-      std::cout << 0 << '\n';
+      std::cout << 0;
       return 0;
     }
 
