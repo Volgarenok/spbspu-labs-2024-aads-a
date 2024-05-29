@@ -4,7 +4,6 @@
 #include <algorithm>
 #include <iterator>
 
-
 namespace gladyshev
 {
   template< typename Compare, typename Iter >
