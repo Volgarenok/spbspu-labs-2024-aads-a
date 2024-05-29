@@ -62,7 +62,7 @@ void belokurskaya::printSums(std::ostream& output, const List< std::pair< std::s
 
   if (maxLen == 0)
   {
-    output << 0 << '\n';
+    output << 0;
     return;
   }
 
