@@ -147,7 +147,7 @@ void ishmuratov::save(const dict_t & dictionaries, std::istream &input, std::ost
   output << "\n";
 }
 
-void ishmuratov::read(ishmuratov::dict_t &dictionaries, std::istream & input)
+void ishmuratov::read(dict_t & dictionaries, std::istream & input)
 {
   std::string name;
   input >> name;
@@ -171,7 +171,7 @@ void ishmuratov::renamedict(dict_t & dictionaries, std::istream & input)
   dictionaries.erase(name);
 }
 
-void ishmuratov::intersect(dict_t &dictionaries, std::istream &input)
+void ishmuratov::intersect(dict_t & dictionaries, std::istream & input)
 {
   std::string new_name;
   std::string first_name;
@@ -209,7 +209,7 @@ ishmuratov::unit_t ishmuratov::intersect_impl(const unit_t & first, const unit_t
   return intersect_dict;
 }
 
-void ishmuratov::uniond(ishmuratov::dict_t &dictionaries, std::istream &input)
+void ishmuratov::uniond(dict_t & dictionaries, std::istream & input)
 {
   std::string new_name;
   std::string first_name;
@@ -234,7 +234,7 @@ void ishmuratov::uniond(ishmuratov::dict_t &dictionaries, std::istream &input)
   dictionaries.insert(std::make_pair(new_name, temp));
 }
 
-ishmuratov::unit_t ishmuratov::union_impl(const ishmuratov::unit_t &first, const ishmuratov::unit_t &second)
+ishmuratov::unit_t ishmuratov::union_impl(const unit_t & first, const unit_t & second)
 {
   unit_t union_dict;
   for (auto pair = first.cbegin(); pair != first.cend(); ++pair)
