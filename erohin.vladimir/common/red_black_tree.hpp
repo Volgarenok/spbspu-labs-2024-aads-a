@@ -96,9 +96,10 @@ namespace erohin
     F traverse_breadth(F f) const;
   private:
     detail::TreeNode< Key, T > * root_;
-    Compare cmp_;
     size_t size_;
+    Compare cmp_;
     char fake_[sizeof(detail::TreeNode< Key, T >)];
+    detail::TreeNode< Key, T > * make_fake_node() const;
     void clear_subtree(detail::TreeNode< Key, T > * subtree);
     detail::TreeNode< Key, T > * find_to_change_erased(detail::TreeNode< Key, T > * subtree);
     detail::TreeNode< Key, T > * find_grandparent(detail::TreeNode< Key, T > * subtree);
@@ -258,7 +259,7 @@ namespace erohin
     {
       prev = prev->right;
     }
-    detail::TreeNode< Key, T > * result = reinterpret_cast< detail::TreeNode< Key, T > * >(const_cast< char * >(fake_));
+    detail::TreeNode< Key, T > * result = make_fake_node();
     result->left = prev;
     result->right = nullptr;
     return const_reverse_iterator(const_iterator(result));
@@ -874,6 +875,12 @@ namespace erohin
   }
 
   template< class Key, class T, class Compare >
+  detail::TreeNode< Key, T > * RedBlackTree< Key, T, Compare >::make_fake_node() const
+  {
+    return reinterpret_cast< detail::TreeNode< Key, T > * >(const_cast< char * >(fake_));
+  }
+
+  template< class Key, class T, class Compare >
   void RedBlackTree< Key, T, Compare >::clear_subtree(detail::TreeNode< Key, T > * subtree)
   {
     if (!subtree)
@@ -910,7 +917,6 @@ namespace erohin
     }
     return subtree;
   }
-
 
   template< class Key, class T, class Compare >
   template< detail::color_t C >
