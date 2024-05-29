@@ -3,20 +3,28 @@
 void ishmuratov::input_dictionary(dict_t & dictionaries, std::istream &input)
 {
   std::string name;
-  std::getline(input, name);
-
-  unit_t unit;
-  std::string key;
-  while (input >> key)
+  while (std::getline(input, name))
   {
-
-    value_t values;
-    std::string value;
-    while (input >> value)
+    unit_t unit;
+    std::string key;
+    while (input >> key)
     {
-      values.pushBack(value);
+      value_t values;
+      std::string value;
+      while (input >> value)
+      {
+        values.pushBack(value);
+        if (input.get() == '\n')
+        {
+          break;
+        }
+      }
+      unit.insert(std::make_pair(key, values));
+      if (input.get() == '\n')
+      {
+        break;
+      }
     }
-    unit.insert(std::make_pair(key, values));
+    dictionaries.insert(std::make_pair(name, unit));
   }
-  dictionaries.insert(std::make_pair(name, unit));
 }

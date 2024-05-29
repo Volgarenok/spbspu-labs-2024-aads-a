@@ -14,8 +14,8 @@ namespace ishmuratov
   void print_dict(const dict_t & dictionaries, std::istream & input, std::ostream & output);
   void get_value(const dict_t & dictionaries, std::istream & input, std::ostream & output);
   void save(const dict_t & dictionaries, std::istream & input, std::ostream & output);
-  void read(dict_t & dictionaries, std::istream & input, std::istream & input_file);
-  void rename(dict_t & dictionaries, std::istream & input);
+  void read(dict_t & dictionaries, std::istream & input);
+  void renamedict(dict_t & dictionaries, std::istream & input);
   void intersect(dict_t & dictionaries, std::istream & input);
   void uniond(dict_t & dictionaries, std::istream & input);
 

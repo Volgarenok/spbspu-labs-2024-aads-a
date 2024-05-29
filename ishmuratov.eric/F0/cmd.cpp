@@ -1,5 +1,4 @@
 #include "cmd.hpp"
-#include <limits>
 
 void ishmuratov::create_dict(dict_t & dictionaries, std::istream & input)
 {
@@ -148,10 +147,28 @@ void ishmuratov::save(const dict_t & dictionaries, std::istream &input, std::ost
   output << "\n";
 }
 
-void ishmuratov::read(ishmuratov::dict_t &dictionaries, std::istream & input, std::istream & input_file)
+void ishmuratov::read(ishmuratov::dict_t &dictionaries, std::istream & input)
 {
   std::string name;
   input >> name;
+}
+
+void ishmuratov::renamedict(dict_t & dictionaries, std::istream & input)
+{
+  std::string name;
+  std::string new_name;
+  input >> name >> new_name;
+  if (dictionaries.find(name) == dictionaries.end())
+  {
+    throw std::out_of_range("Non existent dictionary!");
+  }
+  if (dictionaries.find(new_name) != dictionaries.end())
+  {
+    throw std::out_of_range("Dictionary with this name already exist!");
+  }
+
+  dictionaries.insert(std::make_pair(new_name, dictionaries.at(name)));
+  dictionaries.erase(name);
 }
 
 void ishmuratov::intersect(dict_t &dictionaries, std::istream &input)

@@ -12,11 +12,11 @@ int main()
 {
   using namespace ishmuratov;
 
-  std::ofstream file;
+  std::ifstream file;
   file.open("../file.txt", std::ios_base::app);
 
   dict_t dict;
-//  input_dictionary(dict, std::cin);
+  input_dictionary(dict, file);
 
 
   AVLTree< std::string, std::function< void(std::istream &, std::ostream &) > > cmds;
@@ -30,12 +30,11 @@ int main()
     cmds.insert(std::make_pair("printdict", std::bind(print_dict, std::ref(dict), _1, _2)));
     cmds.insert(std::make_pair("getvalue", std::bind(get_value, std::ref(dict), _1, _2)));
     cmds.insert(std::make_pair("save", std::bind(save, std::ref(dict), _1, _2)));
+    cmds.insert(std::make_pair("read", std::bind(read, std::ref(dict), _1)));
+    cmds.insert(std::make_pair("rename", std::bind(renamedict, std::ref(dict), _1)));
     cmds.insert(std::make_pair("intersect", std::bind(intersect, std::ref(dict), _1)));
     cmds.insert(std::make_pair("union", std::bind(uniond, std::ref(dict), _1)));
   }
-
-  AVLTree< int, int > lol;
-  lol.insert(std::make_pair(1, 0));
 
   std::string cmd;
   while (std::cin >> cmd)
