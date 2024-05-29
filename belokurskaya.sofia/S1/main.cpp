@@ -14,12 +14,16 @@ int main()
     List< std::pair< std::string, List< size_t > > > sequences;
 
     readSequences(std::cin, sequences);
+    if (sequences.empty())
+    {
+      std::cout << 0 << '\n';
+      return 0;
+    }
 
     printNames(std::cout, sequences);
     std::cout << '\n';
 
     printSequences(std::cout, sequences);
-    std::cout << '\n';
 
     printSums(std::cout, sequences);
     std::cout << '\n';
