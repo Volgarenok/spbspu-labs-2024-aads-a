@@ -1,90 +1,120 @@
 #include "commands.hpp"
+#include <fstream>
 #include <functional>
 #include <algorithm>
-#include <fstream>
 #include "dictionary.hpp"
+
+void nikitov::printHelp(std::ostream& output)
+{
+  output << "Command system:" << '\n'
+    << "1. print dictionary <dictName> - output of all words in the specified dictionary" << '\n'
+    << "2. print all - output of all words from all dictionaries" << '\n'
+    << "3. print names - output the names of all dictionaries" << '\n'
+    << "4. find translation <dictName> <word> - search and output of a word translation from the dictionary" << '\n'
+    << "5. find antonym <dictName> <word> - search and output of the word's antonyms from the dictionary" << '\n'
+    << "6. translate sentence <dictName> - outputs a machine translation of a sentence based on the specified dictionary" << '\n'
+    << "7. translate file <dictName> <inputFile> <outputFile> - reads text from a file and writes the translation to another file" << '\n'
+    << "8. save dictionary <dictName> <newFileName> - saves the specified dictionary to a file" << '\n'
+    << "9. create dictionary <dictName> - creates an empty dictionary with the specified name" << '\n'
+    << "10. add translation <dictName> <word> <translation> - adds a word with a translation to the specified dictionary" << '\n'
+    << "11. add antonym <dictName> <word> <antonym> - adds an antonym to the word" << '\n'
+    << "12. edit primary <dictName> <word> - changes the main translation of the word" << '\n'
+    << "13. edit secondary <dictName> <word> - changes the second translation of the word" << '\n'
+    << "14. delete primary <dictName> <word> - delete the main translation of the word" << '\n'
+    << "15. delete secondary <dictName> <word> - delete the second translation of the word" << '\n'
+    << "16. delete antonym <dictName> <word> - remove the antonym of the word" << '\n'
+    << "17. merge dictionary <firstDictName> <secondDictName> <newDictName> - creates a new dictionary based on the other two" << '\n';
+}
 
 void nikitov::printDictCmd(const Tree< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream& output)
 {
   std::string dictName;
   input >> dictName;
-  dictOfDicts.at(dictName).printDictionary(output);
+  output << dictOfDicts.at(dictName);
 }
 
 void nikitov::printAllCmd(const Tree< std::string, Dictionary >& dictOfDicts, std::istream&, std::ostream& output)
 {
   for (auto i = dictOfDicts.cbegin(); i != dictOfDicts.cend(); ++i)
   {
-    i->second.printDictionary(output);
+    output << i->second;
   }
 }
 
-void nikitov::findTranslationCmd(const Tree< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream& output)
+void nikitov::printNamesCmd(const Tree< std::string, Dictionary >& dictOfDicts, std::istream&, std::ostream& output)
 {
-  std::string dictionaryName;
-  input >> dictionaryName;
-  std::string word;
-  input >> word;
-  dictOfDicts.at(dictionaryName).printTranslation(word, output);
+  for (auto i = dictOfDicts.cbegin(); i != dictOfDicts.cend(); ++i)
+  {
+    output << i->first << '\n';
+  }
 }
 
-void nikitov::findAntonymCmd(const Tree< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream& output)
+void nikitov::findCmd(const Tree< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream& output,
+  const std::string& parameter)
 {
   std::string dictionaryName;
   input >> dictionaryName;
   std::string word;
   input >> word;
-  dictOfDicts.at(dictionaryName).printAntonym(word, output);
+  if (parameter == "translation")
+  {
+    output << dictOfDicts.at(dictionaryName).findWord(word) << '\n';
+  }
+  else
+  {
+    output << dictOfDicts.at(dictionaryName).findAntonym(word) << '\n';
+  }
+}
+
+char translate(const nikitov::Tree< std::string, nikitov::Dictionary >& dictOfDicts, const std::string& dictionaryName,
+  std::istream& input, std::ostream& output)
+{
+  std::string line;
+  input >> line;
+  char symb = ' ';
+  std::string temp = line;
+  for (auto i = temp.begin(); i != temp.end(); ++i)
+  {
+    *i = std::tolower(*i);
+  }
+
+  try
+  {
+    if (!temp.empty() && !std::isalpha(temp.back()))
+    {
+      symb = temp.back();
+      temp.pop_back();
+      line.pop_back();
+    }
+    temp = dictOfDicts.at(dictionaryName).findTranslation(temp);
+    output << temp;
+  }
+  catch (const std::exception&)
+  {
+    output << line;
+  }
+  if (symb != ' ')
+  {
+    output << symb;
+  }
+  return symb;
 }
 
 void nikitov::translateSentenceCmd(const Tree< std::string, Dictionary >& dictOfDicts, std::istream& input, std::ostream& output)
 {
   std::string dictionaryName;
   input >> dictionaryName;
-  std::string line;
   char symb = ' ';
-  bool isFirstWord = true;
-  bool isBigSymb = true;
+  bool isFirst = true;
 
-  while (input >> line && symb != '.')
+  while (input && symb != '.')
   {
-    std::string temp = line;
-    isBigSymb = std::isupper(temp.front());
-    for (auto i = temp.begin(); i != temp.end(); ++i)
-    {
-      *i = std::tolower(*i);
-    }
-    if (!isFirstWord)
+    if (!isFirst)
     {
       output << ' ';
     }
-    isFirstWord = false;
-
-    symb = ' ';
-    try
-    {
-      if (!std::isalpha(temp.back()))
-      {
-        symb = temp.back();
-        temp.pop_back();
-        line.pop_back();
-      }
-      temp = dictOfDicts.at(dictionaryName).getTranslation(temp);
-      if (isBigSymb)
-      {
-        setlocale(LC_ALL, "Russian");
-        temp.front() = std::toupper(temp.front());
-      }
-      output << temp;
-    }
-    catch (const std::exception&)
-    {
-      output << line;
-    }
-    if (symb != ' ')
-    {
-      output << symb;
-    }
+    isFirst = false;
+    symb = translate(dictOfDicts, dictionaryName, input, output);
   }
   output << '\n';
 }
@@ -100,50 +130,16 @@ void nikitov::translateFileCmd(const Tree< std::string, Dictionary >& dictOfDict
 
   std::ifstream fileInput(fileName);
   std::ofstream fileOutput(newFileName);
-  std::string line;
-  char symb = ' ';
-  bool isFirstWord = true;
-  bool isBigSymb = true;
+  bool isFirst = true;
 
-  while (input >> line)
+  while (fileInput)
   {
-    std::string temp = line;
-    isBigSymb = std::isupper(temp.front());
-    for (auto i = temp.begin(); i != temp.end(); ++i)
-    {
-      *i = std::tolower(*i);
-    }
-    if (!isFirstWord)
+    if (!isFirst)
     {
       fileOutput << ' ';
     }
-    isFirstWord = false;
-
-    symb = ' ';
-    try
-    {
-      if (!std::isalpha(temp.back()))
-      {
-        symb = temp.back();
-        temp.pop_back();
-        line.pop_back();
-      }
-      temp = dictOfDicts.at(dictionaryName).getTranslation(temp);
-      if (isBigSymb)
-      {
-        setlocale(LC_ALL, "Russian");
-        temp.front() = std::toupper(temp.front());
-      }
-      fileOutput << temp;
-    }
-    catch (const std::exception&)
-    {
-      fileOutput << line;
-    }
-    if (symb != ' ')
-    {
-      fileOutput << symb;
-    }
+    isFirst = false;
+    translate(dictOfDicts, dictionaryName, fileInput, fileOutput);
   }
   fileOutput << '\n';
 }
@@ -155,7 +151,7 @@ void nikitov::saveCmd(const Tree< std::string, Dictionary >& dictOfDicts, std::i
   std::string newFileName;
   input >> newFileName;
   std::ofstream fileOutput(newFileName);
-  dictOfDicts.at(dictName).printDictionary(fileOutput);
+  fileOutput << dictOfDicts.at(dictName);
 }
 
 void nikitov::createCmd(Tree< std::string, Dictionary >& dictOfDicts, std::istream& input)
@@ -164,31 +160,28 @@ void nikitov::createCmd(Tree< std::string, Dictionary >& dictOfDicts, std::istre
   input >> dictionaryName;
   if (!dictOfDicts.insert({ dictionaryName, Dictionary() }).second)
   {
-    throw std::logic_error("<INVALID COMMAND>");
+    throw std::logic_error("<ERROR: ALREADY EXIST>");
   }
 }
 
-void nikitov::addTranslationCmd(Tree< std::string, Dictionary >& dictOfDicts, std::istream& input)
+void nikitov::addCmd(Tree< std::string, Dictionary >& dictOfDicts, std::istream& input, const std::string& parameter)
 {
   std::string dictionaryName;
   input >> dictionaryName;
   std::string word;
   std::string translation;
   input >> word >> translation;
-  dictOfDicts.at(dictionaryName).addTranslation(word, translation);
+  if (parameter == "translation")
+  {
+    dictOfDicts.at(dictionaryName).addTranslation(word, translation);
+  }
+  else
+  {
+    dictOfDicts.at(dictionaryName).addAntonym(word, translation);
+  }
 }
 
-void nikitov::addAntonymCmd(Tree< std::string, Dictionary >& dictOfDicts, std::istream& input)
-{
-  std::string dictionaryName;
-  input >> dictionaryName;
-  std::string word;
-  std::string translation;
-  input >> word >> translation;
-  dictOfDicts.at(dictionaryName).addAntonym(word, translation);
-}
-
-void nikitov::editPrimaryCmd(Tree< std::string, Dictionary >& dictOfDicts, std::istream& input)
+void nikitov::editCmd(Tree< std::string, Dictionary >& dictOfDicts, std::istream& input, const std::string& parameter)
 {
   std::string dictionaryName;
   input >> dictionaryName;
@@ -196,45 +189,34 @@ void nikitov::editPrimaryCmd(Tree< std::string, Dictionary >& dictOfDicts, std::
   input >> word;
   std::string translation;
   input >> translation;
-  dictOfDicts.at(dictionaryName).editPrimaryTranslation(word, translation);
+  if (parameter == "primary")
+  {
+    dictOfDicts.at(dictionaryName).editPrimaryTranslation(word, translation);
+  }
+  else
+  {
+    dictOfDicts.at(dictionaryName).editSecondaryTranslation(word, translation);
+  }
 }
 
-void nikitov::editSecondaryCmd(Tree< std::string, Dictionary >& dictOfDicts, std::istream& input)
+void nikitov::deleteCmd(Tree< std::string, Dictionary >& dictOfDicts, std::istream& input, const std::string& parameter)
 {
   std::string dictionaryName;
   input >> dictionaryName;
   std::string word;
   input >> word;
-  std::string translation;
-  input >> translation;
-  dictOfDicts.at(dictionaryName).editSecondaryTranslation(word, translation);
-}
-
-void nikitov::deletePrimaryCmd(Tree< std::string, Dictionary >& dictOfDicts, std::istream& input)
-{
-  std::string dictionaryName;
-  input >> dictionaryName;
-  std::string word;
-  input >> word;
-  dictOfDicts.at(dictionaryName).deletePrimaryTranslation(word);
-}
-
-void nikitov::deleteSecondaryCmd(Tree< std::string, Dictionary >& dictOfDicts, std::istream& input)
-{
-  std::string dictionaryName;
-  input >> dictionaryName;
-  std::string word;
-  input >> word;
-  dictOfDicts.at(dictionaryName).deleteSecondaryTranslation(word);
-}
-
-void nikitov::deleteAntonymCmd(Tree< std::string, Dictionary >& dictOfDicts, std::istream& input)
-{
-  std::string dictionaryName;
-  input >> dictionaryName;
-  std::string word;
-  input >> word;
-  dictOfDicts.at(dictionaryName).deleteAntonym(word);
+  if (parameter == "primary")
+  {
+    dictOfDicts.at(dictionaryName).deletePrimaryTranslation(word);
+  }
+  else if (parameter == "secondary")
+  {
+    dictOfDicts.at(dictionaryName).deleteSecondaryTranslation(word);
+  }
+  else
+  {
+    dictOfDicts.at(dictionaryName).deleteAntonym(word);
+  }
 }
 
 void nikitov::mergeCmd(Tree< std::string, Dictionary >& dictOfDicts, std::istream& input)

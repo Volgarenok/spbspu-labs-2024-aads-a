@@ -1,92 +1,50 @@
 #include "word.hpp"
+#include <iostream>
 #include <stdexcept>
 #include "delimiter.hpp"
 
-#include <iostream>
-
-nikitov::detail::Word::Word(const std::string& translation):
-  primaryTranslation_(translation),
-  secondaryTranslation_(),
-  antonym_()
+nikitov::detail::Word::Word(const std::string& primary, const std::string& secondary, const std::string& antonym) :
+  primaryTranslation(primary),
+  secondaryTranslation(secondary),
+  antonym(antonym)
 {}
-
-std::string& nikitov::detail::Word::getPrimaryTranslation()
-{
-  return primaryTranslation_;
-}
-
-const std::string& nikitov::detail::Word::getPrimaryTranslation() const
-{
-  return primaryTranslation_;
-}
-
-std::string& nikitov::detail::Word::getSecondaryTranslation()
-{
-  return secondaryTranslation_;
-}
-
-const std::string& nikitov::detail::Word::getSecondaryTranslation() const
-{
-  return secondaryTranslation_;
-}
-
-std::string& nikitov::detail::Word::getAntonym()
-{
-  return antonym_;
-}
-
-const std::string& nikitov::detail::Word::getAntonym() const
-{
-  return antonym_;
-}
 
 std::istream& nikitov::detail::operator>>(std::istream& input, Word& word)
 {
-  std::string line;
-  input >> line;
-  if (line.back() == ';')
+  std::istream::sentry guard(input);
+  if (!guard)
   {
-    line.pop_back();
-    word.getPrimaryTranslation() = line;
     return input;
   }
-  else if (line.back() == ',')
-  {
-    line.pop_back();
-    word.getPrimaryTranslation() = line;
-    input >> line;
-    if (line.back() == ';')
-    {
-      line.pop_back();
-      word.getSecondaryTranslation() = line;
-      return input;
-    }
-    else
-    {
-      word.getSecondaryTranslation() = line;
-    }
-  }
-  else
-  {
-    word.getPrimaryTranslation() = line;
-  }
 
-  input >> DelimiterChar({'('});
+  char lastSymb = ' ';
+  std::string translation;
+  input >> translation;
+
+  lastSymb = translation.back();
+  translation.pop_back();
+  word.primaryTranslation = translation;
+  if (lastSymb == ',')
+  {
+    input >> translation;
+    lastSymb = translation.back();
+    translation.pop_back();
+    word.secondaryTranslation = translation;
+  }
+  if (lastSymb == ';')
+  {
+    return input;
+  }
+  input >> DelimiterChar({ '(' });
   if (input)
   {
-    input >> line;
-    if (line.back() == ';')
+    input >> translation;
+    lastSymb = translation.back();
+    translation.pop_back();
+    if (lastSymb == ';' && translation.back() == ')')
     {
-      line.pop_back();
-      if (line.back() == ')')
-      {
-        line.pop_back();
-        word.getAntonym() = line;
-      }
-      else
-      {
-        input.setstate(std::ios::failbit);
-      }
+      translation.pop_back();
+      word.antonym = translation;
     }
     else
     {
@@ -98,14 +56,14 @@ std::istream& nikitov::detail::operator>>(std::istream& input, Word& word)
 
 std::ostream& nikitov::detail::operator<<(std::ostream& output, const Word& word)
 {
-  output << word.getPrimaryTranslation();
-  if (!word.getSecondaryTranslation().empty())
+  output << word.primaryTranslation;
+  if (!word.secondaryTranslation.empty())
   {
-    output << ',' << ' ' << word.getSecondaryTranslation();
+    output << ", " << word.secondaryTranslation;
   }
-  if (!word.getAntonym().empty())
+  if (!word.antonym.empty())
   {
-    output << ' ' << '(' << word.getAntonym() << ')';
+    output << " (" << word.antonym << ')';
   }
   output << ';';
   return output;

@@ -1,52 +1,64 @@
 #include <iostream>
 #include <fstream>
-#include <string>
-#include <tree.hpp>
 #include <limits>
+#include <functional>
+#include <tree.hpp>
 #include "dictionary.hpp"
 #include "commands.hpp"
-#include <functional>
 
 int main(int argc, char* argv[])
 {
-  setlocale(LC_ALL, "Russian");
   using namespace nikitov;
 
   Tree< std::string, Dictionary > dictOfDicts;
-  for (int i = 1; i != argc; ++i)
+  if (argc != 1)
   {
-    std::ifstream fileInput(argv[i]);
-    if (fileInput)
+    if (std::string(argv[1]) == "--dicts")
     {
-      Dictionary dict;
-      fileInput >> dict;
-      dictOfDicts.insert({ argv[i], dict });
+      for (int i = 2; i != argc; ++i)
+      {
+        std::ifstream fileInput(argv[i]);
+        if (fileInput)
+        {
+          Dictionary dict;
+          fileInput >> dict;
+          dictOfDicts.insert({ argv[i], dict });
+        }
+      }
+    }
+    else if (std::string(argv[1]) == "--help")
+    {
+      printHelp(std::cout);
+      return 0;
     }
   }
 
+  using namespace std::placeholders;
   Tree< std::pair< std::string, std::string >, std::function< void(const Tree< std::string, Dictionary >&, std::istream&,
     std::ostream&) > > constCommands;
   constCommands[{ "print", "dictionary" }] = printDictCmd;
   constCommands[{ "print", "all" }] = printAllCmd;
-  constCommands[{ "find", "translation" }] = findTranslationCmd;
-  constCommands[{ "find", "antonym" }] = findAntonymCmd;
+  constCommands[{ "print", "names" }] = printNamesCmd;
+  constCommands[{ "find", "translation" }] = std::bind(findCmd, _1, _2, _3, "translation");
+  constCommands[{ "find", "antonym" }] = std::bind(findCmd, _1, _2, _3, "antonym");
   constCommands[{ "translate", "sentence" }] = translateSentenceCmd;
   constCommands[{ "translate", "file" }] = translateFileCmd;
   constCommands[{ "save", "dictionary" }] = saveCmd;
 
   Tree< std::pair< std::string, std::string >, std::function< void(Tree< std::string, Dictionary >&, std::istream&) > > commands;
   commands[{ "create", "dictionary" }] = createCmd;
-  commands[{ "add", "translation" }] = addTranslationCmd;
-  commands[{ "add", "antonym" }] = addAntonymCmd;
-  commands[{ "edit", "primary" }] = editPrimaryCmd;
-  commands[{ "edit", "secondary" }] = editSecondaryCmd;
-  commands[{ "delete", "primary" }] = deletePrimaryCmd;
-  commands[{ "delete", "secondary" }] = deleteSecondaryCmd;
-  commands[{ "delete", "antonym" }] = deleteAntonymCmd;
-  commands[{ "merge", "dictionary" }] = mergeCmd;
+  commands[{ "add", "translation" }] = std::bind(addCmd, _1, _2, "translation");
+  commands[{ "add", "antonym" }] = std::bind(addCmd, _1, _2, "antonym");
+  commands[{ "edit", "primary" }] = std::bind(editCmd, _1, _2, "primary");
+  commands[{ "edit", "secondary" }] = std::bind(editCmd, _1, _2, "secondary");
+  commands[{ "delete", "primary" }] = std::bind(deleteCmd, _1, _2, "primary");
+  commands[{ "delete", "secondary" }] = std::bind(deleteCmd, _1, _2, "secondary");
+  commands[{ "delete", "antonym" }] = std::bind(deleteCmd, _1, _2, "antonym");
+  commands[{ "merge", "dictionary"}] = mergeCmd;
+
 
   std::string command;
-  std::string parameter ;
+  std::string parameter;
   while (std::cin >> command && std::cin >> parameter)
   {
     try
@@ -61,7 +73,7 @@ int main(int argc, char* argv[])
       }
       catch (const std::out_of_range&)
       {
-        std::cerr << "<INVALID COMMAND>" << '\n';
+        std::cerr << "<ERROR: INVALID COMMAND>" << '\n';
         std::cin.clear();
         std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
       }
@@ -79,4 +91,5 @@ int main(int argc, char* argv[])
       std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
   }
+  return 0;
 }
