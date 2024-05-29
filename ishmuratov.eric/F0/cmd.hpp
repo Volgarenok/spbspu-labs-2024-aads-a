@@ -13,11 +13,14 @@ namespace ishmuratov
   void remove_key(dict_t & dictionaries, std::istream & input);
   void print_dict(const dict_t & dictionaries, std::istream & input, std::ostream & output);
   void get_value(const dict_t & dictionaries, std::istream & input, std::ostream & output);
-  void save(dict_t & dictionaries, std::istream & input);
-  void read(dict_t & dictionaries, std::istream & input);
+  void save(const dict_t & dictionaries, std::istream & input, std::ostream & output);
+  void read(dict_t & dictionaries, std::istream & input, std::istream & input_file);
   void rename(dict_t & dictionaries, std::istream & input);
   void intersect(dict_t & dictionaries, std::istream & input);
   void uniond(dict_t & dictionaries, std::istream & input);
+
+  unit_t intersect_impl(const unit_t & first, const unit_t & second);
+  unit_t union_impl(const unit_t & first, const unit_t & second);
 }
 
 #endif

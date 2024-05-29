@@ -1,4 +1,5 @@
 #include "cmd.hpp"
+#include <limits>
 
 void ishmuratov::create_dict(dict_t & dictionaries, std::istream & input)
 {
@@ -124,4 +125,111 @@ void ishmuratov::get_value(const dict_t & dictionaries, std::istream & input, st
     output << count << ". " << *value << "\n";
     ++count;
   }
+}
+
+void ishmuratov::save(const dict_t & dictionaries, std::istream &input, std::ostream & output)
+{
+  std::string name;
+  input >> name;
+  if (dictionaries.find(name) == dictionaries.cend())
+  {
+    throw std::out_of_range("Dictionary doesn't exists!");
+  }
+  output << name << "\n";
+  for (auto pair = dictionaries.at(name).cbegin(); pair != dictionaries.at(name).cend(); ++pair)
+  {
+    output << pair->first;
+    for (auto value = (pair->second.cbegin()); value != pair->second.cend(); ++value)
+    {
+      output << " " << *value;
+    }
+    output << "\n";
+  }
+  output << "\n";
+}
+
+void ishmuratov::read(ishmuratov::dict_t &dictionaries, std::istream & input, std::istream & input_file)
+{
+  std::string name;
+  input >> name;
+}
+
+void ishmuratov::intersect(dict_t &dictionaries, std::istream &input)
+{
+  std::string new_name;
+  std::string first_name;
+  std::string second_name;
+  input >> new_name >> first_name >> second_name;
+
+  if (dictionaries.find(first_name) == dictionaries.end() || dictionaries.find(second_name) == dictionaries.end())
+  {
+    throw std::out_of_range("Non existent dictionary!");
+  }
+
+  unit_t temp = intersect_impl(dictionaries.at(first_name), dictionaries.at(second_name));
+
+  while (input >> second_name)
+  {
+    temp = intersect_impl(temp, dictionaries.at(second_name));
+    if (input.get() == '\n')
+    {
+      break;
+    }
+  }
+  dictionaries.insert(std::make_pair(new_name, temp));
+}
+
+ishmuratov::unit_t ishmuratov::intersect_impl(const unit_t & first, const unit_t & second)
+{
+  unit_t intersect_dict;
+  for (auto pair = first.cbegin(); pair != first.cend(); ++pair)
+  {
+    if (second.find(pair->first) != second.cend())
+    {
+      intersect_dict.insert(std::make_pair(pair->first, first.at(pair->first)));
+    }
+  }
+  return intersect_dict;
+}
+
+void ishmuratov::uniond(ishmuratov::dict_t &dictionaries, std::istream &input)
+{
+  std::string new_name;
+  std::string first_name;
+  std::string second_name;
+  input >> new_name >> first_name >> second_name;
+
+  if (dictionaries.find(first_name) == dictionaries.end() || dictionaries.find(second_name) == dictionaries.end())
+  {
+    throw std::out_of_range("Non existent dictionary!");
+  }
+
+  unit_t temp = union_impl(dictionaries.at(first_name), dictionaries.at(second_name));
+
+  while (input >> second_name)
+  {
+    temp = union_impl(temp, dictionaries.at(second_name));
+    if (input.get() == '\n')
+    {
+      break;
+    }
+  }
+  dictionaries.insert(std::make_pair(new_name, temp));
+}
+
+ishmuratov::unit_t ishmuratov::union_impl(const ishmuratov::unit_t &first, const ishmuratov::unit_t &second)
+{
+  unit_t union_dict;
+  for (auto pair = first.cbegin(); pair != first.cend(); ++pair)
+  {
+    union_dict.insert(std::make_pair(pair->first, first.at(pair->first)));
+  }
+  for (auto pair = second.cbegin(); pair != second.cend(); ++pair)
+  {
+    if (union_dict.find(pair->first) == union_dict.end())
+    {
+      union_dict.insert(std::make_pair(pair->first, second.at(pair->first)));
+    }
+  }
+  return union_dict;
 }

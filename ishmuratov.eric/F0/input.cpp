@@ -7,15 +7,12 @@ void ishmuratov::input_dictionary(dict_t & dictionaries, std::istream &input)
 
   unit_t unit;
   std::string key;
-  while (std::getline(input, key) && !key.empty())
+  while (input >> key)
   {
-    if (key == "lol")
-    {
-      break;
-    }
+
     value_t values;
     std::string value;
-    while (std::getline(input, value) && !value.empty())
+    while (input >> value)
     {
       values.pushBack(value);
     }
