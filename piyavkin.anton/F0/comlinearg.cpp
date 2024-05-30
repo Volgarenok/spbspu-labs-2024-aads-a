@@ -24,7 +24,8 @@ void piyavkin::check(std::istream& in, std::ostream& out, dic_t& dicts)
 {
   try
   {
-    makeDict(in, dicts);
+    iterator it = addDict(in, dicts);
+    input(in, it);
     out << "GOOD FILE\n";
   }
   catch (...)

@@ -93,9 +93,9 @@ void piyavkin::topFreq(std::istream& in, std::ostream& out, const dic_t& dicts)
 piyavkin::iterator piyavkin::addDict(std::istream& in, dic_t& dicts)
 {
   auto pair = add(in, dicts);
-  if (pair.second)
+  if (!pair.second)
   {
-    throw std::out_of_range(pair.first->first);
+    throw std::out_of_range("");
   }
   return pair.first;
 }
@@ -104,6 +104,15 @@ piyavkin::iterator piyavkin::cmdChange(std::istream& in, dic_t& dicts)
 {
   auto it = getDict(in, dicts);
   change(in, it->second);
+  return it;
+}
+
+piyavkin::iterator piyavkin::input(std::istream& file, iterator it)
+{
+  while (file)
+  {
+    change(file, it->second);
+  }
   return it;
 }
 
@@ -118,11 +127,7 @@ piyavkin::iterator piyavkin::makeDict(std::istream& in, dic_t& dicts)
   {
     throw std::out_of_range("");
   }
-  while (file)
-  {
-    change(file, it->second);
-  }
-  return it;
+  return input(in, it);
 }
 
 piyavkin::iterator piyavkin::intersect(std::istream& in, dic_t& dicts)
