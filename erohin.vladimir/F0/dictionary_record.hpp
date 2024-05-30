@@ -26,12 +26,6 @@ namespace erohin
   std::istream & operator>>(std::istream & input, Record & record);
   std::ostream & operator<<(std::ostream & output, const Record & record);
   std::ostream & operator<<(std::ostream & output, const FormattedRecord & record);
-  FormattedRecord createFormattedRecord(const Record & record, size_t total_number, numformat_t numformat);
-  template< class T1, class T2 >
-  Record createRecord(const std::pair< T1, T2 > & pair)
-  {
-    return Record(std::make_pair(std::get< std::string >(pair), std::get< size_t >(pair)));
-  }
 }
 
 #endif

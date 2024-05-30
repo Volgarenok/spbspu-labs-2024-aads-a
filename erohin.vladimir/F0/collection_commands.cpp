@@ -110,7 +110,7 @@ void erohin::findCommand(const collection & dict_context, std::istream & input, 
   if (found_iter != dict.records.cend())
   {
     size_t total_number = detail::countTotalNumber(dict.records);
-    output << createFormattedRecord(Record(*found_iter), total_number, numformat) << "\n";
+    output << FormattedRecord(Record(*found_iter), total_number, numformat) << "\n";
   }
   else
   {
