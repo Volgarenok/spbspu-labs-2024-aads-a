@@ -2,22 +2,51 @@
 #include <limits>
 #include <functional>
 #include <fstream>
+#include <cstring>
 #include "tree.hpp"
 #include "bdlist.hpp"
 
 #include "input.hpp"
 #include "cmd.hpp"
 
-int main()
+int main(int argc, char * argv[])
 {
   using namespace ishmuratov;
 
-  std::ifstream file;
-  file.open("../file.txt", std::ios_base::app);
-
   dict_t dict;
-  input_dictionary(dict, file);
+  std::ifstream file;
 
+  if (argc > 3)
+  {
+    std::cerr << "Incorrect number of arguments!\n";
+    return 1;
+  }
+  else if (argc > 1)
+  {
+    try
+    {
+      if (std::strcmp(argv[1], "--help") == 0)
+      {
+        print_help(std::cout);
+      }
+      else if (argc > 2 && std::strcmp(argv[2], "--help") == 0)
+      {
+        file.open(argv[1]);
+        input_dictionary(dict, file);
+        print_help(std::cout);
+      }
+      else if (argc == 2)
+      {
+        file.open(argv[1]);
+        input_dictionary(dict, file);
+      }
+    }
+    catch (...)
+    {
+      std::cerr << "Failed to read from file!\n";
+      return 2;
+    }
+  }
 
   AVLTree< std::string, std::function< void(std::istream &, std::ostream &) > > cmds;
   {

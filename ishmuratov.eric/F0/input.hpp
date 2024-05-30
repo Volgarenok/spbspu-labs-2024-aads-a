@@ -12,6 +12,7 @@ namespace ishmuratov
   using dict_t = AVLTree< std::string, unit_t >;
 
   void input_dictionary(dict_t & dictionaries, std::istream & input);
+  void print_help(std::ostream & output);
 }
 
 #endif
