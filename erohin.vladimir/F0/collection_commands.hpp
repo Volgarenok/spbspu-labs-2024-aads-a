@@ -31,12 +31,6 @@ namespace erohin
   namespace detail
   {
     template< class T1, class T2 >
-    std::pair< T2, T1 > invertPair(const std::pair< T1, T2 > & pair)
-    {
-      return std::make_pair(pair.second, pair.first);
-    }
-
-    template< class T1, class T2 >
     size_t getNumber(const std::pair< T1, T2 > & pair)
     {
       return std::get< size_t >(pair);

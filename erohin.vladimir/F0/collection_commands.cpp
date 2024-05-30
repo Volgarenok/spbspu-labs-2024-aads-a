@@ -13,9 +13,9 @@
 
 void erohin::addTextCommand(texts_source & text_context, std::istream & input, std::ostream &)
 {
-  std::string text_name, text_source;
-  input >> text_name >> text_source;
-  auto iter_pair = text_context.insert(std::make_pair(text_name, text_source));
+  std::string text_name[2];
+  input >> text_name[0] >> text_name[1];
+  auto iter_pair = text_context.insert(std::make_pair(text_name[0], text_name[1]));
   if (!iter_pair.second)
   {
     throw std::logic_error("addtext: bad insertion into texts source");
@@ -42,22 +42,15 @@ namespace erohin
 
 void erohin::createDictCommand(collection & dict_context, const texts_source & text_context, std::istream & input, std::ostream &)
 {
-  std::string dict_name, text_name;
-  input >> dict_name >> text_name;
-  if (!isNewDictionary(dict_context, dict_name))
+  std::string name[2];
+  input >> name[0] >> name[1];
+  if (!isNewDictionary(dict_context, name[0]))
   {
     throw std::logic_error("creadict: dictionary has already existed");
   }
   dictionary temp_dict;
-  createDictionary(temp_dict, text_context.at(text_name));
-  /*
-  auto iter_pair = dict_context.insert(std::make_pair(dict_name, std::move(temp_dict)));
-  if (!iter_pair.second)
-  {
-    throw std::logic_error("createdict: bad insertion into dictionary collection");
-  }
-  */
-  dict_context[dict_name] = std::move(temp_dict);
+  createDictionary(temp_dict, text_context.at(name[1]));
+  dict_context[name[0]] = std::move(temp_dict);
 }
 
 void erohin::removeDictCommand(collection & dict_context, std::istream & input, std::ostream &)
@@ -69,7 +62,7 @@ void erohin::removeDictCommand(collection & dict_context, std::istream & input, 
   {
     throw std::logic_error("removetext: bad removal from dictionary collection");
   }
-  dict_context.erase(dict_name);
+  dict_context.erase(found_iter);
 }
 
 namespace erohin
@@ -114,10 +107,10 @@ void erohin::sortCommand(const collection & dict_context, std::istream & input, 
 
 void erohin::findCommand(const collection & dict_context, std::istream & input, std::ostream & output, numformat_t numformat)
 {
-  std::string dict_name, word;
-  input >> dict_name >> word;
-  const dictionary & dict = dict_context.at(dict_name);
-  auto found_iter = dict.find(word);
+  std::string name[2];
+  input >> name[0] >> name[1];
+  const dictionary & dict = dict_context.at(name[0]);
+  auto found_iter = dict.find(name[1]);
   if (found_iter != dict.cend())
   {
     size_t total_number = detail::countTotalNumber(dict);
@@ -131,36 +124,36 @@ void erohin::findCommand(const collection & dict_context, std::istream & input, 
 
 void erohin::topCommand(collection & dict_context, std::istream & input, std::ostream &)
 {
-  std::string new_dict_name, dict_name;
+  std::string dict_name[2];
   size_t num = 0;
-  input >> new_dict_name >> dict_name >> num;
-  if (!input || !isNewDictionary(dict_context, new_dict_name))
+  input >> dict_name[0] >> dict_name[1] >> num;
+  if (!input || !isNewDictionary(dict_context, dict_name[0]))
   {
     throw std::logic_error("top: wrong argument input");
   }
-  const dictionary & dict = dict_context.at(dict_name);
+  const dictionary & dict = dict_context.at(dict_name[1]);
   sorted_dictionary sorted_dict;
   createSortedDictionary(sorted_dict, dict);
-  dictionary new_dict;
-  detail::insertNumRecords(new_dict, num, sorted_dict.crbegin(), sorted_dict.crend());
-  dict_context[new_dict_name] = std::move(new_dict);
+  dictionary temp_dict;
+  detail::insertNumRecords(temp_dict, num, sorted_dict.crbegin(), sorted_dict.crend());
+  dict_context[dict_name[0]] = std::move(temp_dict);
 }
 
 void erohin::bottomCommand(collection & dict_context, std::istream & input, std::ostream &)
 {
-  std::string new_dict_name, dict_name;
-  size_t num;
-  input >> new_dict_name >> dict_name >> num;
-  if (!input || !isNewDictionary(dict_context, new_dict_name))
+  std::string dict_name[2];
+  size_t num = 0;
+  input >> dict_name[0] >> dict_name[1] >> num;
+  if (!input || !isNewDictionary(dict_context, dict_name[0]))
   {
     throw std::logic_error("bottom: wrong argument input");
   }
-  const dictionary & dict = dict_context.at(dict_name);
+  const dictionary & dict = dict_context.at(dict_name[1]);
   sorted_dictionary sorted_dict;
   createSortedDictionary(sorted_dict, dict);
-  dictionary new_dict;
-  detail::insertNumRecords(new_dict, num, sorted_dict.cbegin(), sorted_dict.cend());
-  dict_context[new_dict_name] = std::move(new_dict);
+  dictionary temp_dict;
+  detail::insertNumRecords(temp_dict, num, sorted_dict.cbegin(), sorted_dict.cend());
+  dict_context[dict_name[0]] = std::move(temp_dict);
 }
 
 namespace erohin
@@ -170,14 +163,14 @@ namespace erohin
 
 void erohin::differCommand(collection & dict_context, std::istream & input, std::ostream &)
 {
-  std::string new_dict_name, first_dict_name, second_dict_name;
-  input >> new_dict_name >> first_dict_name >> second_dict_name;
-  if (!isNewDictionary(dict_context, new_dict_name))
+  std::string dict_name[3];
+  input >> dict_name[0] >> dict_name[1] >> dict_name[2];
+  if (!isNewDictionary(dict_context, dict_name[0]))
   {
     throw std::logic_error("differ: dictionary has already existed");
   }
-  const dictionary & first_dict = dict_context.at(first_dict_name);
-  const dictionary & second_dict = dict_context.at(second_dict_name);
+  const dictionary & first_dict = dict_context.at(dict_name[1]);
+  const dictionary & second_dict = dict_context.at(dict_name[2]);
   dictionary temp_dict;
   auto begin = first_dict.cbegin();
   auto end = first_dict.cend();
@@ -190,25 +183,25 @@ void erohin::differCommand(collection & dict_context, std::istream & input, std:
   {
     throw std::underflow_error("differ: Empty difference of two dictionaries");
   }
-  dict_context[new_dict_name] = std::move(temp_dict);
+  dict_context[dict_name[0]] = std::move(temp_dict);
 }
 
 void erohin::uniteCommand(collection & dict_context, std::istream & input, std::ostream &)
 {
-  std::string new_dict_name, first_dict_name, second_dict_name;
-  input >> new_dict_name >> first_dict_name >> second_dict_name;
-  if (!isNewDictionary(dict_context, new_dict_name))
+  std::string dict_name[3];
+  input >> dict_name[0] >> dict_name[1] >> dict_name[2];
+  if (!isNewDictionary(dict_context, dict_name[0]))
   {
     throw std::logic_error("unite: dictionary has already existed");
   }
-  const dictionary & first_dict = dict_context.at(first_dict_name);
-  const dictionary & second_dict = dict_context.at(second_dict_name);
+  const dictionary & first_dict = dict_context.at(dict_name[1]);
+  const dictionary & second_dict = dict_context.at(dict_name[2]);
   dictionary temp_dict;
   auto begin = first_dict.cbegin();
   auto end = first_dict.cend();
   while (begin != end)
   {
-    temp_dict.insert(*begin);
+    temp_dict[begin->first] += begin->second;
     ++begin;
   }
   begin = second_dict.cbegin();
@@ -226,19 +219,19 @@ void erohin::uniteCommand(collection & dict_context, std::istream & input, std::
   {
     throw std::underflow_error("unite: Empty union of two dictionaries");
   }
-  dict_context[new_dict_name] = std::move(temp_dict);
+  dict_context[dict_name[0]] = std::move(temp_dict);
 }
 
 void erohin::intersectCommand(collection & dict_context, std::istream & input, std::ostream &)
 {
-  std::string new_dict_name, first_dict_name, second_dict_name;
-  input >> new_dict_name >> first_dict_name >> second_dict_name;
-  if (!isNewDictionary(dict_context, new_dict_name))
+  std::string dict_name[3];
+  input >> dict_name[0] >> dict_name[1] >> dict_name[2];
+  if (!isNewDictionary(dict_context, dict_name[0]))
   {
     throw std::logic_error("intersect: dictionary has already existed");
   }
-  const dictionary & first_dict = dict_context.at(first_dict_name);
-  const dictionary & second_dict = dict_context.at(second_dict_name);
+  const dictionary & first_dict = dict_context.at(dict_name[1]);
+  const dictionary & second_dict = dict_context.at(dict_name[2]);
   dictionary temp_dict;
   auto begin = first_dict.cbegin();
   auto end = first_dict.cend();
@@ -255,7 +248,7 @@ void erohin::intersectCommand(collection & dict_context, std::istream & input, s
   {
     throw std::underflow_error("differ: Empty difference of two dictionaries");
   }
-  dict_context[new_dict_name] = std::move(temp_dict);
+  dict_context[dict_name[0]] = std::move(temp_dict);
 }
 
 bool erohin::isNewDictionary(const collection & dict_context, const std::string & new_dict_name)
@@ -345,6 +338,6 @@ void erohin::printSortedDictionary(const sorted_dictionary & sorted_dict, std::o
 erohin::record_pair erohin::makeDifference(const record_pair & pair, const dictionary & dict)
 {
   auto found_iter = dict.find(pair.first);
-  size_t num = found_iter != dict.cend() ?  found_iter->second : 0;
+  size_t num = found_iter != dict.cend() ? found_iter->second : 0;
   return std::make_pair(pair.first, pair.second - num);
 }
