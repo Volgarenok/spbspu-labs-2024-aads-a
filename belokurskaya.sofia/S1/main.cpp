@@ -28,6 +28,7 @@ int main()
     try
     {
       printSums(std::cout, sequences);
+      std::cout << '\n';
     }
     catch (const std::overflow_error& e)
     {
