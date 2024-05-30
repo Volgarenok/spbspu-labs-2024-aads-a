@@ -1,11 +1,7 @@
 #include "collection_commands.hpp"
 #include <iostream>
 #include <fstream>
-#include <algorithm>
-#include <functional>
-#include <numeric>
 #include <limits>
-#include <iterator>
 #include "list.hpp"
 #include "string_format.hpp"
 #include "dictionary_record.hpp"
@@ -158,7 +154,9 @@ void erohin::bottomCommand(collection & dict_context, std::istream & input, std:
 
 namespace erohin
 {
-  record_pair makeDifference(const record_pair & pair, const dictionary & dict);
+  using dict_pair = std::pair< dictionary, dictionary >;
+  record_pair createDifferenceRecord(const record_pair & pair, const dictionary & dict);
+  void makeDifference(dictionary & dict, const dict_pair & source);
 }
 
 void erohin::differCommand(collection & dict_context, std::istream & input, std::ostream &)
@@ -172,18 +170,17 @@ void erohin::differCommand(collection & dict_context, std::istream & input, std:
   const dictionary & first_dict = dict_context.at(dict_name[1]);
   const dictionary & second_dict = dict_context.at(dict_name[2]);
   dictionary temp_dict;
-  auto begin = first_dict.cbegin();
-  auto end = first_dict.cend();
-  while (begin != end)
-  {
-    temp_dict.insert(makeDifference(*begin, second_dict));
-    ++begin;
-  }
+  makeDifference(temp_dict, std::make_pair(first_dict, second_dict));
   if (temp_dict.empty())
   {
     throw std::underflow_error("differ: Empty difference of two dictionaries");
   }
   dict_context[dict_name[0]] = std::move(temp_dict);
+}
+
+namespace erohin
+{
+  void makeUnion(dictionary & dict, const dict_pair & source);
 }
 
 void erohin::uniteCommand(collection & dict_context, std::istream & input, std::ostream &)
@@ -197,29 +194,13 @@ void erohin::uniteCommand(collection & dict_context, std::istream & input, std::
   const dictionary & first_dict = dict_context.at(dict_name[1]);
   const dictionary & second_dict = dict_context.at(dict_name[2]);
   dictionary temp_dict;
-  auto begin = first_dict.cbegin();
-  auto end = first_dict.cend();
-  while (begin != end)
-  {
-    temp_dict[begin->first] += begin->second;
-    ++begin;
-  }
-  begin = second_dict.cbegin();
-  end = second_dict.cend();
-  while (begin != end)
-  {
-    auto iter_pair = temp_dict.insert(*begin);
-    if (!iter_pair.second)
-    {
-      temp_dict[begin->first] += begin->second;
-    }
-    ++begin;
-  }
-  if (temp_dict.empty())
-  {
-    throw std::underflow_error("unite: Empty union of two dictionaries");
-  }
+  makeUnion(temp_dict, std::make_pair(first_dict, second_dict));
   dict_context[dict_name[0]] = std::move(temp_dict);
+}
+
+namespace erohin
+{
+  void makeIntersection(dictionary & dict, const dict_pair & source);
 }
 
 void erohin::intersectCommand(collection & dict_context, std::istream & input, std::ostream &)
@@ -233,17 +214,7 @@ void erohin::intersectCommand(collection & dict_context, std::istream & input, s
   const dictionary & first_dict = dict_context.at(dict_name[1]);
   const dictionary & second_dict = dict_context.at(dict_name[2]);
   dictionary temp_dict;
-  auto begin = first_dict.cbegin();
-  auto end = first_dict.cend();
-  while (begin != end)
-  {
-    auto found_iter = second_dict.find(begin->first);
-    if (found_iter != second_dict.cend())
-    {
-      temp_dict.insert(std::make_pair(begin->first, std::min(begin->second, found_iter->second)));
-    }
-    ++begin;
-  }
+  makeIntersection(temp_dict, std::make_pair(first_dict, second_dict));
   if (temp_dict.empty())
   {
     throw std::underflow_error("differ: Empty difference of two dictionaries");
@@ -335,9 +306,57 @@ void erohin::printSortedDictionary(const sorted_dictionary & sorted_dict, std::o
   }
 }
 
-erohin::record_pair erohin::makeDifference(const record_pair & pair, const dictionary & dict)
+erohin::record_pair erohin::createDifferenceRecord(const record_pair & pair, const dictionary & dict)
 {
   auto found_iter = dict.find(pair.first);
   size_t num = found_iter != dict.cend() ? found_iter->second : 0;
   return std::make_pair(pair.first, pair.second - num);
+}
+
+void erohin::makeDifference(dictionary & dict, const dict_pair & source)
+{
+  auto begin = source.first.cbegin();
+  auto end = source.first.cend();
+  while (begin != end)
+  {
+    dict.insert(createDifferenceRecord(*begin, source.second));
+    ++begin;
+  }
+}
+
+void erohin::makeUnion(dictionary & dict, const dict_pair & source)
+{
+  auto begin = source.first.cbegin();
+  auto end = source.first.cend();
+  while (begin != end)
+  {
+    dict[begin->first] += begin->second;
+    ++begin;
+  }
+  begin = source.second.cbegin();
+  end = source.second.cend();
+  while (begin != end)
+  {
+    auto iter_pair = dict.insert(*begin);
+    if (!iter_pair.second)
+    {
+      dict[begin->first] += begin->second;
+    }
+    ++begin;
+  }
+}
+
+void erohin::makeIntersection(dictionary & dict, const dict_pair & source)
+{
+  auto begin = source.first.cbegin();
+  auto end = source.first.cend();
+  while (begin != end)
+  {
+    auto found_iter = source.second.find(begin->first);
+    if (found_iter != source.second.cend())
+    {
+      dict.insert(std::make_pair(begin->first, std::min(begin->second, found_iter->second)));
+    }
+    ++begin;
+  }
 }
