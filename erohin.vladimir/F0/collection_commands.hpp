@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include <string>
-#include <numeric>
 #include "red_black_tree.hpp"
 #include "input_output_collection.hpp"
 #include "dictionary_record.hpp"
@@ -49,8 +48,8 @@ namespace erohin
       return total_number;
     }
 
-    template< class Dictionary, class DictIter >
-    void insertNumRecords(Dictionary & dict, size_t count, DictIter begin, DictIter end)
+    template< class Dict, class DictIter >
+    void insertNumDifferentRecords(Dict & dict, size_t count, DictIter begin, DictIter end)
     {
       size_t current_count = 0;
       while (begin != end && current_count < count)
