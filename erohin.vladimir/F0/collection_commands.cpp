@@ -42,7 +42,7 @@ void erohin::createDictCommand(collection & dict_context, const texts_source & t
   input >> name[0] >> name[1];
   if (!isNewDictionary(dict_context, name[0]))
   {
-    throw std::logic_error("creadict: Dictionary has already existed");
+    throw std::logic_error("creadict: dictionary has already existed");
   }
   Dictionary temp_dict;
   createDictionary(temp_dict, text_context.at(name[1]));
@@ -56,7 +56,7 @@ void erohin::removeDictCommand(collection & dict_context, std::istream & input, 
   auto found_iter = dict_context.find(dict_name);
   if (found_iter == dict_context.end())
   {
-    throw std::logic_error("removetext: bad removal from Dictionary collection");
+    throw std::logic_error("removetext: bad removal from dictionary collection");
   }
   dict_context.erase(found_iter);
 }
@@ -165,7 +165,7 @@ void erohin::differCommand(collection & dict_context, std::istream & input, std:
   input >> dict_name[0] >> dict_name[1] >> dict_name[2];
   if (!isNewDictionary(dict_context, dict_name[0]))
   {
-    throw std::logic_error("differ: Dictionary has already existed");
+    throw std::logic_error("differ: dictionary has already existed");
   }
   const Dictionary & first_dict = dict_context.at(dict_name[1]);
   const Dictionary & second_dict = dict_context.at(dict_name[2]);
@@ -173,7 +173,7 @@ void erohin::differCommand(collection & dict_context, std::istream & input, std:
   makeDifference(temp_dict, std::make_pair(first_dict, second_dict));
   if (temp_dict.records.empty())
   {
-    throw std::underflow_error("differ: Empty difference of two dictionaries");
+    throw std::underflow_error("differ: empty difference of two dictionaries");
   }
   dict_context[dict_name[0]] = std::move(temp_dict);
 }
@@ -189,7 +189,7 @@ void erohin::uniteCommand(collection & dict_context, std::istream & input, std::
   input >> dict_name[0] >> dict_name[1] >> dict_name[2];
   if (!isNewDictionary(dict_context, dict_name[0]))
   {
-    throw std::logic_error("unite: Dictionary has already existed");
+    throw std::logic_error("unite: dictionary has already existed");
   }
   const Dictionary & first_dict = dict_context.at(dict_name[1]);
   const Dictionary & second_dict = dict_context.at(dict_name[2]);
@@ -209,7 +209,7 @@ void erohin::intersectCommand(collection & dict_context, std::istream & input, s
   input >> dict_name[0] >> dict_name[1] >> dict_name[2];
   if (!isNewDictionary(dict_context, dict_name[0]))
   {
-    throw std::logic_error("intersect: Dictionary has already existed");
+    throw std::logic_error("intersect: dictionary has already existed");
   }
   const Dictionary & first_dict = dict_context.at(dict_name[1]);
   const Dictionary & second_dict = dict_context.at(dict_name[2]);
@@ -217,7 +217,7 @@ void erohin::intersectCommand(collection & dict_context, std::istream & input, s
   makeIntersection(temp_dict, std::make_pair(first_dict, second_dict));
   if (temp_dict.records.empty())
   {
-    throw std::underflow_error("differ: Empty difference of two dictionaries");
+    throw std::underflow_error("differ: empty difference of two dictionaries");
   }
   dict_context[dict_name[0]] = std::move(temp_dict);
 }
