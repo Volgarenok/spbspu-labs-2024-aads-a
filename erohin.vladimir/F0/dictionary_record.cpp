@@ -1,8 +1,8 @@
 #include "dictionary_record.hpp"
 #include <iostream>
 #include <string>
-#include "format.hpp"
 #include "delimiter.hpp"
+#include "string_format.hpp"
 #include "number_format.hpp"
 
 erohin::Record::Record():

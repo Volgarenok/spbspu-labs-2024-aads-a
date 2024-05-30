@@ -5,7 +5,6 @@
 #include <string>
 #include "red_black_tree.hpp"
 #include "input_output_collection.hpp"
-#include "dictionary_record.hpp"
 #include "number_format.hpp"
 
 namespace erohin

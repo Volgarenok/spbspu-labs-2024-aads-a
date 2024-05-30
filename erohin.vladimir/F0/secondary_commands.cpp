@@ -1,7 +1,6 @@
 #include "secondary_commands.hpp"
 #include <iostream>
 #include <fstream>
-#include "string_format.hpp"
 #include "input_output_collection.hpp"
 
 void erohin::printHelp(std::ostream & output)
