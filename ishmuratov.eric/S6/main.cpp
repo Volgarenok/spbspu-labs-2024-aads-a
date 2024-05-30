@@ -1,82 +1,57 @@
 #include <iostream>
-#include <list>
-#include <forward_list>
-#include <deque>
-#include <random>
 #include <functional>
-#include "bdlist.hpp"
+#include <map>
+#include <iomanip>
 
-#include "merge_sort.hpp"
-#include "quick_sort.hpp"
+#include "generate.hpp"
 
-int main()
+int main(int argc, char * argv[])
 {
   using namespace ishmuratov;
 
-  std::random_device device;
-  std::mt19937 range(device());
-  std::uniform_int_distribution< int > dist(-10000, 10000);
-
-  List< int > bilist_merge;
-  std::deque< int > deque_merge;
-  std::deque< int > deque_qsort;
-  std::list< int > bilist_standard;
-  std::forward_list< int > forward_standard;
-  std::deque< int > deque_standard;
-
-  for (size_t i = 0; i < 10; ++i)
+  if (argc != 4)
   {
-    int num = dist(range);
-    bilist_merge.pushBack(num);
-    deque_merge.push_back(num);
-    deque_qsort.push_back(num);
-    bilist_standard.push_back(num);
-    forward_standard.push_front(num);
-    deque_standard.push_back(num);
+    std::cerr << "Incorrect number of arguments!\n";
+    return 1;
   }
 
-  merge_sort(bilist_merge.begin(), bilist_merge.end(), std::greater< int >());
-  merge_sort(deque_merge.begin(), deque_merge.end(), std::greater< int >());
-  quick_sort(deque_qsort.begin(), deque_qsort.end(), std::greater< int >());
-
-  bilist_standard.sort(std::greater< int >());
-  forward_standard.sort(std::greater< int >());
-
-  std::sort(deque_standard.begin(), deque_standard.end(), std::greater< int >());
-
-  for (auto value: bilist_merge)
+  size_t size;
+  try
   {
-    std::cout << value << " ";
+    size = std::stoull(argv[3]);
+    if (size == 0)
+    {
+      throw std::underflow_error("Size of 0!");
+    }
   }
-  std::cout << "\n";
-
-  for (auto value: deque_merge)
+  catch (const std::underflow_error & e)
   {
-    std::cout << value << " ";
+    std::cerr << e.what() << "\n";
+    return 1;
   }
-  std::cout << "\n";
-
-  for (auto value: deque_qsort)
+  catch (const std::invalid_argument &)
   {
-    std::cout << value << " ";
+    std::cerr << "Incorrect size value!\n";
+    return 1;
   }
-  std::cout << "\n";
 
-  for (auto value: bilist_standard)
+  std::map< std::pair< std::string, std::string >, std::function< void(size_t, std::ostream &) > > cmds;
   {
-    std::cout << value << " ";
+    using namespace std::placeholders;
+    cmds[std::make_pair("ints", "ascending")] = test_sort< int, std::less< int > >;
+    cmds[std::make_pair("ints", "descending")] = test_sort< int, std::greater< int > >;
+    cmds[std::make_pair("floats", "ascending")] = test_sort< float, std::less< float > >;
+    cmds[std::make_pair("floats", "descending")] = test_sort< float, std::greater< float > >;
   }
-  std::cout << "\n";
 
-  for (auto value: forward_standard)
+  try
   {
-    std::cout << value << " ";
+    std::cout << std::fixed << std::setprecision(1);
+    cmds[{argv[1], argv[2]}](size, std::cout);
   }
-  std::cout << "\n";
-
-  for (auto value: deque_standard)
+  catch (std::exception & e)
   {
-    std::cout << value << " ";
+    std::cerr << e.what() << "\n";
+    return 1;
   }
-  std::cout << "\n";
 }
