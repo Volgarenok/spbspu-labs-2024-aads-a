@@ -1,7 +1,7 @@
 #include "input_output_collection.hpp"
 #include <iostream>
 #include <string>
-#include "format.hpp"
+#include "string_format.hpp"
 #include "dictionary_record.hpp"
 
 void erohin::inputDictionary(dictionary & dict, std::istream & input)
