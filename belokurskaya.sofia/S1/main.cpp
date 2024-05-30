@@ -25,8 +25,15 @@ int main()
 
     printSequences(std::cout, sequences);
 
-    printSums(std::cout, sequences);
-    std::cout << '\n';
+    try
+    {
+      printSums(std::cout, sequences);
+    }
+    catch (const std::overflow_error& e)
+    {
+      std::cerr << e.what() << '\n';
+      return 1;
+    }
   }
 
   catch (const std::exception & e)

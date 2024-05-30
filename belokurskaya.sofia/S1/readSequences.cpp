@@ -19,7 +19,7 @@ void belokurskaya::readSequences(std::istream& in, List< std::pair< std::string,
       ++index;
     }
 
-    List<size_t> sequence;
+    List< size_t > sequence;
 
     while (index < line.size() && line[index] == ' ')
     {

@@ -67,6 +67,7 @@ void belokurskaya::printSums(std::ostream& output, const List< std::pair< std::s
   }
 
   List< size_t > sums;
+  size_t maxNum = std::numeric_limits<size_t>::max();
 
   for (size_t i = 0; i < maxLen; ++i)
   {
@@ -75,6 +76,10 @@ void belokurskaya::printSums(std::ostream& output, const List< std::pair< std::s
     {
       if (i < pair.second.size())
       {
+        if (maxNum - sum < pair.second.at(i))
+        {
+          throw std::overflow_error("Overflow");
+        }
         sum += pair.second.at(i);
       }
     }
