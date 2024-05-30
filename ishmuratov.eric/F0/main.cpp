@@ -4,7 +4,6 @@
 #include <fstream>
 #include <cstring>
 #include "tree.hpp"
-#include "bdlist.hpp"
 
 #include "input.hpp"
 #include "cmd.hpp"
@@ -58,7 +57,7 @@ int main(int argc, char * argv[])
     cmds.insert(std::make_pair("removekey", std::bind(remove_key, std::ref(dict), _1)));
     cmds.insert(std::make_pair("printdict", std::bind(print_dict, std::ref(dict), _1, _2)));
     cmds.insert(std::make_pair("getvalue", std::bind(get_value, std::ref(dict), _1, _2)));
-    cmds.insert(std::make_pair("save", std::bind(save, std::ref(dict), _1, _2)));
+    cmds.insert(std::make_pair("save", std::bind(save, std::ref(dict), _1)));
     cmds.insert(std::make_pair("read", std::bind(read, std::ref(dict), _1)));
     cmds.insert(std::make_pair("rename", std::bind(renamedict, std::ref(dict), _1)));
     cmds.insert(std::make_pair("intersect", std::bind(intersect, std::ref(dict), _1)));

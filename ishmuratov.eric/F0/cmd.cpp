@@ -1,4 +1,5 @@
 #include "cmd.hpp"
+#include <fstream>
 
 void ishmuratov::create_dict(dict_t & dictionaries, std::istream & input)
 {
@@ -126,31 +127,43 @@ void ishmuratov::get_value(const dict_t & dictionaries, std::istream & input, st
   }
 }
 
-void ishmuratov::save(const dict_t & dictionaries, std::istream &input, std::ostream & output)
+void ishmuratov::save(const dict_t & dictionaries, std::istream &input)
 {
-  std::string name;
-  input >> name;
-  if (dictionaries.find(name) == dictionaries.cend())
+  std::string file_name;
+  input >> file_name;
+  std::ofstream out_file(file_name);
+  if (!out_file.is_open())
   {
-    throw std::out_of_range("Dictionary doesn't exists!");
+    throw std::runtime_error("Error occurred while opening file!");
   }
-  output << name << "\n";
-  for (auto pair = dictionaries.at(name).cbegin(); pair != dictionaries.at(name).cend(); ++pair)
+
+  for (auto dict = dictionaries.cbegin(); dict != dictionaries.cend(); ++dict)
   {
-    output << pair->first;
-    for (auto value = (pair->second.cbegin()); value != pair->second.cend(); ++value)
+    out_file << dict->first << "\n";
+    for (auto pair = dict->second.cbegin(); pair != dict->second.cend(); ++pair)
     {
-      output << " " << *value;
+      out_file << pair->first;
+      for (auto value = pair->second.cbegin(); value != pair->second.cend(); ++value)
+      {
+        out_file << " " << *value;
+      }
+      out_file << "\n";
     }
-    output << "\n";
+    out_file << "\n";
   }
-  output << "\n";
 }
 
 void ishmuratov::read(dict_t & dictionaries, std::istream & input)
 {
-  std::string name;
-  input >> name;
+  std::ifstream in_file;
+  std::string file_name;
+  input >> file_name;
+  in_file.open(file_name);
+  if (!in_file.is_open())
+  {
+    throw std::runtime_error("Error occurred while opening file!");
+  }
+  input_dictionary(dictionaries, in_file);
 }
 
 void ishmuratov::renamedict(dict_t & dictionaries, std::istream & input)
