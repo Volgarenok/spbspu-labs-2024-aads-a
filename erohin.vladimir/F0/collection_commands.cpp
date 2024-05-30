@@ -27,7 +27,7 @@ void erohin::removeTextCommand(texts_source & text_context, std::istream & input
   {
     throw std::logic_error("removetext: bad removal from texts source");
   }
-  text_context.erase(text_name);
+  text_context.erase(found_iter);
 }
 
 namespace erohin
