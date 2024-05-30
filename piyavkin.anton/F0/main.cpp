@@ -40,7 +40,7 @@ int main(int argc, char* argv[])
     }
     catch (const std::out_of_range&)
     {
-      std::cout << "LOX<INVALID COMMAND>\n";
+      std::cout << "<INVALID COMMAND>\n";
     }
     catch (const std::exception& e)
     {
