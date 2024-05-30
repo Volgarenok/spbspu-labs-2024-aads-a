@@ -38,16 +38,16 @@ int main(int argc, char * argv[])
   std::map< std::pair< std::string, std::string >, std::function< void(size_t, std::ostream &) > > cmds;
   {
     using namespace std::placeholders;
-    cmds[std::make_pair("ints", "ascending")] = test_sort< int, std::less< int > >;
-    cmds[std::make_pair("ints", "descending")] = test_sort< int, std::greater< int > >;
-    cmds[std::make_pair("floats", "ascending")] = test_sort< float, std::less< float > >;
-    cmds[std::make_pair("floats", "descending")] = test_sort< float, std::greater< float > >;
+    cmds[std::make_pair("ascending", "ints")] = test_sort< int, std::less< int > >;
+    cmds[std::make_pair("descending", "ints")] = test_sort< int, std::greater< int > >;
+    cmds[std::make_pair("ascending", "floats")] = test_sort< float, std::less< float > >;
+    cmds[std::make_pair("descending", "floats")] = test_sort< float, std::greater< float > >;
   }
 
   try
   {
     std::cout << std::fixed << std::setprecision(1);
-    cmds[{argv[1], argv[2]}](size, std::cout);
+    cmds[std::make_pair(argv[1], argv[2])](size, std::cout);
   }
   catch (std::exception & e)
   {
