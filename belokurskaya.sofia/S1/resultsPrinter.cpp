@@ -67,7 +67,7 @@ void belokurskaya::printSums(std::ostream& output, const List< std::pair< std::s
   }
 
   List< size_t > sums;
-  size_t maxNum = std::numeric_limits<size_t>::max();
+  size_t maxNum = std::numeric_limits< size_t >::max();
 
   for (size_t i = 0; i < maxLen; ++i)
   {
