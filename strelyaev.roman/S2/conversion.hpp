@@ -1,7 +1,7 @@
 #ifndef CONVERSION_HPP
 #define CONVERSION_HPP
 #include <iosfwd>
-#include "queue.hpp"
+#include <others/queue.hpp>
 #include "token.hpp"
 namespace strelyaev
 {

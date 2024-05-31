@@ -42,7 +42,29 @@ int Summator::getResult() const
   return result_;
 }
 
-int strelyaev::ascending(std::string& result, Tree< int, std::string >& tree)
+int strelyaev::traverseAscending(std::string& result, Tree< int, std::string >& tree)
 {
   Summator amount;
+  amount = tree.traverse_lnr(amount);
+  int sum = amount.getResult();
+  result = amount.getLine();
+  return sum;
+}
+
+int strelyaev::traverseDescending(std::string& result, Tree< int, std::string >& tree)
+{
+  Summator amount;
+  amount = tree.traverse_rnl(amount);
+  int sum = amount.getResult();
+  result = amount.getLine();
+  return sum;
+}
+
+int strelyaev::TraverseBreadth(std::string& result, Tree< int, std::string >& tree)
+{
+  Summator amount;
+  amount = tree.traverse_breadth(amount);
+  int sum = amount.getResult();
+  result = amount.getLine();
+  return sum;
 }

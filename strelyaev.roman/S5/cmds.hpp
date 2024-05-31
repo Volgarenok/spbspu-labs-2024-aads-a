@@ -4,9 +4,9 @@
 
 namespace strelyaev
 {
-  int ascending(std::string& result, Tree< int, std::string >& tree);
-  int descending(std::string& result, Tree< int, std::string >& tree);
-  int breadth(std::string& result, Tree< int, std::string >& tree);
+  int traverseAscending(std::string& result, Tree< int, std::string >& tree);
+  int traverseDescending(std::string& result, Tree< int, std::string >& tree);
+  int TraverseBreadth(std::string& result, Tree< int, std::string >& tree);
 }
 
 #endif
