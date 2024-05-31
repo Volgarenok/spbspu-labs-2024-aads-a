@@ -317,13 +317,13 @@ namespace novokhatskiy
       return result;
     }
 
-    std::pair< iter, bool > insert(const std::pair<Key, Value>& val)
+    std::pair< iter, bool > insert(const std::pair< Key, Value >& val)
     {
       node_t* tmp = search(val.first);
       bool isInsert = false;
-      if (!tmp)
+      if ((tmp && tmp->value.first != val.first) || !tmp)
       {
-        insert_imp(val, root_);
+        insert_imp(val, tmp);
         ++size_;
         isInsert = true;
       }
@@ -508,7 +508,7 @@ namespace novokhatskiy
       return res;
     }
 
-    node_t *search_imp(node_t *node, const Key &key) const
+    node_t* search_imp(node_t* node, const Key& key) const
     {
       if (!node)
       {
@@ -516,11 +516,25 @@ namespace novokhatskiy
       }
       else if (cmp_(key, node->value.first))
       {
-        return search_imp(node->left, key);
+        if (node->left)
+        {
+          return search_imp(node->left, key);
+        }
+        else
+        {
+          return node;
+        }
       }
       else if (cmp_(node->value.first, key))
       {
-        return search_imp(node->right, key);
+        if (node->right)
+        {
+          return search_imp(node->right, key);
+        }
+        else
+        {
+          return node;
+        }
       }
       else
       {
