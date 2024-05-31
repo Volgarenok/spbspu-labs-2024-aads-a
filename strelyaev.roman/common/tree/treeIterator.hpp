@@ -55,6 +55,32 @@ namespace strelyaev
         return result;
       }
 
+      Iterator< Key, T > operator--()
+      {
+        if (node_->left_)
+        {
+          node_ = node_->left;
+          while (node_->right_)
+          {
+            node_ = node_->right_;
+          }
+          return *this;
+        }
+        while (node_->parent_ && node_->parent_->left_ == node_)
+        {
+          node_ = node_->parent_;
+        }
+        node_ = node_->parent_;
+        return *this;
+      }
+
+      Iterator< Key, T > operator--(int)
+      {
+        Iterator< Key, T > result(*this);
+        --(*this);
+        return result;
+      }
+
       bool operator==(const Iterator< Key, T >& rhs)
       {
         return node_ == rhs.node_;
