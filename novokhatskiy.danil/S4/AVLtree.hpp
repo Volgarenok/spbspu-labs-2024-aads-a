@@ -115,22 +115,22 @@ namespace novokhatskiy
       return constIter(curr);
     }
 
-    Value &at(const Key &key)
+    Value& at(const Key& key)
     {
-      node_t *curr = search(key);
-      if (curr)
+      iter curr = find(key);
+      if (curr.node_)
       {
-        return curr->value.second;
+        return curr.node_->value.second;
       }
       throw std::out_of_range("No such element");
     }
 
     const Value &at(const Key &key) const
     {
-      node_t *curr = search(key);
-      if (curr)
+      constIter curr = find(key);
+      if (curr.node_)
       {
-        return curr->value.second;
+        return curr.node_->value.second;
       }
       throw std::out_of_range("No such element");
     }
