@@ -237,6 +237,34 @@ namespace strelyaev
         return c_iterator_t(current);
       }
 
+      template< typename F >
+      F traverse_lnr(F f) const
+      {
+        if (empty())
+        {
+          throw std::logic_error("<EMPTY>");
+        }
+        for (auto it = cbegin(); it != end(); it++)
+        {
+          f(*it);
+        }
+        return f;
+      }
+
+      template< typename F >
+      F traverse_rnl(F f) const
+      {
+        if (empty())
+        {
+          throw std::logic_error("<EMPTY>");
+        }
+        for (auto it = cbeginr(); it != end(); --it)
+        {
+          f(*it);
+        }
+        return f;
+      }
+
       T& at(const Key& key)
       {
         iterator_t it = find(key);
