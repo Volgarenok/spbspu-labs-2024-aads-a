@@ -266,31 +266,31 @@ namespace strelyaev
         return f;
       }
 
-      // template< typename F >
-      // F traverse_breadth(F f) const
-      // {
-      //   if (empty())
-      //   {
-      //     throw std::logic_error("<EMPTY>");
-      //   }
-      //   Queue< const node_t* > queue;
-      //   queue.push(root_);
-      //   while (!queue.empty())
-      //   {
-      //     const node_t* curr = queue.front();
-      //     queue.pop_front();
-      //     f(curr->data_);
-      //     if (curr->left_)
-      //     {
-      //       queue.push(curr->left_);
-      //     }
-      //     if (curr->right_)
-      //     {
-      //       queue.push(curr->right_);
-      //     }
-      //   }
-      //   return f;
-      // }
+      template< typename F >
+      F traverse_breadth(F f) const
+      {
+        if (empty())
+        {
+          throw std::logic_error("<EMPTY>");
+        }
+        Queue< const node_t* > queue;
+        queue.push(root_);
+        while (!queue.empty())
+        {
+          const node_t* curr = queue.front();
+          queue.pop_front();
+          f(curr->data_);
+          if (curr->left_)
+          {
+            queue.push(curr->left_);
+          }
+          if (curr->right_)
+          {
+            queue.push(curr->right_);
+          }
+        }
+        return f;
+      }
 
       T& at(const Key& key)
       {

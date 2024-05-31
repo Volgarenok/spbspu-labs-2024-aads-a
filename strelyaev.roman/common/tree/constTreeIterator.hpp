@@ -59,7 +59,7 @@ namespace strelyaev
       {
         if (node_->left_)
         {
-          node_ = node_->left;
+          node_ = node_->left_;
           while (node_->right_)
           {
             node_ = node_->right_;
