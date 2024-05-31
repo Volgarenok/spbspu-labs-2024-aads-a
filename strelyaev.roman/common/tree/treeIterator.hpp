@@ -1,7 +1,7 @@
 #ifndef TREEITERATOR_HPP
 #define TREEITERATOR_HPP
 #include <memory>
-#include "node.hpp"
+#include "treeNode.hpp"
 
 namespace strelyaev
 {
@@ -9,15 +9,15 @@ namespace strelyaev
   class Tree;
 
   template< typename Key, typename T >
-  struct Iterator
+  struct IteratorTree
   {
     friend class Tree< Key, T, std::less< Key > >;
     public:
-      Iterator(const Iterator< Key, T >& val):
+      IteratorTree(const IteratorTree< Key, T >& val):
         node_(val.node_)
       {}
 
-      Iterator< Key, T >& operator=(const Iterator< Key, T>& rhs) = default;
+      IteratorTree< Key, T >& operator=(const IteratorTree< Key, T>& rhs) = default;
 
       std::pair< Key, T >& operator*()
       {
@@ -29,7 +29,7 @@ namespace strelyaev
         return std::addressof(node_->data_);
       }
 
-      Iterator< Key, T >& operator++()
+      IteratorTree< Key, T >& operator++()
       {
         if (node_->right_)
         {
@@ -48,14 +48,14 @@ namespace strelyaev
         return *this;
       }
 
-      Iterator< Key, T > operator++(int)
+      IteratorTree< Key, T > operator++(int)
       {
-        Iterator< Key, T > result(*this);
+        IteratorTree< Key, T > result(*this);
         ++(*this);
         return result;
       }
 
-      Iterator< Key, T > operator--()
+      IteratorTree< Key, T > operator--()
       {
         if (node_->left_)
         {
@@ -74,27 +74,27 @@ namespace strelyaev
         return *this;
       }
 
-      Iterator< Key, T > operator--(int)
+      IteratorTree< Key, T > operator--(int)
       {
-        Iterator< Key, T > result(*this);
+        IteratorTree< Key, T > result(*this);
         --(*this);
         return result;
       }
 
-      bool operator==(const Iterator< Key, T >& rhs)
+      bool operator==(const IteratorTree< Key, T >& rhs)
       {
         return node_ == rhs.node_;
       }
 
-      bool operator!=(const Iterator< Key, T >& rhs)
+      bool operator!=(const IteratorTree< Key, T >& rhs)
       {
         return !(*this == rhs);
       }
 
     private:
-      detail::Node< Key, T >* node_;
+      detail::TreeNode< Key, T >* node_;
 
-      explicit Iterator(detail::Node< Key, T >* node):
+      explicit IteratorTree(detail::TreeNode< Key, T >* node):
         node_(node)
       {}
   };

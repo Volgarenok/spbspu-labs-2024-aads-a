@@ -4,7 +4,7 @@
 #include <cassert>
 #include <stdexcept>
 #include <others/queue.hpp>
-#include "node.hpp"
+#include "treeNode.hpp"
 #include "treeIterator.hpp"
 #include "constTreeIterator.hpp"
 
@@ -13,9 +13,9 @@ namespace strelyaev
   template< typename Key, typename T, typename Compare = std::less< Key > >
   class Tree
   {
-    using node_t = detail::Node< Key, T >;
-    using iterator_t = Iterator< Key, T >;
-    using c_iterator_t = ConstIterator< Key, T >;
+    using node_t = detail::TreeNode< Key, T >;
+    using iterator_t = IteratorTree< Key, T >;
+    using c_iterator_t = ConstIteratorTree< Key, T >;
     using tree_t = Tree< Key, T, Compare >;
     public:
       Tree():
@@ -266,31 +266,31 @@ namespace strelyaev
         return f;
       }
 
-      template< typename F >
-      F traverse_breadth(F f) const
-      {
-        if (empty())
-        {
-          throw std::logic_error("<EMPTY>");
-        }
-        Queue< const node_t* > queue;
-        queue.push(root_);
-        while (!queue.empty())
-        {
-          const node_t* curr = queue.front();
-          queue.pop_front();
-          f(curr->data_);
-          if (curr->left_)
-          {
-            queue.push(curr->left_);
-          }
-          if (curr->right_)
-          {
-            queue.push(curr->right_);
-          }
-        }
-        return f;
-      }
+      // template< typename F >
+      // F traverse_breadth(F f) const
+      // {
+      //   if (empty())
+      //   {
+      //     throw std::logic_error("<EMPTY>");
+      //   }
+      //   Queue< const node_t* > queue;
+      //   queue.push(root_);
+      //   while (!queue.empty())
+      //   {
+      //     const node_t* curr = queue.front();
+      //     queue.pop_front();
+      //     f(curr->data_);
+      //     if (curr->left_)
+      //     {
+      //       queue.push(curr->left_);
+      //     }
+      //     if (curr->right_)
+      //     {
+      //       queue.push(curr->right_);
+      //     }
+      //   }
+      //   return f;
+      // }
 
       T& at(const Key& key)
       {

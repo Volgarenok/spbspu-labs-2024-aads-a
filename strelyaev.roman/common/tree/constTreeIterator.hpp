@@ -1,7 +1,7 @@
 #ifndef CONSTTREEITERATOR_HPP
 #define CONSTTREEITERATOR_HPP
 #include <memory>
-#include "node.hpp"
+#include "treeNode.hpp"
 
 namespace strelyaev
 {
@@ -9,15 +9,15 @@ namespace strelyaev
   class Tree;
 
   template< typename Key, typename T >
-  struct ConstIterator
+  struct ConstIteratorTree
   {
     friend class Tree< Key, T, std::less< Key > >;
     public:
-      ConstIterator(const ConstIterator< Key, T >& val):
+      ConstIteratorTree(const ConstIteratorTree< Key, T >& val):
         node_(val.node_)
       {}
 
-      ConstIterator< Key, T >& operator=(const ConstIterator< Key, T>& rhs) = default;
+      ConstIteratorTree< Key, T >& operator=(const ConstIteratorTree< Key, T>& rhs) = default;
 
       const std::pair< Key, T >& operator*() const
       {
@@ -29,7 +29,7 @@ namespace strelyaev
         return std::addressof(node_->data_);
       }
 
-      ConstIterator< Key, T >& operator++()
+      ConstIteratorTree< Key, T >& operator++()
       {
         if (node_->right_)
         {
@@ -48,14 +48,14 @@ namespace strelyaev
         return *this;
       }
 
-      ConstIterator< Key, T > operator++(int)
+      ConstIteratorTree< Key, T > operator++(int)
       {
-        ConstIterator< Key, T > result(*this);
+        ConstIteratorTree< Key, T > result(*this);
         ++(*this);
         return result;
       }
 
-            ConstIterator< Key, T > operator--()
+      ConstIteratorTree< Key, T > operator--()
       {
         if (node_->left_)
         {
@@ -74,27 +74,27 @@ namespace strelyaev
         return *this;
       }
 
-      ConstIterator< Key, T > operator--(int)
+      ConstIteratorTree< Key, T > operator--(int)
       {
-        ConstIterator< Key, T > result(*this);
+        ConstIteratorTree< Key, T > result(*this);
         --(*this);
         return result;
       }
 
-      bool operator==(ConstIterator< Key, T > rhs)
+      bool operator==(ConstIteratorTree< Key, T > rhs)
       {
         return node_ == rhs.node_;
       }
 
-      bool operator!=(ConstIterator< Key, T > rhs)
+      bool operator!=(ConstIteratorTree< Key, T > rhs)
       {
         return !(*this == rhs);
       }
 
     private:
-      detail::Node< Key, T >* node_;
+      detail::TreeNode< Key, T >* node_;
 
-      explicit ConstIterator(detail::Node< Key, T >* node):
+      explicit ConstIteratorTree(detail::TreeNode< Key, T >* node):
         node_(node)
       {}
   };
