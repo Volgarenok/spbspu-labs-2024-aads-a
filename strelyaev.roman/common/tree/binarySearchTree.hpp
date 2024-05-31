@@ -223,6 +223,20 @@ namespace strelyaev
         return c_iterator_t(nullptr);
       }
 
+      c_iterator_t cbeginr() const noexcept
+      {
+        if (root_ == nullptr)
+        {
+          return c_iterator_t(nullptr);
+        }
+        node_t* current = root_;
+        while (current->right_)
+        {
+          current = current->right_;
+        }
+        return c_iterator_t(current);
+      }
+
       T& at(const Key& key)
       {
         iterator_t it = find(key);
