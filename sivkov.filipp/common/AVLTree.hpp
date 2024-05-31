@@ -40,19 +40,17 @@ namespace sivkov
 
     void clear();
     detail::TreeNode< Key, Value >* remove(detail::TreeNode< Key, Value >* node, const Key& key);
-
     detail::TreeNode< Key, Value >* find_min(detail::TreeNode< Key, Value >* node) const;
     detail::TreeNode< Key, Value >* deep_copy(detail::TreeNode< Key, Value >* root);
     detail::TreeNode< Key, Value >* balance(detail::TreeNode< Key, Value >* root);
     int height(detail::TreeNode< Key, Value >* root);
     int get_balance_factor(detail::TreeNode< Key, Value >* root);
-
     const Value& get(const Key& key) const;
     detail::TreeNode< Key, Value >* get(detail::TreeNode< Key, Value >* node, const Key& key) const;
     Value& get(const Key& key);
     detail::TreeNode< Key, Value >* get(detail::TreeNode< Key, Value >* node, const Key& key);
     detail::TreeNode< Key, Value >* insert(detail::TreeNode< Key, Value >* root, const Key& key, const Value& value);
-  detail::TreeNode< Key, Value >* addOrFind(detail::TreeNode< Key, Value >* node, const Key& key, const Value& value);
+    detail::TreeNode< Key, Value >* addOrFind(detail::TreeNode< Key, Value >* node, const Key& key, const Value& value);
   };
 
   template< typename Key, typename Value, typename Comp >
