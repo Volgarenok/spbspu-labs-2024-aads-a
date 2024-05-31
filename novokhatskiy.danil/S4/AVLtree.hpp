@@ -109,7 +109,7 @@ namespace novokhatskiy
         }
         else
         {
-          return iter(curr);
+          return constIter(curr);
         }
       }
       return constIter(curr);
