@@ -1,4 +1,5 @@
 #include <iostream>
+#include <functional>
 
 namespace skuratov
 {
@@ -21,7 +22,11 @@ namespace skuratov
     };
   }
 
-  template < typename Key, typename Value, typename Compare >
+  template< class Key, class Value, class Comparator = std::less< Key > >
+  class ConstIterator
+  {};
+
+  template < typename Key, typename Value, typename Compare = std::less< Key > >
   class AVLTree
   {
   public:
@@ -45,7 +50,7 @@ namespace skuratov
       {
         for (auto it = diff.cbegin(); it != diff.cend(); it++)
         {
-          push(it->first, it->second)
+          push(it->first, it->second);
         }
       }
       catch (...)
@@ -64,18 +69,61 @@ namespace skuratov
       diff.size_ = 0;
     }
 
-    size_t size() const;
-    bool empty() const noexcept;
-    void clear() noexcept;
-    void swap();
+    //operator==
+
+    ConstIterator cbegin() const noexcept
+    {
+      return ConstIterator(root_);
+    }
+
+    ConstIterator cend() const noexcept
+    {
+      return ConstIterator(nullptr);
+    }
+
+    size_t size() const noexcept
+    {
+      return size_;
+    }
+
+    bool empty() const noexcept
+    {
+      return size_ == 0;
+    }
+
+    void clear() noexcept
+    {
+      removeNode(root_);
+      root_ = nullptr;
+      size_ = 0;
+    }
+
+    void swap(AVLTree& diff)
+    {
+      std::swap(root_, diff.root_);
+      std::swap(cmp_, diff.cmp_);
+      std::swap(size_, diff.size_);
+    }
 
     void push(Key k, Value v);
     Value get(Key k);
     Value drop(Key k);
+
   private:
     detail::TreeNode< Key, Value >* root_;
     Compare* cmp_;
     size_t size_;
+
+    void removeNode(detail::TreeNode< Key, Value >* node)
+    {
+      if (node == nullptr)
+      {
+        return;
+      }
+      removeNode(node->left);
+      removeNode(node->right);
+      delete node;
+    }
   };
 
   int main()
