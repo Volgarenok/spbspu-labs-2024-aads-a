@@ -7,10 +7,17 @@
 #include "dictionary_record.hpp"
 #include "number_format.hpp"
 
+
 void erohin::addTextCommand(texts_source & text_context, std::istream & input, std::ostream &)
 {
   std::string text_name[2];
   input >> text_name[0] >> text_name[1];
+  std::fstream file(text_name[1], std::fstream::in);
+  file.close();
+  if (!file)
+  {
+    throw std::runtime_error("addtext: cannot read the file");
+  }
   auto iter_pair = text_context.insert(std::make_pair(text_name[0], text_name[1]));
   if (!iter_pair.second)
   {
