@@ -10,7 +10,6 @@
 namespace erohin
 {
   using texts_source = RedBlackTree< std::string, std::string >;
-  using record_pair = std::pair< std::string, size_t >;
 
   void addTextCommand(texts_source & text_context, std::istream & input, std::ostream &);
   void removeTextCommand(texts_source & text_context, std::istream & input, std::ostream &);

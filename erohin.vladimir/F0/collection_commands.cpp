@@ -161,6 +161,7 @@ void erohin::bottomCommand(collection & dict_context, std::istream & input, std:
 
 namespace erohin
 {
+  using record_pair = std::pair< std::string, size_t >;
   using dict_pair = std::pair< Dictionary, Dictionary >;
   record_pair createDifferenceRecord(const record_pair & pair, const Dictionary & dict);
   void makeDifference(Dictionary & dict, const dict_pair & source);
