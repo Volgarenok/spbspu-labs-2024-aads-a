@@ -130,7 +130,7 @@ void erohin::topCommand(collection & dict_context, std::istream & input, std::os
   std::string dict_name[2];
   size_t num = 0;
   input >> dict_name[0] >> dict_name[1] >> num;
-  if (!input || !isNewDictionary(dict_context, dict_name[0]))
+  if (!input || !num || !isNewDictionary(dict_context, dict_name[0]))
   {
     throw std::logic_error("top: wrong argument input");
   }
@@ -147,7 +147,7 @@ void erohin::bottomCommand(collection & dict_context, std::istream & input, std:
   std::string dict_name[2];
   size_t num = 0;
   input >> dict_name[0] >> dict_name[1] >> num;
-  if (!input || !isNewDictionary(dict_context, dict_name[0]))
+  if (!input || !num || !isNewDictionary(dict_context, dict_name[0]))
   {
     throw std::logic_error("bottom: wrong argument input");
   }
