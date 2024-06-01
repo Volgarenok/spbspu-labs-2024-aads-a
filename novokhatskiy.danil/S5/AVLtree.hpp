@@ -73,7 +73,7 @@ namespace novokhatskiy
     }
 
     template< class F >
-    F traverse_lnr(F f) const
+    F traverse_lnr(F f)
     {
       if (empty())
       {
@@ -85,9 +85,15 @@ namespace novokhatskiy
       }
       return f;
     }
-
+    
     template< class F >
-    F traverse_rnl(F f) const
+    F traverse_lnr(F f) const
+    {
+      return static_cast< const F >(traverse_lnr(f));
+    }
+    
+    template< class F >
+    F traverse_rnl(F f)
     {
       if (empty())
       {
@@ -99,9 +105,15 @@ namespace novokhatskiy
       }
       return f;
     }
-
+    
     template< class F >
-    F traverse_breadth(F f) const
+    F traverse_rnl(F f) const
+    {
+      return static_cast< const F >(traverse_rnl(f));
+    }
+    
+    template< class F >
+    F traverse_breadth(F f)
     {
       if (empty())
       {
@@ -124,6 +136,12 @@ namespace novokhatskiy
         }
       }
       return f;
+    }
+    
+    template< class F >
+    F traverse_breadth(F f) const
+    {
+      return static_cast< const F >(traverse_breadth(f));
     }
 
     node_t* find(node_t* node, const Key& key)
