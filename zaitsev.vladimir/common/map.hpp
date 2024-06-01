@@ -4,6 +4,8 @@
 #include <initializer_list>
 #include <memory>
 #include <stdexcept>
+#include <stack.hpp>
+#include <queue.hpp>
 
 namespace zaitsev
 {
@@ -438,11 +440,121 @@ namespace zaitsev
         return node_ == other.node_;
       }
     };
+
+    template< bool IsConst >
+    class BaseLNRIterator
+    {
+      template< bool U > friend class BaseLNRIterator;
+      template< typename T1, typename T2, class T3 > friend class Map;
+      using val_t = std::conditional_t< IsConst, const std::pair< const Key, T >, std::pair< const Key, T > >;
+      using prt_t = std::conditional_t< IsConst, const val_t*, val_t* >;
+      using ref_t = std::conditional_t< IsConst, const val_t&, val_t& >;
+      using path_t = Stack< Node* >;
+
+      path_t path_;
+    public:
+      using iterator_category = std::bidirectional_iterator_tag;
+      using value_type = val_t;
+      using difference_type = std::ptrdiff_t;
+      using pointer = prt_t;
+      using reference = ref_t;
+
+      explicit BaseLNRIterator(Node* fakeroot):
+        path_()
+      {
+        path_.push(fakeroot);
+      }
+      BaseLNRIterator(const BaseLNRIterator& other):
+        path_(other.path_)
+      {}
+      BaseLNRIterator(BaseLNRIterator&& other) noexcept:
+        path_(std::move(other.path_))
+      {}
+      template< bool cond = IsConst, std::enable_if_t<cond, bool > = true >
+      BaseLNRIterator(const BaseLNRIterator< !cond >& other) :
+        path_(other.path_)
+      {}
+      BaseLNRIterator& operator=(const BaseLNRIterator& other)
+      {
+        path_ = other.path_;
+      }
+      BaseLNRIterator& operator++()
+      {
+        if (path_.top()->right_)
+        {
+          path_.push(path_.top()->right_);
+          for (; path_.top()->left_; path_.push(path_.top()->left_));
+        }
+        else
+        {
+          Node* cur = path_.top();
+          path_.pop();
+          while (path_.top()->right_ == cur)
+          {
+            cur = path_.top();
+            path_.pop();
+          }
+        }
+        return *this;
+      }
+      BaseLNRIterator operator++(int)
+      {
+        BaseLNRIterator copy = *this;
+        ++(*this);
+        return copy;
+      }
+      BaseLNRIterator& operator--()
+      {
+        if (path_.top()->left_)
+        {
+          path_.push(path_.top()->left_);
+          for (; path_.top()->right_; path_.push(path_.top()->right_));
+        }
+        else
+        {
+          Node* cur = path_.top();
+          path_.pop();
+          while (path_.top()->left_ == cur && path_.size() != 1)
+          {
+            cur = path_.top();
+            path_.pop();
+          }
+        }
+        return *this;
+      }
+      BaseLNRIterator operator--(int)
+      {
+        BaseLNRIterator copy = *this;
+        --(*this);
+        return copy;
+      }
+      ref_t operator*() const
+      {
+        return path_.top()->val_;
+      }
+      prt_t operator->() const
+      {
+        return std::addressof(path_.top()->val_);
+      }
+      bool operator!=(const BaseLNRIterator& other) const
+      {
+        return path_.top() != other.path_.top();
+      }
+      bool operator==(const BaseLNRIterator& other) const
+      {
+        return path_.top() == other.path_.top();
+      }
+    };
   public:
     using iterator = BaseIterator< false >;
     using const_iterator = BaseIterator< true >;
     using reverse_iterator = std::reverse_iterator< iterator >;
     using const_reverse_iterator = std::reverse_iterator< const_iterator >;
+
+    using lnr_iterator = BaseLNRIterator< false >;
+    using const_lnr_iterator = BaseLNRIterator< true >;
+    using rnl_iterator = std::reverse_iterator< lnr_iterator >;
+    using const_rnl_iterator = std::reverse_iterator< const_lnr_iterator >;
     Map():
       comparator_(),
       fakeroot_(new Node(-1)),
@@ -575,6 +687,14 @@ namespace zaitsev
     {
       return std::make_reverse_iterator(cend());
     }
+    static iterator get_lite_iterator(lnr_iterator it)
+    {
+      return iterator(it.path_.top());
+    }
+    static const_iterator get_lite_iterator(const_lnr_iterator it)
+    {
+      return const_iterator(it.path_.top());
+    }
 
     iterator end() noexcept
     {
@@ -599,6 +719,152 @@ namespace zaitsev
     const_reverse_iterator crend() const noexcept
     {
       return std::make_reverse_iterator(cbegin());
+    }
+    static reverse_iterator get_lite_iterator(rnl_iterator it)
+    {
+      iterator forward_it(it.base().path_.top());
+      return std::make_reverse_iterator(forward_it);
+    }
+    static const_reverse_iterator get_lite_iterator(const_rnl_iterator it)
+    {
+      const_iterator forward_it(it.base().path_.top());
+      return std::make_reverse_iterator(forward_it);
+    }
+
+    lnr_iterator lnr_begin()
+    {
+      lnr_iterator it(fakeroot_);
+      for (; it.path_.top()->left_; it.path_.push(it.path_.top()->left_));
+      return it;
+    }
+    const_lnr_iterator lnr_begin() const
+    {
+      return lnr_cbegin();
+    }
+    const_lnr_iterator lnr_cbegin() const
+    {
+      const_lnr_iterator it(fakeroot_);
+      for (; it.path_.top()->left_; it.path_.push(it.path_.top()->left_));
+      return it;
+    }
+    lnr_iterator lnr_end()
+    {
+      return lnr_iterator(fakeroot_);
+    }
+    const_lnr_iterator lnr_end() const
+    {
+      return lnr_cend();
+    }
+    const_lnr_iterator lnr_cend() const
+    {
+      return const_lnr_iterator(fakeroot_);
+    }
+    template< class F >
+    F traverse_lnr(F f)
+    {
+      for (lnr_iterator i = lnr_begin(); i != lnr_end(); ++i)
+      {
+        f(*i);
+      }
+      return f;
+    }
+    template< class F >
+    F const_traverse_lnr(F f) const
+    {
+      for (const_lnr_iterator i = lnr_cbegin(); i != lnr_cend(); ++i)
+      {
+        f(*i);
+      }
+      return f;
+    }
+
+    rnl_iterator rnl_begin()
+    {
+      return std::make_reverse_iterator(lnr_end());
+    }
+    const_rnl_iterator rnl_begin() const
+    {
+      return rnl_cbegin();
+    }
+    const_rnl_iterator rnl_cbegin() const
+    {
+      return std::make_reverse_iterator(lnr_cend());
+    }
+    rnl_iterator rnl_end()
+    {
+      return std::make_reverse_iterator(lnr_begin());
+    }
+    const_rnl_iterator rnl_end() const
+    {
+      return rnl_cend();
+    }
+    const_rnl_iterator rnl_cend() const
+    {
+      return std::make_reverse_iterator(lnr_cbegin());
+    }
+    template< class F >
+    F traverse_rnl(F f)
+    {
+      for (rnl_iterator i = rnl_begin(); i != rnl_end(); ++i)
+      {
+        f(*i);
+      }
+      return f;
+    }
+    template< class F >
+    F const_traverse_rnl(F f) const
+    {
+      for (const_rnl_iterator i = rnl_cbegin(); i != rnl_cend(); ++i)
+      {
+        f(*i);
+      }
+      return f;
+    }
+    template< class F >
+    F traverse_breadth(F f)
+    {
+      Queue< Node* > bf_queue;
+      if (size_)
+      {
+        bf_queue.push(fakeroot_->left_);
+      }
+      while (!bf_queue.empty())
+      {
+        if (bf_queue.front()->left_)
+        {
+          bf_queue.push(bf_queue.front()->left_);
+        }
+        if (bf_queue.front()->right_)
+        {
+          bf_queue.push(bf_queue.front()->right_);
+        }
+        f(bf_queue.front()->val_);
+        bf_queue.pop();
+      }
+      return f;
+    }
+    template< class F >
+    F const_traverse_breadth(F f) const
+    {
+      Queue< const Node* > bf_queue;
+      if (size_)
+      {
+        bf_queue.push(fakeroot_->left_);
+      }
+      while (!bf_queue.empty())
+      {
+        if (bf_queue.front()->left_)
+        {
+          bf_queue.push(bf_queue.front()->left_);
+        }
+        if (bf_queue.front()->right_)
+        {
+          bf_queue.push(bf_queue.front()->right_);
+        }
+        f(bf_queue.front()->val_);
+        bf_queue.pop();
+      }
+      return f;
     }
 
     bool empty() const noexcept
