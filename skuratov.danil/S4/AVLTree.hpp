@@ -2,6 +2,7 @@
 #define AVL_TREE_HPP
 
 #include <cstddef>
+#include <algorithm>
 #include "treeNode.hpp"
 #include "constIteratorTree.hpp"
 
@@ -43,7 +44,7 @@ namespace skuratov
 
     AVLTree& operator=(const AVLTree& diff)
     {
-      if (this != std::addressof(other))
+      if (this != std::addressof(diff))
       {
         AVLTree tempNode(diff);
         swap(tempNode);
@@ -90,6 +91,50 @@ namespace skuratov
       return size_ == 0;
     }
 
+    Value& at(const Key& key)
+    {
+      detail::TreeNode< Key, Value >* nodePointer = findNode(root_, key);
+
+      if (!nodePointer)
+      {
+        throw std::out_of_range("Key not found");
+      }
+      return nodePointer->data_.second;
+    }
+
+    const Value& at(const Key& key) const
+    {
+      detail::TreeNode< Key, Value >* nodePointer = findNode(root_, key);
+
+      if (!nodePointer)
+      {
+        throw std::out_of_range("Key not found");
+      }
+      return nodePointer->data_.second;
+    }
+
+    Value& operator[](const Key& key)
+    {
+      detail::TreeNode< Key, Value >* nodePointer = findNode(root_, key);
+
+      if (nodePointer == nullptr)
+      {
+        nodePointer = insertNode(root_, key, Value());
+      }
+      return nodePointer->data_.second;
+    }
+
+    const Value& operator[](const Key& key) const
+    {
+      detail::TreeNode< Key, Value >* nodePointer = findNode(root_, key);
+
+      if (nodePointer == nullptr)
+      {
+        throw std::out_of_range("Key not found");
+      }
+      return nodePointer->data_.second;
+    }
+
     void clear() noexcept
     {
       removeNode(root_);
@@ -108,10 +153,24 @@ namespace skuratov
     {
       return ConstIteratorTree(findNode(root_, key));
     }
+    
+    void push(const Key& key, const Value& value)
+    {
+      insertNode(root_, key, value);
+    }
 
-    void push(Key k, Value v);
-    Value get(Key k);
-    Value drop(Key k);
+    Value& drop(const Key& key)
+    {
+      detail::TreeNode< Key, Value >* nodePointer = findNode(root_, key);
+
+      if (!nodePointer)
+      {
+        throw std::out_of_range("Key not found");
+      }
+      Value tempValue = nodePointer->data.second;
+      removeNode(nodePointer);
+      return tempValue;
+    }
 
   private:
     detail::TreeNode< Key, Value >* root_;
@@ -142,10 +201,33 @@ namespace skuratov
       }
       else if (Compare()(nodePointer->data.first, key))
       {
-        return findNode(nodepointer->right, key);
+        return findNode(nodePointer->right, key);
       }
       else
       {
+        return nodePointer;
+      }
+    }
+
+    detail::TreeNode< Key, Value >* insertNode(detail::TreeNode< Key, Value >* nodePointer, const Key& key, const Value& value)
+    {
+      if (!nodePointer)
+      {
+        nodePointer = new detail::TreeNode< Key, Value >(key, value);
+        return nodePointer;
+      }
+
+      if (key < nodePointer->data_.first)
+      {
+        return insertNode(nodePointer->left, key, value);
+      }
+      else if (key > nodePointer->data_.first)
+      {
+        return insertNode(nodePointer->right, key, value);
+      }
+      else
+      {
+        nodePointer->data.second = value;
         return nodePointer;
       }
     }
