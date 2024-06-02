@@ -8,17 +8,19 @@ namespace skuratov
     template < typename Key, typename Value >
     struct TreeNode
     {
-      TreeNode(const Key& key, const Value& value) :
+      TreeNode(const Key& key, const Value& value):
         parent_(nullptr),
         left_(nullptr),
         right_(nullptr),
-        data_(std::pair< Key, Value >)
+        data_(std::pair< Key, Value >),
+        height_(0)
       {}
       ~TreeNode() = default;
       TreeNode* parent_;
       TreeNode* left_;
       TreeNode* right_;
-      std::pair< Key, Value > data;
+      std::pair< Key, Value > data_;
+      long long int height_;
     };
   }
 }
