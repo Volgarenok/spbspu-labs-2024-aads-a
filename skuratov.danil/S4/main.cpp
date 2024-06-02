@@ -15,6 +15,19 @@ int main(int argc, char* argv[])
     }
   }
 
-	std::cout << "Hi!";
-	return 0;
+  std::string cmd;
+  while (std::cin >> cmd)
+  {
+    try
+    {
+      //дописать после реализации команд
+    }
+    catch (const std::exception&)
+    {
+      std::cerr << "<INVALID COMMAND>\n";
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    }
+  }
+  return 0;
 }
