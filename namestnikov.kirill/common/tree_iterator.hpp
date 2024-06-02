@@ -15,7 +15,7 @@ namespace namestnikov
   class ConstIteratorTree;
 
   template< class Key, class Value, class Compare >
-  class IteratorTree
+  class IteratorTree: public std::iterator< std::bidirectional_iterator_tag, Value >
   {
     friend class Tree< Key, Value, Compare >;
     friend class ConstIteratorTree< Key, Value, Compare >;
@@ -58,6 +58,33 @@ namespace namestnikov
       ++(*this);
       return temp;
 
+    }
+    iterator & operator--()
+    {
+      if (node_->left)
+      {
+        node_ = node_->left;
+        while (node_->right)
+        {
+          node_ = node_->right;
+        }
+        return *this;
+      }
+      else
+      {
+        while (node_->isLeftChild())
+        {
+          node_ = node_->parent;
+        }
+        node_ = node_->parent;
+        return *this;
+      }
+    }
+    iterator operator--(int)
+    {
+      iterator temp(*this);
+      --(*this);
+      return temp;
     }
     bool operator==(const iterator & other) const
     {
