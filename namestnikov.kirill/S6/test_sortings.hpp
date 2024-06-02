@@ -77,6 +77,7 @@ namespace namestnikov
     printData(listShell.begin(), listShell.end(), out);
     printData(dequeSelection.begin(), dequeSelection.end(), out);
     printData(dequeShell.begin(), dequeShell.end(), out);
+    printData(dequeNormal.begin(), dequeNormal.end(), out);
   }
 }
 
