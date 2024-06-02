@@ -41,7 +41,17 @@ namespace skuratov
       }
     }
 
-    AVLTree(const AVLTree&& diff):
+    AVLTree& operator=(const AVLTree& diff)
+    {
+      if (this != std::addressof(other))
+      {
+        AVLTree tempNode(diff);
+        swap(tempNode);
+      }
+      return *this;
+    }
+
+    AVLTree(AVLTree&& diff) noexcept:
       root_(diff.root_),
       cmp_(diff.cmp_),
       size_(diff.size_)
@@ -50,7 +60,15 @@ namespace skuratov
       diff.size_ = 0;
     }
 
-    //operator==
+    AVLTree& operator=(AVLTree&& diff) noexcept
+    {
+      if (this != std::addressof(diff))
+      {
+        clear();
+        swap(diff);
+      }
+      return *this;
+    }
 
     ConstIteratorTree cbegin() const noexcept
     {
@@ -86,6 +104,11 @@ namespace skuratov
       std::swap(size_, diff.size_);
     }
 
+    ConstIteratorTree find(const Key& key) const
+    {
+      return ConstIteratorTree(findNode(root_, key));
+    }
+
     void push(Key k, Value v);
     Value get(Key k);
     Value drop(Key k);
@@ -104,6 +127,27 @@ namespace skuratov
       removeNode(node->left);
       removeNode(node->right);
       delete node;
+    }
+
+    detail::TreeNode< Key, Value >* findNode(detail::TreeNode< Key, Value >* nodePointer, const Key& key) const
+    {
+      if (!nodePointer)
+      {
+        return nullptr;
+      }
+
+      if (Compare()(key, nodePointer->data.first))
+      {
+        return findNode(nodePointer->left, key);
+      }
+      else if (Compare()(nodePointer->data.first, key))
+      {
+        return findNode(nodepointer->right, key);
+      }
+      else
+      {
+        return nodePointer;
+      }
     }
   };
 }
