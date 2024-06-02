@@ -153,7 +153,7 @@ namespace skuratov
     {
       return ConstIteratorTree(findNode(root_, key));
     }
-    
+
     void push(const Key& key, const Value& value)
     {
       insertNode(root_, key, value);

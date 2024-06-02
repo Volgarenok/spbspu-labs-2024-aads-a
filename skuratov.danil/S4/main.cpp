@@ -4,7 +4,7 @@
 
 int main(int argc, char* argv[])
 {
-	using namespace skuratov;
+  using namespace skuratov;
   if (argc > 1)
   {
     std::ifstream infile(argv[1]);
