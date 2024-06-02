@@ -65,11 +65,13 @@ namespace namestnikov
     std::list< T > listShell(data.begin(), data.end());
     std::deque< T > dequeSelection(data.begin(), data.end());
     std::deque< T > dequeShell(data.begin(), data.end());
+    std::deque< T > dequeNormal(data.begin(), data.end());
     doSelectionSort(forwardlistSelection.begin(), size, compare);
     doSelectionSort(listSelection.begin(), size, compare);
     doShellSort(listShell.begin(), size, compare);
     doSelectionSort(dequeSelection.begin(), size, compare);
     doShellSort(dequeShell.begin(), size, compare);
+    std::sort(dequeNormal.begin(), dequeNormal.end(), compare);
     printData(forwardlistSelection.begin(), forwardlistSelection.end(), out);
     printData(listSelection.begin(), listSelection.end(), out);
     printData(listShell.begin(), listShell.end(), out);
