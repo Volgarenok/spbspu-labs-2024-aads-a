@@ -18,13 +18,13 @@ namespace zakozhurnikova
   void doUnion(List< std::string >& args, dict& dictionary);
   void specificLetter(List< std::string >& args, dict& dictionary);
   void elimination(List< std::string >& args, dict& dictionary);
-  void destruction(List< std::string >& args, dict& dictionary);
-  void addition(List< std::string >& args, dict& dictionary);
-  void palindrome(List< std::string >& args, dict& dictionary);
+  void destruction(const List< std::string >& args, dict& dictionary);
+  void addition(const List< std::string >& args, dict& dictionary);
+  void palindrome(const List< std::string >& args, dict& dictionary);
   void rider(List< std::string >& args, dict& dictionary);
-  void interpreter(List< std::string >& args, dict& dictionary);
-  void save(List< std::string >& args, dict& dictionary);
-  void doAddDictionary(List< std::string >&, std::istream& in, dict& dictionary);
+  void interpreter(const List< std::string >& args, dict& dictionary);
+  void save(const List< std::string >& args, const dict& dictionary);
+  void doAddDictionary(const List< std::string >&, std::istream& in, dict& dictionary);
 }
 
 #endif

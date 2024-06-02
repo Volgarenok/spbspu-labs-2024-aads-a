@@ -23,11 +23,7 @@ void zakozhurnikova::inputArgs(std::istream& in, List< std::string >& args)
 
 bool isEnglish(const std::string& temp)
 {
-  if ((temp[0] >= 'a' && temp[0] <= 'z') || (temp[0] >= 'A' && temp[0] <= 'Z'))
-  {
-    return true;
-  }
-  return false;
+  return ((temp[0] >= 'a' && temp[0] <= 'z') || (temp[0] >= 'A' && temp[0] <= 'Z'));
 }
 
 bool zakozhurnikova::isDictionary(const std::string& nameDictionary, const dict& dictionary)
@@ -89,10 +85,6 @@ std::istream& zakozhurnikova::operator>>(std::istream& in, subDict& dict)
     if (!word.empty() && !translate.empty())
     {
       dict.push(word, translate);
-    }
-    if (!in.eof())
-    {
-      in.clear();
     }
   return in;
 }

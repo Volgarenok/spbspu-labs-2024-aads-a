@@ -122,11 +122,7 @@ void zakozhurnikova::doUnion(List< std::string >& args, dict& dictionary)
 
 bool checkSymbol(const std::string& temp)
 {
-  if (temp.size() != 1 || !((temp[0] >= 'a' && temp[0] <= 'z') || (temp[0] >= 'A' && temp[0] <= 'Z')))
-  {
-    return false;
-  }
-  return true;
+  return (temp.size() != 1 || !((temp[0] >= 'a' && temp[0] <= 'z') || (temp[0] >= 'A' && temp[0] <= 'Z')));
 }
 
 void zakozhurnikova::specificLetter(List< std::string >& args, dict& dictionary)
@@ -174,7 +170,7 @@ void zakozhurnikova::elimination(List< std::string >& args, dict& dictionary)
   current[word] = temp;
 }
 
-void zakozhurnikova::destruction(List< std::string >& args, dict& dictionary)
+void zakozhurnikova::destruction(const List< std::string >& args, dict& dictionary)
 {
   if (args.size() != 2)
   {
@@ -192,7 +188,7 @@ void zakozhurnikova::destruction(List< std::string >& args, dict& dictionary)
   }
 }
 
-void zakozhurnikova::addition(List< std::string >& args, dict& dictionary)
+void zakozhurnikova::addition(const List< std::string >& args, dict& dictionary)
 {
   if (args.size() != 2)
   {
@@ -200,8 +196,7 @@ void zakozhurnikova::addition(List< std::string >& args, dict& dictionary)
   }
 
   dictionaryOne& secondMap = dictionary.at(args.back());
-  args.pop_back();
-  dictionaryOne& firstMap = dictionary.at(args.back());
+  dictionaryOne& firstMap = dictionary.at(args.front());
 
   for (auto it = secondMap.cbegin(); it != secondMap.cend(); ++it)
   {
@@ -226,7 +221,7 @@ bool isPalindrome(const std::string& word)
   return true;
 }
 
-void zakozhurnikova::palindrome(List< std::string >& args, dict& dictionary)
+void zakozhurnikova::palindrome(const List< std::string >& args, dict& dictionary)
 {
   if (args.size() != 2)
   {
@@ -242,7 +237,14 @@ void zakozhurnikova::palindrome(List< std::string >& args, dict& dictionary)
       resultDictionary.push(it->first, it->second);
     }
   }
-  addDictionary(nameDictionary, resultDictionary, dictionary);
+  if (!resultDictionary.empty())
+  {
+    addDictionary(nameDictionary, resultDictionary, dictionary);
+  }
+  else
+  {
+    std::cout << "<EMPTY>\n";
+  }
 }
 
 void zakozhurnikova::rider(List< std::string >& args, dict& dictionary)
@@ -276,7 +278,7 @@ void zakozhurnikova::rider(List< std::string >& args, dict& dictionary)
   }
 }
 
-void zakozhurnikova::interpreter(List< std::string >& args, dict& dictionary)
+void zakozhurnikova::interpreter(const List< std::string >& args, dict& dictionary)
 {
   if (args.size() != 2)
   {
@@ -284,8 +286,7 @@ void zakozhurnikova::interpreter(List< std::string >& args, dict& dictionary)
   }
   std::string result;
   dictionaryOne& current = dictionary.at(args.front());
-  args.pop_front();
-  std::string word = args.front();
+  std::string word = args.back();
   if (current.find(word) != current.cend())
   {
     result += *current[word].cbegin();
@@ -301,7 +302,7 @@ void zakozhurnikova::interpreter(List< std::string >& args, dict& dictionary)
   std::cout << result << '\n';
 }
 
-void zakozhurnikova::save(List< std::string >& args, dict& dictionary)
+void zakozhurnikova::save(const List< std::string >& args, const dict& dictionary)
 {
   if (args.size() != 1)
   {
@@ -329,7 +330,7 @@ void zakozhurnikova::save(List< std::string >& args, dict& dictionary)
   file.close();
 }
 
-void zakozhurnikova::doAddDictionary(List< std::string >&, std::istream& in, dict& dictionary)
+void zakozhurnikova::doAddDictionary(const List< std::string >&, std::istream& in, dict& dictionary)
 {
   ScopeGuard guard(in);
   std::string nameDictionary;

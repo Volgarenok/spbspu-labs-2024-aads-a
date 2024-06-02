@@ -35,7 +35,7 @@ int main(int argc, char* argv[])
   commands.push("palindrome", std::bind(palindrome, _1, std::ref(dictionary)));
   commands.push("rider", std::bind(rider, _1, std::ref(dictionary)));
   commands.push("interpreter", std::bind(interpreter, _1, std::ref(dictionary)));
-  commands.push("save", std::bind(save, _1, std::ref(dictionary)));
+  commands.push("save", std::bind(save, _1, std::cref(dictionary)));
   commands.push("addDictionary", std::bind(doAddDictionary, _1, std::ref(std::cin), std::ref(dictionary)));
 
   std::string command;
