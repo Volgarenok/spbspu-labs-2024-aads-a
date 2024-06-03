@@ -2,6 +2,7 @@
 #define ITERATOR_HPP
 
 #include <cassert>
+#include <stdexcept>
 #include "node.hpp"
 
 namespace petuhov
@@ -43,13 +44,17 @@ namespace petuhov
   template < typename T >
   T &Iterator< T >::operator*() const
   {
+    if (node_ == nullptr)
+    {
+      throw std::out_of_range("Iterator is out of range");
+    }
     return node_->value_;
   }
 
   template < typename T >
   T *Iterator< T >::operator->() const
   {
-    return &(operator*());
+    return &(**this);
   }
 
   template < typename T >

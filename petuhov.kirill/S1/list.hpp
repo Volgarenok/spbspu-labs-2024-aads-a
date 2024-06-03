@@ -4,6 +4,7 @@
 #include <cstddef>
 #include <initializer_list>
 #include <utility>
+#include <stdexcept>
 #include "node.hpp"
 #include "iterator.hpp"
 #include "constiterator.hpp"
@@ -116,12 +117,20 @@ namespace petuhov
   template < typename T >
   T &List< T >::front()
   {
+    if (empty())
+    {
+      throw std::out_of_range("List is empty");
+    }
     return head_->value_;
   }
 
   template < typename T >
   const T &List< T >::front() const
   {
+    if (empty())
+    {
+      throw std::out_of_range("List is empty");
+    }
     return head_->value_;
   }
 
@@ -189,46 +198,40 @@ namespace petuhov
   }
 
   template < typename T >
-  List< T >::List(std::size_t count, const T &value):
-    head_(nullptr),
-    tail_(nullptr)
+  List< T >::List(std::size_t count, const T &value) : head_(nullptr), tail_(nullptr)
   {
-    detail::Node< T > *lastNode = nullptr;
-    for (std::size_t i = 0; i < count; ++i)
+    try
     {
-      detail::Node< T > *newNode = new detail::Node< T >(value);
-      if (!head_)
+      for (std::size_t i = 0; i < count; ++i)
       {
-        head_ = newNode;
+        push_front(value);
       }
-      else
-      {
-        lastNode->next_ = newNode;
-      }
-      lastNode = newNode;
+      reverse();
     }
-    tail_ = lastNode;
+    catch (const std::bad_alloc &)
+    {
+      clear();
+      throw;
+    }
   }
 
   template < typename T >
   void List< T >::assign(std::size_t count, const T &value)
   {
     clear();
-    detail::Node< T > *lastNode = nullptr;
-    for (std::size_t i = 0; i < count; ++i)
+    try
     {
-      detail::Node< T > *newNode = new detail::Node< T >(value);
-      if (!head_)
+      for (std::size_t i = 0; i < count; ++i)
       {
-        head_ = newNode;
+        push_front(value);
       }
-      else
-      {
-        lastNode->next_ = newNode;
-      }
-      lastNode = newNode;
+      reverse();
     }
-    tail_ = lastNode;
+    catch (const std::bad_alloc &)
+    {
+      clear();
+      throw;
+    }
   }
 
   template < typename T >
@@ -324,18 +327,18 @@ namespace petuhov
     head_(nullptr),
     tail_(nullptr)
   {
-    for (; first != last; ++first)
+    try
     {
-      detail::Node< T > *newNode = new detail::Node< T >(*first);
-      if (!tail_)
+      for (; first != last; ++first)
       {
-        head_ = tail_ = newNode;
+        push_front(*first);
       }
-      else
-      {
-        tail_->next_ = newNode;
-        tail_ = newNode;
-      }
+      reverse();
+    }
+    catch (const std::bad_alloc &)
+    {
+      clear();
+      throw;
     }
   }
 

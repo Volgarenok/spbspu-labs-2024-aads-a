@@ -2,6 +2,7 @@
 #define CONST_ITERATOR_HPP
 
 #include <cassert>
+#include <stdexcept>
 #include "node.hpp"
 
 namespace petuhov
@@ -21,13 +22,16 @@ namespace petuhov
 
     const T &operator*() const
     {
-      assert(node_ != nullptr);
+      if (node_ == nullptr)
+      {
+        throw std::out_of_range("ConstIterator is out of range");
+      }
       return node_->value_;
     }
 
     const T *operator->() const
     {
-      return &(operator*());
+      return &(**this);
     }
 
     ConstIterator &operator++()
