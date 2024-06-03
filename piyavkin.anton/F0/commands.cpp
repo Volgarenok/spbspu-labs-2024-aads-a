@@ -3,18 +3,6 @@
 #include <functional>
 #include <list.hpp>
 
-piyavkin::iterator getDict(std::istream& in, piyavkin::dic_t dicts)
-{
-  std::string name = "";
-  in >> name;
-  piyavkin::iterator it = dicts.find(name);
-  if (it == dicts.end())
-  {
-    throw std::out_of_range("");
-  }
-  return it;
-}
-
 void change(std::istream& in, piyavkin::tree_t& dic)
 {
   size_t val = 0;
@@ -102,7 +90,13 @@ piyavkin::iterator piyavkin::addDict(std::istream& in, dic_t& dicts)
 
 piyavkin::iterator piyavkin::cmdChange(std::istream& in, dic_t& dicts)
 {
-  auto it = getDict(in, dicts);
+  std::string name = "";
+  in >> name;
+  piyavkin::iterator it = dicts.find(name);
+  if (it == dicts.end())
+  {
+    throw std::out_of_range("");
+  }
   change(in, it->second);
   return it;
 }
@@ -127,7 +121,11 @@ piyavkin::iterator piyavkin::makeDict(std::istream& in, dic_t& dicts)
   {
     throw std::out_of_range("");
   }
-  return input(in, it);
+  while (file)
+  {
+    change(file, it->second);
+  }
+  return it;
 }
 
 piyavkin::iterator piyavkin::intersect(std::istream& in, dic_t& dicts)

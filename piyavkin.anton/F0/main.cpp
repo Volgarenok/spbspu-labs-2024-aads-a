@@ -24,7 +24,7 @@ int main(int argc, char* argv[])
     }
     Tree< std::string, std::function< void(std::ostream&) > > cmdLine;
     cmdLine["--help"] = help;
-    cmdLine["--check"] = std::bind(check, std::ref(in), std::placeholders::_1, dicts);
+    cmdLine["--check"] = std::bind(check, std::ref(in), std::placeholders::_1, std::ref(dicts));
     size_t n = argc;
     try
     {
