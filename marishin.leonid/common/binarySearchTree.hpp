@@ -74,12 +74,12 @@ namespace marishin
 
     void swap(Tree< Key, Value, Compare > & other) noexcept
     {
-      static_assert(std::is_nothrow_copy_constructible< Compare >::value);
       std::swap(root_, other.root_);
       std::swap(size_, other.size_);
       std::swap(compare_, other.compare_);
     }
 
+    /*
     void insert(const Key & key, const Value & val)
     {
       try
@@ -101,6 +101,22 @@ namespace marishin
         throw;
       }
     }
+    */
+
+    std::pair< iterator, bool > insert(const std::pair< Key, Value >& val)
+    {
+      node_t* temp = search(val.first);
+      bool isInsert = false;
+      if ((temp && temp->value.first != val.first) || !temp)
+      {
+        insert_impl(val.first, val, temp);
+        ++size_;
+        isInsert = true;
+      }
+      return std::pair< iterator, bool >(find(val.first), isInsert);
+    }
+
+
     void balance(node_t * node)
     {
       if (node->height < 0)
