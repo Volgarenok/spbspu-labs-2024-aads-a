@@ -119,27 +119,30 @@ gladyshev::dic gladyshev::additionImpl(const dic& dict1, const dic& dict2)
   }
   return result;
 }
+
 gladyshev::dic gladyshev::complementImpl(const dic& dict1, const dic& dict2)
 {
-  dic result;
-  bool check = true;
+  dic result = dict1;
   for (auto it1 = dict1.cbegin(); it1 != dict1.cend(); ++it1)
   {
-    check = true;
     for (auto it2 = dict2.cbegin(); it2 != dict2.cend(); ++it2)
     {
       if (it1->first == it2->first)
       {
-        check = false;
+        if (it1->second - it2->second >= 0)
+        {
+          result.insert(it1->first, it1->second - it2->second);
+        }
+        else
+        {
+          result.erase(it1->first);
+        }
       }
-    }
-    if (check)
-    {
-      result.insert(it1->first, it1->second);
     }
   }
   return result;
 }
+
 void gladyshev::deleteDict(mainDic& dictionaries, std::istream& in)
 {
   std::string datasetName = "";
