@@ -79,7 +79,7 @@ namespace marishin
       std::swap(compare_, other.compare_);
     }
 
-    /*
+
     void insert(const Key & key, const Value & val)
     {
       try
@@ -99,41 +99,6 @@ namespace marishin
       {
         clear();
         throw;
-      }
-    }
-    */
-
-    std::pair< iterator, bool > insert(const std::pair< Key, Value >& val)
-    {
-      node_t* temp = search(val.first);
-      bool isInsert = false;
-      if ((temp && temp->value.first != val.first) || !temp)
-      {
-        insert_impl(val.first, val, temp);
-        ++size_;
-        isInsert = true;
-      }
-      return std::pair< iterator, bool >(find(val.first), isInsert);
-    }
-
-
-    void balance(node_t * node)
-    {
-      if (node->height < 0)
-      {
-        if (node->right->height > 0)
-        {
-          node->right = rotateRight(node->right);
-        }
-        node = rotateLeft(node);
-      }
-      else
-      {
-        if (node->left->height < 0)
-        {
-          node->left = rotateLeft(node->left);
-        }
-        node = rotateRight(node);
       }
     }
 
@@ -206,13 +171,23 @@ namespace marishin
     }
     Value & operator[](const Key & key)
     {
-      auto temp = std::make_pair(key, Value());
-      return (insert(temp).first)->second;
+      iterator node = findNode(key);
+      if (node == end())
+      {
+        insert(key, Value());
+        node = findNode(key);
+      }
+      return node->second;
     }
     const Value & operator[](const Key & key) const
     {
-      auto temp = std::make_pair(key, Value());
-      return (insert(temp).first)->second;
+      iterator node = findNode(key);
+      if (node == end())
+      {
+        insert(key, Value());
+        node = findNode(key);
+      }
+      return node->second;
     }
     Value & at(const Key & key)
     {
@@ -344,6 +319,25 @@ namespace marishin
       node->height = node->height - 1 - std::max(0, newRoot->height);
       newRoot->height = newRoot->height - 1 + std::min(0, node->height);
       return newRoot;
+    }
+    void balance(node_t * node)
+    {
+      if (node->height < 0)
+      {
+        if (node->right->height > 0)
+        {
+          node->right = rotateRight(node->right);
+        }
+        node = rotateLeft(node);
+      }
+      else
+      {
+        if (node->left->height < 0)
+        {
+          node->left = rotateLeft(node->left);
+        }
+        node = rotateRight(node);
+      }
     }
     node_t * search_impl(node_t * node, const Key & key) const
     {
