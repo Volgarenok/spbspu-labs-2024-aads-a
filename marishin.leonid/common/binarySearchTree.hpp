@@ -190,23 +190,13 @@ namespace marishin
     }
     Value & operator[](const Key & key)
     {
-      iterator node = findNode(key);
-      if (node == end())
-      {
-        insert(key, Value());
-        node = findNode(key);
-      }
-      return node->second;
+      auto temp = std::make_pair(key, Value());
+      return (insert(temp).first)->second;
     }
     const Value & operator[](const Key & key) const
     {
-      iterator node = findNode(key);
-      if (node == end())
-      {
-        insert(key, Value());
-        node = findNode(key);
-      }
-      return node->second;
+      auto temp = std::make_pair(key, Value());
+      return (insert(temp).first)->second;
     }
     Value & at(const Key & key)
     {
