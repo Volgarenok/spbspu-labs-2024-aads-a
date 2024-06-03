@@ -1,4 +1,5 @@
 #include <iostream>
+#include <limits>
 #include <functional>
 #include "commands.hpp"
 #include "inputdata.hpp"
@@ -35,10 +36,14 @@ int main(int argc, char * argv[])
     {
       cmds.at(command)(std::cin, std::cout);
     }
+    catch (const std::out_of_range& e)
+    {
+      std::cerr << e.what() << "\n";
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    }
     catch (const std::exception& e)
     {
       std::cerr << e.what() << "\n";
-      return 1;
     }
   }
 }
