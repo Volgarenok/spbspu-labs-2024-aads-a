@@ -4,7 +4,8 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include "avltree.hpp"
+
+#include <avltree.hpp>
 
 namespace gladyshev
 {
@@ -18,6 +19,7 @@ namespace gladyshev
   void print_dictionariesL(const mainDic& dictionaries, std::istream& in, std::ostream& out);
   void print_dictionaries(const mainDic& dictionaries, std::istream& in, std::ostream& out);
   dic intersectImpl(const dic& dict1, const dic& dict2);
+  void printInfo(std::ostream& out);
   void intersect(mainDic& dictionaries, std::istream& in);
   void addelem(mainDic& dictionaries, std::istream& in);
   void addition(mainDic& dictionaries, std::istream& in);

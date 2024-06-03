@@ -3,14 +3,14 @@
 #include <functional>
 #include "commands.hpp"
 #include "inputdata.hpp"
-#include "avltree.hpp"
+#include <avltree.hpp>
 
 int main(int argc, char * argv[])
 {
   using namespace gladyshev;
   using namespace std::placeholders;
   mainDic setDic;
-  if (argc != 2)
+  if (argc < 2)
   {
     std::cerr << "Bad data\n";
     return 1;
@@ -18,6 +18,13 @@ int main(int argc, char * argv[])
   std::ifstream file(argv[1]);
   std::ofstream outFile(argv[1], std::ios::trunc);
   read_dictionaries(file, setDic);
+  if (argc == 3)
+  {
+    if (std::strcmp(argv[2], "--help") == 0)
+    {
+      printInfo(std::cout);
+    }
+  }
   Tree< std::string, std::function< void(std::istream&, std::ostream&) > > cmds;
   cmds.insert("addelem", std::bind(addelem, std::ref(setDic), _1));
   cmds.insert("printdict", std::bind(print_dictionaries, std::cref(setDic), _1, _2));

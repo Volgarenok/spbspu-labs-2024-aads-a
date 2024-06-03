@@ -99,6 +99,20 @@ gladyshev::dic gladyshev::intersectImpl(const dic& dict1, const dic& dict2)
   }
   return result;
 }
+void gladyshev::printInfo(std::ostream& out)
+{
+  out << "printdict <dataset> - display a dictionary with the corresponding name\n";
+  out << "makedict <newdataset> <text> create a dictionary based on text from a file\n";
+  out << "makedict <newdataset> <text> <number> create a dictionary based on text from a file with length number\n";
+  out << "printgreater <dataset> <number> display all dictionary words that appear more than number times\n";
+  out << "save <newdataset> <filename> save the dictionary to a file\n";
+  out << "addelem <dataset> <key> <value> add an element to the specified dictionary\n";
+  out << "delete <newdataset> delete dictionary with the corresponding name\n";
+  out << "delete <newdataset> <key> delete an element with the corresponding key\n";
+  out << "addition <newdataset> <dataset1> <dataset2> … <datasetn> combine an unlimited number of dictionaries\n";
+  out << "intersect <newdataset> <dataset1> <dataset2> … <datasetn> intersect unlimited number of dictionaries\n";
+  out << "complement <newdataset> <dataset1> <dataset2> … <datasetn> subtracts all dictionaries from the first one\n";
+}
 gladyshev::dic gladyshev::additionImpl(const dic& dict1, const dic& dict2)
 {
   dic result = dict1;
