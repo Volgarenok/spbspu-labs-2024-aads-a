@@ -60,7 +60,7 @@ void gladyshev::addelem(mainDic& dictionaries, std::istream& in)
   }
   it->second.insert(key, value);
 }
-void gladyshev::save(const mainDic& dictionaries, std::istream& in, std::ofstream& outFile)
+void gladyshev::save(const mainDic& dictionaries, std::ofstream& outFile, std::istream& in)
 {
   std::string datasetName = "";
   in >> datasetName;
