@@ -51,7 +51,7 @@ private:
 
 namespace namestnikov
 {
-  template< class T>
+  template< class T >
   void testSortings(std::ostream & out, std::vector< T > data, size_t size, const std::string & order)
   {
     printData(data.begin(), data.end(), out);
