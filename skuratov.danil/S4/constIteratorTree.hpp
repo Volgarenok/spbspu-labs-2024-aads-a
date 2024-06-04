@@ -85,13 +85,13 @@ namespace skuratov
     ConstIteratorTree< Key, Value, Compare > operator++(int)
     {
       ConstIteratorTree< Key, Value > result(*this);
-      (*this)++;
+      ++(*this);
       return result;
     }
     ConstIteratorTree< Key, Value, Compare > operator--(int)
     {
       ConstIteratorTree< Key, Value, Compare > result(*this);
-      (*this)--;
+      --(*this);
       return result;
     }
 

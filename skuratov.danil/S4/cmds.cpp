@@ -2,13 +2,10 @@
 
 void skuratov::isPrint(std::istream& in, AVLTree< std::string, AVLTree< int, std::string > >& dictionary, std::ostream& out)
 {
-  std::string name;
+  std::string name = {};
   in >> name;
-
   try
   {
-    std::string name = {};
-    in >> name;
     AVLTree< int, std::string > dic = dictionary.at(name);
     if (dic.empty())
     {
@@ -26,7 +23,7 @@ void skuratov::isPrint(std::istream& in, AVLTree< std::string, AVLTree< int, std
   }
   catch (std::out_of_range&)
   {
-    out << "<KEY NOT FOUND>" << '\n';
+    out << "<DICTIONARY NOT FOUND>" << '\n';
   }
 }
 
