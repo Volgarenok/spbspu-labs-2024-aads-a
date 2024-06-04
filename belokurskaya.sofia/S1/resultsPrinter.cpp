@@ -41,7 +41,7 @@ void belokurskaya::printSequences(std::ostream& out, const List< std::pair< std:
         {
           out << ' ';
         }
-        out << pair.second.at(i);
+        belokurskaya::at(pair.second, i);
         first = false;
       }
     }
@@ -76,11 +76,11 @@ void belokurskaya::printSums(std::ostream& output, const List< std::pair< std::s
     {
       if (i < pair.second.size())
       {
-        if (maxNum - sum < pair.second.at(i))
+        if (maxNum - sum < belokurskaya::at(pair.second, i))
         {
           throw std::overflow_error("Overflow");
         }
-        sum += pair.second.at(i);
+        sum += belokurskaya::at(pair.second, i);
       }
     }
     sums.push_back(sum);
