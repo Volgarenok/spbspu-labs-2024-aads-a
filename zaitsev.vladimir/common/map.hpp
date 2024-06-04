@@ -1064,7 +1064,7 @@ namespace zaitsev
     {
       for (; first != last; ++first)
       {
-        addNode(fakeroot_, nullptr, first->val_.first, first->val_.second);
+        addNode(fakeroot_, nullptr, first->first, first->second);
       }
     }
     void insert(std::initializer_list<val_t> init_list)
