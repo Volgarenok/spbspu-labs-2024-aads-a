@@ -90,6 +90,130 @@ namespace belokurskaya
         clear();
       }
 
+      class Iterator: public std::iterator< std::forward_iterator_tag, T >
+      {
+      private:
+        Node* current;
+
+      public:
+        using pointer = T*;
+        using reference = T&;
+
+        Iterator() :
+          current(nullptr)
+        {}
+
+        reference operator*() const
+        {
+          return current->value;
+        }
+
+        pointer operator->() const
+        {
+          return std::addressof(current->value);
+        }
+
+        Iterator& operator++()
+        {
+          current = current->next;
+          return *this;
+        }
+
+        Iterator operator++(int)
+        {
+          Iterator result = *this;
+          ++(*this);
+          return result;
+        }
+
+        bool operator!=(const Iterator& other) const
+        {
+          return current != other.current;
+        }
+
+        bool operator==(const Iterator& other) const
+        {
+          return current == other.current;
+        }
+
+      private:
+        friend class List;
+        explicit Iterator(Node* node) :
+          current(node)
+        {}
+      };
+
+      Iterator begin()
+      {
+        return Iterator(head);
+      }
+
+      Iterator end()
+      {
+        return Iterator(nullptr);
+      }
+
+      class ConstIterator: public std::iterator< std::input_iterator_tag, const T >
+      {
+      private:
+        const Node* current;
+        friend class List;
+        explicit ConstIterator(const Node* node) :
+          current(node)
+        {}
+
+      public:
+        using pointer = const T*;
+        using reference = const T&;
+
+        ConstIterator() :
+          current(nullptr)
+        {}
+
+        reference operator*() const
+        {
+          return current->value;
+        }
+
+        pointer operator->() const
+        {
+          return std::addressof(current->value);
+        }
+
+        ConstIterator& operator++()
+        {
+          current = current->next;
+          return *this;
+        }
+
+        ConstIterator operator++(int)
+        {
+          ConstIterator result = *this;
+          ++(*this);
+          return result;
+        }
+
+        bool operator!=(const ConstIterator& other) const
+        {
+          return current != other.current;
+        }
+
+        bool operator==(const ConstIterator& other) const
+        {
+          return current == other.current;
+        }
+      };
+
+      ConstIterator begin() const
+      {
+        return ConstIterator(head);
+      }
+
+      ConstIterator end() const
+      {
+        return ConstIterator(nullptr);
+      }
+
       void clear()
       {
         while (head)
@@ -226,13 +350,18 @@ namespace belokurskaya
         }
       }
 
-      const T& at(Iterator pos) const
+      const T& at(size_t index) const
       {
-        if (pos == end())
+        Node* current = head;
+        for (size_t i = 0; i < index && current; ++i)
         {
-          throw std::out_of_range("Iterator is out of range");
+          current = current->next;
         }
-        return *pos;
+        if (!current)
+        {
+          throw std::out_of_range("Index out of range");
+        }
+        return current->value;
       }
 
       size_t size() const noexcept
@@ -303,130 +432,6 @@ namespace belokurskaya
       {
         return *this > other || *this == other;
       }
-
-      class Iterator: public std::iterator< std::forward_iterator_tag, T >
-      {
-        private:
-          Node* current;
-
-        public:
-          using pointer = T*;
-          using reference = T&;
-
-          Iterator():
-            current(nullptr)
-          {}
-
-          reference operator*() const
-          {
-            return current->value;
-          }
-
-          pointer operator->() const
-          {
-            return std::addressof(current->value);
-          }
-
-          Iterator& operator++()
-          {
-            current = current->next;
-            return *this;
-          }
-
-          Iterator operator++(int)
-          {
-            Iterator result = *this;
-            ++(*this);
-            return result;
-          }
-
-          bool operator!=(const Iterator& other) const
-          {
-            return current != other.current;
-          }
-
-          bool operator==(const Iterator& other) const
-          {
-            return current == other.current;
-          }
-
-        private:
-          friend class List;
-          explicit Iterator(Node* node):
-            current(node)
-          {}
-      };
-
-      Iterator begin()
-      {
-        return Iterator(head);
-      }
-
-      Iterator end()
-      {
-        return Iterator(nullptr);
-      }
-
-      class ConstIterator: public std::iterator< std::input_iterator_tag, const T >
-      {
-        private:
-          const Node* current;
-          friend class List;
-          explicit ConstIterator(const Node* node):
-            current(node)
-          {}
-
-        public:
-          using pointer = const T*;
-          using reference = const T&;
-
-          ConstIterator():
-            current(nullptr)
-          {}
-
-          reference operator*() const
-          {
-            return current->value;
-          }
-
-          pointer operator->() const
-          {
-            return std::addressof(current->value);
-          }
-
-          ConstIterator& operator++()
-          {
-            current = current->next;
-            return *this;
-          }
-
-          ConstIterator operator++(int)
-          {
-            ConstIterator result = *this;
-            ++(*this);
-            return result;
-          }
-
-          bool operator!=(const ConstIterator& other) const
-          {
-            return current != other.current;
-          }
-
-          bool operator==(const ConstIterator& other) const
-          {
-            return current == other.current;
-          }
-      };
-
-        ConstIterator begin() const
-        {
-          return ConstIterator(head);
-        }
-
-        ConstIterator end() const
-        {
-          return ConstIterator(nullptr);
-        }
   };
 }
 
