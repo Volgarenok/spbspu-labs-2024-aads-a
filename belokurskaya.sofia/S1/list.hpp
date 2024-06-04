@@ -169,26 +169,33 @@ namespace belokurskaya
         --list_size;
       }
 
-      void erase(size_t index)
+      void erase(Iterator pos)
       {
-        if (index == 0)
+        if (pos == end())
+        {
+          throw std::out_of_range("Iterator is out of range");
+        }
+
+        if (pos == begin())
         {
           pop_front();
-          return;
         }
-        Node* current = head;
-        for (size_t i = 0; i < index - 1 && current; ++i)
+        else
         {
-          current = current->next;
+          Node* current = head;
+          while (current && current->next != pos.current)
+          {
+            current = current->next;
+          }
+          if (!current)
+          {
+            throw std::out_of_range("Index out of range");
+          }
+          Node* temp = current->next;
+          current->next = current->next->next;
+          delete temp;
+          --list_size;
         }
-        if (!current || !current->next)
-        {
-          throw std::out_of_range("Index out of range");
-        }
-        Node* temp = current->next;
-        current->next = current->next->next;
-        delete temp;
-        --list_size;
       }
 
       void remove(const T& value)
@@ -219,18 +226,13 @@ namespace belokurskaya
         }
       }
 
-      const T& at(size_t index) const
+      const T& at(Iterator pos) const
       {
-        Node* current = head;
-        for (size_t i = 0; i < index && current; ++i)
+        if (pos == end())
         {
-          current = current->next;
+          throw std::out_of_range("Iterator is out of range");
         }
-        if (!current)
-        {
-          throw std::out_of_range("Index out of range");
-        }
-        return current->value;
+        return *pos;
       }
 
       size_t size() const noexcept
@@ -302,7 +304,7 @@ namespace belokurskaya
         return *this > other || *this == other;
       }
 
-      class Iterator
+      class Iterator: public std::iterator< std::forward_iterator_tag, T >
       {
         private:
           Node* current;
@@ -365,7 +367,7 @@ namespace belokurskaya
         return Iterator(nullptr);
       }
 
-      class ConstIterator
+      class ConstIterator: public std::iterator< std::input_iterator_tag, const T >
       {
         private:
           const Node* current;
