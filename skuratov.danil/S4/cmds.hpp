@@ -2,6 +2,7 @@
 #define CMDS_HPP
 
 #include <string>
+#include <iostream>
 #include "AVLTree.hpp"
 
 namespace skuratov

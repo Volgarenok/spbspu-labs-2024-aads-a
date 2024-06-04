@@ -1,7 +1,6 @@
 #ifndef CONST_ITERATOR_TREE_HPP
 #define CONST_ITERATOR_TREE_HPP
 
-#include <functional>
 #include <memory>
 
 namespace skuratov
@@ -59,7 +58,7 @@ namespace skuratov
       }
       return *this;
     }
-    ConstIteratorTree<Key, Value, Compare>& operator--()
+    ConstIteratorTree< Key, Value, Compare >& operator--()
     {
       if (nodePointer_->left_)
       {

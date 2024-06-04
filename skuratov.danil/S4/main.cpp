@@ -1,7 +1,5 @@
-#include <iostream>
 #include <fstream>
-#include <exception>
-#include "AVLTree.hpp"
+#include "cmds.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -33,12 +31,21 @@ int main(int argc, char* argv[])
     }
   }
 
+  AVLTree< std::string, std::function< void(std::istream&, AVLTree< std::string, AVLTree< int, std::string > >& dictionary) > > cmds;
+  {
+    using namespace std::placeholders;
+    cmds["print"] = std::bind(isPrint, _1, _2, std::ref(std::cout));
+    cmds["complement"] = isComplement;
+    cmds["intersect"] = isIntersect;
+    cmds["union"] = isUnion;
+  }
+
   std::string cmd;
   while (std::cin >> cmd)
   {
     try
     {
-      //wrote after implementing the commands
+      cmds.at(cmd)(std::cin, dictionary);
     }
     catch (const std::exception&)
     {

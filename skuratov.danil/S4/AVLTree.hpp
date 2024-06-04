@@ -3,6 +3,8 @@
 
 #include <cstddef>
 #include <algorithm>
+#include <stdexcept>
+#include <functional>
 #include "treeNode.hpp"
 #include "constIteratorTree.hpp"
 
