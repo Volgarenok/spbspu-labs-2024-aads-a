@@ -2,7 +2,7 @@
 #include <fstream>
 #include <string>
 #include <iomanip>
-#include <delimiter.hpp>
+#include "delimiter.hpp"
 
 zaitsev::graph_t basicGraphRead(std::istream& in);
 void basicGraphPrint(std::ostream& out, const zaitsev::graph_t& graph, size_t indnent_sz = 2);
