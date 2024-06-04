@@ -5,7 +5,7 @@
 #include <iterator>
 #include "dictionary.hpp"
 
-using val_t = std::pair<std::string, std::set<std::string>>;
+using val_t = std::pair< std::string, std::set< std::string > >;
 
 void novokhatskiy::unique(dictionaries &dict, std::istream &in)
 {
