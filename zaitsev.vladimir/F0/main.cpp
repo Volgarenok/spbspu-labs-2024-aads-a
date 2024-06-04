@@ -55,7 +55,7 @@ int main(int argc, char** argv)
   {
     std::cout << "Created empty base.\n";
   }
-  std::map< std::string, std::function< void(const std::vector< std::string >&, std::ostream& out) > > commands;
+  std::map< std::string, std::function< void(const args_flist&, std::ostream& out) > > commands;
   {
     using namespace std::placeholders;
     commands["read"] = std::bind(readGraph, std::ref(graphs), _1, _2);
@@ -73,7 +73,7 @@ int main(int argc, char** argv)
     commands["shortestpathmatrix"] = std::bind(printShortestPathsMatrix, std::cref(graphs), _1, _2);
     commands["dump"] = std::bind(dump, std::ref(graphs), _1, _2);
   }
-  std::vector< std::string > args;
+  args_flist args;
   while (!std::cin.eof())
   {
     std::cout << "command: ";
@@ -84,7 +84,7 @@ int main(int argc, char** argv)
     }
     try
     {
-      auto cmd_it = commands.find(args[0]);
+      auto cmd_it = commands.find(*args.begin());
       if (cmd_it == commands.end())
       {
         std::cin.setstate(std::ios::failbit);

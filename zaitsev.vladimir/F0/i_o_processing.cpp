@@ -7,7 +7,7 @@
 zaitsev::graph_t basicGraphRead(std::istream& in);
 void basicGraphPrint(std::ostream& out, const zaitsev::graph_t& graph, size_t indnent_sz = 2);
 
-std::ostream& zaitsev::listGraphs(const base_t& graphs, const std::vector< std::string >&, std::ostream& out)
+std::ostream& zaitsev::listGraphs(const base_t& graphs, const args_flist&, std::ostream& out)
 {
   if (graphs.empty())
   {
@@ -22,7 +22,7 @@ std::ostream& zaitsev::listGraphs(const base_t& graphs, const std::vector< std::
   return out;
 }
 
-void zaitsev::readArgs(std::istream& in, std::vector< std::string >& dest_args)
+void zaitsev::readArgs(std::istream& in, args_flist& dest_args)
 {
   std::string raw_args;
   dest_args.clear();
@@ -44,11 +44,12 @@ void zaitsev::readArgs(std::istream& in, std::vector< std::string >& dest_args)
     {
       if (beg != raw_args.size())
       {
-        dest_args.push_back(raw_args.substr(beg, i - beg));
+        dest_args.push_front(raw_args.substr(beg, i - beg));
       }
       beg = raw_args.size();
     }
   }
+  dest_args.reverse();
   return;
 }
 
@@ -88,34 +89,38 @@ void zaitsev::printHelp()
   return;
 }
 
-std::ostream& zaitsev::printGraph(const base_t& graphs, const std::vector< std::string >& args, std::ostream& out)
+std::ostream& zaitsev::printGraph(const base_t& graphs, const args_flist& args, std::ostream& out)
 {
-  if (args.size() != 2)
+  size_t args_nmb = std::distance(args.cbegin(), args.cend());
+  if (args_nmb != 2)
   {
     throw std::invalid_argument("Invalid number of arguments");
   }
-  base_t::const_iterator graph = graphs.find(args[1]);
+  const std::string& arg = *(++args.cbegin());
+  base_t::const_iterator graph = graphs.find(arg);
   if (graph == graphs.end())
   {
-    throw std::invalid_argument("Graph with name \"" + args[1] + "\" doesn't exists.");
+    throw std::invalid_argument("Graph with name \"" + arg + "\" doesn't exists.");
   }
   out << "Graph name: " << graph->first << '\n';
   basicGraphPrint(out, graph->second);
   return out;
 }
 
-void zaitsev::dump(const base_t& graphs, const std::vector< std::string >& args, std::ostream&)
+void zaitsev::dump(const base_t& graphs, const args_flist& args, std::ostream&)
 {
-  if (args.size() != 2)
+  size_t args_nmb = std::distance(args.cbegin(), args.cend());
+  if (args_nmb != 2)
   {
     throw std::invalid_argument("Invalid number of arguments");
   }
-  if (std::ifstream(args[1]).good())
+  const std::string& arg = *(++args.cbegin());
+  if (std::ifstream(arg).good())
   {
     throw std::invalid_argument("File already exists");
   }
 
-  std::ofstream out(args[1]);
+  std::ofstream out(arg);
   out << "Graphs number: " << graphs.size() << '\n';
   for (auto& i : graphs)
   {
@@ -149,14 +154,16 @@ void zaitsev::initBase(const char* file, base_t& base)
   return;
 }
 
-void zaitsev::readGraph(base_t& graphs, const std::vector< std::string >& args, std::ostream&)
+void zaitsev::readGraph(base_t& graphs, const args_flist& args, std::ostream&)
 {
-  if (args.size() != 3)
+  size_t args_nmb = std::distance(args.cbegin(), args.cend());
+  args_flist::const_iterator arg = args.cbegin();
+  if (args_nmb != 3)
   {
     throw std::invalid_argument("Invalid number of arguments");
   }
-  const std::string& graph_name = args[1];
-  const std::string& file = args[2];
+  const std::string& graph_name = *(++arg);
+  const std::string& file = *(++arg);
   if (graphs.find(graph_name) != graphs.end())
   {
     throw std::invalid_argument("Graph with name \"" + graph_name + "\" already exists.");
@@ -170,14 +177,16 @@ void zaitsev::readGraph(base_t& graphs, const std::vector< std::string >& args, 
   return;
 }
 
-void zaitsev::writeGraph(const base_t& graphs, const std::vector< std::string >& args, std::ostream&)
+void zaitsev::writeGraph(const base_t& graphs, const args_flist& args, std::ostream&)
 {
-  if (args.size() != 3)
+  size_t args_nmb = std::distance(args.cbegin(), args.cend());
+  args_flist::const_iterator arg = args.cbegin();
+  if (args_nmb != 3)
   {
     throw std::invalid_argument("Invalid number of arguments");
   }
-  const std::string& graph_name = args[1];
-  const std::string& file = args[2];
+  const std::string& graph_name = *(++arg);
+  const std::string& file = *(++arg);
   if (std::ifstream(file).good())
   {
     throw std::invalid_argument("File \"" + file + "\" already exists");
