@@ -1,17 +1,17 @@
 #ifndef COMMANDS_HPP
 #define COMMANDS_HPP
 
-#include <map>
 #include <utility>
 #include <string>
 #include <set>
 #include <random>
 #include <iostream>
 #include "dictionary.hpp"
+#include "AVLtree.hpp"
 
 namespace novokhatskiy
 {
-  using dictionaries = std::map< std::string, Dictionary >;
+  using dictionaries = Tree< std::string, Dictionary >;
   void search(dictionaries &dict, std::istream &in);
   void merge(dictionaries &dict, std::istream &in);
   void unique(dictionaries &dict, std::istream &in);

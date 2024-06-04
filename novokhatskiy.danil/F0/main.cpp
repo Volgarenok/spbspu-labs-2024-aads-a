@@ -1,19 +1,17 @@
 #include <iostream>
 #include <fstream>
-#include <map>
-#include <iterator>
 #include <algorithm>
 #include <string>
 #include <limits>
 #include <random>
 #include <functional>
-#include <list>
 #include <set>
 #include "commands.hpp"
 #include "dictionary.hpp"
+#include "AVLtree.hpp"
 
 using val_t = std::pair< std::string, std::set< std::string > >;
-using dictionaries = std::map< std::string, novokhatskiy::Dictionary >;
+using dictionaries = novokhatskiy::Tree< std::string, novokhatskiy::Dictionary >;
 
 int main(int argc, char **argv)
 {
@@ -32,8 +30,8 @@ int main(int argc, char **argv)
   }
   using namespace std::placeholders;
   std::random_device rand;
-  std::map< std::string, std::function< void(dictionaries &, std::istream &) > >  commandsIn;
-  std::map< std::string, std::function< void(dictionaries &, std::istream &, std::ostream &) > > commandsInOut;
+  Tree< std::string, std::function< void(dictionaries &, std::istream &) > >  commandsIn;
+  Tree< std::string, std::function< void(dictionaries &, std::istream &, std::ostream &) > > commandsInOut;
   commandsInOut["print"] = print;
   commandsInOut["find"] = find;
   commandsIn["save"] = save;
