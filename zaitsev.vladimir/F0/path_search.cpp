@@ -1,6 +1,5 @@
 #include "path_search.hpp"
 #include <vector>
-#include <unordered_map>
 #include <string>
 #include <algorithm>
 #include <iomanip>
@@ -10,7 +9,6 @@
 using std::vector;
 using std::pair;
 using std::string;
-using std::unordered_map;
 
 constexpr int inf = std::numeric_limits< int >::max();
 
@@ -21,7 +19,7 @@ struct edge
   int val;
 };
 
-unordered_map< string, size_t > convertToIndexes(const zaitsev::graph_t& graph);
+zaitsev::Map< string, size_t > convertToIndexes(const zaitsev::graph_t& graph);
 vector< vector<int> > createAdjacencyMatrix(const zaitsev::graph_t& graph);
 vector< edge > extractEdges(const zaitsev::graph_t& graph);
 vector< vector< int > > calcPathsFloyd(const zaitsev::graph_t& graph);
@@ -49,7 +47,7 @@ void zaitsev::findShortestDistance(const base_t& graphs, const args_flist& args,
   {
     throw std::invalid_argument("Vertex doesn't exist");
   }
-  unordered_map< string, size_t > indexes = convertToIndexes(graph_pos->second);
+  Map< string, size_t > indexes = convertToIndexes(graph_pos->second);
   vector< edge > edges = extractEdges(graph_pos->second);
   pair< vector< int >, vector< size_t > > dist_with_prev = calcPathsFord(edges, indexes[begin_name], indexes.size());
 
@@ -93,7 +91,7 @@ void zaitsev::findShortestPathTtrace(const base_t& graphs, const args_flist& arg
   {
     throw std::invalid_argument("Vertex doesn't exist");
   }
-  unordered_map< string, size_t > indexes = convertToIndexes(graph);
+  Map< string, size_t > indexes = convertToIndexes(graph);
   vector< edge > edges = extractEdges(graph);
   pair< vector< int >, vector< size_t > > dist_with_prev = calcPathsFord(edges, indexes[begin_name], indexes.size());
 
@@ -219,10 +217,10 @@ void zaitsev::checkNegativeWeightCycles(const base_t& graphs, const args_flist& 
   out << "Graph " << (negative_cycles ? "contains" : "doesn't contain") << " a negative weight cycle\n";
 }
 
-unordered_map< string, size_t > convertToIndexes(const zaitsev::graph_t& graph)
+zaitsev::Map< string, size_t > convertToIndexes(const zaitsev::graph_t& graph)
 {
   using namespace zaitsev;
-  unordered_map< string, size_t > vert_indexes(graph.size());
+  Map< string, size_t > vert_indexes;
   size_t index = 0;
   for (auto& i : graph)
   {
@@ -235,7 +233,7 @@ vector< vector< int > > createAdjacencyMatrix(const zaitsev::graph_t& graph)
 {
   using namespace zaitsev;
   vector< vector< int > > matrix(graph.size(), vector< int >(graph.size(), inf));
-  unordered_map< string, size_t > vert_indexes = convertToIndexes(graph);
+  Map< string, size_t > vert_indexes = convertToIndexes(graph);
 
   size_t i = 0;
   for (graph_t::const_iterator it_i = graph.begin(); it_i != graph.end(); ++it_i)
@@ -253,7 +251,7 @@ vector< edge > extractEdges(const zaitsev::graph_t& graph)
 {
   using namespace zaitsev;
 
-  unordered_map< string, size_t > vert_indexes = convertToIndexes(graph);
+  Map< string, size_t > vert_indexes = convertToIndexes(graph);
   size_t edges_nmb = 0;
   for (auto& i : graph)
   {

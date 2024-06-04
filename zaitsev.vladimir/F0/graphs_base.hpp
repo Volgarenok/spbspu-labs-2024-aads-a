@@ -1,7 +1,6 @@
 #ifndef GRAPHS_BASE_HPP
 #define GRAPHS_BASE_HPP
 #include <ostream>
-#include <vector>
 #include <string>
 #include <map.hpp>
 
