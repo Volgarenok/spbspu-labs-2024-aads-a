@@ -92,55 +92,55 @@ namespace belokurskaya
 
       class Iterator: public std::iterator< std::forward_iterator_tag, T >
       {
-      private:
-        Node* current;
+        private:
+          Node* current;
 
-      public:
-        using pointer = T*;
-        using reference = T&;
+        public:
+          using pointer = T*;
+          using reference = T&;
 
-        Iterator() :
-          current(nullptr)
-        {}
+          Iterator() :
+            current(nullptr)
+          {}
 
-        reference operator*() const
-        {
-          return current->value;
-        }
+          reference operator*() const
+          {
+            return current->value;
+          }
 
-        pointer operator->() const
-        {
-          return std::addressof(current->value);
-        }
+          pointer operator->() const
+          {
+            return std::addressof(current->value);
+          }
 
-        Iterator& operator++()
-        {
-          current = current->next;
-          return *this;
-        }
+          Iterator& operator++()
+          {
+            current = current->next;
+            return *this;
+          }
 
-        Iterator operator++(int)
-        {
-          Iterator result = *this;
-          ++(*this);
-          return result;
-        }
+          Iterator operator++(int)
+          {
+            Iterator result = *this;
+            ++(*this);
+            return result;
+          }
 
-        bool operator!=(const Iterator& other) const
-        {
-          return current != other.current;
-        }
+          bool operator!=(const Iterator& other) const
+          {
+            return current != other.current;
+          }
 
-        bool operator==(const Iterator& other) const
-        {
-          return current == other.current;
-        }
+          bool operator==(const Iterator& other) const
+          {
+            return current == other.current;
+          }
 
-      private:
-        friend class List;
-        explicit Iterator(Node* node) :
-          current(node)
-        {}
+        private:
+          friend class List;
+          explicit Iterator(Node* node) :
+            current(node)
+          {}
       };
 
       Iterator begin()
@@ -155,53 +155,53 @@ namespace belokurskaya
 
       class ConstIterator: public std::iterator< std::input_iterator_tag, const T >
       {
-      private:
-        const Node* current;
-        friend class List;
-        explicit ConstIterator(const Node* node) :
-          current(node)
-        {}
+        private:
+          const Node* current;
+          friend class List;
+          explicit ConstIterator(const Node* node) :
+            current(node)
+          {}
 
-      public:
-        using pointer = const T*;
-        using reference = const T&;
+        public:
+          using pointer = const T*;
+          using reference = const T&;
 
-        ConstIterator() :
-          current(nullptr)
-        {}
+          ConstIterator() :
+            current(nullptr)
+          {}
 
-        reference operator*() const
-        {
-          return current->value;
-        }
+          reference operator*() const
+          {
+            return current->value;
+          }
 
-        pointer operator->() const
-        {
-          return std::addressof(current->value);
-        }
+          pointer operator->() const
+          {
+            return std::addressof(current->value);
+          }
 
-        ConstIterator& operator++()
-        {
-          current = current->next;
-          return *this;
-        }
+          ConstIterator& operator++()
+          {
+            current = current->next;
+            return *this;
+          }
 
-        ConstIterator operator++(int)
-        {
-          ConstIterator result = *this;
-          ++(*this);
-          return result;
-        }
+          ConstIterator operator++(int)
+          {
+            ConstIterator result = *this;
+            ++(*this);
+            return result;
+          }
 
-        bool operator!=(const ConstIterator& other) const
-        {
-          return current != other.current;
-        }
+          bool operator!=(const ConstIterator& other) const
+          {
+            return current != other.current;
+          }
 
-        bool operator==(const ConstIterator& other) const
-        {
-          return current == other.current;
-        }
+          bool operator==(const ConstIterator& other) const
+          {
+            return current == other.current;
+          }
       };
 
       ConstIterator begin() const
