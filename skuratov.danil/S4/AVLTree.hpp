@@ -4,7 +4,6 @@
 #include <cstddef>
 #include <algorithm>
 #include <stdexcept>
-#include <functional>
 #include "treeNode.hpp"
 #include "constIteratorTree.hpp"
 
@@ -73,14 +72,23 @@ namespace skuratov
       return *this;
     }
 
-    ConstIteratorTree cbegin() const noexcept
+    ConstIteratorTree< Key, Value, Compare > cbegin() const noexcept
     {
-      return ConstIteratorTree(root_);
+      detail::TreeNode< Key, Value >* temp = root_;
+      if (!temp)
+      {
+        return ConstIteratorTree< Key, Value, Compare > (nullptr);
+      }
+      while (temp->left_)
+      {
+        temp = temp->left_;
+      }
+      return ConstIteratorTree< Key, Value, Compare > (temp);
     }
 
-    ConstIteratorTree cend() const noexcept
+    ConstIteratorTree< Key, Value, Compare > cend() const noexcept
     {
-      return ConstIteratorTree(nullptr);
+      return ConstIteratorTree< Key, Value, Compare > (nullptr);
     }
 
     size_t size() const noexcept
@@ -151,9 +159,9 @@ namespace skuratov
       std::swap(size_, diff.size_);
     }
 
-    ConstIteratorTree find(const Key& key) const
+    ConstIteratorTree< Key, Value, Compare > find(const Key& key) const
     {
-      return ConstIteratorTree(findNode(root_, key));
+      return ConstIteratorTree< Key, Value, Compare > (findNode(root_, key));
     }
 
     void push(const Key& key, const Value& value)
@@ -180,7 +188,7 @@ namespace skuratov
       {
         if (root_)
         {
-          insertNode(key, value, root_);
+          insertNode(root_, key, value);
           ++size_;
         }
         else
@@ -198,7 +206,7 @@ namespace skuratov
 
   private:
     detail::TreeNode< Key, Value >* root_;
-    Compare* cmp_;
+    Compare cmp_;
     size_t size_;
 
     void removeNode(detail::TreeNode< Key, Value >* nodePointer)
@@ -207,8 +215,8 @@ namespace skuratov
       {
         return;
       }
-      removeNode(nodePointer->left);
-      removeNode(nodePointer->right);
+      removeNode(nodePointer->left_);
+      removeNode(nodePointer->right_);
       delete nodePointer;
     }
 

@@ -1,6 +1,8 @@
 #ifndef CONST_ITERATOR_TREE_HPP
 #define CONST_ITERATOR_TREE_HPP
 
+#include <iterator>
+#include <functional>
 #include <memory>
 
 namespace skuratov
@@ -8,7 +10,7 @@ namespace skuratov
   template< typename Key, typename Value, typename Compare >
   class AVLTree;
 
-  template< typename Key, typename Value, typename Compare >
+  template< typename Key, typename Value, typename Compare = std::less < Key > >
   class ConstIteratorTree
   {
   public:

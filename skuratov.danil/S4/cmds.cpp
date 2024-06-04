@@ -7,7 +7,9 @@ void skuratov::isPrint(std::istream& in, AVLTree< std::string, AVLTree< int, std
 
   try
   {
-    const AVLTree< int, std::string >& dic = dictionary.at(name);
+    std::string name = {};
+    in >> name;
+    AVLTree< int, std::string > dic = dictionary.at(name);
     if (dic.empty())
     {
       out << "<EMPTY>" << '\n';
@@ -19,7 +21,7 @@ void skuratov::isPrint(std::istream& in, AVLTree< std::string, AVLTree< int, std
       {
         out << " " << key->first << " " << key->second;
       }
-      out << '\n';
+      out << "\n";
     }
   }
   catch (std::out_of_range&)

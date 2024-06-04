@@ -1,6 +1,8 @@
 #ifndef TREE_NODE_HPP
 #define TREE_NODE_HPP
 
+#include <utility>
+
 namespace skuratov
 {
   namespace detail
@@ -12,7 +14,7 @@ namespace skuratov
         parent_(nullptr),
         left_(nullptr),
         right_(nullptr),
-        data_(std::pair< Key, Value >),
+        data_(std::make_pair(key, value)),
         height_(0)
       {}
       ~TreeNode() = default;
