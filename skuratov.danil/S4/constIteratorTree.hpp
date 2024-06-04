@@ -4,6 +4,7 @@
 #include <iterator>
 #include <functional>
 #include <memory>
+#include "treeNode.hpp"
 
 namespace skuratov
 {

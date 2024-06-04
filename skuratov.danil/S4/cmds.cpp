@@ -30,11 +30,11 @@ void skuratov::isPrint(std::istream& in, AVLTree< std::string, AVLTree< int, std
   }
 }
 
-void skuratov::isComplement(std::istream& in, AVLTree< std::string, AVLTree< int, std::string > >& dictionary)
+void skuratov::isComplement(std::istream&, AVLTree< std::string, AVLTree< int, std::string > >&)
 {}
 
-void skuratov::isIntersect(std::istream& in, AVLTree< std::string, AVLTree< int, std::string > >& dictionary)
+void skuratov::isIntersect(std::istream&, AVLTree< std::string, AVLTree< int, std::string > >&)
 {}
 
-void skuratov::isUnion(std::istream& in, AVLTree< std::string, AVLTree< int, std::string > >& dictionary)
+void skuratov::isUnion(std::istream&, AVLTree< std::string, AVLTree< int, std::string > >&)
 {}
