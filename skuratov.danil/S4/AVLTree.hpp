@@ -246,7 +246,10 @@ namespace skuratov
       if (!nodePointer)
       {
         nodePointer = new detail::TreeNode< Key, Value >(key, value);
-        root_ = nodePointer;
+        if (!root)
+        {
+          root_ = nodePointer;
+        }
         size_++;
         return nodePointer;
       }
