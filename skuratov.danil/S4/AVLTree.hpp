@@ -140,7 +140,7 @@ namespace skuratov
 
       if (nodePointer == nullptr)
       {
-        throw std::out_of_range("Key not found");
+        nodePointer = insertNode(root_, key, Value());
       }
       return nodePointer->data_.second;
     }
@@ -246,6 +246,7 @@ namespace skuratov
       if (!nodePointer)
       {
         nodePointer = new detail::TreeNode< Key, Value >(key, value);
+        root_ = nodePointer;
         size_++;
         return nodePointer;
       }
