@@ -14,22 +14,22 @@ int main(int argc, char* argv[])
       std::cerr << "Error reading file" << '\n';
       return 1;
     }
-    /*while (!infile.eof())
+    while (!infile.eof())
     {
       infile.clear();
       AVLTree< int, std::string > tempDic;
       std::string nameDic = {};
-      std::cin >> nameDic;
+      infile >> nameDic;
 
       int keyNum = {};
-      while (std::cin >> keyNum)
+      while (infile >> keyNum)
       {
         std::string value = {};
-        std::cin >> value;
+        infile >> value;
         tempDic.insert(keyNum, value);
       }
       dictionary.insert(nameDic, tempDic);
-    }*/
+    }
   }
 
   AVLTree< std::string, std::function< void(std::istream&, AVLTree< std::string, AVLTree< int, std::string > >&) > > cmds;
