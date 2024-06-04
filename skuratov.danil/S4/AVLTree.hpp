@@ -172,6 +172,28 @@ namespace skuratov
       return tempValue;
     }
 
+    void insert(const Key& key, const Value& value)
+    {
+      try
+      {
+        if (root_)
+        {
+          insertNode(key, value, root_);
+          ++size_;
+        }
+        else
+        {
+          root_ = new detail::TreeNode< Key, Value >(key, value);
+          ++size_;
+        }
+      }
+      catch (...)
+      {
+        clear();
+        throw;
+      }
+    }
+
   private:
     detail::TreeNode< Key, Value >* root_;
     Compare* cmp_;

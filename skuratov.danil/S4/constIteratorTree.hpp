@@ -9,7 +9,7 @@ namespace skuratov
   template< typename Key, typename Value, typename Compare >
   class AVLTree;
 
-  template< typename Key, typename Value, typename Compare = std::less< Key > >
+  template< typename Key, typename Value, typename Compare >
   class ConstIteratorTree
   {
   public:
