@@ -8,3 +8,4 @@ namespace sivkov
   AVLTree < std::string, AVLTree< size_t, std::string > > inputDictionary(std::istream& in);
 }
 #endif
+
