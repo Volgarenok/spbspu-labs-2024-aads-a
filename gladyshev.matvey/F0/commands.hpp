@@ -9,7 +9,7 @@
 
 namespace gladyshev
 {
-  using dic = Tree< std::string, size_t >;
+  using dic = Tree< std::string, int >;
   using mainDic = Tree< std::string, dic >;
   void print_dictionary(const dic& dictionary, std::ostream& out);
   void deleteDict(mainDic& dictionaries, std::istream& in);
