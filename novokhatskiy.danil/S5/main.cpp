@@ -4,8 +4,8 @@
 #include <algorithm>
 #include <functional>
 #include "SumStruct.hpp"
-#include "commands.hpp"
 #include "AVLtree.hpp"
+#include "commands.hpp"
 
 void inputMaps(std::istream& in, novokhatskiy::Tree< int, std::string >& map)
 {
