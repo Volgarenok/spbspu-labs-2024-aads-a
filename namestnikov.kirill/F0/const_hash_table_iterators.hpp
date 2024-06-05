@@ -17,7 +17,7 @@ namespace namestnikov
     friend class HashTable< Key, Value >;
   public:
     using val_type_t = std::pair< const Key, Value >;
-    using node_t = HashTableNode< Value >;
+    using node_t = HashTableNode< val_type_t >;
     using list_iterator_t = typename std::list< node_t * >::iterator;
     using const_list_iterator_t = typename std::list< node_t * >::const_iterator;
     using const_hash_table_iterator = ConstHashTableIterator< Key, Value >;
