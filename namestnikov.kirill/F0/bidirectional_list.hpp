@@ -205,6 +205,7 @@ namespace namestnikov
         delete cur->prev;
       }
       size_ = 0;
+      delete fakeNode_;
     }
     void swap(List< T > & other) noexcept
     {
