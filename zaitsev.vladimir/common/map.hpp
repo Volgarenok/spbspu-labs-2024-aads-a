@@ -572,7 +572,7 @@ namespace zaitsev
       {
         while (size_ != added)
         {
-          if (cur_other->right_)
+          if (cur_other->right_ && !cur->right_)
           {
             cur->right_ = new Node(*(cur_other->right_));
             cur->right_->parent_ = cur;
@@ -581,7 +581,7 @@ namespace zaitsev
             ++added;
             continue;
           }
-          if (cur_other->left_)
+          if (cur_other->left_ && !cur->left_)
           {
             cur->left_ = new Node(*(cur_other->left_));
             cur->left_->parent_ = cur;
@@ -1064,7 +1064,7 @@ namespace zaitsev
     {
       for (; first != last; ++first)
       {
-        addNode(fakeroot_, nullptr, first->val_.first, first->val_.second);
+        addNode(fakeroot_, nullptr, first->first, first->second);
       }
     }
     void insert(std::initializer_list<val_t> init_list)
@@ -1077,6 +1077,7 @@ namespace zaitsev
       Node* for_del = pos.node_;
       ++pos;
       eraseNode(for_del);
+      --size_;
       return pos;
     }
     const_iterator erase(const_iterator pos)
@@ -1084,6 +1085,7 @@ namespace zaitsev
       Node* for_del = pos.node_;
       ++pos;
       eraseNode(for_del);
+      --size_;
       return pos;
     }
     size_t erase(const Key& key)
