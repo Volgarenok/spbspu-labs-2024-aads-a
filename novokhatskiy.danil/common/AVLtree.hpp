@@ -384,11 +384,6 @@ namespace novokhatskiy
       return iter(minN(root_));
     }
 
-    constIter cbeginRight() const
-    {
-      return constIter(lastRight(root_));
-    }
-
     iter end()
     {
       return iter();
