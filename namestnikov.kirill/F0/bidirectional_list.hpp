@@ -153,7 +153,28 @@ namespace namestnikov
         clear();
         throw;
       }
-      
+    }
+    iterator erase(iterator pos)
+    {
+      if (size_ == 0)
+      {
+        throw std::invalid_argument("There aren't any elements in list");
+      }
+      try
+      {
+        base_node_t * node = pos.node_;
+        node->prev->next = node->next;
+        node->next->prev = node->prev;
+        ++pos;
+        delete node
+        --size_;
+        return pos;
+      }
+      catch (...)
+      {
+        clear();
+        throw;
+      }
     }
     void swap(List< T > & other) noexcept
     {
