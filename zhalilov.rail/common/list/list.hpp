@@ -493,7 +493,10 @@ namespace zhalilov
   template < typename T >
   void List< T >::pop_back() noexcept
   {
-    erase(--cend());
+    if (!empty())
+    {
+      erase(--cend());
+    }
   }
 
   template < typename T >
