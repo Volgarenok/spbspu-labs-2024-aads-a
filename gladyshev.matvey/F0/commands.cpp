@@ -143,7 +143,7 @@ gladyshev::dic gladyshev::complementImpl(const dic& dict1, const dic& dict2)
     {
       if (it1->first == it2->first)
       {
-        if (it1->second - it2->second >= 0)
+        if (it1->second - it2->second > 0)
         {
           result.insert(it1->first, it1->second - it2->second);
         }
