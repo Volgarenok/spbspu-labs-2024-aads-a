@@ -42,7 +42,7 @@ namespace gladyshev
   void merge(Iter begin, Iter end, Compare cmp)
   {
     auto size = std::distance(begin, end);
-    if (size >= 1)
+    if (size > 1)
     {
       Iter mid = begin;
       std::advance(mid, size / 2);
