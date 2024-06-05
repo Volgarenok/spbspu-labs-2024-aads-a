@@ -176,6 +176,20 @@ namespace namestnikov
         throw;
       }
     }
+    void clear()
+    {
+      if (!size_)
+      {
+        return;
+      }
+      base_node_t * cur = fakeNode_->next;
+      while (cur != fakeNode_)
+      {
+        cur = cur->next;
+        delete cur->prev;
+      }
+      size_ = 0;
+    }
     void swap(List< T > & other) noexcept
     {
       std::swap(size_, other.size_);
