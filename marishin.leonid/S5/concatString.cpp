@@ -6,11 +6,7 @@ marishin::ConcatString::ConcatString():
 
 void marishin::ConcatString::operator()(const std::string & str)
 {
-  if (!result_.empty())
-  {
-    result_ += " ";
-  }
-  result_ += str;
+  result_ += " " + str;
 }
 
 std::string marishin::ConcatString::getResult() const
