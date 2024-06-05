@@ -54,7 +54,7 @@ namespace namestnikov
       ++iter_;
       return *this;
     }
-    hash_table_iterator & operator++(int)
+    hash_table_iterator operator++(int)
     {
       hash_table_iterator temp(*this);
       ++(*this);
