@@ -6,7 +6,7 @@
 #include "constTreeIterator.hpp"
 #include "treeIterator.hpp"
 #include "treeNode.hpp"
-#include <otherContainers/queue.hpp>
+#include <queue.hpp>
 
 namespace strelyaev
 {
