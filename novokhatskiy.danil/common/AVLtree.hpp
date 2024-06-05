@@ -89,12 +89,6 @@ namespace novokhatskiy
     }
 
     template< class F >
-    F traverse_lnr(F f) const
-    {
-      return static_cast< const F >(traverse_lnr(f));
-    }
-
-    template< class F >
     F traverse_rnl(F f)
     {
       if (empty())
@@ -106,12 +100,6 @@ namespace novokhatskiy
         f(*i);
       }
       return f;
-    }
-
-    template< class F >
-    F traverse_rnl(F f) const
-    {
-      return static_cast< const F >(traverse_rnl(f));
     }
 
     template< class F >
@@ -138,12 +126,6 @@ namespace novokhatskiy
         }
       }
       return f;
-    }
-
-    template< class F >
-    F traverse_breadth(F f) const
-    {
-      return static_cast< const F >(traverse_breadth(f));
     }
 
     iter find(const Key &key)
