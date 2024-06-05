@@ -127,6 +127,22 @@ namespace namestnikov
       }
       return *std::prev(end())
     }
+    void push_front(const T & value)
+    {
+      insert(begin(), value);
+    }
+    void push_back(const T & value)
+    {
+      insert(end(), value);
+    }
+    void pop_front()
+    {
+      erase(begin());
+    }
+    void pop_back()
+    {
+      erase(std::prev(end()));
+    }
     iterator insert(iterator pos, const T & val)
     {
       try
