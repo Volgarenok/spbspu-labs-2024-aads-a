@@ -182,7 +182,8 @@ namespace zaitsev
     {
       other.head_ = nullptr;
     }
-    ForwardList(const_iterator begin, const_iterator end):
+    template< class InputIt>
+    ForwardList(InputIt begin, InputIt end):
       head_(nullptr)
     {
       head_ = new_list(begin, end);

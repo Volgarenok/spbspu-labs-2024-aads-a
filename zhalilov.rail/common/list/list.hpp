@@ -22,7 +22,8 @@ namespace zhalilov
     List(List< T > &&) noexcept;
     explicit List(size_t);
     List(size_t, const T &);
-    List(iterator, iterator);
+    template < typename InputIt >
+    List(InputIt, InputIt);
     List(std::initializer_list< T >);
     ~List();
 
@@ -45,7 +46,8 @@ namespace zhalilov
     bool empty() const noexcept;
 
     void assign(size_t, const T &);
-    void assign(iterator, iterator);
+    template < typename InputIt >
+    void assign(InputIt, InputIt);
     void assign(std::initializer_list< T >);
 
     void splice(const_iterator, List< T > &) noexcept;
@@ -150,7 +152,8 @@ namespace zhalilov
   }
 
   template < typename T >
-  List< T >::List(iterator first, iterator last):
+  template < typename InputIt >
+  List< T >::List(InputIt first, InputIt last):
     List()
   {
     assign(first, last);
@@ -283,7 +286,8 @@ namespace zhalilov
   }
 
   template < typename T >
-  void List< T >::assign(iterator first, iterator last)
+  template < typename InputIt >
+  void List< T >::assign(InputIt first, InputIt last)
   {
     clear();
     while (first != last)
@@ -467,7 +471,7 @@ namespace zhalilov
   template < typename T >
   void List< T >::remove(const T &value) noexcept
   {
-    auto predicate = [&value](const T &listValue)-> bool
+    auto predicate = [&value](const T &listValue) -> bool
     {
       return listValue == value;
     };
@@ -489,7 +493,10 @@ namespace zhalilov
   template < typename T >
   void List< T >::pop_back() noexcept
   {
-    erase(--cend());
+    if (!empty())
+    {
+      erase(--cend());
+    }
   }
 
   template < typename T >
