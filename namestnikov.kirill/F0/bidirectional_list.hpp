@@ -47,6 +47,22 @@ namespace namestnikov
       }
       return *this;
     }
+    List(List< T > && other) noexcept:
+      size_(other.size_),
+      fakeNode_(other.fakeNode_)
+    {
+      other.size_ = 0;
+      other.fakeNode_ = nullptr;
+    }
+    List< T > & operator=(List< T > && other) noexcept
+    {
+      if (this != std::addressof(other))
+      {
+        List< T > temp(std::move(other));
+        swap(temp);
+      }
+      return *this;
+    }
     ~List()
     {
       clear();
