@@ -9,8 +9,8 @@
 #include <stdexcept>
 #include <algorithm>
 #include <string>
-#include "AVLtree.hpp"
-#include "AVLtreeNode.hpp"
+#include <AVLtree.hpp>
+#include <AVLtreeNode.hpp>
 #include "commands.hpp"
 
 using mainMap = novokhatskiy::Tree< std::string, novokhatskiy::Tree< size_t, std::string > >;

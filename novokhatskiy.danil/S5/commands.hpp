@@ -2,7 +2,7 @@
 #define COMMANDS_HPP
 #include <ostream>
 #include <string>
-#include "AVLtree.hpp"
+#include <AVLtree.hpp>
 
 namespace novokhatskiy
 {

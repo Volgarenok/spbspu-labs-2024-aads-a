@@ -1,35 +1,31 @@
 #ifndef CONST_ITERATOR_TREE
 #define CONST_ITERATOR_TREE
 
-#include <cassert>
-#include <iterator>
 #include <functional>
+#include <iterator>
 #include <utility>
-#include "AVLtreeNode.hpp"
-#include "IteratorTree.hpp"
+#include <AVLtreeNode.hpp>
+#include <IteratorTree.hpp>
 
 namespace novokhatskiy
 {
-  template< class Key, class Value, class Compare >
+  template < class Key, class Value, class Compare >
   struct IteratorTree;
 
-  template< class Key, class Value, class Compare >
+  template < class Key, class Value, class Compare >
   class Tree;
 
-  template< class Key, class Value, class Compare = std::less< Key > >
-  struct ConstIteratorTree : public std::iterator< std::bidirectional_iterator_tag, Value >
+  template < class Key, class Value, class Compare = std::less< Key > >
+  struct ConstIteratorTree: public std::iterator< std::bidirectional_iterator_tag, Value >
   {
     using node_t = detail::NodeTree< Key, Value >;
     using constIter = ConstIteratorTree< Key, Value, Compare >;
     using iter = IteratorTree< Key, Value, Compare >;
 
-    ConstIteratorTree() :
+    ConstIteratorTree():
       node_(nullptr)
     {}
 
-    explicit ConstIteratorTree(node_t* node) :
-      node_(node)
-    {}
     constIter& operator=(const constIter& other) = default;
 
     bool operator!=(const constIter& other) const
@@ -76,17 +72,15 @@ namespace novokhatskiy
       if (node_->left)
       {
         node_ = node_->left;
-        while (node_->right)
-        {
-          node_ = node_->right;
-        }
-        return *this;
+        for (; node_->right; node_ = node_->right)
+        {}
       }
-      while (node_->parent && node_->parent->left == node_)
+      else
       {
+        for (; node_ == node_->parent->left; node_ = node_->parent)
+        {}
         node_ = node_->parent;
       }
-      node_ = node_->parent;
       return *this;
     }
 
@@ -122,40 +116,9 @@ namespace novokhatskiy
     friend class Tree< Key, Value, Compare >;
     friend struct IteratorTree< Key, Value, Compare >;
 
-    void goLastRight()
-    {
-      auto tmp = node_->right;
-      while (tmp->right)
-      {
-        tmp = tmp->right;
-      }
-      node_ = tmp;
-    }
-
-    void goLastLeft()
-    {
-      auto tmp = node_;
-      while (tmp->left)
-      {
-        tmp = tmp->left;
-      }
-      node_ = tmp;
-    }
-
-    node_t* predecessor(node_t* node)
-    {
-      if (node->left)
-      {
-        goLastRight(node->left);
-      }
-      node_t* tmp = node->parent;
-      while (tmp && node == tmp->left)
-      {
-        node = tmp;
-        tmp = tmp->parent;
-      }
-      return tmp;
-    }
+    explicit ConstIteratorTree(node_t* node):
+      node_(node)
+    {}
   };
 }
 
