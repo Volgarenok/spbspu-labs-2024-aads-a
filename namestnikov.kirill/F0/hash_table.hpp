@@ -3,6 +3,7 @@
 
 #include <initializer_list>
 #include <stdexcept>
+#include <cmath>
 #include <cstddef>
 #include "hash_table_node.hpp"
 #include "hash_table_iterators.hpp"
@@ -150,6 +151,57 @@ namespace namestnikov
         tempIt = it;
       }
       count_ = 0;
+    }
+    size_t calculateNewCapacity(size_t current) const
+    {
+      size_t indicator = 0;
+      for (; current > std::pow(2, indicator); ++indicator) {};
+      ++indicator;
+      return std::pow(2, indicator) - (std::pow(2, indicator) - std::pow(2, indicator - 1)) / 2 - 1;
+    }
+    void rehash(size_t count)
+    {
+      size_t newCapacity = 5;
+      while ((newCapacity < count) || (newCapacity < (count / 0.75)))
+      {
+        newCapacity = calculateNewCapacity(newCapacity);
+      }
+      if (capacity_ == newCapacity)
+      {
+        return;
+      }
+      else
+      {
+        std::list< node_t * > newElements;
+        list_iterator_t * newBuckets = new list_iterator_t[newCapacity]{};
+        for (size_t i = 0; i < newCapacity; ++i)
+        {
+          newBuckets[i] = newElements.end();
+        }
+        auto it = elements_.begin();
+        auto temp = it;
+        while (it != elements_.end())
+        {
+          size_t index = (**it).hash % newCapacity;
+          if (newBuckets[index] == newElements.end())
+          {
+            newElements.push_front(*it);
+            newBuckets[index] = newElements.begin();
+          }
+          else
+          {
+            newElements.insert(newBuckets[index], *it);
+            --(newBuckets[index]);
+          }
+          ++it;
+          elements_.erase(temp);
+          temp = it;
+        }
+        elements = std::move(newElements);
+        delete [] buckets_;
+        buckets_ = newBuckets;
+        capacity_ = newCapacity;
+      }
     }
     hash_table_iterator begin() noexcept
     {
