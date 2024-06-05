@@ -1,4 +1,5 @@
 #include "path_search.hpp"
+#include <tuple>
 #include <vector>
 #include <string>
 #include <algorithm>
@@ -12,6 +13,100 @@ using std::string;
 
 constexpr int inf = std::numeric_limits< int >::max();
 
+template< typename T >
+struct FixedVec
+{
+  FixedVec() = delete;
+  FixedVec(size_t size):
+    size_(size),
+    vals_(new T[size])
+  {}
+  FixedVec(size_t size, const T& val):
+    size_(size),
+    vals_(reinterpret_cast< T* >(new char[sizeof(T) * size]))
+  {
+    size_t i = 0;
+    try
+    {
+      for (; i < size_; ++i)
+      {
+        new (vals_ + i) T(val);
+      }
+    }
+    catch (...)
+    {
+      for (size_t j = 0; j < i; ++j)
+      {
+        vals_[j].~T();
+      }
+      delete[] reinterpret_cast< char* >(vals_);
+    }
+  }
+  FixedVec(const FixedVec& other):
+    size_(other.size_),
+    vals_(reinterpret_cast< T* >(new char[sizeof(T) * other.size_]))
+  {
+    size_t i = 0;
+    try
+    {
+      for (; i < size_; ++i)
+      {
+        new (vals_ + i) T(other[i]);
+      }
+    }
+    catch (...)
+    {
+      for (size_t j = 0; j < i; ++j)
+      {
+        vals_[j].~T();
+      }
+      delete[] reinterpret_cast< char* >(vals_);
+    }
+  }
+  FixedVec(FixedVec&& other):
+    size_(other.size_),
+    vals_(other.vals_)
+  {
+    other.size_ = 0;
+    other.vals_ = 0;
+  }
+  ~FixedVec()
+  {
+    delete[] vals_;
+  }
+  size_t size() const
+  {
+    return size_;
+  }
+  T* begin()
+  {
+    return vals_;
+  }
+  const T* begin() const
+  {
+    return vals_;
+  }
+  T* end()
+  {
+    return vals_ + size_;
+  }
+  const T* end() const
+  {
+    return vals_ + size_;
+  }
+  T& operator[](size_t index)
+  {
+    return vals_[index];
+  }
+  const T& operator[](size_t index) const
+  {
+    return vals_[index];
+  }
+private:
+  size_t size_;
+  T* vals_;
+};
+
 struct edge
 {
   size_t a;
@@ -20,10 +115,10 @@ struct edge
 };
 
 zaitsev::Map< string, size_t > convertToIndexes(const zaitsev::graph_t& graph);
-vector< vector<int> > createAdjacencyMatrix(const zaitsev::graph_t& graph);
-vector< edge > extractEdges(const zaitsev::graph_t& graph);
-vector< vector< int > > calcPathsFloyd(const zaitsev::graph_t& graph);
-pair< vector< int >, vector< size_t > > calcPathsFord(const vector< edge >& edges, size_t begin, size_t vert_nmb);
+FixedVec< FixedVec< int > > createAdjacencyMatrix(const zaitsev::graph_t& graph);
+FixedVec< edge > extractEdges(const zaitsev::graph_t& graph);
+FixedVec< FixedVec< int > > calcPathsFloyd(const zaitsev::graph_t& graph);
+pair< FixedVec< int >, FixedVec< size_t > > calcPathsFord(const FixedVec< edge >& edges, size_t begin, size_t vert_nmb);
 
 void zaitsev::findShortestDistance(const base_t& graphs, const args_flist& args, std::ostream& out)
 {
@@ -48,8 +143,8 @@ void zaitsev::findShortestDistance(const base_t& graphs, const args_flist& args,
     throw std::invalid_argument("Vertex doesn't exist");
   }
   Map< string, size_t > indexes = convertToIndexes(graph_pos->second);
-  vector< edge > edges = extractEdges(graph_pos->second);
-  pair< vector< int >, vector< size_t > > dist_with_prev = calcPathsFord(edges, indexes[begin_name], indexes.size());
+  FixedVec< edge > edges = extractEdges(graph_pos->second);
+  pair< FixedVec< int >, FixedVec< size_t > > dist_with_prev = calcPathsFord(edges, indexes[begin_name], indexes.size());
 
   if (dist_with_prev.first[indexes[begin_name]] == inf)
   {
@@ -92,8 +187,8 @@ void zaitsev::findShortestPathTtrace(const base_t& graphs, const args_flist& arg
     throw std::invalid_argument("Vertex doesn't exist");
   }
   Map< string, size_t > indexes = convertToIndexes(graph);
-  vector< edge > edges = extractEdges(graph);
-  pair< vector< int >, vector< size_t > > dist_with_prev = calcPathsFord(edges, indexes[begin_name], indexes.size());
+  FixedVec< edge > edges = extractEdges(graph);
+  pair< FixedVec< int >, FixedVec< size_t > > dist_with_prev = calcPathsFord(edges, indexes[begin_name], indexes.size());
 
   if (dist_with_prev.first[indexes[begin_name]] == inf)
   {
@@ -144,7 +239,7 @@ void zaitsev::printShortestPathsMatrix(const base_t& graphs, const args_flist& a
     out << "Graph is empty.\n";
     return;
   }
-  vector< vector< int > > distances = calcPathsFloyd(it->second);
+  FixedVec< FixedVec< int > > distances = calcPathsFloyd(it->second);
   size_t max_int_len = std::to_string(std::numeric_limits< int >::lowest()).size();
   auto get_len = [](const std::pair< string, unit_t >& a)
     {
@@ -155,8 +250,8 @@ void zaitsev::printShortestPathsMatrix(const base_t& graphs, const args_flist& a
       return len < max_int_len;
     };
 
-  vector< size_t > names_length;
-  std::transform(it->second.begin(), it->second.end(), std::back_inserter(names_length), get_len);
+  FixedVec< size_t > names_length(it->second.size());
+  std::transform(it->second.begin(), it->second.end(), names_length.begin(), get_len);
   size_t names_column_width = *(std::max_element(names_length.begin(), names_length.end()));
   std::replace_if(names_length.begin(), names_length.end(), need_to_extend, max_int_len);
   string names_indent(names_column_width, ' ');
@@ -174,15 +269,15 @@ void zaitsev::printShortestPathsMatrix(const base_t& graphs, const args_flist& a
   for (graph_t::const_iterator ii = it->second.begin(); ii != it->second.end(); ++ii)
   {
     out << std::left << std::setw(names_column_width) << ii->first;
-    for (auto j : distances[i])
+    for (size_t j = 0; j < distances.size(); ++j)
     {
-      if (j == inf)
+      if (distances[i][j] == inf)
       {
         out << indent << std::left << std::setw(names_length[i]) << "inf";
       }
       else
       {
-        out << indent << std::left << std::setw(names_length[i]) << j;
+        out << indent << std::left << std::setw(names_length[i]) << distances[i][j];
       }
     }
     out << '\n';
@@ -204,7 +299,7 @@ void zaitsev::checkNegativeWeightCycles(const base_t& graphs, const args_flist& 
   {
     throw std::invalid_argument("Graph with name \"" + arg + "\", doesn't exists.");
   }
-  vector< vector< int > > distances = calcPathsFloyd(it->second);
+  FixedVec< FixedVec< int > > distances = calcPathsFloyd(it->second);
   bool negative_cycles = false;
   for (size_t i = 0; i < distances.size(); ++i)
   {
@@ -229,10 +324,10 @@ zaitsev::Map< string, size_t > convertToIndexes(const zaitsev::graph_t& graph)
   return vert_indexes;
 }
 
-vector< vector< int > > createAdjacencyMatrix(const zaitsev::graph_t& graph)
+FixedVec< FixedVec< int > > createAdjacencyMatrix(const zaitsev::graph_t& graph)
 {
   using namespace zaitsev;
-  vector< vector< int > > matrix(graph.size(), vector< int >(graph.size(), inf));
+  FixedVec< FixedVec< int > > matrix(graph.size(), FixedVec< int >(graph.size(), inf));
   Map< string, size_t > vert_indexes = convertToIndexes(graph);
 
   size_t i = 0;
@@ -247,7 +342,7 @@ vector< vector< int > > createAdjacencyMatrix(const zaitsev::graph_t& graph)
   return matrix;
 }
 
-vector< edge > extractEdges(const zaitsev::graph_t& graph)
+FixedVec< edge > extractEdges(const zaitsev::graph_t& graph)
 {
   using namespace zaitsev;
 
@@ -257,7 +352,7 @@ vector< edge > extractEdges(const zaitsev::graph_t& graph)
   {
     edges_nmb += i.second.size();
   }
-  vector< edge > edges_list(edges_nmb);
+  FixedVec< edge > edges_list(edges_nmb);
   size_t i = 0, k = 0;
   for (auto& it_i : graph)
   {
@@ -271,11 +366,11 @@ vector< edge > extractEdges(const zaitsev::graph_t& graph)
   return edges_list;
 }
 
-pair< vector< int >, vector< size_t > > calcPathsFord(const vector< edge >& edges, size_t begin, size_t vert_nmb)
+pair< FixedVec< int >, FixedVec< size_t > > calcPathsFord(const FixedVec< edge >& edges, size_t begin, size_t vert_nmb)
 {
-  vector< int > dist(vert_nmb, inf);
+  FixedVec< int > dist(vert_nmb, inf);
   dist[begin] = 0;
-  vector< size_t > prev(vert_nmb, vert_nmb + 1);
+  FixedVec< size_t > prev(vert_nmb, vert_nmb + 1);
   bool changed = true;
   size_t phase_nmb = 0;
   while (changed && phase_nmb < vert_nmb + 1)
@@ -300,9 +395,9 @@ pair< vector< int >, vector< size_t > > calcPathsFord(const vector< edge >& edge
   return { dist, prev };
 }
 
-vector< vector< int > > calcPathsFloyd(const zaitsev::graph_t& graph)
+FixedVec< FixedVec< int > > calcPathsFloyd(const zaitsev::graph_t& graph)
 {
-  vector< vector< int > > dist = createAdjacencyMatrix(graph);
+  FixedVec< FixedVec< int > > dist = createAdjacencyMatrix(graph);
   for (size_t k = 0; k < dist.size(); ++k)
   {
     for (size_t i = 0; i < dist.size(); ++i)
