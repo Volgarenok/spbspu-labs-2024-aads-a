@@ -125,6 +125,14 @@ namespace namestnikov
       }
       return (*result).second;
     }
+    bool empty() const noexcept
+    {
+      return (count_ == 0);
+    }
+    size_t size() const noexcept
+    {
+      return count_;
+    }
     ~HashTable()
     {
       clear();
