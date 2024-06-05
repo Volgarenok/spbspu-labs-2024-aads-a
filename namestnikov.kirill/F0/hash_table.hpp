@@ -102,6 +102,29 @@ namespace namestnikov
       std::swap(elements_, other.elements_);
       std::swap(buckets_, other.buckets_);
     }
+    Value & operator[](const Key & key)
+    {
+      auto result = insert(key, Value());
+      return (*(result.first)).second;
+    }
+    Value & at(const Key & key)
+    {
+      auto result = find(key);
+      if (result == end())
+      {
+        throw std::out_of_range("There aren't any element with this key");
+      }
+      return (*result).second;
+    }
+    const Value & at(const Key & key) const
+    {
+      auto result = find(key);
+      if (result == end())
+      {
+        throw std::out_of_range("There aren't any element with this key");
+      }
+      return (*result).second;
+    }
     ~HashTable()
     {
       clear();
