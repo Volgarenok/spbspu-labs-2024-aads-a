@@ -45,7 +45,7 @@ namespace zhalilov
     std::pair< iterator, bool > insert(const MapPair &);
     iterator erase(iterator);
     iterator erase(const_iterator);
-    char erase(const Key &);
+    size_t erase(const Key &);
     void clear() noexcept;
     void swap(TwoThree &) noexcept;
 
@@ -172,7 +172,7 @@ namespace zhalilov
     {
       throw std::out_of_range("TwoThree: accessing element doesn't exist");
     }
-    return *it;
+    return it->second;
   }
 
   template < class Key, class T, class Compare >
@@ -358,10 +358,15 @@ namespace zhalilov
   }
 
   template < class Key, class T, class Compare >
-  char TwoThree< Key, T, Compare >::erase(const Key &key)
+  size_t TwoThree< Key, T, Compare >::erase(const Key &key)
   {
-    erase(find(key));
-    return doFind(key).second;
+    auto result = find(key);
+    if (result != end())
+    {
+      erase(result);
+      return 1;
+    }
+    return 0;
   }
 
   template < class Key, class T, class Compare >
@@ -416,9 +421,9 @@ namespace zhalilov
     auto resultPair = doFind(key);
     if (resultPair.second)
     {
-      return std::make_pair(const_iterator(resultPair.first.node_, resultPair.first.isPtrToLeft_), true);
+      return const_iterator(resultPair.first.node_, resultPair.first.isPtrToLeft_);
     }
-    return std::make_pair(cend(), false);
+    return cend();
   }
 
   template < class Key, class T, class Compare >
