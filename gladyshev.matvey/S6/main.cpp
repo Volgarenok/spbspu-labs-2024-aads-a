@@ -14,7 +14,15 @@ int main(int argc, char *argv[])
     std::cerr << "bad data\n";
     return 1;
   }
-  size_t size = std::stoull(argv[3]);
+  try
+  {  
+    size_t size = std::stoull(argv[3]);
+  }
+  catch (...)
+  {
+    std::cerr << "Wrong parametr\n";
+    return 1;
+  }
   if (size == 0)
   {
     std::cerr << "Wrong size\n";
