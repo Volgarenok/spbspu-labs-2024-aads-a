@@ -63,6 +63,43 @@ namespace namestnikov
       }
       return *this;
     }
+    bool empty() const noexcept
+    {
+      return (size_ == 0);
+    }
+    size_t size() const noexcept
+    {
+      return size_;
+    }
+    iterator begin() const
+    {
+      if (!size_)
+      {
+        return iterator(fakeNode_);
+      }
+      return iterator(fakeNode_->next);
+    }
+    const_iterator cbegin() const
+    {
+      if (!size_)
+      {
+        return const_iterator(fakeNode_);
+      }
+      return const_iterator(fakeNode_->next);
+    }
+    iterator end() const
+    {
+      return iterator(fakeNode_);
+    }
+    const_iterator cend() const
+    {
+      return const_iterator(fakeNode_);
+    }
+    void swap(List< T > & other) noexcept
+    {
+      std::swap(size_, other.size_);
+      std::swap(fakeNode_, other.fakeNode_);
+    }
     ~List()
     {
       clear();
