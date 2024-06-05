@@ -23,7 +23,7 @@ namespace sivkov
     const Value& at(const Key& key) const;
     bool empty() const noexcept;
     bool contains(const Key& key) const;
-    void swap(AVLTree other) noexcept;
+    void swap(AVLTree& other) noexcept;
     void push(const Key& key, const Value& value);
     void deleteKey(const Key& key);
     Value& operator[](const Key& key);
