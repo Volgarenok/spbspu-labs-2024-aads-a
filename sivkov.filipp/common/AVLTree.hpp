@@ -210,7 +210,7 @@ namespace sivkov
   template< typename Key, typename Value, typename Comp >
   const Value& AVLTree< Key, Value, Comp >::operator[](const Key& key) const
   {
-    detail::TreeNode< Key, Value>* node = get(root_, key);
+    detail::TreeNode< Key, Value> * node = get(root_, key);
     if (node)
     {
       return node->data.second;
