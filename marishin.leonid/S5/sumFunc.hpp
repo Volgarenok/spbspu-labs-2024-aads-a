@@ -1,10 +1,8 @@
 #ifndef SUMFUNC_HPP
 #define SUMFUNC_HPP
 
-#include <string>
-#include <utility>
-#include <stdexcept>
-#include <limits>
+#include "sumNum.hpp"
+#include "concatString.hpp"
 
 namespace marishin
 {
@@ -16,8 +14,8 @@ namespace marishin
     int getResult() const;
     std::string getLine() const;
   private:
-    int result_;
-    std::string line_;
+    SumNum sumNum_;
+    ConcatString concatString_;
   };
 }
 
