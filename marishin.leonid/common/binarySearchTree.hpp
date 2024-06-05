@@ -269,7 +269,31 @@ namespace marishin
     template< class F >
     F traverse_lnr(F f) const
     {
-      return static_cast< const F >(traverse_lnr(f));
+      if (empty())
+      {
+        throw std::logic_error("Tree is empty");
+      }
+      else
+      {
+        Stack< const node_t * > traverseStack;
+        const node_t * current = root_;
+        while (current || (!traverseStack.empty()))
+        {
+          if (current)
+          {
+            traverseStack.push(current);
+            current = current->left;
+          }
+          else
+          {
+            current = traverseStack.top();
+            traverseStack.drop();
+            f(current->data);
+            current = current->right;
+          }
+        }
+        return f;
+      }
     }
     template< class F >
     F traverse_rnl(F f)
@@ -303,7 +327,31 @@ namespace marishin
     template< class F >
     F traverse_rnl(F f) const
     {
-      return static_cast< const F >(traverse_rnl(f));
+      if (empty())
+      {
+        throw std::logic_error("Tree is empty");
+      }
+      else
+      {
+        Stack< const node_t * > traverseStack;
+        const node_t * current = root_;
+        while (current || (!traverseStack.empty()))
+        {
+          if (current)
+          {
+            traverseStack.push(current);
+            current = current->right;
+          }
+          else
+          {
+            current = traverseStack.top();
+            traverseStack.drop();
+            f(current->data);
+            current = current->left;
+          }
+        }
+      }
+      return f;
     }
     template< class F >
     F traverse_breadth(F f)
@@ -337,7 +385,31 @@ namespace marishin
     template< class F >
     F traverse_breadth(F f) const
     {
-      return static_cast< const F >(traverse_breadth(f));
+      if (empty())
+      {
+        throw std::logic_error("Tree is empty");
+      }
+      else
+      {
+        Queue< const node_t * > traverseQueue;
+        const node_t * current = root_;
+        traverseQueue.push(current);
+        while (!traverseQueue.empty())
+        {
+          current = traverseQueue.top();
+          traverseQueue.drop();
+          f(current->data);
+          if (current->left)
+          {
+            traverseQueue.push(current->left);
+          }
+          if (current->right)
+          {
+            traverseQueue.push(current->right);
+          }
+        }
+        return f;
+      }
     }
     ~Tree()
     {
