@@ -386,15 +386,15 @@ namespace sivkov
   {
     if (node == nullptr || (!comp_(key, node->data.first) && !comp_(node->data.first, key)))
     {
-        return node;
+      return node;
     }
     if (comp_(key, node->data.first))
     {
-        return get(node->left, key);
+      return get(node->left, key);
     }
     else
     {
-        return get(node->right, key);
+      return get(node->right, key);
     }
   }
 
