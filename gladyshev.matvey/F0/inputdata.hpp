@@ -9,7 +9,7 @@
 
 namespace gladyshev
 {
-  using dic = Tree< std::string, size_t >;
+  using dic = Tree< std::string, int >;
   using mainDic = Tree< std::string, dic >;
   void makeDict(mainDic& finres, std::ifstream& file, std::istream& in);
   void makeDictLen(mainDic& finres, std::ifstream& file, std::istream& in);
