@@ -355,20 +355,6 @@ namespace belokurskaya
         }
       }
 
-      const T& at(size_t index) const
-      {
-        Node* current = head;
-        for (size_t i = 0; i < index && current; ++i)
-        {
-          current = current->next;
-        }
-        if (!current)
-        {
-          throw std::out_of_range("Index out of range");
-        }
-        return current->value;
-      }
-
       size_t size() const noexcept
       {
         return list_size;

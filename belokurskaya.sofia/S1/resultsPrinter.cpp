@@ -19,82 +19,57 @@ void belokurskaya::printNames(std::ostream& out, const List< std::pair< std::str
   }
 }
 
-void belokurskaya::printSequences(std::ostream& out, const List< std::pair< std::string, List< size_t > > >& list)
+void belokurskaya::printSequence(std::ostream& output, const List< size_t >& list)
 {
-  size_t maxLen = 0;
-  for (const auto& pair : list)
+  if (!list.empty())
   {
-    if (pair.second.size() > maxLen)
+    auto end = list.end();
+    auto i = list.begin();
+    output << *(i++);
+    for (; i != end; ++i)
     {
-      maxLen = pair.second.size();
+      output << ' ' << *i;
     }
-  }
-
-  for (size_t i = 0; i < maxLen; ++i)
-  {
-    bool first = true;
-    for (const auto& pair : list)
-    {
-      if (i < pair.second.size())
-      {
-        if (!first)
-        {
-          out << ' ';
-        }
-        out << pair.second.at(i);
-        first = false;
-      }
-    }
-    out << '\n';
   }
 }
 
-void belokurskaya::printSums(std::ostream& output, const List< std::pair< std::string, List< size_t > > >& list)
+void belokurskaya::printSequences(std::ostream& output, const List< List< size_t > >& lists)
 {
-  size_t maxLen = 0;
-  for (const auto& pair : list)
+  if (!lists.empty())
   {
-    if (pair.second.size() > maxLen)
+    auto end = lists.end();
+    auto i = lists.begin();
+    printSequence(output, *i++);
+    for (; i != end; ++i)
     {
-      maxLen = pair.second.size();
+      output << '\n';
+      printSequence(output, *i);
     }
   }
+}
 
-  if (maxLen == 0)
+void belokurskaya::printSums(std::ostream& output, const List< List< size_t > >& lists)
+{
+  size_t maxNum = std::numeric_limits< size_t >::max();
+  if (lists.empty())
   {
     output << 0;
     return;
   }
-
   List< size_t > sums;
-  size_t maxNum = std::numeric_limits< size_t >::max();
-
-  for (size_t i = 0; i < maxLen; ++i)
+  for (auto i = lists.begin(); i != lists.end(); ++i)
   {
-    size_t sum = 0;
-    for (const auto& pair : list)
+    size_t result = 0;
+    auto end = i->end();
+    for (auto j = i->begin(); j != end; ++j)
     {
-      if (i < pair.second.size())
+      if (maxNum - result < *j)
       {
-        if (maxNum - sum < pair.second.at(i))
-        {
-          throw std::overflow_error("Overflow");
-        }
-        sum += pair.second.at(i);
+        throw std::overflow_error("Overflow");
       }
+      result += *j;
     }
-    sums.push_back(sum);
+    sums.push_back(result);
   }
-
-  auto it = sums.begin();
-  if (it != sums.end())
-  {
-    output << *it;
-    ++it;
-  }
-
-  for (; it != sums.end(); ++it)
-  {
-    output << ' ' << *it;
-  }
+  printSequence(output, sums);
 }

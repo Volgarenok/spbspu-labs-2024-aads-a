@@ -45,3 +45,31 @@ void belokurskaya::readSequences(std::istream& in, List< std::pair< std::string,
     sequences.push_back({ name, sequence });
   }
 }
+
+void belokurskaya::readElem(List< List< size_t > >& out, List< std::pair< std::string, List< size_t > > >& in)
+{
+  size_t ind = 0;
+  auto end = in.end();
+  while (true)
+  {
+    List< size_t > numbers;
+    for (auto i = in.begin(); i != end; ++i)
+    {
+      if (ind < i->second.size())
+      {
+        auto temp_i = i->second.begin();
+        std::advance(temp_i, ind);
+        numbers.push_back(*temp_i);
+      }
+    }
+    if (!numbers.empty())
+    {
+      out.push_back(numbers);
+      ++ind;
+    }
+    else
+    {
+      break;
+    }
+  }
+}

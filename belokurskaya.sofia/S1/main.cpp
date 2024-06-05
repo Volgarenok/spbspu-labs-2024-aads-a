@@ -23,18 +23,16 @@ int main()
     printNames(std::cout, sequences);
     std::cout << '\n';
 
-    printSequences(std::cout, sequences);
-
-    try
+    List< List < size_t > > nums;
+    readElem(nums, sequences);
+    if (!nums.empty())
     {
-      printSums(std::cout, sequences);
+      printSequences(std::cout, nums);
       std::cout << '\n';
     }
-    catch (const std::overflow_error& e)
-    {
-      std::cerr << e.what() << '\n';
-      return 1;
-    }
+
+    printSums(std::cout, nums);
+    std::cout << '\n';
   }
 
   catch (const std::exception & e)
