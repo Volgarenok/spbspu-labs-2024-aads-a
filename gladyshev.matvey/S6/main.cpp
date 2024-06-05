@@ -15,6 +15,11 @@ int main(int argc, char *argv[])
     return 1;
   }
   size_t size = std::stoull(argv[3]);
+  if (size == 0)
+  {
+    std::cerr << "Wrong size\n";
+    return 0;
+  }
   std::map< std::pair< std::string, std::string >, std::function< void(size_t, std::ostream&) > > cmds;
   cmds[std::make_pair("ascending", "floats")] = processSorts< float, std::less< float > >;
   cmds[std::make_pair("descending", "floats")] = processSorts< float, std::greater< float > >;
