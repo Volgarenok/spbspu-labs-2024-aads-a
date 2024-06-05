@@ -26,7 +26,9 @@ namespace belokurskaya
         head(nullptr), list_size(0)
       {}
 
-      List(size_t count, const T& value) : head(nullptr), list_size(0)
+      List(size_t count, const T& value):
+        head(nullptr),
+        list_size(0)
       {
         try
         {
@@ -43,7 +45,8 @@ namespace belokurskaya
       }
 
       List(const List< T >& other):
-        head(nullptr), list_size(0)
+        head(nullptr),
+        list_size(0)
       {
         try
         {
@@ -62,14 +65,16 @@ namespace belokurskaya
       }
 
       List(List< T >&& other) noexcept:
-        head(other.head), list_size(other.list_size)
+        head(other.head),
+        list_size(other.list_size)
       {
         other.head = nullptr;
         other.list_size = 0;
       }
 
       List(const std::initializer_list< T >& ilist):
-        head(nullptr), list_size(0)
+        head(nullptr),
+        list_size(0)
       {
         try
         {
@@ -99,7 +104,7 @@ namespace belokurskaya
           using pointer = T*;
           using reference = T&;
 
-          Iterator() :
+          Iterator():
             current(nullptr)
           {}
 
@@ -138,7 +143,7 @@ namespace belokurskaya
 
         private:
           friend class List;
-          explicit Iterator(Node* node) :
+          explicit Iterator(Node* node):
             current(node)
           {}
       };
@@ -158,7 +163,7 @@ namespace belokurskaya
         private:
           const Node* current;
           friend class List;
-          explicit ConstIterator(const Node* node) :
+          explicit ConstIterator(const Node* node):
             current(node)
           {}
 
@@ -166,7 +171,7 @@ namespace belokurskaya
           using pointer = const T*;
           using reference = const T&;
 
-          ConstIterator() :
+          ConstIterator():
             current(nullptr)
           {}
 
@@ -350,6 +355,20 @@ namespace belokurskaya
         }
       }
 
+      const T& at(size_t index) const
+      {
+        Node* current = head;
+        for (size_t i = 0; i < index && current; ++i)
+        {
+          current = current->next;
+        }
+        if (!current)
+        {
+          throw std::out_of_range("Index out of range");
+        }
+        return current->value;
+      }
+
       size_t size() const noexcept
       {
         return list_size;
@@ -419,21 +438,6 @@ namespace belokurskaya
         return *this > other || *this == other;
       }
   };
-
-  template< class T >
-  const T& at(const List< T >& list, size_t index)
-  {
-    typename List< T >::Node* current = list.head;
-    for (size_t i = 0; i < index && current; ++i)
-    {
-      current = current->next;
-    }
-    if (!current)
-    {
-      throw std::out_of_range("Index out of range");
-    }
-    return current->value;
-  }
 }
 
 #endif
