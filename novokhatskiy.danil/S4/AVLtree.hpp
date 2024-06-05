@@ -311,12 +311,6 @@ namespace novokhatskiy
       return iter();
     }
 
-    node_t *search(const Key &key) const
-    {
-      node_t *result = search_imp(root_, key);
-      return result;
-    }
-
     std::pair< iter, bool > insert(const std::pair< Key, Value >& val)
     {
       node_t* tmp = search(val.first);
@@ -358,6 +352,12 @@ namespace novokhatskiy
         }
         node = rotate_right(node);
       }
+    }
+
+    node_t *search(const Key &key) const
+    {
+      node_t *result = search_imp(root_, key);
+      return result;
     }
 
     node_t *updateHeight(node_t *node)
