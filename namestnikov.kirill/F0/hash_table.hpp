@@ -241,7 +241,7 @@ namespace namestnikov
         }
         catch (...)
         {
-          delete node;
+          delete resNode;
           throw;
         }
         ++count_;
@@ -311,7 +311,7 @@ namespace namestnikov
       }
       return end();
     }
-    const_hash_table_iterator find(const Key & key, size_t hash)
+    const_hash_table_iterator find(const Key & key, size_t hash) const
     {
       size_t index = hash & capacity_;
       auto iter = buckets_[index];

@@ -50,7 +50,7 @@ namespace namestnikov
       ++iter_;
       return *this;
     }
-    const_hash_table_iterator operator++()
+    const_hash_table_iterator operator++(int)
     {
       const_hash_table_iterator temp(*this);
       ++(*this);
