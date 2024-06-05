@@ -16,6 +16,14 @@ namespace namestnikov
     using node_t = detail::BiListNode< T >;
     using iterator = ListIterator< T >;
     using const_iterator = ConstListIterator< T >;
+    List():
+      size_(0),
+      fakeNode_(new base_node_t())
+    {}
+    ~List()
+    {
+      clear();
+    }
   private:
     base_node_t * fakeNode_;
     size_t size_;
