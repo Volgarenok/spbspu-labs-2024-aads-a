@@ -23,7 +23,7 @@ namespace gladyshev
     }
   }
   template< typename Compare, typename Iter >
-  void inplacemerge(Iter first, Iter mid, Iter last, Compare cmp)
+  void inplaceMerge(Iter first, Iter mid, Iter last, Compare cmp)
   {
     while (first != mid && mid != last)
     {
@@ -48,7 +48,7 @@ namespace gladyshev
       std::advance(mid, size / 2);
       merge(begin, mid, cmp);
       merge(mid, end, cmp);
-      inplacemerge(begin, mid, end, cmp);
+      inplaceMerge(begin, mid, end, cmp);
     }
   }
 }
