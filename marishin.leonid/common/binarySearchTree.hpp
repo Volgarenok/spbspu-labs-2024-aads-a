@@ -102,32 +102,6 @@ namespace marishin
       }
     }
 
-    void getNewBalance(node_t * node)
-    {
-      if ((node->height > 1) || (node->height < -1))
-      {
-        balance(node);
-      }
-      else
-      {
-        if (node->parent)
-        {
-          if (node->left)
-          {
-            ++node->parent->height;
-          }
-          else if (node->right)
-          {
-            --node->parent->height;
-          }
-          if (node->parent->height != 0)
-          {
-            getNewBalance(node->parent);
-          }
-        }
-      }
-    }
-
     node_t * search(const Key & key) const
     {
       node_t * res = search_impl(root_, key);
@@ -291,6 +265,31 @@ namespace marishin
         result = result->left;
       }
       return result;
+    }
+    void getNewBalance(node_t * node)
+    {
+      if ((node->height > 1) || (node->height < -1))
+      {
+        balance(node);
+      }
+      else
+      {
+        if (node->parent)
+        {
+          if (node->left)
+          {
+            ++node->parent->height;
+          }
+          else if (node->right)
+          {
+            --node->parent->height;
+          }
+          if (node->parent->height != 0)
+          {
+            getNewBalance(node->parent);
+          }
+        }
+      }
     }
     node_t * rotateLeft(node_t * node)
     {
