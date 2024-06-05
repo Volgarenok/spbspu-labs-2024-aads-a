@@ -260,13 +260,13 @@ namespace namestnikov
     }
     hash_table_iterator erase(hash_table_iterator pos)
     {
-      list_iterator_t iter = pos.listIter_;
+      list_iterator_t iter = pos.iter_;
       size_t hash = (*iter)->hash;
-      if ((pos.listIter_ == elements_.begin()) || (((*(--iter))->hash % capacity_) != (hash % capacity_)))
+      if ((pos.iter_ == elements_.begin()) || (((*(--iter))->hash % capacity_) != (hash % capacity_)))
       {
         size_t index = hash % capacity_;
-        delete *(pos.listIter_);
-        list_iterator_t next = elements_.erase(pos.listIter_);
+        delete *(pos.iter_);
+        list_iterator_t next = elements_.erase(pos.iter_);
         if ((next != elements_.end()) && (((*next)->hash % capacity_) == (hash % capacity_)))
         {
           buckets_[index] = next;
@@ -276,13 +276,13 @@ namespace namestnikov
           buckets_[index] = elements_.end();
         }
         --count_;
-        return Iterator(next);
+        return hash_table_iterator(next);
       }
       else
       {
-        delete *(pos.listIter_);
+        delete *(pos.iter_);
         --count_;
-        return Iterator(elements_.erase(pos.listIter_));
+        return hash_table_iterator(elements_.erase(pos.iter_));
       }
     }
     hash_table_iterator find(const Key & key)
