@@ -105,13 +105,13 @@ namespace novokhatskiy
       }
       return f;
     }
-    
+
     template< class F >
     F traverse_rnl(F f) const
     {
       return static_cast< const F >(traverse_rnl(f));
     }
-    
+
     template< class F >
     F traverse_breadth(F f)
     {
@@ -137,7 +137,7 @@ namespace novokhatskiy
       }
       return f;
     }
-    
+
     template< class F >
     F traverse_breadth(F f) const
     {
