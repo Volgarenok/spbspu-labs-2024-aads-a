@@ -20,6 +20,33 @@ namespace namestnikov
       size_(0),
       fakeNode_(new base_node_t())
     {}
+    List(const List< T > & other):
+      size_(0)
+    {
+      try
+      {
+        fakeNode_ = new base_node_t();
+        auto it = other.cbegin();
+        for (; it != other.cend(); ++it)
+        {
+          push_back(*it);
+        }
+      }
+      catch (...)
+      {
+        clear();
+        throw;
+      }
+    }
+    List< T > & operator=(const List< T > & other)
+    {
+      if (this != std::addressof(other))
+      {
+        List< T > temp(other);
+        swap(temp);
+      }
+      return *this;
+    }
     ~List()
     {
       clear();
