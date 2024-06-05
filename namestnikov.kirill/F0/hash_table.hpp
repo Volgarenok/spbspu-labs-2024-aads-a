@@ -3,6 +3,7 @@
 
 #include <initializer_list>
 #include <stdexcept>
+#include <cstddef>
 #include "hash_table_node.hpp"
 #include "hash_table_iterators.hpp"
 #include "const_hash_table_iterators.hpp"
@@ -74,6 +75,32 @@ namespace namestnikov
         swap(temp);
       }
       return *this;
+    }
+    HashTable(HashTable< Key, Value > && other) noexcept:
+      capacity_(other.capacity_),
+      count_(other.count_),
+      elements_(std::move(other.elements_)),
+      buckets_(other.buckets_)
+    {
+      other.capacity_ = 5;
+      other.count_ = 0;
+      other.buckets_ = nullptr;
+    }
+    HashTable< Key, Value > & operator=(HashTable< Key, Value > && other) noexcept
+    {
+      if (this != std::addressof(other))
+      {
+        HashTable< Key, Value > temp(std::move(other));
+        swap(temp);
+      }
+      return *this;
+    }
+    void swap(HashTable< Key, Value > & other) noexcept
+    {
+      std::swap(capacity_, other.capacity_);
+      std::swap(count_, other.count_);
+      std::swap(elements_, other.elements_);
+      std::swap(buckets_, other.buckets_);
     }
   private:
     size_t count_;
