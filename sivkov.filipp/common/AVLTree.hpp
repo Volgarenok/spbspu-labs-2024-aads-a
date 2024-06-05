@@ -461,37 +461,55 @@ namespace sivkov
     }
     return balance(root);
   }
-
   template < typename Key, typename Value, typename Comp >
-  detail::TreeNode< Key, Value>* AVLTree< Key, Value, Comp >::addOrFind(detail::TreeNode< Key, Value >* node,
+  detail::TreeNode< Key, Value >* AVLTree< Key, Value, Comp >::addOrFind(detail::TreeNode< Key, Value >* node,
     const Key& key, const Value& value)
   {
     if (node == nullptr)
     {
-      node = new detail::TreeNode< Key, Value >;
-      node->data = std::make_pair(key, value);
-      node->left = nullptr;
-      node->right = nullptr;
-      node->parent = nullptr;
-      if (root_ == nullptr)
+      detail::TreeNode< Key, Value >* new_node = nullptr;
+      try
       {
-        root_ = node;
+        new_node = new detail::TreeNode< Key, Value >;
+        new_node->data = std::make_pair(key, value);
+        new_node->left = nullptr;
+        new_node->right = nullptr;
+        new_node->parent = nullptr;
+        if (root_ == nullptr)
+        {
+          root_ = new_node;
+        }
+        ++size_;
       }
-      ++size_;
-      return node;
+      catch (...)
+      {
+        delete new_node;
+        throw;
+      }
+      return new_node;
     }
 
     if (comp_(key, node->data.first))
     {
       if (node->left == nullptr)
       {
-        node->left = new detail::TreeNode< Key, Value >;
-        node->left->data = std::make_pair(key, value);
-        node->left->left = nullptr;
-        node->left->right = nullptr;
-        node->left->parent = node;
-        ++size_;
-        return node->left;
+        detail::TreeNode< Key, Value >* new_node = nullptr;
+        try
+        {
+          new_node = new detail::TreeNode< Key, Value >;
+          new_node->data = std::make_pair(key, value);
+          new_node->left = nullptr;
+          new_node->right = nullptr;
+          new_node->parent = node;
+          node->left = new_node;
+          ++size_;
+        }
+        catch (...)
+        {
+          delete new_node;
+          throw;
+        }
+        return new_node;
       }
       else
       {
@@ -502,13 +520,23 @@ namespace sivkov
     {
       if (node->right == nullptr)
       {
-        node->right = new detail::TreeNode< Key, Value >;
-        node->right->data = std::make_pair(key, value);
-        node->right->left = nullptr;
-        node->right->right = nullptr;
-        node->right->parent = node;
-        ++size_;
-        return node->right;
+        detail::TreeNode< Key, Value >* new_node = nullptr;
+        try
+        {
+          new_node = new detail::TreeNode< Key, Value >;
+          new_node->data = std::make_pair(key, value);
+          new_node->left = nullptr;
+          new_node->right = nullptr;
+          new_node->parent = node;
+          node->right = new_node;
+          ++size_;
+        }
+        catch (...)
+        {
+          delete new_node;
+          throw;
+        }
+        return new_node;
       }
       else
       {
