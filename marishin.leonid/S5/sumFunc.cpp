@@ -1,5 +1,6 @@
 #include "sumFunc.hpp"
 
+
 marishin::SumFunc::SumFunc():
   result_(0),
   line_()
