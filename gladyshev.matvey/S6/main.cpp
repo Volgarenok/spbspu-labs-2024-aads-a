@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
     return 1;
   }
   try
-  {  
+  {
     size_t size = std::stoull(argv[3]);
   }
   catch (...)
