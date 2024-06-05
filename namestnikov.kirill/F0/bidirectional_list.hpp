@@ -95,6 +95,66 @@ namespace namestnikov
     {
       return const_iterator(fakeNode_);
     }
+    T & front()
+    {
+      if (size_ == 0)
+      {
+        throw std::invalid_argument("There aren't any elements in list");
+      }
+      return *begin();
+    }
+    const T & front() const
+    {
+      if (size_ == 0)
+      {
+        throw std::invalid_argument("There aren't any elements in list");
+      }
+      return *begin();
+    }
+    T & back()
+    {
+      if (size_ == 0)
+      {
+        throw std::invalid_argument("There aren't any elements in list");
+      }
+      return *std::prev(end())
+    }
+    const T & back() const
+    {
+      if (size_ == 0)
+      {
+        throw std::invalid_argument("There aren't any elements in list");
+      }
+      return *std::prev(end())
+    }
+    iterator insert(iterator pos, const T & val)
+    {
+      try
+      {
+        node_t * newNode = new node_t(val);
+        base_node_t * curNode = pos.node_;
+        newNode->next = curNode;
+        if (size_)
+        {
+          curNode->prev->next = newNode;
+          newNode->prev = curNode->prev;
+        }
+        else
+        {
+          newNode->prev = curNode;
+          curNode->next = newNode;
+        }
+        curNode->prev =newNode;
+        ++size_;
+        return iterator(newNode);
+      }
+      catch (...)
+      {
+        clear();
+        throw;
+      }
+      
+    }
     void swap(List< T > & other) noexcept
     {
       std::swap(size_, other.size_);
