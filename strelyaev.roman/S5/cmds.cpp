@@ -5,7 +5,7 @@ struct Summator
 {
   public:
     Summator();
-    void operator()(std::pair< int, std::string > data);
+    void operator()(std::pair< int, std::string >& data);
     int getResult() const;
     std::string getLine() const;
 
@@ -19,7 +19,7 @@ Summator::Summator():
   line_("")
 {}
 
-void Summator::operator()(std::pair< int, std::string > data)
+void Summator::operator()(std::pair< int, std::string >& data)
 {
   int max_num = std::numeric_limits< int >::max();
   int min_num = std::numeric_limits< int >::min();
