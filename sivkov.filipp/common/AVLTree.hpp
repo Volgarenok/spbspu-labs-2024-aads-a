@@ -159,7 +159,7 @@ namespace sivkov
   }
 
   template< typename Key, typename Value, typename Comp >
-  void AVLTree< Key, Value, Comp >::swap(AVLTree other) noexcept
+  void AVLTree< Key, Value, Comp >::swap(AVLTree& other) noexcept
   {
     static_assert(std::is_nothrow_copy_constructible< Comp >::value);
     std::swap(root_, other.root_);
