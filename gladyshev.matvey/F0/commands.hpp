@@ -15,7 +15,7 @@ namespace gladyshev
   void deleteDict(mainDic& dictionaries, std::istream& in);
   void deleteName(mainDic& dictionaries, std::istream& in);
   void save(const mainDic& dictionaries, std::ofstream& outFile, std::istream& in);
-  void print_dictionaryL(const dic& dictionary, size_t n, std::ostream& out);
+  void print_dictionaryL(const dic& dictionary, int n, std::ostream& out);
   void print_dictionariesL(const mainDic& dictionaries, std::istream& in, std::ostream& out);
   void print_dictionaries(const mainDic& dictionaries, std::istream& in, std::ostream& out);
   dic intersectImpl(const dic& dict1, const dic& dict2);
