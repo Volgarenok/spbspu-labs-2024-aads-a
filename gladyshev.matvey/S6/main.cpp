@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
   if (size == 0)
   {
     std::cerr << "Wrong size\n";
-    return 0;
+    return 1;
   }
   std::map< std::pair< std::string, std::string >, std::function< void(size_t, std::ostream&) > > cmds;
   cmds[std::make_pair("ascending", "floats")] = processSorts< float, std::less< float > >;
