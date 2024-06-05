@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <fstream>
 #include <utility>
 #include <functional>
 #include <limits>
@@ -43,7 +44,7 @@ int main(int argc, char * argv[])
   try
   {
     std::string out = "";
-    commands.at(argx[1])(res, out, myMap);
+    commands.at(argv[1])(res, out, myMap);
     std::cout << res << out << "\n";
   }
   catch (const std::out_of_range &)
