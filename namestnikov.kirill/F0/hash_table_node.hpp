@@ -3,16 +3,19 @@
 
 namespace namestnikov
 {
-  template< class T >
-  struct HashTableNode
+  namespace detail
   {
-    T data;
-    size_t hash;
-    HashTableNode(const T & value, size_t h):
+    template< class T >
+    struct HashTableNode
+    {
+      T data;
+      size_t hash;
+      HashTableNode(const T & value, size_t h):
       data(value),
       hash(h)
-    {}
-  };
+      {}
+    };
+  }
 }
 
 #endif
