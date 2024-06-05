@@ -3,6 +3,7 @@
 
 #include <initializer_list>
 #include <stdexcept>
+#include <iostream>
 #include <cmath>
 #include <cstddef>
 #include "hash_table_node.hpp"
@@ -21,12 +22,12 @@ namespace namestnikov
     using hash_table_iterator = HashTableIterator< Key, Value >;
     using const_hash_table_iterator = ConstHashTableIterator< Key, Value >;
     HashTable():
-      capacity_(5),
+      capacity_(500),
       count_(0),
-      buckets_(new list_iterator_t[5]),
+      buckets_(new list_iterator_t[500]),
       elements_()
     {
-      for (size_t i = 0; i < 5; ++i)
+      for (size_t i = 0; i < 500; ++i)
       {
         buckets_[i] = elements_.end();
       }
@@ -226,18 +227,20 @@ namespace namestnikov
         std::pair< hash_table_iterator, bool > result(end(), true);
         try
         {
-          if (buckets_[index] == elements_.end())
-          {
+          //if (buckets_[index] == elements_.end())
+          //{
+            std::cout << "here";
             elements_.push_front(resNode);
             buckets_[index] = elements_.begin();
             result.first = begin();
-          }
-          else
+          //}
+          /*else
           {
+            std::cout << "here111";
             elements_.insert(buckets_[index], resNode);
             --(buckets_[index]);
             result.first = hash_table_iterator(buckets_[index]);
-          }
+          }*/
         }
         catch (...)
         {
