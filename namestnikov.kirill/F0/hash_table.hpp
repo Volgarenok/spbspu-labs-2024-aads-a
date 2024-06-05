@@ -248,6 +248,50 @@ namespace namestnikov
         return result;
       }
     }
+    hash_table_iterator find(const Key & key)
+    {
+      return find(key, std::hash< Key >()(key));
+    }
+    const_hash_table_iterator find(const Key & key) const
+    {
+      return find(key, std::hash< Key >()(key));
+    }
+    hash_table_iterator find(const Key & key, size_t hash)
+    {
+      size_t index = hash & capacity_;
+      auto iter = buckets_[index];
+      if (iter == elements_.end())
+      {
+        return end();
+      }
+      while ((iter != elements_.end()) && (((**iter).hash % capacity_) == index) && ((**iter).data.first != key))
+      {
+        ++iter;
+      }
+      if ((iter != elements_.end()) && ((**iter).data.first == key))
+      {
+        return hash_table_iterator(iter);
+      }
+      return end();
+    }
+    const_hash_table_iterator find(const Key & key, size_t hash)
+    {
+      size_t index = hash & capacity_;
+      auto iter = buckets_[index];
+      if (iter == elements_.end())
+      {
+        return cend();
+      }
+      while ((iter != elements_.end()) && (((**iter).hash % capacity_) == index) && ((**iter).data.first != key))
+      {
+        ++iter;
+      }
+      if ((iter != elements_.end()) && ((**iter).data.first == key))
+      {
+        return const_hash_table_iterator(iter);
+      }
+      return cend();
+    }
     hash_table_iterator begin() noexcept
     {
       return hash_table_iterator(elements_.begin());
