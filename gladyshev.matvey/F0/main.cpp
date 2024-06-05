@@ -2,9 +2,11 @@
 #include <limits>
 #include <cstring>
 #include <functional>
+
+#include <avltree.hpp>
+
 #include "commands.hpp"
 #include "inputdata.hpp"
-#include <avltree.hpp>
 
 int main(int argc, char * argv[])
 {
