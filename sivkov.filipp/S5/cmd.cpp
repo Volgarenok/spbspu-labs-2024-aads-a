@@ -1,6 +1,6 @@
 #include "cmd.hpp"
 #include <string>
-#include "AVLTree.hpp"
+#include <AVLTree.hpp>
 #include "key_summ.hpp"
 
 namespace sivkov
