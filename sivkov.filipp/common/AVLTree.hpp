@@ -23,7 +23,7 @@ namespace sivkov
     const Value& at(const Key& key) const;
     bool empty() const noexcept;
     bool contains(const Key& key) const;
-    void swap(AVLTree other);
+    void swap(AVLTree other) noexcept;
     void push(const Key& key, const Value& value);
     void deleteKey(const Key& key);
     Value& operator[](const Key& key);
@@ -159,7 +159,7 @@ namespace sivkov
   }
 
   template< typename Key, typename Value, typename Comp >
-  void AVLTree< Key, Value, Comp >::swap(AVLTree other)
+  void AVLTree< Key, Value, Comp >::swap(AVLTree other) noexcept
   {
     static_assert(std::is_nothrow_copy_constructible< Comp >::value);
     std::swap(root_, other.root_);
@@ -430,20 +430,21 @@ namespace sivkov
     }
     else if (comp_(key, root->data.first))
     {
-        root->left = insert(root->left, key, value);
-        root->left->parent = root;
+      root->left = insert(root->left, key, value);
+      root->left->parent = root;
     }
     else if (comp_(root->data.first, key))
     {
-        root->right = insert(root->right, key, value);
-        root->right->parent = root;
+      root->right = insert(root->right, key, value);
+      root->right->parent = root;
     }
     else
     {
-        root->data.second = value;
+      root->data.second = value;
     }
     return balance(root);
   }
+
   template < typename Key, typename Value, typename Comp >
   detail::TreeNode< Key, Value>* AVLTree< Key, Value, Comp >::addOrFind(detail::TreeNode< Key, Value >* node,
     const Key& key, const Value& value)
