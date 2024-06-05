@@ -319,7 +319,7 @@ namespace marishin
         traverseQueue.push(current);
         while (!traverseQueue.empty())
         {
-          current = traverseQueue.front();
+          current = traverseQueue.top();
           traverseQueue.drop();
           f(current->data);
           if (current->left)
