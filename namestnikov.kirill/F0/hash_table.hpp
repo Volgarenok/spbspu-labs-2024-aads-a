@@ -248,6 +248,43 @@ namespace namestnikov
         return result;
       }
     }
+    bool erase(const Key & key)
+    {
+      auto it = find(key);
+      if (it != end())
+      {
+        erase(it);
+        return true;
+      }
+      return false;
+    }
+    hash_table_iterator erase(hash_table_iterator pos)
+    {
+      list_iterator_t iter = pos.listIter_;
+      size_t hash = (*iter)->hash;
+      if ((pos.listIter_ == elements_.begin()) || (((*(--iter))->hash % capacity_) != (hash % capacity_)))
+      {
+        size_t index = hash % capacity_;
+        delete *(pos.listIter_);
+        list_iterator_t next = elements_.erase(pos.listIter_);
+        if ((next != elements_.end()) && (((*next)->hash % capacity_) == (hash % capacity_)))
+        {
+          buckets_[index] = next;
+        }
+        else
+        {
+          buckets_[index] = elements_.end();
+        }
+        --count_;
+        return Iterator(next);
+      }
+      else
+      {
+        delete *(pos.listIter_);
+        --count_;
+        return Iterator(elements_.erase(pos.listIter_));
+      }
+    }
     hash_table_iterator find(const Key & key)
     {
       return find(key, std::hash< Key >()(key));
