@@ -1,5 +1,6 @@
 #include <iostream>
 #include <limits>
+#include <string>
 #include <functional>
 #include "commands.hpp"
 #include "inputdata.hpp"
