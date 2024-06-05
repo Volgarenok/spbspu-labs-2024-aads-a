@@ -59,7 +59,6 @@ namespace marishin
       return temp;
 
     }
-<<<<<<< HEAD
     iterator & operator--()
     {
       if (node_->left)
@@ -87,8 +86,6 @@ namespace marishin
       --(*this);
       return temp;
     }
-=======
->>>>>>> master
     bool operator==(const iterator & other) const
     {
       return (node_ == other.node_);

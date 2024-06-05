@@ -57,7 +57,6 @@ namespace marishin
       return temp;
 
     }
-<<<<<<< HEAD
 
     const_iterator & operator--()
     {
@@ -86,9 +85,6 @@ namespace marishin
       --(*this);
       return temp;
     }
-
-=======
->>>>>>> master
     bool operator==(const const_iterator & other) const
     {
       return (node_ == other.node_);
