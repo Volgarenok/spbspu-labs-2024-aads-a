@@ -8,7 +8,6 @@
 #include <type_traits>
 #include <stdexcept>
 #include <utility>
-#include <stack.hpp>
 #include <queue.hpp>
 #include <AVLtreeNode.hpp>
 #include <constIteratorTree.hpp>
@@ -383,6 +382,11 @@ namespace novokhatskiy
     iter begin()
     {
       return iter(minN(root_));
+    }
+
+    constIter cbeginRight() const
+    {
+      return constIter(lastRight(root_));
     }
 
     iter end()
