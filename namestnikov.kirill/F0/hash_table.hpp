@@ -102,6 +102,11 @@ namespace namestnikov
       std::swap(elements_, other.elements_);
       std::swap(buckets_, other.buckets_);
     }
+    ~HashTable()
+    {
+      clear();
+      delete [] buckets_;
+    }
   private:
     size_t count_;
     size_t capacity_;
