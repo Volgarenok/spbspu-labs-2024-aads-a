@@ -1,6 +1,6 @@
 #include <iostream>
 #include <limits>
-#include <string>
+#include <cstring>
 #include <functional>
 #include "commands.hpp"
 #include "inputdata.hpp"
