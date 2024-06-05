@@ -149,7 +149,7 @@ void zaitsev::initBase(const char* file, base_t& base)
   {
     std::string graph_name;
     in >> del{ "Graph" } >> del{ "name:" } >> graph_name;
-    base.insert({ graph_name, basicGraphRead(in) });
+    base[graph_name] = basicGraphRead(in);
   }
   return;
 }
@@ -173,7 +173,7 @@ void zaitsev::readGraph(base_t& graphs, const args_flist& args, std::ostream&)
   {
     throw std::invalid_argument("File \"" + file + "\" does't found");
   }
-  graphs.insert({ graph_name,basicGraphRead(input_file) });
+  graphs[graph_name] = basicGraphRead(input_file);
   return;
 }
 
@@ -221,7 +221,7 @@ zaitsev::graph_t basicGraphRead(std::istream& in)
     {
       throw std::ios_base::failure("Input fail");
     }
-    new_graph.insert({ vert_name, unit_t{} });
+    new_graph[vert_name];
   }
   size_t edges_nmb = 0;
   in >> del{ "Edges" } >> del{ "(" } >> edges_nmb >> del{ "):" };
@@ -234,7 +234,7 @@ zaitsev::graph_t basicGraphRead(std::istream& in)
     {
       throw std::ios_base::failure("Input fail");
     }
-    new_graph[begin].insert({ end, value });
+    new_graph[begin][end] = value;
   }
   return new_graph;
 }
@@ -246,10 +246,10 @@ void basicGraphPrint(std::ostream& out, const zaitsev::graph_t& graph, size_t in
   out << "Vertices (" << graph.size() << "):\n";
   size_t counter = 0;
 
-  for (auto i : graph)
+  for (auto& vert : graph)
   {
-    out << indent << i.first << '\n';
-    counter += i.second.size();
+    out << indent << vert.first << '\n';
+    counter += vert.second.size();
   }
   out << "Edges (" << counter << "):\n";
   for (auto& i : graph)

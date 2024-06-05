@@ -1,13 +1,10 @@
 #include "path_search.hpp"
-#include <tuple>
-#include <vector>
 #include <string>
 #include <algorithm>
 #include <iomanip>
 #include <limits>
 #include "stream_guard.hpp"
 
-using std::vector;
 using std::pair;
 using std::string;
 
@@ -19,7 +16,7 @@ struct FixedVec
   FixedVec() = delete;
   FixedVec(size_t size):
     size_(size),
-    vals_(new T[size])
+    vals_(reinterpret_cast<T*>(new char[sizeof(T) * size]))
   {}
   FixedVec(size_t size, const T& val):
     size_(size),
@@ -72,7 +69,11 @@ struct FixedVec
   }
   ~FixedVec()
   {
-    delete[] vals_;
+    for (size_t i = 0; i < size_; ++i)
+    {
+      vals_[i].~T();
+    }
+    delete[] reinterpret_cast<char*>(vals_);
   }
   size_t size() const
   {
@@ -320,6 +321,7 @@ zaitsev::Map< string, size_t > convertToIndexes(const zaitsev::graph_t& graph)
   for (auto& i : graph)
   {
     vert_indexes[i.first] = index;
+    ++index;
   }
   return vert_indexes;
 }
@@ -331,11 +333,11 @@ FixedVec< FixedVec< int > > createAdjacencyMatrix(const zaitsev::graph_t& graph)
   Map< string, size_t > vert_indexes = convertToIndexes(graph);
 
   size_t i = 0;
-  for (graph_t::const_iterator it_i = graph.begin(); it_i != graph.end(); ++it_i)
+  for (auto& vert : graph)
   {
-    for (unit_t::const_iterator it_j = it_i->second.begin(); it_j != it_i->second.end(); ++it_j)
+    for (auto& it_j : vert.second)
     {
-      matrix[i][vert_indexes[it_j->first]] = it_j->second;
+      matrix[i][vert_indexes[it_j.first]] = it_j.second;
     }
     ++i;
   }

@@ -133,14 +133,13 @@ void zaitsev::mergeGraphs(base_t& graphs, const args_flist& args, std::ostream&)
     throw std::invalid_argument("Invalid arguments");
   }
   graph_t new_graph = graphs.find(nm_2)->second;
-  graph_t graph_1_inst = graphs.find(nm_1)->second;
+  const graph_t& graph_1_inst = graphs.find(nm_1)->second;
 
   for (auto& i : graph_1_inst)
   {
-    graph_t::iterator same_vert = new_graph.find(i.first);
-    if (same_vert == new_graph.end())
+    if (new_graph.find(i.first) == new_graph.end())
     {
-      new_graph.insert({ i });
+      new_graph.insert(i);
     }
     else
     {
@@ -164,6 +163,6 @@ void zaitsev::mergeGraphs(base_t& graphs, const args_flist& args, std::ostream&)
       }
     }
   }
-  graphs.insert({ new_nm, new_graph });
+  graphs[new_nm] = std::move(new_graph);
   return;
 }
