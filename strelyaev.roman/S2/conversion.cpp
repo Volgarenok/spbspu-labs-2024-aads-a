@@ -3,8 +3,8 @@
 #include <string>
 #include <iomanip>
 #include "calculations.hpp"
-#include <list/queue.hpp>
-#include <list/stack.hpp>
+#include <otherContainers/queue.hpp>
+#include <otherContainers/stack.hpp>
 #include "token.hpp"
 
 strelyaev::ExpressionUnit strelyaev::convertStringToUnit(std::string string_token)

@@ -3,7 +3,7 @@
 #include <string>
 #include <iosfwd>
 #include "token.hpp"
-#include <list/queue.hpp>
+#include <otherContainers/queue.hpp>
 namespace strelyaev
 {
   long long calculateOperation(const ExpressionUnit&, const ExpressionUnit&, const ExpressionUnit&);

@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
-#include <list/queue.hpp>
-#include <list/stack.hpp>
+#include <otherContainers/queue.hpp>
+#include <otherContainers/stack.hpp>
 #include "calculations.hpp"
 #include "conversion.hpp"
 
