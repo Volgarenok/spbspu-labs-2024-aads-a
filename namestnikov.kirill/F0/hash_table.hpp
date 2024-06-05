@@ -129,9 +129,43 @@ namespace namestnikov
     {
       return (count_ == 0);
     }
+    size_t bucketCount() const noexcept
+    {
+      return capacity_;
+    }
     size_t size() const noexcept
     {
       return count_;
+    }
+    void clear() noexcept
+    {
+      auto it = elements_.begin();
+      auto tempIt = it;
+      while (it != elements_.end())
+      {
+        buckets_[(**it).hash & capacity_] = elements_.end();
+        ++it;
+        delete *tempIt;
+        elements_.erase(tempIt);
+        tempIt = it;
+      }
+      count_ = 0;
+    }
+    hash_table_iterator begin() noexcept
+    {
+      return hash_table_iterator(elements_.begin());
+    }
+    hash_table_iterator end() noexcept
+    {
+      return hash_table_iterator(elements_.end());
+    }
+    const_hash_table_iterator cbegin() const noexcept
+    {
+      return const_hash_table_iterator(elements_.cbegin());
+    }
+    const_hash_table_iterator cend() const noexcept
+    {
+      return const_hash_table_iterator(elements_.cend());
     }
     ~HashTable()
     {
