@@ -37,6 +37,7 @@ struct Array
         vals_[j].~T();
       }
       delete[] reinterpret_cast< char* >(vals_);
+      throw;
     }
   }
   Array(const Array& other):
@@ -58,9 +59,10 @@ struct Array
         vals_[j].~T();
       }
       delete[] reinterpret_cast< char* >(vals_);
+      throw;
     }
   }
-  Array(Array&& other):
+  Array(Array&& other) noexcept:
     size_(other.size_),
     vals_(other.vals_)
   {
