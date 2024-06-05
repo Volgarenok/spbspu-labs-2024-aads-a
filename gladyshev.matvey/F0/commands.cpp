@@ -36,7 +36,7 @@ void gladyshev::print_dictionary(const dic& dictionary, std::ostream& out)
   }
   out << "\n";
 }
-void gladyshev::print_dictionaryL(const dic& dictionary, size_t n, std::ostream& out)
+void gladyshev::print_dictionaryL(const dic& dictionary, int n, std::ostream& out)
 {
   for (auto it = dictionary.cbegin(); it != dictionary.cend(); ++it)
   {
