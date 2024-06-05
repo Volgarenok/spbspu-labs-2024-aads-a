@@ -4,8 +4,11 @@
 #include <functional>
 #include <treeNode.hpp>
 #include <treeIterator.hpp>
+<<<<<<< HEAD
 #include <queue.hpp>
 #include <stack.hpp>
+=======
+>>>>>>> master
 #include <constTreeIterator.hpp>
 
 namespace marishin
@@ -76,7 +79,11 @@ namespace marishin
 
     void swap(Tree< Key, Value, Compare > & other) noexcept
     {
+<<<<<<< HEAD
       static_assert(std::is_nothrow_copy_constructible< Compare >::value);
+=======
+      static_assert(std::is_nothrow_copy_constructible< Compare >::value || std::is_nothrow_move_constructible< Compare >::value);
+>>>>>>> master
       std::swap(root_, other.root_);
       std::swap(size_, other.size_);
       std::swap(compare_, other.compare_);
@@ -103,6 +110,7 @@ namespace marishin
         throw;
       }
     }
+<<<<<<< HEAD
     void balance(node_t * node)
     {
       if (node->height < 0)
@@ -148,6 +156,8 @@ namespace marishin
         }
       }
     }
+=======
+>>>>>>> master
 
     node_t * search(const Key & key) const
     {
@@ -282,6 +292,7 @@ namespace marishin
       clear_impl(root_);
       root_ = nullptr;
     }
+<<<<<<< HEAD
     template< class F >
     F traverse_lnr(F f)
     {
@@ -384,6 +395,8 @@ namespace marishin
     {
       return static_cast< const F >(traverse_breadth(f));
     }
+=======
+>>>>>>> master
     ~Tree()
     {
       clear();
@@ -415,6 +428,34 @@ namespace marishin
       }
       return result;
     }
+<<<<<<< HEAD
+=======
+    void getNewBalance(node_t * node)
+    {
+      if ((node->height > 1) || (node->height < -1))
+      {
+        balance(node);
+      }
+      else
+      {
+        if (node->parent)
+        {
+          if (node->left)
+          {
+            ++node->parent->height;
+          }
+          else if (node->right)
+          {
+            --node->parent->height;
+          }
+          if (node->parent->height != 0)
+          {
+            getNewBalance(node->parent);
+          }
+        }
+      }
+    }
+>>>>>>> master
     node_t * rotateLeft(node_t * node)
     {
       node_t * newRoot = node->right;
@@ -443,6 +484,28 @@ namespace marishin
       newRoot->height = newRoot->height - 1 + std::min(0, node->height);
       return newRoot;
     }
+<<<<<<< HEAD
+=======
+    void balance(node_t * node)
+    {
+      if (node->height < 0)
+      {
+        if (node->right->height > 0)
+        {
+          node->right = rotateRight(node->right);
+        }
+        node = rotateLeft(node);
+      }
+      else
+      {
+        if (node->left->height < 0)
+        {
+          node->left = rotateLeft(node->left);
+        }
+        node = rotateRight(node);
+      }
+    }
+>>>>>>> master
     node_t * search_impl(node_t * node, const Key & key) const
     {
       if (!node)
