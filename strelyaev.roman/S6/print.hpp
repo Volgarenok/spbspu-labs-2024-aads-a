@@ -3,7 +3,7 @@
 #include <forward_list>
 #include <iomanip>
 #include <ostream>
-#include "../common/list/list.hpp"
+#include <list/list.hpp>
 namespace strelyaev
 {
   template < class It >

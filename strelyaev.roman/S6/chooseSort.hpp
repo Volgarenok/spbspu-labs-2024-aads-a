@@ -7,7 +7,7 @@
 #include <iostream>
 #include <list>
 #include <string>
-#include "../common/list/list.hpp"
+#include <list/list.hpp>
 #include "generate.hpp"
 #include "print.hpp"
 #include "sorts.hpp"
