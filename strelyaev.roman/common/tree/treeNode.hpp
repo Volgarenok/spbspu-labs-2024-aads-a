@@ -1,5 +1,5 @@
-#ifndef NODE_HPP
-#define NODE_HPP
+#ifndef TREENODE_HPP
+#define TREENODE_HPP
 #include <utility>
 #include <cstddef>
 namespace strelyaev
@@ -7,9 +7,9 @@ namespace strelyaev
   namespace detail
   {
     template< typename Key, typename T >
-    struct Node
+    struct TreeNode
     {
-      Node(Node* left, Node* parent, Node* right, Key key, T value):
+      TreeNode(TreeNode* left, TreeNode* parent, TreeNode* right, Key key, T value):
         data_(std::make_pair(key, value)),
         parent_(parent),
         right_(right),
@@ -33,9 +33,9 @@ namespace strelyaev
       }
 
       std::pair< Key, T > data_;
-      Node< Key, T >* parent_;
-      Node< Key, T >* right_;
-      Node< Key, T >* left_;
+      TreeNode< Key, T >* parent_;
+      TreeNode< Key, T >* right_;
+      TreeNode< Key, T >* left_;
       size_t height_;
     };
   }
