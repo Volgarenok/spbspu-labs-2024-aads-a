@@ -7,6 +7,7 @@ namespace zhalilov
   {
     BinOperator,
     Operand,
+    VarExpression,
     OpenBracket,
     CloseBracket,
     Undefined

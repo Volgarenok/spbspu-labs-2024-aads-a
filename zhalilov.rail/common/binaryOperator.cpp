@@ -1,9 +1,9 @@
-#include "binaryOperator.hpp"
+#include <calc/binaryOperator.hpp>
 
 #include <stdexcept>
 #include <limits>
 
-#include "operand.hpp"
+#include <calc/operand.hpp>
 
 zhalilov::BinOperator::BinOperator():
   type_(BinOperator::Type::Undefined)
@@ -105,6 +105,11 @@ bool zhalilov::BinOperator::operator<=(const BinOperator &other) const
 bool zhalilov::BinOperator::operator>=(const BinOperator &other) const
 {
   return getPriority() >= other.getPriority();
+}
+
+zhalilov::BinOperator::Type zhalilov::BinOperator::getType() const
+{
+  return type_;
 }
 
 zhalilov::Operand zhalilov::BinOperator::doAddition(const Operand &a, const Operand &b) const

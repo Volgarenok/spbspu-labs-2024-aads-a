@@ -1,9 +1,10 @@
-#include "infixToPostfix.hpp"
+#include <listQueueCasting.hpp>
+#include <calc/infixToPostfix.hpp>
 
 #include <queue.hpp>
+#include <stack.hpp>
 
-#include "stack.hpp"
-#include "expressionTokens.hpp"
+#include <calc/expressionTokens.hpp>
 
 void zhalilov::infixToPostfix(Queue< InfixToken > infix, Queue< PostfixToken > &postfix)
 {
@@ -60,4 +61,13 @@ void zhalilov::infixToPostfix(Queue< InfixToken > infix, Queue< PostfixToken > &
     postfix.push(PostfixToken(transfer.top().getBinOperator()));
     transfer.pop();
   }
+}
+
+void zhalilov::infixToPostfix(List< InfixToken > infix, List< PostfixToken > &postfix)
+{
+  Queue< InfixToken > queueInf;
+  listToQueue(infix, queueInf);
+  Queue< PostfixToken > queuePost;
+  infixToPostfix(queueInf, queuePost);
+  queueToList(queuePost, postfix);
 }

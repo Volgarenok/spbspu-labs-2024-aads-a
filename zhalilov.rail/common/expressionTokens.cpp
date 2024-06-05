@@ -1,36 +1,74 @@
-#include "expressionTokens.hpp"
+#include <calc/expressionTokens.hpp>
 
 #include <stdexcept>
+#include <utility>
 
 zhalilov::InfixToken::InfixToken():
-  type_(PrimaryType::Undefined)
+  binOperator_{},
+  operand_{},
+  bracket_{ PrimaryType::CloseBracket },
+  varExpr_{},
+  type_{ PrimaryType::Undefined }
 {}
 
-zhalilov::InfixToken::InfixToken(const InfixToken &tkn)
+zhalilov::InfixToken::InfixToken(const InfixToken &tkn):
+  InfixToken{}
 {
-  assigner(tkn);
+  switch (tkn.type_)
+  {
+  case PrimaryType::Operand:
+    type_ = PrimaryType::Operand;
+    operand_ = tkn.operand_;
+    return;
+  case PrimaryType::BinOperator:
+    type_ = PrimaryType::BinOperator;
+    binOperator_ = tkn.binOperator_;
+    return;
+  case PrimaryType::CloseBracket:
+    type_ = PrimaryType::CloseBracket;
+    bracket_ = Bracket(PrimaryType::CloseBracket);
+    return;
+  case PrimaryType::OpenBracket:
+    type_ = PrimaryType::OpenBracket;
+    bracket_ = Bracket(PrimaryType::OpenBracket);
+    return;
+  case PrimaryType::VarExpression:
+    type_ = PrimaryType::VarExpression;
+    varExpr_ = tkn.varExpr_;
+    return;
+  default:
+    return;
+  }
 }
 
 zhalilov::InfixToken::InfixToken(BinOperator aBinOperator):
-  binOperator_(aBinOperator),
-  type_(PrimaryType::BinOperator)
-{}
+  InfixToken{}
+{
+  binOperator_ = aBinOperator;
+  type_ = PrimaryType::BinOperator;
+}
 
 zhalilov::InfixToken::InfixToken(Operand aOperand):
-  operand_(aOperand),
-  type_(PrimaryType::Operand)
-{}
+  InfixToken{}
+{
+  operand_ = aOperand,
+    type_ = PrimaryType::Operand;
+}
 
 zhalilov::InfixToken::InfixToken(Bracket aBracket):
   bracket_(aBracket),
   type_(bracket_.getType())
 {}
 
-zhalilov::InfixToken &zhalilov::InfixToken::operator=(const InfixToken &tkn)
+zhalilov::InfixToken::InfixToken(VarExpression aVarExpr):
+  InfixToken{}
 {
-  assigner(tkn);
-  return *this;
+  varExpr_ = aVarExpr;
+  type_ = PrimaryType::VarExpression;
 }
+
+zhalilov::InfixToken::~InfixToken()
+{}
 
 zhalilov::PrimaryType zhalilov::InfixToken::getType() const
 {
@@ -64,7 +102,20 @@ zhalilov::Bracket zhalilov::InfixToken::getBracket()
   return bracket_;
 }
 
-void zhalilov::InfixToken::assigner(const InfixToken &tkn)
+zhalilov::VarExpression zhalilov::InfixToken::getVarExpression()
+{
+  if (type_ != PrimaryType::VarExpression)
+  {
+    throw std::logic_error("token doesn't store varexpr");
+  }
+  return varExpr_;
+}
+
+zhalilov::PostfixToken::PostfixToken():
+  type_(PrimaryType::Undefined)
+{}
+
+zhalilov::PostfixToken::PostfixToken(const PostfixToken &tkn)
 {
   switch (tkn.type_)
   {
@@ -76,26 +127,9 @@ void zhalilov::InfixToken::assigner(const InfixToken &tkn)
     type_ = PrimaryType::BinOperator;
     binOperator_ = tkn.binOperator_;
     return;
-  case PrimaryType::CloseBracket:
-    type_ = PrimaryType::CloseBracket;
-    bracket_ = Bracket(PrimaryType::CloseBracket);
-    return;
-  case PrimaryType::OpenBracket:
-    type_ = PrimaryType::OpenBracket;
-    bracket_ = Bracket(PrimaryType::OpenBracket);
-    return;
   default:
     return;
   }
-}
-
-zhalilov::PostfixToken::PostfixToken():
-  type_(PrimaryType::Undefined)
-{}
-
-zhalilov::PostfixToken::PostfixToken(const PostfixToken &tkn)
-{
-  assigner(tkn);
 }
 
 zhalilov::PostfixToken::PostfixToken(BinOperator aBinOperator):
@@ -107,12 +141,6 @@ zhalilov::PostfixToken::PostfixToken(Operand aOperand):
   operand_(aOperand),
   type_(PrimaryType::Operand)
 {}
-
-zhalilov::PostfixToken &zhalilov::PostfixToken::operator=(const PostfixToken &tkn)
-{
-  assigner(tkn);
-  return *this;
-}
 
 zhalilov::PrimaryType zhalilov::PostfixToken::getType() const
 {
@@ -137,30 +165,29 @@ zhalilov::Operand zhalilov::PostfixToken::getOperand()
   return operand_;
 }
 
-void zhalilov::PostfixToken::assigner(const PostfixToken &tkn)
-{
-  switch (tkn.type_)
-  {
-  case PrimaryType::Operand:
-    type_ = PrimaryType::Operand;
-    operand_ = tkn.operand_;
-    return;
-  case PrimaryType::BinOperator:
-    type_ = PrimaryType::BinOperator;
-    binOperator_ = tkn.binOperator_;
-    return;
-  default:
-    return;
-  }
-}
-
 zhalilov::TransferToken::TransferToken():
   type_(PrimaryType::Undefined)
 {}
 
 zhalilov::TransferToken::TransferToken(const TransferToken &tkn)
 {
-  assigner(tkn);
+  switch (tkn.type_)
+  {
+  case PrimaryType::BinOperator:
+    type_ = PrimaryType::BinOperator;
+    binOperator_ = tkn.binOperator_;
+    return;
+  case PrimaryType::CloseBracket:
+    type_ = PrimaryType::CloseBracket;
+    bracket_ = Bracket(PrimaryType::CloseBracket);
+    return;
+  case PrimaryType::OpenBracket:
+    type_ = PrimaryType::OpenBracket;
+    bracket_ = Bracket(PrimaryType::CloseBracket);
+    return;
+  default:
+    return;
+  }
 }
 
 zhalilov::TransferToken::TransferToken(BinOperator aBinOperator):
@@ -172,12 +199,6 @@ zhalilov::TransferToken::TransferToken(Bracket aBracket):
   bracket_(aBracket),
   type_(aBracket.getType())
 {}
-
-zhalilov::TransferToken &zhalilov::TransferToken::operator=(const TransferToken &tkn)
-{
-  assigner(tkn);
-  return *this;
-}
 
 zhalilov::PrimaryType zhalilov::TransferToken::getType() const
 {
@@ -200,25 +221,4 @@ zhalilov::Bracket zhalilov::TransferToken::getBracket()
     throw std::logic_error("token doesn't store bracket");
   }
   return bracket_;
-}
-
-void zhalilov::TransferToken::assigner(const TransferToken &tkn)
-{
-  switch (tkn.type_)
-  {
-  case PrimaryType::BinOperator:
-    type_ = PrimaryType::BinOperator;
-    binOperator_ = tkn.binOperator_;
-    return;
-  case PrimaryType::CloseBracket:
-    type_ = PrimaryType::CloseBracket;
-    bracket_ = Bracket(PrimaryType::CloseBracket);
-    return;
-  case PrimaryType::OpenBracket:
-    type_ = PrimaryType::OpenBracket;
-    bracket_ = Bracket(PrimaryType::CloseBracket);
-    return;
-  default:
-    return;
-  }
 }

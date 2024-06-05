@@ -5,6 +5,7 @@
 #include "bracket.hpp"
 #include "operand.hpp"
 #include "binaryOperator.hpp"
+#include "varExpression.hpp"
 
 namespace zhalilov
 {
@@ -15,26 +16,23 @@ namespace zhalilov
     explicit InfixToken(BinOperator aBinOperator);
     explicit InfixToken(Operand aOperand);
     explicit InfixToken(Bracket aBracket);
-
-    InfixToken &operator=(const InfixToken &tkn);
+    explicit InfixToken(VarExpression aVarExpr);
+    ~InfixToken();
 
     PrimaryType getType() const;
 
     BinOperator getBinOperator();
     Operand getOperand();
     Bracket getBracket();
+    VarExpression getVarExpression();
 
   private:
-    union
-    {
-      BinOperator binOperator_;
-      Operand operand_;
-      Bracket bracket_;
-    };
+    BinOperator binOperator_;
+    Operand operand_;
+    Bracket bracket_;
+    VarExpression varExpr_;
 
     PrimaryType type_;
-
-    void assigner(const InfixToken &tkn);
   };
 
   struct PostfixToken
@@ -44,8 +42,6 @@ namespace zhalilov
     explicit PostfixToken(BinOperator aBinOperator);
     explicit PostfixToken(Operand aOperand);
 
-    PostfixToken &operator=(const PostfixToken &tkn);
-
     PrimaryType getType() const;
 
     BinOperator getBinOperator();
@@ -59,8 +55,6 @@ namespace zhalilov
     };
 
     PrimaryType type_;
-
-    void assigner(const PostfixToken &tkn);
   };
 
   struct TransferToken
@@ -69,8 +63,6 @@ namespace zhalilov
     TransferToken(const TransferToken &tkn);
     explicit TransferToken(BinOperator aBinOperator);
     explicit TransferToken(Bracket aBracket);
-
-    TransferToken &operator=(const TransferToken &tkn);
 
     PrimaryType getType() const;
 
@@ -85,8 +77,6 @@ namespace zhalilov
     };
 
     PrimaryType type_;
-
-    void assigner(const TransferToken &tkn);
   };
 }
 
