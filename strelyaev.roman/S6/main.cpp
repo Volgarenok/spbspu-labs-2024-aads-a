@@ -19,7 +19,7 @@ int main(int argc, char* argv[])
   }
   std::string sort = argv[1];
   std::string type = argv[2];
-  auto condition = sort + type;
+  std::string condition = sort + type;
   size_t size = std::atoi(argv[3]);
   if (size == 0)
   {
@@ -38,7 +38,7 @@ int main(int argc, char* argv[])
 
     commands.at(condition)(std::cout, size, generator);
   }
-  catch (const std::exception& e)
+  catch (...)
   {
     std::cout << "SOMETHING WENT WRONG\n";
     return 1;
