@@ -299,10 +299,10 @@ namespace sivkov
     {
       return nullptr;
     }
-
-    detail::TreeNode< Key, Value >* new_root = new detail::TreeNode< Key, Value >;
+    detail::TreeNode< Key, Value >* new_root = nullptr;
     try
     {
+      new_root = new detail::TreeNode< Key, Value >;
       new_root->data = root->data;
       new_root->left = deep_copy(root->left);
       new_root->right = deep_copy(root->right);
