@@ -1,7 +1,6 @@
 #ifndef COMMANDS_HPP
 #define COMMANDS_HPP
 
-#include <iostream>
 #include <fstream>
 #include <string>
 
