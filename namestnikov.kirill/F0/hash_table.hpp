@@ -197,10 +197,55 @@ namespace namestnikov
           elements_.erase(temp);
           temp = it;
         }
-        elements = std::move(newElements);
+        elements_ = std::move(newElements);
         delete [] buckets_;
         buckets_ = newBuckets;
         capacity_ = newCapacity;
+      }
+    }
+    std::pair< hash_table_iterator, bool > insert(const Key & key, const Value & value)
+    {
+      return insert(key, value, std::hash< Key >()(key));
+    }
+    std::pair< hash_table_iterator, bool > insert(const Key & key, const Value & value, size_t hash)
+    {
+      hash_table_iterator result = find(key, hash);
+      if (result != end())
+      {
+        return std::pair< hash_table_iterator, bool >(result, false);
+      }
+      else
+      {
+        size_t index = hash & capacity_;
+        if (capacity_ < ((count_ + 1) / 0.75))
+        {
+          rehash(calculateNewCapacity(capacity_));
+          index = hash % capacity_;
+        }
+        node_t * resNode = new node_t(val_type_t(key, value), hash);
+        std::pair< hash_table_iterator, bool > result(end(), true);
+        try
+        {
+          if (buckets_[index] == elements_.end())
+          {
+            elements_.push_front(resNode);
+            buckets_[index] = elements_.begin();
+            result.first = begin();
+          }
+          else
+          {
+            elements_.insert(buckets_[index], resNode);
+            --(buckets_[index]);
+            result.first = hash_table_iterator(buckets_[index]);
+          }
+        }
+        catch (...)
+        {
+          delete node;
+          throw;
+        }
+        ++count_;
+        return result;
       }
     }
     hash_table_iterator begin() noexcept
