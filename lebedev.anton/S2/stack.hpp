@@ -16,6 +16,7 @@ namespace lebedev
     const T & top() const;
 
     void push(const T & val);
+    void push(T && val);
     void pop();
 
   private:
@@ -48,6 +49,11 @@ namespace lebedev
   void Stack< T >::push(const T & val)
   {
     list_.push_front(val);
+  }
+  template< class T >
+  void Stack< T >::push(T && val)
+  {
+    list_.push_front(std::move(val));
   }
   template< class T >
   void Stack< T >::pop()
