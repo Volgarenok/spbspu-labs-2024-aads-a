@@ -1,5 +1,7 @@
 #include "commands.hpp"
 
+#include <iostream>
+
 namespace gladyshev
 {
   template< typename Function >
