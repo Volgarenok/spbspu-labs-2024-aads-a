@@ -16,6 +16,7 @@ namespace zhalilov
   public:
     using Node = detail::Node< T >;
 
+    ConstIterator() = default;
     ~ConstIterator() = default;
 
     ConstIterator &operator=(const ConstIterator &) = default;
