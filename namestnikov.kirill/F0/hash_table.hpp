@@ -45,6 +45,36 @@ namespace namestnikov
         insert((*it).first, (*it).second);
       }
     }
+    HashTable(const HashTable< Key, Value > & other):
+      capacity_(other.capacity_),
+      count_(0),
+      buckets_(new list_iterator_t[other.capacity_]),
+      elements_()
+    {
+      for (size_t i = 0; i < capacity_; ++i)
+      {
+        buckets_[i] = elements_.end();
+        if (other.buckets_[i] != other.elements_.end())
+        {
+          list_iterator_t it = other.buckets_[i];
+          insert(Key((**it).data.first), Value((**it).data.second), (**it).hash);
+        }
+      }
+      auto it = other.elements_.cbegin();
+      for (; it != other.elements_.cend(); ++it)
+      {
+        insert(Key((**it).data.first), Value((**it).data.second), (**it).hash);
+      }
+    }
+    HashTable< Key, Value > & operator=(const HashTable< Key, Value > & other)
+    {
+      if (this != std::addressof(other))
+      {
+        HashTable< Key, Value > temp(other);
+        swap(temp);
+      }
+      return *this;
+    }
   private:
     size_t count_;
     size_t capacity_;
