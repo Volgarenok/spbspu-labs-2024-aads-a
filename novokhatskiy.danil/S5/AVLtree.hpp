@@ -85,13 +85,13 @@ namespace novokhatskiy
       }
       return f;
     }
-    
+
     template< class F >
     F traverse_lnr(F f) const
     {
       return static_cast< const F >(traverse_lnr(f));
     }
-    
+
     template< class F >
     F traverse_rnl(F f)
     {
