@@ -1,7 +1,7 @@
 #include "input_expressions.hpp"
 #include <istream>
 #include <string>
-#include "queue.hpp"
+#include <queue.hpp>
 #include "infix_type.hpp"
 
 nikitov::InfixType recognizeType(std::string& line)

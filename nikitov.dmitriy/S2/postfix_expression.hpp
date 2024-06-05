@@ -1,7 +1,7 @@
 #ifndef POSTFIX_EXPRESSION_HPP
 #define POSTFIX_EXPRESSION_HPP
 
-#include "queue.hpp"
+#include <queue.hpp>
 #include "postfix_type.hpp"
 
 namespace nikitov
