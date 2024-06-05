@@ -17,9 +17,6 @@ int main(int argc, char* argv[])
     std::cerr << "NOT ENOUGH ARGUMENTS";
     return 1;
   }
-  std::string sort = argv[1];
-  std::string type = argv[2];
-  std::string condition = sort + type;
   size_t size = std::atoi(argv[3]);
   if (size == 0)
   {
@@ -30,13 +27,13 @@ int main(int argc, char* argv[])
   {
     std::default_random_engine generator;
     using namespace std::placeholders;
-    std::map< std::string, std::function< void(std::ostream&, size_t, std::default_random_engine&) > > commands;
-    commands["ascendingints"] = fillContainer< int, std::less< int > >;
-    commands["ascendingfloats"] = fillContainer< float, std::less< float > >;
-    commands["descendingints"] = fillContainer< int, std::greater< int > >;
-    commands["descendingfloats"] = fillContainer< float, std::greater< float > >;
+    std::map< std::pair< std::string, std::string >, std::function< void(std::ostream&, size_t, std::default_random_engine&) > > commands;
+    commands[{"ascending", "ints"}] = fillContainer< int, std::less< int > >;
+    commands[{"ascending", "floats"}] = fillContainer< float, std::less< float > >;
+    commands[{"descending", "ints"}] = fillContainer< int, std::greater< int > >;
+    commands[{"descending", "floats"}] = fillContainer< float, std::greater< float > >;
 
-    commands.at(condition)(std::cout, size, generator);
+    commands.at(std::make_pair(argv[1], argv[2]))(std::cout, size, generator);
   }
   catch (...)
   {
