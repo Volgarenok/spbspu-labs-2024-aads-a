@@ -48,6 +48,7 @@ namespace gladyshev
     selection(selecDec.begin(), selecDec.end(), Compare());
     merge(mergeDec.begin(), mergeDec.end(), Compare());
     selection(selecList.begin(), selecList.end(), Compare());
+    printContainer(deq, out);
     printContainer(selecList, out);
     printContainer(selecBiList, out);
     printContainer(selecDec, out);
