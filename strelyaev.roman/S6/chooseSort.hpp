@@ -33,23 +33,23 @@ namespace strelyaev
   template < class Type, class Compare >
   void sortAndPrint(std::ostream& out, size_t size, Type array[], Compare cmp)
   {
-    List< Type > biListR(array, array + size);
-    std::list< Type > biListSt(array, array + size);
-    std::deque< Type > dequeSort(array, array + size);
-    std::deque< Type > dequeBubble(array, array + size);
-    std::deque< Type > dequeShell(array, array + size);
-    std::forward_list< Type > forwardList(array, array + size);
-    print(out, forwardList.begin(), forwardList.end());
+    List< Type > bi_list(array, array + size);
+    std::list< Type > bi_list_standart(array, array + size);
+    std::deque< Type > deque_sort(array, array + size);
+    std::deque< Type > deque_bubble(array, array + size);
+    std::deque< Type > deque_shell(array, array + size);
+    std::forward_list< Type > forward_list(array, array + size);
+    print(out, forward_list.begin(), forward_list.end());
     out << "\n";
 
-    chooseSort(out, biListR.begin(), biListR.end(), cmp, bubble_sort);
-    chooseSort(out, dequeBubble.begin(), dequeBubble.end(), cmp, bubble_sort);
-    chooseSort(out, dequeShell.begin(), dequeShell.end(), cmp, shell_sort);
-    standartSort(out, biListSt, cmp);
-    standartSort(out, forwardList, cmp);
+    chooseSort(out, bi_list.begin(), bi_list.end(), cmp, bubble_sort);
+    chooseSort(out, deque_bubble.begin(), deque_bubble.end(), cmp, bubble_sort);
+    chooseSort(out, deque_shell.begin(), deque_shell.end(), cmp, shell_sort);
+    standartSort(out, bi_list_standart, cmp);
+    standartSort(out, forward_list, cmp);
 
-    std::sort(dequeSort.begin(), dequeSort.end(), cmp);
-    print(out, dequeSort.begin(), dequeSort.end());
+    std::sort(deque_sort.begin(), deque_sort.end(), cmp);
+    print(out, deque_sort.begin(), deque_sort.end());
     out << "\n";
   }
 
