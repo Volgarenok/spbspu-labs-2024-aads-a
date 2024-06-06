@@ -572,7 +572,7 @@ namespace sivkov
   {
     if (empty())
     {
-      throw std::logic_error("EMPTY");
+      throw std::logic_error("<EMPTY>");
     }
     Stack<detail::TreeNode< Key, Value >* > stack;
     detail::TreeNode< Key, Value >* current = root_;
@@ -601,7 +601,7 @@ namespace sivkov
   {
     if (empty())
     {
-      throw std::logic_error("EMPTY");
+      throw std::logic_error("<EMPTY>");
     }
     return traverse_rnl_helper(root_, f);
   }
@@ -612,7 +612,7 @@ namespace sivkov
   {
     if (empty())
     {
-      throw std::logic_error("EMPTY");
+      throw std::logic_error("<EMPTY>");
     }
 
     Queue< detail::TreeNode<Key, Value >* > nodes_queue;
