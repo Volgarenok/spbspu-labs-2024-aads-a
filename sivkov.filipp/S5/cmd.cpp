@@ -1,23 +1,27 @@
 #include "cmd.hpp"
 #include <string>
+#include <ostream>
 #include <AVLTree.hpp>
 #include "key_summ.hpp"
 
 namespace sivkov
 {
-  void ascending(const AVLTree< int, std::string >& tree, KeySum& f)
+  void ascending(const AVLTree< int, std::string >& tree, KeySum& f, std::ostream& out)
   {
-    tree.traverse_lnr(f);
+    KeySum res = tree.traverse_lnr(f);
+    out << res.key_ << res.string_ << "\n";
   }
 
-  void descending(const AVLTree< int, std::string >& tree, KeySum& f)
+  void descending(const AVLTree< int, std::string >& tree, KeySum& f, std::ostream& out)
   {
-    tree.traverse_rnl(f);
+    KeySum res = tree.traverse_rnl(f);
+    out << res.key_ << res.string_ << "\n";
   }
 
-  void breadth(const AVLTree< int, std::string >& tree, KeySum& f)
+  void breadth(const AVLTree< int, std::string >& tree, KeySum& f, std::ostream& out)
   {
-    tree.traverse_breadth(f);
+    KeySum res = tree.traverse_breadth(f);
+    out << res.key_ << res.string_ << "\n";
   }
 }
 

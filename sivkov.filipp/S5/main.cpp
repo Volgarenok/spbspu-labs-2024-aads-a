@@ -25,7 +25,7 @@ int main(int argc, char* argv[])
     filename = argv[2];
   }
 
-  using func = std::function< void(avlTree&, KeySum&)>;
+  using func = std::function< void(avlTree&, KeySum&, std::ostream&)>;
   AVLTree< std::string, func > cmd;
   cmd.push("ascending", ascending);
   cmd.push("descending", descending);
@@ -38,8 +38,7 @@ int main(int argc, char* argv[])
     auto it = cmd.find(command);
     if (it != cmd.cend())
     {
-      it->second(tree, f);
-      std::cout << f.key_ << f.string_ << "\n";
+      it->second(tree, f, std::cout);
     }
     else
     {
@@ -57,3 +56,4 @@ int main(int argc, char* argv[])
   }
   return 0;
 }
+

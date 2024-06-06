@@ -7,9 +7,10 @@
 
 namespace sivkov
 {
-  void ascending(const AVLTree< int, std::string >& tree, KeySum& f);
-  void descending(const AVLTree< int, std::string >& tree, KeySum& f);
-  void breadth(const AVLTree< int, std::string >& tree, KeySum& f);
+  void ascending(const AVLTree< int, std::string >& tree, KeySum& f, std::ostream& out);
+  void descending(const AVLTree< int, std::string >& tree, KeySum& f, std::ostream& out);
+  void breadth(const AVLTree< int, std::string >& tree, KeySum& f, std::ostream& out);
 }
 
 #endif
+
