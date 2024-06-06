@@ -95,21 +95,21 @@ namespace sivkov
     std::deque< T > deq3 = deq;
     if (type == "ascending")
     {
-      oddEvenSort(fwdList.cbegin(), fwdList.cend(), std::less< int >());
-      shellSort(biList.begin(), biList.end(), std::less< int >());
-      biList2.sort(std::less< int >());
-      oddEvenSort(deq.begin(), deq.end(), std::less< int >());
-      shellSort(deq2.begin(), deq2.end(), std::less< int >());
-      std::sort(deq3.begin(), deq3.end(), std::less< int >());
+      oddEvenSort(fwdList.cbegin(), fwdList.cend(), std::less< T >());
+      shellSort(biList.begin(), biList.end(), std::less< T >());
+      biList2.sort(std::less< T >());
+      oddEvenSort(deq.begin(), deq.end(), std::less< T >());
+      shellSort(deq2.begin(), deq2.end(), std::less< T >());
+      std::sort(deq3.begin(), deq3.end(), std::less< T >());
     }
     else if (type == "descending")
     {
-      oddEvenSort(fwdList.cbegin(), fwdList.cend(), std::greater< int >());
-      shellSort(biList.begin(), biList.end(), std::greater< int >());
-      biList2.sort(std::greater< int >());
-      oddEvenSort(deq.begin(), deq.end(), std::greater< int >());
-      shellSort(deq2.begin(), deq2.end(), std::greater< int >());
-      std::sort(deq3.begin(), deq3.end(), std::greater< int >());
+      oddEvenSort(fwdList.cbegin(), fwdList.cend(), std::greater< T >());
+      shellSort(biList.begin(), biList.end(), std::greater< T >());
+      biList2.sort(std::greater< T >());
+      oddEvenSort(deq.begin(), deq.end(), std::greater< T >());
+      shellSort(deq2.begin(), deq2.end(), std::greater< T >());
+      std::sort(deq3.begin(), deq3.end(), std::greater< T >());
     }
     else
     {
