@@ -18,6 +18,10 @@ int main(int argc, char** argv)
       return 1;
     }
     size_t size = std::stoull(argv[3]);
+    if (size <= 0)
+    {
+      throw std::invalid_argument("Zero size");
+    }
     std::string sort(argv[1]);
     std::string type(argv[2]);
     if (type == "ints")
