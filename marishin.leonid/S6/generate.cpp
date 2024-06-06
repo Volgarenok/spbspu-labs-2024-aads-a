@@ -3,6 +3,6 @@
 
 float marishin::detail::randomNumber(std::default_random_engine& generate, float)
 {
-  std::uniform_real_distribution< float > dis(-1000, 1000);
+  std::uniform_real_distribution< float > dis(-10000, 10000);
   return dis(generate);
 }

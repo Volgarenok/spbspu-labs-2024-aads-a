@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
 
     cmd.at(condition)(std::cout, size, generator);
   }
-  catch (const std::exception&)
+  catch (const std::exception& e)
   {
     std::cout << "No right argument\n";
     return 1;
