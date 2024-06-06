@@ -37,7 +37,7 @@ namespace marishin
     std::list< Type > biListSt(array, array + size);
     std::deque< Type > dequeSort(array, array + size);
     std::deque< Type > dequeShaker(array, array + size);
-    std::deque< Type > dequeShell(array, array + size);
+    std::deque< Type > dequeQsort(array, array + size);
     std::forward_list< Type > forwardList(array, array + size);
 
     print(out, forwardList.begin(), forwardList.end());
@@ -45,7 +45,6 @@ namespace marishin
 
     chooseSort(out, biListR.begin(), biListR.end(), size, cmp, shaker);
     chooseSort(out, dequeShaker.begin(), dequeShaker.end(), size, cmp, shaker);
-    chooseSort(out, dequeShell.begin(), dequeShell.end(), size, cmp, qSort);
     standartSort(out, biListSt, cmp);
     standartSort(out, forwardList, cmp);
 
