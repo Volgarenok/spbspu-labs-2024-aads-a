@@ -12,10 +12,11 @@ namespace sivkov
   template < typename ForwardIt, typename Compare >
   void oddEvenSort(ForwardIt first, ForwardIt last, Compare comp)
   {
-    if (first == last) return;
-
+    if (first == last)
+    {
+      return;
+    }
     bool sorted = false;
-
     while (!sorted)
     {
       sorted = true;
@@ -60,12 +61,10 @@ namespace sivkov
     }
   }
 
-
   template < typename RandomIt, typename Compare >
   void shellSort(RandomIt first, RandomIt last, Compare comp)
   {
     auto n = std::distance(first, last);
-
     for (auto gap = n / 2; gap > 0; gap /= 2)
     {
       for (auto i = first; std::distance(first, i) < n; ++i)
@@ -75,7 +74,6 @@ namespace sivkov
         {
           auto prevGapIt = j;
           std::advance(prevGapIt, -gap);
-
           if (comp(*tempIt, *prevGapIt))
           {
             std::swap(*tempIt, *prevGapIt);
@@ -92,7 +90,6 @@ namespace sivkov
   template< typename T >
   void enterTypeOfSort(const std::string& type, std::deque< T >& deq, List< T >& fwdList, std::list< T >& biList, std::ostream& out)
   {
-
     std::list< T > biList2 = biList;
     std::deque< T > deq2 = deq;
     std::deque< T > deq3 = deq;
@@ -126,7 +123,4 @@ namespace sivkov
     print(out, deq3);
   }
 }
-
 #endif
-
-
