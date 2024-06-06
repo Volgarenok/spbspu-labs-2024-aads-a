@@ -25,6 +25,11 @@ int main(int argc, char * argv[])
     {
       printInfo(std::cout);
     }
+    else
+    {
+      std::cerr << "Wrong argument\n";
+      return 1;
+    }
   }
   Tree< std::string, std::function< void(std::istream&, std::ostream&) > > cmds;
   cmds.insert("addelem", std::bind(addelem, std::ref(setDic), _1));
