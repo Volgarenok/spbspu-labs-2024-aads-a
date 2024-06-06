@@ -57,7 +57,7 @@ namespace marishin
       count++;
     }
   }
-
+  /*
   template< class Iterator, class Compare >
   void qSort(Iterator begin, size_t size, Compare cmp)
   {
@@ -95,6 +95,6 @@ namespace marishin
       qSort(left, begin + size - left, cmp);
     }
   }
-
+*/
 }
 #endif
