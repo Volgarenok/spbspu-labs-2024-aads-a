@@ -34,7 +34,6 @@ int main(int argc, char* argv[])
   }
 
   using namespace sivkov;
-
   try
   {
     if (type == "floats")
