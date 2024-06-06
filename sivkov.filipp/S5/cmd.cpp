@@ -7,16 +7,17 @@ namespace sivkov
 {
   void ascending(const AVLTree< int, std::string >& tree, KeySum& f)
   {
-    tree.iterLnr(f);
+    tree.traverse_lnr(f);
   }
 
   void descending(const AVLTree< int, std::string >& tree, KeySum& f)
   {
-    tree.iterRnl(f);
+    tree.traverse_rnl(f);
   }
 
   void breadth(const AVLTree< int, std::string >& tree, KeySum& f)
   {
-    tree.iterBfs(f);
+    tree.traverse_breadth(f);
   }
 }
+

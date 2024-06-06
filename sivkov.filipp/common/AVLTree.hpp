@@ -3,11 +3,10 @@
 
 #include <algorithm>
 #include <iostream>
+#include "queue.hpp"
+#include "stack.hpp"
 #include "treeNode.hpp"
 #include "cIterator.hpp"
-#include "constIteratorLnr.hpp"
-#include "constIteratorRnl.hpp"
-#include "constIteratorBfs.hpp"
 
 namespace sivkov
 {
@@ -32,26 +31,17 @@ namespace sivkov
     Value& operator[](const Key& key);
     const Value& operator[](const Key& key) const;
 
-    ConstIteratorLnr< Key, Value, Comp > cbeginLnr() const;
-    ConstIteratorLnr< Key, Value, Comp > cendLnr() const;
-
-    ConstIteratorRnl< Key, Value, Comp > cbeginRnl() const;
-    ConstIteratorRnl< Key, Value, Comp > cendRnl() const;
-
-    ConstIteratorBfs< Key, Value, Comp > cbeginBfs() const;
-    ConstIteratorBfs< Key, Value, Comp > cendBfs() const;
-
     ConstIteratorTree< Key, Value, Comp > cbegin() const;
     ConstIteratorTree< Key, Value, Comp > cend() const;
 
     ConstIteratorTree< Key, Value, Comp > find(const Key& key) const;
 
     template< typename F >
-    F& iterLnr(F& f) const;
+    F traverse_lnr(F f) const;
     template< typename F >
-    F& iterRnl(F& f) const;
+    F traverse_rnl (F f) const;
     template< typename F >
-    F& iterBfs(F& f) const;
+    F traverse_breadth (F f) const;
 
   private:
     size_t size_;
@@ -59,6 +49,10 @@ namespace sivkov
     Comp comp_;
 
     void clear();
+
+    template< typename F >
+    F traverse_rnl_helper(detail::TreeNode<Key, Value>* node, F f) const;
+
     detail::TreeNode< Key, Value >* remove(detail::TreeNode< Key, Value >* node, const Key& key);
     detail::TreeNode< Key, Value >* find_min(detail::TreeNode< Key, Value >* node) const;
     detail::TreeNode< Key, Value >* deep_copy(detail::TreeNode< Key, Value >* root);
@@ -221,41 +215,6 @@ namespace sivkov
     }
   }
 
-  template< typename Key, typename Value, typename Comp >
-  ConstIteratorLnr< Key, Value, Comp > AVLTree< Key, Value, Comp >::cbeginLnr() const
-  {
-    return ConstIteratorLnr< Key, Value, Comp >(root_);
-  }
-
-  template< typename Key, typename Value, typename Comp >
-  ConstIteratorLnr< Key, Value, Comp > AVLTree< Key, Value, Comp >::cendLnr() const
-  {
-    return ConstIteratorLnr< Key, Value, Comp >(nullptr);
-  }
-
-  template< typename Key, typename Value, typename Comp >
-  ConstIteratorRnl< Key, Value, Comp > AVLTree< Key, Value, Comp >::cbeginRnl() const
-  {
-    return ConstIteratorRnl< Key, Value, Comp >(root_);
-  }
-
-  template< typename Key, typename Value, typename Comp >
-  ConstIteratorRnl< Key, Value, Comp > AVLTree< Key, Value, Comp >::cendRnl() const
-  {
-    return ConstIteratorRnl< Key, Value, Comp >(nullptr);
-  }
-
-  template< typename Key, typename Value, typename Comp >
-  ConstIteratorBfs< Key, Value, Comp > AVLTree< Key, Value, Comp >::cbeginBfs() const
-  {
-    return ConstIteratorBfs< Key, Value, Comp >(root_);
-  }
-
-  template< typename Key, typename Value, typename Comp >
-  ConstIteratorBfs< Key, Value, Comp > AVLTree< Key, Value, Comp >::cendBfs() const
-  {
-    return ConstIteratorBfs< Key, Value, Comp >(nullptr);
-  }
 
   template< typename Key, typename Value, typename Comp >
   ConstIteratorTree< Key, Value, Comp > AVLTree< Key, Value, Comp >::cbegin() const
@@ -287,50 +246,6 @@ namespace sivkov
     return cend();
   }
 
-  template< typename Key, typename Value, typename Comp >
-  template< typename F >
-  F& AVLTree< Key, Value, Comp >::iterLnr(F& f) const
-  {
-    if (empty())
-    {
-      throw std::logic_error("<EMPTY>");
-    }
-    for (auto i = cbeginLnr(); i != cendLnr(); ++i)
-    {
-      f(*i);
-    }
-    return f;
-  }
-
-  template< typename Key, typename Value, typename Comp >
-  template< typename F >
-  F& AVLTree< Key, Value, Comp >::iterRnl(F& f) const
-  {
-    if (empty())
-    {
-      throw std::logic_error("<EMPTY>");
-    }
-    for (auto i = cbeginRnl(); i != cendRnl(); ++i)
-    {
-      f(*i);
-    }
-    return f;
-  }
-
-  template< typename Key, typename Value, typename Comp >
-  template< typename F >
-  F& AVLTree< Key, Value, Comp >::iterBfs(F& f) const
-  {
-    if (empty())
-    {
-      throw std::logic_error("<EMPTY>");
-    }
-    for (auto i = cbeginBfs(); i != cendBfs(); ++i)
-    {
-      f(*i);
-    }
-    return f;
-  }
 
   template< typename Key, typename Value, typename Comp >
   void AVLTree< Key, Value, Comp >::clear()
@@ -650,5 +565,87 @@ namespace sivkov
       return node;
     }
   }
+
+  template<typename Key, typename Value, typename Comp>
+  template<typename F>
+  F AVLTree<Key, Value, Comp>::traverse_lnr(F f) const
+  {
+    if (root_ == nullptr)
+    {
+      throw std::logic_error("EMPTY");
+    }
+    Stack<detail::TreeNode<Key, Value>*> stack;
+    detail::TreeNode<Key, Value>* current = root_;
+
+    while (!stack.empty() || current != nullptr)
+    {
+      if (current != nullptr)
+      {
+        stack.push(current);
+        current = current->left;
+      }
+      else
+      {
+        current = stack.top();
+        stack.pop();
+        f(current->data);
+        current = current->right;
+      }
+    }
+    return f;
+  }
+
+  template<typename Key, typename Value, typename Comp>
+  template<typename F>
+  F AVLTree<Key, Value, Comp>::traverse_rnl(F f) const
+  {
+    return traverse_rnl_helper(root_, f);
+  }
+
+  template<typename Key, typename Value, typename Comp>
+  template<typename F>
+  F AVLTree<Key, Value, Comp>::traverse_breadth(F f) const
+  {
+    if (root_ == nullptr)
+    {
+      return f;
+    }
+
+    Queue<detail::TreeNode<Key, Value>*> nodes_queue;
+    nodes_queue.push(root_);
+
+    while (!nodes_queue.empty())
+    {
+      detail::TreeNode<Key, Value>* current = nodes_queue.front();
+      nodes_queue.pop();
+
+      f(current->data);
+
+      if (current->left != nullptr)
+      {
+        nodes_queue.push(current->left);
+      }
+      if (current->right != nullptr)
+      {
+        nodes_queue.push(current->right);
+      }
+    }
+    return f;
+  }
+
+  template<typename Key, typename Value, typename Comp>
+  template<typename F>
+  F AVLTree<Key, Value, Comp>::traverse_rnl_helper(detail::TreeNode<Key, Value>* node, F f) const
+  {
+    if (node == nullptr)
+    {
+      return f;
+    }
+    f = traverse_rnl_helper(node->right, f);
+    f(node->data);
+    return traverse_rnl_helper(node->left, f);
+  }
 }
+
 #endif
+
