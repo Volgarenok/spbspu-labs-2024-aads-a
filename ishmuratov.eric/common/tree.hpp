@@ -318,7 +318,7 @@ namespace ishmuratov
       queue.push(root_);
       while (!queue.empty())
       {
-        const tnode * temp = queue.front();
+        const tnode * temp = queue.back();
         f(temp->data);
         queue.pop();
         if (temp->left)
