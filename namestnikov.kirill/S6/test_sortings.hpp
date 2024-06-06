@@ -12,44 +12,24 @@
 #include "generate_numbers.hpp"
 #include "selection_sort.hpp"
 
-template< class Iter >
-void printData(Iter first, Iter last, std::ostream & out)
+namespace namestnikov
 {
-  auto temp = first;
-  ++temp;
-  for (; temp != last; ++temp)
+  namespace detail
   {
-    out << *first << " ";
-    ++first;
+    template< class Iter >
+    void printData(Iter first, Iter last, std::ostream & out)
+    {
+      auto temp = first;
+      ++temp;
+      for (; temp != last; ++temp)
+      {
+        out << *first << " ";
+        ++first;
+      }
+      out << *first << "\n";
+    }
   }
-  out << *first << "\n";
 }
-
-template< class T >
-struct Comparator
-{
-public:
-  explicit Comparator(const std::string & order):
-    order_(order)
-  {}
-  bool operator()(T a, T b) const
-  {
-    if (order_ == "ascending")
-    {
-      return std::less< T >()(a, b);
-    }
-    else if (order_ == "descending")
-    {
-      return std::greater< T >()(a, b);
-    }
-    else
-    {
-      throw std::invalid_argument("Wrong type of order");
-    }
-  }
-private:
-  std::string order_;
-};
 
 namespace namestnikov
 {
@@ -58,7 +38,7 @@ namespace namestnikov
   {
     std::vector< T > data(size);
     std::generate(data.begin(), data.end(), std::bind(generateNumber< T >, -1000, 1000));
-    printData(data.begin(), data.end(), out);
+    detail::printData(data.begin(), data.end(), out);
     Compare compare;
     ForwardList< T > forwardlistSelection;
     for (size_t i = 0; i < size; ++i)
@@ -76,12 +56,12 @@ namespace namestnikov
     doSelectionSort(dequeSelection.begin(), size, compare);
     doShellSort(dequeShell.begin(), size, compare);
     std::sort(dequeNormal.begin(), dequeNormal.end(), compare);
-    printData(forwardlistSelection.begin(), forwardlistSelection.end(), out);
-    printData(listSelection.begin(), listSelection.end(), out);
-    printData(listShell.begin(), listShell.end(), out);
-    printData(dequeSelection.begin(), dequeSelection.end(), out);
-    printData(dequeShell.begin(), dequeShell.end(), out);
-    printData(dequeNormal.begin(), dequeNormal.end(), out);
+    detail::printData(forwardlistSelection.begin(), forwardlistSelection.end(), out);
+    detail::printData(listSelection.begin(), listSelection.end(), out);
+    detail::printData(listShell.begin(), listShell.end(), out);
+    detail::printData(dequeSelection.begin(), dequeSelection.end(), out);
+    detail::printData(dequeShell.begin(), dequeShell.end(), out);
+    detail::printData(dequeNormal.begin(), dequeNormal.end(), out);
   }
 }
 
