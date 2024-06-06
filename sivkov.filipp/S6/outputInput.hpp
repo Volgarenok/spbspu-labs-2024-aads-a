@@ -16,6 +16,10 @@ namespace sivkov
   template < typename T >
   void filRandom(size_t numElements, std::deque< T >& dq, List< T >& fwdList, std::list< T >& biList, std::mt19937& gen)
   {
+    if (numElements >= 0)
+    {
+      throw std::invalid_argument("error number elements");
+    }
     if (std::is_same< T, int >::value)
     {
       std::uniform_int_distribution< int > dis(-100, 100);
