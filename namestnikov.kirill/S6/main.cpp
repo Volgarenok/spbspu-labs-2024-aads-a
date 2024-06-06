@@ -25,7 +25,7 @@ int main(int argc, char * argv[])
     }
     std::string sorting = argv[1];
     std::string type = argv[2];
-    Tree< std::pair< std::string, std::string >, std::function< void(std::ostream & ) > > sortMap;
+    Tree< std::pair< std::string, std::string >, std::function< void(std::ostream &) > > sortMap;
     {
       using namespace std::placeholders;
       sortMap[{"ascending", "ints"}] = std::bind(testSortings< int, std::less< int > >, _1, size);

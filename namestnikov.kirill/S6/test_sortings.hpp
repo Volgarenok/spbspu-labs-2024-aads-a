@@ -40,11 +40,7 @@ namespace namestnikov
     std::generate(data.begin(), data.end(), std::bind(generateNumber< T >, -1000, 1000));
     detail::printData(data.begin(), data.end(), out);
     Compare compare;
-    ForwardList< T > forwardlistSelection;
-    for (size_t i = 0; i < size; ++i)
-    {
-      forwardlistSelection.push_front(data[i]);
-    }
+    ForwardList< T > forwardlistSelection(data.begin(), data.end());
     std::list< T > listSelection(data.begin(), data.end());
     std::list< T > listShell(data.begin(), data.end());
     std::deque< T > dequeSelection(data.begin(), data.end());
