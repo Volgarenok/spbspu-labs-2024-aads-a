@@ -49,10 +49,6 @@ namespace sivkov
     Comp comp_;
 
     void clear();
-
-    template< typename F >
-    F traverse_rnl_helper(detail::TreeNode<Key, Value>* node, F f) const;
-
     detail::TreeNode< Key, Value >* remove(detail::TreeNode< Key, Value >* node, const Key& key);
     detail::TreeNode< Key, Value >* find_min(detail::TreeNode< Key, Value >* node) const;
     detail::TreeNode< Key, Value >* deep_copy(detail::TreeNode< Key, Value >* root);
@@ -574,20 +570,21 @@ namespace sivkov
     {
       throw std::logic_error("<EMPTY>");
     }
-    Stack<detail::TreeNode< Key, Value >* > stack;
+
+    Stack< detail::TreeNode< Key, Value >* > node_stack;
     detail::TreeNode< Key, Value >* current = root_;
 
-    while (!stack.empty() || current != nullptr)
+    while (!node_stack.empty() || current != nullptr)
     {
       if (current != nullptr)
       {
-        stack.push(current);
+        node_stack.push(current);
         current = current->left;
       }
       else
       {
-        current = stack.top();
-        stack.pop();
+        current = node_stack.top();
+        node_stack.pop();
         f(current->data);
         current = current->right;
       }
@@ -597,14 +594,31 @@ namespace sivkov
 
   template< typename Key, typename Value, typename Comp >
   template< typename F >
-  F AVLTree<Key, Value, Comp>::traverse_rnl(F f) const
+  F AVLTree< Key, Value, Comp >::traverse_rnl(F f) const
   {
     if (empty())
     {
       throw std::logic_error("<EMPTY>");
     }
-    return traverse_rnl_helper(root_, f);
+
+    Stack< detail::TreeNode< Key, Value >* > node_stack;
+    detail::TreeNode< Key, Value >* current = root_;
+
+    while (!node_stack.empty() || current != nullptr)
+    {
+      while (current != nullptr)
+      {
+        node_stack.push(current);
+        current = current->right;
+      }
+      current = node_stack.top();
+      node_stack.pop();
+      f(current->data);
+      current = current->left;
+    }
+    return f;
   }
+
 
   template< typename Key, typename Value, typename Comp >
   template< typename F >
@@ -622,9 +636,7 @@ namespace sivkov
     {
       detail::TreeNode< Key, Value >* current = nodes_queue.front();
       nodes_queue.pop();
-
       f(current->data);
-
       if (current->left != nullptr)
       {
         nodes_queue.push(current->left);
@@ -637,18 +649,6 @@ namespace sivkov
     return f;
   }
 
-  template< typename Key, typename Value, typename Comp >
-  template< typename F >
-  F AVLTree< Key, Value, Comp >::traverse_rnl_helper(detail::TreeNode< Key, Value >* node, F f) const
-  {
-    if (node == nullptr)
-    {
-      return f;
-    }
-    f = traverse_rnl_helper(node->right, f);
-    f(node->data);
-    return traverse_rnl_helper(node->left, f);
-  }
 }
 #endif
 
