@@ -47,7 +47,7 @@ namespace novokhatskiy
   {
     for (auto i = begin; i != end; i++)
     {
-      auto const tmp = std::upper_bound(begin, i, *i, cmp);
+      auto tmp = std::upper_bound(begin, i, *i, cmp);
       std::rotate(tmp, i, std::next(i));
     }
   }
