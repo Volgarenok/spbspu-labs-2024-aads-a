@@ -57,6 +57,7 @@ namespace novokhatskiy
     optSort(deque.begin(), deque.end(), out, cmp, doInsertionSort);
     optSort(secondDeque.begin(), secondDeque.end(), out, cmp, doShakerSort);
     optSort(thirdDeque.begin(), thirdDeque.end(), out, cmp, doInsertionSort);
+    out << '\n';
   }
 }
 
