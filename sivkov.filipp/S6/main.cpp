@@ -9,6 +9,8 @@
 #include "sorts.hpp"
 #include "outputInput.hpp"
 
+
+
 int main(int argc, char* argv[])
 {
   if (argc != 4)
@@ -36,12 +38,14 @@ int main(int argc, char* argv[])
   using namespace sivkov;
   try
   {
+    std::random_device rd;
+    std::mt19937 gen(rd());
     if (type == "floats")
     {
       List< float > fwdList;
       std::list< float > biList;
       std::deque< float > deq;
-      generateRandom(n, "floats", deq, fwdList, biList);
+      filRandom(n, deq, fwdList, biList, gen);
       print(std::cout, deq);
       enterTypeOfSort(direction, deq, fwdList, biList, std::cout);
     }
@@ -50,13 +54,13 @@ int main(int argc, char* argv[])
       List< int > fwdList;
       std::list< int > biList;
       std::deque< int > deq;
-      generateRandom(n, "ints", deq, fwdList, biList);
+      filRandom(n, deq, fwdList, biList, gen);
       print(std::cout, deq);
       enterTypeOfSort(direction, deq, fwdList, biList, std::cout);
     }
     else
     {
-      throw std::invalid_argument("Invalid type or template argument");
+      throw std::invalid_argument("Invalid type");
     }
   }
   catch (std::exception& e)
@@ -67,3 +71,4 @@ int main(int argc, char* argv[])
 
   return 0;
 }
+
