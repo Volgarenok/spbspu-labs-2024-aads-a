@@ -89,6 +89,11 @@ namespace ishmuratov
       return Iter(min_elem(root_));
     }
 
+    Iter rbegin() noexcept
+    {
+      return Iter(max_elem(root_));
+    }
+
     Iter end() noexcept
     {
       return Iter(nullptr);
@@ -97,6 +102,11 @@ namespace ishmuratov
     ConstIter cbegin() const noexcept
     {
       return ConstIter(min_elem(root_));
+    }
+
+    ConstIter crbegin() noexcept
+    {
+      return ConstIter(max_elem(root_));
     }
 
     ConstIter cend() const noexcept
@@ -304,7 +314,7 @@ namespace ishmuratov
     template< class F >
     F traverse_breadth(F f)
     {
-      std::queue< tnode * > queue;
+      Queue< tnode * > queue;
       queue.push(root_);
       while (!queue.empty())
       {
