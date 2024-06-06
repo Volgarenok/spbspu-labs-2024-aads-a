@@ -3,7 +3,7 @@
 
 #include <string>
 #include <iostream>
-#include "AVLTree.hpp"
+#include <AVLTree.hpp>
 
 namespace sivkov
 {
