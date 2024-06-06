@@ -39,7 +39,6 @@ namespace sivkov
     ConstIterator< T > cbegin() const;
     ConstIterator< T > cend() const;
 
-
   private:
     size_t size_;
     detail::Node< T >* head_;
