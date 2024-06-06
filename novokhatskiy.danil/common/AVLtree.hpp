@@ -8,9 +8,10 @@
 #include <type_traits>
 #include <stdexcept>
 #include <utility>
-#include "AVLtreeNode.hpp"
-#include "constIteratorTree.hpp"
-#include "IteratorTree.hpp"
+#include <queue.hpp>
+#include <AVLtreeNode.hpp>
+#include <constIteratorTree.hpp>
+#include <IteratorTree.hpp>
 
 namespace novokhatskiy
 {
@@ -71,6 +72,60 @@ namespace novokhatskiy
       clear();
       this->swap(other);
       return *this;
+    }
+
+    template< class F >
+    F traverse_lnr(F f)
+    {
+      if (empty())
+      {
+        throw std::logic_error("<EMPTY>");
+      }
+      for (auto i = cbegin(); i != cend(); i++)
+      {
+        f(*i);
+      }
+      return f;
+    }
+
+    template< class F >
+    F traverse_rnl(F f)
+    {
+      if (empty())
+      {
+        throw std::logic_error("<EMPTY>");
+      }
+      for (auto i = cbeginRight(); i != cend(); --i)
+      {
+        f(*i);
+      }
+      return f;
+    }
+
+    template< class F >
+    F traverse_breadth(F f)
+    {
+      if (empty())
+      {
+        throw std::logic_error("<EMPTY>");
+      }
+      Queue< node_t* > queue;
+      queue.push(root_);
+      while (!queue.empty())
+      {
+        node_t* node = queue.front();
+        queue.pop();
+        f(node->value);
+        if (node->left)
+        {
+          queue.push(node->left);
+        }
+        if (node->right)
+        {
+          queue.push(node->right);
+        }
+      }
+      return f;
     }
 
     iter find(const Key &key)
@@ -276,6 +331,11 @@ namespace novokhatskiy
       return res;
     }
 
+    constIter cbeginRight() const
+    {
+      return constIter(lastRight(root_));
+    }
+
     std::pair< iter, iter > equal_range(const Key &key)
     {
       return std::make_pair(lower_bound(key), upper_bound(key));
@@ -333,6 +393,20 @@ namespace novokhatskiy
     node_t *root_;
     size_t size_;
     Compare cmp_;
+
+    node_t* lastRight(node_t* node) const
+    {
+      node_t* res = node;
+      if (!res)
+      {
+        return nullptr;
+      }
+      while (res->right)
+      {
+        res = res->right;
+      }
+      return res;
+    }
 
     void balance(node_t *node)
     {

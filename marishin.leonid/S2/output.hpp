@@ -1,7 +1,7 @@
 #ifndef OUTPUT_HPP
 #define OUTPUT_HPP
 
-#include "stack.hpp"
+#include <stack.hpp>
 
 namespace marishin
 {
