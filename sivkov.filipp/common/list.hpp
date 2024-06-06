@@ -5,7 +5,7 @@
 #include <memory>
 #include <stdexcept>
 #include "node.hpp"
-#include "../S6/iteratorList.hpp"
+#include "iteratorList.hpp"
 #include "constIterator.hpp"
 
 
