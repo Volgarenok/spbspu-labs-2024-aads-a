@@ -50,8 +50,6 @@ namespace novokhatskiy
     while (sorted_end != end)
     {
       auto current = sorted_end;
-      auto next = sorted_end;
-      ++next;
 
       while (current != begin)
       {
@@ -75,7 +73,7 @@ namespace novokhatskiy
           break;
         }
       }
-      sorted_end = next;
+      sorted_end = std::next(sorted_end);
     }
   }
 }
