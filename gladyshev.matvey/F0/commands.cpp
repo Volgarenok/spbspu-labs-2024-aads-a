@@ -74,6 +74,7 @@ void gladyshev::save(const mainDic& dictionaries, std::istream& in)
   {
     outFile << " " << itr->first << " " << itr->second;
   }
+  outFile << "\n";
 }
 void gladyshev::intersect(mainDic& dictionaries, std::istream& in)
 {
