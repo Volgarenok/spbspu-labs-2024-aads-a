@@ -15,9 +15,9 @@
 namespace marishin
 {
   template < class It, class Cmp >
-  void chooseSort(std::ostream& out, It begin, It end, size_t size, Cmp cmp, void (*sort)(It, size_t, Cmp))
+  void chooseSort(std::ostream& out, It begin, It end, Cmp cmp, void (*sort)(It, It, Cmp))
   {
-    sort(begin, size, cmp);
+    sort(begin, end, cmp);
     print(out, begin, end);
     out << '\n';
   }
@@ -33,25 +33,24 @@ namespace marishin
   template < class Type, class Compare >
   void sortAndPrint(std::ostream& out, size_t size, Type array[], Compare cmp)
   {
-    LinkedList< Type > biListR(array, array + size);
-    std::list< Type > biListSt(array, array + size);
-    std::deque< Type > dequeSort(array, array + size);
-    std::deque< Type > dequeShaker(array, array + size);
-    std::deque< Type > dequeQsort(array, array + size);
-    std::forward_list< Type > forwardList(array, array + size);
+    List< Type > bi_list(array, array + size);
+    std::list< Type > bi_list_standart(array, array + size);
+    std::deque< Type > deque_sort(array, array + size);
+    std::deque< Type > deque_bubble(array, array + size);
+    std::deque< Type > deque_shell(array, array + size);
+    std::forward_list< Type > forward_list(array, array + size);
+    print(out, forward_list.begin(), forward_list.end());
+    out << "\n";
 
-    print(out, forwardList.begin(), forwardList.end());
-    out << '\n';
+    chooseSort(out, bi_list.begin(), bi_list.end(), cmp, bubble_sort);
+    chooseSort(out, deque_bubble.begin(), deque_bubble.end(), cmp, bubble_sort);
+    chooseSort(out, deque_shell.begin(), deque_shell.end(), cmp, shell_sort);
+    standartSort(out, bi_list_standart, cmp);
+    standartSort(out, forward_list, cmp);
 
-    chooseSort(out, biListR.begin(), biListR.end(), size, cmp, shaker);
-    chooseSort(out, dequeShaker.begin(), dequeShaker.end(), size, cmp, shaker);
-    chooseSort(out, dequeQsort.begin(), dequeQsort.end(), size, cmp, qSort);
-    standartSort(out, biListSt, cmp);
-    standartSort(out, forwardList, cmp);
-
-    std::sort(dequeSort.begin(), dequeSort.end(), cmp);
-    print(out, dequeSort.begin(), dequeSort.end());
-    out << '\n';
+    std::sort(deque_sort.begin(), deque_sort.end(), cmp);
+    print(out, deque_sort.begin(), deque_sort.end());
+    out << "\n";
   }
 
   template < class Type, class Compare >

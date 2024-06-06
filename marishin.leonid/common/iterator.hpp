@@ -46,12 +46,12 @@ namespace marishin
         return temp;
       }
 
-      bool operator!=(const Iterator< T > & other) const
+      bool operator!=(const Iterator< T > other) const
       {
-        return !(ptr_ == other.ptr_);
+        return !(*this == other);
       }
 
-      bool operator==(const Iterator< T > & other) const
+      bool operator==(const Iterator< T > other) const
       {
         return ptr_ == other.ptr_;
       }
@@ -101,7 +101,7 @@ namespace marishin
         return *this;
       }
 
-      ConstIterator< T > & operator++(int)
+      ConstIterator< T > operator++(int)
       {
         ConstIterator< T > temp(*this);
         ++(*this);
@@ -121,12 +121,12 @@ namespace marishin
         return temp;
       }
 
-      bool operator!=(const ConstIterator< T > & other) const
+      bool operator!=(const ConstIterator< T > other) const
       {
-        return !(ptr_ == other.ptr_);
+        return !(*this == other);
       }
 
-      bool operator==(const ConstIterator< T > & other) const
+      bool operator==(const ConstIterator< T > other) const
       {
         return ptr_ == other.ptr_;
       }

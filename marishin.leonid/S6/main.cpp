@@ -1,17 +1,13 @@
-#include <algorithm>
-#include <cstdlib>
-#include <deque>
-#include <forward_list>
 #include <functional>
 #include <iostream>
-#include <linkedList.hpp>
-#include <list>
 #include <map>
 #include <string>
+#include <vector>
 #include "generate.hpp"
 #include "print.hpp"
 #include "sorting.hpp"
 #include "sortingList.hpp"
+#include <linkedList.hpp>
 
 int main(int argc, char* argv[])
 {
@@ -21,9 +17,6 @@ int main(int argc, char* argv[])
     std::cerr << "No right argument";
     return 1;
   }
-  std::string sort = argv[1];
-  std::string type = argv[2];
-  auto condition = sort + type;
   size_t size = std::atoi(argv[3]);
   if (size == 0)
   {
@@ -34,17 +27,17 @@ int main(int argc, char* argv[])
   {
     std::default_random_engine generator;
     using namespace std::placeholders;
-    std::map< std::string, std::function< void(std::ostream&, size_t, std::default_random_engine&) > > cmd;
-    cmd["ascendingints"] = fillContainer< int, std::less< int > >;
-    cmd["ascendingfloats"] = fillContainer< float, std::less< float > >;
-    cmd["descendingints"] = fillContainer< int, std::greater< int > >;
-    cmd["descendingfloats"] = fillContainer< float, std::greater< float > >;
+    std::map< std::pair< std::string, std::string >, std::function< void(std::ostream&, size_t, std::default_random_engine&) > > commands;
+    commands[{"ascending", "ints"}] = fillContainer< int, std::less< int > >;
+    commands[{"ascending", "floats"}] = fillContainer< float, std::less< float > >;
+    commands[{"descending", "ints"}] = fillContainer< int, std::greater< int > >;
+    commands[{"descending", "floats"}] = fillContainer< float, std::greater< float > >;
 
-    cmd.at(condition)(std::cout, size, generator);
+    commands.at(std::make_pair(argv[1], argv[2]))(std::cout, size, generator);
   }
-  catch (const std::exception& e)
+  catch (...)
   {
-    std::cout << "No right argument\n";
+    std::cout << "Error\n";
     return 1;
   }
 }
