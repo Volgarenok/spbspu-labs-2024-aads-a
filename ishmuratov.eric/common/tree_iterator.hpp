@@ -56,7 +56,7 @@ namespace ishmuratov
       }
       if (node_->left != nullptr)
       {
-        node_ = min_elem(node_->left);
+        node_ = max_elem(node_->left);
       }
       else
       {
@@ -130,6 +130,15 @@ namespace ishmuratov
       }
       return min_elem(root->left);
     }
+
+    tnode * max_elem(tnode * root) const
+    {
+      if (root == nullptr || root->right == nullptr)
+      {
+        return root;
+      }
+      return max_elem(root->right);
+    }
   };
 
   template< class Key, class Value, class Comparator = std::less< Key > >
@@ -179,7 +188,7 @@ namespace ishmuratov
       }
       if (node_->left != nullptr)
       {
-        node_ = min_elem(node_->left);
+        node_ = max_elem(node_->left);
       }
       else
       {
@@ -242,6 +251,15 @@ namespace ishmuratov
         return root;
       }
       return min_elem(root->left);
+    }
+
+    tnode * max_elem(tnode * root) const
+    {
+      if (root == nullptr || root->right == nullptr)
+      {
+        return root;
+      }
+      return max_elem(root->right);
     }
   };
 }

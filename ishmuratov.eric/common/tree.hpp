@@ -4,6 +4,7 @@
 #include <iostream>
 #include "tree_node.hpp"
 #include "tree_iterator.hpp"
+#include <queue.hpp>
 
 namespace ishmuratov
 {
@@ -280,6 +281,48 @@ namespace ishmuratov
       return std::make_pair(lower_bound(k), upper_bound(k));
     }
 
+    template< class F >
+    F traverse_lnr(F f)
+    {
+      for (auto node = cbegin(); node != cend(); ++node)
+      {
+        f(*node);
+      }
+      return f;
+    }
+
+    template< class F >
+    F traverse_rnl(F f)
+    {
+      for (auto node = crbegin(); node != cend(); --node)
+      {
+        f(*node);
+      }
+      return f;
+    }
+
+    template< class F >
+    F traverse_breadth(F f)
+    {
+      std::queue< tnode * > queue;
+      queue.push(root_);
+      while (!queue.empty())
+      {
+        const tnode * temp = queue.front();
+        f(temp->data);
+        queue.pop();
+        if (temp->left)
+        {
+          queue.push(temp->left);
+        }
+        if (temp->right)
+        {
+          queue.push(temp->right);
+        }
+      }
+      return f;
+    }
+
   private:
     detail::TNode< Key, Value> * root_;
     Compare * comp_;
@@ -322,6 +365,15 @@ namespace ishmuratov
         return root;
       }
       return min_elem(root->left);
+    }
+
+    tnode * max_elem(tnode * root) const
+    {
+      if (root == nullptr || root->right == nullptr)
+      {
+        return root;
+      }
+      return max_elem(root->right);
     }
 
     std::pair< tnode *, tnode * > insert_impl(const std::pair< Key, Value > & pair, tnode * node, bool rewrite)
