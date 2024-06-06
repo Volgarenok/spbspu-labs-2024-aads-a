@@ -33,7 +33,7 @@ namespace skuratov
       {
         for (auto it = diff.cbegin(); it != diff.cend(); it++)
         {
-          push(it->first, it->second);
+          insert(it->first, it->second);
         }
       }
       catch (...)
@@ -134,7 +134,7 @@ namespace skuratov
       return nodePointer->data_.second;
     }
 
-    /*const Value& operator[](const Key& key) const
+    const Value& operator[](const Key& key) const
     {
       detail::TreeNode< Key, Value >* nodePointer = findNode(root_, key);
 
@@ -143,7 +143,7 @@ namespace skuratov
         nodePointer = insertNode(root_, key, Value());
       }
       return nodePointer->data_.second;
-    }*/
+    }
 
     void clear() noexcept
     {
@@ -164,13 +164,6 @@ namespace skuratov
       return ConstIteratorTree< Key, Value, Compare > (findNode(root_, key));
     }
 
-    void push(const Key& key, const Value& value)
-    {
-      root_ = insertNode(root_, key, value);
-      ++size_;
-      /*insertNode(root_, key, value);*/
-    }
-
     Value& drop(const Key& key)
     {
       detail::TreeNode< Key, Value >* nodePointer = findNode(root_, key);
@@ -189,7 +182,7 @@ namespace skuratov
     {
       try
       {
-        /*if (root_)
+        if (root_)
         {
           insertNode(root_, key, value);
           ++size_;
@@ -198,9 +191,7 @@ namespace skuratov
         {
           root_ = new detail::TreeNode< Key, Value >(key, value);
           ++size_;
-        }*/
-        root_ = insertNode(root_, key, value);
-        ++size_;
+        }
       }
       catch (...)
       {
@@ -265,9 +256,9 @@ namespace skuratov
       return balance(nodePointer);
     }
 
-    detail::TreeNode< Key, Value >* minValueNode(detail::TreeNode< Key, Value >* node)
+    detail::TreeNode< Key, Value >* minValueNode(detail::TreeNode< Key, Value >* nodePointer)
     {
-      detail::TreeNode< Key, Value >* current = node;
+      detail::TreeNode< Key, Value >* current = nodePointer;
       while (current && current->left_ != nullptr)
       {
         current = current->left_;
@@ -311,25 +302,24 @@ namespace skuratov
     {
       if (!nodePointer)
       {
-        /*nodePointer = new detail::TreeNode< Key, Value >(key, value);
+        nodePointer = new detail::TreeNode< Key, Value >(key, value);
         if (!root_)
         {
           root_ = nodePointer;
         }
         size_++;
-        return nodePointer;*/
-        return new detail::TreeNode< Key, Value >(key, value);
+        return nodePointer;
       }
 
       if (cmp_(key, nodePointer->data_.first))
       {
         nodePointer->left_ = insertNode(nodePointer->left_, key, value);
-        nodePointer->left_->parent_ = nodePointer; //update
+        nodePointer->left_->parent_ = nodePointer;
       }
       else if (cmp_(nodePointer->data_.first, key))
       {
         nodePointer->right_ = insertNode(nodePointer->right_, key, value);
-        nodePointer->right_->parent_ = nodePointer; //update
+        nodePointer->right_->parent_ = nodePointer;
       }
       else
       {
@@ -367,12 +357,12 @@ namespace skuratov
       unbalancedNode->height_ = std::max(height(unbalancedNode->left_), height(unbalancedNode->right_)) + 1;
       leftChild->height_ = std::max(height(leftChild->left_), height(leftChild->right_)) + 1;
 
-      leftChild->parent_ = unbalancedNode->parent_; //update
+      leftChild->parent_ = unbalancedNode->parent_;
       unbalancedNode->parent_ = leftChild;
       if (leftRightChild)
       {
         leftRightChild->parent_ = unbalancedNode;
-      } //end
+      }
 
       return leftChild;
     }
@@ -388,12 +378,12 @@ namespace skuratov
       unbalancedNode->height_ = std::max(height(unbalancedNode->left_), height(unbalancedNode->right_)) + 1;
       rightChild->height_ = std::max(height(rightChild->left_), height(rightChild->right_)) + 1;
 
-      rightChild->parent_ = unbalancedNode->parent_; //update
+      rightChild->parent_ = unbalancedNode->parent_;
       unbalancedNode->parent_ = rightChild;
       if (rightLeftChild)
       {
         rightLeftChild->parent_ = unbalancedNode;
-      } //end
+      }
 
       return rightChild;
     }
