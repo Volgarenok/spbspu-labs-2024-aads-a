@@ -33,6 +33,16 @@ namespace marishin
         return temp;
       }
 
+      Iterator< T > operator+(int a)
+      {
+        Iterator< T > temp (*this);
+        for (int b = 0; b < a; b++)
+        {
+          temp.ptr_ = temp.ptr_->next_;
+        }
+        return temp;
+      }
+
       Iterator< T > & operator--()
       {
         ptr_ = ptr_->next_;
