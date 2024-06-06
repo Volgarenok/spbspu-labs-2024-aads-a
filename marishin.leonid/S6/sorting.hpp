@@ -2,61 +2,98 @@
 #define SORTING_HPP
 #include <utility>
 #include <iterator>
+#include <algorithm>
 
 namespace marishin
 {
-  template < class Iterator, class Compare >
-  void bubble_sort(Iterator begin, Iterator end, Compare cmp)
+  template< class Iterator >
+  Iterator findPivot(Iterator begin, Iterator end)
   {
-    bool sorted_once = false;
-    do
+    --end;
+    while (begin < end)
     {
-      auto current_first = begin;
-      auto current_second = begin + 1;
-      sorted_once = false;
-      for (; current_second != end; current_first++, current_second++)
+      ++begin;
+      --end;
+    }
+    return begin;
+  }
+
+  template< class Iterator, class Compare >
+  void QSort(Iterator begin, Iterator end, Compare cmp)
+  {
+    Iterator toSwap = findPivot(begin, end);
+    Iterator pivot = end;
+    --pivot;
+    std::iter_swap(toSwap, pivot);
+
+    Iterator first = begin;
+    Iterator second = begin;
+    bool isFirst = true;
+    while (second != pivot)
+    {
+      if (cmp(*second, *pivot))
       {
-        if (!cmp(*current_first, *current_second))
+        if (isFirst)
         {
-          auto tmp = *current_first;
-          *current_first = *current_second;
-          *current_second = tmp;
-          sorted_once = true;
+          isFirst = false;
         }
+        else
+        {
+          ++first;
+        }
+        std::iter_swap(first, second);
       }
-    } while (sorted_once);
+      ++second;
+    }
+
+    if (!isFirst)
+    {
+      ++first;
+    }
+    std::iter_swap(first, pivot);
+    if (first != begin)
+    {
+      QSort(begin, first, cmp);
+    }
+    if (first != pivot)
+    {
+      QSort(++first, end, cmp);
+    }
   }
 
   template < class Iterator, class Compare >
-  void shell_sort(Iterator begin, Iterator end, Compare cmp)
+  void shaker(Iterator begin, Iterator end, Compare cmp)
   {
-    auto size_it = begin;
-    size_t size = 0;
-    while (size_it != end)
+    auto last = std::prev(end);
+    bool swapped = true;
+    while (swapped)
     {
-      size_it++;
-      size++;
-    }
-
-    auto spacing = begin + size / 2;
-    for (size_t interval = size / 2; interval > 0; interval /= 2)
-    {
-      auto temp = begin + interval;
-      for (size_t i = interval; i < size; ++i)
+      swapped = false;
+      for (auto i = begin; i != last; i++)
       {
-        auto number = *temp;
-        auto tmp = temp;
-        size_t j = i;
-        for (; j >= interval && cmp(number, *(tmp - interval)); j -= interval)
+        auto next = std::next(i);
+        if (!cmp(*i, *next))
         {
-          auto next = tmp - interval;
-          *tmp = *next;
-          tmp = next;
+          std::swap(*i, *next);
+          swapped = true;
         }
-        *tmp = number;
-        ++temp;
       }
-      spacing = begin + interval / 2;
+      last = std::prev(last);
+      if (!swapped)
+      {
+        break;
+      }
+      swapped = false;
+      for (auto i = last; i != begin; --i)
+      {
+        auto prev = std::prev(i);
+        if (cmp(*i, *prev))
+        {
+          std::swap(*i, *prev);
+          swapped = true;
+        }
+      }
+      begin = std::next(begin);
     }
   }
 }

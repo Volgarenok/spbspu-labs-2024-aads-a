@@ -36,15 +36,15 @@ namespace marishin
     LinkedList< Type > bi_list(array, array + size);
     std::list< Type > bi_list_standart(array, array + size);
     std::deque< Type > deque_sort(array, array + size);
-    std::deque< Type > deque_bubble(array, array + size);
-    std::deque< Type > deque_shell(array, array + size);
+    std::deque< Type > deque_qsort(array, array + size);
+    std::deque< Type > deque_shaker(array, array + size);
     std::forward_list< Type > forward_list(array, array + size);
     print(out, forward_list.begin(), forward_list.end());
     out << "\n";
 
-    chooseSort(out, bi_list.begin(), bi_list.end(), cmp, bubble_sort);
-    chooseSort(out, deque_bubble.begin(), deque_bubble.end(), cmp, bubble_sort);
-    chooseSort(out, deque_shell.begin(), deque_shell.end(), cmp, shell_sort);
+    chooseSort(out, bi_list.begin(), bi_list.end(), cmp, QSort);
+    chooseSort(out, deque_qsort.begin(), deque_qsort.end(), cmp, QSort);
+    chooseSort(out, deque_shaker.begin(), deque_shaker.end(), cmp, shaker);
     standartSort(out, bi_list_standart, cmp);
     standartSort(out, forward_list, cmp);
 
