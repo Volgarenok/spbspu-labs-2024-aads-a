@@ -45,15 +45,10 @@ namespace novokhatskiy
   template < class It, class P >
   void doInsertionSort(It begin, It end, P cmp)
   {
-    for (auto i = std::next(begin); i != end; i++)
+    for (auto i = begin; i != end; i++)
     {
-      for (auto j = begin; j != i; j++)
-      {
-        if (cmp(*i, *j))
-        {
-          std::swap(*i, *j);
-        }
-      }
+      auto const tmp = std::upper_bound(begin, i, *i, cmp);
+      std::rotate(tmp, i, std::next(i));
     }
   }
 }
