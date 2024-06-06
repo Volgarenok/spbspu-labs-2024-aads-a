@@ -3,7 +3,7 @@
 #include <forward_list>
 #include <iomanip>
 #include <ostream>
-#include "linkedList.hpp"
+#include <linkedList.hpp>
 
 namespace marishin
 {
