@@ -3,8 +3,7 @@
 #include <limits>
 
 novokhatskiy::KeySum::KeySum():
-  value_(0),
-  name_()
+  value_(0)
 {}
 
 void novokhatskiy::KeySum::operator()(const std::pair< int, std::string>& value)
@@ -16,7 +15,6 @@ void novokhatskiy::KeySum::operator()(const std::pair< int, std::string>& value)
     throw std::overflow_error("Overflow");
   }
   value_ += value.first;
-  name_ += ' ' + value.second;
 }
 
 int novokhatskiy::KeySum::getKey() const
@@ -24,7 +22,16 @@ int novokhatskiy::KeySum::getKey() const
   return value_;
 }
 
-std::string novokhatskiy::KeySum::getStr() const
+std::string novokhatskiy::StrSum::getStr() const
 {
   return name_;
+}
+
+novokhatskiy::StrSum::StrSum():
+  name_()
+{}
+
+void novokhatskiy::StrSum::operator()(const std::pair< int, std::string >& val)
+{
+  name_ += ' ' + val.second;
 }

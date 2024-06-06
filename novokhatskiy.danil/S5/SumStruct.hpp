@@ -11,9 +11,16 @@ namespace novokhatskiy
     KeySum();
     void operator()(const std::pair< int, std::string >& value);
     int getKey() const;
-    std::string getStr() const;
   private:
     int value_;
+  };
+
+  struct StrSum
+  {
+    StrSum();
+    void operator()(const std::pair< int, std::string >& val);
+    std::string getStr() const;
+  private:
     std::string name_;
   };
 }
