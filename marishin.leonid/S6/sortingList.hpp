@@ -22,8 +22,8 @@ namespace marishin
     out << '\n';
   }
 
-  template < class List, class Cmp >
-  void standartSort(std::ostream& out, List& list, Cmp cmp)
+  template < class LinkedList, class Cmp >
+  void standartSort(std::ostream& out, LinkedList& list, Cmp cmp)
   {
     list.sort(cmp);
     print(out, list.begin(), list.end());
@@ -33,7 +33,7 @@ namespace marishin
   template < class Type, class Compare >
   void sortAndPrint(std::ostream& out, size_t size, Type array[], Compare cmp)
   {
-    List< Type > bi_list(array, array + size);
+    LinkedList< Type > bi_list(array, array + size);
     std::list< Type > bi_list_standart(array, array + size);
     std::deque< Type > deque_sort(array, array + size);
     std::deque< Type > deque_bubble(array, array + size);
