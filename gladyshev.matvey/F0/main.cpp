@@ -17,7 +17,6 @@ int main(int argc, char * argv[])
     return 1;
   }
   std::ifstream file(argv[1]);
-  std::ofstream outFile(argv[1], std::ios::trunc);
   read_dictionaries(file, setDic);
   if (argc == 3)
   {
@@ -42,7 +41,7 @@ int main(int argc, char * argv[])
   cmds.insert("complement", std::bind(complement, std::ref(setDic), _1));
   cmds.insert("makedict", std::bind(makeDict, std::ref(setDic), std::ref(file), _1));
   cmds.insert("makedictlen", std::bind(makeDictLen, std::ref(setDic), std::ref(file), _1));
-  cmds.insert("save", std::bind(save, std::cref(setDic), std::ref(outFile), _1));
+  cmds.insert("save", std::bind(save, std::cref(setDic), _1));
   std::string command = "";
   while (!std::cin.eof())
   {
