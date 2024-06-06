@@ -45,7 +45,7 @@ namespace novokhatskiy
   template < class It, class P >
   void doInsertionSort(It begin, It end, P cmp)
   {
-    for (auto i = begin; i != end; i++)
+    for (auto i = std::next(begin); i != end; i++)
     {
       for (auto j = begin; j != i; j++)
       {

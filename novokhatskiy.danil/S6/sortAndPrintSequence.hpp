@@ -9,6 +9,7 @@
 #include <list>
 #include <ostream>
 #include <stdexcept>
+#include "sortings.hpp"
 
 namespace novokhatskiy
 {
