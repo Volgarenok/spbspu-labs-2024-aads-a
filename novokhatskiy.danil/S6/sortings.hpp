@@ -42,13 +42,40 @@ namespace novokhatskiy
     }
   }
 
-  template < class It, class P >
+  template < typename It, typename P >
   void doInsertionSort(It begin, It end, P cmp)
   {
-    for (auto i = begin; i != end; i++)
+    It sorted_end = std::next(begin);
+
+    while (sorted_end != end)
     {
-      auto tmp = std::upper_bound(begin, i, *i, cmp);
-      std::rotate(tmp, i, std::next(i));
+      auto current = sorted_end;
+      auto next = sorted_end;
+      ++next;
+
+      while (current != begin)
+      {
+        auto previous = begin;
+        It it = begin;
+        while (it != current)
+        {
+          previous = it;
+          ++it;
+        }
+
+        if (cmp(*current, *previous))
+        {
+          auto temp = *current;
+          *current = *previous;
+          *previous = temp;
+          current = previous;
+        }
+        else
+        {
+          break;
+        }
+      }
+      sorted_end = next;
     }
   }
 }
