@@ -5,7 +5,7 @@
 #include <deque>
 #include <forward_list>
 #include <iostream>
-#include <linkedList.hpp>
+#include <list.hpp>
 #include <list>
 #include <string>
 #include "generate.hpp"
