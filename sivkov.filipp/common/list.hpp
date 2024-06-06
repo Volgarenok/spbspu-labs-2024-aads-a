@@ -5,7 +5,6 @@
 #include <memory>
 #include <stdexcept>
 #include "node.hpp"
-#include "iteratorList.hpp"
 #include "constIterator.hpp"
 
 
@@ -40,8 +39,6 @@ namespace sivkov
     ConstIterator< T > cbegin() const;
     ConstIterator< T > cend() const;
 
-    Iterator< T > begin() const;
-    Iterator< T > end() const;
 
   private:
     size_t size_;
@@ -271,17 +268,6 @@ namespace sivkov
   {
     return ConstIterator< T >(nullptr);
   }
-  template< typename T >
-  Iterator< T > List< T >::begin() const
-  {
-    return Iterator< T >(head_);
-  }
-  template< typename T >
-  Iterator< T > List< T >::end() const
-  {
-    return Iterator< T >(nullptr);
-  }
 }
 #endif
-
 
