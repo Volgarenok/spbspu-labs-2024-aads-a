@@ -15,7 +15,6 @@ namespace marishin
     {
       return;
     }
-    Iterator end = std::next(begin, size - 1);
     size_t leftMark = 0;
     size_t rightMark = size - 1;
 
