@@ -9,6 +9,9 @@
 #include <iterator>
 #include <fstream>
 #include <limits>
+#include <binarySearchTree.hpp>
+#include <constTreeIterator.hpp>
+#include <treeIterator.hpp>
 
 class Note
 {
