@@ -17,10 +17,10 @@ namespace namestnikov
     };
 
     template< class T >
-    struct BiListNode: BaseListNode
+    struct ListNode: BaseListNode
     {
       T data;
-      BiListNode(const T& newData):
+      ListNode(const T& newData):
         BaseListNode(),
         data(newData)
       {}

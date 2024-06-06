@@ -2,8 +2,8 @@
 #define HASH_TABLE_ITERATORS_HPP
 
 #include <iterator>
-#include <list>
 #include <utility>
+#include "bidirectional_list.hpp"
 #include "hash_table_node.hpp"
 
 namespace namestnikov
@@ -12,22 +12,21 @@ namespace namestnikov
   class HashTable;
 
   template< class Key, class Value >
-  class HashTableIterator: public std::iterator< std::forward_iterator_tag, std::pair< const Key, Value > > 
+  class HashTableIterator: public std::iterator< std::forward_iterator_tag, std::pair< const Key, Value > >
   {
     friend class HashTable< Key, Value >;
   public:
     using val_type_t = std::pair< const Key, Value >;
-    using node_t = detail::HashTableNode< val_type_t >;
-    using list_iterator_t = typename std::list< node_t * >::iterator;
+    using ListNode = detail::HashTableNode< val_type_t >;
+    using ListIterator = typename List< ListNode* >::iterator;
     using hash_table_iterator = HashTableIterator< Key, Value >;
-    explicit HashTableIterator(list_iterator_t data):
-      iter_(data)
-    {}
     HashTableIterator(const hash_table_iterator &) = default;
     hash_table_iterator & operator=(const hash_table_iterator &) = default;
+    HashTableIterator(hash_table_iterator &&) = default;
+
     bool operator==(const hash_table_iterator & other) const
     {
-      return (iter_ == other.iter_);
+      return listIter_ == other.listIter_;
     }
     bool operator!=(const hash_table_iterator & other) const
     {
@@ -35,11 +34,11 @@ namespace namestnikov
     }
     val_type_t & operator*()
     {
-      return (**iter_).data;
+      return (*listIter_)->data;
     }
     const val_type_t & operator*() const
     {
-      return (**iter_).data;
+      return (*listIter_)->data;
     }
     val_type_t * operator->()
     {
@@ -51,7 +50,7 @@ namespace namestnikov
     }
     hash_table_iterator & operator++()
     {
-      ++iter_;
+      ++listIter_;
       return *this;
     }
     hash_table_iterator operator++(int)
@@ -62,7 +61,10 @@ namespace namestnikov
     }
     ~HashTableIterator() = default;
   private:
-    list_iterator_t iter_;
+    ListIterator listIter_;
+    explicit HashTableIterator(ListIterator current):
+      listIter_(current)
+    {}
   };
 }
 

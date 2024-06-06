@@ -2,8 +2,8 @@
 #define CONST_HASH_TABLE_ITERATORS_HPP
 
 #include <iterator>
-#include <list>
 #include <utility>
+#include "bidirectional_list.hpp"
 #include "hash_table_node.hpp"
 
 namespace namestnikov
@@ -12,26 +12,22 @@ namespace namestnikov
   class HashTable;
 
   template< class Key, class Value >
-  class ConstHashTableIterator: public std::iterator< std::forward_iterator_tag, std::pair< const Key, Value > >
+  class ConstHashTableIterator : public std::iterator< std::forward_iterator_tag, std::pair< const Key, Value > >
   {
     friend class HashTable< Key, Value >;
   public:
     using val_type_t = std::pair< const Key, Value >;
-    using node_t = detail::HashTableNode< val_type_t >;
-    using list_iterator_t = typename std::list< node_t * >::iterator;
-    using const_list_iterator_t = typename std::list< node_t * >::const_iterator;
+    using ListNode = detail::HashTableNode< val_type_t >;
+    using ListIterator = typename List< ListNode* >::iterator;
+    using ConstListIterator = typename List< ListNode* >::const_iterator;
     using const_hash_table_iterator = ConstHashTableIterator< Key, Value >;
-    explicit ConstHashTableIterator(const_list_iterator_t data):
-      iter_(data)
-    {}
-    explicit ConstHashTableIterator(list_iterator_t data):
-      iter_(const_list_iterator_t(data))
-    {}
+    ~ConstHashTableIterator() = default;
     ConstHashTableIterator(const const_hash_table_iterator &) = default;
     const_hash_table_iterator & operator=(const const_hash_table_iterator &) = default;
+    ConstHashTableIterator(const_hash_table_iterator &&) = default;
     bool operator==(const const_hash_table_iterator & other) const
     {
-      return (iter_ == other.iter_);
+      return (listIter_ == other.listIter_);
     }
     bool operator!=(const const_hash_table_iterator & other) const
     {
@@ -39,7 +35,7 @@ namespace namestnikov
     }
     const val_type_t & operator*() const
     {
-      return (**iter_).data;
+      return (*listIter_)->data;
     }
     const val_type_t * operator->() const
     {
@@ -47,7 +43,7 @@ namespace namestnikov
     }
     const_hash_table_iterator & operator++()
     {
-      ++iter_;
+      ++listIter_;
       return *this;
     }
     const_hash_table_iterator operator++(int)
@@ -55,11 +51,15 @@ namespace namestnikov
       const_hash_table_iterator temp(*this);
       ++(*this);
       return temp;
-
     }
-    ~ConstHashTableIterator() = default;
   private:
-    const_list_iterator_t iter_;
+    ConstListIterator listIter_;
+    explicit ConstHashTableIterator(ConstListIterator current):
+      listIter_(current)
+    {}
+    explicit ConstHashTableIterator(ListIterator current):
+      listIter_(ConstListIterator(current))
+    {}
   };
 }
 

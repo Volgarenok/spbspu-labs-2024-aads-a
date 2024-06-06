@@ -10,15 +10,15 @@ int main()
   h["maxxxxxx"] = "ma";
   h.insert("ki", "a");
   h.insert("wiii", "mee");
-  /*
+  
   std::cout << h["wiii"];
   std::cout << h["kirill"];
   std::cout << h["maxxxxxx"];
   std::cout << h["ki"];
-  */
+  
   for (const auto & key: h)
   {
-    std::cout << key.first;
+    std::cout << key.first << "||||" << key.second;
   }
   std::cout << "\n";
   h.erase("ki");
@@ -26,5 +26,4 @@ int main()
   h.erase("ki");
   std::cout << h.size();
   std::cout << h.size();
-  std::list < std::string > list;
 }

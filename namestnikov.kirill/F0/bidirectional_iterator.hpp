@@ -21,14 +21,14 @@ namespace namestnikov
     using node_t = detail::BaseListNode;
     using iterator = ListIterator< T >;
     ListIterator():
-      node_(nullptr)
+      current_(nullptr)
     {}
     ListIterator(const iterator &) = default;
     iterator & operator=(const iterator &) = default;
-    ListIterator(iterator &&) noexcept = default;
+    ListIterator(iterator &&) = default;
     bool operator==(const iterator & other) const
     {
-      return (node_ == other.node_);
+      return current_ == other.current_;
     }
     bool operator!=(const iterator & other) const
     {
@@ -36,11 +36,11 @@ namespace namestnikov
     }
     T & operator*()
     {
-      return (dynamic_cast< detail::BiListNode< T > * >(node_))->data;
+      return (dynamic_cast< detail::ListNode< T > * >(current_))->data;
     }
     const T & operator*() const
     {
-      return (dynamic_cast< detail::BiListNode< T > * >(node_))->data;
+      return (dynamic_cast< detail::ListNode< T >* >(current_))->data;
     }
     T * operator->()
     {
@@ -52,7 +52,7 @@ namespace namestnikov
     }
     iterator & operator++()
     {
-      node_ = node_->next;
+      current_ = current_->next;
       return *this;
     }
     iterator operator++(int)
@@ -63,7 +63,7 @@ namespace namestnikov
     }
     iterator & operator--()
     {
-      node_ = node_->prev;
+      current_ = current_->prev;
       return *this;
     }
     iterator operator--(int)
@@ -73,9 +73,9 @@ namespace namestnikov
       return temp;
     }
   private:
-    node_t * node_;
-    explicit ListIterator(node_t * node):
-      node_(node)
+    node_t * current_;
+    explicit ListIterator(node_t * ptr):
+      current_(ptr)
     {}
   };
 }

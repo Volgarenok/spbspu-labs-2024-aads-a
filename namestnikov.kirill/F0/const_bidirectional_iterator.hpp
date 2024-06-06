@@ -16,15 +16,12 @@ namespace namestnikov
   public:
     using node_t = detail::BaseListNode;
     using const_iterator = ConstListIterator< T >;
-    ConstListIterator():
-      node_(nullptr)
-    {}
     ConstListIterator(const const_iterator &) = default;
-    const_iterator & operator(const const_iterator &) = default;
+    const_iterator & operator=(const const_iterator &) = default;
     ConstListIterator(const_iterator &&) = default;
     bool operator==(const const_iterator & other) const
     {
-      return (node_ == other.node_);
+      return node_ == other.node_;
     }
     bool operator!=(const const_iterator & other) const
     {
@@ -32,7 +29,7 @@ namespace namestnikov
     }
     const T & operator*() const
     {
-      return (dynamic_cast< const detail::BiListNode< T > * >(node_))->data;
+      return (dynamic_cast< const detail::ListNode< T >* >(node_))->data;
     }
     const T * operator->() const
     {
@@ -60,9 +57,10 @@ namespace namestnikov
       --(*this);
       return temp;
     }
+
   private:
-    const node_t * node_;
-    explicit ConstListIterator(node_t * node):
+    const const_iterator * node_;
+    explicit ConstListIterator(const const_iterator * node) :
       node_(node)
     {}
   };

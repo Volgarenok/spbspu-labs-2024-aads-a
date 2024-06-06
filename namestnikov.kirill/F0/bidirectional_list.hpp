@@ -1,10 +1,9 @@
 #ifndef BIDIRECTIONAL_LIST_HPP
 #define BIDIRECTIONAL_LIST_HPP
-
 #include <utility>
 #include "bidirectional_iterator.hpp"
-#include "bidirectional_node.hpp"
 #include "const_bidirectional_iterator.hpp"
+#include "bidirectional_node.hpp"
 
 namespace namestnikov
 {
@@ -13,32 +12,33 @@ namespace namestnikov
   {
   public:
     using base_node_t = detail::BaseListNode;
-    using node_t = detail::BiListNode< T >;
+    using node_t = detail::ListNode< T >;
     using iterator = ListIterator< T >;
     using const_iterator = ConstListIterator< T >;
+
     List():
       size_(0),
       fakeNode_(new base_node_t())
     {}
-    List(const List< T > & other):
+    List(const List& other):
       size_(0)
     {
       try
       {
         fakeNode_ = new base_node_t();
-        auto it = other.cbegin();
-        for (; it != other.cend(); ++it)
+        for (auto it = other.cbegin(); it != other.cend(); ++it)
         {
-          push_back(*it);
+          pushBack(*it);
         }
       }
       catch (...)
       {
         clear();
+        delete fakeNode_;
         throw;
       }
     }
-    List< T > & operator=(const List< T > & other)
+    List & operator=(const List & other)
     {
       if (this != std::addressof(other))
       {
@@ -47,14 +47,14 @@ namespace namestnikov
       }
       return *this;
     }
-    List(List< T > && other) noexcept:
+    List(List && other) noexcept:
       size_(other.size_),
       fakeNode_(other.fakeNode_)
     {
       other.size_ = 0;
       other.fakeNode_ = nullptr;
     }
-    List< T > & operator=(List< T > && other) noexcept
+    List & operator=(List && other) noexcept
     {
       if (this != std::addressof(other))
       {
@@ -65,7 +65,7 @@ namespace namestnikov
     }
     bool empty() const noexcept
     {
-      return (size_ == 0);
+      return size_ == 0;
     }
     size_t size() const noexcept
     {
@@ -117,7 +117,7 @@ namespace namestnikov
       {
         throw std::invalid_argument("There aren't any elements in list");
       }
-      return *std::prev(end())
+      return *std::prev(end());
     }
     const T & back() const
     {
@@ -125,7 +125,7 @@ namespace namestnikov
       {
         throw std::invalid_argument("There aren't any elements in list");
       }
-      return *std::prev(end())
+      return *std::prev(end());
     }
     void push_front(const T & value)
     {
@@ -143,30 +143,31 @@ namespace namestnikov
     {
       erase(std::prev(end()));
     }
-    iterator insert(iterator pos, const T & val)
+    iterator insert(iterator pos, const T & value)
     {
       try
       {
-        node_t * newNode = new node_t(val);
-        base_node_t * curNode = pos.node_;
-        newNode->next = curNode;
+        node_t * newNode = new node_t(value);
+        base_node_t* currentNode = pos.current_;
+        newNode->next = currentNode;
         if (size_)
         {
-          curNode->prev->next = newNode;
-          newNode->prev = curNode->prev;
+          currentNode->prev->next = newNode;
+          newNode->prev = currentNode->prev;
         }
         else
         {
-          newNode->prev = curNode;
-          curNode->next = newNode;
+          newNode->prev = currentNode;
+          currentNode->next = newNode;
         }
-        curNode->prev =newNode;
+        currentNode->prev = newNode;
         ++size_;
         return iterator(newNode);
       }
       catch (...)
       {
         clear();
+        delete fakeNode_;
         throw;
       }
     }
@@ -178,17 +179,18 @@ namespace namestnikov
       }
       try
       {
-        base_node_t * node = pos.node_;
+        base_node_t * node = pos.current_;
         node->prev->next = node->next;
         node->next->prev = node->prev;
         ++pos;
-        delete node
+        delete node;
         --size_;
         return pos;
       }
       catch (...)
       {
         clear();
+        delete fakeNode_;
         throw;
       }
     }
@@ -205,9 +207,8 @@ namespace namestnikov
         delete cur->prev;
       }
       size_ = 0;
-      delete fakeNode_;
     }
-    void swap(List< T > & other) noexcept
+    void swap(List & other) noexcept
     {
       std::swap(size_, other.size_);
       std::swap(fakeNode_, other.fakeNode_);
@@ -215,6 +216,7 @@ namespace namestnikov
     ~List()
     {
       clear();
+      delete fakeNode_;
     }
   private:
     base_node_t * fakeNode_;

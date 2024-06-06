@@ -3,10 +3,10 @@
 
 #include <initializer_list>
 #include <stdexcept>
-#include <iostream>
 #include <cmath>
-#include <cstddef>
+#include <utility>
 #include "hash_table_node.hpp"
+#include "bidirectional_list.hpp"
 #include "hash_table_iterators.hpp"
 #include "const_hash_table_iterators.hpp"
 
@@ -18,16 +18,17 @@ namespace namestnikov
   public:
     using val_type_t = std::pair< const Key, Value >;
     using node_t = detail::HashTableNode< val_type_t >;
-    using list_iterator_t = typename std::list< node_t * >::iterator;
+    using list_iterator = typename List< node_t * >::iterator;
     using hash_table_iterator = HashTableIterator< Key, Value >;
     using const_hash_table_iterator = ConstHashTableIterator< Key, Value >;
+
     HashTable():
-      capacity_(500),
+      capacity_(5),
       count_(0),
-      buckets_(new list_iterator_t[500]),
+      buckets_(new list_iterator[5]),
       elements_()
     {
-      for (size_t i = 0; i < 500; ++i)
+      for (size_t i = 0; i < 5; ++i)
       {
         buckets_[i] = elements_.end();
       }
@@ -35,41 +36,57 @@ namespace namestnikov
     HashTable(std::initializer_list< val_type_t > initList):
       capacity_(initList.size() / 0.75 + 1),
       count_(0),
-      buckets_(new list_iterator_t[initList.size() / 0.75 + 1]),
+      buckets_(new list_iterator[initList.size() / 0.75 + 1]),
       elements_()
     {
-      for (size_t i = 0; i < capacity_; ++i)
+      try
       {
-        buckets_[i] = elements_.end();
+        for (size_t i = 0; i < capacity_; ++i)
+        {
+          buckets_[i] = elements_.end();
+        }
+        for (auto it = initList.begin(); it != initList.end(); ++it)
+        {
+          insert((*it).first, (*it).second);
+        }
       }
-      auto it = initList.begin();
-      for (; it != initList.end(); ++it)
+      catch (...)
       {
-        insert((*it).first, (*it).second);
+        clear();
+        delete[] buckets_;
+        throw;
       }
     }
     HashTable(const HashTable< Key, Value > & other):
       capacity_(other.capacity_),
       count_(0),
-      buckets_(new list_iterator_t[other.capacity_]),
+      buckets_(new list_iterator[other.capacity_]),
       elements_()
     {
-      for (size_t i = 0; i < capacity_; ++i)
+      try
       {
-        buckets_[i] = elements_.end();
-        if (other.buckets_[i] != other.elements_.end())
+        for (size_t i = 0; i < capacity_; ++i)
         {
-          list_iterator_t it = other.buckets_[i];
-          insert(Key((**it).data.first), Value((**it).data.second), (**it).hash);
+          buckets_[i] = elements_.end();
+          if (other.buckets_[i] != other.elements_.end())
+          {
+            list_iterator iter = other.buckets_[i];
+            insert(Key((*iter)->data.first), Value((*iter)->data.second), (*iter)->hash);
+          }
+        }
+        for (auto it = other.elements_.cbegin(); it != other.elements_.cend(); ++it)
+        {
+          insert(Key((*it)->data.first), Value((*it)->data.second), (*it)->hash);
         }
       }
-      auto it = other.elements_.cbegin();
-      for (; it != other.elements_.cend(); ++it)
+      catch (...)
       {
-        insert(Key((**it).data.first), Value((**it).data.second), (**it).hash);
+        clear();
+        delete[] buckets_;
+        throw;
       }
     }
-    HashTable< Key, Value > & operator=(const HashTable< Key, Value > & other)
+    HashTable< Key, Value >& operator=(const HashTable< Key, Value > & other)
     {
       if (this != std::addressof(other))
       {
@@ -88,7 +105,7 @@ namespace namestnikov
       other.count_ = 0;
       other.buckets_ = nullptr;
     }
-    HashTable< Key, Value > & operator=(HashTable< Key, Value > && other) noexcept
+    HashTable< Key, Value >& operator=(HashTable< Key, Value > && other) noexcept
     {
       if (this != std::addressof(other))
       {
@@ -114,7 +131,7 @@ namespace namestnikov
       auto result = find(key);
       if (result == end())
       {
-        throw std::out_of_range("There aren't any element with this key");
+        throw std::out_of_range("There are not value with specific key");
       }
       return (*result).second;
     }
@@ -123,7 +140,7 @@ namespace namestnikov
       auto result = find(key);
       if (result == end())
       {
-        throw std::out_of_range("There aren't any element with this key");
+        throw std::out_of_range("There are not value with specific key");
       }
       return (*result).second;
     }
@@ -139,42 +156,111 @@ namespace namestnikov
     {
       return count_;
     }
-    void clear() noexcept
+    void clear()
     {
       auto it = elements_.begin();
-      auto tempIt = it;
+      auto temp = it;
       while (it != elements_.end())
       {
-        buckets_[(**it).hash & capacity_] = elements_.end();
+        buckets_[(*it)->hash % capacity_] = elements_.end();
         ++it;
-        delete *tempIt;
-        elements_.erase(tempIt);
-        tempIt = it;
+        delete *temp;
+        elements_.erase(temp);
+        temp = it;
       }
       count_ = 0;
     }
-    size_t calculateNewCapacity(size_t current) const
+    std::pair< hash_table_iterator, bool > insert(const Key & key, const Value & value)
     {
-      size_t indicator = 0;
-      for (; current > std::pow(2, indicator); ++indicator) {};
-      ++indicator;
-      return std::pow(2, indicator) - (std::pow(2, indicator) - std::pow(2, indicator - 1)) / 2 - 1;
+      return insert(key, value, std::hash< Key >()(key));
+    }
+    bool erase(const Key & key)
+    {
+      auto it = find(key);
+      bool isErased = false;
+      if (it != end())
+      {
+        erase(it);
+        isErased = true;
+      }
+      return isErased;
+    }
+    hash_table_iterator find(const Key & key)
+    {
+      return find(key, std::hash< Key >()(key));
+    }
+    const_hash_table_iterator find(const Key & key) const
+    {
+      return find(key, std::hash< Key >()(key));
+    }
+    hash_table_iterator begin() const
+    {
+      return hash_table_iterator(elements_.begin());
+    }
+    hash_table_iterator end() const
+    {
+      return hash_table_iterator(elements_.end());
+    }
+    const_hash_table_iterator cbegin() const
+    {
+      return ConstIterator(elements_.cbegin());
+    }
+    const_hash_table_iterator cend() const
+    {
+      return ConstIterator(elements_.cend());
+    }
+    ~HashTable()
+    {
+      clear();
+      delete[] buckets_;
+    }
+  private:
+    size_t count_;
+    size_t capacity_;
+    List< node_t * > elements_;
+    list_iterator * buckets_;
+    hash_table_iterator erase(hash_table_iterator pos)
+    {
+      list_iterator iter = pos.listIter_;
+      size_t hash = (*iter)->hash;
+      if ((pos.listIter_ == elements_.begin()) || (((*(--iter))->hash % capacity_) != (hash % capacity_)))
+      {
+        size_t index = hash % capacity_;
+        delete *(pos.listIter_);
+        list_iterator next = elements_.erase(pos.listIter_);
+        if ((next != elements_.end()) && (((*next)->hash % capacity_) == (hash % capacity_)))
+        {
+          buckets_[index] = next;
+        }
+        else
+        {
+          buckets_[index] = elements_.end();
+        }
+        --count_;
+        return hash_table_iterator(next);
+      }
+      else
+      {
+        delete *(pos.listIter_);
+        --count_;
+        return hash_table_iterator(elements_.erase(pos.listIter_));
+      }
     }
     void rehash(size_t count)
     {
       size_t newCapacity = 5;
-      while ((newCapacity < count) || (newCapacity < (count / 0.75)))
+      while ((newCapacity < count) || (newCapacity < (count_ / 0.75)))
       {
-        newCapacity = calculateNewCapacity(newCapacity);
+        newCapacity = calculateNextCapacity(newCapacity);
       }
-      if (capacity_ == newCapacity)
+      if (newCapacity == capacity_)
       {
         return;
       }
-      else
+      try
       {
-        std::list< node_t * > newElements;
-        list_iterator_t * newBuckets = new list_iterator_t[newCapacity]{};
+        List< node_t * > newElements;
+        list_iterator * newBuckets = new list_iterator[newCapacity] {};
         for (size_t i = 0; i < newCapacity; ++i)
         {
           newBuckets[i] = newElements.end();
@@ -183,7 +269,7 @@ namespace namestnikov
         auto temp = it;
         while (it != elements_.end())
         {
-          size_t index = (**it).hash % newCapacity;
+          size_t index = (*it)->hash % newCapacity;
           if (newBuckets[index] == newElements.end())
           {
             newElements.push_front(*it);
@@ -199,165 +285,108 @@ namespace namestnikov
           temp = it;
         }
         elements_ = std::move(newElements);
-        delete [] buckets_;
+        delete[] buckets_;
         buckets_ = newBuckets;
         capacity_ = newCapacity;
       }
-    }
-    std::pair< hash_table_iterator, bool > insert(const Key & key, const Value & value)
-    {
-      return insert(key, value, std::hash< Key >()(key));
-    }
-    std::pair< hash_table_iterator, bool > insert(const Key & key, const Value & value, size_t hash)
-    {
-      hash_table_iterator result = find(key, hash);
-      if (result != end())
+      catch (...)
       {
-        return std::pair< hash_table_iterator, bool >(result, false);
-      }
-      else
-      {
-        size_t index = hash & capacity_;
-        if (capacity_ < ((count_ + 1) / 0.75))
-        {
-          rehash(calculateNewCapacity(capacity_));
-          index = hash % capacity_;
-        }
-        node_t * resNode = new node_t(val_type_t(key, value), hash);
-        std::pair< hash_table_iterator, bool > result(end(), true);
-        try
-        {
-          //if (buckets_[index] == elements_.end())
-          //{
-            std::cout << "here";
-            elements_.push_front(resNode);
-            buckets_[index] = elements_.begin();
-            result.first = begin();
-          //}
-          /*else
-          {
-            std::cout << "here111";
-            elements_.insert(buckets_[index], resNode);
-            --(buckets_[index]);
-            result.first = hash_table_iterator(buckets_[index]);
-          }*/
-        }
-        catch (...)
-        {
-          delete resNode;
-          throw;
-        }
-        ++count_;
-        return result;
+        clear();
+        delete[] buckets_;
+        throw;
       }
     }
-    bool erase(const Key & key)
+    size_t calculateNextCapacity(size_t current) const
     {
-      auto it = find(key);
-      if (it != end())
-      {
-        erase(it);
-        return true;
-      }
-      return false;
-    }
-    hash_table_iterator erase(hash_table_iterator pos)
-    {
-      list_iterator_t iter = pos.iter_;
-      size_t hash = (*iter)->hash;
-      if ((pos.iter_ == elements_.begin()) || (((*(--iter))->hash % capacity_) != (hash % capacity_)))
-      {
-        size_t index = hash % capacity_;
-        delete *(pos.iter_);
-        list_iterator_t next = elements_.erase(pos.iter_);
-        if ((next != elements_.end()) && (((*next)->hash % capacity_) == (hash % capacity_)))
-        {
-          buckets_[index] = next;
-        }
-        else
-        {
-          buckets_[index] = elements_.end();
-        }
-        --count_;
-        return hash_table_iterator(next);
-      }
-      else
-      {
-        delete *(pos.iter_);
-        --count_;
-        return hash_table_iterator(elements_.erase(pos.iter_));
-      }
-    }
-    hash_table_iterator find(const Key & key)
-    {
-      return find(key, std::hash< Key >()(key));
-    }
-    const_hash_table_iterator find(const Key & key) const
-    {
-      return find(key, std::hash< Key >()(key));
+      size_t degree = 0;
+      for (; current > std::pow(2, degree); ++degree) {};
+      ++degree;
+      return std::pow(2, degree) - (std::pow(2, degree) - std::pow(2, degree - 1)) / 2 - 1;
     }
     hash_table_iterator find(const Key & key, size_t hash)
     {
-      size_t index = hash & capacity_;
-      auto iter = buckets_[index];
-      if (iter == elements_.end())
+      size_t index = hash % capacity_;
+      auto bucketIter = buckets_[index];
+      if (bucketIter == elements_.end())
       {
         return end();
       }
-      while ((iter != elements_.end()) && (((**iter).hash % capacity_) == index) && ((**iter).data.first != key))
+      while ((bucketIter != elements_.end()) && (((*bucketIter)->hash % capacity_) == index) && ((*bucketIter)->data.first != key))
       {
-        ++iter;
+        ++bucketIter;
       }
-      if ((iter != elements_.end()) && ((**iter).data.first == key))
+      if ((bucketIter != elements_.end()) && ((*bucketIter)->data.first == key))
       {
-        return hash_table_iterator(iter);
+        return hash_table_iterator(bucketIter);
       }
       return end();
     }
     const_hash_table_iterator find(const Key & key, size_t hash) const
     {
-      size_t index = hash & capacity_;
-      auto iter = buckets_[index];
-      if (iter == elements_.end())
+      size_t index = hash % capacity_;
+      auto bucketIter = buckets_[index];
+      if (bucketIter == elements_.end())
       {
         return cend();
       }
-      while ((iter != elements_.end()) && (((**iter).hash % capacity_) == index) && ((**iter).data.first != key))
+      while ((bucketIter != elements_.end()) && (((*bucketIter)->hash % capacity_) == index) && ((*bucketIter)->data.first != key))
       {
-        ++iter;
+        ++bucketIter;
       }
-      if ((iter != elements_.end()) && ((**iter).data.first == key))
+      if ((bucketIter != elements_.end()) && ((*bucketIter)->data.first == key))
       {
-        return const_hash_table_iterator(iter);
+        return const_hash_table_iterator(bucketIter);
       }
       return cend();
     }
-    hash_table_iterator begin() noexcept
+    std::pair< hash_table_iterator, bool > insert(const Key & key, const Value & value, size_t hash)
     {
-      return hash_table_iterator(elements_.begin());
+      try
+      {
+        hash_table_iterator desired = find(key, hash);
+        if (desired != end())
+        {
+          return std::pair< hash_table_iterator, bool >(desired, false);
+        }
+        size_t index = hash % capacity_;
+        if (capacity_ < ((count_ + 1) / 0.75))
+        {
+          rehash(calculateNextCapacity(capacity_));
+          index = hash % capacity_;
+        }
+
+        node_t  * node = new node_t(val_type_t(key, value), hash);
+        std::pair< hash_table_iterator, bool > result(end(), true);
+        try
+        {
+          if (buckets_[index] == elements_.end())
+          {
+            elements_.push_front(node);
+            buckets_[index] = elements_.begin();
+            result.first = begin();
+          }
+          else
+          {
+            elements_.insert(buckets_[index], node);
+            --(buckets_[index]);
+            result.first = hash_table_iterator(buckets_[index]);
+          }
+        }
+        catch (...)
+        {
+          delete node;
+          throw;
+        }
+        ++count_;
+        return result;
+      }
+      catch (...)
+      {
+        clear();
+        delete[] buckets_;
+        throw;
+      }
     }
-    hash_table_iterator end() noexcept
-    {
-      return hash_table_iterator(elements_.end());
-    }
-    const_hash_table_iterator cbegin() const noexcept
-    {
-      return const_hash_table_iterator(elements_.cbegin());
-    }
-    const_hash_table_iterator cend() const noexcept
-    {
-      return const_hash_table_iterator(elements_.cend());
-    }
-    ~HashTable()
-    {
-      clear();
-      delete [] buckets_;
-    }
-  private:
-    size_t count_;
-    size_t capacity_;
-    std::list< node_t * > elements_;
-    list_iterator_t * buckets_;
   };
 }
 
