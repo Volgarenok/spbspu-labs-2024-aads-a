@@ -641,6 +641,10 @@ namespace sivkov
   template< typename F >
   F AVLTree< Key, Value, Comp >::traverse_rnl_helper(detail::TreeNode< Key, Value >* node, F f) const
   {
+    if (node == nullptr)
+    {
+      return f;
+    }
     f = traverse_rnl_helper(node->right, f);
     f(node->data);
     return traverse_rnl_helper(node->left, f);
