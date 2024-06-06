@@ -11,11 +11,11 @@ void ishmuratov::Key_summ::operator()(const std::pair< const int, std::string > 
 {
   constexpr int maxnum = std::numeric_limits< int >::max();
   constexpr int minnum = std::numeric_limits< int >::min();
-  if (int_sum_ > maxnum - key_value.first)
+  if ((int_sum_ > 0) && (int_sum_ > maxnum - key_value.first))
   {
     throw std::overflow_error("Overflow!");
   }
-  if (int_sum_ < minnum + key_value.first)
+  if ((int_sum_ < 0) && (int_sum_ < minnum + key_value.first))
   {
     throw std::underflow_error("Underflow!");
   }
