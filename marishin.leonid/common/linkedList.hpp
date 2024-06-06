@@ -105,6 +105,29 @@ namespace marishin
       return *this;
     }
 
+    template< class T >
+    bool LinkedList< T >::operator<(const LinkedList< T >& other) const
+    {
+      auto otherIterator = other.cbegin();
+      for (auto ownIterator = cbegin(); ownIterator != cend(); ++ownIterator)
+      {
+        if (otherIterator == other.cend())
+        {
+          return false;
+        }
+        if (*ownIterator < *otherIterator)
+        {
+          return true;
+        }
+        else if (*ownIterator > *otherIterator)
+        {
+          return false;
+        }
+        ++otherIterator;
+      }
+      return false;
+    }
+
     Iterator< T > begin() noexcept
     {
       return Iterator< T >(head_);
