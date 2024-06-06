@@ -1,56 +1,56 @@
 #ifndef LIST_HPP
 #define LIST_HPP
-#include <initializer_list>
 #include <cassert>
-#include "node.hpp"
-#include "iterator.hpp"
+#include <initializer_list>
 #include "constIterator.hpp"
+#include "iterator.hpp"
+#include "node.hpp"
 
 namespace strelyaev
 {
   template< typename T >
   class List
   {
-    public:
-      List();
-      List(const List&);
-      List(List< T >&&);
-      List(size_t n, const T&);
-      ~List();
+  public:
+    List();
+    List(const List&);
+    List(List< T >&&);
+    List(size_t n, const T&);
+    List(T*, T*);
+    ~List();
 
-      List< T >& operator=(const List< T >&);
-      List< T >& operator=(List< T >&&);
+    List< T >& operator=(const List< T >&);
+    List< T >& operator=(List< T >&&);
 
-      void assign(size_t n, const T& value);
-      void swap(List< T >& other) noexcept;
+    void assign(size_t n, const T& value);
+    void swap(List< T >& other) noexcept;
 
-      Iterator< T > insert(ConstIterator< T >, const T&);
-      ConstIterator< T > erase(ConstIterator< T >);
+    Iterator< T > insert(ConstIterator< T >, const T&);
+    ConstIterator< T > erase(ConstIterator< T >);
 
-      bool empty() noexcept;
-      void push_back(const T&);
-      void push_front(const T&);
-      void pop_front();
-      void pop_back();
-      void clear() noexcept;
-      void remove(const T& value);
-      template< class Predicate >
-      void remove_if(Predicate);
+    bool empty() noexcept;
+    void push_back(const T&);
+    void push_front(const T&);
+    void pop_front();
+    void pop_back();
+    void clear() noexcept;
+    void remove(const T& value);
+    template< typename Predicate >
+    void remove_if(Predicate);
 
-      size_t size() noexcept;
-      T& back();
-      T& front();
-      const T& back() const;
-      const T& front() const;
-      Iterator< T > begin() noexcept;
-      Iterator< T > end() noexcept;
-      ConstIterator< T > cbegin() const noexcept;
-      ConstIterator< T > cend() const noexcept;
-
-    private:
-      detail::Node< T >* tail_;
-      detail::Node< T >* head_;
-      size_t size_;
+    size_t size() noexcept;
+    T& back();
+    T& front();
+    const T& back() const;
+    const T& front() const;
+    Iterator< T > begin() noexcept;
+    Iterator< T > end() noexcept;
+    ConstIterator< T > cbegin() const noexcept;
+    ConstIterator< T > cend() const noexcept;
+  private:
+    detail::Node< T >* tail_;
+    detail::Node< T >* head_;
+    size_t size_;
   };
 
   template< typename T >
@@ -92,6 +92,16 @@ namespace strelyaev
   }
 
   template< typename T >
+  List< T >::List(T* begin, T* end):
+    List()
+  {
+    for (T* ptr = begin; ptr != end; ++ptr)
+    {
+      push_back(*ptr);
+    }
+  }
+
+  template< typename T >
   List< T >::~List()
   {
     clear();
@@ -103,7 +113,8 @@ namespace strelyaev
   {
     if (this != std::addressof(other))
     {
-      swap(other);
+      List temp(other);
+      swap(temp);
     }
     return *this;
   }
@@ -241,11 +252,9 @@ namespace strelyaev
   void List< T >::remove(const T& value)
   {
     remove_if(
-      [&](const T& el)
-      {
-        return (el == value);
-      }
-    );
+        [&](const T& el) {
+          return (el == value);
+        });
   }
 
   template< typename T >
@@ -261,7 +270,6 @@ namespace strelyaev
       }
     }
   }
-
 
   template< typename T >
   size_t List< T >::size() noexcept

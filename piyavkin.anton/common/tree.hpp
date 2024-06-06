@@ -299,11 +299,21 @@ namespace piyavkin
       detail::TreeNode< Key, T >* node = delete_node.node_->right_;
       if (!node || delete_node.node_->right_ == std::addressof(end_node_))
       {
-        if ((size_ == 1) || (delete_node.node_->parent_ && !delete_node.node_->parent_->left_))
+        if ((size_ == 1) || (delete_node.node_->parent_ && !delete_node.node_->left_))
         {
           if (size_ != 1 && delete_node.node_->right_)
           {
-            delete_node.node_->parent_->right_ = std::addressof(end_node_);
+            delete_node.node_->parent_->right_ = delete_node.node_->right_;
+            delete_node.node_->right_->parent_ = delete_node.node_->parent_;
+          }
+          else if (size_ == 1)
+          {
+            delete_node.node_->left_->parent_ = delete_node.node_->right_;
+            delete_node.node_->right_->parent_ = delete_node.node_->left_;
+          }
+          else
+          {
+            delete_node.node_->parent_->right_ = nullptr;
           }
           delete delete_node.node_;
           --size_;
@@ -314,27 +324,25 @@ namespace piyavkin
         {
           node = node->right_;
         }
-        if (node)
+        detail::TreeNode< Key, T >* temp = node->left_;
+        if (node != delete_node.node_->left_)
         {
-          if (node != delete_node.node_->left_)
+          node->left_ = delete_node.node_->left_;
+          delete_node.node_->left_->parent_ = node;
+        }
+        if (isRightChild(node))
+        {
+          node->parent_->right_ = temp;
+          if (temp)
           {
-            node->left_ = delete_node.node_->left_;
-            delete_node.node_->left_->parent_ = node;
+            temp->parent_ = node->parent_;
           }
-          if (isLeftChild(node))
-          {
-            node->parent_->left_ = nullptr;
-          }
-          else
-          {
-            node->parent_->right_ = nullptr;
-          }
-          node->parent_ = delete_node.node_->parent_;
-          if (delete_node.node_->right_)
-          {
-            end_node_.parent_ = node;
-            node->right_ = std::addressof(end_node_);
-          }
+        }
+        node->parent_ = delete_node.node_->parent_;
+        if (delete_node.node_->right_)
+        {
+          end_node_.parent_ = node;
+          node->right_ = std::addressof(end_node_);
         }
         if (isLeftChild(delete_node.node_))
         {
@@ -419,7 +427,8 @@ namespace piyavkin
     size_t erase(const Key& key)
     {
       size_t count = 0;
-      while (erase(find(key)) != end())
+      const Key key_cp = key;
+      while (erase(find(key_cp)) != end())
       {
         ++count;
       }
