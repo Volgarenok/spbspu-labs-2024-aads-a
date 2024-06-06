@@ -2,6 +2,7 @@
 #define ITERATOR_HPP
 
 #include <memory>
+#include <iterator>
 #include "node.hpp"
 
 namespace marishin
@@ -9,7 +10,7 @@ namespace marishin
   template< class T >
   class LinkedList;
   template< class T >
-  class Iterator
+  class Iterator: public std::iterator < std::bidirectional_iterator_tag, T >
   {
     public:
       Iterator():
