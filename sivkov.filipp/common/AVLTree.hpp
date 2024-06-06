@@ -566,16 +566,16 @@ namespace sivkov
     }
   }
 
-  template<typename Key, typename Value, typename Comp>
-  template<typename F>
-  F AVLTree<Key, Value, Comp>::traverse_lnr(F f) const
+  template< typename Key, typename Value, typename Comp >
+  template< typename F>
+  F AVLTree< Key, Value, Comp >::traverse_lnr(F f) const
   {
-    if (root_ == nullptr)
+    if (empty())
     {
       throw std::logic_error("EMPTY");
     }
-    Stack<detail::TreeNode<Key, Value>*> stack;
-    detail::TreeNode<Key, Value>* current = root_;
+    Stack<detail::TreeNode< Key, Value >* > stack;
+    detail::TreeNode< Key, Value >* current = root_;
 
     while (!stack.empty() || current != nullptr)
     {
@@ -595,28 +595,32 @@ namespace sivkov
     return f;
   }
 
-  template<typename Key, typename Value, typename Comp>
-  template<typename F>
+  template< typename Key, typename Value, typename Comp >
+  template< typename F >
   F AVLTree<Key, Value, Comp>::traverse_rnl(F f) const
   {
+    if (empty())
+    {
+      throw std::logic_error("EMPTY");
+    }
     return traverse_rnl_helper(root_, f);
   }
 
-  template<typename Key, typename Value, typename Comp>
-  template<typename F>
-  F AVLTree<Key, Value, Comp>::traverse_breadth(F f) const
+  template< typename Key, typename Value, typename Comp >
+  template< typename F >
+  F AVLTree< Key, Value, Comp >::traverse_breadth(F f) const
   {
-    if (root_ == nullptr)
+    if (empty())
     {
-      return f;
+      throw std::logic_error("EMPTY");
     }
 
-    Queue<detail::TreeNode<Key, Value>*> nodes_queue;
+    Queue< detail::TreeNode<Key, Value >* > nodes_queue;
     nodes_queue.push(root_);
 
     while (!nodes_queue.empty())
     {
-      detail::TreeNode<Key, Value>* current = nodes_queue.front();
+      detail::TreeNode< Key, Value >* current = nodes_queue.front();
       nodes_queue.pop();
 
       f(current->data);
@@ -633,19 +637,14 @@ namespace sivkov
     return f;
   }
 
-  template<typename Key, typename Value, typename Comp>
-  template<typename F>
-  F AVLTree<Key, Value, Comp>::traverse_rnl_helper(detail::TreeNode<Key, Value>* node, F f) const
+  template< typename Key, typename Value, typename Comp >
+  template< typename F >
+  F AVLTree< Key, Value, Comp >::traverse_rnl_helper(detail::TreeNode< Key, Value >* node, F f) const
   {
-    if (node == nullptr)
-    {
-      return f;
-    }
     f = traverse_rnl_helper(node->right, f);
     f(node->data);
     return traverse_rnl_helper(node->left, f);
   }
 }
-
 #endif
 
