@@ -272,12 +272,12 @@ namespace sivkov
     return ConstIterator< T >(nullptr);
   }
   template< typename T >
-  inline Iterator< T > List< T >::begin() const
+  Iterator< T > List< T >::begin() const
   {
     return Iterator< T >(head_);
   }
   template< typename T >
-  inline Iterator< T > List< T >::end() const
+  Iterator< T > List< T >::end() const
   {
     return Iterator< T >(nullptr);
   }
