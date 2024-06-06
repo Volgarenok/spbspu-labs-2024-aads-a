@@ -62,10 +62,12 @@ void gladyshev::addelem(mainDic& dictionaries, std::istream& in)
   }
   it->second.insert(key, value);
 }
-void gladyshev::save(const mainDic& dictionaries, std::ofstream& outFile, std::istream& in)
+void gladyshev::save(const mainDic& dictionaries, std::istream& in)
 {
   std::string datasetName = "";
-  in >> datasetName;
+  std::string fileName = "";
+  in >> datasetName >> fileName;
+  std::ofstream outFile(fileName, std::ios::trunc);
   auto it = dictionaries.find(datasetName);
   outFile << "\n";
   outFile << datasetName;
