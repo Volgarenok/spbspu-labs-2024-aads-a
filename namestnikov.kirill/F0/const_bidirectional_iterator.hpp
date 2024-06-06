@@ -3,6 +3,7 @@
 
 #include <iterator>
 #include "bidirectional_node.hpp"
+#include "bidirectional_iterator.hpp"
 
 namespace namestnikov
 {
@@ -10,12 +11,23 @@ namespace namestnikov
   class List;
 
   template< class T >
+  class ListIterator;
+
+  template< class T >
   class ConstListIterator: public std::iterator< std::bidirectional_iterator_tag, T >
   {
     friend class List< T >;
+    friend class ListIterator< T >;
   public:
     using node_t = detail::BaseListNode;
     using const_iterator = ConstListIterator< T >;
+    using iterator = ListIterator< T >;
+    explicit ConstListIterator(const node_t * node) :
+      node_(node)
+    {}
+    explicit ConstListIterator(iterator iter):
+      node_(iter.node_)
+    {}
     ConstListIterator(const const_iterator &) = default;
     const_iterator & operator=(const const_iterator &) = default;
     ConstListIterator(const_iterator &&) = default;
@@ -26,6 +38,14 @@ namespace namestnikov
     bool operator!=(const const_iterator & other) const
     {
       return !(*this == other);
+    }
+    bool operator==(iterator & other) const
+    {
+      return node_ == other.node_;
+    }
+    bool operator!=(iterator & other) const
+    {
+      return node_ != other.node_;
     }
     const T & operator*() const
     {
@@ -59,10 +79,7 @@ namespace namestnikov
     }
 
   private:
-    const const_iterator * node_;
-    explicit ConstListIterator(const const_iterator * node) :
-      node_(node)
-    {}
+    const node_t * node_;
   };
 }
 

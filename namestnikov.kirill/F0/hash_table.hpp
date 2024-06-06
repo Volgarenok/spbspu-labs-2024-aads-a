@@ -4,6 +4,7 @@
 #include <initializer_list>
 #include <stdexcept>
 #include <cmath>
+#include <cstddef>
 #include <utility>
 #include "hash_table_node.hpp"
 #include "bidirectional_list.hpp"
@@ -98,8 +99,8 @@ namespace namestnikov
     HashTable(HashTable< Key, Value > && other) noexcept:
       capacity_(other.capacity_),
       count_(other.count_),
-      elements_(std::move(other.elements_)),
-      buckets_(other.buckets_)
+      buckets_(other.buckets_),
+      elements_(std::move(other.elements_))
     {
       other.capacity_ = 5;
       other.count_ = 0;
@@ -203,11 +204,11 @@ namespace namestnikov
     }
     const_hash_table_iterator cbegin() const
     {
-      return ConstIterator(elements_.cbegin());
+      return const_hash_table_iterator(elements_.cbegin());
     }
     const_hash_table_iterator cend() const
     {
-      return ConstIterator(elements_.cend());
+      return const_hash_table_iterator(elements_.cend());
     }
     hash_table_iterator erase(hash_table_iterator pos)
     {
@@ -242,10 +243,10 @@ namespace namestnikov
       delete[] buckets_;
     }
   private:
-    size_t count_;
     size_t capacity_;
-    List< node_t * > elements_;
+    size_t count_;
     list_iterator * buckets_;
+    List< node_t * > elements_;
     void rehash(size_t count)
     {
       size_t newCapacity = 5;

@@ -1,6 +1,8 @@
 #ifndef HASH_TABLE_NODE_HPP
 #define HASH_TABLE_NODE_HPP
 
+#include <cstddef>
+
 namespace namestnikov
 {
   namespace detail

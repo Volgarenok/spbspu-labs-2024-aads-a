@@ -3,6 +3,7 @@
 
 #include <iterator>
 #include "bidirectional_node.hpp"
+#include "const_bidirectional_iterator.hpp"
 
 namespace namestnikov
 {
@@ -20,27 +21,39 @@ namespace namestnikov
   public:
     using node_t = detail::BaseListNode;
     using iterator = ListIterator< T >;
+    using const_iterator = ConstListIterator< T >;
     ListIterator():
-      current_(nullptr)
+      node_(nullptr)
+    {}
+    explicit ListIterator(node_t * ptr):
+      node_(ptr)
     {}
     ListIterator(const iterator &) = default;
     iterator & operator=(const iterator &) = default;
     ListIterator(iterator &&) = default;
     bool operator==(const iterator & other) const
     {
-      return current_ == other.current_;
+      return node_ == other.node_;
     }
     bool operator!=(const iterator & other) const
     {
       return !(*this == other);
     }
+    bool operator==(const_iterator & other) const
+    {
+      return (*this == other);
+    }
+    bool operator!=(const_iterator & other) const
+    {
+      return (*this != other);
+    }
     T & operator*()
     {
-      return (dynamic_cast< detail::ListNode< T > * >(current_))->data;
+      return (dynamic_cast< detail::ListNode< T > * >(node_))->data;
     }
     const T & operator*() const
     {
-      return (dynamic_cast< detail::ListNode< T >* >(current_))->data;
+      return (dynamic_cast< detail::ListNode< T >* >(node_))->data;
     }
     T * operator->()
     {
@@ -52,7 +65,7 @@ namespace namestnikov
     }
     iterator & operator++()
     {
-      current_ = current_->next;
+      node_ = node_->next;
       return *this;
     }
     iterator operator++(int)
@@ -63,7 +76,7 @@ namespace namestnikov
     }
     iterator & operator--()
     {
-      current_ = current_->prev;
+      node_ = node_->prev;
       return *this;
     }
     iterator operator--(int)
@@ -73,10 +86,7 @@ namespace namestnikov
       return temp;
     }
   private:
-    node_t * current_;
-    explicit ListIterator(node_t * ptr):
-      current_(ptr)
-    {}
+    node_t * node_;
   };
 }
 

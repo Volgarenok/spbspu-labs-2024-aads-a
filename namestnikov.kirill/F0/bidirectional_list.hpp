@@ -1,6 +1,7 @@
 #ifndef BIDIRECTIONAL_LIST_HPP
 #define BIDIRECTIONAL_LIST_HPP
 #include <utility>
+#include <cstddef>
 #include "bidirectional_iterator.hpp"
 #include "const_bidirectional_iterator.hpp"
 #include "bidirectional_node.hpp"
@@ -148,7 +149,7 @@ namespace namestnikov
       try
       {
         node_t * newNode = new node_t(value);
-        base_node_t* currentNode = pos.current_;
+        base_node_t* currentNode = pos.node_;
         newNode->next = currentNode;
         if (size_)
         {
@@ -179,7 +180,7 @@ namespace namestnikov
       }
       try
       {
-        base_node_t * node = pos.current_;
+        base_node_t * node = pos.node_;
         node->prev->next = node->next;
         node->next->prev = node->prev;
         ++pos;
@@ -219,8 +220,8 @@ namespace namestnikov
       delete fakeNode_;
     }
   private:
-    base_node_t * fakeNode_;
     size_t size_;
+    base_node_t * fakeNode_;
   };
 }
 

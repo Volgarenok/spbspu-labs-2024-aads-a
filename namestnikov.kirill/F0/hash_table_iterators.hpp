@@ -5,6 +5,7 @@
 #include <utility>
 #include "bidirectional_list.hpp"
 #include "hash_table_node.hpp"
+#include "const_hash_table_iterators.hpp"
 
 namespace namestnikov
 {
@@ -12,14 +13,19 @@ namespace namestnikov
   class HashTable;
 
   template< class Key, class Value >
+  class ConstHashTableIterator;
+
+  template< class Key, class Value >
   class HashTableIterator: public std::iterator< std::forward_iterator_tag, std::pair< const Key, Value > >
   {
     friend class HashTable< Key, Value >;
+    friend class ConstHashTableIterator< Key, Value >;
   public:
     using val_type_t = std::pair< const Key, Value >;
     using ListNode = detail::HashTableNode< val_type_t >;
     using ListIterator = typename List< ListNode* >::iterator;
     using hash_table_iterator = HashTableIterator< Key, Value >;
+    using const_hash_table_iterator = ConstHashTableIterator< Key, Value >;
     HashTableIterator(const hash_table_iterator &) = default;
     hash_table_iterator & operator=(const hash_table_iterator &) = default;
     HashTableIterator(hash_table_iterator &&) = default;
@@ -31,6 +37,14 @@ namespace namestnikov
     bool operator!=(const hash_table_iterator & other) const
     {
       return !(*this == other);
+    }
+    bool operator==(const_hash_table_iterator && other) const
+    {
+      return (listIter_ == other.listIter_);
+    }
+    bool operator!=(const_hash_table_iterator && other) const
+    {
+      return (listIter_ != other.listIter_);
     }
     val_type_t & operator*()
     {
