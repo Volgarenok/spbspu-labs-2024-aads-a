@@ -4,8 +4,8 @@
 #include <functional>
 #include <iterator>
 #include <utility>
-#include "AVLtreeNode.hpp"
-#include "IteratorTree.hpp"
+#include <AVLtreeNode.hpp>
+#include <IteratorTree.hpp>
 
 namespace novokhatskiy
 {
@@ -72,15 +72,17 @@ namespace novokhatskiy
       if (node_->left)
       {
         node_ = node_->left;
-        for (; node_->right; node_ = node_->right)
-        {}
+        while (node_->right)
+        {
+          node_ = node_->right;
+        }
+        return *this;
       }
-      else
+      while (node_->parent && node_->parent->left == node_)
       {
-        for (; node_ == node_->parent->left; node_ = node_->parent)
-        {}
         node_ = node_->parent;
       }
+      node_ = node_->parent;
       return *this;
     }
 
