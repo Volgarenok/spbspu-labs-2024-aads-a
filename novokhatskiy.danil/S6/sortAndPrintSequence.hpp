@@ -35,6 +35,10 @@ namespace novokhatskiy
     std::forward_list< T > forwardList;
     std::list< T > biList;
     std::deque< T > deque;
+    if (size <= 0)
+    {
+      throw std::invalid_argument("The size of seq can't be zero");
+    }
     for (size_t i = 0; i != size; i++)
     {
       T value;
@@ -82,6 +86,7 @@ namespace novokhatskiy
     printSeq(deque.cbegin(), deque.cend(), out);
     printSeq(secondDeque.cbegin(), secondDeque.cend(), out);
     printSeq(thirdDeque.cbegin(), thirdDeque.cend(), out);
+    out << '\n';
   }
 }
 
