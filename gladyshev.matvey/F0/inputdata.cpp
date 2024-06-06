@@ -60,7 +60,7 @@ void gladyshev::makeDictLen(mainDic& finres, std::ifstream& file, std::istream& 
     file >> word;
     if (word.length() == len)
     {
-      ++result[word];
+      result[word]++;
     }
   }
   finres.insert(name, result);
