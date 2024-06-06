@@ -43,6 +43,6 @@ int main(int argc, char * argv[])
   {
     pair = breadth(data);
   }
-  std::cout << pair.first << " " << pair.second;
+  std::cout << pair.first << pair.second;
   return 0;
 }

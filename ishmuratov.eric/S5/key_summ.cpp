@@ -20,7 +20,7 @@ void ishmuratov::Key_summ::operator()(const std::pair< const int, std::string > 
     throw std::underflow_error("Underflow!");
   }
   int_sum_ += key_value.first;
-  str_sum_ += key_value.second + " ";
+  str_sum_ += " " + key_value.second;
 }
 
 int ishmuratov::Key_summ::get_int()
