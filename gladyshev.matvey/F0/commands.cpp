@@ -212,7 +212,7 @@ void gladyshev::print_dictionariesL(const mainDic& dictionaries, std::istream& i
     {
       if (it->second.empty())
       {
-        throw std::overflow_error("<NO TEXT>");
+        throw std::overflow_error("<NO MATCHES>");
       }
       out << it->first;
       print_dictionaryL(it->second, n, out);
