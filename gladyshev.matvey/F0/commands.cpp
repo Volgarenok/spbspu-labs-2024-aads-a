@@ -69,7 +69,6 @@ void gladyshev::save(const mainDic& dictionaries, std::istream& in)
   in >> datasetName >> fileName;
   std::ofstream outFile(fileName, std::ios::trunc);
   auto it = dictionaries.find(datasetName);
-  outFile << "\n";
   outFile << datasetName;
   for (auto itr = it->second.cbegin(); itr != it->second.cend(); ++itr)
   {
