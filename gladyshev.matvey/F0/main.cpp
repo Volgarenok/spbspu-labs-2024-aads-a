@@ -3,8 +3,6 @@
 #include <cstring>
 #include <functional>
 
-#include <avltree.hpp>
-
 #include "commands.hpp"
 #include "inputdata.hpp"
 
