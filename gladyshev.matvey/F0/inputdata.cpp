@@ -10,6 +10,10 @@ void gladyshev::makeDict(mainDic& finres, std::ifstream& file, std::istream& in)
   in >> name >> text;
   dic result;
   std::string word = "";
+  if (file.eof())
+  {
+    throw std::logic_error("EMPTY FILE");
+  }
   while (file >> word)
   {
     if (word == text)
@@ -36,6 +40,10 @@ void gladyshev::makeDictLen(mainDic& finres, std::ifstream& file, std::istream& 
   in >> name >> text >> len;
   dic result;
   std::string word = "";
+  if (file.eof())
+  {
+    throw std::logic_error("NO TEXT");
+  }
   while (file >> word)
   {
     if (word == text)
