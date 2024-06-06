@@ -7,7 +7,7 @@
 namespace marishin
 {
   template< class Iterator, class Compare >
-  Iterator doPartition(Iterator begin, Iterator end, Compare cmp)
+  Iterator findPivot(Iterator begin, Iterator end, Compare cmp)
   {
     auto pivot = begin;
     auto cur_iter = std::next(begin);
@@ -35,7 +35,7 @@ namespace marishin
   {
     if (begin != end)
     {
-      auto pivot = doPartition(begin, end, cmp);
+      auto pivot = findPivot(begin, end, cmp);
       QSort(begin, pivot, cmp);
       QSort(std::next(pivot), end, cmp);
     }
