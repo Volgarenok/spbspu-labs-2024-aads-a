@@ -21,10 +21,9 @@ namespace sivkov
 
     Value& at(const Key& key);
     const Value& at(const Key& key) const;
-    void remove(const Key& key);
     bool empty() const noexcept;
     bool contains(const Key& key) const;
-    void swap(AVLTree other) noexcept;
+    void swap(AVLTree& other) noexcept;
     void push(const Key& key, const Value& value);
     void deleteKey(const Key& key);
     Value& operator[](const Key& key);
@@ -40,20 +39,18 @@ namespace sivkov
     Comp comp_;
 
     void clear();
-    void clear(detail::TreeNode< Key, Value >* node);
     detail::TreeNode< Key, Value >* remove(detail::TreeNode< Key, Value >* node, const Key& key);
-
     detail::TreeNode< Key, Value >* find_min(detail::TreeNode< Key, Value >* node) const;
     detail::TreeNode< Key, Value >* deep_copy(detail::TreeNode< Key, Value >* root);
     detail::TreeNode< Key, Value >* balance(detail::TreeNode< Key, Value >* root);
     int height(detail::TreeNode< Key, Value >* root);
     int get_balance_factor(detail::TreeNode< Key, Value >* root);
-
     const Value& get(const Key& key) const;
     detail::TreeNode< Key, Value >* get(detail::TreeNode< Key, Value >* node, const Key& key) const;
     Value& get(const Key& key);
     detail::TreeNode< Key, Value >* get(detail::TreeNode< Key, Value >* node, const Key& key);
     detail::TreeNode< Key, Value >* insert(detail::TreeNode< Key, Value >* root, const Key& key, const Value& value);
+    detail::TreeNode< Key, Value >* addOrFind(detail::TreeNode< Key, Value >* node, const Key& key, const Value& value);
   };
 
   template< typename Key, typename Value, typename Comp >
@@ -79,7 +76,7 @@ namespace sivkov
     catch (...)
     {
       clear();
-      throw std::logic_error("error");
+      throw;
     }
   }
 
@@ -150,12 +147,6 @@ namespace sivkov
   }
 
   template< typename Key, typename Value, typename Comp >
-  void AVLTree< Key, Value, Comp >::remove(const Key& key)
-  {
-    root_ = remove(root_, key);
-  }
-
-  template< typename Key, typename Value, typename Comp >
   bool AVLTree< Key, Value, Comp >::empty() const noexcept
   {
     return size_ == 0;
@@ -168,8 +159,9 @@ namespace sivkov
   }
 
   template< typename Key, typename Value, typename Comp >
-  void AVLTree< Key, Value, Comp >::swap(AVLTree other) noexcept
+  void AVLTree< Key, Value, Comp >::swap(AVLTree& other) noexcept
   {
+    static_assert(std::is_nothrow_copy_constructible< Comp >::value);
     std::swap(root_, other.root_);
     std::swap(size_, other.size_);
     std::swap(comp_, other.comp_);
@@ -182,50 +174,32 @@ namespace sivkov
     ++size_;
   }
 
-  template<typename Key, typename Value, typename Comp>
-  void AVLTree<Key, Value, Comp>::deleteKey(const Key& key)
+  template< typename Key, typename Value, typename Comp >
+  void AVLTree< Key, Value, Comp >::deleteKey(const Key& key)
   {
-    if (contains(key))
-    {
-      root_ = remove(root_, key);
-      --size_;
-    }
-    else
-    {
-      throw std::out_of_range("Error key");
-    }
+    root_ = remove(root_, key);
   }
 
   template< typename Key, typename Value, typename Comp >
   Value& AVLTree< Key, Value, Comp >::operator[](const Key& key)
   {
-    detail::TreeNode< Key, Value >* data = get(key, root_);
-    if (data)
-    {
-      return data->data.second;
-    }
-    else
-    {
-      push(key, Value());
-      return get(key, root_)->data.second;
-    }
+    detail::TreeNode< Key, Value >* node = addOrFind(root_, key, Value());
+    return node->data.second;
   }
 
   template< typename Key, typename Value, typename Comp >
   const Value& AVLTree< Key, Value, Comp >::operator[](const Key& key) const
   {
-    detail::TreeNode< Key, Value >* data = get(key, root_);
-    if (data)
+    detail::TreeNode< Key, Value> * node = get(root_, key);
+    if (node)
     {
-      return data->data.second;
+      return node->data.second;
     }
     else
     {
-      push(key, Value());
-      return get(key, root_)->data.second;
+      throw std::out_of_range("no key");
     }
   }
-
   template< typename Key, typename Value, typename Comp >
   ConstIteratorTree< Key, Value, Comp > AVLTree< Key, Value, Comp >::cbegin() const
   {
@@ -249,13 +223,9 @@ namespace sivkov
   ConstIteratorTree< Key, Value, Comp > AVLTree< Key, Value, Comp >::find(const Key& key) const
   {
     detail::TreeNode< Key, Value >* node = get(root_, key);
-    if (node)
+    if (node && !comp_(node->data.first, key) && !comp_(key, node->data.first))
     {
-      ConstIteratorTree< Key, Value, Comp > it(node);
-      if (it.current_->data.first == key)
-      {
-        return it;
-      }
+      return ConstIteratorTree< Key, Value, Comp >(node);
     }
     return cend();
   }
@@ -263,20 +233,11 @@ namespace sivkov
   template< typename Key, typename Value, typename Comp >
   void AVLTree< Key, Value, Comp >::clear()
   {
-    clear(root_);
-    root_ = nullptr;
-    size_ = 0;
-  }
-
-  template< typename Key, typename Value, typename Comp >
-  void AVLTree< Key, Value, Comp >::clear(detail::TreeNode< Key, Value >* node)
-  {
-    if (node != nullptr)
+    while (root_ != nullptr)
     {
-      clear(node->left);
-      clear(node->right);
-      delete node;
+      root_ = remove(root_, root_->data.first);
     }
+    size_ = 0;
   }
 
   template< typename Key, typename Value, typename Comp >
@@ -301,12 +262,14 @@ namespace sivkov
       {
         detail::TreeNode< Key, Value >* right_child = node->right;
         delete node;
+        --size_;
         return right_child;
       }
       else if (node->right == nullptr)
       {
         detail::TreeNode< Key, Value >* left_child = node->left;
         delete node;
+        --size_;
         return left_child;
       }
       else
@@ -332,15 +295,31 @@ namespace sivkov
   template< typename Key, typename Value, typename Comp >
   detail::TreeNode< Key, Value >* AVLTree< Key, Value, Comp >::deep_copy(detail::TreeNode< Key, Value >* root)
   {
-
     if (root == nullptr)
     {
       return nullptr;
     }
-    detail::TreeNode< Key, Value >* new_root = new detail::TreeNode< Key, Value >;
-    new_root->data = root->data;
-    new_root->left = deep_copy(root->left);
-    new_root->right = deep_copy(root->right);
+    detail::TreeNode< Key, Value >* new_root = nullptr;
+    try
+    {
+      new_root = new detail::TreeNode< Key, Value >;
+      new_root->data = root->data;
+      new_root->left = deep_copy(root->left);
+      new_root->right = deep_copy(root->right);
+      if (new_root->left)
+      {
+        new_root->left->parent = new_root;
+      }
+      if (new_root->right)
+      {
+        new_root->right->parent = new_root;
+      }
+    }
+    catch (...)
+    {
+      delete new_root;
+      throw;
+    }
     return new_root;
   }
 
@@ -405,7 +384,7 @@ namespace sivkov
   template< typename Key, typename Value, typename Comp >
   detail::TreeNode< Key, Value >* AVLTree< Key, Value, Comp >::get(detail::TreeNode< Key, Value >* node, const Key& key) const
   {
-    if (node == nullptr || node->data.first == key)
+    if (node == nullptr || (!comp_(key, node->data.first) && !comp_(node->data.first, key)))
     {
       return node;
     }
@@ -449,11 +428,22 @@ namespace sivkov
   {
     if (root == nullptr)
     {
-      root = new  detail::TreeNode< Key, Value >;
-      root->data = std::make_pair(key, value);
-      root->left = nullptr;
-      root->right = nullptr;
-      root->parent = nullptr;
+      detail::TreeNode< Key, Value >* new_node = nullptr;
+      try
+      {
+        new_node = new detail::TreeNode< Key, Value >;
+        new_node->data = std::make_pair(key, value);
+        new_node->left = nullptr;
+        new_node->right = nullptr;
+        new_node->parent = nullptr;
+      }
+      catch (...)
+      {
+        delete new_node;
+        throw;
+      }
+      root = new_node;
+      ++size_;
     }
     else if (comp_(key, root->data.first))
     {
@@ -471,6 +461,92 @@ namespace sivkov
     }
     return balance(root);
   }
+  template < typename Key, typename Value, typename Comp >
+  detail::TreeNode< Key, Value >* AVLTree< Key, Value, Comp >::addOrFind(detail::TreeNode< Key, Value >* node,
+    const Key& key, const Value& value)
+  {
+    if (node == nullptr)
+    {
+      detail::TreeNode< Key, Value >* new_node = nullptr;
+      try
+      {
+        new_node = new detail::TreeNode< Key, Value >;
+        new_node->data = std::make_pair(key, value);
+        new_node->left = nullptr;
+        new_node->right = nullptr;
+        new_node->parent = nullptr;
+        if (root_ == nullptr)
+        {
+          root_ = new_node;
+        }
+        ++size_;
+      }
+      catch (...)
+      {
+        delete new_node;
+        throw;
+      }
+      return new_node;
+    }
+
+    if (comp_(key, node->data.first))
+    {
+      if (node->left == nullptr)
+      {
+        detail::TreeNode< Key, Value >* new_node = nullptr;
+        try
+        {
+          new_node = new detail::TreeNode< Key, Value >;
+          new_node->data = std::make_pair(key, value);
+          new_node->left = nullptr;
+          new_node->right = nullptr;
+          new_node->parent = node;
+          node->left = new_node;
+          ++size_;
+        }
+        catch (...)
+        {
+          delete new_node;
+          throw;
+        }
+        return new_node;
+      }
+      else
+      {
+        return addOrFind(node->left, key, value);
+      }
+    }
+    else if (comp_(node->data.first, key))
+    {
+      if (node->right == nullptr)
+      {
+        detail::TreeNode< Key, Value >* new_node = nullptr;
+        try
+        {
+          new_node = new detail::TreeNode< Key, Value >;
+          new_node->data = std::make_pair(key, value);
+          new_node->left = nullptr;
+          new_node->right = nullptr;
+          new_node->parent = node;
+          node->right = new_node;
+          ++size_;
+        }
+        catch (...)
+        {
+          delete new_node;
+          throw;
+        }
+        return new_node;
+      }
+      else
+      {
+        return addOrFind(node->right, key, value);
+      }
+    }
+    else
+    {
+      return node;
+    }
+  }
 }
 #endif
-

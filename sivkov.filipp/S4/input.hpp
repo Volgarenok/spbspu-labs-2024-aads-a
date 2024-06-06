@@ -5,7 +5,7 @@
 
 namespace sivkov
 {
-  void inputDictionary(AVLTree < std::string, AVLTree< size_t, std::string > >& treeOfdic, std::istream& in);
+  AVLTree < std::string, AVLTree< size_t, std::string > > inputDictionary(std::istream& in);
 }
 #endif
 
