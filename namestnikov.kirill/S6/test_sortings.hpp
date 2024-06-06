@@ -28,16 +28,22 @@ namespace namestnikov
       }
       out << *first << "\n";
     }
+    template< class T >
+    T getNumber(std::default_random_engine & generator)
+    {
+      std::uniform_real_distribution< float > dist(-1000, 1000);
+      return static_cast< T >(dist(generator));
+    }
   }
 }
 
 namespace namestnikov
 {
   template< class T, class Compare >
-  void testSortings(std::ostream & out, size_t size)
+  void testSortings(std::ostream & out, std::default_random_engine & generator, size_t size)
   {
     std::vector< T > data(size);
-    std::generate(data.begin(), data.end(), std::bind(generateNumber< T >, -1000, 1000));
+    std::generate(data.begin(), data.end(), std::bind(detail::getNumber< T >, generator));
     detail::printData(data.begin(), data.end(), out);
     Compare compare;
     ForwardList< T > forwardlistSelection(data.begin(), data.end());
