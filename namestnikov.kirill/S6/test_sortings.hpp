@@ -6,8 +6,10 @@
 #include <vector>
 #include <list>
 #include <deque>
+#include <functional>
 #include <forward_list.hpp>
 #include "shell_sort.hpp"
+#include "generate_numbers.hpp"
 #include "selection_sort.hpp"
 
 template< class Iter >
@@ -52,8 +54,10 @@ private:
 namespace namestnikov
 {
   template< class T >
-  void testSortings(std::ostream & out, std::vector< T > data, size_t size, const std::string & order)
+  void testSortings(std::ostream & out, size_t size, const std::string & order)
   {
+    std::vector< T > data(size);
+    std::generate(data.begin(), data.end(), std::bind(generateNumber< T >, -1000, 1000));
     printData(data.begin(), data.end(), out);
     Comparator< T > compare(order);
     ForwardList< T > forwardlistSelection;

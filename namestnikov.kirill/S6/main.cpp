@@ -27,13 +27,11 @@ int main(int argc, char * argv[])
     }
     if (type == "ints")
     {
-      std::vector< int > vec = generateNumbers< int >(size);
-      testSortings(std::cout, vec, vec.size(), sorting);
+      testSortings< int >(std::cout, size, sorting);
     }
     else if (type == "floats")
     {
-      std::vector< float > vec = generateNumbers< float >(size);
-      testSortings(std::cout, vec, vec.size(), sorting);
+      testSortings< float >(std::cout, size, sorting);
     }
     else
     {
