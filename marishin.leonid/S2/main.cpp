@@ -1,8 +1,8 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include "queue.hpp"
-#include "stack.hpp"
+#include <queue.hpp>
+#include <stack.hpp>
 #include "getPostfixForm.hpp"
 #include "checksPostfix.hpp"
 #include "output.hpp"

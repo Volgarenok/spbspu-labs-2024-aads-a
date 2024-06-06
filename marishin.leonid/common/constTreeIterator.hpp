@@ -1,8 +1,8 @@
 #ifndef CONST_TREE_ITERATOR_HPP
 #define CONST_TREE_ITERATOR_HPP
 
-#include <treeNode.hpp>
-#include <treeIterator.hpp>
+#include "treeNode.hpp"
+#include "treeIterator.hpp"
 
 namespace marishin
 {
@@ -56,6 +56,34 @@ namespace marishin
       ++(*this);
       return temp;
 
+    }
+
+    const_iterator & operator--()
+    {
+      if (node_->left)
+      {
+        node_ = node_->left;
+        while (node_->right)
+        {
+          node_ = node_->right;
+        }
+        return *this;
+      }
+      else
+      {
+        while ((node_->parent) && (node_->parent->left == node_))
+        {
+          node_ = node_->parent;
+        }
+        node_ = node_->parent;
+        return *this;
+      }
+    }
+    const_iterator operator--(int)
+    {
+      const_iterator temp(*this);
+      --(*this);
+      return temp;
     }
     bool operator==(const const_iterator & other) const
     {
