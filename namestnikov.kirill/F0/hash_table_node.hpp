@@ -13,8 +13,8 @@ namespace namestnikov
       T data;
       size_t hash;
       HashTableNode(const T & value, size_t h):
-      data(value),
-      hash(h)
+        data(value),
+        hash(h)
       {}
     };
   }

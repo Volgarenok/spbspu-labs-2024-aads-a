@@ -16,7 +16,7 @@ namespace namestnikov
   class HashTableIterator;
 
   template< class Key, class Value >
-  class ConstHashTableIterator : public std::iterator< std::forward_iterator_tag, std::pair< const Key, Value > >
+  class ConstHashTableIterator: public std::iterator< std::forward_iterator_tag, std::pair< const Key, Value > >
   {
     friend class HashTable< Key, Value >;
     friend class HashTableIterator< Key, Value >;
