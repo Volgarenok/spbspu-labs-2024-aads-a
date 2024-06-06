@@ -2,7 +2,7 @@
 #include <limits>
 #include <stdexcept>
 #include <cmath>
-#include "stack.hpp"
+#include <stack.hpp>
 
 long long novokhatskiy::doAddition(long long op1, long long op2)
 {

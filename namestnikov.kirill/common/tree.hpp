@@ -3,8 +3,11 @@
 
 #include <functional>
 #include <type_traits>
+#include <cassert>
 #include <tree_node.hpp>
 #include <tree_iterator.hpp>
+#include <queue.hpp>
+#include <stack.hpp>
 #include <const_tree_iterator.hpp>
 
 namespace namestnikov
@@ -247,6 +250,108 @@ namespace namestnikov
     {
       clear_impl(root_);
       root_ = nullptr;
+    }
+    template< class F >
+    F traverse_lnr(F f)
+    {
+      if (empty())
+      {
+        throw std::logic_error("Tree is empty");
+      }
+      else
+      {
+        Stack< node_t * > traverseStack;
+        node_t * current = root_;
+        while (current || (!traverseStack.empty()))
+        {
+          if (current)
+          {
+            traverseStack.push(current);
+            current = current->left;
+          }
+          else
+          {
+            current = traverseStack.top();
+            traverseStack.pop();
+            f(current->data);
+            current = current->right;
+          }
+        }
+        return f;
+      }
+    }
+    template< class F >
+    F traverse_lnr(F f) const
+    {
+      return static_cast< const F >(traverse_lnr(f));
+    }
+    template< class F >
+    F traverse_rnl(F f)
+    {
+      if (empty())
+      {
+        throw std::logic_error("Tree is empty");
+      }
+      else
+      {
+        Stack< node_t * > traverseStack;
+        node_t * current = root_;
+        while (current || (!traverseStack.empty()))
+        {
+          if (current)
+          {
+            traverseStack.push(current);
+            current = current->right;
+          }
+          else
+          {
+            current = traverseStack.top();
+            traverseStack.pop();
+            f(current->data);
+            current = current->left;
+          }
+        }
+      }
+      return f;
+    }
+    template< class F >
+    F traverse_rnl(F f) const
+    {
+      return static_cast< const F >(traverse_rnl(f));
+    }
+    template< class F >
+    F traverse_breadth(F f)
+    {
+      if (empty())
+      {
+        throw std::logic_error("Tree is empty");
+      }
+      else
+      {
+        Queue< node_t * > traverseQueue;
+        node_t * current = root_;
+        traverseQueue.push(current);
+        while (!traverseQueue.empty())
+        {
+          current = traverseQueue.front();
+          traverseQueue.pop();
+          f(current->data);
+          if (current->left)
+          {
+            traverseQueue.push(current->left);
+          }
+          if (current->right)
+          {
+            traverseQueue.push(current->right);
+          }
+        }
+        return f;
+      }
+    }
+    template< class F >
+    F traverse_breadth(F f) const
+    {
+      return static_cast< const F >(traverse_breadth(f));
     }
     ~Tree()
     {
