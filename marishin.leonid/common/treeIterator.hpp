@@ -3,8 +3,8 @@
 
 #include <iterator>
 #include <cassert>
-#include <treeNode.hpp>
-#include <constTreeIterator.hpp>
+#include "treeNode.hpp"
+#include "constTreeIterator.hpp"
 
 namespace marishin
 {
@@ -58,6 +58,33 @@ namespace marishin
       ++(*this);
       return temp;
 
+    }
+    iterator & operator--()
+    {
+      if (node_->left)
+      {
+        node_ = node_->left;
+        while (node_->right)
+        {
+          node_ = node_->right;
+        }
+        return *this;
+      }
+      else
+      {
+        while (node_->parent && node_->parent->left == node_)
+        {
+          node_ = node_->parent;
+        }
+        node_ = node_->parent;
+        return *this;
+      }
+    }
+    iterator operator--(int)
+    {
+      iterator temp(*this);
+      --(*this);
+      return temp;
     }
     bool operator==(const iterator & other) const
     {

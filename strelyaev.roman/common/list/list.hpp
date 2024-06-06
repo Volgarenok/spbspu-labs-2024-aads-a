@@ -113,7 +113,8 @@ namespace strelyaev
   {
     if (this != std::addressof(other))
     {
-      swap(other);
+      List temp(other);
+      swap(temp);
     }
     return *this;
   }
