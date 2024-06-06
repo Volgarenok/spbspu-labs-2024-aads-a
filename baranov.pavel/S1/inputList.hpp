@@ -2,7 +2,7 @@
 #define INPUT_LIST_HPP
 
 #include <iostream>
-#include "list.hpp"
+#include <list/list.hpp>
 
 namespace baranov
 {

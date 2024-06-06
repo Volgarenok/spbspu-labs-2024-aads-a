@@ -2,7 +2,7 @@
 #define LIST_FUNCTIONS_HPP
 
 #include <iostream>
-#include "list.hpp"
+#include <list/list.hpp>
 
 namespace baranov
 {
