@@ -5,7 +5,6 @@
 #include <tree.hpp>
 #include "shell_sort.hpp"
 #include "selection_sort.hpp"
-#include "generate_numbers.hpp"
 #include "test_sortings.hpp"
 
 int main(int argc, char * argv[])
