@@ -27,22 +27,35 @@ int main(int argc, char * argv[])
   }
   if (data.empty())
   {
-    std::cerr << "<EMPTY>\n";
+    std::cout << "<EMPTY>\n";
     return 1;
   }
   std::pair< int, std::string > pair;
-  if (command == "ascending")
+  try
   {
-    pair = ascend(data);
+    if (command == "ascending")
+    {
+      pair = ascend(data);
+    }
+    else if (command == "descending")
+    {
+      pair = descend(data);
+    }
+    else if (command == "breadth")
+    {
+      pair = breadth(data);
+    }
+    else
+    {
+      std::cerr << "Incorrect comand!\n";
+      return 1;
+    }
+    std::cout << pair.first << pair.second << '\n';
   }
-  else if (command == "descending")
+  catch (const std::exception & e)
   {
-    pair = descend(data);
+    std::cerr << e.what() << '\n';
+    return 1;
   }
-  else if (command == "breadth")
-  {
-    pair = breadth(data);
-  }
-  std::cout << pair.first << pair.second << '\n';
   return 0;
 }
