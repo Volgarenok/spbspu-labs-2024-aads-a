@@ -28,7 +28,7 @@ int main(int argc, char * argv[])
   if (data.empty())
   {
     std::cout << "<EMPTY>\n";
-    return 1;
+    return 0;
   }
   std::pair< int, std::string > pair;
   try
@@ -47,7 +47,7 @@ int main(int argc, char * argv[])
     }
     else
     {
-      std::cerr << "Incorrect comand!\n";
+      std::cerr << "Incorrect command!\n";
       return 1;
     }
     std::cout << pair.first << pair.second << '\n';
