@@ -28,5 +28,4 @@ namespace namestnikov
   }
 }
 
-
 #endif
