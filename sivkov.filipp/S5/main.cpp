@@ -31,6 +31,7 @@ int main(int argc, char* argv[])
   cmd.push("descending", descending);
   cmd.push("breadth", breadth);
   KeySum f;
+
   try
   {
     std::fstream file(filename);
