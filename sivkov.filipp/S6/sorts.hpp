@@ -98,7 +98,7 @@ namespace sivkov
     std::deque< T > deq3 = deq;
     if (type == "ascending")
     {
-      oddEvenSort(fwdList.begin(), fwdList.end(), std::less< int >());
+      oddEvenSort(fwdList.cbegin(), fwdList.cend(), std::less< int >());
       shellSort(biList.begin(), biList.end(), std::less< int >());
       biList2.sort(std::less< int >());
       oddEvenSort(deq.begin(), deq.end(), std::less< int >());
@@ -107,7 +107,7 @@ namespace sivkov
     }
     else if (type == "descending")
     {
-      oddEvenSort(fwdList.begin(), fwdList.end(), std::greater< int >());
+      oddEvenSort(fwdList.cbegin(), fwdList.cend(), std::greater< int >());
       shellSort(biList.begin(), biList.end(), std::greater< int >());
       biList2.sort(std::greater< int >());
       oddEvenSort(deq.begin(), deq.end(), std::greater< int >());
@@ -128,4 +128,5 @@ namespace sivkov
 }
 
 #endif
+
 
