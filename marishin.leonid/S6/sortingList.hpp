@@ -57,10 +57,6 @@ namespace marishin
   template < class Type, class Compare >
   void fillContainer(std::ostream& out, size_t size, std::default_random_engine& generate)
   {
-    if (size > 10000)
-    {
-      throw std::out_of_range("Size exceeds the maximum allowed limit");
-    }
     Type array[10000];
     for (size_t i = 0; i < size; ++i)
     {

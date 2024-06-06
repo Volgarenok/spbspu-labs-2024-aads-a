@@ -2,7 +2,6 @@
 #define SORTING_HPP
 #include <utility>
 #include <algorithm>
-#include <iterator>
 #include <iterator.hpp>
 #include <linkedList.hpp>
 
@@ -11,74 +10,75 @@ namespace marishin
   template < class Iterator, class Compare >
   void shaker(Iterator begin, size_t size, Compare cmp)
   {
-    if (size <= 1)
-    {
-      return;
-    }
-    size_t leftMark = 0;
+    ++begin;
+    size_t leftMark = 1;
     size_t rightMark = size - 1;
-
+    auto end = begin;
+    size_t count = 0;
+    for (size_t i = 1; i < size - 1; ++i)
+    {
+      ++end;
+    }
     while (leftMark <= rightMark)
     {
-      for (size_t i = rightMark; i > leftMark; --i)
+      auto tempEnd = end;
+      auto tempBegin = begin;
+      for (size_t i = 0; i < count; i++)
       {
-        Iterator curr = std::next(begin, i);
-        Iterator prev = std::prev(curr);
-        if (cmp(*curr, *prev))
-        {
-          std::iter_swap(curr, prev);
-        }
+        --tempEnd;
+        ++tempBegin;
       }
-      ++leftMark;
+      auto tmpBegin = tempBegin;
+      for (size_t i = rightMark; i >= leftMark; --i)
+      {
+        auto curr = tempEnd;
+        --curr;
+        if (cmp(*(tempEnd), *(curr)))
+        {
+          std::iter_swap(curr, tempEnd);
+        }
+        --tempEnd;
+      }
+      leftMark++;
+      tmpBegin++;
 
       for (size_t i = leftMark; i <= rightMark; ++i)
       {
-        Iterator curr = std::next(begin, i);
-        Iterator prev = std::prev(curr);
-        if (cmp(*curr, *prev))
+        auto curr = tmpBegin;
+        --curr;
+        if (cmp(*(tmpBegin), *(curr)))
         {
-          std::iter_swap(curr, prev);
+          std::iter_swap(curr, tmpBegin);
         }
+        ++tmpBegin;
       }
-      --rightMark;
+      rightMark--;
+      count++;
     }
   }
 
-  template< class Iterator, class Compare >
+  template < class Iterator, class Compare >
   void qSort(Iterator begin, size_t size, Compare cmp)
   {
-    if (size < 2)
+    auto spacing = begin + size / 2;
+    for (size_t interval = size / 2; interval > 0; interval /= 2)
     {
-      return;
-    }
-    Iterator pivot = std::next(begin, size / 2);
-
-    Iterator left = begin;
-    Iterator right = std::next(begin, size - 1);
-    while (left <= right)
-    {
-      while (cmp(*left, *pivot))
+      auto temp = begin + interval;
+      for (size_t i = interval; i < size; ++i)
       {
-        ++left;
+        auto number = *temp;
+        auto tmp = temp;
+        size_t j = i;
+        for (; j >= interval && cmp(number, *(tmp - interval)); j -= interval)
+        {
+          auto next = tmp - interval;
+          *tmp = *next;
+          tmp = next;
+        }
+        *tmp = number;
+        ++temp;
       }
-      while (cmp(*pivot, *right))
-      {
-        --right;
-      }
-      if (left <= right)
-      {
-        std::iter_swap(left, right);
-        ++left;
-        --right;
-      }
-    }
-    if (right >= begin)
-    {
-      qSort(begin, std::distance(begin, right) + 1, cmp);
-    }
-    if (left < std::next(begin, size))
-    {
-      qSort(left, std::distance(left, std::next(begin, size)), cmp);
+      spacing = begin + interval / 2;
     }
   }
 }
