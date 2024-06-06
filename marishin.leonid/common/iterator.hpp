@@ -43,6 +43,28 @@ namespace marishin
         return temp;
       }
 
+      bool operator<(const Iterator& other) const
+      {
+        auto otherIterator = other.cbegin();
+        for (auto ownIterator = cbegin(); ownIterator != cend(); ++ownIterator)
+        {
+          if (otherIterator == other.cend())
+          {
+            return false;
+          }
+          if (*ownIterator < *otherIterator)
+          {
+            return true;
+          }
+          else if (*ownIterator > *otherIterator)
+          {
+            return false;
+          }
+          ++otherIterator;
+        }
+        return false;
+      }
+
       Iterator< T > & operator--()
       {
         ptr_ = ptr_->next_;
