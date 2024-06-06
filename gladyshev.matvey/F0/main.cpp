@@ -17,7 +17,6 @@ int main(int argc, char * argv[])
     return 1;
   }
   std::ifstream file(argv[1]);
-  read_dictionaries(file, setDic);
   if (argc == 3)
   {
     if (std::strcmp(argv[2], "--help") == 0)
