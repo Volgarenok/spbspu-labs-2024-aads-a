@@ -12,8 +12,8 @@ namespace ishmuratov
   class AVLTree
   {
     using tnode = detail::TNode< Key, Value >;
-    using Iter = Iterator< Key, Value, Compare >;
-    using ConstIter = ConstIterator< Key, Value, Compare >;
+    using Iter = TreeIterator< Key, Value, Compare >;
+    using ConstIter = ConstTreeIterator< Key, Value, Compare >;
   public:
     AVLTree():
       root_(nullptr),

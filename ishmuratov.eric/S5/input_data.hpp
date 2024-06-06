@@ -2,7 +2,7 @@
 #define INPUT_DATA_HPP
 
 #include <iostream>
-#include "tree.hpp"
+#include <tree.hpp>
 
 namespace ishmuratov
 {

@@ -1,6 +1,6 @@
 #include <iostream>
 #include <fstream>
-#include "tree.hpp"
+#include <tree.hpp>
 #include "commands.hpp"
 #include "input_data.hpp"
 #include "key_summ.hpp"
