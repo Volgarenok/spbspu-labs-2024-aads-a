@@ -37,7 +37,7 @@ namespace marishin
     std::list< Type > biListSt(array, array + size);
     std::deque< Type > dequeSort(array, array + size);
     std::deque< Type > dequeShaker(array, array + size);
-    //std::deque< Type > dequeQsort(array, array + size);
+    std::deque< Type > dequeQsort(array, array + size);
     std::forward_list< Type > forwardList(array, array + size);
 
     print(out, forwardList.begin(), forwardList.end());
@@ -45,7 +45,7 @@ namespace marishin
 
     chooseSort(out, biListR.begin(), biListR.end(), size, cmp, shaker);
     chooseSort(out, dequeShaker.begin(), dequeShaker.end(), size, cmp, shaker);
-    //chooseSort(out, dequeQsort.begin(), dequeQsort.end(), size, cmp, qSort);
+    chooseSort(out, dequeQsort.begin(), dequeQsort.end(), size, cmp, qSort);
     standartSort(out, biListSt, cmp);
     standartSort(out, forwardList, cmp);
 
@@ -57,6 +57,10 @@ namespace marishin
   template < class Type, class Compare >
   void fillContainer(std::ostream& out, size_t size, std::default_random_engine& generate)
   {
+    if (size > 10000)
+    {
+      throw std::out_of_range("Size exceeds the maximum allowed limit");
+    }
     Type array[10000];
     for (size_t i = 0; i < size; ++i)
     {

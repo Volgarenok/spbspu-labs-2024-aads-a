@@ -11,53 +11,40 @@ namespace marishin
   template < class Iterator, class Compare >
   void shaker(Iterator begin, size_t size, Compare cmp)
   {
-    ++begin;
-    size_t leftMark = 1;
-    size_t rightMark = size - 1;
-    auto end = begin;
-    size_t count = 0;
-    for (size_t i = 1; i < size - 1; ++i)
+    if (size <= 1)
     {
-      ++end;
+      return;
     }
+    Iterator end = std::next(begin, size - 1);
+    size_t leftMark = 0;
+    size_t rightMark = size - 1;
+
     while (leftMark <= rightMark)
     {
-      auto tempEnd = end;
-      auto tempBegin = begin;
-      for (size_t i = 0; i < count; i++)
+      for (size_t i = rightMark; i > leftMark; --i)
       {
-        --tempEnd;
-        ++tempBegin;
-      }
-      auto tmpBegin = tempBegin;
-      for (size_t i = rightMark; i >= leftMark; --i)
-      {
-        auto curr = tempEnd;
-        --curr;
-        if (cmp(*(tempEnd), *(curr)))
+        Iterator curr = std::next(begin, i);
+        Iterator prev = std::prev(curr);
+        if (cmp(*curr, *prev))
         {
-          std::iter_swap(curr, tempEnd);
+          std::iter_swap(curr, prev);
         }
-        --tempEnd;
       }
-      leftMark++;
-      tmpBegin++;
+      ++leftMark;
 
       for (size_t i = leftMark; i <= rightMark; ++i)
       {
-        auto curr = tmpBegin;
-        --curr;
-        if (cmp(*(tmpBegin), *(curr)))
+        Iterator curr = std::next(begin, i);
+        Iterator prev = std::prev(curr);
+        if (cmp(*curr, *prev))
         {
-          std::iter_swap(curr, tmpBegin);
+          std::iter_swap(curr, prev);
         }
-        ++tmpBegin;
       }
-      rightMark--;
-      count++;
+      --rightMark;
     }
   }
-  /*
+
   template< class Iterator, class Compare >
   void qSort(Iterator begin, size_t size, Compare cmp)
   {
@@ -65,13 +52,13 @@ namespace marishin
     {
       return;
     }
-    Iterator pivot = begin + size / 2;
+    Iterator pivot = std::next(begin, size / 2);
 
     Iterator left = begin;
-    Iterator right = begin + size - 1;
+    Iterator right = std::next(begin, size - 1);
     while (left <= right)
     {
-      while (cmp(*(left), *(pivot)))
+      while (cmp(*left, *pivot))
       {
         ++left;
       }
@@ -86,15 +73,14 @@ namespace marishin
         --right;
       }
     }
-    if (right > begin)
+    if (right >= begin)
     {
-      qSort(begin, right - begin + 1, cmp);
+      qSort(begin, std::distance(begin, right) + 1, cmp);
     }
-    if (left < begin + size)
+    if (left < std::next(begin, size))
     {
-      qSort(left, begin + size - left, cmp);
+      qSort(left, std::distance(left, std::next(begin, size)), cmp);
     }
   }
-*/
 }
 #endif
