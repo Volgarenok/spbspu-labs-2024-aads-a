@@ -6,60 +6,41 @@
 
 namespace marishin
 {
-  template< class Iterator >
-  Iterator findPivot(Iterator begin, Iterator end)
+  template< class Iterator, class Compare >
+  Iterator doPartition(Iterator begin, Iterator end, Compare cmp)
   {
-    --end;
-    while (begin < end)
+    auto pivot = begin;
+    auto cur_iter = std::next(begin);
+    while (cur_iter != end)
     {
-      ++begin;
-      --end;
+      if (!cmp(*pivot, *cur_iter))
+      {
+        auto temp_iter = pivot;
+        using T = typename Iterator::value_type;
+        T temp(std::move(*cur_iter));
+        while (temp_iter != std::next(cur_iter))
+        {
+          std::swap(*temp_iter, temp);
+          ++temp_iter;
+        }
+        ++pivot;
+      }
+      ++cur_iter;
     }
-    return begin;
+    return pivot;
   }
 
   template< class Iterator, class Compare >
   void QSort(Iterator begin, Iterator end, Compare cmp)
   {
-    Iterator toSwap = findPivot(begin, end);
-    Iterator pivot = end;
-    --pivot;
-    std::iter_swap(toSwap, pivot);
-
-    Iterator first = begin;
-    Iterator second = begin;
-    bool isFirst = true;
-    while (second != pivot)
+    if (begin != end)
     {
-      if (cmp(*second, *pivot))
-      {
-        if (isFirst)
-        {
-          isFirst = false;
-        }
-        else
-        {
-          ++first;
-        }
-        std::iter_swap(first, second);
-      }
-      ++second;
-    }
-
-    if (!isFirst)
-    {
-      ++first;
-    }
-    std::iter_swap(first, pivot);
-    if (first != begin)
-    {
-      QSort(begin, first, cmp);
-    }
-    if (first != pivot)
-    {
-      QSort(++first, end, cmp);
+      auto pivot = doPartition(begin, end, cmp);
+      QSort(begin, pivot, cmp);
+      QSort(std::next(pivot), end, cmp);
     }
   }
+
 
   template < class Iterator, class Compare >
   void shaker(Iterator begin, Iterator end, Compare cmp)
