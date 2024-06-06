@@ -60,6 +60,27 @@ namespace marishin
       other.size_ = 0;
     }
 
+    template < typename InputIt >
+    List(InputIt first, InputIt last):
+      head_(nullptr),
+      tail_(nullptr),
+      size_(0)
+    {
+      while (first != last)
+      {
+        try
+        {
+          push_back(*first);
+          ++first;
+        }
+        catch (...)
+        {
+          clear();
+          throw;
+        }
+      }
+    }
+
     LinkedList & operator=(const LinkedList & other)
     {
       if (this != std::addressof(other))
