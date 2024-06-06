@@ -18,26 +18,22 @@ int main(int argc, char * argv[])
   try
   {
     size_t size = std::stoull(argv[3]);
-    std::string sorting = argv[1];
-    std::string type = argv[2];
     if (size == 0)
     {
       std::cerr << "Size should me more than zero\n";
       return 1;
     }
-    if (type == "ints")
+    std::string sorting = argv[1];
+    std::string type = argv[2];
+    std::map< std::pair< std::string, std::string >, std::function< void(std::ostream & ) > > sortMap;
     {
-      testSortings< int >(std::cout, size, sorting);
+      using namespace std::placeholders;
+      sortMap[{"ascending", "ints"}] = std::bind(testSortings< int, std::less< int > >, _1, size);
+      sortMap[{"ascending", "floats"}] = std::bind(testSortings< float, std::less< int > >, _1, size);
+      sortMap[{"descending", "ints"}] = std::bind(testSortings< int, std::greater< int > >, _1, size);
+      sortMap[{"descending", "floats"}] = std::bind(testSortings< float, std::greater< int > >, _1, size);
     }
-    else if (type == "floats")
-    {
-      testSortings< float >(std::cout, size, sorting);
-    }
-    else
-    {
-      std::cerr << "Wrong type\n";
-      return 1;
-    }
+    sortMap.at({sorting, type})(std::cout);
   }
   catch (const std::exception& e)
   {

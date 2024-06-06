@@ -53,13 +53,13 @@ private:
 
 namespace namestnikov
 {
-  template< class T >
-  void testSortings(std::ostream & out, size_t size, const std::string & order)
+  template< class T, class Compare >
+  void testSortings(std::ostream & out, size_t size)
   {
     std::vector< T > data(size);
     std::generate(data.begin(), data.end(), std::bind(generateNumber< T >, -1000, 1000));
     printData(data.begin(), data.end(), out);
-    Comparator< T > compare(order);
+    Compare compare;
     ForwardList< T > forwardlistSelection;
     for (size_t i = 0; i < size; ++i)
     {
