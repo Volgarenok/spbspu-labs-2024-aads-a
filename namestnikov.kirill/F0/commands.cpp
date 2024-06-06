@@ -107,11 +107,6 @@ void namestnikov::doRemove(std::istream & in, dictMain & mainMap, std::ostream &
   out << "The word " << key << " sucessfully deleted from " << dictName << ".\n";
 }
 
-bool isNotExist(const std::pair< std::string, std::string > & pairDict, const namestnikov::HashTable< std::string, std::string > & map)
-{
-  return (map.find(pairDict.first) == map.end());
-}
-
 void namestnikov::doSubtract(std::istream & in, dictMain & mainMap, std::ostream & out)
 {
   std::string resDict = "";
@@ -123,9 +118,13 @@ void namestnikov::doSubtract(std::istream & in, dictMain & mainMap, std::ostream
   HashTable< std::string, std::string > res;
   HashTable< std::string, std::string > first = mainMap.at(firstDict);
   HashTable< std::string, std::string > second = mainMap.at(secondDict);
-  using namespace std::placeholders;
-  auto notExist = std::bind(isNotExist, _1, second);
-  std::copy_if(first.begin(), first.end(), std::inserter(res, res.end()), notExist);
+  for (const auto & key1: first)
+  {
+    if (second.find(key1.first) == second.end())
+    {
+      res.insert(key1.first, key1.second);
+    }
+  }
   mainMap[resDict] = res;
   out << "Dictionary " << resDict << " is successfully created.\n";
 }
@@ -141,10 +140,17 @@ void namestnikov::doMerge(std::istream & in, dictMain & mainMap, std::ostream & 
   HashTable< std::string, std::string > res;
   HashTable< std::string, std::string > first = mainMap.at(firstDict);
   HashTable< std::string, std::string > second = mainMap.at(secondDict);
-  std::copy(first.begin(), first.end(), std::inserter(res, res.end()));
-  using namespace std::placeholders;
-  auto notExist = std::bind(isNotExist, _1, res);
-  std::copy_if(second.begin(), second.end(), std::inserter(res, res.end()), notExist);
+  for (const auto & key1: first)
+  {
+    res.insert(key1.first, key1.second);
+  }
+  for (const auto & key2: second)
+  {
+    if (res.find(key2.first) == res.end())
+    {
+      res.insert(key2.first, key2.second);
+    }
+  }
   mainMap[resDict] = res;
   out << "Dictionary " << resDict << " is successfully created.\n";
 }
@@ -215,9 +221,13 @@ void namestnikov::doPrefix(std::istream & in, dictMain & mainMap, std::ostream &
   HashTable< std::string, std::string > res;
   std::string prefix = "";
   in >> prefix;
-  using namespace std::placeholders;
-  auto isStartWith = std::bind(startsWith, _1, prefix);
-  std::copy_if(searchDict.begin(), searchDict.end(), std::inserter(res, res.end()), isStartWith);
+  for (const auto & key: searchDict)
+  {
+    if (startsWith(key, prefix))
+    {
+      res.insert(key.first, key.second);
+    }
+  }
   if (res.empty())
   {
     out << "There aren't any words in " << dict << " with prefix " << prefix << ".\n";
@@ -241,9 +251,13 @@ void namestnikov::doPostfix(std::istream & in, dictMain & mainMap, std::ostream 
   HashTable< std::string, std::string > res;
   std::string postfix = "";
   in >> postfix;
-  using namespace std::placeholders;
-  auto isEndWith = std::bind(endsWith, _1, postfix);
-  std::copy_if(searchDict.begin(), searchDict.end(), std::inserter(res, res.end()), isEndWith);
+  for (const auto & key: searchDict)
+  {
+    if (endsWith(key, postfix))
+    {
+      res.insert(key.first, key.second);
+    }
+  }
   if (res.empty())
   {
     out << "There aren't any words in " << dict << " with postfix " << postfix << ".\n";
@@ -287,9 +301,13 @@ void namestnikov::doSuffix(std::istream & in, dictMain & mainMap, std::ostream &
   HashTable< std::string, std::string > res;
   std::string suffix = "";
   in >> suffix;
-  using namespace std::placeholders;
-  auto isHasBetween = std::bind(hasBetween, _1, suffix);
-  std::copy_if(searchDict.begin(), searchDict.end(), std::inserter(res, res.end()), isHasBetween);
+  for (const auto & key: searchDict)
+  {
+    if (hasBetween(key, suffix))
+    {
+      res.insert(key.first, key.second);
+    }
+  }
   if (res.empty())
   {
     out << "There aren't any words in " << dict << " with suffix " << suffix << ".\n";

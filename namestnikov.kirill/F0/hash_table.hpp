@@ -209,16 +209,6 @@ namespace namestnikov
     {
       return ConstIterator(elements_.cend());
     }
-    ~HashTable()
-    {
-      clear();
-      delete[] buckets_;
-    }
-  private:
-    size_t count_;
-    size_t capacity_;
-    List< node_t * > elements_;
-    list_iterator * buckets_;
     hash_table_iterator erase(hash_table_iterator pos)
     {
       list_iterator iter = pos.listIter_;
@@ -246,6 +236,16 @@ namespace namestnikov
         return hash_table_iterator(elements_.erase(pos.listIter_));
       }
     }
+    ~HashTable()
+    {
+      clear();
+      delete[] buckets_;
+    }
+  private:
+    size_t count_;
+    size_t capacity_;
+    List< node_t * > elements_;
+    list_iterator * buckets_;
     void rehash(size_t count)
     {
       size_t newCapacity = 5;
