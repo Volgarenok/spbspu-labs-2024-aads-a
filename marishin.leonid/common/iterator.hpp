@@ -25,7 +25,7 @@ namespace marishin
         return *this;
       }
 
-      Iterator< T > & operator++(int)
+      Iterator< T > operator++(int)
       {
         Iterator< T > temp(*this);
         ++(*this);
