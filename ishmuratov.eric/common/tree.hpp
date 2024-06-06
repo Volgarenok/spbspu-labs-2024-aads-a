@@ -4,6 +4,8 @@
 #include <iostream>
 #include "tree_node.hpp"
 #include "tree_iterator.hpp"
+#include <queue.hpp>
+#include <stack.hpp>
 
 namespace ishmuratov
 {
@@ -11,8 +13,8 @@ namespace ishmuratov
   class AVLTree
   {
     using tnode = detail::TNode< Key, Value >;
-    using Iter = Iterator< Key, Value, Compare >;
-    using ConstIter = ConstIterator< Key, Value, Compare >;
+    using Iter = TreeIterator< Key, Value, Compare >;
+    using ConstIter = ConstTreeIterator< Key, Value, Compare >;
   public:
     AVLTree():
       root_(nullptr),
@@ -88,6 +90,11 @@ namespace ishmuratov
       return Iter(min_elem(root_));
     }
 
+    Iter rbegin() noexcept
+    {
+      return Iter(max_elem(root_));
+    }
+
     Iter end() noexcept
     {
       return Iter(nullptr);
@@ -96,6 +103,11 @@ namespace ishmuratov
     ConstIter cbegin() const noexcept
     {
       return ConstIter(min_elem(root_));
+    }
+
+    ConstIter crbegin() const noexcept
+    {
+      return ConstIter(max_elem(root_));
     }
 
     ConstIter cend() const noexcept
@@ -280,6 +292,80 @@ namespace ishmuratov
       return std::make_pair(lower_bound(k), upper_bound(k));
     }
 
+    template< class F >
+    F traverse_lnr(F f) const
+    {
+      if (empty())
+      {
+        throw std::logic_error("<EMPTY>");
+      }
+      Stack< tnode * > stack;
+      tnode * temp = root_;
+      while (!stack.empty() || temp != nullptr)
+      {
+        while (temp != nullptr)
+        {
+          stack.push(temp);
+          temp = temp->left;
+        }
+        temp = stack.top();
+        f(temp->data);
+        stack.pop();
+        temp = temp->right;
+      }
+      return f;
+    }
+
+    template< class F >
+    F traverse_rnl(F f) const
+    {
+      if (empty())
+      {
+        throw std::logic_error("<EMPTY>");
+      }
+      Stack< tnode * > stack;
+      tnode * temp = root_;
+      while (!stack.empty() || temp != nullptr)
+      {
+        while (temp != nullptr)
+        {
+          stack.push(temp);
+          temp = temp->right;
+        }
+        temp = stack.top();
+        f(temp->data);
+        stack.pop();
+        temp = temp->left;
+      }
+      return f;
+    }
+
+    template< class F >
+    F traverse_breadth(F f) const
+    {
+      if (empty())
+      {
+        throw std::logic_error("<EMPTY>");
+      }
+      Queue< tnode * > queue;
+      queue.push(root_);
+      while (!queue.empty())
+      {
+        const tnode * temp = queue.back();
+        f(temp->data);
+        queue.pop();
+        if (temp->left)
+        {
+          queue.push(temp->left);
+        }
+        if (temp->right)
+        {
+          queue.push(temp->right);
+        }
+      }
+      return f;
+    }
+
   private:
     detail::TNode< Key, Value> * root_;
     Compare * comp_;
@@ -322,6 +408,15 @@ namespace ishmuratov
         return root;
       }
       return min_elem(root->left);
+    }
+
+    tnode * max_elem(tnode * root) const
+    {
+      if (root == nullptr || root->right == nullptr)
+      {
+        return root;
+      }
+      return max_elem(root->right);
     }
 
     std::pair< tnode *, tnode * > insert_impl(const std::pair< Key, Value > & pair, tnode * node, bool rewrite)
