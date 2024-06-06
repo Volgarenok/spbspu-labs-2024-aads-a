@@ -45,6 +45,7 @@ namespace marishin
 
     chooseSort(out, biListR.begin(), biListR.end(), size, cmp, shaker);
     chooseSort(out, dequeShaker.begin(), dequeShaker.end(), size, cmp, shaker);
+    chooseSort(out, dequeQsort.begin(), dequeQsort.end(), size, cmp, qSort);
     standartSort(out, biListSt, cmp);
     standartSort(out, forwardList, cmp);
 
