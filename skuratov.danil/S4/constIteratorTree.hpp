@@ -21,27 +21,32 @@ namespace skuratov
     ~ConstIteratorTree() = default;
     ConstIteratorTree(const ConstIteratorTree< Key, Value, Compare >&) = default;
 
-    const std::pair< Key, Value >& operator*() const
+    std::pair< Key, Value >& operator*() const
     {
       return nodePointer_->data_;
     }
-    const std::pair< Key, Value >* operator->() const
+    std::pair< Key, Value >* operator->() const
     {
       return std::addressof(nodePointer_->data_);
     }
 
-    bool operator==(const ConstIteratorTree< Key, Value, Compare >& diff) const
+    bool operator==(const ConstIteratorTree& diff) const
     {
       return nodePointer_ == diff.nodePointer_;
     }
-    bool operator!=(const ConstIteratorTree< Key, Value, Compare >& diff) const
+    bool operator!=(const ConstIteratorTree& diff) const
     {
-      return nodePointer_ != diff.nodePointer_;
+      return !(*this == diff);
     }
 
     ConstIteratorTree< Key, Value, Compare >& operator=(const ConstIteratorTree< Key, Value, Compare >&) = default;
     ConstIteratorTree< Key, Value, Compare >& operator++()
     {
+      if (!nodePointer_)
+      {
+        return *this;
+      }
+
       if (nodePointer_->right_)
       {
         nodePointer_ = nodePointer_->right_;
@@ -56,6 +61,7 @@ namespace skuratov
         while (diff && nodePointer_ == diff->right_)
         {
           nodePointer_ = diff;
+          diff = diff->parent_;
         }
         nodePointer_ = diff;
       }
@@ -63,6 +69,11 @@ namespace skuratov
     }
     ConstIteratorTree< Key, Value, Compare >& operator--()
     {
+      if (!nodePointer_)
+      {
+        return *this;
+      }
+
       if (nodePointer_->left_)
       {
         nodePointer_ = nodePointer_->left_;
@@ -77,6 +88,7 @@ namespace skuratov
         while (diff && nodePointer_ == diff->left_)
         {
           nodePointer_ = diff;
+          diff = diff->parent_;
         }
         nodePointer_ = diff;
       }

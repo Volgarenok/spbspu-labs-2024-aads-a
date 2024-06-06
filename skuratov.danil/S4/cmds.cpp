@@ -27,11 +27,81 @@ void skuratov::isPrint(std::istream& in, AVLTree< std::string, AVLTree< int, std
   }
 }
 
-void skuratov::isComplement(std::istream&, AVLTree< std::string, AVLTree< int, std::string > >&)
-{}
+void skuratov::isComplement(std::istream& in, AVLTree< std::string, AVLTree< int, std::string > >& dictionary)
+{
+  std::string newDataset, dataset1, dataset2;
+  in >> newDataset >> dataset1 >> dataset2;
 
-void skuratov::isIntersect(std::istream&, AVLTree< std::string, AVLTree< int, std::string > >&)
-{}
+  try
+  {
+    AVLTree< int, std::string > dict1 = dictionary.at(dataset1);
+    AVLTree< int, std::string > dict2 = dictionary.at(dataset2);
 
-void skuratov::isUnion(std::istream&, AVLTree< std::string, AVLTree< int, std::string > >&)
-{}
+    AVLTree< int, std::string > complementDict;
+    for (auto it = dict1.cbegin(); it != dict1.cend(); ++it)
+    {
+      if (dict2.find(it->first) == dict2.cend())
+      {
+        complementDict.insert(it->first, it->second);
+      }
+    }
+    dictionary.insert(newDataset, complementDict);
+  }
+  catch (std::out_of_range&)
+  {
+    std::cerr << "<DICTIONARY NOT FOUND>" << '\n';
+  }
+}
+
+void skuratov::isIntersect(std::istream& in, AVLTree< std::string, AVLTree< int, std::string > >& dictionary)
+{
+  std::string newDataset, dataset1, dataset2;
+  in >> newDataset >> dataset1 >> dataset2;
+
+  try
+  {
+    AVLTree< int, std::string > dict1 = dictionary.at(dataset1);
+    AVLTree< int, std::string > dict2 = dictionary.at(dataset2);
+
+    AVLTree< int, std::string > intersectDict;
+    for (auto it = dict1.cbegin(); it != dict1.cend(); ++it)
+    {
+      if (dict2.find(it->first) != dict2.cend())
+      {
+        intersectDict.insert(it->first, it->second);
+      }
+    }
+    dictionary.insert(newDataset, intersectDict);
+  }
+  catch (std::out_of_range&)
+  {
+    std::cerr << "<DICTIONARY NOT FOUND>" << '\n';
+  }
+}
+
+void skuratov::isUnion(std::istream& in, AVLTree< std::string, AVLTree< int, std::string > >& dictionary)
+{
+  std::string newDataset, dataset1, dataset2;
+  in >> newDataset >> dataset1 >> dataset2;
+
+  try
+  {
+    AVLTree< int, std::string > dict1 = dictionary.at(dataset1);
+    AVLTree< int, std::string > dict2 = dictionary.at(dataset2);
+
+    AVLTree< int, std::string > unionDict = dict1;
+
+    for (auto it = dict2.cbegin(); it != dict2.cend(); ++it)
+    {
+      if (unionDict.find(it->first) == unionDict.cend())
+      {
+        unionDict.insert(it->first, it->second);
+      }
+    }
+    dictionary.insert(newDataset, unionDict);
+  }
+  catch (std::out_of_range&)
+  {
+    std::cerr << "<DICTIONARY NOT FOUND>" << '\n';
+  }
+}

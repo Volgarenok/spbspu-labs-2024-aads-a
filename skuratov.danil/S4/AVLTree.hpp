@@ -79,7 +79,7 @@ namespace skuratov
       {
         return ConstIteratorTree< Key, Value, Compare > (nullptr);
       }
-      while (temp->left_)
+      while (temp->left_ != nullptr)
       {
         temp = temp->left_;
       }
@@ -134,7 +134,7 @@ namespace skuratov
       return nodePointer->data_.second;
     }
 
-    const Value& operator[](const Key& key) const
+    /*const Value& operator[](const Key& key) const
     {
       detail::TreeNode< Key, Value >* nodePointer = findNode(root_, key);
 
@@ -143,11 +143,11 @@ namespace skuratov
         nodePointer = insertNode(root_, key, Value());
       }
       return nodePointer->data_.second;
-    }
+    }*/
 
     void clear() noexcept
     {
-      removeNode(root_);
+      removeNode(root_, Key());
       root_ = nullptr;
       size_ = 0;
     }
@@ -166,7 +166,9 @@ namespace skuratov
 
     void push(const Key& key, const Value& value)
     {
-      insertNode(root_, key, value);
+      root_ = insertNode(root_, key, value);
+      ++size_;
+      /*insertNode(root_, key, value);*/
     }
 
     Value& drop(const Key& key)
@@ -178,7 +180,8 @@ namespace skuratov
         throw std::out_of_range("Key not found");
       }
       Value tempValue = nodePointer->data_.second;
-      removeNode(nodePointer);
+      root_ = removeNode(root_, key);
+      --size_;
       return tempValue;
     }
 
@@ -186,7 +189,7 @@ namespace skuratov
     {
       try
       {
-        if (root_)
+        /*if (root_)
         {
           insertNode(root_, key, value);
           ++size_;
@@ -195,7 +198,9 @@ namespace skuratov
         {
           root_ = new detail::TreeNode< Key, Value >(key, value);
           ++size_;
-        }
+        }*/
+        root_ = insertNode(root_, key, value);
+        ++size_;
       }
       catch (...)
       {
@@ -209,7 +214,68 @@ namespace skuratov
     Compare cmp_;
     size_t size_;
 
-    void removeNode(detail::TreeNode< Key, Value >* nodePointer)
+    detail::TreeNode< Key, Value >* removeNode(detail::TreeNode< Key, Value >* nodePointer, const Key& key)
+    {
+      if (nodePointer == nullptr)
+      {
+        return nodePointer;
+      }
+
+      if (cmp_(key, nodePointer->data_.first))
+      {
+        nodePointer->left_ = removeNode(nodePointer->left_, key);
+      }
+      else if (cmp_(nodePointer->data_.first, key))
+      {
+        nodePointer->right_ = removeNode(nodePointer->right_, key);
+      }
+      else
+      {
+        if ((nodePointer->left_ == nullptr) || (nodePointer->right_ == nullptr))
+        {
+          detail::TreeNode< Key, Value >* temp = nodePointer->left_ ? nodePointer->left_ : nodePointer->right_;
+
+          if (temp == nullptr)
+          {
+            temp = nodePointer;
+            nodePointer = nullptr;
+          }
+          else
+          {
+            *nodePointer = *temp;
+          }
+
+          delete temp;
+        }
+        else
+        {
+          detail::TreeNode< Key, Value >* temp = minValueNode(nodePointer->right_);
+          nodePointer->data_ = temp->data_;
+          nodePointer->right_ = removeNode(nodePointer->right_, temp->data_.first);
+        }
+      }
+
+      if (nodePointer == nullptr)
+      {
+        return nodePointer;
+      }
+
+      nodePointer->height_ = 1 + std::max(height(nodePointer->left_), height(nodePointer->right_));
+
+      return balance(nodePointer);
+    }
+
+    detail::TreeNode< Key, Value >* minValueNode(detail::TreeNode< Key, Value >* node)
+    {
+      detail::TreeNode< Key, Value >* current = node;
+      while (current && current->left_ != nullptr)
+      {
+        current = current->left_;
+      }
+      return current;
+    }
+
+    /*void removeNode(detail::TreeNode< Key, Value >* nodePointer)
     {
       if (nodePointer == nullptr)
       {
@@ -218,7 +284,7 @@ namespace skuratov
       removeNode(nodePointer->left_);
       removeNode(nodePointer->right_);
       delete nodePointer;
-    }
+    }*/
 
     detail::TreeNode< Key, Value >* findNode(detail::TreeNode< Key, Value >* nodePointer, const Key& key) const
     {
@@ -245,22 +311,25 @@ namespace skuratov
     {
       if (!nodePointer)
       {
-        nodePointer = new detail::TreeNode< Key, Value >(key, value);
+        /*nodePointer = new detail::TreeNode< Key, Value >(key, value);
         if (!root_)
         {
           root_ = nodePointer;
         }
         size_++;
-        return nodePointer;
+        return nodePointer;*/
+        return new detail::TreeNode< Key, Value >(key, value);
       }
 
       if (cmp_(key, nodePointer->data_.first))
       {
         nodePointer->left_ = insertNode(nodePointer->left_, key, value);
+        nodePointer->left_->parent_ = nodePointer; //update
       }
       else if (cmp_(nodePointer->data_.first, key))
       {
         nodePointer->right_ = insertNode(nodePointer->right_, key, value);
+        nodePointer->right_->parent_ = nodePointer; //update
       }
       else
       {
@@ -298,6 +367,13 @@ namespace skuratov
       unbalancedNode->height_ = std::max(height(unbalancedNode->left_), height(unbalancedNode->right_)) + 1;
       leftChild->height_ = std::max(height(leftChild->left_), height(leftChild->right_)) + 1;
 
+      leftChild->parent_ = unbalancedNode->parent_; //update
+      unbalancedNode->parent_ = leftChild;
+      if (leftRightChild)
+      {
+        leftRightChild->parent_ = unbalancedNode;
+      } //end
+
       return leftChild;
     }
 
@@ -311,6 +387,13 @@ namespace skuratov
 
       unbalancedNode->height_ = std::max(height(unbalancedNode->left_), height(unbalancedNode->right_)) + 1;
       rightChild->height_ = std::max(height(rightChild->left_), height(rightChild->right_)) + 1;
+
+      rightChild->parent_ = unbalancedNode->parent_; //update
+      unbalancedNode->parent_ = rightChild;
+      if (rightLeftChild)
+      {
+        rightLeftChild->parent_ = unbalancedNode;
+      } //end
 
       return rightChild;
     }
