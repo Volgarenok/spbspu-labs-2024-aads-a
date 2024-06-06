@@ -61,7 +61,7 @@ namespace marishin
     }
 
     template < typename InputIt >
-    List(InputIt first, InputIt last):
+    LinkedList(InputIt first, InputIt last):
       head_(nullptr),
       tail_(nullptr),
       size_(0)
