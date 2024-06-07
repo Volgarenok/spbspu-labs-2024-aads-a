@@ -14,6 +14,12 @@
 
 namespace marishin
 {
+  template< class T >
+  T randomNumber()
+  {
+    return static_cast< T >(std::rand());
+  }
+
   template < class It, class Cmp >
   void chooseSort(std::ostream& out, It begin, It end, Cmp cmp, void (*sort)(It, It, Cmp))
   {
@@ -31,14 +37,16 @@ namespace marishin
   }
 
   template < class Type, class Compare >
-  void sortAndPrint(std::ostream& out, size_t size, Type array[], Compare cmp)
+  void sortAndPrint(size_t size, std::ostream& out)
   {
-    LinkedList< Type > bi_list(array, array + size);
-    std::list< Type > bi_list_standart(array, array + size);
-    std::deque< Type > deque_sort(array, array + size);
-    std::deque< Type > deque_qsort(array, array + size);
-    std::deque< Type > deque_shaker(array, array + size);
-    std::forward_list< Type > forward_list(array, array + size);
+    std::deque< Type > deque(size);
+    std::generate(deque.begin(), deque.end(), randomNumber< Type >);
+    LinkedList< Type > bi_list(deque.cbegin(), deque.cend());
+    std::list< Type > bi_list_standart(deque.cbegin(), deque.cend());
+    std::deque< Type > deque_sort(deque.cbegin(), deque.cend());
+    std::deque< Type > deque_qsort(deque.cbegin(), deque.cend());
+    std::deque< Type > deque_shaker(deque.cbegin(), deque.cend());
+    std::forward_list< Type > forward_list(deque.cbegin(), deque.cend());
     print(out, forward_list.begin(), forward_list.end());
     out << "\n";
 
@@ -51,17 +59,6 @@ namespace marishin
     std::sort(deque_sort.begin(), deque_sort.end(), cmp);
     print(out, deque_sort.begin(), deque_sort.end());
     out << "\n";
-  }
-
-  template < class Type, class Compare >
-  void fillContainer(std::ostream& out, size_t size, std::default_random_engine& generate)
-  {
-    Type array[10000];
-    for (size_t i = 0; i < size; ++i)
-    {
-      array[i] = detail::randomNumber(generate);
-    }
-    sortAndPrint(out, size, array, Compare());
   }
 }
 #endif
