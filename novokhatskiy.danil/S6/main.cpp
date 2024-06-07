@@ -2,7 +2,6 @@
 #include <functional>
 #include <iostream>
 #include <stdexcept>
-#include <random>
 #include <string>
 #include <AVLtree.hpp>
 #include "sortAndPrintSequence.hpp"
@@ -22,15 +21,14 @@ int main(int argc, char** argv)
     {
       throw std::invalid_argument("Size can't be zero");
     }
-    Tree< std::pair< std::string, std::string >, std::function< void(size_t, std::ostream&, std::default_random_engine&) > > sorts;
-    std::default_random_engine device;
+    Tree< std::pair< std::string, std::string >, std::function< void(size_t, std::ostream&) > > sorts;
     sorts[{ "ints", "ascending" }] = sortSeq< int, std::less< int > >;
     sorts[{ "floats", "ascending" }] = sortSeq< float, std::less< float > >;
     sorts[{ "ints", "descending" }] = sortSeq< int, std::greater< int > >;
     sorts[{ "floats", "descending" }] = sortSeq< float, std::greater< float > >;
     std::string cmp = argv[1];
     std::string type = argv[2];
-    sorts.at({ type, cmp })(size, std::cout, device);
+    sorts.at({ type, cmp })(size, std::cout);
     std::cout << '\n';
   }
   catch (const std::exception& e)
