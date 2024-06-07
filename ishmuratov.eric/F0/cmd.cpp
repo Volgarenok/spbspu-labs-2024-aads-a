@@ -181,7 +181,14 @@ void ishmuratov::read(dict_t & dictionaries, std::istream & input)
   {
     throw std::runtime_error("Error occurred while opening file!");
   }
-  input_dictionary(dictionaries, in_file);
+  try
+  {
+    input_dictionary(dictionaries, in_file);
+  }
+  catch (...)
+  {
+    throw std::invalid_argument("Invalid file content!");
+  }
 }
 
 void ishmuratov::renamedict(dict_t & dictionaries, std::istream & input)
