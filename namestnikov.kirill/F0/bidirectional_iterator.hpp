@@ -25,9 +25,6 @@ namespace namestnikov
     ListIterator():
       node_(nullptr)
     {}
-    explicit ListIterator(node_t * ptr):
-      node_(ptr)
-    {}
     ListIterator(const iterator &) = default;
     iterator & operator=(const iterator &) = default;
     ListIterator(iterator &&) = default;
@@ -87,6 +84,9 @@ namespace namestnikov
     }
   private:
     node_t * node_;
+    explicit ListIterator(node_t * ptr):
+      node_(ptr)
+    {}
   };
 }
 

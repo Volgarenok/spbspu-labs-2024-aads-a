@@ -22,8 +22,8 @@ namespace namestnikov
     using node_t = detail::BaseListNode;
     using const_iterator = ConstListIterator< T >;
     using iterator = ListIterator< T >;
-    explicit ConstListIterator(const node_t * node) :
-      node_(node)
+    ConstListIterator():
+      node_(nullptr)
     {}
     explicit ConstListIterator(iterator iter):
       node_(iter.node_)
@@ -77,9 +77,11 @@ namespace namestnikov
       --(*this);
       return temp;
     }
-
   private:
     const node_t * node_;
+    explicit ConstListIterator(const node_t * node) :
+      node_(node)
+    {}
   };
 }
 
