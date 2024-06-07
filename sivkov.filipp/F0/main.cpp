@@ -12,7 +12,7 @@ int main(int argc, char* argv[])
 {
   setlocale(LC_ALL, "Russian");
   using namespace sivkov;
-  using avlTree = AVLTree<std::string, AVLTree<std::string, std::string>>;
+  using avlTree = AVLTree< std::string, AVLTree< std::string, std::string > >;
   avlTree treeOfdic;
 
   if (argc != 2)
@@ -38,15 +38,15 @@ int main(int argc, char* argv[])
 
   std::string command;
 
-  using funcForPrint = std::function<void(avlTree&, std::istream&, std::ostream&)>;
-  AVLTree<std::string, funcForPrint> outCommands;
+  using funcForPrint = std::function< void(avlTree&, std::istream&, std::ostream&) >;
+  AVLTree< std::string, funcForPrint > outCommands;
   outCommands.push("list_words", list_words);
   outCommands.push("search_words", search_words);
   outCommands.push("repeating_words", repeating_words);
   outCommands.push("count", count_words);
 
-  using func = std::function<void(avlTree&, std::istream&)>;
-  AVLTree<std::string, func> cmd;
+  using func = std::function< void(avlTree&, std::istream&) >;
+  AVLTree< std::string, func > cmd;
   cmd.push("add_word", add_word);
   cmd.push("add_translation", add_translation);
   cmd.push("create", create_dictionary);
@@ -83,13 +83,13 @@ int main(int argc, char* argv[])
     {
       std::cout << "<INVALID COMMAND>" << "\n";
       std::cin.clear();
-      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
     catch (const std::logic_error& e)
     {
       std::cout << e.what() << "\n";
       std::cin.clear();
-      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
     }
   }
 
