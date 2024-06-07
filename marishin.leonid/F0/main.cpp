@@ -9,10 +9,7 @@
 #include <iterator>
 #include <fstream>
 #include <limits>
-#include <binarySearchTree.hpp>
-#include <constTreeIterator.hpp>
-#include <treeIterator.hpp>
-
+/*
 class Note
 {
 public:
@@ -233,6 +230,7 @@ public:
     }
   }
 }
+*/
 void printHelp()
 {
   std::cout << "--help: Show available commands and their usage.\n";
@@ -247,6 +245,7 @@ void printHelp()
   std::cout << "tag-merge-books <book1> <book2> <new_book>: Merge notes from the given books into a new book based on common tags.\n";
   std::cout << "tag-sort-entries <source_book> <tag>: Sort entries in the book by the given tag.\n";
 }
+/*
 void executeAddNote(NotebookManager& manager, std::istream& is, std::ostream& os)
 {
   std::string book, key, note;
@@ -308,6 +307,7 @@ void executeSortEntriesByTag(NotebookManager& manager, std::istream& is, std::os
   is >> book >> tag;
   manager.sortEntriesByTag(book, tag);
 }
+*/
 int main(int argc, char* argv[])
 {
   if (argc != 2)
@@ -321,9 +321,10 @@ int main(int argc, char* argv[])
     std::cerr << "Unable to open file\n";
     return 1;
   }
-  NotebookManager manager;
+  //NotebookManager manager;
   std::map< std::string, std::function< void(std::istream&, std::ostream&) > > cmds;
   using namespace std::placeholders;
+  /*
   cmds["add"] = std::bind(executeAddNote, std::ref(manager), _1, _2);
   cmds["remove"] = std::bind(executeRemoveNote, std::ref(manager), _1, _2);
   cmds["create"] = std::bind(executeCreateNotebook, std::ref(manager), _1, _2);
@@ -334,7 +335,7 @@ int main(int argc, char* argv[])
   cmds["tag-create-book"] = std::bind(executeCreateNotebookFromTags, std::ref(manager), _1, _2);
   cmds["tag-merge-books"] = std::bind(executeMergeNotebooksByTags, std::ref(manager), _1, _2);
   cmds["tag-sort-entries"] = std::bind(executeSortEntriesByTag, std::ref(manager), _1, _2);
-
+  */
   std::string command;
   while (std::getline(in, command))
   {
