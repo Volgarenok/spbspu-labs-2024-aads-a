@@ -2,9 +2,9 @@
 #define BIDIRECTIONAL_LIST_HPP
 #include <utility>
 #include <cstddef>
-#include "bidirectional_iterator.hpp"
-#include "const_bidirectional_iterator.hpp"
-#include "bidirectional_node.hpp"
+#include <bidirectional_iterator.hpp>
+#include <const_bidirectional_iterator.hpp>
+#include <bidirectional_node.hpp>
 
 namespace namestnikov
 {

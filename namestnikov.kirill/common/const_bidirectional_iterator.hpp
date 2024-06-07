@@ -2,8 +2,8 @@
 #define CONST_BIDIRECTIONAL_ITERATOR_HPP
 
 #include <iterator>
-#include "bidirectional_node.hpp"
-#include "bidirectional_iterator.hpp"
+#include <bidirectional_node.hpp>
+#include <bidirectional_iterator.hpp>
 
 namespace namestnikov
 {

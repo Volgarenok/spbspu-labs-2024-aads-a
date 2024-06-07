@@ -6,9 +6,9 @@
 #include <utility>
 #include <functional>
 #include <vector>
-#include "hash_table.hpp"
+#include <bidirectional_list.hpp>
+#include <hash_table.hpp>
 #include "delimeters.hpp"
-#include "bidirectional_list.hpp"
 
 void namestnikov::doHelp(std::ostream & out)
 {

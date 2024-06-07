@@ -2,7 +2,7 @@
 #define INPUT_OUTPUT_DATA_HPP
 
 #include <fstream>
-#include "hash_table.hpp"
+#include <hash_table.hpp>
 
 namespace namestnikov
 {

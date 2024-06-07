@@ -2,7 +2,7 @@
 #define COMMANDS_HPP
 
 #include <string>
-#include "hash_table.hpp"
+#include <hash_table.hpp>
 
 namespace namestnikov
 {
