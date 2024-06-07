@@ -94,7 +94,7 @@ size_t novokhatskiy::Dictionary::size() const noexcept
   return dict_.size();
 }
 
-std::map<std::string, val_t> novokhatskiy::Dictionary::getDict() const
+Tree< std::string, val_t > novokhatskiy::Dictionary::getDict() const
 {
   return dict_;
 }
