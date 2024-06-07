@@ -42,12 +42,10 @@ namespace ishmuratov
   }
 
   template< class T, class Compare >
-  void test_sort(size_t size, std::ostream & output)
+  void test_sort(size_t size, std::ostream & output, std::mt19937 & range)
   {
     std::deque< T > nums;
     List< T > bilist_merge;
-    std::random_device device;
-    std::mt19937 range(device());
     T first = -1000;
     T second = 1000;
     for (size_t i = 0; i != size; ++i)

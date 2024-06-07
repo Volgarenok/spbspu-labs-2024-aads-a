@@ -35,7 +35,7 @@ int main(int argc, char * argv[])
     return 1;
   }
 
-  std::map< std::pair< std::string, std::string >, std::function< void(size_t, std::ostream &) > > cmds;
+  std::map< std::pair< std::string, std::string >, std::function< void(size_t, std::ostream &, std::mt19937 &) > > cmds;
   {
     using namespace std::placeholders;
     cmds[std::make_pair("ascending", "ints")] = test_sort< int, std::less< int > >;
@@ -45,8 +45,10 @@ int main(int argc, char * argv[])
   }
   try
   {
+    std::random_device device;
+    std::mt19937 range(device());
     std::cout << std::fixed << std::setprecision(1);
-    cmds[std::make_pair(argv[1], argv[2])](size, std::cout);
+    cmds[std::make_pair(argv[1], argv[2])](size, std::cout, range);
   }
   catch (const std::exception & e)
   {
