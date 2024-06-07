@@ -21,6 +21,23 @@ namespace namestnikov
       size_(0),
       fakeNode_(new base_node_t())
     {}
+    List(size_t count, const T & value):
+      size_(count),
+      fakeNode_(new base_node_t())
+    {
+      try
+      {
+        for (size_t i = 0; i < count; ++i)
+        {
+          push_back(value);
+        }
+      }
+      catch (...)
+      {
+        clear();
+        throw;
+      }
+    }
     List(const List& other):
       size_(0)
     {
@@ -35,7 +52,6 @@ namespace namestnikov
       catch (...)
       {
         clear();
-        delete fakeNode_;
         throw;
       }
     }
@@ -130,19 +146,51 @@ namespace namestnikov
     }
     void push_front(const T & value)
     {
-      insert(begin(), value);
+      try
+      {
+        insert(begin(), value);
+      }
+      catch (...)
+      {
+        clear();
+        throw;
+      }
     }
     void push_back(const T & value)
     {
-      insert(end(), value);
+      try
+      {
+        insert(end(), value);
+      }
+      catch (...)
+      {
+        clear();
+        throw;
+      }
     }
     void pop_front()
     {
-      erase(begin());
+      try
+      {
+        erase(begin());
+      }
+      catch (...)
+      {
+        clear();
+        throw;
+      }
     }
     void pop_back()
     {
-      erase(std::prev(end()));
+      try
+      {
+        erase(std::prev(end()));
+      }
+      catch (...)
+      {
+        clear();
+        throw;
+      }
     }
     iterator insert(iterator pos, const T & value)
     {
@@ -168,7 +216,6 @@ namespace namestnikov
       catch (...)
       {
         clear();
-        delete fakeNode_;
         throw;
       }
     }
@@ -191,7 +238,6 @@ namespace namestnikov
       catch (...)
       {
         clear();
-        delete fakeNode_;
         throw;
       }
     }
@@ -208,6 +254,7 @@ namespace namestnikov
         delete cur->prev;
       }
       size_ = 0;
+      delete fakeNode_;
     }
     void swap(List & other) noexcept
     {
@@ -217,7 +264,6 @@ namespace namestnikov
     ~List()
     {
       clear();
-      delete fakeNode_;
     }
   private:
     size_t size_;
