@@ -23,7 +23,7 @@ int main(int argc, char * argv[])
   }
   catch (...)
   {
-    std::cerr << "Error while reading from file!";
+    std::cerr << "Error while reading from file!\n";
     return 1;
   }
 
