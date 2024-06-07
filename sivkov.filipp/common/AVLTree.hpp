@@ -3,6 +3,8 @@
 
 #include <algorithm>
 #include <iostream>
+#include "queue.hpp"
+#include "stack.hpp"
 #include "treeNode.hpp"
 #include "cIterator.hpp"
 
@@ -31,7 +33,15 @@ namespace sivkov
 
     ConstIteratorTree< Key, Value, Comp > cbegin() const;
     ConstIteratorTree< Key, Value, Comp > cend() const;
+
     ConstIteratorTree< Key, Value, Comp > find(const Key& key) const;
+
+    template< typename F >
+    F traverse_lnr(F f) const;
+    template< typename F >
+    F traverse_rnl (F f) const;
+    template< typename F >
+    F traverse_breadth (F f) const;
 
   private:
     size_t size_;
@@ -200,6 +210,8 @@ namespace sivkov
       throw std::out_of_range("no key");
     }
   }
+
+
   template< typename Key, typename Value, typename Comp >
   ConstIteratorTree< Key, Value, Comp > AVLTree< Key, Value, Comp >::cbegin() const
   {
@@ -229,6 +241,7 @@ namespace sivkov
     }
     return cend();
   }
+
 
   template< typename Key, typename Value, typename Comp >
   void AVLTree< Key, Value, Comp >::clear()
@@ -548,5 +561,94 @@ namespace sivkov
       return node;
     }
   }
+
+  template< typename Key, typename Value, typename Comp >
+  template< typename F>
+  F AVLTree< Key, Value, Comp >::traverse_lnr(F f) const
+  {
+    if (empty())
+    {
+      throw std::logic_error("<EMPTY>");
+    }
+
+    Stack< detail::TreeNode< Key, Value >* > node_stack;
+    detail::TreeNode< Key, Value >* current = root_;
+
+    while (!node_stack.empty() || current != nullptr)
+    {
+      if (current != nullptr)
+      {
+        node_stack.push(current);
+        current = current->left;
+      }
+      else
+      {
+        current = node_stack.top();
+        node_stack.pop();
+        f(current->data);
+        current = current->right;
+      }
+    }
+    return f;
+  }
+
+  template< typename Key, typename Value, typename Comp >
+  template< typename F >
+  F AVLTree< Key, Value, Comp >::traverse_rnl(F f) const
+  {
+    if (empty())
+    {
+      throw std::logic_error("<EMPTY>");
+    }
+
+    Stack< detail::TreeNode< Key, Value >* > node_stack;
+    detail::TreeNode< Key, Value >* current = root_;
+
+    while (!node_stack.empty() || current != nullptr)
+    {
+      while (current != nullptr)
+      {
+        node_stack.push(current);
+        current = current->right;
+      }
+      current = node_stack.top();
+      node_stack.pop();
+      f(current->data);
+      current = current->left;
+    }
+    return f;
+  }
+
+
+  template< typename Key, typename Value, typename Comp >
+  template< typename F >
+  F AVLTree< Key, Value, Comp >::traverse_breadth(F f) const
+  {
+    if (empty())
+    {
+      throw std::logic_error("<EMPTY>");
+    }
+
+    Queue< detail::TreeNode<Key, Value >* > nodes_queue;
+    nodes_queue.push(root_);
+
+    while (!nodes_queue.empty())
+    {
+      detail::TreeNode< Key, Value >* current = nodes_queue.front();
+      nodes_queue.pop();
+      f(current->data);
+      if (current->left != nullptr)
+      {
+        nodes_queue.push(current->left);
+      }
+      if (current->right != nullptr)
+      {
+        nodes_queue.push(current->right);
+      }
+    }
+    return f;
+  }
+
 }
 #endif
+

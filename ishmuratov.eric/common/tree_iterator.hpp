@@ -10,18 +10,18 @@ namespace ishmuratov
   class AVLTree;
 
   template< class Key, class Value, class Comparator = std::less< Key > >
-  class Iterator
+  class TreeIterator
   {
     using tnode = detail::TNode< Key, Value >;
-    using Iter = Iterator< Key, Value, Comparator >;
+    using Iter = TreeIterator< Key, Value, Comparator >;
     using pair = std::pair< Key, Value >;
   public:
-    Iterator():
+    TreeIterator():
       node_(nullptr)
     {}
 
-    ~Iterator() = default;
-    Iterator(const Iter &) = default;
+    ~TreeIterator() = default;
+    TreeIterator(const Iter &) = default;
     Iter & operator=(const Iter &) = default;
     Iter & operator=(Iter &&) = default;
 
@@ -56,7 +56,7 @@ namespace ishmuratov
       }
       if (node_->left != nullptr)
       {
-        node_ = min_elem(node_->left);
+        node_ = max_elem(node_->left);
       }
       else
       {
@@ -118,7 +118,7 @@ namespace ishmuratov
   private:
     friend AVLTree< Key, Value, Comparator >;
     detail::TNode< Key, Value > * node_;
-    explicit Iterator(detail::TNode< Key, Value > * node):
+    explicit TreeIterator(detail::TNode< Key, Value > * node):
       node_(node)
     {}
 
@@ -130,21 +130,30 @@ namespace ishmuratov
       }
       return min_elem(root->left);
     }
+
+    tnode * max_elem(tnode * root) const
+    {
+      if (root == nullptr || root->right == nullptr)
+      {
+        return root;
+      }
+      return max_elem(root->right);
+    }
   };
 
   template< class Key, class Value, class Comparator = std::less< Key > >
-  class ConstIterator
+  class ConstTreeIterator
   {
     using tnode = detail::TNode< Key, Value >;
-    using ConstIter = ConstIterator< Key, Value, Comparator >;
+    using ConstIter = ConstTreeIterator< Key, Value, Comparator >;
     using pair = std::pair< Key, Value >;
   public:
-    ConstIterator():
+    ConstTreeIterator():
       node_(nullptr)
     {}
 
-    ~ConstIterator() = default;
-    ConstIterator(const ConstIter &) = default;
+    ~ConstTreeIterator() = default;
+    ConstTreeIterator(const ConstIter &) = default;
     ConstIter & operator=(const ConstIter &) = default;
     ConstIter & operator=(ConstIter &&) = default;
 
@@ -179,7 +188,7 @@ namespace ishmuratov
       }
       if (node_->left != nullptr)
       {
-        node_ = min_elem(node_->left);
+        node_ = max_elem(node_->left);
       }
       else
       {
@@ -231,7 +240,7 @@ namespace ishmuratov
   private:
     friend AVLTree< Key, Value, Comparator >;
     const detail::TNode< Key, Value > * node_;
-    explicit ConstIterator(const detail::TNode< Key, Value > * node):
+    explicit ConstTreeIterator(const detail::TNode< Key, Value > * node):
       node_(node)
     {}
 
@@ -242,6 +251,15 @@ namespace ishmuratov
         return root;
       }
       return min_elem(root->left);
+    }
+
+    tnode * max_elem(tnode * root) const
+    {
+      if (root == nullptr || root->right == nullptr)
+      {
+        return root;
+      }
+      return max_elem(root->right);
     }
   };
 }
