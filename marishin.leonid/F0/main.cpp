@@ -110,7 +110,7 @@ public:
     it->second.removeTag(tag);
   }
 
-  std::vector<Note> getNotesByTag(const std::string& tag) const
+  std::vector<Note> getNotesByTag(const std::string&) const
   {
     std::vector<Note> result;
     return result;
