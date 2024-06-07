@@ -292,7 +292,7 @@ namespace ishmuratov
     }
 
     template< class F >
-    F traverse_lnr(F f)
+    F traverse_lnr(F f) const
     {
       for (auto node = cbegin(); node != cend(); ++node)
       {
@@ -302,7 +302,7 @@ namespace ishmuratov
     }
 
     template< class F >
-    F traverse_rnl(F f)
+    F traverse_rnl(F f) const
     {
       for (auto node = crbegin(); node != cend(); --node)
       {
@@ -312,7 +312,7 @@ namespace ishmuratov
     }
 
     template< class F >
-    F traverse_breadth(F f)
+    F traverse_breadth(F f) const
     {
       Queue< tnode * > queue;
       queue.push(root_);
