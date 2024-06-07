@@ -48,14 +48,14 @@ namespace marishin
     std::forward_list< Type > forward_list(deque.cbegin(), deque.cend());
     print(out, forward_list.begin(), forward_list.end());
     out << "\n";
+    Cmp cmp;
+    chooseSort(out, bi_list.begin(), bi_list.end(), cmp, QSort);
+    chooseSort(out, deque_qsort.begin(), deque_qsort.end(), cmp, QSort);
+    chooseSort(out, deque_shaker.begin(), deque_shaker.end(), cmp, shaker);
+    standartSort(out, bi_list_standart, cmp);
+    standartSort(out, forward_list, cmp);
 
-    chooseSort(out, bi_list.begin(), bi_list.end(), Cmp, QSort);
-    chooseSort(out, deque_qsort.begin(), deque_qsort.end(), Cmp, QSort);
-    chooseSort(out, deque_shaker.begin(), deque_shaker.end(), Cmp, shaker);
-    standartSort(out, bi_list_standart, Cmp);
-    standartSort(out, forward_list, Cmp);
-
-    std::sort(deque_sort.begin(), deque_sort.end(), Cmp);
+    std::sort(deque_sort.begin(), deque_sort.end(), cmp);
     print(out, deque_sort.begin(), deque_sort.end());
     out << "\n";
   }
