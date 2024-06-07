@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <functional>
 #include <tree.hpp>
 #include "commands.hpp"
 #include "input_data.hpp"
@@ -30,26 +31,14 @@ int main(int argc, char * argv[])
     std::cout << "<EMPTY>\n";
     return 0;
   }
+  AVLTree< std::string, std::function< std::pair< int, std::string >(AVLTree< int, std::string > &) > > cmds;
+  cmds.insert(std::make_pair("ascending", ascend));
+  cmds.insert(std::make_pair("descending", descend));
+  cmds.insert(std::make_pair("breadth", breadth));
   std::pair< int, std::string > pair;
   try
   {
-    if (command == "ascending")
-    {
-      pair = ascend(data);
-    }
-    else if (command == "descending")
-    {
-      pair = descend(data);
-    }
-    else if (command == "breadth")
-    {
-      pair = breadth(data);
-    }
-    else
-    {
-      std::cerr << "Incorrect command!\n";
-      return 1;
-    }
+    pair = cmds.at(command)(data);
     std::cout << pair.first << pair.second << '\n';
   }
   catch (const std::exception & e)
