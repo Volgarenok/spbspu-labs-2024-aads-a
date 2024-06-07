@@ -41,7 +41,14 @@ void ishmuratov::add_key(dict_t & dictionaries, std::istream & input)
   {
     throw std::out_of_range("Dictionary doesn't exists!");
   }
-  dictionaries.at(name).insert(std::make_pair(key, values));
+  if (dictionaries.at(name).find(key) != dictionaries.at(name).end())
+  {
+    throw std::invalid_argument("Key already exists!");
+  }
+  else
+  {
+    dictionaries.at(name).insert(std::make_pair(key, values));
+  }
 }
 
 void ishmuratov::add_value(dict_t & dictionaries, std::istream & input)
@@ -70,7 +77,14 @@ void ishmuratov::remove_key(dict_t & dictionaries, std::istream & input)
   {
     throw std::out_of_range("Dictionary doesn't exists!");
   }
-  dictionaries.at(name).erase(key);
+  if (dictionaries.at(name).find(key) == dictionaries.at(name).end())
+  {
+    throw std::invalid_argument("Key not found!");
+  }
+  else
+  {
+    dictionaries.at(name).erase(key);
+  }
 }
 
 void ishmuratov::print_dict(const dict_t & dictionaries, std::istream & input, std::ostream & output)

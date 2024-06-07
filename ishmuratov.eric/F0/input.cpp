@@ -24,6 +24,10 @@ void ishmuratov::input_dictionary(dict_t & dictionaries, std::istream &input)
       {
         break;
       }
+      else
+      {
+        input.unget();
+      }
     }
     dictionaries.insert(std::make_pair(name, unit));
   }

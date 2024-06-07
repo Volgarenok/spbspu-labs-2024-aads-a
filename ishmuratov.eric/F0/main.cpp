@@ -80,6 +80,10 @@ int main(int argc, char * argv[])
     {
       std::cout << "<EMPTY>\n";
     }
+    catch (const std::invalid_argument & e)
+    {
+      std::cout << "<ERROR: " << e.what() << ">\n";
+    }
     catch (const std::runtime_error & e)
     {
       std::cout << "<ERROR: " << e.what() << ">\n";
