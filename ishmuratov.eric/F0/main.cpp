@@ -3,8 +3,7 @@
 #include <functional>
 #include <fstream>
 #include <cstring>
-#include "tree.hpp"
-
+#include <tree.hpp>
 #include "input.hpp"
 #include "cmd.hpp"
 

@@ -2,8 +2,8 @@
 #define INPUT_HPP
 
 #include <iostream>
-#include "tree.hpp"
-#include "bdlist.hpp"
+#include <tree.hpp>
+#include <bdlist.hpp>
 
 namespace ishmuratov
 {
