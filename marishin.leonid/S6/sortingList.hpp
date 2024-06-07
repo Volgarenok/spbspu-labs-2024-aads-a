@@ -59,7 +59,7 @@ namespace marishin
     Type array[10000];
     for (size_t i = 0; i < size; ++i)
     {
-      array[i] = detail::randomNumber(generate, Type());
+      array[i] = detail::randomNumber(generate);
     }
     sortAndPrint(out, size, array, Compare());
   }
