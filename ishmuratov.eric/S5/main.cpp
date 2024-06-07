@@ -37,6 +37,11 @@ int main(int argc, char * argv[])
     pair = cmds.at(command)(data);
     std::cout << pair.first << pair.second << '\n';
   }
+  catch (const std::out_of_range &)
+  {
+    std::cerr << "Command wasn't found!\n";
+    return 1;
+  }
   catch (const std::logic_error & e)
   {
     std::cout << e.what() << '\n';
