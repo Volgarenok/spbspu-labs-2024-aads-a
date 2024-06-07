@@ -1,18 +1,23 @@
 #ifndef SORT_AND_PRINT_SEQUENCE
 #define SORT_AND_PRINT_SEQUENCE
 
-#include <algorithm>
-#include <deque>
-#include <forward_list>
-#include <iomanip>
-#include <list>
 #include <ostream>
-#include <stdexcept>
+#include <list>
+#include <deque>
+#include <algorithm>
+#include <iomanip>
+#include <forward_list>
 #include "sortings.hpp"
 
 namespace novokhatskiy
 {
-  template < class It >
+  template< class T >
+  T getRandomValue()
+  {
+    return static_cast< T >(std::rand());
+  }
+  
+  template< class It >
   void printSeq(It begin, It end, std::ostream& out)
   {
     if (begin != end)
@@ -22,28 +27,23 @@ namespace novokhatskiy
       {
         out << ' ' << *begin;
       }
-      out << '\n';
     }
   }
 
-  template < class It, class Cmp >
-  void optSort(It begin, It end, std::ostream& out, Cmp cmp, void (*sort)(It, It, Cmp))
+  template< class It, class Cmp >
+  void optSort(It begin, It end, std::ostream& out, Cmp cmp, void(*sort)(It, It, Cmp))
   {
     sort(begin, end, cmp);
     printSeq(begin, end, out);
+    out << '\n';
   }
 
-  template < class T, class Cmp >
+  template< class T, class Cmp >
   void sortSeq(size_t size, std::ostream& out)
   {
     using namespace novokhatskiy;
-    std::deque< T > deque;
-    T value;
-    for (size_t i = 0; i != size; i++)
-    {
-      value = static_cast< T >(std::rand() / (static_cast< T >(RAND_MAX / RAND_MAX)));
-      deque.push_back(value);
-    }
+    std::deque< T > deque(size);
+    std::generate(deque.begin(), deque.end(), getRandomValue< T >);
     std::forward_list< T > forwardList(deque.cbegin(), deque.cend());
     std::list< T > biList(deque.cbegin(), deque.cend());
     std::list< T > secondBiList(deque.cbegin(), deque.cend());
