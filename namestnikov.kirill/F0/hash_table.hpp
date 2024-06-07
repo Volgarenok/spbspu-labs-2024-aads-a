@@ -34,30 +34,6 @@ namespace namestnikov
         buckets_[i] = elements_.end();
       }
     }
-    HashTable(std::initializer_list< val_type_t > initList):
-      capacity_(initList.size() / 0.75 + 1),
-      count_(0),
-      buckets_(new list_iterator[initList.size() / 0.75 + 1]),
-      elements_()
-    {
-      try
-      {
-        for (size_t i = 0; i < capacity_; ++i)
-        {
-          buckets_[i] = elements_.end();
-        }
-        for (auto it = initList.begin(); it != initList.end(); ++it)
-        {
-          insert((*it).first, (*it).second);
-        }
-      }
-      catch (...)
-      {
-        clear();
-        delete[] buckets_;
-        throw;
-      }
-    }
     HashTable(const HashTable< Key, Value > & other):
       capacity_(other.capacity_),
       count_(0),
@@ -299,10 +275,10 @@ namespace namestnikov
     }
     size_t calculateNextCapacity(size_t current) const
     {
-      size_t degree = 0;
-      for (; current > std::pow(2, degree); ++degree) {};
-      ++degree;
-      return std::pow(2, degree) - (std::pow(2, degree) - std::pow(2, degree - 1)) / 2 - 1;
+      size_t powDegree = 0;
+      for (; current > std::pow(2, powDegree); ++powDegree) {};
+      ++powDegree;
+      return std::pow(2, powDegree) - (std::pow(2, powDegree) - std::pow(2, powDegree - 1)) / 2 - 1;
     }
     hash_table_iterator find(const Key & key, size_t hash)
     {
@@ -320,7 +296,10 @@ namespace namestnikov
       {
         return hash_table_iterator(bucketIter);
       }
-      return end();
+      else
+      {
+        return end();
+      }
     }
     const_hash_table_iterator find(const Key & key, size_t hash) const
     {
@@ -338,7 +317,10 @@ namespace namestnikov
       {
         return const_hash_table_iterator(bucketIter);
       }
-      return cend();
+      else
+      {
+        return cend();
+      }
     }
     std::pair< hash_table_iterator, bool > insert(const Key & key, const Value & value, size_t hash)
     {
