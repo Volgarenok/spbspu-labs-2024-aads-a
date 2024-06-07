@@ -2,7 +2,7 @@
 #define EXPRESSION_HPP
 
 #include <cstddef>
-#include "queue.hpp"
+#include <queue.hpp>
 
 namespace novokhatskiy
 {

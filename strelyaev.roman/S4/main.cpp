@@ -3,7 +3,7 @@
 #include <string>
 #include <fstream>
 #include <limits>
-#include "binarySearchTree.hpp"
+#include <tree/binarySearchTree.hpp>
 #include "inputMap.hpp"
 #include "commands.hpp"
 

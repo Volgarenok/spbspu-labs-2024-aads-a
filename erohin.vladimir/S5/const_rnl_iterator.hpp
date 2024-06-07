@@ -48,7 +48,8 @@ namespace erohin
   template< class Key, class T >
   ConstRnlIterator< Key, T > & ConstRnlIterator< Key, T >::operator++()
   {
-    return ConstRnlIterator< Key, T >(--iter_);
+    --iter_;
+    return *this;
   }
 
   template< class Key, class T >
@@ -60,7 +61,8 @@ namespace erohin
   template< class Key, class T >
   ConstRnlIterator< Key, T > & ConstRnlIterator< Key, T >::operator--()
   {
-    return ConstRnlIterator< Key, T >(++iter_);
+    ++iter_;
+    return *this;
   }
 
   template< class Key, class T >

@@ -3,7 +3,7 @@
 #include <iosfwd>
 #include <map>
 #include <string>
-#include "binarySearchTree.hpp"
+#include <tree/binarySearchTree.hpp>
 
 namespace strelyaev
 {

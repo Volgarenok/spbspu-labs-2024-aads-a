@@ -1,6 +1,6 @@
 #include "inputMap.hpp"
 #include <iostream>
-#include "binarySearchTree.hpp"
+#include <tree/binarySearchTree.hpp>
 
 strelyaev::Tree< std::string, strelyaev::Tree< int, std::string > > strelyaev::inputMap(std::istream& in)
 {

@@ -2,7 +2,7 @@
 #define COMMANDS_HPP
 #include <iosfwd>
 #include <string>
-#include "binarySearchTree.hpp"
+#include <tree/binarySearchTree.hpp>
 
 namespace strelyaev
 {

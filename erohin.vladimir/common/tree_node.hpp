@@ -53,22 +53,15 @@ namespace erohin
       }
       else
       {
-        if (!parent)
+        while (node->parent && node->parent->left != node)
+        {
+          node = node->parent;
+        }
+        if (!node->parent)
         {
           return nullptr;
         }
-        while (node->parent->right == node)
-        {
-          node = node->parent;
-          if (!node->parent)
-          {
-            return nullptr;
-          }
-        }
-        while (node->parent && node->parent->left == node)
-        {
-          node = node->parent;
-        }
+        node = node->parent;
       }
       return node;
     }
@@ -87,18 +80,15 @@ namespace erohin
       }
       else
       {
-        while (node->parent->left == node)
-        {
-          node = node->parent;
-          if (!(node->parent))
-          {
-            return nullptr;
-          }
-        }
-        while (node->parent && node->parent->right == node)
+        while (node->parent && node->parent->right != node)
         {
           node = node->parent;
         }
+        if (!node->parent)
+        {
+          return nullptr;
+        }
+        node = node->parent;
       }
       return node;
     }
