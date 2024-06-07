@@ -7,7 +7,6 @@
 #include <algorithm>
 #include <iomanip>
 #include <cstdlib>
-#include <ctime>
 #include <forward_list>
 #include "sortings.hpp"
 
@@ -16,7 +15,7 @@ namespace novokhatskiy
   template< class T >
   T getRandomValue()
   {
-    //srand(time(nullptr));
+    srand(time(nullptr));
     return static_cast< T >(std::rand());
   }
 
