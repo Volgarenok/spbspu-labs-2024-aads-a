@@ -3,7 +3,7 @@
 
 #include <iosfwd>
 #include <string>
-#include "queue.hpp"
+#include <queue.hpp>
 
 namespace marishin
 {

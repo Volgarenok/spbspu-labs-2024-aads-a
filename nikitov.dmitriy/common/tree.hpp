@@ -17,9 +17,9 @@ namespace nikitov
   template< class Key, class T, class Compare = std::less< Key > >
   class Tree
   {
-    using treeIterator = TreeIterator< Key, T, Compare >;
-    using constTreeIterator = ConstTreeIterator< Key, T, Compare >;
   public:
+    typedef TreeIterator< Key, T, Compare > treeIterator;
+    typedef ConstTreeIterator< Key, T, Compare > constTreeIterator;
     Tree();
     Tree(constTreeIterator first, constTreeIterator second);
     Tree(std::initializer_list< std::pair< Key, T > > initList);
@@ -56,6 +56,7 @@ namespace nikitov
     void insert(constTreeIterator first, constTreeIterator second);
     void insert(std::initializer_list< std::pair< Key, T > > initList);
 
+    treeIterator erase(treeIterator position);
     treeIterator erase(constTreeIterator position);
     treeIterator erase(constTreeIterator first, constTreeIterator last);
 
@@ -332,6 +333,12 @@ namespace nikitov
   }
 
   template< class Key, class T, class Compare >
+  TreeIterator< Key, T, Compare > Tree< Key, T, Compare >::erase(treeIterator position)
+  {
+    return erase(constTreeIterator(position.node_, position.isFirst_));
+  }
+
+  template< class Key, class T, class Compare >
   TreeIterator< Key, T, Compare > Tree< Key, T, Compare >::erase(constTreeIterator position)
   {
     if (size_ == 1)
@@ -351,7 +358,14 @@ namespace nikitov
     }
     if (iterator.node_->size_ == 2)
     {
-      iterator.node_->free(iterator.isFirst_);
+      if (iterator.isFirst_)
+      {
+        iterator.node_->freeFirst();
+      }
+      else
+      {
+        iterator.node_->freeSecond();
+      }
     }
     else
     {

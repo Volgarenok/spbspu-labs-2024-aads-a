@@ -1,8 +1,8 @@
 #include "getPostfixForm.hpp"
 #include <cctype>
 #include <iostream>
-#include "stack.hpp"
-#include "queue.hpp"
+#include <stack.hpp>
+#include <queue.hpp>
 #include "input.hpp"
 
 bool binary(const std::string& p)
