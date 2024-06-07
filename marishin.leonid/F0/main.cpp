@@ -185,7 +185,8 @@ public:
     it->second.removeTagFromNote(key, tag);
   }
 
-  void createNotebookFromTags(const std::string& book1, const std::string& tag1, const std::string& book2, const std::string& tag2, const std::string& newBook)
+  void createNotebookFromTags(const std::string& book1, const std::string& tag1, const std::string& book2, 
+    const std::string& tag2, const std::string& newBook)
   {
     auto it1 = notebooks.find(book1);
     auto it2 = notebooks.find(book2);
@@ -218,7 +219,8 @@ public:
       for (const auto& [key, note2] : it2->second.notes)
       {
         std::vector<std::string> common_tags;
-        std::set_intersection(note1.tags.begin(), note1.tags.end(), note2.tags.begin(), note2.tags.end(), std::back_inserter(common_tags));
+        std::set_intersection(note1.tags.begin(), note1.tags.end(), note2.tags.begin(), note2.tags.end(), 
+          std::back_inserter(common_tags));
         if (!common_tags.empty())
         {
           notebooks[newBook].add(note1.key, note1.description);
@@ -260,7 +262,8 @@ void printHelp()
   std::cout << "tag-delete <book> <tag>: Delete the tag from the book.\n";
   std::cout << "tag-add <book> <key> <tag>: Add a tag to the note with the given key in the book.\n";
   std::cout << "tag-remove <book> <key> <tag>: Remove a tag from the note with the given key in the book.\n";
-  std::cout << "tag-create-book <book1> <tag1> <book2> <tag2> <new_book>: Create a new notebook based on notes tagged in the given books.\n";
+  std::cout << "tag-create-book <book1> <tag1> <book2> <tag2> <new_book>:" ;
+  std::cout << "Create a new notebook based on notes tagged in the given books.\n";
   std::cout << "tag-merge-books <book1> <book2> <new_book>: Merge notes from the given books into a new book based on common tags.\n";
   std::cout << "tag-sort-entries <source_book> <tag>: Sort entries in the book by the given tag.\n";
 }
