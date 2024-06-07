@@ -214,7 +214,7 @@ namespace sivkov
     }
 
     const AVLTree< std::string, std::string >& dictionary = treeOfdic.at(dictionaryName);
-    out << dictionary.size() << "\n";
+    out << dictionary.getSize() << "\n";
   }
 
   void merge_dictionaries(tree& treeOfdic, std::istream& in)
