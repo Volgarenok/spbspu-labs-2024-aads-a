@@ -6,7 +6,7 @@
 #include <functional>
 #include "read_dictionaries.hpp"
 #include "commands.hpp"
-#include "tree.hpp"
+#include <tree.hpp>
 
 int main(int argc, char* argv[])
 {

@@ -1,11 +1,28 @@
 #include <iostream>
 #include <fstream>
 
-#include "stack.hpp"
-#include "queue.hpp"
-#include "getInfix.hpp"
-#include "infixToPostfix.hpp"
-#include "calculateExpr.hpp"
+#include <queue.hpp>
+
+#include <stack.hpp>
+#include <calc/getInfix.hpp>
+#include <calc/infixToPostfix.hpp>
+#include <calc/calculateExpr.hpp>
+
+namespace zhalilov
+{
+  void getInfixesFromStream(Stack< Queue< InfixToken > > &stack, std::istream &in)
+  {
+    while (in)
+    {
+      Queue< InfixToken > temp;
+      getInfix(temp, in);
+      if (!temp.empty())
+      {
+        stack.push(temp);
+      }
+    }
+  }
+}
 
 int main(int argc, char *argv[])
 {

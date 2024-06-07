@@ -1,11 +1,11 @@
 #ifndef LIST_HPP
 #define LIST_HPP
-#include <utility>
 #include <cstddef>
 #include <string>
-#include "node.hpp"
-#include "iterator.hpp"
+#include <utility>
 #include "constIterator.hpp"
+#include "iterator.hpp"
+#include "node.hpp"
 
 namespace zakozhurnikova
 {
@@ -50,6 +50,27 @@ namespace zakozhurnikova
       rhs.size_ = 0;
     }
 
+    template < typename InputIt >
+    List(InputIt first, InputIt last):
+      head_(nullptr),
+      tail_(nullptr),
+      size_(0)
+    {
+      while(first != last)
+      {
+        try
+        {
+          push_back(*first);
+          ++first;
+        }
+        catch (...)
+        {
+          clear();
+          throw;
+        }
+      }
+    }
+
     List& operator=(const List& rhs)
     {
       if (this != std::addressof(rhs))
@@ -83,6 +104,16 @@ namespace zakozhurnikova
     const T& front() const
     {
       return head_->data;
+    }
+
+    T& back()
+    {
+      return tail_->data;
+    }
+
+    const T& back() const
+    {
+      return tail_->data;
     }
 
     void push_back(const T& data)
@@ -200,12 +231,7 @@ namespace zakozhurnikova
 
     void remove(const T& value)
     {
-      remove_if(
-        [&](const T& item)
-        {
-          return (item == value);
-        }
-      );
+      remove_if([&](const T& item) { return (item == value); });
     }
 
     template < class UnaryPredicate >

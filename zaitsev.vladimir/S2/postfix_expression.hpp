@@ -2,8 +2,8 @@
 #define POSTFIX_EXPRESSION_HPP
 #include <stdexcept>
 #include <string>
-#include "queue.hpp"
-#include "stack.hpp"
+#include <queue.hpp>
+#include <stack.hpp>
 #include "token.hpp"
 
 namespace zaitsev
