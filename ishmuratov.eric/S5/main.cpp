@@ -26,11 +26,7 @@ int main(int argc, char * argv[])
     std::cerr << "Error while reading from file!";
     return 1;
   }
-  if (data.empty())
-  {
-    std::cout << "<EMPTY>\n";
-    return 0;
-  }
+
   AVLTree< std::string, std::function< std::pair< int, std::string >(AVLTree< int, std::string > &) > > cmds;
   cmds.insert(std::make_pair("ascending", ascend));
   cmds.insert(std::make_pair("descending", descend));
@@ -40,6 +36,11 @@ int main(int argc, char * argv[])
   {
     pair = cmds.at(command)(data);
     std::cout << pair.first << pair.second << '\n';
+  }
+  catch (const std::logic_error & e)
+  {
+    std::cout << e.what() << '\n';
+    return 0;
   }
   catch (const std::exception & e)
   {

@@ -294,6 +294,10 @@ namespace ishmuratov
     template< class F >
     F traverse_lnr(F f) const
     {
+      if (empty())
+      {
+        throw std::logic_error("<EMPTY>");
+      }
       for (auto node = cbegin(); node != cend(); ++node)
       {
         f(*node);
@@ -304,6 +308,10 @@ namespace ishmuratov
     template< class F >
     F traverse_rnl(F f) const
     {
+      if (empty())
+      {
+        throw std::logic_error("<EMPTY>");
+      }
       for (auto node = crbegin(); node != cend(); --node)
       {
         f(*node);
@@ -314,6 +322,10 @@ namespace ishmuratov
     template< class F >
     F traverse_breadth(F f) const
     {
+      if (empty())
+      {
+        throw std::logic_error("<EMPTY>");
+      }
       Queue< tnode * > queue;
       queue.push(root_);
       while (!queue.empty())
