@@ -22,7 +22,7 @@ void ishmuratov::delete_dict(dict_t & dictionaries, std::istream & input)
   input >> name;
   if (dictionaries.find(name) == dictionaries.end())
   {
-    throw std::out_of_range("Dictionary doesn't exists!");
+    throw std::out_of_range("Dictionary doesn't exist!");
   }
   dictionaries.erase(name);
 }
@@ -39,7 +39,7 @@ void ishmuratov::add_key(dict_t & dictionaries, std::istream & input)
 
   if (dictionaries.find(name) == dictionaries.end())
   {
-    throw std::out_of_range("Dictionary doesn't exists!");
+    throw std::out_of_range("Dictionary doesn't exist!");
   }
   if (dictionaries.at(name).find(key) != dictionaries.at(name).end())
   {
@@ -61,7 +61,11 @@ void ishmuratov::add_value(dict_t & dictionaries, std::istream & input)
 
   if (dictionaries.find(name) == dictionaries.end())
   {
-    throw std::out_of_range("Dictionary doesn't exists!");
+    throw std::out_of_range("Dictionary doesn't exist!");
+  }
+  if (dictionaries.at(name).find(key) == dictionaries.at(name).end())
+  {
+    throw std::invalid_argument("Key wasn't found!");
   }
   dictionaries.at(name).at(key).pushBack(value);
 }
@@ -75,11 +79,11 @@ void ishmuratov::remove_key(dict_t & dictionaries, std::istream & input)
 
   if (dictionaries.find(name) == dictionaries.end())
   {
-    throw std::out_of_range("Dictionary doesn't exists!");
+    throw std::out_of_range("Dictionary doesn't exist!");
   }
   if (dictionaries.at(name).find(key) == dictionaries.at(name).end())
   {
-    throw std::invalid_argument("Key not found!");
+    throw std::invalid_argument("Key wasn't found!");
   }
   else
   {
@@ -94,7 +98,7 @@ void ishmuratov::print_dict(const dict_t & dictionaries, std::istream & input, s
 
   if (dictionaries.find(name) == dictionaries.cend())
   {
-    throw std::out_of_range("Dictionary doesn't exists!");
+    throw std::out_of_range("Dictionary doesn't exist!");
   }
   if (dictionaries.at(name).empty())
   {
@@ -125,7 +129,7 @@ void ishmuratov::get_value(const dict_t & dictionaries, std::istream & input, st
   input >> name >> key;
   if (dictionaries.find(name) == dictionaries.cend())
   {
-    throw std::out_of_range("Dictionary doesn't exists!");
+    throw std::out_of_range("Dictionary doesn't exist!");
   }
   if (dictionaries.at(name).find(key) == dictionaries.at(name).cend())
   {
@@ -187,11 +191,11 @@ void ishmuratov::renamedict(dict_t & dictionaries, std::istream & input)
   input >> name >> new_name;
   if (dictionaries.find(name) == dictionaries.end())
   {
-    throw std::out_of_range("Non existent dictionary!");
+    throw std::out_of_range("Dictionary doesn't exist!");
   }
   if (dictionaries.find(new_name) != dictionaries.end())
   {
-    throw std::out_of_range("Dictionary with this name already exist!");
+    throw std::out_of_range("Dictionary with this name already exists!");
   }
 
   dictionaries.insert(std::make_pair(new_name, dictionaries.at(name)));
@@ -207,7 +211,7 @@ void ishmuratov::intersect(dict_t & dictionaries, std::istream & input)
 
   if (dictionaries.find(first_name) == dictionaries.end() || dictionaries.find(second_name) == dictionaries.end())
   {
-    throw std::out_of_range("Non existent dictionary!");
+    throw std::out_of_range("Dictionary doesn't exist!");
   }
 
   unit_t temp = intersect_impl(dictionaries.at(first_name), dictionaries.at(second_name));
@@ -245,7 +249,7 @@ void ishmuratov::uniond(dict_t & dictionaries, std::istream & input)
 
   if (dictionaries.find(first_name) == dictionaries.end() || dictionaries.find(second_name) == dictionaries.end())
   {
-    throw std::out_of_range("Non existent dictionary!");
+    throw std::out_of_range("Dictionary doesn't exist!");
   }
 
   unit_t temp = union_impl(dictionaries.at(first_name), dictionaries.at(second_name));
