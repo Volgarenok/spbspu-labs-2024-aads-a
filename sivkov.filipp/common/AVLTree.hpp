@@ -43,6 +43,8 @@ namespace sivkov
     template< typename F >
     F traverse_breadth (F f) const;
 
+    size_t getSize() const;
+
   private:
     size_t size_;
     detail::TreeNode< Key, Value >* root_;
@@ -62,6 +64,12 @@ namespace sivkov
     detail::TreeNode< Key, Value >* insert(detail::TreeNode< Key, Value >* root, const Key& key, const Value& value);
     detail::TreeNode< Key, Value >* addOrFind(detail::TreeNode< Key, Value >* node, const Key& key, const Value& value);
   };
+
+  template<typename Key, typename Value, typename Comp>
+  size_t AVLTree<Key, Value, Comp>::getSize() const
+  {
+    return size_;
+  }
 
   template< typename Key, typename Value, typename Comp >
   AVLTree< Key, Value, Comp >::AVLTree():
