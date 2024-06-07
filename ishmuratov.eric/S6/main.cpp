@@ -43,7 +43,6 @@ int main(int argc, char * argv[])
     cmds[std::make_pair("ascending", "floats")] = test_sort< float, std::less< float > >;
     cmds[std::make_pair("descending", "floats")] = test_sort< float, std::greater< float > >;
   }
-
   try
   {
     std::cout << std::fixed << std::setprecision(1);
