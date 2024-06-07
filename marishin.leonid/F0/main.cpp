@@ -9,7 +9,7 @@
 #include <iterator>
 #include <fstream>
 #include <limits>
-/*
+
 class Note
 {
 public:
@@ -22,6 +22,24 @@ public:
     key(k),
     description(d)
   {}
+
+  Note(const Note& other):
+    key(other.key),
+    description(other.description),
+    tags(other.tags)
+  {}
+
+  Note& operator=(const Note& other)
+  {
+    if (this != &other)
+    {
+      key = other.key;
+      description = other.description;
+      tags = other.tags;
+    }
+    return *this;
+  }
+
   void addTag(const std::string& tag)
   {
     tags.insert(tag);
@@ -64,10 +82,6 @@ public:
     {
       throw std::runtime_error("INVALID COMMAND");
     }
-    for (auto& [key, note] : notes)
-    {
-      note.removeTag(tag);
-    }
   }
   void addTagToNote(const std::string& key, const std::string& tag)
   {
@@ -90,13 +104,6 @@ public:
   std::vector<Note> getNotesByTag(const std::string& tag) const
   {
     std::vector<Note> result;
-    for (const auto& [key, note] : notes)
-    {
-      if (note.tags.find(tag) != note.tags.end())
-      {
-        result.push_back(note);
-      }
-    }
     return result;
   }
 };
@@ -194,19 +201,6 @@ public:
       throw std::runtime_error("INVALID COMMAND");
     }
     createNotebook(newBook);
-    for (const auto& [key, note1] : it1->second.notes)
-    {
-      for (const auto& [key, note2] : it2->second.notes)
-      {
-        std::vector<std::string> common_tags;
-        std::set_intersection(note1.tags.begin(), note1.tags.end(), note2.tags.begin(),
-          note2.tags.end(), std::back_inserter(common_tags));
-        if (!common_tags.empty())
-        {
-          notebooks[newBook].add(note1.key, note1.description);
-        }
-      }
-    }
   }
   void sortEntriesByTag(const std::string& book, const std::string& tag)
   {
@@ -229,8 +223,7 @@ public:
       it->second.notes[note.key] = note;
     }
   }
-}
-*/
+};
 void printHelp()
 {
   std::cout << "--help: Show available commands and their usage.\n";
@@ -245,7 +238,6 @@ void printHelp()
   std::cout << "tag-merge-books <book1> <book2> <new_book>: Merge notes from the given books into a new book based on common tags.\n";
   std::cout << "tag-sort-entries <source_book> <tag>: Sort entries in the book by the given tag.\n";
 }
-/*
 void executeAddNote(NotebookManager& manager, std::istream& is, std::ostream& os)
 {
   std::string book, key, note;
@@ -307,7 +299,6 @@ void executeSortEntriesByTag(NotebookManager& manager, std::istream& is, std::os
   is >> book >> tag;
   manager.sortEntriesByTag(book, tag);
 }
-*/
 int main(int argc, char* argv[])
 {
   if (argc != 2)
@@ -321,10 +312,9 @@ int main(int argc, char* argv[])
     std::cerr << "Unable to open file\n";
     return 1;
   }
-  //NotebookManager manager;
+  NotebookManager manager;
   std::map< std::string, std::function< void(std::istream&, std::ostream&) > > cmds;
   using namespace std::placeholders;
-  /*
   cmds["add"] = std::bind(executeAddNote, std::ref(manager), _1, _2);
   cmds["remove"] = std::bind(executeRemoveNote, std::ref(manager), _1, _2);
   cmds["create"] = std::bind(executeCreateNotebook, std::ref(manager), _1, _2);
@@ -335,7 +325,6 @@ int main(int argc, char* argv[])
   cmds["tag-create-book"] = std::bind(executeCreateNotebookFromTags, std::ref(manager), _1, _2);
   cmds["tag-merge-books"] = std::bind(executeMergeNotebooksByTags, std::ref(manager), _1, _2);
   cmds["tag-sort-entries"] = std::bind(executeSortEntriesByTag, std::ref(manager), _1, _2);
-  */
   std::string command;
   while (std::getline(in, command))
   {
