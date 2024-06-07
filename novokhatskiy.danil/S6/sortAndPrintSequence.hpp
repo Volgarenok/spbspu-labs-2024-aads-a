@@ -16,7 +16,7 @@ namespace novokhatskiy
   template< class T >
   T getRandomValue()
   {
-    srand(time(nullptr));
+    //srand(time(nullptr));
     return static_cast< T >(std::rand());
   }
 
