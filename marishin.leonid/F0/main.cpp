@@ -18,7 +18,7 @@ public:
   std::set<std::string> tags;
 
   Note() = default;
-  Note(const std::string& k, const std::string& d):
+  Note(const std::string& k, const std::string& d) :
     key(k),
     description(d)
   {}
@@ -44,24 +44,28 @@ public:
   {
     tags.insert(tag);
   }
+
   void removeTag(const std::string& tag)
   {
     tags.erase(tag);
   }
 };
+
 class Notebook
 {
 public:
   std::map<std::string, Note> notes;
   std::set<std::string> tags;
+
   void add(const std::string& key, const std::string& note)
   {
     if (notes.find(key) != notes.end())
     {
       throw std::runtime_error("INVALID COMMAND");
     }
-    notes[key] = Note{key, note};
+    notes.emplace(std::make_pair(key, Note{ key, note }));
   }
+
   void remove(const std::string& key)
   {
     if (notes.erase(key) == 0)
@@ -69,6 +73,7 @@ public:
       throw std::runtime_error("INVALID COMMAND");
     }
   }
+
   void createTag(const std::string& tag)
   {
     if (!tags.insert(tag).second)
@@ -76,6 +81,7 @@ public:
       throw std::runtime_error("INVALID COMMAND");
     }
   }
+
   void deleteTag(const std::string& tag)
   {
     if (tags.erase(tag) == 0)
@@ -83,6 +89,7 @@ public:
       throw std::runtime_error("INVALID COMMAND");
     }
   }
+
   void addTagToNote(const std::string& key, const std::string& tag)
   {
     auto it = notes.find(key);
@@ -92,6 +99,7 @@ public:
     }
     it->second.addTag(tag);
   }
+
   void removeTagFromNote(const std::string& key, const std::string& tag)
   {
     auto it = notes.find(key);
@@ -101,12 +109,14 @@ public:
     }
     it->second.removeTag(tag);
   }
+
   std::vector<Note> getNotesByTag(const std::string& tag) const
   {
     std::vector<Note> result;
     return result;
   }
 };
+
 class NotebookManager
 {
 public:
@@ -119,6 +129,7 @@ public:
       throw std::runtime_error("INVALID COMMAND");
     }
   }
+
   void addNote(const std::string& book, const std::string& key, const std::string& note)
   {
     auto it = notebooks.find(book);
@@ -128,6 +139,7 @@ public:
     }
     it->second.add(key, note);
   }
+
   void removeNote(const std::string& book, const std::string& key)
   {
     auto it = notebooks.find(book);
@@ -137,6 +149,7 @@ public:
     }
     it->second.remove(key);
   }
+
   void createTag(const std::string& book, const std::string& tag)
   {
     auto it = notebooks.find(book);
@@ -146,6 +159,7 @@ public:
     }
     it->second.createTag(tag);
   }
+
   void deleteTag(const std::string& book, const std::string& tag)
   {
     auto it = notebooks.find(book);
@@ -155,6 +169,7 @@ public:
     }
     it->second.deleteTag(tag);
   }
+
   void addTagToNote(const std::string& book, const std::string& key, const std::string& tag)
   {
     auto it = notebooks.find(book);
@@ -164,6 +179,7 @@ public:
     }
     it->second.addTagToNote(key, tag);
   }
+
   void removeTagFromNote(const std::string& book, const std::string& key, const std::string& tag)
   {
     auto it = notebooks.find(book);
@@ -173,6 +189,7 @@ public:
     }
     it->second.removeTagFromNote(key, tag);
   }
+
   void createNotebookFromTags(const std::string& book1, const std::string& tag1, const std::string& book2,
     const std::string& tag2, const std::string& newBook)
   {
@@ -192,6 +209,7 @@ public:
       notebooks[newBook].add(note.key, note.description);
     }
   }
+
   void mergeNotebooksByTags(const std::string& book1, const std::string& book2, const std::string& newBook)
   {
     auto it1 = notebooks.find(book1);
@@ -202,6 +220,7 @@ public:
     }
     createNotebook(newBook);
   }
+
   void sortEntriesByTag(const std::string& book, const std::string& tag)
   {
     auto it = notebooks.find(book);
@@ -210,13 +229,11 @@ public:
       throw std::runtime_error("INVALID COMMAND");
     }
     auto notes = it->second.getNotesByTag(tag);
-    auto other_notes = it->second.notes;
-    for (const auto& note : notes)
-    {
-      other_notes.erase(note.key);
-    }
     std::vector<Note> sorted_notes(notes.begin(), notes.end());
-    sorted_notes.insert(sorted_notes.end(), other_notes.begin(), other_notes.end());
+    std::sort(sorted_notes.begin(), sorted_notes.end(), [](const Note& a, const Note& b)
+    {
+      return a.key < b.key;
+    });
     it->second.notes.clear();
     for (const auto& note : sorted_notes)
     {
@@ -224,6 +241,7 @@ public:
     }
   }
 };
+
 void printHelp()
 {
   std::cout << "--help: Show available commands and their usage.\n";
@@ -238,6 +256,7 @@ void printHelp()
   std::cout << "tag-merge-books <book1> <book2> <new_book>: Merge notes from the given books into a new book based on common tags.\n";
   std::cout << "tag-sort-entries <source_book> <tag>: Sort entries in the book by the given tag.\n";
 }
+
 void executeAddNote(NotebookManager& manager, std::istream& is, std::ostream& os)
 {
   std::string book, key, note;
@@ -245,60 +264,70 @@ void executeAddNote(NotebookManager& manager, std::istream& is, std::ostream& os
   std::getline(is, note);
   manager.addNote(book, key, note);
 }
+
 void executeRemoveNote(NotebookManager& manager, std::istream& is, std::ostream& os)
 {
   std::string book, key;
   is >> book >> key;
   manager.removeNote(book, key);
 }
+
 void executeCreateNotebook(NotebookManager& manager, std::istream& is, std::ostream& os)
 {
   std::string book;
   is >> book;
   manager.createNotebook(book);
 }
+
 void executeCreateTag(NotebookManager& manager, std::istream& is, std::ostream& os)
 {
   std::string book, tag;
   is >> book >> tag;
   manager.createTag(book, tag);
 }
+
 void executeDeleteTag(NotebookManager& manager, std::istream& is, std::ostream& os)
 {
   std::string book, tag;
   is >> book >> tag;
   manager.deleteTag(book, tag);
 }
+
 void executeAddTagToNote(NotebookManager& manager, std::istream& is, std::ostream& os)
 {
   std::string book, key, tag;
   is >> book >> key >> tag;
   manager.addTagToNote(book, key, tag);
 }
+
 void executeRemoveTagFromNote(NotebookManager& manager, std::istream& is, std::ostream& os)
 {
   std::string book, key, tag;
   is >> book >> key >> tag;
   manager.removeTagFromNote(book, key, tag);
 }
+
 void executeCreateNotebookFromTags(NotebookManager& manager, std::istream& is, std::ostream& os)
 {
   std::string book1, tag1, book2, tag2, newBook;
   is >> book1 >> tag1 >> book2 >> tag2 >> newBook;
   manager.createNotebookFromTags(book1, tag1, book2, tag2, newBook);
 }
+
 void executeMergeNotebooksByTags(NotebookManager& manager, std::istream& is, std::ostream& os)
 {
   std::string book1, book2, newBook;
   is >> book1 >> book2 >> newBook;
   manager.mergeNotebooksByTags(book1, book2, newBook);
 }
+
 void executeSortEntriesByTag(NotebookManager& manager, std::istream& is, std::ostream& os)
 {
   std::string book, tag;
   is >> book >> tag;
   manager.sortEntriesByTag(book, tag);
 }
+
 int main(int argc, char* argv[])
 {
   if (argc != 2)
@@ -312,8 +341,9 @@ int main(int argc, char* argv[])
     std::cerr << "Unable to open file\n";
     return 1;
   }
+
   NotebookManager manager;
-  std::map< std::string, std::function< void(std::istream&, std::ostream&) > > cmds;
+  std::map<std::string, std::function<void(std::istream&, std::ostream&)>> cmds;
   using namespace std::placeholders;
   cmds["add"] = std::bind(executeAddNote, std::ref(manager), _1, _2);
   cmds["remove"] = std::bind(executeRemoveNote, std::ref(manager), _1, _2);
@@ -325,6 +355,7 @@ int main(int argc, char* argv[])
   cmds["tag-create-book"] = std::bind(executeCreateNotebookFromTags, std::ref(manager), _1, _2);
   cmds["tag-merge-books"] = std::bind(executeMergeNotebooksByTags, std::ref(manager), _1, _2);
   cmds["tag-sort-entries"] = std::bind(executeSortEntriesByTag, std::ref(manager), _1, _2);
+
   std::string command;
   while (std::getline(in, command))
   {
@@ -333,7 +364,6 @@ int main(int argc, char* argv[])
       std::istringstream cmd_stream(command);
       std::string cmd;
       cmd_stream >> cmd;
-
       auto it = cmds.find(cmd);
       if (it != cmds.end())
       {
@@ -351,4 +381,5 @@ int main(int argc, char* argv[])
     std::cin.clear();
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
   }
+  return 0;
 }
