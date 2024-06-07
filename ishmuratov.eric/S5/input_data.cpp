@@ -11,5 +11,6 @@ void ishmuratov::input_data(AVLTree< int, std::string > & data, std::istream & i
   if (!input.eof())
   {
     input.clear();
+    throw std::invalid_argument("Error while reading from file!");
   }
 }

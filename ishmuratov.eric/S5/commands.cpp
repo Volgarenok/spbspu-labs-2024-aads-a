@@ -9,14 +9,14 @@ std::pair< int, std::string > ishmuratov::ascend(AVLTree< int, std::string > & d
   return std::make_pair(sum.get_int(), sum.get_str());
 }
 
-std::pair< int, std::string > ishmuratov::descend(AVLTree<int, std::string> & data)
+std::pair< int, std::string > ishmuratov::descend(AVLTree< int, std::string > & data)
 {
   Key_summ sum;
   sum = data.traverse_rnl(sum);
   return std::make_pair(sum.get_int(), sum.get_str());
 }
 
-std::pair< int, std::string > ishmuratov::breadth(AVLTree<int, std::string> &data)
+std::pair< int, std::string > ishmuratov::breadth(AVLTree< int, std::string > &data)
 {
   Key_summ sum;
   sum = data.traverse_breadth(sum);

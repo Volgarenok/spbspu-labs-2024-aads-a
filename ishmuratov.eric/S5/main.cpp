@@ -52,16 +52,6 @@ int main(int argc, char * argv[])
     }
     std::cout << pair.first << pair.second << '\n';
   }
-  catch (const std::overflow_error & e)
-  {
-    std::cerr << e.what() << '\n';
-    return 1;
-  }
-  catch (const std::underflow_error & e)
-  {
-    std::cerr << e.what() << '\n';
-    return 1;
-  }
   catch (const std::exception & e)
   {
     std::cerr << e.what() << '\n';
