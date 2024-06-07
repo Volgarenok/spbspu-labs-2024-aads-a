@@ -24,8 +24,6 @@ int main(int argc, char* argv[])
   }
   try
   {
-    std::default_random_engine generator;
-    using namespace std::placeholders;
     std::map< std::pair< std::string, std::string >, std::function< void(size_t, std::ostream&) > > commands;
     commands[{"ascending", "ints"}] = sortAndPrint< int, std::less< int > >;
     commands[{"ascending", "floats"}] = sortAndPrint< float, std::less< float > >;

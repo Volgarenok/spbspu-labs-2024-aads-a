@@ -35,7 +35,7 @@ namespace marishin
     out << '\n';
   }
 
-  template < class Type, class Compare >
+  template < class Type, class Cmp >
   void sortAndPrint(size_t size, std::ostream& out)
   {
     std::deque< Type > deque(size);
@@ -49,13 +49,13 @@ namespace marishin
     print(out, forward_list.begin(), forward_list.end());
     out << "\n";
 
-    chooseSort(out, bi_list.begin(), bi_list.end(), cmp, QSort);
-    chooseSort(out, deque_qsort.begin(), deque_qsort.end(), cmp, QSort);
-    chooseSort(out, deque_shaker.begin(), deque_shaker.end(), cmp, shaker);
-    standartSort(out, bi_list_standart, cmp);
-    standartSort(out, forward_list, cmp);
+    chooseSort(out, bi_list.begin(), bi_list.end(), Cmp, QSort);
+    chooseSort(out, deque_qsort.begin(), deque_qsort.end(), Cmp, QSort);
+    chooseSort(out, deque_shaker.begin(), deque_shaker.end(), Cmp, shaker);
+    standartSort(out, bi_list_standart, Cmp);
+    standartSort(out, forward_list, Cmp);
 
-    std::sort(deque_sort.begin(), deque_sort.end(), cmp);
+    std::sort(deque_sort.begin(), deque_sort.end(), Cmp);
     print(out, deque_sort.begin(), deque_sort.end());
     out << "\n";
   }
