@@ -5,6 +5,7 @@
 #include "tree_node.hpp"
 #include "tree_iterator.hpp"
 #include <queue.hpp>
+#include <stack.hpp>
 
 namespace ishmuratov
 {
@@ -298,9 +299,19 @@ namespace ishmuratov
       {
         throw std::logic_error("<EMPTY>");
       }
-      for (auto node = cbegin(); node != cend(); ++node)
+      Stack< tnode * > stack;
+      tnode * temp = root_;
+      while (!stack.empty() || temp != nullptr)
       {
-        f(*node);
+        while (temp != nullptr)
+        {
+          stack.push(temp);
+          temp = temp->left;
+        }
+        temp = stack.top();
+        f(temp->data);
+        stack.pop();
+        temp = temp->right;
       }
       return f;
     }
@@ -312,9 +323,19 @@ namespace ishmuratov
       {
         throw std::logic_error("<EMPTY>");
       }
-      for (auto node = crbegin(); node != cend(); --node)
+      Stack< tnode * > stack;
+      tnode * temp = root_;
+      while (!stack.empty() || temp != nullptr)
       {
-        f(*node);
+        while (temp != nullptr)
+        {
+          stack.push(temp);
+          temp = temp->right;
+        }
+        temp = stack.top();
+        f(temp->data);
+        stack.pop();
+        temp = temp->left;
       }
       return f;
     }
