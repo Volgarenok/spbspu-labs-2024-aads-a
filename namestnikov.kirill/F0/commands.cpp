@@ -8,6 +8,7 @@
 #include <vector>
 #include "hash_table.hpp"
 #include "delimeters.hpp"
+#include "bidirectional_list.hpp"
 
 void namestnikov::doHelp(std::ostream & out)
 {
@@ -320,7 +321,7 @@ void namestnikov::doPalindrome(std::istream & in, dictMain & mainMap, std::ostre
 {
   std::string dictName = "";
   in >> dictName;
-  std::vector< std::string > palindromes;
+  List< std::string > palindromes;
   HashTable< std::string, std::string > searchDict = mainMap.at(dictName);
   for (const auto & pair1: searchDict)
   {
