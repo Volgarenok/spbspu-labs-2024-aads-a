@@ -1,6 +1,7 @@
 #ifndef GENERATE_HPP
 #define GENERATE_HPP
 
+#include <iostream>
 #include <random>
 #include <deque>
 #include <list>
