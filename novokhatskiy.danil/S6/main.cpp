@@ -2,6 +2,7 @@
 #include <functional>
 #include <iostream>
 #include <stdexcept>
+#include <cstdlib>
 #include <string>
 #include <AVLtree.hpp>
 #include "sortAndPrintSequence.hpp"
@@ -22,6 +23,7 @@ int main(int argc, char** argv)
       throw std::invalid_argument("Size can't be zero");
     }
     Tree< std::pair< std::string, std::string >, std::function< void(size_t, std::ostream&) > > sorts;
+    srand(time(nullptr));
     sorts[{ "ints", "ascending" }] = sortSeq< int, std::less< int > >;
     sorts[{ "floats", "ascending" }] = sortSeq< float, std::less< float > >;
     sorts[{ "ints", "descending" }] = sortSeq< int, std::greater< int > >;

@@ -6,7 +6,6 @@
 #include <deque>
 #include <algorithm>
 #include <iomanip>
-#include <cstdlib>
 #include <forward_list>
 #include "sortings.hpp"
 
@@ -44,7 +43,6 @@ namespace novokhatskiy
   {
     using namespace novokhatskiy;
     std::deque< T > deque(size);
-    srand(time(nullptr));
     std::generate(deque.begin(), deque.end(), getRandomValue< T >);
     std::forward_list< T > forwardList(deque.cbegin(), deque.cend());
     std::list< T > biList(deque.cbegin(), deque.cend());
