@@ -9,6 +9,9 @@
 #include <iterator>
 #include <fstream>
 #include <limits>
+#include <binarySearchTree.hpp>
+#include <constTreeIterator.hpp>
+#include <treeIterator.hpp>
 
 class Note
 {
@@ -254,18 +257,17 @@ public:
 
 void printHelp()
 {
-  std::cout << "--help: Show available commands and their usage.\n";
-  std::cout << "add <book> <key> <note>: Add a note with the given key and description to the book.\n";
-  std::cout << "remove <book> <key>: Remove the note with the given key from the book.\n";
-  std::cout << "create <book>: Create a new notebook with the given name.\n";
-  std::cout << "tag-create <book> <tag>: Create a new tag in the book.\n";
-  std::cout << "tag-delete <book> <tag>: Delete the tag from the book.\n";
-  std::cout << "tag-add <book> <key> <tag>: Add a tag to the note with the given key in the book.\n";
-  std::cout << "tag-remove <book> <key> <tag>: Remove a tag from the note with the given key in the book.\n";
-  std::cout << "tag-create-book <book1> <tag1> <book2> <tag2> <new_book>:" ;
-  std::cout << "Create a new notebook based on notes tagged in the given books.\n";
-  std::cout << "tag-merge-books <book1> <book2> <new_book>: Merge notes from the given books into a new book based on common tags.\n";
-  std::cout << "tag-sort-entries <source_book> <tag>: Sort entries in the book by the given tag.\n";
+  std::cout << "--help: Show available commands and their usage.";
+  std::cout << "add <book> <key> <note>: Add a note with the given key and description to the book.";
+  std::cout << "remove <book> <key>: Remove the note with the given key from the book.";
+  std::cout << "create <book>: Create a new notebook with the given name.";
+  std::cout << "tag-create <book> <tag>: Create a new tag in the book.";
+  std::cout << "tag-delete <book> <tag>: Delete the tag from the book.";
+  std::cout << "tag-add <book> <key> <tag>: Add a tag to the note with the given key in the book.";
+  std::cout << "tag-remove <book> <key> <tag>: Remove a tag from the note with the given key in the book.";
+  std::cout << "tag-create-book <book1> <tag1> <book2> <tag2> <new_book>: Create a new notebook based on notes tagged in the given books.";
+  std::cout << "tag-merge-books <book1> <book2> <new_book>: Merge notes from the given books into a new book based on common tags.";
+  std::cout << "tag-sort-entries <source_book> <tag>: Sort entries in the book by the given tag.";
 }
 
 void executeAddNote(NotebookManager& manager, std::istream& is, std::ostream& os)
@@ -355,7 +357,6 @@ int main(int argc, char* argv[])
   }
 
   NotebookManager manager;
-
   std::map< std::string, std::function< void(std::istream&, std::ostream&) > > cmds;
 
   using namespace std::placeholders;
