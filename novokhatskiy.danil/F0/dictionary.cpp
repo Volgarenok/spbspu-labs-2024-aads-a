@@ -59,7 +59,7 @@ const val_t& novokhatskiy::Dictionary::getValue(const std::string& name) const
   return dict_.find(name)->second;
 }
 
-std::map<std::string, val_t>& novokhatskiy::Dictionary::getDict()
+novokhatskiy::Tree< std::string, val_t >& novokhatskiy::Dictionary::getDict()
 {
   return dict_;
 }
@@ -94,7 +94,7 @@ size_t novokhatskiy::Dictionary::size() const noexcept
   return dict_.size();
 }
 
-Tree< std::string, val_t > novokhatskiy::Dictionary::getDict() const
+novokhatskiy::Tree< std::string, val_t > novokhatskiy::Dictionary::getDict() const
 {
   return dict_;
 }

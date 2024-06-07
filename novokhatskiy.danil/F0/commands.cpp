@@ -20,7 +20,7 @@ void novokhatskiy::unique(dictionaries &dict, std::istream &in)
   auto end1 = dict1.getDict().cend();
   auto begin2 = dict2.getDict().cbegin();
   auto end2 = dict2.getDict().cend();
-  std::set_difference(begin1, end1, begin2, end2, std::inserter(res.getDict(), res.getDict().begin()));
+  std::set_difference(begin1, end1, begin2, end2, res.getDict().begin());
   dict.insert({ newName, res });
 }
 
@@ -61,7 +61,7 @@ void novokhatskiy::merge(dictionaries &dict, std::istream &in)
   auto dict1 = dict.at(nameOfDict1);
   auto dict2 = dict.at(nameOfDict2);
   auto res = dict1;
-  std::copy(dict2.getDict().cbegin(), dict2.getDict().cend(), std::inserter(res.getDict(), res.getDict().end()));
+  std::copy(dict2.getDict().cbegin(), dict2.getDict().cend(), res.getDict().begin());
   dict.insert({newName, res});
 }
 
