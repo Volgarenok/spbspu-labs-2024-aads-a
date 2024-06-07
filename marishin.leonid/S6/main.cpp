@@ -11,6 +11,7 @@
 
 int main(int argc, char* argv[])
 {
+  std::srand(std::time(0));
   using namespace marishin;
   if (argc != 4)
   {
@@ -25,14 +26,13 @@ int main(int argc, char* argv[])
   }
   try
   {
-    std::default_random_engine generator;
-    std::map< std::pair< std::string, std::string >, std::function< void(size_t, std::ostream&, std::default_random_engine& generator) > > cmd;
+    std::map< std::pair< std::string, std::string >, std::function< void(size_t, std::ostream&) > > cmd;
     cmd[{"ascending", "ints"}] = sortAndPrint< int, std::less< int > >;
     cmd[{"ascending", "floats"}] = sortAndPrint< float, std::less< float > >;
     cmd[{"descending", "ints"}] = sortAndPrint< int, std::greater< int > >;
     cmd[{"descending", "floats"}] = sortAndPrint< float, std::greater< float > >;
 
-    cmd.at(std::make_pair(argv[1], argv[2]))(size, std::cout, generator);
+    cmd.at(std::make_pair(argv[1], argv[2]))(size, std::cout);
   }
   catch (...)
   {
