@@ -12,13 +12,16 @@
 
 namespace ishmuratov
 {
-  template< class T >
-  T generate(T first, T second)
+  int generate(int first, int second, std::mt19937 & range)
   {
-    std::random_device device;
-    std::mt19937 range(device());
-    std::uniform_real_distribution<> dist(first, second);
-    return static_cast< T >(dist(range));
+    std::uniform_int_distribution< int > dist(first, second);
+    return dist(range);
+  }
+
+  float generate(float first, float second, std::mt19937 & range)
+  {
+    std::uniform_real_distribution< float > dist(first, second);
+    return dist(range);
   }
 
   template< class Iterator >
@@ -43,9 +46,13 @@ namespace ishmuratov
   {
     std::deque< T > nums;
     List< T > bilist_merge;
+    std::random_device device;
+    std::mt19937 range(device());
+    T first = -1000;
+    T second = 1000;
     for (size_t i = 0; i != size; ++i)
     {
-      T num = generate(-1000.0, 1000.0);
+      T num = generate(first, second, range);
       bilist_merge.pushBack(num);
       nums.push_back(num);
     }
