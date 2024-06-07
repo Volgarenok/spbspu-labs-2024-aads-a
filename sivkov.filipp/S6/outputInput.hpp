@@ -20,7 +20,7 @@ namespace sivkov
     {
       throw std::invalid_argument("error number elements");
     }
-    if (std::is_same< T, int >::value)
+    if constexpr (std::is_same< T, int >::value)
     {
       std::uniform_int_distribution< int > dis(-100, 100);
       for (size_t i = 0; i < numElements; ++i)
@@ -31,7 +31,7 @@ namespace sivkov
         biList.push_back(value);
       }
     }
-    else if (std::is_same< T, float >::value)
+    else if constexpr (std::is_same< T, float >::value)
     {
       std::uniform_real_distribution< float > dis(0.0f, 99.9f);
       for (size_t i = 0; i < numElements; ++i)
