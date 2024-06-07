@@ -63,6 +63,7 @@ namespace ishmuratov
     forward_standard.sort(Compare());
     std::sort(deque_standard.begin(), deque_standard.end(), Compare());
 
+    print(nums.cbegin(), nums.cend(), output);
     print(bilist_merge.cbegin(), bilist_merge.cend(), output);
     print(deque_merge.cbegin(), deque_merge.cend(), output);
     print(deque_qsort.cbegin(), deque_qsort.cend(), output);
