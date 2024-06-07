@@ -6,8 +6,8 @@
 #include <set>
 #include <random>
 #include <iostream>
+#include <AVLtree.hpp>
 #include "dictionary.hpp"
-#include "AVLtree.hpp"
 
 namespace novokhatskiy
 {

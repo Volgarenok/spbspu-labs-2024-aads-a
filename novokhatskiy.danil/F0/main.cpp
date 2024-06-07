@@ -6,9 +6,9 @@
 #include <random>
 #include <functional>
 #include <set>
+#include <AVLtree.hpp>
 #include "commands.hpp"
 #include "dictionary.hpp"
-#include "AVLtree.hpp"
 
 using val_t = std::pair< std::string, std::set< std::string > >;
 using dictionaries = novokhatskiy::Tree< std::string, novokhatskiy::Dictionary >;

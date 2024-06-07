@@ -4,7 +4,7 @@
 #include <string>
 #include <set>
 #include <iostream>
-#include "AVLtree.hpp"
+#include <AVLtree.hpp>
 
 namespace novokhatskiy
 {
