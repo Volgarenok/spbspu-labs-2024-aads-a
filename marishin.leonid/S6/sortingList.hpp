@@ -14,9 +14,10 @@
 namespace marishin
 {
   template< class T >
-  T randomNumber()
+  T randomNumber(std::default_random_engine & generator)
   {
-    return static_cast< T >(std::rand());
+    std::uniform_real_distribution< float > dist(-1000, 1000);
+    return static_cast< T >(dist(generator));
   }
 
   template < class It, class Cmp >
@@ -36,10 +37,10 @@ namespace marishin
   }
 
   template < class Type, class Cmp >
-  void sortAndPrint(size_t size, std::ostream& out)
+  void sortAndPrint(size_t size, std::ostream& out, std::default_random_engine & generator)
   {
     std::deque< Type > deque(size);
-    std::generate(deque.begin(), deque.end(), randomNumber< Type >);
+    std::generate(deque.begin(), deque.end(), std::bind(randomNumber< Type >, generator));
     LinkedList< Type > bi_list(deque.cbegin(), deque.cend());
     std::list< Type > bi_list_standart(deque.cbegin(), deque.cend());
     std::deque< Type > deque_sort(deque.cbegin(), deque.cend());
