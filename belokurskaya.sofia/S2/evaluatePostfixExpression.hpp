@@ -6,8 +6,12 @@
 namespace belokurskaya
 {
   bool isOperator(char c);
+  void safeStrCopy(char* dest, const char* src, size_t max_len);
+  bool safeAdd(long long a, long long b, long long& result);
+  bool willMultiplyOverflowOrUnderflow(long long a, long long b, char* errorType);
+  bool willSubtractUnderflow(long long a, long long b);
 
-  int evaluatePostfixExpression(std::string expression);
+  long long evaluatePostfixExpression(std::string expression);
 }
 
 #endif
