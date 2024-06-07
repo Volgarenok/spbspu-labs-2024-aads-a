@@ -23,12 +23,12 @@ void ishmuratov::Key_summ::operator()(const std::pair< const int, std::string > 
   str_sum_ += " " + key_value.second;
 }
 
-int ishmuratov::Key_summ::get_int()
+int ishmuratov::Key_summ::get_int() const
 {
   return int_sum_;
 }
 
-std::string ishmuratov::Key_summ::get_str()
+std::string ishmuratov::Key_summ::get_str() const
 {
   return str_sum_;
 }

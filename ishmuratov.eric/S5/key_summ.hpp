@@ -10,8 +10,8 @@ namespace ishmuratov
   {
     Key_summ();
     void operator()(const std::pair< const int, std::string > & key_value);
-    int get_int();
-    std::string get_str();
+    int get_int() const;
+    std::string get_str() const;
   private:
     int int_sum_;
     std::string str_sum_;
