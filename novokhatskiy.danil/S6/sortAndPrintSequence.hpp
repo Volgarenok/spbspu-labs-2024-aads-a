@@ -6,18 +6,18 @@
 #include <deque>
 #include <algorithm>
 #include <iomanip>
-#include <functional>
-#include <random>
+#include <cstdlib>
+#include <ctime>
 #include <forward_list>
 #include "sortings.hpp"
 
 namespace novokhatskiy
 {
   template< class T >
-  T getRandomValue(std::default_random_engine& engine)
+  T getRandomValue()
   {
-    std::uniform_real_distribution< float > distance(-10000, 10000);
-    return static_cast< T >(distance(engine));
+    srand(time(nullptr));
+    return static_cast< T >(std::rand());
   }
 
   template< class It >
@@ -42,11 +42,11 @@ namespace novokhatskiy
   }
 
   template< class T, class Cmp >
-  void sortSeq(size_t size, std::ostream& out, std::default_random_engine& device)
+  void sortSeq(size_t size, std::ostream& out)
   {
     using namespace novokhatskiy;
     std::deque< T > deque(size);
-    std::generate(deque.begin(), deque.end(), std::bind(getRandomValue< T >, device));
+    std::generate(deque.begin(), deque.end(), getRandomValue< T >);
     std::forward_list< T > forwardList(deque.cbegin(), deque.cend());
     std::list< T > biList(deque.cbegin(), deque.cend());
     std::list< T > secondBiList(deque.cbegin(), deque.cend());
