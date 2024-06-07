@@ -15,7 +15,6 @@ namespace novokhatskiy
   template< class T >
   T getRandomValue()
   {
-    srand(time(nullptr));
     return static_cast< T >(std::rand());
   }
 
@@ -45,6 +44,7 @@ namespace novokhatskiy
   {
     using namespace novokhatskiy;
     std::deque< T > deque(size);
+    srand(time(nullptr));
     std::generate(deque.begin(), deque.end(), getRandomValue< T >);
     std::forward_list< T > forwardList(deque.cbegin(), deque.cend());
     std::list< T > biList(deque.cbegin(), deque.cend());
