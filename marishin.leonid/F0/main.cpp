@@ -257,7 +257,7 @@ void printHelp()
   std::cout << "tag-sort-entries <source_book> <tag>: Sort entries in the book by the given tag.\n";
 }
 
-void executeAddNote(NotebookManager& manager, std::istream& is, std::ostream& os)
+void executeAddNote(NotebookManager& manager, std::istream& is)
 {
   std::string book, key, note;
   is >> book >> key;
@@ -265,63 +265,63 @@ void executeAddNote(NotebookManager& manager, std::istream& is, std::ostream& os
   manager.addNote(book, key, note);
 }
 
-void executeRemoveNote(NotebookManager& manager, std::istream& is, std::ostream& os)
+void executeRemoveNote(NotebookManager& manager, std::istream& is)
 {
   std::string book, key;
   is >> book >> key;
   manager.removeNote(book, key);
 }
 
-void executeCreateNotebook(NotebookManager& manager, std::istream& is, std::ostream& os)
+void executeCreateNotebook(NotebookManager& manager, std::istream& is)
 {
   std::string book;
   is >> book;
   manager.createNotebook(book);
 }
 
-void executeCreateTag(NotebookManager& manager, std::istream& is, std::ostream& os)
+void executeCreateTag(NotebookManager& manager, std::istream& is)
 {
   std::string book, tag;
   is >> book >> tag;
   manager.createTag(book, tag);
 }
 
-void executeDeleteTag(NotebookManager& manager, std::istream& is, std::ostream& os)
+void executeDeleteTag(NotebookManager& manager, std::istream& is)
 {
   std::string book, tag;
   is >> book >> tag;
   manager.deleteTag(book, tag);
 }
 
-void executeAddTagToNote(NotebookManager& manager, std::istream& is, std::ostream& os)
+void executeAddTagToNote(NotebookManager& manager, std::istream& is)
 {
   std::string book, key, tag;
   is >> book >> key >> tag;
   manager.addTagToNote(book, key, tag);
 }
 
-void executeRemoveTagFromNote(NotebookManager& manager, std::istream& is, std::ostream& os)
+void executeRemoveTagFromNote(NotebookManager& manager, std::istream& is)
 {
   std::string book, key, tag;
   is >> book >> key >> tag;
   manager.removeTagFromNote(book, key, tag);
 }
 
-void executeCreateNotebookFromTags(NotebookManager& manager, std::istream& is, std::ostream& os)
+void executeCreateNotebookFromTags(NotebookManager& manager, std::istream& is)
 {
   std::string book1, tag1, book2, tag2, newBook;
   is >> book1 >> tag1 >> book2 >> tag2 >> newBook;
   manager.createNotebookFromTags(book1, tag1, book2, tag2, newBook);
 }
 
-void executeMergeNotebooksByTags(NotebookManager& manager, std::istream& is, std::ostream& os)
+void executeMergeNotebooksByTags(NotebookManager& manager, std::istream& is)
 {
   std::string book1, book2, newBook;
   is >> book1 >> book2 >> newBook;
   manager.mergeNotebooksByTags(book1, book2, newBook);
 }
 
-void executeSortEntriesByTag(NotebookManager& manager, std::istream& is, std::ostream& os)
+void executeSortEntriesByTag(NotebookManager& manager, std::istream& is)
 {
   std::string book, tag;
   is >> book >> tag;
@@ -345,16 +345,16 @@ int main(int argc, char* argv[])
   NotebookManager manager;
   std::map<std::string, std::function<void(std::istream&, std::ostream&)>> cmds;
   using namespace std::placeholders;
-  cmds["add"] = std::bind(executeAddNote, std::ref(manager), _1, _2);
-  cmds["remove"] = std::bind(executeRemoveNote, std::ref(manager), _1, _2);
-  cmds["create"] = std::bind(executeCreateNotebook, std::ref(manager), _1, _2);
-  cmds["tag-create"] = std::bind(executeCreateTag, std::ref(manager), _1, _2);
-  cmds["tag-delete"] = std::bind(executeDeleteTag, std::ref(manager), _1, _2);
-  cmds["tag-add"] = std::bind(executeAddTagToNote, std::ref(manager), _1, _2);
-  cmds["tag-remove"] = std::bind(executeRemoveTagFromNote, std::ref(manager), _1, _2);
-  cmds["tag-create-book"] = std::bind(executeCreateNotebookFromTags, std::ref(manager), _1, _2);
-  cmds["tag-merge-books"] = std::bind(executeMergeNotebooksByTags, std::ref(manager), _1, _2);
-  cmds["tag-sort-entries"] = std::bind(executeSortEntriesByTag, std::ref(manager), _1, _2);
+  cmds["add"] = std::bind(executeAddNote, std::ref(manager), _1);
+  cmds["remove"] = std::bind(executeRemoveNote, std::ref(manager), _1);
+  cmds["create"] = std::bind(executeCreateNotebook, std::ref(manager), _1);
+  cmds["tag-create"] = std::bind(executeCreateTag, std::ref(manager), _1);
+  cmds["tag-delete"] = std::bind(executeDeleteTag, std::ref(manager), _1);
+  cmds["tag-add"] = std::bind(executeAddTagToNote, std::ref(manager), _1);
+  cmds["tag-remove"] = std::bind(executeRemoveTagFromNote, std::ref(manager), _1);
+  cmds["tag-create-book"] = std::bind(executeCreateNotebookFromTags, std::ref(manager), _1);
+  cmds["tag-merge-books"] = std::bind(executeMergeNotebooksByTags, std::ref(manager), _1);
+  cmds["tag-sort-entries"] = std::bind(executeSortEntriesByTag, std::ref(manager), _1);
 
   std::string command;
   while (std::getline(in, command))
