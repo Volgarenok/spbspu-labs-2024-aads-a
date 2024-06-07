@@ -16,7 +16,7 @@ namespace novokhatskiy
   {
     return static_cast< T >(std::rand());
   }
-  
+
   template< class It >
   void printSeq(It begin, It end, std::ostream& out)
   {
