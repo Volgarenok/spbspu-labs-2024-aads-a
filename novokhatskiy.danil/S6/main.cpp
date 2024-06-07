@@ -29,6 +29,7 @@ int main(int argc, char** argv)
     std::string cmp = argv[1];
     std::string type = argv[2];
     sorts.at({ type, cmp })(size, std::cout);
+    std::cout << '\n';
   }
   catch (const std::exception& e)
   {
