@@ -4,6 +4,8 @@
 #include <functional>
 #include <treeNode.hpp>
 #include <treeIterator.hpp>
+#include <queue.hpp>
+#include <stack.hpp>
 #include <constTreeIterator.hpp>
 
 namespace marishin
@@ -234,6 +236,180 @@ namespace marishin
     {
       clear_impl(root_);
       root_ = nullptr;
+    }
+    template< class F >
+    F traverse_lnr(F f)
+    {
+      if (empty())
+      {
+        throw std::logic_error("Tree is empty");
+      }
+      else
+      {
+        Stack< node_t * > traverseStack;
+        node_t * current = root_;
+        while (current || (!traverseStack.empty()))
+        {
+          if (current)
+          {
+            traverseStack.push(current);
+            current = current->left;
+          }
+          else
+          {
+            current = traverseStack.top();
+            traverseStack.drop();
+            f(current->data);
+            current = current->right;
+          }
+        }
+        return f;
+      }
+    }
+    template< class F >
+    F traverse_lnr(F f) const
+    {
+      if (empty())
+      {
+        throw std::logic_error("Tree is empty");
+      }
+      else
+      {
+        Stack< const node_t * > traverseStack;
+        const node_t * current = root_;
+        while (current || (!traverseStack.empty()))
+        {
+          if (current)
+          {
+            traverseStack.push(current);
+            current = current->left;
+          }
+          else
+          {
+            current = traverseStack.top();
+            traverseStack.drop();
+            f(current->data);
+            current = current->right;
+          }
+        }
+        return f;
+      }
+    }
+    template< class F >
+    F traverse_rnl(F f)
+    {
+      if (empty())
+      {
+        throw std::logic_error("Tree is empty");
+      }
+      else
+      {
+        Stack< node_t * > traverseStack;
+        node_t * current = root_;
+        while (current || (!traverseStack.empty()))
+        {
+          if (current)
+          {
+            traverseStack.push(current);
+            current = current->right;
+          }
+          else
+          {
+            current = traverseStack.top();
+            traverseStack.drop();
+            f(current->data);
+            current = current->left;
+          }
+        }
+      }
+      return f;
+    }
+    template< class F >
+    F traverse_rnl(F f) const
+    {
+      if (empty())
+      {
+        throw std::logic_error("Tree is empty");
+      }
+      else
+      {
+        Stack< const node_t * > traverseStack;
+        const node_t * current = root_;
+        while (current || (!traverseStack.empty()))
+        {
+          if (current)
+          {
+            traverseStack.push(current);
+            current = current->right;
+          }
+          else
+          {
+            current = traverseStack.top();
+            traverseStack.drop();
+            f(current->data);
+            current = current->left;
+          }
+        }
+      }
+      return f;
+    }
+    template< class F >
+    F traverse_breadth(F f)
+    {
+      if (empty())
+      {
+        throw std::logic_error("Tree is empty");
+      }
+      else
+      {
+        Queue< node_t * > traverseQueue;
+        node_t * current = root_;
+        traverseQueue.push(current);
+        while (!traverseQueue.empty())
+        {
+          current = traverseQueue.top();
+          traverseQueue.drop();
+          f(current->data);
+          if (current->left)
+          {
+            traverseQueue.push(current->left);
+          }
+          if (current->right)
+          {
+            traverseQueue.push(current->right);
+          }
+        }
+        return f;
+      }
+    }
+    template< class F >
+    F traverse_breadth(F f) const
+    {
+      if (empty())
+      {
+        throw std::logic_error("Tree is empty");
+      }
+      else
+      {
+        Queue< const node_t * > traverseQueue;
+        const node_t * current = root_;
+        traverseQueue.push(current);
+        while (!traverseQueue.empty())
+        {
+          current = traverseQueue.top();
+          traverseQueue.drop();
+          f(current->data);
+          if (current->left)
+          {
+            traverseQueue.push(current->left);
+          }
+          if (current->right)
+          {
+            traverseQueue.push(current->right);
+          }
+        }
+        return f;
+      }
     }
     ~Tree()
     {
