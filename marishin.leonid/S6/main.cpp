@@ -26,13 +26,13 @@ int main(int argc, char* argv[])
   {
     std::default_random_engine generator;
     using namespace std::placeholders;
-    std::map< std::pair< std::string, std::string >, std::function< void(std::ostream&, size_t, std::default_random_engine&) > > commands;
+    std::map< std::pair< std::string, std::string >, std::function< void(size_t, std::ostream&) > > commands;
     commands[{"ascending", "ints"}] = sortAndPrint< int, std::less< int > >;
     commands[{"ascending", "floats"}] = sortAndPrint< float, std::less< float > >;
     commands[{"descending", "ints"}] = sortAndPrint< int, std::greater< int > >;
     commands[{"descending", "floats"}] = sortAndPrint< float, std::greater< float > >;
 
-    commands.at(std::make_pair(argv[1], argv[2]))(std::cout, size, generator);
+    commands.at(std::make_pair(argv[1], argv[2]))(size, std::cout);
   }
   catch (...)
   {
