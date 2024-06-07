@@ -104,7 +104,7 @@ namespace ishmuratov
       return ConstIter(min_elem(root_));
     }
 
-    ConstIter crbegin() noexcept
+    ConstIter crbegin() const noexcept
     {
       return ConstIter(max_elem(root_));
     }
