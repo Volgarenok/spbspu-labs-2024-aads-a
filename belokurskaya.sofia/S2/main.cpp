@@ -1,11 +1,11 @@
-﻿#include <iostream>
-#include <fstream>
+﻿#include <fstream>
+#include <iostream>
 #include <string>
 
-#include "stack.hpp"
-#include "queue.hpp"
 #include "evaluatePostfixExpression.hpp"
 #include "infixToPostfix.hpp"
+#include "queue.hpp"
+#include "stack.hpp"
 
 int main(int argc, char* argv[])
 {

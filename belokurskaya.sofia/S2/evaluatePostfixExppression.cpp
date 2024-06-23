@@ -1,8 +1,8 @@
 #include "evaluatePostfixExpression.hpp"
 
-#include <stdexcept>
 #include <cctype>
 #include <limits>
+#include <stdexcept>
 
 #include "stack.hpp"
 
