@@ -1,6 +1,5 @@
 #include <iostream>
 #include <fstream>
-#include "dataArray.hpp"
 #include "inputInfix.hpp"
 #include "convertInfToPostf.hpp"
 #include "calculateExpression.hpp"
