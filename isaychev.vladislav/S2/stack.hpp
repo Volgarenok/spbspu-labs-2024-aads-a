@@ -2,7 +2,6 @@
 #define STACK_HPP
 
 #include <utility>
-//#include "dataArray.hpp"
 #include <list/list.hpp>
 
 namespace isaychev
