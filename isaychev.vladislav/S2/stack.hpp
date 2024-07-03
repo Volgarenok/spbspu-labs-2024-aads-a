@@ -11,8 +11,6 @@ namespace isaychev
   {
    public:
     Stack() = default;
-    Stack(const Container & rhs);
-    Stack(Container && rhs) noexcept;
 
     void push(const T & rhs);
     void pop();
@@ -29,16 +27,6 @@ namespace isaychev
    private:
     Container con_;
   };
-
-  template < class T, class Container >
-  Stack< T, Container >::Stack(const Container & rhs):
-   con_(rhs)
-  {}
-
-  template < class T, class Container >
-  Stack< T, Container >::Stack(Container && rhs) noexcept:
-   con_(rhs)
-  {}
 
   template < class T, class Container >
   void Stack< T, Container >::push(const T & rhs)

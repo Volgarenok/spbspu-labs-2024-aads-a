@@ -2,7 +2,7 @@
 #define LISTMANIPULATIONS_HPP
 
 #include <string>
-#include "list.hpp"
+#include <listIterators/list.hpp>
 
 namespace isaychev
 {

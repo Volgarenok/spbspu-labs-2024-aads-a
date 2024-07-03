@@ -11,8 +11,6 @@ namespace isaychev
   {
    public:
     Queue() = default;
-    Queue(const Container & rhs);
-    Queue(Container && rhs) noexcept;
 
     void push(const T & rhs);
     void pop();
@@ -31,16 +29,6 @@ namespace isaychev
    private:
     Container con_;
   };
-
-  template < class T, class Container >
-  Queue< T, Container >::Queue(const Container & rhs):
-   con_(rhs)
-  {}
-
-  template < class T, class Container >
-  Queue< T, Container >::Queue(Container && rhs) noexcept:
-   con_(rhs)
-  {}
 
   template < class T, class Container >
   void Queue< T, Container >::push(const T & rhs)
