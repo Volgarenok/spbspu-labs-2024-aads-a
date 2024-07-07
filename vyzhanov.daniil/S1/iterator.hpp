@@ -74,7 +74,7 @@ namespace vyzhanov
   template< typename T >
   BiIterator< T > BiIterator< T >::operator++(int)
   {
-    BiIterator< T > temp = *this;
+    iterator temp = *this;
     node_ = node_->next_;
     return temp;
   }
@@ -82,7 +82,7 @@ namespace vyzhanov
   template< typename T >
   BiIterator< T > BiIterator< T >::operator--(int)
   {
-    BiIterator< T > temp = *this;
+    iterator temp = *this;
     node_ = node_->prev_;
     return *this;
   }

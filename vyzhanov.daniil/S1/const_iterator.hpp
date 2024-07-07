@@ -72,7 +72,7 @@ namespace vyzhanov
   template< typename T >
   ConstBiIterator< T >  ConstBiIterator< T >::operator++(int)
   {
-    BiIterator< T > temp = *this;
+    citerator temp = *this;
     node_ = node_->next_;
     return temp;
   }
@@ -80,7 +80,7 @@ namespace vyzhanov
   template< typename T >
   ConstBiIterator< T >  ConstBiIterator< T >::operator--(int)
   {
-    BiIterator< T > temp = *this;
+    citerator temp = *this;
     node_ = node_->prev_;
     return *this;
   }
