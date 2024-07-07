@@ -43,6 +43,10 @@ void baranov::inputPostfix(std::istream & input, Queue< Token > & result)
       {
         result.push(t);
         stack.pop();
+        if (stack.empty())
+        {
+          break;
+        }
         t = stack.top();
       }
       stack.push(token);
@@ -54,3 +58,4 @@ void baranov::inputPostfix(std::istream & input, Queue< Token > & result)
     stack.pop();
   }
 }
+

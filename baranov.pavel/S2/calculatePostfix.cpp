@@ -1,4 +1,6 @@
 #include "calculatePostfix.hpp"
+#include <iostream>
+#include <limits>
 #include "stack.hpp"
 
 long long int baranov::calculatePostfix(Queue< Token > & exp)
@@ -26,10 +28,10 @@ long long int baranov::calculatePostfix(Queue< Token > & exp)
       switch (t.value.operation.type)
       {
         case OperationType::ADDITION:
-          result = b + a;
+          result = sum(b, a);
           break;
         case OperationType::SUBTRACTION:
-          result = b - a;
+          result = sum(b, -a);
           break;
         case OperationType::MULTIPLICATION:
           result = b * a;
@@ -50,5 +52,32 @@ long long int baranov::calculatePostfix(Queue< Token > & exp)
     throw std::logic_error("Invalid postfix expression");
   }
   return stack.top().value.operand.value;
+}
+
+long long int baranov::sum(long long int a, long long int b) {
+  const long long int max = std::numeric_limits< long long int >::max();
+  const long long int min = std::numeric_limits< long long int >::min();
+  if (same_sign(a, b) && (a > 0)) {
+    if (max - a >= b) {
+      return a + b;
+    }
+  }
+  else if (same_sign(a, b) && (a < 0)) {
+    if (min - a <= b) {
+      return a + b;
+    }
+  }
+  else if (!same_sign(a, b)) {
+    return a + b;
+  }
+  throw std::overflow_error("Signed overflow");
+}
+
+int baranov::sign(long long int val) {
+  return (val > 0) ? 1 : ((val < 0) ? -1 : 0);
+}
+
+bool baranov::same_sign(long long int a, long long int b) {
+  return sign(a) * sign(b) > 0;
 }
 
