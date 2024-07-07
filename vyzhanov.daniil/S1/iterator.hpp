@@ -10,27 +10,26 @@ namespace vyzhanov
   class List;
 
   template< typename T >
-  class BiIterator: public std::iterator< std::bidirectional_iterator_tag, T >
+  class BiIterator : public std::iterator< std::bidirectional_iterator_tag, T >
   {
-    friend List< T >;
+    friend class List< T >;
     using iterator = BiIterator< T >;
-    BiIterator() = default;
+    BiIterator();
     BiIterator(const iterator&) = default;
     ~BiIterator() = default;
 
     iterator& operator=(const iterator&) = default;
     bool operator==(const iterator&) const;
     bool operator!=(const iterator&) const;
-
     iterator& operator++();
     iterator& operator--();
     iterator operator++(int);
     iterator operator--(int);
-
     T& operator*();
     T* operator->();
     const T& operator*() const;
     const T* operator->() const;
+
   private:
     Node< T >* node_;
     explicit BiIterator(Node< T >* node);
@@ -83,7 +82,7 @@ namespace vyzhanov
   template< typename T >
   BiIterator< T > BiIterator< T >::operator--(int)
   {
-    BiIterator< T > temp = *this
+    BiIterator< T > temp = *this;
     node_ = node_->prev_;
     return *this;
   }
@@ -109,7 +108,7 @@ namespace vyzhanov
   template< class T >
   const T* BiIterator< T >::operator->() const
   {
-     return std::addressof(node_->data_);
+    return std::addressof(node_->data_);
   }
 
 }
