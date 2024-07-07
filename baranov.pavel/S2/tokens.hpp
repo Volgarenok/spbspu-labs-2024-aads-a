@@ -11,7 +11,8 @@ namespace baranov
     ADDITION,
     SUBTRACTION,
     MULTIPLICATION,
-    DIVISION
+    DIVISION,
+    MODULATION
   };
 
   struct Operation

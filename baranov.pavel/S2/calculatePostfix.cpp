@@ -37,7 +37,10 @@ long long int baranov::calculatePostfix(Queue< Token > & exp)
           result = multiply(b, a);
           break;
         case OperationType::DIVISION:
-          result = devide(b, a);
+          result = div(b, a);
+          break;
+        case OperationType::MODULATION:
+          result = mod(b, a);
           break;
       }
       stack.top().value.operand.value = result;
@@ -83,7 +86,7 @@ long long int baranov::multiply(long long int a, long long int b)
   return result;
 }
 
-long long int baranov::devide(long long int a, long long int b)
+long long int baranov::div(long long int a, long long int b)
 {
   long long int min = std::numeric_limits< long long int >::min();
   if (b == 0)
@@ -95,6 +98,12 @@ long long int baranov::devide(long long int a, long long int b)
     throw std::overflow_error("Division overflow");
   }
   return a / b;
+}
+
+long long int baranov::mod(long long int a, long long int b)
+{
+  long long int result = a % b;
+  return result >= 0 ? result : result + b;
 }
 
 int baranov::sign(long long int val) {

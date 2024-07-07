@@ -10,7 +10,7 @@ baranov::Token::Token(const std::string & str)
       type = TokenType::BRACKET;
       value.bracket.type = (c == '(' ? BracketType::OPEN : BracketType::CLOSE);
     }
-    else if (c == '+' || c == '-' || c == '*' || c == '/')
+    else if (c == '+' || c == '-' || c == '*' || c == '/' || c == '%')
     {
       type = TokenType::OPERATION;
       switch (c)
@@ -29,6 +29,10 @@ baranov::Token::Token(const std::string & str)
           break;
         case '/':
           value.operation.type = OperationType::DIVISION;
+          value.operation.priority = 1;
+          break;
+        case '%':
+          value.operation.type = OperationType::MODULATION;
           value.operation.priority = 1;
           break;
       }
