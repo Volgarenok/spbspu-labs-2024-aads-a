@@ -8,6 +8,8 @@ namespace baranov
 {
   long long int calculatePostfix(Queue< Token > &);
   long long int sum(long long int a, long long int b);
+  long long int multiply(long long int a, long long int b);
+  long long int devide(long long int a, long long int b);
   int sign(long long int val);
   bool same_sign(long long int a, long long int b);
 }

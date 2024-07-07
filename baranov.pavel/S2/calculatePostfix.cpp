@@ -34,10 +34,10 @@ long long int baranov::calculatePostfix(Queue< Token > & exp)
           result = sum(b, -a);
           break;
         case OperationType::MULTIPLICATION:
-          result = b * a;
+          result = multiply(b, a);
           break;
         case OperationType::DIVISION:
-          result = b / a;
+          result = devide(b, a);
           break;
       }
       stack.top().value.operand.value = result;
@@ -70,7 +70,31 @@ long long int baranov::sum(long long int a, long long int b) {
   else if (!same_sign(a, b)) {
     return a + b;
   }
-  throw std::overflow_error("Signed overflow");
+  throw std::overflow_error("Addition overflow");
+}
+
+long long int baranov::multiply(long long int a, long long int b)
+{
+  long long int result = a * b;
+  if (b != 0 && result / b != a)
+  {
+    throw std::overflow_error("Mulptiplication overflow");
+  }
+  return result;
+}
+
+long long int baranov::devide(long long int a, long long int b)
+{
+  long long int min = std::numeric_limits< long long int >::min();
+  if (b == 0)
+  {
+    throw std::logic_error("Division by zero");
+  }
+  else if (a == min && b == -1)
+  {
+    throw std::overflow_error("Division overflow");
+  }
+  return a / b;
 }
 
 int baranov::sign(long long int val) {
