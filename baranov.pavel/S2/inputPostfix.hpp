@@ -7,6 +7,7 @@
 
 namespace baranov
 {
+  void inputPostfixes(std::istream &, Queue< Queue< Token > > & result);
   void inputPostfix(std::istream &, Queue< Token > & result);
 }
 

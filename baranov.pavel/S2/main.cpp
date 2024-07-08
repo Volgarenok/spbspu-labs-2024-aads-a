@@ -5,17 +5,18 @@
 #include "tokens.hpp"
 #include "inputPostfix.hpp"
 #include "calculatePostfix.hpp"
+#include "outputFunction.hpp"
 
 int main()
 {
   using namespace baranov;
-  Queue< Token > postfixExp;
-  long long int result = 0;
+  Queue< Queue< Token > > postfixes;
+  Stack< long long int > results;
 
   try
   {
-    inputPostfix(std::cin, postfixExp);
-    result = calculatePostfix(postfixExp);
+    inputPostfixes(std::cin, postfixes);
+    calculatePostfixes(postfixes, results);
   }
   catch (const std::exception & e)
   {
@@ -23,6 +24,7 @@ int main()
     return 1;
   }
 
-  std::cout << result << '\n';
+  printResults(std::cout, results);
+  std::cout << '\n';
 }
 

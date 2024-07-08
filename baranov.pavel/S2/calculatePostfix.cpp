@@ -3,6 +3,15 @@
 #include <limits>
 #include "stack.hpp"
 
+void baranov::calculatePostfixes(Queue< Queue< Token > > & postfixes, Stack< long long int > & results)
+{
+  while (!postfixes.empty())
+  {
+    results.push(calculatePostfix(postfixes.front()));
+    postfixes.pop();
+  }
+}
+
 long long int baranov::calculatePostfix(Queue< Token > & exp)
 {
   Stack< Token > stack;
@@ -18,7 +27,7 @@ long long int baranov::calculatePostfix(Queue< Token > & exp)
     {
       if (stack.size() < 2)
       {
-        throw std::logic_error("Invalit postfix expression");
+        throw std::logic_error("Invalid postfix expression");
       }
       long long int a = stack.top().value.operand.value;
       stack.pop();

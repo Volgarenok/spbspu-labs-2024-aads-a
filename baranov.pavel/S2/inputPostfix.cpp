@@ -2,6 +2,19 @@
 #include <string>
 #include "stack.hpp"
 
+void baranov::inputPostfixes(std::istream & input, Queue< Queue< Token > > & result)
+{
+  while (input)
+  {
+    Queue< Token > postfixExp;
+    inputPostfix(input, postfixExp);
+    if (!postfixExp.empty())
+    {
+      result.push(postfixExp);
+    }
+  }
+}
+
 void baranov::inputPostfix(std::istream & input, Queue< Token > & result)
 {
   std::string str = "";
@@ -50,6 +63,10 @@ void baranov::inputPostfix(std::istream & input, Queue< Token > & result)
         t = stack.top();
       }
       stack.push(token);
+    }
+    if (input.peek() == '\n')
+    {
+      break;
     }
   }
   while (!stack.empty())
