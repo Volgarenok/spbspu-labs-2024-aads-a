@@ -1,77 +1,58 @@
+#ifndef LIST_HPP
+#define LIST_HPP
+
 #include <iostream>
+#include "node.hpp"
+#include "iterator.hpp"
+#include "const_iterator.hpp"
+
 namespace vyzhanov
 {
-    template<typename T>
-    struct Node
-    {
-        T data_;
-        Node<T>* next_;
-        Node<T>* prev_;
-    };
+  template<typename T>
+  struct List
+  {
+    using citerator = ConstBiIterator< T >;
+    using iterator = BiIterator< T >;
 
-    template<typename T>
-    struct List
+    List();
+    ~List();
+    void clear();
+    bool empty();
+  private:
+    Node<T>* head_;
+    Node<T>* tail_;
+    size_t size_
+  };
+
+  template< class T >
+  List< T >::List() :
+    head_(nullptr),
+    tail_(nullptr),
+    size_(0)
+  {}
+
+  template< class T >
+  List< T >::~List()
+  {
+    clear();
+  }
+
+  template < typename T>
+  void List<T>::clear()
+  {
+    while (head_ != tail_)
     {
-        List() :head(nullptr), tail(nullptr) {};
-        ~List();
-        void Add(T data);
-        void Show();
-        void delElem();
-        void fill(T start, T last, T value);
-    private:
-        Node<T>* head;
-        Node<T>* tail;
-    };
-}
-template<typename T>
-void vyzhanov::List<T>::Add(T Data)
-{
-    vyzhanov::Node<T>* newNode = new vyzhanov::Node<T>;
-    vyzhanov::Node<T>* start = head;
-    if (start != nullptr)
-    {
-        while (start->next_ != nullptr)
-        {
-            start = start->next_;
-        }
+      Node< T > newHead = head_->next_;
+      delete head_;
+      head_ = newHead;
     }
-    newNode->data_ = Data;
-    newNode->prev_ = newNode->next_;
-    newNode->next_ = nullptr;
-    if (start != nullptr)
-        start->next_ = newNode;
-    else
-        head = newNode;
-    tail = newNode;
-}
+  }
 
-template<typename T>
-void vyzhanov::List<T>::Show()
-{
-    Node<T>* temp = head;
-    while (temp != nullptr)
-    {
-        std::cout << temp->data_ << " ";
-        temp = temp->next_;
-    }
-    std::cout << "\n";
-}
-
-template<typename T>
-vyzhanov::List<T>::~List()
-{
-    while (head)
-    {
-        vyzhanov::Node<T>* newHead;
-        newHead = head->next_;
-        delete head;
-        head = newHead;
-    }
-    delete head;
-}
-
-template<typename T>
-void vyzhanov::List<T>::delElem()
-{
+  template < typename T>
+  bool List<T>::empty()
+  {
+    return (head_ = tail_);
+  }
 
 }
+#endif
