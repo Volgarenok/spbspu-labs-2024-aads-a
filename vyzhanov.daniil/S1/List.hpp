@@ -61,7 +61,7 @@ namespace vyzhanov
   }
 
   template < typename T>
-  BiIterator<T> List<T>::begin()
+  BiIterator<T> List<T>::begin() noexcept
   {
     return iterator(head_);
   }
@@ -73,7 +73,7 @@ namespace vyzhanov
   }
 
   template < typename T>
-  BiIterator<T> List<T>::end()
+  BiIterator<T> List<T>::end() noexcept
   {
     return iterator(tail_);
   }
