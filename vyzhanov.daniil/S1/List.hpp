@@ -16,12 +16,18 @@ namespace vyzhanov
 
     List();
     ~List();
+
     void clear();
     bool empty();
+
+    iterator begin() noexcept;
+    citerator cbegin() const noexcept;
+    iterator end() noexcept;
+    citerator cend() const noexcept;
   private:
     Node<T>* head_;
     Node<T>* tail_;
-    size_t size_
+    size_t size_;
   };
 
   template< class T >
@@ -42,7 +48,7 @@ namespace vyzhanov
   {
     while (head_ != tail_)
     {
-      Node< T > newHead = head_->next_;
+      Node< T >* newHead = head_->next_;
       delete head_;
       head_ = newHead;
     }
@@ -52,6 +58,30 @@ namespace vyzhanov
   bool List<T>::empty()
   {
     return (head_ = tail_);
+  }
+
+  template < typename T>
+  BiIterator<T> List<T>::begin()
+  {
+    return iterator(head_);
+  }
+
+  template< typename T >
+  ConstBiIterator< T > List< T >::cbegin() const noexcept
+  {
+    return citerator(head_);
+  }
+
+  template < typename T>
+  BiIterator<T> List<T>::end()
+  {
+    return iterator(tail_);
+  }
+
+  template< typename T >
+  ConstBiIterator< T > List< T >::cend() const noexcept
+  {
+    return citerator(tail_);
   }
 
 }
