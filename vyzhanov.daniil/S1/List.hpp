@@ -19,6 +19,10 @@ namespace vyzhanov
 
     void clear();
     bool empty();
+    void push_back(const T&);
+    void push_back(T&&);
+    void push_front(const T&);
+    void push_front(T&&);
 
     iterator begin() noexcept;
     citerator cbegin() const noexcept;
@@ -61,6 +65,74 @@ namespace vyzhanov
   }
 
   template < typename T>
+  void List<T>::push_back(const T& data)
+  {
+    Node< T >* newNode = new Node< T >(data, nullptr, tail_);
+    newNode->prev_ = tail_;
+    if (head_ == nullptr)
+    {
+      head_ = newNode;
+    }
+    else
+    {
+      tail_->next_ = newNode;
+    }
+    tail_ = newNode;
+    ++size_;
+  }
+
+  template < typename T>
+  void List<T>::push_back(T&& data)
+  {
+    Node< T >* newNode = new Node< T >(std::move(data), nullptr, tail_);
+    newNode->prev_ = tail_;
+    if (head_ == nullptr)
+    {
+      head_ = newNode;
+    }
+    else
+    {
+      tail_->next_ = newNode;
+    }
+    tail_ = newNode;
+    ++size_;
+  }
+
+  template < typename T>
+  void List<T>::push_front(const T& data)
+  {
+    Node< T >* newNode = new Node< T >(data, head_, nullptr);
+    newNode->next_ = head_;
+    if (head_ == nullptr)
+    {
+      head_ = newNode;
+    }
+    else
+    {
+      head_->prev_ = newNode;
+    }
+    head_ = newNode;
+    ++size_;
+  }
+
+  template < typename T>
+  void List<T>::push_front(T&& data)
+  {
+    Node< T >* newNode = new Node< T >(std::move(data), nullptr, tail_);
+    newNode->next_ = head_;
+    if (head_ == nullptr)
+    {
+      head_ = newNode;
+    }
+    else
+    {
+      head_->next_ = newNode;
+    }
+    head_ = newNode;
+    ++size_;
+  }
+
+  template < typename T>
   BiIterator<T> List<T>::begin() noexcept
   {
     return iterator(head_);
@@ -83,6 +155,5 @@ namespace vyzhanov
   {
     return citerator(tail_);
   }
-
 }
 #endif
