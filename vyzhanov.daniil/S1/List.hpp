@@ -87,7 +87,7 @@ namespace vyzhanov
   {
     std::swap(list.head_, head_);
     std::swap(list.tail_, tail_);
-    std::swap(list.size_, size_);  
+    std::swap(list.size_, size_);
   }
 
   template < typename T>
