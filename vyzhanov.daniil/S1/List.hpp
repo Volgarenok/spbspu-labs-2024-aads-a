@@ -19,10 +19,14 @@ namespace vyzhanov
 
     void clear();
     bool empty();
+
     void push_back(const T&);
     void push_back(T&&);
     void push_front(const T&);
     void push_front(T&&);
+
+    void pop_back();
+    void pop_front();
 
     iterator begin() noexcept;
     citerator cbegin() const noexcept;
@@ -130,6 +134,38 @@ namespace vyzhanov
     }
     head_ = newNode;
     ++size_;
+  }
+
+  template < typename T>
+  void List<T>::pop_back()
+  {
+    Node< T >* newTail = tail_->prev_;
+    if (tail_ == head_)
+    {
+      return;
+    }
+    else
+    {
+      newTail->next_ = nullptr;
+    }
+    tail_ = newTail;
+    --size_;
+  }
+
+  template < typename T>
+  void List<T>::pop_front()
+  {
+    Node< T >* newHead = head_->next_;
+    if (head_ == tail_)
+    {
+      return;
+    }
+    else
+    {
+      newHead->prev_ = nullptr;
+    }
+    head_ = newHead;
+    --size_;
   }
 
   template < typename T>
