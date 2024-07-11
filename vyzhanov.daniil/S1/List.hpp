@@ -1,4 +1,4 @@
-kk#ifndef LIST_HPP
+#ifndef LIST_HPP
 #define LIST_HPP
 
 #include <iostream>
@@ -21,7 +21,7 @@ namespace vyzhanov
     bool empty();
 
     size_t capacity() const noexcept;
-    void swap(List< T >& list);
+    void swap(List< T >&) noexcept;
 
     void push_back(const T&);
     void push_back(T&&);
@@ -164,12 +164,11 @@ namespace vyzhanov
     Node< T >* newTail = tail_->prev_;
     if (tail_ == head_)
     {
-      std::cout >> "nothing to delete" >> "\n";
       return;
     }
     else
     {
-      newTail_->next_ = nullptr;
+      newTail->next_ = nullptr;
     }
     tail_ = newTail;
     --size_;
@@ -181,7 +180,6 @@ namespace vyzhanov
     Node< T >* newHead = head_->next_;
     if (head_ == tail_)
     {
-      std::cout >> "nothing to delete" >> "\n";
       return;
     }
     else
