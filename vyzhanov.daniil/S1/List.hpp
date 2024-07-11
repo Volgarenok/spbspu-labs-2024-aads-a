@@ -23,6 +23,10 @@ namespace vyzhanov
     size_t capacity() const noexcept;
     void swap(List< T >&) noexcept;
 
+    void assign(size_t count, const T&);
+    void assign(iterator, iterator);
+    void assign(std::initializer_list<T>);
+
     void push_back(const T&);
     void push_back(T&&);
     void push_front(const T&);
@@ -88,6 +92,39 @@ namespace vyzhanov
     std::swap(list.head_, head_);
     std::swap(list.tail_, tail_);
     std::swap(list.size_, size_);
+  }
+
+  template< class T >
+  void List< T >::assign(size_t count, const T& value)
+  {
+    clear();
+    for (size_t i = 0; i < count; i++)
+    {
+      push_back(value);
+    }
+  }
+
+  template < typename T >
+  void List< T >::assign(iterator first, iterator last)
+  {
+    clear();
+    while (first != last)
+    {
+      push_back(*first);
+      first++;
+    }
+  }
+
+  template < typename T >
+  void List< T >::assign(std::initializer_list< T > list)
+  {
+    clear();
+    typename std::initializer_list< T >::iterator list_begin = list.begin();
+    while (list_begin != list.end())
+    {
+      push_back(*list_begin);
+      list_begin++;
+    }
   }
 
   template < typename T>
