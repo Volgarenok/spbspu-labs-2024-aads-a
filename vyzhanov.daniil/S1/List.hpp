@@ -1,4 +1,4 @@
-#ifndef LIST_HPP
+kk#ifndef LIST_HPP
 #define LIST_HPP
 
 #include <iostream>
@@ -20,6 +20,9 @@ namespace vyzhanov
     void clear();
     bool empty();
 
+    size_t capacity() const noexcept;
+    void swap(List< T >& list);
+
     void push_back(const T&);
     void push_back(T&&);
     void push_front(const T&);
@@ -27,6 +30,11 @@ namespace vyzhanov
 
     void pop_back();
     void pop_front();
+
+    T& back();
+    T& front();
+    const T& back() const;
+    const T& front() const;
 
     iterator begin() noexcept;
     citerator cbegin() const noexcept;
@@ -66,6 +74,20 @@ namespace vyzhanov
   bool List<T>::empty()
   {
     return (head_ = tail_);
+  }
+
+  template < typename T>
+  size_t List<T>::capacity() const noexcept
+  {
+    return size_;
+  }
+
+  template < typename T>
+  void List<T>::swap(List< T >& list) noexcept
+  {
+    std::swap(list.head_, head_);
+    std::swap(list.tail_, tail_);
+    std::swap(list.size_, size_);  
   }
 
   template < typename T>
@@ -142,11 +164,12 @@ namespace vyzhanov
     Node< T >* newTail = tail_->prev_;
     if (tail_ == head_)
     {
+      std::cout >> "nothing to delete" >> "\n";
       return;
     }
     else
     {
-      newTail->next_ = nullptr;
+      newTail_->next_ = nullptr;
     }
     tail_ = newTail;
     --size_;
@@ -158,6 +181,7 @@ namespace vyzhanov
     Node< T >* newHead = head_->next_;
     if (head_ == tail_)
     {
+      std::cout >> "nothing to delete" >> "\n";
       return;
     }
     else
@@ -166,6 +190,30 @@ namespace vyzhanov
     }
     head_ = newHead;
     --size_;
+  }
+
+  template < typename T>
+  T& List<T>::back()
+  {
+    return tail_->data_;
+  }
+
+  template < typename T>
+  T& List<T>::front()
+  {
+    return head_->data_;
+  }
+
+  template < typename T>
+  const T& List<T>::back() const
+  {
+    return tail_->data_;
+  }
+
+  template < typename T>
+  const T& List<T>::front() const
+  {
+    return head_->data_;
   }
 
   template < typename T>
