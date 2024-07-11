@@ -17,6 +17,9 @@ namespace vyzhanov
     List();
     ~List();
 
+    List< T >& operator=(const List< T >&);
+    List< T >& operator=(List< T >&&) noexcept;
+
     void clear();
     bool empty();
 
@@ -50,17 +53,44 @@ namespace vyzhanov
     size_t size_;
   };
 
-  template< class T >
+  template< typename T >
   List< T >::List() :
     head_(nullptr),
     tail_(nullptr),
     size_(0)
   {}
 
-  template< class T >
+  template< typename T >
   List< T >::~List()
   {
     clear();
+  }
+
+  template< typename T >
+  List< T >& List< T >::operator=(const List< T >& list)
+  {
+    if (head_ != list.head_)
+    {
+      clear();
+      head_ = list.head_;
+      tail_ = list.tail_;
+      size_ = list.size_;
+      list.head_ = nullptr;
+      list.tail_ = nullptr;
+      list.size_ = 0;
+    }
+    return *this;
+  }
+
+  template< typename T >
+  List< T >& List< T >::operator=(List< T >&& list) noexcept
+  {
+    if (head_ != list.head_)
+    {
+      List< T > temp(list);
+      swap(temp);
+    }
+    return *this;
   }
 
   template < typename T>
@@ -94,7 +124,7 @@ namespace vyzhanov
     std::swap(list.size_, size_);
   }
 
-  template< class T >
+  template< typename T >
   void List< T >::assign(size_t count, const T& value)
   {
     clear();
