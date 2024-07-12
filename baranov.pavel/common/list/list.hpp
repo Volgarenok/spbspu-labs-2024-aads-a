@@ -1,9 +1,9 @@
 #ifndef LIST_HPP
 #define LIST_HPP
 
-#include "node.hpp"
-#include "iterator.hpp"
-#include "constIterator.hpp"
+#include <list/node.hpp>
+#include <list/iterator.hpp>
+#include <list/constIterator.hpp>
 
 namespace baranov
 {
