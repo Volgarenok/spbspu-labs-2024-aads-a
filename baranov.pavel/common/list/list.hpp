@@ -16,6 +16,10 @@ namespace baranov
       List(const List && rhs) noexcept;
       List(size_t count, const T & data);
       ~List();
+      T & back();
+      const T & back() const;
+      T & front();
+      const T & front() const;
       Iterator< T > begin() noexcept;
       Iterator< T > end() noexcept;
       ConstIterator< T > cbegin() const noexcept;
@@ -103,6 +107,30 @@ namespace baranov
   List< T >::~List()
   {
     clear();
+  }
+
+  template< class T >
+  T & List< T >::back()
+  {
+    return tail_->value_;
+  }
+
+  template< class T >
+  const T & List< T >::back() const
+  {
+    return tail_->value_;
+  }
+
+  template< class T >
+  T & List< T >::front()
+  {
+    return head_->value_;
+  }
+
+  template< class T >
+  const T & List< T >::front() const
+  {
+    return head_->value_;
   }
 
   template< class T >
