@@ -15,6 +15,10 @@ namespace vyzhanov
     using iterator = BiIterator< T >;
 
     List();
+    List(const List< T >&);
+    List(List< T >&&) noexcept;
+    explicit List(size_t);
+    List(size_t n, const T&);
     ~List();
 
     List< T >& operator=(const List< T >&);
@@ -27,8 +31,6 @@ namespace vyzhanov
     void swap(List< T >&) noexcept;
 
     void assign(size_t count, const T&);
-    void assign(iterator, iterator);
-    void assign(std::initializer_list<T>);
 
     void push_back(const T&);
     void push_back(T&&);
@@ -42,6 +44,10 @@ namespace vyzhanov
     T& front();
     const T& back() const;
     const T& front() const;
+
+    void remove(const T&);
+    template < typename UnaryPredicate>
+    void remove_if(UnaryPredicate pred);
 
     iterator begin() noexcept;
     citerator cbegin() const noexcept;
@@ -59,6 +65,45 @@ namespace vyzhanov
     tail_(nullptr),
     size_(0)
   {}
+
+  template< typename T >
+  List< T >::List(const List< T >& list) :
+    List()
+  {
+    if (!list.empty())
+    {
+      citerator begin = list.cbegin();
+      citerator end = list.cend();
+      while (begin != end)
+      {
+        push_back(*begin);
+        begin++;
+      }
+    }
+  }
+
+  template< typename T >
+  List< T >::List(List< T >&& list) noexcept :
+    head_(list.head_),
+    tail_(list.tail_),
+    size_(list.size_)
+  {
+    list.head_ = nullptr;
+    list.tail_ = nullptr;
+    list.size_ = 0;
+  }
+
+  template< typename T >
+  List< T >::List(size_t count) :
+    List(count, T())
+  {}
+
+  template< typename T >
+  List< T >::List(size_t count, const T& value) :
+    List()
+  {
+    assign(count, value);
+  }
 
   template< typename T >
   List< T >::~List()
@@ -131,29 +176,6 @@ namespace vyzhanov
     for (size_t i = 0; i < count; i++)
     {
       push_back(value);
-    }
-  }
-
-  template < typename T >
-  void List< T >::assign(iterator first, iterator last)
-  {
-    clear();
-    while (first != last)
-    {
-      push_back(*first);
-      first++;
-    }
-  }
-
-  template < typename T >
-  void List< T >::assign(std::initializer_list< T > list)
-  {
-    clear();
-    typename std::initializer_list< T >::iterator list_begin = list.begin();
-    while (list_begin != list.end())
-    {
-      push_back(*list_begin);
-      list_begin++;
     }
   }
 
@@ -255,6 +277,46 @@ namespace vyzhanov
     }
     head_ = newHead;
     --size_;
+  }
+
+  template < typename T >
+  void List< T >::remove(const T& value)
+  {
+    auto predicate = [&value](const T& listValue)-> bool
+      {
+        return listValue == value;
+      };
+    remove_if(predicate);
+  }
+
+  template < typename T>
+  template < typename UnaryPredicate>
+  void List< T >::remove_if(UnaryPredicate pred)
+  {
+    if (empty())
+    {
+      return;
+    }
+    auto curr = begin();
+    auto last = end();
+    if (p(*begin()))
+    {
+      pop_front();
+    }
+    while (curr != last)
+    {
+      if (p(*curr))
+      {
+        Node< T >* del = curr;
+        curr->prev->next = curr->next;
+        if (curr->next != nullptr)
+        {
+          curr->next->prev = curr->prev;
+        }
+        ++curr;
+        delete del;
+      }
+    }
   }
 
   template < typename T>
