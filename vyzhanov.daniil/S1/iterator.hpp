@@ -14,6 +14,7 @@ namespace vyzhanov
   {
     friend class List< T >;
     using iterator = BiIterator< T >;
+  public:
     BiIterator();
     BiIterator(const iterator&) = default;
     ~BiIterator() = default;

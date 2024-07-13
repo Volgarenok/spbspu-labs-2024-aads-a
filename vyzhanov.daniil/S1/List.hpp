@@ -13,7 +13,7 @@ namespace vyzhanov
   {
     using citerator = ConstBiIterator< T >;
     using iterator = BiIterator< T >;
-
+  public:
     List();
     List(const List< T >&);
     List(List< T >&&) noexcept;
