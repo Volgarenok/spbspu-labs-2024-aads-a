@@ -1,18 +1,5 @@
 #include "OutputSequence.hpp"
 
-std::ostream& vyzhanov::outputList(std::ostream& output, const List< size_t >& list)
-{
-  auto curr = list.cbegin();
-  auto end = list.cend();
-  end--;
-  while (curr != end)
-  {
-    output << *curr << " ";
-    curr++;
-  }
-  return output << *curr;
-}
-
 size_t vyzhanov::maxListSize(const List< pair >& list)
 {
   size_t maxSize = 0;
@@ -55,12 +42,17 @@ void vyzhanov::outputNums(List< pair >& list, std::ostream& output)
     }
     newList.push_back(localList);
   }
+
   auto it = newList.begin();
-  auto end = newList.end();
-  while (it != end)
+  while (it != newList.end())
   {
-    outputList(output, *it);
-    output << '\n';
+    auto curr = it->cbegin();
+    while (curr != it->cend())
+    {
+      output << *curr << " ";
+      curr++;
+    }
+    output << "\n";
     it++;
   }
 }
