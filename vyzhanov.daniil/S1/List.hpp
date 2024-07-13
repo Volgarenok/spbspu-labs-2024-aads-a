@@ -25,7 +25,7 @@ namespace vyzhanov
     List< T >& operator=(List< T >&&) noexcept;
 
     void clear();
-    bool empty();
+    bool empty() const noexcept;
 
     size_t capacity() const noexcept;
     void swap(List< T >&) noexcept;
@@ -149,10 +149,10 @@ namespace vyzhanov
     }
   }
 
-  template < typename T>
-  bool List<T>::empty()
+  template < typename T >
+  bool List< T >::empty() const noexcept
   {
-    return (head_ = tail_);
+    return size_ == 0;
   }
 
   template < typename T>
