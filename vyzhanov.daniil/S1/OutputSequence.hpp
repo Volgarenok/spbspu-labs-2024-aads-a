@@ -12,7 +12,6 @@ namespace vyzhanov
   size_t maxListSize(const List< pair >&);
   void outputNames(const List< pair >&, std::ostream&);
   void outputNums(List< pair >&, std::ostream&);
-  void printSums(const List< pair >&, std::ostream&);
 }
 
 #endif

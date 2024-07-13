@@ -64,8 +64,3 @@ void vyzhanov::outputNums(List< pair >& list, std::ostream& output)
     it++;
   }
 }
-
-void vyzhanov::printSums(const List< pair >& l, std::ostream& out)
-{
-
-}
