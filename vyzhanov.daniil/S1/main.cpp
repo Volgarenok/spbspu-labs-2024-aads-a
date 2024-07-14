@@ -13,6 +13,11 @@ int main()
   {
     List< pair > list;
     inputSequence(list, std::cin);
+    if (list.empty())
+    {
+      std::cerr << "List is empty";
+      return 0;
+    }
     outputNames(list, std::cout);
     std::cout << '\n';
   }
