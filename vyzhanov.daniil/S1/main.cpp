@@ -14,7 +14,6 @@ int main()
     List< pair > list;
     inputSequence(list, std::cin);
     outputNames(list, std::cout);
-    outputNums(list, std::cout);
     std::cout << '\n';
   }
   catch (const std::range_error& e)
