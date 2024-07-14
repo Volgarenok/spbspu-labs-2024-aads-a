@@ -19,6 +19,12 @@ int main()
       return 0;
     }
     outputNames(list, std::cout);
+    auto curr = list.begin();
+    if (curr->second.empty())
+    {
+      std::cout << 0 << "\n";
+      return 0;
+    }
     std::cout << '\n';
   }
   catch (const std::range_error& e)
