@@ -1,5 +1,4 @@
 #include "calculatePostfix.hpp"
-#include <iostream>
 #include <limits>
 #include "stack.hpp"
 
@@ -66,20 +65,26 @@ long long int baranov::calculatePostfix(Queue< Token > & exp)
   return stack.top().value.operand.value;
 }
 
-long long int baranov::sum(long long int a, long long int b) {
+long long int baranov::sum(long long int a, long long int b)
+{
   const long long int max = std::numeric_limits< long long int >::max();
   const long long int min = std::numeric_limits< long long int >::min();
-  if (same_sign(a, b) && (a > 0)) {
-    if (max - a >= b) {
+  if (same_sign(a, b) && (a > 0))
+  {
+    if (max - a >= b)
+    {
       return a + b;
     }
   }
-  else if (same_sign(a, b) && (a < 0)) {
-    if (min - a <= b) {
+  else if (same_sign(a, b) && (a < 0))
+  {
+    if (min - a <= b)
+    {
       return a + b;
     }
   }
-  else if (!same_sign(a, b)) {
+  else if (!same_sign(a, b))
+  {
     return a + b;
   }
   throw std::overflow_error("Addition overflow");
@@ -115,11 +120,13 @@ long long int baranov::mod(long long int a, long long int b)
   return result >= 0 ? result : result + b;
 }
 
-int baranov::sign(long long int val) {
+int baranov::sign(long long int val)
+{
   return (val > 0) ? 1 : ((val < 0) ? -1 : 0);
 }
 
-bool baranov::same_sign(long long int a, long long int b) {
+bool baranov::same_sign(long long int a, long long int b)
+{
   return sign(a) * sign(b) > 0;
 }
 

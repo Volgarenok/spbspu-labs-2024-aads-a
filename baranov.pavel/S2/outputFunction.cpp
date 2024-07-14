@@ -14,3 +14,4 @@ void baranov::printResults(std::ostream & out, Stack< long long int > & results)
     results.pop();
   }
 }
+
