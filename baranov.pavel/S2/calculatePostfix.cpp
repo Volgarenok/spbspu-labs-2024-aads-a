@@ -7,7 +7,7 @@ void baranov::calculatePostfixes(Queue< Queue< Token > > & postfixes, Stack< lon
 {
   while (!postfixes.empty())
   {
-    results.push(calculatePostfix(postfixes.front()));
+    results.push(calculatePostfix(postfixes.top()));
     postfixes.pop();
   }
 }
@@ -17,7 +17,7 @@ long long int baranov::calculatePostfix(Queue< Token > & exp)
   Stack< Token > stack;
   while (!exp.empty())
   {
-    Token t = exp.front();
+    Token t = exp.top();
     exp.pop();
     if (t.type == TokenType::OPERAND)
     {
