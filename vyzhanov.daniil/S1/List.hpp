@@ -183,16 +183,17 @@ namespace vyzhanov
   void List<T>::push_back(const T& data)
   {
     Node< T >* newNode = new Node< T >(data, nullptr, tail_);
-    newNode->prev_ = tail_;
     if (head_ == nullptr)
     {
       head_ = newNode;
+      tail_ = newNode;
     }
     else
     {
+      newNode->prev_ = tail_;
       tail_->next_ = newNode;
+      tail_ = newNode;
     }
-    tail_ = newNode;
     ++size_;
   }
 

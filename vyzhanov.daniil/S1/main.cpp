@@ -15,7 +15,7 @@ int main()
     inputSequence(list, std::cin);
     if (list.empty())
     {
-      std::cout << 0;
+      std::cout << 0 << "\n";
       return 0;
     }
     outputNames(list, std::cout);
