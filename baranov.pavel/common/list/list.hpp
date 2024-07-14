@@ -112,25 +112,25 @@ namespace baranov
   template< class T >
   T & List< T >::back()
   {
-    return tail_->value_;
+    return tail_->data_;
   }
 
   template< class T >
   const T & List< T >::back() const
   {
-    return tail_->value_;
+    return tail_->data_;
   }
 
   template< class T >
   T & List< T >::front()
   {
-    return head_->value_;
+    return head_->data_;
   }
 
   template< class T >
   const T & List< T >::front() const
   {
-    return head_->value_;
+    return head_->data_;
   }
 
   template< class T >
@@ -181,8 +181,8 @@ namespace baranov
     else
     {
       tail_->next_ = topush;
+      topush->prev_ = tail_;
       tail_ = topush;
-      tail_->prev_ = topush;
     }
     ++size_;
   }
@@ -219,8 +219,8 @@ namespace baranov
     else
     {
       head_->prev_ = topush;
+      topush->next_ = head_;
       head_ = topush;
-      head_->next_ = topush;
     }
     ++size_;
   }
