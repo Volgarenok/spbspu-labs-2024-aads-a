@@ -19,6 +19,7 @@ int main()
       return 0;
     }
     outputNames(list, std::cout);
+    outputNums(list, std::cout);
     auto curr = list.begin();
     if (curr->second.empty())
     {
