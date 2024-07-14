@@ -147,6 +147,7 @@ namespace vyzhanov
       delete head_;
       head_ = newHead;
     }
+    delete head_;
   }
 
   template < typename T >
