@@ -11,10 +11,29 @@ isaychev::Operation::Operation(std::string s)
   //type_ = determine_priority();
 }
 
-void isaychev::Operation::operator()(const Operand & a, const Operand & b) const
+isaychev::Operand isaychev::Operation::operator()(const Operand & a, const Operand & b) const
 {
-  a.get_operand();
-  b.get_operand();
+  if (type_ == OperationType::ADD)
+  {
+    return add(a, b);
+  }
+  else if (type_ == OperationType::SUBTRACT)
+  {
+    return subtract(a, b);
+  }
+  else if (type_ == OperationType::MULTIPLY)
+  {
+    return multiply(a, b);
+  }
+  else if (type_ == OperationType::DIVIDE)
+  {
+    return divide(a, b);
+  }
+  else if (type_ == OperationType::REM_DIVIDE)
+  {
+    return rem_divide(a, b);
+  }
+  return Operand(0);
 }
 
 void isaychev::Operation::set_operation(const std::string & s)
@@ -25,7 +44,7 @@ void isaychev::Operation::set_operation(const std::string & s)
   }
   else if (s == "-")
   {
-    type_ = OperationType::SUBSTRACT;
+    type_ = OperationType::SUBTRACT;
   }
   else if (s == "*")
   {
@@ -45,34 +64,39 @@ void isaychev::Operation::set_operation(const std::string & s)
   }
 }
 
-void isaychev::Operation::add(const Operand & a, const Operand & b) const
+isaychev::Operand isaychev::Operation::add(const Operand & a, const Operand & b) const
 {
   a.get_operand();
   b.get_operand();
+  return Operand(0);
 }
 
-void isaychev::Operation::substruct(const Operand & a, const Operand & b) const
+isaychev::Operand isaychev::Operation::subtract(const Operand & a, const Operand & b) const
 {
   a.get_operand();
   b.get_operand();
+  return Operand(0);
 }
 
-void isaychev::Operation::multiply(const Operand & a, const Operand & b) const
+isaychev::Operand isaychev::Operation::multiply(const Operand & a, const Operand & b) const
 {
   a.get_operand();
   b.get_operand();
+  return Operand(0);
 }
 
-void isaychev::Operation::divide(const Operand & a, const Operand & b) const
+isaychev::Operand isaychev::Operation::divide(const Operand & a, const Operand & b) const
 {
   a.get_operand();
   b.get_operand();
+  return Operand(0);
 }
 
-void isaychev::Operation::rem_divide(const Operand & a, const Operand & b) const
+isaychev::Operand isaychev::Operation::rem_divide(const Operand & a, const Operand & b) const
 {
   a.get_operand();
   b.get_operand();
+  return Operand(0);
 }
 
 int isaychev::Operation::determine_priority(char c)

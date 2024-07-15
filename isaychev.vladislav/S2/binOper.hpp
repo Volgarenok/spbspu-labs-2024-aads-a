@@ -9,7 +9,7 @@ namespace isaychev
   enum class OperationType
   {
     ADD,
-    SUBSTRACT,
+    SUBTRACT,
     MULTIPLY,
     DIVIDE,
     REM_DIVIDE,
@@ -22,18 +22,18 @@ namespace isaychev
     Operation();
     explicit Operation(std::string c);
 
-    void operator()(const Operand & a, const Operand & b) const;
+    Operand operator()(const Operand & a, const Operand & b) const;
     void set_operation(const std::string & c);
 
    private:
     OperationType type_;
     int priority_;
 
-    void add(const Operand & a, const Operand & b) const;
-    void substruct(const Operand & a, const Operand & b) const;
-    void multiply(const Operand & a, const Operand & b) const;
-    void divide(const Operand & a, const Operand & b) const;
-    void rem_divide(const Operand & a, const Operand & b) const;
+    Operand add(const Operand & a, const Operand & b) const;
+    Operand subtract(const Operand & a, const Operand & b) const;
+    Operand multiply(const Operand & a, const Operand & b) const;
+    Operand divide(const Operand & a, const Operand & b) const;
+    Operand rem_divide(const Operand & a, const Operand & b) const;
 
     int determine_priority(char c);
   };
