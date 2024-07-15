@@ -1,19 +1,19 @@
 #include "operand.hpp"
 
-Operand():
- op(0)
+isaychev::Operand::Operand():
+ op_(0)
 {}
 
-explicit Operand(long long int n)
- op(n)
+isaychev::Operand::Operand(long long int n):
+ op_(n)
 {}
 
-void set_operand(long long int n)
+void isaychev::Operand::set_operand(long long int n)
 {
-  op = n;
+  op_ = n;
 }
 
-long long int get_operand()
+long long int isaychev::Operand::get_operand() const
 {
-  return op;
+  return op_;
 }

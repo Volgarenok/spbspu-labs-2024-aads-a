@@ -10,10 +10,10 @@ namespace isaychev
     explicit Operand(long long int n);
 
     void set_operand(long long int n);
-    long long int get_operand();
+    long long int get_operand() const;
 
    private:
-    long long int op;
+    long long int op_;
   };
 }
 

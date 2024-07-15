@@ -10,6 +10,12 @@ namespace isaychev
     OPERAND,
     UNKNOWN
   };
+
+  enum class BracketType
+  {
+    OPENING,
+    CLOSING
+  };
 }
 
 #endif
