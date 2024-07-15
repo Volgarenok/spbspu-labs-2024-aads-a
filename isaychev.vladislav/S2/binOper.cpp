@@ -1,10 +1,9 @@
 #include "binOper.hpp"
 #include <limits>
-#include <stdexept>
+#include <stdexcept>
 
 isaychev::Operation::Operation():
- type_(OperationType::UNKNOWN),
- priority_(0)
+ type_(OperationType::UNKNOWN)
 {}
 
 isaychev::Operation::Operation(std::string s)
