@@ -1,4 +1,6 @@
 #include "binOper.hpp"
+#include <limits>
+#include <stdexept>
 
 isaychev::Operation::Operation():
  type_(OperationType::UNKNOWN),
@@ -8,7 +10,6 @@ isaychev::Operation::Operation():
 isaychev::Operation::Operation(std::string s)
 {
   set_operation(s);
-  //type_ = determine_priority();
 }
 
 isaychev::Operand isaychev::Operation::operator()(const Operand & a, const Operand & b) const
@@ -66,41 +67,69 @@ void isaychev::Operation::set_operation(const std::string & s)
 
 isaychev::Operand isaychev::Operation::add(const Operand & a, const Operand & b) const
 {
-  a.get_operand();
-  b.get_operand();
-  return Operand(0);
+  long long int max = std::numeric_limits< long long int >::max();
+  if (max - a.get_operand() < b.get_operand())
+  {
+    throw std::overflow_error("addition overflow");
+  }
+  return Operand(a.get_operand() + b.get_operand());
 }
 
 isaychev::Operand isaychev::Operation::subtract(const Operand & a, const Operand & b) const
 {
-  a.get_operand();
-  b.get_operand();
-  return Operand(0);
+  return Operand(a.get_operand() - b.get_operand());
 }
 
 isaychev::Operand isaychev::Operation::multiply(const Operand & a, const Operand & b) const
 {
-  a.get_operand();
-  b.get_operand();
-  return Operand(0);
+  long long int max = std::numeric_limits< long long int >::max();
+  long long int n1 = a.get_operand(), n2 = b.get_operand();
+  if (n2 != 0 && (max / std::abs(n2) < std::abs(n1)))
+  {
+    throw std::overflow_error("multiplication overflow");
+  }
+  return Operand(n1 * n2);
 }
 
 isaychev::Operand isaychev::Operation::divide(const Operand & a, const Operand & b) const
 {
-  a.get_operand();
-  b.get_operand();
-  return Operand(0);
+  if (b.get_operand() == 0)
+  {
+    throw std::logic_error("division by zero");
+  }
+  return Operand(a.get_operand() / b.get_operand());
 }
 
 isaychev::Operand isaychev::Operation::rem_divide(const Operand & a, const Operand & b) const
 {
-  a.get_operand();
-  b.get_operand();
-  return Operand(0);
+  if (a.get_operand() == 0)
+  {
+    throw std::logic_error("mod zero");
+  }
+  return Operand(a.get_operand() % b.get_operand());
 }
 
-int isaychev::Operation::determine_priority(char c)
+int isaychev::Operation::get_priority() const
 {
-  c += 1;
+  if (type_ == OperationType::ADD)
+  {
+    return 2;
+  }
+  else if (type_ == OperationType::SUBTRACT)
+  {
+    return 2;
+  }
+  else if (type_ == OperationType::MULTIPLY)
+  {
+    return 1;
+  }
+  else if (type_ == OperationType::DIVIDE)
+  {
+    return 1;
+  }
+  else if (type_ == OperationType::REM_DIVIDE)
+  {
+    return 1;
+  }
   return 0;
 }

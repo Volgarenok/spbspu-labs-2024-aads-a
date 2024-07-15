@@ -27,7 +27,6 @@ namespace isaychev
 
    private:
     OperationType type_;
-    int priority_;
 
     Operand add(const Operand & a, const Operand & b) const;
     Operand subtract(const Operand & a, const Operand & b) const;
@@ -35,7 +34,7 @@ namespace isaychev
     Operand divide(const Operand & a, const Operand & b) const;
     Operand rem_divide(const Operand & a, const Operand & b) const;
 
-    int determine_priority(char c);
+    int get_priority() const;
   };
 }
 
