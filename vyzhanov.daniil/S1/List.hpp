@@ -73,7 +73,7 @@ namespace vyzhanov
     if (!list.empty())
     {
       citerator begin = list.cbegin();
-      citerator end = ++list.cend();
+      citerator end = list.cend();
       while (begin != end)
       {
         push_back(*begin);
