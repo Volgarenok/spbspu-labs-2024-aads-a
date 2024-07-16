@@ -60,6 +60,10 @@ void isaychev::convertInfToPostf(Queue< Token > & infExp, Queue< Token > & postf
         temp.push(t);
       }
       //мб поставить проверку на скобу
+/*      if (temp.top().type == TokenType::BRACKET)
+      {
+        temp.pop();
+      }*/
     }
     else if (t.type == TokenType::OPERAND)
     {

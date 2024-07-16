@@ -19,13 +19,14 @@ int main(int argc, char * argv[])
     file.open(argv[1]);
     input = std::addressof(file);
   }
+
   Stack< long long int > results;
   try
   {
-    while (!(*input).eof())
-    {
-/*      Queue< std::string > infExp;
-      Queue< std::string > postfExp;*/
+//    while (!(*input).eof())
+  //  {
+//      Queue< std::string > infExp;
+      //Queue< std::string > postfExp;
       Queue< Token > infExp;
       Queue< Token > postfExp;
       try
@@ -34,11 +35,25 @@ int main(int argc, char * argv[])
       }
       catch (const std::length_error &)
       {
-        continue;
+//        continue;
       }
-      convertInfToPostf(infExp, postfExp);
-      results.push(calculateExpression(postfExp));
-    }
+//      convertInfToPostf(infExp, postfExp);
+  //    results.push(calculateExpression(postfExp));
+   // } ( 1 + 2 ) * ( 6 / 2 )
+     TokenType n[11] = {isaychev::TokenType::BRACKET, isaychev::TokenType::OPERAND,
+      isaychev::TokenType::OPERATION, isaychev::TokenType::OPERAND,isaychev::TokenType::BRACKET,
+      isaychev::TokenType::OPERATION,isaychev::TokenType::BRACKET, isaychev::TokenType::OPERAND,
+      isaychev::TokenType::OPERATION, isaychev::TokenType::OPERAND,isaychev::TokenType::BRACKET  };
+     int k = 0;
+     for (int i = 0; !infExp.empty(); ++i)
+     {
+       if (infExp.front().type == n[i])
+       {
+         k++;
+       }
+       infExp.pop();
+     }
+     std::cout << k;
   }
   catch (const std::invalid_argument & e)
   {
@@ -60,7 +75,8 @@ int main(int argc, char * argv[])
     std::cerr << e.what() << "\n";
     return 4;
   }
-  if (!results.empty())
+
+/*  if (!results.empty())
   {
     std::cout << results.top();
     results.pop();
@@ -69,6 +85,7 @@ int main(int argc, char * argv[])
       std::cout << " " << results.top();
       results.pop();
     }
-  }
+  }*/
   std::cout << "\n";
 }
+

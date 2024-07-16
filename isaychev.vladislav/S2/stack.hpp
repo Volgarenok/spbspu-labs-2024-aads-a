@@ -18,7 +18,6 @@ namespace isaychev
     const T & top() const noexcept;
 
     bool empty() const noexcept;
-    size_t size() const noexcept;
     void swap(Stack & rhs) noexcept;
 
    private:
@@ -53,12 +52,6 @@ namespace isaychev
   bool Stack< T >::empty() const noexcept
   {
     return con_.empty();
-  }
-
-  template < class T >
-  size_t Stack< T >::size() const noexcept
-  {
-    return con_.size();
   }
 
   template < class T >
