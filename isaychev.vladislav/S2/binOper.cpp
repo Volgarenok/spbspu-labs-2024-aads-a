@@ -6,10 +6,14 @@ isaychev::Operation::Operation():
  type_(OperationType::UNKNOWN)
 {}
 
-isaychev::Operation::Operation(std::string s)
+isaychev::Operation::Operation(char c)
 {
-  set_operation(s);
+  set_operation(c);
 }
+
+isaychev::Operation::Operation(OperationType t):
+ type_(t)
+{}
 
 isaychev::Operand isaychev::Operation::operator()(const Operand & a, const Operand & b) const
 {
@@ -36,25 +40,25 @@ isaychev::Operand isaychev::Operation::operator()(const Operand & a, const Opera
   return Operand(0);
 }
 
-void isaychev::Operation::set_operation(const std::string & s)
+void isaychev::Operation::set_operation(char c)
 {
-  if (s == "+")
+  if (c == '+')
   {
     type_ = OperationType::ADD;
   }
-  else if (s == "-")
+  else if (c == '-')
   {
     type_ = OperationType::SUBTRACT;
   }
-  else if (s == "*")
+  else if (c == '*')
   {
     type_ = OperationType::MULTIPLY;
   }
-  else if (s == "/")
+  else if (c == '/')
   {
     type_ = OperationType::DIVIDE;
   }
-  else if (s == "%")
+  else if (c == '%')
   {
     type_ = OperationType::REM_DIVIDE;
   }
@@ -105,7 +109,12 @@ isaychev::Operand isaychev::Operation::rem_divide(const Operand & a, const Opera
   {
     throw std::logic_error("mod zero");
   }
-  return Operand(a.get_operand() % b.get_operand());
+  long long int n = a.get_operand() % b.get_operand();
+  if (n < 0)
+  {
+    n += b.get_operand();
+  }
+  return Operand(n);
 }
 
 int isaychev::Operation::get_priority() const

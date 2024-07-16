@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include <limits>
 
-void placeOperands(isaychev::Stack< long long int > & s, long long int * n)
+void placeOperands(isaychev::Stack< isaychev::Operand > & s, isaychev::Operand n[])
 {
   for (int i = 0; i < 2; ++i)
   {
@@ -12,13 +12,30 @@ void placeOperands(isaychev::Stack< long long int > & s, long long int * n)
   }
 }
 
-long long int isaychev::calculateExpression(Queue< std::string > & postfExp)
+long long int isaychev::calculateExpression(Queue< Token > & postfExp)
 {
-  Stack< long long int > calcStack;
-  long long int nums[2] = {};
-  long long int max = std::numeric_limits< long long int >::max();
-  std::string s = "";
+  Stack< Operand > calcStack;
+  Operand ops[2] = {};
+//  long long int max = std::numeric_limits< long long int >::max();
+  //std::string s = "";
+
   while (!postfExp.empty())
+  {
+    Token t = postfExp.front();
+    postfExp.pop();
+    if (t.type == TokenType::OPERATION)
+    {
+      placeOperands(calcStack, ops);
+      calcStack.push(t.value.operation(ops[1], ops[0]));
+    }
+    else if (t.type == TokenType::OPERAND)
+    {
+      calcStack.push(t.value.operand);
+    }
+  }
+  return calcStack.top().get_operand();
+
+/*  while (!postfExp.empty())
   {
     s = postfExp.front();
     postfExp.pop();
@@ -29,7 +46,7 @@ long long int isaychev::calculateExpression(Queue< std::string > & postfExp)
       {
         throw std::overflow_error("addition overflow");
       }
-        calcStack.push(nums[1] + nums[0]);
+      calcStack.push(nums[1] + nums[0]);
     }
     else if (s == "-")
     {
@@ -52,7 +69,7 @@ long long int isaychev::calculateExpression(Queue< std::string > & postfExp)
       {
         throw std::logic_error("division by zero");
       }
-        calcStack.push(nums[1] / nums[0]);
+      calcStack.push(nums[1] / nums[0]);
     }
     else if (s == "%")
     {
@@ -73,5 +90,5 @@ long long int isaychev::calculateExpression(Queue< std::string > & postfExp)
       calcStack.push(std::stoll(s, nullptr, 10));
     }
   }
-  return calcStack.top();
+  return calcStack.top();*/
 }

@@ -3,6 +3,7 @@
 #include "inputInfix.hpp"
 #include "convertInfToPostf.hpp"
 #include "calculateExpression.hpp"
+#include "tokens.hpp"
 
 int main(int argc, char * argv[])
 {
@@ -23,8 +24,10 @@ int main(int argc, char * argv[])
   {
     while (!(*input).eof())
     {
-      Queue< std::string > infExp;
-      Queue< std::string > postfExp;
+/*      Queue< std::string > infExp;
+      Queue< std::string > postfExp;*/
+      Queue< Token > infExp;
+      Queue< Token > postfExp;
       try
       {
         inputInfix(*input, infExp);

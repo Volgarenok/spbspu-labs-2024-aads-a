@@ -1,5 +1,5 @@
-#ifndef BINOPERS_HPP
-#define BINOPERS_HPP
+#ifndef BINOPER_HPP
+#define BINOPER_HPP
 
 #include <string>
 #include "operand.hpp"
@@ -20,10 +20,12 @@ namespace isaychev
   {
    public:
     Operation();
-    explicit Operation(std::string c);
+    explicit Operation(char c);
+    explicit Operation(OperationType t);
 
     Operand operator()(const Operand & a, const Operand & b) const;
-    void set_operation(const std::string & c);
+    void set_operation(char c);
+    int get_priority() const;
 
    private:
     OperationType type_;
@@ -33,8 +35,6 @@ namespace isaychev
     Operand multiply(const Operand & a, const Operand & b) const;
     Operand divide(const Operand & a, const Operand & b) const;
     Operand rem_divide(const Operand & a, const Operand & b) const;
-
-    int get_priority() const;
   };
 }
 

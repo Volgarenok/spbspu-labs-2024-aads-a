@@ -25,6 +25,11 @@ namespace isaychev
    public:
     explicit Bracket(char c)
     {
+      set_type(c);
+    }
+
+    void set_type(char c)
+    {
       if (c == '(')
       {
         type_ = BracketType::OPENING;
@@ -39,22 +44,48 @@ namespace isaychev
       }
     }
 
+    BracketType get_type()
+    {
+      return type_;
+    }
+
    private:
     BracketType type_;
   };
 
-  union Token
+  union TokenUnit
   {
     Operand operand;
     Operation operation;
     Bracket bracket;
+
+    TokenUnit(long long int):
+     operand(0)
+    {}
   };
 
-  struct TokenUnit
+  struct Token
   {
-    Token tok;
+    TokenUnit value;
     TokenType type;
-  };
+
+    Token():
+     value(0),
+     type(TokenType::UNKNOWN)
+    {}
+/*    Token(char c)
+    {
+      if (isBracket(c))
+      {
+        value.bracket(c);
+        type = TokenType::BRACKET;
+      }
+      else if (isOper(c)
+      {
+        value.operation(c);
+        type = TokenType::OPERATION;
+      }*/
+    };
 }
 
 #endif
