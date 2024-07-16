@@ -20,21 +20,10 @@ int main()
     }
     outputNames(list, std::cout);
     outputNums(list, std::cout);
-    auto curr = list.begin();
-    if (curr->second.empty())
-    {
-      std::cout << 0 << "\n";
-      return 0;
-    }
-    std::cout << '\n';
-  }
-  catch (const std::range_error& e)
-  {
-    return 1;
   }
   catch (const std::out_of_range& e)
   {
-    std::cerr << "Overflow numbers!\n";
+    std::cerr << e.what();
     return 1;
   }
   return 0;

@@ -13,7 +13,7 @@ namespace vyzhanov
   {
     using citerator = ConstBiIterator< T >;
     using iterator = BiIterator< T >;
-  public:
+   public:
     List();
     List(const List< T >&);
     List(List< T >&&) noexcept;
@@ -73,7 +73,7 @@ namespace vyzhanov
     if (!list.empty())
     {
       citerator begin = list.cbegin();
-      citerator end = list.cend();
+      citerator end = ++list.cend();
       while (begin != end)
       {
         push_back(*begin);
@@ -213,7 +213,6 @@ namespace vyzhanov
     tail_ = newNode;
     ++size_;
   }
-
   template < typename T>
   void List<T>::push_front(const T& data)
   {
