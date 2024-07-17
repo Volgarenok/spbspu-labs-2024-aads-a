@@ -41,7 +41,7 @@ void belokurskaya::readSequences(std::istream& in, List< std::pair< std::string,
       }
     }
 
-    sequences.push_front({name, numbers});
+    sequences.push_back({name, numbers});
   }
 }
 
