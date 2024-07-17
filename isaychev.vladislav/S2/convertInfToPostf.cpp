@@ -18,6 +18,7 @@ void isaychev::convertInfToPostf(Queue< Token > & infExp, Queue< Token > & postf
   while (!infExp.empty())
   {
     Token t = infExp.front();
+    infExp.pop();
 
     if (t.type == TokenType::BRACKET)
     {
@@ -27,7 +28,7 @@ void isaychev::convertInfToPostf(Queue< Token > & infExp, Queue< Token > & postf
       }
       else if (t.value.bracket.get_type() == BracketType::CLOSING)
       {
-        while (temp.top().value.bracket.get_type() != BracketType::OPENING)
+        while (temp.top().type != TokenType::BRACKET)
         {
           moveElToQueue(temp, postfExp);
         }
@@ -45,16 +46,18 @@ void isaychev::convertInfToPostf(Queue< Token > & infExp, Queue< Token > & postf
         }
         temp.push(t);
       }
-//      else if (priority == 2)
-      else
+      else if (priority == 2)
       {
-       // while (!temp.empty() && priority == 2 && temp.top().type != TokenType::BRACKET)
         while (!temp.empty() && temp.top().type == TokenType::OPERATION)
         {
           priority = temp.top().value.operation.get_priority();
           if (priority == 2)
           {
             moveElToQueue(temp, postfExp);
+          }
+          else
+          {
+            break;
           }
         }
         temp.push(t);
@@ -69,7 +72,6 @@ void isaychev::convertInfToPostf(Queue< Token > & infExp, Queue< Token > & postf
     {
       postfExp.push(t);
     }
-    infExp.pop();
   }
   if (!temp.empty())
   {
