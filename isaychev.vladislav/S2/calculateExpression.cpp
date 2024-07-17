@@ -16,8 +16,6 @@ long long int isaychev::calculateExpression(Queue< Token > & postfExp)
 {
   Stack< Operand > calcStack;
   Operand ops[2] = {};
-//  long long int max = std::numeric_limits< long long int >::max();
-  //std::string s = "";
 
   while (!postfExp.empty())
   {
@@ -31,6 +29,10 @@ long long int isaychev::calculateExpression(Queue< Token > & postfExp)
     else if (t.type == TokenType::OPERAND)
     {
       calcStack.push(t.value.operand);
+    }
+    else
+    {
+      throw std::invalid_argument("invalid expression");
     }
   }
   return calcStack.top().get_operand();
