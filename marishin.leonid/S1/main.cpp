@@ -2,7 +2,7 @@
 #include <limits>
 
 #include "input.hpp"
-#include "linkedList.hpp"
+#include <linkedList.hpp>
 
 int main()
 {

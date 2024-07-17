@@ -2,12 +2,12 @@
 #define INPUTINFIX_HPP
 
 #include <iosfwd>
-#include <string>
 #include "queue.hpp"
+#include "tokens.hpp"
 
 namespace isaychev
 {
-  void inputInfix(std::istream & in, Queue< std::string > & infExp);
+  void inputInfix(std::istream & in, Queue< Token > & infExp);
 }
 
 #endif

@@ -2,89 +2,60 @@
 #define STACK_HPP
 
 #include <utility>
-#include "dataArray.hpp"
+#include <list/list.hpp>
 
 namespace isaychev
 {
-  template < class T, class Container = DataArray< T > >
+  template < class T >
   class Stack
   {
    public:
     Stack() = default;
-    Stack(const Container & rhs);
-    Stack(Container && rhs);
 
     void push(const T & rhs);
     void pop();
-    T & top();
-    const T & top() const;
+    T & top() noexcept;
+    const T & top() const noexcept;
 
-    template < class... Args >
-    void emplace(Args&&... args);
-
-    bool empty() const;
-    size_t size() const;
-    void swap(Stack & rhs);
+    bool empty() const noexcept;
+    void swap(Stack & rhs) noexcept;
 
    private:
-    Container con_;
+     List< T > con_;
   };
 
-  template < class T, class Container >
-  Stack< T, Container >::Stack(const Container & rhs):
-   con_(rhs)
-  {}
-
-  template < class T, class Container >
-  Stack< T, Container >::Stack(Container && rhs):
-   con_(rhs)
-  {}
-
-  template < class T, class Container >
-  void Stack< T, Container >::push(const T & rhs)
+  template < class T >
+  void Stack< T >::push(const T & rhs)
   {
-    con_.push_back(rhs);
+    con_.push_front(rhs);
   }
 
-  template < class T, class Container >
-  void Stack< T, Container >::pop()
+  template < class T >
+  void Stack< T >::pop()
   {
-    con_.pop_back();
+    con_.pop_front();
   }
 
-  template < class T, class Container >
-  T & Stack< T, Container >::top()
+  template < class T >
+  T & Stack< T >::top() noexcept
   {
-    return con_.back();
+    return con_.front();
   }
 
-  template < class T, class Container >
-  const T & Stack< T, Container >::top() const
+  template < class T >
+  const T & Stack< T >::top() const noexcept
   {
-    return con_.back();
+    return con_.front();
   }
 
-  template < class T, class Container >
-  template < class... Args >
-  void Stack< T, Container >::emplace(Args&&... args)
-  {
-    con_.emplace_back(std::forward< Args... >(args...));
-  }
-
-  template < class T, class Container >
-  bool Stack< T, Container >::empty() const
+  template < class T >
+  bool Stack< T >::empty() const noexcept
   {
     return con_.empty();
   }
 
-  template < class T, class Container >
-  size_t Stack< T, Container >::size() const
-  {
-    return con_.size();
-  }
-
-  template < class T, class Container >
-  void Stack< T, Container >::swap(Stack & rhs)
+  template < class T >
+  void Stack< T >::swap(Stack & rhs) noexcept
   {
     con_.swap(rhs.con_);
   }

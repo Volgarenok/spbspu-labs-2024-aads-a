@@ -641,7 +641,7 @@ namespace piyavkin
   {
     auto comp = [](const T& lhs, const T& rhs)
     {
-      return lhs > rhs;
+      return lhs < rhs;
     };
     sort(comp);
   }
@@ -655,7 +655,7 @@ namespace piyavkin
       detail::Node< T >* node2 = node1;
       for (size_t j = i; j < size_; ++j)
       {
-        if (comp(node1->value_, node2->value_))
+        if (comp(node2->value_, node1->value_))
         {
           std::swap(node1->value_, node2->value_);
         }

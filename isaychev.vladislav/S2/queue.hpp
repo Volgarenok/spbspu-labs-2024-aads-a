@@ -2,103 +2,74 @@
 #define QUEUE_HPP
 
 #include <utility>
-#include "dataArray.hpp"
+#include <list/list.hpp>
 
 namespace isaychev
 {
-  template < class T, class Container = DataArray< T > >
+  template < class T >
   class Queue
   {
    public:
     Queue() = default;
-    Queue(const Container & rhs);
-    Queue(Container && rhs);
 
     void push(const T & rhs);
     void pop();
-    T & front();
-    const T & front() const;
-    T & back();
-    const T & back() const;
+    T & front() noexcept;
+    const T & front() const noexcept;
+    T & back() noexcept;
+    const T & back() const noexcept;
 
-    template < class... Args >
-    void emplace(Args&&... args);
-
-    bool empty() const;
-    size_t size() const;
-    void swap(Queue & rhs);
+    bool empty() const noexcept;
+    void swap(Queue & rhs) noexcept;
 
    private:
-    Container con_;
+    List< T > con_;
   };
 
-  template < class T, class Container >
-  Queue< T, Container >::Queue(const Container & rhs):
-   con_(rhs)
-  {}
-
-  template < class T, class Container >
-  Queue< T, Container >::Queue(Container && rhs):
-   con_(rhs)
-  {}
-
-  template < class T, class Container >
-  void Queue< T, Container >::push(const T & rhs)
+  template < class T >
+  void Queue< T >::push(const T & rhs)
   {
     con_.push_back(rhs);
   }
 
-  template < class T, class Container >
-  void Queue< T, Container >::pop()
+  template < class T >
+  void Queue< T >::pop()
   {
     con_.pop_front();
   }
 
-  template < class T, class Container >
-  T & Queue< T, Container >::front()
+  template < class T >
+  T & Queue< T >::front() noexcept
   {
     return con_.front();
   }
 
-  template < class T, class Container >
-  const T & Queue< T, Container >::front() const
+  template < class T >
+  const T & Queue< T >::front() const noexcept
   {
     return con_.front();
   }
 
-  template < class T, class Container >
-  T & Queue< T, Container >::back()
+  template < class T >
+  T & Queue< T >::back() noexcept
   {
     return con_.back();
   }
 
-  template < class T, class Container >
-  const T & Queue< T, Container >::back() const
+  template < class T >
+  const T & Queue< T >::back() const noexcept
   {
     return con_.back();
   }
 
-  template < class T, class Container >
-  template < class... Args >
-  void Queue< T, Container >::emplace(Args&&... args)
-  {
-    con_.emplace_back(std::forward< Args... >(args...));
-  }
-
-  template < class T, class Container >
-  bool Queue< T, Container >::empty() const
+  template < class T >
+  bool Queue< T >::empty() const noexcept
   {
     return con_.empty();
   }
 
-  template < class T, class Container >
-  size_t Queue< T, Container >::size() const
-  {
-    return con_.size();
-  }
-
-  template < class T, class Container >
-  void Queue< T, Container >::swap(Queue & rhs)
+  template < class T >
+  void Queue< T >::swap(Queue & rhs) noexcept
   {
     con_.swap(rhs.con_);
   }

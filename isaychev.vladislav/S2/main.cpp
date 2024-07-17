@@ -1,9 +1,9 @@
 #include <iostream>
 #include <fstream>
-#include "dataArray.hpp"
 #include "inputInfix.hpp"
 #include "convertInfToPostf.hpp"
 #include "calculateExpression.hpp"
+#include "tokens.hpp"
 
 int main(int argc, char * argv[])
 {
@@ -19,13 +19,14 @@ int main(int argc, char * argv[])
     file.open(argv[1]);
     input = std::addressof(file);
   }
+
   Stack< long long int > results;
   try
   {
     while (!(*input).eof())
     {
-      Queue< std::string > infExp;
-      Queue< std::string > postfExp;
+      Queue< Token > infExp;
+      Queue< Token > postfExp;
       try
       {
         inputInfix(*input, infExp);
@@ -58,6 +59,7 @@ int main(int argc, char * argv[])
     std::cerr << e.what() << "\n";
     return 4;
   }
+
   if (!results.empty())
   {
     std::cout << results.top();
