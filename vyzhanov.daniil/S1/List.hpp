@@ -13,7 +13,7 @@ namespace vyzhanov
   {
     using citerator = ConstBiIterator< T >;
     using iterator = BiIterator< T >;
-   public:
+  public:
     List();
     List(const List< T >&);
     List(List< T >&&) noexcept;
@@ -141,11 +141,9 @@ namespace vyzhanov
   template < typename T>
   void List<T>::clear()
   {
-    while (head_ != tail_)
+    while (head_)
     {
-      Node< T >* newHead = head_->next_;
-      delete head_;
-      head_ = newHead;
+      pop_back();
     }
   }
 
@@ -182,53 +180,50 @@ namespace vyzhanov
   template < typename T>
   void List<T>::push_back(const T& data)
   {
-    Node< T >* newNode = new Node< T >(data, head_, tail_);
+    Node< T >* newNode = new Node< T >(data, nullptr, tail_);
+    newNode->prev_ = tail_;
     if (head_ == nullptr)
     {
       head_ = newNode;
-      tail_ = newNode;
     }
     else
     {
-      newNode->prev_ = tail_;
       tail_->next_ = newNode;
-      tail_ = newNode;
     }
+    tail_ = newNode;
     ++size_;
   }
 
   template < typename T>
   void List<T>::push_back(T&& data)
   {
-    Node< T >* newNode = new Node< T >(std::move(data), head_, tail_);
+    Node< T >* newNode = new Node< T >(std::move(data), nullptr, tail_);
+    newNode->prev_ = tail_;
     if (head_ == nullptr)
     {
       head_ = newNode;
-      tail_ = newNode;
     }
     else
     {
-      newNode->prev_ = tail_;
       tail_->next_ = newNode;
-      tail_ = newNode;
     }
+    tail_ = newNode;
     ++size_;
   }
   template < typename T>
   void List<T>::push_front(const T& data)
   {
     Node< T >* newNode = new Node< T >(data, head_, nullptr);
+    newNode->next_ = head_;
     if (head_ == nullptr)
     {
       head_ = newNode;
-      tail_ = newNode;
     }
     else
     {
-      newNode->next_ = head_;
       head_->prev_ = newNode;
-      head_ = newNode;
     }
+    head_ = newNode;
     ++size_;
   }
 
@@ -236,58 +231,51 @@ namespace vyzhanov
   void List<T>::push_front(T&& data)
   {
     Node< T >* newNode = new Node< T >(std::move(data), nullptr, tail_);
+    newNode->next_ = head_;
     if (head_ == nullptr)
     {
       head_ = newNode;
-      tail_ = newNode;
     }
     else
     {
-      newNode->next_ = head_;
-      head_->prev_ = newNode;
-      head_ = newNode;
+      head_->next_ = newNode;
     }
+    head_ = newNode;
     ++size_;
   }
 
   template < typename T>
   void List<T>::pop_back()
   {
-    if (head_ != nullptr)
+    Node< T >* newHead = head_;
+    if (!head_->next_)
     {
-      Node< T >* newTail = tail_->prev_;
-      if (newTail)
-      {
-        newTail->next_ = nullptr;
-      }
-      tail_ = newTail;
-      --size_;
+      head_ = nullptr;
+      tail_ = nullptr;
     }
     else
     {
-      return;
+      head_ = head_->next_;
     }
+    delete newHead;
+    --size_;
   }
 
   template < typename T>
   void List<T>::pop_front()
   {
-    if (head_ != nullptr)
+    Node< T >* newHead = head_;
+    if (!head_->next_)
     {
-      Node< T >* newHead = head_->next_;
-      if (newHead)
-      {
-        newHead->prev_ = nullptr;
-      }
-      delete head_;
-      head_ = newHead;
-      delete newHead;
-      --size_;
+      head_ = nullptr;
+      tail_ = nullptr;
     }
     else
     {
-      return;
+      head_ = head_->next_;
     }
+    delete newHead;
+    --size_;
   }
 
   template < typename T >

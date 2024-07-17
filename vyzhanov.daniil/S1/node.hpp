@@ -10,6 +10,7 @@ namespace vyzhanov
     Node* prev_;
 
     Node(const T& data, Node* next, Node* prev);
+    ~Node() = default;
   };
 
   template< typename T >

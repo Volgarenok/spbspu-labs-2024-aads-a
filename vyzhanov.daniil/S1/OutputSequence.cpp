@@ -20,7 +20,7 @@ void vyzhanov::outputNames(const List< pair >& list, std::ostream& output)
   {
     output << curr->first << " ";
   }
-  output  << "\n";
+  output << "\n";
 }
 
 void vyzhanov::outputNums(List< pair >& list, std::ostream& output)
@@ -31,9 +31,9 @@ void vyzhanov::outputNums(List< pair >& list, std::ostream& output)
   for (; size <= maxSize; ++size)
   {
     auto curr = list.begin();
-    auto end = ++list.end();
+    auto end = list.end();
     List< size_t > localList;
-    while (curr != end)
+    while (curr != ++list.end())
     {
       if (!(curr->second.empty()))
       {
@@ -45,11 +45,10 @@ void vyzhanov::outputNums(List< pair >& list, std::ostream& output)
     newList.push_back(localList);
   }
   auto it = newList.begin();
-  auto end = newList.end();
-  while (it != end)
+  while (it != newList.end())
   {
-    auto curr = it->begin();
-    while (curr != ++it->end())
+    auto curr = it->cbegin();
+    while (curr != ++it->cend())
     {
       output << *curr << " ";
       curr++;
@@ -58,11 +57,11 @@ void vyzhanov::outputNums(List< pair >& list, std::ostream& output)
     it++;
   }
   it = newList.begin();
-  while (it != end)
+  while (it != newList.end())
   {
     size_t sum = 0;
-    auto curr = it->begin();
-    while (curr != ++it->end())
+    auto curr = it->cbegin();
+    while (curr != ++it->cend())
     {
       if (sum > std::numeric_limits< size_t >::max() - *curr)
       {
