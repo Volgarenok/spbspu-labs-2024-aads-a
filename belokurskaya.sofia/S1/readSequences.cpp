@@ -6,6 +6,8 @@
 void belokurskaya::readSequences(std::istream& in, List< std::pair< std::string, List< size_t > > >& sequences)
 {
   std::string line;
+  List<std::pair< std::string, List< size_t > > > sequenceList;
+
   while (std::getline(in, line))
   {
     if (line.empty()) continue;
@@ -34,15 +36,18 @@ void belokurskaya::readSequences(std::istream& in, List< std::pair< std::string,
         number = number * 10 + (line[index] - '0');
         ++index;
       }
-      sequence.push_back(number);
+      sequence.push_front(number);
 
       while (index < line.size() && line[index] == ' ')
       {
         ++index;
       }
     }
-
-    sequences.push_back({ name, sequence });
+    sequenceList.push_front( {name, sequence} );
+  }
+  for (const auto& entry : sequenceList)
+  {
+    sequences.push_front(entry);
   }
 }
 
