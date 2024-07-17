@@ -29,18 +29,14 @@ void belokurskaya::readSequences(std::istream& in, List< std::pair< std::string,
         ++index;
       }
 
+      size_t num = 0;
       while (index < line.size() && line[index] >= '0' && line[index] <= '9')
       {
-        sequences.push_back(line[index]);
+        num = num * 10 + (line[index] - '0');
         ++index;
       }
-
-      if (!sequences.empty())
-      {
-        numbers.push_back(std::stoi(sequences));
-      }
+      numbers.push_back(num);
     }
-
     sequences.push_back({name, numbers});
   }
 }
