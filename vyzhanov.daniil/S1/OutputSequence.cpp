@@ -1,4 +1,4 @@
-k#include "OutputSequence.hpp"
+#include "OutputSequence.hpp"
 
 size_t vyzhanov::maxListSize(const List< pair >& list)
 {
