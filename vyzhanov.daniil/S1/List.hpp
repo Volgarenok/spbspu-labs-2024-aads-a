@@ -73,7 +73,7 @@ namespace vyzhanov
     if (!list.empty())
     {
       citerator begin = list.cbegin();
-      citerator end = list.cend();
+      citerator end = ++list.cend();
       while (begin != end)
       {
         push_back(*begin);
@@ -141,13 +141,10 @@ namespace vyzhanov
   template < typename T>
   void List<T>::clear()
   {
-    while (head_ != tail_)
+    while (!empty())
     {
-      Node< T >* newHead = head_->next_;
-      delete head_;
-      head_ = newHead;
+      pop_back();
     }
-    delete head_;
   }
 
   template < typename T >
@@ -184,16 +181,17 @@ namespace vyzhanov
   void List<T>::push_back(const T& data)
   {
     Node< T >* newNode = new Node< T >(data, nullptr, tail_);
-    newNode->prev_ = tail_;
-    if (head_ == nullptr)
+    if ((head_ == nullptr) && (tail_ == nullptr))
     {
       head_ = newNode;
+      tail_ = newNode;
     }
     else
     {
+      newNode->prev_ = tail_;
       tail_->next_ = newNode;
+      tail_ = newNode;
     }
-    tail_ = newNode;
     ++size_;
   }
 
@@ -201,32 +199,33 @@ namespace vyzhanov
   void List<T>::push_back(T&& data)
   {
     Node< T >* newNode = new Node< T >(std::move(data), nullptr, tail_);
-    newNode->prev_ = tail_;
-    if (head_ == nullptr)
+    if ((head_ == nullptr) && (tail_ == nullptr))
     {
       head_ = newNode;
+      tail_ = newNode;
     }
     else
     {
+      newNode->prev_ = tail_;
       tail_->next_ = newNode;
+      tail_ = newNode;
     }
-    tail_ = newNode;
     ++size_;
   }
   template < typename T>
   void List<T>::push_front(const T& data)
   {
     Node< T >* newNode = new Node< T >(data, head_, nullptr);
-    newNode->next_ = head_;
     if (head_ == nullptr)
     {
       head_ = newNode;
     }
     else
     {
+      newNode->next_ = head_;
       head_->prev_ = newNode;
+      head_ = newNode;
     }
-    head_ = newNode;
     ++size_;
   }
 
@@ -234,28 +233,28 @@ namespace vyzhanov
   void List<T>::push_front(T&& data)
   {
     Node< T >* newNode = new Node< T >(std::move(data), nullptr, tail_);
-    newNode->next_ = head_;
     if (head_ == nullptr)
     {
       head_ = newNode;
     }
     else
     {
-      head_->next_ = newNode;
+      newNode->next_ = head_;
+      head_->prev_ = newNode;
+      head_ = newNode;
     }
-    head_ = newNode;
     ++size_;
   }
 
   template < typename T>
   void List<T>::pop_back()
   {
-    Node< T >* newTail = tail_->prev_;
-    if (tail_ == head_)
+    if (tail_ == nullptr)
     {
       return;
     }
-    else
+    Node< T >* newTail = tail_->prev_;
+    if (newTail != nullptr)
     {
       newTail->next_ = nullptr;
     }
@@ -266,15 +265,16 @@ namespace vyzhanov
   template < typename T>
   void List<T>::pop_front()
   {
-    Node< T >* newHead = head_->next_;
-    if (head_ == tail_)
+    if (head_ == nullptr)
     {
       return;
     }
-    else
+    Node< T >* newHead = head_->next_;
+    if (newHead != nullptr)
     {
       newHead->prev_ = nullptr;
     }
+    delete head_;
     head_ = newHead;
     --size_;
   }

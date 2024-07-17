@@ -1,27 +1,23 @@
 #include "InputSequence.hpp"
 #include <iostream>
 
-void vyzhanov::inputSequence(List< pair >& seq, std::istream& input)
+void vyzhanov::inputSequence(List< pair >& list, std::istream& input)
 {
+  std::string names = "";
   size_t curr = 0;
-  std::string name = "";
   while (input)
   {
-    List< size_t > list;
-    input >> name;
-    if (name.empty())
-    {
-      break;
-    }
+    List< size_t > nums;
+    input >> names;
     while (input >> curr)
     {
-      list.push_back(curr);
+      nums.push_back(curr);
     }
     if (!input.eof())
     {
       input.clear();
     }
-    auto pair = std::make_pair(name, list);
-    seq.push_back(pair);
+    auto pair = std::make_pair(names, nums);
+    list.push_back(pair);
   }
 }
