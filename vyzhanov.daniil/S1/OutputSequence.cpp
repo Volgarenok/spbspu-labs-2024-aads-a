@@ -15,12 +15,12 @@ size_t vyzhanov::maxListSize(const List< pair >& list)
 void vyzhanov::outputNames(const List< pair >& list, std::ostream& output)
 {
   auto curr = list.cbegin();
-  auto end = ++list.cend();
+  auto end = list.cend();
   for (; curr != end; ++curr)
   {
     output << curr->first << " ";
   }
-  output << "\n";
+  output << curr->first << "\n";
 }
 
 void vyzhanov::outputNums(List< pair >& list, std::ostream& output)
@@ -48,15 +48,16 @@ void vyzhanov::outputNums(List< pair >& list, std::ostream& output)
   while (it != newList.end())
   {
     auto curr = it->cbegin();
-    while (curr != ++it->cend())
+    while (curr != it->cend())
     {
       output << *curr << " ";
       curr++;
     }
-    output << "\n";
+    output << *curr << "\n";
     it++;
   }
   it = newList.begin();
+  List< size_t > sums;
   while (it != newList.end())
   {
     size_t sum = 0;
@@ -70,7 +71,14 @@ void vyzhanov::outputNums(List< pair >& list, std::ostream& output)
       sum += *curr;
       curr++;
     }
-    output << sum << " ";
+    sums.push_back(sum);
     it++;
   }
+  auto curr = sums.cbegin();
+  while (curr != sums.cend())
+  {
+    output << *curr << " ";
+    curr++;
+  }
+  output << *curr << "\n";
 }
