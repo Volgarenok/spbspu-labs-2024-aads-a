@@ -1,7 +1,7 @@
 #ifndef STACK_HPP
 #define STACK_HPP
 
-#include <linkedList.hpp>
+#include "linkedList.hpp"
 
 namespace marishin
 {

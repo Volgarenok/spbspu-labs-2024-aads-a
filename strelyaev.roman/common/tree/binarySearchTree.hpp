@@ -124,6 +124,16 @@ namespace strelyaev
       return find(key);
     }
 
+    void erase(const Key& key)
+    {
+      node_t* node_to_remove = find(key).node_;
+      if (node_to_remove)
+      {
+        removeNode(node_to_remove);
+        size_--;
+      }
+    }
+
     iterator_t find(const Key& key)
     {
       node_t* current = root_;
@@ -512,7 +522,64 @@ namespace strelyaev
         rotateLeft(node);
       }
     }
+    node_t* findMin(node_t* node) const
+    {
+      while (node->left_)
+      {
+        node = node->left_;
+      }
+      return node;
+    }
+
+    void removeNode(node_t* node)
+    {
+      if (!node->left_ && !node->right_)
+      {
+        if (node->parent_)
+        {
+          if (node->parent_->left_ == node)
+          {
+            node->parent_->left_ = nullptr;
+          }
+          else
+          {
+            node->parent_->right_ = nullptr;
+          }
+        }
+        else
+        {
+          root_ = nullptr;
+        }
+        delete node;
+      }
+      else if (!node->left_ || !node->right_)
+      {
+        node_t* child = node->left_ ? node->left_ : node->right_;
+        if (node->parent_)
+        {
+          if (node->parent_->left_ == node)
+          {
+            node->parent_->left_ = child;
+          }
+          else
+          {
+            node->parent_->right_ = child;
+          }
+        }
+        else
+        {
+          root_ = child;
+        }
+        child->parent_ = node->parent_;
+        delete node;
+      }
+      else
+      {
+        node_t* successor = findMin(node->right_);
+        node->data_ = successor->data_;
+        removeNode(successor);
+      }
+    }
   };
 }
-
 #endif
