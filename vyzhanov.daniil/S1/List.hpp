@@ -143,8 +143,12 @@ namespace vyzhanov
   {
     while (!empty())
     {
-      pop_back();
+      Node< T >* newHead = head_->next_;
+      delete head_;
+      head_ = newHead;
     }
+    delete head_;
+    delete tail_;
   }
 
   template < typename T >
@@ -249,7 +253,7 @@ namespace vyzhanov
   template < typename T>
   void List<T>::pop_back()
   {
-    if (tail_ == nullptr)
+    if (head_ == nullptr)
     {
       return;
     }
