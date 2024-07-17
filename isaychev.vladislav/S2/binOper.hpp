@@ -21,7 +21,6 @@ namespace isaychev
    public:
     Operation();
     explicit Operation(char c);
-    explicit Operation(OperationType t);
 
     Operand operator()(const Operand & a, const Operand & b) const;
     void set_operation(char c);

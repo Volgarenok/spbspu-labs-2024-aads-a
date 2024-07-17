@@ -38,19 +38,6 @@ int main(int argc, char * argv[])
       convertInfToPostf(infExp, postfExp);
       results.push(calculateExpression(postfExp));
     }
-/*     TokenType n[7] = {isaychev::TokenType::OPERAND, isaychev::TokenType::OPERAND,
-      isaychev::TokenType::OPERATION, isaychev::TokenType::OPERAND, isaychev::TokenType::OPERAND,
-      isaychev::TokenType::OPERATION, isaychev::TokenType::OPERATION};
-     int k = 0;
-     for (int i = 0; !postfExp.empty(); ++i)
-     {
-       if (postfExp.front().type == n[i])
-       {
-         k++;
-       }
-       postfExp.pop();
-     }
-     std::cout << k;*/
   }
   catch (const std::invalid_argument & e)
   {
@@ -85,4 +72,3 @@ int main(int argc, char * argv[])
   }
   std::cout << "\n";
 }
-

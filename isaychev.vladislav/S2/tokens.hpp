@@ -6,14 +6,6 @@
 
 namespace isaychev
 {
-  enum class TokenType
-  {
-    OPERATION,
-    BRACKET,
-    OPERAND,
-    UNKNOWN
-  };
-
   enum class BracketType
   {
     OPENING,
@@ -53,6 +45,14 @@ namespace isaychev
     BracketType type_;
   };
 
+  enum class TokenType
+  {
+    OPERATION,
+    BRACKET,
+    OPERAND,
+    UNKNOWN
+  };
+
   union TokenUnit
   {
     Operand operand;
@@ -73,19 +73,7 @@ namespace isaychev
      value(0),
      type(TokenType::UNKNOWN)
     {}
-/*    Token(char c)
-    {
-      if (isBracket(c))
-      {
-        value.bracket(c);
-        type = TokenType::BRACKET;
-      }
-      else if (isOper(c)
-      {
-        value.operation(c);
-        type = TokenType::OPERATION;
-      }*/
-    };
+  };
 }
 
 #endif

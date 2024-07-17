@@ -11,10 +11,6 @@ isaychev::Operation::Operation(char c)
   set_operation(c);
 }
 
-isaychev::Operation::Operation(OperationType t):
- type_(t)
-{}
-
 isaychev::Operand isaychev::Operation::operator()(const Operand & a, const Operand & b) const
 {
   if (type_ == OperationType::ADD)
@@ -119,11 +115,7 @@ isaychev::Operand isaychev::Operation::rem_divide(const Operand & a, const Opera
 
 int isaychev::Operation::get_priority() const
 {
-  if (type_ == OperationType::ADD)
-  {
-    return 2;
-  }
-  else if (type_ == OperationType::SUBTRACT)
+  if (type_ == OperationType::ADD || type_ == OperationType::SUBTRACT)
   {
     return 2;
   }

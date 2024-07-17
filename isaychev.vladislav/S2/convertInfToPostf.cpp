@@ -1,10 +1,4 @@
 #include "convertInfToPostf.hpp"
-#include <cctype>
-
-bool isHighPriority(const std::string & str)
-{
-  return str == "/" || str == "%" || str == "*";
-}
 
 void moveElToQueue(isaychev::Stack< isaychev::Token > & s, isaychev::Queue< isaychev::Token > & q)
 {
@@ -62,11 +56,6 @@ void isaychev::convertInfToPostf(Queue< Token > & infExp, Queue< Token > & postf
         }
         temp.push(t);
       }
-      //мб поставить проверку на скобу
-/*      if (temp.top().type == TokenType::BRACKET)
-      {
-        temp.pop();
-      }*/
     }
     else if (t.type == TokenType::OPERAND)
     {
@@ -77,47 +66,4 @@ void isaychev::convertInfToPostf(Queue< Token > & infExp, Queue< Token > & postf
   {
     moveElToQueue(temp, postfExp);
   }
-
-
-/*  while (!infExp.empty())
-  {
-    s = infExp.front();
-    if (s == "(")
-    {
-      temp.push(s);
-    }
-    else if (s == ")")
-    {
-      while (temp.top() != "(")
-      {
-        moveElToQueue(temp, postfExp);
-      }
-      temp.pop();
-    }
-    else if (isHighPriority(s))
-    {
-      while (!temp.empty() && temp.top() != "(")
-      {
-        moveElToQueue(temp, postfExp);
-      }
-      temp.push(s);
-    }
-    else if (s == "+" || s == "-")
-    {
-      while (!temp.empty() && (temp.top() == "-" || temp.top() == "+") && temp.top() != "(")
-      {
-        moveElToQueue(temp, postfExp);
-      }
-      temp.push(s);
-    }
-    else
-    {
-      postfExp.push(s);
-    }
-    infExp.pop();
-  }
-  if (!temp.empty())
-  {
-    moveElToQueue(temp, postfExp);
-  }*/
 }
