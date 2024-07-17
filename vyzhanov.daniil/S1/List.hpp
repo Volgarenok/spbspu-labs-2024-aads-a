@@ -247,17 +247,17 @@ namespace vyzhanov
   template < typename T>
   void List<T>::pop_back()
   {
-    Node< T >* newHead = head_;
-    if (!head_->next_)
+    Node< T >* newTail = tail_;
+    if (!tail_->prev_)
     {
       head_ = nullptr;
       tail_ = nullptr;
     }
     else
     {
-      head_ = head_->next_;
+      tail_ = tail_->prev_;
     }
-    delete newHead;
+    delete newTail;
     --size_;
   }
 
