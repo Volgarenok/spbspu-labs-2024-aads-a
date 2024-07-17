@@ -158,7 +158,7 @@ namespace belokurskaya
         return Iterator(nullptr);
       }
 
-      class ConstIterator: public std::iterator< std::input_iterator_tag, const T >
+      class ConstIterator: public std::iterator< std::forward_iterator_tag, const T >
       {
         private:
           const Node* current;
