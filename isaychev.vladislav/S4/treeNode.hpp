@@ -1,7 +1,13 @@
 #ifndef TREENODE_HPP
 #define TREENODE_HPP
 
-class treeNode
-{};
+namespace isaychev
+{
+  namespace detail
+  {
+    class treeNode
+    {};
+  }
+}
 
 #endif

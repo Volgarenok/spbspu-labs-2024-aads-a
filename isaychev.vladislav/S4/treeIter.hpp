@@ -1,7 +1,10 @@
 #ifndef CONSTITER_HPP
 #define CONSTITER_HPP
 
-class constIter
-{};
+namespace isaychev
+{
+  class constIter
+  {};
+}
 
 #endif
