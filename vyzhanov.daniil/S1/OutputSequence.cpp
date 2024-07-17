@@ -73,5 +73,4 @@ void vyzhanov::outputNums(List< pair >& list, std::ostream& output)
     output << sum << " ";
     it++;
   }
-  output << "\n";
 }
