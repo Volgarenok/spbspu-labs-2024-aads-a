@@ -9,6 +9,10 @@ void vyzhanov::inputSequence(List< pair >& list, std::istream& input)
   {
     List< size_t > nums;
     input >> names;
+    if (names.empty())
+    {
+      break;
+    }
     while (input >> curr)
     {
       nums.push_back(curr);

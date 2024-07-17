@@ -25,6 +25,12 @@ void vyzhanov::outputNames(const List< pair >& list, std::ostream& output)
 
 void vyzhanov::outputNums(List< pair >& list, std::ostream& output)
 {
+  if (list.capacity() == 1 &&
+  list.cbegin()->second.empty())
+  {
+    output << 0 << "\n";
+    return;
+  }
   size_t size = 0;
   size_t maxSize = maxListSize(list);
   List< List< size_t > > newList;
