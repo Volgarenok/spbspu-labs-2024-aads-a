@@ -6,6 +6,7 @@
 void belokurskaya::readSequences(std::istream& in, List< std::pair< std::string, List< size_t > > >& sequences)
 {
   std::string line;
+  List< std::pair< std::string, List< size_t > > > sequenceList;
 
   while (std::getline(in, line))
   {
@@ -15,6 +16,7 @@ void belokurskaya::readSequences(std::istream& in, List< std::pair< std::string,
     List< size_t > numbers;
 
     size_t index = 0;
+
     while (index < line.size() && line[index] != ' ')
     {
       name.push_back(line[index]);
@@ -23,7 +25,6 @@ void belokurskaya::readSequences(std::istream& in, List< std::pair< std::string,
 
     while (index < line.size())
     {
-      std::string sequences;
       while (index < line.size() && line[index] == ' ')
       {
         ++index;
@@ -37,7 +38,11 @@ void belokurskaya::readSequences(std::istream& in, List< std::pair< std::string,
       }
       numbers.push_back(num);
     }
-    sequences.push_back({name, numbers});
+    sequenceList.push_front({ name, numbers });
+  }
+  for (const auto& entry : sequenceList)
+  {
+    sequences.push_front(entry);
   }
 }
 
