@@ -141,13 +141,12 @@ namespace vyzhanov
   template < typename T>
   void List<T>::clear()
   {
-    while (!empty())
+    while (head_ != tail_)
     {
       Node< T >* newHead = head_->next_;
       delete head_;
       head_ = newHead;
     }
-    delete head_;
   }
 
   template < typename T >
@@ -183,8 +182,8 @@ namespace vyzhanov
   template < typename T>
   void List<T>::push_back(const T& data)
   {
-    Node< T >* newNode = new Node< T >(data, nullptr, tail_);
-    if ((head_ == nullptr) && (tail_ == nullptr))
+    Node< T >* newNode = new Node< T >(data, head_, tail_);
+    if (head_ == nullptr)
     {
       head_ = newNode;
       tail_ = newNode;
@@ -201,8 +200,8 @@ namespace vyzhanov
   template < typename T>
   void List<T>::push_back(T&& data)
   {
-    Node< T >* newNode = new Node< T >(std::move(data), nullptr, tail_);
-    if ((head_ == nullptr) && (tail_ == nullptr))
+    Node< T >* newNode = new Node< T >(std::move(data), head_, tail_);
+    if (head_ == nullptr)
     {
       head_ = newNode;
       tail_ = newNode;
@@ -222,6 +221,7 @@ namespace vyzhanov
     if (head_ == nullptr)
     {
       head_ = newNode;
+      tail_ = newNode;
     }
     else
     {
@@ -239,6 +239,7 @@ namespace vyzhanov
     if (head_ == nullptr)
     {
       head_ = newNode;
+      tail_ = newNode;
     }
     else
     {
@@ -252,34 +253,41 @@ namespace vyzhanov
   template < typename T>
   void List<T>::pop_back()
   {
-    if (head_ == nullptr)
+    if (head_ != nullptr)
+    {
+      Node< T >* newTail = tail_->prev_;
+      if (newTail)
+      {
+        newTail->next_ = nullptr;
+      }
+      tail_ = newTail;
+      --size_;
+    }
+    else
     {
       return;
     }
-    Node< T >* newTail = tail_->prev_;
-    if (newTail != nullptr)
-    {
-      newTail->next_ = nullptr;
-    }
-    tail_ = newTail;
-    --size_;
   }
 
   template < typename T>
   void List<T>::pop_front()
   {
-    if (head_ == nullptr)
+    if (head_ != nullptr)
+    {
+      Node< T >* newHead = head_->next_;
+      if (newHead)
+      {
+        newHead->prev_ = nullptr;
+      }
+      delete head_;
+      head_ = newHead;
+      delete newHead;
+      --size_;
+    }
+    else
     {
       return;
     }
-    Node< T >* newHead = head_->next_;
-    if (newHead != nullptr)
-    {
-      newHead->prev_ = nullptr;
-    }
-    delete head_;
-    head_ = newHead;
-    --size_;
   }
 
   template < typename T >
