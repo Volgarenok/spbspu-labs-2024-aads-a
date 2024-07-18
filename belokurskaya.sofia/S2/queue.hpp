@@ -121,7 +121,6 @@ namespace belokurskaya
 
       void freeMemory()
       {
-        size_t newFront = initial_capacity_;
         T* newData = new T[capacity_ / capacity_change_factor_];
         std::copy(data_ + front_, data_ + rear_ + 1, newData);
         rear_ = rear_ - front_;
