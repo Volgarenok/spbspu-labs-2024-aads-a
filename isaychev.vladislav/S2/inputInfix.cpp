@@ -6,7 +6,7 @@
 
 bool isOper(char c)
 {
-  return c == '+'|| c == '-' || c == '%' || c == '/' || c == '*';
+  return c == '+' || c == '-' || c == '%' || c == '/' || c == '*';
 }
 
 bool isBracket(char c)
