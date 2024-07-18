@@ -1,8 +1,16 @@
 #include "tokens.hpp"
 
-isaychev::Bracket::Bracket(char c)
+isaychev::Bracket::Bracket(char c):
+ type_(BracketType::OPENING)
 {
-  set_type(c);
+  if (c == ')')
+  {
+    type_ = BracketType::CLOSING;
+  }
+  else if (c != '(')
+  {
+    throw std::logic_error("not a bracket");
+  }
 }
 
 void isaychev::Bracket::set_type(char c)
