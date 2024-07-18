@@ -99,7 +99,7 @@ namespace belokurskaya
     private:
       T* data_;
       size_t size_;
-      int top_;
+      size_t top_;
       size_t capacity_;
       const size_t initial_capacity_ = 3;
       const size_t capacity_change_factor_ = 2;
