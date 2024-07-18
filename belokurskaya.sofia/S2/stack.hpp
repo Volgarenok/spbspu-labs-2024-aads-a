@@ -15,6 +15,7 @@ namespace belokurskaya
         size_ = 0;
         top_ = -1;
         data_ = new T[capacity_];
+        isEmpty_ = true;
       }
 
       Stack(const Stack< T >& other):
@@ -51,26 +52,28 @@ namespace belokurskaya
         }
         size_++;
         data_[++top_] = value;
+        isEmpty_ = false;
       }
 
       T pop()
       {
-        if (empty())
+        if (isEmpty_)
         {
           throw std::runtime_error("Stack is empty");
         }
         T value = data_[top_];
         top_--;
-        if (top_ < 0)
+        if (size_ == 0)
         {
-          top_ = -1;
+          isEmpty_ = true;
         }
+        size_--;
         return value;
       }
 
       bool empty() const
       {
-        return (top_ == -1);
+        return isEmpty_;
       }
 
       T top() const
@@ -103,6 +106,7 @@ namespace belokurskaya
       size_t capacity_;
       const size_t initial_capacity_ = 3;
       const size_t capacity_change_factor_ = 2;
+      bool isEmpty_;
 
       void addMemory()
       {
