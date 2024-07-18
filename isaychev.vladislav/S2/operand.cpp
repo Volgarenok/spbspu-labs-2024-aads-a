@@ -1,9 +1,5 @@
 #include "operand.hpp"
 
-isaychev::Operand::Operand():
- op_(0)
-{}
-
 isaychev::Operand::Operand(long long int n):
  op_(n)
 {}
