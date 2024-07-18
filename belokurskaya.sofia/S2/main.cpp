@@ -13,7 +13,6 @@ int main(int argc, char* argv[])
   std::istream* input;
   std::ifstream fileInput;
   Stack< long long > results;
-
   if (argc < 2)
   {
     input = &std::cin;
@@ -36,7 +35,6 @@ int main(int argc, char* argv[])
     {
       continue;
     }
-
     try
     {
       std::string postfix = infixToPostfix(line);
