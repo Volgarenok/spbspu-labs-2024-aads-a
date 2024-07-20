@@ -116,7 +116,7 @@ long long belokurskaya::evaluatePostfixExpression(std::string expression)
         long long result;
         if (!safeAdd(operand1, operand2, result))
         {
-          return 1;
+          throw std::logic_error("Invalid addition");
         }
         st.push(result);
       }
@@ -126,8 +126,7 @@ long long belokurskaya::evaluatePostfixExpression(std::string expression)
         if (willSubtractUnderflow(operand1, operand2))
         {
           safeStrCopy(errorType, "Subtraction Underflow", 30);
-          std::cerr << errorType << "\n";
-          return 1;
+          throw std::logic_error("Invalid substraction");
         }
         else
         {
