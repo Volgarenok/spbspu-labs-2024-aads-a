@@ -288,24 +288,35 @@ namespace vyzhanov
   template < typename UnaryPredicate >
   void List< T >::remove_if(UnaryPredicate pred)
   {
-    if (empty())
+    Node< T >* curr = head_;
+    Node< T >* temp = nullptr;
+    while (curr)
     {
-      return;
-    }
-    auto curr = begin();
-    auto last = end();
-    Node< T >* del = curr;
-    while (curr != last)
-    {
-      if (!pred(*curr))
+      if (pred(curr->data_))
       {
-        if (del != curr)
+        if (curr == head_)
         {
-          *del = *curr;
+          pop_front();
+          curr = head_;
+        }
+        else if (curr == tail_)
+        {
+          pop_back();
+          curr = tail_;
+        }
+        else
+        {
+          temp->next_ = curr->next_;
+          delete curr;
+          curr = temp->next_;
+          --size_;
         }
       }
-      ++curr;
-      delete del;
+      else
+      {
+        temp = curr;
+        curr = curr->next_;
+      }
     }
   }
 
