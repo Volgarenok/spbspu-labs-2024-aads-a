@@ -57,7 +57,7 @@ void vyzhanov::outputNums(List< pair >& list, std::ostream& output)
     auto curr = it->cbegin();
     output << *it->cbegin();
     curr++;
-    while (curr != ++it->cend())
+    while (curr != it->cend())
     {
       output << " " << *curr;
       curr++;
@@ -71,7 +71,7 @@ void vyzhanov::outputNums(List< pair >& list, std::ostream& output)
   {
     size_t sum = 0;
     auto curr = it->cbegin();
-    while (curr != ++it->cend())
+    while (curr != it->cend())
     {
       if (sum > std::numeric_limits< size_t >::max() - *curr)
       {
@@ -86,7 +86,7 @@ void vyzhanov::outputNums(List< pair >& list, std::ostream& output)
   auto curr = sums.cbegin();
   output << *sums.cbegin();
   curr++;
-  while (curr != ++sums.cend())
+  while (curr != sums.cend())
   {
     output << " " << *curr;
     curr++;
