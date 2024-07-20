@@ -139,8 +139,7 @@ long long belokurskaya::evaluatePostfixExpression(std::string expression)
         char errorType[10];
         if (willMultiplyOverflowOrUnderflow(operand1, operand2, errorType))
         {
-          std::cerr << "Multiplication" << errorType << "\n";
-          return 1;
+          throw std::logic_error("Invalid multiplication");
         }
         else
         {
@@ -151,13 +150,11 @@ long long belokurskaya::evaluatePostfixExpression(std::string expression)
       {
         if (operand2 == 0)
         {
-          std::cerr << "Division by zero\n";
-          return 1;
+          throw std::logic_error("Invalid division");
         }
         if (operand1 == std::numeric_limits< long long >::min() && operand2 == -1)
         {
-          std::cerr << "Division Overflow\n";
-          return 1;
+          throw std::logic_error("Invalid division");
         }
         st.push(operand1 / operand2);
       }
