@@ -276,7 +276,7 @@ namespace vyzhanov
   template < typename T >
   void List< T >::remove(const T& value)
   {
-    auto predicate = 
+    auto predicate =
       [&value](const T& listValue)-> bool
       {
         return listValue == value;
