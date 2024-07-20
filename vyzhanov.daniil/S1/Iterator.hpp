@@ -2,17 +2,17 @@
 #define ITERATOR_HPP
 
 #include <iterator>
-#include "node.hpp"
+#include "Node.hpp"
 
 namespace vyzhanov
 {
   template< typename T >
-  class List;
+  struct List;
 
   template< typename T >
-  class BiIterator : public std::iterator< std::bidirectional_iterator_tag, T >
+  struct BiIterator : public std::iterator< std::bidirectional_iterator_tag, T >
   {
-    friend class List< T >;
+    friend struct List< T >;
     using iterator = BiIterator< T >;
   public:
     BiIterator();
@@ -37,12 +37,12 @@ namespace vyzhanov
   };
 
   template< typename T >
-  BiIterator< T >::BiIterator() :
+  BiIterator< T >::BiIterator():
     node_(nullptr)
   {}
 
   template< typename T >
-  BiIterator< T >::BiIterator(Node< T >* node) :
+  BiIterator< T >::BiIterator(Node< T >* node):
     node_(node)
   {}
 
@@ -111,7 +111,6 @@ namespace vyzhanov
   {
     return std::addressof(node_->data_);
   }
-
 }
 
 #endif

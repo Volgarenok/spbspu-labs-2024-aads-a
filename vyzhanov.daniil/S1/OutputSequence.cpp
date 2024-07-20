@@ -3,9 +3,9 @@
 size_t vyzhanov::maxListSize(const List< pair >& list)
 {
   auto curr = list.cbegin();
-  auto end = ++list.cend();
+  auto end = list.cend();
   size_t maxSize = curr->second.capacity();
-  for (; curr != end; curr++)
+  for (; curr != end; ++curr)
   {
     maxSize = std::max(maxSize, curr->second.capacity());
   }
@@ -14,19 +14,20 @@ size_t vyzhanov::maxListSize(const List< pair >& list)
 
 void vyzhanov::outputNames(const List< pair >& list, std::ostream& output)
 {
-  auto curr = list.cbegin();
+  auto curr = ++list.cbegin();
   auto end = list.cend();
+  output << list.cbegin()->first;
   for (; curr != end; ++curr)
   {
-    output << curr->first << " ";
+    output << " " << curr->first;
   }
-  output << curr->first << "\n";
+  output << "\n";
 }
 
 void vyzhanov::outputNums(List< pair >& list, std::ostream& output)
 {
   if (list.capacity() == 1 &&
-  list.cbegin()->second.empty())
+    list.cbegin()->second.empty())
   {
     output << 0 << "\n";
     return;
@@ -34,12 +35,12 @@ void vyzhanov::outputNums(List< pair >& list, std::ostream& output)
   size_t size = 0;
   size_t maxSize = maxListSize(list);
   List< List< size_t > > newList;
-  for (; size <= maxSize; ++size)
+  for (; size < maxSize; ++size)
   {
     auto curr = list.begin();
     auto end = list.end();
     List< size_t > localList;
-    while (curr != ++list.end())
+    while (curr != end)
     {
       if (!(curr->second.empty()))
       {
@@ -50,21 +51,23 @@ void vyzhanov::outputNums(List< pair >& list, std::ostream& output)
     }
     newList.push_back(localList);
   }
-  auto it = newList.begin();
-  while (it != newList.end())
+  auto it = newList.cbegin();
+  for (; it != newList.cend(); it++)
   {
     auto curr = it->cbegin();
-    while (curr != it->cend())
+    output << *it->cbegin();
+    curr++;
+    while (curr != ++it->cend())
     {
-      output << *curr << " ";
+      output << " " << *curr;
       curr++;
     }
-    output << *curr << "\n";
-    it++;
+    output << "\n";
   }
-  it = newList.begin();
+
+  it = newList.cbegin();
   List< size_t > sums;
-  while (it != newList.end())
+  while (it != newList.cend())
   {
     size_t sum = 0;
     auto curr = it->cbegin();
@@ -81,10 +84,12 @@ void vyzhanov::outputNums(List< pair >& list, std::ostream& output)
     it++;
   }
   auto curr = sums.cbegin();
-  while (curr != sums.cend())
+  output << *sums.cbegin();
+  curr++;
+  while (curr != ++sums.cend())
   {
-    output << *curr << " ";
+    output << " " << *curr;
     curr++;
   }
-  output << *curr << "\n";
+  output << "\n";
 }
