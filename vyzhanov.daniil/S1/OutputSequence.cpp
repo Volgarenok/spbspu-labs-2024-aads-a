@@ -89,8 +89,5 @@ void vyzhanov::outputNums(List< pair >& list, std::ostream& output)
     sums.push_back(sum);
     it++;
   }
-  auto curr = sums.cbegin();
-  output << *sums.cbegin();
-  curr++;
   outputList(output, sums);
 }
