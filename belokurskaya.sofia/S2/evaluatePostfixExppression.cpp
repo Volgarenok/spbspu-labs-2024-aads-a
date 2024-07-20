@@ -116,7 +116,7 @@ long long belokurskaya::evaluatePostfixExpression(std::string expression)
         long long result;
         if (!safeAdd(operand1, operand2, result))
         {
-          exit(1);
+          return 1;
         }
         st.push(result);
       }
@@ -127,7 +127,7 @@ long long belokurskaya::evaluatePostfixExpression(std::string expression)
         {
           safeStrCopy(errorType, "Subtraction Underflow", 30);
           std::cerr << errorType << "\n";
-          exit(1);
+          return 1;
         }
         else
         {
@@ -140,7 +140,7 @@ long long belokurskaya::evaluatePostfixExpression(std::string expression)
         if (willMultiplyOverflowOrUnderflow(operand1, operand2, errorType))
         {
           std::cerr << "Multiplication" << errorType << "\n";
-          exit(1);
+          return 1;
         }
         else
         {
@@ -152,12 +152,12 @@ long long belokurskaya::evaluatePostfixExpression(std::string expression)
         if (operand2 == 0)
         {
           std::cerr << "Division by zero\n";
-          exit(1);
+          return 1;
         }
         if (operand1 == std::numeric_limits< long long >::min() && operand2 == -1)
         {
           std::cerr << "Division Overflow\n";
-          exit(1);
+          return 1;
         }
         st.push(operand1 / operand2);
       }
