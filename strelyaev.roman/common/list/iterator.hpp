@@ -6,78 +6,97 @@
 
 namespace strelyaev
 {
-  template< typename T >
+  template < typename T >
   class List;
 
-  template< typename T >
+  template < typename T >
   class Iterator
   {
     friend class List< T >;
-    public:
-     Iterator():
+  public:
+    Iterator():
       node_(nullptr)
-     {}
+    {}
 
-     Iterator(const Iterator& val):
+    Iterator(const Iterator& val):
       node_(val.node_)
-     {}
+    {}
 
-     ~Iterator() = default;
+    ~Iterator() = default;
 
-     Iterator< T >& operator=(Iterator& val) = default;
+    Iterator< T >& operator=(Iterator& val) = default;
 
-     Iterator< T > operator++(int)
-     {
-       Iterator result = *this;
-       ++(*this);
-       return result;
-     }
+    Iterator< T > operator++(int)
+    {
+      Iterator result = *this;
+      ++(*this);
+      return result;
+    }
 
-     Iterator< T >& operator++()
-     {
-       node_ = node_->next_;
-       return *this;
-     }
+    Iterator< T >& operator++()
+    {
+      node_ = node_->next_;
+      return *this;
+    }
 
-     Iterator< T > operator--(int)
-     {
-       Iterator< T > result = *this;
-       --(*this);
-       return result;
-     }
+    Iterator< T > operator+(int a)
+    {
+      Iterator< T > result (*this);
+      for (int b = 0; b < a; b++)
+      {
+        result.node_ = result.node_->next_;
+      }
+      return result;
+    }
 
-     Iterator< T >& operator--()
-     {
+    Iterator< T > operator--(int)
+    {
+      Iterator< T > result = *this;
+      --(*this);
+      return result;
+    }
+
+    Iterator< T >& operator--()
+    {
       node_ = node_->prev_;
       return *this;
-     }
+    }
 
-     T& operator*()
-     {
-       return node_->value_;
-     }
+    Iterator< T > operator-(int a)
+    {
+      Iterator< T > result (*this);
+      for (int b = 0; b < a; b++)
+      {
+        result.node_ = result.node_->prev_;
+      }
+      return result;
+    }
 
-     T* operator->()
-     {
-       return std::addressof(node_->value_);
-     }
+    T& operator*()
+    {
+      return node_->value_;
+    }
 
-     bool operator==(Iterator< T > val)
-     {
-       return node_ == val.node_;
-     }
+    T* operator->()
+    {
+      return std::addressof(node_->value_);
+    }
 
-     bool operator!=(Iterator< T > val)
-     {
-       return !(*this == val);
-     }
+    bool operator==(Iterator< T > val)
+    {
+      return node_ == val.node_;
+    }
 
-    private:
-     detail::Node< T >* node_;
+    bool operator!=(Iterator< T > val)
+    {
+      return !(*this == val);
+    }
+  private:
+    detail::Node< T >* node_;
 
-     explicit Iterator(detail::Node< T >* val):
+    explicit Iterator(detail::Node< T >* val):
       node_(val)
-     {}
+    {}
   };
 }
 
