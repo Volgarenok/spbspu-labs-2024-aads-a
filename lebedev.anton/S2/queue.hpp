@@ -1,7 +1,7 @@
 #ifndef QUEUE_HPP
 #define QUEUE_HPP
 
-#include <list/list.hpp>
+#include <list.hpp>
 
 namespace lebedev
 {
