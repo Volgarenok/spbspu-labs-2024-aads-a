@@ -61,6 +61,10 @@ void isaychev::convertInfToPostf(Queue< Token > & infExp, Queue< Token > & postf
     {
       postfExp.push(t);
     }
+    else
+    {
+      throw std::invalid_argument("wrong token");
+    }
   }
   if (!temp.empty())
   {

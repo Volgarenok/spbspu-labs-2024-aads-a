@@ -25,6 +25,7 @@ namespace isaychev
     Operand operator()(const Operand & a, const Operand & b) const;
     void set_operation(char c);
     int get_priority() const;
+    OperationType get_type();
 
    private:
     OperationType type_;

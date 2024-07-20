@@ -25,23 +25,25 @@ void isaychev::inputInfix(std::istream & in, Queue< Token > & infExp)
 
   for (size_t i = 0; i < str.length(); ++i)
   {
-    Token token;
+//    Token token;
 
     if (str[i] == ' ')
     {
       continue;
     }
-    else if (isBracket(str[i]))
+    //else if (isBracket(str[i]))
+    else if (str[i] == '(')
     {
-      token.value.bracket.set_type(str[i]);
-      token.type = TokenType::BRACKET;
-      infExp.push(token);
+      //token.value.bracket.set_type(str[i]);
+      //token.type = TokenType::BRACKET;
+      infExp.push(Token(BracketType::OPENING));
     }
-    else if (isOper(str[i]))
+    //else if (isOper(str[i]))
+    else if (str[i] == ')')
     {
-      token.value.operation.set_operation(str[i]);
-      token.type = TokenType::OPERATION;
-      infExp.push(token);
+      //token.value.operation.set_operation(str[i]);
+      //token.type = TokenType::OPERATION;
+      infExp.push(Token(BracketType::CLOSING));
     }
     else if (std::isdigit(str[i]))
     {
@@ -52,13 +54,17 @@ void isaychev::inputInfix(std::istream & in, Queue< Token > & infExp)
         ++i;
       }
       while (str[i] != ' ' && std::isdigit(str[i]) && i < str.length());
-      token.value.operand.set_operand(std::stoll(num, nullptr, 10));
-      token.type = TokenType::OPERAND;
-      infExp.push(token);
+      //token.value.operand.set_operand(std::stoll(num, nullptr, 10));
+      //token.type = TokenType::OPERAND;
+      infExp.push(Token(std::stoll(num, nullptr, 10)));
     }
-    else
+   /* else
     {
       throw std::invalid_argument("wrong token");
+    }*/
+    else
+    {
+      infExp.push(Token(str[i]));
     }
   }
 }

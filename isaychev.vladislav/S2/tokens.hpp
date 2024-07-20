@@ -16,6 +16,7 @@ namespace isaychev
   {
    public:
     explicit Bracket(char c);
+    explicit Bracket(BracketType type);
 
     void set_type(char c);
     BracketType get_type();
@@ -39,6 +40,8 @@ namespace isaychev
     Bracket bracket;
 
     TokenUnit(long long int);
+    TokenUnit(char c);
+    TokenUnit(BracketType type);
   };
 
   struct Token
@@ -46,7 +49,10 @@ namespace isaychev
     TokenUnit value;
     TokenType type;
 
-    Token();
+//    Token();
+    explicit Token(long long n);
+    explicit Token(char c);
+    Token(BracketType type);
   };
 }
 

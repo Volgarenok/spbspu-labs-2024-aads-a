@@ -64,6 +64,11 @@ void isaychev::Operation::set_operation(char c)
   }
 }
 
+isaychev::OperationType isaychev::Operation::get_type()
+{
+  return type_;
+}
+
 isaychev::Operand isaychev::Operation::add(const Operand & a, const Operand & b) const
 {
   long long int max = std::numeric_limits< long long int >::max();
