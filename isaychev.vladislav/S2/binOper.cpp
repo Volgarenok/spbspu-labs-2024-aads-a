@@ -32,7 +32,7 @@ isaychev::Operation::Operation(char c):
   }
   else if (c == '%')
   {
-    type_ = OperationType::REM_DIVIDE;
+    type_ = OperationType::MOD;
     priority_ = 1;
   }
 }
@@ -55,9 +55,9 @@ isaychev::Operand isaychev::Operation::operator()(const Operand & a, const Opera
   {
     return divide(a, b);
   }
-  else if (type_ == OperationType::REM_DIVIDE)
+  else if (type_ == OperationType::MOD)
   {
-    return rem_divide(a, b);
+    return mod(a, b);
   }
   return Operand(0);
 }
@@ -70,6 +70,11 @@ isaychev::OperationType isaychev::Operation::get_type() const noexcept
 int isaychev::Operation::get_priority() const noexcept
 {
   return priority_;
+}
+
+bool isaychev::Operation::operator<=(const Operation & rhs) const noexcept
+{
+  return priority_ <= rhs.priority_;
 }
 
 isaychev::Operand isaychev::Operation::add(const Operand & a, const Operand & b) const
@@ -107,7 +112,7 @@ isaychev::Operand isaychev::Operation::divide(const Operand & a, const Operand &
   return Operand(a.get_operand() / b.get_operand());
 }
 
-isaychev::Operand isaychev::Operation::rem_divide(const Operand & a, const Operand & b) const
+isaychev::Operand isaychev::Operation::mod(const Operand & a, const Operand & b) const
 {
   if (a.get_operand() == 0)
   {
