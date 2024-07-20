@@ -15,7 +15,6 @@ namespace belokurskaya
         size_ = 0;
         top_ = -1;
         data_ = new T[capacity_];
-        isEmpty_ = true;
       }
 
       Stack(const Stack< T >& other):
@@ -52,20 +51,19 @@ namespace belokurskaya
         }
         size_++;
         data_[++top_] = value;
-        isEmpty_ = false;
       }
 
       T pop()
       {
-        if (isEmpty_)
+        if (empty())
         {
           throw std::runtime_error("Stack is empty");
         }
         T value = data_[top_];
         top_--;
-        if (size_ == 0)
+        if (top_ < 0)
         {
-          isEmpty_ = true;
+          top_ = -1;
         }
         size_--;
         return value;
@@ -73,7 +71,7 @@ namespace belokurskaya
 
       bool empty() const
       {
-        return isEmpty_;
+        return (top_ == -1);
       }
 
       T top() const
