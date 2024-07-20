@@ -38,12 +38,12 @@ namespace vyzhanov
   };
 
   template< typename T >
-  ConstBiIterator< T >::ConstBiIterator():
+  ConstBiIterator< T >::ConstBiIterator() :
     node_(nullptr)
   {}
 
   template< typename T >
-  ConstBiIterator< T >::ConstBiIterator(Node< T >* node):
+  ConstBiIterator< T >::ConstBiIterator(Node< T >* node) :
     node_(node)
   {}
 
@@ -89,13 +89,13 @@ namespace vyzhanov
     return *this;
   }
 
-  template< class T >
+  template< typename T >
   const T& ConstBiIterator< T >::operator*() const
   {
     return node_->data_;
   }
 
-  template< class T >
+  template< typename T >
   const T* ConstBiIterator< T >::operator->() const
   {
     return std::addressof(node_->data_);

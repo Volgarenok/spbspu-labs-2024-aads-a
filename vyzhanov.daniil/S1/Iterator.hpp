@@ -88,25 +88,25 @@ namespace vyzhanov
     return *this;
   }
 
-  template< class T >
+  template< typename T >
   T& BiIterator< T >::operator*()
   {
     return node_->data_;
   }
 
-  template< class T >
+  template< typename T >
   T* BiIterator< T >::operator->()
   {
     return std::addressof(node_->data_);
   }
 
-  template< class T >
+  template< typename T >
   const T& BiIterator< T >::operator*() const
   {
     return node_->data_;
   }
 
-  template< class T >
+  template< typename T >
   const T* BiIterator< T >::operator->() const
   {
     return std::addressof(node_->data_);

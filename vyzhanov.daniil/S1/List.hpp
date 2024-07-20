@@ -140,7 +140,7 @@ namespace vyzhanov
     return *this;
   }
 
-  template < typename T>
+  template< typename T>
   void List<T>::clear()
   {
     while (head_)
@@ -149,19 +149,19 @@ namespace vyzhanov
     }
   }
 
-  template < typename T >
+  template< typename T >
   bool List< T >::empty() const noexcept
   {
     return size_ == 0;
   }
 
-  template < typename T>
+  template< typename T>
   size_t List<T>::capacity() const noexcept
   {
     return size_;
   }
 
-  template < typename T>
+  template< typename T>
   void List<T>::swap(List< T >& list) noexcept
   {
     std::swap(list.head_, head_);
@@ -180,7 +180,7 @@ namespace vyzhanov
     swap(newList);
   }
 
-  template < typename T>
+  template< typename T>
   void List<T>::push_back(Node< T >* newNode)
   {
     if (head_ == nullptr)
@@ -196,21 +196,21 @@ namespace vyzhanov
     ++size_;
   }
 
-  template < typename T>
+  template< typename T>
   void List<T>::push_back(const T& data)
   {
     Node< T >* newNode = new Node< T >(data, nullptr, tail_);
     push_back(newNode);
   }
 
-  template < typename T>
+  template< typename T>
   void List<T>::push_back(T&& data)
   {
     Node< T >* newNode = new Node< T >(std::move(data), nullptr, tail_);
     push_back(newNode);
   }
 
-  template < typename T>
+  template< typename T>
   void List<T>::push_front(Node< T >* newNode)
   {
     if (head_ == nullptr)
@@ -225,21 +225,21 @@ namespace vyzhanov
     ++size_;
   }
 
-  template < typename T>
+  template< typename T>
   void List<T>::push_front(const T& data)
   {
     Node< T >* newNode = new Node< T >(data, head_, nullptr);
     push_front(newNode);
   }
 
-  template < typename T>
+  template< typename T>
   void List<T>::push_front(T&& data)
   {
     Node< T >* newNode = new Node< T >(std::move(data), nullptr, tail_);
     push_front(newNode);
   }
 
-  template < typename T>
+  template< typename T>
   void List<T>::pop_back()
   {
     Node< T >* newTail = tail_;
@@ -256,7 +256,7 @@ namespace vyzhanov
     --size_;
   }
 
-  template < typename T>
+  template< typename T>
   void List<T>::pop_front()
   {
     Node< T >* newHead = head_;
@@ -273,7 +273,7 @@ namespace vyzhanov
     --size_;
   }
 
-  template < typename T >
+  template< typename T >
   void List< T >::remove(const T& value)
   {
     auto predicate =
@@ -284,8 +284,8 @@ namespace vyzhanov
     remove_if(predicate);
   }
 
-  template < typename T>
-  template < typename UnaryPredicate >
+  template< typename T>
+  template< typename UnaryPredicate >
   void List< T >::remove_if(UnaryPredicate pred)
   {
     Node< T >* curr = head_;
@@ -320,31 +320,31 @@ namespace vyzhanov
     }
   }
 
-  template < typename T>
+  template< typename T>
   T& List<T>::back()
   {
     return tail_->data_;
   }
 
-  template < typename T>
+  template< typename T>
   T& List<T>::front()
   {
     return head_->data_;
   }
 
-  template < typename T>
+  template< typename T>
   const T& List<T>::back() const
   {
     return tail_->data_;
   }
 
-  template < typename T>
+  template< typename T>
   const T& List<T>::front() const
   {
     return head_->data_;
   }
 
-  template < typename T>
+  template< typename T>
   BiIterator<T> List<T>::begin() noexcept
   {
     return iterator(head_);
@@ -356,7 +356,7 @@ namespace vyzhanov
     return citerator(head_);
   }
 
-  template < typename T>
+  template< typename T>
   BiIterator<T> List<T>::end() noexcept
   {
     return iterator(tail_->next_);

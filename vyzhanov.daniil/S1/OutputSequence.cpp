@@ -12,6 +12,20 @@ size_t vyzhanov::maxListSize(const List< pair >& list)
   return maxSize;
 }
 
+template< typename T >
+void vyzhanov::outputList(std::ostream& output, const List< T >& list)
+{
+  auto curr = list.cbegin();
+  auto end = list.cend();
+  output << *list.cbegin();
+  curr++;
+  for (; curr != end; ++curr)
+  {
+    output << " " << *curr;
+  }
+  output << "\n";
+}
+
 void vyzhanov::outputNames(const List< pair >& list, std::ostream& output)
 {
   auto curr = ++list.cbegin();
@@ -54,15 +68,7 @@ void vyzhanov::outputNums(List< pair >& list, std::ostream& output)
   auto it = newList.cbegin();
   for (; it != newList.cend(); it++)
   {
-    auto curr = it->cbegin();
-    output << *it->cbegin();
-    curr++;
-    while (curr != it->cend())
-    {
-      output << " " << *curr;
-      curr++;
-    }
-    output << "\n";
+    outputList(output, *it);
   }
 
   it = newList.cbegin();
@@ -86,10 +92,5 @@ void vyzhanov::outputNums(List< pair >& list, std::ostream& output)
   auto curr = sums.cbegin();
   output << *sums.cbegin();
   curr++;
-  while (curr != sums.cend())
-  {
-    output << " " << *curr;
-    curr++;
-  }
-  output << "\n";
+  outputList(output, sums);
 }

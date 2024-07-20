@@ -11,6 +11,8 @@ namespace vyzhanov
   size_t maxListSize(const List< pair >&);
   void outputNames(const List< pair >&, std::ostream&);
   void outputNums(List< pair >&, std::ostream&);
+  template< typename T >
+  void outputList(std::ostream& os, const List< T >& list);
 }
 
 #endif
