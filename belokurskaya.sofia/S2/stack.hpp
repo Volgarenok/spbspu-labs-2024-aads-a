@@ -104,7 +104,6 @@ namespace belokurskaya
       size_t capacity_;
       const size_t initial_capacity_ = 3;
       const size_t capacity_change_factor_ = 2;
-      bool isEmpty_;
 
       void addMemory()
       {
