@@ -6,9 +6,35 @@ isaychev::Operation::Operation():
  type_(OperationType::UNKNOWN)
 {}
 
-isaychev::Operation::Operation(char c)
+isaychev::Operation::Operation(char c):
+ type_(OperationType::UNKNOWN),
+ priority_(0)
 {
-  set_operation(c);
+  if (c == '+')
+  {
+    type_ = OperationType::ADD;
+    priority_ = 2;
+  }
+  else if (c == '-')
+  {
+    type_ = OperationType::SUBTRACT;
+    priority_ = 2;
+  }
+  else if (c == '*')
+  {
+    type_ = OperationType::MULTIPLY;
+    priority_ = 1;
+  }
+  else if (c == '/')
+  {
+    type_ = OperationType::DIVIDE;
+    priority_ = 1;
+  }
+  else if (c == '%')
+  {
+    type_ = OperationType::REM_DIVIDE;
+    priority_ = 1;
+  }
 }
 
 isaychev::Operand isaychev::Operation::operator()(const Operand & a, const Operand & b) const
@@ -36,37 +62,14 @@ isaychev::Operand isaychev::Operation::operator()(const Operand & a, const Opera
   return Operand(0);
 }
 
-void isaychev::Operation::set_operation(char c)
-{
-  if (c == '+')
-  {
-    type_ = OperationType::ADD;
-  }
-  else if (c == '-')
-  {
-    type_ = OperationType::SUBTRACT;
-  }
-  else if (c == '*')
-  {
-    type_ = OperationType::MULTIPLY;
-  }
-  else if (c == '/')
-  {
-    type_ = OperationType::DIVIDE;
-  }
-  else if (c == '%')
-  {
-    type_ = OperationType::REM_DIVIDE;
-  }
-  else
-  {
-    type_ = OperationType::UNKNOWN;
-  }
-}
-
-isaychev::OperationType isaychev::Operation::get_type()
+isaychev::OperationType isaychev::Operation::get_type() const noexcept
 {
   return type_;
+}
+
+int isaychev::Operation::get_priority() const noexcept
+{
+  return priority_;
 }
 
 isaychev::Operand isaychev::Operation::add(const Operand & a, const Operand & b) const
@@ -116,25 +119,4 @@ isaychev::Operand isaychev::Operation::rem_divide(const Operand & a, const Opera
     n += b.get_operand();
   }
   return Operand(n);
-}
-
-int isaychev::Operation::get_priority() const
-{
-  if (type_ == OperationType::ADD || type_ == OperationType::SUBTRACT)
-  {
-    return 2;
-  }
-  else if (type_ == OperationType::MULTIPLY)
-  {
-    return 1;
-  }
-  else if (type_ == OperationType::DIVIDE)
-  {
-    return 1;
-  }
-  else if (type_ == OperationType::REM_DIVIDE)
-  {
-    return 1;
-  }
-  return 0;
 }

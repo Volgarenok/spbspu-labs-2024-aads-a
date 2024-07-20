@@ -17,23 +17,7 @@ isaychev::Bracket::Bracket(BracketType type):
  type_(type)
 {}
 
-void isaychev::Bracket::set_type(char c)
-{
-  if (c == '(')
-  {
-    type_ = BracketType::OPENING;
-  }
-  else if (c == ')')
-  {
-    type_ = BracketType::CLOSING;
-  }
-  else
-  {
-    throw std::logic_error("not a bracket");
-  }
-}
-
-isaychev::BracketType isaychev::Bracket::get_type()
+isaychev::BracketType isaychev::Bracket::get_type() const noexcept
 {
   return type_;
 }
@@ -49,11 +33,6 @@ isaychev::TokenUnit::TokenUnit(char c):
 isaychev::TokenUnit::TokenUnit(BracketType type):
  bracket(type)
 {}
-
-/*isaychev::Token::Token():
- value(0),
- type(isaychev::TokenType::UNKNOWN)
-{}*/
 
 isaychev::Token::Token(long long int n):
  value(n),

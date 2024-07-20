@@ -8,7 +8,6 @@ namespace isaychev
    public:
     explicit Operand(long long int n);
 
-    void set_operand(long long int n);
     long long int get_operand() const;
 
    private:
