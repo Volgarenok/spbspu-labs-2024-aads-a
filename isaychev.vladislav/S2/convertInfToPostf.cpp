@@ -37,31 +37,6 @@ void isaychev::convertInfToPostf(Queue< Token > & infExp, Queue< Token > & postf
         moveElToQueue(temp, postfExp);
       }
         temp.push(t);
-
-      /*int priority = t.value.operation.get_priority();
-      if (priority == 1)
-      {
-        while (!temp.empty() && temp.top().type != TokenType::BRACKET)
-        {
-          moveElToQueue(temp, postfExp);
-        }
-      }
-      else if (priority == 2)
-      {
-        while (!temp.empty() && temp.top().type == TokenType::OPERATION && t < temp.top().value.operation)
-        {
-          priority = temp.top().value.operation.get_priority();
-          if (priority == 2)
-          {
-            moveElToQueue(temp, postfExp);
-          }
-          else
-          {
-            break;
-          }
-        }
-        temp.push(t);
-      }*/
     }
     else if (t.type == TokenType::OPERAND)
     {

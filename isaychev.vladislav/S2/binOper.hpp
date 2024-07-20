@@ -23,10 +23,14 @@ namespace isaychev
     explicit Operation(char c);
 
     Operand operator()(const Operand & a, const Operand & b) const;
-    int get_priority() const noexcept;
     OperationType get_type() const noexcept;
 
+    bool operator<(const Operation & rhs) const noexcept;
+    bool operator>(const Operation & rhs) const noexcept;
     bool operator<=(const Operation & rhs) const noexcept;
+    bool operator>=(const Operation & rhs) const noexcept;
+    bool operator==(const Operation & rhs) const noexcept;
+    bool operator!=(const Operation & rhs) const noexcept;
 
    private:
     OperationType type_;

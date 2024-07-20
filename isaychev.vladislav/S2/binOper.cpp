@@ -67,14 +67,34 @@ isaychev::OperationType isaychev::Operation::get_type() const noexcept
   return type_;
 }
 
-int isaychev::Operation::get_priority() const noexcept
+bool isaychev::Operation::operator<(const Operation & rhs) const noexcept
 {
-  return priority_;
+  return priority_ < rhs.priority_;
+}
+
+bool isaychev::Operation::operator>(const Operation & rhs) const noexcept
+{
+  return priority_ > rhs.priority_;
 }
 
 bool isaychev::Operation::operator<=(const Operation & rhs) const noexcept
 {
   return priority_ <= rhs.priority_;
+}
+
+bool isaychev::Operation::operator>=(const Operation & rhs) const noexcept
+{
+  return priority_ >= rhs.priority_;
+}
+
+bool isaychev::Operation::operator==(const Operation & rhs) const noexcept
+{
+  return priority_ == rhs.priority_;
+}
+
+bool isaychev::Operation::operator!=(const Operation & rhs) const noexcept
+{
+  return priority_ != rhs.priority_;
 }
 
 isaychev::Operand isaychev::Operation::add(const Operand & a, const Operand & b) const
