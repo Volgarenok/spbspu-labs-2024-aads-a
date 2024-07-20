@@ -4,7 +4,7 @@
 #include <iostream>
 #include <string>
 #include <utility>
-#include <list/list.hpp>
+#include <list.hpp>
 
 namespace lebedev
 {
