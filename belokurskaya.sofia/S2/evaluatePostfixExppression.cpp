@@ -6,7 +6,7 @@
 
 #include "stack.hpp"
 
-int mod(long long int a, long long int b)
+int belokurskaya::mod(long long int a, long long int b)
 {
   return (a % b + b) % b;
 }
