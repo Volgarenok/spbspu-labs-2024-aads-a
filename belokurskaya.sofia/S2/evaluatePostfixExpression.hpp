@@ -5,6 +5,7 @@
 
 namespace belokurskaya
 {
+  int mod(long long int a, long long int b);
   bool isOperator(char c);
   void safeStrCopy(char* dest, const char* src, size_t max_len);
   bool safeAdd(long long a, long long b, long long& result);
