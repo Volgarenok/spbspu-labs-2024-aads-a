@@ -6,6 +6,11 @@
 
 #include "stack.hpp"
 
+int mod(long long int a, long long int b)
+{
+  return (a % b + b) % b;
+}
+
 bool belokurskaya::isOperator(char c)
 {
   return c == '+' || c == '-' || c == '*' || c == '/' || c == '%';
@@ -159,7 +164,7 @@ long long belokurskaya::evaluatePostfixExpression(std::string expression)
       }
       else if (c == '%')
       {
-        st.push(operand1 % operand2);
+        st.push(mod(operand1, operand2));
       }
     }
     else
