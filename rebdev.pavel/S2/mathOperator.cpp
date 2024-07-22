@@ -1,56 +1,37 @@
-#include "node.hpp"
+#include "mathOperator.hpp"
 
-#include <stdexcept>
 #include <limits>
+#include <stdexcept>
 
-rebdev::node::node(long long number) noexcept:
-  number_(number),
-  operationPriority_(0)
-{}
-
-rebdev::node::node(char operationName):
-  operationName_(operationName),
-  operationPriority_(0)
-{
-  if ((operationName == '+') || (operationName == '-'))
+rebdev::mathOperator::mathOperator(char type):
+  operType_(type),
+  priority_(0)
   {
-    operationPriority_ = 1;
+    switch (operType_)
+    {
+      case '+':
+      case '-':
+        priority_ = 1;
+        break;
+      case '/':
+      case '*':
+      case '%':
+        priority_ = 2;
+        break;
+      case '(':
+        priority_ = 0;
+        break;
+      default:
+        throw std::logic_error("uncorrect type of operation!");
+    }
   }
-  else if ((operationName == '/') || (operationName == '*') || (operationName == '%'))
-  {
-    operationPriority_ = 2;
-  }
-  else if ((operationName == '(') || (operationName == ')'))
-  {
-    operationPriority_ = 3;
-  }
-  else
-  {
-    throw std::logic_error("unknown type of operation");
-  }
-}
-
-bool rebdev::node::operator>=(const node & origNode) const noexcept
-{
-  return (operationPriority_ >= origNode.operationPriority_);
-}
-bool rebdev::node::operator!=(char sym) const noexcept
-{
-  return (operationName_ != sym);
-}
-
-long long rebdev::node::getResult() const
-{
-  return number_;
-}
-long long rebdev::node::getResult(long long first, long long second) const
+long long rebdev::mathOperator::operator()(long long first, long long second)
 {
   long long llMax = std::numeric_limits< long long >::max();
   long long llMin = std::numeric_limits< long long >::min();
-
   long long result = 0;
   bool upOverflow = false, lowOverflow = false;
-  switch (operationName_)
+  switch (operType_)
   {
     case '+':
       if ((first > 0) && (second > 0))
@@ -106,12 +87,16 @@ long long rebdev::node::getResult(long long first, long long second) const
   return result;
 }
 
-long long rebdev::node::getPriority() const noexcept
+unsigned int rebdev::mathOperator::priority() const noexcept
 {
-  return operationPriority_;
+  return priority_;
 }
-
-bool rebdev::node::isSignSame(long long f, long long s) const noexcept
+bool rebdev::mathOperator::leftBracket() const noexcept
+{
+  return (operType_ == '(');
+}
+bool rebdev::mathOperator::isSignSame(long long f, long long s) const noexcept
 {
   return (((f > 0) && (s > 0)) || ((f < 0) && (s < 0)));
 }
+
