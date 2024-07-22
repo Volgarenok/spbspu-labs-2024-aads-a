@@ -10,11 +10,11 @@ namespace spiridonov
   bool isRightBracket(const std::string& s);
   size_t evalPriority(char op);
   bool priorityEqualOrGreater(char op1, char op2);
-  int opPlus(int a, int b);
-  int opMinus(int a, int b);
-  int opMultiply(int a, int b);
-  int opDiv(int a, int b);
-  int opMod(int a, int b);
+  int64_t opPlus(int64_t a, int64_t b);
+  int64_t opMinus(int64_t a, int64_t b);
+  int64_t opMultiply(int64_t a, int64_t b);
+  int64_t opDiv(int64_t a, int64_t b);
+  int64_t opMod(int64_t a, int64_t b);
 }
 
 #endif

@@ -10,10 +10,10 @@ namespace spiridonov
   class Parser
   {
   public:
-    static int parseExpression(const std::string& expression);
+    static int64_t parseExpression(const std::string& expression);
 
   private:
-    static void applyOperation(Stack<int>& operands, char op);
+    static void applyOperation(Stack<int64_t>& operands, char op);
   };
 }
 #endif

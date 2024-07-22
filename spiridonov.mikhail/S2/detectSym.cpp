@@ -89,14 +89,14 @@ namespace spiridonov
     return ch == ')';
   }
 
-  int opPlus(int a, int b)
+  int64_t opPlus(int64_t a, int64_t b)
   {
-    if (b < 0 && a < INT_MIN - b)
+    if (b < 0 && a < LLONG_MIN - b)
     {
       throw std::runtime_error("Bad operand");
     }
 
-    if (a > 0 && b > INT_MAX - a)
+    if (a > 0 && b > LLONG_MAX - a)
     {
       throw std::runtime_error("Bad operand");
     }
@@ -104,14 +104,14 @@ namespace spiridonov
     return a + b;
   }
 
-  int opMinus(int a, int b)
+  int64_t opMinus(int64_t a, int64_t b)
   {
     return opPlus(a, -b);
   }
 
-  int opMultiply(int a, int b)
+  int64_t opMultiply(int64_t a, int64_t b)
   {
-    if (a > INT_MAX / b || a < INT_MIN / b)
+    if (a > LLONG_MAX / b || a < LLONG_MIN / b)
     {
       throw std::runtime_error("Bad operand");
     }
@@ -119,7 +119,7 @@ namespace spiridonov
     return a * b;
   }
 
-  int opDiv(int a, int b)
+  int64_t opDiv(int64_t a, int64_t b)
   {
     if (b == 0)
     {
@@ -129,7 +129,7 @@ namespace spiridonov
     return a / b;
   }
 
-  int opMod(int a, int b)
+  int64_t opMod(int64_t a, int64_t b)
   {
     if (b == 0)
     {

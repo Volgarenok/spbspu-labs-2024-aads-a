@@ -23,20 +23,23 @@ int main(int argc, char* argv[])
 
   std::string expression = "";
   spiridonov::Parser parser;
-  spiridonov::Queue< int > results;
+  spiridonov::Queue< int64_t > results;
 
   while ((argc == 1 && std::getline(std::cin, expression)) ||
     (argc == 2 && std::getline(file, expression)))
   {
-    try
+    if (expression.compare(""))
     {
-      int result = parser.parseExpression(expression);
-      results.push(result);
-    }
-    catch (const std::exception& e)
-    {
-      std::cerr << "Error: " << e.what() << "\n";
-      return 1;
+      try
+      {
+        int64_t result = parser.parseExpression(expression);
+        results.push(result);
+      }
+      catch (const std::exception& e)
+      {
+        std::cerr << "Error: " << e.what() << "\n";
+        return 1;
+      }
     }
   }
 
@@ -45,10 +48,23 @@ int main(int argc, char* argv[])
     file.close();
   }
 
+  spiridonov::Stack<int64_t> output;
   while (!results.isEmpty())
   {
-    std::cout << results.getTop() << " ";
+    output.push(results.getTop());
+    results.getTop();
     results.pop();
+  }
+
+  if (!output.isEmpty())
+  {
+    std::cout << output.getTop();
+    output.pop();
+  }
+  while (!output.isEmpty())
+  {
+    std::cout << " " << output.getTop();
+    output.pop();
   }
   std::cout << "\n";
 
