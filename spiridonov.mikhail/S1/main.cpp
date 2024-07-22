@@ -14,10 +14,15 @@ int main()
   {
     sequences = input(std::cin);
   }
-  catch (std::invalid_argument& ex)
+  catch (std::invalid_argument&)
   {
     std::cout << '0' << "\n";
     return 0;
+  }
+  catch (std::overflow_error& ex)
+  {
+    std::cout << ex.what() << "\n";
+    return 1;
   }
 
   bool hasNumbers = false;
@@ -56,12 +61,12 @@ int main()
     std::cout << "\n";
   }
 
-  List<List<int>> nums;
+  List<List<size_t>> nums;
   bool empty = false;
   while (!empty)
   {
     empty = true;
-    List<int> cumulate;
+    List<size_t> cumulate;
     for (auto it = sequences.begin(); it != sequences.end(); ++it)
     {
       if (!it->second.is_empty())
@@ -83,14 +88,14 @@ int main()
 
   try
   {
-    List<int> sum;
+    List<size_t> sum;
     for (auto it = nums.begin(); it != nums.end(); ++it)
     {
       sum.push_back(sumListValues(*it));
     }
     printListValues(sum);
   }
-  catch (std::exception& ex)
+  catch (std::exception&)
   {
     std::cerr << "Error: Calculation of sum is not possible." << "\n";
     return 1;

@@ -17,15 +17,15 @@ namespace spiridonov
   };
 
   template <typename T>
-  Node<T>::Node(): data(T()), next(nullptr)
+  Node<T>::Node() : data(T()), next(nullptr)
   {}
 
   template <typename T>
-  Node<T>::Node(T value): data(value), next(nullptr)
+  Node<T>::Node(T value) : data(value), next(nullptr)
   {}
 
   template <typename T>
-  Node<T>::Node(T value, Node* next): data(value), next(next)
+  Node<T>::Node(T value, Node* next) : data(value), next(next)
   {}
 
 }

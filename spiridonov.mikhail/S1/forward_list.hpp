@@ -58,11 +58,11 @@ namespace spiridonov
   };
 
   template <typename T>
-  List<T>::List(): head(nullptr), tail(nullptr), size(0)
+  List<T>::List() : head(nullptr), tail(nullptr), size(0)
   {}
 
   template <typename T>
-  List<T>::List(const List& other): head(nullptr), tail(nullptr), size(0)
+  List<T>::List(const List& other) : head(nullptr), tail(nullptr), size(0)
   {
     Node<T>* current = other.head;
 
@@ -86,7 +86,7 @@ namespace spiridonov
   }
 
   template<typename T>
-  List<T>::List(const T& value, size_t count): head(nullptr), tail(nullptr), size(0)
+  List<T>::List(const T& value, size_t count) : head(nullptr), tail(nullptr), size(0)
   {
     for (size_t i = 0; i < count; ++i)
     {
@@ -95,7 +95,7 @@ namespace spiridonov
   }
 
   template <typename T>
-  List<T>::List(std::initializer_list<T> ilist): head(nullptr), tail(nullptr), size(0)
+  List<T>::List(std::initializer_list<T> ilist) : head(nullptr), tail(nullptr), size(0)
   {
     for (const auto& value : ilist)
     {
@@ -104,7 +104,7 @@ namespace spiridonov
   }
 
   template <typename T>
-  List<T>::List(iterator<T> first, iterator<T> last): head(nullptr), tail(nullptr), size(0)
+  List<T>::List(iterator<T> first, iterator<T> last) : head(nullptr), tail(nullptr), size(0)
   {
     for (auto it = first; it != last; ++it)
     {

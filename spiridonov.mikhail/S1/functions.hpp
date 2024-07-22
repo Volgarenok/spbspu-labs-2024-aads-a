@@ -17,16 +17,13 @@ namespace spiridonov
     }
 
     size_t inNum = 0;
-    try
+    while (in >> inNum)
     {
-      while (in >> inNum)
+      if (inNum > INT_MAX)
       {
-        result.second.push_back(inNum);
+        throw std::overflow_error("Error: overflow");
       }
-    }
-    catch (...)
-    {
-      throw std::overflow_error("Error: overflow");
+      result.second.push_back(inNum);
     }
 
     return result;
@@ -35,13 +32,24 @@ namespace spiridonov
   List<nameList> input(std::istream& in)
   {
     List<nameList> Lists;
-    while (in)
+    try
     {
-      Lists.push_back(inputLine(in));
-      if (!in.eof())
+      while (in)
       {
-        in.clear();
+        Lists.push_back(inputLine(in));
+        if (!in.eof())
+        {
+          in.clear();
+        }
       }
+    }
+    catch (std::invalid_argument&)
+    {
+      throw std::invalid_argument("Name is empty");
+    }
+    catch (std::overflow_error &)
+    {
+      throw std::overflow_error("Error: overflow");
     }
     return Lists;
   }
