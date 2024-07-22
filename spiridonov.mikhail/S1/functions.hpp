@@ -1,6 +1,7 @@
 #ifndef FUNCTIONS_HPP
 #define FUNCTIONS_HPP
 #include "forward_list.hpp"
+#include <climits>
 #include <iostream>
 
 namespace spiridonov
