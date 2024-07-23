@@ -9,7 +9,21 @@ rebdev::token::token(char oper):
 rebdev::token::token(long long num):
   isNum_(true),
   data_(data{num})
-{}
+{
+}
+rebdev::token::token(const token & t):
+  isNum_(t.isNum_),
+  data_(data{0})
+{
+  if (t.isNum_)
+  {
+    data_.num_ = t.data_.num_;
+  }
+  else
+  {
+    data_.oper_ = t.data_.oper_;
+  }
+}
 rebdev::token rebdev::token::operator()(token f, token s)
 {
   token newTok(data_.oper_(f.data_.num_, s.data_.num_));

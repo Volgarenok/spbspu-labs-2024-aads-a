@@ -18,6 +18,7 @@ namespace rebdev
     public:
       token(char oper);
       token(long long num);
+      token(const token & t);
       token operator()(token f, token s);
       long long getNum() const noexcept;
       bool isNum() const noexcept;
