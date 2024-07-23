@@ -25,7 +25,6 @@ namespace rebdev
   class token
   {
     public:
-      token() = default;
       token(char oper);
       token(long long num);
       token(const token & t);
@@ -36,8 +35,8 @@ namespace rebdev
       unsigned int priority() const noexcept;
       bool leftBracket() const noexcept;
     private:
-      data data_;
       bool isNum_;
+      data data_;
   };
 }
 
