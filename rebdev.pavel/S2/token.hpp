@@ -25,6 +25,7 @@ namespace rebdev
   class token
   {
     public:
+      token() = default;
       token(char oper);
       token(long long num);
       token(const token & t);
