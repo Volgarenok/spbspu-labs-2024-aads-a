@@ -33,10 +33,6 @@ void rebdev::makePostFix(std::string & str, postFixQueue & queue)
       {
         mathStack.push(token{strPart[0]});
       }
-      else if (strPart[0] == EOF)
-      {
-        break;
-      }
       else
       {
         token operTok(strPart[0]);
@@ -56,7 +52,7 @@ void rebdev::makePostFix(std::string & str, postFixQueue & queue)
         mathStack.push(operTok);
       }
     }
-    else
+    else if (strPart.size() >= 1)
     {
       queue.push(token{std::stoll(strPart)});
     }
