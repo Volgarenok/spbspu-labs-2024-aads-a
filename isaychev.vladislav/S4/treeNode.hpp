@@ -13,6 +13,7 @@ namespace isaychev
       std::pair< Key, Value > data;
       TreeNode< Key, Value > * right;
       TreeNode< Key, Value > * left;
+      TreeNode< Key, Value > * parent;
     };
   }
 }
