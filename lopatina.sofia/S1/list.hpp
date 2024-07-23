@@ -33,6 +33,39 @@ namespace lopatina
       }
     }
 
+    List(const List & other):
+      head(nullptr),
+      tail(nullptr)
+    {
+      try
+      {
+        Node<T> * newptr = other.head;
+        while (newptr)
+        {
+          push_back(newptr->data);
+          newptr = newptr->next;
+        }
+      }
+      catch (...)
+      {
+        while (!empty())
+        {
+          pop_front();
+        }
+        throw;
+      }
+    }
+
+    List<T> & operator=(const List & other)
+    {
+      if (this != std::addressof(other))
+      {
+        List tmp(other);
+        swap(tmp);
+      }
+      return *this;
+    }
+
     T & front()
     {
       return head->data;
