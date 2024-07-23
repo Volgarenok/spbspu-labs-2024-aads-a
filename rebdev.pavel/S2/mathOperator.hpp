@@ -7,11 +7,11 @@ namespace rebdev
   {
     public:
       mathOperator(char type);
-      mathOperator(const mathOperator & m);
-      mathOperator & operator=(const mathOperator & m);
+
       long long operator()(long long firts, long long second);
       unsigned int priority() const noexcept;
       bool leftBracket() const noexcept;
+
     private:
       char operType_;
       unsigned int priority_;

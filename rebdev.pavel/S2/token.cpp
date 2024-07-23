@@ -1,29 +1,25 @@
 #include "token.hpp"
 
+rebdev::data::data(long long num):
+  num_(num)
+{}
+
+rebdev::data::data(char oper):
+  oper_(mathOperator{oper})
+{}
+
 rebdev::token::token(char oper):
   isNum_(false),
-  data_(data{0})
-{
-  data_.oper_ = mathOperator{oper};
-}
+  data_(oper)
+{}
 rebdev::token::token(long long num):
   isNum_(true),
-  data_(data{num})
-{
-}
+  data_(num)
+{}
 rebdev::token::token(const token & t):
   isNum_(t.isNum_),
-  data_(data{0})
-{
-  if (t.isNum_)
-  {
-    data_.num_ = t.data_.num_;
-  }
-  else
-  {
-    data_.oper_ = t.data_.oper_;
-  }
-}
+  data_(t.data_)
+{}
 rebdev::token rebdev::token::operator()(token f, token s)
 {
   token newTok(data_.oper_(f.data_.num_, s.data_.num_));

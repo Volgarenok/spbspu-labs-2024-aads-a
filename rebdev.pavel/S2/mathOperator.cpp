@@ -25,16 +25,6 @@ rebdev::mathOperator::mathOperator(char type):
         throw std::logic_error("uncorrect type of operation!");
     }
   }
-rebdev::mathOperator::mathOperator(const mathOperator & m):
-  operType_(m.operType_),
-  priority_(m.priority_)
-{}
-rebdev::mathOperator & rebdev::mathOperator::operator=(const mathOperator & m)
-{
-  this->operType_ = m.operType_;
-  this->priority_ = m.priority_;
-  return *this;
-}
 long long rebdev::mathOperator::operator()(long long first, long long second)
 {
   long long llMax = std::numeric_limits< long long >::max();

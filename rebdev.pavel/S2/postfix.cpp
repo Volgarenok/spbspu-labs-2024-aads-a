@@ -6,6 +6,7 @@ void rebdev::makePostFix(std::string & str, postFixQueue & queue)
 {
   size_t lastIndex = 0, index = 0;
   std::stack< token > mathStack;
+
   while (index < (str.size() - 1))
   {
     index = str.find(' ', lastIndex);
@@ -16,6 +17,7 @@ void rebdev::makePostFix(std::string & str, postFixQueue & queue)
 
     std::string strPart;
     strPart.assign(str, lastIndex, (index - lastIndex));
+
     if (((strPart.size()) == 1) && (!isdigit(strPart[0])))
     {
       if (strPart[0] == ')')
@@ -27,15 +29,20 @@ void rebdev::makePostFix(std::string & str, postFixQueue & queue)
         }
         mathStack.pop();
       }
-      else if (strPart[0] != '(')
+      else if (strPart[0] == '(')
       {
-         token operTok(strPart[0]);
+        mathStack.push(token{strPart[0]});
+      }
+      else
+      {
+        token operTok(strPart[0]);
         if (!mathStack.empty())
         {
           while (mathStack.top().priority() >= operTok.priority())
           {
             queue.push(mathStack.top());
             mathStack.pop();
+
             if (mathStack.empty())
             {
               break;
@@ -44,16 +51,10 @@ void rebdev::makePostFix(std::string & str, postFixQueue & queue)
         }
         mathStack.push(operTok);
       }
-      else
-      {
-         token operTok(strPart[0]);
-        mathStack.push(operTok);
-      }
     }
     else
     {
-      token numTok(std::stoll(strPart));
-      queue.push(numTok);
+      queue.push(token{std::stoll(strPart)});
     }
 
     lastIndex = index + 1;
