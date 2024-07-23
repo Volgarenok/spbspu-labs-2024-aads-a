@@ -1,7 +1,6 @@
 #ifndef STACK_HPP
 #define STACK_HPP
 
-#include <utility>
 #include <list/list.hpp>
 
 namespace isaychev
