@@ -3,7 +3,8 @@
 #include <stdexcept>
 
 isaychev::Operation::Operation():
- type_(OperationType::UNKNOWN)
+ type_(OperationType::UNKNOWN),
+ priority_(0)
 {}
 
 isaychev::Operation::Operation(char c):
