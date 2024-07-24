@@ -13,6 +13,7 @@ int main(int argv, char ** argc)
     std::ifstream inFile(argc[1]);
     if (inFile.peek() == EOF)
     {
+      std::cout << '\n';
       return 0;
     }
     inPointer = &inFile;
