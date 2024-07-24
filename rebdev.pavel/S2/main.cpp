@@ -1,8 +1,8 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <stack>
 
+#include "myStack.hpp"
 #include "postfix.hpp"
 
 int main(int argv, char ** argc)
@@ -22,7 +22,7 @@ int main(int argv, char ** argc)
   }
   std::istream & in = *inPointer;
 
-  std::stack< long long > resStack;
+  rebdev::Stack< long long > resStack;
 
   while (!in.eof())
   {
@@ -53,10 +53,9 @@ int main(int argv, char ** argc)
 
   for (size_t i = 0; i < (resStack.size() - 1); ++i)
   {
-    std::cout << resStack.top() << ' ';
-    resStack.pop();
+    std::cout << resStack.drop() << ' ';
   }
 
-  std::cout << resStack.top() << '\n';
+  std::cout << resStack.drop() << '\n';
   return 0;
 }

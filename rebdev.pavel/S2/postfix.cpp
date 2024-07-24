@@ -1,12 +1,13 @@
 #include "postfix.hpp"
 
-#include <stack>
 #include <stdexcept>
+
+#include "myStack.hpp"
 
 void rebdev::makePostFix(std::string & str, postFixQueue & queue)
 {
   size_t lastIndex = 0, index = 0;
-  std::stack< token > mathStack;
+  Stack< token > mathStack;
 
   while (index < (str.size() - 1))
   {
@@ -23,12 +24,12 @@ void rebdev::makePostFix(std::string & str, postFixQueue & queue)
     {
       if (strPart[0] == ')')
       {
-        while (!mathStack.top().leftBracket())
+        auto top = mathStack.drop();
+        while (!top.leftBracket())
         {
-          queue.push(mathStack.top());
-          mathStack.pop();
+          queue.push(top);
+          top = mathStack.drop();
         }
-        mathStack.pop();
       }
       else if (strPart[0] == '(')
       {
@@ -39,16 +40,17 @@ void rebdev::makePostFix(std::string & str, postFixQueue & queue)
         token operTok(strPart[0]);
         if (!mathStack.empty())
         {
-          while (mathStack.top().priority() >= operTok.priority())
+          auto top = mathStack.drop();
+          while (top.priority() >= operTok.priority())
           {
-            queue.push(mathStack.top());
-            mathStack.pop();
-
+            queue.push(top);
             if (mathStack.empty())
             {
               break;
             }
+            top = mathStack.drop();
           }
+          mathStack.push(top);
         }
         mathStack.push(operTok);
       }
@@ -62,31 +64,29 @@ void rebdev::makePostFix(std::string & str, postFixQueue & queue)
   }
   while (!mathStack.empty())
   {
-    queue.push(mathStack.top());
-    mathStack.pop();
+    queue.push(mathStack.drop());
   }
 }
 long long rebdev::postFixToResult(postFixQueue & queue)
 {
-  std::stack< token > resultStack;
+  Stack< token > resultStack;
   while (!queue.empty())
   {
-    resultStack.push(queue.front());
-    queue.pop();
-    if (!resultStack.top().isNum())
+    auto top = queue.drop();
+    if (!top.isNum())
     {
-      if (resultStack.size() < 3)
+      if (resultStack.size() < 2)
       {
         throw std::logic_error("Uncorrect mathematical expression!");
       }
-      auto oper = resultStack.top();
-      resultStack.pop();
-      auto second = resultStack.top();
-      resultStack.pop();
-      auto first = resultStack.top();
-      resultStack.pop();
-      resultStack.push(oper(first, second));
+      auto second = resultStack.drop();
+      auto first = resultStack.drop();
+      resultStack.push(top(first, second));
+    }
+    else
+    {
+      resultStack.push(top);
     }
   }
-  return resultStack.top().getNum();
+  return resultStack.drop().getNum();
 }
