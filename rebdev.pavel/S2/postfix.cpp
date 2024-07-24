@@ -41,16 +41,22 @@ void rebdev::makePostFix(std::string & str, postFixQueue & queue)
         if (!mathStack.empty())
         {
           auto top = mathStack.drop();
-          while (top.priority() >= operTok.priority())
+          if (top.priority() < operTok.priority())
           {
-            queue.push(top);
-            if (mathStack.empty())
-            {
-              break;
-            }
-            top = mathStack.drop();
+            mathStack.push(top);
           }
-          mathStack.push(top);
+          else
+          {
+            while (top.priority() >= operTok.priority())
+            {
+              queue.push(top);
+              if (mathStack.empty())
+              {
+                break;
+              }
+              top = mathStack.drop();
+            }
+          }
         }
         mathStack.push(operTok);
       }
