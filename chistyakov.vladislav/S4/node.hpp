@@ -3,7 +3,7 @@
 
 namespace chistyakov
 {
-  template< typename T >
+  template< typename Key, typename Value >
   struct Node
   {
     Node():
@@ -19,7 +19,7 @@ namespace chistyakov
       parent(nullptr)
     {}
 
-    T value;
+    std::pair< const Key, Value > value;
     Node * left;
     Node * right;
     Node * parent;
