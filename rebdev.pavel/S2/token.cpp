@@ -16,10 +16,6 @@ rebdev::token::token(long long num):
   isNum_(true),
   data_(num)
 {}
-rebdev::token::token(const token & t):
-  isNum_(t.isNum_),
-  data_(t.data_)
-{}
 rebdev::token rebdev::token::operator()(token f, token s)
 {
   token newTok(data_.oper_(f.data_.num_, s.data_.num_));
