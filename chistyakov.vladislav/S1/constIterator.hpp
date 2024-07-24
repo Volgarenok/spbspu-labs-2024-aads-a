@@ -17,7 +17,7 @@ namespace chistyakov
         node_(nullptr)
       {}
 
-      ConstIterator(const ConstIterator & val):
+      explicit ConstIterator(const ConstIterator & val):
         node_(val.node_)
       {}
 

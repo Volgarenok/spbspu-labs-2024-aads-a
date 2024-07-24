@@ -18,7 +18,7 @@ namespace chistyakov
         node_(nullptr)
       {}
 
-      Iterator(Node< T > * val):
+      explicit Iterator(Node< T > * val):
         node_(val)
       {}
 
