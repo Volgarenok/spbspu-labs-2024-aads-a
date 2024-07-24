@@ -8,27 +8,30 @@
 namespace isaychev
 {
   template < class Key, class Value, class Compare = std::less< Key > >
-  class Tree
+  class BSTree
   {
-    using bSTree = Tree< Key, Value, Compare >;
+    using Tree = Tree< Key, Value, Compare >;
+    using Node = detail::TreeNode< Key, Value >;
 
    public:
     Tree();
 
     //begin();
     //end();
-    //at();
-    //operator[]();
 
     size_t size() const noexcept;
     void clear() noexcept;
-    void swap(bSTree & other) noexcept;
+    void swap(tree & other) noexcept;
     //find(const Key & key) const;
+    //at();
+    //operator[]();
 
    private:
     detail::TreeNode< Key, Value > * root_;
     Compare cmp_;
     size_t size_;
+
+    void delete_tree(node * ptr) noexcept;
   };
 
   template < class Key, class Value, class Compare >
@@ -45,17 +48,42 @@ namespace isaychev
   }
 
   template < class Key, class Value, class Compare >
-  void Tree< Key, Value, Compare >::clear() noexcept
+  void Tree< Key, Value, Compare >::delete_tree(Node * root) noexcept
   {
+    if (root->left)
+    {
+      delete_tree(root->left);
+    }
+    if (root->right)
+    {
+      delete_tree(root->right);
+    }
+    delete root;
   }
 
   template < class Key, class Value, class Compare >
-  void Tree< Key, Value, Compare >::swap(bSTree & other) noexcept
+  void Tree< Key, Value, Compare >::clear() noexcept
+  {
+    delete_tree(root_);
+  }
+
+  template < class Key, class Value, class Compare >
+  void Tree< Key, Value, Compare >::swap(tree & other) noexcept
   {
     std::swap(root_, other.root_);
     std::swap(cmp_, other.cmp_);
     std::swap(size_, other.size_);
   }
+
+  //template < class Key, class Value, class Compare >
+  //find(const Key & key) const;
+
+/*  template < class Key, class Value, class Compare >
+  T & Tree< Key, Value, Compare >::at(const Key & key)
+  {
+  }*/
+
+  //operator[]();
 }
 
 #endif
