@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <stack>
 
 #include "postfix.hpp"
 
@@ -9,8 +10,8 @@ int main(int argv, char ** argc)
   std::istream * inPointer = &std::cin;
   if (argv == 2)
   {
-    std::ifstream inFile(argc[2]);
-    if (!inFile.is_open())
+    std::ifstream inFile(argc[1]);
+    if (inFile.peek() == EOF)
     {
       return 0;
     }
@@ -18,7 +19,8 @@ int main(int argv, char ** argc)
   }
   std::istream & in = *inPointer;
 
-  bool firstOutput = true;
+  std::stack< long long > resStack;
+
   while (!in.eof())
   {
     std::string inStr;
@@ -36,20 +38,22 @@ int main(int argv, char ** argc)
       {
         break;
       }
-      if (!firstOutput)
-      {
-        std::cout << ' ';
-      }
-      std::cout << rebdev::postFixToResult(postFix);
+      long long num = rebdev::postFixToResult(postFix);
+      resStack.push(num);
     }
     catch (const std::exception & e)
     {
       std::cerr << e.what() << '\n';
       return 1;
     }
-    firstOutput = false;
   }
 
-  std::cout << '\n';
+  for (size_t i = 0; i < (resStack.size() - 1); ++i)
+  {
+    std::cout << resStack.top() << ' ';
+    resStack.pop();
+  }
+
+  std::cout << resStack.top() << '\n';
   return 0;
 }
