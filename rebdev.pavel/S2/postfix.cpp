@@ -1,6 +1,7 @@
 #include "postfix.hpp"
 
 #include <stack>
+#include <stdexcept>
 
 void rebdev::makePostFix(std::string & str, postFixQueue & queue)
 {
@@ -74,6 +75,10 @@ long long rebdev::postFixToResult(postFixQueue & queue)
     queue.pop();
     if (!resultStack.top().isNum())
     {
+      if (resultStack.size() < 3)
+      {
+        throw std::logic_error("Uncorrect mathematical expression!");
+      }
       auto oper = resultStack.top();
       resultStack.pop();
       auto second = resultStack.top();

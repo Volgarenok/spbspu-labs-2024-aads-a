@@ -10,6 +10,10 @@ int main(int argv, char ** argc)
   if (argv == 2)
   {
     std::ifstream inFile(argc[2]);
+    if (!inFile.is_open())
+    {
+      return 0;
+    }
     inPointer = &inFile;
   }
   std::istream & in = *inPointer;
