@@ -5,7 +5,7 @@
 #include <utility>
 #include <string>
 
-#include "list.hpp"
+#include "../common/list.hpp"
 
 namespace rebdev
 {
