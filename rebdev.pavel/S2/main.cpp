@@ -8,9 +8,11 @@
 int main(int argv, char ** argc)
 {
   std::istream * inPointer = &std::cin;
+  std::ifstream inFile;
+
   if (argv == 2)
   {
-    std::ifstream inFile(argc[1]);
+    inFile.open(argc[1]);
     if (inFile.peek() == EOF)
     {
       std::cout << '\n';
