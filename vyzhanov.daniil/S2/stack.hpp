@@ -6,13 +6,16 @@
 namespace vyzhanov
 {
   template < typename T >
-  class Stack 
+  class Stack
   {
   public:
     void push(const T&);
     void pop();
     bool empty() const noexcept;
     size_t capacity() const noexcept;
+    T& top();
+    const T& top() const;
+    void swap(Stack< T >&);
   private:
     List< T > stack_;
   };
@@ -39,6 +42,24 @@ namespace vyzhanov
   size_t Stack< T >::capacity() const noexcept
   {
     return stack_.capacity();
+  }
+
+  template< typename T>
+  T& Stack<T>::top()
+  {
+    return stack_.back();
+  }
+
+  template< typename T>
+  const T& Stack<T>::top() const
+  {
+    return stack_.back();
+  }
+
+  template< typename T>
+  void Stack<T>::swap(Stack< T >& newStack)
+  {
+    stack_.swap(newStack);
   }
 }
 
