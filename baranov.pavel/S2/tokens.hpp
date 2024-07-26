@@ -1,42 +1,15 @@
+
 #ifndef TOKENS_HPP
 #define TOKENS_HPP
 
 #include <stdexcept>
 #include <string>
+#include "bracket.hpp"
+#include "operand.hpp"
+#include "operation.hpp"
 
 namespace baranov
 {
-  enum class OperationType
-  {
-    ADDITION,
-    SUBTRACTION,
-    MULTIPLICATION,
-    DIVISION,
-    MODULATION
-  };
-
-  struct Operation
-  {
-    OperationType type;
-    unsigned char priority;
-  };
-
-  struct Operand
-  {
-    long long int value;
-  };
-
-  enum class BracketType
-  {
-    OPEN,
-    CLOSE
-  };
-
-  struct Bracket
-  {
-    BracketType type;
-  };
-
   enum class TokenType
   {
     OPERATION,
@@ -51,12 +24,16 @@ namespace baranov
     Bracket bracket;
   };
 
-  struct Token
+  class Token
   {
-    TokenType type;
-    TokenValue value;
-
-    Token(const std::string & str);
+  public:
+    explicit Token(const std::string & str);
+    explicit Token(long long int num);
+    TokenType getType() const;
+    TokenValue getValue() const;
+  private:
+    TokenType type_;
+    TokenValue value_;
   };
 }
 
