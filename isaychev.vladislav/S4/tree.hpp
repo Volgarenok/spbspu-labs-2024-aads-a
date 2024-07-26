@@ -30,7 +30,8 @@ namespace isaychev
     void swap(Tree & other) noexcept;
     iterator find(const Key & key);
     const_iterator find(const Key & key) const;
-    //at();
+    Value & at(const Key & key);
+    const Value & at(const Key & key) const;
     //operator[]();
 
    private:
@@ -160,6 +161,27 @@ namespace isaychev
     return cend();
   }
 
+  template < class Key, class Value, class Compare >
+  Value & BSTree< Key, Value, Compare >::at(const Key & key)
+  {
+    iterator value_iter = find(key);
+    if (!value_iter.current)
+    {
+      throw std::out_of_range("no element with such key");
+    }
+    return (*value_iter).second;
+  }
+
+  template < class Key, class Value, class Compare >
+  const Value & BSTree< Key, Value, Compare >::at(const Key & key) const
+  {
+    const_iterator value_iter = find(key);
+    if (!value_iter.current)
+    {
+      throw std::out_of_range("no element with such key");
+    }
+    return (*value_iter).second;
+  }
 /*  template < class Key, class Value, class Compare >
   T & BSTree< Key, Value, Compare >::at(const Key & key)
   {
