@@ -26,26 +26,6 @@ bool vyzhanov::isOperand(char c)
   return false;
 }
 
-void vyzhanov::inputInfix(Queue< Stack< char > >& expressions, std::istream& input)
-{
-  std::string symbols = "";
-  while (std::getline(input, symbols))
-  {
-    Stack< char > expression;
-    for (size_t i = 0; i < symbols.size(); i++)
-    {
-      if (!std::isspace(symbols[i]))
-      {
-        expression.push(symbols[i]);
-      }
-    }
-    if (!symbols.empty())
-    {
-      expressions.push(expression);
-    }
-  }
-}
-
 void vyzhanov::infixToPostfix(Queue< Stack< char > >& stack)
 {
   Queue< Stack< char > > newStack;
