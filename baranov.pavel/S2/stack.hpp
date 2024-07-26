@@ -10,8 +10,8 @@ namespace baranov
   public:
     void push(const T & value);
     void pop();
-    T & top() noexcept;
-    const T & top() const noexcept;
+    T & top();
+    const T & top() const;
     bool empty() const noexcept;
     size_t size() const noexcept;
   private:
@@ -31,13 +31,13 @@ namespace baranov
   }
 
   template< class T >
-  T & Stack< T >::top() noexcept
+  T & Stack< T >::top()
   {
     return list_.back();
   }
 
   template< class T >
-  const T & Stack< T >::top() const noexcept
+  const T & Stack< T >::top() const
   {
     return list_.back();
   }
