@@ -76,4 +76,3 @@ void baranov::inputPostfix(std::istream & input, Queue< Token > & result)
   }
 }
 
-

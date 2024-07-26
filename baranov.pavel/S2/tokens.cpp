@@ -8,7 +8,7 @@ baranov::Token::Token(const std::string & str)
     type_ = TokenType::BRACKET;
     value_.bracket = Bracket(c);
   }
-  else if (c == '+' || c == '-' || c == '*' || c == '/')
+  else if (c == '+' || c == '-' || c == '*' || c == '/' || c == '%')
   {
     type_ = TokenType::OPERATION;
     value_.operation = Operation(c);
