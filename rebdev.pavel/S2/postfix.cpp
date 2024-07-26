@@ -8,8 +8,7 @@ void rebdev::makePostFix(std::string & str, postFixQueue & queue)
 {
   size_t lastIndex = 0, index = 0;
   Stack< token > mathStack;
-
-  while (index < (str.size() - 1))
+  while (index < str.size())
   {
     index = str.find(' ', lastIndex);
     if (index == std::string::npos)
