@@ -13,10 +13,13 @@ namespace isaychev
     using Tree = BSTree< Key, Value, Compare >;
     using node_t = detail::TreeNode< Key, Value >;
     using const_iterator = ConstTreeIter< Key, Value, Compare >;
+    using iterator = TreeIter< Key, Value, Compare >;
 
    public:
     BSTree();
 
+    iterator begin();
+    iterator end();
     const_iterator begin() const;
     const_iterator end() const;
     const_iterator cbegin() const;
@@ -25,12 +28,13 @@ namespace isaychev
     size_t size() const noexcept;
     void clear() noexcept;
     void swap(Tree & other) noexcept;
+    iterator find(const Key & key);
     const_iterator find(const Key & key) const;
     //at();
     //operator[]();
 
    private:
-    detail::TreeNode< Key, Value > * root_;
+    node_t * root_;
     Compare cmp_;
     size_t size_;
     // node_t dummy_node;
@@ -44,6 +48,18 @@ namespace isaychev
    cmp_(),
    size_(0)
   {}
+
+  template < class Key, class Value, class Compare >
+  TreeIter< Key, Value, Compare > BSTree< Key, Value, Compare >::begin()
+  {
+    return TreeIter< Key, Value, Compare >(traverse_left(root_));
+  }
+
+  template < class Key, class Value, class Compare >
+  TreeIter< Key, Value, Compare > BSTree< Key, Value, Compare >::end()
+  {
+    return TreeIter< Key, Value, Compare >();
+  }
 
   template < class Key, class Value, class Compare >
   ConstTreeIter< Key, Value, Compare > BSTree< Key, Value, Compare >::begin() const
@@ -101,6 +117,28 @@ namespace isaychev
   }
 
   template < class Key, class Value, class Compare >
+  TreeIter< Key, Value, Compare > BSTree< Key, Value, Compare >::find(const Key & key)
+  {
+    node_t * current = root_;
+    while (current)
+    {
+      if (key == current->data.first)
+      {
+        return TreeIter< Key, Value, Compare >(current);
+      }
+      if (cmp_(key, current->data.first))
+      {
+        current = current->left;
+      }
+      else
+      {
+        current = current->right;
+      }
+    }
+    return end();
+  }
+
+  template < class Key, class Value, class Compare >
   ConstTreeIter< Key, Value, Compare > BSTree< Key, Value, Compare >::find(const Key & key) const
   {
     node_t * current = root_;
@@ -119,7 +157,7 @@ namespace isaychev
         current = current->right;
       }
     }
-    return end();
+    return cend();
   }
 
 /*  template < class Key, class Value, class Compare >
