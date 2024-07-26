@@ -9,13 +9,15 @@ namespace isaychev
   template < class Key, class Value, class Compare >
   class BSTree;
 
-  template < class Key, class Value >
-  class ConstTreeIter: public std::iterator< bidirectional_iterator_tag, Key, Value >
+  template < class Key, class Value, class Compare >
+  class ConstTreeIter: public std::iterator< std::bidirectional_iterator_tag, Key, Value, Compare >
   {
-    using this_t = ConstTreeIter< Key, Value >;
+    using this_t = ConstTreeIter< Key, Value, Compare >;
     using node_t = detail::TreeNode< Key, Value >;
+
    public:
     ConstTreeIter();
+    explicit ConstTreeIter(node_t * node);
 
     this_t & operator++();
     this_t operator++(int);
@@ -25,34 +27,31 @@ namespace isaychev
     bool operator==(const this_t & rhs);
     bool operator!=(const this_t & rhs);
 
-    const  & operator*() const; //неверно
-    const T * operator->() const; //неверно
+    const std::pair< Key, Value > & operator*() const;
+    const std::pair< Key, Value > * operator->() const;
 
    private:
     node_t * current_;
-    node_t * previous_;
 
-    template < class Key, class Value, class Compare >
     friend class BSTree< Key, Value, Compare >;
 
-    //node_t * traverse_left(node_t * ptr);
-    explicit ConstIterTree(node_t * node);
+    node_t * traverse_left(node_t * node);
+    node_t * traverse_right(node_t * node);
+    void go_up();
   };
 
-  template < class Key, class Value >
-  ConstTreeIter< Key, Value >::ConstTreeIter():
-   current_(nullptr),
-   previous_(nullptr)
+  template < class Key, class Value, class Compare >
+  ConstTreeIter< Key, Value, Compare >::ConstTreeIter():
+   current_(nullptr)
   {}
 
-  template < class Key, class Value >
-  ConstTreeIter< Key, Value >::ConstIterTree(node_t * node):
-   current_(node),
-   previous_(nullptr)
+  template < class Key, class Value, class Compare >
+  ConstTreeIter< Key, Value, Compare >::ConstTreeIter(node_t * node):
+   current_(node)
   {}
 
-  template < class Key, class Value >
-  detail::TreeNode< Key, Value > * ConstTreeIter< Key, Value >::traverse_left(node_t * root)
+  template < class Key, class Value, class Compare >
+  detail::TreeNode< Key, Value > * ConstTreeIter< Key, Value, Compare >::traverse_left(node_t * root)
   {
     if (root)
     {
@@ -64,43 +63,30 @@ namespace isaychev
     return root;
   }
 
-  template < class Key, class Value >
-  void ConstTreeIter< Key, Value >::go_RL()
+  template < class Key, class Value, class Compare >
+  void ConstTreeIter< Key, Value, Compare >::go_up()
   {
-    previous_ = current_;
-    current_= traverse_left(current_->right);
-  }
-
-  template < class Key, class Value >
-  void ConstTreeIter< Key, Value >::go_up()
-  {
-    previous_ = current_;
     current_ = current_->parent;
   }
 
-  template < class Key, class Value >
-  ConstTreeIter< Key, Value > & ConstTreeIter< Key, Value >::operator++()
+  template < class Key, class Value, class Compare >
+  ConstTreeIter< Key, Value, Compare > & ConstTreeIter< Key, Value, Compare >::operator++()
   {
-//    do_increment();
-    if (!current_->left && !current_->right && current_ == current_->parent->left)
+    if (!current_)
     {
-      go_up();
+      return *this;
     }
-    else if (previous_ == current_->left && current_->right)
+    else if (current_->right)
     {
-      go_RL();
+      current_= traverse_left(current_->right);
     }
-    else if (!current_->left && current_->right)
-    {
-      go_RL();
-    }
-    else if (current_ == current_->parent->right)
+    else
     {
       while (current_ == current_->parent->right)
       {
         go_up();
       }
-      if (parent)
+      if (current_->parent)
       {
         go_up();
       }
@@ -112,75 +98,83 @@ namespace isaychev
     return *this;
   }
 
-  template < class Key, class Value >
-  ConstTreeIter< Key, Value > ConstTreeIter< Key, Value >::operator++(int)
+  template < class Key, class Value, class Compare >
+  ConstTreeIter< Key, Value, Compare > ConstTreeIter< Key, Value, Compare >::operator++(int)
   {
     auto iter = *this;
-//    do_increment();
-    if (!current_->left && !current_->right && current_ == current_->parent->left)
-    {
-      go_up();
-    }
-    else if (previous_ == current_->left && current_->right)
-    {
-      go_RL();
-    }
-    else if (!current_->left && current_->right)
-    {
-      go_RL();
-    }
-    else if (current_ == current_->parent->right)
-    {
-      while (current_ == current_->parent->right)
-      {
-        go_up();
-      }
-      if (parent)
-      {
-        go_up();
-      }
-      else
-      {
-        current_ = nullptr;
-      }
-    }
+    ++(*this);
     return iter;
   }
 
-  template < class Key, class Value >
-  ConstTreeIter< Key, Value > & ConstTreeIter< Key, Value >::operator--()
+  template < class Key, class Value, class Compare >
+  detail::TreeNode< Key, Value > * ConstTreeIter< Key, Value, Compare >::traverse_right(node_t * root)
   {
+    if (!root)
+    {
+      return root;
+    }
+    return root->right ? traverse_right(root->right) : root;
+  }
+
+  template < class Key, class Value, class Compare >
+  ConstTreeIter< Key, Value, Compare > & ConstTreeIter< Key, Value, Compare >::operator--()
+  {
+    if (!current_)
+    {
+      return *this;
+    }
+    else if (current_->left)
+    {
+      current_= traverse_right(current_->right);
+    }
+    else
+    {
+      while (current_ == current_->parent->left)
+      {
+        go_up();
+      }
+      if (current_->parent)
+      {
+        go_up();
+      }
+      else
+      {
+        current_ = nullptr;
+      }
+    }
     return *this;
   }
 
-  template < class Key, class Value >
-  ConstTreeIter< Key, Value > ConstTreeIter< Key, Value >::operator--(int)
+  template < class Key, class Value, class Compare >
+  ConstTreeIter< Key, Value, Compare > ConstTreeIter< Key, Value, Compare >::operator--(int)
   {
-    return *this;
+    auto iter = *this;
+    --(*this);
+    return iter;
   }
 
-  template < class Key, class Value >
-  bool ConstTreeIter< Key, Value >::operator==(const this_t & rhs)
+  template < class Key, class Value, class Compare >
+  bool ConstTreeIter< Key, Value, Compare >::operator==(const this_t & rhs)
   {
     return current_ == rhs.current_;
   }
 
-  template < class Key, class Value >
-  bool ConstTreeIter< Key, Value >::operator!=(const this_t & rhs)
+  template < class Key, class Value, class Compare >
+  bool ConstTreeIter< Key, Value, Compare >::operator!=(const this_t & rhs)
   {
     return current_ != rhs.current_;
   }
 
-  template < class Key, class Value >
-  const T & ConstTreeIter< Key, Value >::operator*() const
+  template < class Key, class Value, class Compare >
+  const std::pair< Key, Value > & ConstTreeIter< Key, Value, Compare >::operator*() const
   {
     return current_->data;
   }
 
-  template < class Key, class Value >
-  const T * ConstTreeIter< Key, Value >::operator->() const
+  template < class Key, class Value, class Compare >
+  const std::pair< Key, Value > * ConstTreeIter< Key, Value, Compare >::operator->() const
   {
-    return std::addresof(current_->data);
+    return std::addressof(current_->data);
   }
 }
 

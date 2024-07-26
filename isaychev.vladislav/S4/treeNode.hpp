@@ -14,6 +14,8 @@ namespace isaychev
       TreeNode< Key, Value > * right;
       TreeNode< Key, Value > * left;
       TreeNode< Key, Value > * parent;
+
+      //explicit TreeNode();
     };
   }
 }
