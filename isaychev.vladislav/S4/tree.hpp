@@ -50,15 +50,12 @@ namespace isaychev
   template < class Key, class Value, class Compare >
   void Tree< Key, Value, Compare >::delete_tree(Node * root) noexcept
   {
-    if (root->left)
+    if (root)
     {
       delete_tree(root->left);
-    }
-    if (root->right)
-    {
       delete_tree(root->right);
+      delete root;
     }
-    delete root;
   }
 
   template < class Key, class Value, class Compare >
