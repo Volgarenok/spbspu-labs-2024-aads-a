@@ -3,7 +3,7 @@
 
 #include <functional>
 #include <stdexcept>
-#include "treeNode.hpp"
+#include "treeIter.hpp"
 
 namespace isaychev
 {
@@ -11,18 +11,21 @@ namespace isaychev
   class BSTree
   {
     using Tree = BSTree< Key, Value, Compare >;
-    using Node = detail::TreeNode< Key, Value >;
+    using node_t = detail::TreeNode< Key, Value >;
+    using const_iterator = ConstTreeIter< Key, Value, Compare >;
 
    public:
     BSTree();
 
-    //begin();
-    //end();
+    const_iterator begin() const;
+    const_iterator end() const;
+    const_iterator cbegin() const;
+    const_iterator cend() const;
 
     size_t size() const noexcept;
     void clear() noexcept;
     void swap(Tree & other) noexcept;
-    //find(const Key & key) const;
+    const_iterator find(const Key & key) const;
     //at();
     //operator[]();
 
@@ -30,8 +33,9 @@ namespace isaychev
     detail::TreeNode< Key, Value > * root_;
     Compare cmp_;
     size_t size_;
+    // node_t dummy_node;
 
-    void delete_tree(Node * ptr) noexcept;
+    void delete_tree(node_t * ptr) noexcept;
   };
 
   template < class Key, class Value, class Compare >
@@ -42,13 +46,37 @@ namespace isaychev
   {}
 
   template < class Key, class Value, class Compare >
+  ConstTreeIter< Key, Value, Compare > BSTree< Key, Value, Compare >::begin() const
+  {
+    return ConstTreeIter< Key, Value, Compare >(traverse_left(root_));
+  }
+
+  template < class Key, class Value, class Compare >
+  ConstTreeIter< Key, Value, Compare > BSTree< Key, Value, Compare >::end() const
+  {
+    return ConstTreeIter< Key, Value, Compare >();
+  }
+
+  template < class Key, class Value, class Compare >
+  ConstTreeIter< Key, Value, Compare > BSTree< Key, Value, Compare >::cbegin() const
+  {
+    return ConstTreeIter< Key, Value, Compare >(traverse_left(root_));
+  }
+
+  template < class Key, class Value, class Compare >
+  ConstTreeIter< Key, Value, Compare > BSTree< Key, Value, Compare >::cend() const
+  {
+    return ConstTreeIter< Key, Value, Compare >();
+  }
+
+  template < class Key, class Value, class Compare >
   size_t BSTree< Key, Value, Compare >::size() const noexcept
   {
     return size_;
   }
 
   template < class Key, class Value, class Compare >
-  void BSTree< Key, Value, Compare >::delete_tree(Node * root) noexcept
+  void BSTree< Key, Value, Compare >::delete_tree(node_t * root) noexcept
   {
     if (root)
     {
@@ -72,8 +100,27 @@ namespace isaychev
     std::swap(size_, other.size_);
   }
 
-  //template < class Key, class Value, class Compare >
-  //find(const Key & key) const;
+  template < class Key, class Value, class Compare >
+  ConstTreeIter< Key, Value, Compare > BSTree< Key, Value, Compare >::find(const Key & key) const
+  {
+    node_t * current = root_;
+    while (current)
+    {
+      if (key == current->data.first)
+      {
+        return ConstTreeIter< Key, Value, Compare >(current);
+      }
+      if (cmp_(key, current->data.first))
+      {
+        current = current->left;
+      }
+      else
+      {
+        current = current->right;
+      }
+    }
+    return end();
+  }
 
 /*  template < class Key, class Value, class Compare >
   T & BSTree< Key, Value, Compare >::at(const Key & key)

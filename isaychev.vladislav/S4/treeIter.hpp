@@ -17,7 +17,6 @@ namespace isaychev
 
    public:
     ConstTreeIter();
-    explicit ConstTreeIter(node_t * node);
 
     this_t & operator++();
     this_t operator++(int);
@@ -32,8 +31,9 @@ namespace isaychev
 
    private:
     node_t * current_;
-
     friend class BSTree< Key, Value, Compare >;
+
+    explicit ConstTreeIter(node_t * node);
 
     node_t * traverse_left(node_t * node);
     node_t * traverse_right(node_t * node);
