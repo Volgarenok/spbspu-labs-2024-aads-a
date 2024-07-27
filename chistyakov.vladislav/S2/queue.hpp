@@ -14,6 +14,11 @@ namespace chistyakov
       queue_.push_back;
     }
 
+    void pop()
+    {
+      queue_.pop_front();
+    }
+
   private:
     List< T > queue_;
   }
