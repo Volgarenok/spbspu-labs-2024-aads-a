@@ -19,6 +19,11 @@ namespace chistyakov
       return queue_.back();
     }
 
+    bool empty()
+    {
+      return queue_.empty();
+    }
+
     void push(const T & value)
     {
       queue_.push_back(value);
