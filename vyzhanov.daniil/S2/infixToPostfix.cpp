@@ -55,7 +55,7 @@ void vyzhanov::infixToPostfix(Queue< Stack< char > >& stack)
       }
       else
       {
-        while (!postfix.empty() && priority(curr.top()) <= priority(postfix.top())) 
+        while (!postfix.empty() && priority(curr.top()) <= priority(postfix.top()))
         {
           expression += postfix.top();
           postfix.pop();
