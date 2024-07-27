@@ -9,9 +9,19 @@ namespace chistyakov
   class Queue
   {
   public:
+    T & front()
+    {
+      return queue_.front();
+    }
+
+    T & back()
+    {
+      return queue_.back();
+    }
+
     void push(const T & value)
     {
-      queue_.push_back;
+      queue_.push_back(value);
     }
 
     void pop()
@@ -21,7 +31,7 @@ namespace chistyakov
 
   private:
     List< T > queue_;
-  }
+  };
 }
 
 #endif
