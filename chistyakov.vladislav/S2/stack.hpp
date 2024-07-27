@@ -35,8 +35,7 @@ namespace chistyakov
     }
   private:
     List< T > stack_;
-  }
+  };
 }
 
 #endif
-
