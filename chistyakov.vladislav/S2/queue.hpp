@@ -9,17 +9,27 @@ namespace chistyakov
   class Queue
   {
   public:
-    T & front()
+    T & front() noexcept
     {
       return queue_.front();
     }
 
-    T & back()
+    const T & front() const noexcept
+    {
+      return queue_.front();
+    }
+
+    T & back() noexcept
     {
       return queue_.back();
     }
 
-    bool empty()
+    const T & back() const noexcept
+    {
+      return queue_.back();
+    }
+
+    bool empty() const noexcept
     {
       return queue_.empty();
     }
