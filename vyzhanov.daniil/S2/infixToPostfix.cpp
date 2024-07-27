@@ -11,15 +11,15 @@ int vyzhanov::priority(char symbol)
   {
     return 2;
   }
-  else
+  else 
   {
     return 0;
   }
 }
 
-bool vyzhanov::isOperand(char c)
+bool vyzhanov::isOperand(char c) 
 {
-  if ( c = '0' && c <= '9')
+  if ( c >= '0' && c <= '9')
   {
     return true;
   }
@@ -39,38 +39,49 @@ void vyzhanov::infixToPostfix(Queue< Stack< char > >& stack)
       if (isOperand(curr.top()))
       {
         expression += curr.top();
+        curr.pop();
       }
       else if (curr.top() == '(')
       {
         postfix.push('(');
+        curr.pop();
       }
-      else if (curr.top() == ')')
+      else if (curr.top() == ')') 
       {
-        while (curr.top() != '(')
+        while (curr.top() != '(') 
         {
           expression += postfix.top();
           postfix.pop();
         }
         postfix.pop();
+        curr.pop();
       }
-      else
+      else 
       {
-        while (!postfix.empty() && priority(curr.top()) <= priority(postfix.top()))
+        while (!postfix.empty() && priority(curr.top()) <= priority(postfix.top())) 
         {
           expression += postfix.top();
           postfix.pop();
         }
         postfix.push(curr.top());
+        curr.pop();
       }
     }
-    while (!postfix.empty())
+    stack.pop();
+    while (!postfix.empty()) 
     {
       expression += postfix.top();
-      postfix.pop();
+      postfix.pop();   
     }
     for (size_t i = 0; i < expression.size(); i++)
     {
       postfix.push(expression[i]);
     }
+    newStack.push(postfix);
+  }
+  while (!newStack.empty())
+  {
+    stack.push(newStack.top());
+    newStack.pop();
   }
 }
