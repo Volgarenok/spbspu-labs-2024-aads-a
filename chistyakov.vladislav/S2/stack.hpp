@@ -9,6 +9,16 @@ namespace chistyakov
   class Stack
   {
   public:
+    T & top() noexcept
+    {
+      return stack_.back();
+    }
+
+    const T & top() const noexcept
+    {
+      return stack_.back();
+    }
+
     bool empty() const noexcept
     {
       return stack_.empty();
