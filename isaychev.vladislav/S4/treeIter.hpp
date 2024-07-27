@@ -194,7 +194,9 @@ namespace isaychev
     bool operator==(const this_t & rhs);
     bool operator!=(const this_t & rhs);
 
+    std::pair< Key, Value > & operator*();
     const std::pair< Key, Value > & operator*() const;
+    std::pair< Key, Value > * operator->();
     const std::pair< Key, Value > * operator->() const;
 
    private:

@@ -17,6 +17,7 @@ namespace isaychev
 
    public:
     BSTree();
+    ~BSTree();
 
     iterator begin();
     iterator end();
@@ -32,7 +33,7 @@ namespace isaychev
     const_iterator find(const Key & key) const;
     Value & at(const Key & key);
     const Value & at(const Key & key) const;
-    //operator[]();
+    Value & operator[](const Key & key);
 
    private:
     node_t * root_;
@@ -49,6 +50,12 @@ namespace isaychev
    cmp_(),
    size_(0)
   {}
+
+  template < class Key, class Value, class Compare >
+  BSTree< Key, Value, Compare >::~BSTree()
+  {
+    clear();
+  }
 
   template < class Key, class Value, class Compare >
   TreeIter< Key, Value, Compare > BSTree< Key, Value, Compare >::begin()
@@ -156,7 +163,7 @@ namespace isaychev
       else
       {
         current = current->right;
-      }
+      } //mpjno vinesti v func if{} else{}
     }
     return cend();
   }
@@ -182,12 +189,44 @@ namespace isaychev
     }
     return (*value_iter).second;
   }
-/*  template < class Key, class Value, class Compare >
-  T & BSTree< Key, Value, Compare >::at(const Key & key)
-  {
-  }*/
 
-  //operator[]();
+  template < class Key, class Value, class Compare >
+  Value & BSTree< Key, Value, Compare >::operator[](const Key & key)
+  {
+    node_t * current = root_;
+    while (current)
+    {
+      if (key == current->data.first)
+      {
+        return current->data.second;
+      }
+      if (cmp_(key, current->data.first))
+      {
+        if (!current->left)
+        {
+          current->left = new node_t(std::make_pair(key, Value()), current);
+          current = current->left;
+          break;
+        }
+        current = current->left;
+      }
+      else
+      {
+        if (!current->right)
+        {
+          current->right = new node_t(std::make_pair(key, Value()), current);
+          current = current->right;
+          break;
+        }
+        current = current->right;
+      }
+    }
+    if (!current)
+    {
+      current = new node_t(std::make_pair(key, Value()), nullptr);
+    }
+    return current->data.second;
+  }
 }
 
 #endif
