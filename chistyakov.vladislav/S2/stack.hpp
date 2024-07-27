@@ -9,6 +9,11 @@ namespace chistyakov
   class Stack
   {
   public:
+    bool empty() const noexcept
+    {
+      return stack_.empty();
+    }
+
     void push(const T & value)
     {
       stack_.push_back(value);
