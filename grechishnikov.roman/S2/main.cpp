@@ -7,7 +7,6 @@
 int main(int argc, char* argv[])
 {
   using namespace grechishnikov;
-
   Stack< long long > res;
   try
   {

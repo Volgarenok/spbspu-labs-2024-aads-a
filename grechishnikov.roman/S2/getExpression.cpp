@@ -4,7 +4,7 @@
 grechishnikov::Queue< std::string > grechishnikov::getExpression(const std::string& str)
 {
   Queue< std::string > tempQ;
-  std::string tempS = "";
+  std::string tempS;
   for (size_t pars = 0; pars != str.size(); pars++)
   {
     if (std::isspace(str[pars]))

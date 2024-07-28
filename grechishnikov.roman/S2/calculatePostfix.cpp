@@ -57,10 +57,9 @@ grechishnikov::Stack< long long int > grechishnikov::calculateExpressions(std::i
 {
   std::string str;
   Stack< long long > res;
-  while (!in.eof())
+  while (std::getline(in, str))
   {
-    getline(in, str);
-    if (in.eof() || str == "")
+    if (str.empty())
     {
       continue;
     }

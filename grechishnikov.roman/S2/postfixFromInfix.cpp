@@ -3,7 +3,6 @@
 #include <stdexcept>
 #include "stack.hpp"
 #include "tokenType.hpp"
-#include <iostream>
 
 void pushUntilOpen(grechishnikov::Queue< std::string >& res, grechishnikov::Stack< std::string >& from)
 {
