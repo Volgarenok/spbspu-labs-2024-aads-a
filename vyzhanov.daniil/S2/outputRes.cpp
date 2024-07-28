@@ -1,17 +1,17 @@
 #include "outputRes.hpp"
 #include <iostream>
 
-void vyzhanov::outputResult(std::ostream& out, Stack< long long >& result)
+void vyzhanov::outputResult(std::ostream& output, Stack< long long >& results)
 {
-  if (!result.empty())
+  if (!results.empty())
   {
-    out << result.top();
-    result.pop();
+    output << results.top();
+    results.pop();
   }
-  while (!result.empty())
+  while (!results.empty())
   {
-    out << " ";
-    out << result.top();
-    result.pop();
+    output << " ";
+    output << results.top();
+    results.pop();
   }
 }

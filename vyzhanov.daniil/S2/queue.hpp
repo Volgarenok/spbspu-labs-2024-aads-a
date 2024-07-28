@@ -15,7 +15,6 @@ namespace vyzhanov
     size_t capacity() const noexcept;
     T& top();
     const T& top() const;
-    void swap(Queue< T >&);
   private:
     List< T > queue_;
   };
@@ -54,12 +53,6 @@ namespace vyzhanov
   const T& Queue<T>::top() const
   {
     return queue_.front();
-  }
-
-  template< typename T>
-  void Queue<T>::swap(Queue< T >& newQueue)
-  {
-    queue_.swap(newQueue);
   }
 }
 

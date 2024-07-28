@@ -1,5 +1,6 @@
 #include "infixToPostfix.hpp"
 #include <string>
+#include "stack.hpp"
 
 int vyzhanov::priority(char symbol)
 {
@@ -11,13 +12,13 @@ int vyzhanov::priority(char symbol)
   {
     return 2;
   }
-  else 
+  else
   {
     return 0;
   }
 }
 
-bool vyzhanov::isOperand(char c) 
+bool vyzhanov::isOperand(char c)
 {
   if ( c >= '0' && c <= '9')
   {
@@ -26,13 +27,14 @@ bool vyzhanov::isOperand(char c)
   return false;
 }
 
-void vyzhanov::infixToPostfix(Queue< Stack< char > >& stack)
+void vyzhanov::infixToPostfix(Queue< Queue< char > >& expressions)
 {
-  Queue< Stack< char > > newStack;
-  while (!stack.empty())
+  Queue< Queue< char > > newStack;
+  while (!expressions.empty())
   {
     Stack< char > postfix;
-    Stack< char > curr = stack.top();
+    Queue< char > queue;
+    Queue< char > curr = expressions.top();
     std::string expression = "";
     while (!curr.empty())
     {
@@ -46,9 +48,9 @@ void vyzhanov::infixToPostfix(Queue< Stack< char > >& stack)
         postfix.push('(');
         curr.pop();
       }
-      else if (curr.top() == ')') 
+      else if (curr.top() == ')')
       {
-        while (curr.top() != '(') 
+        while (postfix.top() != '(')
         {
           expression += postfix.top();
           postfix.pop();
@@ -56,9 +58,9 @@ void vyzhanov::infixToPostfix(Queue< Stack< char > >& stack)
         postfix.pop();
         curr.pop();
       }
-      else 
+      else
       {
-        while (!postfix.empty() && priority(curr.top()) <= priority(postfix.top())) 
+        while (!postfix.empty() && priority(curr.top()) <= priority(postfix.top()))
         {
           expression += postfix.top();
           postfix.pop();
@@ -67,21 +69,21 @@ void vyzhanov::infixToPostfix(Queue< Stack< char > >& stack)
         curr.pop();
       }
     }
-    stack.pop();
-    while (!postfix.empty()) 
+    expressions.pop();
+    while (!postfix.empty())
     {
       expression += postfix.top();
-      postfix.pop();   
+      postfix.pop();
     }
     for (size_t i = 0; i < expression.size(); i++)
     {
-      postfix.push(expression[i]);
+      queue.push(expression[i]);
     }
-    newStack.push(postfix);
+    newStack.push(queue);
   }
   while (!newStack.empty())
   {
-    stack.push(newStack.top());
+    expressions.push(newStack.top());
     newStack.pop();
   }
 }

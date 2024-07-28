@@ -10,7 +10,7 @@
 int main(int argc, char* argv[])
 {
   using namespace vyzhanov;
-  Queue< Stack< char > > expressions;
+  Queue< Queue< char > > expressions;
   Stack< long long > results;
   try
   {

@@ -6,6 +6,6 @@
 namespace vyzhanov
 {
   long long performOperation(long long operand1, long long operand2, char operation);
-  void evaluatePostfix(Queue< Stack< char > >&, Stack< long long >&);
+  void evaluatePostfix(Queue< Queue< char > >&, Stack< long long >&);
 }
 #endif

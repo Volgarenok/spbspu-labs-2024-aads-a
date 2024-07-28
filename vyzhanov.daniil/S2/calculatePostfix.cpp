@@ -25,11 +25,12 @@ long long vyzhanov::performOperation(long long operand1, long long operand2, cha
   }
 }
 
-void vyzhanov::evaluatePostfix(Queue< Stack< char > >& expressions, Stack< long long >& results)
+void vyzhanov::calculatePostfix(Queue< Queue< char > >& expressions,
+  Stack< long long >& results)
 {
   while (!expressions.empty())
   {
-    Stack< char > curr = expressions.top();
+    Queue< char > curr = expressions.top();
     Stack< long long > newStack;
     while (!curr.empty())
     {
@@ -45,15 +46,16 @@ void vyzhanov::evaluatePostfix(Queue< Stack< char > >& expressions, Stack< long 
         newStack.pop();
         long long operand1 = newStack.top();
         newStack.pop();
+        long long mult = operand1 * operand2;
         long long maxRes = std::numeric_limits< long long >::max();
         long long minRes = std::numeric_limits< long long >::min();
-        if (operand1 > maxRes - operand2 || operand1 > maxRes / operand2)
+        if (operand1 > maxRes - operand2 ||(operand2 != 0 && operand1 == mult / operand2))
         {
           throw std::out_of_range("Overflow!");
         }
         if (operand1 < minRes + operand2 || (operand1 == minRes && operand2 == -1))
         {
-          throw std::out_of_range("Overflow!");
+          throw std::out_of_range("Underflow!");
         }
         long long result = performOperation(operand1, operand2, it);
         newStack.push(result);

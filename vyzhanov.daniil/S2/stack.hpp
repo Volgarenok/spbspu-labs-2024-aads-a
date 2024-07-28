@@ -55,12 +55,6 @@ namespace vyzhanov
   {
     return stack_.back();
   }
-
-  template< typename T>
-  void Stack<T>::swap(Stack< T >& newStack)
-  {
-    stack_.swap(newStack);
-  }
 }
 
 #endif
