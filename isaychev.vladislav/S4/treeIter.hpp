@@ -336,9 +336,21 @@ namespace isaychev
   }
 
   template < class Key, class Value, class Compare >
+  std::pair< Key, Value > & TreeIter< Key, Value, Compare >::operator*()
+  {
+    return current_->data;
+  }
+
+  template < class Key, class Value, class Compare >
   const std::pair< Key, Value > & TreeIter< Key, Value, Compare >::operator*() const
   {
     return current_->data;
+  }
+
+  template < class Key, class Value, class Compare >
+  std::pair< Key, Value > * TreeIter< Key, Value, Compare >::operator->()
+  {
+    return std::addressof(current_->data);
   }
 
   template < class Key, class Value, class Compare >

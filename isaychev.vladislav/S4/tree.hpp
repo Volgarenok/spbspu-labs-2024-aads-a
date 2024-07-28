@@ -27,10 +27,12 @@ namespace isaychev
     const_iterator cend() const;
 
     size_t size() const noexcept;
+    bool empty() const noexcept;
     void clear() noexcept;
     void swap(Tree & other) noexcept;
     iterator find(const Key & key);
     const_iterator find(const Key & key) const;
+
     Value & at(const Key & key);
     const Value & at(const Key & key) const;
     Value & operator[](const Key & key);
@@ -42,6 +44,7 @@ namespace isaychev
     // node_t dummy_node;
 
     void delete_tree(node_t * ptr) noexcept;
+    node_t * traverse_left(node_t * root) const;
   };
 
   template < class Key, class Value, class Compare >
@@ -55,6 +58,19 @@ namespace isaychev
   BSTree< Key, Value, Compare >::~BSTree()
   {
     clear();
+  }
+
+  template < class Key, class Value, class Compare >
+  detail::TreeNode< Key, Value > * BSTree< Key, Value, Compare >::traverse_left(node_t * root) const
+  {
+    if (root)
+    {
+      while (root->left)
+      {
+        root = root->left;
+      }
+    }
+    return root;
   }
 
   template < class Key, class Value, class Compare >
@@ -100,6 +116,12 @@ namespace isaychev
   }
 
   template < class Key, class Value, class Compare >
+  bool BSTree< Key, Value, Compare >::empty() const noexcept
+  {
+    return root_ == nullptr;
+  }
+
+  template < class Key, class Value, class Compare >
   void BSTree< Key, Value, Compare >::delete_tree(node_t * root) noexcept
   {
     if (root)
@@ -114,6 +136,8 @@ namespace isaychev
   void BSTree< Key, Value, Compare >::clear() noexcept
   {
     delete_tree(root_);
+    root_ = nullptr;
+    size_ = 0;
   }
 
   template < class Key, class Value, class Compare >
@@ -172,7 +196,7 @@ namespace isaychev
   Value & BSTree< Key, Value, Compare >::at(const Key & key)
   {
     iterator value_iter = find(key);
-    if (!value_iter.current)
+    if (!value_iter.current_)
     {
       throw std::out_of_range("no element with such key");
     }
@@ -194,6 +218,13 @@ namespace isaychev
   Value & BSTree< Key, Value, Compare >::operator[](const Key & key)
   {
     node_t * current = root_;
+    if (!root_)
+    {
+      root_ = new node_t(std::make_pair(key, Value()), nullptr);
+      ++size_;
+      return root_->data.second;
+    }
+
     while (current)
     {
       if (key == current->data.first)
@@ -221,10 +252,7 @@ namespace isaychev
         current = current->right;
       }
     }
-    if (!current)
-    {
-      current = new node_t(std::make_pair(key, Value()), nullptr);
-    }
+    ++size_;
     return current->data.second;
   }
 }
