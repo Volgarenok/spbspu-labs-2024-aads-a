@@ -67,6 +67,10 @@ long long int grechishnikov::modTwo(long long int first, long long int second)
   {
     throw std::logic_error("Division by zero");
   }
-  return first % second;
+  long long int res = first % second;
+  if (res < 0)
+  {
+    res += second;
+  }
+  return res;
 }
-
