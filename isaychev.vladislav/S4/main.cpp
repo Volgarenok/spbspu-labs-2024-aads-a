@@ -28,9 +28,9 @@ int main()
     std::cout << e.what() << "\n";
   }
 
-/*  for (auto i = dict.cbegin(); i != dict.cend(); ++i)
+  for (auto i = dict.cbegin(); i != dict.cend(); ++i)
   {
     std::cout << (*i).second << " ";
   }
-  std::cout << "\n";*/
+  std::cout << "\n";
 }

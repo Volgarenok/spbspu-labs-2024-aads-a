@@ -82,12 +82,12 @@ namespace isaychev
     }
     else
     {
-      while (current_ == current_->parent->right)
-      {
-        go_up();
-      }
       if (current_->parent)
       {
+        while (current_->parent && current_ == current_->parent->right)
+        {
+          go_up();
+        }
         go_up();
       }
       else
@@ -129,12 +129,12 @@ namespace isaychev
     }
     else
     {
-      while (current_ == current_->parent->left)
-      {
-        go_up();
-      }
       if (current_->parent)
       {
+        while (current_->parent && current_ == current_->parent->left)
+        {
+          go_up();
+        }
         go_up();
       }
       else
@@ -252,12 +252,12 @@ namespace isaychev
     }
     else
     {
-      while (current_ == current_->parent->right)
-      {
-        go_up();
-      }
       if (current_->parent)
       {
+        while (current_->parent && current_ == current_->parent->right)
+        {
+          go_up();
+        }
         go_up();
       }
       else
@@ -299,12 +299,12 @@ namespace isaychev
     }
     else
     {
-      while (current_ == current_->parent->left)
-      {
-        go_up();
-      }
       if (current_->parent)
       {
+        while (current_->parent && current_ == current_->parent->left)
+        {
+          go_up();
+        }
         go_up();
       }
       else
