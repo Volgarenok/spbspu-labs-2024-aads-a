@@ -82,12 +82,12 @@ namespace belokurskaya
         return data_[front_];
       }
 
-      bool isEmpty()
+      bool isEmpty() noexcept
       {
         return rear_ < front_;
       }
 
-      bool isFull()
+      bool isFull() noexcept
       {
         return rear_ == capacity_ - 1;
       }
