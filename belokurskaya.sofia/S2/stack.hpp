@@ -89,9 +89,14 @@ namespace belokurskaya
 
       friend std::ostream& operator<<(std::ostream& out, const Stack< T >& stack)
       {
-        for (size_t i = 0; i <= stack.top_; ++i)
+        if (stack.size() > 0)
         {
-          out << stack.data_[i] << " ";
+          out << stack.data_[0];
+        }
+
+        for (size_t i = 1; i <= stack.top_; ++i)
+        {
+          out << " " << stack.data_[i];
         }
         return out;
       }
