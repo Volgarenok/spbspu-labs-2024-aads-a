@@ -27,8 +27,9 @@ void belokurskaya::safeStrCopy(char* dest, const char* src, size_t max_len)
 
 bool belokurskaya::safeAdd(long long a, long long b, long long& result)
 {
-  if ((b > 0 && a > std::numeric_limits< long long >::max() - b) ||
-    (b < 0 && a < std::numeric_limits< long long >::min() - b))
+  long long c = std::numeric_limits< long long >::max() - b;
+  long long d = std::numeric_limits< long long >::min() - b;
+  if ((b > 0 && a > c) || (b < 0 && a < d))
   {
     std::cerr << "Addition Overflow\n";
     return false;
@@ -82,8 +83,9 @@ bool belokurskaya::willMultiplyOverflowOrUnderflow(long long a, long long b, cha
 
 bool belokurskaya::willSubtractUnderflow(long long a, long long b)
 {
-  if ((b > 0 && a < std::numeric_limits< long long >::min() + b) ||
-    (b < 0 && a > std::numeric_limits< long long >::max() + b))
+  long long c = std::numeric_limits< long long >::min() + b;
+  long long d = std::numeric_limits< long long >::max() + b;
+  if ((b > 0 && a < c) || (b < 0 && a > d))
   {
     return true;
   }
@@ -96,7 +98,7 @@ long long belokurskaya::evaluatePostfixExpression(std::string expression)
   long long num = 0;
   bool flag = false;
 
-  for (char& c : expression)
+  for (char& c: expression)
   {
     if (std::isdigit(c))
     {
