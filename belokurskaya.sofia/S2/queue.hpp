@@ -47,7 +47,7 @@ namespace belokurskaya
         delete[] data_;
       }
 
-      void push(T rhs)
+      void push(const T & rhs)
       {
         if (isFull())
         {
