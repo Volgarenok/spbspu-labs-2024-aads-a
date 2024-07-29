@@ -9,13 +9,12 @@ namespace belokurskaya
   class Stack
   {
     public:
-      Stack()
-      {
-        capacity_ = initial_capacity_;
-        size_ = 0;
-        top_ = -1;
-        data_ = new T[capacity_];
-      }
+      Stack():
+        capacity_(initial_capacity_),
+        size_(0),
+        top_(-1),
+        data_(new T[capacity_])
+      {}
 
       Stack(const Stack< T >& other):
         size_(other.size_),
