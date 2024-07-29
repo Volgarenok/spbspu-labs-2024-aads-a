@@ -85,11 +85,7 @@ bool belokurskaya::willSubtractUnderflow(long long a, long long b)
 {
   long long c = std::numeric_limits< long long >::min() + b;
   long long d = std::numeric_limits< long long >::max() + b;
-  if ((b > 0 && a < c) || (b < 0 && a > d))
-  {
-    return true;
-  }
-  return false;
+  return (b > 0 && a < c) || (b < 0 && a > d);
 }
 
 long long belokurskaya::evaluatePostfixExpression(std::string expression)
