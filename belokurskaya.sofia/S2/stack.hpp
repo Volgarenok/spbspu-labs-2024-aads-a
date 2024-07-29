@@ -10,26 +10,26 @@ namespace belokurskaya
   {
     public:
       Stack():
-        capacity_(initial_capacity_),
+        data_(new T[capacity_]),
         size_(0),
         top_(-1),
-        data_(new T[capacity_])
+        capacity_(initial_capacity_)
       {}
 
       Stack(const Stack< T >& other):
+        data_(new T[other.capacity_]),
         size_(other.size_),
         top_(other.top_),
-        capacity_(other.capacity_),
-        data_(new T[other.capacity_])
+        capacity_(other.capacity_)
       {
         std::copy(other.data_, other.data_ + other.capacity_, data_);
       }
 
       Stack(Stack< T >&& other):
+        data_(other.data_),
         size_(other.size_),
         top_(other.top_),
-        capacity_(other.capacity_),
-        data_(other.data_)
+        capacity_(other.capacity_)
       {
         other.capacity_ = initial_capacity_;
         other.size_ = 0;
