@@ -97,10 +97,10 @@ namespace belokurskaya
       }
 
     private:
-      T* data_;
       size_t size_;
       int top_;
       int capacity_;
+      T* data_;
       const size_t initial_capacity_ = 3;
       const size_t capacity_change_factor_ = 2;
 
