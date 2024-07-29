@@ -101,6 +101,40 @@ namespace belokurskaya
         return out;
       }
 
+      Queue& operator=(const Queue& other)
+      {
+        if (this != &other)
+        {
+          delete[] data_;
+          capacity_ = other.capacity_;
+          size_ = other.size_;
+          front_ = other.front_;
+          rear_ = other.rear_;
+          data_ = new T[capacity_];
+          std::copy(other.data_, other.data_ + capacity_, data_);
+        }
+        return *this;
+      }
+
+      Queue& operator=(Queue&& other)
+      {
+        if (this != &other)
+        {
+          delete[] data_;
+          capacity_ = other.capacity_;
+          size_ = other.size_;
+          front_ = other.front_;
+          rear_ = other.rear_;
+          data_ = other.data_;
+          other.capacity_ = initial_capacity_;
+          other.size_ = 0;
+          other.front_ = 0;
+          other.rear_ = -1;
+          other.data_ = new T[capacity_];
+        }
+        return *this;
+      }
+
     private:
       T* data_;
       size_t size_;
