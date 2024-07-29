@@ -18,6 +18,10 @@ namespace isaychev
    public:
     BSTree();
     ~BSTree();
+    BSTree(const Tree & rhs);
+    BSTree(Tree && rhs);
+    Tree & operator=(Tree && rhs);
+    Tree & operator=(const Tree & rhs);
 
     iterator begin();
     iterator end();
@@ -41,9 +45,9 @@ namespace isaychev
     node_t * root_;
     Compare cmp_;
     size_t size_;
-    // node_t dummy_node;
 
     void delete_tree(node_t * ptr) noexcept;
+    void copy_tree(const Tree & rhs);
     node_t * traverse_left(node_t * root) const;
   };
 
@@ -58,6 +62,54 @@ namespace isaychev
   BSTree< Key, Value, Compare >::~BSTree()
   {
     clear();
+  }
+
+  template < class Key, class Value, class Compare >
+  void BSTree< Key, Value, Compare >::copy_tree(const Tree & rhs)
+  {
+    for (auto i = rhs.begin(); i != rhs.end(); ++i)
+    {
+      (*this)[(*i).first] = (*i).second;
+    }
+  }
+
+  template < class Key, class Value, class Compare >
+  BSTree< Key, Value, Compare >::BSTree(const Tree & rhs):
+   root_(nullptr),
+   cmp_(rhs.cmp_),
+   size_(0)
+  {
+    copy_tree(rhs);
+  }
+
+  template < class Key, class Value, class Compare >
+  BSTree< Key, Value, Compare >::BSTree(Tree && rhs):
+   root_(rhs.root_),
+   cmp_(rhs.cmp_),
+   size_(rhs.size_)
+  {
+    rhs.root_ = nullptr;
+    rhs.size_ = 0;
+  }
+
+  template < class Key, class Value, class Compare >
+  BSTree< Key, Value, Compare > & BSTree< Key, Value, Compare >::operator=(Tree && rhs)
+  {
+    root_ = rhs.root_;
+    cmp_ = rhs.cmp_;
+    size_ = rhs.size_;
+    rhs.root_ = nullptr;
+    rhs.size_ = 0;
+    return *this;
+  }
+
+  template < class Key, class Value, class Compare >
+  BSTree< Key, Value, Compare > & BSTree< Key, Value, Compare >::operator=(const Tree & rhs)
+  {
+    clear();
+    cmp_ = rhs.cmp_;
+    copy_tree(rhs);
+    return *this;
   }
 
   template < class Key, class Value, class Compare >
@@ -207,7 +259,7 @@ namespace isaychev
   const Value & BSTree< Key, Value, Compare >::at(const Key & key) const
   {
     const_iterator value_iter = find(key);
-    if (!value_iter.current)
+    if (!value_iter.current_)
     {
       throw std::out_of_range("no element with such key");
     }
@@ -220,7 +272,7 @@ namespace isaychev
     node_t * current = root_;
     if (!root_)
     {
-      root_ = new node_t(std::make_pair(key, Value()), nullptr);
+      root_ = new node_t(key, Value(), nullptr);
       ++size_;
       return root_->data.second;
     }
@@ -235,7 +287,7 @@ namespace isaychev
       {
         if (!current->left)
         {
-          current->left = new node_t(std::make_pair(key, Value()), current);
+          current->left = new node_t(key, Value(), current);
           current = current->left;
           break;
         }
@@ -245,7 +297,7 @@ namespace isaychev
       {
         if (!current->right)
         {
-          current->right = new node_t(std::make_pair(key, Value()), current);
+          current->right = new node_t(key, Value(), current);
           current = current->right;
           break;
         }

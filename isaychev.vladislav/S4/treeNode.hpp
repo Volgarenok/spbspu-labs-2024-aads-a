@@ -15,12 +15,15 @@ namespace isaychev
       TreeNode< Key, Value > * left;
       TreeNode< Key, Value > * parent;
 
-      TreeNode(const std::pair< Key, Value > & new_data, TreeNode< Key, Value > * root):
-       data(new_data),
+      TreeNode (Key key, Value value, TreeNode< Key, Value > * root):
+       data(),
        right(nullptr),
        left(nullptr),
        parent(root)
-      {}
+      {
+        data.first = key;
+        data.second = value;
+      }
     };
   }
 }
