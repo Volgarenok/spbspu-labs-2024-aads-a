@@ -70,7 +70,7 @@ namespace chistyakov
       }
 
     private:
-      Node< T > * node_;
+      detail::Node< T > * node_;
   };
 }
 

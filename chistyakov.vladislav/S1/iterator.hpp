@@ -18,7 +18,7 @@ namespace chistyakov
         node_(nullptr)
       {}
 
-      explicit Iterator(Node< T > * val):
+      explicit Iterator(detail::Node< T > * val):
         node_(val)
       {}
 
@@ -83,7 +83,7 @@ namespace chistyakov
       }
 
     private:
-      Node< T > * node_;
+      detail::Node< T > * node_;
   };
 }
 

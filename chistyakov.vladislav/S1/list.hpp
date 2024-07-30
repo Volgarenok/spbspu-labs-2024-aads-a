@@ -16,7 +16,7 @@ namespace chistyakov
         tail_(nullptr)
       {}
 
-      List(Node< T > & head, Node< T > & tail):
+      List(detail::Node< T > & head, detail::Node< T > & tail):
         head_(head),
         tail_(tail)
       {}
@@ -114,7 +114,7 @@ namespace chistyakov
 
       void push_back(const T & value)
       {
-        Node< T > * newNode = new Node< T >(value);
+        detail::Node< T > * newNode = new detail::Node< T >(value);
         newNode->previous = tail_;
 
         if (!head_)
@@ -132,7 +132,7 @@ namespace chistyakov
 
       void push_front(const T & value)
       {
-        Node< T > * newNode = new Node< T >(value);
+        detail::Node< T > * newNode = new detail::Node< T >(value);
         newNode->next = head_;
 
         if (head_)
@@ -150,7 +150,7 @@ namespace chistyakov
 
       void pop_back()
       {
-        Node< T > * lastTail = tail_;
+        detail::Node< T > * lastTail = tail_;
         tail_ = tail_->previous;
 
         if (tail_ != nullptr)
@@ -167,7 +167,7 @@ namespace chistyakov
 
       void pop_front()
       {
-        Node< T > * lastHead = head_;
+        detail::Node< T > * lastHead = head_;
         head_ = head_->next;
 
         if (head_ != nullptr)
@@ -240,8 +240,8 @@ namespace chistyakov
       }
 
     private:
-      Node< T > * head_;
-      Node< T > * tail_;
+      detail::Node< T > * head_;
+      detail::Node< T > * tail_;
   };
 }
 
