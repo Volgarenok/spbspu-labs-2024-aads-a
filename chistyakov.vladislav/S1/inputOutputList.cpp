@@ -40,7 +40,7 @@ size_t chistyakov::maxDigit(List< std::pair< std::string, List < size_t > > > & 
   return max_digit;
 }
 
-void chistyakov::outPutNames(List < std::pair < std::string, List < size_t > > > & list)
+void chistyakov::outputNames(List < std::pair < std::string, List < size_t > > > & list)
 {
   for (auto element = list.begin(); element != list.end(); ++element)
   {
@@ -53,7 +53,7 @@ void chistyakov::outPutNames(List < std::pair < std::string, List < size_t > > >
   }
 }
 
-void chistyakov::outPutNums(List < std::pair < size_t, List < size_t > > > & list)
+void chistyakov::outputNums(List < std::pair < size_t, List < size_t > > > & list)
 {
   for (auto element = list.begin(); element != list.end(); ++element)
   {
@@ -72,7 +72,7 @@ void chistyakov::outPutNums(List < std::pair < size_t, List < size_t > > > & lis
   }
 }
 
-void chistyakov::outPutSums(List < std::pair < size_t, List < size_t > > > & list)
+void chistyakov::outputSums(List < std::pair < size_t, List < size_t > > > & list)
 {
   for (auto element = list.begin(); element != list.end(); ++element)
   {

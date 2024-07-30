@@ -26,7 +26,7 @@ int main()
     return 0;
   }
 
-  outPutNames(list);
+  outputNames(list);
   size_t max_digit = maxDigit(list);
   std::cout << "\n";
 
@@ -75,7 +75,7 @@ int main()
     nowSize++;
   }
 
-  outPutNums(listSumAndNums);
+  outputNums(listSumAndNums);
   if (listSumAndNums.empty())
   {
     std::cout << "0\n";
@@ -88,7 +88,7 @@ int main()
     return 1;
   }
 
-  outPutSums(listSumAndNums);
+  outputSums(listSumAndNums);
 
   std::cout << "\n";
   return 0;
