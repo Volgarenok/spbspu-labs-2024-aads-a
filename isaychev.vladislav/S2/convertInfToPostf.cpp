@@ -36,7 +36,7 @@ void isaychev::convertInfToPostf(Queue< Token > & infExp, Queue< Token > & postf
       {
         moveElToQueue(temp, postfExp);
       }
-        temp.push(t);
+      temp.push(t);
     }
     else if (t.type == TokenType::OPERAND)
     {
