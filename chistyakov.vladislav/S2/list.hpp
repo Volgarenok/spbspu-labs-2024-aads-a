@@ -4,6 +4,7 @@
 #include "iterator.hpp"
 #include "constIterator.hpp"
 #include "node.hpp"
+#include <iostream>
 
 namespace chistyakov
 {
@@ -152,6 +153,16 @@ namespace chistyakov
       {
         Node< T > * lastTail = tail_;
         tail_ = tail_->previous_;
+
+        if (tail_ != nullptr)
+        {
+          tail_->next_ = nullptr;
+        }
+        else
+        {
+          head_ = nullptr;
+        }
+
         delete lastTail;
       }
 
@@ -159,6 +170,16 @@ namespace chistyakov
       {
         Node< T > * lastHead = head_;
         head_ = head_->next_;
+
+        if (head_ != nullptr)
+        {
+          head_->previous_ = nullptr;
+        }
+        else
+        {
+          tail_ = nullptr;
+        }
+
         delete lastHead;
       }
 
