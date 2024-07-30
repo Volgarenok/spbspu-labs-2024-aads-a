@@ -33,6 +33,7 @@ namespace chistyakov
     {
       stack_.pop_back();
     }
+
   private:
     List< T > stack_;
   };
