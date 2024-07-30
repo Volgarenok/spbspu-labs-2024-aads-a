@@ -16,7 +16,7 @@ namespace chistyakov
         tail_(nullptr)
       {}
 
-      List(Node< T > * head, Node< T > * tail):
+      List(Node< T > & head, Node< T > & tail):
         head_(head),
         tail_(tail)
       {}
