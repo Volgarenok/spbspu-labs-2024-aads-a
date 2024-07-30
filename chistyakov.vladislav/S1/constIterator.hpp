@@ -59,12 +59,12 @@ namespace chistyakov
         return !(rhs == *this);
       }
 
-      T & operator*()
+      const T & operator*() const
       {
         return node_->value_;
       }
 
-      T * operator->()
+      const T * operator->() const
       {
         return std::addressof(node_->value_);
       }
