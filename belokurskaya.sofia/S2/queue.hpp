@@ -147,21 +147,45 @@ namespace belokurskaya
       void addMemory()
       {
         T* newData = new T[capacity_ * capacity_change_factor_];
-        std::copy(data_, data_ + capacity_, newData);
-        capacity_ *= capacity_change_factor_;
-        delete[] data_;
-        data_ = newData;
+        if (newData == nullptr)
+        {
+          throw std::runtime_error("Failed to allocate memory");
+        }
+        try
+        {
+          std::copy(data_, data_ + capacity_, newData);
+          capacity_ *= capacity_change_factor_;
+          delete[] data_;
+          data_ = newData;
+        }
+        catch (const std::exception& e)
+        {
+          delete[] newData;
+          throw;
+        }
       }
 
       void freeMemory()
       {
         T* newData = new T[capacity_ / capacity_change_factor_];
-        std::copy(data_ + front_, data_ + rear_ + 1, newData);
-        rear_ = rear_ - front_;
-        front_ = 0;
-        capacity_ /= capacity_change_factor_;
-        delete[] data_;
-        data_ = newData;
+        if (newData == nullptr)
+        {
+          throw std::runtime_error("Failed to free memory");
+        }
+        try
+        {
+          std::copy(data_ + front_, data_ + rear_ + 1, newData);
+          rear_ = rear_ - front_;
+          front_ = 0;
+          capacity_ /= capacity_change_factor_;
+          delete[] data_;
+          data_ = newData;
+        }
+        catch (const std::exception& e)
+        {
+          delete[] newData;
+          throw;
+        }
       }
   };
 }
