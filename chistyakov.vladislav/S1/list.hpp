@@ -25,11 +25,11 @@ namespace chistyakov
         head_(nullptr),
         tail_(nullptr)
       {
-        for (auto element = list.head_; element != nullptr; element = element->next_)
+        for (auto element = list.head_; element != nullptr; element = element->next)
         {
           try
           {
-            push_back(element->value_);
+            push_back(element->value);
           }
           catch (...)
           {
@@ -87,23 +87,23 @@ namespace chistyakov
 
       T & front()
       {
-        return head_->value_;
+        return head_->value;
       }
 
       T & back()
       {
-        return tail_->value_;
+        return tail_->value;
       }
 
       const T & front() const
       {
-        const T & tmp = head_->value_;
+        const T & tmp = head_->value;
         return tmp;
       }
 
       const T & back() const
       {
-        const T & tmp = tail_->value_;
+        const T & tmp = tail_->value;
         return tmp;
       }
 
@@ -115,7 +115,7 @@ namespace chistyakov
       void push_back(const T & value)
       {
         Node< T > * newNode = new Node< T >(value);
-        newNode->previous_ = tail_;
+        newNode->previous = tail_;
 
         if (!head_)
         {
@@ -124,7 +124,7 @@ namespace chistyakov
 
         if (tail_)
         {
-          tail_->next_ = newNode;
+          tail_->next = newNode;
         }
 
         tail_ = newNode;
@@ -151,11 +151,11 @@ namespace chistyakov
       void pop_back()
       {
         Node< T > * lastTail = tail_;
-        tail_ = tail_->previous_;
+        tail_ = tail_->previous;
 
         if (tail_ != nullptr)
         {
-          tail_->next_ = nullptr;
+          tail_->next = nullptr;
         }
         else
         {
@@ -168,11 +168,11 @@ namespace chistyakov
       void pop_front()
       {
         Node< T > * lastHead = head_;
-        head_ = head_->next_;
+        head_ = head_->next;
 
         if (head_ != nullptr)
         {
-          head_->previous_ = nullptr;
+          head_->previous = nullptr;
         }
         else
         {
@@ -214,8 +214,8 @@ namespace chistyakov
               return;
             }
 
-            element->previous_->next_ = element->next_;
-            element->next_->previous_ = element->previous_;
+            element->previous->next = element->next;
+            element->next->previous = element->previous;
             delete element;
           }
         }

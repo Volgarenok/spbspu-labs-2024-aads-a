@@ -28,7 +28,7 @@ namespace chistyakov
 
       Iterator< T > & operator++()
       {
-        node_ = node_->next_;
+        node_ = node_->next;
         return *this;
       }
 
@@ -41,7 +41,7 @@ namespace chistyakov
 
       Iterator< T > & operator--()
       {
-        node_ = node_->previous_;
+        node_ = node_->previous;
         return *this;
       }
 
@@ -64,22 +64,22 @@ namespace chistyakov
 
       T & operator*()
       {
-        return node_->value_;
+        return node_->value;
       }
 
       T * operator->()
       {
-        return std::addressof(node_->value_);
+        return std::addressof(node_->value);
       }
 
       const T & operator*() const
       {
-        return node_->value_;
+        return node_->value;
       }
 
       const T * operator->() const
       {
-        return std::addressof(node_->value_);
+        return std::addressof(node_->value);
       }
 
     private:

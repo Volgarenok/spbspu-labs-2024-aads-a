@@ -7,16 +7,16 @@ namespace chistyakov
   struct Node
   {
     Node(const T & value):
-      value_(value),
-      next_(nullptr),
-      previous_(nullptr)
+      value(value),
+      next(nullptr),
+      previous(nullptr)
     {}
 
     ~Node() = default;
 
-    T value_;
-    Node * next_;
-    Node * previous_;
+    T value;
+    Node * next;
+    Node * previous;
   };
 }
 
