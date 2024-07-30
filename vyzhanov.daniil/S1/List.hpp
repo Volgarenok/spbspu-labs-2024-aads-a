@@ -46,7 +46,7 @@ namespace vyzhanov
     const T& front() const;
 
     void remove(const T&);
-    template < typename UnaryPredicate >
+    template< typename UnaryPredicate >
     void remove_if(UnaryPredicate pred);
 
     iterator begin() noexcept;
