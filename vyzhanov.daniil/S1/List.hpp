@@ -243,7 +243,7 @@ namespace vyzhanov
   void List<T>::pop_back()
   {
     Node< T >* newTail = tail_;
-    if (!tail_->prev_)
+    if (!tail_)
     {
       head_ = nullptr;
       tail_ = nullptr;
@@ -260,7 +260,7 @@ namespace vyzhanov
   void List<T>::pop_front()
   {
     Node< T >* newHead = head_;
-    if (!head_->next_)
+    if (!head_)
     {
       head_ = nullptr;
       tail_ = nullptr;
