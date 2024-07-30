@@ -22,9 +22,9 @@ namespace chistyakov
         node_(val)
       {}
 
-      ~Iterator() = default;
-      Iterator(const Iterator< T > &) = default;
-      Iterator< T > & operator=(const Iterator< T > & ) = default;
+      ~Iterator() noexcept = default;
+      Iterator(const Iterator< T > &) noexcept = default;
+      Iterator< T > & operator=(const Iterator< T > & ) noexcept = default;
 
       Iterator< T > & operator++()
       {

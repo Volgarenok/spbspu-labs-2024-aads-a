@@ -21,7 +21,7 @@ namespace chistyakov
         node_(val.node_)
       {}
 
-      ~ConstIterator() = default;
+      ~ConstIterator() noexcept = default;
 
       ConstIterator< T > & operator++()
       {
