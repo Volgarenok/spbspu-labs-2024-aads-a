@@ -112,6 +112,10 @@ namespace belokurskaya
       void addMemory()
       {
         T* newData = new T[capacity_ * capacity_change_factor_];
+        if (newData == nullptr)
+        {
+          throw std::runtime_error("Failed to allocate memory for Stack");
+        }
         std::copy(data_, data_ + capacity_, newData);
         capacity_ *= capacity_change_factor_;
         delete[] data_;
@@ -121,6 +125,10 @@ namespace belokurskaya
       void freeMemory()
       {
         T* newData = new T[capacity_ / capacity_change_factor_];
+        if (newData == nullptr)
+        {
+          throw std::runtime_error("Failed to allocate memory for Stack");
+        }
         std::copy(data_, data_ + capacity_ / capacity_change_factor_, newData);
         capacity_ /= capacity_change_factor_;
         delete[] data_;
