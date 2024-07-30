@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include "tree.hpp"
+#include "commands.hpp"
 
 /*struct DelimeterIO
 {
@@ -20,35 +20,32 @@ std::istream & operator>>(std::istream & in, DelimeterIO && del)
   return in;
 }*/
 
-using subDict = isaychev::BSTree< int, std::string >;
-
-void inputDictionaries(std::istream & in, isaychev::BSTree< std::string, subDict > & dicts)
+/*void inputDictionaries(std::istream & in, isaychev::BSTree< std::string, isaychev::dataset > & dicts)
 {
-  //subDict dictionary;
   std::string name;
   int key = 0;
   std::string value;
 
-  in >> std::noskipws;
   while (!in.eof())
   {
     in >> name;
-    char c = 0;
-    in >> c;
-    do
+//    if (name.empty())
     {
-      in >> key >> c >> value >> c;
-      dicts[name][key] = value;
+      continue;
     }
-    while (c != '\n');
+  //  dicts[name] = isaychev::dataset();  insert
+    while (in >> key >> value);
+    {
+   //   dicts.at(name)[key] = value;
+    }
+    in.clear();
   }
-}
+}*/
 
 int main(int argc, char * argv[])
 {
   using namespace isaychev;
-  BSTree< int, std::string > dict;
-  std::ifstream in;
+  BSTree< std::string, BSTree< int, std::string > > dictionaries;
   if (argc != 2)
   {
     std::cerr << "troubles with filename\n";
@@ -56,7 +53,9 @@ int main(int argc, char * argv[])
   }
   else
   {
-    in.open((argv[1]));
+    std::ifstream in(argv[1]);
+  //  inputDictionaries(in, dictionaries);
+    in.close();
   }
-  BSTree< std::string, BSTree< int, std::string > > dictionaries;
+  std::cout << dictionaries.size() << "\n";
 }
