@@ -15,31 +15,10 @@ namespace isaychev
   class Bracket
   {
    public:
-    explicit Bracket(char c)
-    {
-      set_type(c);
-    }
+    explicit Bracket(char c);
+    explicit Bracket(BracketType type);
 
-    void set_type(char c)
-    {
-      if (c == '(')
-      {
-        type_ = BracketType::OPENING;
-      }
-      else if (c == ')')
-      {
-        type_ = BracketType::CLOSING;
-      }
-      else
-      {
-        throw std::logic_error("not a bracket");
-      }
-    }
-
-    BracketType get_type()
-    {
-      return type_;
-    }
+    BracketType get_type() const noexcept;
 
    private:
     BracketType type_;
@@ -59,9 +38,9 @@ namespace isaychev
     Operation operation;
     Bracket bracket;
 
-    TokenUnit(long long int):
-     operand(0)
-    {}
+    TokenUnit(long long int);
+    TokenUnit(char c);
+    TokenUnit(BracketType type);
   };
 
   struct Token
@@ -69,10 +48,9 @@ namespace isaychev
     TokenUnit value;
     TokenType type;
 
-    Token():
-     value(0),
-     type(TokenType::UNKNOWN)
-    {}
+    explicit Token(long long n);
+    explicit Token(char c);
+    explicit Token(BracketType type);
   };
 }
 

@@ -31,35 +31,20 @@ void isaychev::convertInfToPostf(Queue< Token > & infExp, Queue< Token > & postf
     }
     else if (t.type == TokenType::OPERATION)
     {
-      int priority = t.value.operation.get_priority();
-      if (priority == 1)
+      Operation o = t.value.operation;
+      while (!temp.empty() && temp.top().type == TokenType::OPERATION && temp.top().value.operation <= o)
       {
-        while (!temp.empty() && temp.top().type != TokenType::BRACKET)
-        {
-          moveElToQueue(temp, postfExp);
-        }
-        temp.push(t);
+        moveElToQueue(temp, postfExp);
       }
-      else if (priority == 2)
-      {
-        while (!temp.empty() && temp.top().type == TokenType::OPERATION)
-        {
-          priority = temp.top().value.operation.get_priority();
-          if (priority == 2)
-          {
-            moveElToQueue(temp, postfExp);
-          }
-          else
-          {
-            break;
-          }
-        }
-        temp.push(t);
-      }
+      temp.push(t);
     }
     else if (t.type == TokenType::OPERAND)
     {
       postfExp.push(t);
+    }
+    else
+    {
+      throw std::invalid_argument("wrong token");
     }
   }
   if (!temp.empty())

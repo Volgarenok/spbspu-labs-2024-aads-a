@@ -1,7 +1,6 @@
 #ifndef QUEUE_HPP
 #define QUEUE_HPP
 
-#include <utility>
 #include <list/list.hpp>
 
 namespace isaychev

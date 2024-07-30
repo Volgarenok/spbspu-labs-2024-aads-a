@@ -12,7 +12,7 @@ namespace isaychev
     SUBTRACT,
     MULTIPLY,
     DIVIDE,
-    REM_DIVIDE,
+    MOD,
     UNKNOWN
   };
 
@@ -23,17 +23,24 @@ namespace isaychev
     explicit Operation(char c);
 
     Operand operator()(const Operand & a, const Operand & b) const;
-    void set_operation(char c);
-    int get_priority() const;
+    OperationType get_type() const noexcept;
+
+    bool operator<(const Operation & rhs) const noexcept;
+    bool operator>(const Operation & rhs) const noexcept;
+    bool operator<=(const Operation & rhs) const noexcept;
+    bool operator>=(const Operation & rhs) const noexcept;
+    bool operator==(const Operation & rhs) const noexcept;
+    bool operator!=(const Operation & rhs) const noexcept;
 
    private:
     OperationType type_;
+    int priority_;
 
     Operand add(const Operand & a, const Operand & b) const;
     Operand subtract(const Operand & a, const Operand & b) const;
     Operand multiply(const Operand & a, const Operand & b) const;
     Operand divide(const Operand & a, const Operand & b) const;
-    Operand rem_divide(const Operand & a, const Operand & b) const;
+    Operand mod(const Operand & a, const Operand & b) const;
   };
 }
 

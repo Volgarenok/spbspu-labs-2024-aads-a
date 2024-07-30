@@ -6,11 +6,9 @@ namespace isaychev
   class Operand
   {
    public:
-    Operand();
     explicit Operand(long long int n);
 
-    void set_operand(long long int n);
-    long long int get_operand() const;
+    long long int get_operand() const noexcept;
 
    private:
     long long int op_;

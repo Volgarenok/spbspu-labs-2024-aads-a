@@ -39,25 +39,10 @@ int main(int argc, char * argv[])
       results.push(calculateExpression(postfExp));
     }
   }
-  catch (const std::invalid_argument & e)
+  catch (const std::exception & e)
   {
     std::cerr << e.what() << "\n";
     return 1;
-  }
-  catch (const std::out_of_range & e)
-  {
-    std::cerr << e.what() << "\n";
-    return 2;
-  }
-  catch (const std::overflow_error & e)
-  {
-    std::cerr << e.what() << "\n";
-    return 3;
-  }
-  catch (const std::logic_error & e)
-  {
-    std::cerr << e.what() << "\n";
-    return 4;
   }
 
   if (!results.empty())
