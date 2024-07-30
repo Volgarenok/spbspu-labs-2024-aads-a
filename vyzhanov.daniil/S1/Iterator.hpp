@@ -10,7 +10,7 @@ namespace vyzhanov
   struct List;
 
   template< typename T >
-  struct BiIterator : public std::iterator< std::bidirectional_iterator_tag, T >
+  struct BiIterator: public std::iterator< std::bidirectional_iterator_tag, T >
   {
     friend struct List< T >;
     using iterator = BiIterator< T >;

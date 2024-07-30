@@ -14,7 +14,7 @@ namespace vyzhanov
   };
 
   template< typename T >
-  Node< T >::Node(const T& data, Node* next, Node* prev) :
+  Node< T >::Node(const T& data, Node* next, Node* prev):
     data_(data),
     next_(next),
     prev_(prev)

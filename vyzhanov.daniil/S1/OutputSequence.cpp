@@ -28,14 +28,14 @@ void vyzhanov::outputList(std::ostream& output, const List< T >& list)
 
 void vyzhanov::outputNames(const List< pair >& list, std::ostream& output)
 {
-  auto curr = ++list.cbegin();
+  auto curr = list.cbegin();
   auto end = list.cend();
-  output << list.cbegin()->first;
+  List< std::string > names;
   for (; curr != end; ++curr)
   {
-    output << " " << curr->first;
+     names.push_back(curr->first);
   }
-  output << "\n";
+  outputList(output, names);
 }
 
 void vyzhanov::outputNums(List< pair >& list, std::ostream& output)
