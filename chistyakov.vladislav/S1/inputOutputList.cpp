@@ -42,14 +42,14 @@ size_t chistyakov::maxDigit(List< std::pair< std::string, List < size_t > > > & 
 
 void chistyakov::outputNames(List < std::pair < std::string, List < size_t > > > & list)
 {
-  for (auto element = list.begin(); element != list.end(); ++element)
+  if (!list.empty())
   {
-    std::cout << element->first;
-    auto next = element;
-    if (++next != list.end())
-    {
-      std::cout << " ";
-    }
+    std::cout << list.begin()->first;
+  }
+
+  for (auto element = ++list.begin(); element != list.end(); ++element)
+  {
+    std::cout << " " << element->first;
   }
 }
 
@@ -57,15 +57,14 @@ void chistyakov::outputNums(List < std::pair < size_t, List < size_t > > > & lis
 {
   for (auto element = list.begin(); element != list.end(); ++element)
   {
-    for (auto num = (element->second).begin(); num != (element->second).end(); ++num)
+    if (!element->second.empty())
     {
-      std::cout << *num;
-      auto next = num;
+       std::cout << *(element->second).begin();
+    }
 
-      if (++next != (element->second).end())
-      {
-        std::cout << " ";
-      }
+    for (auto num = ++(element->second).begin(); num != (element->second).end(); ++num)
+    {
+      std::cout << " " << *num;
     }
 
     std::cout << "\n";
@@ -74,13 +73,13 @@ void chistyakov::outputNums(List < std::pair < size_t, List < size_t > > > & lis
 
 void chistyakov::outputSums(List < std::pair < size_t, List < size_t > > > & list)
 {
-  for (auto element = list.begin(); element != list.end(); ++element)
+  if (!list.empty())
   {
-    std::cout << element->first;
-    auto next = element;
-    if (++next != list.end())
-    {
-      std::cout << " ";
-    }
+    std::cout << list.begin()->first;
+  }
+
+  for (auto element = ++list.begin(); element != list.end(); ++element)
+  {
+    std::cout << " " << element->first;
   }
 }
