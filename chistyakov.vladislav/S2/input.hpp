@@ -2,11 +2,13 @@
 #define INPUT_HPP
 
 #include <string>
+#include <istream>
 #include "queue.hpp"
+#include "stack.hpp"
 
 namespace chistyakov
 {
-  void inputExp(Queue< std::string > & queue, const std::string & exp);
+  void inputExp(Stack< Queue< std::string > > & result, std::istream & in);
 }
 
 #endif
