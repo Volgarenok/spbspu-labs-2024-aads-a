@@ -39,7 +39,6 @@ int chistyakov::calculate(Queue< std::string > & exp)
         stack.push(firstNum % secondNum);
       }
     }
-
     exp.pop();
   }
 
