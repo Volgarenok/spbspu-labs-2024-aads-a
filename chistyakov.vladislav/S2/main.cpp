@@ -1,23 +1,58 @@
 #include <iostream>
 #include <string>
+#include <fstream>
 #include "queue.hpp"
 #include "stack.hpp"
 #include "infixToPostfix.hpp"
 #include "input.hpp"
 #include "calculate.hpp"
 
-int main()
+int main(int argc, char ** argv)
 {
   using namespace chistyakov;
 
-  Queue< std::string > exp;
-  std::string a = "5*6+(2-9)";
-  std::cout << a << "\n";
+  Stack< Queue< std::string > > results;
 
-  inputExp(exp, a);
-  Queue< std::string > result;
-  infixToPostfix(result, exp);
-  int resultNum = calculate(result);
+  try
+  {
+    if (argc == 2)
+    {
+      std::ifstream in(argv[1]);
+      inputExp(results, in);
+    }
+    if (argc == 1)
+    {
+      inputExp(results, std::cin);
+    }
+    else
+    {
+      std::cerr << "Invalid argv\n";
+      return 1;
+    }
 
-  std::cout << "Result: " << resultNum << "\n";
+    if (!results.empty())
+    {
+      Queue< std::string > localResult;
+      infixToPostfix(localResult, results.top());
+      std::cout << calculate(localResult);
+      results.pop();
+    }
+
+    while (!results.empty())
+    {
+      Queue< std::string > localResult;
+      infixToPostfix(localResult, results.top());
+      std::cout << " " << calculate(localResult);
+      results.pop();
+    }
+    std::cout << "\n";
+
+  }
+  catch (const std::exception & e)
+  {
+    std::cerr << "Error: " << e.what() << "\n";
+    return 1;
+  }
+
+  return 0;
 }
