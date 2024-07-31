@@ -94,7 +94,7 @@ long long belokurskaya::evaluatePostfixExpression(std::string expression)
   long long num = 0;
   bool flag = false;
 
-  for (char& c: expression)
+  for (char & c : expression)
   {
     if (std::isdigit(c))
     {

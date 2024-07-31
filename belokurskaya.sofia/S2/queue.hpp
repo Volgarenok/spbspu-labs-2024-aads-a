@@ -144,19 +144,21 @@ namespace belokurskaya
       const size_t initial_capacity_ = 3;
       const size_t capacity_change_factor_ = 2;
 
-      void addMemory()
+      void reallocateMemory(size_t newCapacity)
       {
-        T* newData = new T[capacity_ * capacity_change_factor_];
+        T* newData = new T[newCapacity];
         if (newData == nullptr)
         {
-          throw std::runtime_error("Failed to allocate memory");
+          throw std::runtime_error("Memory problems");
         }
         try
         {
-          std::copy(data_, data_ + capacity_, newData);
-          capacity_ *= capacity_change_factor_;
+          std::copy(data_ + front_, data_ + rear_ + 1, newData);
+          rear_ = rear_ - front_;
+          front_ = 0;
           delete[] data_;
           data_ = newData;
+          capacity_ = newCapacity;
         }
         catch (const std::exception& e)
         {
@@ -165,27 +167,16 @@ namespace belokurskaya
         }
       }
 
+      void addMemory()
+      {
+        size_t newCapacity = capacity_ * capacity_change_factor_;
+        reallocateMemory(newCapacity);
+      }
+
       void freeMemory()
       {
-        T* newData = new T[capacity_ / capacity_change_factor_];
-        if (newData == nullptr)
-        {
-          throw std::runtime_error("Failed to free memory");
-        }
-        try
-        {
-          std::copy(data_ + front_, data_ + rear_ + 1, newData);
-          rear_ = rear_ - front_;
-          front_ = 0;
-          capacity_ /= capacity_change_factor_;
-          delete[] data_;
-          data_ = newData;
-        }
-        catch (const std::exception& e)
-        {
-          delete[] newData;
-          throw;
-        }
+        size_t newCapacity = capacity_ / capacity_change_factor_;
+        reallocateMemory(newCapacity);
       }
   };
 }
