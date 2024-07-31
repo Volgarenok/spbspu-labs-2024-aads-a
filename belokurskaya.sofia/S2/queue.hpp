@@ -57,22 +57,6 @@ namespace belokurskaya
         data_[++rear_] = rhs;
       }
 
-      T drop()
-      {
-        if (isEmpty())
-        {
-          throw std::runtime_error("Attempt to drop from an empty queue");
-        }
-        T result = data_[front_];
-        front_++;
-        size_--;
-        if (capacity_ / capacity_change_factor_ >= initial_capacity_ && size_ < capacity_ / capacity_change_factor_)
-        {
-          freeMemory();
-        }
-        return result;
-      }
-
       T front()
       {
         if (isEmpty())
@@ -82,9 +66,25 @@ namespace belokurskaya
         return data_[front_];
       }
 
+      T pop()
+      {
+        if (isEmpty())
+        {
+          throw std::runtime_error("Queue is empty");
+        }
+        T value = data_[front_];
+        front_ = (front_ + 1) % capacity_;
+        size_--;
+        if (size_ == 0)
+        {
+          front_ = 0;
+        }
+        return value;
+      }
+
       bool isEmpty() noexcept
       {
-        return rear_ < front_;
+        return size_ == 0;
       }
 
       bool isFull() noexcept

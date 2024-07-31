@@ -72,8 +72,9 @@ std::string belokurskaya::infixToPostfix(const std::string& infix)
   }
   while (!outputQueue.isEmpty())
   {
-    postfix += outputQueue.drop();
+    postfix += outputQueue.front();
     postfix += " ";
+    outputQueue.pop();
   }
   return postfix;
 }
