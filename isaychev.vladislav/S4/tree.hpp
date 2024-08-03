@@ -14,14 +14,15 @@ namespace isaychev
     using node_t = detail::TreeNode< Key, Value >;
     using const_iterator = ConstTreeIter< Key, Value, Compare >;
     using iterator = TreeIter< Key, Value, Compare >;
+    using value_t = std::pair< Key, Value >;
 
    public:
     BSTree();
     ~BSTree();
     BSTree(const Tree & rhs);
     BSTree(Tree && rhs);
-    Tree & operator=(Tree && rhs);
     Tree & operator=(const Tree & rhs);
+    Tree & operator=(Tree && rhs);
 
     iterator begin();
     iterator end();
@@ -40,6 +41,7 @@ namespace isaychev
     Value & at(const Key & key);
     const Value & at(const Key & key) const;
     Value & operator[](const Key & key);
+    std::pair< iterator, bool > insert(const value_t & value);
 
    private:
     node_t * root_;
@@ -49,6 +51,7 @@ namespace isaychev
     void delete_tree(node_t * ptr) noexcept;
     void copy_tree(const Tree & rhs);
     node_t * traverse_left(node_t * root) const;
+    std::pair< node_t *, bool > insert_new(const value_t & value);
   };
 
   template < class Key, class Value, class Compare >
@@ -95,11 +98,14 @@ namespace isaychev
   template < class Key, class Value, class Compare >
   BSTree< Key, Value, Compare > & BSTree< Key, Value, Compare >::operator=(Tree && rhs)
   {
-    root_ = rhs.root_;
-    cmp_ = rhs.cmp_;
-    size_ = rhs.size_;
-    rhs.root_ = nullptr;
-    rhs.size_ = 0;
+    if (this != std::addressof(rhs))
+    {
+      root_ = rhs.root_;
+      cmp_ = rhs.cmp_;
+      size_ = rhs.size_;
+      rhs.root_ = nullptr;
+      rhs.size_ = 0;
+    }
     return *this;
   }
 
@@ -269,25 +275,38 @@ namespace isaychev
   template < class Key, class Value, class Compare >
   Value & BSTree< Key, Value, Compare >::operator[](const Key & key)
   {
-    node_t * current = root_;
+    auto result = insert_new(std::make_pair(key, Value()));
+    return result.first->data.second;
+  }
+
+  template < class Key, class Value, class Compare >
+  std::pair< TreeIter< Key, Value, Compare >, bool > BSTree< Key, Value, Compare >::insert(const value_t & value)
+  {
+    auto result = insert_new(value);
+    return std::pair< iterator, bool >(iterator(result.first), result.second);
+  }
+
+  template < class Key, class Value, class Compare >
+  std::pair< detail::TreeNode< Key, Value > *, bool > BSTree< Key, Value, Compare >::insert_new(const value_t & value)
+  {
     if (!root_)
     {
-      root_ = new node_t(key, Value(), nullptr);
+      root_ = new node_t(value.first, value.second, nullptr);
       ++size_;
-      return root_->data.second;
+      return std::pair< node_t *, bool >(root_, true);
     }
-
+    node_t * current = root_;
     while (current)
     {
-      if (key == current->data.first)
+      if (value.first == current->data.first)
       {
-        return current->data.second;
+        return std::pair< node_t *, bool >(current, false);
       }
-      if (cmp_(key, current->data.first))
+      if (cmp_(value.first, current->data.first))
       {
         if (!current->left)
         {
-          current->left = new node_t(key, Value(), current);
+          current->left = new node_t(value.first, value.second, current);
           current = current->left;
           break;
         }
@@ -297,7 +316,7 @@ namespace isaychev
       {
         if (!current->right)
         {
-          current->right = new node_t(key, Value(), current);
+          current->right = new node_t(value.first, value.second, current);
           current = current->right;
           break;
         }
@@ -305,7 +324,7 @@ namespace isaychev
       }
     }
     ++size_;
-    return current->data.second;
+    return std::pair< node_t *, bool >(current, true);
   }
 }
 

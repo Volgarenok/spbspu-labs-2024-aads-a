@@ -16,14 +16,11 @@ namespace isaychev
       TreeNode< Key, Value > * parent;
 
       TreeNode (Key key, Value value, TreeNode< Key, Value > * root):
-       data(),
+       data(key, value),
        right(nullptr),
        left(nullptr),
        parent(root)
-      {
-        data.first = key;
-        data.second = value;
-      }
+      {}
     };
   }
 }

@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
-#include <string>
 #include "commands.hpp"
+#include "inputDictionaries.hpp"
 
 /*struct DelimeterIO
 {
@@ -20,27 +20,6 @@ std::istream & operator>>(std::istream & in, DelimeterIO && del)
   return in;
 }*/
 
-/*void inputDictionaries(std::istream & in, isaychev::BSTree< std::string, isaychev::dataset > & dicts)
-{
-  std::string name;
-  int key = 0;
-  std::string value;
-
-  while (!in.eof())
-  {
-    in >> name;
-//    if (name.empty())
-    {
-      continue;
-    }
-  //  dicts[name] = isaychev::dataset();  insert
-    while (in >> key >> value);
-    {
-   //   dicts.at(name)[key] = value;
-    }
-    in.clear();
-  }
-}*/
 
 int main(int argc, char * argv[])
 {
@@ -54,8 +33,6 @@ int main(int argc, char * argv[])
   else
   {
     std::ifstream in(argv[1]);
-  //  inputDictionaries(in, dictionaries);
-    in.close();
+    inputDictionaries(in, dictionaries);
   }
-  std::cout << dictionaries.size() << "\n";
 }
