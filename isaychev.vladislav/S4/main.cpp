@@ -1,51 +1,46 @@
 #include <iostream>
 #include <fstream>
+#include <functional>
 #include "commands.hpp"
 #include "inputDictionaries.hpp"
-
-/*struct DelimeterIO
-{
-  char expected;
-}
-
-std::istream & operator>>(std::istream & in, DelimeterIO && del)
-{
-  std::istream::sentry guard(in);
-  char c = 0;
-  in >> c;
-  if (in || c != del.expected)
-  {
-    in.setstate(std::ios::failbit)
-  }
-  return in;
-}*/
-
 
 int main(int argc, char * argv[])
 {
   using namespace isaychev;
+  using command_map_t = BSTree< std::string, std::function< void(std::istream &) > >;
+
   BSTree< std::string, BSTree< int, std::string > > dictionaries;
-  if (argc != 2)
-  {
-    std::cerr << "troubles with filename\n";
-    return 1;
-  }
-  else
+  if (argc == 2)
   {
     std::ifstream in(argv[1]);
     inputDictionaries(in, dictionaries);
   }
+  else
+  {
+    std::cerr << "troubles with filename\n";
+    return 1;
+  }
 
-  complement(std::string("third"), std::string("second"), std::string("first"), dictionaries);
-  print(std::cout, std::string("third"), dictionaries);
+  command_map_t commands;
+  {
+    using namespace std::placeholders;
+    commands["print"] = std::bind(print, std::cref(dictionaries), std::ref(std::cout), _1);
+    commands["complement"] = std::bind(complement, std::ref(dictionaries), _1);
+    commands["intersect"] = std::bind(intersect, std::ref(dictionaries), _1);
+    commands["union"] = std::bind(unite, std::ref(dictionaries), _1);
+  }
 
-  intersect(std::string("fourth"), std::string("first"), std::string("second"), dictionaries);
-  print(std::cout, std::string("fourth"), dictionaries);
-  intersect(std::string("yafourth"), std::string("second"), std::string("first"), dictionaries);
-  print(std::cout, std::string("yafourth"), dictionaries);
-
-  unite(std::string("fifth"), std::string("first"), std::string("second"), dictionaries);
-  print(std::cout, std::string("fifth"), dictionaries);
-  unite(std::string("yafifth"), std::string("second"), std::string("first"), dictionaries);
-  print(std::cout, std::string("yafifth"), dictionaries);
+  std::string str;
+  while (!std::cin.eof())
+  {
+    std::cin >> str;
+    try
+    {
+      (commands.at(str))(std::cin);
+    }
+    catch (const std::exception & e)
+    {
+      std::cout << e.what() << "\n";
+    }
+  }
 }

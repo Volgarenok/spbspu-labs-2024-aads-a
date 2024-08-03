@@ -1,8 +1,10 @@
 #include "commands.hpp"
 #include <iostream>
 
-void isaychev::print(std::ostream & out, cstr_ref name, const map_t & dicts)
+void isaychev::print(const map_t & dicts, std::ostream & out, std::istream & in)
 {
+  std::string name;
+  in >> name;
   const dataset_t & current = dicts.at(name);
   if (current.empty())
   {
@@ -35,8 +37,10 @@ void complement_impl(isaychev::dataset_t & n3, const isaychev::dataset_t & n1, c
   }
 }
 
-void isaychev::complement(cstr_ref new_name, cstr_ref name1, cstr_ref name2, map_t & dicts)
+void isaychev::complement(map_t & dicts, std::istream & in)
 {
+  std::string new_name, name1 , name2;
+  in >> new_name >> name1 >> name2;
   const dataset_t & n1 = dicts.at(name1);
   const dataset_t & n2 = dicts.at(name2);
   auto result = dicts.insert(std::make_pair(new_name, dataset_t()));
@@ -57,8 +61,10 @@ void isaychev::complement(cstr_ref new_name, cstr_ref name1, cstr_ref name2, map
   }
 }
 
-void isaychev::intersect(cstr_ref new_name, cstr_ref name1, cstr_ref name2, map_t & dicts)
+void isaychev::intersect(map_t & dicts, std::istream & in)
 {
+  std::string new_name, name1 , name2;
+  in >> new_name >> name1 >> name2;
   const dataset_t & n1 = dicts.at(name1);
   const dataset_t & n2 = dicts.at(name2);
   auto result = dicts.insert(std::make_pair(new_name, dataset_t()));
@@ -90,8 +96,10 @@ void insert_elems(isaychev::dataset_t & n1, const isaychev::dataset_t & n2)
   }
 }
 
-void isaychev::unite(cstr_ref new_name, cstr_ref name1, cstr_ref name2, map_t & dicts)
+void isaychev::unite(map_t & dicts, std::istream & in)
 {
+  std::string new_name, name1 , name2;
+  in >> new_name >> name1 >> name2;
   const dataset_t & n1 = dicts.at(name1);
   const dataset_t & n2 = dicts.at(name2);
   auto result = dicts.insert(std::make_pair(new_name, dataset_t()));
