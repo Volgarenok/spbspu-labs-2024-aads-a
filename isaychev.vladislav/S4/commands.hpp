@@ -13,6 +13,8 @@ namespace isaychev
 
   void print(std::ostream & out, const std::string & name, const map_t & dicts);
   void complement(cstr_ref new_name, cstr_ref name1, cstr_ref name2, map_t & dicts);
+  void intersect(cstr_ref new_name, cstr_ref name1, cstr_ref name2, map_t & dicts);
+  void unite(cstr_ref new_name, cstr_ref name1, cstr_ref name2, map_t & dicts);
 }
 
 #endif

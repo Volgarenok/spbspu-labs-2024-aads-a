@@ -53,7 +53,56 @@ void isaychev::complement(cstr_ref new_name, cstr_ref name1, cstr_ref name2, map
   }
   else
   {
-    throw std::runtime_error("< dataset already exists >");
+    throw std::runtime_error("< dataset with such name already exists >");
   }
 }
 
+void isaychev::intersect(cstr_ref new_name, cstr_ref name1, cstr_ref name2, map_t & dicts)
+{
+  const dataset_t & n1 = dicts.at(name1);
+  const dataset_t & n2 = dicts.at(name2);
+  auto result = dicts.insert(std::make_pair(new_name, dataset_t()));
+  if (result.second)
+  {
+    dataset_t & n3 = (*(result.first)).second;
+    for (auto i = n1.cbegin(); i != n1.cend(); ++i)
+    {
+      for (auto j = n2.cbegin(); j != n2.cend(); ++j)
+      {
+        if ((*i).first == (*j).first)
+        {
+          n3.insert(*i);
+        }
+      }
+    }
+  }
+  else
+  {
+    throw std::runtime_error("< dataset with such name already exists >");
+  }
+}
+
+void insert_elems(isaychev::dataset_t & n1, const isaychev::dataset_t & n2)
+{
+  for (auto j = n2.cbegin(); j != n2.cend(); ++j)
+  {
+    n1.insert(*j);
+  }
+}
+
+void isaychev::unite(cstr_ref new_name, cstr_ref name1, cstr_ref name2, map_t & dicts)
+{
+  const dataset_t & n1 = dicts.at(name1);
+  const dataset_t & n2 = dicts.at(name2);
+  auto result = dicts.insert(std::make_pair(new_name, dataset_t()));
+  if (result.second)
+  {
+    dataset_t & n3 = (*(result.first)).second;
+    insert_elems(n3, n1);
+    insert_elems(n3, n2);
+  }
+  else
+  {
+    throw std::runtime_error("< dataset with such name already exists >");
+  }
+}

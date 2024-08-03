@@ -38,4 +38,14 @@ int main(int argc, char * argv[])
 
   complement(std::string("third"), std::string("second"), std::string("first"), dictionaries);
   print(std::cout, std::string("third"), dictionaries);
+
+  intersect(std::string("fourth"), std::string("first"), std::string("second"), dictionaries);
+  print(std::cout, std::string("fourth"), dictionaries);
+  intersect(std::string("yafourth"), std::string("second"), std::string("first"), dictionaries);
+  print(std::cout, std::string("yafourth"), dictionaries);
+
+  unite(std::string("fifth"), std::string("first"), std::string("second"), dictionaries);
+  print(std::cout, std::string("fifth"), dictionaries);
+  unite(std::string("yafifth"), std::string("second"), std::string("first"), dictionaries);
+  print(std::cout, std::string("yafifth"), dictionaries);
 }
