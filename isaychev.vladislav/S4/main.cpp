@@ -35,4 +35,7 @@ int main(int argc, char * argv[])
     std::ifstream in(argv[1]);
     inputDictionaries(in, dictionaries);
   }
+
+  complement(std::string("third"), std::string("second"), std::string("first"), dictionaries);
+  print(std::cout, std::string("third"), dictionaries);
 }

@@ -112,9 +112,12 @@ namespace isaychev
   template < class Key, class Value, class Compare >
   BSTree< Key, Value, Compare > & BSTree< Key, Value, Compare >::operator=(const Tree & rhs)
   {
-    clear();
-    cmp_ = rhs.cmp_;
-    copy_tree(rhs);
+    if (this != std::addressof(rhs))
+    {
+      clear();
+      cmp_ = rhs.cmp_;
+      copy_tree(rhs);
+    }
     return *this;
   }
 
