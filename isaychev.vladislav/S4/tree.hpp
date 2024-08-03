@@ -50,7 +50,6 @@ namespace isaychev
 
     void delete_tree(node_t * ptr) noexcept;
     void copy_tree(const Tree & rhs);
-    node_t * traverse_left(node_t * root) const;
     std::pair< node_t *, bool > insert_new(const value_t & value);
   };
 
@@ -122,22 +121,9 @@ namespace isaychev
   }
 
   template < class Key, class Value, class Compare >
-  detail::TreeNode< Key, Value > * BSTree< Key, Value, Compare >::traverse_left(node_t * root) const
-  {
-    if (root)
-    {
-      while (root->left)
-      {
-        root = root->left;
-      }
-    }
-    return root;
-  }
-
-  template < class Key, class Value, class Compare >
   TreeIter< Key, Value, Compare > BSTree< Key, Value, Compare >::begin()
   {
-    return TreeIter< Key, Value, Compare >(traverse_left(root_));
+    return TreeIter< Key, Value, Compare >(detail::traverse_left(root_));
   }
 
   template < class Key, class Value, class Compare >
@@ -149,7 +135,7 @@ namespace isaychev
   template < class Key, class Value, class Compare >
   ConstTreeIter< Key, Value, Compare > BSTree< Key, Value, Compare >::begin() const
   {
-    return ConstTreeIter< Key, Value, Compare >(traverse_left(root_));
+    return ConstTreeIter< Key, Value, Compare >(detail::traverse_left(root_));
   }
 
   template < class Key, class Value, class Compare >
@@ -161,7 +147,7 @@ namespace isaychev
   template < class Key, class Value, class Compare >
   ConstTreeIter< Key, Value, Compare > BSTree< Key, Value, Compare >::cbegin() const
   {
-    return ConstTreeIter< Key, Value, Compare >(traverse_left(root_));
+    return ConstTreeIter< Key, Value, Compare >(detail::traverse_left(root_));
   }
 
   template < class Key, class Value, class Compare >

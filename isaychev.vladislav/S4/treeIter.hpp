@@ -34,10 +34,6 @@ namespace isaychev
     friend class BSTree< Key, Value, Compare >;
 
     explicit ConstTreeIter(node_t * node);
-
-    node_t * traverse_left(node_t * node);
-    node_t * traverse_right(node_t * node);
-    void go_up();
   };
 
   template < class Key, class Value, class Compare >
@@ -51,25 +47,6 @@ namespace isaychev
   {}
 
   template < class Key, class Value, class Compare >
-  detail::TreeNode< Key, Value > * ConstTreeIter< Key, Value, Compare >::traverse_left(node_t * root)
-  {
-    if (root)
-    {
-      while (root->left)
-      {
-        root = root->left;
-      }
-    }
-    return root;
-  }
-
-  template < class Key, class Value, class Compare >
-  void ConstTreeIter< Key, Value, Compare >::go_up()
-  {
-    current_ = current_->parent;
-  }
-
-  template < class Key, class Value, class Compare >
   ConstTreeIter< Key, Value, Compare > & ConstTreeIter< Key, Value, Compare >::operator++()
   {
     if (!current_)
@@ -78,7 +55,7 @@ namespace isaychev
     }
     else if (current_->right)
     {
-      current_= traverse_left(current_->right);
+      current_= detail::traverse_left(current_->right);
     }
     else
     {
@@ -86,9 +63,9 @@ namespace isaychev
       {
         while (current_->parent && current_ == current_->parent->right)
         {
-          go_up();
+          current_ = detail::go_up(current_);
         }
-        go_up();
+        current_ = detail::go_up(current_);
       }
       else
       {
@@ -107,16 +84,6 @@ namespace isaychev
   }
 
   template < class Key, class Value, class Compare >
-  detail::TreeNode< Key, Value > * ConstTreeIter< Key, Value, Compare >::traverse_right(node_t * root)
-  {
-    if (!root)
-    {
-      return root;
-    }
-    return root->right ? traverse_right(root->right) : root;
-  }
-
-  template < class Key, class Value, class Compare >
   ConstTreeIter< Key, Value, Compare > & ConstTreeIter< Key, Value, Compare >::operator--()
   {
     if (!current_)
@@ -125,7 +92,7 @@ namespace isaychev
     }
     else if (current_->left)
     {
-      current_= traverse_right(current_->right);
+      current_= detail::traverse_right(current_->right);
     }
     else
     {
@@ -133,9 +100,9 @@ namespace isaychev
       {
         while (current_->parent && current_ == current_->parent->left)
         {
-          go_up();
+          current_ = detail::go_up(current_);
         }
-        go_up();
+        current_ = detail::go_up(current_);
       }
       else
       {
@@ -204,10 +171,6 @@ namespace isaychev
     friend class BSTree< Key, Value, Compare >;
 
     explicit TreeIter(node_t * node);
-
-    node_t * traverse_left(node_t * node);
-    node_t * traverse_right(node_t * node);
-    void go_up();
   };
 
   template < class Key, class Value, class Compare >
@@ -221,25 +184,6 @@ namespace isaychev
   {}
 
   template < class Key, class Value, class Compare >
-  detail::TreeNode< Key, Value > * TreeIter< Key, Value, Compare >::traverse_left(node_t * root)
-  {
-    if (root)
-    {
-      while (root->left)
-      {
-        root = root->left;
-      }
-    }
-    return root;
-  }
-
-  template < class Key, class Value, class Compare >
-  void TreeIter< Key, Value, Compare >::go_up()
-  {
-    current_ = current_->parent;
-  }
-
-  template < class Key, class Value, class Compare >
   TreeIter< Key, Value, Compare > & TreeIter< Key, Value, Compare >::operator++()
   {
     if (!current_)
@@ -248,7 +192,7 @@ namespace isaychev
     }
     else if (current_->right)
     {
-      current_= traverse_left(current_->right);
+      current_= detail::traverse_left(current_->right);
     }
     else
     {
@@ -256,9 +200,9 @@ namespace isaychev
       {
         while (current_->parent && current_ == current_->parent->right)
         {
-          go_up();
+          current_ = detail::go_up(current_);
         }
-        go_up();
+        current_ = detail::go_up(current_);
       }
       else
       {
@@ -277,16 +221,6 @@ namespace isaychev
   }
 
   template < class Key, class Value, class Compare >
-  detail::TreeNode< Key, Value > * TreeIter< Key, Value, Compare >::traverse_right(node_t * root)
-  {
-    if (!root)
-    {
-      return root;
-    }
-    return root->right ? traverse_right(root->right) : root;
-  }
-
-  template < class Key, class Value, class Compare >
   TreeIter< Key, Value, Compare > & TreeIter< Key, Value, Compare >::operator--()
   {
     if (!current_)
@@ -295,7 +229,7 @@ namespace isaychev
     }
     else if (current_->left)
     {
-      current_= traverse_right(current_->right);
+      current_= detail::traverse_right(current_->right);
     }
     else
     {
@@ -303,9 +237,9 @@ namespace isaychev
       {
         while (current_->parent && current_ == current_->parent->left)
         {
-          go_up();
+          current_ = detail::go_up(current_);
         }
-        go_up();
+        current_ = detail::go_up(current_);
       }
       else
       {

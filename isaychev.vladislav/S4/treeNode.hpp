@@ -22,6 +22,35 @@ namespace isaychev
        parent(root)
       {}
     };
+
+    template < class Key, class Value >
+    TreeNode< Key, Value > * traverse_left(TreeNode< Key, Value > * root)
+    {
+      if (root)
+      {
+        while (root->left)
+        {
+          root = root->left;
+        }
+      }
+      return root;
+    }
+
+    template < class Key, class Value >
+    TreeNode< Key, Value > * traverse_right(TreeNode< Key, Value > * root)
+    {
+      if (!root)
+      {
+        return root;
+      }
+      return root->right ? traverse_right(root->right) : root;
+    }
+
+    template < class Key, class Value >
+    TreeNode< Key, Value > * go_up(TreeNode< Key, Value > * current)
+    {
+      return current->parent;
+    }
   }
 }
 
