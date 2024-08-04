@@ -52,7 +52,9 @@ int main()
   {
     list_sum.push_back(0);
   }
-
+  //
+  bool overflow = false;
+  //
   List<List<size_t>> list_nums;
   for (size_t i = 0; i < max_size; ++i)
   {
@@ -72,8 +74,9 @@ int main()
           }
           else
           {
-            std::cerr << "Overflow\n";
-            return 1;
+            //std::cerr << "Overflow\n";
+            //return 1;
+            overflow = true;
           }
           list_num.push_back(*sub_iter);
         }
@@ -98,6 +101,13 @@ int main()
     }
     std::cout << '\n';
   }
+//
+  if (overflow)
+  {
+    std::cerr << "Overflow\n";
+    return 1;
+  }
+//
   for (auto iter = list_sum.begin(); iter != list_sum.end(); ++iter)
   {
     auto iter_next = iter;
