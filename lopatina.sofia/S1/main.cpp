@@ -100,14 +100,16 @@ int main()
   }
   for (auto iter = list_sum.begin(); iter != list_sum.end(); ++iter)
   {
-/*    if (iter == list_sum.tail_)
+    auto iter_next = iter;
+    ++iter_next;
+    if (iter_next == nullptr)
     {
       std::cout << *iter;
     }
     else
-    { */
+    {
       std::cout << *iter << ' ';
-//    }
+    }
   }
   std::cout << '\n';
   return 0;
