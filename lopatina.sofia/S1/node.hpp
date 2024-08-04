@@ -6,12 +6,12 @@ namespace lopatina
   template<typename T>
   struct Node
   {
-    T data;
-    Node<T> * next;
+    T data_;
+    Node<T> * next_;
 
-    Node(T _data):
-      data(_data),
-      next(nullptr)
+    Node(const T & data):
+      data_(data),
+      next_(nullptr)
     {}
   };
 }

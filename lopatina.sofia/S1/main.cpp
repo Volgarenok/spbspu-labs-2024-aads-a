@@ -4,7 +4,8 @@
 #include <utility>
 #include <limits>
 #include "node.hpp"
-#include "iterator.hpp"
+#include "list_iterator.hpp"
+#include "const_list_iterator.hpp"
 #include "list.hpp"
 
 int main()
@@ -99,14 +100,14 @@ int main()
   }
   for (auto iter = list_sum.begin(); iter != list_sum.end(); ++iter)
   {
-    if (iter == list_sum.tail)
+/*    if (iter == list_sum.tail_)
     {
       std::cout << *iter;
     }
     else
-    {
+    { */
       std::cout << *iter << ' ';
-    }
+//    }
   }
   std::cout << '\n';
   return 0;
