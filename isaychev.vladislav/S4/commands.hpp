@@ -3,7 +3,7 @@
 
 #include <string>
 #include <iosfwd>
-#include "tree.hpp"
+#include <tree/tree.hpp>
 
 namespace isaychev
 {

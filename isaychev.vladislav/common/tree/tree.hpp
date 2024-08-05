@@ -70,6 +70,7 @@ namespace isaychev
     void delete_tree(node_t * ptr) noexcept;
     void erase_el(node_t * curr);
     std::pair< node_t *, bool > insert_new(const value_t & value);
+    node_t * go_down(node_t * curr, const Key & key) const;
   };
 
   template < class Key, class Value, class Compare >
@@ -112,7 +113,7 @@ namespace isaychev
    cmp_(),
    size_(0)
   {
-    for (first; first != last; ++first)
+    for (; first != last; ++first)
     {
       insert(*first);
     }
@@ -221,14 +222,7 @@ namespace isaychev
       {
         return TreeIter< Key, Value, Compare >(current);
       }
-      if (cmp_(key, current->data.first))
-      {
-        current = current->left;
-      }
-      else
-      {
-        current = current->right;
-      }
+      current = go_down(current, key);
     }
     return end();
   }
@@ -236,7 +230,16 @@ namespace isaychev
   template < class Key, class Value, class Compare >
   ConstTreeIter< Key, Value, Compare > BSTree< Key, Value, Compare >::find(const Key & key) const
   {
-    return const_iterator((find(key)).current_);
+    node_t * current = root_;
+    while (current)
+    {
+      if (key == current->data.first)
+      {
+        return ConstTreeIter< Key, Value, Compare >(current);
+      }
+      current = go_down(current, key);
+    }
+    return cend();
   }
 
   template < class Key, class Value, class Compare >
@@ -366,7 +369,7 @@ namespace isaychev
   template < class InputIt >
   void BSTree< Key, Value, Compare >::insert(InputIt first, InputIt last) //func input_range(first, last) s class InputIt
   {
-    for (first; first != last; ++first)
+    for (; first != last; ++first)
     {
       insert(*first);
     }
@@ -530,6 +533,20 @@ namespace isaychev
     }
     ++size_;
     return std::pair< node_t *, bool >(current, true);
+  }
+
+  template < class Key, class Value, class Compare >
+  detail::TreeNode< Key, Value > * BSTree< Key, Value, Compare >::go_down(node_t * current, const Key & key) const
+  {
+    if (cmp_(key, current->data.first))
+    {
+      current = current->left;
+    }
+    else
+    {
+      current = current->right;
+    }
+    return current;
   }
 }
 
