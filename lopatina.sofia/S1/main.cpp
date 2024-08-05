@@ -38,6 +38,17 @@ size_t inputListOfPairs(std::istream & in, listOfPairs & list)
   return max_size;
 }
 
+template <typename T>
+void outputList(std::ostream & out, lopatina::List<T> list)
+{
+  out << list.front();
+  for (auto iter = ++(list.begin()); iter != list.end(); ++iter)
+  {
+    out << ' ' << *iter;
+  }
+  out << '\n';
+}
+
 int main()
 {
   using namespace lopatina;
@@ -94,31 +105,16 @@ int main()
     list_nums.push_back(list_num);
   }
 
-  std::cout << list_names.front();
-  for (auto iter_name = ++(list_names.begin()); iter_name != list_names.end(); ++iter_name)
-  {
-    std::cout << ' ' << *iter_name;
-  }
-  std::cout << '\n';
+  outputList(std::cout, list_names);
   for (auto iter_nums = list_nums.begin(); iter_nums != list_nums.end(); ++iter_nums)
   {
-    std::cout << (*iter_nums).front();
-    for (auto iter_num = ++((*iter_nums).begin()); iter_num != (*iter_nums).end(); ++iter_num)
-    {
-      std::cout << ' ' << *iter_num;
-    }
-    std::cout << '\n';
+    outputList(std::cout, *iter_nums);
   }
   if (overflow)
   {
     std::cerr << "Overflow\n";
     return 1;
   }
-  std::cout << list_sums.front();
-  for (auto iter_sum = ++(list_sums.begin()); iter_sum != list_sums.end(); ++iter_sum)
-  {
-    std::cout << ' ' << *iter_sum;
-  }
-  std::cout << '\n';
+  outputList(std::cout, list_sums);
   return 0;
 }
