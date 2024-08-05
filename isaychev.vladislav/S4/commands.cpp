@@ -8,7 +8,7 @@ void isaychev::print(const map_t & dicts, std::ostream & out, std::istream & in)
   const dataset_t & current = dicts.at(name);
   if (current.empty())
   {
-    throw std::runtime_error("< empty dataset >");
+    throw std::runtime_error("<EMPTY>");
   }
   out << name;
   for (auto i = current.cbegin(); i != current.cend(); ++i)
@@ -57,7 +57,7 @@ void isaychev::complement(map_t & dicts, std::istream & in)
   }
   else
   {
-    throw std::runtime_error("< dataset with such name already exists >");
+    throw std::runtime_error("<INVALID COMMAND>");
   }
 }
 
@@ -84,7 +84,7 @@ void isaychev::intersect(map_t & dicts, std::istream & in)
   }
   else
   {
-    throw std::runtime_error("< dataset with such name already exists >");
+    throw std::runtime_error("<INVALID COMMAND>");
   }
 }
 
@@ -111,6 +111,6 @@ void isaychev::unite(map_t & dicts, std::istream & in)
   }
   else
   {
-    throw std::runtime_error("< dataset with such name already exists >");
+    throw std::runtime_error("<INVALID COMMNAD>");
   }
 }

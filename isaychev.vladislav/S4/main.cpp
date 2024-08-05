@@ -1,6 +1,5 @@
 #include <iostream>
 #include <fstream>
-#include <functional>
 #include "commands.hpp"
 #include "inputDictionaries.hpp"
 
@@ -43,4 +42,26 @@ int main(int argc, char * argv[])
       std::cout << e.what() << "\n";
     }
   }
+/*  BSTree< int, std::string > tree;
+  tree[7] = "g";
+  tree[3] = "c";
+  tree[1] = "a";
+  tree[2] = "b";
+  tree[5] = "e";
+  tree[4] = "d";
+  tree[10] = "l";
+  tree[6] = "f";
+  tree[12] = "n";
+  tree[8] = "h";
+  tree[9] = "k";
+  tree[11] = "m";
+
+  auto i = tree.begin();
+  for (int a = 0; a < 6; ++a)
+  {
+    ++i;
+  }
+  std::cout << (*i).first << "\n";
+  auto n = tree.erase(i);
+  std::cout << (*n).first << "\n";*/
 }

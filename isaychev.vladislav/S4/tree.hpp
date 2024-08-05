@@ -4,6 +4,7 @@
 #include <functional>
 #include <stdexcept>
 #include "treeIter.hpp"
+#include "constTreeIter.hpp"
 
 namespace isaychev
 {
@@ -37,11 +38,17 @@ namespace isaychev
     void swap(Tree & other) noexcept;
     iterator find(const Key & key);
     const_iterator find(const Key & key) const;
+    size_t count(const Key & key) const;
+    std::pair< iterator, iterator > equal_range(const Key & key);
+    std::pair< const_iterator, const_iterator > equal_range(const Key & key) const;
 
     Value & at(const Key & key);
     const Value & at(const Key & key) const;
     Value & operator[](const Key & key);
     std::pair< iterator, bool > insert(const value_t & value);
+    iterator erase(iterator pos);
+    const_iterator erase(const_iterator pos);
+    size_t erase(const Key & key);
 
    private:
     node_t * root_;
@@ -51,6 +58,8 @@ namespace isaychev
     void delete_tree(node_t * ptr) noexcept;
     void copy_tree(const Tree & rhs);
     std::pair< node_t *, bool > insert_new(const value_t & value);
+    node_t * go_down(node_t * current, const Key & key) const;
+    void erase_el(node_t * curr);
   };
 
   template < class Key, class Value, class Compare >
@@ -196,6 +205,20 @@ namespace isaychev
   }
 
   template < class Key, class Value, class Compare >
+  detail::TreeNode< Key, Value > * BSTree< Key, Value, Compare >::go_down(node_t * current, const Key & key) const
+  {
+    if (cmp_(key, current->data.first))
+    {
+      current = current->left;
+    }
+    else
+    {
+      current = current->right;
+    }
+    return current;
+  }
+
+  template < class Key, class Value, class Compare >
   TreeIter< Key, Value, Compare > BSTree< Key, Value, Compare >::find(const Key & key)
   {
     node_t * current = root_;
@@ -205,14 +228,7 @@ namespace isaychev
       {
         return TreeIter< Key, Value, Compare >(current);
       }
-      if (cmp_(key, current->data.first))
-      {
-        current = current->left;
-      }
-      else
-      {
-        current = current->right;
-      }
+      current = go_down(current, key);
     }
     return end();
   }
@@ -227,16 +243,58 @@ namespace isaychev
       {
         return ConstTreeIter< Key, Value, Compare >(current);
       }
-      if (cmp_(key, current->data.first))
-      {
-        current = current->left;
-      }
-      else
-      {
-        current = current->right;
-      } //mpjno vinesti v func if{} else{}
+      current = go_down(current, key);
     }
     return cend();
+  }
+
+  template < class Key, class Value, class Compare >
+  size_t BSTree< Key, Value, Compare >::count(const Key & key) const
+  {
+    auto result = find(key);
+    if (!result.current_)
+    {
+      return 0;
+    }
+    return 1;
+  }
+
+  template < class Key, class Value, class Compare >
+  std::pair< TreeIter< Key, Value, Compare >, TreeIter< Key, Value, Compare > >
+  BSTree< Key, Value, Compare >::equal_range(const Key & key)
+  {
+    iterator result = find(key);
+    if (!result.current_)
+    {
+      return std::pair< iterator, iterator >(end(), end());
+    }
+    iterator lesser;
+    if (result == (*this).begin())
+    {
+      return std::pair< iterator, iterator >(end(), ++result);
+    }
+    lesser = result++;
+    --lesser;
+    return std::pair< iterator, iterator >(lesser, result);
+  }
+
+  template < class Key, class Value, class Compare >
+  std::pair< ConstTreeIter< Key, Value, Compare >, ConstTreeIter< Key, Value, Compare > >
+  BSTree< Key, Value, Compare >::equal_range(const Key & key) const
+  {
+    const_iterator result = find(key);
+    if (!result.current_)
+    {
+      return std::pair< const_iterator, const_iterator >(cend(), cend());
+    }
+    const_iterator lesser;
+    if (result == (*this).cbegin())
+    {
+      return std::pair< const_iterator, const_iterator >(cend(), ++result);
+    }
+    lesser = result++;
+    --lesser;
+    return std::pair< const_iterator, const_iterator >(lesser, result);
   }
 
   template < class Key, class Value, class Compare >
@@ -273,6 +331,96 @@ namespace isaychev
   {
     auto result = insert_new(value);
     return std::pair< iterator, bool >(iterator(result.first), result.second);
+  }
+
+  template < class Key, class Value, class Compare >
+  void BSTree< Key, Value, Compare >::erase_el(node_t * curr)
+  {
+    if (curr->left && !curr->right)
+    {
+      if (curr->parent && curr->parent->left == curr)
+      {
+        curr->parent->left = curr->left;
+        curr->left->parent = curr->parent;
+      }
+      else if (curr->parent && curr->parent->right == curr)
+      {
+        curr->parent->right = curr->left;
+        curr->left->parent = curr->parent;
+      }
+      else
+      {
+        root_ = curr->left;
+      }
+    }
+    else if (!curr->left && curr->right)
+    {
+      if (curr->parent && curr->parent->left == curr)
+      {
+        curr->parent->left = curr->right;
+        curr->right->parent = curr->parent;
+      }
+      else if (curr->parent && curr->parent->right == curr)
+      {
+        curr->parent->right = curr->right;
+        curr->right->parent = curr->parent;
+      }
+      else
+      {
+        root_ = curr->right;
+      }
+    }
+    else if (curr->left && curr->right)
+    {
+      node_t * min_right = detail::traverse_left(curr->right);
+      min_right->left = curr->left;
+      curr->left->parent = min_right;
+      if (curr->parent && curr->parent->left == curr)
+      {
+        curr->parent->left = curr->right;
+        curr->right->parent = curr->parent;
+      }
+      else if (curr->parent && curr->parent->right == curr)
+      {
+        curr->parent->right = curr->right;
+        curr->right->parent = curr->parent;
+      }
+      else
+      {
+        root_ = curr->right;
+      }
+    }
+    delete curr;
+  }
+
+  template < class Key, class Value, class Compare >
+  TreeIter< Key, Value, Compare > BSTree< Key, Value, Compare >::erase(iterator pos)
+  {
+    node_t * trash = pos.current_;
+    iterator next = ++pos;
+    erase_el(trash);
+    return next;
+  }
+
+  template < class Key, class Value, class Compare >
+  ConstTreeIter< Key, Value, Compare >  BSTree< Key, Value, Compare >::erase(const_iterator pos)
+  {
+    node_t * trash = pos.current_;
+    const_iterator next = ++pos;
+    erase_el(trash);
+    return next;
+  }
+
+  template < class Key, class Value, class Compare >
+  size_t BSTree< Key, Value, Compare >::erase(const Key & key)
+  {
+    auto trash = find(key);
+    if (!trash.current_)
+    {
+      return 0;
+    }
+    erase_el(trash.current_);
+    return 1;
   }
 
   template < class Key, class Value, class Compare >

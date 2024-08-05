@@ -1,5 +1,5 @@
-#ifndef TREEITER_HPP
-#define TREEITER_HPP
+#ifndef CONSTTREEITER_HPP
+#define CONSTTREEITER_HPP
 
 #include <iterator>
 #include "treeNode.hpp"
@@ -10,13 +10,13 @@ namespace isaychev
   class BSTree;
 
   template < class Key, class Value, class Compare >
-  class TreeIter: public std::iterator< std::bidirectional_iterator_tag, Key, Value, Compare >
+  class ConstTreeIter: public std::iterator< std::bidirectional_iterator_tag, Key, Value, Compare >
   {
-    using this_t = TreeIter< Key, Value, Compare >;
+    using this_t = ConstTreeIter< Key, Value, Compare >;
     using node_t = detail::TreeNode< Key, Value >;
 
    public:
-    TreeIter();
+    ConstTreeIter();
 
     this_t & operator++();
     this_t operator++(int);
@@ -26,30 +26,28 @@ namespace isaychev
     bool operator==(const this_t & rhs);
     bool operator!=(const this_t & rhs);
 
-    std::pair< Key, Value > & operator*();
     const std::pair< Key, Value > & operator*() const;
-    std::pair< Key, Value > * operator->();
     const std::pair< Key, Value > * operator->() const;
 
    private:
     node_t * current_;
     friend class BSTree< Key, Value, Compare >;
 
-    explicit TreeIter(node_t * node);
+    explicit ConstTreeIter(node_t * node);
   };
 
   template < class Key, class Value, class Compare >
-  TreeIter< Key, Value, Compare >::TreeIter():
+  ConstTreeIter< Key, Value, Compare >::ConstTreeIter():
    current_(nullptr)
   {}
 
   template < class Key, class Value, class Compare >
-  TreeIter< Key, Value, Compare >::TreeIter(node_t * node):
+  ConstTreeIter< Key, Value, Compare >::ConstTreeIter(node_t * node):
    current_(node)
   {}
 
   template < class Key, class Value, class Compare >
-  TreeIter< Key, Value, Compare > & TreeIter< Key, Value, Compare >::operator++()
+  ConstTreeIter< Key, Value, Compare > & ConstTreeIter< Key, Value, Compare >::operator++()
   {
     if (!current_)
     {
@@ -78,7 +76,7 @@ namespace isaychev
   }
 
   template < class Key, class Value, class Compare >
-  TreeIter< Key, Value, Compare > TreeIter< Key, Value, Compare >::operator++(int)
+  ConstTreeIter< Key, Value, Compare > ConstTreeIter< Key, Value, Compare >::operator++(int)
   {
     auto iter = *this;
     ++(*this);
@@ -86,7 +84,7 @@ namespace isaychev
   }
 
   template < class Key, class Value, class Compare >
-  TreeIter< Key, Value, Compare > & TreeIter< Key, Value, Compare >::operator--()
+  ConstTreeIter< Key, Value, Compare > & ConstTreeIter< Key, Value, Compare >::operator--()
   {
     if (!current_)
     {
@@ -115,7 +113,7 @@ namespace isaychev
   }
 
   template < class Key, class Value, class Compare >
-  TreeIter< Key, Value, Compare > TreeIter< Key, Value, Compare >::operator--(int)
+  ConstTreeIter< Key, Value, Compare > ConstTreeIter< Key, Value, Compare >::operator--(int)
   {
     auto iter = *this;
     --(*this);
@@ -123,37 +121,25 @@ namespace isaychev
   }
 
   template < class Key, class Value, class Compare >
-  bool TreeIter< Key, Value, Compare >::operator==(const this_t & rhs)
+  bool ConstTreeIter< Key, Value, Compare >::operator==(const this_t & rhs)
   {
     return current_ == rhs.current_;
   }
 
   template < class Key, class Value, class Compare >
-  bool TreeIter< Key, Value, Compare >::operator!=(const this_t & rhs)
+  bool ConstTreeIter< Key, Value, Compare >::operator!=(const this_t & rhs)
   {
     return current_ != rhs.current_;
   }
 
   template < class Key, class Value, class Compare >
-  std::pair< Key, Value > & TreeIter< Key, Value, Compare >::operator*()
+  const std::pair< Key, Value > & ConstTreeIter< Key, Value, Compare >::operator*() const
   {
     return current_->data;
   }
 
   template < class Key, class Value, class Compare >
-  const std::pair< Key, Value > & TreeIter< Key, Value, Compare >::operator*() const
-  {
-    return current_->data;
-  }
-
-  template < class Key, class Value, class Compare >
-  std::pair< Key, Value > * TreeIter< Key, Value, Compare >::operator->()
-  {
-    return std::addressof(current_->data);
-  }
-
-  template < class Key, class Value, class Compare >
-  const std::pair< Key, Value > * TreeIter< Key, Value, Compare >::operator->() const
+  const std::pair< Key, Value > * ConstTreeIter< Key, Value, Compare >::operator->() const
   {
     return std::addressof(current_->data);
   }
