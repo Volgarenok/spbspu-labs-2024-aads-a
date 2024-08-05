@@ -42,7 +42,7 @@ int main(int argc, char * argv[])
       std::cout << e.what() << "\n";
     }
   }
-/*  BSTree< int, std::string > tree;
+  /*BSTree< int, std::string > tree;
   tree[7] = "g";
   tree[3] = "c";
   tree[1] = "a";
@@ -56,12 +56,9 @@ int main(int argc, char * argv[])
   tree[9] = "k";
   tree[11] = "m";
 
-  auto i = tree.begin();
-  for (int a = 0; a < 6; ++a)
-  {
-    ++i;
-  }
-  std::cout << (*i).first << "\n";
-  auto n = tree.erase(i);
-  std::cout << (*n).first << "\n";*/
+  BSTree< int, std::string > tree2;
+  tree2 = tree;
+
+  auto i = tree.cbegin();
+  std::cout << (*i).first << "\n";*/
 }
