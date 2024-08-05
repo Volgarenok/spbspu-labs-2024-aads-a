@@ -30,23 +30,23 @@ namespace rebdev
         delete headNode_;
       }
 
-      iterator begin()
+      iterator begin() const
       {
         node * beginNode = headNode_;
-        while ((beginNode->left != nullptr) || (beginNode->right != nullptr))
+        while (((beginNode->left) != nullptr) || ((beginNode->right) != nullptr))
         {
-          while (beginNode->left != nullptr)
+          while ((beginNode->left) != nullptr)
           {
-            beginNode = beginNode->left;
+            beginNode = (beginNode->left);
           }
-          if (beginNode->right != nullptr)
+          if ((beginNode->right) != nullptr)
           {
-            beginNode = beginNode->right;
+            beginNode = (beginNode->right);
           }
         }
         return iterator(beginNode);
       }
-      iterator end()
+      iterator end() const
       {
         return iterator(headNode_);
       }
@@ -77,44 +77,44 @@ namespace rebdev
         }
 
         node * newNode = new node{nullptr, nullptr, nullptr, pair{k, Value{}}};
-        if (headNode_->right == nullptr)
+        if ((headNode_->right) == nullptr)
         {
-          headNode_->right = newNode;
-          newNode->parent = headNode_;
+          (headNode_->right) = newNode;
+          (newNode->parent) = headNode_;
         }
         else
         {
-          node * nodeNow = headNode_->right;
-          while (newNode->parent != nodeNow)
+          node * nodeNow = (headNode_->right);
+          while ((newNode->parent) != nodeNow)
           {
-            if (comp(nodeNow->data.first, k))
+            if (comp((nodeNow->data.first), k))
             {
               if ((nodeNow->right) == nullptr)
               {
-                nodeNow->right = newNode;
-                newNode->parent = nodeNow;
+                (nodeNow->right) = newNode;
+                (newNode->parent) = nodeNow;
               }
               else
               {
-                nodeNow = nodeNow->right;
+                nodeNow = (nodeNow->right);
               }
             }
             else
             {
               if ((nodeNow->left) == nullptr)
               {
-                nodeNow->left = newNode;
-                newNode->parent = nodeNow;
+                (nodeNow->left) = newNode;
+                (newNode->parent) = nodeNow;
               }
               else
               {
-                nodeNow = nodeNow->left;
+                nodeNow = (nodeNow->left);
               }
             }
           }
         }
         ++size_;
-        return newNode->data.second;
+        return (newNode->data.second);
       }
       Value & operator[](Key && k)
       {
@@ -155,7 +155,112 @@ namespace rebdev
         }
         size_ = 0;
       }
-
+      std::pair< iterator, bool > insert(const pair & p)
+      {
+        iterator it = find(p.first);
+        bool orig = (it == end());
+        if (orig)
+        {
+          (*this)[p.first] = p.second;
+        }
+        return std::pair< iterator, bool >{it, orig};
+      }
+      iterator erase (iterator position)
+      {
+        node * it = position.node_;
+        if (((it->left) == nullptr) && ((it->right) == nullptr))
+        {
+          if ((it->parent) != nullptr)
+          {
+            if ((it->parent->left) == it)
+            {
+              it->parent->left = nullptr;
+            }
+            else
+            {
+              it->parent->right = nullptr;
+            }
+          }
+          delete it;
+          it = headNode_;
+        }
+        else
+        {
+          if ((it->left) != nullptr)
+          {
+            while ((it->left) != nullptr)
+            {
+              it = (it->left);
+              while ((it->right) != nullptr)
+              {
+                it = (it->right);
+              }
+            }
+          }
+          else
+          {
+            while ((it->right) != nullptr)
+            {
+              it = (it->right);
+              while ((it->left) != nullptr)
+              {
+                it = (it->left);
+              }
+            }
+          }
+          if ((position.node_->left) != it)
+          {
+            (it->left) = (position.node_->left);
+          }
+          else
+          {
+            (it->left) = nullptr;
+          }
+          if ((position.node_->right) != it)
+          {
+            (it->right) = (position.node_->right);
+          }
+          else
+          {
+            (it->right) = nullptr;
+          }
+          (it->parent) = (position.node_->parent);
+          if ((it->left) != nullptr)
+          {
+            (it->left->parent) = it;
+          }
+          if ((it->right) != nullptr)
+          {
+            (it->right->parent) = it;
+          }
+          if ((it->parent) != nullptr)
+          {
+            if ((it->parent->right) == position.node_)
+            {
+              (it->parent->right) = it;
+            }
+            else
+            {
+              (it->parent->left) = it;
+            }
+          }
+          delete position.node_;
+        }
+        --size_;
+        return iterator(it);
+      }
+      size_t erase (const Key & k)
+      {
+        size_t num = 0;
+        iterator it = find(k);
+        while ((it.node_) != headNode_)
+        {
+          erase(it);
+          ++num;
+          it = find(k);
+        }
+        return num;
+      }
       iterator find(const Key & k)
       {
         return iterator(findBase(k));
@@ -163,6 +268,27 @@ namespace rebdev
       const_iterator find(const Key & k) const
       {
         return const_iterator(findBase(k));
+      }
+      size_t count (const Key & k) const
+      {
+        size_t num = 0;
+        iterator it = begin();
+        while (it != end())
+        {
+          num += ((*it).first == k);
+          ++it;
+        }
+        return num;
+      }
+      std::pair< const_iterator, const_iterator > equal_range (const Key & k) const
+      {
+        const_iterator it = find(k);
+        return std::pair< const_iterator, const_iterator >{it, it};
+      }
+      std::pair< iterator, iterator > equal_range (const Key & k)
+      {
+        iterator it = find(k);
+        return std::pair< iterator, iterator >{it, it};
       }
 
     private:
@@ -173,15 +299,15 @@ namespace rebdev
       node * findBase(const Key & k)
       {
         node * nodeNow = headNode_;
-        while (nodeNow->data.first != k)
+        while ((nodeNow->data.first) != k)
         {
-          if (comp(nodeNow->data.first, k))
+          if (comp((nodeNow->data.first), k))
           {
-            nodeNow = nodeNow->right;
+            nodeNow = (nodeNow->right);
           }
           else
           {
-            nodeNow = nodeNow->left;
+            nodeNow = (nodeNow->left);
           }
           if (nodeNow == nullptr)
           {

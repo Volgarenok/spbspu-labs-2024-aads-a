@@ -47,23 +47,23 @@ namespace rebdev
 
       iter & operator++()
       {
-        node * nodeCopy = node_->parent;
-        if ((nodeCopy->right == node_) || (nodeCopy->right == nullptr))
+        node * nodeCopy = (node_->parent);
+        if (((nodeCopy->right) == node_) || ((nodeCopy->right) == nullptr))
         {
           node_ = nodeCopy;
         }
         else
         {
-          node_ = nodeCopy->right;
-          while ((node_->left != nullptr) || (node_->right != nullptr))
+          node_ = (nodeCopy->right);
+          while (((node_->left) != nullptr) || ((node_->right) != nullptr))
           {
-            while (node_->left != nullptr)
+            while ((node_->left) != nullptr)
             {
-              node_ = node_->left;
+              node_ = (node_->left);
             }
-            if (node_->right != nullptr)
+            if ((node_->right) != nullptr)
             {
-              node_ = node_->right;
+              node_ = (node_->right);
             }
           }
         }
@@ -78,21 +78,21 @@ namespace rebdev
       }
       iter & operator--()
       {
-        if (node_->right != nullptr)
+        if ((node_->right) != nullptr)
         {
-          node_ = node_->right;
+          node_ = (node_->right);
         }
-        else if (node_->left != nullptr)
+        else if ((node_->left) != nullptr)
         {
-          node_ = node_->left;
+          node_ = (node_->left);
         }
         else
         {
-          while (!((node_->parent->right == node_) && (node_->parent->left != nullptr)))
+          while (!(((node_->parent->right) == node_) && ((node_->parent->left) != nullptr)))
           {
-            node_ = node_->parent;
+            node_ = (node_->parent);
           }
-          node_ = node_->parent->left;
+          node_ = (node_->parent->left);
         }
         return *this;
       }
