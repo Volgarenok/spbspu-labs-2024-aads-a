@@ -56,14 +56,14 @@ int main()
     list_names.push_back((*iter).first);
   }
 
-  List<size_t> list_sum;
+  List<size_t> list_sums;
   if (max_size == 0)
   {
-    list_sum.push_back(0);
+    list_sums.push_back(0);
   }
-  //
+
   bool overflow = false;
-  //
+
   List<List<size_t>> list_nums;
   for (size_t i = 0; i < max_size; ++i)
   {
@@ -90,45 +90,34 @@ int main()
         ++size;
       }
     }
-    list_sum.push_back(sum);
+    list_sums.push_back(sum);
     list_nums.push_back(list_num);
   }
+
   std::cout << list_names.front();
-  for (auto iter0 = ++(list_names.begin()); iter0 != list_names.end(); ++iter0)
+  for (auto iter_name = ++(list_names.begin()); iter_name != list_names.end(); ++iter_name)
   {
-    std::cout << ' ' << *iter0;
+    std::cout << ' ' << *iter_name;
   }
   std::cout << '\n';
-  for (auto iter1 = list_nums.begin(); iter1 != list_nums.end(); ++iter1)
+  for (auto iter_nums = list_nums.begin(); iter_nums != list_nums.end(); ++iter_nums)
   {
-    std::cout << (*iter1).front();
-    for (auto iter2 = ++((*iter1).begin()); iter2 != (*iter1).end(); ++iter2)
+    std::cout << (*iter_nums).front();
+    for (auto iter_num = ++((*iter_nums).begin()); iter_num != (*iter_nums).end(); ++iter_num)
     {
-      std::cout << ' ' << *iter2;
+      std::cout << ' ' << *iter_num;
     }
     std::cout << '\n';
   }
-//
   if (overflow)
   {
     std::cerr << "Overflow\n";
     return 1;
   }
-//
-  std::cout << list_sum.front();
-  for (auto iter = ++(list_sum.begin()); iter != list_sum.end(); ++iter)
+  std::cout << list_sums.front();
+  for (auto iter_sum = ++(list_sums.begin()); iter_sum != list_sums.end(); ++iter_sum)
   {
-/*
-    auto iter_next = iter;
-    ++iter_next;
-    if (iter_next == nullptr)
-    {
-      std::cout << *iter;
-    }
-    else
-    {*/
-    std::cout << ' ' << *iter;
-   // }
+    std::cout << ' ' << *iter_sum;
   }
   std::cout << '\n';
   return 0;
