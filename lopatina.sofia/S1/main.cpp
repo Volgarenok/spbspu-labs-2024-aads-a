@@ -8,25 +8,24 @@
 #include "const_list_iterator.hpp"
 #include "list.hpp"
 
-int main()
+using listOfPairs = lopatina::List<std::pair<std::string, lopatina::List<size_t>>>;
+
+size_t inputListOfPairs(std::istream & in, listOfPairs & list)
 {
-  using namespace lopatina;
-  List<std::pair<std::string,List<size_t>>> list;
   std::string name = "";
   std::string num_str = "";
-  size_t number = 0;
   size_t max_size = 0;
-  while (std::cin >> name)
+  while (in >> name)
   {
     size_t loc_size = 0;
-    List<size_t> list_num;
-    std::getline(std::cin,num_str);
-    size_t sz = 0;
+    lopatina::List<size_t> list_num;
+    std::getline(in, num_str);
+    size_t idx = 0;
     while (!num_str.empty())
     {
-      number = 0;
-      number = std::stoull(num_str,&sz);
-      num_str = num_str.substr(sz);
+      size_t number = 0;
+      number = std::stoull(num_str, &idx);
+      num_str = num_str.substr(idx);
       list_num.push_back(number);
       loc_size += 1;
     }
@@ -36,11 +35,21 @@ int main()
       max_size = loc_size;
     }
   }
+  return max_size;
+}
+
+int main()
+{
+  using namespace lopatina;
+  List<std::pair<std::string, List<size_t>>> list;
+  size_t max_size = inputListOfPairs(std::cin, list);
+
   if (list.empty())
   {
     std::cout << "0\n";
     return 0;
   }
+
   List<std::string> list_names;
   for (auto iter = list.begin(); iter != list.end(); ++iter)
   {
@@ -74,8 +83,6 @@ int main()
           }
           else
           {
-            //std::cerr << "Overflow\n";
-            //return 1;
             overflow = true;
           }
           list_num.push_back(*sub_iter);
@@ -108,8 +115,10 @@ int main()
     return 1;
   }
 //
-  for (auto iter = list_sum.begin(); iter != list_sum.end(); ++iter)
+  std::cout << list_sum.front();
+  for (auto iter = ++(list_sum.begin()); iter != list_sum.end(); ++iter)
   {
+/*
     auto iter_next = iter;
     ++iter_next;
     if (iter_next == nullptr)
@@ -117,9 +126,9 @@ int main()
       std::cout << *iter;
     }
     else
-    {
-      std::cout << *iter << ' ';
-    }
+    {*/
+    std::cout << ' ' << *iter;
+   // }
   }
   std::cout << '\n';
   return 0;
