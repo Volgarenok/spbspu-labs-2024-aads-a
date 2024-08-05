@@ -307,7 +307,14 @@ namespace isaychev
   template < class Key, class Value, class Compare >
   ConstTreeIter< Key, Value, Compare > BSTree< Key, Value, Compare >::lower_bound(const Key & key) const
   {
-    return const_iterator(*(lower_bound(key)).current_);
+    for (auto i = cbegin(); i != cend(); ++i)
+    {
+      if (!cmp_((*i).first), key)
+      {
+        return i;
+      }
+    }
+    return cend();
   }
 
   template < class Key, class Value, class Compare >
@@ -326,7 +333,14 @@ namespace isaychev
   template < class Key, class Value, class Compare >
   ConstTreeIter< Key, Value, Compare > BSTree< Key, Value, Compare >::upper_bound(const Key & key) const
   {
-    return const_iterator(*(upper_bound(key)).current_);
+    for (auto i = cbegin(); i != cend(); ++i)
+    {
+      if (cmp_(key, (*i).first))
+      {
+        return i;
+      }
+    }
+    return cend();
   }
 
   template < class Key, class Value, class Compare >
