@@ -1,19 +1,7 @@
 #include <fstream>
 #include <iostream>
 #include "inputDataset.hpp"
-
-/*class DatasetSummarizer
-{
- public:
-  void operator()(const std::pair< int, std::string > & elem);
-  std::ostream & operator<<(std::ostream & out);
-
- private:
-  int key_sum;
-  std::string value_sum;
-
-  //check_flows
-};*/
+#include "datasetSummarizer.hpp"
 
 int main(int argc, char * argv[])
 {
@@ -29,4 +17,12 @@ int main(int argc, char * argv[])
     std::cerr << "bad launch\n";
     return 1;
   }
+
+  DatasetSummarizer f;
+  for (auto i = dataset.cbegin(); i != dataset.cend(); ++i)
+  {
+    f(*i);
+  }
+
+  std::cout << f.get_keysum() << f.get_valsum() << "\n";
 }
