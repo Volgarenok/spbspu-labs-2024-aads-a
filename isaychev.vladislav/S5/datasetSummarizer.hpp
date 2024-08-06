@@ -1,7 +1,6 @@
 #ifndef DATASETSUMMARIZER_HPP
 #define DATASETSUMMARIZER_HPP
 
-#include <iosfwd>
 #include <string>
 
 namespace isaychev

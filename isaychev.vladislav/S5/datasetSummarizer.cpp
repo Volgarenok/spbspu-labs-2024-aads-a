@@ -1,29 +1,25 @@
 #include "datasetSummarizer.hpp"
 #include <limits>
-#include <ostream>
+#include <stdexcept>
 
 isaychev::DatasetSummarizer::DatasetSummarizer():
  key_sum(0),
  value_sum()
 {}
 
-void check_boundaries(int a, int b) //-> bool(int, int)
+bool isOverflow(int a, int b)
 {
   int max = std::numeric_limits< int >::max();
-  if (b > 0 && max - b < a)
-  {
-    throw std::overflow_error("final sum is too big");
-  }
   int min = std::numeric_limits< int >::min();
-  if (a < 0 && b < 0 &&  min - b > a)
-  {
-    throw std::underflow_error("final sum is too ");
-  }
+  return ((b > 0 && max - b < a) || (a < 0 && b < 0 &&  min - b > a));
 }
 
 void isaychev::DatasetSummarizer::operator()(const std::pair< int, std::string > & elem)
 {
-  check_boundaries(key_sum, elem.first);
+  if (isOverflow(key_sum, elem.first))
+  {
+    throw std::overflow_error("final sum is out of bounds");
+  }
   key_sum += elem.first;
   value_sum += ' ';
   value_sum += elem.second;
