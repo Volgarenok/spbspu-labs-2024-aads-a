@@ -7,14 +7,15 @@
 namespace vyzhanov
 {
   template< typename T >
-  struct List;
+  class List;
 
   template< typename T >
-  struct ConstBiIterator : public std::iterator< std::bidirectional_iterator_tag, T >
+  class ConstBiIterator: public std::iterator< std::bidirectional_iterator_tag, T >
   {
+  public:
     friend struct List< T >;
     using citerator = ConstBiIterator< T >;
-  public:
+
     ConstBiIterator();
     ConstBiIterator(const citerator&) = default;
     ~ConstBiIterator() = default;

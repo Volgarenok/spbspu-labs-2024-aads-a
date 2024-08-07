@@ -9,11 +9,12 @@
 namespace vyzhanov
 {
   template<typename T>
-  struct List
+  class List
   {
+  public:
     using citerator = ConstBiIterator< T >;
     using iterator = BiIterator< T >;
-  public:
+
     List();
     List(const List< T >&);
     List(List< T >&&) noexcept;
