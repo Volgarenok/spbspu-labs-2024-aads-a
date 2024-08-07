@@ -455,35 +455,17 @@ namespace isaychev
     }
     node_t * current = root_;
     std::stack< node_t * > s;
-    while (current->left)
+    while (current || !s.empty())
     {
-      s.push(current);
-      current = current->left;
-    }
-    f(current->data);
-    while (current && !s.empty())
-    {
-      if (current->right)
+      while (current)
       {
         s.push(current);
-        current = current->right;
-        while (current)
-        {
-          s.push(current);
-          current = current->left;
-        }
-      }
-      else
-      {
-        while (!s.empty() && s.top()->right == current)
-        {
-          current = s.top();
-          s.pop();
-        }
+        current = current->left;
       }
       current = s.top();
       s.pop();
       f(current->data);
+      current = current->right;
     }
     return f;
   }
