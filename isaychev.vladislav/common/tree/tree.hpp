@@ -3,6 +3,7 @@
 
 #include <functional>
 #include <stdexcept>
+#include <stack>
 #include <initializer_list>
 #include "treeIter.hpp"
 #include "constTreeIter.hpp"
@@ -61,8 +62,13 @@ namespace isaychev
     size_t erase(const Key & key);
     iterator erase(iterator first, iterator last);
     iterator erase(const_iterator first, const_iterator last);
-    //test line
-    //test line
+
+    template < class F >
+    F traverse_lnr(F f) const;
+/*    template < class F >
+    F traverse_rnl(F f) const;
+    template < class F >
+    F traverse_breadth(F f) const;*/
 
    private:
     node_t * root_;
@@ -438,6 +444,61 @@ namespace isaychev
       first = erase(first);
     }
   }
+
+  template < class Key, class Value, class Compare >
+  template < class F >
+  F BSTree< Key, Value, Compare >::traverse_lnr(F f) const
+  {
+    if (!root_)
+    {
+      return f;
+    }
+    node_t * current = root_;
+    std::stack< node_t * > s;
+    while (current->left)
+    {
+      s.push(current);
+      current = current->left;
+    }
+    f(current->data);
+    while (current && !s.empty())
+    {
+      if (current->right)
+      {
+        s.push(current);
+        current = current->right;
+        while (current)
+        {
+          s.push(current);
+          current = current->left;
+        }
+      }
+      else
+      {
+        while (!s.empty() && s.top()->right == current)
+        {
+          current = s.top();
+          s.pop();
+        }
+      }
+      current = s.top();
+      s.pop();
+      f(current->data);
+    }
+    return f;
+  }
+
+/*  template < class Key, class Value, class Compare >
+  template < class F >
+  F BSTree< Key, Value, Compare >::traverse_rnl(F f) const
+  {
+  }
+
+  template < class Key, class Value, class Compare >
+  template < class F >
+  F BSTree< Key, Value, Compare >::traverse_breadth(F f) const
+  {
+  }*/
 
   template < class Key, class Value, class Compare >
   void BSTree< Key, Value, Compare >::delete_tree(node_t * root) noexcept

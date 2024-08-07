@@ -18,11 +18,11 @@ int main(int argc, char * argv[])
     return 1;
   }
 
-  DatasetSummarizer f;
-  for (auto i = dataset.cbegin(); i != dataset.cend(); ++i)
+  DatasetSummarizer f = dataset.traverse_lnr(DatasetSummarizer());
+/*  for (auto i = dataset.cbegin(); i != dataset.cend(); ++i)
   {
     f(*i);
-  }
+  }*/
 
   std::cout << f.get_keysum() << f.get_valsum() << "\n";
 }
