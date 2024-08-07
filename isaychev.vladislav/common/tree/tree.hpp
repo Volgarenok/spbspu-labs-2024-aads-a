@@ -65,9 +65,9 @@ namespace isaychev
 
     template < class F >
     F traverse_lnr(F f) const;
-/*    template < class F >
-    F traverse_rnl(F f) const;
     template < class F >
+    F traverse_rnl(F f) const;
+/*    template < class F >
     F traverse_breadth(F f) const;*/
 
    private:
@@ -470,13 +470,32 @@ namespace isaychev
     return f;
   }
 
-/*  template < class Key, class Value, class Compare >
+  template < class Key, class Value, class Compare >
   template < class F >
   F BSTree< Key, Value, Compare >::traverse_rnl(F f) const
   {
+    if (!root_)
+    {
+      return f;
+    }
+    node_t * current = root_;
+    std::stack< node_t * > s;
+    while (current || !s.empty())
+    {
+      while (current)
+      {
+        s.push(current);
+        current = current->right;
+      }
+      current = s.top();
+      s.pop();
+      f(current->data);
+      current = current->left;
+    }
+    return f;
   }
 
-  template < class Key, class Value, class Compare >
+/*  template < class Key, class Value, class Compare >
   template < class F >
   F BSTree< Key, Value, Compare >::traverse_breadth(F f) const
   {

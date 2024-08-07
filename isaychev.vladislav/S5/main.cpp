@@ -18,7 +18,7 @@ int main(int argc, char * argv[])
     return 1;
   }
 
-  DatasetSummarizer f = dataset.traverse_lnr(DatasetSummarizer());
+  DatasetSummarizer f = dataset.traverse_rnl(DatasetSummarizer());
 /*  for (auto i = dataset.cbegin(); i != dataset.cend(); ++i)
   {
     f(*i);
