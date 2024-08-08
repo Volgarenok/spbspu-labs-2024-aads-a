@@ -35,6 +35,8 @@ namespace erohin
     ~RedBlackTree();
     RedBlackTree< Key, T, Compare > & operator=(const RedBlackTree< Key, T, Compare > & rhs);
     RedBlackTree< Key, T, Compare > & operator=(RedBlackTree< Key, T, Compare > && rhs) noexcept;
+    T & operator[](const Key & key);
+    const T & operator[](const Key & key) const;
     iterator begin();
     iterator end();
     const_iterator cbegin() const;
@@ -93,32 +95,34 @@ namespace erohin
     template< class F >
     F traverse_breadth(F f) const;
   private:
-    detail::Node< Key, T > * root_;
-    Compare cmp_;
+    detail::TreeNode< Key, T > * root_;
     size_t size_;
-    void clear_subtree(detail::Node< Key, T > * subtree);
-    detail::Node< Key, T > * find_to_change_erased(detail::Node< Key, T > * subtree);
-    detail::Node< Key, T > * find_grandparent(detail::Node< Key, T > * subtree);
-    detail::Node< Key, T > * find_uncle(detail::Node< Key, T > * subtree);
-    detail::Node< Key, T > * find_brother(detail::Node< Key, T > * subtree);
+    Compare cmp_;
+    char fake_[sizeof(detail::TreeNode< Key, T >)];
+    detail::TreeNode< Key, T > * make_fake_node() const;
+    void clear_subtree(detail::TreeNode< Key, T > * subtree);
+    detail::TreeNode< Key, T > * find_to_change_erased(detail::TreeNode< Key, T > * subtree);
+    detail::TreeNode< Key, T > * find_grandparent(detail::TreeNode< Key, T > * subtree);
+    detail::TreeNode< Key, T > * find_uncle(detail::TreeNode< Key, T > * subtree);
+    detail::TreeNode< Key, T > * find_brother(detail::TreeNode< Key, T > * subtree);
     template< detail::color_t C >
-    bool is_color(detail::Node< Key, T > * node);
+    bool is_color(detail::TreeNode< Key, T > * node);
     template< detail::color_t C >
-    void colorize(detail::Node< Key, T > * node);
-    bool is_leaf(detail::Node< Key, T > * node);
-    void rotate_left(detail::Node< Key, T > * subtree);
-    void rotate_right(detail::Node< Key, T > * subtree);
-    void insert_balance_case1(detail::Node< Key, T > * subtree);
-    void insert_balance_case2(detail::Node< Key, T > * subtree);
-    void insert_balance_case3(detail::Node< Key, T > * subtree);
-    void insert_balance_case4(detail::Node< Key, T > * subtree);
-    void insert_balance_case5(detail::Node< Key, T > * subtree);
-    void erase_balance_case1(detail::Node< Key, T > * subtree);
-    void erase_balance_case2(detail::Node< Key, T > * subtree);
-    void erase_balance_case3(detail::Node< Key, T > * subtree);
-    void erase_balance_case4(detail::Node< Key, T > * subtree);
-    void erase_balance_case5(detail::Node< Key, T > * subtree);
-    void erase_balance_case6(detail::Node< Key, T > * subtree);
+    void colorize(detail::TreeNode< Key, T > * node);
+    bool is_leaf(detail::TreeNode< Key, T > * node);
+    void rotate_left(detail::TreeNode< Key, T > * subtree);
+    void rotate_right(detail::TreeNode< Key, T > * subtree);
+    void insert_balance_case1(detail::TreeNode< Key, T > * subtree);
+    void insert_balance_case2(detail::TreeNode< Key, T > * subtree);
+    void insert_balance_case3(detail::TreeNode< Key, T > * subtree);
+    void insert_balance_case4(detail::TreeNode< Key, T > * subtree);
+    void insert_balance_case5(detail::TreeNode< Key, T > * subtree);
+    void erase_balance_case1(detail::TreeNode< Key, T > * subtree);
+    void erase_balance_case2(detail::TreeNode< Key, T > * subtree);
+    void erase_balance_case3(detail::TreeNode< Key, T > * subtree);
+    void erase_balance_case4(detail::TreeNode< Key, T > * subtree);
+    void erase_balance_case5(detail::TreeNode< Key, T > * subtree);
+    void erase_balance_case6(detail::TreeNode< Key, T > * subtree);
   };
 
   template< class Key, class T, class Compare >
@@ -188,9 +192,23 @@ namespace erohin
   }
 
   template< class Key, class T, class Compare >
+  T & RedBlackTree< Key, T, Compare >::operator[](const Key & key)
+  {
+    auto iter = insert(std::make_pair(key, T())).first;
+    return iter->second;
+  }
+
+  template< class Key, class T, class Compare >
+  const T & RedBlackTree< Key, T, Compare >::operator[](const Key & key) const
+  {
+    TreeConstIterator< Key, T > iter = find(key);
+    return iter->second;
+  }
+
+  template< class Key, class T, class Compare >
   TreeIterator< Key, T > RedBlackTree< Key, T, Compare >::begin()
   {
-    detail::Node< Key, T > * result = root_;
+    detail::TreeNode< Key, T > * result = root_;
     while (result && result->left)
     {
       result = result->left;
@@ -207,7 +225,7 @@ namespace erohin
   template< class Key, class T, class Compare >
   TreeConstIterator< Key, T > RedBlackTree< Key, T, Compare >::cbegin() const
   {
-    const detail::Node< Key, T > * result = root_;
+    const detail::TreeNode< Key, T > * result = root_;
     while (result && result->left)
     {
       result = result->left;
@@ -230,24 +248,27 @@ namespace erohin
   template< class Key, class T, class Compare >
   typename RedBlackTree< Key, T, Compare >::reverse_iterator RedBlackTree< Key, T, Compare >::rend()
   {
-    return reverse_iterator(iterator(nullptr));
+    return reverse_iterator(iterator(crend().node_));
   }
 
   template< class Key, class T, class Compare >
   typename RedBlackTree< Key, T, Compare >::const_reverse_iterator RedBlackTree< Key, T, Compare >::crbegin() const
   {
-    detail::Node< Key, T > * result = root_;
-    while (result->right)
+    detail::TreeNode< Key, T > * prev = root_;
+    while (prev->right)
     {
-      result = result->right;
+      prev = prev->right;
     }
+    detail::TreeNode< Key, T > * result = make_fake_node();
+    result->left = prev;
+    result->right = nullptr;
     return const_reverse_iterator(const_iterator(result));
   }
 
   template< class Key, class T, class Compare >
   typename RedBlackTree< Key, T, Compare >::const_reverse_iterator RedBlackTree< Key, T, Compare >::crend() const
   {
-    return const_reverse_iterator(const_iterator(nullptr));
+    return const_reverse_iterator(const_iterator(cbegin().node_));
   }
 
   template< class Key, class T, class Compare >
@@ -357,15 +378,15 @@ namespace erohin
   template< class Key, class T, class Compare >
   std::pair< TreeIterator< Key, T >, bool > RedBlackTree< Key, T, Compare >::insert(value_type && value)
   {
-    detail::Node< Key, T > * node = root_;
+    detail::TreeNode< Key, T > * node = root_;
     if (empty())
     {
-      root_ = new detail::Node< Key, T >(nullptr, nullptr, nullptr, std::move(value));
+      root_ = new detail::TreeNode< Key, T >(nullptr, nullptr, nullptr, std::move(value));
       node = root_;
     }
     else
     {
-      detail::Node< Key, T > * prev = node;
+      detail::TreeNode< Key, T > * prev = node;
       while (node)
       {
         prev = node;
@@ -382,7 +403,7 @@ namespace erohin
           node = node->right;
         }
       }
-      node = new detail::Node< Key, T >(prev, nullptr, nullptr, std::move(value));
+      node = new detail::TreeNode< Key, T >(prev, nullptr, nullptr, std::move(value));
       try
       {
         if (cmp_(node->data.first, prev->data.first))
@@ -414,8 +435,8 @@ namespace erohin
   template< class Key, class T, class Compare >
   TreeIterator< Key, T > RedBlackTree< Key, T, Compare >::insert(iterator pos, value_type && value)
   {
-    detail::Node< Key, T > * node = pos.node_;
-    detail::Node< Key, T > * prev = node;
+    detail::TreeNode< Key, T > * node = pos.node_;
+    detail::TreeNode< Key, T > * prev = node;
     while (node)
     {
       prev = node;
@@ -428,7 +449,7 @@ namespace erohin
         node = node->right;
       }
     }
-    node = new detail::Node< Key, T >(prev, nullptr, nullptr, std::move(value));
+    node = new detail::TreeNode< Key, T >(prev, nullptr, nullptr, std::move(value));
     try
     {
       if (cmp_(node->data.first, prev->data.first))
@@ -470,7 +491,7 @@ namespace erohin
   template< class... Args >
   std::pair< TreeIterator< Key, T >, bool > RedBlackTree< Key, T, Compare >::emplace(Args &&... args)
   {
-    detail::Node< Key, T > * emplaced = new detail::Node< Key, T >(nullptr, nullptr, nullptr, std::forward< Args... >(args...));
+    detail::TreeNode< Key, T > * emplaced = new detail::TreeNode< Key, T >(nullptr, nullptr, nullptr, std::forward< Args... >(args...));
     try
     {
       if (empty())
@@ -479,8 +500,8 @@ namespace erohin
       }
       else
       {
-        detail::Node< Key, T > * node = root_;
-        detail::Node< Key, T > * prev = node;
+        detail::TreeNode< Key, T > * node = root_;
+        detail::TreeNode< Key, T > * prev = node;
         while (node)
         {
           prev = node;
@@ -523,11 +544,11 @@ namespace erohin
   template< class... Args >
   TreeIterator< Key, T > RedBlackTree< Key, T, Compare >::emplace_hint(const_iterator pos, Args &&... args)
   {
-    detail::Node< Key, T > * emplaced = new detail::Node< Key, T >(nullptr, nullptr, nullptr, std::forward< Args... >(args...));
+    detail::TreeNode< Key, T > * emplaced = new detail::TreeNode< Key, T >(nullptr, nullptr, nullptr, std::forward< Args... >(args...));
     try
     {
-      detail::Node< Key, T > * node = pos.node_;
-      detail::Node< Key, T > * prev = node;
+      detail::TreeNode< Key, T > * node = pos.node_;
+      detail::TreeNode< Key, T > * prev = node;
       while (node)
       {
         prev = node;
@@ -568,8 +589,8 @@ namespace erohin
   template< class Key, class T, class Compare >
   TreeIterator< Key, T > RedBlackTree< Key, T, Compare >::erase(const Key & key)
   {
-    detail::Node< Key, T > * node = root_;
-    detail::Node< Key, T > * to_delete = nullptr;
+    detail::TreeNode< Key, T > * node = root_;
+    detail::TreeNode< Key, T > * to_delete = nullptr;
     while (!to_delete && node)
     {
       if (node->data.first == key)
@@ -595,8 +616,8 @@ namespace erohin
   template< class Key, class T, class Compare >
   TreeIterator< Key, T > RedBlackTree< Key, T, Compare >::erase(iterator pos)
   {
-    detail::Node< Key, T > * to_delete = pos.node_;
-    detail::Node< Key, T > * found = find_to_change_erased(to_delete);
+    detail::TreeNode< Key, T > * to_delete = pos.node_;
+    detail::TreeNode< Key, T > * found = find_to_change_erased(to_delete);
     if (to_delete == root_ && !found)
     {
       clear();
@@ -684,7 +705,7 @@ namespace erohin
   template< class Key, class T, class Compare >
   TreeIterator< Key, T > RedBlackTree< Key, T, Compare >::find(const Key & key)
   {
-    detail::Node< Key, T > * node = root_;
+    detail::TreeNode< Key, T > * node = root_;
     while (node)
     {
       if (cmp_(key, node->data.first))
@@ -706,7 +727,7 @@ namespace erohin
   template< class Key, class T, class Compare >
   TreeConstIterator< Key, T > RedBlackTree< Key, T, Compare >::find(const Key & key) const
   {
-    const detail::Node< Key, T > * node = root_;
+    const detail::TreeNode< Key, T > * node = root_;
     while (node)
     {
       if (cmp_(key, node->data.first))
@@ -750,8 +771,8 @@ namespace erohin
   template< class Key, class T, class Compare >
   TreeIterator< Key, T > RedBlackTree< Key, T, Compare >::lower_bound(const Key & key)
   {
-    detail::Node< Key, T > * node = root_;
-    detail::Node< Key, T > * prev = root_;
+    detail::TreeNode< Key, T > * node = root_;
+    detail::TreeNode< Key, T > * prev = root_;
     while (node)
     {
       prev = node;
@@ -780,7 +801,7 @@ namespace erohin
   template< class Key, class T, class Compare >
   TreeIterator< Key, T > RedBlackTree< Key, T, Compare >::upper_bound(const Key & key)
   {
-    detail::Node< Key, T > * node = root_;
+    detail::TreeNode< Key, T > * node = root_;
     while (node)
     {
       if (cmp_(node->data.first, key))
@@ -854,7 +875,13 @@ namespace erohin
   }
 
   template< class Key, class T, class Compare >
-  void RedBlackTree< Key, T, Compare >::clear_subtree(detail::Node< Key, T > * subtree)
+  detail::TreeNode< Key, T > * RedBlackTree< Key, T, Compare >::make_fake_node() const
+  {
+    return reinterpret_cast< detail::TreeNode< Key, T > * >(const_cast< char * >(fake_));
+  }
+
+  template< class Key, class T, class Compare >
+  void RedBlackTree< Key, T, Compare >::clear_subtree(detail::TreeNode< Key, T > * subtree)
   {
     if (!subtree)
     {
@@ -866,7 +893,7 @@ namespace erohin
   }
 
   template< class Key, class T, class Compare >
-  detail::Node< Key, T > * RedBlackTree< Key, T, Compare >::find_to_change_erased(detail::Node< Key, T > * subtree)
+  detail::TreeNode< Key, T > * RedBlackTree< Key, T, Compare >::find_to_change_erased(detail::TreeNode< Key, T > * subtree)
   {
     if (subtree->left)
     {
@@ -891,29 +918,28 @@ namespace erohin
     return subtree;
   }
 
-
   template< class Key, class T, class Compare >
   template< detail::color_t C >
-  bool RedBlackTree< Key, T, Compare >::is_color(detail::Node< Key, T > * node)
+  bool RedBlackTree< Key, T, Compare >::is_color(detail::TreeNode< Key, T > * node)
   {
     return (node->color == C);
   }
 
   template< class Key, class T, class Compare >
   template< detail::color_t C >
-  void RedBlackTree< Key, T, Compare >::colorize(detail::Node< Key, T > * node)
+  void RedBlackTree< Key, T, Compare >::colorize(detail::TreeNode< Key, T > * node)
   {
     node->color = C;
   }
 
   template< class Key, class T, class Compare >
-  bool RedBlackTree< Key, T, Compare >::is_leaf(detail::Node< Key, T > * node)
+  bool RedBlackTree< Key, T, Compare >::is_leaf(detail::TreeNode< Key, T > * node)
   {
     return !(node->left && node->right);
   }
 
   template< class Key, class T, class Compare >
-  detail::Node< Key, T > * RedBlackTree< Key, T, Compare >::find_grandparent(detail::Node< Key, T > * subtree)
+  detail::TreeNode< Key, T > * RedBlackTree< Key, T, Compare >::find_grandparent(detail::TreeNode< Key, T > * subtree)
   {
     if (subtree && subtree->parent)
     {
@@ -926,9 +952,9 @@ namespace erohin
   }
 
   template< class Key, class T, class Compare >
-  detail::Node< Key, T > * RedBlackTree< Key, T, Compare >::find_uncle(detail::Node< Key, T > * subtree)
+  detail::TreeNode< Key, T > * RedBlackTree< Key, T, Compare >::find_uncle(detail::TreeNode< Key, T > * subtree)
   {
-    detail::Node< Key, T > * node = find_grandparent(subtree);
+    detail::TreeNode< Key, T > * node = find_grandparent(subtree);
     if (!node)
     {
       return nullptr;
@@ -944,7 +970,7 @@ namespace erohin
   }
 
   template< class Key, class T, class Compare >
-  detail::Node< Key, T > * RedBlackTree< Key, T, Compare >::find_brother(detail::Node< Key, T > * subtree)
+  detail::TreeNode< Key, T > * RedBlackTree< Key, T, Compare >::find_brother(detail::TreeNode< Key, T > * subtree)
   {
     if (subtree == subtree->parent->left)
     {
@@ -957,9 +983,9 @@ namespace erohin
   }
 
   template< class Key, class T, class Compare >
-  void RedBlackTree< Key, T, Compare >::rotate_left(detail::Node< Key, T > * subtree)
+  void RedBlackTree< Key, T, Compare >::rotate_left(detail::TreeNode< Key, T > * subtree)
   {
-    detail::Node< Key, T > * node = subtree->right;
+    detail::TreeNode< Key, T > * node = subtree->right;
     node->parent = subtree->parent;
     if (!node->parent)
     {
@@ -986,9 +1012,9 @@ namespace erohin
   }
 
   template< class Key, class T, class Compare >
-  void RedBlackTree< Key, T, Compare >::rotate_right(detail::Node< Key, T > * subtree)
+  void RedBlackTree< Key, T, Compare >::rotate_right(detail::TreeNode< Key, T > * subtree)
   {
-    detail::Node< Key, T > * node = subtree->left;
+    detail::TreeNode< Key, T > * node = subtree->left;
     node->parent = subtree->parent;
     if (!node->parent)
     {
@@ -1015,7 +1041,7 @@ namespace erohin
   }
 
   template< class Key, class T, class Compare >
-  void RedBlackTree< Key, T, Compare >::insert_balance_case1(detail::Node< Key, T > * subtree)
+  void RedBlackTree< Key, T, Compare >::insert_balance_case1(detail::TreeNode< Key, T > * subtree)
   {
     using namespace detail;
     if (!subtree->parent)
@@ -1029,7 +1055,7 @@ namespace erohin
   }
 
   template< class Key, class T, class Compare >
-  void RedBlackTree< Key, T, Compare >::insert_balance_case2(detail::Node< Key, T > * subtree)
+  void RedBlackTree< Key, T, Compare >::insert_balance_case2(detail::TreeNode< Key, T > * subtree)
   {
     using namespace detail;
     if (is_color< RED >(subtree->parent))
@@ -1039,15 +1065,15 @@ namespace erohin
   }
 
   template< class Key, class T, class Compare >
-  void RedBlackTree< Key, T, Compare >::insert_balance_case3(detail::Node< Key, T > * subtree)
+  void RedBlackTree< Key, T, Compare >::insert_balance_case3(detail::TreeNode< Key, T > * subtree)
   {
     using namespace detail;
-    Node< Key, T > * uncle = find_uncle(subtree);
+    TreeNode< Key, T > * uncle = find_uncle(subtree);
     if (uncle && is_color< RED >(uncle))
     {
       colorize< BLACK >(subtree->parent);
       colorize< BLACK >(uncle);
-      Node< Key, T > * grand = find_grandparent(subtree);
+      TreeNode< Key, T > * grand = find_grandparent(subtree);
       colorize< RED >(grand);
       insert_balance_case1(grand);
     }
@@ -1058,10 +1084,10 @@ namespace erohin
   }
 
   template< class Key, class T, class Compare >
-  void RedBlackTree< Key, T, Compare >::insert_balance_case4(detail::Node< Key, T > * subtree)
+  void RedBlackTree< Key, T, Compare >::insert_balance_case4(detail::TreeNode< Key, T > * subtree)
   {
     using namespace detail;
-    Node< Key, T > * grand = find_grandparent(subtree);
+    TreeNode< Key, T > * grand = find_grandparent(subtree);
     if (subtree == subtree->parent->right && subtree->parent == grand->left)
     {
       rotate_left(subtree->parent);
@@ -1076,10 +1102,10 @@ namespace erohin
   }
 
   template< class Key, class T, class Compare >
-  void RedBlackTree< Key, T, Compare >::insert_balance_case5(detail::Node< Key, T > * subtree)
+  void RedBlackTree< Key, T, Compare >::insert_balance_case5(detail::TreeNode< Key, T > * subtree)
   {
     using namespace detail;
-    Node< Key, T > * grand = find_grandparent(subtree);
+    TreeNode< Key, T > * grand = find_grandparent(subtree);
     colorize< BLACK >(subtree->parent);
     colorize< RED >(grand);
     if (subtree == subtree->parent->left && subtree->parent == grand->left)
@@ -1093,12 +1119,12 @@ namespace erohin
   }
 
   template< class Key, class T, class Compare >
-  void RedBlackTree< Key, T, Compare >::erase_balance_case1(detail::Node< Key, T > * subtree)
+  void RedBlackTree< Key, T, Compare >::erase_balance_case1(detail::TreeNode< Key, T > * subtree)
   {
     using namespace detail;
     if (is_color< BLACK >(subtree) && !is_leaf(subtree))
     {
-      Node< Key, T > * child = (subtree->right) ? subtree->left : subtree->right;
+      TreeNode< Key, T > * child = (subtree->right) ? subtree->left : subtree->right;
       if (is_color< RED >(child))
       {
         colorize< BLACK >(child);
@@ -1111,10 +1137,10 @@ namespace erohin
   }
 
   template< class Key, class T, class Compare >
-  void RedBlackTree< Key, T, Compare >::erase_balance_case2(detail::Node< Key, T > * subtree)
+  void RedBlackTree< Key, T, Compare >::erase_balance_case2(detail::TreeNode< Key, T > * subtree)
   {
     using namespace detail;
-    Node< Key, T > * brother = find_brother(subtree);
+    TreeNode< Key, T > * brother = find_brother(subtree);
     if (is_color< RED >(brother))
     {
       colorize< RED >(subtree->parent);
@@ -1132,10 +1158,10 @@ namespace erohin
   }
 
   template< class Key, class T, class Compare >
-  void RedBlackTree< Key, T, Compare >::erase_balance_case3(detail::Node< Key, T > * subtree)
+  void RedBlackTree< Key, T, Compare >::erase_balance_case3(detail::TreeNode< Key, T > * subtree)
   {
     using namespace detail;
-    Node< Key, T > * brother = find_brother(subtree);
+    TreeNode< Key, T > * brother = find_brother(subtree);
     bool is_any_child_black = is_color< BLACK >(brother->left) && is_color< BLACK >(brother->right);
     if (is_color< BLACK >(subtree->parent) && is_color< BLACK >(brother) && is_any_child_black)
     {
@@ -1149,10 +1175,10 @@ namespace erohin
   }
 
   template< class Key, class T, class Compare >
-  void RedBlackTree< Key, T, Compare >::erase_balance_case4(detail::Node< Key, T > * subtree)
+  void RedBlackTree< Key, T, Compare >::erase_balance_case4(detail::TreeNode< Key, T > * subtree)
   {
     using namespace detail;
-    Node< Key, T > * brother = find_brother(subtree);
+    TreeNode< Key, T > * brother = find_brother(subtree);
     bool is_any_child_black = is_color< BLACK >(brother->left) && is_color< BLACK >(brother->right);
     if (is_color< RED >(subtree->parent) && is_color< BLACK >(brother) && is_any_child_black)
     {
@@ -1166,10 +1192,10 @@ namespace erohin
   }
 
   template< class Key, class T, class Compare >
-  void RedBlackTree< Key, T, Compare >::erase_balance_case5(detail::Node< Key, T > * subtree)
+  void RedBlackTree< Key, T, Compare >::erase_balance_case5(detail::TreeNode< Key, T > * subtree)
   {
     using namespace detail;
-    Node< Key, T > * brother = find_brother(subtree);
+    TreeNode< Key, T > * brother = find_brother(subtree);
     if (is_color< BLACK >(brother))
     {
       if (subtree == subtree->parent->left && is_color< BLACK >(brother->right) && is_color< RED >(brother->left))
@@ -1189,10 +1215,10 @@ namespace erohin
   }
 
   template< class Key, class T, class Compare >
-  void RedBlackTree< Key, T, Compare >::erase_balance_case6(detail::Node< Key, T > * subtree)
+  void RedBlackTree< Key, T, Compare >::erase_balance_case6(detail::TreeNode< Key, T > * subtree)
   {
     using namespace detail;
-    Node< Key, T > * brother = find_brother(subtree);
+    TreeNode< Key, T > * brother = find_brother(subtree);
     brother->color = subtree->parent->color;
     colorize< BLACK >(subtree->parent);
     if (subtree == subtree->parent->left)

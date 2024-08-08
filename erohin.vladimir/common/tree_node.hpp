@@ -15,23 +15,23 @@ namespace erohin
     };
 
     template< class Key, class T >
-    struct Node
+    struct TreeNode
     {
       std::pair< Key, T > data;
-      Node * parent;
-      Node * left;
-      Node * right;
+      TreeNode * parent;
+      TreeNode * left;
+      TreeNode * right;
       color_t color;
       template< class... Args >
-      Node(Node * parent_node, Node * left_node, Node * right_node, Args &&... args);
-      ~Node() = default;
-      Node * next();
-      Node * prev();
+      TreeNode(TreeNode * parent_node, TreeNode * left_node, TreeNode * right_node, Args &&... args);
+      ~TreeNode() = default;
+      TreeNode * next();
+      TreeNode * prev();
     };
 
     template< class Key, class T >
     template< class... Args >
-    Node< Key, T >::Node(Node * parent_node, Node * left_node, Node * right_node, Args &&... args):
+    TreeNode< Key, T >::TreeNode(TreeNode * parent_node, TreeNode * left_node, TreeNode * right_node, Args &&... args):
       data(std::forward< Args... >(args...)),
       parent(parent_node),
       left(left_node),
@@ -40,9 +40,9 @@ namespace erohin
     {}
 
     template< class Key, class T >
-    Node< Key, T > * Node< Key, T >::next()
+    TreeNode< Key, T > * TreeNode< Key, T >::next()
     {
-      Node< Key, T > * node = this;
+      TreeNode< Key, T > * node = this;
       if (node->right)
       {
         node = node->right;
@@ -53,30 +53,23 @@ namespace erohin
       }
       else
       {
-        if (!parent)
+        while (node->parent && node->parent->left != node)
+        {
+          node = node->parent;
+        }
+        if (!node->parent)
         {
           return nullptr;
         }
-        while (node->parent->right == node)
-        {
-          node = node->parent;
-          if (!node->parent)
-          {
-            return nullptr;
-          }
-        }
-        while (node->parent && node->parent->left == node)
-        {
-          node = node->parent;
-        }
+        node = node->parent;
       }
       return node;
     }
 
     template< class Key, class T >
-    Node< Key, T > * Node< Key, T >::prev()
+    TreeNode< Key, T > * TreeNode< Key, T >::prev()
     {
-      Node< Key, T > * node = this;
+      TreeNode< Key, T > * node = this;
       if (node->left)
       {
         node = node->left;
@@ -87,18 +80,15 @@ namespace erohin
       }
       else
       {
-        while (node->parent->left == node)
-        {
-          node = node->parent;
-          if (!(node->parent))
-          {
-            return nullptr;
-          }
-        }
-        while (node->parent && node->parent->right == node)
+        while (node->parent && node->parent->right != node)
         {
           node = node->parent;
         }
+        if (!node->parent)
+        {
+          return nullptr;
+        }
+        node = node->parent;
       }
       return node;
     }

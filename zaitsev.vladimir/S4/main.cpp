@@ -2,7 +2,7 @@
 #include <fstream>
 #include <limits>
 #include <string>
-#include "map.hpp"
+#include <map.hpp>
 #include "commands_processing.hpp"
 
 int main(int argc, char** argv)

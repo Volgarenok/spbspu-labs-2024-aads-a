@@ -58,8 +58,8 @@ namespace erohin
     bool operator==(const TreeIterator< Key, T > & rhs) const;
     bool operator!=(const TreeIterator< Key, T > & rhs) const;
   private:
-    detail::Node< Key, T > * node_;
-    explicit TreeIterator(detail::Node< Key, T > * node_ptr);
+    detail::TreeNode< Key, T > * node_;
+    explicit TreeIterator(detail::TreeNode< Key, T > * node_ptr);
   };
 
   template< class Key, class T >
@@ -83,7 +83,7 @@ namespace erohin
   {}
 
   template< class Key, class T >
-  TreeIterator< Key, T >::TreeIterator(detail::Node< Key, T > * node_ptr):
+  TreeIterator< Key, T >::TreeIterator(detail::TreeNode< Key, T > * node_ptr):
     node_(node_ptr)
   {}
 

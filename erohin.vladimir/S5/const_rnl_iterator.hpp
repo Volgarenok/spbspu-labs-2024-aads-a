@@ -31,12 +31,12 @@ namespace erohin
     bool operator!=(const ConstRnlIterator< Key, T > & rhs) const;
   private:
     ConstLnrIterator< Key, T > iter_;
-    explicit ConstRnlIterator(const detail::Node< Key, T > * node_ptr);
+    explicit ConstRnlIterator(const detail::TreeNode< Key, T > * node_ptr);
     explicit ConstRnlIterator(ConstLnrIterator< Key, T > iter);
   };
 
   template< class Key, class T >
-  ConstRnlIterator< Key, T >::ConstRnlIterator(const detail::Node< Key, T > * node_ptr):
+  ConstRnlIterator< Key, T >::ConstRnlIterator(const detail::TreeNode< Key, T > * node_ptr):
     iter_(ConstLnrIterator< Key, T >(node_ptr))
   {}
 
@@ -48,7 +48,8 @@ namespace erohin
   template< class Key, class T >
   ConstRnlIterator< Key, T > & ConstRnlIterator< Key, T >::operator++()
   {
-    return ConstRnlIterator< Key, T >(--iter_);
+    --iter_;
+    return *this;
   }
 
   template< class Key, class T >
@@ -60,7 +61,8 @@ namespace erohin
   template< class Key, class T >
   ConstRnlIterator< Key, T > & ConstRnlIterator< Key, T >::operator--()
   {
-    return ConstRnlIterator< Key, T >(++iter_);
+    ++iter_;
+    return *this;
   }
 
   template< class Key, class T >

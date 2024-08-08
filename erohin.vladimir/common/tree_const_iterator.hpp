@@ -53,8 +53,8 @@ namespace erohin
     bool operator==(const TreeConstIterator< Key, T > & rhs) const;
     bool operator!=(const TreeConstIterator< Key, T > & rhs) const;
   private:
-    const detail::Node< Key, T > * node_;
-    explicit TreeConstIterator(const detail::Node< Key, T > * node_ptr);
+    const detail::TreeNode< Key, T > * node_;
+    explicit TreeConstIterator(const detail::TreeNode< Key, T > * node_ptr);
   };
 
   template< class Key, class T >
@@ -78,14 +78,14 @@ namespace erohin
   {}
 
   template< class Key, class T >
-  TreeConstIterator< Key, T >::TreeConstIterator(const detail::Node< Key, T > * node_ptr):
+  TreeConstIterator< Key, T >::TreeConstIterator(const detail::TreeNode< Key, T > * node_ptr):
     node_(node_ptr)
   {}
 
   template< class Key, class T >
   TreeConstIterator< Key, T > & TreeConstIterator< Key, T >::operator++()
   {
-    node_ = const_cast< detail::Node< Key, T > * >(node_)->next();
+    node_ = const_cast< detail::TreeNode< Key, T > * >(node_)->next();
     return *this;
   }
 
@@ -100,7 +100,7 @@ namespace erohin
   template< class Key, class T >
   TreeConstIterator< Key, T > & TreeConstIterator< Key, T >::operator--()
   {
-    node_ = const_cast< detail::Node< Key, T > * >(node_)->prev();
+    node_ = const_cast< detail::TreeNode< Key, T > * >(node_)->prev();
     return *this;
   }
 

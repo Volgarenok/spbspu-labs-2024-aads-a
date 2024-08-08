@@ -39,9 +39,9 @@ namespace erohin
     bool operator==(const LnrIterator< Key, T > & rhs) const;
     bool operator!=(const LnrIterator< Key, T > & rhs) const;
   private:
-    detail::Node< Key, T > * node_;
-    Stack< detail::Node< Key, T > * > stack_;
-    explicit LnrIterator(detail::Node< Key, T > * node_ptr);
+    detail::TreeNode< Key, T > * node_;
+    Stack< detail::TreeNode< Key, T > * > stack_;
+    explicit LnrIterator(detail::TreeNode< Key, T > * node_ptr);
   };
 
   template< class Key, class T >
@@ -50,7 +50,7 @@ namespace erohin
   {}
 
   template< class Key, class T >
-  LnrIterator< Key, T >::LnrIterator(detail::Node< Key, T > * node_ptr):
+  LnrIterator< Key, T >::LnrIterator(detail::TreeNode< Key, T > * node_ptr):
     node_(node_ptr)
   {}
 
