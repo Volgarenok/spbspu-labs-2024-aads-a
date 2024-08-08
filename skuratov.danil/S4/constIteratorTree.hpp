@@ -9,7 +9,7 @@
 namespace skuratov
 {
   template< typename Key, typename Value, typename Compare >
-  class AVLTree;
+  class UBST;
 
   template< typename Key, typename Value, typename Compare = std::less < Key > >
   class ConstIteratorTree
@@ -108,7 +108,7 @@ namespace skuratov
     }
 
   private:
-    friend AVLTree< Key, Value, Compare >;
+    friend UBST< Key, Value, Compare >;
     detail::TreeNode< Key, Value >* nodePointer_;
     explicit ConstIteratorTree(detail::TreeNode< Key, Value >* nodePointer):
       nodePointer_(nodePointer)

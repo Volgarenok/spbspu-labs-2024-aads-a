@@ -5,7 +5,7 @@
 int main(int argc, char* argv[])
 {
   using namespace skuratov;
-  AVLTree< std::string, AVLTree< int, std::string > > dictionary;
+  UBST< std::string, UBST< int, std::string > > dictionary;
   if (argc > 1)
   {
     std::ifstream infile(argv[1]);
@@ -17,7 +17,7 @@ int main(int argc, char* argv[])
     while (!infile.eof())
     {
       infile.clear();
-      AVLTree< int, std::string > tempDic;
+      UBST< int, std::string > tempDic;
       std::string nameDic = {};
       infile >> nameDic;
 
@@ -32,7 +32,7 @@ int main(int argc, char* argv[])
     }
   }
 
-  AVLTree< std::string, std::function< void(std::istream&, AVLTree< std::string, AVLTree< int, std::string > >&) > > cmds;
+  UBST< std::string, std::function< void(std::istream&, UBST< std::string, UBST< int, std::string > >&) > > cmds;
   {
     using namespace std::placeholders;
     cmds["print"] = std::bind(isPrint, _1, _2, std::ref(std::cout));

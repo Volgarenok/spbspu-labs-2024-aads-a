@@ -1,12 +1,12 @@
 #include "cmds.hpp"
 
-void skuratov::isPrint(std::istream& in, AVLTree< std::string, AVLTree< int, std::string > >& dictionary, std::ostream& out)
+void skuratov::isPrint(std::istream& in, UBST< std::string, UBST< int, std::string > >& dictionary, std::ostream& out)
 {
   std::string name = {};
   in >> name;
   try
   {
-    AVLTree< int, std::string > dic = dictionary.at(name);
+    UBST< int, std::string > dic = dictionary.at(name);
     if (dic.empty())
     {
       out << "<EMPTY>" << '\n';
@@ -27,17 +27,17 @@ void skuratov::isPrint(std::istream& in, AVLTree< std::string, AVLTree< int, std
   }
 }
 
-void skuratov::isComplement(std::istream& in, AVLTree< std::string, AVLTree< int, std::string > >& dictionary)
+void skuratov::isComplement(std::istream& in, UBST< std::string, UBST< int, std::string > >& dictionary)
 {
   std::string newDataset, dataset1, dataset2;
   in >> newDataset >> dataset1 >> dataset2;
 
   try
   {
-    AVLTree< int, std::string > dict1 = dictionary.at(dataset1);
-    AVLTree< int, std::string > dict2 = dictionary.at(dataset2);
+    UBST< int, std::string > dict1 = dictionary.at(dataset1);
+    UBST< int, std::string > dict2 = dictionary.at(dataset2);
 
-    AVLTree< int, std::string > complementDict;
+    UBST< int, std::string > complementDict;
     for (auto it = dict1.cbegin(); it != dict1.cend(); ++it)
     {
       if (dict2.find(it->first) == dict2.cend())
@@ -53,17 +53,17 @@ void skuratov::isComplement(std::istream& in, AVLTree< std::string, AVLTree< int
   }
 }
 
-void skuratov::isIntersect(std::istream& in, AVLTree< std::string, AVLTree< int, std::string > >& dictionary)
+void skuratov::isIntersect(std::istream& in, UBST< std::string, UBST< int, std::string > >& dictionary)
 {
   std::string newDataset, dataset1, dataset2;
   in >> newDataset >> dataset1 >> dataset2;
 
   try
   {
-    AVLTree< int, std::string > dict1 = dictionary.at(dataset1);
-    AVLTree< int, std::string > dict2 = dictionary.at(dataset2);
+    UBST< int, std::string > dict1 = dictionary.at(dataset1);
+    UBST< int, std::string > dict2 = dictionary.at(dataset2);
 
-    AVLTree< int, std::string > intersectDict;
+    UBST< int, std::string > intersectDict;
     for (auto it = dict1.cbegin(); it != dict1.cend(); ++it)
     {
       if (dict2.find(it->first) != dict2.cend())
@@ -79,17 +79,17 @@ void skuratov::isIntersect(std::istream& in, AVLTree< std::string, AVLTree< int,
   }
 }
 
-void skuratov::isUnion(std::istream& in, AVLTree< std::string, AVLTree< int, std::string > >& dictionary)
+void skuratov::isUnion(std::istream& in, UBST< std::string, UBST< int, std::string > >& dictionary)
 {
   std::string newDataset, dataset1, dataset2;
   in >> newDataset >> dataset1 >> dataset2;
 
   try
   {
-    AVLTree< int, std::string > dict1 = dictionary.at(dataset1);
-    AVLTree< int, std::string > dict2 = dictionary.at(dataset2);
+    UBST< int, std::string > dict1 = dictionary.at(dataset1);
+    UBST< int, std::string > dict2 = dictionary.at(dataset2);
 
-    AVLTree< int, std::string > unionDict = dict1;
+    UBST< int, std::string > unionDict = dict1;
 
     for (auto it = dict2.cbegin(); it != dict2.cend(); ++it)
     {

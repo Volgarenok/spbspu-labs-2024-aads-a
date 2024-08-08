@@ -14,15 +14,13 @@ namespace skuratov
         parent_(nullptr),
         left_(nullptr),
         right_(nullptr),
-        data_(std::make_pair(key, value)),
-        height_(0)
+        data_(std::make_pair(key, value))
       {}
       ~TreeNode() = default;
       TreeNode* parent_;
       TreeNode* left_;
       TreeNode* right_;
       std::pair< Key, Value > data_;
-      long long int height_;
     };
   }
 }
