@@ -33,6 +33,19 @@ namespace rebdev
       {
         insert(first, last);
       }
+      AVLTree(const AVLTree & tree):
+        headNode_(new node{nullptr, nullptr, nullptr, pair{}}),
+        size_(0),
+        comp_(tree.comp_)
+      {
+        (*this)=tree;
+      }
+      AVLTree(AVLTree && tree):
+        headNode_(new node{nullptr, nullptr, nullptr, pair{}}),
+        size_(0)
+      {
+        swap(tree);
+      }
       AVLTree(std::initializer_list< pair > il, const Compare & comp = Compare()):
         headNode_(new node{nullptr, nullptr, nullptr, pair{}}),
         size_(0),
@@ -44,6 +57,18 @@ namespace rebdev
       {
         clear();
         delete headNode_;
+      }
+      AVLTree & operator=(const AVLTree & tree)
+      {
+        AVLTree treeToSwap;
+        treeToSwap.insert(tree.cbegin(), tree.cend());
+        swap(treeToSwap);
+        return *this;
+      }
+      AVLTree & operator=(AVLTree && tree)
+      {
+        swap(tree);
+        return *this;
       }
       iterator begin() const
       {
@@ -109,9 +134,13 @@ namespace rebdev
       }
       void swap(AVLTree & tree)
       {
-        std::swap(headNode_->right->parent, (tree.headNode_)->right->parent);
+        if ((headNode_->right) != nullptr)
+        {
+          std::swap(headNode_->right->parent, (tree.headNode_)->right->parent);
+        }
         std::swap(headNode_, tree.headNode_);
         std::swap(size_, tree.size_);
+        std::swap(comp_, tree.comp_);
       }
       void clear() noexcept
       {
