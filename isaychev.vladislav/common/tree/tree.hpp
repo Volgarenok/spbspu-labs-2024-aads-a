@@ -4,6 +4,7 @@
 #include <functional>
 #include <stdexcept>
 #include <stack>
+#include <queue>
 #include <initializer_list>
 #include "treeIter.hpp"
 #include "constTreeIter.hpp"
@@ -67,8 +68,8 @@ namespace isaychev
     F traverse_lnr(F f) const;
     template < class F >
     F traverse_rnl(F f) const;
-/*    template < class F >
-    F traverse_breadth(F f) const;*/
+    template < class F >
+    F traverse_breadth(F f) const;
 
    private:
     node_t * root_;
@@ -495,11 +496,30 @@ namespace isaychev
     return f;
   }
 
-/*  template < class Key, class Value, class Compare >
+  template < class Key, class Value, class Compare >
   template < class F >
   F BSTree< Key, Value, Compare >::traverse_breadth(F f) const
   {
-  }*/
+    if (!root_)
+    {
+      return f;
+    }
+    node_t * current = root_;
+    std::queue< node_t * > q;
+    q.push(root_);
+    while (!q.empty())
+    {
+      current = q.front();
+      q.pop();
+      if (current)
+      {
+        q.push(current->left);
+        q.push(current->right);
+        f(current->data);
+      }
+    }
+    return f;
+  }
 
   template < class Key, class Value, class Compare >
   void BSTree< Key, Value, Compare >::delete_tree(node_t * root) noexcept
