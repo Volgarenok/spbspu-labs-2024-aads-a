@@ -52,23 +52,4 @@ int main(int argc, char * argv[])
     }
     str.clear();
   }
-  /*BSTree< int, std::string > tree;
-  tree[7] = "g";
-  tree[3] = "c";
-  tree[1] = "a";
-  tree[2] = "b";
-  tree[5] = "e";
-  tree[4] = "d";
-  tree[10] = "l";
-  tree[6] = "f";
-  tree[12] = "n";
-  tree[8] = "h";
-  tree[9] = "k";
-  tree[11] = "m";
-
-  BSTree< int, std::string > tree2;
-  tree2 = tree;
-
-  auto i = tree.cbegin();
-  std::cout << (*i).first << "\n";*/
 }
