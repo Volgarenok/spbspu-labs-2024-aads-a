@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <limits>
 #include "commands.hpp"
 #include "inputDictionaries.hpp"
 
@@ -33,32 +34,22 @@ int main(int argc, char * argv[])
   while (!std::cin.eof())
   {
     std::cin >> str;
-    try
+    if (!str.empty())
     {
-      (commands.at(str))(std::cin);
+      try
+      {
+        (commands.at(str))(std::cin);
+      }
+      catch (const std::runtime_error & e)
+      {
+        std::cout << e.what() << "\n";
+      }
+      catch (const std::exception &)
+      {
+        std::cout << "<INVALID COMMAND>\n";
+        std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+      }
     }
-    catch (const std::exception & e)
-    {
-      std::cout << e.what() << "\n";
-    }
+    str.clear();
   }
-  /*BSTree< int, std::string > tree;
-  tree[7] = "g";
-  tree[3] = "c";
-  tree[1] = "a";
-  tree[2] = "b";
-  tree[5] = "e";
-  tree[4] = "d";
-  tree[10] = "l";
-  tree[6] = "f";
-  tree[12] = "n";
-  tree[8] = "h";
-  tree[9] = "k";
-  tree[11] = "m";
-
-  BSTree< int, std::string > tree2;
-  tree2 = tree;
-
-  auto i = tree.cbegin();
-  std::cout << (*i).first << "\n";*/
 }
