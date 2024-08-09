@@ -3,8 +3,7 @@
 
 #include <functional>
 #include <stdexcept>
-#include <stack>
-#include <queue>
+#include <queue.hpp>
 #include <initializer_list>
 #include "treeIter.hpp"
 #include "constTreeIter.hpp"
@@ -207,7 +206,7 @@ namespace isaychev
   template < class Key, class Value, class Compare >
   LNRIter< Key, Value, Compare > BSTree< Key, Value, Compare >::lnrbegin()
   {
-    std::stack< node_t * > s;
+    Stack< node_t * > s;
     auto curr = root_;
     while (curr && curr->left)
     {
@@ -220,13 +219,13 @@ namespace isaychev
   template < class Key, class Value, class Compare >
   LNRIter< Key, Value, Compare > BSTree< Key, Value, Compare >::lnrend()
   {
-    return lnr_iterator(nullptr, std::stack< node_t * >());
+    return lnr_iterator(nullptr, Stack< node_t * >());
   }
 
   template < class Key, class Value, class Compare >
   ConstLNRIter< Key, Value, Compare > BSTree< Key, Value, Compare >::lnrbegin() const
   {
-    std::stack< node_t * > s;
+    Stack< node_t * > s;
     auto curr = root_;
     while (curr && curr->left)
     {
@@ -239,13 +238,13 @@ namespace isaychev
   template < class Key, class Value, class Compare >
   ConstLNRIter< Key, Value, Compare > BSTree< Key, Value, Compare >::lnrend() const
   {
-    return const_lnr_iterator(nullptr, std::stack< node_t * >());
+    return const_lnr_iterator(nullptr, Stack< node_t * >());
   }
 
   template < class Key, class Value, class Compare >
   ConstLNRIter< Key, Value, Compare > BSTree< Key, Value, Compare >::clnrbegin() const
   {
-    std::stack< node_t * > s;
+    Stack< node_t * > s;
     auto curr = root_;
     while (curr && curr->left)
     {
@@ -258,7 +257,7 @@ namespace isaychev
   template < class Key, class Value, class Compare >
   ConstLNRIter< Key, Value, Compare > BSTree< Key, Value, Compare >::clnrend() const
   {
-    return const_lnr_iterator(nullptr, std::stack< node_t * >());
+    return const_lnr_iterator(nullptr, Stack< node_t * >());
   }
 
   template < class Key, class Value, class Compare >
@@ -503,7 +502,7 @@ namespace isaychev
       return f;
     }
     node_t * current = root_;
-    std::stack< node_t * > s;
+    Stack< node_t * > s;
     while (current || !s.empty())
     {
       while (current)
@@ -528,7 +527,7 @@ namespace isaychev
       return f;
     }
     node_t * current = root_;
-    std::stack< node_t * > s;
+    Stack< node_t * > s;
     while (current || !s.empty())
     {
       while (current)
@@ -553,7 +552,7 @@ namespace isaychev
       return f;
     }
     node_t * current = root_;
-    std::queue< node_t * > q;
+    Queue< node_t * > q;
     q.push(root_);
     while (!q.empty())
     {

@@ -1,7 +1,7 @@
 #ifndef LNRITER_HPP
 #define LNRITER_HPP
 
-#include <stack>
+#include <stack.hpp>
 
 namespace isaychev
 {
@@ -32,14 +32,14 @@ namespace isaychev
 
    private:
     node_t * current_;
-    std::stack< node_t * > stack_;
+    Stack< node_t * > stack_;
     friend class BSTree< Key, Value, Compare >;
 
-    LNRIter(node_t * node, std::stack< node_t * > && s);
+    LNRIter(node_t * node, Stack< node_t * > && s);
   };
 
   template < class Key, class Value, class Compare >
-  LNRIter< Key, Value, Compare >:: LNRIter(node_t * node, std::stack< node_t * > && s):
+  LNRIter< Key, Value, Compare >:: LNRIter(node_t * node, Stack< node_t * > && s):
    current_(node),
    stack_(s)
   {}
@@ -63,15 +63,19 @@ namespace isaychev
     }
     else
     {
-      do
+      while (!stack_.empty() && stack_.top()->right == current_)
       {
         current_ = stack_.top();
         stack_.pop();
+        if (stack_.empty())
+        {
+          current_ = nullptr;
+        }
       }
-      while (!stack_.empty() && stack_.top()->right == current_);
-      if (stack_.empty())
+      if (!stack_.empty() && stack_.top()->left == current_)
       {
-        current_ = nullptr;
+        current_ = stack_.top();
+        stack_.pop();
       }
     }
     return *this;
@@ -104,15 +108,19 @@ namespace isaychev
     }
     else
     {
-      do
+      while (!stack_.empty() && stack_.top()->left == current_)
       {
         current_ = stack_.top();
         stack_.pop();
+        if (stack_.empty())
+        {
+          current_ = nullptr;
+        }
       }
-      while (!stack_.empty() && stack_.top()->left == current_);
-      if (stack_.empty())
+      if (!stack_.empty() && stack_.top()->right == current_)
       {
-        current_ = nullptr;
+        current_ = stack_.top();
+        stack_.pop();
       }
     }
     return *this;
@@ -153,12 +161,13 @@ namespace isaychev
   template < class Key, class Value, class Compare >
   std::pair< Key, Value > * LNRIter< Key, Value, Compare >::operator->()
   {
-    return std::addressof(current_);
+    return std::addressof(current_->data);
   }
+
   template < class Key, class Value, class Compare >
   const std::pair< Key, Value > * LNRIter< Key, Value, Compare >::operator->() const
   {
-    return std::addressof(current_);
+    return std::addressof(current_->data);
   }
 }
 

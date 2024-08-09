@@ -1,7 +1,7 @@
 #ifndef CONSTLNRITER_HPP
 #define CONSTLNRITER_HPP
 
-#include <stack>
+#include <stack.hpp>
 
 namespace isaychev
 {
@@ -32,14 +32,14 @@ namespace isaychev
 
    private:
     node_t * current_;
-    std::stack< node_t * > stack_;
+    Stack< node_t * > stack_;
     friend class BSTree< Key, Value, Compare >;
 
-    ConstLNRIter(node_t * node, std::stack< node_t * > && s);
+    ConstLNRIter(node_t * node, Stack< node_t * > && s);
   };
 
   template < class Key, class Value, class Compare >
-  ConstLNRIter< Key, Value, Compare >::ConstLNRIter(node_t * node, std::stack< node_t * > && s):
+  ConstLNRIter< Key, Value, Compare >::ConstLNRIter(node_t * node, Stack< node_t * > && s):
    current_(node),
    stack_(s)
   {}
@@ -63,15 +63,19 @@ namespace isaychev
     }
     else
     {
-      do
+      while (!stack_.empty() && stack_.top()->right == current_)
       {
         current_ = stack_.top();
         stack_.pop();
+        if (stack_.empty())
+        {
+          current_ = nullptr;
+        }
       }
-      while (!stack_.empty() && stack_.top()->right == current_);
-      if (stack_.empty())
+      if (!stack_.empty() && stack_.top()->left == current_)
       {
-        current_ = nullptr;
+        current_ = stack_.top();
+        stack_.pop();
       }
     }
     return *this;
@@ -104,15 +108,19 @@ namespace isaychev
     }
     else
     {
-      do
+      while (!stack_.empty() && stack_.top()->left == current_)
       {
         current_ = stack_.top();
         stack_.pop();
+        if (stack_.empty())
+        {
+          current_ = nullptr;
+        }
       }
-      while (!stack_.empty() && stack_.top()->left == current_);
-      if (stack_.empty())
+      if (!stack_.empty() && stack_.top()->right == current_)
       {
-        current_ = nullptr;
+        current_ = stack_.top();
+        stack_.pop();
       }
     }
     return *this;
@@ -147,7 +155,7 @@ namespace isaychev
   template < class Key, class Value, class Compare >
   const std::pair< Key, Value > * ConstLNRIter< Key, Value, Compare >::operator->() const
   {
-    return std::addressof(current_);
+    return std::addressof(current_->data);
   }
 }
 
