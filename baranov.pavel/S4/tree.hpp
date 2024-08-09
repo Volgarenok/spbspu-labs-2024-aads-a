@@ -18,6 +18,10 @@ namespace baranov
     using node_t = Node< Key, T >;
     Tree();
     ~Tree();
+    iterator_t begin();
+    iterator_t end();
+    const_iterator_t cbegin() const;
+    const_iterator_t cend() const;
     size_t size() const noexcept;
     bool empty() const noexcept;
     void clear() noexcept;
@@ -38,6 +42,48 @@ namespace baranov
   Tree< Key, T, Compare >::~Tree()
   {
     clear();
+  }
+
+  template< typename Key, typename T, typename Compare >
+  Iterator< Key, T, Compare > Tree< Key, T, Compare >::begin()
+  {
+    if (root_ == nullptr)
+    {
+      return iterator_t();
+    }
+    node_t * node = root_;
+    while(node.hasLeft())
+    {
+      node = node->left_;
+    }
+    return iterator_t(node);
+  }
+
+  template< typename Key, typename T, typename Compare >
+  Iterator< Key, T, Compare > Tree< Key, T, Compare >::end()
+  {
+    return iterator_t();
+  }
+
+  template< typename Key, typename T, typename Compare >
+  ConstIterator< Key, T, Compare > Tree< Key, T, Compare >::cbegin() const
+  {
+    if (root_ == nullptr)
+    {
+      return const_iterator_t();
+    }
+    node_t * node = root_;
+    while(node.hasLeft())
+    {
+      node = node->left_;
+    }
+    return const_iterator_t(node);
+  }
+
+  template< typename Key, typename T, typename Compare >
+  ConstIterator< Key, T, Compare > Tree< Key, T, Compare >::cend() const
+  {
+    return const_iterator_t();
   }
 
   template< typename Key, typename T, typename Compare >
