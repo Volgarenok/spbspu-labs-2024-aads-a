@@ -1,5 +1,5 @@
-#ifndef ITERATOR_HPP
-#define ITERATOR_HPP
+#ifndef CONST_ITERATOR_HPP
+#define CONST_ITERATOR_HPP
 #include <iterator>
 #include <utility>
 #include "node.hpp"
@@ -10,15 +10,15 @@ namespace baranov
   class Tree;
 
   template< typename Key, typename T, typename Compare >
-  class Iterator: public std::iterator< std::bidirectional_iterator_tag, T >
+  class ConstIterator: public std::iterator< std::bidirectional_iterator_tag, T >
   {
   public:
     friend class Tree< Key, T, Compare >;
-    using this_t = Iterator< Key, T, Compare >;
+    using this_t = ConstIterator< Key, T, Compare >;
 
-    Iterator();
-    ~Iterator() = default;
-    Iterator(const this_t &) = default;
+    ConstIterator();
+    ~ConstIterator() = default;
+    ConstIterator(const this_t &) = default;
     this_t & operator=(const this_t &) = default;
 
     this_t & operator++();
@@ -26,8 +26,6 @@ namespace baranov
     this_t & operator--();
     this_t operator--(int);
 
-    std::pair< Key, T > & operator*();
-    std::pair< Key, T > * operator->();
     const std::pair< Key, T > & operator*() const;
     const std::pair< Key, T > * operator->() const;
 
@@ -35,21 +33,21 @@ namespace baranov
     bool operator!=(const this_t &) const;
   private:
     Node< Key, T > * node_;
-    explicit Iterator(Node< Key, T > * node);
+    explicit ConstIterator(Node< Key, T > * node);
   };
 
   template< typename Key, typename T, typename Compare >
-  Iterator< Key, T, Compare >::Iterator():
+  ConstIterator< Key, T, Compare >::ConstIterator():
     node_(nullptr)
   {}
 
   template< typename Key, typename T, typename Compare >
-  Iterator< Key, T, Compare >::Iterator(Node< Key, T > * node):
+  ConstIterator< Key, T, Compare >::ConstIterator(Node< Key, T > * node):
     node_(node)
   {}
 
   template< typename Key, typename T, typename Compare >
-  Iterator< Key, T, Compare > & Iterator< Key, T, Compare >::operator++()
+  ConstIterator< Key, T, Compare > & ConstIterator< Key, T, Compare >::operator++()
   {
     if (node_->hasRight())
     {
@@ -71,7 +69,7 @@ namespace baranov
   }
 
   template< typename Key, typename T, typename Compare >
-  Iterator< Key, T, Compare > Iterator< Key, T, Compare >::operator++(int)
+  ConstIterator< Key, T, Compare > ConstIterator< Key, T, Compare >::operator++(int)
   {
     this_t result(*this);
     ++(*this);
@@ -79,7 +77,7 @@ namespace baranov
   }
 
   template< typename Key, typename T, typename Compare >
-  Iterator< Key, T, Compare > & Iterator< Key, T, Compare >::operator--()
+  ConstIterator< Key, T, Compare > & ConstIterator< Key, T, Compare >::operator--()
   {
     if (node_->hasLeft())
     {
@@ -101,7 +99,7 @@ namespace baranov
   }
 
   template< typename Key, typename T, typename Compare >
-  Iterator< Key, T, Compare > Iterator< Key, T, Compare >::operator--(int)
+  ConstIterator< Key, T, Compare > ConstIterator< Key, T, Compare >::operator--(int)
   {
     this_t result(*this);
     --(*this);
@@ -109,41 +107,27 @@ namespace baranov
   }
 
   template< typename Key, typename T, typename Compare >
-  std::pair< Key, T > & Iterator< Key, T, Compare >::operator*()
+  const std::pair< Key, T > & ConstIterator< Key, T, Compare >::operator*() const
   {
     assert(node_ != nullptr);
     return node_->data_;
   }
 
   template< typename Key, typename T, typename Compare >
-  std::pair< Key, T > * Iterator< Key, T, Compare >::operator->()
+  const std::pair< Key, T > * ConstIterator< Key, T, Compare >::operator->() const
   {
     assert(node_ != nullptr);
     return std::addressof(node_->data_);
   }
 
   template< typename Key, typename T, typename Compare >
-  const std::pair< Key, T > & Iterator< Key, T, Compare >::operator*() const
-  {
-    assert(node_ != nullptr);
-    return node_->data_;
-  }
-
-  template< typename Key, typename T, typename Compare >
-  const std::pair< Key, T > * Iterator< Key, T, Compare >::operator->() const
-  {
-    assert(node_ != nullptr);
-    return std::addressof(node_->data_);
-  }
-
-  template< typename Key, typename T, typename Compare >
-  bool Iterator< Key, T, Compare >::operator==(const this_t & rhs) const
+  bool ConstIterator< Key, T, Compare >::operator==(const this_t & rhs) const
   {
     return node_ == rhs.node_;
   }
 
   template< typename Key, typename T, typename Compare >
-  bool Iterator< Key, T, Compare >::operator!=(const this_t & rhs) const
+  bool ConstIterator< Key, T, Compare >::operator!=(const this_t & rhs) const
   {
     return !(rhs == *this);
   }
