@@ -19,10 +19,10 @@ int main(int argc, char * argv[])
   }
 
   DatasetSummarizer f = dataset.traverse_breadth(DatasetSummarizer());
-/*  for (auto i = dataset.cbegin(); i != dataset.cend(); ++i)
+  for (auto i = dataset.lnrbegin(); i != dataset.lnrend(); ++i)
   {
     f(*i);
-  }*/
+  }
 
   std::cout << f.get_keysum() << f.get_valsum() << "\n";
 }

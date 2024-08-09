@@ -8,6 +8,8 @@
 #include <initializer_list>
 #include "treeIter.hpp"
 #include "constTreeIter.hpp"
+#include "LNRIter.hpp"
+#include "constLNRIter.hpp"
 
 namespace isaychev
 {
@@ -19,6 +21,8 @@ namespace isaychev
     using const_iterator = ConstTreeIter< Key, Value, Compare >;
     using iterator = TreeIter< Key, Value, Compare >;
     using value_t = std::pair< Key, Value >;
+    using lnr_iterator = LNRIter< Key, Value, Compare >;
+    using const_lnr_iterator = ConstLNRIter< Key, Value, Compare >;
 
    public:
     BSTree();
@@ -37,6 +41,12 @@ namespace isaychev
     const_iterator end() const noexcept;
     const_iterator cbegin() const noexcept;
     const_iterator cend() const noexcept;
+    lnr_iterator lnrbegin();
+    lnr_iterator lnrend();
+    const_lnr_iterator lnrbegin() const;
+    const_lnr_iterator lnrend() const;
+    const_lnr_iterator clnrbegin() const;
+    const_lnr_iterator clnrend() const;
 
     size_t size() const noexcept;
     bool empty() const noexcept;
@@ -191,6 +201,63 @@ namespace isaychev
   ConstTreeIter< Key, Value, Compare > BSTree< Key, Value, Compare >::cend() const noexcept
   {
     return ConstTreeIter< Key, Value, Compare >();
+  }
+
+  template < class Key, class Value, class Compare >
+  LNRIter< Key, Value, Compare > BSTree< Key, Value, Compare >::lnrbegin()
+  {
+    std::stack< node_t * > s;
+    auto curr = root_;
+    while (curr && curr->left)
+    {
+      s.push(curr);
+      curr = curr->left;
+    }
+    return lnr_iterator(curr, std::move(s));
+  }
+
+  template < class Key, class Value, class Compare >
+  LNRIter< Key, Value, Compare > BSTree< Key, Value, Compare >::lnrend()
+  {
+    return lnr_iterator(nullptr, std::stack< node_t * >());
+  }
+
+  template < class Key, class Value, class Compare >
+  ConstLNRIter< Key, Value, Compare > BSTree< Key, Value, Compare >::lnrbegin() const
+  {
+    std::stack< node_t * > s;
+    auto curr = root_;
+    while (curr && curr->left)
+    {
+      s.push(curr);
+      curr = curr->left;
+    }
+    return const_lnr_iterator(curr, std::move(s));
+  }
+
+  template < class Key, class Value, class Compare >
+  ConstLNRIter< Key, Value, Compare > BSTree< Key, Value, Compare >::lnrend() const
+  {
+    return const_lnr_iterator(nullptr, std::stack< node_t * >());
+  }
+
+  template < class Key, class Value, class Compare >
+  ConstLNRIter< Key, Value, Compare > BSTree< Key, Value, Compare >::clnrbegin() const
+  {
+    std::stack< node_t * > s;
+    auto curr = root_;
+    while (curr && curr->left)
+    {
+      s.push(curr);
+      curr = curr->left;
+    }
+    return const_lnr_iterator(curr, std::move(s));
+  }
+
+  template < class Key, class Value, class Compare >
+  ConstLNRIter< Key, Value, Compare > BSTree< Key, Value, Compare >::clnrend() const
+  {
+    return const_lnr_iterator(nullptr, std::stack< node_t * >());
   }
 
   template < class Key, class Value, class Compare >
