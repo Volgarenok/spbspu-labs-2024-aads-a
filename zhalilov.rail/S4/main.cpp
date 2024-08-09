@@ -1,9 +1,10 @@
 #include <iostream>
 #include <fstream>
 
+#include <tree/twoThreeTree.hpp>
+
 #include "getMaps.hpp"
 #include "mapMaster.hpp"
-#include "twoThreeTree.hpp"
 #include "commands.hpp"
 
 int main(int argc, char *argv[])

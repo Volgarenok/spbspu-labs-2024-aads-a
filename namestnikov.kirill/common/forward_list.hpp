@@ -44,6 +44,25 @@ namespace namestnikov
         throw;
       }
     }
+    template< class Iter >
+    ForwardList(Iter begin, Iter end):
+      head_(nullptr)
+    {
+      try
+      {
+        auto it = begin;
+        while (it != end)
+        {
+          push_front(*it);
+          ++it;
+        }
+      }
+      catch (...)
+      {
+        clear();
+        throw;
+      }
+    }
     ForwardList(const ForwardList< T > & other):
       head_(nullptr)
     {

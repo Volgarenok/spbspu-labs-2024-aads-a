@@ -5,8 +5,7 @@
 #include <iosfwd>
 
 #include <list/list.hpp>
-
-#include "twoThreeTree.hpp"
+#include <tree/twoThreeTree.hpp>
 
 namespace zhalilov
 {

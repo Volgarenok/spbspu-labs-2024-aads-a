@@ -31,7 +31,7 @@ namespace zaitsev
     using ullListIt = ullList::iterator;
     if (list.empty())
     {
-      return ullList(1,0);
+      return ullList(1,0ull);
     }
     ForwardList< std::pair< ullListIt, ullListIt > > list_of_iterators =
       { {list.begin()->second.begin(), (list.begin())->second.end()} };
