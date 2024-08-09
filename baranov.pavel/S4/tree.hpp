@@ -2,6 +2,7 @@
 #define TREE
 #include <functional>
 #include <cstddef>
+#include <stdexcept>
 #include "iterator.hpp"
 #include "constIterator.hpp"
 #include "node.hpp"
@@ -22,6 +23,8 @@ namespace baranov
     iterator_t end();
     const_iterator_t cbegin() const;
     const_iterator_t cend() const;
+    iterator_t find(const Key & key);
+    const_iterator_t find(const Key & key) const;
     size_t size() const noexcept;
     bool empty() const noexcept;
     void clear() noexcept;
@@ -84,6 +87,42 @@ namespace baranov
   ConstIterator< Key, T, Compare > Tree< Key, T, Compare >::cend() const
   {
     return const_iterator_t();
+  }
+
+  template< typename Key, typename T, typename Compare >
+  Iterator< Key, T, Compare > Tree< Key, T, Compare >::find(const Key & key)
+  {
+    node_t * node = root_;
+    while (node && node->data_.first != key)
+    {
+      if (Compare()(node->data_.first, key))
+      {
+        node = node->right_;
+      }
+      else
+      {
+        node = node->left_;
+      }
+    }
+    return iterator_t(node);
+  }
+
+  template< typename Key, typename T, typename Compare >
+  ConstIterator< Key, T, Compare > Tree< Key, T, Compare >::find(const Key & key) const
+  {
+    node_t * node = root_;
+    while (node && node->data_.first != key)
+    {
+      if (Compare()(node->data_.first, key))
+      {
+        node = node->right_;
+      }
+      else
+      {
+        node = node->left_;
+      }
+    }
+    return const_iterator_t(node);
   }
 
   template< typename Key, typename T, typename Compare >
