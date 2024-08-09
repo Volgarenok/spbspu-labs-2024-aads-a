@@ -34,6 +34,7 @@ namespace baranov
     size_t size() const noexcept;
     bool empty() const noexcept;
     void clear() noexcept;
+    void swap(this_t & rhs);
   private:
     Node< Key, T > * root_;
     size_t size_;
@@ -228,6 +229,13 @@ namespace baranov
   bool Tree< Key, T, Compare >::empty() const noexcept
   {
     return size_ == 0;
+  }
+
+  template< typename Key, typename T, typename Compare >
+  void Tree< Key, T, Compare >::swap(this_t & rhs)
+  {
+    std::swap(root_, rhs.root_);
+    std::swap(size_, rhs.size_);
   }
 
   template< typename Key, typename T, typename Compare >
