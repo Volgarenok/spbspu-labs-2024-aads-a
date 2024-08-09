@@ -1,9 +1,9 @@
 #ifndef LIST_HPP
 #define LIST_HPP
 
-#include "node.hpp"
-#include "iterator.hpp"
-#include "constIterator.hpp"
+#include <list/node.hpp>
+#include <list/iterator.hpp>
+#include <list/constIterator.hpp>
 
 namespace baranov
 {
@@ -16,6 +16,10 @@ namespace baranov
       List(const List && rhs) noexcept;
       List(size_t count, const T & data);
       ~List();
+      T & back();
+      const T & back() const;
+      T & front();
+      const T & front() const;
       Iterator< T > begin() noexcept;
       Iterator< T > end() noexcept;
       ConstIterator< T > cbegin() const noexcept;
@@ -106,6 +110,30 @@ namespace baranov
   }
 
   template< class T >
+  T & List< T >::back()
+  {
+    return tail_->data_;
+  }
+
+  template< class T >
+  const T & List< T >::back() const
+  {
+    return tail_->data_;
+  }
+
+  template< class T >
+  T & List< T >::front()
+  {
+    return head_->data_;
+  }
+
+  template< class T >
+  const T & List< T >::front() const
+  {
+    return head_->data_;
+  }
+
+  template< class T >
   Iterator< T > List< T >::begin() noexcept
   {
     return Iterator< T >(head_);
@@ -153,8 +181,8 @@ namespace baranov
     else
     {
       tail_->next_ = topush;
+      topush->prev_ = tail_;
       tail_ = topush;
-      tail_->prev_ = topush;
     }
     ++size_;
   }
@@ -191,8 +219,8 @@ namespace baranov
     else
     {
       head_->prev_ = topush;
+      topush->next_ = head_;
       head_ = topush;
-      head_->next_ = topush;
     }
     ++size_;
   }
