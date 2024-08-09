@@ -1,6 +1,7 @@
 #ifndef TREE
 #define TREE
 #include <functional>
+#include <cstddef>
 #include "iterator.hpp"
 #include "constIterator.hpp"
 #include "node.hpp"
@@ -17,6 +18,8 @@ namespace baranov
     using node_t = Node< Key, T >;
     Tree();
     ~Tree();
+    size_t size() const noexcept;
+    bool empty() const noexcept;
     void clear() noexcept;
   private:
     Node< Key, T > * root_;
@@ -35,6 +38,18 @@ namespace baranov
   Tree< Key, T, Compare >::~Tree()
   {
     clear();
+  }
+
+  template< typename Key, typename T, typename Compare >
+  size_t Tree< Key, T, Compare >::size() const noexcept
+  {
+    return size_;
+  }
+
+  template< typename Key, typename T, typename Compare >
+  bool Tree< Key, T, Compare >::empty() const noexcept
+  {
+    return size_ == 0;
   }
 
   template< typename Key, typename T, typename Compare >
