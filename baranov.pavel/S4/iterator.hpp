@@ -22,6 +22,8 @@ namespace baranov
 
     this_t & operator++();
     this_t operator++(int);
+    this_t & operator--();
+    this_t operator--(int);
   private:
     Node< Key, T > * node_;
   };
@@ -53,6 +55,36 @@ namespace baranov
   {
     Iterator< Key, T, Compare > result(*this);
     ++(*this);
+    return result;
+  }
+
+  template< typename Key, typename T, typename Compare >
+  Iterator< Key, T, Compare > & Iterator< Key, T, Compare >::operator--()
+  {
+    if (node_->hasLeft())
+    {
+      node_ = node_->left_;
+      while (node_->hasRight())
+      {
+        node_ = node_->right_;
+      }
+    }
+    else
+    {
+      while (node_->isLeft())
+      {
+        node_ = node_->parent_;
+      }
+      node_ = node_->parent_;
+    }
+    return * this;
+  }
+
+  template< typename Key, typename T, typename Compare >
+  Iterator< Key, T, Compare > Iterator< Key, T, Compare >::operator--(int)
+  {
+    Iterator< Key, T, Compare > result(*this);
+    --(*this);
     return result;
   }
 }
