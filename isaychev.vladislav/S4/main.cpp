@@ -33,13 +33,16 @@ int main(int argc, char * argv[])
   while (!std::cin.eof())
   {
     std::cin >> str;
-    try
+    if (!str.empty())
     {
-      (commands.at(str))(std::cin);
-    }
-    catch (const std::exception & e)
-    {
-      std::cout << e.what() << "\n";
+      try
+      {
+        (commands.at(str))(std::cin);
+      }
+      catch (const std::exception & e)
+      {
+        std::cout << e.what() << "\n";
+      }
     }
   }
   /*BSTree< int, std::string > tree;
