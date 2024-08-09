@@ -1,6 +1,7 @@
 #ifndef ITERATOR_HPP
 #define ITERATOR_HPP
 #include <iterator>
+#include <utility>
 #include "node.hpp"
 
 namespace baranov
@@ -24,6 +25,14 @@ namespace baranov
     this_t operator++(int);
     this_t & operator--();
     this_t operator--(int);
+
+    std::pair< Key, T > & operator*();
+    std::pair< Key, T > * operator->();
+    const std::pair< Key, T > & operator*() const;
+    const std::pair< Key, T > * operator->() const;
+
+    bool operator==(const this_t &) const;
+    bool operator!=(const this_t &) const;
   private:
     Node< Key, T > * node_;
   };
@@ -53,7 +62,7 @@ namespace baranov
   template< typename Key, typename T, typename Compare >
   Iterator< Key, T, Compare > Iterator< Key, T, Compare >::operator++(int)
   {
-    Iterator< Key, T, Compare > result(*this);
+    this_t result(*this);
     ++(*this);
     return result;
   }
@@ -83,10 +92,51 @@ namespace baranov
   template< typename Key, typename T, typename Compare >
   Iterator< Key, T, Compare > Iterator< Key, T, Compare >::operator--(int)
   {
-    Iterator< Key, T, Compare > result(*this);
+    this_t result(*this);
     --(*this);
     return result;
   }
+
+  template< typename Key, typename T, typename Compare >
+  std::pair< Key, T > & Iterator< Key, T, Compare >::operator*()
+  {
+    assert(node_ != nullptr);
+    return node_->data_;
+  }
+
+  template< typename Key, typename T, typename Compare >
+  std::pair< Key, T > * Iterator< Key, T, Compare >::operator->()
+  {
+    assert(node_ != nullptr);
+    return std::addressof(node_->data_);
+  }
+
+  template< typename Key, typename T, typename Compare >
+  const std::pair< Key, T > & Iterator< Key, T, Compare >::operator*() const
+  {
+    assert(node_ != nullptr);
+    return node_->data_;
+  }
+
+  template< typename Key, typename T, typename Compare >
+  const std::pair< Key, T > * Iterator< Key, T, Compare >::operator->() const
+  {
+    assert(node_ != nullptr);
+    return std::addressof(node_->data_);
+  }
+
+  template< typename Key, typename T, typename Compare >
+  bool Iterator< Key, T, Compare >::operator==(const this_t & rhs) const
+  {
+    return node_ == rhs.node_;
+  }
+
+  template< typename Key, typename T, typename Compare >
+  bool Iterator< Key, T, Compare >::operator!=(const this_t & rhs) const
+  {
+    return !(rhs == *this);
+  }
+
 }
 
 #endif
