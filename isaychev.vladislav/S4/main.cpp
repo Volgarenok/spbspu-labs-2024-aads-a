@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <limits>
 #include "commands.hpp"
 #include "inputDictionaries.hpp"
 
@@ -46,7 +47,7 @@ int main(int argc, char * argv[])
       catch (const std::exception &)
       {
         std::cout << "<INVALID COMMAND>\n";
-        //std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+        std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
       }
     }
     str.clear();

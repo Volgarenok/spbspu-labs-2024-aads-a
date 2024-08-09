@@ -61,7 +61,7 @@ namespace isaychev
     size_t erase(const Key & key);
     iterator erase(iterator first, iterator last);
     iterator erase(const_iterator first, const_iterator last);
-    //test line
+
    private:
     node_t * root_;
     Compare cmp_;
@@ -139,6 +139,7 @@ namespace isaychev
   {
     if (this != std::addressof(rhs))
     {
+      clear();
       root_ = rhs.root_;
       cmp_ = rhs.cmp_;
       size_ = rhs.size_;
