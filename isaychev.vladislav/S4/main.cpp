@@ -39,11 +39,17 @@ int main(int argc, char * argv[])
       {
         (commands.at(str))(std::cin);
       }
-      catch (const std::exception & e)
+      catch (const std::runtime_error & e)
       {
         std::cout << e.what() << "\n";
       }
+      catch (const std::exception &)
+      {
+        std::cout << "<INVALID COMMAND>\n";
+        //std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+      }
     }
+    str.clear();
   }
   /*BSTree< int, std::string > tree;
   tree[7] = "g";
