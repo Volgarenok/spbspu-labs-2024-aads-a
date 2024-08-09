@@ -23,6 +23,12 @@ namespace baranov
     iterator_t end();
     const_iterator_t cbegin() const;
     const_iterator_t cend() const;
+    std::pair< iterator_t, bool > insert(const Key & key, const T & val);
+    std::pair< iterator_t, bool > insert(const std::pair< Key, T > & pair);
+    T & at(const Key & key);
+    const T & at(const Key & key) const;
+    T & operator[](const Key & key);
+    const T & operator[](const Key & key) const;
     iterator_t find(const Key & key);
     const_iterator_t find(const Key & key) const;
     size_t size() const noexcept;
@@ -87,6 +93,93 @@ namespace baranov
   ConstIterator< Key, T, Compare > Tree< Key, T, Compare >::cend() const
   {
     return const_iterator_t();
+  }
+
+  template< typename Key, typename T, typename Compare >
+  std::pair< Iterator< Key, T, Compare >, bool > Tree< Key, T, Compare >::insert(const Key & key, const T & val)
+  {
+    if (empty())
+    {
+      root_ = new node_t(std::make_pair(key, val), nullptr, nullptr, nullptr);
+      ++size_;
+      return iterator_t(root_);
+    }
+    node_t * node = root_;
+    while (node)
+      if (Compare()(key, node->data_.first))
+      {
+        if (!node.hasLeft())
+        {
+          node->left_ = new node_t(std::make_pair(key, val), nullptr, nullptr, node);
+          ++size_;
+          return std::make_pair(iterator_t(node->left_), true);
+        }
+        node = node->left;
+      }
+      else if (Compare()(node->data_.first, key))
+      {
+        if (!node.hasRight())
+        {
+          node->right_ = new node_t(std::make_pair(key, val), nullptr, nullptr, node);
+          ++size_;
+          return std::make_pair(iterator_t(node->right_), true);
+        }
+        node = node->right;
+      }
+      else
+      {
+        return std::make_pair(iterator_t(node), false);
+      }
+  }
+
+  template< typename Key, typename T, typename Compare >
+  std::pair< Iterator< Key, T, Compare >, bool > Tree< Key, T, Compare >::insert(const std::pair< Key, T > & pair)
+  {
+    return insert(pair.first, pair.second);
+  }
+
+  template< typename Key, typename T, typename Compare >
+  T & Tree< Key, T, Compare >::at(const Key & key)
+  {
+    iterator_t it = find(key);
+    if (it == end())
+    {
+      throw std::out_of_range("Invalid key");
+    }
+    return it->second;
+  }
+
+  template< typename Key, typename T, typename Compare >
+  const T & Tree< Key, T, Compare >::at(const Key & key) const
+  {
+    const_iterator_t it = find(key);
+    if (it == end())
+    {
+      throw std::out_of_range("Invalid key");
+    }
+    return it->second;
+  }
+
+  template< typename Key, typename T, typename Compare >
+  T & Tree< Key, T, Compare >::operator[](const Key & key)
+  {
+    iterator_t it = find(key);
+    if (it == end())
+    {
+      it = insert(key, T()).first;
+    }
+    return it->second;
+  }
+
+  template< typename Key, typename T, typename Compare >
+  const T & Tree< Key, T, Compare >::operator[](const Key & key) const
+  {
+    const_iterator_t it = find(key);
+    if (it == end())
+    {
+      it = insert(key, T()).first;
+    }
+    return it->second;
   }
 
   template< typename Key, typename T, typename Compare >
