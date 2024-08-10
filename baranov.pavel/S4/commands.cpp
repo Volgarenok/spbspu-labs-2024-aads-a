@@ -38,3 +38,23 @@ void baranov::complement(treeOfTrees & trees, std::istream & in, std::ostream &)
   }
   trees[newDictName] = newDict;
 }
+
+void baranov::intersect(treeOfTrees & trees, std::istream & in, std::ostream &)
+{
+  std::string newDictName;
+  std::string firstDictName;
+  std::string secondDictName;
+  in >> newDictName >> firstDictName >> secondDictName;
+  const basicTree & firstDict = trees.at(firstDictName);
+  const basicTree & secondDict = trees.at(secondDictName);
+  basicTree newDict;
+  for (auto it = firstDict.cbegin(); it != firstDict.cend(); ++it)
+  {
+    if (secondDict.find(it->first) != secondDict.cend())
+    {
+      newDict.insert(*it);
+    }
+  }
+  trees[newDictName] = newDict;
+}
+
