@@ -10,13 +10,25 @@ namespace isaychev
   class BSTree;
 
   template < class Key, class Value, class Compare >
+  class LNRIter;
+
+  template < class Key, class Value, class Compare >
+  class RNLIter;
+
+  template < class Key, class Value, class Compare >
   class TreeIter: public std::iterator< std::bidirectional_iterator_tag, Key, Value, Compare >
   {
     using this_t = TreeIter< Key, Value, Compare >;
     using node_t = detail::TreeNode< Key, Value >;
+    using lnr_iterator = LNRIter< Key, Value, Compare >;
+    using rnl_iterator = RNLIter< Key, Value, Compare >;
 
    public:
     TreeIter();
+    TreeIter(const lnr_iterator & rhs);
+    TreeIter(const rnl_iterator & rhs);
+    this_t & operator=(const lnr_iterator & rhs);
+    this_t & operator=(const rnl_iterator & rhs);
 
     this_t & operator++();
     this_t operator++(int);
@@ -34,6 +46,8 @@ namespace isaychev
    private:
     node_t * current_;
     friend class BSTree< Key, Value, Compare >;
+    friend class LNRIter< Key, Value, Compare >;
+    friend class RNLIter< Key, Value, Compare >;
 
     explicit TreeIter(node_t * node);
   };
@@ -47,6 +61,30 @@ namespace isaychev
   TreeIter< Key, Value, Compare >::TreeIter(node_t * node):
    current_(node)
   {}
+
+  template < class Key, class Value, class Compare >
+  TreeIter< Key, Value, Compare >::TreeIter(const lnr_iterator & rhs):
+   current_(rhs.current_)
+  {}
+
+  template < class Key, class Value, class Compare >
+  TreeIter< Key, Value, Compare >::TreeIter(const rnl_iterator & rhs):
+   current_(rhs.current_)
+  {}
+
+  template < class Key, class Value, class Compare >
+  TreeIter< Key, Value, Compare > & TreeIter< Key, Value, Compare >::operator=(const lnr_iterator & rhs)
+  {
+    current_ = rhs.current_;
+    return *this;
+  }
+
+  template < class Key, class Value, class Compare >
+  TreeIter< Key, Value, Compare > & TreeIter< Key, Value, Compare >::operator=(const rnl_iterator & rhs)
+  {
+    current_ = rhs.current_;
+    return *this;
+  }
 
   template < class Key, class Value, class Compare >
   TreeIter< Key, Value, Compare > & TreeIter< Key, Value, Compare >::operator++()
