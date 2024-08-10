@@ -86,13 +86,17 @@ namespace rebdev
         {
           node_ = (node_->left);
         }
-        else
+        else if ((node_->parent) != nullptr)
         {
-          while (!(((node_->parent->right) == node_) && ((node_->parent->left) != nullptr)))
+          while ((node_->left) == nullptr)
           {
-            node_ = (node_->parent);
+            while ((node_->parent->left) == node_)
+            {
+              node_ = node_->parent;
+            }
+            node_ = node_->parent;
           }
-          node_ = (node_->parent->left);
+          node_ = node_->left;
         }
         return *this;
       }

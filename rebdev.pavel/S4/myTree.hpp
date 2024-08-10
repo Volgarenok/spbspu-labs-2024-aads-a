@@ -61,7 +61,14 @@ namespace rebdev
       AVLTree & operator=(const AVLTree & tree)
       {
         AVLTree treeToSwap;
-        treeToSwap.insert(tree.cbegin(), tree.cend());
+        auto it = tree.cend();
+        --it;
+        while (it != tree.cbegin())
+        {
+          treeToSwap.insert(*it);
+          --it;
+        }
+        treeToSwap.insert(*it);
         swap(treeToSwap);
         return *this;
       }
@@ -101,7 +108,7 @@ namespace rebdev
         {
           return ((*it).second);
         }
-        std::pair< iterator, bool > it2 = insert(pair{k, Value{}});
+        std::pair< iterator, bool > it2 = insert(pair{std::move(k), Value{}});
         return ((*(it2.first)).second);
       }
       Value & operator[](Key && k)
@@ -134,10 +141,6 @@ namespace rebdev
       }
       void swap(AVLTree & tree)
       {
-        if ((headNode_->right) != nullptr)
-        {
-          std::swap(headNode_->right->parent, (tree.headNode_)->right->parent);
-        }
         std::swap(headNode_, tree.headNode_);
         std::swap(size_, tree.size_);
         std::swap(comp_, tree.comp_);
