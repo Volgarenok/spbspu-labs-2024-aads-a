@@ -47,6 +47,10 @@ int main(int argc, char ** argv)
   {
     std::string command;
     std::cin >> command;
+    if (std::cin.eof())
+    {
+      break;
+    }
     try
     {
       if (command == "print")
