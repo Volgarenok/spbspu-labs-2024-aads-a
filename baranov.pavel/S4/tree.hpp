@@ -176,7 +176,7 @@ namespace baranov
   const T & Tree< Key, T, Compare >::at(const Key & key) const
   {
     const_iterator_t it = find(key);
-    if (it == end())
+    if (it == cend())
     {
       throw std::out_of_range("Invalid key");
     }

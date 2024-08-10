@@ -1,7 +1,10 @@
 #include <iostream>
 #include <fstream>
+#include <functional>
+#include <limits>
 #include "tree.hpp"
 #include "inputTrees.hpp"
+#include "commands.hpp"
 
 int main(int argc, char ** argv)
 {
@@ -20,6 +23,27 @@ int main(int argc, char ** argv)
   using basicTree = Tree< int, std::string >;
   using treeOfTrees = Tree< std::string, basicTree >;
   treeOfTrees trees;
-  baranov::inputTrees(trees, file);
+  inputTrees(trees, file);
+
+  Tree< std::string, std::function< void(std::istream &, std::ostream &) > > commands;
+  {
+    using namespace std::placeholders;
+    commands.insert("print", std::bind(print, std::cref(trees), _1, _2));
+  }
+
+  std::string command;
+  while (std::cin >> command)
+  {
+    try
+    {
+      commands.at(command)(std::cin, std::cout);
+    }
+    catch (const std::exception &)
+    {
+      std::cout << "<INVALID COMMAND>\n";
+    }
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+  }
 }
 
