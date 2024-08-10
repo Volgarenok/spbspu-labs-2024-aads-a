@@ -67,7 +67,10 @@ int main(int argc, char ** argv)
     }
     catch (const std::exception & e)
     {
-      std::cout << "<INVALID COMMAND>\n";
+      if (!std::cin.eof())
+      {
+        std::cout << "<INVALID COMMAND>\n";
+      }
     }
   }
   return 0;

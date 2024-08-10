@@ -16,19 +16,11 @@ rebdev::tree rebdev::complement(const tree & firstTree, const tree & secondTree)
   auto it = secondTree.cbegin();
   while (it != secondTree.cend())
   {
-    newTree.erase((*it).first);
-    ++it;
-  }
-  return newTree;
-}
-rebdev::tree rebdev::intersect(const tree & firstTree, const tree & secondTree)
-{
-  tree newTree(firstTree);
-  auto it = secondTree.cbegin();
-  while (it != secondTree.cend())
-  {
-    auto it2 = newTree.find((*it).first);
-    if (it2 != newTree.end())
+    if (firstTree.find((*it).first) == firstTree.cend())
+    {
+      newTree.insert(*it);
+    }
+    else
     {
       newTree.erase((*it).first);
     }
@@ -36,16 +28,29 @@ rebdev::tree rebdev::intersect(const tree & firstTree, const tree & secondTree)
   }
   return newTree;
 }
-rebdev::tree rebdev::treeUnion(const tree & firstTree, const tree & secondTree)
+rebdev::tree rebdev::intersect(const tree & firstTree, const tree & secondTree)
 {
   tree newTree;
+  auto it = firstTree.cbegin();
+  while (it != firstTree.cend())
+  {
+    if (secondTree.find((*it).first) != secondTree.cend())
+    {
+      newTree.insert(*it);
+    }
+    ++it;
+  }
+  return newTree;
+}
+rebdev::tree rebdev::treeUnion(const tree & firstTree, const tree & secondTree)
+{
+  tree newTree(firstTree);
   auto it = secondTree.cbegin();
   while (it != secondTree.cend())
   {
-    auto it2 = firstTree.find((*it).first);
-    if (it2 != firstTree.cend())
+    if (firstTree.find((*it).first) == firstTree.cend())
     {
-      newTree.insert(*it2);
+      newTree.insert(*it);
     }
     ++it;
   }
