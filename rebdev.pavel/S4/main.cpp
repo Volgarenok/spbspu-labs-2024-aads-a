@@ -74,14 +74,9 @@ int main(int argc, char ** argv)
         std::cin >> command >> firstTree >> secondTree;
         auto tree1 = dictionaryTree.find(firstTree);
         auto tree2 = dictionaryTree.find(secondTree);
-        if ((command == firstTree) || (command == secondTree))
-        {
-          std::cout << "<INVALID COMMAND>\n";
-        }
-        else
-        {
-          (*it).second(dictionaryTree[command], (*tree1).second, (*tree2).second);
-        }
+        dictTree newDictionary;
+        (*it).second(newDictionary, (*tree1).second, (*tree2).second);
+        dictionaryTree[command] = newDictionary;
       }
     }
     catch (const std::exception & e)
