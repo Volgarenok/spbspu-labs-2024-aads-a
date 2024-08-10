@@ -7,6 +7,12 @@ namespace baranov
   template< typename Key, typename T >
   struct Node
   {
+    Node(Key key, T val, Node * left, Node * right, Node * parent):
+      data_(std::make_pair(key, val)),
+      left_(left),
+      right_(right),
+      parent_(parent)
+    {}
     std::pair< Key, T > data_;
     Node< Key, T > * left_;
     Node< Key, T > * right_;
@@ -14,12 +20,12 @@ namespace baranov
 
     bool hasLeft() const noexcept
     {
-      return parent_->left_;
+      return left_ != nullptr;
     }
 
     bool hasRight() const noexcept
     {
-      return parent_->right_;
+      return right_ != nullptr;
     }
 
     bool isRoot() const noexcept

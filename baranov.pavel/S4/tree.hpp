@@ -101,36 +101,39 @@ namespace baranov
   {
     if (empty())
     {
-      root_ = new node_t(std::make_pair(key, val), nullptr, nullptr, nullptr);
+      root_ = new node_t(key, val, nullptr, nullptr, nullptr);
       ++size_;
-      return iterator_t(root_);
+      return std::make_pair(iterator_t(root_), true);
     }
     node_t * node = root_;
     while (node)
-      if (Compare()(key, node->data_.first))
+    {
+      if (key == node->data_.first)
       {
-        if (!node.hasLeft())
-        {
-          node->left_ = new node_t(std::make_pair(key, val), nullptr, nullptr, node);
-          ++size_;
-          return std::make_pair(iterator_t(node->left_), true);
-        }
-        node = node->left;
+        break;
       }
       else if (Compare()(node->data_.first, key))
       {
-        if (!node.hasRight())
+        if (!node->hasRight())
         {
-          node->right_ = new node_t(std::make_pair(key, val), nullptr, nullptr, node);
+          node->right_ = new node_t(key, val, nullptr, nullptr, node);
           ++size_;
           return std::make_pair(iterator_t(node->right_), true);
         }
-        node = node->right;
+        node = node->right_;
       }
       else
       {
-        return std::make_pair(iterator_t(node), false);
+        if (!node->hasLeft())
+        {
+          node->left_ = new node_t(key, val, nullptr, nullptr, node);
+          ++size_;
+          return std::make_pair(iterator_t(node->left_), true);
+        }
+        node = node->left_;
       }
+    }
+    return std::make_pair(iterator_t(node), false);
   }
 
   template< typename Key, typename T, typename Compare >
