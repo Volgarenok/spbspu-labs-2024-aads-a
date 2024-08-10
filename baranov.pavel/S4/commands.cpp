@@ -58,3 +58,19 @@ void baranov::intersect(treeOfTrees & trees, std::istream & in, std::ostream &)
   trees[newDictName] = newDict;
 }
 
+void baranov::unite(treeOfTrees & trees, std::istream & in, std::ostream &)
+{
+  std::string newDictName;
+  std::string firstDictName;
+  std::string secondDictName;
+  in >> newDictName >> firstDictName >> secondDictName;
+  const basicTree & firstDict = trees.at(firstDictName);
+  const basicTree & secondDict = trees.at(secondDictName);
+  basicTree newDict = firstDict;
+  for (auto it = secondDict.cbegin(); it != secondDict.cend(); ++it)
+  {
+    newDict.insert(*it);
+  }
+  trees[newDictName] = newDict;
+}
+

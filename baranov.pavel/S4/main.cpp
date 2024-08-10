@@ -31,6 +31,7 @@ int main(int argc, char ** argv)
     commands.insert("print", std::bind(print, std::cref(trees), _1, _2));
     commands.insert("complement", std::bind(complement, std::ref(trees), _1, _2));
     commands.insert("intersect", std::bind(intersect, std::ref(trees), _1, _2));
+    commands.insert("union", std::bind(unite, std::ref(trees), _1, _2));
   }
 
   std::string command;
