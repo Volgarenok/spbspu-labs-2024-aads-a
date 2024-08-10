@@ -18,6 +18,7 @@ namespace baranov
     using const_iterator_t = ConstIterator< Key, T, Compare >;
     using node_t = Node< Key, T >;
     Tree();
+    Tree(const Tree & rhs);
     ~Tree();
     iterator_t begin();
     iterator_t end();
@@ -34,12 +35,11 @@ namespace baranov
     size_t size() const noexcept;
     bool empty() const noexcept;
     void clear() noexcept;
+    void clear(node_t* node) noexcept;
     void swap(this_t & rhs);
   private:
     Node< Key, T > * root_;
     size_t size_;
-    void clear(node_t * node) noexcept;
-
   };
 
   template< typename Key, typename T, typename Compare >
@@ -47,6 +47,25 @@ namespace baranov
     root_(nullptr),
     size_(0)
   {}
+
+  template< typename Key, typename T, typename Compare >
+  Tree< Key, T, Compare >::Tree(const Tree & rhs) :
+    root_(nullptr),
+    size_(0)
+  {
+    try
+    {
+      for (auto it = rhs.cbegin(); it != rhs.cend(); ++it)
+      {
+        insert(*it);
+      }
+    }
+    catch (...)
+    {
+      clear();
+      throw;
+    }
+  }
 
   template< typename Key, typename T, typename Compare >
   Tree< Key, T, Compare >::~Tree()
@@ -62,7 +81,7 @@ namespace baranov
       return iterator_t();
     }
     node_t * node = root_;
-    while(node.hasLeft())
+    while(node->hasLeft())
     {
       node = node->left_;
     }
@@ -83,7 +102,7 @@ namespace baranov
       return const_iterator_t();
     }
     node_t * node = root_;
-    while(node.hasLeft())
+    while(node->hasLeft())
     {
       node = node->left_;
     }

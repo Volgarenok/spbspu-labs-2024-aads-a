@@ -35,12 +35,12 @@ namespace baranov
 
     bool isLeft() const noexcept
     {
-      return !isRoot && parent_->left_ == this;
+      return !isRoot() && parent_->left_ == this;
     }
 
     bool isRight() const noexcept
     {
-      return !isRoot && parent_->right_ == this;
+      return !isRoot() && parent_->right_ == this;
     }
   };
 }
