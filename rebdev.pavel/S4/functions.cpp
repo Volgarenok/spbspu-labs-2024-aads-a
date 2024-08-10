@@ -2,6 +2,10 @@
 
 void rebdev::print(std::ostream & out, const tree & outTree)
 {
+  if (outTree.empty())
+  {
+    return;
+  }
   auto it = outTree.cbegin();
   while (it != outTree.cend())
   {

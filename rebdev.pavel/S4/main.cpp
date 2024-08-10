@@ -28,15 +28,15 @@ int main(int argc, char ** argv)
     std::stringstream inLine(line);
     inLine >> line;
     dictTree newDictionary;
-    dictionaryTree[line] = newDictionary;
     while (!inLine.eof())
     {
       int key;
       std::string value;
       inLine >> key;
       inLine >> value;
-      (dictionaryTree[line])[key] = value;
+      newDictionary[key] = value;
     }
+    dictionaryTree[line] = newDictionary;
   }
   rebdev::AVLTree< std::string, std::function< dictTree(const dictTree &, const dictTree &) > > commandTree;
   commandTree["complement"] = rebdev::complement;
