@@ -19,6 +19,9 @@ namespace baranov
     using node_t = Node< Key, T >;
     Tree();
     Tree(const Tree & rhs);
+    Tree(Tree && rhs) noexcept;
+    Tree & operator=(const Tree & rhs);
+    Tree & operator=(Tree && rhs) noexcept;
     ~Tree();
     iterator_t begin();
     iterator_t end();
@@ -65,6 +68,37 @@ namespace baranov
       clear();
       throw;
     }
+  }
+
+  template< typename Key, typename T, typename Compare >
+  Tree< Key, T, Compare >::Tree(Tree && rhs) noexcept:
+    root_(rhs.root_),
+    size_(rhs.size_)
+  {
+    rhs.root_ = nullptr;
+    rhs.size_ = 0;
+  }
+
+  template< typename Key, typename T, typename Compare >
+  Tree< Key, T, Compare > & Tree< Key, T, Compare >::operator=(const Tree & rhs)
+  {
+    if (std::addressof(rhs) != this)
+    {
+      Tree< Key, T, Compare > newtree(rhs);
+      swap(newtree);
+    }
+    return *this;
+  }
+
+  template< typename Key, typename T, typename Compare >
+  Tree< Key, T, Compare > & Tree< Key, T, Compare >::operator=(Tree && rhs) noexcept
+  {
+    if (std::addressof(rhs) != this)
+    {
+      clear();
+      swap(rhs);
+    }
+    return *this;
   }
 
   template< typename Key, typename T, typename Compare >

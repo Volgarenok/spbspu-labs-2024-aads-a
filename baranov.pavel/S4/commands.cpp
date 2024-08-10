@@ -36,5 +36,5 @@ void baranov::complement(treeOfTrees & trees, std::istream & in, std::ostream &)
       newDict.insert(*it);
     }
   }
-  trees.insert(newDictName, newDict);
+  trees[newDictName] = newDict;
 }
