@@ -14,9 +14,9 @@ void rebdev::print(std::ostream & out, const tree & outTree)
   }
   std::cout << '\n';
 }
-rebdev::tree rebdev::complement(const tree & firstTree, const tree & secondTree)
+void rebdev::complement(tree & newTree, const tree & firstTree, const tree & secondTree)
 {
-  tree newTree(firstTree);
+  newTree = firstTree;
   auto it = secondTree.cbegin();
   while (it != secondTree.cend())
   {
@@ -30,11 +30,9 @@ rebdev::tree rebdev::complement(const tree & firstTree, const tree & secondTree)
     }
     ++it;
   }
-  return newTree;
 }
-rebdev::tree rebdev::intersect(const tree & firstTree, const tree & secondTree)
+void rebdev::intersect(tree & newTree, const tree & firstTree, const tree & secondTree)
 {
-  tree newTree;
   auto it = firstTree.cbegin();
   while (it != firstTree.cend())
   {
@@ -44,11 +42,10 @@ rebdev::tree rebdev::intersect(const tree & firstTree, const tree & secondTree)
     }
     ++it;
   }
-  return newTree;
 }
-rebdev::tree rebdev::treeUnion(const tree & firstTree, const tree & secondTree)
+void rebdev::treeUnion(tree & newTree, const tree & firstTree, const tree & secondTree)
 {
-  tree newTree(firstTree);
+  newTree = firstTree;
   auto it = secondTree.cbegin();
   while (it != secondTree.cend())
   {
@@ -58,5 +55,4 @@ rebdev::tree rebdev::treeUnion(const tree & firstTree, const tree & secondTree)
     }
     ++it;
   }
-  return newTree;
 }

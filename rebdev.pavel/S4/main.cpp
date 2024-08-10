@@ -38,7 +38,8 @@ int main(int argc, char ** argv)
     }
     dictionaryTree[line] = newDictionary;
   }
-  rebdev::AVLTree< std::string, std::function< dictTree(const dictTree &, const dictTree &) > > commandTree;
+  using func = std::function< void(dictTree &, const dictTree &, const dictTree &) >;
+  rebdev::AVLTree< std::string, func > commandTree;
   commandTree["complement"] = rebdev::complement;
   commandTree["intersect"] = rebdev::intersect;
   commandTree["union"] = rebdev::treeUnion;
@@ -52,8 +53,11 @@ int main(int argc, char ** argv)
       {
         std::cin >> command;
         auto it = dictionaryTree.find(command);
-        std::cout << command;
-        rebdev::print(std::cout, (*it).second);
+        if (!((*it).second.empty()))
+        {
+          std::cout << command;
+          rebdev::print(std::cout, (*it).second);
+        }
       }
       else
       {
@@ -62,7 +66,7 @@ int main(int argc, char ** argv)
         std::cin >> command >> firstTree >> secondTree;
         auto tree1 = dictionaryTree.find(firstTree);
         auto tree2 = dictionaryTree.find(secondTree);
-        dictionaryTree[command] = ((*it).second((*tree1).second, (*tree2).second));
+        (*it).second(dictionaryTree[command], (*tree1).second, (*tree2).second);
       }
     }
     catch (const std::exception & e)
