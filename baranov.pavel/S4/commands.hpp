@@ -9,6 +9,7 @@ namespace baranov
   using basicTree = Tree< int, std::string >;
   using treeOfTrees = Tree< std::string, basicTree >;
   void print(const treeOfTrees & trees, std::istream & in, std::ostream & out);
+  void complement(treeOfTrees & trees, std::istream & in, std::ostream &);
 }
 
 #endif
