@@ -58,6 +58,10 @@ int main(int argc, char ** argv)
           std::cout << command;
           rebdev::print(std::cout, (*it).second);
         }
+        else
+        {
+          std::cout << "<EMPTY>\n";
+        }
       }
       else
       {
@@ -66,7 +70,14 @@ int main(int argc, char ** argv)
         std::cin >> command >> firstTree >> secondTree;
         auto tree1 = dictionaryTree.find(firstTree);
         auto tree2 = dictionaryTree.find(secondTree);
-        (*it).second(dictionaryTree[command], (*tree1).second, (*tree2).second);
+        if ((command == firstTree) || (command == secondTree))
+        {
+          std::cout << "<INVALID COMMAND>\n";
+        }
+        else
+        {
+          (*it).second(dictionaryTree[command], (*tree1).second, (*tree2).second);
+        }
       }
     }
     catch (const std::exception & e)
