@@ -5,8 +5,8 @@ void rebdev::print(std::ostream & out, const tree & outTree)
   auto it = outTree.cbegin();
   while (it != outTree.cend())
   {
-    std::cout << " " << (*it).first << " " << (*it).second;
-    ++it
+    out << " " << (*it).first << " " << (*it).second;
+    ++it;
   }
   std::cout << '\n';
 }
@@ -42,8 +42,8 @@ rebdev::tree rebdev::treeUnion(const tree & firstTree, const tree & secondTree)
   auto it = secondTree.cbegin();
   while (it != secondTree.cend())
   {
-    auto it2 = newTree.find((*it).first);
-    if (it2 != newTree.end())
+    auto it2 = firstTree.find((*it).first);
+    if (it2 != firstTree.cend())
     {
       newTree.insert(*it2);
     }

@@ -377,7 +377,7 @@ namespace rebdev
       size_t size_;
       Compare comp_;
 
-      node * findBase(const Key & k)
+      node * findBase(const Key & k) const
       {
         node * nodeNow = headNode_;
         while ((nodeNow->data.first) != k)
@@ -413,7 +413,7 @@ namespace rebdev
         }
         return beginNode;
       }
-      std::pair< node *, node * > equal_rangeBase(const Key & k)
+      std::pair< node *, node * > equal_rangeBase(const Key & k) const
       {
         iterator firstIt = find(k);
         iterator secondIt;
@@ -430,7 +430,7 @@ namespace rebdev
         return std::pair< node *, node * >{firstIt.node, secondIt.node};
       }
       using lambda = const std::function< bool(const Key & nowKey, const Key & key) >;
-      node * boundBase(const Key & k, lambda pred)
+      node * boundBase(const Key & k, lambda pred) const
       {
         node * nodeNow = headNode_->right;
         while (!pred(((nodeNow->data).first), k))
