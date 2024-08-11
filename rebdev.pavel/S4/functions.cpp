@@ -16,43 +16,47 @@ void rebdev::print(std::ostream & out, const tree & outTree)
 }
 void rebdev::complement(tree & newTree, const tree & firstTree, const tree & secondTree)
 {
-  newTree = firstTree;
+  tree treeToSwap(firstTree);
   auto it = secondTree.cbegin();
   while (it != secondTree.cend())
   {
     if (firstTree.find((*it).first) == firstTree.cend())
     {
-      newTree.insert(*it);
+      treeToSwap.insert(*it);
     }
     else
     {
-      newTree.erase((*it).first);
+      treeToSwap.erase((*it).first);
     }
     ++it;
   }
+  newTree.swap(treeToSwap);
 }
 void rebdev::intersect(tree & newTree, const tree & firstTree, const tree & secondTree)
 {
+  tree treeToSwap;
   auto it = firstTree.cbegin();
   while (it != firstTree.cend())
   {
     if (secondTree.find((*it).first) != secondTree.cend())
     {
-      newTree.insert(*it);
+      treeToSwap.insert(*it);
     }
     ++it;
   }
+  newTree.swap(treeToSwap);
 }
 void rebdev::treeUnion(tree & newTree, const tree & firstTree, const tree & secondTree)
 {
-  newTree = firstTree;
+  tree treeToSwap(firstTree);
   auto it = secondTree.cbegin();
   while (it != secondTree.cend())
   {
     if (firstTree.find((*it).first) == firstTree.cend())
     {
-      newTree.insert(*it);
+      treeToSwap.insert(*it);
     }
     ++it;
   }
+  newTree.swap(treeToSwap);
 }

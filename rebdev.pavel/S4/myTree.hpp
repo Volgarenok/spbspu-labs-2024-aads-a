@@ -108,7 +108,7 @@ namespace rebdev
         {
           return ((*it).second);
         }
-        std::pair< iterator, bool > it2 = insert(pair{std::move(k), Value{}});
+        std::pair< iterator, bool > it2 = insert(pair{k, Value{}});
         return ((*(it2.first)).second);
       }
       Value & operator[](Key && k)

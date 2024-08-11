@@ -32,8 +32,7 @@ int main(int argc, char ** argv)
     {
       int key;
       std::string value;
-      inLine >> key;
-      inLine >> value;
+      inLine >> key >> value;
       newDictionary[key] = value;
     }
     dictionaryTree[line] = newDictionary;
@@ -51,44 +50,36 @@ int main(int argc, char ** argv)
     {
       break;
     }
-    try
+    if (command == "print")
     {
-      if (command == "print")
+      std::cin >> command;
+      auto it = dictionaryTree.find(command);
+      if (it == dictionaryTree.end())
       {
-        std::cin >> command;
-        auto it = dictionaryTree.find(command);
-        if (!((*it).second.empty()))
-        {
-          std::cout << command;
-          rebdev::print(std::cout, (*it).second);
-        }
-        else
-        {
-          std::cout << "<EMPTY>\n";
-        }
+        std::cout << "<INVALID COMMAND>\n";
+      }
+      else if (!((*it).second.empty()))
+      {
+        std::cout << command;
+        rebdev::print(std::cout, (*it).second);
       }
       else
       {
-        auto it = commandTree.find(command);
-        std::string firstTree, secondTree;
-        std::cin >> command >> firstTree >> secondTree;
-        if ((command == firstTree) || (command == secondTree))
-        {
-          std::cout << "<INVALID COMMAND>\n";
-        }
-        else if (!std::cin.eof())
-        {
-          auto tree1 = dictionaryTree.find(firstTree);
-          auto tree2 = dictionaryTree.find(secondTree);
-          dictTree newDictionary;
-          (*it).second(newDictionary, (*tree1).second, (*tree2).second);
-          dictionaryTree[command] = newDictionary;
-        }
+        std::cout << "<EMPTY>\n";
       }
     }
-    catch (const std::exception & e)
+    else
     {
-      if (!std::cin.eof())
+      auto it = commandTree.find(command);
+      std::string firstTree, secondTree;
+      std::cin >> command >> firstTree >> secondTree;
+      auto tree1 = dictionaryTree.find(firstTree);
+      auto tree2 = dictionaryTree.find(secondTree);
+      if ((tree1 != dictionaryTree.end()) && (tree2 != dictionaryTree.end()))
+      {
+        (*it).second(dictionaryTree[command], (*tree1).second, (*tree2).second);
+      }
+      else
       {
         std::cout << "<INVALID COMMAND>\n";
       }
