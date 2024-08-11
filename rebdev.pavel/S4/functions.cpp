@@ -1,13 +1,18 @@
 #include "functions.hpp"
 
+#include <vector>
+#include <functional>
+
 void rebdev::print(std::ostream & out, const tree & outTree)
 {
+  std::vector< std::pair< long long int, std::string > > vec(outTree.begin(), outTree.end());
+  std::sort(vec.begin(), vec.end(), std::less< std::pair< long long int, std::string > >());
   if (outTree.empty())
   {
     return;
   }
-  auto it = outTree.cbegin();
-  while (it != outTree.cend())
+  auto it = vec.begin();
+  while (it != vec.end())
   {
     out << " " << (*it).first << " " << (*it).second;
     ++it;
