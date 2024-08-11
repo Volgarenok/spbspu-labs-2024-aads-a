@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <functional>
+#include <algorithm>
 
 void rebdev::print(std::ostream & out, const tree & outTree)
 {
