@@ -27,15 +27,14 @@ int main(int argc, char ** argv)
     }
     std::stringstream inLine(line);
     inLine >> line;
-    dictTree newDictionary;
+    dictionaryTree[line];
     while (!inLine.eof())
     {
       int key;
       std::string value;
       inLine >> key >> value;
-      newDictionary[key] = value;
+      (dictionaryTree[line])[key] = value;
     }
-    dictionaryTree[line] = newDictionary;
   }
   using func = std::function< void(dictTree &, const dictTree &, const dictTree &) >;
   rebdev::AVLTree< std::string, func > commandTree;

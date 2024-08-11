@@ -68,7 +68,10 @@ namespace rebdev
           treeToSwap.insert(*it);
           --it;
         }
-        treeToSwap.insert(*it);
+        if (it != tree.cend())
+        {
+          treeToSwap.insert(*it);
+        }
         swap(treeToSwap);
         return *this;
       }
