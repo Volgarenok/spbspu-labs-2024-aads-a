@@ -8,9 +8,6 @@
 
 namespace grechishnikov
 {
-  //template< typename T >
-  //class List;
-
   template< typename Key, typename T, typename Compare >
   class ConstTreeIterator: public std::iterator< std::bidirectional_iterator_tag, Key, const T, Compare >
   {
@@ -31,10 +28,8 @@ namespace grechishnikov
     bool operator==(const ConstTreeIterator< Key, T, Compare >& other) const;
     bool operator!=(const ConstTreeIterator< Key, T, Compare >& other) const;
 
-    //friend List< T >;
-
-    explicit ConstTreeIterator(detail::Node< Key, T >* node);
   private:
+    explicit ConstTreeIterator(detail::Node< Key, T >* node);
     detail::Node< Key, T >* node_;
   };
 
