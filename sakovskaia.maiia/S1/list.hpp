@@ -1,15 +1,16 @@
 #ifndef LIST_HPP
 #define LIST_HPP
 #include "iterator.hpp"
+#include "const_iterator.hpp"
 namespace sakovskaia
 {
   template < typename T >
   class List
   {
     using iterator = fwdIterator< T >;
+    using const_iterator = CFwdIterator< T >;
   public:
     List() = default;
-    using const_iterator = typename std::forward_list<T>::const_iterator;
     iterator begin();
     const_iterator begin() const;
     const_iterator cbegin() const;
