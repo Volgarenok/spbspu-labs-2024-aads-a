@@ -3,6 +3,53 @@
 #include <vector>
 #include <iterator>
 #include <limits>
+#include <list>
+
+template < typename T >
+class Queue
+{
+public:
+  void push(T rhs);
+  T drop();
+private:
+};
+
+template < typename T >
+class Stack
+{
+public:
+  Stack()
+  {
+    stack_list();
+  }
+  ~Stack() = default;
+  bool empty() const
+  {
+    return stack_list.empty();
+  }
+  size_t size() const
+  {
+    return stack_list.size();
+  }
+  T & top()
+  {
+    return stack_list.back();
+  }
+  const T & top() const
+  {
+    return stack_list.back();
+  }
+  void push(const T & rhs)
+  {
+    stack_list.push_back(rhs);
+  }
+  void pop()
+  {
+    stack_list.pop_back();
+  }
+private:
+  std::list<T> stack_list;
+};
 
 int main(int argc, char ** argv)
 {
