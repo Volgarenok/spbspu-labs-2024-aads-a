@@ -31,6 +31,11 @@ int main(int argc, char* argv[])
       dictionary.insert(nameDic, tempDic);
     }
   }
+  else
+  {
+    std::cerr << "Not enough arguments" << '\n';
+    return 2;
+  }
 
   UBST< std::string, std::function< void(std::istream&, UBST< std::string, UBST< int, std::string > >&) > > cmds;
   {
