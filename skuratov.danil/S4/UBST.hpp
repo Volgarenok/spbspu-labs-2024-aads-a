@@ -77,18 +77,18 @@ namespace skuratov
       detail::TreeNode< Key, Value >* temp = root_;
       if (!temp)
       {
-        return ConstIteratorTree< Key, Value, Compare > (nullptr);
+        return ConstIteratorTree< Key, Value, Compare >(nullptr);
       }
       while (temp->left_ != nullptr)
       {
         temp = temp->left_;
       }
-      return ConstIteratorTree< Key, Value, Compare > (temp);
+      return ConstIteratorTree< Key, Value, Compare >(temp);
     }
 
     ConstIteratorTree< Key, Value, Compare > cend() const noexcept
     {
-      return ConstIteratorTree< Key, Value, Compare > (nullptr);
+      return ConstIteratorTree< Key, Value, Compare >(nullptr);
     }
 
     size_t size() const noexcept
@@ -129,7 +129,8 @@ namespace skuratov
 
       if (nodePointer == nullptr)
       {
-        nodePointer = insertNode(root_, key, Value());
+        insert(key, Value());
+        nodePointer = findNode(root_, key);
       }
       return nodePointer->data_.second;
     }
@@ -140,7 +141,8 @@ namespace skuratov
 
       if (nodePointer == nullptr)
       {
-        nodePointer = insertNode(root_, key, Value());
+        insert(key, Value());
+        nodePointer = findNode(root_, key);
       }
       return nodePointer->data_.second;
     }
@@ -161,28 +163,22 @@ namespace skuratov
 
     ConstIteratorTree< Key, Value, Compare > find(const Key& key) const
     {
-      return ConstIteratorTree< Key, Value, Compare > (findNode(root_, key));
-    }
-
-    void push(const Key& key, const Value& value)
-    {
-      root_ = insertNode(root_, key, value);
-      ++size_;
+      return ConstIteratorTree< Key, Value, Compare >(findNode(root_, key));
     }
 
     void insert(const Key& key, const Value& value)
     {
       try
       {
-        if (root_)
+        if (!findNode(root_, key))
         {
-          insertNode(root_, key, value);
+          root_ = insertNode(root_, key, value);
           ++size_;
         }
         else
         {
-          root_ = new detail::TreeNode< Key, Value >(key, value);
-          ++size_;
+          detail::TreeNode< Key, Value >* nodePointer = findNode(root_, key);
+          nodePointer->data_.second = value;
         }
       }
       catch (...)
@@ -229,17 +225,11 @@ namespace skuratov
       }
     }
 
-    detail::TreeNode< Key, Value >* insertNode(detail::TreeNode< Key, Value >* nodePointer, const Key& key, const Value& value)
+    detail::TreeNode<Key, Value>* insertNode(detail::TreeNode< Key, Value >* nodePointer, const Key& key, const Value& value)
     {
       if (!nodePointer)
       {
-        nodePointer = new detail::TreeNode< Key, Value >(key, value);
-        if (!root_)
-        {
-          root_ = nodePointer;
-        }
-        size_++;
-        return nodePointer;
+        return new detail::TreeNode<Key, Value>(key, value);
       }
 
       if (cmp_(key, nodePointer->data_.first))
@@ -251,10 +241,6 @@ namespace skuratov
       {
         nodePointer->right_ = insertNode(nodePointer->right_, key, value);
         nodePointer->right_->parent_ = nodePointer;
-      }
-      else
-      {
-        nodePointer->data_.second = value;
       }
       return nodePointer;
     }

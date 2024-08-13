@@ -35,10 +35,10 @@ int main(int argc, char* argv[])
   UBST< std::string, std::function< void(std::istream&, UBST< std::string, UBST< int, std::string > >&) > > cmds;
   {
     using namespace std::placeholders;
+    cmds["union"] = std::bind(isUnion, _1, _2);
     cmds["print"] = std::bind(isPrint, _1, _2, std::ref(std::cout));
     cmds["complement"] = std::bind(isComplement, _1, _2);
     cmds["intersect"] = std::bind(isIntersect, _1, _2);
-    cmds["union"] = std::bind(isUnion, _1, _2);
   }
 
   std::string cmd;
