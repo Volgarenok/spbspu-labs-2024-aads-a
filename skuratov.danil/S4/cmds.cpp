@@ -4,26 +4,20 @@ void skuratov::isPrint(std::istream& in, UBST< std::string, UBST< int, std::stri
 {
   std::string name = {};
   in >> name;
-  try
+
+  UBST< int, std::string > dic = dictionary.at(name);
+  if (dic.empty())
   {
-    UBST< int, std::string > dic = dictionary.at(name);
-    if (dic.empty())
-    {
-      out << "<EMPTY>" << '\n';
-    }
-    else
-    {
-      out << name;
-      for (auto key = dic.cbegin(); key != dic.cend(); ++key)
-      {
-        out << " " << key->first << " " << key->second;
-      }
-      out << "\n";
-    }
+    out << "<EMPTY>" << '\n';
   }
-  catch (std::out_of_range&)
+  else
   {
-    out << "<DICTIONARY NOT FOUND>" << '\n';
+    out << name;
+    for (auto key = dic.cbegin(); key != dic.cend(); ++key)
+    {
+      out << " " << key->first << " " << key->second;
+    }
+    out << "\n";
   }
 }
 
@@ -32,25 +26,18 @@ void skuratov::isComplement(std::istream& in, UBST< std::string, UBST< int, std:
   std::string newDataset, dataset1, dataset2;
   in >> newDataset >> dataset1 >> dataset2;
 
-  try
-  {
-    UBST< int, std::string > dict1 = dictionary.at(dataset1);
-    UBST< int, std::string > dict2 = dictionary.at(dataset2);
+  UBST< int, std::string > dict1 = dictionary.at(dataset1);
+  UBST< int, std::string > dict2 = dictionary.at(dataset2);
+  UBST< int, std::string > complementDict;
 
-    UBST< int, std::string > complementDict;
-    for (auto it = dict1.cbegin(); it != dict1.cend(); ++it)
-    {
-      if (dict2.find(it->first) == dict2.cend())
-      {
-        complementDict.insert(it->first, it->second);
-      }
-    }
-    dictionary.insert(newDataset, complementDict);
-  }
-  catch (std::out_of_range&)
+  for (auto it = dict1.cbegin(); it != dict1.cend(); ++it)
   {
-    std::cerr << "<DICTIONARY NOT FOUND>" << '\n';
+    if (dict2.find(it->first) == dict2.cend())
+    {
+      complementDict.insert(it->first, it->second);
+    }
   }
+  dictionary.insert(newDataset, complementDict);
 }
 
 void skuratov::isIntersect(std::istream& in, UBST< std::string, UBST< int, std::string > >& dictionary)
@@ -58,25 +45,18 @@ void skuratov::isIntersect(std::istream& in, UBST< std::string, UBST< int, std::
   std::string newDataset, dataset1, dataset2;
   in >> newDataset >> dataset1 >> dataset2;
 
-  try
-  {
-    UBST< int, std::string > dict1 = dictionary.at(dataset1);
-    UBST< int, std::string > dict2 = dictionary.at(dataset2);
+  UBST< int, std::string > dict1 = dictionary.at(dataset1);
+  UBST< int, std::string > dict2 = dictionary.at(dataset2);
+  UBST< int, std::string > intersectDict;
 
-    UBST< int, std::string > intersectDict;
-    for (auto it = dict1.cbegin(); it != dict1.cend(); ++it)
-    {
-      if (dict2.find(it->first) != dict2.cend())
-      {
-        intersectDict.insert(it->first, it->second);
-      }
-    }
-    dictionary.insert(newDataset, intersectDict);
-  }
-  catch (std::out_of_range&)
+  for (auto it = dict1.cbegin(); it != dict1.cend(); ++it)
   {
-    std::cerr << "<DICTIONARY NOT FOUND>" << '\n';
+    if (dict2.find(it->first) != dict2.cend())
+    {
+      intersectDict.insert(it->first, it->second);
+    }
   }
+  dictionary.insert(newDataset, intersectDict);
 }
 
 void skuratov::isUnion(std::istream& in, UBST< std::string, UBST< int, std::string > >& dictionary)
@@ -84,24 +64,16 @@ void skuratov::isUnion(std::istream& in, UBST< std::string, UBST< int, std::stri
   std::string newDataset, dataset1, dataset2;
   in >> newDataset >> dataset1 >> dataset2;
 
-  try
+  UBST< int, std::string > dict1 = dictionary.at(dataset1);
+  UBST< int, std::string > dict2 = dictionary.at(dataset2);
+  UBST< int, std::string > unionDict = dict1;
+
+  for (auto it = dict2.cbegin(); it != dict2.cend(); ++it)
   {
-    UBST< int, std::string > dict1 = dictionary.at(dataset1);
-    UBST< int, std::string > dict2 = dictionary.at(dataset2);
-
-    UBST< int, std::string > unionDict = dict1;
-
-    for (auto it = dict2.cbegin(); it != dict2.cend(); ++it)
+    if (unionDict.find(it->first) == unionDict.cend())
     {
-      if (unionDict.find(it->first) == unionDict.cend())
-      {
-        unionDict.insert(it->first, it->second);
-      }
+      unionDict.insert(it->first, it->second);
     }
-    dictionary.insert(newDataset, unionDict);
   }
-  catch (std::out_of_range&)
-  {
-    std::cerr << "<DICTIONARY NOT FOUND>" << '\n';
-  }
+  dictionary.insert(newDataset, unionDict);
 }
