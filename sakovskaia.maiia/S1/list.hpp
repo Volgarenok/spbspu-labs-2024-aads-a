@@ -7,26 +7,26 @@ namespace sakovskaia
   template < typename T >
   class List
   {
+  public:
     using iterator = fwdIterator< T >;
     using const_iterator = CFwdIterator< T >;
-  public:
-    List() = default;
+    List();
+    ~List();
     iterator begin();
     const_iterator begin() const;
     const_iterator cbegin() const;
     iterator end();
     const_iterator end() const;
     const_iterator cend() const;
-    T& front();
-    const T & front() const;
     bool empty() const;
-    void push_back(const T & value);
+    void push_front(const T & value);
     void pop_front();
     void clear();
-    void swap(List<T>& other);
+    void swap(List< T > & other);
   private:
-    std::forward_list<T> data;
-    typename std::forward_list<T>::iterator before_end();
+    node_t< T > * head_;
+    void copy_from(const List & other);
+    void move_from(List && other) noexcept;
   };
 }
 #endif
