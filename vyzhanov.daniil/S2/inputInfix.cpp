@@ -24,6 +24,8 @@ void vyzhanov::inputInfix(Queue< Queue< Token > >& expressions, std::istream& in
           long long num = symbols[i] - '0';
           value = Value(num);
           type = Type::OPERAND;
+          Token token(type, value);
+          expression.push(token);
         }
         else 
         {
@@ -44,9 +46,9 @@ void vyzhanov::inputInfix(Queue< Queue< Token > >& expressions, std::istream& in
             }
             value = Value(symbols[i]);
           }
+          Token token(type, value);
+          expression.push(token);
         }
-        Token token(type, value);
-        expression.push(token);
       }
     }
     if (!symbols.empty())

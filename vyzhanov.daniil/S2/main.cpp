@@ -6,11 +6,12 @@
 #include "infixToPostfix.hpp"
 #include "calculatePostfix.hpp"
 #include "outputRes.hpp"
+#include "types.hpp"
 
 int main(int argc, char* argv[])
 {
   using namespace vyzhanov;
-  Queue< Queue< char > > expressions;
+  Queue< Queue< Token > > expressions;
   Stack< long long > results;
   try
   {

@@ -5,7 +5,8 @@
 
 long long vyzhanov::performOperation(long long operand1, long long operand2, char operation)
 {
-  switch (operation) {
+  switch (operation) 
+  {
   case '+':
     return operand1 + operand2;
   case '-':
@@ -25,31 +26,33 @@ long long vyzhanov::performOperation(long long operand1, long long operand2, cha
   }
 }
 
-void vyzhanov::calculatePostfix(Queue< Queue< char > >& expressions,
-  Stack< long long >& results)
+void vyzhanov::calculatePostfix(Queue< Queue< Token > >& expressions, Stack< long long >& results)
 {
+  size_t count = 0;
   while (!expressions.empty())
   {
-    Queue< char > curr = expressions.top();
+    Queue< Token > curr = expressions.top();
     Stack< long long > newStack;
     while (!curr.empty())
     {
-      char it = curr.top();
-      if (std::isdigit(it))
+      Token it = curr.top();
+      long long operand1 = 0;
+      long long operand2 = 0;
+      long long res = 0;
+      if (it.getType() == Type::OPERAND)
       {
-        newStack.push(it - '0');
+        newStack.push(it.getOperand());
         curr.pop();
       }
       else
       {
-        long long operand2 = newStack.top();
+        operand2 = newStack.top();
         newStack.pop();
-        long long operand1 = newStack.top();
+        operand1 = newStack.top();
         newStack.pop();
-        long long mult = operand1 * operand2;
         long long maxRes = std::numeric_limits< long long >::max();
         long long minRes = std::numeric_limits< long long >::min();
-        if (operand1 > maxRes - operand2 ||(operand2 != 0 && operand1 == mult / operand2))
+        if (operand1 > maxRes - operand2 ||(operand2 != 0 && operand1 > maxRes / operand2))
         {
           throw std::out_of_range("Overflow!");
         }
@@ -57,8 +60,8 @@ void vyzhanov::calculatePostfix(Queue< Queue< char > >& expressions,
         {
           throw std::out_of_range("Underflow!");
         }
-        long long result = performOperation(operand1, operand2, it);
-        newStack.push(result);
+        res = performOperation(operand1, operand2, it.getOperation());
+        newStack.push(res);
         curr.pop();
       }
     }

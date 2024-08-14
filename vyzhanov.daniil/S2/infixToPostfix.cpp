@@ -2,15 +2,19 @@
 #include <string>
 #include "stack.hpp"
 
-int vyzhanov::priority(char symbol)
+int vyzhanov::priority(Token token)
 {
-  if (symbol == '+' || symbol == '-')
+  if (token.getType() == Type::OPERATION)
   {
-    return 1;
-  }
-  else if (symbol == '*' || symbol == '/' || symbol == '%')
-  {
-    return 2;
+    char symbol = token.getOperation();
+    if (symbol == '*' || symbol == '/' || symbol == '%')
+    {
+      return 2;
+    }
+    else if (symbol == '+' || symbol == '-')
+    {
+      return 1;
+    }
   }
   else
   {
@@ -18,41 +22,32 @@ int vyzhanov::priority(char symbol)
   }
 }
 
-bool vyzhanov::isOperand(char c)
+void vyzhanov::infixToPostfix(Queue< Queue< Token > >& expressions)
 {
-  if ( c >= '0' && c <= '9')
-  {
-    return true;
-  }
-  return false;
-}
-
-void vyzhanov::infixToPostfix(Queue< Queue< char > >& expressions)
-{
-  Queue< Queue< char > > newStack;
+  Queue< Queue< Token > > newQueue;
   while (!expressions.empty())
   {
-    Stack< char > postfix;
-    Queue< char > queue;
-    Queue< char > curr = expressions.top();
-    std::string expression = "";
+    Stack < Token > postfix;
+    Queue< Token > queue;
+    Queue< Token > curr = expressions.top();
+    Queue< Token > expression;
     while (!curr.empty())
     {
-      if (isOperand(curr.top()))
+      if (curr.top().getType() == Type::OPERAND)
       {
-        expression += curr.top();
+        expression.push(curr.top());
         curr.pop();
       }
-      else if (curr.top() == '(')
+      else if (curr.top().getType() == Type::OPEN_BRACKET)
       {
-        postfix.push('(');
+        postfix.push(curr.top());
         curr.pop();
       }
-      else if (curr.top() == ')')
+      else if (curr.top().getType() == Type::CLOSE_BRACKET)
       {
-        while (postfix.top() != '(')
+        while (postfix.top().getType() != Type::OPEN_BRACKET)
         {
-          expression += postfix.top();
+          expression.push(postfix.top());
           postfix.pop();
         }
         postfix.pop();
@@ -60,30 +55,27 @@ void vyzhanov::infixToPostfix(Queue< Queue< char > >& expressions)
       }
       else
       {
-        while (!postfix.empty() && priority(curr.top()) <= priority(postfix.top()))
+        while (!postfix.empty() && priority(curr.top()) <=
+          priority(postfix.top()))
         {
-          expression += postfix.top();
+          expression.push(postfix.top());
           postfix.pop();
         }
         postfix.push(curr.top());
         curr.pop();
       }
     }
-    expressions.pop();
     while (!postfix.empty())
     {
-      expression += postfix.top();
+      expression.push(postfix.top());
       postfix.pop();
     }
-    for (size_t i = 0; i < expression.size(); i++)
-    {
-      queue.push(expression[i]);
-    }
-    newStack.push(queue);
+    newQueue.push(expression);
+    expressions.pop();
   }
-  while (!newStack.empty())
+  while (!newQueue.empty())
   {
-    expressions.push(newStack.top());
-    newStack.pop();
+    expressions.push(newQueue.top());
+    newQueue.pop();
   }
 }

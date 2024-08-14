@@ -15,7 +15,6 @@ namespace vyzhanov
     size_t capacity() const noexcept;
     T& top();
     const T& top() const;
-    void swap(Stack< T >&);
   private:
     List< T > stack_;
   };
