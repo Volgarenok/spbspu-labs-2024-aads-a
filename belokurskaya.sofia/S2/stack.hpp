@@ -116,6 +116,16 @@ namespace belokurskaya
         return *this;
       }
 
+      Stack& operator=(Stack&& other) noexcept
+      {
+        if (this != &other)
+        {
+          delete[] data_;
+          swap(other);
+        }
+        return *this;
+      }
+
       void swap(Stack& other) noexcept
       {
         std::swap(size_, other.size_);
