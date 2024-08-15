@@ -5,6 +5,7 @@
 #include <list/list.hpp>
 #include <deque>
 #include <list>
+#include <random>
 #include <forward_list>
 #include "output_range.hpp"
 
@@ -17,16 +18,20 @@ namespace isaychev
     {
       sort(first, last, cmp);
       output_range(out, first, last);
+      out << "\n";
     }
   }
 
   template < class T, class Cmp >
   void do_cmd(std::ostream & out, size_t seq_size)
   {
+    std::random_device dev;
+    std::mt19937 gen(dev());
+    std::uniform_int_distribution< int > dist(-1000, 1000);
     List< T > src;
     for (size_t i = 0; i < seq_size; ++i)
     {
-      //src.push_front(generate_rand());
+      src.push_front(dist(gen));
     }
     /*List< T > fwd;
     for (auto i = src.cbegin(); i != src.cend(); ++i)

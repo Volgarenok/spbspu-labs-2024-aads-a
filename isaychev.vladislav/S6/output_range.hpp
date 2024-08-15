@@ -13,7 +13,6 @@ namespace isaychev
     {
       out << " " << *first;
     }
-    out << "\n";
   }
 }
 
