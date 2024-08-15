@@ -52,8 +52,6 @@ namespace isaychev
     bi_std.sort(Cmp());
     output_range(out, bi_std.cbegin(), bi_std.cend());
     out << "\n";
-    //std::sort(deq_std.begin(), deq_std.end(), Cmp());
-    //output_range(out, deq_std.cbegin(), deq_std.cend());
   }
 
 }
