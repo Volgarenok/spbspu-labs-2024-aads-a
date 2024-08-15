@@ -1,6 +1,7 @@
 #ifndef BINARY_SEARCH_TREE_HPP
 #define BINARY_SEARCH_TREE_HPP
 
+#include <functional>
 #include <stdexcept>
 
 namespace belokurskaya
@@ -48,7 +49,10 @@ namespace belokurskaya
 
     Node* find(Node* node, Key key) const 
     {
-      if (!node) return nullptr;
+      if (!node)
+      {
+        return nullptr;
+      }
       if (compare(key, node->key))
       {
         return find(node->left, key);
@@ -155,84 +159,84 @@ namespace belokurskaya
       Node* current;
       const Node* root;
       bool finished = false;
+      std::function< Node*(Node*) > nextFunc;
+      Compare compare;
 
       Node* leftMost(Node* node)
       {
-        if (node == nullptr)
-        {
-          return nullptr;
-        }
-        while (node->left != nullptr)
+        while (node && node->left)
         {
           node = node->left;
         }
         return node;
       }
 
-      public:
-        Iterator(Node* rootNode):
-          current(leftMost(rootNode)),
-          root(rootNode)
-        {}
-
-        std::pair< Key, Value > operator*() const
+      Node* inOrderSuccessor(Node* node)
+      {
+        if (node->right)
         {
-          return std::make_pair(current->key, current->value);
+          return leftMost(node->right);
         }
 
-        Iterator& operator++()
+        Node* successor = nullptr;
+        Node* ancestor = const_cast< Node* >(root);
+        while (ancestor != node)
         {
-          if (current == nullptr)
+          if (compare(node->key, ancestor->key))
           {
-            finished = true;
-            return *this;
-          }
-
-          if (current->right != nullptr)
-          {
-            current = leftMost(current->right);
+            successor = ancestor;
+            ancestor = ancestor->left;
           }
           else
           {
-            Node* successor = nullptr;
-            Node* ancestor = root;
-            while (ancestor != current)
-            {
-              if (compare(current->key, ancestor->key))
-              {
-                successor = ancestor;
-                ancestor = ancestor->left;
-              }
-              else
-              {
-                ancestor = ancestor->right;
-              }
-            }
-            current = successor;
+            ancestor = ancestor->right;
           }
-
-          return *this;
         }
+        return successor;
+      }
 
-        bool operator!=(const Iterator& other) const
+      public:
+      Iterator(Node* rootNode, Compare comp):
+        current(leftMost(rootNode)),
+        root(rootNode),
+        compare(comp)
+      {
+        nextFunc = std::bind(&Iterator::inOrderSuccessor, this, std::placeholders::_1);
+      }
+
+      std::pair< Key, Value > operator*() const
+      {
+        return std::make_pair(current->key, current->value);
+      }
+
+      Iterator& operator++()
+      {
+        if (current)
         {
-          return current != other.current || finished != other.finished;
+          current = nextFunc(current);
         }
+        return *this;
+      }
 
-        bool operator==(const Iterator& other) const
-        {
-          return !(*this != other);
-        }
+      bool operator!=(const Iterator& other) const
+      {
+        return current != other.current;
+      }
+
+      bool operator==(const Iterator& other) const
+      {
+        return current == other.current;
+      }
     };
 
     Iterator begin() const
     {
-      return Iterator(root);
+      return Iterator(root, compare);
     }
 
     Iterator end() const
     {
-      return Iterator(nullptr);
+      return Iterator(nullptr, compare);
     }
   };
 }
