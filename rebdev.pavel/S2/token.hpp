@@ -25,11 +25,15 @@ namespace rebdev
   class token
   {
     public:
+      token() = default;
       token(char oper);
       token(long long num);
       token(const token & t) = default;
+      token(token && t) = default;
+      ~token() = default
       token operator()(token f, token s);
       token & operator=(const token & t) = default;
+      token & operator=(token && t) = default;
 
       long long getNum() const noexcept;
       bool isNum() const noexcept;
