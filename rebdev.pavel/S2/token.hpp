@@ -30,7 +30,7 @@ namespace rebdev
       token(long long num);
       token(const token & t) = default;
       token(token && t) = default;
-      ~token() = default
+      ~token() = default;
       token operator()(token f, token s);
       token & operator=(const token & t) = default;
       token & operator=(token && t) = default;
