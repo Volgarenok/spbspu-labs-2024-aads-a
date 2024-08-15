@@ -1,9 +1,10 @@
 #ifndef MYSTACK_HPP
 #define MYSTACH_HPP
 
-#include <list>
 #include <cstddef>
 #include <stdexcept>
+
+#include "../common/list.hpp"
 
 namespace rebdev
 {
@@ -46,7 +47,7 @@ namespace rebdev
       }
 
     private:
-      std::list< T > dataBase_;
+      BiList< T > dataBase_;
   };
 }
 
