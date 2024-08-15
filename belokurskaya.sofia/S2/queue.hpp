@@ -152,11 +152,12 @@ namespace belokurskaya
       }
 
     private:
-      T* data_;
+      size_t capacity_;
       size_t size_;
       size_t front_;
       size_t rear_;
-      size_t capacity_;
+      T* data_;
+
       const size_t initial_capacity_ = 3;
       const size_t capacity_change_factor_ = 2;
 
