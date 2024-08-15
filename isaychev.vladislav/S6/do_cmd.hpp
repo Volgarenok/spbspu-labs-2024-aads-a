@@ -1,15 +1,25 @@
 #ifndef DO_CMD_HPP
 #define DO_CMD_HPP
 
-#include <ostream>
 #include <algorithm>
 #include <list/list.hpp>
 #include <deque>
 #include <list>
 #include <forward_list>
+#include "output_range.hpp"
 
 namespace isaychev
 {
+  namespace detail
+  {
+    template < class Iter, class Cmp >
+    void do_sort(std::ostream & out, Iter first, Iter last, Cmp cmp, void (*sort)(Iter, Iter, Cmp))
+    {
+      sort(first, last, cmp);
+      output_range(out, first, last);
+    }
+  }
+
   template < class T, class Cmp >
   void do_cmd(std::ostream & out, size_t seq_size)
   {
@@ -27,10 +37,16 @@ namespace isaychev
     std::list< T > bi_std(src.cbegin(), src.cend());
     std::deque< T > deq_std(src.cbegin(), src.cend());
 
+    detail::do_sort(out, deq_std.begin(), deq_std.end(), Cmp(), std::sort);
+
     fwd_std.sort(Cmp());
+    output_range(out, fwd_std.cbegin(), fwd_std.cend());
     bi_std.sort(Cmp());
-    std::sort(deq_std.begin(), deq_std.end(), Cmp());
+    output_range(out, bi_std.cbegin(), bi_std.cend());
+    //std::sort(deq_std.begin(), deq_std.end(), Cmp());
+    //output_range(out, deq_std.cbegin(), deq_std.cend());
   }
+
 }
 
 #endif
