@@ -179,6 +179,10 @@ namespace rebdev
         {
           tailCopy->next = tailNode_;
         }
+        else
+        {
+          headNode_ = tailNode_;
+        }
         --size_;
       }
       void swap(BiList & x) noexcept
