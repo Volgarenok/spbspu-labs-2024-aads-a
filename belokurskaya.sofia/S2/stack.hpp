@@ -25,13 +25,13 @@ namespace belokurskaya
         std::copy(other.data_, other.data_ + other.capacity_, data_);
       }
 
-      Stack(Stack< T >&& other) noexcept:
-        size_(0),
-        top_(-1),
-        capacity_(initial_capacity_),
-        data_(nullptr)
+      Stack(Stack&& other) noexcept:
+        size_(other.size_),
+        top_(other.top_),
+        capacity_(other.capacity_),
+        data_(other.data_)
       {
-        swap(other);
+        other.data_ = nullptr;
       }
 
       ~Stack()
@@ -121,6 +121,19 @@ namespace belokurskaya
         return *this;
       }
 
+      Stack& operator=(Stack&& other) noexcept
+      {
+        if (this != &other)
+        {
+          size_ = other.size_;
+          top_ = other.top_;
+          capacity_ = other.capacity_;
+          data_ = other.data_;
+          other.data_ = nullptr;
+        }
+        return *this;
+      }
+
       void swap(Stack& other) noexcept
       {
         std::swap(size_, other.size_);
@@ -129,19 +142,6 @@ namespace belokurskaya
         std::swap(data_, other.data_);
       }
 
-      Stack& operator=(Stack&& other) noexcept
-      {
-        if (this != &other)
-        {
-          std::swap(size_, other.size_);
-          std::swap(top_, other.top_);
-          std::swap(capacity_, other.capacity_);
-          std::swap(data_, other.data_);
-          other.data_ = nullptr;
-        }
-
-        return *this;
-      }
 
     private:
       const size_t initial_capacity_ = 3;
