@@ -175,7 +175,10 @@ namespace rebdev
         node * tailCopy = tailNode_->last->last;
         delete tailNode_->last;
         tailNode_->last = tailCopy;
-        tailCopy->next = tailNode_;
+        if (taiCopy != nullptr)
+        {
+          tailCopy->next = tailNode_;
+        }
         --size_;
       }
       void swap(BiList & x) noexcept
