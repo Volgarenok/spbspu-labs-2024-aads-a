@@ -9,7 +9,7 @@ namespace rebdev
       mathOperator() = default;
       mathOperator(const mathOperator & m) = default;
       mathOperator(mathOperator && m) = default;
-      ~mathOperator = default;
+      ~mathOperator() = default;
       mathOperator & operator=(const mathOperator & m) = default;
       mathOperator & operator=(mathOperator && m) = default;
 
