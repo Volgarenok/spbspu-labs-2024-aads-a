@@ -68,7 +68,7 @@ namespace belokurskaya
         return value;
       }
 
-      bool empty() const
+      bool empty() const noexcept
       {
         return (top_ == -1);
       }
@@ -82,7 +82,7 @@ namespace belokurskaya
         return data_[top_];
       }
 
-      size_t size()
+      size_t size() noexcept
       {
         return size_;
       }

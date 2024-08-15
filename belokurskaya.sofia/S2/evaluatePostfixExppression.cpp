@@ -29,13 +29,7 @@ bool belokurskaya::safeAdd(long long a, long long b, long long& result)
 {
   long long c = std::numeric_limits< long long >::max() - b;
   long long d = std::numeric_limits< long long >::min() - b;
-  if ((b > 0 && a > c) || (b < 0 && a < d))
-  {
-    std::cerr << "Addition Overflow\n";
-    return false;
-  }
-  result = a + b;
-  return true;
+  return ((b > 0 && a <= c) || (b < 0 && a >= d)) && (result = a + b, true);
 }
 
 bool belokurskaya::willMultiplyOverflowOrUnderflow(long long a, long long b, char* errorType)
