@@ -175,7 +175,7 @@ namespace rebdev
         node * tailCopy = tailNode_->last->last;
         delete tailNode_->last;
         tailNode_->last = tailCopy;
-        if (taiCopy != nullptr)
+        if (tailCopy != nullptr)
         {
           tailCopy->next = tailNode_;
         }
