@@ -25,16 +25,13 @@ namespace belokurskaya
         std::copy(other.data_, other.data_ + other.capacity_, data_);
       }
 
-      Stack(Stack< T >&& other):
-        size_(other.size_),
-        top_(other.top_),
-        capacity_(other.capacity_),
-        data_(other.data_)
+      Stack(Stack< T >&& other) noexcept:
+        size_(0),
+        top_(-1),
+        capacity_(initial_capacity_),
+        data_(nullptr)
       {
-        other.capacity_ = initial_capacity_;
-        other.size_ = 0;
-        other.top_ = -1;
-        other.data_ = new T[capacity_];
+        swap(other);
       }
 
       ~Stack()
@@ -44,12 +41,21 @@ namespace belokurskaya
 
       void push(const T& value)
       {
-        if (top_ >= capacity_ - 1)
+        try
         {
-          addMemory();
+          if (top_ >= capacity_ - 1)
+          {
+            addMemory();
+          }
+          size_++;
+          data_[++top_] = value;
         }
-        size_++;
-        data_[++top_] = value;
+        catch (const std::exception& e)
+        {
+          size_--;
+          top_--;
+          throw;
+        }
       }
 
       T pop()
@@ -101,6 +107,24 @@ namespace belokurskaya
         return out;
       }
 
+      Stack& operator=(Stack&& other) noexcept
+      {
+        if (this != &other)
+        {
+          swap(other);
+        }
+        return *this;
+      }
+
+      void swap(Stack& other) noexcept
+      {
+        std::swap(size_, other.size_);
+        std::swap(top_, other.top_);
+        std::swap(capacity_, other.capacity_);
+        std::swap(data_, other.data_);
+      }
+
+
     private:
       const size_t initial_capacity_ = 3;
       size_t size_;
@@ -112,10 +136,6 @@ namespace belokurskaya
       void addMemory()
       {
         T* newData = new T[capacity_ * capacity_change_factor_];
-        if (newData == nullptr)
-        {
-          throw std::runtime_error("Failed to allocate memory");
-        }
         try
         {
           std::copy(data_, data_ + capacity_, newData);
@@ -133,10 +153,6 @@ namespace belokurskaya
       void freeMemory()
       {
         T* newData = new T[capacity_ / capacity_change_factor_];
-        if (newData == nullptr)
-        {
-          throw std::runtime_error("Failed to free memory");
-        }
         try
         {
           std::copy(data_, data_ + capacity_ / capacity_change_factor_, newData);
