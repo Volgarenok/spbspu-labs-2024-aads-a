@@ -11,7 +11,7 @@ class Queue
 public:
   Queue()
   {
-    queue_list();
+    queue_list;
   }
   ~Queue() = default;
   bool empty() const
@@ -56,7 +56,7 @@ class Stack
 public:
   Stack()
   {
-    stack_list();
+    stack_list;
   }
   ~Stack() = default;
   bool empty() const
@@ -87,9 +87,36 @@ private:
   std::list<T> stack_list;
 };
 
+//--------------------
+
+void inputExpression(std::istream & in, Queue<char> & queue_source)
+{
+  char c = 0;
+  while (in >> c)
+  {
+    if (c == '\n')
+    {
+      return;
+    }
+    queue_source.push(c);
+  }
+}
+
 int main(int argc, char ** argv)
 {
-  std::vector<int> ints;
+  Queue<char> queue_source;
+  Queue<char> queue_result;
+  Stack<char> stack_process;
+
+  if (argc == 1)
+  {
+    while (!std::cin.eof())
+    {
+      inputExpression(std::cin, queue_source);
+    }
+  }
+
+/*
   if (argc == 1)
   {
     std::copy(
@@ -120,8 +147,12 @@ int main(int argc, char ** argv)
       }
     }
   }
-  for (auto i = ints.begin(); i != ints.end(); ++i)
+*/
+
+  while (!queue_source.empty())
   {
-    std::cout << *i << '\n';
+    std::cout << queue_source.front() << ' ';
+    queue_source.pop();
   }
+  std::cout << '\n';
 }
