@@ -2,6 +2,7 @@
 #define CONST_ITERATOR_HPP
 #include <iterator>
 #include <utility>
+#include <cassert>
 #include "node.hpp"
 
 namespace baranov
