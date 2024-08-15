@@ -18,14 +18,24 @@ namespace belokurskaya
         data_ = new T[capacity_];
       }
 
-      Queue(const Queue& other)
+      Queue(const Queue& other):
+        capacity_(other.capacity_),
+        size_(other.size_),
+        front_(other.front_),
+        rear_(other.rear_),
+        data_(nullptr)
       {
-        capacity_ = other.capacity_;
-        size_ = other.size_;
-        front_ = other.front_;
-        rear_ = other.rear_;
-        data_ = new T[capacity_];
-        std::copy(other.data_, other.data_ + capacity_, data_);
+        T* temp = new T[other.capacity_];
+        try
+        {
+          std::copy(other.data_, other.data_ + capacity_, temp);
+          data_ = temp;
+        }
+        catch (...)
+        {
+          delete[] temp;
+          throw;
+        }
       }
 
       Queue(Queue&& other)
@@ -73,12 +83,14 @@ namespace belokurskaya
           throw std::runtime_error("Queue is empty");
         }
         T value = data_[front_];
-        front_ = (front_ + 1) % capacity_;
-        size_--;
-        if (size_ == 0)
+        Queue temp(*this);
+        temp.front_ = (temp.front_ + 1) % capacity_;
+        temp.size_--;
+        if (temp.size_ == 0)
         {
-          front_ = 0;
+          temp.front_ = 0;
         }
+        swap(temp);
         return value;
       }
 
@@ -105,13 +117,8 @@ namespace belokurskaya
       {
         if (this != &other)
         {
-          delete[] data_;
-          capacity_ = other.capacity_;
-          size_ = other.size_;
-          front_ = other.front_;
-          rear_ = other.rear_;
-          data_ = new T[capacity_];
-          std::copy(other.data_, other.data_ + capacity_, data_);
+          Queue temp(other);
+          swap(temp);
         }
         return *this;
       }
@@ -133,6 +140,15 @@ namespace belokurskaya
           other.data_ = new T[capacity_];
         }
         return *this;
+      }
+
+      void swap(Queue& other)
+      {
+        std::swap(data_, other.data_);
+        std::swap(capacity_, other.capacity_);
+        std::swap(size_, other.size_);
+        std::swap(front_, other.front_);
+        std::swap(rear_, other.rear_);
       }
 
     private:
