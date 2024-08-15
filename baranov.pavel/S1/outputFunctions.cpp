@@ -1,7 +1,6 @@
 #include "outputFunctions.hpp"
 #include <limits>
 #include <cassert>
-#include "list.hpp"
 
 void baranov::printNames(std::ostream & output, const ds_t & sequences)
 {
@@ -13,7 +12,6 @@ void baranov::printNames(std::ostream & output, const ds_t & sequences)
   {
     output << ' ' << i->first;
   }
-  output << '\n';
 }
 
 void baranov::printList(std::ostream & output, const List< size_t > & list)

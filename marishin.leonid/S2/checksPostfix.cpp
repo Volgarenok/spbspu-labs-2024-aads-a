@@ -1,8 +1,8 @@
 #include "checksPostfix.hpp"
 #include <stdexcept>
 #include <limits>
-#include "stack.hpp"
-#include "queue.hpp"
+#include <stack.hpp>
+#include <queue.hpp>
 #include "input.hpp"
 
 marishin::Stack< long long >& marishin::checksPostfix(Stack< long long >& result, Queue< std::string >& queue)
