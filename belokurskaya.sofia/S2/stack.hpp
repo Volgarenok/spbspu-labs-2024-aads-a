@@ -121,16 +121,6 @@ namespace belokurskaya
         return *this;
       }
 
-      Stack& operator=(Stack&& other) noexcept
-      {
-        if (this != &other)
-        {
-          delete[] data_;
-          swap(other);
-        }
-        return *this;
-      }
-
       void swap(Stack& other) noexcept
       {
         std::swap(size_, other.size_);
@@ -139,6 +129,19 @@ namespace belokurskaya
         std::swap(data_, other.data_);
       }
 
+      Stack& operator=(Stack&& other) noexcept
+      {
+        if (this != &other)
+        {
+          std::swap(size_, other.size_);
+          std::swap(top_, other.top_);
+          std::swap(capacity_, other.capacity_);
+          std::swap(data_, other.data_);
+          other.data_ = nullptr;
+        }
+
+        return *this;
+      }
 
     private:
       const size_t initial_capacity_ = 3;
