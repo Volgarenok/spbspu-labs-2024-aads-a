@@ -33,21 +33,25 @@ namespace isaychev
     {
       src.push_front(dist(gen));
     }
+    output_range(out, src.begin(), src.end());
+    out << "\n";
     /*List< T > fwd;
     for (auto i = src.cbegin(); i != src.cend(); ++i)
     {
       fwd.push_front(*i);
     }*/
-    std::forward_list< T > fwd_std(src.cbegin(), src.cend());
-    std::list< T > bi_std(src.cbegin(), src.cend());
-    std::deque< T > deq_std(src.cbegin(), src.cend());
+    std::forward_list< T > fwd_std(src.begin(), src.end());
+    std::list< T > bi_std(src.begin(), src.end());
+    std::deque< T > deq_std(src.begin(), src.end());
 
     detail::do_sort(out, deq_std.begin(), deq_std.end(), Cmp(), std::sort);
 
     fwd_std.sort(Cmp());
     output_range(out, fwd_std.cbegin(), fwd_std.cend());
+    out << "\n";
     bi_std.sort(Cmp());
     output_range(out, bi_std.cbegin(), bi_std.cend());
+    out << "\n";
     //std::sort(deq_std.begin(), deq_std.end(), Cmp());
     //output_range(out, deq_std.cbegin(), deq_std.cend());
   }
