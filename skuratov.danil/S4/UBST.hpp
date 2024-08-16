@@ -5,7 +5,7 @@
 #include <algorithm>
 #include <stdexcept>
 #include "treeNode.hpp"
-#include "constIteratorTree.hpp"
+#include "iteratorTree.hpp"
 
 namespace skuratov
 {
@@ -91,9 +91,33 @@ namespace skuratov
       return ConstIteratorTree< Key, Value, Compare >(nullptr);
     }
 
+    IteratorTree< Key, Value, Compare > begin() noexcept
+    {
+      detail::TreeNode< Key, Value >* temp = root_;
+      if (!temp)
+      {
+        return IteratorTree< Key, Value, Compare >(nullptr);
+      }
+      while (temp->left_ != nullptr)
+      {
+        temp = temp->left_;
+      }
+      return IteratorTree< Key, Value, Compare >(temp);
+    }
+
+    IteratorTree< Key, Value, Compare > end() noexcept
+    {
+      return IteratorTree< Key, Value, Compare >(nullptr);
+    }
+
     size_t size() const noexcept
     {
       return size_;
+    }
+
+    size_t count(const Key& key) const
+    {
+      return find(key) != cend();
     }
 
     bool empty() const noexcept
@@ -188,6 +212,25 @@ namespace skuratov
       }
     }
 
+    void erase(const Key& key)
+    {
+      root_ = eraseNode(root_, key);
+    }
+
+    std::pair< ConstIteratorTree< Key, Value, Compare >, ConstIteratorTree< Key, Value, Compare > > equalRange(const Key& key) const
+    {
+      auto isLow = lower_bound(key);
+      auto isHigh = upper_bound(key);
+      return std::make_pair(isLow, isHigh);
+    }
+
+    std::pair< IteratorTree< Key, Value, Compare >, IteratorTree< Key, Value, Compare > > equalRange(const Key& key)
+    {
+      auto isLow = lower_bound(key);
+      auto isHigh = upper_bound(key);
+      return std::make_pair(isLow, isHigh);
+    }
+
   private:
     detail::TreeNode< Key, Value >* root_;
     Compare cmp_;
@@ -241,6 +284,50 @@ namespace skuratov
       {
         nodePointer->right_ = insertNode(nodePointer->right_, key, value);
         nodePointer->right_->parent_ = nodePointer;
+      }
+      return nodePointer;
+    }
+
+    detail::TreeNode< Key, Value >* eraseNode(detail::TreeNode< Key, Value >* nodePointer, const Key& key)
+    {
+      if (!nodePointer)
+      {
+        return nullptr;
+      }
+
+      if (cmp_(key, nodePointer->data_.first))
+      {
+        nodePointer->left_ = eraseNode(nodePointer->left_, key);
+      }
+      else if (cmp_(nodePointer->data_.first, key))
+      {
+        nodePointer->right_ = eraseNode(nodePointer->right_, key);
+      }
+      else
+      { 
+        if (!nodePointer->left_)
+        {
+          detail::TreeNode< Key, Value >* temp = nodePointer->right_;
+          delete nodePointer;
+          --size_;
+          return temp;
+        }
+        else if (!nodePointer->right_)
+        {
+          detail::TreeNode< Key, Value >* temp = nodePointer->left_;
+          delete nodePointer;
+          --size_;
+          return temp;
+        }
+ 
+        detail::TreeNode< Key, Value >* temp = nodePointer->right_;
+        while (temp->left_ != nullptr)
+        {
+          temp = temp->left_;
+        }
+
+        nodePointer->data_ = temp->data_;
+        nodePointer->right_ = eraseNode(nodePointer->right_, temp->data_.first);
       }
       return nodePointer;
     }

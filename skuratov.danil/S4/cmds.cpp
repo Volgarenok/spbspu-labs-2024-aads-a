@@ -5,15 +5,15 @@ void skuratov::isPrint(std::istream& in, UBST< std::string, UBST< int, std::stri
   std::string name = {};
   in >> name;
 
-  UBST< int, std::string > dic = dictionary.at(name);
-  if (dic.empty())
+  UBST< int, std::string > dict = dictionary.at(name);
+  if (dict.empty())
   {
     out << "<EMPTY>" << '\n';
   }
   else
   {
     out << name;
-    for (auto key = dic.cbegin(); key != dic.cend(); ++key)
+    for (auto key = dict.cbegin(); key != dict.cend(); ++key)
     {
       out << " " << key->first << " " << key->second;
     }
