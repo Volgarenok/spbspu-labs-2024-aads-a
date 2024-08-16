@@ -304,7 +304,7 @@ namespace skuratov
         nodePointer->right_ = eraseNode(nodePointer->right_, key);
       }
       else
-      { 
+      {
         if (!nodePointer->left_)
         {
           detail::TreeNode< Key, Value >* temp = nodePointer->right_;
@@ -319,7 +319,7 @@ namespace skuratov
           --size_;
           return temp;
         }
- 
+
         detail::TreeNode< Key, Value >* temp = nodePointer->right_;
         while (temp->left_ != nullptr)
         {
