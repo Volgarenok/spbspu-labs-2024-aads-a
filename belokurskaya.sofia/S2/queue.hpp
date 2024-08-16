@@ -186,14 +186,12 @@ namespace belokurskaya
 
       void addMemory()
       {
-        size_t newCapacity = capacity_ * capacity_change_factor_;
-        reallocateMemory(newCapacity);
+        reallocateMemory(capacity_ * capacity_change_factor_);
       }
 
       void freeMemory()
       {
-        size_t newCapacity = capacity_ / capacity_change_factor_;
-        reallocateMemory(newCapacity);
+        reallocateMemory(capacity_ / capacity_change_factor_);
       }
   };
 }
