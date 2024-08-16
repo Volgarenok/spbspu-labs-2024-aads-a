@@ -151,13 +151,13 @@ namespace belokurskaya
       T* data_;
       const size_t capacity_change_factor_ = 2;
 
-      void addMemory()
+      void reallocateMemory(int newCapacity)
       {
-        T* newData = new T[capacity_ * capacity_change_factor_];
+        T* newData = new T[newCapacity];
         try
         {
-          std::copy(data_, data_ + capacity_, newData);
-          capacity_ *= capacity_change_factor_;
+          std::copy(data_, data_ + std::min(capacity_, newCapacity), newData);
+          capacity_ = newCapacity;
           delete[] data_;
           data_ = newData;
         }
@@ -168,21 +168,14 @@ namespace belokurskaya
         }
       }
 
+      void addMemory()
+      {
+        reallocateMemory(capacity_ * capacity_change_factor_);
+      }
+
       void freeMemory()
       {
-        T* newData = new T[capacity_ / capacity_change_factor_];
-        try
-        {
-          std::copy(data_, data_ + capacity_ / capacity_change_factor_, newData);
-          capacity_ /= capacity_change_factor_;
-          delete[] data_;
-          data_ = newData;
-        }
-        catch (const std::exception& e)
-        {
-          delete[] newData;
-          throw;
-        }
+        reallocateMemory(capacity_ / capacity_change_factor_);
       }
   };
 }
