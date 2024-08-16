@@ -25,20 +25,20 @@ void belokurskaya::safeStrCopy(char* dest, const char* src, size_t max_len)
   }
 }
 
-bool belokurskaya::safeAdd(long long a, long long b, long long& result)
+bool belokurskaya::safeAdd(long long int a, long long int b, long long int& result)
 {
-  long long c = std::numeric_limits< long long >::max() - b;
-  long long d = std::numeric_limits< long long >::min() - b;
+  long long int c = std::numeric_limits< long long int >::max() - b;
+  long long int d = std::numeric_limits< long long int >::min() - b;
   return ((b > 0 && a <= c) || (b < 0 && a >= d)) && (result = a + b, true);
 }
 
-bool belokurskaya::willMultiplyOverflowOrUnderflow(long long a, long long b, char* errorType)
+bool belokurskaya::willMultiplyOverflowOrUnderflow(long long int a, long long int b, char* errorType)
 {
   if (a > 0)
   {
     if (b > 0)
     {
-      if (a > (std::numeric_limits< long long >::max() / b))
+      if (a > (std::numeric_limits< long long int >::max() / b))
       {
         safeStrCopy(errorType, "Overflow", 30);
         return true;
@@ -46,7 +46,7 @@ bool belokurskaya::willMultiplyOverflowOrUnderflow(long long a, long long b, cha
     }
     else
     {
-      if (b < (std::numeric_limits< long long >::min() / a))
+      if (b < (std::numeric_limits< long long int >::min() / a))
       {
         safeStrCopy(errorType, "Underflow", 30);
         return true;
@@ -57,7 +57,7 @@ bool belokurskaya::willMultiplyOverflowOrUnderflow(long long a, long long b, cha
   {
     if (b > 0)
     {
-      if (a < (std::numeric_limits< long long >::min() / b))
+      if (a < (std::numeric_limits< long long int >::min() / b))
       {
         safeStrCopy(errorType, "Underflow", 30);
         return true;
@@ -65,7 +65,7 @@ bool belokurskaya::willMultiplyOverflowOrUnderflow(long long a, long long b, cha
     }
     else
     {
-      if (a != 0 && b < (std::numeric_limits< long long >::max() / a))
+      if (a != 0 && b < (std::numeric_limits< long long int >::max() / a))
       {
         safeStrCopy(errorType, "Overflow", 30);
         return true;
@@ -75,17 +75,17 @@ bool belokurskaya::willMultiplyOverflowOrUnderflow(long long a, long long b, cha
   return false;
 }
 
-bool belokurskaya::willSubtractUnderflow(long long a, long long b)
+bool belokurskaya::willSubtractUnderflow(long long int a, long long int b)
 {
-  long long c = std::numeric_limits< long long >::min() + b;
-  long long d = std::numeric_limits< long long >::max() + b;
+  long long int c = std::numeric_limits< long long int >::min() + b;
+  long long int d = std::numeric_limits< long long int >::max() + b;
   return (b > 0 && a < c) || (b < 0 && a > d);
 }
 
-long long belokurskaya::evaluatePostfixExpression(std::string expression)
+long long int belokurskaya::evaluatePostfixExpression(std::string expression)
 {
-  Stack< long long > st;
-  long long num = 0;
+  Stack< long long int > st;
+  long long int num = 0;
   bool flag = false;
   for (char & c : expression)
   {
@@ -105,11 +105,11 @@ long long belokurskaya::evaluatePostfixExpression(std::string expression)
     }
     else if (isOperator(c))
     {
-      long long operand2 = st.pop();
-      long long operand1 = st.pop();
+      long long int operand2 = st.pop();
+      long long int operand1 = st.pop();
       if (c == '+')
       {
-        long long result;
+        long long int result = 0;
         if (!safeAdd(operand1, operand2, result))
         {
           throw std::logic_error("Invalid addition");
@@ -147,7 +147,7 @@ long long belokurskaya::evaluatePostfixExpression(std::string expression)
         {
           throw std::logic_error("Invalid division");
         }
-        if (operand1 == std::numeric_limits< long long >::min() && operand2 == -1)
+        if (operand1 == std::numeric_limits< long long int >::min() && operand2 == -1)
         {
           throw std::logic_error("Invalid division");
         }

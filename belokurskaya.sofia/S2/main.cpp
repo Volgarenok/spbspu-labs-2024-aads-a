@@ -12,7 +12,7 @@ int main(int argc, char* argv[])
   using namespace belokurskaya;
   std::istream* input;
   std::ifstream fileInput;
-  Stack< long long > results;
+  Stack< long long int > results;
   if (argc < 2)
   {
     input = &std::cin;
@@ -38,7 +38,7 @@ int main(int argc, char* argv[])
     try
     {
       std::string postfix = infixToPostfix(line);
-      long long result = evaluatePostfixExpression(postfix);
+      long long int result = evaluatePostfixExpression(postfix);
       results.push(result);
     }
     catch (const std::exception& e)
