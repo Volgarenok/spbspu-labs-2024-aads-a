@@ -3,11 +3,13 @@
 
 #include <algorithm>
 #include <list/list.hpp>
+#include <functional>
 #include <deque>
 #include <list>
 #include <random>
 #include <forward_list>
 #include "output_range.hpp"
+#include "sorts.hpp"
 
 namespace isaychev
 {
@@ -15,6 +17,14 @@ namespace isaychev
   {
     template < class Iter, class Cmp >
     void do_sort(std::ostream & out, Iter first, Iter last, Cmp cmp, void (*sort)(Iter, Iter, Cmp))
+    {
+      sort(first, last, cmp);
+      output_range(out, first, last);
+      out << "\n";
+    }
+
+    template < class Iter, class Cmp >
+    void do_sort(std::ostream & out, Iter first, Iter last, size_t size, Cmp cmp, void (*sort)(Iter, size_t, Cmp))
     {
       sort(first, last, cmp);
       output_range(out, first, last);
@@ -44,14 +54,19 @@ namespace isaychev
     std::list< T > bi_std(src.begin(), src.end());
     std::deque< T > deq_std(src.begin(), src.end());
 
-    detail::do_sort(out, deq_std.begin(), deq_std.end(), Cmp(), std::sort);
+    using namespace std::placeholders;
+    detail::do_sort(out, fwd_std.begin(), fwd_std.end(), Cmp(), quick_sort);
+/*    detail::do_sort(out, deq_std.begin(), deq_std.end(), Cmp(), std::sort);
+    merge_sort(fwd_std.begin(), seq_size, Cmp());
+    output_range(out, fwd_std.begin(), fwd_std.end());
+    out << "\n";*/
 
-    fwd_std.sort(Cmp());
+/*    fwd_std.sort(Cmp());
+    bi_std.sort(Cmp());
     output_range(out, fwd_std.cbegin(), fwd_std.cend());
     out << "\n";
-    bi_std.sort(Cmp());
     output_range(out, bi_std.cbegin(), bi_std.cend());
-    out << "\n";
+    out << "\n";*/
   }
 
 }
