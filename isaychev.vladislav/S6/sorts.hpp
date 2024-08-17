@@ -6,11 +6,10 @@
 
 namespace isaychev
 {
-
-  template < class ForwardIt, class Cmp >
-  ForwardIt do_partition(ForwardIt first, ForwardIt last, Cmp cmp)
+  namespace detail
   {
-    if (first != last)
+    template < class ForwardIt, class Cmp >
+    ForwardIt do_partition(ForwardIt first, ForwardIt last, Cmp cmp)
     {
       auto curr = first;
       for (++curr; curr != last;)
@@ -27,15 +26,19 @@ namespace isaychev
           ++curr;
         }
       }
+      return first;
     }
-    return ++first;
   }
-
 
   template < class ForwardIt, class Cmp >
   void quick_sort(ForwardIt first, ForwardIt last, Cmp cmp)
   {
-    auto temp = do_partition(first, last, cmp);
+    if (first != last)
+    {
+      auto temp = detail::do_partition(first, last, cmp);
+      quick_sort(first, temp, cmp);
+      quick_sort(++temp, last, cmp);
+    }
   }
 
 /*  template < class BidIter, class Cmp >  // ne rabotaet poka
