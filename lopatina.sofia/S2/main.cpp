@@ -89,6 +89,31 @@ private:
 
 //--------------------
 
+bool isLowerPriority(const char & lhs, const char & rhs)
+{
+  int priority_lhs = 1, priority_rhs = 1;
+  if (lhs == '+' || lhs == '-')
+  {
+    priority_lhs = 0;
+  }
+  if (rhs == '+' || rhs == '-')
+  {
+    priority_rhs = 0;
+  }
+  return priority_lhs < priority_rhs;
+}
+
+bool isDigit(char c)
+{
+  return (c >= '0' && c <= '9');
+}
+
+bool isArithmetic(char c)
+{
+  return (c == '+' || c == '-' || c == '*' || c == '/' || c == '%');
+}
+
+
 void inputExpression(std::istream & in, Queue<char> & queue_source)
 {
   char c = 0;
@@ -148,6 +173,7 @@ int main(int argc, char ** argv)
     }
   }
 */
+  std::cout << queue_source.empty() << '\n';
 
   while (!queue_source.empty())
   {
