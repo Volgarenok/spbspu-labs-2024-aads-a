@@ -113,6 +113,60 @@ bool isArithmetic(char c)
   return (c == '+' || c == '-' || c == '*' || c == '/' || c == '%');
 }
 
+enum TypeName
+{
+  OPERAND,
+  OPERATION,
+  OPEN_BRACKET,
+  CLOSE_BRACKET
+};
+
+struct InfixType
+{
+public:
+  InfixType() = default;
+  InfixType(long long val, TypeName name);
+  InfixType(char val, TypeName name);
+  ~InfixType() = default;
+private:
+  long long number_;
+  char symbol_;
+  TypeName type_;
+};
+
+InfixType::InfixType(long long val, TypeName name):
+  number_(val),
+  symbol_(0),
+  type_(name)
+{}
+InfixType::InfixType(char val, TypeName name):
+  number_(0),
+  symbol_(val),
+  type_(name)
+{}
+
+struct PostfixType
+{
+public:
+  PostfixType() = default;
+  explicit PostfixType(long long val);
+  explicit PostfixType(char val);
+  ~PostfixType() = default;
+private:
+  long long number_;
+  char symbol_;
+  TypeName type_;
+};
+PostfixType::PostfixType(long long val):
+  number_(val),
+  symbol_(0),
+  type_(TypeName::OPERAND)
+{}
+PostfixType::PostfixType(char val):
+  number_(0),
+  symbol_(val),
+  type_(TypeName::OPERATION)
+{}
 
 void inputExpression(std::istream & in, Queue<char> & queue_source)
 {
