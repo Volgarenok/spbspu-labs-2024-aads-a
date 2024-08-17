@@ -1,5 +1,7 @@
 #include <iostream>
 #include <fstream>
+#include <stdexcept>
+#include <string>
 #include <vector>
 #include <iterator>
 #include <limits>
@@ -168,31 +170,78 @@ PostfixType::PostfixType(char val):
   type_(TypeName::OPERATION)
 {}
 
-void inputExpression(std::istream & in, Queue<char> & queue_source)
+void inputExpression(std::istream & in, Queue<InfixType> & queue_source)
 {
   char c = 0;
+  std::string num_str = "";
+  in >> std::noskipws;
   while (in >> c)
   {
     if (c == '\n')
     {
+      if (!num_str.empty())
+      {
+        long long num = std::stoll(num_str);
+        InfixType elem{num, TypeName::OPERAND};
+        queue_source.push(elem);
+      }
       return;
     }
-    queue_source.push(c);
+    if (isDigit(c))
+    {
+      num_str += c;
+    }
+    else if (c == ' ')
+    {
+      if (!num_str.empty())
+      {
+        long long num = std::stoll(num_str);
+        InfixType elem{num, TypeName::OPERAND};
+        queue_source.push(elem);
+        num_str = "";
+      }
+    }
+    else if (c == '(')
+    {
+      InfixType elem{c, TypeName::OPEN_BRACKET};
+      queue_source.push(elem);
+    }
+    else if (c == ')')
+    {
+      InfixType elem{c, TypeName::CLOSE_BRACKET};
+      queue_source.push(elem);
+    }
+    else if (isArithmetic(c))
+    {
+      InfixType elem{c, TypeName::OPERATION};
+      queue_source.push(elem);
+    }
+    else
+    {
+      throw std::invalid_argument("Invalid expression element");
+    }
   }
 }
 
 int main(int argc, char ** argv)
 {
-  Queue<char> queue_source;
+  Queue<InfixType> queue_source;
   Queue<char> queue_result;
   Stack<char> stack_process;
-
-  if (argc == 1)
+  try
   {
-    while (!std::cin.eof())
+    if (argc == 1)
     {
-      inputExpression(std::cin, queue_source);
+      while (!std::cin.eof())
+      {
+        inputExpression(std::cin, queue_source);
+      }
     }
+  }
+  catch (const std::exception & e)
+  {
+    std::cerr << e.what() << '\n';
+    return 1;
   }
 
 /*
@@ -227,6 +276,7 @@ int main(int argc, char ** argv)
     }
   }
 */
+/*
   std::cout << queue_source.empty() << '\n';
 
   while (!queue_source.empty())
@@ -235,4 +285,5 @@ int main(int argc, char ** argv)
     queue_source.pop();
   }
   std::cout << '\n';
+*/
 }
