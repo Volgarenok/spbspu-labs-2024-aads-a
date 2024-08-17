@@ -91,20 +91,6 @@ private:
 
 //--------------------
 
-bool isLowerPriority(const char & lhs, const char & rhs)
-{
-  int priority_lhs = 1, priority_rhs = 1;
-  if (lhs == '+' || lhs == '-')
-  {
-    priority_lhs = 0;
-  }
-  if (rhs == '+' || rhs == '-')
-  {
-    priority_rhs = 0;
-  }
-  return priority_lhs < priority_rhs;
-}
-
 bool isDigit(char c)
 {
   return (c >= '0' && c <= '9');
@@ -130,6 +116,9 @@ public:
   InfixType(long long val, TypeName name);
   InfixType(char val, TypeName name);
   ~InfixType() = default;
+  TypeName getType() const;
+  long long getNumber() const;
+  char getSymbol() const;
 private:
   long long number_;
   char symbol_;
@@ -146,6 +135,19 @@ InfixType::InfixType(char val, TypeName name):
   symbol_(val),
   type_(name)
 {}
+
+TypeName InfixType::getType() const
+{
+  return type_;
+}
+long long InfixType::getNumber() const
+{
+  return number_;
+}
+char InfixType::getSymbol() const
+{
+  return symbol_;
+}
 
 struct PostfixType
 {
@@ -185,6 +187,7 @@ void inputExpression(std::istream & in, Queue<InfixType> & queue_source)
         InfixType elem{num, TypeName::OPERAND};
         queue_source.push(elem);
       }
+      in >> std::skipws;
       return;
     }
     if (isDigit(c))
@@ -218,9 +221,100 @@ void inputExpression(std::istream & in, Queue<InfixType> & queue_source)
     }
     else
     {
+      in >> std::skipws;
       throw std::invalid_argument("Invalid expression element");
     }
   }
+}
+
+bool isLowerPriority(const InfixType & lhs, const InfixType & rhs)
+{
+  int priority_lhs = 1, priority_rhs = 1;
+  char symbol_lhs = lhs.getSymbol();
+  char symbol_rhs = rhs.getSymbol();
+  if (symbol_lhs == '+' || symbol_lhs == '-')
+  {
+    priority_lhs = 0;
+  }
+  if (symbol_rhs == '+' || symbol_rhs == '-')
+  {
+    priority_rhs = 0;
+  }
+  return priority_lhs < priority_rhs;
+}
+
+Queue<PostfixType> convertToPostfix(Queue<InfixType> & queue_source)
+{
+  Queue<PostfixType> queue_result;
+  Stack<InfixType> stack_process;
+
+  while (!queue_source.empty())
+  {
+    InfixType infix_elem = queue_source.front();
+    if (infix_elem.getType() == OPEN_BRACKET)
+    {
+      stack_process.push(infix_elem);
+    }
+    else if (infix_elem.getType() == OPERAND)
+    {
+      PostfixType postfix_elem{infix_elem.getNumber()};
+      queue_result.push(postfix_elem);
+    }
+    else if (infix_elem.getType() == CLOSE_BRACKET)
+    {
+      if (stack_process.empty())
+      {
+        throw std::logic_error("Wrong math expression");
+      }
+      InfixType elem_stack = stack_process.top();
+      while (elem_stack.getType() != OPEN_BRACKET)
+      {
+        if (stack_process.empty())
+        {
+          throw std::logic_error("Wrong math expression");
+        }
+        PostfixType postfix_elem{elem_stack.getSymbol()};
+        queue_result.push(postfix_elem);
+        stack_process.pop();
+        elem_stack = stack_process.top();
+      }
+      stack_process.pop();
+    }
+    else if (infix_elem.getType() == OPERATION)
+    {
+      while (!stack_process.empty())
+      {
+        InfixType elem_stack = stack_process.top();
+        if (elem_stack.getType() == OPERATION && !isLowerPriority(elem_stack, infix_elem))
+        {
+          PostfixType postfix_elem{elem_stack.getSymbol()};
+          queue_result.push(postfix_elem);
+          stack_process.pop();
+        }
+        else
+        {
+          break;
+        }
+      }
+      stack_process.push(infix_elem);
+    }
+    queue_source.pop();
+  }
+  while (!stack_process.empty())
+  {
+    InfixType elem_stack = stack_process.top();
+    if (elem_stack.getType() == OPERATION)
+    {
+      PostfixType postfix_elem{elem_stack.getSymbol()};
+      queue_result.push(postfix_elem);
+      stack_process.pop();
+    }
+    else
+    {
+      throw std::logic_error("Wrong math expression");
+    }
+  }
+  return queue_result;
 }
 
 int main(int argc, char ** argv)
