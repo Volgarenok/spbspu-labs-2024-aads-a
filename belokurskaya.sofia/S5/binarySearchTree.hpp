@@ -154,6 +154,77 @@ namespace belokurskaya
       return tree_size == 0;
     }
 
+    template< class F >
+    F traverse_lnr(F f) const
+    {
+      if (empty())
+      {
+        throw std::logic_error("<EMPTY>");
+      }
+      traverse_lnr(root, f);
+      return f;
+    }
+
+    template< class F >
+    void traverse_lnr(Node* node, F f) const
+    {
+      if (node)
+      {
+        traverse_lnr(node->left, f);
+        f(std::make_pair(node->key, node->value));
+        traverse_lnr(node->right, f);
+      }
+    }
+
+    template< class F >
+    F traverse_rnl(F f)
+    {
+      if (empty())
+      {
+        throw std::logic_error("<EMPTY>");
+      }
+      traverseRNL(root_, f);
+      return f;
+    }
+
+    template< class F >
+    void traverseRNL(Node* node, F f)
+    {
+      if (node == nullptr)
+      {
+        return;
+      }
+      traverseRNL(node->right, f);
+      f(node->value);
+      traverseRNL(node->left, f);
+    }
+
+    template< class F >
+    F traverse_breadth(F f)
+    {
+      if (empty())
+      {
+        throw std::logic_error("<EMPTY>");
+      }
+      Queue< Node* > queue;
+      queue.push(root_);
+      while (!queue.empty())
+      {
+        Node* node = queue.front();
+        queue.pop();
+        f(node->value);
+        if (node->left)
+        {
+          queue.push(node->left);
+        }
+        if (node->right)
+        {
+          queue.push(node->right);
+        }
+      }
+      return f;
+    }
+
     class Iterator
     {
       Node* current;
