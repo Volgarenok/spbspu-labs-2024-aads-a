@@ -198,6 +198,21 @@ namespace belokurskaya
       return f;
     }
 
+    Value& operator[](const Key& key)
+    {
+      Node* node = find(root, key);
+      if (node)
+      {
+        return node->value;
+      }
+      else
+      {
+        Node* newNode = new Node(key, Value());
+        root = insert(root, key, Value());
+        return newNode->value;
+      }
+    }
+
     class Iterator
     {
       Node* current;
