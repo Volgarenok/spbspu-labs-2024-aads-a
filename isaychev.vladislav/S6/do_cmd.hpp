@@ -3,7 +3,6 @@
 
 #include <algorithm>
 #include <list/list.hpp>
-#include <functional>
 #include <deque>
 #include <list>
 #include <random>
@@ -45,30 +44,31 @@ namespace isaychev
     }
     output_range(out, src.begin(), src.end());
     out << "\n";
-    /*List< T > fwd;
+
+    List< T > fwd;
     for (auto i = src.cbegin(); i != src.cend(); ++i)
     {
       fwd.push_front(*i);
-    }*/
+    }
+    std::list< T > bi_qsort(src.begin(), src.end());
+    std::deque< T > deq_qsort(src.begin(), src.end());
+    std::deque< T > deq_merge(src.begin(), src.end());
     std::forward_list< T > fwd_std(src.begin(), src.end());
     std::list< T > bi_std(src.begin(), src.end());
     std::deque< T > deq_std(src.begin(), src.end());
 
-    using namespace std::placeholders;
-//    detail::do_sort(out, fwd_std.begin(), fwd_std.end(), Cmp(), quick_sort);
-    detail::do_sort(out, deq_std.begin(), deq_std.end(), seq_size, Cmp(), merge_sort);
-/*    detail::do_sort(out, deq_std.begin(), deq_std.end(), Cmp(), std::sort);
-    output_range(out, fwd_std.begin(), fwd_std.end());
-    out << "\n";*/
-
-/*    fwd_std.sort(Cmp());
+    detail::do_sort(out, fwd.begin(), fwd.end(), Cmp(), quick_sort);
+    detail::do_sort(out, bi_qsort.begin(), bi_qsort.end(), Cmp(), quick_sort);
+    detail::do_sort(out, deq_qsort.begin(), deq_qsort.end(), Cmp(), quick_sort);
+    detail::do_sort(out, deq_merge.begin(), deq_merge.end(), seq_size, Cmp(), merge_sort);
+    fwd_std.sort(Cmp());
     bi_std.sort(Cmp());
     output_range(out, fwd_std.cbegin(), fwd_std.cend());
     out << "\n";
     output_range(out, bi_std.cbegin(), bi_std.cend());
-    out << "\n";*/
+    out << "\n";
+    detail::do_sort(out, deq_std.begin(), deq_std.end(), Cmp(), std::sort);
   }
-
 }
 
 #endif
