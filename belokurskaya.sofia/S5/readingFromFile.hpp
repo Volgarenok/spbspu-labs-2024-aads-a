@@ -8,7 +8,7 @@
 
 namespace belokurskaya
 {
-  void inputTree(std::istream& in, BinarySearchTree< int, std::string >& tree);
+  void readingFromFile(std::istream& in, BinarySearchTree< int, std::string >& tree);
 }
 
 #endif

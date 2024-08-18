@@ -1,6 +1,8 @@
 ﻿#include <iostream>
+#include <fstream>
 
 #include "binarySearchTree.hpp"
+#include "readingFromFile.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -11,4 +13,15 @@ int main(int argc, char* argv[])
   }
   using namespace belokurskaya;
   BinarySearchTree< int, std::string > tree;
+
+  try
+  {
+    std::ifstream file(argv[2]);
+    readingFromFile(file, tree);
+  }
+  catch (const std::exception& e)
+  {
+    std::cerr << e.what() << "\n";
+    return 1;
+  }
 }
