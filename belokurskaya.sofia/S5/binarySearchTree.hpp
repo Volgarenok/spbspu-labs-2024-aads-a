@@ -157,69 +157,40 @@ namespace belokurskaya
     template< class F >
     F traverse_lnr(F f) const
     {
-      if (empty())
+      for (auto it = begin(); it != end(); ++it)
       {
-        throw std::logic_error("<EMPTY>");
+        f(std::make_pair(it->first, it->second));
       }
-      traverse_lnr(root, f);
       return f;
     }
 
     template< class F >
-    void traverse_lnr(Node* node, F f) const
+    F traverse_rnl(F f) const
     {
-      if (node)
+      for (auto it = end(); it != begin(); --it)
       {
-        traverse_lnr(node->left, f);
-        f(std::make_pair(node->key, node->value));
-        traverse_lnr(node->right, f);
+        f(std::make_pair(it->first, it->second));
       }
-    }
-
-    template< class F >
-    F traverse_rnl(F f)
-    {
-      if (empty())
-      {
-        throw std::logic_error("<EMPTY>");
-      }
-      traverseRNL(root_, f);
       return f;
     }
 
     template< class F >
-    void traverseRNL(Node* node, F f)
+    F traverse_breadth(F f) const
     {
-      if (node == nullptr)
-      {
-        return;
-      }
-      traverseRNL(node->right, f);
-      f(node->value);
-      traverseRNL(node->left, f);
-    }
-
-    template< class F >
-    F traverse_breadth(F f)
-    {
-      if (empty())
-      {
-        throw std::logic_error("<EMPTY>");
-      }
-      Queue< Node* > queue;
-      queue.push(root_);
+      std::queue< Iterator > queue;
+      queue.push(begin());
       while (!queue.empty())
       {
-        Node* node = queue.front();
+        auto it = queue.front();
         queue.pop();
-        f(node->value);
-        if (node->left)
+        f(std::make_pair(it->first, it->second));
+        if (it->left != nullptr)
         {
-          queue.push(node->left);
+          queue.push(Iterator(it->left, compare));
         }
-        if (node->right)
+        if (it->right != nullptr)
         {
-          queue.push(node->right);
+          queue.push(Iterator(it->right, compare));
         }
       }
       return f;
