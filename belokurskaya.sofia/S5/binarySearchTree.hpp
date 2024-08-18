@@ -146,12 +146,12 @@ namespace belokurskaya
       tree_size = 0;
     }
 
-    size_t size() const
+    size_t size() const noexcept
     {
       return tree_size;
     }
 
-    bool empty() const
+    bool empty() const noexcept
     {
       return tree_size == 0;
     }
