@@ -4,6 +4,8 @@
 #include <functional>
 #include <stdexcept>
 
+#include "queue.hpp"
+
 namespace belokurskaya
 {
   template < typename Key, typename Value, typename Compare = std::less< Key > >
@@ -177,7 +179,7 @@ namespace belokurskaya
     template< class F >
     F traverse_breadth(F f) const
     {
-      std::queue< Iterator > queue;
+      Queue< Iterator > queue;
       queue.push(begin());
       while (!queue.empty())
       {
