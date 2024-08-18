@@ -65,13 +65,8 @@ namespace isaychev
     if (size != 1 && size != 0)
     {
       size_t middle = size / 2;
-      /*for (size_t i = 0; i != middle; ++i)
-      {
-        ++temp;
-      }*/
-      auto temp = first + middle;
       merge_sort(first, middle, cmp);
-      merge_sort(temp, size - middle, cmp);
+      merge_sort(first + middle, size - middle, cmp);
       detail::merge(first, middle, size, cmp);
     }
   }

@@ -46,7 +46,7 @@ namespace isaychev
     out << "\n";
 
     List< T > fwd;
-    for (auto i = src.cbegin(); i != src.cend(); ++i)
+    for (auto i = src.begin(); i != src.end(); ++i)
     {
       fwd.push_front(*i);
     }
