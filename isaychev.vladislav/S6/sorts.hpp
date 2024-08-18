@@ -2,7 +2,7 @@
 #define SORTS_HPP
 
 #include <utility>
-#include <cstddef>
+#include <iterator>
 
 namespace isaychev
 {
@@ -28,6 +28,24 @@ namespace isaychev
       }
       return first;
     }
+
+    template < class RandomAcIt, class Cmp >
+    void merge(RandomAcIt first, size_t middle, size_t size, Cmp cmp)
+    {
+      auto mid = first + middle;
+      auto end = first + size;
+      for (; first != mid && mid != end; ++first)
+      {
+        if (!cmp(*first, *mid))
+        {
+          for (auto i = mid; i != first; --i)
+          {
+            std::swap(*(std::prev(i)), *i);
+          }
+          ++mid;
+        }
+      }
+    }
   }
 
   template < class ForwardIt, class Cmp >
@@ -41,30 +59,22 @@ namespace isaychev
     }
   }
 
-/*  template < class BidIter, class Cmp >  // ne rabotaet poka
-  void merge_sort(BidIter first, size_t size, Cmp cmp)
+  template < class RandomAcIt, class Cmp >
+  void merge_sort(RandomAcIt first, size_t size, Cmp cmp)
   {
-    if (size != 1 || size != 0)
+    if (size != 1 && size != 0)
     {
-      BidIter temp = first;
       size_t middle = size / 2;
-      size_t remain = size - middle;
-      for (size_t i = 0; i != middle; ++i)
+      /*for (size_t i = 0; i != middle; ++i)
       {
         ++temp;
-      }
+      }*/
+      auto temp = first + middle;
       merge_sort(first, middle, cmp);
-      merge_sort(temp, remain, cmp);
-
-      for (size_t i = 0; i < size - 1; ++i)
-      {
-        if (cmp(*temp, *first))
-        {
-          std::swap(*temp, *first);
-        }
-      }
+      merge_sort(temp, size - middle, cmp);
+      detail::merge(first, middle, size, cmp);
     }
-  }*/
+  }
 }
 
 #endif

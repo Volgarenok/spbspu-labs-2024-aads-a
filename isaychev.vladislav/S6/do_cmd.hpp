@@ -26,7 +26,7 @@ namespace isaychev
     template < class Iter, class Cmp >
     void do_sort(std::ostream & out, Iter first, Iter last, size_t size, Cmp cmp, void (*sort)(Iter, size_t, Cmp))
     {
-      sort(first, last, cmp);
+      sort(first, size, cmp);
       output_range(out, first, last);
       out << "\n";
     }
@@ -55,9 +55,9 @@ namespace isaychev
     std::deque< T > deq_std(src.begin(), src.end());
 
     using namespace std::placeholders;
-    detail::do_sort(out, fwd_std.begin(), fwd_std.end(), Cmp(), quick_sort);
+//    detail::do_sort(out, fwd_std.begin(), fwd_std.end(), Cmp(), quick_sort);
+    detail::do_sort(out, deq_std.begin(), deq_std.end(), seq_size, Cmp(), merge_sort);
 /*    detail::do_sort(out, deq_std.begin(), deq_std.end(), Cmp(), std::sort);
-    merge_sort(fwd_std.begin(), seq_size, Cmp());
     output_range(out, fwd_std.begin(), fwd_std.end());
     out << "\n";*/
 
