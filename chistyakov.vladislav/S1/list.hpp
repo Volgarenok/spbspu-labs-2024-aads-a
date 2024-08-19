@@ -16,11 +16,6 @@ namespace chistyakov
         tail_(nullptr)
       {}
 
-      List(detail::Node< T > & head, detail::Node< T > & tail):
-        head_(head),
-        tail_(tail)
-      {}
-
       explicit List(const List & list):
         head_(nullptr),
         tail_(nullptr)
