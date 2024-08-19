@@ -205,18 +205,17 @@ namespace chistyakov
             if (element == begin())
             {
               pop_front();
-              return;
             }
-
-            if (element == end())
+            else if (element == end())
             {
               pop_back();
-              return;
             }
-
-            element->previous->next = element->next;
-            element->next->previous = element->previous;
-            delete element;
+            else
+            {
+              element->previous->next = element->next;
+              element->next->previous = element->previous;
+              delete element;
+            }
           }
         }
       }
