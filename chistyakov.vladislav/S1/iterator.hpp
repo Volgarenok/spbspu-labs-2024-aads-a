@@ -17,13 +17,12 @@ namespace chistyakov
       Iterator():
         node_(nullptr)
       {}
-
-      explicit Iterator(detail::Node< T > * val):
-        node_(val)
+      Iterator(const Iterator & value):
+        node_(value.node_)
       {}
 
       ~Iterator() noexcept = default;
-      Iterator(const Iterator< T > &) noexcept = default;
+
       Iterator< T > & operator=(const Iterator< T > & ) noexcept = default;
 
       Iterator< T > & operator++()
@@ -84,6 +83,10 @@ namespace chistyakov
 
     private:
       detail::Node< T > * node_;
+
+      explicit Iterator(detail::Node< T > * value):
+        node_(value)
+      {}
   };
 }
 
