@@ -53,7 +53,7 @@ namespace chistyakov
         return *this;
       }
 
-      List & operator=(List && other)
+      List & operator=(List && other) noexcept
       {
         clear();
         swap(other);
