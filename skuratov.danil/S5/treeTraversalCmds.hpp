@@ -7,9 +7,9 @@
 
 namespace skuratov
 {
-  std::pair< size_t, std::string > ascending(UBST< size_t, std::string >&);
-  std::pair< size_t, std::string > descending(UBST< size_t, std::string >&);
-  std::pair< size_t, std::string > breadth(UBST< size_t, std::string >&);
+  std::pair< size_t, std::string > isAscending(UBST< size_t, std::string >&);
+  std::pair< size_t, std::string > isDescending(UBST< size_t, std::string >&);
+  std::pair< size_t, std::string > isBreadth(UBST< size_t, std::string >&);
 }
 
 #endif
