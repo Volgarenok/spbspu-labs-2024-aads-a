@@ -8,7 +8,7 @@
 #include "const_list_iterator.hpp"
 #include "list.hpp"
 
-using listOfPairs = lopatina::List<std::pair<std::string, lopatina::List<size_t>>>;
+using listOfPairs = lopatina::List< std::pair< std::string, lopatina::List< size_t > > >;
 
 size_t inputListOfPairs(std::istream & in, listOfPairs & list)
 {
@@ -18,7 +18,7 @@ size_t inputListOfPairs(std::istream & in, listOfPairs & list)
   while (in >> name)
   {
     size_t loc_size = 0;
-    lopatina::List<size_t> list_num;
+    lopatina::List< size_t > list_num;
     std::getline(in, num_str);
     size_t idx = 0;
     while (!num_str.empty())
@@ -38,8 +38,8 @@ size_t inputListOfPairs(std::istream & in, listOfPairs & list)
   return max_size;
 }
 
-template <typename T>
-void outputList(std::ostream & out, lopatina::List<T> list)
+template < typename T >
+void outputList(std::ostream & out, lopatina::List< T > list)
 {
   out << list.front();
   for (auto iter = ++(list.begin()); iter != list.end(); ++iter)
@@ -52,7 +52,7 @@ void outputList(std::ostream & out, lopatina::List<T> list)
 int main()
 {
   using namespace lopatina;
-  List<std::pair<std::string, List<size_t>>> list;
+  List< std::pair< std::string, List< size_t > > > list;
   size_t max_size = inputListOfPairs(std::cin, list);
 
   if (list.empty())
@@ -61,13 +61,13 @@ int main()
     return 0;
   }
 
-  List<std::string> list_names;
+  List< std::string > list_names;
   for (auto iter = list.begin(); iter != list.end(); ++iter)
   {
     list_names.push_back((*iter).first);
   }
 
-  List<size_t> list_sums;
+  List< size_t > list_sums;
   if (max_size == 0)
   {
     list_sums.push_back(0);
@@ -75,20 +75,20 @@ int main()
 
   bool overflow = false;
 
-  List<List<size_t>> list_nums;
+  List< List< size_t > > list_nums;
   for (size_t i = 0; i < max_size; ++i)
   {
     size_t sum = 0;
-    List<size_t> list_num;
+    List< size_t > list_num;
     for (auto iter = list.begin(); iter != list.end(); ++iter)
     {
-      List<size_t> sub_list = (*iter).second;
+      List< size_t > sub_list = (*iter).second;
       size_t size = 0;
       for (auto sub_iter = sub_list.begin(); sub_iter != sub_list.end(); ++sub_iter)
       {
         if (size == i)
         {
-          if ((std::numeric_limits<unsigned long long>::max() - sum) >= *sub_iter)
+          if ((std::numeric_limits< unsigned long long >::max() - sum) >= *sub_iter)
           {
             sum += *sub_iter;
           }

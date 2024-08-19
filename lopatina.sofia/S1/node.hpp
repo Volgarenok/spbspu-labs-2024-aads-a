@@ -3,11 +3,11 @@
 
 namespace lopatina
 {
-  template<typename T>
+  template < typename T >
   struct Node
   {
     T data_;
-    Node<T> * next_;
+    Node< T > * next_;
 
     Node(const T & data):
       data_(data),

@@ -3,29 +3,29 @@
 
 #include <iterator>
 #include <forward_list>
-#include <assert.h>
+#include <cassert>
 #include "node.hpp"
 
 namespace lopatina
 {
-  template <typename T>
+  template < typename T >
   class List;
 
-  template <typename T>
+  template < typename T >
   struct ConstListIterator;
 
-  template <typename T>
-  struct ListIterator: public std::iterator<std::forward_iterator_tag,T>
+  template < typename T >
+  struct ListIterator: public std::iterator< std::forward_iterator_tag, T >
   {
-    friend class List<T>;
-    friend struct ConstListIterator<T>;
+    friend class List< T >;
+    friend struct ConstListIterator< T >;
 
   public:
-    using this_t = ListIterator<T>;
+    using this_t = ListIterator< T >;
     ListIterator():
       node_(nullptr)
     {}
-    ListIterator(Node<T> * node):
+    ListIterator(Node< T > * node):
       node_(node)
     {}
     ~ListIterator() = default;
@@ -66,7 +66,7 @@ namespace lopatina
     }
 
   private:
-    Node<T> * node_;
+    Node< T > * node_;
   };
 }
 
