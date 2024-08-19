@@ -10,7 +10,7 @@ namespace chistyakov
   class List;
 
   template< typename T >
-  class Iterator : public std::iterator< std::bidirectional_iterator_tag, T >
+  class Iterator : public std::iterator < std::bidirectional_iterator_tag, T >
   {
     friend class List< T >;
     public:
