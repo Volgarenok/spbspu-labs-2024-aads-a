@@ -46,7 +46,6 @@ void outputList(std::ostream & out, lopatina::List< T > list)
   {
     out << ' ' << *iter;
   }
-  out << '\n';
 }
 
 int main()
@@ -106,9 +105,11 @@ int main()
   }
 
   outputList(std::cout, list_names);
+  std::cout << '\n';
   for (auto iter_nums = list_nums.begin(); iter_nums != list_nums.end(); ++iter_nums)
   {
     outputList(std::cout, *iter_nums);
+    std::cout << '\n';
   }
   if (overflow)
   {
@@ -116,5 +117,6 @@ int main()
     return 1;
   }
   outputList(std::cout, list_sums);
+  std::cout << '\n';
   return 0;
 }
