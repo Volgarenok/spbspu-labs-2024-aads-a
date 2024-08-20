@@ -49,12 +49,12 @@ namespace chistyakov
         return now;
       }
 
-      bool operator==(const ConstIterator< T > & rhs) const
+      bool operator==(const ConstIterator< T > & rhs) const noexcept
       {
         return node_ == rhs.node_;
       }
 
-      bool operator!=(const ConstIterator< T > & rhs) const
+      bool operator!=(const ConstIterator< T > & rhs) const noexcept
       {
         return !(rhs == *this);
       }
@@ -72,7 +72,7 @@ namespace chistyakov
     private:
       detail::Node< T > * node_;
 
-      explicit ConstIterator(detail::Node< T > * value):
+      explicit ConstIterator(detail::Node< T > * value) noexcept:
          node_(value)
       {}
   };
