@@ -51,7 +51,6 @@ namespace lopatina
     template < typename Predicate >
     void remove_if(Predicate pred);
     void assign(size_t n, const T & val);
-    Node< T > * remove_node(Node< T > * prev, Node< T > * todelete);
 
     void assign(iterator first, iterator last);
     void assign(std::initializer_list< T > init_list);
@@ -76,6 +75,8 @@ namespace lopatina
   private:
     Node< T > * head_;
     Node< T > * tail_;
+
+    Node< T > * remove_node(Node< T > * prev, Node< T > * todelete);
   };
 
   template < typename T >
@@ -121,7 +122,8 @@ namespace lopatina
   }
 
   template < typename T >
-  List< T >::List(iterator first, iterator last)
+  List< T >::List(iterator first, iterator last):
+    List()
   {
     for (auto it = first; it != last; ++it)
     {
@@ -130,7 +132,8 @@ namespace lopatina
   }
 
   template < typename T >
-  List< T >::List(std::initializer_list< T > init_list)
+  List< T >::List(std::initializer_list< T > init_list):
+    List()
   {
     for (auto it = init_list.begin(); it != init_list.end(); ++it)
     {
