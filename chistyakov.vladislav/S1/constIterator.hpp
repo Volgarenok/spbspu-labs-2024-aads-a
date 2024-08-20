@@ -71,6 +71,10 @@ namespace chistyakov
 
     private:
       detail::Node< T > * node_;
+
+      explicit ConstIterator(detail::Node< T > * value):
+         node_(value)
+      {}
   };
 }
 
