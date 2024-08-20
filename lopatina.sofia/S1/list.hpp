@@ -15,24 +15,27 @@ namespace lopatina
     friend struct ConstListIterator< T >;
 
   public:
+    using iterator = ListIterator< T >;
+    using const_iterator = ConstListIterator< T >;
+
     List();
     List(const List & other);
     List(List && other) noexcept;
     explicit List(size_t n);
     List(size_t n, const T & val);
-    List(ListIterator< T > first, ListIterator< T > last);
+    List(iterator first, iterator last);
     List(std::initializer_list< T > init_list);
     ~List();
 
     List & operator=(const List & other);
     List & operator=(List && other) noexcept;
 
-    ListIterator< T > begin() noexcept;
-    ListIterator< T > end() noexcept;
-    ConstListIterator< T > begin() const noexcept;
-    ConstListIterator< T > end() const noexcept;
-    ConstListIterator< T > cbegin() const noexcept;
-    ConstListIterator< T > cend() const noexcept;
+    iterator begin() noexcept;
+    iterator end() noexcept;
+    const_iterator begin() const noexcept;
+    const_iterator end() const noexcept;
+    const_iterator cbegin() const noexcept;
+    const_iterator cend() const noexcept;
 
     T & front();
     const T & front() const;
@@ -50,27 +53,25 @@ namespace lopatina
     void assign(size_t n, const T & val);
     Node< T > * remove_node(Node< T > * prev, Node< T > * todelete);
 
-    void assign(ListIterator< T > first, ListIterator< T > last);
+    void assign(iterator first, iterator last);
     void assign(std::initializer_list< T > init_list);
     void reverse() noexcept;
 
-    ListIterator< T > erase_after(ConstListIterator< T > position);
-    ListIterator< T > erase_after(ConstListIterator< T > position, ConstListIterator< T > last);
+    iterator erase_after(const_iterator position);
+    iterator erase_after(const_iterator position, const_iterator last);
 
-    ListIterator< T > insert_after(ConstListIterator< T > position, const T & val);
-    ListIterator< T > insert_after(ConstListIterator< T > position, T && val);
-    ListIterator< T > insert_after(ConstListIterator< T > position, size_t n, const T & val);
-    ListIterator< T > insert_after(ConstListIterator< T > position, ConstListIterator< T > first, ConstListIterator< T > last);
-    ListIterator< T > insert_after(ConstListIterator< T > position, std::initializer_list< T > init_list);
+    iterator insert_after(const_iterator position, const T & val);
+    iterator insert_after(const_iterator position, T && val);
+    iterator insert_after(const_iterator position, size_t n, const T & val);
+    iterator insert_after(const_iterator position, const_iterator first, const_iterator last);
+    iterator insert_after(const_iterator position, std::initializer_list< T > init_list);
 
-    void splice_after(ConstListIterator< T > position, List< T > & fwdlst);
-    void splice_after(ConstListIterator< T > position, List< T > && fwdlst);
-    void splice_after(ConstListIterator< T > position, List< T > & fwdlst, ConstListIterator< T > it);
-    void splice_after(ConstListIterator< T > position, List< T > && fwdlst, ConstListIterator< T > it);
-    void splice_after(ConstListIterator< T > position, List< T > & fwdlst,
-                      ConstListIterator< T > first, ConstListIterator< T > last);
-    void splice_after(ConstListIterator< T > position, List< T > && fwdlst,
-                      ConstListIterator< T > first, ConstListIterator< T > last);
+    void splice_after(const_iterator position, List< T > & fwdlst);
+    void splice_after(const_iterator position, List< T > && fwdlst);
+    void splice_after(const_iterator position, List< T > & fwdlst, const_iterator it);
+    void splice_after(const_iterator position, List< T > && fwdlst, const_iterator it);
+    void splice_after(const_iterator position, List< T > & fwdlst, const_iterator first, const_iterator last);
+    void splice_after(const_iterator position, List< T > && fwdlst, const_iterator first, const_iterator last);
 
   private:
     Node< T > * head_;
@@ -120,7 +121,7 @@ namespace lopatina
   }
 
   template < typename T >
-  List< T >::List(ListIterator< T > first, ListIterator< T > last)
+  List< T >::List(iterator first, iterator last)
   {
     for (auto it = first; it != last; ++it)
     {
@@ -352,7 +353,7 @@ namespace lopatina
   }
 
   template < typename T >
-  void List< T >::assign(ListIterator< T > first, ListIterator< T > last)
+  void List< T >::assign(iterator first, iterator last)
   {
     clear();
     for (auto it = first; it != last; ++it)
@@ -394,7 +395,7 @@ namespace lopatina
   }
 
   template < typename T >
-  ListIterator< T > List< T >::erase_after(ConstListIterator< T > position)
+  ListIterator< T > List< T >::erase_after(const_iterator position)
   {
     Node< T > * pos_node = position.node_;
     Node< T > * result = nullptr;
@@ -402,45 +403,45 @@ namespace lopatina
     {
       result = remove_node(pos_node, pos_node->next_);
     }
-    return ListIterator< T >(result);
+    return iterator(result);
   }
 
   template < typename T >
-  ListIterator< T > List< T >::erase_after(ConstListIterator< T > position, ConstListIterator< T > last)
+  ListIterator< T > List< T >::erase_after(const_iterator position, const_iterator last)
   {
     while (position.node_->next_ != last.node_)
     {
       erase_after(position);
     }
-    return ListIterator< T >(last.node_);
+    return iterator(last.node_);
   }
 
   template < typename T >
-  ListIterator< T > List< T >::insert_after(ConstListIterator< T > position, const T & val)
+  ListIterator< T > List< T >::insert_after(const_iterator position, const T & val)
   {
     Node< T > * pos_node = position.node_;
     if (pos_node == tail_)
     {
       push_back(val);
-      return ListIterator< T >(tail_);
+      return iterator(tail_);
     }
     Node< T > * next = pos_node->next_;
     Node< T > * new_node = new Node< T >(val);
     pos_node->next_ = new_node;
     new_node->next_ = next;
-    return ListIterator< T >(new_node);
+    return iterator(new_node);
   }
 
   template < typename T >
-  ListIterator< T > List< T >::insert_after(ConstListIterator< T > position, T && val)
+  ListIterator< T > List< T >::insert_after(const_iterator position, T && val)
   {
     return insert_after(position, val);
   }
 
   template < typename T >
-  ListIterator< T > List< T >::insert_after(ConstListIterator< T > position, size_t n, const T & val)
+  ListIterator< T > List< T >::insert_after(const_iterator position, size_t n, const T & val)
   {
-    ListIterator< T > result(position.node_);
+    iterator result(position.node_);
     for (size_t i = 0; i != n; ++i)
     {
       result = insert_after(result, val);
@@ -449,9 +450,9 @@ namespace lopatina
   }
 
   template < typename T >
-  ListIterator< T > List< T >::insert_after(ConstListIterator< T > position, ConstListIterator< T > first, ConstListIterator< T > last)
+  ListIterator< T > List< T >::insert_after(const_iterator position, const_iterator first, const_iterator last)
   {
-    ListIterator< T > result(position.node_);
+    iterator result(position.node_);
     for (auto it = first; it != last; ++it)
     {
       result = insert_after(result, *it);
@@ -460,9 +461,9 @@ namespace lopatina
   }
 
   template < typename T >
-  ListIterator< T > List< T >::insert_after(ConstListIterator< T > position, std::initializer_list< T > init_list)
+  ListIterator< T > List< T >::insert_after(const_iterator position, std::initializer_list< T > init_list)
   {
-    ListIterator< T > result(position.node_);
+    iterator result(position.node_);
     for (auto it = init_list.begin(); it != init_list.end(); ++it)
     {
       result = insert_after(result, *it);
@@ -471,7 +472,7 @@ namespace lopatina
   }
 
   template < typename T >
-  void List< T >::splice_after(ConstListIterator< T > position, List< T > & fwdlst)
+  void List< T >::splice_after(const_iterator position, List< T > & fwdlst)
   {
     Node< T > * pos_node = position.node_;
     if ((pos_node == nullptr) && (empty()))
@@ -499,13 +500,13 @@ namespace lopatina
   }
 
   template < typename T >
-  void List< T >::splice_after(ConstListIterator< T > position, List< T > && fwdlst)
+  void List< T >::splice_after(const_iterator position, List< T > && fwdlst)
   {
     splice_after(position, fwdlst);
   }
 
   template < typename T >
-  void List< T >::splice_after(ConstListIterator< T > position, List< T > & fwdlst, ConstListIterator< T > it)
+  void List< T >::splice_after(const_iterator position, List< T > & fwdlst, const_iterator it)
   {
     if ((position == it) || (position.node_ == it.node_->next_))
     {
@@ -515,14 +516,13 @@ namespace lopatina
   }
 
   template < typename T >
-  void List< T >::splice_after(ConstListIterator< T > position, List< T > && fwdlst, ConstListIterator< T > it)
+  void List< T >::splice_after(const_iterator position, List< T > && fwdlst, const_iterator it)
   {
     splice_after(position, fwdlst, it);
   }
 
   template < typename T >
-  void List< T >::splice_after(ConstListIterator< T > position, List< T > & fwdlst,
-                             ConstListIterator< T > first, ConstListIterator< T > last)
+  void List< T >::splice_after(const_iterator position, List< T > & fwdlst, const_iterator first, const_iterator last)
   {
     Node< T > * pos_node = position.node_;
     Node< T > * begin = first.node_->next_;
@@ -559,8 +559,7 @@ namespace lopatina
   }
 
   template < typename T >
-  void List< T >::splice_after(ConstListIterator< T > position, List< T > && fwdlst,
-                             ConstListIterator< T > first, ConstListIterator< T > last)
+  void List< T >::splice_after(const_iterator position, List< T > && fwdlst, const_iterator first, const_iterator last)
   {
     splice_after(position, fwdlst, first, last);
   }
@@ -568,32 +567,32 @@ namespace lopatina
   template < typename T >
   ListIterator< T > List< T >::begin() noexcept
   {
-    return ListIterator< T >(head_);
+    return iterator(head_);
   }
   template < typename T >
   ListIterator< T > List< T >::end() noexcept
   {
-    return ListIterator< T >();
+    return iterator();
   }
   template < typename T >
   ConstListIterator< T > List< T >::begin() const noexcept
   {
-    return ConstListIterator< T >(head_);
+    return const_iterator(head_);
   }
   template < typename T >
   ConstListIterator< T > List< T >::end() const noexcept
   {
-    return ConstListIterator< T >();
+    return const_iterator();
   }
   template < typename T >
   ConstListIterator< T > List< T >::cbegin() const noexcept
   {
-    return ConstListIterator< T >(head_);
+    return const_iterator(head_);
   }
   template < typename T >
   ConstListIterator< T > List< T >::cend() const noexcept
   {
-    return ConstListIterator< T >();
+    return const_iterator();
   }
 }
 
