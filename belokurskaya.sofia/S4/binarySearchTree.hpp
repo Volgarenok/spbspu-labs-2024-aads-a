@@ -132,7 +132,7 @@ namespace belokurskaya
       throw std::runtime_error("Key not found");
     }
 
-    typename BinarySearchTree< Key, Value, Compare >::Node* findNode(const Key& key) const
+    Node* findNode(const Key& key) const
     {
       Node* current = root;
       while (current != nullptr)
