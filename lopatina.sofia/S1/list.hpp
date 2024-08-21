@@ -347,10 +347,18 @@ namespace lopatina
   template < typename T >
   void List< T >::assign(size_t n, const T & val)
   {
-    clear();
-    for (size_t i = 0; i < n; ++i)
+    try
     {
-      push_back(val);
+      clear();
+      for (size_t i = 0; i < n; ++i)
+      {
+        push_back(val);
+      }
+    }
+    catch (...)
+    {
+      clear();
+      throw;
     }
   }
 
@@ -358,21 +366,25 @@ namespace lopatina
   template < typename InputIterator >
   void List< T >::assign(InputIterator first, InputIterator last)
   {
-    clear();
-    for (auto it = first; it != last; ++it)
+    try
     {
-      push_back(*it);
+      clear();
+      for (auto it = first; it != last; ++it)
+      {
+        push_back(*it);
+      }
+    }
+    catch (...)
+    {
+      clear();
+      throw;
     }
   }
 
   template < typename T >
   void List< T >::assign(std::initializer_list< T > init_list)
   {
-    clear();
-    for (auto it = init_list.begin(); it != init_list.end(); ++it)
-    {
-      push_back(*it);
-    }
+    assign(init_list.begin(), init_list.end());
   }
 
   template < typename T >
