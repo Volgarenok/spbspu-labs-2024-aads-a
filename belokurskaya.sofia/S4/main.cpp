@@ -1,12 +1,12 @@
 ﻿#include <cstring>
 #include <fstream>
-#include <iostream>
 #include <functional>
-#include <limits>
 
-#include "commandCollection.hpp"
 #include "parseLine.hpp"
 #include "commands.hpp"
+#include "commandCollection.hpp"
+
+using fnc = std::function< void(belokurskaya::DictionaryCollection&, std::istream&, std::ostream&) >;
 
 int main(int argc, char* argv[])
 {
@@ -24,7 +24,7 @@ int main(int argc, char* argv[])
     return 1;
   }
 
-  belokurskaya::DictionaryCollection dictionaries;
+  DictionaryCollection dictionaries;
   char buffer[1024];
   while (file.getline(buffer, sizeof(buffer)))
   {
@@ -39,21 +39,21 @@ int main(int argc, char* argv[])
 
     dictionaries.add(dict_name, std::move(dict));
   }
-
+  
   try
   {
-    BinarySearchTree< std::string, fnc > commands;
+    BinarySearchTree< std::string, fnc > cmds;
     {
       using namespace std::placeholders;
-      commands["complement"] = std::bind(&complement, _1, _2, _3);
-      commands["intersect"] = std::bind(&intersect, _1, _2, _3);
-      commands["union"] = std::bind(&unionDicts, _1, _2, _3);
-      commands["print"] = std::bind(&printCommand, _1, _2, _3);
+      cmds["complement"] = std::bind(&belokurskaya::cmds::complement, _1, _2, _3);
+      cmds["intersect"] = std::bind(&belokurskaya::cmds::intersect, _1, _2, _3);
+      cmds["union"] = std::bind(&belokurskaya::cmds::unionDicts, _1, _2, _3);
+      cmds["print"] = std::bind(&belokurskaya::cmds::printCommand, _1, _2, _3);
     }
     std::string command;
     while (std::cin >> command)
     {
-      commands.at(command)(dictionaries, std::cin, std::cout);
+      cmds.at(command)(dictionaries, std::cin, std::cout);
 
       std::cin.clear();
       std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
@@ -64,4 +64,5 @@ int main(int argc, char* argv[])
     std::cerr << e.what() << "\n";
     return 1;
   }
+  return 0;
 }
