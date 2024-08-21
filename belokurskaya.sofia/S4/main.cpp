@@ -39,7 +39,7 @@ int main(int argc, char* argv[])
 
     dictionaries.add(dict_name, std::move(dict));
   }
-  
+
   try
   {
     BinarySearchTree< std::string, fnc > cmds;

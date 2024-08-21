@@ -21,7 +21,7 @@ namespace belokurskaya
       void validateDictionaries(DictCol& dictionaries, Str name1, Str name2);
       void printDictionary(const Dictionary& dict, Str name);
     }
-  } 
+  }
 }
 
 #endif
