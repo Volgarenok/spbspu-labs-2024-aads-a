@@ -3,7 +3,7 @@
 #include <iterator>
 #include <utility>
 #include <cassert>
-#include "node.hpp"
+#include <tree/node.hpp>
 
 namespace baranov
 {

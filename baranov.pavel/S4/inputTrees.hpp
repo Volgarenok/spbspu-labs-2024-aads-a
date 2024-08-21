@@ -2,7 +2,7 @@
 #define INPUT_DATASET
 #include <istream>
 #include <string>
-#include "tree.hpp"
+#include <tree/tree.hpp>
 
 namespace baranov
 {

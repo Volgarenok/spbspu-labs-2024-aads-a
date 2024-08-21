@@ -3,9 +3,9 @@
 #include <functional>
 #include <cstddef>
 #include <stdexcept>
-#include "iterator.hpp"
-#include "constIterator.hpp"
-#include "node.hpp"
+#include <tree/iterator.hpp>
+#include <tree/constIterator.hpp>
+#include <tree/node.hpp>
 
 namespace baranov
 {

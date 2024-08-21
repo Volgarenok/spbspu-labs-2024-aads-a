@@ -2,7 +2,7 @@
 #include <fstream>
 #include <functional>
 #include <limits>
-#include "tree.hpp"
+#include <tree/tree.hpp>
 #include "inputTrees.hpp"
 #include "commands.hpp"
 
