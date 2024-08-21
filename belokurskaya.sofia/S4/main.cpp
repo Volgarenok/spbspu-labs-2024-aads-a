@@ -5,6 +5,7 @@
 
 #include "commandCollection.hpp"
 #include "parseLine.hpp"
+#include "commands.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -36,5 +37,17 @@ int main(int argc, char* argv[])
     parseLine(buffer, dict_name, dict);
 
     dictionaries.add(dict_name, std::move(dict));
+  }
+
+  try
+  {
+    BinarySearchTree<std::string, fnc> cmds;
+    {
+      using namespace std::placeholders;
+      cmds["complement"] = std::bind(&complement, _1, _2, _3);
+      cmds["intersect"] = std::bind(&intersect, _1, _2, _3);
+      cmds["union"] = std::bind(&unionDicts, _1, _2, _3);
+      cmds["print"] = std::bind(&printCommand, _1, _2, _3);
+    }
   }
 }
