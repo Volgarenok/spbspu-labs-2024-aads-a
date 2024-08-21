@@ -23,7 +23,8 @@ namespace lopatina
     List(List && other) noexcept;
     explicit List(size_t n);
     List(size_t n, const T & val);
-    List(iterator first, iterator last);
+    template < typename InputIterator >
+    List(InputIterator first, InputIterator last);
     List(std::initializer_list< T > init_list);
     ~List();
 
@@ -52,7 +53,8 @@ namespace lopatina
     void remove_if(Predicate pred);
     void assign(size_t n, const T & val);
 
-    void assign(iterator first, iterator last);
+    template < typename InputIterator >
+    void assign(InputIterator first, InputIterator last);
     void assign(std::initializer_list< T > init_list);
     void reverse() noexcept;
 
@@ -62,7 +64,8 @@ namespace lopatina
     iterator insert_after(const_iterator position, const T & val);
     iterator insert_after(const_iterator position, T && val);
     iterator insert_after(const_iterator position, size_t n, const T & val);
-    iterator insert_after(const_iterator position, const_iterator first, const_iterator last);
+    template < typename InputIterator >
+    iterator insert_after(const_iterator position, InputIterator first, InputIterator last);
     iterator insert_after(const_iterator position, std::initializer_list< T > init_list);
 
     void splice_after(const_iterator position, List< T > & fwdlst);
@@ -122,7 +125,8 @@ namespace lopatina
   }
 
   template < typename T >
-  List< T >::List(iterator first, iterator last):
+  template < typename InputIterator >
+  List< T >::List(InputIterator first, InputIterator last):
     List()
   {
     for (auto it = first; it != last; ++it)
@@ -152,13 +156,8 @@ namespace lopatina
   {
     if (this != std::addressof(other))
     {
-      clear();
-      Node< T > * newnode = other.head_;
-      while (newnode)
-      {
-        push_back(newnode->data_);
-        newnode = newnode->next_;
-      }
+      List< T > copy{other};
+      swap(copy);
     }
     return *this;
   }
@@ -356,7 +355,8 @@ namespace lopatina
   }
 
   template < typename T >
-  void List< T >::assign(iterator first, iterator last)
+  template < typename InputIterator >
+  void List< T >::assign(InputIterator first, InputIterator last)
   {
     clear();
     for (auto it = first; it != last; ++it)
@@ -453,7 +453,8 @@ namespace lopatina
   }
 
   template < typename T >
-  ListIterator< T > List< T >::insert_after(const_iterator position, const_iterator first, const_iterator last)
+  template < typename InputIterator >
+  ListIterator< T > List< T >::insert_after(const_iterator position, InputIterator first, InputIterator last)
   {
     iterator result(position.node_);
     for (auto it = first; it != last; ++it)
