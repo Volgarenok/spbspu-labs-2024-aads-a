@@ -14,20 +14,30 @@ void belokurskaya::KeySum::operator()(const std::pair< const int, std::string >&
   resultValue_ += data.second;
 }
 
-std::pair< long long int, std::string > belokurskaya::KeySum::getResult() const
+std::pair< int, std::string > belokurskaya::KeySum::getResult() const
 {
   return std::make_pair(resultKey_, resultValue_);
 }
 
-bool belokurskaya::KeySum::sameSign(long long int a, long long int b)
+int belokurskaya::KeySum::getResultKey() const
+{
+  return resultKey_;
+}
+
+std::string belokurskaya::KeySum::getResultValue() const
+{
+  return resultValue_;
+}
+
+bool belokurskaya::KeySum::sameSign(int a, int b)
 {
   return (a > 0 && b > 0) || (a < 0 && b < 0);
 }
 
-long long int belokurskaya::KeySum::sum(long long int a, long long int b)
+int belokurskaya::KeySum::sum(int a, int b)
 {
-  const long long int max = std::numeric_limits< long long int >::max();
-  const long long int min = std::numeric_limits< long long int >::min();
+  const int max = std::numeric_limits< int >::max();
+  const int min = std::numeric_limits< int >::min();
   if (sameSign(a, b))
   {
     if ((a > 0 && a > max - b) || (a < 0 && a < min - b))

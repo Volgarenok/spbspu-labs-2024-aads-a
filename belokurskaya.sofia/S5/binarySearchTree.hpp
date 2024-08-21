@@ -5,6 +5,7 @@
 #include <stdexcept>
 
 #include "queue.hpp"
+#include "stack.hpp"
 
 namespace belokurskaya
 {
@@ -134,6 +135,16 @@ namespace belokurskaya
       throw std::runtime_error("Key not found");
     }
 
+    Value at(const Key& key) const
+    {
+      Node* node = find(root, key);
+      if (node)
+      {
+        return node->value;
+      }
+      throw std::out_of_range("Key not found");
+    }
+
     bool exists(Key key) const
     {
       return find(root, key) != nullptr;
@@ -161,7 +172,8 @@ namespace belokurskaya
     {
       for (auto it = begin(); it != end(); ++it)
       {
-        f(std::make_pair(it->first, it->second));
+        auto pair = *it;
+        f(pair);
       }
       return f;
     }
@@ -169,9 +181,17 @@ namespace belokurskaya
     template< class F >
     F traverse_rnl(F f) const
     {
-      for (auto it = end(); it != begin(); --it)
+      Stack< Iterator > stack;
+      for (auto it = begin(); it != end(); ++it)
       {
-        f(std::make_pair(it->first, it->second));
+        stack.push(it);
+      }
+      while (!stack.empty())
+      {
+        auto it = stack.top();
+        stack.pop();
+        auto pair = *it;
+        f(pair);
       }
       return f;
     }
@@ -181,18 +201,18 @@ namespace belokurskaya
     {
       Queue< Iterator > queue;
       queue.push(begin());
-      while (!queue.empty())
+      while (!queue.isEmpty())
       {
         auto it = queue.front();
-        queue.pop();
-        f(std::make_pair(it->first, it->second));
-        if (it->left != nullptr)
+        auto pair = *it;
+        f(pair);
+        if (it.current->left != nullptr)
         {
-          queue.push(Iterator(it->left, compare));
+          queue.push(Iterator(it.current->left, compare));
         }
-        if (it->right != nullptr)
+        if (it.current->right != nullptr)
         {
-          queue.push(Iterator(it->right, compare));
+          queue.push(Iterator(it.current->right, compare));
         }
       }
       return f;
@@ -215,7 +235,6 @@ namespace belokurskaya
 
     class Iterator
     {
-      Node* current;
       const Node* root;
       bool finished = false;
       std::function< Node*(Node*) > nextFunc;
@@ -255,37 +274,45 @@ namespace belokurskaya
       }
 
       public:
-      Iterator(Node* rootNode, Compare comp):
-        current(leftMost(rootNode)),
-        root(rootNode),
-        compare(comp)
-      {
-        nextFunc = std::bind(&Iterator::inOrderSuccessor, this, std::placeholders::_1);
-      }
+        Node* current;
+        Iterator():
+          current(nullptr),
+          finished(true),
+          root(nullptr),
+          compare()
+        {}
 
-      std::pair< Key, Value > operator*() const
-      {
-        return std::make_pair(current->key, current->value);
-      }
-
-      Iterator& operator++()
-      {
-        if (current)
+        Iterator(Node* rootNode, Compare comp):
+          current(leftMost(rootNode)),
+          root(rootNode),
+          compare(comp)
         {
-          current = nextFunc(current);
+          nextFunc = std::bind(&Iterator::inOrderSuccessor, this, std::placeholders::_1);
         }
-        return *this;
-      }
 
-      bool operator!=(const Iterator& other) const
-      {
-        return current != other.current;
-      }
+        std::pair< Key, Value > operator*() const
+        {
+          return std::make_pair(current->key, current->value);
+        }
 
-      bool operator==(const Iterator& other) const
-      {
-        return current == other.current;
-      }
+        Iterator& operator++()
+        {
+          if (current)
+          {
+            current = nextFunc(current);
+          }
+          return *this;
+        }
+
+        bool operator!=(const Iterator& other) const
+        {
+          return current != other.current;
+        }
+
+        bool operator==(const Iterator& other) const
+        {
+          return current == other.current;
+        }
     };
 
     Iterator begin() const

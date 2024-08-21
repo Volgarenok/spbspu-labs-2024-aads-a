@@ -11,13 +11,15 @@ namespace belokurskaya
     public:
       KeySum();
       void operator()(const std::pair< const int, std::string >& data);
-      std::pair< long long int, std::string > getResult() const;
+      std::pair< int, std::string > getResult() const;
+      int getResultKey() const;
+      std::string getResultValue() const;
 
     private:
-      long long int resultKey_;
+      int resultKey_;
       std::string resultValue_;
-      bool sameSign(long long int a, long long int b);
-      long long int sum(long long int a, long long int b);
+      bool sameSign(int a, int b);
+      int sum(int a, int b);
   };
 }
 
