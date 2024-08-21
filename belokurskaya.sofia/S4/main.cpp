@@ -41,13 +41,26 @@ int main(int argc, char* argv[])
 
   try
   {
-    BinarySearchTree<std::string, fnc> cmds;
+    BinarySearchTree< std::string, fnc > commands;
     {
       using namespace std::placeholders;
-      cmds["complement"] = std::bind(&complement, _1, _2, _3);
-      cmds["intersect"] = std::bind(&intersect, _1, _2, _3);
-      cmds["union"] = std::bind(&unionDicts, _1, _2, _3);
-      cmds["print"] = std::bind(&printCommand, _1, _2, _3);
+      commands["complement"] = std::bind(&complement, _1, _2, _3);
+      commands["intersect"] = std::bind(&intersect, _1, _2, _3);
+      commands["union"] = std::bind(&unionDicts, _1, _2, _3);
+      commands["print"] = std::bind(&printCommand, _1, _2, _3);
     }
+    std::string command;
+    while (std::cin >> command)
+    {
+      commands.at(command)(dictionaries, std::cin, std::cout);
+
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    }
+  }
+  catch (const std::exception& e)
+  {
+    std::cerr << e.what() << "\n";
+    return 1;
   }
 }

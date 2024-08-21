@@ -132,6 +132,47 @@ namespace belokurskaya
       throw std::runtime_error("Key not found");
     }
 
+    typename BinarySearchTree<Key, Value, Compare>::Node* findNode(const Key& key) const
+    {
+      Node* current = root;
+      while (current != nullptr)
+      {
+        if (compare(key, current->key) < 0)
+        {
+          current = current->left;
+        }
+        else if (compare(key, current->key) > 0)
+        {
+          current = current->right;
+        }
+        else
+        {
+          return current;
+        }
+      }
+      return nullptr;
+    }
+
+    Value& at(const Key& key)
+    {
+      Node* node = findNode(key);
+      if (node == nullptr)
+      {
+        throw std::out_of_range("Key not found");
+      }
+      return node->value;
+    }
+
+    Value& operator[](const Key& key)
+    {
+      Node* node = findNode(key);
+      if (node == nullptr)
+      {
+        throw std::out_of_range("Key not found");
+      }
+      return node->value;
+    }
+
     bool exists(Key key) const
     {
       return find(root, key) != nullptr;
@@ -144,12 +185,12 @@ namespace belokurskaya
       tree_size = 0;
     }
 
-    size_t size() const
+    size_t size() const noexcept
     {
       return tree_size;
     }
 
-    bool empty() const
+    bool empty() const noexcept
     {
       return tree_size == 0;
     }
@@ -171,62 +212,60 @@ namespace belokurskaya
         return node;
       }
 
-      Node* inOrderSuccessor(Node* node)
-      {
-        if (node->right)
+      public:
+        Iterator(Node* rootNode, const Compare& comp):
+          current(leftMost(rootNode)),
+          root(rootNode),
+          compare(comp)
+        {}
+
+        std::pair< Key, Value > operator*() const
         {
-          return leftMost(node->right);
+          return std::make_pair(current->key, current->value);
         }
 
-        Node* successor = nullptr;
-        Node* ancestor = const_cast< Node* >(root);
-        while (ancestor != node)
+        Iterator& operator++()
         {
-          if (compare(node->key, ancestor->key))
+          if (current == nullptr)
           {
-            successor = ancestor;
-            ancestor = ancestor->left;
+            finished = true;
+            return *this;
+          }
+
+          if (current->right != nullptr)
+          {
+            current = leftMost(current->right);
           }
           else
           {
-            ancestor = ancestor->right;
+            Node* successor = nullptr;
+            Node* ancestor = const_cast< Node* >(root);
+            while (ancestor != current)
+            {
+              if (compare(current->key, ancestor->key))
+              {
+                successor = ancestor;
+                ancestor = ancestor->left;
+              } 
+              else
+              {
+                ancestor = ancestor->right;
+              }
+            }
+            current = successor;
           }
+          return *this;
         }
-        return successor;
-      }
 
-      public:
-      Iterator(Node* rootNode, Compare comp):
-        current(leftMost(rootNode)),
-        root(rootNode),
-        compare(comp)
-      {
-        nextFunc = std::bind(&Iterator::inOrderSuccessor, this, std::placeholders::_1);
-      }
-
-      std::pair< Key, Value > operator*() const
-      {
-        return std::make_pair(current->key, current->value);
-      }
-
-      Iterator& operator++()
-      {
-        if (current)
+        bool operator!=(const Iterator& other) const
         {
-          current = nextFunc(current);
+          return current != other.current || finished != other.finished;
         }
-        return *this;
-      }
 
-      bool operator!=(const Iterator& other) const
-      {
-        return current != other.current;
-      }
-
-      bool operator==(const Iterator& other) const
-      {
-        return current == other.current;
-      }
+        bool operator==(const Iterator& other) const
+        {
+          return !(*this != other);
+        }
     };
 
     Iterator begin() const
@@ -238,6 +277,49 @@ namespace belokurskaya
     {
       return Iterator(nullptr, compare);
     }
+
+    private:
+      Node* erase(Node* node, Key key)
+      {
+        if (!node)
+        {
+          return nullptr;
+        }
+
+        if (compare(key, node->key))
+        {
+          node->left = erase(node->left, key);
+        }
+        else if (compare(node->key, key))
+        {
+          node->right = erase(node->right, key);
+        }
+        else
+        {
+          if (!node->left)
+          {
+            Node* rightChild = node->right;
+            delete node;
+            tree_size--;
+            return rightChild;
+          }
+          else if (!node->right)
+          {
+            Node* leftChild = node->left;
+            delete node;
+            tree_size--;
+            return leftChild;
+          }
+          else
+          {
+            Node* successor = leftMost(node->right);
+            node->key = successor->key;
+            node->value = successor->value;
+            node->right = erase(node->right, successor->key);
+          }
+        }
+        return node;
+      }
   };
 }
 
