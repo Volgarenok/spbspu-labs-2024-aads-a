@@ -34,7 +34,8 @@ void belokurskaya::descending(int& num, std::string& str, BinarySearchTree< int,
 
 void belokurskaya::breadth(int& num, std::string& str, BinarySearchTree< int, std::string >& tree)
 {
-  if (tree.empty()) {
+  if (tree.empty())
+  {
     throw std::logic_error("<EMPTY>");
   }
   KeySum res;
