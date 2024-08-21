@@ -55,8 +55,8 @@ namespace vyzhanov
     iterator end() noexcept;
     citerator cend() const noexcept;
   private:
-    Node<T>* head_;
-    Node<T>* tail_;
+    Node< T >* head_;
+    Node< T >* tail_;
     size_t size_;
     void push_back(Node< T >*);
     void push_front(Node< T >*);
@@ -277,12 +277,18 @@ namespace vyzhanov
   template< typename T >
   void List< T >::remove(const T& value)
   {
-    auto predicate =
-      [&value](const T& listValue)-> bool
+    class Predicate
+    {
+      T locValue;
+    public:
+      Predicate(T v): locValue(v) {}
+      bool operator()(const T& listValue)
       {
-        return listValue == value;
-      };
-    remove_if(predicate);
+        return listValue == locValue;
+      }
+    };
+    auto newValue = value;
+    remove_if(Predicate(newValue));
   }
 
   template< typename T>
