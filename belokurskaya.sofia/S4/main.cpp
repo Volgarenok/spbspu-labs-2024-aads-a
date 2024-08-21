@@ -4,9 +4,11 @@
 #include <functional>
 
 #include "commandCollection.hpp"
+#include "parseLine.hpp"
 
 int main(int argc, char* argv[])
 {
+  using namespace belokurskaya;
   if (argc != 2)
   {
     std::cerr << "No args\n";
@@ -31,5 +33,8 @@ int main(int argc, char* argv[])
 
     std::string dict_name;
     Dictionary dict;
-    }
+    parseLine(buffer, dict_name, dict);
+
+    dictionaries.add(dict_name, std::move(dict));
+  }
 }
