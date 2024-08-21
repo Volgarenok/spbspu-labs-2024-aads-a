@@ -18,7 +18,7 @@ namespace belokurskaya
     void printCommand(DictCol& dictionaries, std::istream& in, std::ostream& out);
     namespace subcmds
     {
-      void validateDictionaries(DictCol& dictionaries, Str& name1, Str name2);
+      void validateDictionaries(DictCol& dictionaries, Str name1, Str name2);
       void printDictionary(const Dictionary& dict, Str name);
     }
   } 

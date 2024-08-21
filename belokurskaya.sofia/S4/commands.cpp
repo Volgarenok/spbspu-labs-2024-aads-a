@@ -87,7 +87,19 @@ void belokurskaya::cmds::printCommand(DictCol& dictionaries, std::istream& in, s
   }
 }
 
-void belokurskaya::cmds::subcmds::printDictionary(const Dictionary& dict, Str& name)
+void belokurskaya::cmds::subcmds::validateDictionaries(DictCol& dictionaries, Str name1, Str name2)
+{
+  Dictionary* dict1 = dictionaries.find(name1);
+  Dictionary* dict2 = dictionaries.find(name2);
+
+  if (!dict1 || !dict2)
+  {
+    std::cout << "<INVALID COMMAND>\n";
+    return;
+  }
+}
+
+void belokurskaya::cmds::subcmds::printDictionary(const Dictionary& dict, Str name)
 {
   if (dict.empty())
   {
@@ -101,17 +113,5 @@ void belokurskaya::cmds::subcmds::printDictionary(const Dictionary& dict, Str& n
       std::cout << " " << (*it).first << " " << (*it).second;
     }
     std::cout << std::endl;
-  }
-}
-
-void belokurskaya::cmds::subcmds::validateDictionaries(DictCol& dictionaries, Str name1, Str name2)
-{
-  Dictionary* dict1 = dictionaries.find(name1);
-  Dictionary* dict2 = dictionaries.find(name2);
-
-  if (!dict1 || !dict2)
-  {
-    std::cout << "<INVALID COMMAND>\n";
-    return;
   }
 }
