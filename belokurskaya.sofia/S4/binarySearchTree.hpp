@@ -40,7 +40,10 @@ namespace belokurskaya
 
     Node* copy(Node* node)
     {
-      if (!node) return nullptr;
+      if (!node)
+      {
+        return nullptr;
+      }
       Node* newNode = new Node(node->key, node->value);
       newNode->left = copy(node->left);
       newNode->right = copy(node->right);
@@ -163,16 +166,6 @@ namespace belokurskaya
       return node->value;
     }
 
-    Value& operator[](const Key& key)
-    {
-      Node* node = findNode(key);
-      if (node == nullptr)
-      {
-        throw std::out_of_range("Key not found");
-      }
-      return node->value;
-    }
-
     bool exists(Key key) const
     {
       return find(root, key) != nullptr;
@@ -193,6 +186,21 @@ namespace belokurskaya
     bool empty() const noexcept
     {
       return tree_size == 0;
+    }
+
+    Value& operator[](const Key& key)
+    {
+      Node* node = find(root, key);
+      if (node)
+      {
+        return node->value;
+      }
+      else
+      {
+        Node* newNode = new Node(key, Value());
+        root = insert(root, key, Value());
+        return newNode->value;
+      }
     }
 
     class Iterator
