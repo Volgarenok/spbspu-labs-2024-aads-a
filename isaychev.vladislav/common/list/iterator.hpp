@@ -3,6 +3,7 @@
 
 #include <stdexcept>
 #include <utility>
+#include <iterator>
 #include "node.hpp"
 
 namespace isaychev
@@ -11,7 +12,7 @@ namespace isaychev
   class List;
 
   template < typename T >
-  class fwdIterator
+  class fwdIterator: public std::iterator< std::forward_iterator_tag, T >
   {
     using this_t = fwdIterator< T >;
     friend class List< T >;
