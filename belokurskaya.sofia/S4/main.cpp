@@ -1,43 +1,35 @@
-﻿#include <iostream>
+﻿#include <cstring>
 #include <fstream>
-#include <string>
+#include <iostream>
+#include <functional>
 
-#include "binarySearchTree.hpp"
+#include "commandCollection.hpp"
 
 int main(int argc, char* argv[])
 {
-  using namespace belokurskaya;
-
-  using Dictionary = BinarySearchTree< int, std::string >;
-  using DictionaryCollection = BinarySearchTree< std::string, Dictionary >;
   if (argc != 2)
   {
     std::cerr << "No args\n";
     return 1;
   }
+
   std::ifstream file(argv[1]);
   if (!file.is_open())
   {
     std::cerr << "Cannot open file\n";
     return 1;
   }
-  DictionaryCollection dictionaries;
-  std::string line;
 
-  while (std::getline(file, line))
+  belokurskaya::DictionaryCollection dictionaries;
+  char buffer[1024];
+  while (file.getline(buffer, sizeof(buffer)))
   {
-    if (line.empty())
+    if (std::strlen(buffer) == 0)
     {
       continue;
     }
-  }
-  using fun = std::function< void(DictionaryCollection&, const std::string&, const std::string&, const std::string&) >;
 
-  BinarySearchTree< std::string, fun > cmds;
-  {
-    using namespace std::placeholders;
-    cmds["complement"] = std::bind(&complement, _1, _2, _3, std::placeholders::_4);
-    cmds["intersect"] = std::bind(&intersect, _1, _2, _3, _4);
-    cmds["union"] = std::bind(&unionDictionaries, _1, _2, _3, _4);
-  }
+    std::string dict_name;
+    Dictionary dict;
+    }
 }
