@@ -40,6 +40,11 @@ namespace baranov
     void clear() noexcept;
     void clear(node_t* node) noexcept;
     void swap(this_t & rhs);
+
+    template < typename F >
+    F traverse_lnr(F f);
+    template < typename F >
+    F traverse_lnr(F f) const;
   private:
     Node< Key, T > * root_;
     size_t size_;
@@ -312,6 +317,36 @@ namespace baranov
       delete node;
       --size_;
     }
+  }
+
+  template< typename Key, typename T, typename Compare >
+  template < typename F >
+  F Tree< Key, T, Compare >::traverse_lnr(F f)
+  {
+    if (empty())
+    {
+      throw std::logic_error("Tree is empty");
+    }
+    for (auto it = begin(); it != end(); ++it)
+    {
+      f(*it);
+    }
+    return f;
+  }
+
+  template< typename Key, typename T, typename Compare >
+  template < typename F >
+  F Tree< Key, T, Compare >::traverse_lnr(F f) const
+  {
+    if (empty())
+    {
+      throw std::logic_error("Tree is empty");
+    }
+    for (auto it = cbegin(); it != cend(); ++it)
+    {
+      f(*it);
+    }
+    return f;
   }
 }
 
