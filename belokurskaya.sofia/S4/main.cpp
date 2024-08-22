@@ -45,10 +45,10 @@ int main(int argc, char* argv[])
     BinarySearchTree< std::string, fnc > cmds;
     {
       using namespace std::placeholders;
-      cmds["complement"] = std::bind(&belokurskaya::cmds::complement, _1, _2, _3);
-      cmds["intersect"] = std::bind(&belokurskaya::cmds::intersect, _1, _2, _3);
-      cmds["union"] = std::bind(&belokurskaya::cmds::unionDicts, _1, _2, _3);
-      cmds["print"] = std::bind(&belokurskaya::cmds::printCommand, _1, _2, _3);
+      cmds["complement"] = std::bind(&cmds::complement, _1, _2, _3);
+      cmds["intersect"] = std::bind(&cmds::intersect, _1, _2, _3);
+      cmds["union"] = std::bind(&cmds::unionDicts, _1, _2, _3);
+      cmds["print"] = std::bind(&cmds::printCommand, _1, _2, _3);
     }
     std::string command;
     while (std::cin >> command)
