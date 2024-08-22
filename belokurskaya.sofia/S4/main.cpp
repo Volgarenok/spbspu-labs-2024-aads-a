@@ -41,10 +41,10 @@ int main(int argc, char* argv[])
 
   CommandCollection commands;
   using namespace std::placeholders;
-  commands.add("print", cmds::print);
-  commands.add("complement", cmds::complement);
-  commands.add("intersect", cmds::intersect);
-  commands.add("union", cmds::unionD);
+  commands.add("print", std::bind(cmds::print, _1, _2));
+  commands.add("complement", std::bind(cmds::complement, _1, _2));
+  commands.add("intersect", std::bind(cmds::intersect, _1, _2));
+  commands.add("union", std::bind(cmds::unionD, _1, _2));
 
   std::string command;
   while (std::cin >> command)
