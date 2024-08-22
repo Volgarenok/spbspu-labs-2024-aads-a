@@ -48,6 +48,11 @@ namespace baranov
     template < typename F >
     F traverse_lnr(F f) const;
 
+    template < typename F >
+    F traverse_rnl(F f);
+    template < typename F >
+    F traverse_rnl(F f) const;
+
   private:
     Node< Key, T > * root_;
     size_t size_;
@@ -376,6 +381,36 @@ namespace baranov
       throw std::logic_error("Tree is empty");
     }
     for (auto it = cbegin(); it != cend(); ++it)
+    {
+      f(*it);
+    }
+    return f;
+  }
+
+  template< typename Key, typename T, typename Compare >
+  template < typename F >
+  F Tree< Key, T, Compare >::traverse_rnl(F f)
+  {
+    if (empty())
+    {
+      throw std::logic_error("Tree is empty");
+    }
+    for (auto it = rbegin(); it != end(); --it)
+    {
+      f(*it);
+    }
+    return f;
+  }
+
+  template< typename Key, typename T, typename Compare >
+  template < typename F >
+  F Tree< Key, T, Compare >::traverse_rnl(F f) const
+  {
+    if (empty())
+    {
+      throw std::logic_error("Tree is empty");
+    }
+    for (auto it = crbegin(); it != cend(); --it)
     {
       f(*it);
     }
