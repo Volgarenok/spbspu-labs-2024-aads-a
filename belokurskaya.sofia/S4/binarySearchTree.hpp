@@ -223,7 +223,7 @@ namespace belokurskaya
               {
                 successor = ancestor;
                 ancestor = ancestor->left;
-              } 
+              }
               else
               {
                 ancestor = ancestor->right;

@@ -69,7 +69,6 @@ void belokurskaya::cmds::subcmds::intersectDicts(DictCol dictionaries, Str new_n
       temp_dict.push((*it).first, (*it).second);
     }
   }
-
   dictionaries.add(new_name, std::move(temp_dict));
 }
 
@@ -83,12 +82,11 @@ void belokurskaya::cmds::subcmds::unionDicts(DictCol dictionaries, Str new_name,
   Dictionary temp_dict = *first_dict;
   for (auto it = second_dict->begin(); it != second_dict->end(); ++it)
   {
-    if (!temp_dict.exists((*it).first)) 
+    if (!temp_dict.exists((*it).first))
     {
       temp_dict.push((*it).first, (*it).second);
     }
   }
-
   dictionaries.add(new_name, std::move(temp_dict));
 }
 
