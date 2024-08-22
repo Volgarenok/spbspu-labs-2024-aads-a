@@ -34,6 +34,16 @@ fnc* belokurskaya::CommandCollection::find(const std::string& name)
   return nullptr;
 }
 
+fnc belokurskaya::CommandCollection::at(const std::string& name)
+{
+  fnc* func = find(name);
+  if (func != nullptr)
+  {
+    return *func;
+  }
+  throw std::out_of_range("Command not found");
+}
+
 void belokurskaya::CommandCollection::resize()
 {
   capacity = (capacity == 0) ? 2 : capacity * 2;

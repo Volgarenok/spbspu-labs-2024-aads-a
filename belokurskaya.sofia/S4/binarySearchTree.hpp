@@ -135,37 +135,6 @@ namespace belokurskaya
       throw std::runtime_error("Key not found");
     }
 
-    Node* findNode(const Key& key) const
-    {
-      Node* current = root;
-      while (current != nullptr)
-      {
-        if (compare(key, current->key) < 0)
-        {
-          current = current->left;
-        }
-        else if (compare(key, current->key) > 0)
-        {
-          current = current->right;
-        }
-        else
-        {
-          return current;
-        }
-      }
-      return nullptr;
-    }
-
-    Value& at(const Key& key)
-    {
-      Node* node = findNode(key);
-      if (node == nullptr)
-      {
-        throw std::out_of_range("Key not found");
-      }
-      return node->value;
-    }
-
     bool exists(Key key) const
     {
       return find(root, key) != nullptr;

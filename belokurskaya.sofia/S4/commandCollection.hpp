@@ -7,7 +7,8 @@
 #include "binarySearchTree.hpp"
 #include "dictionaryCollection.hpp"
 
-using fnc = std::function< void(belokurskaya::DictionaryCollection&, std::istream&, std::ostream&) >;
+using DictCol = belokurskaya::DictionaryCollection&;
+using fnc = std::function< void(DictCol, std::istream& in) >;
 
 namespace belokurskaya
 {
@@ -25,6 +26,7 @@ namespace belokurskaya
 
       void add(const std::string& name, fnc func);
       fnc* find(const std::string& name);
+      fnc at(const std::string& name);
 
     private:
       void resize();
@@ -32,6 +34,7 @@ namespace belokurskaya
       CommandEntry* entries;
       size_t capacity;
       size_t size;
+      BinarySearchTree< std::string, fnc > commands_;
   };
 }
 

@@ -1,19 +1,44 @@
 #include "commands.hpp"
 
-void belokurskaya::cmds::complement(DictCol& dictionaries, std::istream& in, std::ostream& out)
+void belokurskaya::cmds::complement(DictCol dictionaries, std::istream& in)
 {
-  std::string new_name, first_name, second_name;
+  std::string new_name = "", first_name = "", second_name = "";
   in >> new_name >> first_name >> second_name;
+  subcmds::complementDicts(dictionaries, new_name, first_name, second_name);
+}
 
+void belokurskaya::cmds::intersect(DictCol dictionaries, std::istream& in)
+{
+  std::string new_name = "", first_name = "", second_name = "";
+  in >> new_name >> first_name >> second_name;
+  subcmds::intersectDicts(dictionaries, new_name, first_name, second_name);
+}
+
+void belokurskaya::cmds::unionD(DictCol dictionaries, std::istream& in)
+{
+  std::string new_name = "", first_name = "", second_name = "";
+  in >> new_name >> first_name >> second_name;
+  subcmds::unionDicts(dictionaries, new_name, first_name, second_name);
+}
+
+void belokurskaya::cmds::print(DictCol dictionaries, std::istream& in)
+{
+  std::string name = "";
+  in >> name;
+  subcmds::printCommand(dictionaries, name);
+}
+
+void belokurskaya::cmds::subcmds::complementDicts(DictCol dictionaries, Str new_name, Str first_name, Str second_name)
+{
   subcmds::validateDictionaries(dictionaries, first_name, second_name);
 
-  Dictionary* first_dict = dictionaries.find(first_name);
-  Dictionary* second_dict = dictionaries.find(second_name);
+  Dictionary* source_dict = dictionaries.find(first_name);
+  Dictionary* subtract_dict = dictionaries.find(second_name);
 
   Dictionary temp_dict;
-  for (auto it = first_dict->begin(); it != first_dict->end(); ++it)
+  for (auto it = source_dict->begin(); it != source_dict->end(); ++it)
   {
-    if (!second_dict->exists((*it).first))
+    if (!subtract_dict->exists((*it).first))
     {
       temp_dict.push((*it).first, (*it).second);
     }
@@ -21,7 +46,7 @@ void belokurskaya::cmds::complement(DictCol& dictionaries, std::istream& in, std
 
   if (new_name == first_name)
   {
-    *first_dict = std::move(temp_dict);
+    *source_dict = std::move(temp_dict);
   }
   else
   {
@@ -29,11 +54,8 @@ void belokurskaya::cmds::complement(DictCol& dictionaries, std::istream& in, std
   }
 }
 
-void belokurskaya::cmds::intersect(DictCol& dictionaries, std::istream& in, std::ostream& out)
+void belokurskaya::cmds::subcmds::intersectDicts(DictCol dictionaries, Str new_name, Str first_name, Str second_name)
 {
-  std::string new_name, first_name, second_name;
-  in >> new_name >> first_name >> second_name;
-
   subcmds::validateDictionaries(dictionaries, first_name, second_name);
 
   Dictionary* first_dict = dictionaries.find(first_name);
@@ -47,14 +69,12 @@ void belokurskaya::cmds::intersect(DictCol& dictionaries, std::istream& in, std:
       temp_dict.push((*it).first, (*it).second);
     }
   }
+
   dictionaries.add(new_name, std::move(temp_dict));
 }
 
-void belokurskaya::cmds::unionDicts(DictCol& dictionaries, std::istream& in, std::ostream& out)
+void belokurskaya::cmds::subcmds::unionDicts(DictCol dictionaries, Str new_name, Str first_name, Str second_name)
 {
-  std::string new_name, first_name, second_name;
-  in >> new_name >> first_name >> second_name;
-
   subcmds::validateDictionaries(dictionaries, first_name, second_name);
 
   Dictionary* first_dict = dictionaries.find(first_name);
@@ -63,19 +83,17 @@ void belokurskaya::cmds::unionDicts(DictCol& dictionaries, std::istream& in, std
   Dictionary temp_dict = *first_dict;
   for (auto it = second_dict->begin(); it != second_dict->end(); ++it)
   {
-    if (!temp_dict.exists((*it).first))
+    if (!temp_dict.exists((*it).first)) 
     {
       temp_dict.push((*it).first, (*it).second);
     }
   }
+
   dictionaries.add(new_name, std::move(temp_dict));
 }
 
-void belokurskaya::cmds::printCommand(DictCol& dictionaries, std::istream& in, std::ostream& out)
+void belokurskaya::cmds::subcmds::printCommand(DictCol dictionaries, Str name)
 {
-  std::string name;
-  in >> name;
-
   Dictionary* dict = dictionaries.find(name);
   if (dict)
   {
@@ -87,7 +105,7 @@ void belokurskaya::cmds::printCommand(DictCol& dictionaries, std::istream& in, s
   }
 }
 
-void belokurskaya::cmds::subcmds::validateDictionaries(DictCol& dictionaries, Str name1, Str name2)
+void belokurskaya::cmds::subcmds::validateDictionaries(DictCol dictionaries, Str name1, Str name2)
 {
   Dictionary* dict1 = dictionaries.find(name1);
   Dictionary* dict2 = dictionaries.find(name2);
@@ -112,6 +130,6 @@ void belokurskaya::cmds::subcmds::printDictionary(const Dictionary& dict, Str na
     {
       std::cout << " " << (*it).first << " " << (*it).second;
     }
-    std::cout << std::endl;
+    std::cout << "\n";
   }
 }

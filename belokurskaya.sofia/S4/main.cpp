@@ -1,12 +1,11 @@
-﻿#include <cstring>
+﻿#include <iostream>
+#include <cstring>
 #include <fstream>
 #include <functional>
 
 #include "parseLine.hpp"
-#include "commands.hpp"
 #include "commandCollection.hpp"
-
-using fnc = std::function< void(belokurskaya::DictionaryCollection&, std::istream&, std::ostream&) >;
+#include "commands.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -40,29 +39,31 @@ int main(int argc, char* argv[])
     dictionaries.add(dict_name, std::move(dict));
   }
 
-  try
-  {
-    BinarySearchTree< std::string, fnc > cmds;
-    {
-      using namespace std::placeholders;
-      cmds["complement"] = std::bind(&cmds::complement, _1, _2, _3);
-      cmds["intersect"] = std::bind(&cmds::intersect, _1, _2, _3);
-      cmds["union"] = std::bind(&cmds::unionDicts, _1, _2, _3);
-      cmds["print"] = std::bind(&cmds::printCommand, _1, _2, _3);
-    }
-    std::string command;
-    while (std::cin >> command)
-    {
-      cmds.at(command)(dictionaries, std::cin, std::cout);
+  CommandCollection commands;
+  using namespace std::placeholders;
+  commands.add("print", cmds::print);
+  commands.add("complement", cmds::complement);
+  commands.add("intersect", cmds::intersect);
+  commands.add("union", cmds::unionD);
 
-      std::cin.clear();
-      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
-    }
-  }
-  catch (const std::exception& e)
+  std::string command;
+  while (std::cin >> command)
   {
-    std::cerr << e.what() << "\n";
-    return 1;
+    try
+    {
+      commands.at(command)(dictionaries, std::cin);
+    }
+    catch (const std::out_of_range&)
+    {
+      std::cout << "<INVALID COMMAND>\n";
+    }
+    catch (const std::exception& e)
+    {
+      std::cout << e.what() << '\n';
+    }
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
   }
+
   return 0;
 }

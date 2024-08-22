@@ -1,5 +1,5 @@
-#ifndef COMMAND_COLLECTION_HPP
-#define COMMAND_COLLECTION_HPP
+#ifndef COMMANDS_HPP
+#define COMMANDS_HPP
 
 #include <iostream>
 
@@ -12,13 +12,18 @@ namespace belokurskaya
 {
   namespace cmds
   {
-    void complement(DictCol& dictionaries, std::istream& in, std::ostream& out);
-    void intersect(DictCol& dictionaries, std::istream& in, std::ostream& out);
-    void unionDicts(DictCol& dictionaries, std::istream& in, std::ostream& out);
-    void printCommand(DictCol& dictionaries, std::istream& in, std::ostream& out);
+    void complement(DictCol dictionaries, std::istream& in);
+    void intersect(DictCol dictionaries, std::istream& in);
+    void unionD(DictCol dictionaries, std::istream& in);
+    void print(DictCol dictionaries, std::istream& in);
+
     namespace subcmds
     {
-      void validateDictionaries(DictCol& dictionaries, Str name1, Str name2);
+      void complementDicts(DictCol dictionaries, Str new_name, Str first_name, Str second_name);
+      void intersectDicts(DictCol dictionaries, Str new_name, Str first_name, Str second_name);
+      void unionDicts(DictCol dictionaries, Str new_name, Str first_name, Str second_name);
+      void printCommand(DictCol dictionaries, Str name);
+      void validateDictionaries(DictCol dictionaries, Str name1, Str name2);
       void printDictionary(const Dictionary& dict, Str name);
     }
   }
