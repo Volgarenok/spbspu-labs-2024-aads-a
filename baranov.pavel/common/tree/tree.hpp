@@ -486,7 +486,6 @@ namespace baranov
     }
     return f;
   }
-
 }
 
 #endif
