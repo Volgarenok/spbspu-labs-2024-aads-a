@@ -443,10 +443,42 @@ namespace baranov
         {
           stack.push(current->right_);
         }
-        f(*current);
+        f(current->data_);
         current = current->left_;
       }
-      f(*current);
+      f(current->data_);
+      if (current->hasRight())
+      {
+        stack.push(current->right_);
+      }
+    }
+    return f;
+  }
+
+  template< typename Key, typename T, typename Compare >
+  template < typename F >
+  F Tree< Key, T, Compare >::traverse_breath(F f) const
+  {
+    if (empty())
+    {
+      throw std::logic_error("Tree is empty");
+    }
+    Stack< const node_t * > stack;
+    stack.push(root_);
+    while (!stack.empty())
+    {
+      node_t * current = stack.top();
+      stack.pop();
+      while(current->hasLeft())
+      {
+        if (current->hasRight())
+        {
+          stack.push(current->right_);
+        }
+        f(current->data_);
+        current = current->left_;
+      }
+      f(current->data_);
       if (current->hasRight())
       {
         stack.push(current->right_);
