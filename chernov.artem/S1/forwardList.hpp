@@ -76,9 +76,34 @@ namespace chernov
       return size_;
     }
 
-    const T& front()
+    const T& front() const
     {
       return head_->data_;
+    }
+
+    T& front()
+    {
+      return head_->data_;
+    }
+
+    const T& back() const
+    {
+      Node< T >* curr = head_;
+      while (curr->next_)
+      {
+        curr = curr->next_;
+      }
+      return curr->data_;
+    }
+
+    T& back()
+    {
+      Node< T >* curr = head_;
+      while (curr->next_)
+      {
+        curr = curr->next_;
+      }
+      return curr->data_;
     }
 
     void push_back(const T& value)
