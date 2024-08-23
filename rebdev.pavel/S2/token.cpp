@@ -3,11 +3,9 @@
 rebdev::data::data(long long num):
   num_(num)
 {}
-
 rebdev::data::data(char oper):
-  oper_(mathOperator{oper})
+  oper_(MathOperator{oper})
 {}
-
 rebdev::token::token(char oper):
   isNum_(false),
   data_(oper)
@@ -29,7 +27,6 @@ bool rebdev::token::isNum() const noexcept
 {
   return isNum_;
 }
-
 unsigned int rebdev::token::priority() const noexcept
 {
   return data_.oper_.priority();

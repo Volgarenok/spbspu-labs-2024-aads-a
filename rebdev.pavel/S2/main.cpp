@@ -2,28 +2,23 @@
 #include <fstream>
 #include <string>
 
-#include "myStack.hpp"
+#include "stack.hpp"
 #include "postfix.hpp"
 
 int main(int argv, char ** argc)
 {
-  std::istream * inPointer = &std::cin;
   std::ifstream inFile;
-
   if (argv == 2)
   {
     inFile.open(argc[1]);
-    if (inFile.peek() == EOF)
+    if (inFile.eof())
     {
       std::cout << '\n';
       return 0;
     }
-    inPointer = &inFile;
   }
-  std::istream & in = *inPointer;
-
+  std::istream & in = (inFile.is_open() ? inFile : std::cin);
   rebdev::Stack< long long > resStack;
-
   while (!in.eof())
   {
     std::string inStr;
@@ -50,12 +45,10 @@ int main(int argv, char ** argc)
       return 1;
     }
   }
-
   for (size_t i = 0; i < (resStack.size() - 1); ++i)
   {
-    std::cout << resStack.drop() << ' ';
+    std::cout << *(resStack.drop()) << ' ';
   }
-
-  std::cout << resStack.drop() << '\n';
+  std::cout << *(resStack.drop()) << '\n';
   return 0;
 }

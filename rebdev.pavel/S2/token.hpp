@@ -10,8 +10,7 @@ namespace rebdev
   union data
   {
     long long num_;
-    mathOperator oper_;
-
+    MathOperator oper_;
     data() = default;
     data(const data & d) = default;
     data(data && d) = default;
@@ -21,7 +20,6 @@ namespace rebdev
     data & operator=(data && d) = default;
     ~data() = default;
   };
-
   class token
   {
     public:
@@ -34,7 +32,6 @@ namespace rebdev
       token operator()(token f, token s);
       token & operator=(const token & t) = default;
       token & operator=(token && t) = default;
-
       long long getNum() const noexcept;
       bool isNum() const noexcept;
       unsigned int priority() const noexcept;

@@ -2,7 +2,7 @@
 
 #include <stdexcept>
 
-#include "myStack.hpp"
+#include "stack.hpp"
 
 void rebdev::makePostFix(std::string & str, postFixQueue & queue)
 {
@@ -15,19 +15,17 @@ void rebdev::makePostFix(std::string & str, postFixQueue & queue)
     {
       index = str.size();
     }
-
     std::string strPart;
     strPart.assign(str, lastIndex, (index - lastIndex));
-
     if (((strPart.size()) == 1) && (!isdigit(strPart[0])))
     {
       if (strPart[0] == ')')
       {
-        auto top = mathStack.drop();
+        auto top = *(mathStack.drop());
         while (!top.leftBracket())
         {
           queue.push(top);
-          top = mathStack.drop();
+          top = *(mathStack.drop());
         }
       }
       else if (strPart[0] == '(')
@@ -39,7 +37,7 @@ void rebdev::makePostFix(std::string & str, postFixQueue & queue)
         token operTok(strPart[0]);
         if (!mathStack.empty())
         {
-          auto top = mathStack.drop();
+          auto top = *(mathStack.drop());
           if (top.priority() < operTok.priority())
           {
             mathStack.push(top);
@@ -53,7 +51,7 @@ void rebdev::makePostFix(std::string & str, postFixQueue & queue)
               {
                 break;
               }
-              top = mathStack.drop();
+              top = *(mathStack.drop());
             }
           }
         }
@@ -69,7 +67,7 @@ void rebdev::makePostFix(std::string & str, postFixQueue & queue)
   }
   while (!mathStack.empty())
   {
-    queue.push(mathStack.drop());
+    queue.push(*(mathStack.drop()));
   }
 }
 long long rebdev::postFixToResult(postFixQueue & queue)
@@ -77,15 +75,15 @@ long long rebdev::postFixToResult(postFixQueue & queue)
   Stack< token > resultStack;
   while (!queue.empty())
   {
-    auto top = queue.drop();
+    auto top = *(queue.drop());
     if (!top.isNum())
     {
       if (resultStack.size() < 2)
       {
         throw std::logic_error("Uncorrect mathematical expression!");
       }
-      auto second = resultStack.drop();
-      auto first = resultStack.drop();
+      auto second = *(resultStack.drop());
+      auto first = *(resultStack.drop());
       resultStack.push(top(first, second));
     }
     else
@@ -93,5 +91,5 @@ long long rebdev::postFixToResult(postFixQueue & queue)
       resultStack.push(top);
     }
   }
-  return resultStack.drop().getNum();
+  return (*(resultStack.drop())).getNum();
 }
