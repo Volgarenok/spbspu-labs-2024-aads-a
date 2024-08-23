@@ -1,5 +1,5 @@
 #ifndef INPUT_LIST_HPP
-#define	INPUT_LIST_HPP
+#define INPUT_LIST_HPP
 #include "forwardList.hpp"
 #include <istream>
 #include <cstddef>
