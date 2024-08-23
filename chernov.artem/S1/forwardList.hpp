@@ -11,6 +11,12 @@
 namespace chernov
 {
   template < typename T >
+  class Iterators;
+
+  template < typename T >
+  class ConstIterators;
+
+  template < typename T >
   class List
   {
   public:
