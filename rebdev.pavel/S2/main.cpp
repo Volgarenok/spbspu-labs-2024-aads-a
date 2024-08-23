@@ -47,11 +47,12 @@ int main(int argv, char ** argc)
   }
   if (!resStack.empty())
   {
+    std::cout << *(resStack.drop());
     for (size_t i = 0; i < (resStack.size() - 1); ++i)
     {
-      std::cout << *(resStack.drop()) << ' ';
+      std::cout << ' ' << *(resStack.drop());
     }
-    std::cout << *(resStack.drop()) << '\n';
   }
+  std::cout << '\n';
   return 0;
 }
