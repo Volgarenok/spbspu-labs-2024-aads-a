@@ -16,3 +16,31 @@ void baranov::ascending(std::ostream & out, const Tree< int, std::string > & tre
   out << resultKey << resultValue;
 }
 
+void baranov::descending(std::ostream & out, const Tree< int, std::string > & tree)
+{
+  Summator sum;
+  sum = tree.traverse_rnl(sum);
+  int resultKey = sum.getResultKey();
+  std::string resultValue = sum.getResultValue();
+  if (resultValue.empty())
+  {
+    out << "<EMPTY>";
+    return;
+  }
+  out << resultKey << resultValue;
+}
+
+void baranov::breadth(std::ostream & out, const Tree< int, std::string > & tree)
+{
+  Summator sum;
+  sum = tree.traverse_breadth(sum);
+  int resultKey = sum.getResultKey();
+  std::string resultValue = sum.getResultValue();
+  if (resultValue.empty())
+  {
+    out << "<EMPTY>";
+    return;
+  }
+  out << resultKey << resultValue;
+}
+

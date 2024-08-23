@@ -27,6 +27,8 @@ int main(int argc, char * argv[])
   {
     using namespace std::placeholders;
     cmds["ascending"] = std::bind(ascending, _1, std::cref(tree));
+    cmds["descending"] = std::bind(descending, _1, std::cref(tree));
+    cmds["breadth"] = std::bind(breadth, _1, std::cref(tree));
   }
   std::string cmd(argv[1]);
   try

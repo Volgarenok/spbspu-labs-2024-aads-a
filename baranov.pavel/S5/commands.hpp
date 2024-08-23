@@ -7,6 +7,7 @@
 namespace baranov
 {
   void ascending(std::ostream & out, const Tree< int, std::string > & tree);
+  void descending(std::ostream & out, const Tree< int, std::string > & tree);
 }
 
 #endif
