@@ -25,8 +25,8 @@ void chernov::outNumbers(List< namedNumberedList >& list, List< size_t >& listSu
   {
     size_t maxUll = std::numeric_limits< size_t >::max();
     size_t sum = 0;
-    bool flagOfFirst = false;
     bool flagOfLimit = false;
+    bool flagOfFirst = false;
     auto iter = list.begin();
     while (flagOfFirst != true && iter != list.end())
     {
@@ -74,10 +74,6 @@ void chernov::outNumbers(List< namedNumberedList >& list, List< size_t >& listSu
 
 void chernov::outSums(List< size_t >& listSums, std::ostream& output)
 {
-  if (listSums.isEmpty())flagOfLimit = true;
-  {
-    throw std::logic_error("It's impossible to make up the amounts");
-  }
   auto it = listSums.begin();
   output << *it;
   ++it;
