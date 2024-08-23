@@ -10,7 +10,7 @@ baranov::Summator::Summator():
 void baranov::Summator::operator()(const std::pair< int, std::string > & data)
 {
   resultKey_ = sum(resultKey_, data.first);
-  resultValue_ += data.second + ' ';
+  resultValue_ += ' ' + data.second;
 }
 
 int baranov::Summator::getResultKey() const

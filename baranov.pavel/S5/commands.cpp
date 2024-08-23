@@ -13,6 +13,6 @@ void baranov::ascending(std::ostream & out, const Tree< int, std::string > & tre
     out << "<EMPTY>";
     return;
   }
-  out << resultKey << ' ' << resultValue;
+  out << resultKey << resultValue;
 }
 
