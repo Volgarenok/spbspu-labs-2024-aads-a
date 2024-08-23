@@ -14,7 +14,7 @@ int main(int argc, char * argv[])
     return 1;
   }
 
-  std::ifstream file(argv[1]);
+  std::ifstream file(argv[2]);
   if (!file.is_open())
   {
     std::cerr << "Invalid file name\n";
