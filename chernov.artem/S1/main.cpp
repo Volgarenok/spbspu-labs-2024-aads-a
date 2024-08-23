@@ -20,7 +20,15 @@ int main()
   {
     outNames(list, std::cout);
     outNumbers(list, listSums, std::cout);
-    outSums(listSums, std::cout);
+    if (listSums.isEmpty())
+    {
+      std::cout << "0\n";
+      return 0;
+    }
+    else
+    {
+      outSums(listSums, std::cout);
+    }
   }
   catch (const std::exception& e)
   {
