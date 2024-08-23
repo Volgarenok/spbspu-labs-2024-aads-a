@@ -6,6 +6,7 @@
 #include <tree/iterator.hpp>
 #include <tree/constIterator.hpp>
 #include <tree/node.hpp>
+#include <stack.hpp>
 
 namespace baranov
 {
@@ -52,6 +53,11 @@ namespace baranov
     F traverse_rnl(F f);
     template < typename F >
     F traverse_rnl(F f) const;
+
+    template < typename F >
+    F traverse_breadth(F f);
+    template < typename F >
+    F traverse_breadth(F f) const;
 
   private:
     Node< Key, T > * root_;
@@ -416,6 +422,39 @@ namespace baranov
     }
     return f;
   }
+
+  template< typename Key, typename T, typename Compare >
+  template < typename F >
+  F Tree< Key, T, Compare >::traverse_breath(F f)
+  {
+    if (empty())
+    {
+      throw std::logic_error("Tree is empty");
+    }
+    Stack< node_t * > stack;
+    stack.push(root_);
+    while (!stack.empty())
+    {
+      node_t * current = stack.top();
+      stack.pop();
+      while(current->hasLeft())
+      {
+        if (current->hasRight())
+        {
+          stack.push(current->right_);
+        }
+        f(*current);
+        current = current->left_;
+      }
+      f(*current);
+      if (current->hasRight())
+      {
+        stack.push(current->right_);
+      }
+    }
+    return f;
+  }
+
 }
 
 #endif
