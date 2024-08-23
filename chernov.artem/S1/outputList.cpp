@@ -39,7 +39,7 @@ void chernov::outNumbers(List< namedNumberedList >& list, List< size_t >& listSu
       }
     }
     auto newIter = iter;
-    for (newIter; newIter != list.end(); ++newIter)
+    for (; newIter != list.end(); ++newIter)
     {
       bool flagOfEmpty = newIter->second.isEmpty();
       if (flagOfEmpty != true)
