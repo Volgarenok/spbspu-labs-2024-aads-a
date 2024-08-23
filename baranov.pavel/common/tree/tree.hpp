@@ -3,9 +3,9 @@
 #include <functional>
 #include <cstddef>
 #include <stdexcept>
-#include <tree/iterator.hpp>
-#include <tree/constIterator.hpp>
-#include <tree/node.hpp>
+#include <tree/treeIterator.hpp>
+#include <tree/treeConstIterator.hpp>
+#include <tree/treeNode.hpp>
 #include <stack.hpp>
 
 namespace baranov
@@ -15,9 +15,9 @@ namespace baranov
   {
   public:
     using this_t = Tree< Key, T, Compare >;
-    using iterator_t = Iterator< Key, T, Compare >;
-    using const_iterator_t = ConstIterator< Key, T, Compare >;
-    using node_t = Node< Key, T >;
+    using iterator_t = TreeIterator< Key, T, Compare >;
+    using const_iterator_t = TreeConstIterator< Key, T, Compare >;
+    using node_t = TreeNode< Key, T >;
     Tree();
     Tree(const Tree & rhs);
     Tree(Tree && rhs) noexcept;
@@ -60,7 +60,7 @@ namespace baranov
     F traverse_breadth(F f) const;
 
   private:
-    Node< Key, T > * root_;
+    TreeNode< Key, T > * root_;
     size_t size_;
   };
 
@@ -127,7 +127,7 @@ namespace baranov
   }
 
   template< typename Key, typename T, typename Compare >
-  Iterator< Key, T, Compare > Tree< Key, T, Compare >::begin()
+  TreeIterator< Key, T, Compare > Tree< Key, T, Compare >::begin()
   {
     if (root_ == nullptr)
     {
@@ -142,7 +142,7 @@ namespace baranov
   }
 
   template< typename Key, typename T, typename Compare >
-  Iterator< Key, T, Compare > Tree< Key, T, Compare >::rbegin()
+  TreeIterator< Key, T, Compare > Tree< Key, T, Compare >::rbegin()
   {
     if (root_ == nullptr)
     {
@@ -157,13 +157,13 @@ namespace baranov
   }
 
   template< typename Key, typename T, typename Compare >
-  Iterator< Key, T, Compare > Tree< Key, T, Compare >::end()
+  TreeIterator< Key, T, Compare > Tree< Key, T, Compare >::end()
   {
     return iterator_t();
   }
 
   template< typename Key, typename T, typename Compare >
-  ConstIterator< Key, T, Compare > Tree< Key, T, Compare >::cbegin() const
+  TreeConstIterator< Key, T, Compare > Tree< Key, T, Compare >::cbegin() const
   {
     if (root_ == nullptr)
     {
@@ -178,7 +178,7 @@ namespace baranov
   }
 
   template< typename Key, typename T, typename Compare >
-  ConstIterator< Key, T, Compare > Tree< Key, T, Compare >::crbegin() const
+  TreeConstIterator< Key, T, Compare > Tree< Key, T, Compare >::crbegin() const
   {
     if (root_ == nullptr)
     {
@@ -193,13 +193,13 @@ namespace baranov
   }
 
   template< typename Key, typename T, typename Compare >
-  ConstIterator< Key, T, Compare > Tree< Key, T, Compare >::cend() const
+  TreeConstIterator< Key, T, Compare > Tree< Key, T, Compare >::cend() const
   {
     return const_iterator_t();
   }
 
   template< typename Key, typename T, typename Compare >
-  std::pair< Iterator< Key, T, Compare >, bool > Tree< Key, T, Compare >::insert(const Key & key, const T & val)
+  std::pair< TreeIterator< Key, T, Compare >, bool > Tree< Key, T, Compare >::insert(const Key & key, const T & val)
   {
     if (empty())
     {
@@ -239,7 +239,7 @@ namespace baranov
   }
 
   template< typename Key, typename T, typename Compare >
-  std::pair< Iterator< Key, T, Compare >, bool > Tree< Key, T, Compare >::insert(const std::pair< Key, T > & pair)
+  std::pair< TreeIterator< Key, T, Compare >, bool > Tree< Key, T, Compare >::insert(const std::pair< Key, T > & pair)
   {
     return insert(pair.first, pair.second);
   }
@@ -289,7 +289,7 @@ namespace baranov
   }
 
   template< typename Key, typename T, typename Compare >
-  Iterator< Key, T, Compare > Tree< Key, T, Compare >::find(const Key & key)
+  TreeIterator< Key, T, Compare > Tree< Key, T, Compare >::find(const Key & key)
   {
     node_t * node = root_;
     while (node && node->data_.first != key)
@@ -307,7 +307,7 @@ namespace baranov
   }
 
   template< typename Key, typename T, typename Compare >
-  ConstIterator< Key, T, Compare > Tree< Key, T, Compare >::find(const Key & key) const
+  TreeConstIterator< Key, T, Compare > Tree< Key, T, Compare >::find(const Key & key) const
   {
     node_t * node = root_;
     while (node && node->data_.first != key)
@@ -425,7 +425,7 @@ namespace baranov
 
   template< typename Key, typename T, typename Compare >
   template < typename F >
-  F Tree< Key, T, Compare >::traverse_breath(F f)
+  F Tree< Key, T, Compare >::traverse_breadth(F f)
   {
     if (empty())
     {
@@ -457,7 +457,7 @@ namespace baranov
 
   template< typename Key, typename T, typename Compare >
   template < typename F >
-  F Tree< Key, T, Compare >::traverse_breath(F f) const
+  F Tree< Key, T, Compare >::traverse_breadth(F f) const
   {
     if (empty())
     {

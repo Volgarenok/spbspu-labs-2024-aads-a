@@ -1,12 +1,12 @@
 #include "inputTree.hpp"
 
-void baranov::inputTree(std::istream & in, std::map< int, std::string > & tree)
+void baranov::inputTree(std::istream & in,Tree< int, std::string > & tree)
 {
   int key = 0;
   std::string value;
   while (in >> key >> value)
   {
-    tree[key] = value;
+    tree.insert(key, value);
   }
 }
 

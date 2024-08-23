@@ -1,39 +1,39 @@
-#include "calcSum.hpp"
+#include "summator.hpp"
 #include <limits>
 #include <stdexcept>
 
-baranov::KeySum::KeySum():
+baranov::Summator::Summator():
   resultKey_(0),
   resultValue_()
 {}
 
-void baranov::KeySum::operator()(const std::pair< int, std::string > & data)
+void baranov::Summator::operator()(const std::pair< int, std::string > & data)
 {
   resultKey_ = sum(resultKey_, data.first);
   resultValue_ += data.second + ' ';
 }
 
-int baranov::KeySum::getResultKey() const
+int baranov::Summator::getResultKey() const
 {
   return resultKey_;
 }
 
-std::string baranov::KeySum::getResultValue() const
+std::string baranov::Summator::getResultValue() const
 {
   return resultValue_;
 }
 
-int baranov::KeySum::sign(int value)
+int baranov::Summator::sign(int value)
 {
   return (value > 0) ? 1: ((value < 0) ? -1: 0);
 }
 
-bool baranov::KeySum::same_sign(int a, int b)
+bool baranov::Summator::same_sign(int a, int b)
 {
   return sign(a) * sign(b) > 0;
 }
 
-int baranov::KeySum::sum(int a, int b)
+int baranov::Summator::sum(int a, int b)
 {
   const int max_int = std::numeric_limits< int >::max();
   const int min_int = std::numeric_limits< int >::min();

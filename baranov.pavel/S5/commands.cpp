@@ -1,20 +1,18 @@
 #include "commands.hpp"
 #include <string>
-#include "calcSum.hpp"
+#include "summator.hpp"
 
-void baranov::ascending(std::ostream & out, std::map< int, std::string > & tree)
+void baranov::ascending(std::ostream & out, const Tree< int, std::string > & tree)
 {
-  KeySum amount;
-  auto end = tree.cend();
-  for (auto i = tree.cbegin(); i != end; ++i)
+  Summator sum;
+  tree.traverse_lnr(sum);
+  int resultKey = sum.getResultKey();
+  std::string resultValue = sum.getResultValue();
+  if (resultValue.empty())
   {
-    amount(*i);
+    out << "<EMPTY>";
+    return;
   }
-  int sum = amount.getResultKey();
-  std::string str = amount.getResultValue();
-  if (!str.empty())
-  {
-    out << sum << ' ' << str;
-  }
+  out << resultKey << ' ' << resultValue;
 }
 

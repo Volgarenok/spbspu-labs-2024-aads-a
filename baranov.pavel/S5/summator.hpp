@@ -1,15 +1,15 @@
-#ifndef CALC_SUM_HPP
-#define CALC_SUM_HPP
+#ifndef SUMMATOR_HPP
+#define SUMMATOR_HPP
 
 #include <string>
 #include <utility>
 
 namespace baranov
 {
-  class KeySum
+  class Summator
   {
     public:
-      KeySum();
+      Summator();
       void operator()(const std::pair< int, std::string > & data);
       int getResultKey() const;
       std::string getResultValue() const;

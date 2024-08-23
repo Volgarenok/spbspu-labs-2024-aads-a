@@ -1,22 +1,22 @@
-#ifndef NODE_HPP
-#define NODE_HPP
+#ifndef TREE_NODE_HPP
+#define TREE_NODE_HPP
 #include <utility>
 
 namespace baranov
 {
   template< typename Key, typename T >
-  struct Node
+  struct TreeNode
   {
-    Node(Key key, T val, Node * left, Node * right, Node * parent):
+    TreeNode(Key key, T val, TreeNode * left, TreeNode * right, TreeNode * parent):
       data_(std::make_pair(key, val)),
       left_(left),
       right_(right),
       parent_(parent)
     {}
     std::pair< Key, T > data_;
-    Node< Key, T > * left_;
-    Node< Key, T > * right_;
-    Node< Key, T  > * parent_;
+    TreeNode< Key, T > * left_;
+    TreeNode< Key, T > * right_;
+    TreeNode< Key, T  > * parent_;
 
     bool hasLeft() const noexcept
     {
