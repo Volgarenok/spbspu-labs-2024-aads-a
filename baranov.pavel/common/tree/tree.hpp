@@ -467,7 +467,7 @@ namespace baranov
     stack.push(root_);
     while (!stack.empty())
     {
-      node_t * current = stack.top();
+      const node_t * current = stack.top();
       stack.pop();
       while(current->hasLeft())
       {
