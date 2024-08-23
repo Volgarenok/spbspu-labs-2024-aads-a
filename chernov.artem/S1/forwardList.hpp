@@ -7,7 +7,6 @@
 #include <stdexcept>
 #include <cstddef>
 #include <iostream>
-#include <list>
 
 namespace chernov
 {
