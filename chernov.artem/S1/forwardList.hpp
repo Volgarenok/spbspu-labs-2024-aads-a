@@ -4,8 +4,10 @@
 #include "iterators.hpp"
 #include "constIterators.hpp"
 #include "node.hpp"
+#include <stdexcept>
 #include <cstddef>
 #include <iostream>
+#include <list>
 
 namespace chernov
 {
@@ -13,54 +15,37 @@ namespace chernov
   class List
   {
   public:
-    List() :
+    List():
       head_(nullptr),
-      tail_(nullptr),
       size_(0)
     {}
 
-    ~List()
+    List(const List< T >& obj):
+      List()
     {
-      clear();
+      if (!obj.isEmpty())
+      {
+        for (ConstIterators< T > it = obj.cbegin(); it != obj.cend(); ++it)
+        {
+          push_back(*it);
+        }
+      }
     }
 
-    Iterators< T > begin()
+    List(List< T >&& obj):
+      head_(obj.head_),
+      size_(obj.size_)
     {
-      return Iterators< T >(head_);
-    }
-
-    Iterators< T > end()
-    {
-      return Iterators< T >();
-    }
-
-    ConstIterators< T > cbegin() const
-    {
-      return ConstIterators< T >(head_);
-    }
-
-    ConstIterators< T > cend() const
-    {
-      return ConstIterators< T >();
-    }
-
-    List(const List< T >& obj)
-    {
-      head_ = obj.head_;
-      tail_ = obj.tail_;
-      size_ = obj.size_;
-    }
-
-    List(List< T >&& obj)
-    {
-      head_ = obj.head_;
-      tail_ = obj.tail_;
-      size_ = obj.size_;
-      obj.clear();
+      obj.head_ = nullptr;
+      obj.size_ = 0;
     }
 
     List< T >& operator=(const List< T >& obj)
     {
+      if (this == &obj)
+      {
+        return *this;
+      }
       List< T > tmp(obj);
       std::swap(tmp, *this);
       return *this;
@@ -68,8 +53,11 @@ namespace chernov
 
     List< T >& operator=(List< T >&& obj)
     {
-      List< T > tmp(obj);
-      std::swap(tmp, *this);
+      if (this != &obj)
+      {
+        std::swap(head_, obj.head_);
+        std::swap(size_, obj.size_);
+      }
       return *this;
     }
 
@@ -92,13 +80,17 @@ namespace chernov
     {
       if (isEmpty())
       {
-        head_ = tail_ = new Node< T >{ nullptr, value };
-        ++size_;
+        push_front(value);
       }
       else
       {
-        tail_->next_ = new Node< T >{ nullptr, value };
-        tail_ = tail_->next_;
+        Node< T >* newNode = new Node< T >(value);
+        Node< T >* curr = head_;
+        while (curr->next_)
+        {
+          curr = curr->next_;
+        }
+        curr->next_ = newNode;
         ++size_;
       }
     }
@@ -107,61 +99,79 @@ namespace chernov
     {
       if (isEmpty())
       {
-        head_ = tail_ = new Node< T >{ nullptr, value };
-        ++size_;
+        head_ = new Node< T >(value);
       }
       else
       {
         Node< T >* newNode = new Node< T >(value);
         newNode->next_ = head_;
         head_ = newNode;
-        ++size_;
       }
+      ++size_;
     }
 
     void pop_front()
     {
       if (isEmpty())
       {
-        throw std::invalid_argument("Empty list\n");
+        return;
       }
-      else if (head_ == tail_)
+      else if (head_->next_ == nullptr)
       {
-        delete tail_;
-        head_ = tail_ = nullptr;
+        clear();
+      }
+      else
+      {
+        Node< T >* temp = head_;
+        head_ = head_->next_;
+        delete temp;
         --size_;
       }
-      Node< T >* temp = head_->next_;
-      delete head_;
-      head_ = temp;
-      --size_;
     }
 
-    void print() const
+    void pop_back()
     {
-      Node< T >* current = head_;
-      while (current != nullptr)
+      if (isEmpty())
       {
-        std::cout << current->data_ << " ";
-        current = current->next_;
+        return;
       }
+      Node< T >* prev = head_;
+      while (prev->next_ && prev->next_->next_)
+      {
+        prev = prev->next_;
+      }
+      delete prev->next_;
+      prev->next_ = nullptr;
+      --size_;
     }
 
     void clear()
     {
-      if ((isEmpty()))
-      {
-        return;
-      }
-      Node<T>* current = head_;
+      Node< T >* current = head_;
       while (current != nullptr)
       {
-        Node<T>* nextNode = current->next_;
+        Node< T >* next = current->next_;
         delete current;
-        current = nextNode;
+        current = next;
       }
-      head_ = tail_ = nullptr;
+      head_ = nullptr;
       size_ = 0;
+    }
+
+    void reverse()
+    {
+      Node< T >* prev = nullptr;
+      Node< T >* current = head_;
+      Node< T >* tempNext = nullptr;
+
+      while (current != nullptr)
+      {
+        tempNext = current->next_;
+        current->next_ = prev;
+        prev = current;
+        current = tempNext;
+      }
+      head_ = prev;
     }
 
     void swap(const Node< T >& other)
@@ -172,7 +182,7 @@ namespace chernov
       }
       else
       {
-        Node<T>* temporary = other->head_;
+        Node< T >* temporary = other->head_;
         other->head_ = head_;
         head_ = temporary;
       }
@@ -194,8 +204,8 @@ namespace chernov
     template < class UnPredicate >
     void remove_if(UnPredicate p)
     {
-      Node<T>* current = head_;
-      Node<T>* previous = nullptr;
+      Node< T >* current = head_;
+      Node< T >* previous = nullptr;
 
       while (current != nullptr)
       {
@@ -204,20 +214,12 @@ namespace chernov
           if (previous == nullptr)
           {
             head_ = current->next_;
-            if (tail_ == current)
-            {
-              tail_ = nullptr;
-            }
             delete current;
             current = head_;
           }
           else
           {
             previous->next_ = current->next_;
-            if (tail_ == current)
-            {
-              tail_ = previous;
-            }
             delete current;
             current = previous->next_;
           }
@@ -231,10 +233,33 @@ namespace chernov
       }
     }
 
-  private:
+    Iterators< T > begin()
+    {
+      return Iterators< T >(head_);
+    }
 
+    Iterators< T > end()
+    {
+      return Iterators< T >();
+    }
+
+    ConstIterators< T > cbegin() const
+    {
+      return ConstIterators< T >(head_);
+    }
+
+    ConstIterators< T > cend() const
+    {
+      return ConstIterators< T >();
+    }
+
+    ~List()
+    {
+      clear();
+    }
+
+  private:
     Node< T >* head_;
-    Node< T >* tail_;
     size_t size_;
   };
 }

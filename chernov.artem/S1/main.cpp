@@ -7,8 +7,25 @@
 int main()
 {
   using namespace chernov;
+  using namedNumberedList = std::pair< std::string, List< size_t > >;
   List< namedNumberedList > list;
+  List< size_t > listSums;
   inputLists(std::cin, list);
-  outNames(list, std::cout);
+  if (list.isEmpty())
+  {
+    std::cout << "0\n";
+    return 0;
+  }
+  try
+  {
+    outNames(list, std::cout);
+    outNumbers(list, listSums, std::cout);
+    outSums(listSums, std::cout);
+  }
+  catch (const std::exception& e)
+  {
+    std::cerr << e.what();
+    return 1;
+  }
   return 0;
 }

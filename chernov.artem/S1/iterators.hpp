@@ -8,79 +8,49 @@
 
 namespace chernov
 {
-  template <typename T>
+  template < typename T >
   class List;
 
-  template <typename T>
-  class Iterators: public std::iterator<std::forward_iterator_tag, T>
+  template < typename T >
+  class Iterators: public std::iterator< std::forward_iterator_tag, T >
   {
   public:
-    Iterators()
+    Iterators():
+      current_(nullptr)
     {}
-    Iterators(Node< T >* obj) :current_(obj)
+    Iterators(Node< T >* obj):
+      current_(obj)
     {}
-
-    Iterators(const Iterators< T >& obj)
-    {
-      current_ = obj.current_;
-    }
-
-    Iterators(Iterators< T >&& obj)
-    {
-      current_ = obj.current_;
-      obj.current_ = nullptr;
-    }
-
-    Iterators< T >& operator=(const Iterators< T >& obj)
-    {
-      Iterators< T > tmp(obj);
-      std::swap(tmp, *this);
-      return *this;
-    }
-
-    Iterators< T >& operator=(Iterators< T >&& obj)
-    {
-      Iterators< T > tmp(obj);
-      std::swap(tmp, *this);
-      return *this;
-    }
-
+    Iterators(const Iterators< T >&) = default;
+    Iterators< T >& operator=(const Iterators< T >&) = default;
     Iterators< T >& operator++()
     {
       current_ = current_->next_;
       return *this;
     }
-
     Iterators< T > operator++(int)
     {
       Iterators< T > temp(*this);
       operator++();
       return temp;
     }
-
     bool operator==(const Iterators< T >& obj) const
     {
       return current_ == obj.current_;
     }
-
     bool operator!=(const Iterators< T >& obj) const
     {
       return current_ != obj.current_;
     }
-
     T& operator*() const
     {
       return current_->data_;
     }
-
     T* operator->() const
     {
       return &(current_->data_);
     }
-
-    ~Iterators()
-    {}
-
+    ~Iterators() = default;
   private:
     Node< T >* current_;
   };
