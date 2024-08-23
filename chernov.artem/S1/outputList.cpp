@@ -1,6 +1,7 @@
 #include "outputList.hpp"
 #include <iostream>
 #include <stdexcept>
+#include <limits>
 
 void chernov::outNames(List< namedNumberedList >& list, std::ostream& output)
 {
