@@ -2,8 +2,8 @@
 #define CALCULATE_POSTFIX_HPP
 
 #include "tokens.hpp"
-#include "queue.hpp"
-#include "stack.hpp"
+#include <queue.hpp>
+#include <stack.hpp>
 
 namespace baranov
 {
