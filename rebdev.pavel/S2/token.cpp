@@ -1,9 +1,9 @@
 #include "token.hpp"
 
-rebdev::data::data(long long num):
+rebdev::token::data::data(long long num):
   num_(num)
 {}
-rebdev::data::data(char oper):
+rebdev::token::data::data(char oper):
   oper_(MathOperator{oper})
 {}
 rebdev::token::token(char oper):

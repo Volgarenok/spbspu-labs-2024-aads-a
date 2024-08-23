@@ -31,8 +31,7 @@ namespace rebdev
         }
         T backData = dataBase_.back();
         dataBase_.pop_back();
-        T * pointToBackData = &backData;
-        return std::unique_ptr< T >(pointToBackData);
+        return std::unique_ptr< T >(new T{backData});
       }
       size_t size() const noexcept
       {
