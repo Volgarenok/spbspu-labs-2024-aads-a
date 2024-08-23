@@ -37,29 +37,24 @@ int baranov::Summator::sum(int a, int b)
 {
   const int max_int = std::numeric_limits< int >::max();
   const int min_int = std::numeric_limits< int >::min();
-  int result = 0;
   if (same_sign(a, b) && (a > 0))
   {
     if (max_int - a >= b)
     {
-      result = a + b;
+      return a + b;
     }
   }
   else if (same_sign(a, b) && (a < 0))
   {
     if (min_int - a <= b)
     {
-      result = a + b;
+      return a + b;
     }
   }
   else if (!same_sign(a, b))
   {
-    result = a + b;
+    return a + b;
   }
-  else
-  {
-    throw std::overflow_error("Overflow");
-  }
-  return result;
+  throw std::overflow_error("Overflow");
 }
 

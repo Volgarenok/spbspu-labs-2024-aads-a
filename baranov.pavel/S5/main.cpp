@@ -36,13 +36,14 @@ int main(int argc, char * argv[])
     cmds.at(cmd)(std::cout);
     std::cout << '\n';
   }
-  catch (const std::logic_error &)
+  catch (const std::invalid_argument &)
   {
     std::cout << "<EMPTY>\n";
   }
   catch (const std::exception &)
   {
-    std::cout << "<INVALID COMMAND>\n";
+    std::cerr << "<INVALID COMMAND>\n";
+    return 2;
   }
 }
 

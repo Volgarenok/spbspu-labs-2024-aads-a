@@ -369,7 +369,7 @@ namespace baranov
   {
     if (empty())
     {
-      throw std::logic_error("Tree is empty");
+      throw std::invalid_argument("Tree is empty");
     }
     for (auto it = begin(); it != end(); ++it)
     {
@@ -384,7 +384,7 @@ namespace baranov
   {
     if (empty())
     {
-      throw std::logic_error("Tree is empty");
+      throw std::invalid_argument("Tree is empty");
     }
     for (auto it = cbegin(); it != cend(); ++it)
     {
@@ -399,7 +399,7 @@ namespace baranov
   {
     if (empty())
     {
-      throw std::logic_error("Tree is empty");
+      throw std::invalid_argument("Tree is empty");
     }
     for (auto it = rbegin(); it != end(); --it)
     {
@@ -414,7 +414,7 @@ namespace baranov
   {
     if (empty())
     {
-      throw std::logic_error("Tree is empty");
+      throw std::invalid_argument("Tree is empty");
     }
     for (auto it = crbegin(); it != cend(); --it)
     {
@@ -429,7 +429,7 @@ namespace baranov
   {
     if (empty())
     {
-      throw std::logic_error("Tree is empty");
+      throw std::invalid_argument("Tree is empty");
     }
     Stack< node_t * > stack;
     stack.push(root_);
@@ -461,7 +461,7 @@ namespace baranov
   {
     if (empty())
     {
-      throw std::logic_error("Tree is empty");
+      throw std::invalid_argument("Tree is empty");
     }
     Stack< const node_t * > stack;
     stack.push(root_);
