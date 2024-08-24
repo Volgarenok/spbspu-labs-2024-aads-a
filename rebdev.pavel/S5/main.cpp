@@ -54,6 +54,11 @@ int main(int argc, char ** argv)
   {
     int key;
     inFile >> key;
+    if (!inFile && !inFile.eof())
+    {
+      std::cerr << "Uncorrect key!\n";
+      return 1;
+    }
     std::string value;
     inFile >> value;
     if (!inFile.eof())
