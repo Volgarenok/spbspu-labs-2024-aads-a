@@ -23,7 +23,7 @@ namespace rebdev
       template< typename F >
       F traverse_lnr(F & f) const
       {
-        node * nodeNow = leftest(headNode_);
+        node * nodeNow = leftest(headNode_->right);
         f(nodeNow->data);
         while (nodeNow != rightest(headNode_))
         {
@@ -51,7 +51,7 @@ namespace rebdev
       {
         node * nodeNow = rightest(headNode_);
         f(nodeNow->data);
-        while (nodeNow != leftest(headNode_))
+        while (nodeNow != leftest(headNode_->right))
         {
           if ((nodeNow->left) != nullptr)
           {

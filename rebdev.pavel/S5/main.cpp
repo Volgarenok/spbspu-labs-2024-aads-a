@@ -54,13 +54,12 @@ int main(int argc, char ** argv)
   {
     int key;
     inFile >> key;
-    if (inFile.eof())
-    {
-      break;
-    }
     std::string value;
     inFile >> value;
-    tree[key] = value;
+    if (!inFile.eof())
+    {
+      tree[key] = value;
+    }
   }
   Key_summ key;
   try
