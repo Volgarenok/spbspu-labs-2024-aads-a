@@ -4,7 +4,7 @@
 #include <queue>
 #include <limits>
 
-#include "../common/myTree.hpp"
+#include <myTree.hpp>
 
 struct Key_summ
 {
