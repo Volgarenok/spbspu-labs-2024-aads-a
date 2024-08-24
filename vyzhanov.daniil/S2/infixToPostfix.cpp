@@ -4,7 +4,8 @@
 
 int vyzhanov::priority(Token token)
 {
-  if (token.getType() == Type::OPERATION)
+  if (token.getType() == Type::OPERATION ||
+    token.getType() == Type::OPEN_BRACKET)
   {
     char symbol = token.getOperation();
     if (symbol == '*' || symbol == '/' || symbol == '%')
@@ -15,10 +16,14 @@ int vyzhanov::priority(Token token)
     {
       return 1;
     }
+    else
+    {
+      return 0;
+    }
   }
   else
   {
-    return 0;
+    throw std::invalid_argument("Wrong operator");
   }
 }
 
@@ -27,7 +32,7 @@ void vyzhanov::infixToPostfix(Queue< Queue< Token > >& expressions)
   Queue< Queue< Token > > newQueue;
   while (!expressions.empty())
   {
-    Stack < Token > postfix;
+    Stack< Token > postfix;
     Queue< Token > queue;
     Queue< Token > curr = expressions.top();
     Queue< Token > expression;
@@ -45,21 +50,30 @@ void vyzhanov::infixToPostfix(Queue< Queue< Token > >& expressions)
       }
       else if (curr.top().getType() == Type::CLOSE_BRACKET)
       {
-        while (postfix.top().getType() != Type::OPEN_BRACKET)
+        if (curr.top().getOperation() == ')')
         {
-          expression.push(postfix.top());
+          while (postfix.top().getType() != Type::OPEN_BRACKET)
+          {
+            expression.push(postfix.top());
+            postfix.pop();
+          }
           postfix.pop();
+          curr.pop();
         }
-        postfix.pop();
-        curr.pop();
+        else
+        {
+          throw std::invalid_argument("Wrong operator");
+        }
       }
       else
       {
-        while (!postfix.empty() && priority(curr.top()) <=
-          priority(postfix.top()))
+        if (!postfix.empty() && !(postfix.top().getType() == Type::OPEN_BRACKET))
         {
-          expression.push(postfix.top());
-          postfix.pop();
+          while (priority(curr.top()) <= priority(postfix.top()))
+          {
+            expression.push(postfix.top());
+            postfix.pop();
+          }
         }
         postfix.push(curr.top());
         curr.pop();

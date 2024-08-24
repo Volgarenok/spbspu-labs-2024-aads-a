@@ -18,7 +18,10 @@ long long vyzhanov::performOperation(long long operand1, long long operand2, cha
     {
       throw std::logic_error("Divivsion by zero");
     }
-    return operand1 / operand2;
+    else 
+    {
+      return operand1 / operand2;
+    }
   case '%':
     return operand1 % operand2;
   default:

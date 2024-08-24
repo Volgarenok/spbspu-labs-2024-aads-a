@@ -15,26 +15,37 @@ void vyzhanov::inputInfix(Queue< Queue< Token > >& expressions, std::istream& in
     Queue< Token > expression;
     Value value;
     Type type = Type::DEFAULT;
+    std::string temp = "";
     for (size_t i = 0; i < symbols.size(); i++)
     {
       if (!std::isspace(symbols[i]))
       {
-        if (std::isdigit(symbols[i]))
+        if (isdigit(symbols[i]))
         {
-          long long num = symbols[i] - '0';
-          value = Value(num);
-          type = Type::OPERAND;
-          Token token(type, value);
-          expression.push(token);
+          while ((symbols[i] != ' ') && (symbols[i] != '\n')
+            && (i < symbols.size()))
+          {
+            temp += symbols[i];
+            ++i;
+          }
+          if (!temp.empty())
+          {
+            long long num = std::stoll(temp);
+            value = Value(num);
+            type = Type::OPERAND;
+            Token token(type, value);
+            expression.push(token);
+            temp.clear();
+          }
         }
-        else 
+        else
         {
           if (isOperation(symbols[i]))
           {
             value = Value(symbols[i]);
             type = Type::OPERATION;
           }
-          else 
+          else
           {
             if (symbols[i] == '(')
             {
@@ -46,8 +57,8 @@ void vyzhanov::inputInfix(Queue< Queue< Token > >& expressions, std::istream& in
             }
             value = Value(symbols[i]);
           }
-          Token token(type, value);
-          expression.push(token);
+        Token token(type, value);
+        expression.push(token);
         }
       }
     }
