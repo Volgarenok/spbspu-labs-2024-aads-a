@@ -4,7 +4,7 @@
 #include <iostream>
 #include <string>
 
-#include "myTree.hpp"
+#include "tree.hpp"
 
 namespace rebdev
 {

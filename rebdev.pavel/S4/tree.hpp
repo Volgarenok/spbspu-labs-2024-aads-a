@@ -1,5 +1,5 @@
-#ifndef MYTREE_HPP
-#define MYTREE_HPP
+#ifndef TREE_HPP
+#define TREE_HPP
 
 #include <functional>
 #include <utility>

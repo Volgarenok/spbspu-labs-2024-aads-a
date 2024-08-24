@@ -4,7 +4,7 @@
 #include <sstream>
 #include <functional>
 
-#include "myTree.hpp"
+#include "tree.hpp"
 #include "functions.hpp"
 
 int main(int argc, char ** argv)
