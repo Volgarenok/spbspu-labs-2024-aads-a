@@ -26,17 +26,17 @@ lebedev::Symbol lebedev::InfixExpression::getType() const
 {
   return symbol;
 }
-lebedev::Bracket lebedev::InfixExpression::getBracket() const
+bool lebedev::InfixExpression::getBracket() const
 {
-  return bracket;
+  return bracket.is_open;
 }
-lebedev::Operation lebedev::InfixExpression::getOperation() const
+char lebedev::InfixExpression::getOperation() const
 {
-  return operation;
+  return operation.operation;
 }
-lebedev::Operand lebedev::InfixExpression::getOperand() const
+long long lebedev::InfixExpression::getOperand() const
 {
-  return operand;
+  return operand.operand;
 }
 
 lebedev::PostfixExpression::PostfixExpression(long long value):
@@ -52,11 +52,11 @@ lebedev::Symbol lebedev::PostfixExpression::getType() const
 {
   return symbol;
 }
-lebedev::Operation lebedev::PostfixExpression::getOperation() const
+char lebedev::PostfixExpression::getOperation() const
 {
-  return operation;
+  return operation.operation;
 }
-lebedev::Operand lebedev::PostfixExpression::getOperand() const
+long long lebedev::PostfixExpression::getOperand() const
 {
-  return operand;
+  return operand.operand;
 }

@@ -17,9 +17,9 @@ namespace lebedev
     bool isCloseBracket() const;
 
     Symbol getType() const;
-    Bracket getBracket() const;
-    Operation getOperation() const;
-    Operand getOperand() const;
+    bool getBracket() const;
+    char getOperation() const;
+    long long getOperand() const;
   private:
     union
     {
@@ -38,8 +38,8 @@ namespace lebedev
     explicit PostfixExpression(char value);
 
     Symbol getType() const;
-    Operation getOperation() const;
-    Operand getOperand() const;
+    char getOperation() const;
+    long long getOperand() const;
   private:
     union
     {
