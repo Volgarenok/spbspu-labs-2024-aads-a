@@ -1,7 +1,11 @@
 #include "infixToPostfix.hpp"
+#include "calculatePostfix.hpp"
+#include "stack.hpp"
+#include "queue.hpp"
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <stdexcept>
 
 int main(int argc, char* argv[])
 {
@@ -37,6 +41,18 @@ int main(int argc, char* argv[])
   {
     convertToPostfix(infix_queue, postfix_queue);
     convertToValues(postfix_queue, result_stack);
+    int flag = 0;
+    while (!result_stack.empty())
+    {
+      if (flag != 0)
+      {
+        std::cout << ' ';
+      }
+      std::cout << result_stack.top();
+      result_stack.pop();
+      flag = 1;
+    }
+    std::cout << '\n';
   }
   catch (const std::exception& e)
   {
