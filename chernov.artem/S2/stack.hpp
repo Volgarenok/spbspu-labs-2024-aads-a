@@ -1,6 +1,6 @@
 #ifndef STACK_HPP
 #define STACK_HPP
-#include "forwardList.hpp"
+#include <forwardList.hpp>
 #include <cstddef>
 
 namespace chernov
