@@ -8,6 +8,7 @@ namespace chernov
 {
   using queue = Queue< std::string >;
   void inputInfix(std::istream& in, Queue< queue >& infix_queue);
+  void convertToPostfix(Queue< queue >& infix_queue, Queue< queue >& postfix_queue);
 }
 
 #endif
