@@ -24,7 +24,7 @@ static bool checkOperationPriority(lebedev::Operation a, lebedev::Operation b)
 
 lebedev::Queue< lebedev::PostfixExpression > lebedev::convertExpression(Queue< InfixExpression > & queue_infix)
 {
-  Stack< InfixExpression > stack_processing;
+  Stack< InfixExpression > stack;
   Queue< PostfixExpression > queue_postfix;
 
   while (!queue_infix.empty())
@@ -37,45 +37,47 @@ lebedev::Queue< lebedev::PostfixExpression > lebedev::convertExpression(Queue< I
     }
     else if (curr_symbol.getType() == Symbol::operation)
     {
-      while (stack_processing.top().getType() == Symbol::operation && checkOperationPriority(stack_processing.top().getOperation(), curr_symbol.getOperation()) && !stack_processing.empty())
+      bool is_primary_operation = checkOperationPriority(stack.top().getOperation(), curr_symbol.getOperation());
+      while (stack.top().getType() == Symbol::operation && is_primary_operation && !stack.empty())
       {
         queue_postfix.push(PostfixExpression(curr_symbol.getOperation()));
-        stack_processing.pop();
+        stack.pop();
+        is_primary_operation = checkOperationPriority(stack.top().getOperation(), curr_symbol.getOperation());
       }
-      stack_processing.push(curr_symbol);
+      stack.push(curr_symbol);
     }
     else if (curr_symbol.getType() == Symbol::bracket)
     {
       if (curr_symbol.isOpenBracket())
       {
-        stack_processing.push(curr_symbol);
+        stack.push(curr_symbol);
       }
       else
       {
-        while (!stack_processing.empty() && stack_processing.top().getType() != Symbol::bracket)
+        while (!stack.empty() && stack.top().getType() != Symbol::bracket)
         {
-          queue_postfix.push(PostfixExpression(stack_processing.top().getOperation()));
-          stack_processing.pop();
+          queue_postfix.push(PostfixExpression(stack.top().getOperation()));
+          stack.pop();
         }
-        if (stack_processing.empty())
+        if (stack.empty())
         {
           throw std::invalid_argument("ERROR: Invalid bracket");
         }
         else
         {
-          stack_processing.pop();
+          stack.pop();
         }
       }
     }
   }
-  while (!stack_processing.empty())
+  while (!stack.empty())
   {
-    InfixExpression curr_symbol = stack_processing.top();
-    stack_processing.pop();
+    InfixExpression curr_symbol = stack.top();
+    stack.pop();
     if (curr_symbol.getType() == Symbol::operation)
     {
-      queue_postfix.push(PostfixExpression(stack_processing.top().getOperation()));
-      stack_processing.pop();
+      queue_postfix.push(PostfixExpression(stack.top().getOperation()));
+      stack.pop();
     }
     else
     {
