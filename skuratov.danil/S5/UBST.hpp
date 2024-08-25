@@ -305,7 +305,7 @@ namespace skuratov
 
         if (current->left_)
         {
-          queue.push(current->left);
+          queue.push(current->left_);
         }
         if (current->right_)
         {

@@ -1,42 +1,67 @@
 #include <iostream>
 #include <fstream>
 #include <functional>
+
 #include "UBST.hpp"
-#include "treeTraversalCmds.cpp"
+#include "treeTraversalCmds.hpp"
 
 int main(int argc, char* argv[])
 {
   using namespace skuratov;
-  UBST< int, std::string > data;
-  if (argc > 1)
+  UBST< int, std::string > map;
+  try
   {
-    std::string cmd = argv[1];
-    std::ifstream filename(argv[2]);
-    if (!filename)
+    if (argc > 1)
     {
-      std::cerr << "Error reading file" << '\n';
-      return 1;
-    }
-
-    int keyNum = {};
-    while (filename >> keyNum)
-    {
-      std::string value = {};
-      filename >> value;
-      data.insert(keyNum, value);
+      std::ifstream filename(argv[2]);
+      if (!filename)
+      {
+        std::cerr << "Error reading file" << '\n';
+        return 1;
+      }
+      while (!filename.eof())
+      {
+        filename.clear();
+        int keyNum = {};
+        std::string value = {};
+        while (filename >> keyNum >> value)
+        {
+          map.insert(keyNum, value);
+        }
+      }
     }
   }
-  else
+  catch (...)
   {
     std::cerr << "Not enough arguments" << '\n';
-    return 2;
+    return 1;
   }
 
   UBST< std::string, std::function< std::pair< int, std::string >(UBST< int, std::string >&) > > cmds;
-  using namespace std::placeholders;
-  cmds["ascending"] = std::bind(isAscending, _1);
-  cmds["descending"] = std::bind(isDescending, _1);
-  cmds["breadth"] = std::bind(isBreadth, _1);
+  cmds["ascending"] = isAscending;
+  cmds["descending"] = isDescending;
+  cmds["breadth"] = isBreadth;
 
+  try
+  {
+    std::string cmd = argv[1];
+    std::pair< int, std::string > pair;
+    pair = cmds.at(cmd)(map);
+    std::cout << pair.first << pair.second << '\n';
+  }
+  catch (const std::out_of_range&)
+  {
+    std::cerr << "<INVALID COMMAND>" << '\n';
+    return 1;
+  }
+  catch (const std::overflow_error&)
+  {
+    std::cerr << "<OVERFLOW>" << '\n';
+    return 1;
+  }
+  catch (const std::logic_error&)
+  {
+    std::cout << "<EMPTY>" << '\n';
+  }
   return 0;
 }
