@@ -54,8 +54,6 @@ long long lebedev::safeDiv(long long a, long long b)
 
 long long lebedev::safeMod(long long a, long long b)
 {
-  constexpr long long max_ll = std::numeric_limits< long long >::max();
-  constexpr long long min_ll = std::numeric_limits< long long >::min();
   if (b == 0)
   {
     throw std::logic_error("ERROR: Division by zero");
