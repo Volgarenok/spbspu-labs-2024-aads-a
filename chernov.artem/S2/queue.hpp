@@ -1,6 +1,6 @@
 #ifndef QUEUE_HPP
 #define QUEUE_HPP
-#include <forwardList.hpp>
+#include <common/forwardList.hpp>
 #include <cstddef>
 
 namespace chernov
