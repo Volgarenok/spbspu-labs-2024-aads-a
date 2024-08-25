@@ -7,7 +7,7 @@
 int main(int argc, char* argv[])
 {
   using namespace skuratov;
-  UBST< size_t, std::string > data;
+  UBST< int, std::string > data;
   if (argc > 1)
   {
     std::string cmd = argv[1];
@@ -18,7 +18,7 @@ int main(int argc, char* argv[])
       return 1;
     }
 
-    size_t keyNum = {};
+    int keyNum = {};
     while (filename >> keyNum)
     {
       std::string value = {};
@@ -32,7 +32,7 @@ int main(int argc, char* argv[])
     return 2;
   }
 
-  UBST< std::string, std::function< std::pair< size_t, std::string >(UBST< size_t, std::string >&) > > cmds;
+  UBST< std::string, std::function< std::pair< int, std::string >(UBST< int, std::string >&) > > cmds;
   using namespace std::placeholders;
   cmds["ascending"] = std::bind(isAscending, _1);
   cmds["descending"] = std::bind(isDescending, _1);

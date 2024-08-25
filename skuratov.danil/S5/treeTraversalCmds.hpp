@@ -2,14 +2,13 @@
 #define TREE_TRAVERSAL_CMDS_HPP
 
 #include <string>
-#include <cstddef>
 #include "UBST.hpp"
 
 namespace skuratov
 {
-  std::pair< size_t, std::string > isAscending(UBST< size_t, std::string >&);
-  std::pair< size_t, std::string > isDescending(UBST< size_t, std::string >&);
-  std::pair< size_t, std::string > isBreadth(UBST< size_t, std::string >&);
+  std::pair< int, std::string > isAscending(UBST< int, std::string >&);
+  std::pair< int, std::string > isDescending(UBST< int, std::string >&);
+  std::pair< int, std::string > isBreadth(UBST< int, std::string >&);
 }
 
 #endif
