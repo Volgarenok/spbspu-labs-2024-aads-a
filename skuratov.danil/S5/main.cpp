@@ -9,32 +9,30 @@ int main(int argc, char* argv[])
 {
   using namespace skuratov;
   UBST< int, std::string > map;
-  try
+
+  if (argc > 1)
   {
-    if (argc > 1)
+    std::ifstream filename(argv[2]);
+    if (!filename)
     {
-      std::ifstream filename(argv[2]);
-      if (!filename)
+      std::cerr << "Error reading file" << '\n';
+      return 1;
+    }
+    while (!filename.eof())
+    {
+      filename.clear();
+      int keyNum = {};
+      std::string value = {};
+      while (filename >> keyNum >> value)
       {
-        std::cerr << "Error reading file" << '\n';
-        return 1;
-      }
-      while (!filename.eof())
-      {
-        filename.clear();
-        int keyNum = {};
-        std::string value = {};
-        while (filename >> keyNum >> value)
-        {
-          map.insert(keyNum, value);
-        }
+        map.insert(keyNum, value);
       }
     }
   }
-  catch (...)
+  else
   {
     std::cerr << "Not enough arguments" << '\n';
-    return 1;
+    return 2;
   }
 
   UBST< std::string, std::function< std::pair< int, std::string >(UBST< int, std::string >&) > > cmds;
