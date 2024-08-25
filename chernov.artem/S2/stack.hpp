@@ -33,10 +33,6 @@ namespace chernov
     {
       return list_.push_front(value);
     }
-    void print() const
-    {
-      return list_.print();
-    }
     ~Stack() = default;
   private:
     List< T > list_;

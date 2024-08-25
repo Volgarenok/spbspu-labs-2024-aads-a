@@ -33,10 +33,6 @@ namespace chernov
     {
       return list_.back();
     }
-    void print() const
-    {
-      return list_.print();
-    }
     void pop()
     {
       return list_.pop_back();
