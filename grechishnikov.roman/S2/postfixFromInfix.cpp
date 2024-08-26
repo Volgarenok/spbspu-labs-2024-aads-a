@@ -9,7 +9,7 @@ void pushUntilOpen(grechishnikov::Queue< std::string >& res, grechishnikov::Stac
   while (from.top() != "(")
   {
     res.push(from.top());
-    from.pop();
+     from.pop();
     if (from.size() == 0)
     {
       throw std::logic_error("Mathematical expression is incorrect");
@@ -20,15 +20,7 @@ void pushUntilOpen(grechishnikov::Queue< std::string >& res, grechishnikov::Stac
 
 bool higherPriority(std::string first, std::string second)
 {
-  if (first == "(" || second == "(")
-  {
-    return 1;
-  }
-  if ((second == "*" || second == "/") && (first == "+" || first == "-"))
-  {
-    return 1;
-  }
-  return 0;
+  return (first == "(" || second == "(") or ((second == "*" || second == "/") && (first == "+" || first == "-"))
 }
 
 grechishnikov::Queue< std::string > grechishnikov::postfixFromInfix(const Queue< std::string >& infix)
