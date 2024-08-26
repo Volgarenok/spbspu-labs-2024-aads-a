@@ -20,7 +20,7 @@ void pushUntilOpen(grechishnikov::Queue< std::string >& res, grechishnikov::Stac
 
 bool higherPriority(std::string first, std::string second)
 {
-  return (first == "(" || second == "(") or ((second == "*" || second == "/") && (first == "+" || first == "-"))
+  return (first == "(" || second == "(") or ((second == "*" || second == "/") && (first == "+" || first == "-"));
 }
 
 grechishnikov::Queue< std::string > grechishnikov::postfixFromInfix(const Queue< std::string >& infix)
