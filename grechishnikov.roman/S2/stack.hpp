@@ -9,15 +9,6 @@ namespace grechishnikov
   class Stack
   {
   public:
-    Stack();
-    Stack(const Stack& other);
-    Stack(Stack&& other) noexcept;
-
-    ~Stack() = default;
-
-    Stack& operator=(const Stack& other);
-    Stack& operator=(Stack&& other) noexcept;
-
     void push(const T& other);
     void pop();
     T& top();
@@ -29,35 +20,6 @@ namespace grechishnikov
   private:
     List< T > stack_;
   };
-
-  template< typename T >
-  Stack< T >::Stack():
-    stack_()
-  {}
-
-  template< typename T >
-  Stack< T >::Stack(const Stack& other):
-    stack_(other.stack_)
-  {}
-
-  template< typename T >
-  Stack< T >::Stack(Stack&& other) noexcept:
-    stack_(std::move(other.stack_))
-  {}
-
-  template< typename T >
-  Stack< T >& Stack< T >::operator=(const Stack< T >& other)
-  {
-    stack_ = other.stack_;
-    return *this;
-  }
-
-  template< typename T >
-  Stack< T >& Stack< T >::operator=(Stack< T >&& other) noexcept
-  {
-    stack_ = std::move(other.stack_);
-    return *this;
-  }
 
   template< typename T >
   void Stack< T >::push(const T& other)
