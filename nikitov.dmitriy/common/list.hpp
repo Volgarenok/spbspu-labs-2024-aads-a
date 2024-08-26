@@ -14,12 +14,12 @@ namespace nikitov
   template< class T >
   class List
   {
-    using iterator = ListIterator< T >;
-    using constIterator = ConstListIterator< T >;
   public:
+    typedef ListIterator< T > iterator;
+    typedef ConstListIterator< T > iterator_const;
     List();
-    List(size_t n, const T& value);
-    List(constIterator first, constIterator second);
+    List(size_t n, const T& value = T());
+    List(iterator_const first, iterator_const second);
     List(std::initializer_list< T > initList);
     List(const List< T >& other);
     List(List< T >&& other) noexcept;
@@ -36,9 +36,9 @@ namespace nikitov
     bool operator>=(const List< T >& other) const;
 
     iterator begin() noexcept;
-    constIterator cbegin() const noexcept;
+    iterator_const cbegin() const noexcept;
     iterator end() noexcept;
-    constIterator cend() const noexcept;
+    iterator_const cend() const noexcept;
 
     T& front();
     const T& front() const;
@@ -55,35 +55,37 @@ namespace nikitov
     void push_back(T&& value);
     void pop_back() noexcept;
 
-    void assign(constIterator first, constIterator second);
+    void assign(iterator_const first, iterator_const second);
     void assign(size_t n, const T& value);
     void assign(std::initializer_list< T > initList);
 
     template < class... Args >
-    iterator emplace(constIterator position, Args&&... args);
+    iterator emplace(iterator_const position, Args&&... args);
 
-    iterator insert(constIterator position, const T& value);
-    iterator insert(constIterator position, size_t n, const T& value);
-    iterator insert(constIterator position, constIterator first, constIterator last);
-    iterator insert(constIterator position, T&& value);
-    iterator insert(constIterator position, std::initializer_list< T > initList);
+    iterator insert(iterator_const position, const T& value);
+    iterator insert(iterator_const position, size_t n, const T& value);
+    iterator insert(iterator_const position, iterator_const first, iterator_const last);
+    iterator insert(iterator_const position, T&& value);
+    iterator insert(iterator_const position, std::initializer_list< T > initList);
 
-    iterator erase(constIterator position) noexcept;
-    iterator erase(constIterator first, constIterator last) noexcept;
+    iterator erase(iterator_const position) noexcept;
+    iterator erase(iterator_const first, iterator_const last) noexcept;
 
     void clear() noexcept;
     void swap(List< T >& other) noexcept;
 
-    void splice(constIterator position, List< T >& other, constIterator otherPosition);
-    void splice(constIterator position, List< T >& other);
-    void splice(constIterator position, List< T >& other, constIterator first, constIterator last);
-    void splice(constIterator position, List< T >&& other, constIterator otherPosition);
-    void splice(constIterator position, List< T >&& other);
-    void splice(constIterator position, List< T >&& other, constIterator first, constIterator last);
+    void splice(iterator_const position, List< T >& other, iterator_const otherPosition);
+    void splice(iterator_const position, List< T >& other);
+    void splice(iterator_const position, List< T >& other, iterator_const first, iterator_const last);
+    void splice(iterator_const position, List< T >&& other, iterator_const otherPosition);
+    void splice(iterator_const position, List< T >&& other);
+    void splice(iterator_const position, List< T >&& other, iterator_const first, iterator_const last);
 
     void merge(List< T >& other);
     void merge(List< T >&& other);
     void sort();
+    template< class Compare >
+    void sort(Compare cmp);
     void unique();
     void reverse();
 
@@ -98,9 +100,9 @@ namespace nikitov
     size_t size_;
 
     template< class... Args >
-    iterator forwardEmbed(constIterator position, Args&&... args);
-    iterator moveEmbed(constIterator position, detail::Node< T >* newNode);
-    iterator cut(constIterator position);
+    iterator forwardEmbed(iterator_const position, Args&&... args);
+    iterator moveEmbed(iterator_const position, detail::Node< T >* newNode);
+    iterator cut(iterator_const position);
   };
 
   template< class T >
@@ -122,7 +124,7 @@ namespace nikitov
   }
 
   template< class T >
-  List< T >::List(constIterator first, constIterator second):
+  List< T >::List(iterator_const first, iterator_const second):
     List()
   {
     for (auto i = first; i != second; ++i)
@@ -285,11 +287,11 @@ namespace nikitov
   {
     if (tail_->next_ == nullptr)
     {
-      return constIterator(tail_);
+      return iterator_const(tail_);
     }
     else
     {
-      return constIterator(tail_->next_);
+      return iterator_const(tail_->next_);
     }
   }
 
@@ -304,7 +306,7 @@ namespace nikitov
   const T& List< T >::front() const
   {
     assert(!empty());
-    return head_->value;
+    return head_->value_;
   }
 
   template< class T >
@@ -370,7 +372,7 @@ namespace nikitov
   }
 
   template< class T >
-  void List< T >::assign(constIterator first, constIterator second)
+  void List< T >::assign(iterator_const first, iterator_const second)
   {
    List< T > newList(first, second);
    swap(newList);
@@ -392,19 +394,19 @@ namespace nikitov
 
   template< class T >
   template< class... Args >
-  ListIterator< T > List< T >::emplace(constIterator position, Args&&... args)
+  ListIterator< T > List< T >::emplace(iterator_const position, Args&&... args)
   {
     return forwardEmbed(position, args...);
   }
 
   template< class T >
-  ListIterator< T > List< T >::insert(constIterator position, const T& value)
+  ListIterator< T > List< T >::insert(iterator_const position, const T& value)
   {
     return forwardEmbed(position, value);
   }
 
   template< class T >
-  ListIterator< T > List< T >::insert(constIterator position, size_t n, const T& value)
+  ListIterator< T > List< T >::insert(iterator_const position, size_t n, const T& value)
   {
     auto firstNodeIterator = iterator(position.node_);
     if (n != 0)
@@ -419,7 +421,7 @@ namespace nikitov
   }
 
   template< class T >
-  ListIterator< T > List< T >::insert(constIterator position, constIterator first, constIterator last)
+  ListIterator< T > List< T >::insert(iterator_const position, iterator_const first, iterator_const last)
   {
     auto firstNodeIterator = iterator(position.node_);
     if (first != last)
@@ -434,13 +436,13 @@ namespace nikitov
   }
 
   template< class T >
-  ListIterator< T > List< T >::insert(constIterator position, T&& value)
+  ListIterator< T > List< T >::insert(iterator_const position, T&& value)
   {
     return forwardEmbed(position, std::move(value));
   }
 
   template< class T >
-  ListIterator< T > List< T >::insert(constIterator position, std::initializer_list< T > initList)
+  ListIterator< T > List< T >::insert(iterator_const position, std::initializer_list< T > initList)
   {
     auto firstNodeIterator = iterator(position.node_);
     auto first = initList.begin();
@@ -457,13 +459,13 @@ namespace nikitov
   }
 
   template< class T >
-  ListIterator< T > List< T >::erase(constIterator position) noexcept
+  ListIterator< T > List< T >::erase(iterator_const position) noexcept
   {
     return cut(position);
   }
 
   template< class T >
-  ListIterator< T > List< T >::erase(constIterator first, constIterator second) noexcept
+  ListIterator< T > List< T >::erase(iterator_const first, iterator_const second) noexcept
   {
     auto i = first;
     while (i != second)
@@ -510,7 +512,7 @@ namespace nikitov
   }
 
   template< class T >
-  void List< T >::splice(constIterator position, List< T >& other, constIterator otherPosition)
+  void List< T >::splice(iterator_const position, List< T >& other, iterator_const otherPosition)
   {
     detail::Node< T >* otherNode = otherPosition.node_;
     otherNode->next_->prev = otherNode->prev_;
@@ -532,7 +534,7 @@ namespace nikitov
   }
 
   template< class T >
-  void List< T >::splice(constIterator position, List< T >& other)
+  void List< T >::splice(iterator_const position, List< T >& other)
   {
     while (!other.empty())
     {
@@ -541,7 +543,7 @@ namespace nikitov
   }
 
   template< class T >
-  void List< T >::splice(constIterator position, List< T >& other, constIterator first, constIterator last)
+  void List< T >::splice(iterator_const position, List< T >& other, iterator_const first, iterator_const last)
   {
     while (first != last)
     {
@@ -550,19 +552,19 @@ namespace nikitov
   }
 
   template< class T >
-  void List< T >::splice(constIterator position, List< T >&& other, constIterator otherPosition)
+  void List< T >::splice(iterator_const position, List< T >&& other, iterator_const otherPosition)
   {
     splice(position, other, otherPosition);
   }
 
   template< class T >
-  void List< T >::splice(constIterator position, List< T >&& other)
+  void List< T >::splice(iterator_const position, List< T >&& other)
   {
     splice(position, other);
   }
 
   template< class T >
-  void List< T >::splice(constIterator position, List< T >&& other, constIterator first, constIterator last)
+  void List< T >::splice(iterator_const position, List< T >&& other, iterator_const first, iterator_const last)
   {
     splice(position, other, first, last);
   }
@@ -601,6 +603,13 @@ namespace nikitov
   template< class T >
   void List< T >::sort()
   {
+    sort(std::less< T >());
+  }
+
+  template< class T >
+  template< class Compare >
+  void List< T >::sort(Compare cmp)
+  {
     if (empty())
     {
       return;
@@ -612,27 +621,29 @@ namespace nikitov
       detail::Node< T >* node = head_;
       while (node != tail_)
       {
-        if (node->value_ > node->next_->value_)
+        if (!cmp(node->value_, node->next_->value_))
         {
           isSorted = false;
-          if (node->prev_ != nullptr)
-          {
-            std::swap(node->prev_->next_, node->next_->next_->prev_);
-          }
-          else
-          {
-            node->next_->next_->prev_ = node;
-            head_ = node->next_;
-          }
-          node->next_->prev_ = node->prev_;
-          detail::Node< T >* temp = node->next_->next_;
-          node->prev_ = node->next_;
-          node->next_ = temp;
-          node->prev_->next_ = node;
-          if (node->prev_ == tail_)
+          if (node->next_ == tail_)
           {
             tail_ = node;
           }
+          if (node->prev_)
+          {
+            node->prev_->next_ = node->next_;
+          }
+          else
+          {
+            head_ = node->next_;
+          }
+          if (node->next_->next_)
+          {
+            node->next_->next_->prev_ = node;
+          }
+          node->next_->prev_ = node->prev_;
+          node->prev_ = node->next_;
+          node->next_ = node->prev_->next_;
+          node->prev_->next_ = node;
         }
         else
         {
@@ -711,13 +722,13 @@ namespace nikitov
 
   template< class T >
   template< class... Args >
-  ListIterator< T > List< T >::forwardEmbed(constIterator position, Args&&... args)
+  ListIterator< T > List< T >::forwardEmbed(iterator_const position, Args&&... args)
   {
     return moveEmbed(position, new detail::Node< T >(std::forward< Args >(args)...));
   }
 
   template< class T >
-  ListIterator< T > List< T >::moveEmbed(constIterator position, detail::Node< T >* newNode)
+  ListIterator< T > List< T >::moveEmbed(iterator_const position, detail::Node< T >* newNode)
   {
     detail::Node< T >* node = position.node_;
     newNode->prev_ = node->prev_;
@@ -740,7 +751,7 @@ namespace nikitov
   }
 
   template< class T >
-  ListIterator< T > List< T >::cut(constIterator position)
+  ListIterator< T > List< T >::cut(iterator_const position)
   {
     assert(position != cend());
     detail::Node< T >* node = position.node_;

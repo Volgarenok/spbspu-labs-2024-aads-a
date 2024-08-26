@@ -3,7 +3,7 @@
 
 #include <istream>
 #include <string>
-#include "linkedList.hpp"
+#include <linkedList.hpp>
 
 namespace marishin
 {
