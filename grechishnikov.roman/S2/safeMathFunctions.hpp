@@ -6,9 +6,6 @@
 
 namespace grechishnikov
 {
-  const long long int MAX = std::numeric_limits< long long int >::max();
-  const long long int MIN = std::numeric_limits< long long int >::min();
-
   long long int addTwo(long long int first, long long int second);
   long long int subtractTwo(long long int first, long long int second);
   long long int multiplyTwo(long long int first, long long int second);

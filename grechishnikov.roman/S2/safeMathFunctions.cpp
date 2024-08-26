@@ -1,6 +1,12 @@
 #include "safeMathFunctions.hpp"
 #include <stdexcept>
 
+namespace grechishnikov
+{
+  constexpr long long int MAX = std::numeric_limits< long long int >::max();
+  constexpr long long int MIN = std::numeric_limits< long long int >::min();
+}
+
 long long int grechishnikov::addTwo(long long int first, long long int second)
 {
   if (second > 0 && MAX - second < first)

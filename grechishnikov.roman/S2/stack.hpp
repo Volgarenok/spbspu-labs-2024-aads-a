@@ -21,6 +21,7 @@ namespace grechishnikov
     void push(const T& other);
     void pop();
     T& top();
+    const T& top() const;
 
     bool empty() const noexcept;
     size_t size() const noexcept;
@@ -72,6 +73,12 @@ namespace grechishnikov
 
   template< typename T >
   T& Stack< T >::top()
+  {
+    return *stack_.begin();
+  }
+
+  template< typename T >
+  const T& Stack< T >::top() const
   {
     return *stack_.begin();
   }
