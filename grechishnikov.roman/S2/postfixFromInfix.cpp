@@ -9,7 +9,7 @@ void pushUntilOpen(grechishnikov::Queue< std::string >& res, grechishnikov::Stac
   while (from.top() != "(")
   {
     res.push(from.top());
-     from.pop();
+    from.pop();
     if (from.size() == 0)
     {
       throw std::logic_error("Mathematical expression is incorrect");
