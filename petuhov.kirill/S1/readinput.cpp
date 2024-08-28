@@ -8,27 +8,50 @@
 
 namespace petuhov
 {
-  void readInput(List< std::pair< std::string, List< size_t > > >& sequences, std::istream& input)
+  void readInput(List< std::pair< std::string, List< size_t > > > &sequences, const std::string &input)
   {
-    std::string line;
-    while (std::getline(input, line))
+    size_t start = 0;
+    size_t end = input.find('\n');
+
+    while (end != std::string::npos)
     {
-      std::istringstream iss(line);
-      std::string name;
-      if (!(iss >> name))
+      std::string line = input.substr(start, end - start);
+      size_t pos = 0;
+
+      while (pos < line.size() && line[pos] != ' ')
       {
-        continue;
+        ++pos;
       }
+      std::string name = line.substr(0, pos);
+
       List< size_t > numbers;
-      std::string num_str;
-      while (iss >> num_str)
+      while (pos < line.size())
       {
-        size_t num = std::stoull(num_str);
-        numbers.push_front(num);
+        while (pos < line.size() && line[pos] == ' ')
+        {
+          ++pos;
+        }
+
+        size_t num_start = pos;
+        while (pos < line.size() && line[pos] != ' ')
+        {
+          ++pos;
+        }
+
+        if (num_start < pos)
+        {
+          size_t num = std::stoull(line.substr(num_start, pos - num_start));
+          numbers.push_front(num);
+        }
       }
+
       numbers.reverse();
       sequences.push_front(std::make_pair(name, numbers));
+
+      start = end + 1;
+      end = input.find('\n', start);
     }
+
     sequences.reverse();
   }
 }
