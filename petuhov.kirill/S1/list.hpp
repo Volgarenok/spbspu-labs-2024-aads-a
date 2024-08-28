@@ -547,7 +547,7 @@ namespace petuhov
       clear();
       throw;
     }
-    
+
     tail_ = lastNode;
     return *this;
   }
