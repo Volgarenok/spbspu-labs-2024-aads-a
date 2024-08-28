@@ -143,7 +143,17 @@ namespace petuhov
   template < typename T >
   void List< T >::push_front(const T &value)
   {
-    detail::Node< T > *newNode = new detail::Node< T >{value, head_};
+    detail::Node< T > *newNode = nullptr;
+    try
+    {
+      newNode = new detail::Node< T >{value, head_};
+    }
+    catch (const std::bad_alloc&)
+    {
+      delete newNode;
+      throw;
+    }
+
     head_ = newNode;
     if (tail_ == nullptr)
     {
@@ -306,18 +316,26 @@ namespace petuhov
     head_(nullptr),
     tail_(nullptr)
   {
-    for (const T &item : ilist)
+    try
     {
-      detail::Node< T > *newNode = new detail::Node< T >(item);
-      if (!tail_)
+      for (const T &item : ilist)
       {
-        head_ = tail_ = newNode;
+        detail::Node< T > *newNode = new detail::Node< T >(item);
+        if (!tail_)
+        {
+          head_ = tail_ = newNode;
+        }
+        else
+        {
+          tail_->next_ = newNode;
+          tail_ = newNode;
+        }
       }
-      else
-      {
-        tail_->next_ = newNode;
-        tail_ = newNode;
-      }
+    }
+    catch (const std::bad_alloc&)
+    {
+      clear();
+      throw;
     }
   }
 
@@ -345,7 +363,17 @@ namespace petuhov
   template < typename T >
   Iterator< T > List< T >::insert(Iterator< T > pos, const T &value)
   {
-    detail::Node< T > *newNode = new detail::Node< T >(value);
+    detail::Node< T > *newNode = nullptr;
+    try
+    {
+      newNode = new detail::Node< T >(value);
+    }
+    catch (const std::bad_alloc&)
+    {
+      delete newNode;
+      throw;
+    }
+
     if (pos.node_ == head_)
     {
       newNode->next_ = head_;
@@ -403,18 +431,26 @@ namespace petuhov
   void List< T >::assign(InputIterator first, InputIterator last)
   {
     clear();
-    for (; first != last; ++first)
+    try
     {
-      detail::Node< T > *newNode = new detail::Node< T >(*first);
-      if (!tail_)
+      for (; first != last; ++first)
       {
-        head_ = tail_ = newNode;
+        detail::Node< T > *newNode = new detail::Node< T >(*first);
+        if (!tail_)
+        {
+          head_ = tail_ = newNode;
+        }
+        else
+        {
+          tail_->next_ = newNode;
+          tail_ = newNode;
+        }
       }
-      else
-      {
-        tail_->next_ = newNode;
-        tail_ = newNode;
-      }
+    }
+    catch(const std::bad_alloc&)
+    {
+      clear();
+      throw;
     }
   }
 
@@ -453,19 +489,28 @@ namespace petuhov
   {
     clear();
     detail::Node< T > *lastNode = nullptr;
-    for (const T &item : ilist)
+    try
     {
-      detail::Node< T > *newNode = new detail::Node< T >(item);
-      if (!head_)
+      for (const T &item : ilist)
       {
-        head_ = newNode;
+        detail::Node< T > *newNode = new detail::Node< T >(item);
+        if (!head_)
+        {
+          head_ = newNode;
+        }
+        else
+        {
+          lastNode->next_ = newNode;
+        }
+        lastNode = newNode;
       }
-      else
-      {
-        lastNode->next_ = newNode;
-      }
-      lastNode = newNode;
     }
+    catch(const std::bad_alloc&)
+    {
+      clear();
+      throw;
+    }
+    
     tail_ = lastNode;
     return *this;
   }
