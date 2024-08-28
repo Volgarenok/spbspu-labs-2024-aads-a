@@ -363,36 +363,46 @@ namespace petuhov
   template < typename T >
   Iterator< T > List< T >::insert(Iterator< T > pos, const T &value)
   {
-    detail::Node< T > *newNode = nullptr;
-    try
+    if (pos.node_ == nullptr)
     {
-      newNode = new detail::Node< T >(value);
+      push_back(value);
+      return Iterator< T >(tail_);
     }
-    catch (const std::bad_alloc&)
+
+    detail::Node< T > *current = head_;
+    while (current && current != pos.node_)
     {
-      delete newNode;
-      throw;
+      current = current->next_;
     }
+
+    if (current == nullptr)
+    {
+      throw std::invalid_argument("Iterator does not belong to this list");
+    }
+
+    detail::Node< T > *newNode = new detail::Node< T >(value);
 
     if (pos.node_ == head_)
     {
       newNode->next_ = head_;
       head_ = newNode;
-      if (!tail_)
-        tail_ = newNode;
+      return Iterator< T >(newNode);
     }
-    else
+
+    current = head_;
+    while (current->next_ != pos.node_)
     {
-      detail::Node< T > *current = head_;
-      while (current && current->next_ != pos.node_)
-      {
-        current = current->next_;
-      }
-      newNode->next_ = current->next_;
-      current->next_ = newNode;
-      if (newNode->next_ == nullptr)
-        tail_ = newNode;
+      current = current->next_;
     }
+
+    newNode->next_ = current->next_;
+    current->next_ = newNode;
+
+    if (newNode->next_ == nullptr)
+    {
+      tail_ = newNode;
+    }
+
     return Iterator< T >(newNode);
   }
 
@@ -400,13 +410,36 @@ namespace petuhov
   Iterator< T > List< T >::erase(Iterator< T > pos)
   {
     if (!head_ || !pos.node_)
+    {
       return Iterator< T >(nullptr);
+    }
+
+    detail::Node< T > *current = head_;
+    bool found = false;
+    while (current)
+    {
+      if (current == pos.node_)
+      {
+        found = true;
+        break;
+      }
+      current = current->next_;
+    }
+
+    if (!found)
+    {
+      throw std::invalid_argument("Iterator does not belong to this list");
+    }
+
     detail::Node< T > *toDelete = pos.node_;
+
     if (toDelete == head_)
     {
       head_ = head_->next_;
       if (head_ == nullptr)
+      {
         tail_ = nullptr;
+      }
     }
     else
     {
@@ -415,13 +448,17 @@ namespace petuhov
       {
         prev = prev->next_;
       }
+
       if (prev)
       {
         prev->next_ = toDelete->next_;
         if (prev->next_ == nullptr)
+        {
           tail_ = prev;
+        }
       }
     }
+
     delete toDelete;
     return Iterator< T >(toDelete->next_);
   }
