@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <stdexcept>
 #include <functional>
 
 #include "treeTraversalCmds.hpp"
@@ -9,22 +10,30 @@ int main(int argc, char* argv[])
   using namespace skuratov;
   UBST< int, std::string > map;
 
-  if (argc != 2)
+  if (argc != 3)
   {
-    std::cerr << "Error reading file" << '\n';
+    std::cerr << "Not enough arguments" << '\n';
     return 1;
   }
 
-  std::ifstream filename(argv[2]);
-  while (!filename.eof())
+  try
   {
-    filename.clear();
-    int keyNum = {};
-    std::string value = {};
-    while (filename >> keyNum >> value)
+    std::ifstream filename(argv[1]);
+    while (!filename.eof())
     {
-      map.insert(keyNum, value);
+      filename.clear();
+      int keyNum = {};
+      std::string value = {};
+      while (filename >> keyNum >> value)
+      {
+        map.insert(keyNum, value);
+      }
     }
+  }
+  catch (...)
+  {
+    std::cerr << "Error reading file" << '\n';
+    return 1;
   }
 
   UBST< std::string, std::function< std::pair< int, std::string >(UBST< int, std::string >&) > > cmds;
@@ -34,8 +43,9 @@ int main(int argc, char* argv[])
 
   try
   {
-    std::string cmd = argv[1];
+    std::string cmd = argv[2];
     std::pair< int, std::string > pair;
+
     pair = cmds.at(cmd)(map);
     std::cout << pair.first << pair.second << '\n';
   }
