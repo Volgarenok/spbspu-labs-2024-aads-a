@@ -268,14 +268,14 @@ namespace skuratov
       }
 
       Stack< detail::TreeNode< Key, Value>* > stack;
-      detail::TreeNode< Key, Value> * current = root_;
+      detail::TreeNode< Key, Value>* current = root_;
 
       while (current || !stack.empty())
       {
         while (current)
         {
           stack.push(current);
-          current = current->right_; 
+          current = current->right_;
         }
 
         current = stack.top();
@@ -293,7 +293,7 @@ namespace skuratov
       {
         throw std::logic_error("<EMPTY>");
       }
-      
+
       Queue< detail::TreeNode< Key, Value >* > queue;
       queue.push(root_);
 

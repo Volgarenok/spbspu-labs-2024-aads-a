@@ -1,7 +1,7 @@
 #ifndef TREE_TRAVERSAL_CMDS_HPP
 #define TREE_TRAVERSAL_CMDS_HPP
 
-#include "UBST.hpp"
+#include <UBST.hpp>
 #include "funcObject.hpp"
 
 namespace skuratov
