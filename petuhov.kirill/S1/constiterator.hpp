@@ -16,7 +16,7 @@ namespace petuhov
     friend class List< T >;
 
   public:
-    ConstIterator() : node_(nullptr) {}
+    ConstIterator() = default;
     ConstIterator(const detail::Node< T > *node) : node_(node) {}
     ConstIterator(const ConstIterator &other) = default;
 

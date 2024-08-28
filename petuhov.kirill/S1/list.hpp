@@ -72,7 +72,9 @@ namespace petuhov
   }
 
   template < typename T >
-  List< T >::List(const List< T > &other): head_(nullptr), tail_(nullptr)
+  List< T >::List(const List< T > &other):
+    head_(nullptr),
+    tail_(nullptr)
   {
     detail::Node< T > *current = other.head_;
     while (current)
@@ -233,9 +235,8 @@ namespace petuhov
     {
       for (std::size_t i = 0; i < count; ++i)
       {
-        push_front(value);
+        push_back(value);
       }
-      reverse();
     }
     catch (const std::bad_alloc &)
     {
@@ -398,7 +399,7 @@ namespace petuhov
     newNode->next_ = current->next_;
     current->next_ = newNode;
 
-    if (newNode->next_ == nullptr)
+    if (!newNode->next_)
     {
       tail_ = newNode;
     }
@@ -525,30 +526,23 @@ namespace petuhov
   List< T > &List< T >::operator=(std::initializer_list< T > ilist)
   {
     clear();
-    detail::Node< T > *lastNode = nullptr;
+    detail::Node< T > **currentNode = &head_;
+
     try
     {
       for (const T &item : ilist)
       {
-        detail::Node< T > *newNode = new detail::Node< T >(item);
-        if (!head_)
-        {
-          head_ = newNode;
-        }
-        else
-        {
-          lastNode->next_ = newNode;
-        }
-        lastNode = newNode;
+        *currentNode = new detail::Node< T >(item);
+        currentNode = &((*currentNode)->next_);
       }
     }
-    catch(const std::bad_alloc&)
+    catch (const std::bad_alloc &)
     {
       clear();
       throw;
     }
 
-    tail_ = lastNode;
+    tail_ = head_ ? *currentNode : nullptr;
     return *this;
   }
 }
