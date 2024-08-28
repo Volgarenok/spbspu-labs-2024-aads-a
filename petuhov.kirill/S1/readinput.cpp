@@ -7,7 +7,7 @@
 
 namespace petuhov
 {
-  void readInput(List<std::pair<std::string, List<size_t>>> &sequences, const std::string &input)
+  void readInput(List< std::pair< std::string, List< size_t > > > &sequences, const std::string &input)
   {
     if (input.empty())
     {
@@ -36,7 +36,7 @@ namespace petuhov
       }
       std::string name = line.substr(0, pos);
 
-      List<size_t> numbers;
+      List< size_t > numbers;
 
       while (pos < line.size())
       {
