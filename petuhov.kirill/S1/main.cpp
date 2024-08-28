@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-#include <limits>
 #include "list.hpp"
 #include "readinput.hpp"
 #include "outputnames.hpp"
@@ -11,7 +10,15 @@ int main()
 {
   petuhov::List< std::pair< std::string, petuhov::List< size_t > > > sequences;
 
-  petuhov::readInput(sequences, std::cin);
+  std::string input;
+  std::string line;
+
+  while (std::getline(std::cin, line))
+  {
+    input += line + '\n';
+  }
+
+  petuhov::readInput(sequences, input);
 
   if (sequences.empty())
   {
