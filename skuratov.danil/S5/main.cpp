@@ -41,7 +41,7 @@ int main(int argc, char* argv[])
   cmds["ascending"] = isAscending;
   cmds["descending"] = isDescending;
   cmds["breadth"] = isBreadth;
-  
+
   try
   {
     std::pair< int, std::string > pair = cmds.at(cmd)(map);
