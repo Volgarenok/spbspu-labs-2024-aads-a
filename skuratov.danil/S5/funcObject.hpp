@@ -11,7 +11,7 @@ namespace skuratov
   struct KeySumm
   {
     KeySumm();
-    void operator()(const std::pair< const int, std::string >& keyValue);
+    void operator()(const std::pair< int, std::string >& keyValue);
     int getKeyValue() const;
     std::string getNameString() const;
   private:

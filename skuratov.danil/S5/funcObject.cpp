@@ -5,7 +5,7 @@ skuratov::KeySumm::KeySumm():
   nameStr_()
 {}
 
-void skuratov::KeySumm::operator()(const std::pair< const int, std::string >& keyValue)
+void skuratov::KeySumm::operator()(const std::pair< int, std::string >& keyValue)
 {
   constexpr int max = std::numeric_limits< int >::max();
   constexpr int min = std::numeric_limits< int >::min();

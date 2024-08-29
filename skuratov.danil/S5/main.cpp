@@ -31,7 +31,7 @@ int main(int argc, char* argv[])
       map.insert(keyNum, value);
     }
   }
-  catch (const std::exception& e)
+  catch (const std::overflow_error& e)
   {
     std::cerr << "Error reading file: " << e.what() << '\n';
     return 1;
