@@ -30,10 +30,15 @@ int main(int argc, char* argv[])
     {
       map.insert(keyNum, value);
     }
+    if (!filename.eof())
+    {
+      filename.clear();
+      throw std::invalid_argument("Error");
+    }
   }
-  catch (const std::exception& e)
+  catch (...)
   {
-    std::cerr << "Error reading file: " << e.what() << '\n';
+    std::cerr << "Error reading file" << '\n';
     return 1;
   }
 
