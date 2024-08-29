@@ -15,24 +15,25 @@ int main(int argc, char* argv[])
     std::cerr << "Not enough arguments" << '\n';
     return 1;
   }
-
+  std::string cmd = argv[1];
   try
   {
-    std::ifstream filename(argv[1]);
-    while (!filename.eof())
+    std::ifstream filename(argv[2]);
+    if (!filename.is_open())
     {
-      filename.clear();
-      int keyNum = {};
-      std::string value = {};
-      while (filename >> keyNum >> value)
-      {
-        map.insert(keyNum, value);
-      }
+      std::cerr << "Could not open the file" << '\n';
+      return 1;
+    }
+    int keyNum = {};
+    std::string value = "";
+    while (filename >> keyNum >> value)
+    {
+      map.insert(keyNum, value);
     }
   }
-  catch (...)
+  catch (const std::exception& e)
   {
-    std::cerr << "Error reading file" << '\n';
+    std::cerr << "Error reading file: " << e.what() << '\n';
     return 1;
   }
 
@@ -40,13 +41,10 @@ int main(int argc, char* argv[])
   cmds["ascending"] = isAscending;
   cmds["descending"] = isDescending;
   cmds["breadth"] = isBreadth;
-
+  
   try
   {
-    std::string cmd = argv[2];
-    std::pair< int, std::string > pair;
-
-    pair = cmds.at(cmd)(map);
+    std::pair< int, std::string > pair = cmds.at(cmd)(map);
     std::cout << pair.first << pair.second << '\n';
   }
   catch (const std::out_of_range&)
