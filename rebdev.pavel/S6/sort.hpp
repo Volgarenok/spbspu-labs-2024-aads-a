@@ -8,11 +8,27 @@
 namespace rebdev
 {
   template < class t >
-  void shaker(const std::list< t > & nList, std::ostream & out,  std::function< bool(const t &, const t &) > comp)
+  using comparison =  std::function< bool(const t &, const t &) >;
+  template < class numStruct >
+  void listOut(const numStruct & nStruct, std::ostream & out)
   {
-    std::list< t > listCopy(nList);
-    auto begin = listCopy.begin();
-    auto end = listCopy.end();
+    auto now = nStruct.begin();
+    auto end = nStruct.end();
+    out << (*now);
+    ++now;
+    while (now != end)
+    {
+      out << ' ' << (*now);
+      ++now;
+    }
+    out << '\n';
+  }
+  template < class numStruct, class t >
+  void shaker(const numStruct & nStruct, std::ostream & out, comparison< t > comp)
+  {
+    numStruct structCopy(nStruct);
+    auto begin = structCopy.begin();
+    auto end = structCopy.end();
     auto iterNow = begin;
     while (begin != end)
     {
@@ -41,44 +57,43 @@ namespace rebdev
       }
       ++begin;
     }
-    iterNow = listCopy.begin();
-    while (iterNow != listCopy.end())
-    {
-      out << (*iterNow) << ' ';
-      ++iterNow;
-    }
-    out << '\n';
+    listOut(structCopy, out);
   }
-  template < class t >
-  void oddEven(const std::list< t > & nList, std::ostream & out,  std::function< bool(const t &, const t &) > comp)
+  template < class iter, class t >
+  void sortForEvenOdd(iter & iterNow, iter & end, comparison< t > comp, bool & isOddOrEven)
   {
-    std::list< t > listCopy(nList);
+    auto nextIter = iterNow;
+    ++nextIter;
+    while (iterNow != end)
+    {
+      if (comp((*iterNow), (*nextIter)))
+      {
+        isOddOrEven = false;
+        std::swap((*iterNow), (*nextIter));
+      }
+      ++(++iterNow);
+      ++(++nextIter);
+    }
+  }
+  template < class numStruct, class t >
+  void oddEven(const numStruct & nStruct, std::ostream & out, comparison< t > comp)
+  {
+    numStruct structCopy(nStruct);
     bool isOdd = false;
     bool isEven = false;
-    auto iterNow = listCopy.begin();
+    auto iterNow = structCopy.begin();
     while (!isOdd || !isEven)
     {
       isOdd = true;
       isEven = true;
-      auto end = listCopy.end();
-      if ((listCopy.size() % 2) != 0)
+      auto end = structCopy.end();
+      if ((structCopy.size() % 2) != 0)
       {
         --end;
       }
-      iterNow = listCopy.begin();
-      auto nextIter = iterNow;
-      ++nextIter;
-      while (iterNow != end)
-      {
-        if (comp((*iterNow), (*nextIter)))
-        {
-          isOdd = false;
-          std::swap((*iterNow), (*nextIter));
-        }
-        ++(++iterNow);
-        ++(++nextIter);
-      }
-      if ((listCopy.size() % 2) == 0)
+      iterNow = structCopy.begin();
+      sortForEvenOdd(iterNow, end, comp, isOdd);
+      if ((structCopy.size() % 2) == 0)
       {
         --end;
       }
@@ -86,28 +101,11 @@ namespace rebdev
       {
         ++end;
       }
-      iterNow = listCopy.begin();
+      iterNow = structCopy.begin();
       ++iterNow;
-      nextIter = iterNow;
-      ++nextIter;
-      while (iterNow != end)
-      {
-        if (comp((*iterNow), (*nextIter)))
-        {
-          isEven = true;
-          std::swap((*iterNow), (*nextIter));
-        }
-        ++(++iterNow);
-        ++(++nextIter);
-      }
+      sortForEvenOdd(iterNow, end, comp, isEven);
     }
-    iterNow = listCopy.begin();
-    while (iterNow != listCopy.end())
-    {
-      out << (*iterNow) << ' ';
-      ++iterNow;
-    }
-    out << '\n';
+    listOut(structCopy, out);
   }
 }
 
