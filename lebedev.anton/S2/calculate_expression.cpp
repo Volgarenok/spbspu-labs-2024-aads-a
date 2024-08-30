@@ -8,7 +8,7 @@ long long lebedev::safePlus(long long a, long long b)
 {
   constexpr long long max_ll = std::numeric_limits< long long >::max();
   constexpr long long min_ll = std::numeric_limits< long long >::min();
-  if (b >= 0 && (max_ll - b < a) || b < 0 && (min_ll - b > a))
+  if ((b >= 0 && (max_ll - b < a)) || (b < 0 && (min_ll - b > a)))
   {
     throw std::out_of_range("ERROR: Sum overflow");
   }
@@ -19,7 +19,7 @@ long long lebedev::safeMinus(long long a, long long b)
 {
   constexpr long long max_ll = std::numeric_limits< long long >::max();
   constexpr long long min_ll = std::numeric_limits< long long >::min();
-  if (b < 0 && (max_ll + b < a) || b >= 0 && (min_ll + b > a))
+  if ((b < 0 && (max_ll + b < a)) || (b >= 0 && (min_ll + b > a)))
   {
     throw std::out_of_range("ERROR: Substraction overflow");
   }
