@@ -79,9 +79,7 @@ lebedev::Queue< lebedev::PostfixExpression > lebedev::convertExpression(Queue< I
   }
   while (!stack.empty())
   {
-    InfixExpression curr_symbol = stack.top();
-    stack.pop();
-    if (curr_symbol.getType() == Symbol::operation)
+    if (stack.top().getType() == Symbol::operation)
     {
       queue_postfix.push(PostfixExpression(stack.top().getOperation()));
       stack.pop();
