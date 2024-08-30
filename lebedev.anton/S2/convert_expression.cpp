@@ -17,9 +17,16 @@ static short getOperationPriority(lebedev::Operation op)
   }
 }
 
-static bool checkOperationPriority(lebedev::Operation a, lebedev::Operation b)
+static bool checkOperationPriority(lebedev::InfixExpression a, lebedev::Operation b)
 {
-  return getOperationPriority(a.operation) >= getOperationPriority(b.operation);
+  if (a.getType() == lebedev::Symbol::operation)
+  {
+    return getOperationPriority(a.getOperation()) >= getOperationPriority(b.operation);
+  }
+  else
+  {
+    return false;
+  }
 }
 
 lebedev::Queue< lebedev::PostfixExpression > lebedev::convertExpression(Queue< InfixExpression > & queue_infix)
@@ -37,12 +44,12 @@ lebedev::Queue< lebedev::PostfixExpression > lebedev::convertExpression(Queue< I
     }
     else if (curr_symbol.getType() == Symbol::operation)
     {
-      bool is_primary_operation = checkOperationPriority(stack.top().getOperation(), curr_symbol.getOperation());
-      while (stack.top().getType() == Symbol::operation && is_primary_operation && !stack.empty())
+      bool stack_primary_op = !stack.empty() && checkOperationPriority(stack.top(), curr_symbol.getOperation());
+      while (stack_primary_op)
       {
-        queue_postfix.push(PostfixExpression(curr_symbol.getOperation()));
+        queue_postfix.push(PostfixExpression(stack.top().getOperation()));
         stack.pop();
-        is_primary_operation = checkOperationPriority(stack.top().getOperation(), curr_symbol.getOperation());
+        stack_primary_op = !stack.empty() && checkOperationPriority(stack.top(), curr_symbol.getOperation());
       }
       stack.push(curr_symbol);
     }
