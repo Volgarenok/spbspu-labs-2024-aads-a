@@ -37,9 +37,11 @@ int main(int argc, char * argv[])
       Queue< PostfixExpression > curr_postfix_expr = convertExpression(curr_infix_expr);
       stack_res.push(calculatePostfixExpr(curr_postfix_expr));
     }
-
-    std::cout << stack_res.top();
-    stack_res.pop();
+    if (!stack_res.empty())
+    {
+      std::cout << stack_res.top();
+      stack_res.pop();
+    }
     while (!stack_res.empty())
     {
       std::cout << " ";

@@ -39,13 +39,12 @@ long long lebedev::safeMult(long long a, long long b)
 
 long long lebedev::safeDiv(long long a, long long b)
 {
-  constexpr long long max_ll = std::numeric_limits< long long >::max();
   constexpr long long min_ll = std::numeric_limits< long long >::min();
   if (b == 0)
   {
     throw std::logic_error("ERROR: Division by zero");
   }
-  else if ((max_ll * b < a) || (min_ll * b > a))
+  else if (a == min_ll && b == -1)
   {
     throw std::out_of_range("ERROR: Division overflow");
   }
@@ -58,7 +57,15 @@ long long lebedev::safeMod(long long a, long long b)
   {
     throw std::logic_error("ERROR: Division by zero");
   }
-  return a % b;
+  long long res = a % b;
+  if (res >= 0)
+  {
+    return res;
+  }
+  else
+  {
+    return (res + b);
+  }
 }
 
 long long lebedev::calculatePostfixExpr(Queue< PostfixExpression > & queue_postfix)
