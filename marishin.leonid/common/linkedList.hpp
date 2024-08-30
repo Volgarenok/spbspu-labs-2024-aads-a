@@ -1,8 +1,8 @@
 #ifndef LINKEDLIST_HPP
 #define LINKEDLIST_HPP
 
-#include "node.hpp"
 #include "iterator.hpp"
+#include "node.hpp"
 
 namespace marishin
 {
@@ -58,6 +58,27 @@ namespace marishin
       other.head_ = nullptr;
       other.tail_ = nullptr;
       other.size_ = 0;
+    }
+
+    template < typename InputIt >
+    LinkedList(InputIt first, InputIt last):
+      head_(nullptr),
+      tail_(nullptr),
+      size_(0)
+    {
+      while (first != last)
+      {
+        try
+        {
+          push_back(*first);
+          ++first;
+        }
+        catch (...)
+        {
+          clear();
+          throw;
+        }
+      }
     }
 
     LinkedList & operator=(const LinkedList & other)
