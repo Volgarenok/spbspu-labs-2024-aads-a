@@ -45,7 +45,6 @@ namespace belokurskaya
     }
   }
 
-  
   template< class T, class Compare >
   T getPivot(T begin, T end, Compare cmp)
   {
