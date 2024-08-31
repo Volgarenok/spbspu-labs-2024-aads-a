@@ -1,4 +1,6 @@
 ﻿#include <iostream>
+#include <map>
+#include <functional>
 
 #include "list.hpp"
 
@@ -15,4 +17,5 @@ int main(int argc, char* argv[])
     std::cerr << "Invalid size\n";
     return 1;
   }
+  std::map< std::pair< std::string, std::string >, std::function< void(size_t, std::ostream&) > > commands;
 }
