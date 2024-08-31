@@ -3,9 +3,11 @@
 #include <functional>
 
 #include "list.hpp"
+#include "sortings.hpp"
 
 int main(int argc, char* argv[])
 {
+  std::srand(std::time(0));
   if (argc != 4)
   {
     std::cerr << "Invalid args\n";
