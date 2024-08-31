@@ -1,5 +1,7 @@
 ﻿#include <iostream>
 
+#include "list.hpp"
+
 int main(int argc, char* argv[])
 {
   if (argc != 4)
