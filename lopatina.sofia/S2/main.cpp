@@ -156,23 +156,38 @@ public:
   explicit PostfixType(long long val);
   explicit PostfixType(char val);
   ~PostfixType() = default;
+  TypeName getType() const;
+  long long getOperand() const;
+  char getOperation() const;
 private:
-  long long number_;
-  char symbol_;
+  long long operand_;
+  char operation_;
   TypeName type_;
 };
 PostfixType::PostfixType(long long val):
-  number_(val),
-  symbol_(0),
+  operand_(val),
+  operation_(0),
   type_(TypeName::OPERAND)
 {}
 PostfixType::PostfixType(char val):
-  number_(0),
-  symbol_(val),
+  operand_(0),
+  operation_(val),
   type_(TypeName::OPERATION)
 {}
+TypeName PostfixType::getType() const
+{
+  return type_;
+}
+long long PostfixType::getOperand() const
+{
+  return operand_;
+}
+char PostfixType::getOperation() const
+{
+  return operation_;
+}
 
-void inputExpression(std::istream & in, Queue<InfixType> & queue_source)
+bool inputExpression(std::istream & in, Queue<InfixType> & queue_source)
 {
   char c = 0;
   std::string num_str = "";
@@ -181,6 +196,10 @@ void inputExpression(std::istream & in, Queue<InfixType> & queue_source)
   {
     if (c == '\n')
     {
+      if (queue_source.empty())
+      {
+        return false;
+      }
       if (!num_str.empty())
       {
         long long num = std::stoll(num_str);
@@ -188,7 +207,7 @@ void inputExpression(std::istream & in, Queue<InfixType> & queue_source)
         queue_source.push(elem);
       }
       in >> std::skipws;
-      return;
+      return true;
     }
     if (isDigit(c))
     {
@@ -428,16 +447,21 @@ long long calculatePostfix(Queue<PostfixType> & queue_postfix)
 
 int main(int argc, char ** argv)
 {
-  Queue<InfixType> queue_source;
-  Queue<char> queue_result;
-  Stack<char> stack_process;
+  Stack<long long> stack_result;
   try
   {
     if (argc == 1)
     {
       while (!std::cin.eof())
       {
-        inputExpression(std::cin, queue_source);
+        Queue<InfixType> queue_infix;
+
+        int is_input = inputExpression(std::cin, queue_infix);
+        if (is_input == 1)
+        {
+          Queue<PostfixType> queue_postfix = convertToPostfix(queue_infix);
+          stack_result.push(calculatePostfix(queue_postfix));
+        }
       }
     }
   }
@@ -446,6 +470,15 @@ int main(int argc, char ** argv)
     std::cerr << e.what() << '\n';
     return 1;
   }
+  std::cout << stack_result.top();
+  stack_result.pop();
+  while (!stack_result.empty())
+  {
+    std::cout << ' ' << stack_result.top();
+    stack_result.pop();
+  }
+  std::cout << '\n';
+  return 0;
 
 /*
   if (argc == 1)
