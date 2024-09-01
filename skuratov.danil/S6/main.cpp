@@ -33,12 +33,52 @@ void shellSort(ForwardIterator begin, ForwardIterator end, Compare cmp)
   }
 }
 
+template< typename Iterator, class Compare >
+void shakerSort(Iterator begin, Iterator end, Compare cmp)
+{
+  bool swapped = true;
+  auto left = begin;
+  auto right = end;
+  --right;
+
+  while (swapped)
+  {
+    swapped = false;
+
+    for (auto i = left; i < right; ++i)
+    {
+      if (cmp(*(i + 1), *i))
+      {
+        std::iter_swap(i, i + 1);
+        swapped = true;
+      }
+    }
+
+    if (!swapped)
+    {
+      break;
+    }
+    swapped = false;
+    --right;
+
+    for (auto i = right; i > left; --i)
+    {
+      if (cmp(*i, *(i - 1)))
+      {
+        std::iter_swap(i, i - 1);
+        swapped = true;
+      }
+    }
+    ++left;
+  }
+}
+
 template< typename T >
 void generateRandomNumbers(std::deque< T >& container, size_t size)
 {
   for (size_t i = 0; i < size; ++i)
   {
-    container.push_back(static_cast< T >(rand() % 100));  
+    container.push_back(static_cast< T >(rand() % 100));
   }
 }
 
