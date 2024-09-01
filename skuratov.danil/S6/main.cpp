@@ -82,6 +82,36 @@ void generateRandomNumbers(std::deque< T >& container, size_t size)
   }
 }
 
+template< typename T >
+void printContainer(const std::deque< T >& container)
+{
+  for (const auto& item : container)
+  {
+    std::cout << item << " ";
+  }
+  std::cout << "\n";
+}
+
+template< typename T >
+void printContainer(const List< T >& container)
+{
+  for (auto it = container.cbegin(); it != container.cend(); ++it)
+  {
+    std::cout << *it << " ";
+  }
+  std::cout << "\n";
+}
+
+template< typename T >
+void printContainer(const std::forward_list< T >& container)
+{
+  for (const auto& item : container)
+  {
+    std::cout << item << " ";
+  }
+  std::cout << "\n";
+}
+
 int main(/*int argc, char* argv[]*/)
 {
   /*if (argc != 4)
