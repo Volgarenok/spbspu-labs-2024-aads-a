@@ -115,7 +115,7 @@ void printContainer(const std::forward_list< T >& container)
 int main(int argc, char* argv[])
 {
   using namespace skuratov;
-  if (argc != 4)
+  if (argc != 5)
   {
     std::cerr << "Not enough arguments" << '\n';
     return 1;
@@ -147,13 +147,13 @@ int main(int argc, char* argv[])
       if (ascending)
       {
         shellSort(deq.begin(), deq.end(), std::less< int >());
-        shellSort(dblList.ñbegin(), dblList.ñend(), std::less< int >());
+        shellSort(dblList.cbegin(), dblList.cend(), std::less< int >());
         shellSort(fwdList.begin(), fwdList.end(), std::less< int >());
       }
       else
       {
         shellSort(deq.begin(), deq.end(), std::greater< int >());
-        shellSort(dblList.ñbegin(), dblList.ñend(), std::greater< int >());
+        shellSort(dblList.cbegin(), dblList.cend(), std::greater< int >());
         shellSort(fwdList.begin(), fwdList.end(), std::greater< int >());
       }
     }
@@ -162,13 +162,13 @@ int main(int argc, char* argv[])
       if (ascending)
       {
         shakerSort(deq.begin(), deq.end(), std::less< int >());
-        shakerSort(dblList.ñbegin(), dblList.ñend(), std::less< int >());
+        shakerSort(dblList.cbegin(), dblList.cend(), std::less< int >());
         shakerSort(fwdList.begin(), fwdList.end(), std::less< int >());
       }
       else
       {
         shakerSort(deq.begin(), deq.end(), std::greater< int >());
-        shakerSort(dblList.ñbegin(), dblList.ñend(), std::greater< int >());
+        shakerSort(dblList.cbegin(), dblList.cend(), std::greater< int >());
         shakerSort(fwdList.begin(), fwdList.end(), std::greater< int >());
       }
     }
@@ -184,6 +184,63 @@ int main(int argc, char* argv[])
     printContainer(dblList);
     std::cout << "Sorted using std::forward_list: ";
     printContainer(fwdList);
+  }
+  else if (type == "floats")
+  {
+    std::deque< float > deqFloat;
+    List< float > dblListFloat;
+    std::forward_list< float > fwdListFloat;
+
+    for (size_t i = 0; i < size; ++i)
+    {
+      float number = static_cast< float >(rand()) / RAND_MAX * 100;
+      deqFloat.push_back(number);
+      dblListFloat.pushBack(number);
+      fwdListFloat.push_front(number);
+    }
+
+    if (sortType == "shell")
+    {
+      if (ascending)
+      {
+        shellSort(deqFloat.begin(), deqFloat.end(), std::less< float >());
+        shellSort(dblListFloat.cbegin(), dblListFloat.cend(), std::less< float >());
+        shellSort(fwdListFloat.begin(), fwdListFloat.end(), std::less< float >());
+      }
+      else
+      {
+        shellSort(deqFloat.begin(), deqFloat.end(), std::greater< float >());
+        shellSort(dblListFloat.cbegin(), dblListFloat.cend(), std::greater< float >());
+        shellSort(fwdListFloat.begin(), fwdListFloat.end(), std::greater< float >());
+      }
+    }
+    else if (sortType == "shaker")
+    {
+      if (ascending)
+      {
+        shakerSort(deqFloat.begin(), deqFloat.end(), std::less< float >());
+        shakerSort(dblListFloat.cbegin(), dblListFloat.cend(), std::less< float >());
+        shakerSort(fwdListFloat.begin(), fwdListFloat.end(), std::less< float >());
+      }
+      else
+      {
+        shakerSort(deqFloat.begin(), deqFloat.end(), std::greater< float >());
+        shakerSort(dblListFloat.cbegin(), dblListFloat.cend(), std::greater< float >());
+        shakerSort(fwdListFloat.begin(), fwdListFloat.end(), std::greater< float >());
+      }
+    }
+    else
+    {
+      std::cerr << "Invalid sort type" << '\n';
+      return 1;
+    }
+ 
+    std::cout << "Sorted using std::deque: ";
+    printContainer(deqFloat);
+    std::cout << "Sorted using custom List: ";
+    printContainer(dblListFloat);
+    std::cout << "Sorted using std::forward_list: ";
+    printContainer(fwdListFloat);
   }
   else
   {
