@@ -35,7 +35,8 @@ namespace chistyakov
       }
 
       explicit List(List< T > && list):
-        head_(list.head_)
+        head_(list.head_),
+        tail_(list.tail_)
       {
         list.head_ = nullptr;
         list.tail_ = nullptr;
