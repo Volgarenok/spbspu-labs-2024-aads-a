@@ -160,7 +160,6 @@ namespace belokurskaya
           capacity_ = newCapacity;
           delete[] data_;
           data_ = newData;
-          delete[] newData;
         }
         catch (const std::exception& e)
         {

@@ -30,7 +30,6 @@ namespace belokurskaya
         {
           std::copy(other.data_, other.data_ + capacity_, temp);
           data_ = temp;
-          delete[] temp;
         }
         catch (const std::exception& e)
         {
@@ -174,7 +173,6 @@ namespace belokurskaya
           delete[] data_;
           data_ = newData;
           capacity_ = newCapacity;
-          delete[] newData;
         }
         catch (const std::exception& e)
         {
