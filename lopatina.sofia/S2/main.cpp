@@ -476,6 +476,10 @@ int main(int argc, char ** argv)
     std::cerr << e.what() << '\n';
     return 1;
   }
+  if (stack_result.empty())
+  {
+    return 0;
+  }
   std::cout << stack_result.top();
   stack_result.pop();
   while (!stack_result.empty())
