@@ -422,7 +422,12 @@ long long calculatePostfix(Queue<PostfixType> & queue_postfix)
         {
           throw std::logic_error("Division by zero");
         }
-        stack_process.push(num1 % num2);
+        long long res = num1 % num2;
+        if (num1 < 0)
+        {
+          res = std::abs(num2) + res;
+        }
+        stack_process.push(res);
       }
     }
     queue_postfix.pop();
@@ -476,17 +481,15 @@ int main(int argc, char ** argv)
     std::cerr << e.what() << '\n';
     return 1;
   }
-  if (stack_result.empty())
+  if (!stack_result.empty())
   {
-    std::cout << '\n';
-    return 0;
-  }
-  std::cout << stack_result.top();
-  stack_result.pop();
-  while (!stack_result.empty())
-  {
-    std::cout << ' ' << stack_result.top();
+    std::cout << stack_result.top();
     stack_result.pop();
+    while (!stack_result.empty())
+    {
+      std::cout << ' ' << stack_result.top();
+      stack_result.pop();
+    }
   }
   std::cout << '\n';
   return 0;
