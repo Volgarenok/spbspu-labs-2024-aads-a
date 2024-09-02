@@ -70,34 +70,13 @@ namespace belokurskaya
   }
 
   template < class T, class Compare >
-  void quicksort(T begin, T end, Compare cmp)
+  void quickSort(T begin, T end, Compare cmp)
   {
     if (begin != end)
     {
       auto pivot = getPivot(begin, end, cmp);
-      quicksort(begin, pivot, cmp);
-      quicksort(std::next(pivot), end, cmp);
-    }
-  }
-
-  template < typename T >
-  void bubbleSort(List< T >& list)
-  {
-    bool swapped = true;
-    auto end = list.end();
-
-    while (swapped)
-    {
-      swapped = false;
-
-      for (auto it = list.begin(); it != end; ++it)
-      {
-        if (it != end && *it > *(it + 1))
-        {
-          std::swap(*it, *(it + 1));
-          swapped = true;
-        }
-      }
+      quickSort(begin, pivot, cmp);
+      quickSort(std::next(pivot), end, cmp);
     }
   }
 }

@@ -1,5 +1,5 @@
-#ifndef SORTINGS_HPP
-#define SORTINGS_HPP
+#ifndef GENERATOR_HPP
+#define GENERATOR_HPP
 
 #include <deque>
 #include <ctime>
