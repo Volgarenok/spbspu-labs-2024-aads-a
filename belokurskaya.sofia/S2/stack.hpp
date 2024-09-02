@@ -151,7 +151,7 @@ namespace belokurskaya
       T* data_;
       const size_t capacity_change_factor_ = 2;
 
-      void reallocateMemory(int newCapacity)
+      void reallocateMemory(int const newCapacity)
       {
         T* newData = new T[newCapacity];
         try
@@ -166,7 +166,6 @@ namespace belokurskaya
           delete[] newData;
           throw;
         }
-        delete[] newData;
       }
 
       void addMemory()

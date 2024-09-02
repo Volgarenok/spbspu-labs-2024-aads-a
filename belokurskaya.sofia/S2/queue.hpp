@@ -36,7 +36,6 @@ namespace belokurskaya
           delete[] temp;
           throw;
         }
-        delete[] temp;
       }
 
       Queue(Queue&& other)
@@ -179,7 +178,6 @@ namespace belokurskaya
           delete[] newData;
           throw;
         }
-        delete[] newData;
       }
 
       void addMemory()
