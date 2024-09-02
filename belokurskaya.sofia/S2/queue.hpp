@@ -30,12 +30,14 @@ namespace belokurskaya
         {
           std::copy(other.data_, other.data_ + capacity_, temp);
           data_ = temp;
+          delete[] temp;
         }
         catch (...)
         {
           delete[] temp;
           throw;
         }
+
       }
 
       Queue(Queue&& other)
@@ -94,12 +96,12 @@ namespace belokurskaya
         return value;
       }
 
-      bool isEmpty() noexcept
+      bool isEmpty() const noexcept
       {
         return size_ == 0;
       }
 
-      bool isFull() noexcept
+      bool isFull() const noexcept
       {
         return rear_ == capacity_ - 1;
       }
@@ -166,6 +168,7 @@ namespace belokurskaya
         T* newData = new T[newCapacity];
         if (newData == nullptr)
         {
+          delete[] newData;
           throw std::runtime_error("Memory problems");
         }
         try
@@ -175,6 +178,7 @@ namespace belokurskaya
           front_ = 0;
           delete[] data_;
           data_ = newData;
+          delete[] newData;
           capacity_ = newCapacity;
         }
         catch (const std::exception& e)

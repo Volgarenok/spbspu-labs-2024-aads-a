@@ -88,7 +88,7 @@ namespace belokurskaya
         return data_[top_];
       }
 
-      size_t size() noexcept
+      size_t size() const noexcept
       {
         return size_;
       }
@@ -160,6 +160,7 @@ namespace belokurskaya
           capacity_ = newCapacity;
           delete[] data_;
           data_ = newData;
+          delete[] newData;
         }
         catch (const std::exception& e)
         {
