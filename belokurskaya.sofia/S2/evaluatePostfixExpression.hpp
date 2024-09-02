@@ -12,7 +12,7 @@ namespace belokurskaya
   bool willMultiplyOverflowOrUnderflow(long long int a, long long int b, char* errorType);
   bool willSubtractUnderflow(long long int a, long long int b);
 
-  long long evaluatePostfixExpression(std::string expression);
+  long long int evaluatePostfixExpression(std::string expression);
 }
 
 #endif
