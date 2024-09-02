@@ -11,11 +11,6 @@ template < typename T >
 class Queue
 {
 public:
-  Queue()
-  {
-    queue_list;
-  }
-  ~Queue() = default;
   bool empty() const
   {
     return queue_list.empty();
@@ -56,11 +51,6 @@ template < typename T >
 class Stack
 {
 public:
-  Stack()
-  {
-    stack_list;
-  }
-  ~Stack() = default;
   bool empty() const
   {
     return stack_list.empty();
@@ -187,7 +177,7 @@ char PostfixType::getOperation() const
   return operation_;
 }
 
-bool inputExpression(std::istream & in, Queue<InfixType> & queue_source)
+void inputExpression(std::istream & in, Queue<InfixType> & queue_source)
 {
   char c = 0;
   std::string num_str = "";
@@ -198,7 +188,7 @@ bool inputExpression(std::istream & in, Queue<InfixType> & queue_source)
     {
       if (queue_source.empty())
       {
-        return false;
+        return;
       }
       if (!num_str.empty())
       {
@@ -207,7 +197,7 @@ bool inputExpression(std::istream & in, Queue<InfixType> & queue_source)
         queue_source.push(elem);
       }
       in >> std::skipws;
-      return true;
+      return;
     }
     if (isDigit(c))
     {
@@ -365,7 +355,6 @@ bool isMultiplicationOverflow(long long num1, long long num2)
     return false;
   }
   const long long max = std::numeric_limits<long long>::max();
-  const long long min = std::numeric_limits<long long>::min();
   if (std::abs(num1) > max / std::abs(num2))
   {
     return true;
@@ -448,6 +437,7 @@ long long calculatePostfix(Queue<PostfixType> & queue_postfix)
 int main(int argc, char ** argv)
 {
   Stack<long long> stack_result;
+  Queue< Queue< InfixType > > queue_input;
   try
   {
     if (argc == 1)
@@ -455,14 +445,34 @@ int main(int argc, char ** argv)
       while (!std::cin.eof())
       {
         Queue<InfixType> queue_infix;
-
-        int is_input = inputExpression(std::cin, queue_infix);
-        if (is_input == 1)
-        {
-          Queue<PostfixType> queue_postfix = convertToPostfix(queue_infix);
-          stack_result.push(calculatePostfix(queue_postfix));
-        }
+        inputExpression(std::cin, queue_infix);
+        queue_input.push(queue_infix);
       }
+    }
+    else
+    {
+      std::ifstream input(argv[1]);
+      if (!input)
+      {
+        std::cerr << "No such file\n";
+        return 1;
+      }
+      while (!input.eof())
+      {
+        Queue<InfixType> queue_infix;
+        inputExpression(input, queue_infix);
+        queue_input.push(queue_infix);
+      }
+    }
+    while (!queue_input.empty())
+    {
+      Queue<InfixType> queue_infix = queue_input.front();
+      if (!queue_infix.empty())
+      {
+        Queue<PostfixType> queue_postfix = convertToPostfix(queue_infix);
+        stack_result.push(calculatePostfix(queue_postfix));
+      }
+      queue_input.pop();
     }
   }
   catch (const std::exception & e)
@@ -479,47 +489,4 @@ int main(int argc, char ** argv)
   }
   std::cout << '\n';
   return 0;
-
-/*
-  if (argc == 1)
-  {
-    std::copy(
-        std::istream_iterator<int>{std::cin},
-        std::istream_iterator<int>{},
-        std::back_inserter(ints)
-      );
-      if (!std::cin && !std::cin.eof())
-      {
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-      }
-  }
-  else if (argc == 2)
-  {
-    std::ifstream input(argv[1]);
-    while (!input.eof())
-    {
-      std::copy(
-        std::istream_iterator<int>{input},
-        std::istream_iterator<int>{},
-        std::back_inserter(ints)
-      );
-      if (!input && !input.eof())
-      {
-        input.clear();
-        input.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-      }
-    }
-  }
-*/
-/*
-  std::cout << queue_source.empty() << '\n';
-
-  while (!queue_source.empty())
-  {
-    std::cout << queue_source.front() << ' ';
-    queue_source.pop();
-  }
-  std::cout << '\n';
-*/
 }
