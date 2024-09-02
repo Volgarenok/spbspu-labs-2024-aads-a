@@ -478,6 +478,7 @@ int main(int argc, char ** argv)
   }
   if (stack_result.empty())
   {
+    std::cout << '\n';
     return 0;
   }
   std::cout << stack_result.top();
