@@ -32,7 +32,7 @@ namespace belokurskaya
           data_ = temp;
           delete[] temp;
         }
-        catch (...)
+        catch (const std::exception& e)
         {
           delete[] temp;
           throw;
@@ -166,11 +166,6 @@ namespace belokurskaya
       void reallocateMemory(size_t newCapacity)
       {
         T* newData = new T[newCapacity];
-        if (newData == nullptr)
-        {
-          delete[] newData;
-          throw std::runtime_error("Memory problems");
-        }
         try
         {
           std::copy(data_ + front_, data_ + rear_ + 1, newData);
@@ -178,8 +173,8 @@ namespace belokurskaya
           front_ = 0;
           delete[] data_;
           data_ = newData;
-          delete[] newData;
           capacity_ = newCapacity;
+          delete[] newData;
         }
         catch (const std::exception& e)
         {
