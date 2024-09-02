@@ -166,6 +166,7 @@ namespace belokurskaya
           delete[] newData;
           throw;
         }
+        delete[] newData;
       }
 
       void addMemory()
