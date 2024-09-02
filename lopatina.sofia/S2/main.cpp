@@ -186,10 +186,6 @@ void inputExpression(std::istream & in, Queue<InfixType> & queue_source)
   {
     if (c == '\n')
     {
-      if (queue_source.empty())
-      {
-        return;
-      }
       if (!num_str.empty())
       {
         long long num = std::stoll(num_str);
