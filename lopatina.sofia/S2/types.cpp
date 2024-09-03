@@ -34,6 +34,7 @@ lopatina::PostfixType::PostfixType(char val):
   operation_(val),
   type_(TypeName::OPERATION)
 {}
+
 lopatina::TypeName lopatina::PostfixType::getType() const
 {
   return type_;
