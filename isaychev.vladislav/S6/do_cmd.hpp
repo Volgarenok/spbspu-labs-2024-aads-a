@@ -7,8 +7,8 @@
 #include <list>
 #include <random>
 #include <forward_list>
+#include <sorts.hpp>
 #include "output_range.hpp"
-#include "sorts.hpp"
 
 namespace isaychev
 {
