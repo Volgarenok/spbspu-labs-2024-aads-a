@@ -29,9 +29,9 @@ namespace rebdev
         {
           throw std::logic_error("Try to take and delete element from empty stack!");
         }
-        T backData = dataBase_.back();
+        std::unique_ptr< T > ptr (new T{dataBase_.back()});
         dataBase_.pop_back();
-        return std::unique_ptr< T >(new T{backData});
+        return ptr;
       }
       size_t size() const noexcept
       {

@@ -29,9 +29,9 @@ namespace rebdev
         {
           throw std::logic_error("Try to take and delete element from empty queue!");
         }
-        T backData = dataBase_.front();
+        std::unique_ptr< T > ptr(new T{dataBase_.front()});
         dataBase_.pop_front();
-        return std::unique_ptr< T >(new T{backData});
+        return ptr;
       }
       size_t size() const noexcept
       {
