@@ -79,14 +79,23 @@ namespace belokurskaya
           throw std::runtime_error("Queue is empty");
         }
         T value = data_[front_];
-        Queue temp(*this);
-        temp.front_ = (temp.front_ + 1) % capacity_;
-        temp.size_--;
-        if (temp.size_ == 0)
+        try
         {
-          temp.front_ = 0;
+          Queue temp(*this);
+          temp.front_ = (temp.front_ + 1) % capacity_;
+          temp.size_--;
+
+          if (temp.size_ == 0)
+          {
+            temp.front_ = 0;
+          }
+
+          swap(temp);
         }
-        swap(temp);
+        catch (const std::exception& e)
+        {
+          throw;
+        }
         return value;
       }
 
