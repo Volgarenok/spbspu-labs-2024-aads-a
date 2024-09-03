@@ -15,6 +15,7 @@ namespace vyzhanov
     size_t capacity() const noexcept;
     T& top();
     const T& top() const;
+    ~Stack() = default;
   private:
     List< T > stack_;
   };
