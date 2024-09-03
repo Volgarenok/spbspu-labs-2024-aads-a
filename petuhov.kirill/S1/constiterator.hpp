@@ -2,6 +2,7 @@
 #define CONST_ITERATOR_HPP
 
 #include <cassert>
+#include <iterator>
 #include <stdexcept>
 #include "node.hpp"
 
@@ -19,6 +20,8 @@ namespace petuhov
     ConstIterator() = default;
     ConstIterator(const detail::Node< T > *node) : node_(node) {}
     ConstIterator(const ConstIterator &other) = default;
+
+    ConstIterator& operator=(const ConstIterator &other) = default;
 
     const T &operator*() const
     {
