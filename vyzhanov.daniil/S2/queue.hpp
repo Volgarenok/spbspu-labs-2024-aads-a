@@ -23,9 +23,8 @@ namespace vyzhanov
 
   template < class T >
   Queue< T >::Queue():
-  {
-    List();
-  }
+    queue_()
+  {}
 
   template < typename T >
   void Queue< T >::push(const T& obj)
