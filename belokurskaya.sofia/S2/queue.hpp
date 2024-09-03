@@ -142,7 +142,7 @@ namespace belokurskaya
         return *this;
       }
 
-      void swap(Queue& other)
+      void swap(Queue& other) noexcept
       {
         std::swap(data_, other.data_);
         std::swap(capacity_, other.capacity_);
