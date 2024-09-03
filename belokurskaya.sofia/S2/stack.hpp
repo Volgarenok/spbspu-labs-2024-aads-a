@@ -20,9 +20,22 @@ namespace belokurskaya
         size_(other.size_),
         top_(other.top_),
         capacity_(other.capacity_),
-        data_(new T[other.capacity_])
+        data_(nullptr)
       {
-        std::copy(other.data_, other.data_ + other.capacity_, data_);
+        if (other.capacity_ > 0)
+        {
+          data_ = new T[other.capacity_];
+          try
+          {
+            std::copy(other.data_, other.data_ + other.size_, data_);
+          }
+          catch (const std::exception& e)
+          {
+            delete[] data_;
+            data_ = nullptr;
+            throw;
+          }
+        }
       }
 
       Stack(Stack&& other) noexcept:
@@ -32,6 +45,9 @@ namespace belokurskaya
         data_(other.data_)
       {
         other.data_ = nullptr;
+        other.size_ = 0;
+        other.top_ = -1;
+        other.capacity_ = 0;
       }
 
       ~Stack()
@@ -47,8 +63,8 @@ namespace belokurskaya
           {
             addMemory();
           }
-          size_++;
           data_[++top_] = value;
+          size_++;
         }
         catch (const std::exception& e)
         {
@@ -107,12 +123,9 @@ namespace belokurskaya
         return out;
       }
 
-      Stack& operator=(Stack other)
+      Stack& operator=(Stack other) noexcept
       {
-        std::swap(data_, other.data_);
-        std::swap(size_, other.size_);
-        std::swap(capacity_, other.capacity_);
-        std::swap(top_, other.top_);
+        swap(other);
         return *this;
       }
 
@@ -120,11 +133,15 @@ namespace belokurskaya
       {
         if (this != &other)
         {
+          delete[] data_;
           size_ = other.size_;
           top_ = other.top_;
           capacity_ = other.capacity_;
           data_ = other.data_;
           other.data_ = nullptr;
+          other.size_ = 0;
+          other.top_ = -1;
+          other.capacity_ = 0;
         }
         return *this;
       }
@@ -140,7 +157,7 @@ namespace belokurskaya
 
     private:
       const size_t initial_capacity_ = 3;
-      size_t size_;
+      size_t size_ = 0;
       int top_;
       int capacity_;
       T* data_;
@@ -148,13 +165,20 @@ namespace belokurskaya
 
       void reallocateMemory(int const newCapacity)
       {
+        if (newCapacity <= 0)
+        {
+          throw std::invalid_argument("New capacity must be positive.");
+        }
+
         T* newData = new T[newCapacity];
+
         try
         {
-          std::copy(data_, data_ + std::min(capacity_, newCapacity), newData);
-          capacity_ = newCapacity;
+          std::copy(data_, data_ + size_, newData);
+
           delete[] data_;
           data_ = newData;
+          capacity_ = newCapacity;
         }
         catch (const std::exception& e)
         {
