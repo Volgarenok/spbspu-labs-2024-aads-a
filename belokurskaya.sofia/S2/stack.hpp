@@ -107,17 +107,12 @@ namespace belokurskaya
         return out;
       }
 
-      Stack& operator=(const Stack& other)
+      Stack& operator=(Stack other)
       {
-        if (this != &other)
-        {
-          delete[] data_;
-          size_ = other.size_;
-          top_ = other.top_;
-          capacity_ = other.capacity_;
-          data_ = new T[capacity_];
-          std::copy(other.data_, other.data_ + capacity_, data_);
-        }
+        std::swap(data_, other.data_);
+        std::swap(size_, other.size_);
+        std::swap(capacity_, other.capacity_);
+        std::swap(top_, other.top_);
         return *this;
       }
 
