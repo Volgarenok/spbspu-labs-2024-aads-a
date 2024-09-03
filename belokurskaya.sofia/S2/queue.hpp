@@ -25,15 +25,15 @@ namespace belokurskaya
         rear_(other.rear_),
         data_(nullptr)
       {
-        T* temp = new T[other.capacity_];
+        data_ = new T[other.capacity_];
         try
         {
-          std::copy(other.data_, other.data_ + capacity_, temp);
-          data_ = temp;
+          std::copy(other.data_, other.data_ + capacity_, data_);
         }
         catch (const std::exception& e)
         {
-          delete[] temp;
+          delete[] data_;
+          data_ = nullptr;
           throw;
         }
       }
