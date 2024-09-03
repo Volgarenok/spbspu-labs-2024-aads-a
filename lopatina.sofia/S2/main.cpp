@@ -5,7 +5,8 @@
 #include <vector>
 #include <iterator>
 #include <limits>
-#include <list>
+//#include <list>
+#include "list.hpp"
 
 template < typename T >
 class Queue
@@ -44,7 +45,7 @@ public:
     queue_list.pop_front();
   }
 private:
-  std::list<T> queue_list;
+  lopatina::List<T> queue_list;
 };
 
 template < typename T >
@@ -76,7 +77,7 @@ public:
     stack_list.pop_back();
   }
 private:
-  std::list<T> stack_list;
+  lopatina::List<T> stack_list;
 };
 
 //--------------------
