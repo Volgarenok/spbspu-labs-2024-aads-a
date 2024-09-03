@@ -159,6 +159,11 @@ namespace belokurskaya
 
       void reallocateMemory(size_t newCapacity)
       {
+        if (newCapacity <= 0)
+        {
+          throw std::invalid_argument("New capacity must be positive.");
+        }
+
         T* newData = new T[newCapacity];
         try
         {
