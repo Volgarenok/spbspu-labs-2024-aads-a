@@ -31,7 +31,6 @@ long long vyzhanov::performOperation(long long operand1, long long operand2, cha
 
 void vyzhanov::calculatePostfix(Queue< Queue< Token > >& expressions, Stack< long long >& results)
 {
-  size_t count = 0;
   while (!expressions.empty())
   {
     Queue< Token > curr = expressions.top();
