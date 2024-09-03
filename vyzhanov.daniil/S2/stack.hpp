@@ -23,8 +23,9 @@ namespace vyzhanov
 
   template < class T >
   Stack< T >::Stack():
-    stack_()
-  {}
+  {
+    List();
+  }
 
   template < typename T >
   void Stack< T >::push(const T& obj)
