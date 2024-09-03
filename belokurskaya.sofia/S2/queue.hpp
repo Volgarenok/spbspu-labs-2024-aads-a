@@ -25,15 +25,15 @@ namespace belokurskaya
         rear_(other.rear_),
         data_(nullptr)
       {
-        data_ = new T[capacity_];
+        T* temp = new T[other.capacity_];
         try
         {
-          std::copy(other.data_, other.data_ + size_, data_);
+          std::copy(other.data_, other.data_ + capacity_, temp);
+          data_ = temp;
         }
         catch (const std::exception& e)
         {
-          delete[] data_;
-          data_ = nullptr;
+          delete[] temp;
           throw;
         }
       }
@@ -100,11 +100,6 @@ namespace belokurskaya
         return rear_ == capacity_ - 1;
       }
 
-      size_t size() const noexcept
-      {
-        return size_;
-      }
-
       friend std::ostream& operator<<(std::ostream& out, const Queue< T >& queue)
       {
         for (size_t i = 0; i <= queue.rear_; ++i)
@@ -164,25 +159,15 @@ namespace belokurskaya
 
       void reallocateMemory(size_t newCapacity)
       {
-        if (newCapacity <= capacity_)
-        {
-          return;
-        }
         T* newData = new T[newCapacity];
         try
         {
-          size_t elementsToCopy = size();
-          size_t j = 0;
-
-          for (size_t i = 0; i < elementsToCopy; ++i)
-          {
-            newData[j++] = data_[(front_ + i) % capacity_];
-          }
+          std::copy(data_ + front_, data_ + rear_ + 1, newData);
+          rear_ = rear_ - front_;
+          front_ = 0;
           delete[] data_;
           data_ = newData;
           capacity_ = newCapacity;
-          front_ = 0;
-          rear_ = elementsToCopy - 1;
         }
         catch (const std::exception& e)
         {
