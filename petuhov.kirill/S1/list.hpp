@@ -76,13 +76,35 @@ namespace petuhov
     head_(nullptr),
     tail_(nullptr)
   {
-    detail::Node< T > *current = other.head_;
-    while (current)
+    try
     {
-      push_front(current->value_);
-      current = current->next_;
+      detail::Node< T >* current = other.head_;
+      detail::Node< T >* lastAdded = nullptr;
+
+      while (current)
+      {
+        detail::Node< T >* newNode = new detail::Node< T >(current->value_);
+
+        if (lastAdded)
+        {
+          lastAdded->next_ = newNode;
+        }
+        else
+        {
+          head_ = newNode;
+        }
+
+        lastAdded = newNode;
+        current = current->next_;
+      }
+
+      tail_ = lastAdded;
     }
-    reverse();
+    catch (const std::bad_alloc&)
+    {
+      clear();
+      throw;
+    }
   }
 
   template < typename T >
@@ -152,7 +174,6 @@ namespace petuhov
     }
     catch (const std::bad_alloc&)
     {
-      delete newNode;
       throw;
     }
 
@@ -468,28 +489,36 @@ namespace petuhov
   template < typename InputIterator >
   void List< T >::assign(InputIterator first, InputIterator last)
   {
-    clear();
+    List< T > tempList;
+
     try
     {
       for (; first != last; ++first)
       {
-        detail::Node< T > *newNode = new detail::Node< T >(*first);
-        if (!tail_)
+        detail::Node< T >* newNode = new detail::Node< T >(*first);
+        if (!tempList.tail_)
         {
-          head_ = tail_ = newNode;
+          tempList.head_ = tempList.tail_ = newNode;
         }
         else
         {
-          tail_->next_ = newNode;
-          tail_ = newNode;
+          tempList.tail_->next_ = newNode;
+          tempList.tail_ = newNode;
         }
       }
     }
-    catch(const std::bad_alloc&)
+    catch (const std::bad_alloc&)
     {
-      clear();
+      tempList.clear();
       throw;
     }
+
+    clear();
+    head_ = tempList.head_;
+    tail_ = tempList.tail_;
+
+    tempList.head_ = nullptr;
+    tempList.tail_ = nullptr;
   }
 
   template < typename T >

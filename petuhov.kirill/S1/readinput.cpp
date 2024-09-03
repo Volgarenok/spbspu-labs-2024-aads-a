@@ -1,6 +1,5 @@
 #include "readinput.hpp"
 #include <iostream>
-#include <limits>
 #include <stdexcept>
 #include <string>
 #include "list.hpp"
@@ -46,20 +45,21 @@ namespace petuhov
         }
 
         size_t num = 0;
+        bool isNumber = false;
         while (pos < line.size() && line[pos] >= '0' && line[pos] <= '9')
         {
+          isNumber = true;
           num = num * 10 + (line[pos] - '0');
           ++pos;
         }
 
-        if (num != 0 || (pos > 0 && line[pos - 1] == '0'))
+        if (isNumber)
         {
           numbers.push_front(num);
         }
       }
 
       numbers.reverse();
-
       sequences.push_front(std::make_pair(name, numbers));
 
       start = end + 1;

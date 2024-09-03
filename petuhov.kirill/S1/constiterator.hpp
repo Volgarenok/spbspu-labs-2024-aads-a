@@ -11,7 +11,7 @@ namespace petuhov
   class List;
 
   template < typename T >
-  class ConstIterator
+  class ConstIterator: public std::iterator< std::forward_iterator_tag, const T >
   {
     friend class List< T >;
 
@@ -22,10 +22,6 @@ namespace petuhov
 
     const T &operator*() const
     {
-      if (node_ == nullptr)
-      {
-        throw std::out_of_range("ConstIterator is out of range");
-      }
       return node_->value_;
     }
 
