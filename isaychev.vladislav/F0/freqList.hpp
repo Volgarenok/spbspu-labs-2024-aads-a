@@ -37,7 +37,8 @@ namespace isaychev
   {
    public:
     WordCounter();
-    size_t operator()(const value_t & rhs);
+    void operator()(const value_t & rhs);
+    size_t operator()();
 
    private:
     size_t sum_;

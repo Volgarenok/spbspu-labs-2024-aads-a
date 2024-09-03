@@ -73,8 +73,12 @@ isaychev::WordCounter::WordCounter():
  sum_(0)
 {}
 
-size_t isaychev::WordCounter::operator()(const value_t & rhs)
+void isaychev::WordCounter::operator()(const value_t & rhs)
 {
   sum_ += rhs.second;
+}
+
+size_t isaychev::WordCounter::operator()()
+{
   return sum_;
 }
