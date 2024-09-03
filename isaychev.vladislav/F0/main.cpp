@@ -1,4 +1,4 @@
-#include "word.hpp"
+#include "freqList.hpp"
 
 int main()
 {}

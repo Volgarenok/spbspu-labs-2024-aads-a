@@ -14,6 +14,7 @@ namespace isaychev
   std::istream & operator>>(std::istream & in, Word & w);
   std::ostream & operator<<(std::ostream & in, const Word & w);
   bool operator<(const Word & lhs, const Word & rhs);
+  bool operator==(const Word & lhs, const Word & rhs);
 }
 
 #endif

@@ -59,3 +59,8 @@ bool isaychev::operator<(const Word & lhs, const Word & rhs)
 {
   return lhs.content < rhs.content;
 }
+
+bool isaychev::operator==(const Word & lhs, const Word & rhs)
+{
+  return lhs.content == rhs.content;
+}
