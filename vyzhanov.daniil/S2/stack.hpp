@@ -9,16 +9,22 @@ namespace vyzhanov
   class Stack
   {
   public:
+    Stack();
+    ~Stack() = default;
     void push(const T&);
     void pop();
     bool empty() const noexcept;
     size_t capacity() const noexcept;
     T& top();
     const T& top() const;
-    ~Stack() = default;
   private:
     List< T > stack_;
   };
+
+  template < class T >
+  Stack< T >::Stack():
+    stack_()
+  {}
 
   template < typename T >
   void Stack< T >::push(const T& obj)

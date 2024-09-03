@@ -9,16 +9,22 @@ namespace vyzhanov
   class Queue
   {
   public:
+    Queue();
+    ~Queue() = default;
     void push(const T&);
     void pop();
     bool empty() const noexcept;
     size_t capacity() const noexcept;
     T& top();
     const T& top() const;
-    ~Queue() = default;
   private:
     List< T > queue_;
   };
+
+  template < class T >
+  Queue< T >::Queue():
+    queue_()
+  {}
 
   template < typename T >
   void Queue< T >::push(const T& obj)
