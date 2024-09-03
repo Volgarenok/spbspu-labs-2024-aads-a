@@ -64,8 +64,7 @@ void vyzhanov::calculatePostfix(Queue< Queue< Token > >& expressions, Stack< lon
         {
           throw std::out_of_range("Underflow!");
         }
-        long long res = performOperation(operand1, operand2, it.getOperation());
-        newStack.push(res);
+        newStack.push(performOperation(operand1, operand2, it.getOperation()));
       }
       curr.pop();
     }
