@@ -46,7 +46,7 @@ void vyzhanov::calculatePostfix(Queue< Queue< Token > >& expressions, Stack< lon
         newStack.push(it.getOperand());
         curr.pop();
       }
-      else
+      else if (it.getType() == Type::OPERATION)
       {
         operand2 = newStack.top();
         newStack.pop();
