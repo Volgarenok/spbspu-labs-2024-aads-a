@@ -5,7 +5,7 @@
 
 long long vyzhanov::performOperation(long long operand1, long long operand2, char operation)
 {
-  switch (operation) 
+  switch (operation)
   {
   case '+':
     return operand1 + operand2;
@@ -18,7 +18,7 @@ long long vyzhanov::performOperation(long long operand1, long long operand2, cha
     {
       throw std::logic_error("Divivsion by zero");
     }
-    else 
+    else
     {
       return operand1 / operand2;
     }
