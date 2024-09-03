@@ -1,7 +1,7 @@
 #ifndef QUEUE_HPP
 #define QUEUE_HPP
 
-#include <common/List.hpp>
+#include <List.hpp>
 
 namespace vyzhanov
 {
