@@ -38,18 +38,14 @@ namespace belokurskaya
         }
       }
 
-      Queue(Queue&& other)
+      Queue(Queue&& other) noexcept:
+        capacity_(other.capacity_),
+        size_(other.size_),
+        front_(other.front_),
+        rear_(other.rear_),
+        data_(other.data_)
       {
-        capacity_ = other.capacity_;
-        size_ = other.size_;
-        front_ = other.front_;
-        rear_ = other.rear_;
-        data_ = other.data_;
-        other.capacity_ = initial_capacity_;
-        other.size_ = 0;
-        other.front_ = 0;
-        other.rear_ = -1;
-        other.data_ = new T[capacity_];
+        other.data_ = nullptr;
       }
 
       ~Queue()
