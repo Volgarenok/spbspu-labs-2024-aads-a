@@ -5,8 +5,8 @@
 
 bool isAdditionOverflow(long long num1, long long num2)
 {
-  const long long max = std::numeric_limits<long long>::max();
-  const long long min = std::numeric_limits<long long>::min();
+  const long long max = std::numeric_limits< long long >::max();
+  const long long min = std::numeric_limits< long long >::min();
   if (num1 > 0 && num2 > 0 && (max - num1 < num2))
   {
     return true;
@@ -29,7 +29,7 @@ bool isMultiplicationOverflow(long long num1, long long num2)
   {
     return false;
   }
-  const long long max = std::numeric_limits<long long>::max();
+  const long long max = std::numeric_limits< long long >::max();
   if (std::abs(num1) > max / std::abs(num2))
   {
     return true;
