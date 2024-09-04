@@ -9,6 +9,9 @@ namespace isaychev
   class BSTree;
 
   template < class Key, class Value, class Compare >
+  class RNLIter;
+
+  template < class Key, class Value, class Compare >
   class LNRIter: std::iterator< std::bidirectional_iterator_tag, Key, Value, Compare >
   {
     using this_t = LNRIter< Key, Value, Compare >;
@@ -33,7 +36,9 @@ namespace isaychev
    private:
     node_t * current_;
     Stack< node_t * > stack_;
+
     friend class BSTree< Key, Value, Compare >;
+    friend class RNLIter< Key, Value, Compare >;
 
     LNRIter(node_t * node, Stack< node_t * > && s);
   };
