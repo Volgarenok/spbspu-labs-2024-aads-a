@@ -388,19 +388,8 @@ namespace isaychev
   std::pair< TreeIter< Key, Value, Compare >, TreeIter< Key, Value, Compare > >
   BSTree< Key, Value, Compare >::equal_range(const Key & key)
   {
-    iterator result = find(key);
-    if (!result.current_)
-    {
-      return std::pair< iterator, iterator >(end(), end());
-    }
-    iterator lesser;
-    if (result == (*this).begin())
-    {
-      return std::pair< iterator, iterator >(end(), ++result);
-    }
-    lesser = result++;
-    --lesser;
-    return std::pair< iterator, iterator >(lesser, result);
+    auto res = static_cast< const tree_t & >(*this).equal_range(key);
+    return std::pair< iterator, iterator >(iterator(res.first.current_), iterator(res.second.current_));
   }
 
   template < class Key, class Value, class Compare >
@@ -434,11 +423,11 @@ namespace isaychev
     node_t * temp = root_;
     while (temp)
     {
-      if (cmp_(temp->data.first, key))
+      if (!cmp_(temp->data.first, key))
       {
         return const_iterator(temp);
       }
-      else if (cmp_(key, temp->data.first))
+      if (cmp_(key, temp->data.first))
       {
         temp = temp->left;
       }
@@ -466,7 +455,7 @@ namespace isaychev
       {
         return const_iterator(temp);
       }
-      else if (cmp_(key, temp->data.first))
+      if (cmp_(key, temp->data.first))
       {
         temp = temp->left;
       }
@@ -676,48 +665,85 @@ namespace isaychev
   template < class Key, class Value, class Compare >
   void BSTree< Key, Value, Compare >::erase_el(node_t * curr)
   {
-    if (curr->left && !curr->right)
+    if (curr)
     {
-      if (curr->parent && curr->parent->left == curr)
+      if (!curr->left && !curr->right)
       {
-        curr->parent->left = curr->left;
-        curr->left->parent = curr->parent;
+        if (!curr->parent)
+        {
+          root_ = nullptr;
+        }
+        else if (curr->parent->left == curr)
+        {
+          curr->parent->left = nullptr;
+        }
+        else if (curr->parent->right == curr)
+        {
+          curr->parent->right = nullptr;
+        }
       }
-      else if (curr->parent && curr->parent->right == curr)
+      else if (!curr->left)
       {
-        curr->parent->right = curr->left;
-        curr->left->parent = curr->parent;
+        if (!curr->parent)
+        {
+          root_ = curr->right;
+          curr->right->parent = nullptr;
+        }
+        else if (curr->parent->left == curr)
+        {
+          curr->parent->left = curr->right;
+          curr->right->parent = curr->parent;
+        }
+        else if (curr->parent->right == curr)
+        {
+          curr->parent->right = curr->right;
+          curr->right->parent = curr->parent;
+        }
+      }
+      else if (!curr->right)
+      {
+        if (!curr->parent)
+        {
+          root_ = curr->left;
+          curr->left->parent = nullptr;
+        }
+        else if (curr->parent->left == curr)
+        {
+          curr->parent->left = curr->left;
+          curr->left->parent = curr->parent;
+        }
+        else if (curr->parent->right == curr)
+        {
+          curr->parent->right = curr->left;
+          curr->left->parent = curr->parent;
+        }
       }
       else
-      {
-        root_ = curr->left;
-      }
-    }
-    else if ((curr->left && curr->right) || (!curr->left && curr->right))
-    {
-      if (curr->left && curr->right)
       {
         node_t * min_right = detail::traverse_left(curr->right);
         min_right->left = curr->left;
         curr->left->parent = min_right;
+        if (!curr->parent)
+        {
+          root_ = min_right;
+          min_right->parent = nullptr;
+        }
+        else
+        {
+          if (curr->parent->left == curr)
+          {
+            curr->parent->left = curr->right;
+          }
+          else if (curr->parent->right == curr)
+          {
+            curr->parent->right = curr->right;
+          }
+          curr->right->parent = curr->parent;
+        }
       }
-      if (curr->parent && curr->parent->left == curr)
-      {
-        curr->parent->left = curr->right;
-        curr->right->parent = curr->parent;
-      }
-      else if (curr->parent && curr->parent->right == curr)
-      {
-        curr->parent->right = curr->right;
-        curr->right->parent = curr->parent;
-      }
-      else
-      {
-        root_ = curr->right;
-      }
+      --size_;
+      delete curr;
     }
-    --size_;
-    delete curr;
   }
 
   template < class Key, class Value, class Compare >
