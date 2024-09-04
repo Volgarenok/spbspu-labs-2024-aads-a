@@ -40,6 +40,7 @@ void vyzhanov::calculatePostfix(Queue< Queue< Token > >& expressions, Stack< lon
       Token it = curr.top();
       long long operand1 = 0;
       long long operand2 = 0;
+      long long res = 0;
       if (it.getType() == Type::OPERAND)
       {
         newStack.push(it.getOperand());
@@ -54,8 +55,8 @@ void vyzhanov::calculatePostfix(Queue< Queue< Token > >& expressions, Stack< lon
         newStack.pop();
         operand1 = newStack.top();
         newStack.pop();
-        long long maxRes = std::numeric_limits< long long >::max();
-        long long minRes = std::numeric_limits< long long >::min();
+        constexpr long long maxRes = std::numeric_limits< long long >::max();
+        constexpr long long minRes = std::numeric_limits< long long >::min();
         if (operand1 > maxRes - operand2 || (operand2 != 0 && operand1 > maxRes / operand2))
         {
           throw std::out_of_range("Overflow!");
@@ -64,7 +65,8 @@ void vyzhanov::calculatePostfix(Queue< Queue< Token > >& expressions, Stack< lon
         {
           throw std::out_of_range("Underflow!");
         }
-        newStack.push(performOperation(operand1, operand2, it.getOperation()));
+        res = performOperation(operand1, operand2, it.getOperation());
+        newStack.push(res);
       }
       curr.pop();
     }

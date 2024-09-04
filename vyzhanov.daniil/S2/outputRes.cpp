@@ -1,5 +1,4 @@
 #include "outputRes.hpp"
-#include <iostream>
 
 void vyzhanov::outputResult(std::ostream& output, Stack< long long >& results)
 {
