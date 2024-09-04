@@ -44,13 +44,20 @@ void isaychev::complement(map_t & dicts, std::istream & in)
   const dataset_t & n1 = dicts.at(name1);
   const dataset_t & n2 = dicts.at(name2);
   dataset_t n3;
-  if (n1.size() > n2.size())
+/*  if (n1.size() > n2.size())
   {
     complement_impl(n3, n1, n2);
   }
   else
   {
     complement_impl(n3, n2, n1);
+  }*/
+  for (auto i = n1.begin(); i != n1.end(); ++i)
+  {
+    if (n2.find(i->first) != n2.end())
+    {
+      n3.insert(*i);
+    }
   }
   dicts[new_name] = std::move(n3);
 }
