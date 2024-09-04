@@ -1,5 +1,4 @@
 #include "freqList.hpp"
-//#include <iterator>
 #include <ostream>
 
 isaychev::FreqList::FreqList(const BSTree< Word, size_t > & rhs):
@@ -60,8 +59,6 @@ std::string isaychev::convert_to_str(const value_t & rhs)
 
 std::ostream & isaychev::operator<<(std::ostream & out, const FreqList & rhs)
 {
-  //using output_iter_t = std::ostream_iterator< std::string >;
-  //std::transform(rhs.get_map().begin(), rhs.get_map().end(), output_iter_t{out, "\n"}, convert_to_str);
   for (auto i = rhs.get_map().begin(); i != rhs.get_map().end(); ++i)
   {
     out << (*i).second << " " << (*i).first << "\n";

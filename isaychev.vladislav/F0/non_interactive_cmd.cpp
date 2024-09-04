@@ -1,8 +1,6 @@
 #include "non_interactive_cmd.hpp"
-//#include <algorithm>
 #include <ostream>
 #include <fstream>
-//#include <functional>
 
 void isaychev::print_help(std::ostream & out)
 {
@@ -35,9 +33,6 @@ void read_list(std::istream & in, isaychev::BSTree< std::string, isaychev::FreqL
   size_t elem_count = 0, n = 0;
   in >> name >> elem_count;
   isaychev::FreqList temp;
-  //std::map< isaychev::Word, size_t > temp;
-  //auto generator = std::bind(read_value, std::ref(in));
-  //std::generate_n(std::inserter(temp, temp.end()), elem_count, generator);
   for (size_t i = 0; i < elem_count; ++i)
   {
     in >> n >> str;
@@ -55,8 +50,6 @@ void isaychev::load_saved(BSTree< std::string, FreqList > & col)
   }
   size_t count = 0;
   in >> count;
-  //auto generator = std::bind(read_list, std::ref(in));
-  //std::generate_n(std::inserter(col, col.end()), count, generator);
   for (size_t i = 0; i < count; ++i)
   {
     read_list(in, col);
@@ -73,8 +66,6 @@ void isaychev::save(const collection_t & col)
 {
   std::ofstream file("saved");
   file << col.size() << "\n";
-//  auto functor = std::bind(output_name_and_content, std::ref(file), _1);
-  //std::for_each(col.begin(), col.end(), functor);
   for (auto i = col.begin(); i != col.end(); ++i)
   {
     output_name_and_content(file, *i);

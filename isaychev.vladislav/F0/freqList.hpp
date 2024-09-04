@@ -1,7 +1,6 @@
 #ifndef FREQLISTVALUE_HPP
 #define FREQLISTVALUE_HPP
 
-//#include <map>
 #include <iosfwd>
 #include <tree/tree.hpp>
 #include "word.hpp"
