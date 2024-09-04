@@ -7,26 +7,23 @@
 
 namespace belokurskaya
 {
-  template < typename T >
-  void shakerSort(std::list< T >& list)
+  template <typename It, class Cmp>
+  void shakerSort(It begin, It end, Cmp cmp)
   {
     bool swapped = true;
-    auto begin = list.begin();
-    auto end = list.end();
 
     while (swapped)
     {
       swapped = false;
 
-      for (auto it = begin; it != end; ++it)
+      for (auto it = begin; it != std::prev(end); ++it)
       {
-        if (std::next(it) != end && *it > *std::next(it))
+        if (cmp(*std::next(it), *it))
         {
           std::swap(*it, *std::next(it));
           swapped = true;
         }
       }
-
       if (!swapped)
       {
         break;
@@ -36,7 +33,7 @@ namespace belokurskaya
 
       for (auto it = std::prev(end); it != begin; --it)
       {
-        if (*it < *std::prev(it))
+        if (cmp(*it, *std::prev(it)))
         {
           std::swap(*it, *std::prev(it));
           swapped = true;
@@ -45,8 +42,8 @@ namespace belokurskaya
     }
   }
 
-  template< class T, class Compare >
-  T getPivot(T begin, T end, Compare cmp)
+  template< class Iter, class Compare >
+  Iter getPivot(Iter begin, Iter end, Compare cmp)
   {
     auto pivot = begin;
     auto iter = std::next(begin);
@@ -55,7 +52,7 @@ namespace belokurskaya
       if (!cmp(*pivot, *iter))
       {
         auto temp_iter = pivot;
-        using T = typename T::value_type;
+        using T = typename Iter::value_type;
         T temp(std::move(*iter));
         while (temp_iter != std::next(iter))
         {

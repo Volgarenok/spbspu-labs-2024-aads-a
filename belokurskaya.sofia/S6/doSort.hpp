@@ -10,6 +10,7 @@
 #include "list.hpp"
 #include "generator.hpp"
 #include "sortings.hpp"
+#include "print.hpp"
 
 namespace belokurskaya
 {

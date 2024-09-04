@@ -23,7 +23,8 @@ namespace belokurskaya
 
     public:
       List():
-        head(nullptr), list_size(0)
+        head(nullptr),
+        list_size(0)
       {}
 
       List(size_t count, const T& value):
@@ -41,6 +42,17 @@ namespace belokurskaya
         {
           clear();
           throw;
+        }
+      }
+
+      template < typename InputIt >
+      List(InputIt first, InputIt last):
+        head(nullptr),
+        list_size(0)
+      {
+        for (auto it = first; it != last; ++it)
+        {
+          push_back(*it);
         }
       }
 
@@ -154,6 +166,16 @@ namespace belokurskaya
       }
 
       Iterator end()
+      {
+        return Iterator(nullptr);
+      }
+
+      Iterator cbegin() const
+      {
+        return Iterator(head);
+      }
+
+      Iterator cend() const
       {
         return Iterator(nullptr);
       }

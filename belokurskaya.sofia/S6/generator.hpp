@@ -7,11 +7,10 @@
 namespace belokurskaya
 {
   template < typename T >
-  T generateRandomNumbers(size_t size)
+  T generateRandomNumbers()
   {
     return static_cast< T >(std::rand());
   }
 }
 
 #endif
-
