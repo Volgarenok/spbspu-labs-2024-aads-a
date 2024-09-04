@@ -13,7 +13,7 @@ void isaychev::print(const map_t & dicts, std::ostream & out, std::istream & in)
   out << name;
   for (auto i = current.cbegin(); i != current.cend(); ++i)
   {
-    out << " " << (*i).first << " " << (*i).second;
+    out << " " << i->first << " " << i->second;
   }
   out << "\n";
 }
@@ -42,14 +42,11 @@ void isaychev::intersect(map_t & dicts, std::istream & in)
   const dataset_t & n1 = dicts.at(name1);
   const dataset_t & n2 = dicts.at(name2);
   dataset_t n3;
-  for (auto i = n1.cbegin(); i != n1.cend(); ++i)
+  for (auto i = n1.begin(); i != n1.end(); ++i)
   {
-    for (auto j = n2.cbegin(); j != n2.cend(); ++j)
+    if (n2.find(i->first) != n2.end())
     {
-      if ((*i).first == (*j).first)
-      {
-        n3.insert(*i);
-      }
+      n3.insert(*i);
     }
   }
   dicts[new_name] = std::move(n3);
