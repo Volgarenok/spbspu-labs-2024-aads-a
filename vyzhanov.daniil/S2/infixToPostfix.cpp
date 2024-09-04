@@ -68,7 +68,9 @@ void vyzhanov::infixToPostfix(Queue< Queue< Token > >& expressions)
       {
         if (!postfix.empty() && !(postfix.top().getType() == Type::OPEN_BRACKET))
         {
-          while (priority(curr.top()) <= priority(postfix.top()))
+          int op1 = priority(curr.top());
+          int op2 = priority(postfix.top());
+          while ((op1 < op2 || op1 == op2) && !postfix.empty())
           {
             expression.push(postfix.top());
             postfix.pop();
