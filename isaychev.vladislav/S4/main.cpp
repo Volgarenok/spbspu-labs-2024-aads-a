@@ -7,22 +7,6 @@
 int main(int argc, char * argv[])
 {
   using namespace isaychev;
-
-/*  BSTree< int, std::string > dict;
-//  dict[1] = "Time";
-  dict[3] = "a";
-  dict[5] = "Rebellion";
- // dict[4] = "little";
-  dict[2] = "for";
-
-  dict.erase(3);
-
-  for (auto i = dict.begin(); i != dict.end(); ++i)
-  {
-    std::cout << (*i).second << " ";
-  }
-  std::cout << "\n";*/
-
   using command_map_t = BSTree< std::string, std::function< void(std::istream &) > >;
 
   BSTree< std::string, BSTree< int, std::string > > dictionaries;
