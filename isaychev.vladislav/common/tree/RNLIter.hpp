@@ -2,6 +2,7 @@
 #define RNLITER_HPP
 
 #include <stack.hpp>
+#include "LNRIter.hpp"
 
 namespace isaychev
 {
@@ -31,53 +32,21 @@ namespace isaychev
     const std::pair< Key, Value > * operator->() const;
 
    private:
-    node_t * current_;
-    Stack< node_t * > stack_;
-    friend class BSTree< Key, Value, Compare >;
+    LNRIter< Key, Value, Compare > it_;
 
+    friend class BSTree< Key, Value, Compare >;
     RNLIter(node_t * node, Stack< node_t * > && s);
   };
 
   template < class Key, class Value, class Compare >
   RNLIter< Key, Value, Compare >:: RNLIter(node_t * node, Stack< node_t * > && s):
-   current_(node),
-   stack_(s)
+   it_(node, std::forward(s))
   {}
 
   template < class Key, class Value, class Compare >
   RNLIter< Key, Value, Compare > & RNLIter< Key, Value, Compare >::operator++()
   {
-    if (!current_)
-    {
-      return *this;
-    }
-    if (current_->left)
-    {
-      stack_.push(current_);
-      current_ = current_->left;
-      while (current_->right)
-      {
-        stack_.push(current_);
-        current_ = current_->right;
-      }
-    }
-    else
-    {
-      while (!stack_.empty() && stack_.top()->left == current_)
-      {
-        current_ = stack_.top();
-        stack_.pop();
-        if (stack_.empty())
-        {
-          current_ = nullptr;
-        }
-      }
-      if (!stack_.empty() && stack_.top()->right == current_)
-      {
-        current_ = stack_.top();
-        stack_.pop();
-      }
-    }
+    --it_;
     return *this;
   }
 
@@ -92,37 +61,7 @@ namespace isaychev
   template < class Key, class Value, class Compare >
   RNLIter< Key, Value, Compare > & RNLIter< Key, Value, Compare >::operator--()
   {
-    if (!current_)
-    {
-      return *this;
-    }
-    if (current_->right)
-    {
-      stack_.push(current_);
-      current_ = current_->right;
-      while (current_->left)
-      {
-        stack_.push(current_);
-        current_ = current_->left;
-      }
-    }
-    else
-    {
-      while (!stack_.empty() && stack_.top()->right == current_)
-      {
-        current_ = stack_.top();
-        stack_.pop();
-        if (stack_.empty())
-        {
-          current_ = nullptr;
-        }
-      }
-      if (!stack_.empty() && stack_.top()->left == current_)
-      {
-        current_ = stack_.top();
-        stack_.pop();
-      }
-    }
+    ++it_;
     return *this;
   }
 
@@ -137,37 +76,37 @@ namespace isaychev
   template < class Key, class Value, class Compare >
   bool RNLIter< Key, Value, Compare >::operator==(const this_t & rhs) const noexcept
   {
-    return current_ == rhs.current_;
+    return it_ == rhs.it_;
   }
 
   template < class Key, class Value, class Compare >
   bool RNLIter< Key, Value, Compare >::operator!=(const this_t & rhs) const noexcept
   {
-    return current_ != rhs.current_;
+    return !(*this == rhs);
   }
 
   template < class Key, class Value, class Compare >
   std::pair< Key, Value > & RNLIter< Key, Value, Compare >::operator*()
   {
-    return current_->data;
+    return *it_;
   }
 
   template < class Key, class Value, class Compare >
   const std::pair< Key, Value > & RNLIter< Key, Value, Compare >::operator*() const
   {
-    return current_->data;
+    return *it_;
   }
 
   template < class Key, class Value, class Compare >
   std::pair< Key, Value > * RNLIter< Key, Value, Compare >::operator->()
   {
-    return std::addressof(current_->data);
+    return it_.operator->();
   }
 
   template < class Key, class Value, class Compare >
   const std::pair< Key, Value > * RNLIter< Key, Value, Compare >::operator->() const
   {
-    return std::addressof(current_->data);
+    return it_.operator->();
   }
 }
 
