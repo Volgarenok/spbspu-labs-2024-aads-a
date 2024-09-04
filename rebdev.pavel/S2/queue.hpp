@@ -23,13 +23,13 @@ namespace rebdev
       {
         dataBase_.push_back(data);
       }
-      std::unique_ptr< T > drop()
+      std::shared_ptr< T > drop()
       {
         if (dataBase_.size() == 0)
         {
           throw std::logic_error("Try to take and delete element from empty queue!");
         }
-        std::unique_ptr< T > ptr(new T{dataBase_.front()});
+        std::shared_ptr< T > ptr(new T{dataBase_.front()});
         dataBase_.pop_front();
         return ptr;
       }
