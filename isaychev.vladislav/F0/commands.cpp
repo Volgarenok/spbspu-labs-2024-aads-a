@@ -123,7 +123,7 @@ void isaychev::print_extremes(const collection_t & col, const std::string & spec
   }
   else if (spec == "printlast")
   {
-    output_list_part(out, fl.get_map().begin(), num);
+    output_list_part(out, fl.get_map().rbegin(), num);
   }
 }
 
