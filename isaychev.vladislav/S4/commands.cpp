@@ -18,25 +18,6 @@ void isaychev::print(const map_t & dicts, std::ostream & out, std::istream & in)
   out << "\n";
 }
 
-void complement_impl(isaychev::dataset_t & n3, const isaychev::dataset_t & n1, const isaychev::dataset_t & n2)
-{
-  for (auto i = n1.cbegin(); i != n1.cend(); ++i)
-  {
-    bool in_both = false;
-    for (auto j = n2.cbegin(); j != n2.cend(); ++j)
-    {
-      if ((*i).first == (*j).first)
-      {
-        in_both = true;
-      }
-    }
-    if (!in_both)
-    {
-      n3.insert(*i);
-    }
-  }
-}
-
 void isaychev::complement(map_t & dicts, std::istream & in)
 {
   std::string new_name, name1 , name2;
@@ -44,17 +25,9 @@ void isaychev::complement(map_t & dicts, std::istream & in)
   const dataset_t & n1 = dicts.at(name1);
   const dataset_t & n2 = dicts.at(name2);
   dataset_t n3;
-/*  if (n1.size() > n2.size())
-  {
-    complement_impl(n3, n1, n2);
-  }
-  else
-  {
-    complement_impl(n3, n2, n1);
-  }*/
   for (auto i = n1.begin(); i != n1.end(); ++i)
   {
-    if (n2.find(i->first) != n2.end())
+    if (n2.find(i->first) == n2.end())
     {
       n3.insert(*i);
     }
