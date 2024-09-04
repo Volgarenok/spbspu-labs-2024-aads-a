@@ -1,5 +1,4 @@
 #include "calculatePostfix.hpp"
-#include <string>
 #include <limits>
 #include <stdexcept>
 

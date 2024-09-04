@@ -244,14 +244,15 @@ namespace vyzhanov
   void List<T>::pop_back()
   {
     Node< T >* newTail = tail_;
-    if (!tail_)
+    if (head_ == tail_)
     {
       head_ = nullptr;
       tail_ = nullptr;
     }
     else
     {
-      tail_ = tail_->prev_;
+      tail_ = newTail;
+      tail_->next_ = nullptr;
     }
     delete newTail;
     --size_;
@@ -261,14 +262,15 @@ namespace vyzhanov
   void List<T>::pop_front()
   {
     Node< T >* newHead = head_;
-    if (!head_)
+    if (head_ == tail_)
     {
       head_ = nullptr;
       tail_ = nullptr;
     }
     else
     {
-      head_ = head_->next_;
+      head_ = newHead;
+      head_->prev_ = nullptr;
     }
     delete newHead;
     --size_;

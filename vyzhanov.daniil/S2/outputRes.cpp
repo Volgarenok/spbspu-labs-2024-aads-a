@@ -1,6 +1,6 @@
 #include "outputRes.hpp"
 
-void vyzhanov::outputResult(std::ostream& output, Stack< long long >& results)
+void vyzhanov::outputResult(std::ostream& output, Stack< long long > results)
 {
   if (!results.empty())
   {
