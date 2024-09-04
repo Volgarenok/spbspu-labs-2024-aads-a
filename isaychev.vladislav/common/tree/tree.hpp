@@ -240,7 +240,7 @@ namespace isaychev
   std::pair< TreeIter< Key, Value, Compare >, TreeIter< Key, Value, Compare > >
   BSTree< Key, Value, Compare >::equal_range(const Key & key)
   {
-    iterator result = find(key);
+/*    iterator result = find(key);
     if (!result.current_)
     {
       return std::pair< iterator, iterator >(end(), end());
@@ -251,8 +251,9 @@ namespace isaychev
       return std::pair< iterator, iterator >(end(), ++result);
     }
     lesser = result++;
-    --lesser;
-    return std::pair< iterator, iterator >(lesser, result);
+    --lesser;*/
+    auto res = static_cast< const tree_t & >(*this).equal_range(key);
+    return std::pair< iterator, iterator >(iterator(res.first.current_), iterator(res.second.current_));
   }
 
   template < class Key, class Value, class Compare >
@@ -286,11 +287,11 @@ namespace isaychev
     node_t * temp = root_;
     while (temp)
     {
-      if (cmp_(temp->data.first, key))
+      if (!cmp_(temp->data.first, key))
       {
         return const_iterator(temp);
       }
-      else if (cmp_(key, temp->data.first))
+      if (cmp_(key, temp->data.first))
       {
         temp = temp->left;
       }
@@ -318,7 +319,7 @@ namespace isaychev
       {
         return const_iterator(temp);
       }
-      else if (cmp_(key, temp->data.first))
+      if (cmp_(key, temp->data.first))
       {
         temp = temp->left;
       }
