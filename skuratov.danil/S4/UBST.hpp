@@ -6,8 +6,6 @@
 #include <stdexcept>
 #include "treeNode.hpp"
 #include "iteratorTree.hpp"
-#include "queue.hpp"
-#include "stack.hpp"
 
 namespace skuratov
 {
@@ -231,88 +229,6 @@ namespace skuratov
       auto isLow = lower_bound(key);
       auto isHigh = upper_bound(key);
       return std::make_pair(isLow, isHigh);
-    }
-
-    template< typename F >
-    F traverseLnr(F f) const
-    {
-      if (empty())
-      {
-        throw std::logic_error("<EMPTY>");
-      }
-
-      Stack< detail::TreeNode< Key, Value >* > stack;
-      detail::TreeNode< Key, Value>* current = root_;
-
-      while (current || !stack.empty())
-      {
-        while (current)
-        {
-          stack.push(current);
-          current = current->left_;
-        }
-        current = stack.top();
-        stack.drop();
-        f(current->data_);
-        current = current->right_;
-      }
-      return f;
-    }
-
-    template< typename F >
-    F traverseRnl(F f) const
-    {
-      if (empty())
-      {
-        throw std::logic_error("<EMPTY>");
-      }
-
-      Stack< detail::TreeNode< Key, Value>* > stack;
-      detail::TreeNode< Key, Value>* current = root_;
-
-      while (current || !stack.empty())
-      {
-        while (current)
-        {
-          stack.push(current);
-          current = current->right_;
-        }
-
-        current = stack.top();
-        stack.drop();
-        f(current->data_);
-        current = current->left_;
-      }
-      return f;
-    }
-
-    template< typename F >
-    F traverseBreadth(F f) const
-    {
-      if (empty())
-      {
-        throw std::logic_error("<EMPTY>");
-      }
-
-      Queue< detail::TreeNode< Key, Value >* > queue;
-      queue.push(root_);
-
-      while (!queue.empty())
-      {
-        detail::TreeNode< Key, Value >* current = queue.front();
-        queue.drop();
-        f(current->data_);
-
-        if (current->left_)
-        {
-          queue.push(current->left_);
-        }
-        if (current->right_)
-        {
-          queue.push(current->right_);
-        }
-      }
-      return f;
     }
 
   private:
