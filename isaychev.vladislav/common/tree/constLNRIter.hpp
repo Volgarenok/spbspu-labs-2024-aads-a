@@ -9,6 +9,9 @@ namespace isaychev
   class BSTree;
 
   template < class Key, class Value, class Compare >
+  class ConstRNLIter;
+
+  template < class Key, class Value, class Compare >
   class ConstLNRIter: std::iterator< std::bidirectional_iterator_tag, Key, Value, Compare >
   {
     using this_t = ConstLNRIter< Key, Value, Compare >;
@@ -25,15 +28,15 @@ namespace isaychev
     bool operator==(const this_t & rhs) const noexcept;
     bool operator!=(const this_t & rhs) const noexcept;
 
-    std::pair< Key, Value > & operator*();
     const std::pair< Key, Value > & operator*() const;
-    std::pair< Key, Value > * operator->();
     const std::pair< Key, Value > * operator->() const;
 
    private:
     node_t * current_;
     Stack< node_t * > stack_;
+
     friend class BSTree< Key, Value, Compare >;
+    friend class ConstRNLIter< Key, Value, Compare >;
 
     ConstLNRIter(node_t * node, Stack< node_t * > && s);
   };

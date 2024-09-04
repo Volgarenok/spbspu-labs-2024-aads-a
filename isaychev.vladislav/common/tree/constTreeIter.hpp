@@ -167,7 +167,7 @@ namespace isaychev
   template < class Key, class Value, class Compare >
   bool ConstTreeIter< Key, Value, Compare >::operator!=(const this_t & rhs)
   {
-    return current_ != rhs.current_;
+    return !(*this == rhs);
   }
 
   template < class Key, class Value, class Compare >
