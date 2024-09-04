@@ -184,14 +184,14 @@ namespace vyzhanov
   template< typename T>
   void List<T>::push_back(Node< T >* newNode)
   {
-    if (head_ == nullptr)
+    if (empty())
     {
       head_ = newNode;
     }
     else
     {
-      newNode->prev_ = tail_;
       tail_->next_ = newNode;
+      newNode->prev_ = tail_;
     }
     tail_ = newNode;
     ++size_;

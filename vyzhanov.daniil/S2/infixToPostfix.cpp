@@ -40,7 +40,6 @@ void vyzhanov::infixToPostfix(Queue< Queue< Token > >& expressions)
       if (curr.top().getType() == Type::OPERAND)
       {
         expression.push(curr.top());
-        std::cout << curr.top().getOperand() << '\n';
         curr.pop();
       }
       else if (curr.top().getType() == Type::OPEN_BRACKET)
@@ -76,7 +75,6 @@ void vyzhanov::infixToPostfix(Queue< Queue< Token > >& expressions)
           }
         }
         postfix.push(curr.top());
-        std::cout << curr.top().getOperation() << '\n';
         curr.pop();
       }
     }
