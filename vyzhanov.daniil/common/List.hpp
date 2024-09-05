@@ -251,9 +251,7 @@ namespace vyzhanov
     }
     else
     {
-      delete tail_;
-      tail_ = newTail;
-      tail_->next_ = nullptr;
+      tail_ = tail_->prev_;
     }
     delete newTail;
     --size_;
@@ -270,9 +268,7 @@ namespace vyzhanov
     }
     else
     {
-      delete head_;
-      head_ = newHead;
-      head_->prev_ = nullptr;
+      head_ = head_->next_;
     }
     delete newHead;
     --size_;
