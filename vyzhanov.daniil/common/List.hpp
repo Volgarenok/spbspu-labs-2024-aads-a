@@ -251,7 +251,7 @@ namespace vyzhanov
     }
     else
     {
-      delete tail_
+      delete tail_;
       tail_ = newTail;
       tail_->next_ = nullptr;
     }
