@@ -166,8 +166,9 @@ namespace belokurskaya
       const size_t initial_capacity_ = 3;
       const size_t capacity_change_factor_ = 2;
 
-      void reallocateMemory(size_t newCapacity)
+      void addMemory()
       {
+        size_t newCapacity = capacity_ * capacity_change_factor_;
         if (newCapacity <= 0)
         {
           throw std::invalid_argument("New capacity must be positive.");
@@ -188,16 +189,6 @@ namespace belokurskaya
           delete[] newData;
           throw;
         }
-      }
-
-      void addMemory()
-      {
-        reallocateMemory(capacity_ * capacity_change_factor_);
-      }
-
-      void freeMemory()
-      {
-        reallocateMemory(capacity_ / capacity_change_factor_);
       }
   };
 }
