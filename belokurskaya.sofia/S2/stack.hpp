@@ -123,9 +123,25 @@ namespace belokurskaya
         return out;
       }
 
-      Stack& operator=(Stack other) noexcept
+      Stack& operator=(const Stack& other) noexcept
       {
-        swap(other);
+        if (this != &other)
+        {
+          try
+          {
+            delete[] data_;
+            size_ = other.size_;
+            top_ = other.top_;
+            capacity_ = other.capacity_;
+            data_ = new T[capacity_];
+            std::copy(other.data_, other.data_ + capacity_, data_);
+          }
+          catch (const std::exception& e)
+          {
+            std::cerr << "Error in Stack assignment operator: " << e.what() << std::endl;
+            throw;
+          }
+        }
         return *this;
       }
 
