@@ -1,14 +1,13 @@
 #ifndef INPUT_DATASET
 #define INPUT_DATASET
 #include <istream>
-#include <map>
 #include <string>
-
+#include <tree/tree.hpp>
 
 namespace baranov
 {
-  using basicTree = std::map< int, std::string >;
-  using treeOfTrees = std::map< std::string, basicTree >;
+  using basicTree = Tree< int, std::string >;
+  using treeOfTrees = Tree< std::string, basicTree >;
   void inputTrees(treeOfTrees & trees, std::istream & input);
 }
 

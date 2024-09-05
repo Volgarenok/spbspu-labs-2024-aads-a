@@ -9,16 +9,12 @@ void baranov::inputTrees(treeOfTrees & trees, std::istream & input)
   {
     input >> dictName;
     basicTree tree;
-    while (input)
+    while (input && input.peek() != '\n')
     {
       input >> key >> value;
-      tree.insert(std::pair< int, std::string >(key, value));
+      tree.insert(key, value);
     }
-    if (!input.eof())
-    {
-      input.clear();
-    }
-    trees.insert(std::pair< std::string, basicTree >(dictName, tree));
+    trees.insert(dictName, tree);
   }
 }
 
