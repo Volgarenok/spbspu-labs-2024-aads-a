@@ -28,6 +28,8 @@ namespace sakovskaia
     void pop_front();
     void clear();
     void swap(List< T > & other);
+    T & front();
+    const T & front() const;
   private:
     node_t< T > * head_;
     void copy_from(const List & other);
@@ -106,6 +108,18 @@ namespace sakovskaia
   }
 
   template <typename T>
+  typename List<T>::const_iterator List<T>::cbegin() const
+  {
+    return const_iterator(head_);
+  }
+
+  template <typename T>
+  typename List<T>::const_iterator List<T>::cend() const
+  {
+    return const_iterator(nullptr);
+  }
+
+  template <typename T>
   bool List< T >::empty() const
   {
     return head_ == nullptr;
@@ -161,6 +175,26 @@ namespace sakovskaia
   {
     head_ = other.head_;
     other.head_ = nullptr;
+  }
+
+  template <typename T>
+  T & List< T >::front()
+  {
+    if (empty())
+    {
+      throw std::runtime_error("List is empty");
+    }
+    return head_->data;
+  }
+
+  template <typename T>
+  const T & List< T >::front() const
+  {
+    if (empty())
+    {
+      throw std::runtime_error("List is empty");
+    }
+    return head_->data;
   }
 }
 #endif

@@ -1,50 +1,40 @@
 #include "data_processing.hpp"
-
-sakovskaia::List< sakovskaia::ullList > sakovskaia::processData(const List< std::pair< std::string, ullList > > & sequences)
+namespace sakovskaia
 {
-  List< ullList > result;
-  if (sequences.empty())
+  List< List< unsigned long long int > > processData(const List< std::pair< std::string, List< unsigned long long int > > > & sequences)
   {
-    return result;
-  }
-
-  bool finish = false;
-  auto iters = List< List< unsigned long long int >::iterator >();
-
-  for (const auto & seq : sequences)
-  {
-    if (!seq.second.empty())
+    List< std::pair< CFwdIterator< unsigned long long int >, CFwdIterator< unsigned long long int > > > iters;
+    for (const auto & seq : sequences)
     {
-      iters.push_front(seq.second.begin());
+      iters.push_front(std::make_pair(seq.second.cbegin(), seq.second.cend()));
     }
-    else
+    List< List< unsigned long long int > > result;
+    while (!iters.empty())
     {
-      iters.push_front(seq.second.end());
-    }
-  }
-
-  while (!finish)
-  {
-    finish = true;
-    ullList currentList;
-
-    for (auto & it : iters)
-    {
-      if (it != sequences.front().second.end())
+      List< unsigned long long int > current;
+      auto it = iters.begin();
+      bool flag = true;
+      while (it != iters.end())
       {
-        currentList.push_front(* it);
+        if (it->first != it->second)
+        {
+          current.push_front(*(it->first));
+          ++(it->first);
+          flag = false;
+        }
         ++it;
-        finish = false;
+      }
+      if (!current.empty())
+      {
+        result.push_front(std::move(current));
+      }
+      if (flag)
+      {
+        break;
       }
     }
-
-    if (!currentList.empty())
-    {
-      result.push_front(currentList);
-    }
+    return result;
   }
-
-  return result;
 }
 
 sakovskaia::List< unsigned long long int > sakovskaia::calculateSums(const List< ullList > & processedData)

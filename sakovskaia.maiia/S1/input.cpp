@@ -4,9 +4,9 @@ void sakovskaia::input(std::istream & input, List< std::pair< std::string, ullLi
 {
   std::string arg = "";
   input >> arg;
-  while (!in.eof())
+  while (input >> arg)
   {
-    list.push_front({arg, List< unsigned long long int >()});
+    list.push_front({arg, ullList()});
     while (input >> arg)
     {
       try
