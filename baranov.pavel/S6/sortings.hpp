@@ -17,7 +17,15 @@ namespace baranov
       {
         *(std::next(j)) = *j;
       }
-      *(++j) = val;
+      if (j == first)
+      {
+        *(std::next(j)) = *j;
+        *j = val;
+      }
+      else
+      {
+        *(++j) = val;
+      }
     }
   }
 
