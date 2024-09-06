@@ -30,9 +30,13 @@ namespace isaychev
 
     T & front() noexcept;
     const T & front() const noexcept;
-    bool empty() noexcept;
+    T & back() noexcept;
+    const T & back() const noexcept;
     void push_front(const T & obj);
     void pop_front();
+    void push_back(const T & obj);
+
+    bool empty() const noexcept;
     void clear();
     void swap(List< T > & rhs) noexcept;
     void reverse() noexcept;
@@ -142,7 +146,31 @@ namespace isaychev
   }
 
   template < typename T >
-  bool List< T >::empty() noexcept
+  detail::node_t< T > * traverse_to_last(detail::node_t< T > * head)
+  {
+    while (head->next)
+    {
+      head = head->next;
+    }
+    return head;
+  }
+
+  template < typename T >
+  T & List< T >::back() noexcept
+  {
+    detail::node_t< T > * last = traverse_to_last(head_);
+    return last->data;
+  }
+
+  template < typename T >
+  const T & List< T >::back() const noexcept
+  {
+    detail::node_t< T > * last = traverse_to_last(head_);
+    return last->data;
+  }
+
+  template < typename T >
+  bool List< T >::empty() const noexcept
   {
     return (head_ == nullptr);
   }
@@ -171,6 +199,20 @@ namespace isaychev
   }
 
   template < typename T >
+  void List< T >::push_back(const T & obj)
+  {
+    if (head_)
+    {
+      detail::node_t< T > * last = traverse_to_last(head_);
+      last->next = new detail::node_t< T >(obj);
+    }
+    else
+    {
+      head_ = new detail::node_t< T >(obj);
+    }
+  }
+
+  template < typename T >
   void List< T >::clear()
   {
     while (head_)
@@ -182,7 +224,7 @@ namespace isaychev
   template < typename T >
   void List< T >::swap(List< T > & rhs) noexcept
   {
-    std::swap(head_, rhs.head);
+    std::swap(head_, rhs.head_);
   }
 
   template < typename T >
