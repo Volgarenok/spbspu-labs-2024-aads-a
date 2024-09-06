@@ -138,7 +138,7 @@ namespace belokurskaya
           }
           catch (const std::exception& e)
           {
-            std::cerr << "Error in Stack assignment operator\n";
+            delete[] data_;
             throw;
           }
         }
