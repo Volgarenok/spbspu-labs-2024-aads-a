@@ -7,8 +7,6 @@
 #include <initializer_list>
 #include "treeIter.hpp"
 #include "constTreeIter.hpp"
-#include "revTreeIter.hpp"
-#include "constRevTreeIter.hpp"
 #include "LNRIter.hpp"
 #include "constLNRIter.hpp"
 #include "RNLIter.hpp"
@@ -23,8 +21,6 @@ namespace isaychev
     using node_t = detail::TreeNode< Key, Value >;
     using iterator = TreeIter< Key, Value, Compare >;
     using const_iterator = ConstTreeIter< Key, Value, Compare >;
-    using const_reverse_iterator = ConstRevTreeIter< Key, Value, Compare >;
-    using reverse_iterator = RevTreeIter< Key, Value, Compare >;
     using value_t = std::pair< Key, Value >;
     using lnr_iterator = LNRIter< Key, Value, Compare >;
     using const_lnr_iterator = ConstLNRIter< Key, Value, Compare >;
@@ -48,12 +44,6 @@ namespace isaychev
     const_iterator end() const noexcept;
     const_iterator cbegin() const noexcept;
     const_iterator cend() const noexcept;
-    reverse_iterator rbegin() noexcept;
-    reverse_iterator rend() noexcept;
-    const_reverse_iterator rbegin() const noexcept;
-    const_reverse_iterator rend() const noexcept;
-    const_reverse_iterator crbegin() const noexcept;
-    const_reverse_iterator crend() const noexcept;
     lnr_iterator lnrbegin();
     lnr_iterator lnrend();
     const_lnr_iterator lnrbegin() const;
@@ -227,42 +217,6 @@ namespace isaychev
   ConstTreeIter< Key, Value, Compare > BSTree< Key, Value, Compare >::cend() const noexcept
   {
     return ConstTreeIter< Key, Value, Compare >();
-  }
-
-  template < class Key, class Value, class Compare >
-  RevTreeIter< Key, Value, Compare > BSTree< Key, Value, Compare >::rbegin() noexcept
-  {
-    return reverse_iterator(detail::traverse_right(root_));
-  }
-
-  template < class Key, class Value, class Compare >
-  RevTreeIter< Key, Value, Compare > BSTree< Key, Value, Compare >::rend() noexcept
-  {
-    return reverse_iterator();
-  }
-
-  template < class Key, class Value, class Compare >
-  ConstRevTreeIter< Key, Value, Compare > BSTree< Key, Value, Compare >::rbegin() const noexcept
-  {
-    return const_reverse_iterator(detail::traverse_right(root_));
-  }
-
-  template < class Key, class Value, class Compare >
-  ConstRevTreeIter< Key, Value, Compare > BSTree< Key, Value, Compare >::rend() const noexcept
-  {
-    return const_reverse_iterator();
-  }
-
-  template < class Key, class Value, class Compare >
-  ConstRevTreeIter< Key, Value, Compare > BSTree< Key, Value, Compare >::crbegin() const noexcept
-  {
-    return const_reverse_iterator(detail::traverse_right(root_));
-  }
-
-  template < class Key, class Value, class Compare >
-  ConstRevTreeIter< Key, Value, Compare > BSTree< Key, Value, Compare >::crend() const noexcept
-  {
-    return const_reverse_iterator();
   }
 
   template < class Key, class Value, class Compare >

@@ -16,9 +16,6 @@ namespace isaychev
   class ConstRNLIter;
 
   template < class Key, class Value, class Compare >
-  class ConstRevTreeIter;
-
-  template < class Key, class Value, class Compare >
   class ConstTreeIter: public std::iterator< std::bidirectional_iterator_tag, Key, Value, Compare >
   {
     using this_t = ConstTreeIter< Key, Value, Compare >;
@@ -49,7 +46,6 @@ namespace isaychev
     friend class BSTree< Key, Value, Compare >;
     friend class ConstLNRIter< Key, Value, Compare >;
     friend class ConstRNLIter< Key, Value, Compare >;
-    friend class ConstRevTreeIter< Key, Value, Compare >;
 
     explicit ConstTreeIter(node_t * node);
   };

@@ -64,10 +64,37 @@ void isaychev::delete_freqlist(collection_t & col, std::istream & in)
   }
 }
 
+bool is_greater(const std::pair< isaychev::Word, size_t > & lhs, const std::pair< isaychev::Word, size_t > & rhs)
+{
+  return lhs.second > rhs.second;
+}
+
+template< class FreqListIt >
+void output_list_part(std::ostream & out, FreqListIt first, size_t count)
+{
+  for (size_t i = 0; i < count; ++i)
+  {
+    out << convert_to_str(*first) << "\n";
+    ++first;
+  }
+}
+
+template< class Container >
+void input_and_sort(const Container & input, isaychev::List< std::pair< isaychev::Word, size_t > > & rhs)
+{
+  for (auto i = input.begin(); i != input.end(); ++i)
+  {
+    rhs.push_front(*i);
+  }
+  quick_sort(rhs.begin(), rhs.end(), is_greater);
+}
+
 void isaychev::print(const collection_t & col, std::istream & in, std::ostream & out)
 {
   const auto & res = col.at(read_specifier(in));
-  out << res;
+  List< std::pair< Word, size_t > > temp;
+  input_and_sort(res.get_map(), temp);
+  output_list_part(out, temp.begin(), res.size());
 }
 
 void isaychev::count(const collection_t & col, std::istream & in, std::ostream & out)
@@ -93,16 +120,6 @@ void isaychev::get_unique(const collection_t & col, std::istream & in, std::ostr
   out << fl.size() << "\n";
 }
 
-template< class FreqListIt >
-void output_list_part(std::ostream & out, FreqListIt first, size_t count)
-{
-  for (size_t i = 0; i < count; ++i)
-  {
-    out << convert_to_str(*first) << "\n";
-    ++first;
-  }
-}
-
 void isaychev::print_extremes(const collection_t & col, const std::string & spec, std::istream & in, std::ostream & out)
 {
   std::string str = std::move(read_specifier(in));
@@ -117,14 +134,13 @@ void isaychev::print_extremes(const collection_t & col, const std::string & spec
   {
     num = fl.size();
   }
-  if (spec == "printfirst")
+  List< std::pair< Word, size_t > > temp;
+  input_and_sort(fl.get_map(), temp);
+  if (spec == "printlast")
   {
-    output_list_part(out, fl.get_map().begin(), num);
+    temp.reverse();
   }
-  else if (spec == "printlast")
-  {
-    output_list_part(out, fl.get_map().rbegin(), num);
-  }
+  output_list_part(out, temp.begin(), num);
 }
 
 
@@ -149,23 +165,6 @@ void isaychev::merge(collection_t & col, std::istream & in)
     temp.add_element(*i);
   }
   col.insert({new_list, temp});
-}
-
-bool is_greater(const std::pair< isaychev::Word, size_t > & lhs, const std::pair< isaychev::Word, size_t > & rhs)
-{
-  return lhs.second > rhs.second;
-}
-
-void isaychev::print_descending(const collection_t & col, std::istream & in, std::ostream & out)
-{
-  const auto & fl = col.at(read_specifier(in));
-  List< std::pair< Word, size_t > > temp;
-  for (auto i = fl.get_map().begin(); i != fl.get_map().end(); ++i)
-  {
-    temp.push_front(*i);
-  }
-  quick_sort(temp.begin(), temp.end(), is_greater);
-  output_list_part(out, temp.begin(), fl.size());
 }
 
 void isaychev::get_names(const collection_t & col, std::ostream & out)
