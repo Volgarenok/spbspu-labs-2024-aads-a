@@ -1,5 +1,5 @@
 #include <iostream>
-#include "list.hpp"
+#include <list/list.hpp>
 #include "inputList.hpp"
 #include "listFunctions.hpp"
 #include "outputFunctions.hpp"
