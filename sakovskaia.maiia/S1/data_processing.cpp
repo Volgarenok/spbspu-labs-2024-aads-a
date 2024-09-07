@@ -1,4 +1,5 @@
 #include "data_processing.hpp"
+#include <limits.h>
 namespace sakovskaia
 {
   List< List< unsigned long long int > > processData(const List< std::pair< std::string, List< unsigned long long int > > > & sequences)
@@ -9,28 +10,23 @@ namespace sakovskaia
       iters.push_front(std::make_pair(seq.second.cbegin(), seq.second.cend()));
     }
     List< List< unsigned long long int > > result;
-    while (!iters.empty())
+    bool flag = true;
+    while (flag)
     {
+      flag = false;
       List< unsigned long long int > current;
-      auto it = iters.begin();
-      bool flag = true;
-      while (it != iters.end())
+      for (auto & it : iters)
       {
-        if (it->first != it->second)
+        if (it.first != it.second)
         {
-          current.push_front(*(it->first));
-          ++(it->first);
-          flag = false;
+          current.push_front(*(it.first));
+          ++(it.first);
+          flag = true;
         }
-        ++it;
       }
       if (!current.empty())
       {
         result.push_front(std::move(current));
-      }
-      if (flag)
-      {
-        break;
       }
     }
     return result;
@@ -46,10 +42,13 @@ sakovskaia::List< unsigned long long int > sakovskaia::calculateSums(const List<
     unsigned long long int sum = 0;
     for (const auto & num : list)
     {
+      if (ULLONG_MAX - num < sum)
+      {
+        throw std::overflow_error("Overflow during summation");
+      }
       sum += num;
     }
     result.push_front(sum);
   }
-
   return result;
 }
