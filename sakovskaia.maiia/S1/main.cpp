@@ -26,4 +26,5 @@ int main()
     std::cerr << "Calculating sum is impossible" << "\n";
     return 1;
   }
+  return 0;
 }
