@@ -1,6 +1,6 @@
 #include "huffmanCoding.hpp"
 
-void skuratov::storeCodes(HuffmanTreeNode* root, const std::string& str, std::map< char, std::string >& huffmanCodes)
+void skuratov::storeCodes(HuffmanTreeNode* root, const std::string& str, UBST< char, std::string >& huffmanCodes)
 {
   if (root == nullptr)
   {
@@ -14,16 +14,16 @@ void skuratov::storeCodes(HuffmanTreeNode* root, const std::string& str, std::ma
   storeCodes(root->right, str + "1", huffmanCodes);
 }
 
-void skuratov::createHuffmanCodes(const std::string& text, std::map< char, std::string >& huffmanCodes)
+void skuratov::createHuffmanCodes(const std::string& text, UBST< char, std::string >& huffmanCodes)
 {
-  std::map< char, int > freq;
+  UBST< char, int > freq;
   for (char c : text)
   {
     freq[c]++;
   }
 
-  std::priority_queue< HuffmanTreeNode*, std::vector< HuffmanTreeNode* >, Compare > minHeap;
-
+  Queue< HuffmanTreeNode* > minHeap;
+ 
   for (const auto& pair : freq)
   {
     minHeap.push(new HuffmanTreeNode(pair.first, pair.second));
@@ -31,21 +31,46 @@ void skuratov::createHuffmanCodes(const std::string& text, std::map< char, std::
 
   while (minHeap.size() > 1)
   {
-    HuffmanTreeNode* left = minHeap.top();
-    minHeap.pop();
-    HuffmanTreeNode* right = minHeap.top();
-    minHeap.pop();
+    HuffmanTreeNode* left = nullptr;
+    HuffmanTreeNode* right = nullptr;
+
+    if (!minHeap.empty())
+    {
+      left = minHeap.front();
+      minHeap.drop();
+    }
+
+    if (!minHeap.empty())
+    {
+      right = minHeap.front();
+      minHeap.drop();
+    }
 
     HuffmanTreeNode* top = new HuffmanTreeNode('$', left->freq + right->freq);
     top->left = left;
     top->right = right;
+
     minHeap.push(top);
+
+    std::vector< HuffmanTreeNode* > temp;
+    while (!minHeap.empty())
+    {
+      temp.push_back(minHeap.front());
+      minHeap.drop();
+    }
+
+    std::sort(temp.begin(), temp.end(), sortByDescendingFreq);
+
+    for (HuffmanTreeNode* node : temp)
+    {
+      minHeap.push(node);
+    }
   }
 
-  storeCodes(minHeap.top(), "", huffmanCodes);
+  storeCodes(minHeap.front(), "", huffmanCodes);
 }
 
-bool skuratov::compressText(const std::string& text, const std::map< char, std::string >& huffmanCodes, std::string& encodedText)
+bool skuratov::compressText(const std::string& text, const UBST< char, std::string >& huffmanCodes, std::string& encodedText)
 {
   for (char c : text)
   {
@@ -58,9 +83,9 @@ bool skuratov::compressText(const std::string& text, const std::map< char, std::
   return true;
 }
 
-bool skuratov::decompressText(const std::string& encodedText, const std::map< char, std::string >& huffmanCodes, std::string& decodedText)
+bool skuratov::decompressText(const std::string& encodedText, const UBST< char, std::string >& huffmanCodes, std::string& decodedText)
 {
-  std::map< std::string, char > reverseCodes;
+  UBST< std::string, char > reverseCodes;
   for (const auto& pair : huffmanCodes)
   {
     reverseCodes[pair.second] = pair.first;
@@ -80,7 +105,7 @@ bool skuratov::decompressText(const std::string& encodedText, const std::map< ch
   return currentCode.empty();
 }
 
-double skuratov::calculateEfficiency(const std::string& text, const std::map< char, std::string >& huffmanCodes)
+double skuratov::calculateEfficiency(const std::string& text, const UBST< char, std::string >& huffmanCodes)
 {
   double originalSize = text.size() * 8;
   double compressedSize = 0;
@@ -95,4 +120,9 @@ double skuratov::calculateEfficiency(const std::string& text, const std::map< ch
 bool skuratov::compareByLength(const std::string& a, const std::string& b)
 {
   return a.length() < b.length();
+}
+
+bool skuratov::sortByDescendingFreq(HuffmanTreeNode* a, HuffmanTreeNode* b)
+{
+  return a->freq > b->freq;
 }

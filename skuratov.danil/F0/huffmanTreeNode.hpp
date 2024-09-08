@@ -1,9 +1,9 @@
-#ifndef HUFFMANTREENODE_HPP
-#define HUFFMANTREENODE_HPP
+#ifndef HUFFMAN_TREENODE_HPP
+#define HUFFMAN_TREENODE_HPP
 
 #include <cstddef>
-#include <map>
 #include <string>
+#include "UBST.hpp"
 
 namespace skuratov
 {
@@ -32,12 +32,12 @@ namespace skuratov
 
   struct Context
   {
-    std::map< std::string, std::string > context;
+    UBST< std::string, std::string > context;
   };
 
   struct CodeContext
   {
-    std::map< std::string, std::map< char, std::string > > codeContext;
+    UBST< std::string, UBST< char, std::string > > codeContext;
   };
 }
 

@@ -23,7 +23,7 @@ int main(int argc, char* argv[])
   Context context;
   CodeContext codeContext;
 
-  std::map< std::string, std::function< void(std::istream&, std::ostream&) > > cmds;
+  UBST< std::string, std::function< void(std::istream&, std::ostream&) > > cmds;
   {
     using namespace std::placeholders;
     cmds["--help"] = std::bind(help, _2);

@@ -50,7 +50,7 @@ void skuratov::huff(std::istream& in, std::ostream& out, Context& context, CodeC
   }
 
   std::string text = context.context[textVar];
-  std::map< char, std::string > huffmanCodes;
+  UBST< char, std::string > huffmanCodes;
 
   try
   {
@@ -81,7 +81,7 @@ void skuratov::compress(std::istream& in, std::ostream& out, Context& context, C
   }
 
   std::string text = context.context[textVar];
-  std::map< char, std::string > huffmanCodes = codeContext.codeContext[codesVar];
+  UBST< char, std::string > huffmanCodes = codeContext.codeContext[codesVar];
   std::string encodedText;
 
   if (compressText(text, huffmanCodes, encodedText))
@@ -163,7 +163,7 @@ void skuratov::decompress(std::istream& in, std::ostream& out, Context& context,
   }
 
   std::string encodedText = context.context[encodedVar];
-  std::map< char, std::string > huffmanCodes = codeContext.codeContext[codesVar];
+  UBST< char, std::string > huffmanCodes = codeContext.codeContext[codesVar];
   std::string decodedText;
 
   out << "Encoded Text: " << encodedText << "\n";
@@ -191,7 +191,7 @@ void skuratov::eff(std::istream& in, std::ostream& out, const Context& context, 
   }
 
   std::string text = context.context.at(textVar);
-  std::map< char, std::string > huffmanCodes = codeContext.codeContext.at(codesVar);
+  UBST< char, std::string > huffmanCodes = codeContext.codeContext.at(codesVar);
 
   double efficiency = calculateEfficiency(text, huffmanCodes);
   double origSize = text.size() * 8;
