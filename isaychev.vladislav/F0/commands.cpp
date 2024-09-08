@@ -159,7 +159,7 @@ void isaychev::merge(collection_t & col, std::istream & in)
   {
     temp.add_element(*i);
   }
-  col.insert({new_list, temp});
+  col[new_list] = {std::move(temp)};
 }
 
 void isaychev::get_names(const collection_t & col, std::ostream & out)
@@ -194,21 +194,18 @@ void isaychev::intersect(collection_t & col, std::istream & in)
       temp2.insert({(*i).first, std::min(fl1.get_map().at((*i).first), (*i).second)});
     }
   }
-  col.insert({new_list, temp2});
+  col[new_list] = {std::move(temp2)};
 }
 
-void isaychev::execlude(collection_t & col, std::istream & in)
+void isaychev::execlude(collection_t & col, const std::string & spec, std::istream & in)
 {
   using namespace std::placeholders;
-  std::string spec, list;
-  size_t total = 0;
-  in >> spec;
   std::function< bool(const value_t &, const value_t &) > cmp;
-  if (spec == "less")
+  if (spec == "execludeless")
   {
     cmp = is_greater;
   }
-  else if (spec == "more")
+  else if (spec == "execludemore")
   {
     cmp = std::bind(is_greater, _2, _1);
   }
@@ -216,7 +213,9 @@ void isaychev::execlude(collection_t & col, std::istream & in)
   {
     throw std::invalid_argument("<INVALID COMMAND>");
   }
-  in >> spec >> list >> total;
+  std::string new_list, list;
+  size_t total = 0;
+  in >> new_list >> list >> total;
   if (!in)
   {
     throw std::invalid_argument("<INVALID COMMAND>");
@@ -231,11 +230,9 @@ void isaychev::execlude(collection_t & col, std::istream & in)
       temp.insert(*i);
     }
   }
- /* auto pred = std::bind(cmp, std::cref(value_cmp), _1);
-  std::copy_if(fl.get_map().begin(), fl.get_map().end(), std::inserter(temp, temp.end()), pred);*/
   if (temp.empty())
   {
     throw std::runtime_error("<INVALID COMMAND>");
   }
-  col.insert({spec, temp});
+  col[new_list] = {std::move(temp)};
 }
