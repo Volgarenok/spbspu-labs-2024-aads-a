@@ -18,6 +18,7 @@ namespace isaychev
   void merge(collection_t & col, std::istream & in);
   void get_names(const collection_t & col, std::ostream & out);
   void intersect(collection_t & col, std::istream & in);
+  void execlude(collection_t & col, std::istream & in);
 }
 
 #endif
