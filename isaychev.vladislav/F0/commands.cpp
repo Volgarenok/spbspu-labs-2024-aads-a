@@ -59,17 +59,12 @@ void isaychev::delete_freqlist(collection_t & col, std::istream & in)
   }
 }
 
-bool is_greater(const std::pair< isaychev::Word, size_t > & lhs, const std::pair< isaychev::Word, size_t > & rhs)
-{
-  return lhs.second > rhs.second;
-}
-
 template< class FreqListIt >
 void output_list_part(std::ostream & out, FreqListIt first, size_t count)
 {
   for (size_t i = 0; i < count; ++i)
   {
-    out << convert_to_str(*first) << "\n";
+    out << isaychev::convert_to_str(*first) << "\n";
     ++first;
   }
 }
@@ -81,7 +76,7 @@ void input_and_sort(const Container & input, isaychev::List< std::pair< isaychev
   {
     rhs.push_front(*i);
   }
-  quick_sort(rhs.begin(), rhs.end(), is_greater);
+  quick_sort(rhs.begin(), rhs.end(), isaychev::is_greater);
 }
 
 void isaychev::print(const collection_t & col, std::istream & in, std::ostream & out)
@@ -197,22 +192,9 @@ void isaychev::intersect(collection_t & col, std::istream & in)
   col[new_list] = {std::move(temp2)};
 }
 
-void isaychev::execlude(collection_t & col, const std::string & spec, std::istream & in)
+void isaychev::execlude(collection_t & col, cmp_t cmp, std::istream & in)
 {
   using namespace std::placeholders;
-  std::function< bool(const value_t &, const value_t &) > cmp;
-  if (spec == "execludeless")
-  {
-    cmp = is_greater;
-  }
-  else if (spec == "execludemore")
-  {
-    cmp = std::bind(is_greater, _2, _1);
-  }
-  else
-  {
-    throw std::invalid_argument("<INVALID COMMAND>");
-  }
   std::string new_list, list;
   size_t total = 0;
   in >> new_list >> list >> total;
@@ -225,7 +207,7 @@ void isaychev::execlude(collection_t & col, const std::string & spec, std::istre
   std::pair< Word, size_t > value_cmp{{}, total};
   for (auto i = fl.get_map().begin(); i != fl.get_map().end(); ++i)
   {
-    if(cmp(value_cmp, *i))
+    if ((*cmp)(value_cmp, *i))
     {
       temp.insert(*i);
     }
