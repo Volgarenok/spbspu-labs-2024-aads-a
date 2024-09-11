@@ -455,7 +455,7 @@ arakelyan::Iterator< T > arakelyan::BinList< T >::erase(iterator it_pos)
     pop_front();
     return begin();
   }
-  else if (it_pos == end())
+  else if (it_pos == end() || it_pos.node->nextNode == nullptr)
   {
     pop_back();
     return end();
@@ -474,33 +474,13 @@ arakelyan::Iterator< T > arakelyan::BinList< T >::erase(iterator it_pos)
 template < class T >
 arakelyan::Iterator< T > arakelyan::BinList< T >::erase(iterator it_start, iterator it_end)
 {
-  if (it_start == begin() && it_end == end())
+  auto st = it_start;
+  auto end = it_end;
+  while (st != end)
   {
-    clear();
-    return end();
+    st = erase(st);
   }
-  else if (it_start == begin() && it_end != end())
-  {
-    while (it_start != it_end && it_start != end())
-    {
-      ++it_start;
-      pop_front();
-    }
-    return it_start;
-  }
-  else if (it_start != begin() && it_end == end())
-  {
-    while (it_start != it_end)
-    {
-      erase(it_start);
-    }
-    return it_start;
-  }
-  while (it_start != it_end && it_start != end())
-  {
-    erase(it_start);
-  }
-  return it_end;
+  return st;
 }
 
 template < class T >
