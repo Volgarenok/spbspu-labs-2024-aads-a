@@ -3,21 +3,24 @@
 
 namespace chistyakov
 {
-  template< typename T >
-  struct Node
+  namespace detail
   {
-    Node(const T & value):
-      value_(value),
-      next_(nullptr),
-      previous_(nullptr)
-    {}
+    template< typename T >
+    struct Node
+    {
+      Node(const T & value):
+        value(value),
+        next(nullptr),
+        previous(nullptr)
+      {}
 
-    ~Node() = default;
+      ~Node() = default;
 
-    T value_;
-    Node * next_;
-    Node * previous_;
-  };
+      T value;
+      Node * next;
+      Node * previous;
+    };
+  }
 }
 
 #endif

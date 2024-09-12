@@ -4,7 +4,6 @@
 #include "iterator.hpp"
 #include "constIterator.hpp"
 #include "node.hpp"
-#include <iostream>
 
 namespace chistyakov
 {
@@ -17,20 +16,15 @@ namespace chistyakov
         tail_(nullptr)
       {}
 
-      List(Node< T > * head, Node< T > * tail):
-        head_(head),
-        tail_(tail)
-      {}
-
       explicit List(const List & list):
         head_(nullptr),
         tail_(nullptr)
       {
-        for (auto element = list.head_; element != nullptr; element = element->next_)
+        for (auto element = list.head_; element != nullptr; element = element->next)
         {
           try
           {
-            push_back(element->value_);
+            push_back(element->value);
           }
           catch (...)
           {
@@ -41,7 +35,8 @@ namespace chistyakov
       }
 
       explicit List(List< T > && list):
-        head_(list.head_)
+        head_(list.head_),
+        tail_(list.tail_)
       {
         list.head_ = nullptr;
         list.tail_ = nullptr;
@@ -59,7 +54,7 @@ namespace chistyakov
         return *this;
       }
 
-      List & operator=(List && other)
+      List & operator=(List && other) noexcept
       {
         clear();
         swap(other);
@@ -88,23 +83,23 @@ namespace chistyakov
 
       T & front()
       {
-        return head_->value_;
+        return head_->value;
       }
 
       T & back()
       {
-        return tail_->value_;
+        return tail_->value;
       }
 
       const T & front() const
       {
-        const T & tmp = head_->value_;
+        const T & tmp = head_->value;
         return tmp;
       }
 
       const T & back() const
       {
-        const T & tmp = tail_->value_;
+        const T & tmp = tail_->value;
         return tmp;
       }
 
@@ -115,8 +110,8 @@ namespace chistyakov
 
       void push_back(const T & value)
       {
-        Node< T > * newNode = new Node< T >(value);
-        newNode->previous_ = tail_;
+        detail::Node< T > * newNode = new detail::Node< T >(value);
+        newNode->previous = tail_;
 
         if (!head_)
         {
@@ -125,7 +120,7 @@ namespace chistyakov
 
         if (tail_)
         {
-          tail_->next_ = newNode;
+          tail_->next = newNode;
         }
 
         tail_ = newNode;
@@ -133,7 +128,7 @@ namespace chistyakov
 
       void push_front(const T & value)
       {
-        Node< T > * newNode = new Node< T >(value);
+        detail::Node< T > * newNode = new detail::Node< T >(value);
         newNode->next = head_;
 
         if (head_)
@@ -151,12 +146,12 @@ namespace chistyakov
 
       void pop_back()
       {
-        Node< T > * lastTail = tail_;
-        tail_ = tail_->previous_;
+        detail::Node< T > * lastTail = tail_;
+        tail_ = tail_->previous;
 
         if (tail_ != nullptr)
         {
-          tail_->next_ = nullptr;
+          tail_->next = nullptr;
         }
         else
         {
@@ -168,12 +163,12 @@ namespace chistyakov
 
       void pop_front()
       {
-        Node< T > * lastHead = head_;
-        head_ = head_->next_;
+        detail::Node< T > * lastHead = head_;
+        head_ = head_->next;
 
         if (head_ != nullptr)
         {
-          head_->previous_ = nullptr;
+          head_->previous = nullptr;
         }
         else
         {
@@ -189,8 +184,6 @@ namespace chistyakov
         {
           pop_front();
         }
-
-        tail_ = nullptr;
       }
 
       void remove(const T & value)
@@ -208,18 +201,17 @@ namespace chistyakov
             if (element == begin())
             {
               pop_front();
-              return;
             }
-
-            if (element == end())
+            else if (element == end())
             {
               pop_back();
-              return;
             }
-
-            element->previous_->next_ = element->next_;
-            element->next_->previous_ = element->previous_;
-            delete element;
+            else
+            {
+              element->previous->next = element->next;
+              element->next->previous = element->previous;
+              delete element;
+            }
           }
         }
       }
@@ -236,15 +228,15 @@ namespace chistyakov
         swap(tmp);
       }
 
-      void swap(List & list)
+      void swap(List & list) noexcept
       {
         std::swap(list.head_, head_);
         std::swap(list.tail_, tail_);
       }
 
     private:
-      Node< T > * head_;
-      Node< T > * tail_;
+      detail::Node< T > * head_;
+      detail::Node< T > * tail_;
   };
 }
 

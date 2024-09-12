@@ -10,7 +10,7 @@ namespace chistyakov
   class List;
 
   template< typename T >
-  class ConstIterator : public std::iterator< std::bidirectional_iterator_tag, T >
+  class ConstIterator: public std::iterator < std::bidirectional_iterator_tag, T >
   {
     public:
       ConstIterator():
@@ -21,7 +21,7 @@ namespace chistyakov
         node_(val.node_)
       {}
 
-      ~ConstIterator() = default;
+      ~ConstIterator() noexcept = default;
 
       ConstIterator< T > & operator++()
       {
@@ -49,28 +49,32 @@ namespace chistyakov
         return now;
       }
 
-      bool operator==(const ConstIterator< T > & rhs) const
+      bool operator==(const ConstIterator< T > & rhs) const noexcept
       {
         return node_ == rhs.node_;
       }
 
-      bool operator!=(const ConstIterator< T > & rhs) const
+      bool operator!=(const ConstIterator< T > & rhs) const noexcept
       {
         return !(rhs == *this);
       }
 
-      T & operator*()
+      const T & operator*() const
       {
         return node_->value_;
       }
 
-      T * operator->()
+      const T * operator->() const
       {
         return std::addressof(node_->value_);
       }
 
     private:
-      Node< T > * node_;
+      detail::Node< T > * node_;
+
+      explicit ConstIterator(detail::Node< T > * value) noexcept:
+         node_(value)
+      {}
   };
 }
 

@@ -10,25 +10,24 @@ namespace chistyakov
   class List;
 
   template< typename T >
-  class Iterator : public std::iterator< std::bidirectional_iterator_tag, T >
+  class Iterator: public std::iterator < std::bidirectional_iterator_tag, T >
   {
     friend class List< T >;
     public:
       Iterator():
         node_(nullptr)
       {}
-
-      explicit Iterator(Node< T > * val):
-        node_(val)
+      Iterator(const Iterator & value):
+        node_(value.node_)
       {}
 
-      ~Iterator() = default;
-      Iterator(const Iterator< T > &) = default;
-      Iterator< T > & operator=(const Iterator< T > & ) = default;
+      ~Iterator() noexcept = default;
+
+      Iterator< T > & operator=(const Iterator< T > & ) noexcept = default;
 
       Iterator< T > & operator++()
       {
-        node_ = node_->next_;
+        node_ = node_->next;
         return *this;
       }
 
@@ -41,7 +40,7 @@ namespace chistyakov
 
       Iterator< T > & operator--()
       {
-        node_ = node_->previous_;
+        node_ = node_->previous;
         return *this;
       }
 
@@ -52,38 +51,42 @@ namespace chistyakov
         return now;
       }
 
-      bool operator==(const Iterator< T > & rhs) const
+      bool operator==(const Iterator< T > & rhs) const noexcept
       {
         return node_ == rhs.node_;
       }
 
-      bool operator!=(const Iterator< T > & rhs) const
+      bool operator!=(const Iterator< T > & rhs) const noexcept
       {
         return !(rhs == *this);
       }
 
       T & operator*()
       {
-        return node_->value_;
+        return node_->value;
       }
 
       T * operator->()
       {
-        return std::addressof(node_->value_);
+        return std::addressof(node_->value);
       }
 
       const T & operator*() const
       {
-        return node_->value_;
+        return node_->value;
       }
 
       const T * operator->() const
       {
-        return std::addressof(node_->value_);
+        return std::addressof(node_->value);
       }
 
     private:
-      Node< T > * node_;
+      detail::Node< T > * node_;
+
+      explicit Iterator(detail::Node< T > * value) noexcept:
+        node_(value)
+      {}
   };
 }
 
