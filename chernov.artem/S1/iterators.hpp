@@ -46,7 +46,7 @@ namespace chernov
     }
     T* operator->() const
     {
-      return &(current_->data_);
+      return std::addressof(current_->data_);
     }
     ~Iterators() = default;
   private:

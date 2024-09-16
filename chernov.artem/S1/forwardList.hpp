@@ -47,7 +47,7 @@ namespace chernov
 
     List< T >& operator=(const List< T >& obj)
     {
-      if (this == &obj)
+      if (this == std::addressof(obj))
       {
         return *this;
       }
@@ -58,7 +58,7 @@ namespace chernov
 
     List< T >& operator=(List< T >&& obj)
     {
-      if (this != &obj)
+      if (this != std::addressof(obj))
       {
         std::swap(head_, obj.head_);
         std::swap(size_, obj.size_);
