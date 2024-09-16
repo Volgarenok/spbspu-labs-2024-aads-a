@@ -218,14 +218,6 @@ namespace chernov
       }
     }
 
-    void fill(const T& value, size_t count)
-    {
-      for (size_t i = 0; i < count; i++)
-      {
-        push_back(value);
-      }
-    }
-
     void remove(const T& value)
     {
       remove_if([&](const T& number) -> bool { return value == number; });
