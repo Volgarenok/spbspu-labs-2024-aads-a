@@ -40,11 +40,11 @@ namespace chernov
     {
       return current_ != obj.current_;
     }
-    T& operator*() const
+    T& operator*()
     {
       return current_->data_;
     }
-    T* operator->() const
+    T* operator->()
     {
       return std::addressof(current_->data_);
     }
