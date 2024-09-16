@@ -1,10 +1,10 @@
 #ifndef ITERATORS_HPP
 #define ITERATORS_HPP
 
-#include "forwardList.hpp"
-#include "node.hpp"
 #include <cstddef>
 #include <iterator>
+#include "forwardList.hpp"
+#include "node.hpp"
 
 namespace chernov
 {

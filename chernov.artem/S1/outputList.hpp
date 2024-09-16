@@ -1,10 +1,10 @@
 #ifndef OUTPUT_LIST_HPP
 #define OUTPUT_LIST_HPP
 
-#include "inputList.hpp"
-#include "forwardList.hpp"
 #include <ostream>
 #include <cstddef>
+#include "inputList.hpp"
+#include "forwardList.hpp"
 
 namespace chernov
 {

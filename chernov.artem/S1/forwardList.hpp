@@ -1,12 +1,12 @@
 #ifndef FORWARD_LIST_HPP
 #define FORWARD_LIST_HPP
 
+#include <iostream>
+#include <stdexcept>
+#include <cstddef>
 #include "iterators.hpp"
 #include "constIterators.hpp"
 #include "node.hpp"
-#include <stdexcept>
-#include <cstddef>
-#include <iostream>
 
 namespace chernov
 {
