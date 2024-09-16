@@ -66,12 +66,12 @@ namespace chernov
       return *this;
     }
 
-    bool isEmpty() const
+    bool isEmpty() const noexcept
     {
       return size_ == 0;
     }
 
-    size_t getSize() const
+    size_t getSize() const noexcept
     {
       return size_;
     }
