@@ -14,12 +14,10 @@ namespace chernov
   template < typename T >
   class ConstIterators: public std::iterator< std::forward_iterator_tag, T >
   {
+    friend class List< T >;
   public:
     ConstIterators():
       current_(nullptr)
-    {}
-    ConstIterators(Node< T >* obj):
-      current_(obj)
     {}
     ConstIterators(const ConstIterators< T >&) = default;
     ConstIterators< T >& operator=(const ConstIterators< T >&) = default;
@@ -52,6 +50,9 @@ namespace chernov
     }
     ~ConstIterators() = default;
   private:
+    explicit ConstIterators(Node< T >* obj):
+      current_(obj)
+    {}
     const Node< T >* current_;
   };
 }
