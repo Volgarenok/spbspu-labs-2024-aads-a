@@ -7,6 +7,7 @@
 
 #include "commands.hpp"
 #include "readDictionary.hpp"
+#include "binarySearchTree.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -21,7 +22,7 @@ int main(int argc, char* argv[])
   system("chcp 1251");
   system("cls");
   using namespace belokurskaya;
-  std::unordered_map< std::string, EngRusDict > EngRusDicts = ReadEngRusDictFromFile(inputFileName);
+  BinarySearchTree< std::string, EngRusDict > EngRusDicts = ReadEngRusDictFromFile(inputFileName);
   std::map< std::string, std::function< void(std::istream&, std::ostream&) > > commands;
   {
     using namespace std::placeholders;
