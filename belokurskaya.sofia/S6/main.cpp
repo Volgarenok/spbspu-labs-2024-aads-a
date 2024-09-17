@@ -20,11 +20,20 @@ int main(int argc, char* argv[])
     return 1;
   }
   std::srand(std::time(0));
+  try
+  {
+    using namespace belokurskaya;
+    std::map< std::pair< std::string, std::string >, std::function< void(size_t, std::ostream&) > > commands;
+    commands[{"ascending", "ints"}] = sortAndPrint< int, std::less< int > >;
+    commands[{"ascending", "floats"}] = sortAndPrint< float, std::less< float > >;
+    commands[{"descending", "ints"}] = sortAndPrint< int, std::greater< int > >;
+    commands[{"descending", "floats"}] = sortAndPrint< float, std::greater< float > >;
 
-  using namespace belokurskaya;
-  std::map< std::pair< std::string, std::string >, std::function< void(size_t, std::ostream&) > > commands;
-  commands[{"ascending", "ints"}] = sortAndPrint< int, std::less< int > >;
-  commands[{"ascending", "floats"}] = sortAndPrint< float, std::less< float > >;
-  commands[{"descending", "ints"}] = sortAndPrint< int, std::greater< int > >;
-  commands[{"descending", "floats"}] = sortAndPrint< float, std::greater< float > >;
+    commands.at(std::make_pair(argv[1], argv[2]))(size, std::cout);
+  }
+  catch (...)
+  {
+    std::cout << "Error\n";
+    return 1;
+  }
 }
