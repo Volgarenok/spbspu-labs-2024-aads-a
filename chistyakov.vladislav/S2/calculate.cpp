@@ -1,5 +1,6 @@
 #include "calculate.hpp"
 #include "stack.hpp"
+#include <iostream>
 
 int chistyakov::calculate(Queue< std::string > & exp)
 {
