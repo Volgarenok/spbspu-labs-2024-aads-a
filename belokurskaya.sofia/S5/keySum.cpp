@@ -1,7 +1,7 @@
 #include <limits>
 #include <stdexcept>
 
-#include "getSum.hpp"
+#include "keySum.hpp"
 
 belokurskaya::KeySum::KeySum():
   resultKey_(0),
