@@ -35,26 +35,24 @@ namespace belokurskaya
   {
     std::deque< Type > deque(size);
     std::generate(deque.begin(), deque.end(), generateRandomNumbers< Type >);
-
-    std::list< Type > list(deque.cbegin(), deque.cend());
+    
+    List< Type > forward_list(deque.cbegin(), deque.cend());
+    std::forward_list< Type > forward_list_standart(deque.cbegin(), deque.cend());
 
     std::deque< Type > deque_sort(deque.cbegin(), deque.cend());
     std::deque< Type > deque_shaker(deque.cbegin(), deque.cend());
     std::deque< Type > deque_quicksort(deque.cbegin(), deque.cend());
 
-    List< Type > forward_list(deque.cbegin(), deque.cend());
-    std::forward_list< Type > forward_list_standart(deque.cbegin(), deque.cend());
-
-    print(out, forward_list.begin(), forward_list.end());
-    out << "\n";
+    std::list< Type > list(deque.cbegin(), deque.cend());
 
     Cmp cmp;
-    chooseSort(out, list.begin(), list.end(), cmp, quickSort);
+    chooseSort(out, list.begin(), list.end(), cmp, shakerSort);
+    chooseSort(out, forward_list.begin(), forward_list.end(), cmp, quickSort);
     chooseSort(out, deque_shaker.begin(), deque_shaker.end(), cmp, shakerSort);
     chooseSort(out, deque_quicksort.begin(), deque_quicksort.end(), cmp, quickSort);
 
-    standartSort(out, list, cmp);
     standartSort(out, forward_list_standart, cmp);
+    standartSort(out, list, cmp);
 
     std::sort(deque_sort.begin(), deque_sort.end(), cmp);
     print(out, deque_sort.begin(), deque_sort.end());
