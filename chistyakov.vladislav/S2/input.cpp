@@ -1,4 +1,5 @@
 #include "input.hpp"
+#include <iostream>
 
 void chistyakov::inputExp(Stack< Queue< std::string > > & result, std::istream & in)
 {
