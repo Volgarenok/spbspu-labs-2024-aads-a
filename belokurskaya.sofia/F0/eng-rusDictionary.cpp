@@ -1,6 +1,5 @@
 #include "eng-rusDictionary.hpp"
 
-#include <algorithm>
 #include <functional>
 
 belokurskaya::EngRusDict::EngRusDict()
@@ -152,8 +151,10 @@ belokurskaya::EngRusDict& belokurskaya::EngRusDict::operator=(const belokurskaya
 
 std::string belokurskaya::EngRusDict::getLettersToLower(std::string word)
 {
-  using namespace std::placeholders;
-  std::transform(word.begin(), word.end(), word.begin(), std::ptr_fun< int, int >(std::tolower));
+  for (auto& c : word)
+  {
+    c = std::tolower(c);
+  }
   return word;
 }
 

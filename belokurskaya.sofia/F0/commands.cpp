@@ -1,7 +1,6 @@
 #include "commands.hpp"
 
 #include <functional>
-#include <algorithm>
 
 #include "readDictionary.hpp"
 
