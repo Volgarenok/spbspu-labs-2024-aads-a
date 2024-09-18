@@ -1,8 +1,8 @@
 #ifndef CONVERTINFTOPOSTF_HPP
 #define CONVERTINFTOPOSTF_HPP
 
-#include "stack.hpp"
-#include "queue.hpp"
+#include <stack.hpp>
+#include <queue.hpp>
 #include "tokens.hpp"
 
 namespace isaychev
