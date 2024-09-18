@@ -2,10 +2,11 @@
 #include <cstddef>
 #include <string>
 #include <functional>
-#include <deque>
+#include <utility>
 #include <list/list.hpp>
 #include "sortings.hpp"
-#include "sequenceFunctions.hpp"
+#include "testSortings.hpp"
+#include "generate.hpp"
 
 int main(int argc, char * argv[])
 {
@@ -17,27 +18,15 @@ int main(int argc, char * argv[])
   }
   try
   {
-    size_t size = std::stoull(argv[3]);
-    if (size == 0)
-    {
-      throw std::invalid_argument("Size must be greater than zero");
-    }
-
-    List< int > nums;
-    nums.push_back(3);
-    nums.push_back(2);
-    nums.push_back(5);
-    nums.push_back(1);
-    nums.push_back(4);
-
-    insertionSort(nums.begin(), nums.end(), std::less< int >());
-    printSequence(nums.cbegin(), nums.cend(), std::cout);
-    std::cout << '\n';
-
-    std::deque< int > nums2 = {0, 5, 2, 1, 6, 3, 4};
-    quickSort(nums2.begin(), nums2.end(), std::less< int >());
-    printSequence(nums2.cbegin(), nums2.cend(), std::cout);
-    std::cout << '\n';
+    std::string direction = argv[1];
+    std::string type = argv[2];
+    std::pair< std::string, std::string > params{direction, type};
+    std::default_random_engine generator;
+    int a = 0;
+    float b = 0;
+    a = getRandomNumber(generator, a);
+    b = getRandomNumber(generator, b);
+    std::cout << a << ' ' << b << '\n';
   }
   catch (const std::exception & e)
   {

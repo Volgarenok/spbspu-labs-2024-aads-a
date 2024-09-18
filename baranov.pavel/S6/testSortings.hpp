@@ -1,5 +1,5 @@
-#ifndef SEQUENCE_OPERATIONS
-#define SEQUENCE_OPERATIONS
+#ifndef TEST_SORTINGS_HPP
+#define TEST_SORTINGS_HPP
 #include <iostream>
 
 namespace baranov
