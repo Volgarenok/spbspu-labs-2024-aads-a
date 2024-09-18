@@ -2,7 +2,7 @@
 #define COMMANDS_HPP
 #include <iostream>
 #include <string>
-#include "tree.hpp"
+#include <tree/tree.hpp>
 
 namespace baranov
 {

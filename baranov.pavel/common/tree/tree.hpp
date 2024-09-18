@@ -3,9 +3,10 @@
 #include <functional>
 #include <cstddef>
 #include <stdexcept>
-#include "iterator.hpp"
-#include "constIterator.hpp"
-#include "node.hpp"
+#include <tree/treeIterator.hpp>
+#include <tree/treeConstIterator.hpp>
+#include <tree/treeNode.hpp>
+#include <stack.hpp>
 
 namespace baranov
 {
@@ -14,9 +15,9 @@ namespace baranov
   {
   public:
     using this_t = Tree< Key, T, Compare >;
-    using iterator_t = Iterator< Key, T, Compare >;
-    using const_iterator_t = ConstIterator< Key, T, Compare >;
-    using node_t = Node< Key, T >;
+    using iterator_t = TreeIterator< Key, T, Compare >;
+    using const_iterator_t = TreeConstIterator< Key, T, Compare >;
+    using node_t = TreeNode< Key, T >;
     Tree();
     Tree(const Tree & rhs);
     Tree(Tree && rhs) noexcept;
@@ -24,8 +25,10 @@ namespace baranov
     Tree & operator=(Tree && rhs) noexcept;
     ~Tree();
     iterator_t begin();
+    iterator_t rbegin();
     iterator_t end();
     const_iterator_t cbegin() const;
+    const_iterator_t crbegin() const;
     const_iterator_t cend() const;
     std::pair< iterator_t, bool > insert(const Key & key, const T & val);
     std::pair< iterator_t, bool > insert(const std::pair< Key, T > & pair);
@@ -40,8 +43,24 @@ namespace baranov
     void clear() noexcept;
     void clear(node_t* node) noexcept;
     void swap(this_t & rhs);
+
+    template < typename F >
+    F traverse_lnr(F f);
+    template < typename F >
+    F traverse_lnr(F f) const;
+
+    template < typename F >
+    F traverse_rnl(F f);
+    template < typename F >
+    F traverse_rnl(F f) const;
+
+    template < typename F >
+    F traverse_breadth(F f);
+    template < typename F >
+    F traverse_breadth(F f) const;
+
   private:
-    Node< Key, T > * root_;
+    TreeNode< Key, T > * root_;
     size_t size_;
   };
 
@@ -108,7 +127,7 @@ namespace baranov
   }
 
   template< typename Key, typename T, typename Compare >
-  Iterator< Key, T, Compare > Tree< Key, T, Compare >::begin()
+  TreeIterator< Key, T, Compare > Tree< Key, T, Compare >::begin()
   {
     if (root_ == nullptr)
     {
@@ -123,13 +142,28 @@ namespace baranov
   }
 
   template< typename Key, typename T, typename Compare >
-  Iterator< Key, T, Compare > Tree< Key, T, Compare >::end()
+  TreeIterator< Key, T, Compare > Tree< Key, T, Compare >::rbegin()
+  {
+    if (root_ == nullptr)
+    {
+      return iterator_t();
+    }
+    node_t * node = root_;
+    while(node->hasRight())
+    {
+      node = node->right_;
+    }
+    return iterator_t(node);
+  }
+
+  template< typename Key, typename T, typename Compare >
+  TreeIterator< Key, T, Compare > Tree< Key, T, Compare >::end()
   {
     return iterator_t();
   }
 
   template< typename Key, typename T, typename Compare >
-  ConstIterator< Key, T, Compare > Tree< Key, T, Compare >::cbegin() const
+  TreeConstIterator< Key, T, Compare > Tree< Key, T, Compare >::cbegin() const
   {
     if (root_ == nullptr)
     {
@@ -144,13 +178,28 @@ namespace baranov
   }
 
   template< typename Key, typename T, typename Compare >
-  ConstIterator< Key, T, Compare > Tree< Key, T, Compare >::cend() const
+  TreeConstIterator< Key, T, Compare > Tree< Key, T, Compare >::crbegin() const
+  {
+    if (root_ == nullptr)
+    {
+      return const_iterator_t();
+    }
+    node_t * node = root_;
+    while(node->hasRight())
+    {
+      node = node->right_;
+    }
+    return const_iterator_t(node);
+  }
+
+  template< typename Key, typename T, typename Compare >
+  TreeConstIterator< Key, T, Compare > Tree< Key, T, Compare >::cend() const
   {
     return const_iterator_t();
   }
 
   template< typename Key, typename T, typename Compare >
-  std::pair< Iterator< Key, T, Compare >, bool > Tree< Key, T, Compare >::insert(const Key & key, const T & val)
+  std::pair< TreeIterator< Key, T, Compare >, bool > Tree< Key, T, Compare >::insert(const Key & key, const T & val)
   {
     if (empty())
     {
@@ -190,7 +239,7 @@ namespace baranov
   }
 
   template< typename Key, typename T, typename Compare >
-  std::pair< Iterator< Key, T, Compare >, bool > Tree< Key, T, Compare >::insert(const std::pair< Key, T > & pair)
+  std::pair< TreeIterator< Key, T, Compare >, bool > Tree< Key, T, Compare >::insert(const std::pair< Key, T > & pair)
   {
     return insert(pair.first, pair.second);
   }
@@ -240,7 +289,7 @@ namespace baranov
   }
 
   template< typename Key, typename T, typename Compare >
-  Iterator< Key, T, Compare > Tree< Key, T, Compare >::find(const Key & key)
+  TreeIterator< Key, T, Compare > Tree< Key, T, Compare >::find(const Key & key)
   {
     node_t * node = root_;
     while (node && node->data_.first != key)
@@ -258,7 +307,7 @@ namespace baranov
   }
 
   template< typename Key, typename T, typename Compare >
-  ConstIterator< Key, T, Compare > Tree< Key, T, Compare >::find(const Key & key) const
+  TreeConstIterator< Key, T, Compare > Tree< Key, T, Compare >::find(const Key & key) const
   {
     node_t * node = root_;
     while (node && node->data_.first != key)
@@ -312,6 +361,130 @@ namespace baranov
       delete node;
       --size_;
     }
+  }
+
+  template< typename Key, typename T, typename Compare >
+  template < typename F >
+  F Tree< Key, T, Compare >::traverse_lnr(F f)
+  {
+    if (empty())
+    {
+      throw std::invalid_argument("Tree is empty");
+    }
+    for (auto it = begin(); it != end(); ++it)
+    {
+      f(*it);
+    }
+    return f;
+  }
+
+  template< typename Key, typename T, typename Compare >
+  template < typename F >
+  F Tree< Key, T, Compare >::traverse_lnr(F f) const
+  {
+    if (empty())
+    {
+      throw std::invalid_argument("Tree is empty");
+    }
+    for (auto it = cbegin(); it != cend(); ++it)
+    {
+      f(*it);
+    }
+    return f;
+  }
+
+  template< typename Key, typename T, typename Compare >
+  template < typename F >
+  F Tree< Key, T, Compare >::traverse_rnl(F f)
+  {
+    if (empty())
+    {
+      throw std::invalid_argument("Tree is empty");
+    }
+    for (auto it = rbegin(); it != end(); --it)
+    {
+      f(*it);
+    }
+    return f;
+  }
+
+  template< typename Key, typename T, typename Compare >
+  template < typename F >
+  F Tree< Key, T, Compare >::traverse_rnl(F f) const
+  {
+    if (empty())
+    {
+      throw std::invalid_argument("Tree is empty");
+    }
+    for (auto it = crbegin(); it != cend(); --it)
+    {
+      f(*it);
+    }
+    return f;
+  }
+
+  template< typename Key, typename T, typename Compare >
+  template < typename F >
+  F Tree< Key, T, Compare >::traverse_breadth(F f)
+  {
+    if (empty())
+    {
+      throw std::invalid_argument("Tree is empty");
+    }
+    Stack< node_t * > stack;
+    stack.push(root_);
+    while (!stack.empty())
+    {
+      node_t * current = stack.top();
+      stack.pop();
+      while(current->hasLeft())
+      {
+        if (current->hasRight())
+        {
+          stack.push(current->right_);
+        }
+        f(current->data_);
+        current = current->left_;
+      }
+      f(current->data_);
+      if (current->hasRight())
+      {
+        stack.push(current->right_);
+      }
+    }
+    return f;
+  }
+
+  template< typename Key, typename T, typename Compare >
+  template < typename F >
+  F Tree< Key, T, Compare >::traverse_breadth(F f) const
+  {
+    if (empty())
+    {
+      throw std::invalid_argument("Tree is empty");
+    }
+    Stack< const node_t * > stack;
+    stack.push(root_);
+    while (!stack.empty())
+    {
+      const node_t * current = stack.top();
+      stack.pop();
+      while(current->hasLeft())
+      {
+        if (current->hasRight())
+        {
+          stack.push(current->right_);
+        }
+        f(current->data_);
+        current = current->left_;
+      }
+      f(current->data_);
+      if (current->hasRight())
+      {
+        stack.push(current->right_);
+      }
+    }
+    return f;
   }
 }
 
