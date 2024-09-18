@@ -4,6 +4,7 @@
 #include <random>
 #include <deque>
 #include <algorithm>
+#include <list/list.hpp>
 #include "generate.hpp"
 #include "sortings.hpp"
 
@@ -41,19 +42,28 @@ namespace baranov
     printSequence(nums.cbegin(), nums.cend(), out);
     out << '\n';
 
+    std::deque< T > dequeStdSort(nums);
     std::deque< T > dequeInsertion(nums);
     std::deque< T > dequeQsort(nums);
-    std::deque< T > dequeStdSort(nums);
+    List< T > listInsertion(nums.cbegin(), nums.cend());
+    List< T > listQsort(nums.cbegin(), nums.cend());
 
+    std::sort(dequeStdSort.begin(), dequeStdSort.end(), cmp);
     insertionSort(dequeInsertion.begin(), dequeInsertion.end(), cmp);
     quickSort(dequeQsort.begin(), dequeQsort.end(), cmp);
-    std::sort(dequeStdSort.begin(), dequeStdSort.end(), cmp);
+    insertionSort(listInsertion.begin(), listInsertion.end(), cmp);
+    quickSort(listQsort.begin(), listQsort.end(), cmp);
 
+    printSequence(dequeStdSort.begin(), dequeStdSort.end(), out);
+    out << '\n';
     printSequence(dequeInsertion.cbegin(), dequeInsertion.cend(), out);
     out << '\n';
     printSequence(dequeQsort.cbegin(), dequeQsort.cend(), out);
     out << '\n';
-    printSequence(dequeStdSort.begin(), dequeStdSort.end(), out);
+    printSequence(listInsertion.cbegin(), listInsertion.cend(), out);
+    out << '\n';
+    printSequence(listQsort.cbegin(), listQsort.cend(), out);
+    out << '\n';
 
   }
 }

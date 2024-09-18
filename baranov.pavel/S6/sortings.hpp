@@ -2,6 +2,8 @@
 #define SORTINGS_HPP
 #include <iterator>
 #include <iostream>
+#include <algorithm>
+#include <utility>
 
 namespace baranov
 {
@@ -19,42 +21,41 @@ namespace baranov
           --j;
       }
       *j = val;
+    }
   }
-}
 
-
-  template< typename RandomAccessIterator, typename Cmp >
-  void quickSort(RandomAccessIterator first, RandomAccessIterator last, Cmp cmp) {
+  template <typename BiDirIterator, typename Cmp>
+  void quickSort(BiDirIterator first, BiDirIterator last, Cmp cmp)
+  {
     size_t dist = std::distance(first, last);
     if (dist <= 1)
     {
       return;
     }
-    using iter_t = RandomAccessIterator;
-    iter_t pivot = first + dist / 2;
-    auto pivotVal = *pivot;
+    using iter_t = BiDirIterator;
+    iter_t pivot = first;
+    std::advance(pivot, dist / 2);
 
     iter_t left = first;
-    iter_t right = last - 1;
-    while (left <= right)
+    iter_t right = first;
+    std::advance(right, dist - 1);
+
+    while (left != right)
     {
-      while (cmp(*left, pivotVal))
+      while (left != right && !cmp(*pivot, *left))
       {
         ++left;
       }
-      while (cmp(pivotVal, *right))
+      while (left != right && cmp(*pivot, *right))
       {
         --right;
       }
-      if (left <= right)
+      if (left != right)
       {
         std::iter_swap(left, right);
-        ++left;
-        --right;
       }
     }
-
-    quickSort(first, right + 1, cmp);
+    quickSort(first, right, cmp);
     quickSort(left, last, cmp);
   }
 }
