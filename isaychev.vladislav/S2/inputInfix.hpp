@@ -2,7 +2,7 @@
 #define INPUTINFIX_HPP
 
 #include <iosfwd>
-#include "queue.hpp"
+#include <queue.hpp>
 #include "tokens.hpp"
 
 namespace isaychev
