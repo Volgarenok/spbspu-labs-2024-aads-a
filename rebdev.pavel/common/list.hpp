@@ -159,6 +159,7 @@ namespace rebdev
         node * headCopy = headNode_->next;
         delete headNode_;
         headNode_ = headCopy;
+        headNode_->last = nullptr;
         --size_;
       }
       void push_back(const T & val)
@@ -172,9 +173,16 @@ namespace rebdev
       void pop_back()
       {
         node * tailCopy = tailNode_->last->last;
-        delete tailCopy->last;
+        delete tailNode_->last;
         tailNode_->last = tailCopy;
-        tailCopy->next = tailNode_;
+        if (tailCopy != nullptr)
+        {
+          tailCopy->next = tailNode_;
+        }
+        else
+        {
+          headNode_ = tailNode_;
+        }
         --size_;
       }
       void swap(BiList & x) noexcept
