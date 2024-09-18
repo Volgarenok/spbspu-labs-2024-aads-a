@@ -75,6 +75,10 @@ namespace lopatina
     void splice_after(const_iterator position, List< T > & fwdlst, const_iterator first, const_iterator last);
     void splice_after(const_iterator position, List< T > && fwdlst, const_iterator first, const_iterator last);
 
+    T & back();
+    const T & back() const;
+    void pop_back();
+
   private:
     Node< T > * head_;
     Node< T > * tail_;
@@ -578,6 +582,42 @@ namespace lopatina
   void List< T >::splice_after(const_iterator position, List< T > && fwdlst, const_iterator first, const_iterator last)
   {
     splice_after(position, fwdlst, first, last);
+  }
+
+  template < typename T >
+  T & List< T >::back()
+  {
+    return tail_->data_;
+  }
+
+  template < typename T >
+  const T & List< T >::back() const
+  {
+    return tail_->data_;
+  }
+
+  template < typename T >
+  void List< T >::pop_back()
+  {
+    if (tail_ == nullptr)
+    {
+      return;
+    }
+    if (head_ == tail_)
+    {
+      delete tail_;
+      head_ = nullptr;
+      tail_ = nullptr;
+      return;
+    }
+    Node<T> * newptr = head_;
+    while (newptr->next_ != tail_)
+    {
+      newptr = newptr->next_;
+    }
+    newptr->next_ = nullptr;
+    delete tail_;
+    tail_ = newptr;
   }
 
   template < typename T >

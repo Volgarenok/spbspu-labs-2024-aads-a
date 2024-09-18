@@ -3,10 +3,10 @@
 #include <string>
 #include <utility>
 #include <limits>
-#include "node.hpp"
-#include "list_iterator.hpp"
-#include "const_list_iterator.hpp"
-#include "list.hpp"
+#include <node.hpp>
+#include <list_iterator.hpp>
+#include <const_list_iterator.hpp>
+#include <list.hpp>
 
 using listOfPairs = lopatina::List< std::pair< std::string, lopatina::List< size_t > > >;
 
