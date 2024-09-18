@@ -23,6 +23,10 @@ int main(int argc, char * argv[])
     std::string type = argv[2];
     std::string params = direction + type;
     size_t size = std::atoi(argv[3]);
+    if (size == 0)
+    {
+      throw std::logic_error("Invalid size");
+    }
 
     std::map< std::string, std::function< void(std::ostream &, size_t) > > commands;
     commands["ascendingints"] = testSortings< int, std::less< int > >;
