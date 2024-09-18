@@ -2,7 +2,7 @@
 
 #include <stdexcept>
 
-#include "getSum.hpp"
+#include "keySum.hpp"
 
 void belokurskaya::ascending(int& num, std::string& str, BinarySearchTree< int, std::string >& tree)
 {
