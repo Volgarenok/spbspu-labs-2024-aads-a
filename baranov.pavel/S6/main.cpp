@@ -23,10 +23,7 @@ int main(int argc, char * argv[])
     std::string type = argv[2];
     std::pair< std::string, std::string > params{direction, type};
 
-    std::default_random_engine generator;
-    std::deque< int > nums(10);
-    fillSequence< int >(nums.begin(), nums.end(), generator);
-    printSequence(nums.cbegin(), nums.cend(), std::cout);
+    testSortings< float >(std::cout, 10, std::less< float >());
     std::cout << '\n';
   }
   catch (const std::exception & e)

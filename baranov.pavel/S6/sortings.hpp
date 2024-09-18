@@ -12,22 +12,16 @@ namespace baranov
     for (iter_t i = std::next(first); i != last; ++i)
     {
       auto val = *i;
-      iter_t j = std::prev(i);
-      for (; j != first && cmp(val, *j); --j)
+      iter_t j = i;
+      while (j != first && cmp(val, *std::prev(j)))
       {
-        *(std::next(j)) = *j;
+          *j = *std::prev(j);
+          --j;
       }
-      if (j == first)
-      {
-        *(std::next(j)) = *j;
-        *j = val;
-      }
-      else
-      {
-        *(++j) = val;
-      }
-    }
+      *j = val;
   }
+}
+
 
   template< typename RandomAccessIterator, typename Cmp >
   void quickSort(RandomAccessIterator first, RandomAccessIterator last, Cmp cmp) {
