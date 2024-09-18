@@ -3,7 +3,7 @@
 #include <string>
 #include <functional>
 #include <utility>
-#include <deque>
+#include <map>
 #include <list/list.hpp>
 #include "sortings.hpp"
 #include "testSortings.hpp"
@@ -21,9 +21,16 @@ int main(int argc, char * argv[])
   {
     std::string direction = argv[1];
     std::string type = argv[2];
-    std::pair< std::string, std::string > params{direction, type};
+    std::string params = direction + type;
+    size_t size = std::atoi(argv[3]);
 
-    testSortings< float >(std::cout, 10, std::less< float >());
+    std::map< std::string, std::function< void(std::ostream &, size_t) > > commands;
+    commands["ascendingints"] = testSortings< int, std::less< int > >;
+    commands["descendingints"] = testSortings< int, std::greater< int > >;
+    commands["ascendingfloats"] = testSortings< float, std::less< float > >;
+    commands["descendingfloats"] = testSortings< float, std::greater< float > >;
+
+    commands.at(params)(std::cout, size);
     std::cout << '\n';
   }
   catch (const std::exception & e)

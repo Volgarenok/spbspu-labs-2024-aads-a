@@ -1,5 +1,4 @@
 #ifndef SORTINGS_HPP
-
 #define SORTINGS_HPP
 #include <iterator>
 #include <iostream>
@@ -50,7 +49,7 @@ namespace baranov
     {
       auto val = *i;
       iter_t j = i;
-      while (j != i && cmp(val, *std::prev(j)))
+      while (j != first && cmp(val, *std::prev(j)))
       {
         *j = *std::prev(j);
         --j;

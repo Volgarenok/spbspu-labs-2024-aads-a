@@ -35,8 +35,9 @@ namespace baranov
   }
 
   template< typename T, typename Cmp >
-  void testSortings(std::ostream & out, size_t size, Cmp cmp)
+  void testSortings(std::ostream & out, size_t size)
   {
+    Cmp cmp;
     std::deque< T > nums(size);
     std::default_random_engine generator;
     fillSequence< T >(nums.begin(), nums.end(), generator);
