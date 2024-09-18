@@ -31,17 +31,20 @@ int main(int argc, char * argv[])
 
   if (dataset.empty())
   {
-    std::cout << "<EMPTY>";
+    std::cerr << "<EMPTY>";
   }
-  try
+  else
   {
-    functor_t f;
-    commands.at(argv[1])(f);
-    std::cout << f.get_keysum() << f.get_valsum() << "\n";
-  }
-  catch (const std::exception &)
-  {
-    std::cerr << "<INVALID COMMAND>\n";
-    return 2;
+    try
+    {
+      functor_t f;
+      commands.at(argv[1])(f);
+      std::cout << f.get_keysum() << f.get_valsum() << "\n";
+    }
+    catch (const std::exception &)
+    {
+      std::cerr << "<INVALID COMMAND>\n";
+      return 2;
+    }
   }
 }
