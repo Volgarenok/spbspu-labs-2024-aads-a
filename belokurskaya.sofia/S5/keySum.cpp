@@ -11,7 +11,7 @@ belokurskaya::KeySum::KeySum():
 void belokurskaya::KeySum::operator()(const std::pair< const int, std::string >& data)
 {
   resultKey_ = sum(resultKey_, data.first);
-  resultValue_ += data.second;
+  resultValue_ += ' ' + data.second;
 }
 
 std::pair< int, std::string > belokurskaya::KeySum::getResult() const

@@ -135,7 +135,7 @@ namespace belokurskaya
       throw std::runtime_error("Key not found");
     }
 
-    Value at(const Key& key) const
+    Value& at(const Key& key) const
     {
       Node* node = find(root, key);
       if (node)
@@ -227,9 +227,8 @@ namespace belokurskaya
       }
       else
       {
-        Node* newNode = new Node(key, Value());
         root = insert(root, key, Value());
-        return newNode->value;
+        return find(root, key)->value;
       }
     }
 
