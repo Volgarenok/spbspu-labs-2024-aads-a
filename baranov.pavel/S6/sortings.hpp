@@ -1,4 +1,5 @@
 #ifndef SORTINGS_HPP
+
 #define SORTINGS_HPP
 #include <iterator>
 #include <iostream>
@@ -7,6 +8,40 @@
 
 namespace baranov
 {
+  namespace detail
+  {
+    template <typename FwdIterator, typename Cmp>
+    FwdIterator partition(FwdIterator first, FwdIterator last, Cmp cmp)
+    {
+      auto pivot = *first;
+      FwdIterator left = first;
+      FwdIterator right = std::next(first);
+      while (right != last)
+      {
+        if (cmp(*right, pivot))
+        {
+          ++left;
+          std::iter_swap(left, right);
+        }
+        ++right;
+      }
+      std::iter_swap(first, left);
+      return left;
+    }
+  }
+
+  template <typename FwdIterator, typename Cmp>
+  void quickSort(FwdIterator first, FwdIterator last, Cmp cmp)
+  {
+    if (first == last || std::next(first) == last)
+    {
+      return;
+    }
+    FwdIterator pivot = detail::partition(first, last, cmp);
+    quickSort(first, pivot, cmp);
+    quickSort(std::next(pivot), last, cmp);
+  }
+
   template< typename BiDirIterator, typename Cmp >
   void insertionSort(BiDirIterator first, BiDirIterator last, Cmp cmp)
   {
@@ -15,48 +50,13 @@ namespace baranov
     {
       auto val = *i;
       iter_t j = i;
-      while (j != first && cmp(val, *std::prev(j)))
+      while (j != i && cmp(val, *std::prev(j)))
       {
-          *j = *std::prev(j);
-          --j;
+        *j = *std::prev(j);
+        --j;
       }
       *j = val;
     }
-  }
-
-  template <typename BiDirIterator, typename Cmp>
-  void quickSort(BiDirIterator first, BiDirIterator last, Cmp cmp)
-  {
-    size_t dist = std::distance(first, last);
-    if (dist <= 1)
-    {
-      return;
-    }
-    using iter_t = BiDirIterator;
-    iter_t pivot = first;
-    std::advance(pivot, dist / 2);
-
-    iter_t left = first;
-    iter_t right = first;
-    std::advance(right, dist - 1);
-
-    while (left != right)
-    {
-      while (left != right && !cmp(*pivot, *left))
-      {
-        ++left;
-      }
-      while (left != right && cmp(*pivot, *right))
-      {
-        --right;
-      }
-      if (left != right)
-      {
-        std::iter_swap(left, right);
-      }
-    }
-    quickSort(first, right, cmp);
-    quickSort(left, last, cmp);
   }
 }
 

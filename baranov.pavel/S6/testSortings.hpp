@@ -4,6 +4,7 @@
 #include <random>
 #include <deque>
 #include <algorithm>
+#include <forward_list>
 #include <list/list.hpp>
 #include "generate.hpp"
 #include "sortings.hpp"
@@ -47,12 +48,14 @@ namespace baranov
     std::deque< T > dequeQsort(nums);
     List< T > listInsertion(nums.cbegin(), nums.cend());
     List< T > listQsort(nums.cbegin(), nums.cend());
+    std::forward_list< T > fwdListQsort(nums.cbegin(), nums.cend());
 
     std::sort(dequeStdSort.begin(), dequeStdSort.end(), cmp);
     insertionSort(dequeInsertion.begin(), dequeInsertion.end(), cmp);
     quickSort(dequeQsort.begin(), dequeQsort.end(), cmp);
     insertionSort(listInsertion.begin(), listInsertion.end(), cmp);
     quickSort(listQsort.begin(), listQsort.end(), cmp);
+    quickSort(fwdListQsort.begin(), fwdListQsort.end(), cmp);
 
     printSequence(dequeStdSort.begin(), dequeStdSort.end(), out);
     out << '\n';
@@ -64,7 +67,7 @@ namespace baranov
     out << '\n';
     printSequence(listQsort.cbegin(), listQsort.cend(), out);
     out << '\n';
-
+    printSequence(fwdListQsort.cbegin(), fwdListQsort.cend(), out);
   }
 }
 
