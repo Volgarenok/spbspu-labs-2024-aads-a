@@ -2,7 +2,7 @@
 #define INPUT_POSTFIX_HPP
 
 #include <istream>
-#include "queue.hpp"
+#include <queue.hpp>
 #include "tokens.hpp"
 
 namespace baranov
