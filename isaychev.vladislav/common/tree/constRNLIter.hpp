@@ -33,12 +33,12 @@ namespace isaychev
     ConstLNRIter< Key, Value, Compare > it_;
     friend class BSTree< Key, Value, Compare >;
 
-    ConstRNLIter(node_t * node, Stack< node_t * > && s);
+    ConstRNLIter(const node_t * node, Stack< const node_t * > && s);
   };
 
   template < class Key, class Value, class Compare >
-  ConstRNLIter< Key, Value, Compare >::ConstRNLIter(node_t * node, Stack< node_t * > && s):
-   it_(node, std::forward(s))
+  ConstRNLIter< Key, Value, Compare >::ConstRNLIter(const node_t * node, Stack< const node_t * > && s):
+   it_(node, std::move(s))
   {}
 
   template < class Key, class Value, class Compare >
