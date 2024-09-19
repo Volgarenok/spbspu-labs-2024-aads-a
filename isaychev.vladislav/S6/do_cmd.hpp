@@ -63,8 +63,6 @@ namespace isaychev
     fwd_std.sort(Cmp());
     output_range(out, fwd_std.cbegin(), fwd_std.cend());
     out << "\n";
-    output_range(out, bi_std.cbegin(), bi_std.cend());
-    out << "\n";
     detail::do_sort(out, deq_std.begin(), deq_std.end(), Cmp(), std::sort);
   }
 }
