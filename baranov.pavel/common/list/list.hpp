@@ -15,6 +15,8 @@ namespace baranov
       List(const List & rhs);
       List(const List && rhs) noexcept;
       List(size_t count, const T & data);
+      template < typename Iter >
+      List(Iter begin, Iter end);
       ~List();
       T & back();
       const T & back() const;
@@ -94,6 +96,27 @@ namespace baranov
       try
       {
         push_front(data);
+      }
+      catch (...)
+      {
+        clear();
+        throw;
+      }
+    }
+  }
+
+  template< class T >
+  template< class Iter >
+  List< T >::List(Iter begin, Iter end):
+    head_(nullptr),
+    tail_(nullptr),
+    size_(0)
+  {
+    for(; begin != end; ++begin)
+    {
+      try
+      {
+        push_back(*begin);
       }
       catch (...)
       {

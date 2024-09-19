@@ -1,5 +1,5 @@
 #include <functional>
-#include <map>
+#include <tree/tree.hpp>
 #include <iostream>
 #include <iomanip>
 #include "do_cmd.hpp"
@@ -18,7 +18,7 @@ int main(int argc, char * argv[])
   }
 
   using namespace isaychev;
-  std::map< std::pair< std::string, std::string >, std::function< void(std::ostream &, size_t) > > commands;
+  BSTree< std::pair< std::string, std::string >, std::function< void(std::ostream &, size_t) > > commands;
   commands[{"ascending", "ints"}] = do_cmd< int, std::less< int > >;
   commands[{"ascending", "floats"}] = do_cmd< float, std::less< float > >;
   commands[{"descending", "ints"}] = do_cmd< int, std::greater< int > >;

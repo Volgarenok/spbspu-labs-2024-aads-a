@@ -32,17 +32,17 @@ namespace isaychev
     const std::pair< Key, Value > * operator->() const;
 
    private:
-    node_t * current_;
-    Stack< node_t * > stack_;
+    const node_t * current_;
+    Stack< const node_t * > stack_;
 
     friend class BSTree< Key, Value, Compare >;
     friend class ConstRNLIter< Key, Value, Compare >;
 
-    ConstLNRIter(node_t * node, Stack< node_t * > && s);
+    ConstLNRIter(const node_t * node, Stack< const node_t * > && s);
   };
 
   template < class Key, class Value, class Compare >
-  ConstLNRIter< Key, Value, Compare >::ConstLNRIter(node_t * node, Stack< node_t * > && s):
+  ConstLNRIter< Key, Value, Compare >::ConstLNRIter(const node_t * node, Stack< const node_t * > && s):
    current_(node),
    stack_(s)
   {}

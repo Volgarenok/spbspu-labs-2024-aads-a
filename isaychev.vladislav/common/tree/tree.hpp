@@ -260,7 +260,7 @@ namespace isaychev
   template < class Key, class Value, class Compare >
   ConstLNRIter< Key, Value, Compare > BSTree< Key, Value, Compare >::clnrbegin() const
   {
-    Stack< node_t * > s;
+    Stack< const node_t * > s;
     auto curr = root_;
     while (curr && curr->left)
     {
@@ -273,7 +273,7 @@ namespace isaychev
   template < class Key, class Value, class Compare >
   ConstLNRIter< Key, Value, Compare > BSTree< Key, Value, Compare >::clnrend() const
   {
-    return const_lnr_iterator(nullptr, Stack< node_t * >());
+    return const_lnr_iterator(nullptr, Stack< const node_t * >());
   }
 
   template < class Key, class Value, class Compare >
@@ -281,10 +281,10 @@ namespace isaychev
   {
     Stack< node_t * > s;
     auto curr = root_;
-    while (curr && curr->left)
+    while (curr && curr->right)
     {
       s.push(curr);
-      curr = curr->left;
+      curr = curr->right;
     }
     return rnl_iterator(curr, std::move(s));
   }
@@ -298,12 +298,12 @@ namespace isaychev
   template < class Key, class Value, class Compare >
   ConstRNLIter< Key, Value, Compare > BSTree< Key, Value, Compare >::rnlbegin() const
   {
-    Stack< node_t * > s;
+    Stack< const node_t * > s;
     auto curr = root_;
-    while (curr && curr->left)
+    while (curr && curr->right)
     {
       s.push(curr);
-      curr = curr->left;
+      curr = curr->right;
     }
     return const_rnl_iterator(curr, std::move(s));
   }
@@ -311,18 +311,18 @@ namespace isaychev
   template < class Key, class Value, class Compare >
   ConstRNLIter< Key, Value, Compare > BSTree< Key, Value, Compare >::rnlend() const
   {
-    return const_rnl_iterator(nullptr, Stack< node_t * >());
+    return const_rnl_iterator(nullptr, Stack< const node_t * >());
   }
 
   template < class Key, class Value, class Compare >
   ConstRNLIter< Key, Value, Compare > BSTree< Key, Value, Compare >::crnlbegin() const
   {
-    Stack< node_t * > s;
+    Stack< const node_t * > s;
     auto curr = root_;
-    while (curr && curr->left)
+    while (curr && curr->right)
     {
       s.push(curr);
-      curr = curr->left;
+      curr = curr->right;
     }
     return const_rnl_iterator(curr, std::move(s));
   }
@@ -330,7 +330,7 @@ namespace isaychev
   template < class Key, class Value, class Compare >
   ConstRNLIter< Key, Value, Compare > BSTree< Key, Value, Compare >::crnlend() const
   {
-    return const_rnl_iterator(nullptr, Stack< node_t * >());
+    return const_rnl_iterator(nullptr, Stack< const node_t * >());
   }
 
   template < class Key, class Value, class Compare >
@@ -563,19 +563,9 @@ namespace isaychev
     {
       return f;
     }
-    node_t * current = root_;
-    Stack< node_t * > s;
-    while (current || !s.empty())
+    for (auto i = (*this).clnrbegin(); i != (*this).clnrend(); ++i)
     {
-      while (current)
-      {
-        s.push(current);
-        current = current->left;
-      }
-      current = s.top();
-      s.pop();
-      f(current->data);
-      current = current->right;
+      f(*i);
     }
     return f;
   }
@@ -584,7 +574,15 @@ namespace isaychev
   template < class F >
   F BSTree< Key, Value, Compare >::traverse_lnr(F f)
   {
-    return static_cast< const tree_t & >(*this).traverse_lnr(f);
+    if (!root_)
+    {
+      return f;
+    }
+    for (auto i = (*this).lnrbegin(); i != (*this).lnrend(); ++i)
+    {
+      f(*i);
+    }
+    return f;
   }
 
   template < class Key, class Value, class Compare >
@@ -595,19 +593,9 @@ namespace isaychev
     {
       return f;
     }
-    node_t * current = root_;
-    Stack< node_t * > s;
-    while (current || !s.empty())
+    for (auto i = (*this).crnlbegin(); i != (*this).crnlend(); ++i)
     {
-      while (current)
-      {
-        s.push(current);
-        current = current->right;
-      }
-      current = s.top();
-      s.pop();
-      f(current->data);
-      current = current->left;
+      f(*i);
     }
     return f;
   }
@@ -616,7 +604,15 @@ namespace isaychev
   template < class F >
   F BSTree< Key, Value, Compare >::traverse_rnl(F f)
   {
-    return static_cast< const tree_t & >(*this).traverse_rnl(f);
+    if (!root_)
+    {
+      return f;
+    }
+    for (auto i = (*this).rnlbegin(); i != (*this).rnlend(); ++i)
+    {
+      f(*i);
+    }
+    return f;
   }
 
   template < class Key, class Value, class Compare >
@@ -648,7 +644,25 @@ namespace isaychev
   template < class F >
   F BSTree< Key, Value, Compare >::traverse_breadth(F f)
   {
-    return static_cast< const tree_t & >(*this).traverse_breadth(f);
+    if (!root_)
+    {
+      return f;
+    }
+    const node_t * current = root_;
+    Queue< const node_t * > q;
+    q.push(root_);
+    while (!q.empty())
+    {
+      current = q.front();
+      q.pop();
+      if (current)
+      {
+        q.push(current->left);
+        q.push(current->right);
+        f(current->data);
+      }
+    }
+    return f;
   }
 
   template < class Key, class Value, class Compare >

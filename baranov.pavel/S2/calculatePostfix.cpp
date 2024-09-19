@@ -1,6 +1,6 @@
 #include "calculatePostfix.hpp"
 #include <limits>
-#include "stack.hpp"
+#include <stack.hpp>
 
 void baranov::calculatePostfixes(Queue< Queue< Token > > & postfixes, Stack< long long int > & results)
 {
