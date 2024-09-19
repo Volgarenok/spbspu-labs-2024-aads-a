@@ -1,5 +1,5 @@
 #include <iostream>
-#include <list/list.hpp>
+#include <list.hpp>
 #include "io_datastruct.hpp"
 
 int main()

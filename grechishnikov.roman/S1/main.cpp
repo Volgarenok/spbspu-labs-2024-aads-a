@@ -1,5 +1,5 @@
 #include <iostream>
-#include "list.hpp"
+#include <list.hpp>
 #include "listFunctions.hpp"
 
 int main()
