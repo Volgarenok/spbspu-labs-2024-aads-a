@@ -19,8 +19,8 @@ namespace isaychev
   {
     using tree_t = BSTree< Key, Value, Compare >;
     using node_t = detail::TreeNode< Key, Value >;
-    using const_iterator = ConstTreeIter< Key, Value, Compare >;
     using iterator = TreeIter< Key, Value, Compare >;
+    using const_iterator = ConstTreeIter< Key, Value, Compare >;
     using value_t = std::pair< Key, Value >;
     using lnr_iterator = LNRIter< Key, Value, Compare >;
     using const_lnr_iterator = ConstLNRIter< Key, Value, Compare >;
