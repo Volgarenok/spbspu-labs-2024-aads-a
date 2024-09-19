@@ -9,16 +9,26 @@ int main(int argc, char * argv[])
   using namespace isaychev;
   using command_map_t = BSTree< std::string, std::function< void(functor_t &) > >;
 
-  map_t dataset;
+  std::fstream in;
   if (argc == 3)
   {
-    std::fstream in(argv[2]);
-    inputDataset(in, dataset);
+    in.open(argv[2]);
   }
   else
   {
     std::cerr << "bad launch\n";
     return 1;
+  }
+
+  map_t dataset;
+  try
+  {
+    inputDataset(in, dataset);
+  }
+  catch (const std::exception & e)
+  {
+    std::cerr << e.what() << "\n";
+    return 3;
   }
 
   command_map_t commands;

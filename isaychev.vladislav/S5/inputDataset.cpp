@@ -9,4 +9,8 @@ void isaychev::inputDataset(std::istream & in, dataset_t & dataset)
   {
     dataset.insert({key, value});
   }
+  if (!in.eof())
+  {
+    throw std::invalid_argument("incorrect arg");
+  }
 }
