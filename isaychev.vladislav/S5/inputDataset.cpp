@@ -5,9 +5,12 @@ void isaychev::inputDataset(std::istream & in, dataset_t & dataset)
 {
   int key = 0;
   std::string value;
-  while (!in.eof())
+  while (in >> key >> value)
   {
-    in >> key >> value;
-    dataset[key] = value;
+    dataset.insert({key, value});
+  }
+  if (!in.eof())
+  {
+    throw std::invalid_argument("incorrect arg");
   }
 }
