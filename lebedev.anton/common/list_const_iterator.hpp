@@ -2,7 +2,7 @@
 #define CONST_LIST_ITERATOR_HPP
 
 #include <iterator>
-#include "node.hpp"
+#include "list_node.hpp"
 
 namespace lebedev
 {
