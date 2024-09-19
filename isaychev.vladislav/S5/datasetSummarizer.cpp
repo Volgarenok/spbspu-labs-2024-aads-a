@@ -10,15 +10,24 @@ isaychev::DatasetSummarizer::DatasetSummarizer():
 bool isOverflow(int a, int b)
 {
   int max = std::numeric_limits< int >::max();
+  return ((a > 0 && b > 0) && max - b < a);
+}
+
+bool isUnderflow(int a, int b)
+{
   int min = std::numeric_limits< int >::min();
-  return ((b > 0 && max - b < a) || (a < 0 && b < 0 &&  min - b > a));
+  return ((a < 0 && b < 0) && min - b > a);
 }
 
 void isaychev::DatasetSummarizer::operator()(const std::pair< int, std::string > & elem)
 {
   if (isOverflow(key_sum, elem.first))
   {
-    throw std::overflow_error("final sum is out of bounds");
+    throw std::overflow_error("final sum is too large");
+  }
+  if (isUnderflow(key_sum, elem.first))
+  {
+    throw std::overflow_error("final sum is too small");
   }
   key_sum += elem.first;
   value_sum += ' ';

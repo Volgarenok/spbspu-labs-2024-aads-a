@@ -31,7 +31,7 @@ int main(int argc, char * argv[])
 
   if (dataset.empty())
   {
-    std::cerr << "<EMPTY>";
+    std::cout << "<EMPTY>\n";
   }
   else
   {
