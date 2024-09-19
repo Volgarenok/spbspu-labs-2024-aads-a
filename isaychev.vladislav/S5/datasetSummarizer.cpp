@@ -10,8 +10,7 @@ isaychev::DatasetSummarizer::DatasetSummarizer():
 bool isOverflow(int a, int b)
 {
   int max = std::numeric_limits< int >::max();
-//  return ((a > 0 && b > 0) && max - a < b);
-  return a > 0 && max - a < b;
+  return a > 0 && b > 0 && max - a < b;
 }
 
 bool isUnderflow(int a, int b)
