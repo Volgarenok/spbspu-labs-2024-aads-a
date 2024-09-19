@@ -54,7 +54,6 @@ namespace isaychev
     std::deque< T > deq_qsort(src.begin(), src.end());
     std::deque< T > deq_merge(src.begin(), src.end());
     std::forward_list< T > fwd_std(src.begin(), src.end());
-    std::list< T > bi_std(src.begin(), src.end());
     std::deque< T > deq_std(src.begin(), src.end());
 
     detail::do_sort(out, fwd.begin(), fwd.end(), Cmp(), quick_sort);
@@ -62,7 +61,6 @@ namespace isaychev
     detail::do_sort(out, deq_qsort.begin(), deq_qsort.end(), Cmp(), quick_sort);
     detail::do_sort(out, deq_merge.begin(), deq_merge.end(), seq_size, Cmp(), merge_sort);
     fwd_std.sort(Cmp());
-    bi_std.sort(Cmp());
     output_range(out, fwd_std.cbegin(), fwd_std.cend());
     out << "\n";
     output_range(out, bi_std.cbegin(), bi_std.cend());
