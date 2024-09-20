@@ -383,6 +383,11 @@ namespace baranov
   template< typename Key, typename T, typename Compare >
   void Tree< Key, T, Compare >::erase(node_t * todelete)
   {
+    if (size_ <= 1)
+    {
+      clear();
+      return;
+    }
     if (todelete->isRoot())
     {
       if (todelete->hasLeft())
