@@ -9,7 +9,7 @@
 int main(int argc, char * argv[])
 {
   using namespace baranov;
-  Tree< std::string, std::map< std::string, size_t > > dictionaries;
+  Tree< std::string, Tree< std::string, size_t > > dictionaries;
   Tree< std::string, std::function< void(char **, std::ostream &) > > arguments;
   {
     using namespace std::placeholders;

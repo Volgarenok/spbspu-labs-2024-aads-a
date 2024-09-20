@@ -10,7 +10,6 @@ namespace baranov
   using pair_t = std::pair< std::string, size_t >;
   void extendDict(dict_t & dict, std::istream & in);
   void printElement(const pair_t & item, std::ostream & out);
-  pair_t getCount(const std::pair< std::string, dict_t > & namedDict, const std::string & word);
   size_t getWordCount(const dict_t & dict, const std::string & word);
   bool countComparator(const pair_t & lhs, const pair_t & rhs);
   bool isContains(const dict_t & dict, const pair_t & item);

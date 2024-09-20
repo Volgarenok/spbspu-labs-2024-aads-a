@@ -26,11 +26,6 @@ void baranov::printElement(const pair_t & item, std::ostream & out)
   out << item.first << ' ' << item.second << '\n';
 }
 
-baranov::pair_t baranov::getCount(const std::pair< std::string, dict_t > & namedDict, const std::string & word)
-{
-  return std::make_pair(namedDict.first, getWordCount(namedDict.second, word));
-}
-
 size_t baranov::getWordCount(const dict_t & dict, const std::string & word)
 {
   try
@@ -68,3 +63,4 @@ void baranov::printDictName(const std::pair< std::string, dict_t > & namedDict, 
 {
   out << namedDict.first << '\n';
 }
+

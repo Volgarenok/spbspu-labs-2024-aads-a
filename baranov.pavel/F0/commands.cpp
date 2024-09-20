@@ -75,12 +75,11 @@ void baranov::printCountCmd(const Tree< std::string, dict_t > & dicts, std::istr
     {
       throw std::logic_error("There are no dictionaries\n");
     }
-    Tree< std::string, size_t > counts;
-    using namespace std::placeholders;
-    auto countFunc = std::bind(getCount, _1, word);
-    std::transform(dicts.cbegin(), dicts.cend(), std::inserter(counts, counts.begin()), countFunc);
-    auto outFunc = std::bind(printElement, _1, std::ref(out));
-    std::for_each(counts.cbegin(), counts.cend(), outFunc);
+    for (auto it = dicts.cbegin(); it != dicts.cend(); ++it)
+    {
+      size_t count = getWordCount(it->second, word);
+      out << it->first << ' ' << count << '\n';
+    }
   }
 }
 
@@ -89,9 +88,10 @@ void baranov::printDictCmd(const Tree< std::string, dict_t > & dicts, std::istre
   std::string dictName;
   in >> dictName;
   const dict_t & dict = dicts.at(dictName);
-  using namespace std::placeholders;
-  auto outFunc = std::bind(printElement, _1, std::ref(out));
-  std::for_each(dict.cbegin(), dict.cend(), outFunc);
+  for (auto it = dict.cbegin(); it != dict.cend(); ++it)
+  {
+    printElement(*it, out);
+  }
 }
 
 void baranov::printTopCmd(const Tree< std::string, dict_t > & dicts, std::istream & in, std::ostream & out)
@@ -130,9 +130,10 @@ void baranov::joinCmd(Tree< std::string, dict_t > & dicts, std::istream & in, st
   in >> dict2Name;
   const dict_t & dict2 = dicts.at(dict2Name);
   dict_t result = dict1;
-  using namespace std::placeholders;
-  auto join = std::bind(joinWord, _1, std::ref(result));
-  std::for_each(dict2.cbegin(), dict2.cend(), join);
+  for (auto it = dict2.cbegin(); it != dict2.cend(); ++it)
+  {
+    result[it->first] += it->second;
+  }
   std::string resultDictName;
   in >> resultDictName;
   dicts[resultDictName] = result;
@@ -146,13 +147,15 @@ void baranov::intersectCmd(Tree< std::string, dict_t > & dicts, std::istream & i
   std::string dict2Name;
   in >> dict2Name;
   const dict_t & dict2 = dicts.at(dict2Name);
-  dict_t common;
-  using namespace std::placeholders;
-  auto predicate = std::bind(isContains, std::ref(dict2), _1);
-  std::copy_if(dict1.cbegin(), dict1.cend(), std::inserter(common, common.begin()), predicate);
   dict_t result;
-  auto addCounts = std::bind(addWordCount, _1, std::cref(dict2));
-  std::transform(common.begin(), common.end(), std::inserter(result, result.begin()), addCounts);
+  for (auto it = dict1.cbegin(); it != dict1.cend(); ++it)
+  {
+    if (isContains(dict2, *it))
+    {
+      result[it->first] = it->second;
+      result[it->first] += getWordCount(dict2, it->first);
+    }
+  }
   std::string resultDictName;
   in >> resultDictName;
   dicts[resultDictName] = result;
@@ -167,15 +170,18 @@ void baranov::saveCmd(const Tree< std::string, dict_t > & dicts, std::istream & 
   std::ofstream file(fileName);
   file << dictName << '\n';
   const dict_t & dict = dicts.at(dictName);
-  using namespace std::placeholders;
-  auto outFunc = std::bind(printElement, _1, std::ref(file));
-  std::for_each(dict.cbegin(), dict.cend(), outFunc);
+  for (auto it = dict.cbegin(); it != dict.cend(); ++it)
+  {
+    printElement(*it, file);
+  }
 }
 
 void baranov::lsDictsCmd(const Tree< std::string, dict_t > & dicts, std::istream &, std::ostream & out)
 {
   using namespace std::placeholders;
-  auto outFunc = std::bind(printDictName, _1, std::ref(out));
-  std::for_each(dicts.cbegin(), dicts.cend(), outFunc);
+  for (auto it = dicts.cbegin(); it != dicts.cend(); ++it)
+  {
+    out << it->first << '\n';
+  }
 }
 
