@@ -105,8 +105,10 @@ long long int belokurskaya::evaluatePostfixExpression(std::string expression)
     }
     else if (isOperator(c))
     {
-      long long int operand2 = st.pop();
-      long long int operand1 = st.pop();
+      long long int operand2 = st.top();
+      st.pop();
+      long long int operand1 = st.top();
+      st.pop();
       if (c == '+')
       {
         long long int result = 0;

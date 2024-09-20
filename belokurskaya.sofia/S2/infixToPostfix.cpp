@@ -48,7 +48,8 @@ std::string belokurskaya::infixToPostfix(const std::string& infix)
       {
         while (!operatorStack.empty() && operatorStack.top() != '(')
         {
-          outputQueue.push(std::string(1, operatorStack.pop()));
+          outputQueue.push(std::string(1, operatorStack.top()));
+          operatorStack.pop();
         }
         operatorStack.pop();
       }
@@ -56,7 +57,8 @@ std::string belokurskaya::infixToPostfix(const std::string& infix)
       {
         while (!operatorStack.empty() && getPriority(operatorStack.top()) >= getPriority(c))
         {
-          outputQueue.push(std::string(1, operatorStack.pop()));
+          outputQueue.push(std::string(1, operatorStack.top()));
+          operatorStack.pop();
         }
         operatorStack.push(c);
       }
@@ -68,7 +70,8 @@ std::string belokurskaya::infixToPostfix(const std::string& infix)
   }
   while (!operatorStack.empty())
   {
-    outputQueue.push(std::string(1, operatorStack.pop()));
+    outputQueue.push(std::string(1, operatorStack.top()));
+    operatorStack.pop();
   }
   while (!outputQueue.isEmpty())
   {
