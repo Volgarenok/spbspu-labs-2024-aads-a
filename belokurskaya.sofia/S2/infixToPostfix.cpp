@@ -1,7 +1,7 @@
 #include "infixToPostfix.hpp"
 
-#include "stack.hpp"
-#include "queue.hpp"
+#include <stack.hpp>
+#include <queue.hpp>
 #include "evaluatePostfixExpression.hpp"
 
 int belokurskaya::getPriority(char c)

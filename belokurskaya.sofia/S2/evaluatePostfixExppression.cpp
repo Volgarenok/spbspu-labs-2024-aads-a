@@ -4,7 +4,7 @@
 #include <limits>
 #include <stdexcept>
 
-#include "stack.hpp"
+#include <stack.hpp>
 
 int belokurskaya::mod(long long int a, long long int b)
 {
