@@ -4,8 +4,8 @@
 #include <functional>
 #include <stdexcept>
 
-#include "queue.hpp"
-#include "stack.hpp"
+#include <queue.hpp>
+#include <stack.hpp>
 
 namespace belokurskaya
 {
