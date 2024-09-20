@@ -3,7 +3,7 @@
 
 #include <string>
 #include <iostream>
-#include "UBST.hpp"
+#include <UBST.hpp>
 
 namespace skuratov
 {
