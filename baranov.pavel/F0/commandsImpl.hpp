@@ -1,12 +1,12 @@
 #ifndef DICT_FUNCTIONS
 #define DICT_FUNCTIONS
 #include <iostream>
-#include <map>
+#include <tree/tree.hpp>
 #include <string>
 
 namespace baranov
 {
-  using dict_t = std::map< std::string, size_t >;
+  using dict_t = Tree< std::string, size_t >;
   using pair_t = std::pair< std::string, size_t >;
   void extendDict(dict_t & dict, std::istream & in);
   void printElement(const pair_t & item, std::ostream & out);

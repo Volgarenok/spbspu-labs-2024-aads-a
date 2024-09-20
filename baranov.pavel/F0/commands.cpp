@@ -4,7 +4,7 @@
 #include <functional>
 #include "commandsImpl.hpp"
 
-void baranov::createCmd(std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream &)
+void baranov::createCmd(Tree< std::string, dict_t > & dicts, std::istream & in, std::ostream &)
 {
   std::string dictName;
   in >> dictName;
@@ -26,14 +26,14 @@ void baranov::createCmd(std::map< std::string, dict_t > & dicts, std::istream & 
   }
 }
 
-void baranov::clearCmd(std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream &)
+void baranov::clearCmd(Tree< std::string, dict_t > & dicts, std::istream & in, std::ostream &)
 {
   std::string dictName;
   in >> dictName;
   dicts.at(dictName).clear();
 }
 
-void baranov::deleteCmd(std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream &)
+void baranov::deleteCmd(Tree< std::string, dict_t > & dicts, std::istream & in, std::ostream &)
 {
   std::string dictName;
   in >> dictName;
@@ -45,7 +45,7 @@ void baranov::deleteCmd(std::map< std::string, dict_t > & dicts, std::istream & 
   dicts.erase(it);
 }
 
-void baranov::addWordsCmd(std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream &)
+void baranov::addWordsCmd(Tree< std::string, dict_t > & dicts, std::istream & in, std::ostream &)
 {
   std::string dictName;
   in >> dictName;
@@ -59,7 +59,7 @@ void baranov::addWordsCmd(std::map< std::string, dict_t > & dicts, std::istream 
   extendDict(dicts[dictName], file);
 }
 
-void baranov::printCountCmd(const std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream & out)
+void baranov::printCountCmd(const Tree< std::string, dict_t > & dicts, std::istream & in, std::ostream & out)
 {
   std::string word;
   in >> word;
@@ -75,7 +75,7 @@ void baranov::printCountCmd(const std::map< std::string, dict_t > & dicts, std::
     {
       throw std::logic_error("There are no dictionaries\n");
     }
-    std::map< std::string, size_t > counts;
+    Tree< std::string, size_t > counts;
     using namespace std::placeholders;
     auto countFunc = std::bind(getCount, _1, word);
     std::transform(dicts.cbegin(), dicts.cend(), std::inserter(counts, counts.begin()), countFunc);
@@ -84,7 +84,7 @@ void baranov::printCountCmd(const std::map< std::string, dict_t > & dicts, std::
   }
 }
 
-void baranov::printDictCmd(const std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream & out)
+void baranov::printDictCmd(const Tree< std::string, dict_t > & dicts, std::istream & in, std::ostream & out)
 {
   std::string dictName;
   in >> dictName;
@@ -94,7 +94,7 @@ void baranov::printDictCmd(const std::map< std::string, dict_t > & dicts, std::i
   std::for_each(dict.cbegin(), dict.cend(), outFunc);
 }
 
-void baranov::printTopCmd(const std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream & out)
+void baranov::printTopCmd(const Tree< std::string, dict_t > & dicts, std::istream & in, std::ostream & out)
 {
   std::string dictName;
   in >> dictName;
@@ -121,7 +121,7 @@ void baranov::printTopCmd(const std::map< std::string, dict_t > & dicts, std::is
   }
 }
 
-void baranov::joinCmd(std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream &)
+void baranov::joinCmd(Tree< std::string, dict_t > & dicts, std::istream & in, std::ostream &)
 {
   std::string dict1Name;
   in >> dict1Name;
@@ -138,7 +138,7 @@ void baranov::joinCmd(std::map< std::string, dict_t > & dicts, std::istream & in
   dicts[resultDictName] = result;
 }
 
-void baranov::intersectCmd(std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream &)
+void baranov::intersectCmd(Tree< std::string, dict_t > & dicts, std::istream & in, std::ostream &)
 {
   std::string dict1Name;
   in >> dict1Name;
@@ -158,7 +158,7 @@ void baranov::intersectCmd(std::map< std::string, dict_t > & dicts, std::istream
   dicts[resultDictName] = result;
 }
 
-void baranov::saveCmd(const std::map< std::string, dict_t > & dicts, std::istream & in, std::ostream &)
+void baranov::saveCmd(const Tree< std::string, dict_t > & dicts, std::istream & in, std::ostream &)
 {
   std::string dictName;
   in >> dictName;
@@ -172,7 +172,7 @@ void baranov::saveCmd(const std::map< std::string, dict_t > & dicts, std::istrea
   std::for_each(dict.cbegin(), dict.cend(), outFunc);
 }
 
-void baranov::lsDictsCmd(const std::map< std::string, dict_t > & dicts, std::istream &, std::ostream & out)
+void baranov::lsDictsCmd(const Tree< std::string, dict_t > & dicts, std::istream &, std::ostream & out)
 {
   using namespace std::placeholders;
   auto outFunc = std::bind(printDictName, _1, std::ref(out));

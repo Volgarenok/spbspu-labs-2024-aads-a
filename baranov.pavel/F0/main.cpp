@@ -1,16 +1,16 @@
 #include <iostream>
-#include <map>
 #include <string>
 #include <functional>
 #include <limits>
+#include <tree/tree.hpp>
 #include "commands.hpp"
 #include "CLA.hpp"
 
 int main(int argc, char * argv[])
 {
   using namespace baranov;
-  std::map< std::string, std::map< std::string, size_t > > dictionaries;
-  std::map< std::string, std::function< void(char **, std::ostream &) > > arguments;
+  Tree< std::string, std::map< std::string, size_t > > dictionaries;
+  Tree< std::string, std::function< void(char **, std::ostream &) > > arguments;
   {
     using namespace std::placeholders;
     arguments["--help"] = std::bind(printHelp, _2);
@@ -35,7 +35,7 @@ int main(int argc, char * argv[])
     }
 
   }
-  std::map< std::string, std::function< void(std::istream &, std::ostream &) > > commands;
+  Tree< std::string, std::function< void(std::istream &, std::ostream &) > > commands;
   {
     using namespace std::placeholders;
     commands["create"] = std::bind(createCmd, std::ref(dictionaries), _1, _2);

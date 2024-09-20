@@ -48,7 +48,7 @@ void baranov::checkDictFile(char * argv[], std::ostream & out)
   }
 }
 
-void baranov::loadDict(const std::string & fileName, std::map< std::string, dict_t > & dicts)
+void baranov::loadDict(const std::string & fileName, Tree< std::string, dict_t > & dicts)
 {
   dict_t tempDict;
   std::string dictName;
