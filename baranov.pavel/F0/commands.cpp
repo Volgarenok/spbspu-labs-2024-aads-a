@@ -1,7 +1,6 @@
 #include "commands.hpp"
 #include <fstream>
 #include <algorithm>
-#include <functional>
 #include "commandsImpl.hpp"
 
 void baranov::createCmd(Tree< std::string, dict_t > & dicts, std::istream & in, std::ostream &)
@@ -150,7 +149,7 @@ void baranov::intersectCmd(Tree< std::string, dict_t > & dicts, std::istream & i
   dict_t result;
   for (auto it = dict1.cbegin(); it != dict1.cend(); ++it)
   {
-    if (isContains(dict2, *it))
+    if (dict2.find(it->first) != dict2.cend())
     {
       result[it->first] = it->second;
       result[it->first] += getWordCount(dict2, it->first);
