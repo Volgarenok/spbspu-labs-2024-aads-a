@@ -413,16 +413,23 @@ namespace baranov
     else
     {
       todelete->isLeft() ? todelete->parent_->left_ : todelete->parent_->right_ = todelete->left_;
-      todelete->left_->parent_ = todelete->parent_;
-      if (todelete->hasRight())
+      if (todelete->hasLeft())
       {
-        node_t * node = todelete->left_;
-        while (node->hasRight())
+        todelete->left_->parent_ = todelete->parent_;
+        if (todelete->hasRight())
         {
-          node = node->right_;
+          node_t * node = todelete->left_;
+          while (node->hasRight())
+          {
+            node = node->right_;
+          }
+          node->right_ = todelete->right_;
+          node->right_->parent_ = node;
         }
-        node->right_ = todelete->right_;
-        node->right_->parent_ = node;
+        else
+        {
+          todelete->right_->parent_ = todelete->parent_;
+        }
       }
     }
     delete todelete;
