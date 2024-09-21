@@ -6,7 +6,7 @@ namespace vojuck
   template< typename T >
   struct Node
   {
-    T _data;
+    T data_;
     Node * next_;
 
   Node(const T & data):

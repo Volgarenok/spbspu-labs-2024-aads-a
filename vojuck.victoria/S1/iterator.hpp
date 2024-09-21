@@ -9,6 +9,7 @@ namespace vojuck
   template < typename T >
   struct IteratorList
   {
+  public:
     List< T > * node;
     using this_t = IteratorLits< T >;
 
@@ -52,8 +53,8 @@ namespace vojuck
     {
       return !(rhs == *this);
     }
-  //privat: ??
-    
+  private:
+    Node< T > * node_;
   };
 }
 
