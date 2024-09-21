@@ -4,6 +4,8 @@
 #include <functional>
 #include <stdexcept>
 
+#include "MyVector.hpp"
+
 namespace belokurskaya
 {
   template < typename Key, typename Value, typename Compare = std::less< Key > >
@@ -146,6 +148,51 @@ namespace belokurskaya
       return node;
     }
 
+    Node* search(Node* node, const Key& key) const
+    {
+      if (node == nullptr)
+      {
+        throw std::invalid_argument("No element found with the given key");
+      }
+      if (key < node->key)
+      {
+        return search(node->left, key);
+      }
+      else if (key > node->key)
+      {
+        return search(node->right, key);
+      }
+      return node;
+    }
+
+    void getAllKeysRecursive(const Node* node, MyVector< Key >& keys) const
+    {
+      if (node != nullptr)
+      {
+        getAllKeysRecursive(node->left, keys);
+        keys.push_back(node->key);
+        getAllKeysRecursive(node->right, keys);
+      }
+    }
+
+    void displayRecursive(const Node* node, std::ostream& out, const std::string& separator) const
+    {
+      if (node != nullptr)
+      {
+        displayRecursive(node->left_, out, separator);
+        if (node->left_ != nullptr)
+        {
+          out << separator;
+        }
+        out << node->key_ << ": " << node->value_;
+        if (node->right_ != nullptr)
+        {
+          out << separator;
+        }
+        displayRecursive(node->right_, out, separator);
+      }
+    }
+
   public:
     BinarySearchTree():
       root(nullptr),
@@ -230,6 +277,23 @@ namespace belokurskaya
     bool contains(const Key& key) const
     {
       return containsRecursive(root, key);
+    }
+
+    Value& SEARCH(const Key& key) const
+    {
+      return search(root, key)->value_;
+    }
+
+    MyVector< Key > getAllKeys() const
+    {
+      MyVector< Key > keys;
+      getAllKeysRecursive(root, keys);
+      return keys;
+    }
+
+    void display(std::ostream& out, const std::string separator = ", ") const
+    {
+      displayRecursive(root_, out, separator);
     }
 
     void erase(Key key)

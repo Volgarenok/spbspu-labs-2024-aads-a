@@ -2,10 +2,9 @@
 #define ENGRUSDICTIONARY_HPP
 
 #include <iostream>
-#include <map>
-#include <set>
 
 #include "binarySearchTree.hpp"
+#include "MyVector.hpp"
 
 namespace belokurskaya
 {
@@ -18,7 +17,7 @@ namespace belokurskaya
       ~EngRusDict();
       void clear();
 
-      std::set< std::string > getTranslations(const std::string& eng) const;
+      MyVector< std::string > getTranslations(const std::string& eng) const;
 
       size_t getCountWords() const;
       size_t getCountTranslations(const std::string& eng) const;
@@ -31,7 +30,7 @@ namespace belokurskaya
       bool containsWord(const std::string& word) const;
       bool containsTranslation(const std::string& eng, const std::string& translation) const;
 
-      std::set< std::string > getWords() const;
+      MyVector< std::string > getWords() const;
 
       void addWordFromEngRusDict(const EngRusDict& other);
       void removeWordFromEngRusDict(const EngRusDict& other);
@@ -44,7 +43,7 @@ namespace belokurskaya
       EngRusDict& operator=(const EngRusDict& other);
 
     private:
-      std::map< std::string, std::set< std::string > > words_;
+      BinarySearchTree< std::string, MyVector< std::string > > words_;
 
       std::string getLettersToLower(std::string word);
       bool containsOnlyEnglishLetters(const std::string& word) const;

@@ -3,6 +3,7 @@
 
 #include "eng-rusDictionary.hpp"
 #include "binarySearchTree.hpp"
+#include "MyVector.hpp"
 
 namespace belokurskaya
 {

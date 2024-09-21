@@ -204,22 +204,20 @@ void belokurskaya::cmd::getTranslation(BinarySearchTree< std::string, EngRusDict
 {
   std::string key;
   std::cin >> key;
-  std::set< std::string > result;
-  for (std::pair< std::string, EngRusDict > pair : EngRusDicts)
+  MyVector< std::string > result;
+  for (const std::string& name : EngRusDicts.getAllKeys())
   {
-    try
+    for (const std::string& translation : EngRusDicts.SEARCH(name).getTranslations(key))
     {
-      const auto& tr = pair.second.getTranslations(key);
-      result.insert(tr.begin(), tr.end());
-    }
-    catch (const std::out_of_range&)
-    {
-      continue;
+      if (translation != "" && !result.contains(translation))
+      {
+        result.push_back(translation);
+      }
     }
   }
   if (result.size() == 0)
   {
-    throw std::runtime_error("There are no translations");
+    throw std::runtime_error("Error");
   }
   std::copy(result.begin(), result.end(), std::ostream_iterator< std::string >(out, "\n"));
 }
@@ -234,7 +232,7 @@ void belokurskaya::cmd::countTranslations(BinarySearchTree< std::string, EngRusD
   }
   else
   {
-    std::set< std::string > translations = EngRusDicts.at(name).getTranslations(key);
+    MyVector< std::string > translations = EngRusDicts.at(name).getTranslations(key);
     out << translations.size() << "\n";
     std::copy(translations.begin(), translations.end(), std::ostream_iterator< std::string >(out, "\n"));
   }
