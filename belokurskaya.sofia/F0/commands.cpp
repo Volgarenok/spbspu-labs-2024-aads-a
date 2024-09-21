@@ -4,7 +4,7 @@
 
 #include "readDictionary.hpp"
 
-void belokurskaya::cmd::createDict(std::unordered_map< std::string, EngRusDict >& EngRusDicts, std::istream& in)
+void belokurskaya::cmd::createDict(BinarySearchTree< std::string, EngRusDict >& EngRusDicts, std::istream& in)
 {
   std::string name;
   in >> name;
@@ -15,7 +15,7 @@ void belokurskaya::cmd::createDict(std::unordered_map< std::string, EngRusDict >
   EngRusDicts[name] = EngRusDict();
 }
 
-void belokurskaya::cmd::removeDict(std::unordered_map< std::string, EngRusDict >& EngRusDicts, std::istream& in)
+void belokurskaya::cmd::removeDict(BinarySearchTree< std::string, EngRusDict >& EngRusDicts, std::istream& in)
 {
   std::string name;
   in >> name;
@@ -26,7 +26,7 @@ void belokurskaya::cmd::removeDict(std::unordered_map< std::string, EngRusDict >
   EngRusDicts.erase(name);
 }
 
-void belokurskaya::cmd::add(std::unordered_map< std::string, EngRusDict >& EngRusDicts, std::istream& in)
+void belokurskaya::cmd::add(BinarySearchTree< std::string, EngRusDict >& EngRusDicts, std::istream& in)
 {
   std::string name;
   in >> name;
@@ -51,7 +51,7 @@ void belokurskaya::cmd::add(std::unordered_map< std::string, EngRusDict >& EngRu
   }
 }
 
-void belokurskaya::cmd::remove(std::unordered_map< std::string, EngRusDict >& EngRusDicts, std::istream& in)
+void belokurskaya::cmd::remove(BinarySearchTree< std::string, EngRusDict >& EngRusDicts, std::istream& in)
 {
   std::string name;
   in >> name;
@@ -77,7 +77,7 @@ void belokurskaya::cmd::remove(std::unordered_map< std::string, EngRusDict >& En
   }
 }
 
-void belokurskaya::cmd::assign(std::unordered_map< std::string, EngRusDict >& EngRusDicts, std::istream& in)
+void belokurskaya::cmd::assign(BinarySearchTree< std::string, EngRusDict >& EngRusDicts, std::istream& in)
 {
   std::string nameFirstDict, nameSecondDict;
   in >> nameFirstDict >> nameSecondDict;
@@ -88,7 +88,7 @@ void belokurskaya::cmd::assign(std::unordered_map< std::string, EngRusDict >& En
   EngRusDicts.at(nameFirstDict).addWordFromEngRusDict(EngRusDicts[nameSecondDict]);
 }
 
-void belokurskaya::cmd::removeWords(std::unordered_map< std::string, EngRusDict >& EngRusDicts, std::istream& in)
+void belokurskaya::cmd::removeWords(BinarySearchTree< std::string, EngRusDict >& EngRusDicts, std::istream& in)
 {
   std::string nameFirstDict, nameSecondDict;
   in >> nameFirstDict >> nameSecondDict;
@@ -116,7 +116,7 @@ void belokurskaya::cmd::removeWords(std::unordered_map< std::string, EngRusDict 
   }
 }
 
-void belokurskaya::cmd::getIntersection(std::unordered_map< std::string, EngRusDict >& EngRusDicts, std::istream& in)
+void belokurskaya::cmd::getIntersection(BinarySearchTree< std::string, EngRusDict >& EngRusDicts, std::istream& in)
 {
   std::string name, nameFirstDict, nameSecondDict;
   in >> name;
@@ -152,7 +152,7 @@ void belokurskaya::cmd::getIntersection(std::unordered_map< std::string, EngRusD
   EngRusDicts[name] = getIntersectionWithEngRusDict(EngRusDicts[nameFirstDict], EngRusDicts[nameSecondDict]);
 }
 
-void belokurskaya::cmd::getDifference(std::unordered_map< std::string, EngRusDict >& EngRusDicts, std::istream& in)
+void belokurskaya::cmd::getDifference(BinarySearchTree< std::string, EngRusDict >& EngRusDicts, std::istream& in)
 {
   std::string name, nameFirstDict, nameSecondDict;
   in >> name;
@@ -178,15 +178,14 @@ void belokurskaya::cmd::getDifference(std::unordered_map< std::string, EngRusDic
   EngRusDicts[name] = uniqueWords;
 }
 
-void belokurskaya::cmd::clear(std::unordered_map< std::string, EngRusDict >& EngRusDicts, std::istream& in)
+void belokurskaya::cmd::clear(BinarySearchTree< std::string, EngRusDict >& EngRusDicts, std::istream& in)
 {
   std::string name;
   in >> name;
   EngRusDicts.at(name).clear();
 }
 
-void belokurskaya::cmd::display(std::unordered_map< std::string, EngRusDict >& EngRusDicts,
-  std::istream& in, std::ostream& out)
+void belokurskaya::cmd::display(BinarySearchTree< std::string, EngRusDict >& EngRusDicts, std::istream& in, std::ostream& out)
 {
   std::string dictName;
   in >> dictName;
@@ -201,8 +200,7 @@ void belokurskaya::cmd::display(std::unordered_map< std::string, EngRusDict >& E
   }
 }
 
-void belokurskaya::cmd::getTranslation(std::unordered_map< std::string, EngRusDict >& EngRusDicts,
-  std::istream&, std::ostream& out)
+void belokurskaya::cmd::getTranslation(BinarySearchTree< std::string, EngRusDict >& EngRusDicts, std::istream&, std::ostream& out)
 {
   std::string key;
   std::cin >> key;
@@ -226,8 +224,7 @@ void belokurskaya::cmd::getTranslation(std::unordered_map< std::string, EngRusDi
   std::copy(result.begin(), result.end(), std::ostream_iterator< std::string >(out, "\n"));
 }
 
-void belokurskaya::cmd::countTranslations(std::unordered_map< std::string,
-  EngRusDict >& EngRusDicts, std::istream& in, std::ostream& out)
+void belokurskaya::cmd::countTranslations(BinarySearchTree< std::string, EngRusDict >& EngRusDicts, std::istream& in, std::ostream& out)
 {
   std::string name, key;
   in >> name >> key;
@@ -237,7 +234,7 @@ void belokurskaya::cmd::countTranslations(std::unordered_map< std::string,
   }
   else
   {
-    std::set<std::string> translations = EngRusDicts[name].getTranslations(key);
+    std::set< std::string > translations = EngRusDicts[name].getTranslations(key);
     out << translations.size() << "\n";
     std::copy(translations.begin(), translations.end(), std::ostream_iterator< std::string >(out, "\n"));
   }

@@ -5,6 +5,8 @@
 #include <map>
 #include <set>
 
+#include "binarySearchTree.hpp"
+
 namespace belokurskaya
 {
   class EngRusDict

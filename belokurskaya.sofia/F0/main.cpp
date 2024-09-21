@@ -8,6 +8,7 @@
 #include "commands.hpp"
 #include "readDictionary.hpp"
 #include "binarySearchTree.hpp"
+#include "eng-rusDictionary.hpp"
 
 int main(int argc, char* argv[])
 {

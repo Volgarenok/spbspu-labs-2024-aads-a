@@ -132,6 +132,16 @@ namespace belokurskaya
       throw std::runtime_error("Key not found");
     }
 
+    Value& at(const Key& key) const
+    {
+      Node* node = find(root, key);
+      if (node)
+      {
+        return node->value;
+      }
+      throw std::out_of_range("Key not found");
+    }
+
     bool exists(Key key) const
     {
       return find(root, key) != nullptr;
@@ -235,6 +245,16 @@ namespace belokurskaya
     }
 
     Iterator end() const
+    {
+      return Iterator(nullptr, compare);
+    }
+
+    const Iterator cbegin() const
+    {
+      return Iterator(root, compare);
+    }
+
+    const Iterator cend() const
     {
       return Iterator(nullptr, compare);
     }
