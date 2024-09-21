@@ -9,7 +9,7 @@
 
 namespace belokurskaya
 {
-  std::unordered_map< std::string, EngRusDict > ReadEngRusDictFromFile(const std::string& pathToFile);
+  BinarySearchTree< std::string, EngRusDict > ReadEngRusDictFromFile(const std::string& pathToFile);
 }
 
 #endif

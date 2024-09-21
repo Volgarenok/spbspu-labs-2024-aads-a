@@ -1,6 +1,7 @@
 #include "readDictionary.hpp"
+#include "binarySearchTree.hpp"
 
-std::unordered_map< std::string, belokurskaya::EngRusDict >
+BinarySearchTree< std::string, belokurskaya::EngRusDict >
   belokurskaya::ReadEngRusDictFromFile(const std::string& pathToFile)
 {
   std::ifstream file(pathToFile);
@@ -8,7 +9,7 @@ std::unordered_map< std::string, belokurskaya::EngRusDict >
   {
     throw std::invalid_argument("Error with reading dictionary");
   }
-  std::unordered_map< std::string, EngRusDict > EngRusDicts;
+  BinarySearchTree< std::string, EngRusDict > EngRusDicts;
   std::string name;
   while (getline(file, name))
   {
