@@ -8,7 +8,7 @@ void belokurskaya::cmd::createDict(BinarySearchTree< std::string, EngRusDict >& 
 {
   std::string name;
   in >> name;
-  if (EngRusDicts.find(name) != EngRusDicts.cend())
+  if (EngRusDicts.contains(name))
   {
     throw std::runtime_error("Use a different name");
   }
@@ -19,7 +19,7 @@ void belokurskaya::cmd::removeDict(BinarySearchTree< std::string, EngRusDict >& 
 {
   std::string name;
   in >> name;
-  if (EngRusDicts.find(name) == EngRusDicts.cend())
+  if (!EngRusDicts.contains(name))
   {
     throw std::runtime_error("There is no dictionary with that name");
   }
@@ -81,7 +81,7 @@ void belokurskaya::cmd::assign(BinarySearchTree< std::string, EngRusDict >& EngR
 {
   std::string nameFirstDict, nameSecondDict;
   in >> nameFirstDict >> nameSecondDict;
-  if (EngRusDicts.find(nameSecondDict) == EngRusDicts.end())
+  if (!EngRusDicts.contains(nameSecondDict))
   {
     throw std::runtime_error("<INVALID COMMAND>");
   }
@@ -92,7 +92,7 @@ void belokurskaya::cmd::removeWords(BinarySearchTree< std::string, EngRusDict >&
 {
   std::string nameFirstDict, nameSecondDict;
   in >> nameFirstDict >> nameSecondDict;
-  if (EngRusDicts.find(nameSecondDict) == EngRusDicts.end())
+  if (!EngRusDicts.contains(nameSecondDict))
   {
     throw std::runtime_error("<INVALID COMMAND>");
   }
@@ -120,12 +120,12 @@ void belokurskaya::cmd::getIntersection(BinarySearchTree< std::string, EngRusDic
 {
   std::string name, nameFirstDict, nameSecondDict;
   in >> name;
-  if (EngRusDicts.find(name) != EngRusDicts.cend())
+  if (EngRusDicts.contains(name))
   {
     throw std::runtime_error("Use a different name");
   }
   in >> nameFirstDict >> nameSecondDict;
-  if (EngRusDicts.find(nameFirstDict) == EngRusDicts.end() || EngRusDicts.find(nameSecondDict) == EngRusDicts.end())
+  if (!EngRusDicts.contains(nameFirstDict) || !EngRusDicts.contains(nameSecondDict))
   {
     throw std::runtime_error("<INVALID COMMAND>");
   }
@@ -156,12 +156,12 @@ void belokurskaya::cmd::getDifference(BinarySearchTree< std::string, EngRusDict 
 {
   std::string name, nameFirstDict, nameSecondDict;
   in >> name;
-  if (EngRusDicts.find(name) != EngRusDicts.cend())
+  if (EngRusDicts.contains(name))
   {
     throw std::runtime_error("Use a different name");
   }
   in >> nameFirstDict >> nameSecondDict;
-  if (EngRusDicts.find(nameFirstDict) == EngRusDicts.end() || EngRusDicts.find(nameSecondDict) == EngRusDicts.end())
+  if (!EngRusDicts.contains(nameFirstDict) || !EngRusDicts.contains(nameSecondDict))
   {
     throw std::runtime_error("<INVALID COMMAND>");
   }
@@ -190,7 +190,7 @@ void belokurskaya::cmd::display(BinarySearchTree< std::string, EngRusDict >& Eng
   std::string dictName;
   in >> dictName;
 
-  if (EngRusDicts.find(dictName) == EngRusDicts.end())
+  if (!EngRusDicts.contains(dictName))
   {
     throw std::runtime_error("<INVALID COMMAND>");
   }
@@ -228,7 +228,7 @@ void belokurskaya::cmd::countTranslations(BinarySearchTree< std::string, EngRusD
 {
   std::string name, key;
   in >> name >> key;
-  if (EngRusDicts.find(name) == EngRusDicts.end() || !EngRusDicts[name].containsWord(key))
+  if (!EngRusDicts.contains(name) || !EngRusDicts[name].containsWord(key))
   {
     throw std::runtime_error("<INVALID COMMAND>");
   }

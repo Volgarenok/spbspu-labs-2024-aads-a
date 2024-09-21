@@ -85,6 +85,67 @@ namespace belokurskaya
       return node;
     }
 
+    bool containsRecursive(Node* node, const Key& key) const
+    {
+      if (node == nullptr)
+      {
+        return false;
+      }
+      if (key < node->key)
+      {
+        return containsRecursive(node->left, key);
+      }
+      else if (key > node->key)
+      {
+        return containsRecursive(node->right, key);
+      }
+      return true;
+    }
+
+    Node* eraseRecursive(Node* node, Key key)
+    {
+      if (!node)
+      {
+        return nullptr;
+      }
+
+      if (compare(key, node->key))
+      {
+        node->left = eraseRecursive(node->left, key);
+      }
+      else if (compare(node->key, key))
+      {
+        node->right = eraseRecursive(node->right, key);
+      }
+      else
+      {
+        if (!node->left && !node->right)
+        {
+          delete node;
+          return nullptr;
+        }
+        else if (!node->left)
+        {
+          Node* temp = node->right;
+          delete node;
+          return temp;
+        }
+        else if (!node->right)
+        {
+          Node* temp = node->left;
+          delete node;
+          return temp;
+        }
+        else
+        {
+          Node* temp = node->left ? node->left : node->right;
+          delete node;
+          return temp;
+        }
+      }
+      return node;
+    }
+
   public:
     BinarySearchTree():
       root(nullptr),
@@ -162,6 +223,33 @@ namespace belokurskaya
     bool empty() const
     {
       return tree_size == 0;
+    }
+
+    bool contains(const Key& key) const
+    {
+      return containsRecursive(root, key);
+    }
+
+    void erase(Key key)
+    {
+      root = eraseRecursive(root, key);
+      if (root)
+      {
+        tree_size--;
+      }
+    }
+
+    Value& operator[](const Key& key)
+    {
+      Node* node = find(root, key);
+      if (node)
+      {
+        return node->value;
+      }
+      else
+      {
+        throw std::out_of_range("Key not found");
+      }
     }
 
     class Iterator

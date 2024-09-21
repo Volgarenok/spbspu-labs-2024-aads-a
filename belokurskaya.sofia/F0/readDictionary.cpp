@@ -1,7 +1,6 @@
 #include "readDictionary.hpp"
 
-using namespace belokurskaya;
-BinarySearchTree< std::string, EngRusDict > ReadEngRusDictFromFile(const std::string& pathToFile)
+belokurskaya::BinarySearchTree< std::string, belokurskaya::EngRusDict > belokurskaya::ReadEngRusDictFromFile(const std::string& pathToFile)
 {
   std::ifstream file(pathToFile);
   if (!file.is_open())
@@ -40,7 +39,7 @@ BinarySearchTree< std::string, EngRusDict > ReadEngRusDictFromFile(const std::st
         newErd.removeWord(eng);
       }
     }
-    EngRusDicts.at(name) = newErd;
+    EngRusDicts[name] = newErd;
   }
   file.close();
   return EngRusDicts;
