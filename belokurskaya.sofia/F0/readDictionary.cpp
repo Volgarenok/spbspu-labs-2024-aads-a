@@ -39,7 +39,7 @@ belokurskaya::BinarySearchTree< std::string, belokurskaya::EngRusDict > belokurs
         newErd.removeWord(eng);
       }
     }
-    EngRusDicts[name] = newErd;
+    EngRusDicts.at(name) = newErd;
   }
   file.close();
   return EngRusDicts;

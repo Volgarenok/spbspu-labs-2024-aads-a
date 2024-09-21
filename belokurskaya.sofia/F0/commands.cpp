@@ -12,7 +12,7 @@ void belokurskaya::cmd::createDict(BinarySearchTree< std::string, EngRusDict >& 
   {
     throw std::runtime_error("Use a different name");
   }
-  EngRusDicts[name] = EngRusDict();
+  EngRusDicts.at(name) = EngRusDict();
 }
 
 void belokurskaya::cmd::removeDict(BinarySearchTree< std::string, EngRusDict >& EngRusDicts, std::istream& in)
@@ -34,7 +34,7 @@ void belokurskaya::cmd::add(BinarySearchTree< std::string, EngRusDict >& EngRusD
   in >> key >> translation;
   try
   {
-    EngRusDict& dict = EngRusDicts.at(name);
+    EngRusDict dict = EngRusDicts.at(name);
     if (dict.containsTranslation(key, translation))
     {
       throw std::runtime_error("<INVALID COMMAND>");
@@ -59,7 +59,7 @@ void belokurskaya::cmd::remove(BinarySearchTree< std::string, EngRusDict >& EngR
   in >> key >> translation;
   try
   {
-    EngRusDict& dict = EngRusDicts.at(name);
+    EngRusDict dict = EngRusDicts.at(name);
 
     if (dict.containsWord(key) && dict.containsTranslation(key, translation))
     {
@@ -85,7 +85,7 @@ void belokurskaya::cmd::assign(BinarySearchTree< std::string, EngRusDict >& EngR
   {
     throw std::runtime_error("<INVALID COMMAND>");
   }
-  EngRusDicts.at(nameFirstDict).addWordFromEngRusDict(EngRusDicts[nameSecondDict]);
+  EngRusDicts.at(nameFirstDict).addWordFromEngRusDict(EngRusDicts.at(nameSecondDict));
 }
 
 void belokurskaya::cmd::removeWords(BinarySearchTree< std::string, EngRusDict >& EngRusDicts, std::istream& in)
@@ -96,8 +96,8 @@ void belokurskaya::cmd::removeWords(BinarySearchTree< std::string, EngRusDict >&
   {
     throw std::runtime_error("<INVALID COMMAND>");
   }
-  EngRusDict& firstDict = EngRusDicts.at(nameFirstDict);
-  EngRusDict& secondDict = EngRusDicts.at(nameSecondDict);
+  EngRusDict firstDict = EngRusDicts.at(nameFirstDict);
+  EngRusDict secondDict = EngRusDicts.at(nameSecondDict);
 
   bool foundDuplicates = false;
 
@@ -130,8 +130,8 @@ void belokurskaya::cmd::getIntersection(BinarySearchTree< std::string, EngRusDic
     throw std::runtime_error("<INVALID COMMAND>");
   }
 
-  EngRusDict& firstDict = EngRusDicts[nameFirstDict];
-  EngRusDict& secondDict = EngRusDicts[nameSecondDict];
+  EngRusDict firstDict = EngRusDicts.at(nameFirstDict);
+  EngRusDict secondDict = EngRusDicts.at(nameSecondDict);
 
   bool hasIntersection = false;
 
@@ -149,7 +149,7 @@ void belokurskaya::cmd::getIntersection(BinarySearchTree< std::string, EngRusDic
     throw std::runtime_error("<INVALID COMMAND>");
   }
 
-  EngRusDicts[name] = getIntersectionWithEngRusDict(EngRusDicts[nameFirstDict], EngRusDicts[nameSecondDict]);
+  EngRusDicts.at(name) = getIntersectionWithEngRusDict(EngRusDicts.at(nameFirstDict), EngRusDicts.at(nameSecondDict));
 }
 
 void belokurskaya::cmd::getDifference(BinarySearchTree< std::string, EngRusDict >& EngRusDicts, std::istream& in)
@@ -165,8 +165,8 @@ void belokurskaya::cmd::getDifference(BinarySearchTree< std::string, EngRusDict 
   {
     throw std::runtime_error("<INVALID COMMAND>");
   }
-  EngRusDict& firstDict = EngRusDicts[nameFirstDict];
-  EngRusDict& secondDict = EngRusDicts[nameSecondDict];
+  EngRusDict firstDict = EngRusDicts.at(nameFirstDict);
+  EngRusDict secondDict = EngRusDicts.at(nameSecondDict);
 
   auto uniqueWords = getDifferenceWithEngRusDict(firstDict, secondDict);
 
@@ -175,7 +175,7 @@ void belokurskaya::cmd::getDifference(BinarySearchTree< std::string, EngRusDict 
     throw std::runtime_error("<INVALID COMMAND>");
   }
 
-  EngRusDicts[name] = uniqueWords;
+  EngRusDicts.at(name) = uniqueWords;
 }
 
 void belokurskaya::cmd::clear(BinarySearchTree< std::string, EngRusDict >& EngRusDicts, std::istream& in)
@@ -196,7 +196,7 @@ void belokurskaya::cmd::display(BinarySearchTree< std::string, EngRusDict >& Eng
   }
   else
   {
-    EngRusDicts[dictName].display(out);
+    EngRusDicts.at(dictName).display(out);
   }
 }
 
@@ -228,13 +228,13 @@ void belokurskaya::cmd::countTranslations(BinarySearchTree< std::string, EngRusD
 {
   std::string name, key;
   in >> name >> key;
-  if (!EngRusDicts.contains(name) || !EngRusDicts[name].containsWord(key))
+  if (!EngRusDicts.contains(name) || !EngRusDicts.at(name).containsWord(key))
   {
     throw std::runtime_error("<INVALID COMMAND>");
   }
   else
   {
-    std::set< std::string > translations = EngRusDicts[name].getTranslations(key);
+    std::set< std::string > translations = EngRusDicts.at(name).getTranslations(key);
     out << translations.size() << "\n";
     std::copy(translations.begin(), translations.end(), std::ostream_iterator< std::string >(out, "\n"));
   }

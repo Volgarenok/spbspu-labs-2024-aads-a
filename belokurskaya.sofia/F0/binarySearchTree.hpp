@@ -190,17 +190,19 @@ namespace belokurskaya
     {
       Node* node = find(root, key);
       if (node) return node->value;
-      throw std::runtime_error("Key not found");
+      {
+        throw std::runtime_error("Key not found");
+      }
     }
 
-    Value& at(const Key& key) const
+    Value at(const Key& key)
     {
       Node* node = find(root, key);
-      if (node)
+      if (!node)
       {
-        return node->value;
+        throw std::out_of_range("Key not found");
       }
-      throw std::out_of_range("Key not found");
+      return node->value;
     }
 
     bool exists(Key key) const
@@ -239,22 +241,10 @@ namespace belokurskaya
       }
     }
 
-    Value& operator[](const Key& key)
-    {
-      Node* node = find(root, key);
-      if (node)
-      {
-        return node->value;
-      }
-      else
-      {
-        throw std::out_of_range("Key not found");
-      }
-    }
-
     class Iterator
     {
       Node* current;
+      Node* node_;
       const Node* root;
       bool finished = false;
       std::function< Node*(Node*) > nextFunc;
@@ -294,6 +284,15 @@ namespace belokurskaya
       }
 
       public:
+      Iterator(Node* node):
+        node_(node)
+      {
+        if (node_ == nullptr)
+        {
+          *this = Iterator();
+        }
+      }
+
       Iterator(Node* rootNode, Compare comp):
         current(leftMost(rootNode)),
         root(rootNode),
