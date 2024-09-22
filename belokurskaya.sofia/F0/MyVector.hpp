@@ -116,12 +116,12 @@ namespace belokurskaya
         size_ = 0;
       }
 
-      T* begin() const 
+      T* begin() const
       {
         return array_;
       }
 
-      T* end() const 
+      T* end() const
       {
         return array_ + size_;
       }

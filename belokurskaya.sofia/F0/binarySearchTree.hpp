@@ -49,7 +49,7 @@ namespace belokurskaya
       return newNode;
     }
 
-    Node* find(Node* node, Key key) const 
+    Node* find(Node* node, Key key) const
     {
       if (!node)
       {
