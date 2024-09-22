@@ -126,6 +126,22 @@ class MyVector
       return array_ + size_;
     }
 
+    void insert(const T& value)
+    {
+      if (size_ >= capacity_)
+      {
+        capacity_ = (capacity_ == 0) ? 1 : capacity_ * CAPACITY_CHANGE_FACTOR_;
+        T* new_array = new T[capacity_];
+        for (size_t i = 0; i < size_; ++i)
+        {
+          new_array[i] = array_[i];
+        }
+        delete[] array_;
+        array_ = new_array;
+      }
+      array_[size_++] = value;
+    }
+
     size_t findIndexElement(const T& value) const
     {
       for (size_t i = 0; i < size_; ++i)

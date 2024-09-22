@@ -179,18 +179,88 @@ namespace belokurskaya
     {
       if (node != nullptr)
       {
-        displayRecursive(node->left_, out, separator);
-        if (node->left_ != nullptr)
+        displayRecursive(node->left, out, separator);
+        if (node->left != nullptr)
         {
           out << separator;
         }
-        out << node->key_ << ": " << node->value_;
-        if (node->right_ != nullptr)
+        out << node->key << ": " << node->value_;
+        if (node->right != nullptr)
         {
           out << separator;
         }
-        displayRecursive(node->right_, out, separator);
+        displayRecursive(node->right, out, separator);
       }
+    }
+
+    Node* insertRecursive(Node* node, const Key& key, const Value& value)
+    {
+      if (node == nullptr)
+        return new Node(key, value);
+      if (key < node->key)
+      {
+        node->left = insertRecursive(node->left, key, value);
+      }
+      else if (key > node->key_)
+      {
+        node->right = insertRecursive(node->right, key, value);
+      }
+      else
+      {
+          return node;
+      }
+      return node;
+    }
+
+    void deleteElementsRecursive(Node* node)
+    {
+      if (node != nullptr)
+      {
+        DELETE(node->key);
+        deleteElementsRecursive(node->left);
+        deleteElementsRecursive(node->right);
+      }
+    }
+
+    Node* deleteRecursive(Node* node, const Key& key)
+    {
+      if (node == nullptr)
+      {
+        return node;
+      }
+      if (key < node->key)
+      {
+        node->left = deleteRecursive(node->left, key);
+      }
+      else if (key > node->key)
+      {
+        node->right = deleteRecursive(node->right, key);
+      }
+      else
+      {
+        if (node->left == nullptr || node->right == nullptr)
+        {
+          Node* temp = node->left ? node->left : node->right;
+          if (temp == nullptr)
+          {
+            temp = node;
+            node = nullptr;
+          }
+          else
+          {
+            *node = *temp;
+          }
+          delete temp;
+        }
+        else
+        {
+          Node* temp = getMinValueNode(node->right);
+          node->key = temp->key;
+          node->value = temp->value;
+          node->right = deleteRecursive(node->right, temp->ke_);
+        }
+      }
+      return node;
     }
 
   public:
@@ -281,7 +351,12 @@ namespace belokurskaya
 
     Value& SEARCH(const Key& key) const
     {
-      return search(root, key)->value_;
+      return search(root, key)->value;
+    }
+
+    void INSERT(const Key& key, const Value& value)
+    {
+      root = insertRecursive(root, key, value);
     }
 
     MyVector< Key > getAllKeys() const
@@ -291,9 +366,14 @@ namespace belokurskaya
       return keys;
     }
 
+    void DELETE(const Key& key)
+    {
+      root = deleteRecursive(root, key);
+    }
+
     void display(std::ostream& out, const std::string separator = ", ") const
     {
-      displayRecursive(root_, out, separator);
+      displayRecursive(root, out, separator);
     }
 
     void erase(Key key)
@@ -303,6 +383,16 @@ namespace belokurskaya
       {
         tree_size--;
       }
+    }
+
+    void deleteElements(const BinarySearchTree< Key, Value >& other)
+    {
+      deleteElementsRecursive(other.root);
+    }
+
+    Node* find(Key key) const
+    {
+      return find(root, key);
     }
 
     class Iterator
@@ -396,16 +486,6 @@ namespace belokurskaya
     }
 
     Iterator end() const
-    {
-      return Iterator(nullptr, compare);
-    }
-
-    const Iterator cbegin() const
-    {
-      return Iterator(root, compare);
-    }
-
-    const Iterator cend() const
     {
       return Iterator(nullptr, compare);
     }
