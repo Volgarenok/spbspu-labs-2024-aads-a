@@ -388,49 +388,41 @@ namespace baranov
       clear();
       return;
     }
-    if (todelete->isRoot())
+    if (!todelete->hasLeft() && !todelete->hasRight() && !todelete->isRoot())
     {
-      if (todelete->hasLeft())
+      (todelete->isRight() ? todelete->parent_->right_ : todelete->parent_->left_) = nullptr;
+    }
+    else if (todelete->hasLeft() && todelete->hasRight())
+    {
+      if (todelete->isRoot())
       {
         root_ = todelete->left_;
-        if (todelete->hasRight())
-        {
-          node_t * node = root_;
-          while (node->hasRight())
-          {
-            node = node->right_;
-          }
-          node->right_ = todelete->right_;
-          node->right_->parent_ = node;
-        }
       }
-      else if (todelete->hasRight())
+      else
       {
-        root_ = todelete->right_;
+        (todelete->isRight() ? todelete->parent_->right_ : todelete->parent_->left_) = todelete->left_;
       }
-      root_->parent_ = nullptr;
+      todelete->left_->parent_ = todelete->parent_;
+      node_t * node = todelete->left_;
+      while (node->hasRight())
+      {
+        node = node->right_;
+      }
+      node->right_ = todelete->right_;
+      node->right_->parent_ = node;
     }
     else
     {
-      todelete->isLeft() ? todelete->parent_->left_ : todelete->parent_->right_ = todelete->left_;
-      if (todelete->hasLeft())
+      if (todelete->isRoot())
       {
-        todelete->left_->parent_ = todelete->parent_;
-        if (todelete->hasRight())
-        {
-          node_t * node = todelete->left_;
-          while (node->hasRight())
-          {
-            node = node->right_;
-          }
-          node->right_ = todelete->right_;
-          node->right_->parent_ = node;
-        }
-        else
-        {
-          todelete->right_->parent_ = todelete->parent_;
-        }
+        root_ = todelete->hasRight() ? todelete->right_ : todelete->left_;
       }
+      else
+      {
+        node_t * tmp = todelete->hasRight() ? todelete->right_ : todelete->left_;
+        (todelete->isRight() ? todelete->parent_->right_ : todelete->parent_->left_) = tmp;
+      }
+      (todelete->hasRight() ? todelete->right_->parent_ : todelete->left_->parent_) = todelete->parent_;
     }
     delete todelete;
     --size_;
