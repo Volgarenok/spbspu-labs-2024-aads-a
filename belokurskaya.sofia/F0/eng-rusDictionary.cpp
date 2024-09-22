@@ -99,9 +99,16 @@ bool belokurskaya::EngRusDict::containsWord(const std::string& word) const
 bool belokurskaya::EngRusDict::containsTranslation(const std::string& eng, const std::string& translation) const
 {
   auto it = words_.find(eng);
-  if (it != words_.end())
+  if (it != belokurskaya::BinarySearchTree< std::string, belokurskaya::MyVector< std::string >, std::less< std::string > >::Iterator(words_.end()))
   {
-    return (it->second.find(translation) != it->second.end());
+    const MyVector< std::string >& translations = it->value;
+    for (const std::string& trans : translations)
+    {
+      if (trans == translation)
+      {
+        return true;
+      }
+    }
   }
   return false;
 }

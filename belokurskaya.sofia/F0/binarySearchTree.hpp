@@ -184,7 +184,7 @@ namespace belokurskaya
         {
           out << separator;
         }
-        out << node->key << ": " << node->value_;
+        out << node->key << ": " << node->value;
         if (node->right != nullptr)
         {
           out << separator;
@@ -201,7 +201,7 @@ namespace belokurskaya
       {
         node->left = insertRecursive(node->left, key, value);
       }
-      else if (key > node->key_)
+      else if (key > node->key)
       {
         node->right = insertRecursive(node->right, key, value);
       }
@@ -257,10 +257,20 @@ namespace belokurskaya
           Node* temp = getMinValueNode(node->right);
           node->key = temp->key;
           node->value = temp->value;
-          node->right = deleteRecursive(node->right, temp->ke_);
+          node->right = deleteRecursive(node->right, temp->key);
         }
       }
       return node;
+    }
+
+    Node* getMinValueNode(Node* node) const
+    {
+      Node* current = node;
+      while (current && current->left != nullptr)
+      {
+        current = current->left;
+      }
+      return current;
     }
 
   public:
@@ -438,6 +448,13 @@ namespace belokurskaya
       }
 
       public:
+      Iterator():
+        current(nullptr),
+        node_(nullptr),
+        root(nullptr),
+        finished(true)
+      {}
+
       Iterator(Node* node):
         node_(node)
       {
@@ -469,14 +486,14 @@ namespace belokurskaya
         return *this;
       }
 
-      bool operator!=(const Iterator& other) const
-      {
-        return current != other.current;
-      }
-
       bool operator==(const Iterator& other) const
       {
         return current == other.current;
+      }
+
+      friend bool operator!=(const Iterator& lhs, const Iterator& rhs)
+      {
+        return lhs.current != rhs.current;
       }
     };
 

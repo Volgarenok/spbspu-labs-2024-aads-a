@@ -116,12 +116,12 @@ class MyVector
       size_ = 0;
     }
 
-    T* begin()
+    T* begin() const 
     {
       return array_;
     }
 
-    T* end()
+    T* end() const 
     {
       return array_ + size_;
     }
@@ -178,7 +178,7 @@ class MyVector
       }
       return out;
     }
-};
+  };
 
 template < class T >
 MyVector< T > getIntersectionVector(const MyVector< T >& vector1, const MyVector< T >& vector2)
