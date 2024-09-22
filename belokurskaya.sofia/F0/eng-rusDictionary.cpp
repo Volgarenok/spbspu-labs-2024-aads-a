@@ -2,6 +2,8 @@
 
 #include <functional>
 
+using Str = std::string;
+
 belokurskaya::EngRusDict::EngRusDict()
 {}
 
@@ -26,7 +28,7 @@ void belokurskaya::EngRusDict::clear()
   words_.clear();
 }
 
-belokurskaya::MyVector< std::string > belokurskaya::EngRusDict::getTranslations(const std::string& eng) const
+belokurskaya::MyVector< Str > belokurskaya::EngRusDict::getTranslations(const Str& eng) const
 {
   try
   {
@@ -34,7 +36,7 @@ belokurskaya::MyVector< std::string > belokurskaya::EngRusDict::getTranslations(
   }
   catch (const std::invalid_argument&)
   {
-    return MyVector< std::string >();
+    return MyVector< Str >();
   }
 }
 
@@ -43,7 +45,7 @@ size_t belokurskaya::EngRusDict::getCountWords() const
   return words_.size();
 }
 
-size_t belokurskaya::EngRusDict::getCountTranslations(const std::string& eng) const
+size_t belokurskaya::EngRusDict::getCountTranslations(const Str& eng) const
 {
   try
   {
@@ -61,47 +63,47 @@ void belokurskaya::EngRusDict::display(std::ostream& out) const
   out << "\n";
 }
 
-void belokurskaya::EngRusDict::addTranslation(const std::string& eng, const std::string& translation)
+void belokurskaya::EngRusDict::addTranslation(const Str& eng, const Str& translation)
 {
   words_.at(eng).insert(getLettersToLower(translation));
 }
 
-void belokurskaya::EngRusDict::removeTranslation(const std::string& eng, const std::string& translation)
+void belokurskaya::EngRusDict::removeTranslation(const Str& eng, const Str& translation)
 {
   if (!words_.contains(eng))
   {
     throw std::invalid_argument("Invalid argument");
   }
-  MyVector< std::string >& translations = words_.SEARCH(eng);
+  MyVector< Str >& translations = words_.SEARCH(eng);
   translations.erase(translations.findIndexElement(translation));
 }
 
-void belokurskaya::EngRusDict::addWord(const std::string& eng)
+void belokurskaya::EngRusDict::addWord(const Str& eng)
 {
   if (!containsOnlyEnglishLetters(eng))
   {
     throw std::invalid_argument("Invalid argument");
   }
-  words_.INSERT(getLettersToLower(eng), MyVector< std::string >());
+  words_.INSERT(getLettersToLower(eng), MyVector< Str >());
 }
 
-void belokurskaya::EngRusDict::removeWord(const std::string& eng)
+void belokurskaya::EngRusDict::removeWord(const Str& eng)
 {
   words_.erase(eng);
 }
 
-bool belokurskaya::EngRusDict::containsWord(const std::string& word) const
+bool belokurskaya::EngRusDict::containsWord(const Str& word) const
 {
   return words_.exists(word);
 }
 
-bool belokurskaya::EngRusDict::containsTranslation(const std::string& eng, const std::string& translation) const
+bool belokurskaya::EngRusDict::containsTranslation(const Str& eng, const Str& translation) const
 {
   auto it = words_.find(eng);
-  if (it != belokurskaya::BinarySearchTree< std::string, belokurskaya::MyVector< std::string >, std::less< std::string > >::Iterator(words_.end()))
+  if (it != BinarySearchTree< Str, MyVector< Str >, std::less< Str > >::Iterator(words_.end()))
   {
-    const MyVector< std::string >& translations = it->value;
-    for (const std::string& trans : translations)
+    const MyVector< Str >& translations = it->value;
+    for (const Str& trans : translations)
     {
       if (trans == translation)
       {
@@ -112,9 +114,9 @@ bool belokurskaya::EngRusDict::containsTranslation(const std::string& eng, const
   return false;
 }
 
-belokurskaya::MyVector< std::string > belokurskaya::EngRusDict::getWords() const
+belokurskaya::MyVector< Str > belokurskaya::EngRusDict::getWords() const
 {
-  MyVector< std::string > allWords;
+  MyVector< Str > allWords;
   for (const auto& pair : words_)
   {
     allWords.insert(pair.first);
@@ -124,15 +126,15 @@ belokurskaya::MyVector< std::string > belokurskaya::EngRusDict::getWords() const
 
 void belokurskaya::EngRusDict::addWordFromEngRusDict(const EngRusDict& other)
 {
-  for (const std::string& key : other.words_.getAllKeys())
+  for (const Str& key : other.words_.getAllKeys())
   {
     if (words_.contains(key))
     {
-      MyVector< std::string >& translations = words_.SEARCH(key);
-      for (const std::string& translation : other.words_.SEARCH(key))
+      MyVector< Str >& translations = words_.SEARCH(key);
+      for (const Str& translation : other.words_.SEARCH(key))
       {
         bool alreadyPresent = false;
-        for (const std::string& existingTranslation : translations)
+        for (const Str& existingTranslation : translations)
         {
           if (existingTranslation == translation)
           {
@@ -148,8 +150,8 @@ void belokurskaya::EngRusDict::addWordFromEngRusDict(const EngRusDict& other)
     }
     else
     {
-      MyVector< std::string > newTranslations;
-      for (const std::string& translation : other.words_.SEARCH(key))
+      MyVector< Str > newTranslations;
+      for (const Str& translation : other.words_.SEARCH(key))
       {
         newTranslations.push_back(translation);
       }
@@ -169,7 +171,7 @@ belokurskaya::EngRusDict& belokurskaya::EngRusDict::operator=(const belokurskaya
   return *this;
 }
 
-std::string belokurskaya::EngRusDict::getLettersToLower(std::string word)
+Str belokurskaya::EngRusDict::getLettersToLower(Str word)
 {
   for (auto& c : word)
   {
@@ -178,7 +180,7 @@ std::string belokurskaya::EngRusDict::getLettersToLower(std::string word)
   return word;
 }
 
-bool belokurskaya::EngRusDict::containsOnlyEnglishLetters(const std::string& word) const
+bool belokurskaya::EngRusDict::containsOnlyEnglishLetters(const Str& word) const
 {
   bool result = true;
   for (const char& c : word)
@@ -195,12 +197,12 @@ bool belokurskaya::EngRusDict::containsOnlyEnglishLetters(const std::string& wor
 belokurskaya::EngRusDict belokurskaya::getIntersectionWithEngRusDict(const EngRusDict& erd1, const EngRusDict& erd2)
 {
   EngRusDict result;
-  for (std::string& key : erd2.words_.getAllKeys())
+  for (Str& key : erd2.words_.getAllKeys())
   {
     if (erd1.words_.contains(key))
     {
       result.addWord(key);
-      for (std::string& translation : getIntersectionVector(erd1.words_.SEARCH(key), erd2.words_.SEARCH(key)))
+      for (Str& translation : getIntersectionVector(erd1.words_.SEARCH(key), erd2.words_.SEARCH(key)))
       {
         result.addTranslation(key, translation);
       }
@@ -212,23 +214,23 @@ belokurskaya::EngRusDict belokurskaya::getIntersectionWithEngRusDict(const EngRu
 belokurskaya::EngRusDict belokurskaya::getDifferenceWithEngRusDict(const EngRusDict& erd1, const EngRusDict& erd2)
 {
   EngRusDict result;
-  for (std::string& key : erd2.words_.getAllKeys())
+  for (Str& key : erd2.words_.getAllKeys())
   {
     if (!erd1.words_.contains(key))
     {
       result.addWord(key);
-      for (std::string& translation : erd2.words_.SEARCH(key))
+      for (Str& translation : erd2.words_.SEARCH(key))
       {
         result.addTranslation(key, translation);
       }
     }
   }
-  for (std::string& key : erd1.words_.getAllKeys())
+  for (Str& key : erd1.words_.getAllKeys())
   {
     if (!erd2.words_.contains(key))
     {
       result.addWord(key);
-      for (std::string& translation : erd1.words_.SEARCH(key))
+      for (Str& translation : erd1.words_.SEARCH(key))
       {
         result.addTranslation(key, translation);
       }
