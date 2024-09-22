@@ -3,17 +3,20 @@
 
 namespace vojuck
 {
-  template< typename T >
-  struct Node
+  namespace detail
   {
-    T data_;
-    Node * next_;
+    template< typename T >
+    struct Node
+    {
+      T data_;
+      Node * next_;
 
-  Node(const T & data):
-    data_(value),
-    next_(nullptr)
-    {}
-  };
+    Node(const T & data):
+      data_(value),
+      next_(nullptr)
+      {}
+    };
+  }
 }
 
 #endif

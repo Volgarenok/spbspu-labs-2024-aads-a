@@ -1,27 +1,73 @@
 #ifndef LIST_HPP
 #define LIST_HPP
 
+#include "iterator.hpp"
+#include "constiterator.hpp"
+//help
+
 namespace vojuck
 {
   template< typename T >
   class List
   {
   public:
-    List();
-    List(const List< T > & other);
-    List(List && other) noexcept;
-    ~List();
+    using iterator = IteratorList< T >;
+    using constiterator = ConstIteratorList< T >;
 
-    List & operator=(const List< T > & other);
-    List & operator=(List && other) noexcept;
+    List():
+      head_(nullptr),
+      size_(0)
+    {}
+    List(const List< T > & other):
+      List()
+    {
+      detail::Node< T >* current = other.head_;
+      while (current)
+      {
+        push_back(current->data_);
+        current = current->next;
+      }
+      size_ = other.size_;
+    }
+    List(List && other) noexcept :
+      head_(other.head_),
+      size_(other.size_)
+    {
+      other->clear();
+    }
+    ~List()
+    {
+      clear();
+    }
 
-    IteratorList< T > begin() noexcept;
-    IteratorList< T > end() noexcept;
-    ConstIteratorList< T > cbegin() const noexcept;
-    ConstIteratorList< T > cend() const noexcept;
+    List & operator=(const List< T > & other)
+    {
+      assert(this != &other);
+      detail::Node< T >* current = other.head_;
+      while (current)
+      {
+        push_back(current->data);
+        current = current->next;
+      }
+      size_ = other.size_;
+      return *this;
+    }
+    List & operator=(List && other) noexcept
+    {
+      assert(this != &other);
+      head_ = other.head_;
+      size_ = other.size_;
+      other->clear();
+    }
+
+    iterator begin() noexcept;
+    iterator end() noexcept;
+    constiterator cbegin() const noexcept;
+    constiterator cend() const noexcept;
 
     bool empty() const noexcept;
     void clear() noexcept;
+
     void push_back(const T&);
     void push_front(const T&);
     void pop_back();
@@ -29,8 +75,8 @@ namespace vojuck
     void swap(List< T >&) noexcept;
 
   private:
+    size_t size_;
     Node< T >* head_;
-    Node< T >* tail_;
   };
 }
 
