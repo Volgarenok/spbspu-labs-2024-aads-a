@@ -1,6 +1,7 @@
 #ifndef LIST_HPP
 #define LIST_HPP
 
+#include <cstddef>
 #include "iterator.hpp"
 #include "constiterator.hpp"
 //help
@@ -60,10 +61,22 @@ namespace vojuck
       other->clear();
     }
 
-    iterator begin() noexcept;
-    iterator end() noexcept;
-    constiterator cbegin() const noexcept;
-    constiterator cend() const noexcept;
+    iterator begin() noexcept
+    {
+      return iterator(head_);
+    }
+    iterator end() noexcept
+    {
+      return iterator(nullptr);
+    }
+    constiterator cbegin() const noexcept
+    {
+      return constiterator(head_);
+    }
+    constiterator cend() const noexcept
+    {
+      return constiterator(nullptr);
+    }
 
     bool empty() const noexcept;
     void clear() noexcept;
