@@ -1,7 +1,6 @@
 #include "eng-rusDictionary.hpp"
 
 #include <functional>
-#include <algorithm>
 
 belokurskaya::EngRusDict::EngRusDict()
 {}
@@ -132,16 +131,29 @@ void belokurskaya::EngRusDict::addWordFromEngRusDict(const EngRusDict& other)
       MyVector< std::string >& translations = words_.SEARCH(key);
       for (const std::string& translation : other.words_.SEARCH(key))
       {
-        if (!translations.contains(translation))
+        bool alreadyPresent = false;
+        for (const std::string& existingTranslation : translations)
+        {
+          if (existingTranslation == translation)
+          {
+            alreadyPresent = true;
+            break;
+          }
+        }
+        if (!alreadyPresent)
         {
           translations.push_back(translation);
         }
       }
-      std::sort(translations.begin(), translations.end());
     }
     else
     {
-      words_.INSERT(key, other.words_.SEARCH(key));
+      MyVector< std::string > newTranslations;
+      for (const std::string& translation : other.words_.SEARCH(key))
+      {
+        newTranslations.push_back(translation);
+      }
+      words_.INSERT(key, newTranslations);
     }
   }
 }
