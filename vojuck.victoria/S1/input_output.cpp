@@ -1,5 +1,5 @@
 #include "input_output.hpp"
-
+ 
 void vojuck::inputLine(std::istream & in, vojuck::paired_list & vertical)
 {
   in >> vertical.first; // импортируем типа название ("first", "second") в первый элемент пары
