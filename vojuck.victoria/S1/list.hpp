@@ -1,16 +1,20 @@
 #ifndef LIST_HPP
 #define LIST_HPP
 
+#include <algorithm>
+#include <iostream>
 #include <cstddef>
 #include "iterator.hpp"
 #include "constiterator.hpp"
-//help
+#include "node.hpp"
 
 namespace vojuck
 {
   template< typename T >
   class List
   {
+    friend struct IteratorList< T >;
+    friend struct ConstIteratorList< T >;
   public:
     using iterator = IteratorList< T >;
     using constiterator = ConstIteratorList< T >;
@@ -22,11 +26,11 @@ namespace vojuck
     List(const List< T > & other):
       List()
     {
-      detail::Node< T >* current = other.head_;
+      details::Node< T >* current = other.head_;
       while (current)
       {
-        push_back(current->data_);
-        current = current->next;
+        push_front(current->data_);
+        current = current->next_;
       }
       size_ = other.size_;
     }
@@ -44,7 +48,7 @@ namespace vojuck
     List & operator=(const List< T > & other)
     {
       assert(this != &other);
-      detail::Node< T >* current = other.head_;
+      details::Node< T >* current = other.head_;
       while (current)
       {
         push_back(current->data);
@@ -61,6 +65,10 @@ namespace vojuck
       other->clear();
     }
 
+    T & front()
+    {
+      return head_->data_;
+    }
     iterator begin() noexcept
     {
       return iterator(head_);
@@ -78,18 +86,52 @@ namespace vojuck
       return constiterator(nullptr);
     }
 
-    bool empty() const noexcept;
-    void clear() noexcept;
+    bool empty() const noexcept
+    {
+      return head_ == nullptr && size_ == 0;
+    }
+    void clear() noexcept
+    {
+      while(!empty())
+      {
+        pop_front();
+      }
+    }
 
-    void push_back(const T&);
-    void push_front(const T&);
-    void pop_back();
-    void pop_front();
-    void swap(List< T >&) noexcept;
+    void push_front(const T & data_)
+    {
+      details::Node< T >* temp = new details::Node< T >(data_);
+      temp->next_ = head_;
+      head_ = temp;
+      size_++;
+    }
+    void pop_front()
+    {
+      try
+      {
+        if (empty())
+        {
+          throw std::logic_error("empty list");
+        }
+        details::Node< T > temp = head_;
+        head_ = nullptr;
+        head_ = temp.next_;
+        size_--;
+      }
+      catch (std::logic_error & e)
+      {
+        std::cout << e.what() << "\n";
+      }
+    }
+    void swap(List< T > & other) noexcept
+    {
+      std::swap(size_, other.size_);
+      std::swap(head_, other.head_);
+    }
 
   private:
     size_t size_;
-    Node< T >* head_;
+    details::Node< T >* head_;
   };
 }
 

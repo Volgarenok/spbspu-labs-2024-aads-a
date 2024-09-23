@@ -1,26 +1,31 @@
 #ifndef ITERATOR_HPP
 #define ITERATOR_HPP
 
- //#include <iterator>
 #include <cassert>
+#include <iterator>
+#include <forward_list>
 #include "node.hpp"
+#include "list.hpp"
+
 namespace vojuck
 {
   template < typename T >
-  struct IteratorList
+  class List;
+  template < typename T >
+  struct IteratorList: public std::iterator< std::forward_iterator_tag, T >
   {
   public:
-    List< T > * node;
-    using this_t = IteratorLits< T >;
+    //List< T > * node_;
+    using this_t = IteratorList< T >;
 
     IteratorList():
-      node(nullptr)
+      node_(nullptr)
     {}
     ~IteratorList() = default;
     IteratorList(const this_t &) = default;
-    this_t & operator(const this_t &) = default;
+    this_t & operator=(const this_t &) = default;
 
-    this_t & operator++();
+    this_t & operator++()
     {
       assert(node_ != nullptr);
       node_ = node_->next_;
@@ -54,7 +59,7 @@ namespace vojuck
       return !(rhs == *this);
     }
   private:
-    Node< T > * node_;
+    details::Node< T > * node_;
   };
 }
 
