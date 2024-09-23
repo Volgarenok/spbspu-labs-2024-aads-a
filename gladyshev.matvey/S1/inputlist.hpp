@@ -4,7 +4,7 @@
 #include <string>
 #include <istream>
 
-#include "list.hpp"
+#include <list.hpp>
 
 namespace gladyshev
 {
