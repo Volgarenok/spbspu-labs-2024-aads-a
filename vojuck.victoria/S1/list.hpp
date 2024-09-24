@@ -69,6 +69,7 @@ namespace vojuck
     {
       return head_->data_;
     }
+
     iterator begin() noexcept
     {
       return iterator(head_);

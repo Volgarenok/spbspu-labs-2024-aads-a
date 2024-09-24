@@ -12,7 +12,7 @@ namespace vojuck
   template < typename T >
   class List;
   template < typename T >
-  struct ConstIteratorList
+  struct ConstIteratorList: public std::iterator< std::forward_iterator_tag, T >
   {
     public:
       using this_t = ConstIteratorList< T >;
@@ -20,7 +20,7 @@ namespace vojuck
         node_(nullptr)
       {}
       ConstIteratorList(details::Node< T > * node):
-        node_(node.data_)
+        node_(node)
       {}
       ~ConstIteratorList() = default;
 
@@ -44,13 +44,15 @@ namespace vojuck
       }
       const T & operator*() const
       {
-        assert(node_ != nullptr);
+        //assert(node_ != nullptr);
+        //return std::addressof(node_->data_);
         return node_->data_;
       }
       const T * operator->() const
       {
-        assert(node_ != nullptr);
+        //assert(node_ != nullptr);
         return std::addressof(node_->data_);
+        //return node_->data_;
       }
 
       bool operator==(const this_t & rhs) const

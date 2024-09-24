@@ -15,7 +15,7 @@ namespace vojuck
   struct IteratorList: public std::iterator< std::forward_iterator_tag, T >
   {
   public:
-    //List< T > * node_;
+    // List< T > * node_;
     using this_t = IteratorList< T >;
 
     IteratorList():
@@ -23,8 +23,10 @@ namespace vojuck
     {}
     ~IteratorList() = default;
     IteratorList(const this_t &) = default;
+    IteratorList(details::Node< T > * node):
+        node_(node)
+    {}
     this_t & operator=(const this_t &) = default;
-
     this_t & operator++()
     {
       assert(node_ != nullptr);
