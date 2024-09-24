@@ -32,6 +32,7 @@ namespace vojuck
         push_front(current->data_);
         current = current->next_;
       }
+      reverse();
       size_ = other.size_;
     }
     List(List && other) noexcept :
@@ -128,6 +129,25 @@ namespace vojuck
     {
       std::swap(size_, other.size_);
       std::swap(head_, other.head_);
+    }
+    void reverse() noexcept
+    {
+      if (empty()) return;
+
+      constiterator it = cbegin();
+      constiterator prev_it = cend();
+
+      while (it != cend())
+      {
+        details::Node<T>* current = it.node_;
+
+        current->next_ = prev_it.node_;
+
+        prev_it = it;
+        ++it;
+      }
+
+      head_ = prev_it.node_;
     }
 
   private:

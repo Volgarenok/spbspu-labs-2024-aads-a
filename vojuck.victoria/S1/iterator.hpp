@@ -14,8 +14,8 @@ namespace vojuck
   template < typename T >
   struct IteratorList: public std::iterator< std::forward_iterator_tag, T >
   {
+    friend class List< T >;
   public:
-    // List< T > * node_;
     using this_t = IteratorList< T >;
 
     IteratorList():

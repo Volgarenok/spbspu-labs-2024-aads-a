@@ -15,6 +15,7 @@ void vojuck::inputLine(std::istream & in, vojuck::paired_list & vertical)
      in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
   }
+  vertical.second.reverse();
 }
 
 void vojuck::inputLists(std::istream & in, vojuck::List< vojuck::paired_list > & result)
@@ -26,6 +27,7 @@ void vojuck::inputLists(std::istream & in, vojuck::List< vojuck::paired_list > &
     inputLine(in, line);
     result.push_front(line);
   }
+  result.reverse();
 }
 
 void vojuck::getOrderedLists(vojuck::List< vojuck::List < size_t > > & result, vojuck::List< vojuck::paired_list > & listToOrder)
@@ -39,6 +41,7 @@ void vojuck::getOrderedLists(vojuck::List< vojuck::List < size_t > > & result, v
     listIterator.push_front(start->second.cbegin());
     start++;
   }
+  listIterator.reverse();
   while (!listIterator.empty())
   {
     List< size_t > vertical;
@@ -50,12 +53,14 @@ void vojuck::getOrderedLists(vojuck::List< vojuck::List < size_t > > & result, v
         current++;
       }
     }
+    vertical.reverse();
     if (!vertical.empty())
     {
       result.push_front(vertical);
       listIterator.pop_front();
     }
   }
+  result.reverse();
 }
 
 
