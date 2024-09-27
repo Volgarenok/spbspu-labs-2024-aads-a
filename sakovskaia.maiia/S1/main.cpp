@@ -21,9 +21,9 @@ int main()
     List< unsigned long long int > sums = calculateSums(processedData);
     outputSums(sums);
   }
-  catch (const std::overflow_error &)
+  catch (const std::overflow_error & e)
   {
-    std::cerr << "Calculating sum is impossible" << "\n";
+    std::cerr << "Calculating sum is impossible" << e.what() << "\n";
     return 1;
   }
   return 0;

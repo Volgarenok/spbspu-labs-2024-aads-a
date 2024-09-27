@@ -1,5 +1,4 @@
 #include "data_processing.hpp"
-#include <limits.h>
 namespace sakovskaia
 {
   List< List< unsigned long long int > > processData(const List< std::pair< std::string, List< unsigned long long int > > > & sequences)
@@ -33,22 +32,29 @@ namespace sakovskaia
   }
 }
 
-sakovskaia::List< unsigned long long int > sakovskaia::calculateSums(const List< ullList > & processedData)
+sakovskaia::List< unsigned long long int > sakovskaia::calculateSums(const sakovskaia::List< sakovskaia::List< unsigned long long int > > & data)
 {
-  List< unsigned long long int > result;
-
-  for (const auto & list : processedData)
+  sakovskaia::List< unsigned long long int > sums;
+  try
   {
-    unsigned long long int sum = 0;
-    for (const auto & num : list)
+    for (const auto & list : data)
     {
-      if (ULLONG_MAX - num < sum)
+      unsigned long long sum = 0;
+      for (const auto & value : list)
       {
-        throw std::overflow_error("Overflow during summation");
+        if (sum + value < sum)
+        {
+          throw std::overflow_error("Overflow during summation");
+        }
+        sum += value;
       }
-      sum += num;
+      sums.push_front(sum);
     }
-    result.push_front(sum);
   }
-  return result;
+  catch (const std::overflow_error& e)
+  {
+    std::cerr << "Error: " << e.what() << std::endl;
+    throw;
+  }
+    return sums;
 }
