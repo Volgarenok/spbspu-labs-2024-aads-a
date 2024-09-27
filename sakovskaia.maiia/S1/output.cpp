@@ -2,13 +2,14 @@
 void sakovskaia::outputSequences(const List< std::pair< std::string, List< unsigned long long int > > > & sequences)
 {
   for (const auto & seq : sequences)
-  {
-    std::cout << seq.first << " ";
-    if (seq.second.empty()) {
-        std::cout << "0";
+    {
+        std::cout << seq.first << " ";
+        for (auto it = seq.second.begin(); it != seq.second.end(); ++it)
+        {
+            std::cout << *it << " ";
+        }
+        std::cout << '\n'; // Ensure to move to the next line after each sequence
     }
-  }
-  std::cout << '\n';
 }
 
 void sakovskaia::outputProcessedData(const List< List< unsigned long long int > > & processedData)
@@ -19,9 +20,9 @@ void sakovskaia::outputProcessedData(const List< List< unsigned long long int > 
     {
       std::cout << "Empty List";
     }
-    for (const auto & num : list)
+    for (auto it = list.begin(); it != list.end(); ++it)
     {
-      std::cout << num << " ";
+      std::cout << * it << " ";
     }
     std::cout << '\n';
   }
