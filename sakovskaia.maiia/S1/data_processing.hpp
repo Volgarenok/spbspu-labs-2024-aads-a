@@ -3,7 +3,7 @@
 #include <string>
 #include <stdexcept>
 #include <iostream>
-#include <limits.h>
+#include <limits>
 #include "list.hpp"
 namespace sakovskaia
 {

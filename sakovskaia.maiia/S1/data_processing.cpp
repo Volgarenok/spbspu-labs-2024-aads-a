@@ -43,7 +43,7 @@ sakovskaia::List< unsigned long long int > sakovskaia::calculateSums
       unsigned long long sum = 0;
       for (const long long unsigned int & value : list)
       {
-        if (sum + value < sum)
+        if (value > 0 && sum > std::numeric_limits< unsigned long long >::max() - value)
         {
           throw std::overflow_error("Overflow during summation");
         }
@@ -56,5 +56,5 @@ sakovskaia::List< unsigned long long int > sakovskaia::calculateSums
   {
     throw;
   }
-    return sums;
+  return sums;
 }
