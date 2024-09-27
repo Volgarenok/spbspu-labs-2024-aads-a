@@ -41,7 +41,7 @@ sakovskaia::List< unsigned long long int > sakovskaia::calculateSums
     for (const auto & list : data)
     {
       unsigned long long sum = 0;
-      for (const auto & value : list)
+      for (const long long unsigned int & value : list)
       {
         if (sum + value < sum)
         {
@@ -52,9 +52,8 @@ sakovskaia::List< unsigned long long int > sakovskaia::calculateSums
       sums.push_front(sum);
     }
   }
-  catch (const std::overflow_error& e)
+  catch (const std::overflow_error & e)
   {
-    std::cerr << "Error: " << e.what() << std::endl;
     throw;
   }
     return sums;
