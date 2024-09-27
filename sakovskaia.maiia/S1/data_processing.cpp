@@ -32,7 +32,8 @@ namespace sakovskaia
   }
 }
 
-sakovskaia::List< unsigned long long int > sakovskaia::calculateSums(const sakovskaia::List< sakovskaia::List< unsigned long long int > > & data)
+sakovskaia::List< unsigned long long int > sakovskaia::calculateSums
+(const sakovskaia::List< sakovskaia::List< unsigned long long int > > & data)
 {
   sakovskaia::List< unsigned long long int > sums;
   try
