@@ -46,14 +46,12 @@ namespace vojuck
     const T & operator*() const
     {
       assert(node_ != nullptr);
-      //return std::addressof(node_->data_);
       return node_->data_;
     }
     const T * operator->() const
     {
       assert(node_ != nullptr);
       return std::addressof(node_->data_);
-      //return node_->data_;
     }
 
     bool operator==(const this_t & rhs) const
@@ -67,7 +65,6 @@ namespace vojuck
   private:
     details::Node< T > * node_;
   };
-
 }
 
 

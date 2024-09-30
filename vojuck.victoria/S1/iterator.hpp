@@ -36,9 +36,7 @@ namespace vojuck
     this_t operator++(int)
     {
       assert(node_ != nullptr);
-      this_t result(*this);
-      ++(*this);
-      return result;
+      return std::addressof(node_->data_);
     }
 
     T * operator->()

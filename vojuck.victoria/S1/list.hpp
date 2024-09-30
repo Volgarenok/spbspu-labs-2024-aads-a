@@ -29,17 +29,17 @@ namespace vojuck
       details::Node< T >* current = other.head_;
       while (current)
       {
-        push_front(current->data_);
+        push_back(current->data_);
         current = current->next_;
       }
-      reverse();
       size_ = other.size_;
     }
     List(List && other) noexcept :
       head_(other.head_),
       size_(other.size_)
     {
-      other->clear();
+      other.head_ = nullptr;
+      other.size_ = 0;
     }
     ~List()
     {
@@ -48,23 +48,32 @@ namespace vojuck
 
     List & operator=(const List< T > & other)
     {
-      assert(this != &other);
-      details::Node< T >* current = other.head_;
-      while (current)
+      if(this != &other)
       {
-        push_back(current->data);
-        current = current->next;
+        clear();
+        details::Node< T >* current = other.head_;
+        while (current)
+        {
+          push_back(current->data);
+          current = current->next;
+        }
+        size_ = other.size_;
       }
-      size_ = other.size_;
       return *this;
     }
     List & operator=(List && other) noexcept
     {
-      assert(this != &other);
-      head_ = other.head_;
-      size_ = other.size_;
-      other->clear();
+      if (this != &other)
+      {
+        clear();
+        head_ = other.head_;
+        size_ = other.size_;
+        other.head_ = nullptr;
+        other.size_ = 0;
+      }
+      return *this;
     }
+
 
     T & front()
     {
@@ -90,7 +99,7 @@ namespace vojuck
 
     bool empty() const noexcept
     {
-      return head_ == nullptr && size_ == 0;
+      return head_ == nullptr;
     }
     void clear() noexcept
     {
@@ -109,47 +118,52 @@ namespace vojuck
     }
     void pop_front()
     {
-      try
+      if (empty())
       {
-        if (empty())
-        {
-          throw std::logic_error("empty list");
-        }
-        details::Node< T > temp = head_;
-        head_ = nullptr;
-        head_ = temp.next_;
-        size_--;
+        throw std::logic_error("empty list");
       }
-      catch (std::logic_error & e)
-      {
-        std::cout << e.what() << "\n";
-      }
+      details::Node< T > temp = head_
+      head_ = head_->next_;
+      delete temp;
+      size_--;
     }
     void swap(List< T > & other) noexcept
     {
       std::swap(size_, other.size_);
       std::swap(head_, other.head_);
     }
-    void reverse() noexcept
+    void push_back(const T& data)
     {
-      if (empty()) return;
-
-      constiterator it = cbegin();
-      constiterator prev_it = cend();
-
-      while (it != cend())
+      details::Node<T>* newNode = new details::Node<T>(data);
+      if (head_ == nullptr)
       {
-        details::Node<T>* current = it.node_;
-
-        current->next_ = prev_it.node_;
-
-        prev_it = it;
-        ++it;
+        head_ = newNode;
       }
-
-      head_ = prev_it.node_;
+      else
+      {
+      details::Node<T>* current = head_;
+      while (current->next_ != nullptr)
+      {
+        current = current->next_;
+      }
+      current->next_ = newNode;
+      }
+      size_++;
     }
 
+    void reverse() noexcept
+    {
+      details::Node<T>* prev = nullptr;
+      details::Node<T>* current = head_;
+      while (current != nullptr)
+      {
+        details::Node<T>* next = current->next_;
+        current->next_ = prev;
+        prev = current;
+        current = next;
+      }
+      head_ = prev;
+    }
   private:
     size_t size_;
     details::Node< T >* head_;
