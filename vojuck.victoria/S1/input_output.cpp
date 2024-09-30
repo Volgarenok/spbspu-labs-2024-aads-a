@@ -1,66 +1,73 @@
+#include "input_output.hpp"
+
+#include <sstream>
+#include <vector>
 #include <iostream>
 #include <limits>
-#include "input_output.hpp"
 
 void vojuck::inputLine(std::istream & in, vojuck::paired_list & vertical)
 {
-  in >> vertical.first;
-  size_t number;
-  while (in >> number)
+    std::string line;
+  if (!std::getline(in, line))
   {
-    vertical.second.push_front(number);
-    if (in.fail() && !in.eof())
-    {
-      in.clear();
-     in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    }
+    return;
   }
-  vertical.second.reverse();
+  std::istringstream iss(line);
+  iss >> vertical.first;
+  size_t number;
+  while(in >> number)
+  {
+    vertical.second.push_back(number);
+  }
 }
-
+//1)
 void vojuck::inputLists(std::istream & in, vojuck::List< vojuck::paired_list > & result)
 {
   while (!in.eof())
   {
-    in.clear();
     vojuck::paired_list line;
     inputLine(in, line);
-    result.push_front(line);
+    if (line.first.empty())
+    {
+      break;
+    }
+    result.push_back(line);
   }
-  result.reverse();
 }
-
+//2))
 void vojuck::getOrderedLists(vojuck::List< vojuck::List < size_t > > & result, vojuck::List< vojuck::paired_list > & listToOrder)
 {
-  using order_iterator = List< ConstIteratorList< size_t > >;
-  order_iterator listIterator;
+  std::vector< vojuck::ConstIteratorList< size_t > > iterators;
+  std::vector< vojuck::ConstIteratorList< size_t > > ends;
+
   auto start = listToOrder.cbegin();
   auto finish = listToOrder.cend();
+
   while (start != finish)
   {
-    listIterator.push_front(start->second.cbegin());
+    iterators.push_back(start->second.cbegin());
+    ends.push_back(start->second.cend());
     start++;
   }
-  listIterator.reverse();
-  while (!listIterator.empty())
+  bool done = false;
+  while (!done)
   {
-    List< size_t > vertical;
-    for (auto current : listIterator)
+    done = true;
+    vojuck::List< size_t > newSequence;
+    for (size_t i = 0; i < iterators.size(); ++i)
     {
-      if (current != nullptr)
+      if (iterators[i] != ends[i])
       {
-        vertical.push_front(*current);
-        current++;
+        newSequence.push_back(*iterators[i]);
+        ++iterators[i];
+        done = false;
       }
     }
-    vertical.reverse();
-    if (!vertical.empty())
+    if (!newSequence.empty())
     {
-      result.push_front(vertical);
-      listIterator.pop_front();
+      result.push_back(newSequence);
     }
   }
-  result.reverse();
 }
 
 
