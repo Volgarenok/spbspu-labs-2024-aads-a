@@ -137,7 +137,7 @@ namespace sakovskaia
   template <typename T>
   void List< T >::push_back(const T & value)
   {
-    node_t< T >* new_node = new node_t< T >(value);
+    node_t< T > * new_node = new node_t< T >(value);
     if (!head_)
     {
       head_ = new_node;

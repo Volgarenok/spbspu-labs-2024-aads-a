@@ -35,26 +35,45 @@ namespace sakovskaia
 sakovskaia::List< unsigned long long int > sakovskaia::calculateSums
 (const sakovskaia::List< sakovskaia::List< unsigned long long int > > & data)
 {
-  sakovskaia::List< unsigned long long int > sums;
-  try
-  {
-    for (const auto & list : data)
-    {
-      unsigned long long sum = 0;
-      for (const auto & value : list)
-      {
-        if (value > 0 && sum > std::numeric_limits< unsigned long long >::max() - value)
+  List<unsigned long long> sums;
+    bool flag = true;
+    size_t row = 0;
+
+    while (flag) {
+        flag = false;
+        unsigned long long sum = 0;
+        for (const auto& list : data)
         {
-          throw std::overflow_error("Overflow during summation");
+            auto it = list.begin();
+            size_t count = 0;
+            while (it != list.end() && count < row) {
+                ++it;
+                ++count;
+            }
+            if (it != list.end()) {
+                sum += *it;
+                flag = true;
+            }
         }
-        sum += value;
-      }
-      sums.push_back(sum);
+        if (flag) {
+            sums.push_front(sum);
+        }
+        ++row;
     }
-  }
-  catch (const std::overflow_error & e)
+    return sums;
+}
+
+namespace sakovskaia
+{
+  bool isEmpty(List< std::pair< std::string, ullList > >& sequences)
   {
-    throw;
+    for (auto it = sequences.begin(); it != sequences.end(); ++it)
+    {
+       if(it->second.empty());
+       {
+         return false;
+       }
+    }
+    return true;
   }
-  return sums;
 }
