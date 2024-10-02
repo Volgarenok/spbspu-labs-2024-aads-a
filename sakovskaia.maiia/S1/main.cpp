@@ -8,12 +8,17 @@ int main()
   using namespace sakovskaia;
   List< std::pair< std::string, ullList > > sequences;
   input(std::cin, sequences);
-  if ((sequences.empty()) || (isEmpty(sequences)))
+  if (sequences.empty())
   {
     std::cout << "0" << "\n";
     return 0;
   }
   outputSequences(sequences);
+  if (isEmpty(sequences))
+  {
+    std::cout << "0" << "\n";
+    return 0;
+  }
   List< ullList > processedData = processData(sequences);
   outputProcessedData(processedData);
   try

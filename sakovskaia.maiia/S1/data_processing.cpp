@@ -71,9 +71,9 @@ namespace sakovskaia
     {
        if(it->second.empty())
        {
-         return false;
+         return true;
        }
     }
-    return true;
+    return false;
   }
 }
