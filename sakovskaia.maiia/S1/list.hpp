@@ -25,6 +25,7 @@ namespace sakovskaia
     const_iterator cend() const;
     bool empty() const;
     void push_front(const T & value);
+    void push_back(const T & value);
     void pop_front();
     void clear();
     void swap(List< T > & other);
@@ -131,6 +132,25 @@ namespace sakovskaia
     node_t< T > * new_node = new node_t< T >(value);
     new_node->next = head_;
     head_ = new_node;
+  }
+
+  template <typename T>
+  void List< T >::push_back(const T & value)
+  {
+    node_t< T >* new_node = new node_t< T >(value);
+    if (!head_)
+    {
+      head_ = new_node;
+    }
+    else
+    {
+      node_t< T > * current = head_;
+      while (current->next)
+      {
+        current = current->next;
+      }
+      current->next = new_node;
+    }
   }
 
   template <typename T>

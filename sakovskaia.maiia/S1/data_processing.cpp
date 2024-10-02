@@ -6,7 +6,7 @@ namespace sakovskaia
     List< std::pair< CFwdIterator< unsigned long long int >, CFwdIterator< unsigned long long int > > > iters;
     for (const auto & seq : sequences)
     {
-      iters.push_front(std::make_pair(seq.second.cbegin(), seq.second.cend()));
+      iters.push_back(std::make_pair(seq.second.cbegin(), seq.second.cend()));
     }
     List< List< unsigned long long int > > result;
     bool flag = true;
@@ -18,14 +18,14 @@ namespace sakovskaia
       {
         if (it.first != it.second)
         {
-          current.push_front(*(it.first));
+          current.push_back(*(it.first));
           ++(it.first);
           flag = true;
         }
       }
       if (!current.empty())
       {
-        result.push_front(std::move(current));
+        result.push_back(std::move(current));
       }
     }
     return result;
@@ -49,7 +49,7 @@ sakovskaia::List< unsigned long long int > sakovskaia::calculateSums
         }
         sum += value;
       }
-      sums.push_front(sum);
+      sums.push_back(sum);
     }
   }
   catch (const std::overflow_error & e)
