@@ -69,7 +69,7 @@ namespace sakovskaia
   {
     for (auto it = sequences.begin(); it != sequences.end(); ++it)
     {
-       if(it->second.empty());
+       if(it->second.empty())
        {
          return false;
        }
