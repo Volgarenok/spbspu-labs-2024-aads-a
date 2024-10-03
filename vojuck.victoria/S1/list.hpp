@@ -17,7 +17,7 @@ namespace vojuck
     friend struct ConstIteratorList< T >;
   public:
     using iterator = IteratorList< T >;
-    using constiterator = ConstIteratorList< T >;
+    using const_iterator = ConstIteratorList< T >;
 
     List():
       head_(nullptr),
@@ -48,7 +48,7 @@ namespace vojuck
 
     List & operator=(const List< T > & other)
     {
-      if(this != &other)
+      if( this != &other)
       {
         clear();
         details::Node< T >* current = other.head_;
@@ -88,13 +88,13 @@ namespace vojuck
     {
       return iterator(nullptr);
     }
-    constiterator cbegin() const noexcept
+    const_iterator cbegin() const noexcept
     {
-      return constiterator(head_);
+      return const_iterator(head_);
     }
-    constiterator cend() const noexcept
+    const_iterator cend() const noexcept
     {
-      return constiterator(nullptr);
+      return const_iterator(nullptr);
     }
 
     bool empty() const noexcept
@@ -122,7 +122,7 @@ namespace vojuck
       {
         throw std::logic_error("empty list");
       }
-      details::Node< T > temp = head_
+      details::Node< T >* temp = head_;
       head_ = head_->next_;
       delete temp;
       size_--;
@@ -141,12 +141,12 @@ namespace vojuck
       }
       else
       {
-      details::Node<T>* current = head_;
-      while (current->next_ != nullptr)
-      {
-        current = current->next_;
-      }
-      current->next_ = newNode;
+        details::Node<T>* current = head_;
+        while (current->next_ != nullptr)
+        {
+          current = current->next_;
+        }
+        current->next_ = newNode;
       }
       size_++;
     }

@@ -12,31 +12,38 @@ namespace vojuck
   template < typename T >
   class List;
   template < typename T >
-  struct IteratorList: public std::iterator< std::forward_iterator_tag, T >
+  struct IteratorList
   {
     friend class List< T >;
   public:
-    using this_t = IteratorList< T >;
+    using iterator_category = std::forward_iterator_tag;
+    using value_type = T;
+    using difference_type = std::ptrdiff_t;
+    using pointer = T*;
+    using reference = T&;
+
 
     IteratorList():
       node_(nullptr)
     {}
     ~IteratorList() = default;
-    IteratorList(const this_t &) = default;
+    IteratorList(const IteratorList &) = default;
     IteratorList(details::Node< T > * node):
         node_(node)
     {}
-    this_t & operator=(const this_t &) = default;
-    this_t & operator++()
+    IteratorList& operator=(const IteratorList&) = default;
+    IteratorList& operator++()
     {
       assert(node_ != nullptr);
       node_ = node_->next_;
       return *this;
     }
-    this_t operator++(int)
+    IteratorList operator++(int)
     {
       assert(node_ != nullptr);
-      return std::addressof(node_->data_);
+      IteratorList result(*this);
+      ++(*this);
+      return result;
     }
 
     T * operator->()
@@ -50,11 +57,11 @@ namespace vojuck
       return node_->data_;
     }
 
-    bool operator==(const this_t &rhs) const
+    bool operator==(const IteratorList &rhs) const
     {
       return node_ == rhs.node_;
     }
-    bool operator!=(const this_t &rhs) const
+    bool operator!=(const IteratorList &rhs) const
     {
       return !(rhs == *this);
     }

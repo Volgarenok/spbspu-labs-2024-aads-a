@@ -15,12 +15,12 @@ void vojuck::inputLine(std::istream & in, vojuck::paired_list & vertical)
   std::istringstream iss(line);
   iss >> vertical.first;
   size_t number;
-  while(in >> number)
+  while(iss >> number)
   {
     vertical.second.push_back(number);
   }
 }
-//1)
+
 void vojuck::inputLists(std::istream & in, vojuck::List< vojuck::paired_list > & result)
 {
   while (!in.eof())
@@ -34,7 +34,7 @@ void vojuck::inputLists(std::istream & in, vojuck::List< vojuck::paired_list > &
     result.push_back(line);
   }
 }
-//2))
+
 void vojuck::getOrderedLists(vojuck::List< vojuck::List < size_t > > & result, vojuck::List< vojuck::paired_list > & listToOrder)
 {
   std::vector< vojuck::ConstIteratorList< size_t > > iterators;

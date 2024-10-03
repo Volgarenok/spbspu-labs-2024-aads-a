@@ -9,7 +9,7 @@ int main()
 
   if (inputSequences.empty())
   {
-    std::cout << "0" << std::endl;
+    std::cout << "0\n";
     return 0;
   }
 
@@ -30,20 +30,20 @@ int main()
   try
   {
     vojuck::List< size_t > sums;
-    auto seqIt = orderedSequences.cbegin();
-    auto seqEnd = orderedSequences.cend();
-    while (seqIt != seqEnd)
+    auto start = orderedSequences.cbegin();
+    auto finish = orderedSequences.cend();
+    while (start != finish)
     {
       size_t sum = 0;
-      auto numIt = seqIt->cbegin();
-      auto numEnd = seqIt->cend();
-      while (numIt != numEnd)
+      auto first = start->cbegin();
+      auto last = start->cend();
+      while (first != last)
       {
-        sum += *numIt;
-        ++numIt;
+        sum += *first;
+        ++first;
       }
       sums.push_back(sum);
-      ++seqIt;
+      ++start;
     }
     auto sumIt = sums.cbegin();
     auto sumEnd = sums.cend();
@@ -52,13 +52,12 @@ int main()
       std::cout << *sumIt << " ";
       ++sumIt;
     }
-    std::cout << std::endl;
+    std::cout << '\n';
   }
   catch (...)
   {
-    std::cerr << "Error: cannot compute sums" << std::endl;
+    std::cerr << "Error: cannot compute sums" << '\n';
     return 1;
   }
-
   return 0;
 }

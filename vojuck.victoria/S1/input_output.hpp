@@ -2,7 +2,8 @@
 #define INPUT_OUTPUT_HPP
 
 #include <utility>
-
+#include <string>
+#include <istream>
 #include "list.hpp"
 
 namespace vojuck
