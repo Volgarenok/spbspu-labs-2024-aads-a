@@ -45,7 +45,10 @@ sakovskaia::List< unsigned long long int > sakovskaia::calculateSums
       {
         throw std::overflow_error("Can't calculate sum");
       }
-      sum += * it;
+      else
+      {
+        sum += * it;
+      }
     }
     sums.push_back(sum);
     sum = 0;

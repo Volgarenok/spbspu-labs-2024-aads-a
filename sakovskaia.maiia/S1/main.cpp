@@ -8,28 +8,32 @@ int main()
   using namespace sakovskaia;
   List< std::pair< std::string, ullList > > sequences;
   input(std::cin, sequences);
+  bool overflow_detected = false;
   if (sequences.empty())
   {
     std::cout << "0" << "\n";
     return 0;
   }
+  List< ullList > processedData = processData(sequences);
+  List< unsigned long long int > sums = calculateSums(processedData);
   try
   {
-    List< ullList > processedData = processData(sequences);
-    List< unsigned long long int > sums = calculateSums(processedData);
     outputSequences(sequences);
     if (isEmpty(sequences))
     {
       std::cout << "0" << "\n";
       return 0;
     }
-    outputProcessedData(processedData);
-    outputSums(sums);
   }
-  catch (const std::overflow_error & e)
+  catch (const std::out_of_range & e)
   {
     std::cerr << e.what() << "\n";
-    return 1;
+    overflow_detected = true;
   }
-  return 0;
+  outputProcessedData(processedData);
+  if (!overflow_detected)
+  {
+    outputSums(sums);
+  }
+  return overflow_detected;
 }
