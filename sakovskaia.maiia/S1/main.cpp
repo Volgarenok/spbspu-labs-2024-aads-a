@@ -14,16 +14,6 @@ int main()
     return 0;
   }
   List< ullList > processedData = processData(sequences);
-  List< unsigned long long int > sums;
-  try
-  {
-     sums = calculateSums(processedData);
-  }
-  catch (const std::overflow_error & e)
-  {
-    std::cerr << e.what() << "\n";
-    return 1;
-  }
   outputSequences(sequences);
   if (isEmpty(sequences))
   {
@@ -31,5 +21,15 @@ int main()
     return 0;
   }
   outputProcessedData(processedData);
+  List< unsigned long long int > sums;
+  try
+  {
+    sums = calculateSums(processedData);
+  }
+  catch (const std::overflow_error & e)
+  {
+    std::cerr << e.what() << "\n";
+    return 1;
+  }
   outputSums(sums);
 }
