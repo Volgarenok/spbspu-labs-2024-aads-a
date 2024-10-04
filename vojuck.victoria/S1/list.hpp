@@ -4,9 +4,9 @@
 #include <algorithm>
 #include <iostream>
 #include <cstddef>
+#include "node.hpp"
 #include "iterator.hpp"
 #include "constiterator.hpp"
-#include "node.hpp"
 
 namespace vojuck
 {
