@@ -27,11 +27,11 @@ namespace vojuck
       node_(nullptr)
     {}
     ~IteratorList() = default;
-    IteratorList(const IteratorList &) = default;
+    IteratorList(const IteratorList< T > &) = default;
     IteratorList(details::Node< T > * node):
         node_(node)
     {}
-    IteratorList& operator=(const IteratorList&) = default;
+    IteratorList& operator=(const IteratorList< T > &) = default;
     IteratorList& operator++()
     {
       assert(node_ != nullptr);
@@ -57,11 +57,11 @@ namespace vojuck
       return node_->data_;
     }
 
-    bool operator==(const IteratorList &rhs) const
+    bool operator==(const IteratorList< T > &rhs) const
     {
       return node_ == rhs.node_;
     }
-    bool operator!=(const IteratorList &rhs) const
+    bool operator!=(const IteratorList< T > &rhs) const
     {
       return !(rhs == *this);
     }

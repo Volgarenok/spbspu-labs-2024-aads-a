@@ -30,11 +30,11 @@ namespace vojuck
     {}
     ~ConstIteratorList() = default;
 
-    ConstIteratorList(const ConstIteratorList &) = default;
+    ConstIteratorList(const ConstIteratorList< T > &) = default;
     ConstIteratorList(const IteratorList< T > & other):
       node_(other.node_)
     {}
-    ConstIteratorList & operator=(const ConstIteratorList &) = default;
+    ConstIteratorList & operator=(const ConstIteratorList< T > &) = default;
     ConstIteratorList & operator++()
     {
       assert(node_ != nullptr);
@@ -59,11 +59,11 @@ namespace vojuck
       return std::addressof(node_->data_);
     }
 
-    bool operator==(const ConstIteratorList &rhs) const
+    bool operator==(const ConstIteratorList< T > &rhs) const
     {
       return node_ == rhs.node_;
     }
-    bool operator!=(const ConstIteratorList &rhs) const
+    bool operator!=(const ConstIteratorList< T > &rhs) const
     {
       return !(rhs == *this);
     }
