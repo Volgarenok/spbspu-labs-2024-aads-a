@@ -9,7 +9,7 @@ int main()
 
   if (inputSequences.empty())
   {
-    std::cout << "0\n";
+    std::cout << "0" << '\n';
     return 0;
   }
 

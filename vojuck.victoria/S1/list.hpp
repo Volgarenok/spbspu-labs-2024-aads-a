@@ -101,6 +101,18 @@ namespace vojuck
     {
       return head_ == nullptr;
     }
+
+    void pop_front()
+    {
+      if (empty())
+      {
+        throw std::logic_error("empty list");
+      }
+      details::Node< T > *temp = head_;
+      head_ = head_->next_;
+      delete temp;
+      size_--;
+    }
     void clear() noexcept
     {
       while(!empty())
@@ -111,21 +123,10 @@ namespace vojuck
 
     void push_front(const T & data_)
     {
-      details::Node< T >* temp = new details::Node< T >(data_);
+      details::Node< T > *temp = new details::Node< T >(data_);
       temp->next_ = head_;
       head_ = temp;
       size_++;
-    }
-    void pop_front()
-    {
-      if (empty())
-      {
-        throw std::logic_error("empty list");
-      }
-      details::Node< T >* temp = head_;
-      head_ = head_->next_;
-      delete temp;
-      size_--;
     }
     void swap(List< T > & other) noexcept
     {
@@ -134,14 +135,14 @@ namespace vojuck
     }
     void push_back(const T& data)
     {
-      details::Node<T>* newNode = new details::Node<T>(data);
+      details::Node<T> *newNode = new details::Node<T>(data);
       if (head_ == nullptr)
       {
         head_ = newNode;
       }
       else
       {
-        details::Node<T>* current = head_;
+        details::Node<T> *current = head_;
         while (current->next_ != nullptr)
         {
           current = current->next_;
@@ -153,11 +154,11 @@ namespace vojuck
 
     void reverse() noexcept
     {
-      details::Node<T>* prev = nullptr;
-      details::Node<T>* current = head_;
+      details::Node<T> *prev = nullptr;
+      details::Node<T> *current = head_;
       while (current != nullptr)
       {
-        details::Node<T>* next = current->next_;
+        details::Node<T> *next = current->next_;
         current->next_ = prev;
         prev = current;
         current = next;
@@ -166,7 +167,7 @@ namespace vojuck
     }
   private:
     size_t size_;
-    details::Node< T >* head_;
+    details::Node< T > *head_;
   };
 }
 
