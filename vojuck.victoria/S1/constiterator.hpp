@@ -12,15 +12,15 @@ namespace vojuck
   template < typename T >
   class List;
   template < typename T >
-  struct ConstIteratorList
+  struct ConstIteratorList: public std::iterator< std::forward_iterator_tag, T >
   {
     friend class List< T >;
   public:
-    using iterator_category = std::forward_iterator_tag;
-    using value_type = T;
-    using difference_type = std::ptrdiff_t;
-    using pointer = const T*;
-    using reference = const T&;
+    //using iterator_category = std::forward_iterator_tag;
+    //using value_type = T;
+    //using difference_type = std::ptrdiff_t;
+    //using pointer = const T*;
+    //using reference = const T&;
 
     ConstIteratorList():
       node_(nullptr)
