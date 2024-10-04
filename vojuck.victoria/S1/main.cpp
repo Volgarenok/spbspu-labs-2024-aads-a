@@ -5,22 +5,32 @@
 int main()
 {
   vojuck::List< vojuck::paired_list > inputSequences;
-  vojuck::inputLists(std::cin, inputSequences);
+  try
+  {
+    vojuck::inputLists(std::cin, inputSequences);
+  }
+  catch (std::overflow_error & e)
+  {
+    std::cout << e.what();
+    return 1;
+  }
 
   if (inputSequences.empty())
   {
-    std::cout << "0" << '\n';
+    std::cout << "0" << "\n";
     return 0;
   }
+
   if (inputSequences.getSize() == 1)
   {
     if (inputSequences.front().first != "")
     {
       if (inputSequences.front().second.empty())
-        {
-          std::cout << "0" << '\n';
-          return 0;
-        }
+      {
+        std::cout << inputSequences.front().first << "\n";
+        std::cout << "0" << "\n";
+        return 0;
+      }
     }
   }
 
@@ -64,9 +74,14 @@ int main()
     }
     auto sumIt = sums.cbegin();
     auto sumEnd = sums.cend();
+    if (sumIt != sumEnd)
+    {
+      std::cout << *sumIt;
+      ++sumIt;
+    }
     while (sumIt != sumEnd)
     {
-      std::cout << *sumIt << " ";
+      std::cout << " " << *sumIt;
       ++sumIt;
     }
     std::cout << '\n';

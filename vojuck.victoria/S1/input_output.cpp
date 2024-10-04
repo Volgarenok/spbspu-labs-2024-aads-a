@@ -17,7 +17,10 @@ void vojuck::inputLine(std::istream & in, vojuck::paired_list & vertical)
   size_t number;
   while(iss >> number)
   {
-    assert(number < std::numeric_limits< size_t >::max());
+    if (number > std::numeric_limits< size_t >::max())
+    {
+      throw std::overflow_error("The value is too big\n");
+    }
     vertical.second.push_back(number);
   }
 }
