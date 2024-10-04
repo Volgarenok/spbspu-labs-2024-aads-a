@@ -80,9 +80,14 @@ void vojuck::outputOrderedLists(vojuck::List< vojuck::List< size_t > > & ordered
   {
     auto first = start->cbegin();
     auto last = start->cend();
+    if (first != last)
+    {
+      std::cout << *first;
+      first++;
+    }
     while (first != last)
     {
-      std::cout << *first << " ";
+      std::cout << " " << *first;
       first++;
     }
     std::cout << "\n";
