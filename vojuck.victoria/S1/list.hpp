@@ -97,6 +97,11 @@ namespace vojuck
       return const_iterator(nullptr);
     }
 
+    size_t getSize()
+    {
+      return size_;
+    }
+
     bool empty() const noexcept
     {
       return head_ == nullptr;

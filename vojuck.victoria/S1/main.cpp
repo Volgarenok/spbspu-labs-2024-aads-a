@@ -12,14 +12,31 @@ int main()
     std::cout << "0" << '\n';
     return 0;
   }
+  if (inputSequences.getSize() == 1)
+  {
+    if (inputSequences.front().first != "")
+    {
+      if (inputSequences.front().second.empty())
+        {
+          std::cout << "0" << '\n';
+          return 0;
+        }
+    }
+  }
 
   auto it = inputSequences.cbegin();
   auto end = inputSequences.cend();
-  while (it != end)
+  if (it != end)
   {
-    std::cout << it->first << " ";
+    std::cout << it->first;
     ++it;
   }
+  while (it != end)
+  {
+    std::cout << " " << it->first;
+    ++it;
+  }
+
   std::cout << '\n';
 
   vojuck::List< vojuck::List< size_t > > orderedSequences;
