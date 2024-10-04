@@ -1,14 +1,12 @@
 #include "output.hpp"
 void sakovskaia::outputSequences(const List< std::pair< std::string, List< unsigned long long int > > > & sequences)
 {
-  for (auto it = sequences.begin(); it != sequences.end(); it++)
+  auto it = sequences.begin();
+  std::cout << it->first;
+  ++it;
+  for (; it != sequences.end(); ++it)
   {
-    std::cout << it->first;
-    auto temp_it = it;
-    if (++temp_it != sequences.end())
-    {
-      std::cout << " ";
-    }
+    std::cout << " " << it->first;
   }
   std::cout << '\n';
 }
