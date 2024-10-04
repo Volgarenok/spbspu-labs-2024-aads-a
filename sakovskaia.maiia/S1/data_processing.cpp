@@ -1,7 +1,7 @@
 #include "data_processing.hpp"
 namespace sakovskaia
 {
-  List< List< unsigned long long int > > processData(const List< std::pair< std::string, List< unsigned long long int > > > & sequences)
+  List< ullList > processData(const List< std::pair< std::string, ullList > > & sequences)
   {
     List< std::pair< CFwdIterator< unsigned long long int >, CFwdIterator< unsigned long long int > > > iters;
     for (const auto & seq : sequences)
@@ -30,34 +30,30 @@ namespace sakovskaia
     }
     return result;
   }
-}
 
-sakovskaia::List< unsigned long long int > sakovskaia::calculateSums
-(const sakovskaia::List< sakovskaia::List< unsigned long long int > > & data)
-{
-  List< unsigned long long > sums;
-  size_t sum = 0;
-  for (const auto & list : data)
+  ullList calculateSums(const List< ullList > & data)
   {
-    for (auto it = list.begin(); it != list.end(); ++it)
+    List< unsigned long long > sums;
+    size_t sum = 0;
+    for (const auto & list : data)
     {
-      if (std::numeric_limits< unsigned long long >::max() - sum < * it)
+      for (auto it = list.begin(); it != list.end(); ++it)
       {
-        throw std::overflow_error("Can't calculate sum");
+        if (std::numeric_limits< unsigned long long >::max() - sum < * it)
+        {
+          throw std::overflow_error("Can't calculate sum");
+        }
+        else
+        {
+          sum += * it;
+        }
       }
-      else
-      {
-        sum += * it;
-      }
+      sums.push_back(sum);
+      sum = 0;
     }
-    sums.push_back(sum);
-    sum = 0;
+    return sums;
   }
-  return sums;
-}
 
-namespace sakovskaia
-{
   bool isEmpty(List< std::pair< std::string, ullList > >& sequences)
   {
     int check = 0;

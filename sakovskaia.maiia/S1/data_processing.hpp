@@ -9,7 +9,7 @@ namespace sakovskaia
 {
   using ullList = List< unsigned long long int >;
   List< ullList > processData(const List< std::pair< std::string, ullList > > & sequences);
-  List< unsigned long long int > calculateSums(const List< List< unsigned long long int > > & data);
+  ullList calculateSums(const List< ullList > & data);
   bool isEmpty(List< std::pair< std::string, ullList > >& sequences);
 }
 #endif
