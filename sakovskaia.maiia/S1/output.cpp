@@ -21,9 +21,12 @@ void sakovskaia::outputProcessedData(const List< List< unsigned long long int > 
     {
       std::cout << "Empty List";
     }
-    for (auto it = list.begin(); it != list.end(); ++it)
+    auto it = list.begin();
+    std::cout << * it;
+    ++it;
+    for (; it != list.end(); ++it)
     {
-      std::cout << * it << " ";
+      std::cout << " " << * it;
     }
     std::cout << '\n';
   }
@@ -31,9 +34,12 @@ void sakovskaia::outputProcessedData(const List< List< unsigned long long int > 
 
 void sakovskaia::outputSums(const List< unsigned long long int > & sums)
 {
-  for (const auto & sum : sums)
+  auto it = sums.begin();
+  std::cout << * it;
+  ++it;
+  for (; it != sums.end(); ++it)
   {
-    std::cout << sum << " ";
+    std::cout << " " << * it;
   }
   std::cout << '\n';
 }
