@@ -9,12 +9,12 @@
 
 namespace vojuck
 {
-  template < typename T >
-  class List;
+  //template < typename T >
+  //class List;
   template < typename T >
   struct ConstIteratorList: public std::iterator< std::forward_iterator_tag, T >
   {
-    friend class List< T >;
+    //friend class List< T >;
   public:
     //using iterator_category = std::forward_iterator_tag;
     //using value_type = T;
