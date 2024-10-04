@@ -1,15 +1,16 @@
 #include "output.hpp"
 void sakovskaia::outputSequences(const List< std::pair< std::string, List< unsigned long long int > > > & sequences)
 {
-  for (const auto& seq : sequences)
+  for (auto it = sequences.begin(); it != sequences.end(); it++)
   {
-    std::cout << seq.first << " ";
-    for (auto it = seq.second.begin(); it != seq.second.end(); ++it)
+    std::cout << it->first;
+    auto temp_it = it;
+    if (++temp_it != sequences.end())
     {
-      std::cout << *it << " ";
+      std::cout << " ";
     }
-    std::cout << '\n';
   }
+  std::cout << '\n';
 }
 
 void sakovskaia::outputProcessedData(const List< List< unsigned long long int > > & processedData)
