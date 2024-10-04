@@ -43,7 +43,7 @@ sakovskaia::List< unsigned long long int > sakovskaia::calculateSums
     {
       if (std::numeric_limits< unsigned long long >::max() - sum < * it)
       {
-        throw std::overflow_error("");
+        throw std::overflow_error("Can't calculate sum");
       }
       sum += * it;
     }
