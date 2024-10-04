@@ -13,17 +13,17 @@ int main()
     std::cout << "0" << "\n";
     return 0;
   }
-  outputSequences(sequences);
-  if (isEmpty(sequences))
-  {
-    std::cout << "0" << "\n";
-    return 0;
-  }
-  List< ullList > processedData = processData(sequences);
-  outputProcessedData(processedData);
   try
   {
+    List< ullList > processedData = processData(sequences);
     List< unsigned long long int > sums = calculateSums(processedData);
+    outputSequences(sequences);
+    if (isEmpty(sequences))
+    {
+      std::cout << "0" << "\n";
+      return 0;
+    }
+    outputProcessedData(processedData);
     outputSums(sums);
   }
   catch (const std::overflow_error & e)
