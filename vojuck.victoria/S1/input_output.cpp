@@ -7,21 +7,27 @@
 
 void vojuck::inputLine(std::istream & in, vojuck::paired_list & vertical)
 {
-    std::string line;
-  if (!std::getline(in, line))
+  //std::string line;
+  //if (!std::getline(in, line))
+  //{
+    //return;
+  //}
+  //std::istringstream iss(line);
+  //iss >> vertical.first;
+  //std::string stringNumber;
+  in >> vertical.first;
+  size_t number;
+  if (in.peek() == '\n')
   {
     return;
   }
-  std::istringstream iss(line);
-  iss >> vertical.first;
-  size_t number;
-  while(iss >> number)
+  while(in >> number)
   {
-    if (number > std::numeric_limits< size_t >::max())
-    {
-      throw std::overflow_error("The value is too big\n");
-    }
     vertical.second.push_back(number);
+    if (in.peek() == '\n')
+    {
+      break;
+    }
   }
 }
 
