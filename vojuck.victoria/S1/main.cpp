@@ -9,9 +9,9 @@ int main()
   {
     vojuck::inputLists(std::cin, inputSequences);
   }
-  catch (std::out_of_range &)
+  catch (std::overflow_error & e)
   {
-    std::cout << "Helpanite sendu\n";
+    std::cerr << e.what() << "\n";
     return 1;
   }
 
