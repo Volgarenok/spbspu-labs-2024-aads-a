@@ -52,7 +52,15 @@ namespace sakovskaia
   List< T >::List(const List & other):
    head_(nullptr)
   {
-    copy_from(other);
+    try
+    {
+      copy_from(other);
+    }
+    catch(...)
+    {
+      clear();
+      throw;
+    }
   }
 
   template< typename T >
