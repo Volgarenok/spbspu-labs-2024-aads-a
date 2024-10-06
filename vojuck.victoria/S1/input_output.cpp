@@ -33,6 +33,10 @@ void vojuck::inputLine(std::istream & in, vojuck::paired_list & vertical)
     {
       break;
     }
+    if (in.fail() && !in.eof())
+      {
+        throw std::overflow_error("Invalid input or number too big!");
+      }
   }
 }
 

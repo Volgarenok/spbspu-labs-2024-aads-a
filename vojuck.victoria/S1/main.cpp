@@ -1,7 +1,7 @@
 #include <iostream>
 #include "list.hpp"
 #include "input_output.hpp"
-
+//слушай сюда вонючий c++ я уже оверфлоу пожалуйста давай дружить ваще давай там тесты туда сюда а)))
 int main()
 {
   vojuck::List< vojuck::paired_list > inputSequences;
@@ -9,10 +9,10 @@ int main()
   {
     vojuck::inputLists(std::cin, inputSequences);
   }
-  catch (std::overflow_error & e)
+  catch (...)
   {
-    std::cerr << e.what() << "\n";
-    return 1;
+    std::cerr << "SUCK MY DICK" << "\n";
+    return 1;//ПОЧЕМУ ТЫ НЕ ВЫВОДИШЬСЯ Я УМОЛЯЮ ПОСЛЕДИЙ ТЕСТ ДАВАЙ ТЫ ВОЗЬМЕШЬ И РЕТЕРНЕШЬ СЕБЯ В КАНАВУ ААА
   }
 
   if (inputSequences.empty())
