@@ -65,7 +65,7 @@ namespace sakovskaia
   template< typename T >
   List< T > & List< T >::operator=(const List & other)
   {
-    if (this != & other)
+    if (this != std::addressof(other))
     {
       clear();
       copy_from(other);
@@ -76,7 +76,7 @@ namespace sakovskaia
   template< typename T >
   List< T > & List< T >::operator=(List && other) noexcept
   {
-    if (this != & other)
+    if (this != std::addressof(other))
     {
       clear();
       move_from(std::move(other));
