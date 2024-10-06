@@ -17,20 +17,20 @@ namespace sakovskaia
     List(List && other) noexcept;
     List & operator=(const List & other);
     List & operator=(List && other) noexcept;
-    iterator begin();
-    const_iterator begin() const;
-    const_iterator cbegin() const;
-    iterator end();
-    const_iterator end() const;
-    const_iterator cend() const;
-    bool empty() const;
+    iterator begin() noexcept;
+    const_iterator begin() const noexcept;
+    const_iterator cbegin() const noexcept;
+    iterator end() noexcept;
+    const_iterator end() const noexcept;
+    const_iterator cend() const noexcept;
+    bool empty() const noexcept;
     void push_front(const T & value);
     void push_back(const T & value);
     void pop_front();
     void clear();
-    void swap(List< T > & other);
-    T & front();
-    const T & front() const;
+    void swap(List< T > & other) noexcept;
+    T & front() noexcept;
+    const T & front() const noexcept;
   private:
     node_t< T > * head_;
     void copy_from(const List & other);
@@ -85,43 +85,43 @@ namespace sakovskaia
   }
 
   template <typename T>
-  typename List< T >::iterator List< T >::begin()
+  typename List< T >::iterator List< T >::begin() noexcept
   {
     return iterator(head_);
   }
 
   template <typename T>
-  typename List< T >::iterator List< T >::end()
+  typename List< T >::iterator List< T >::end() noexcept
   {
     return iterator(nullptr);
   }
 
   template <typename T>
-  typename List< T >::const_iterator List< T >::begin() const
+  typename List< T >::const_iterator List< T >::begin() const noexcept
   {
     return const_iterator(head_);
   }
 
   template <typename T>
-  typename List< T >::const_iterator List< T >::end() const
+  typename List< T >::const_iterator List< T >::end() const noexcept
   {
     return const_iterator(nullptr);
   }
 
   template <typename T>
-  typename List<T>::const_iterator List<T>::cbegin() const
+  typename List<T>::const_iterator List<T>::cbegin() const noexcept
   {
     return const_iterator(head_);
   }
 
   template <typename T>
-  typename List<T>::const_iterator List<T>::cend() const
+  typename List<T>::const_iterator List<T>::cend() const noexcept
   {
     return const_iterator(nullptr);
   }
 
   template <typename T>
-  bool List< T >::empty() const
+  bool List< T >::empty() const noexcept
   {
     return head_ == nullptr;
   }
@@ -198,7 +198,7 @@ namespace sakovskaia
   }
 
   template <typename T>
-  T & List< T >::front()
+  T & List< T >::front() noexcept
   {
     if (empty())
     {
@@ -208,7 +208,7 @@ namespace sakovskaia
   }
 
   template <typename T>
-  const T & List< T >::front() const
+  const T & List< T >::front() const noexcept
   {
     if (empty())
     {
