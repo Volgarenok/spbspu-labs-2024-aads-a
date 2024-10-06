@@ -2,6 +2,7 @@
 #include <cstring>
 #include <fstream>
 #include <functional>
+#include <limits>
 
 #include "parseLine.hpp"
 #include "commandCollection.hpp"
