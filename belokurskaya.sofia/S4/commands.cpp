@@ -35,6 +35,12 @@ void belokurskaya::cmds::subcmds::complementDicts(DictCol dictionaries, Str new_
   Dictionary* source_dict = dictionaries.find(first_name);
   Dictionary* subtract_dict = dictionaries.find(second_name);
 
+  if (source_dict->empty() || subtract_dict->empty())
+  {
+    std::cout << "<INVALID COMMAND>\n";
+    return;
+  }
+
   Dictionary temp_dict;
   for (auto it = source_dict->begin(); it != source_dict->end(); ++it)
   {
@@ -61,6 +67,12 @@ void belokurskaya::cmds::subcmds::intersectDicts(DictCol dictionaries, Str new_n
   Dictionary* first_dict = dictionaries.find(first_name);
   Dictionary* second_dict = dictionaries.find(second_name);
 
+  if (first_dict->empty() || second_dict->empty())
+  {
+    std::cout << "<INVALID COMMAND>\n";
+    return;
+  }
+
   Dictionary temp_dict;
   for (auto it = first_dict->begin(); it != first_dict->end(); ++it)
   {
@@ -78,6 +90,12 @@ void belokurskaya::cmds::subcmds::unionDicts(DictCol dictionaries, Str new_name,
 
   Dictionary* first_dict = dictionaries.find(first_name);
   Dictionary* second_dict = dictionaries.find(second_name);
+
+  if (first_dict->empty() || second_dict->empty())
+  {
+    std::cout << "<INVALID COMMAND>\n";
+    return;
+  }
 
   Dictionary temp_dict = *first_dict;
   for (auto it = second_dict->begin(); it != second_dict->end(); ++it)
