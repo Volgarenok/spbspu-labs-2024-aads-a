@@ -41,7 +41,8 @@ namespace baranov
     size_t size() const noexcept;
     bool empty() const noexcept;
     void clear() noexcept;
-    void clear(node_t* node) noexcept;
+    void erase(iterator_t pos);
+    void erase(const_iterator_t pos);
     void swap(this_t & rhs);
 
     template < typename F >
@@ -60,6 +61,8 @@ namespace baranov
     F traverse_breadth(F f) const;
 
   private:
+    void clear(node_t * node) noexcept;
+    void erase(node_t * todelete);
     TreeNode< Key, T > * root_;
     size_t size_;
   };
@@ -361,6 +364,68 @@ namespace baranov
       delete node;
       --size_;
     }
+  }
+
+  template< typename Key, typename T, typename Compare >
+  void Tree< Key, T, Compare >::erase(iterator_t pos)
+  {
+    node_t * todelete = pos.node_;
+    erase(todelete);
+  }
+
+  template< typename Key, typename T, typename Compare >
+  void Tree< Key, T, Compare >::erase(const_iterator_t pos)
+  {
+    node_t * todelete = pos.node_;
+    erase(todelete);
+  }
+
+  template< typename Key, typename T, typename Compare >
+  void Tree< Key, T, Compare >::erase(node_t * todelete)
+  {
+    if (size_ <= 1)
+    {
+      clear();
+      return;
+    }
+    if (!todelete->hasLeft() && !todelete->hasRight() && !todelete->isRoot())
+    {
+      (todelete->isRight() ? todelete->parent_->right_ : todelete->parent_->left_) = nullptr;
+    }
+    else if (todelete->hasLeft() && todelete->hasRight())
+    {
+      if (todelete->isRoot())
+      {
+        root_ = todelete->left_;
+      }
+      else
+      {
+        (todelete->isRight() ? todelete->parent_->right_ : todelete->parent_->left_) = todelete->left_;
+      }
+      todelete->left_->parent_ = todelete->parent_;
+      node_t * node = todelete->left_;
+      while (node->hasRight())
+      {
+        node = node->right_;
+      }
+      node->right_ = todelete->right_;
+      node->right_->parent_ = node;
+    }
+    else
+    {
+      if (todelete->isRoot())
+      {
+        root_ = todelete->hasRight() ? todelete->right_ : todelete->left_;
+      }
+      else
+      {
+        node_t * tmp = todelete->hasRight() ? todelete->right_ : todelete->left_;
+        (todelete->isRight() ? todelete->parent_->right_ : todelete->parent_->left_) = tmp;
+      }
+      (todelete->hasRight() ? todelete->right_->parent_ : todelete->left_->parent_) = todelete->parent_;
+    }
+    delete todelete;
+    --size_;
   }
 
   template< typename Key, typename T, typename Compare >
