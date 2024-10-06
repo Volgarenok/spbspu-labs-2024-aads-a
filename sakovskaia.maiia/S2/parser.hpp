@@ -7,7 +7,7 @@
 #include "stack.hpp"
 #include "tokens.hpp"
 
-namespase sakovskaia
+namespace sakovskaia
 {
   Queue< std::string > infix_to_postfix(const std::string & expression);
   int evaluate_postfix(const Queue< std::string > & postfix);
