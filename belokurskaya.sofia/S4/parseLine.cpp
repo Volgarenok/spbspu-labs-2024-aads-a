@@ -1,5 +1,7 @@
 #include "parseLine.hpp"
 
+#include <cstring>
+
 void belokurskaya::parseLine(char* line, std::string& dict_name, Dictionary& dict)
 {
   char* next_token = nullptr;
