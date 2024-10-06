@@ -2,43 +2,19 @@
 
 void belokurskaya::parseLine(char* line, std::string& dict_name, Dictionary& dict)
 {
-  char* p = line;
-  while (*p == ' ')
+  char* next_token = nullptr;
+  char* token = strtok_r(line, " ", &next_token);
+  if (token)
   {
-    p++;
-  }
-
-  char* q = p;
-  while (*q != ' ' && *q != '\0')
-  {
-    q++;
-  }
-  dict_name.assign(p, q - p);
-
-  while (*q == ' ')
-  {
-    q++;
-  }
-  while (*q != '\0')
-  {
-    p = q;
-    while (*p != ' ' && *p != '\0')
+    dict_name = token;
+    while ((token = strtok_r(nullptr, " ", &next_token)))
     {
-      p++;
+      int key = std::atoi(token);
+      if ((token = strtok_r(nullptr, " ", &next_token)))
+      {
+        std::string value = token;
+        dict.push(key, value);
+      }
     }
-    int key = std::atoi(q);
-    q = p;
-    while (*q == ' ')
-    {
-      q++;
-    }
-    p = q;
-    while (*p != ' ' && *p != '\0')
-    {
-      p++;
-    }
-    std::string value(q, p - q);
-    dict.push(key, value);
-    q = p;
   }
 }
