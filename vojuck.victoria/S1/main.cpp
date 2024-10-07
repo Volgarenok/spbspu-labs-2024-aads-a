@@ -1,4 +1,6 @@
 #include <iostream>
+#include <limits>
+#include <cstdint>
 #include "list.hpp"
 #include "input_output.hpp"
 
@@ -9,9 +11,9 @@ int main()
   {
     vojuck::inputLists(std::cin, inputSequences);
   }
-  catch (...)
+  catch (std::overflow_error & e)
   {
-    std::cerr << "logic error" << "\n";
+    std::cerr << e.what() << '\n';
     return 1;
   }
 
