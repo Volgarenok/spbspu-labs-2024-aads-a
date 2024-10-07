@@ -1,6 +1,6 @@
 #ifndef QUEUE_HPP
 #define QUEUE_HPP
-#include <list.hpp>
+#include "list.hpp"
 
 namespace sakovskaia
 {
@@ -51,12 +51,20 @@ namespace sakovskaia
   template< typename T >
   T & Queue< T >::front() noexcept
   {
+    if (empty())
+    {
+      throw std::runtime_error("Queue is empty");
+    }
     return data.front();
   }
 
   template< typename T >
   const T & Queue< T >::front() const noexcept
   {
+    if (empty())
+    {
+      throw std::runtime_error("Queue is empty");
+    }
     return data.front();
   }
 

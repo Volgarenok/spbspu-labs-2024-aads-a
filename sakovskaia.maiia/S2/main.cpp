@@ -3,12 +3,11 @@
 #include <string>
 #include "parser.hpp"
 
-int main()
+int main(int argc, char * argv[])
 {
   using namespace sakovskaia;
   std::istream * input = & std::cin;
   std::ifstream file;
-  std::string filename;
   if (argc > 2)
   {
     std::cerr << "Usage: " << argv[0] << " [filename]" << std::endl;
@@ -16,19 +15,18 @@ int main()
   }
   if (argc == 2)
   {
-    filename = argv[1];
-    file.open(filename);
+    file.open(argv[1]);
     if (!file.is_open())
     {
-      std::cerr << "Could not open file: " << filename << std::endl;
+      std::cerr << "Could not open file: " << std::endl;
       return 1;
     }
     input = & file;
   }
   Queue< int > results;
+  std::string line;
   try
   {
-    std::string line;
     while (std::getline(* input, line))
     {
       if (line.empty())
@@ -37,7 +35,7 @@ int main()
       }
       Queue< std::string > postfix = infix_to_postfix(line);
       int result = evaluate_postfix(postfix);
-      results.push(result);
+      results.push(std::move(result));
     }
   }
   catch (const std::exception & e)

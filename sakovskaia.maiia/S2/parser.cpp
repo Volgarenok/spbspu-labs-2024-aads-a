@@ -2,25 +2,13 @@
 
 namespace sakovskaia
 {
-  int precedence(const std::string & op)
-  {
-    if (op == "+" || op == "-")
-    {
-      return 1;
-    }
-    if (op == "*" || op == "/" || op == "%")
-    {
-      return 2;
-    }
-    return 0;
-  }
-
-  Queue< std::string > infix_to_postfix(const std::string & expression)
+  Queue<std::string> infix_to_postfix(const std::string & expression)
   {
     std::istringstream iss(expression);
     std::string token;
-    Queue< std::string > output;
     Stack< std::string > operators;
+    Queue< std::string > output;
+
     while (iss >> token)
     {
       if (isOperand(token))
@@ -29,10 +17,9 @@ namespace sakovskaia
       }
       else if (isOperator(token))
       {
-        while (!operators.empty() && isOperator(operators.front()) &&
-        precedence(operators.front()) >= precedence(token))
+        while (!operators.empty() && isOperator(operators.top()) && token != "(")
         {
-          output.push(operators.pop());
+          output.push(std::move(operators.pop()));
         }
         operators.push(std::move(token));
       }
@@ -42,9 +29,9 @@ namespace sakovskaia
       }
       else if (token == ")")
       {
-        while (!operators.empty() && operators.front() != "(")
+        while (!operators.empty() && operators.top() != "(")
         {
-          output.push(operators.pop());
+          output.push(std::move(operators.pop()));
         }
         if (operators.empty())
         {
@@ -52,101 +39,70 @@ namespace sakovskaia
         }
         operators.pop();
       }
-      else
-      {
-        throw std::runtime_error("Invalid token: " + token);
-      }
     }
     while (!operators.empty())
     {
-      std::string op = operators.pop();
-      if (op == "(" || op == ")")
-      {
-        throw std::runtime_error("Mismatched parentheses");
-      }
-      output.push(std::move(op));
+      output.push(std::move(operators.pop()));
     }
     return output;
   }
 
-  int evaluate_postfix(const Queue< std::string > & postfix)
+  int evaluate_postfix(const Queue<std::string> & postfix)
   {
     Stack< int > operands;
-    Queue< std::string > postfix_copy = postfix;
-    while (!postfix_copy.empty())
+    Queue< std::string > copy = postfix;
+
+    while (!copy.empty())
     {
-      std::string token = postfix_copy.pop();
+      std::string token = copy.pop();
       if (isOperand(token))
       {
-        try
-        {
-          int value = std::stoi(token);
-          operands.push(value);
-        }
-        catch (const std::invalid_argument&)
-        {
-          throw std::runtime_error("Invalid operand: " + token);
-        }
+        operands.push(std::stoi(token));
       }
       else if (isOperator(token))
       {
         if (operands.empty())
         {
-          throw std::runtime_error("Insufficient operands for operator: " + token);
+          throw std::runtime_error("Invalid postfix expression");
         }
-        int rhs = operands.pop();
-        if (operands.empty())
-        {
-          throw std::runtime_error("Insufficient operands for operator: " + token);
-        }
-        int lhs = operands.pop();
+        int right = operands.pop();
+        int left = operands.pop();
+        int result;
         if (token == "+")
         {
-          operands.push(lhs + rhs);
+          result = left + right;
         }
         else if (token == "-")
         {
-          operands.push(lhs - rhs);
+          result = left - right;
         }
         else if (token == "*")
         {
-          operands.push(lhs * rhs);
+          result = left * right;
         }
         else if (token == "/")
         {
-          if (rhs == 0)
+          if (right == 0)
           {
             throw std::runtime_error("Division by zero");
           }
-          operands.push(lhs / rhs);
+          result = left / right;
         }
         else if (token == "%")
         {
-          if (rhs == 0)
+          if (right == 0)
           {
             throw std::runtime_error("Modulo by zero");
           }
-          operands.push(lhs % rhs);
+          result = left % right;
         }
-        else
-        {
-          throw std::runtime_error("Unknown operator: " + token);
-        }
-      }
-      else
-      {
-        throw std::runtime_error("Invalid token in postfix expression: " + token);
+        operands.push(std::move(result));
       }
     }
     if (operands.empty())
     {
-      throw std::runtime_error("No operands in expression");
+      throw std::runtime_error("Invalid postfix expression");
     }
-    int result = operands.pop();
-    if (!operands.empty())
-    {
-      throw std::runtime_error("Too many operands in expression");
-    }
-    return result;
+    return operands.pop();
   }
 }

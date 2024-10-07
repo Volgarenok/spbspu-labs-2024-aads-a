@@ -1,6 +1,6 @@
 #ifndef STACK_HPP
 #define STACK_HPP
-#include <list.hpp>
+#include "list.hpp"
 
 namespace sakovskaia
 {
@@ -10,9 +10,14 @@ namespace sakovskaia
   public:
     void push_back(const T & value);
     void push(T && value);
-    T pop();
+    T & back();
+    const T & back() const;
+    void pop_back();
     T & front() noexcept;
     const T & front() const noexcept;
+    T pop();
+    T & top();
+    const T & top() const;
     bool empty() const noexcept;
     Stack() = default;
     Stack(const Stack & other) = default;
@@ -36,15 +41,21 @@ namespace sakovskaia
   }
 
   template< typename T >
-  T Stack< T >::pop()
+  T & Stack< T >::back()
   {
-    if (data.empty())
-    {
-      throw std::runtime_error("Stack is empty");
-    }
-    T value = std::move(data.front());
-    data.pop_front();
-    return value;
+    return data.back();
+  }
+
+  template< typename T >
+  const T & Stack< T >::back() const
+  {
+    return data.back();
+  }
+
+  template< typename T >
+  void Stack< T >::pop_back()
+  {
+    data.pop_back();
   }
 
   template< typename T >
@@ -57,6 +68,32 @@ namespace sakovskaia
   const T & Stack< T >::front() const noexcept
   {
     return data.front();
+  }
+
+  template< typename T >
+  T Stack< T >::pop()
+  {
+    if (data.empty())
+    {
+      throw std::runtime_error("Stack is empty");
+    }
+    T value = std::move(data.back());
+    data.pop_back();
+    return value;
+  }
+
+  template< typename T >
+  T & Stack< T >::top()
+  {
+    if (empty()) throw std::runtime_error("Stack is empty");
+    return data.back();
+  }
+
+  template< typename T >
+  const T & Stack< T >::top() const
+  {
+    if (empty()) throw std::runtime_error("Stack is empty");
+    return data.back();
   }
 
   template< typename T >
