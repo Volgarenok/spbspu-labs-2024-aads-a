@@ -7,14 +7,6 @@
 
 void vojuck::inputLine(std::istream & in, vojuck::paired_list & vertical)
 {
-  //std::string line;
-  //if (!std::getline(in, line))
-  //{
-    //return;
-  //}
-  //std::istringstream iss(line);
-  //iss >> vertical.first;
-  //std::string stringNumber;
   in >> vertical.first;
   std::string number;
   if (in.peek() == '\n')
