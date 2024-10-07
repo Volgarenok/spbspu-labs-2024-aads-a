@@ -3,7 +3,9 @@
 
 namespace vojuck
 {
+int precedence(const std::string& op);
 bool isOperator(const std::string& token);
+int evaluatePostfix(const vojuck::Queue<std::string>& postfixQueue);
 }
 
 #endif
