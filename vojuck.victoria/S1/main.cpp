@@ -86,10 +86,10 @@ int main()
     }
     std::cout << '\n';
   }
-  catch (...)
+   catch (const std::overflow_error& e)
   {
-    std::cerr << "Error: cannot compute sums" << '\n';
-    return 1;
+   std::cerr << e.what() << '\n';
+   return 1;
   }
   return 0;
 }
