@@ -1,7 +1,7 @@
 #include <iostream>
 #include "list.hpp"
 #include "input_output.hpp"
-//слушай сюда вонючий c++ я уже оверфлоу пожалуйста давай дружить ваще давай там тесты туда сюда а)))
+
 int main()
 {
   vojuck::List< vojuck::paired_list > inputSequences;
@@ -11,8 +11,8 @@ int main()
   }
   catch (...)
   {
-    std::cerr << "SUCK MY DICK" << "\n";
-    return 1;//ПОЧЕМУ ТЫ НЕ ВЫВОДИШЬСЯ Я УМОЛЯЮ ПОСЛЕДИЙ ТЕСТ ДАВАЙ ТЫ ВОЗЬМЕШЬ И РЕТЕРНЕШЬ СЕБЯ В КАНАВУ ААА
+    std::cerr << "logic error" << "\n";
+    return 1;
   }
 
   if (inputSequences.empty())
