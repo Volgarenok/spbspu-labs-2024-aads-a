@@ -25,6 +25,46 @@ namespace vojuck
       data_.push_back(std::move(value));
     }
 
+    T drop()
+    {
+      if (isEmpty())
+      {
+        throw std::underflow_error("Очередь пуст. Невозможно выполнить drop.");
+      }
+      T value = data_.front();
+      data_.pop_front();
+      return value;
+    }
+
+    const T& front() const
+    {
+      if (isEmpty())
+      {
+        throw std::underflow_error("Очередь пуст. Нет переднего элемента.");
+      }
+      return data_.front();
+    }
+
+    bool isEmpty() const noexcept
+    {
+      return data_.empty();
+    }
+
+    size_t size() const noexcept
+    {
+      return data_.size();
+    }
+
+    bool operator==(const Queue& other) const noexcept
+    {
+      return data_ == other.data_;
+    }
+
+    bool operator!=(const Queue& other) const noexcept
+    {
+      return !(*this == other);
+    }
+
   private:
     List<T>
   };
