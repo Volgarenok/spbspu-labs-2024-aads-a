@@ -1,7 +1,10 @@
 #ifndef QUEUE_HPP
 #define QUEUE_HPP
 
+#include <stdexcept>
+#include <utility>
 #include "list.hpp"
+
 namespace vojuck
 {
   template <typename T>

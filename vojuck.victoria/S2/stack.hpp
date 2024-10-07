@@ -1,6 +1,10 @@
 #ifndef STACK_HPP
 #define STACK_HPP
 
+#include "list.hpp"
+#include <stdexcept>
+#include <utility>
+
 namespace vojuck
 {
   class Stack
