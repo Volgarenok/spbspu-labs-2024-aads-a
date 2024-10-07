@@ -1,3 +1,4 @@
+
 #ifndef LIST_HPP
 #define LIST_HPP
 #include <stdexcept>
@@ -5,7 +6,7 @@
 #include "const_iterator.hpp"
 namespace sakovskaia
 {
-  template < typename T >
+  template< typename T >
   class List
   {
   public:
@@ -27,10 +28,12 @@ namespace sakovskaia
     void push_front(const T & value);
     void push_back(const T & value);
     void pop_front();
+    void pop_back();
     void clear();
     void swap(List< T > & other) noexcept;
-    T & front() noexcept;
-    const T & front() const noexcept;
+    T & front();
+    T & back();
+    const T & front() const;
   private:
     node_t< T > * head_;
     void copy_from(const List & other);
@@ -173,6 +176,21 @@ namespace sakovskaia
   }
 
   template< typename T >
+  void List< T >::pop_back()
+  {
+    if (!head_)
+    {
+      return;
+    }
+    node_t< T > * temp = head_;
+    while (temp->next)
+    {
+      temp = temp->next;
+    }
+    delete temp;
+  }
+
+  template< typename T >
   void List< T >::clear()
   {
     while (head_)
@@ -206,9 +224,13 @@ namespace sakovskaia
   }
 
   template< typename T >
-  T & List< T >::front() noexcept
+  T & List< T >::front()
   {
-    if (empty())
+    if (!empty())
+    {
+      return front();
+    }
+    else
     {
       throw std::runtime_error("List is empty");
     }
@@ -216,9 +238,28 @@ namespace sakovskaia
   }
 
   template< typename T >
-  const T & List< T >::front() const noexcept
+  T & List< T >::back()
   {
     if (empty())
+    {
+      throw std::runtime_error("List is empty");
+    }
+    node_t< T > * temp = head_;
+    while (temp->next)
+    {
+      temp = temp->next;
+    }
+    return temp->data;
+  }
+
+  template< typename T >
+  const T & List< T >::front() const
+  {
+    if (!empty())
+    {
+      return front();
+    }
+    else
     {
       throw std::runtime_error("List is empty");
     }
