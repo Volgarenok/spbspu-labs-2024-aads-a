@@ -7,16 +7,7 @@
 int main()
 {
   vojuck::List< vojuck::paired_list > inputSequences;
-  try
-  {
-    vojuck::inputLists(std::cin, inputSequences);
-  }
-  catch (std::overflow_error & e)
-  {
-    std::cerr << e.what() << '\n';
-    return 1;
-  }
-
+  vojuck::inputLists(std::cin, inputSequences);
   if (inputSequences.empty())
   {
     std::cout << "0" << "\n";
@@ -68,6 +59,18 @@ int main()
       auto last = start->cend();
       while (first != last)
       {
+        try
+        {
+          if (std::numeric_limits< size_t >::max() - sum < *first)
+          {
+            throw std::overflow_error("The sum is too big!");
+          }
+        }
+        catch (std::overflow_error & e)
+        {
+          std::cerr << e.what() << "\n";
+          return 1;
+        }
         sum += *first;
         ++first;
       }
@@ -87,11 +90,11 @@ int main()
       ++sumIt;
     }
     std::cout << '\n';
-  }
-   catch (const std::overflow_error& e)
+    }
+  catch (const std::overflow_error& e)
   {
-   std::cerr << e.what() << '\n';
-   return 1;
+      std::cerr << e.what() << '\n';
+      return 1;
   }
   return 0;
 }

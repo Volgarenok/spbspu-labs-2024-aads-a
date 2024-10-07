@@ -16,27 +16,26 @@ void vojuck::inputLine(std::istream & in, vojuck::paired_list & vertical)
   //iss >> vertical.first;
   //std::string stringNumber;
   in >> vertical.first;
-  size_t maxSize = std::numeric_limits< size_t >::max() - 1;
-  size_t number;
+  std::string number;
   if (in.peek() == '\n')
   {
     return;
   }
   while(in >> number)
   {
-    if (number > maxSize)
+    try
     {
-      throw std::overflow_error("The value is too big!!!!!!");
+      vertical.second.push_back(std::stoull(number));
     }
-    vertical.second.push_back(number);
+    catch (std::out_of_range &)
+    {
+      in.clear();
+      throw std::overflow_error("the value is kinda big hz");
+    }
     if (in.peek() == '\n')
     {
       break;
     }
-    if (in.fail() && !in.eof())
-      {
-        throw std::overflow_error("Invalid input or number too big!");
-      }
   }
 }
 
@@ -45,12 +44,20 @@ void vojuck::inputLists(std::istream & in, vojuck::List< vojuck::paired_list > &
   while (!in.eof())
   {
     vojuck::paired_list line;
-    inputLine(in, line);
-    if (line.first.empty())
+    try
     {
-      break;
+      inputLine(in, line);
     }
-    result.push_back(line);
+    catch (std::overflow_error & e)
+    {
+      line.first = "";
+      line.second.clear();
+      std::cerr << e.what() << "\n";
+    }
+    if (!line.first.empty())
+    {
+      result.push_back(line);
+    }
   }
 }
 
