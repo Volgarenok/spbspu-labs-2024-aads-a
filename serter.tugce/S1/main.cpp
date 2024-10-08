@@ -12,6 +12,10 @@ void inputList(pairsOfList& pairsList, std::istream& input)
     input.clear();
     std::pair< std::string, serter::Doubly_linked_list< size_t > > pair{};
     input >> pair.first;
+    if (pair.first.empty())
+    {
+      return;
+    }
     size_t num = {};
     while (input >> num)
     {
@@ -23,16 +27,24 @@ void inputList(pairsOfList& pairsList, std::istream& input)
 
 void outputList(pairsOfList& pairsList, std::ostream& output)
 {
-  auto names = pairsList.begin();
-  auto namesAfter = pairsList.begin();
-  ++namesAfter;
-  while (namesAfter != pairsList.end())
+  if (pairsList.is_empty())
   {
-    output << names->first << ' ';
-    ++names;
-    ++namesAfter;
+    output << '0';
+    return;
   }
-  output << names->first << '\n';
+  auto names = pairsList.begin();
+  bool anotherName = false;
+  while (names != pairsList.end())
+  {
+    if (anotherName)
+    {
+      output << ' ';
+    }
+    output << names->first;
+    ++names;
+    anotherName = true;
+  }
+  output << '\n';
   size_t max = 0;
   for (auto p : pairsList)
   {
@@ -85,13 +97,15 @@ void outputList(pairsOfList& pairsList, std::ostream& output)
   }
   else
   {
+    bool anotherSum = false;
     for (auto sum = lsums.begin(); sum != lsums.end(); ++sum)
     {
-      std::cout << *sum;
-      if (*sum != lsums.get_back())
+      if (anotherSum)
       {
-        std::cout << " ";
+        output << ' ';
       }
+      output << *sum;
+      anotherSum = true;
     }
   }
 }
@@ -103,6 +117,7 @@ int main()
   {
     inputList(list, std::cin);
     outputList(list, std::cout);
+    std::cout << '\n';
   }
   catch (const std::exception& e)
   {
@@ -110,5 +125,4 @@ int main()
     return 1;
   }
 }
-
 
