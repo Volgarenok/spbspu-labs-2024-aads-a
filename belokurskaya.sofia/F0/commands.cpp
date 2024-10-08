@@ -1,0 +1,270 @@
+#include "commands.hpp"
+
+#include <functional>
+
+#include "readDictionary.hpp"
+
+void belokurskaya::cmd::createDict(BinarySearchTree< std::string, EngRusDict >& EngRusDicts, std::istream& in)
+{
+  std::string name;
+  in >> name;
+  if (EngRusDicts.contains(name))
+  {
+    throw std::runtime_error("Use a different name");
+  }
+  EngRusDicts.at(name) = EngRusDict();
+}
+
+void belokurskaya::cmd::removeDict(BinarySearchTree< std::string, EngRusDict >& EngRusDicts, std::istream& in)
+{
+  std::string name;
+  in >> name;
+  if (!EngRusDicts.contains(name))
+  {
+    throw std::runtime_error("There is no dictionary with that name");
+  }
+  EngRusDicts.erase(name);
+}
+
+void belokurskaya::cmd::add(BinarySearchTree< std::string, EngRusDict >& EngRusDicts, std::istream& in)
+{
+  std::string name;
+  in >> name;
+  std::string key, translation;
+  in >> key >> translation;
+  try
+  {
+    EngRusDict dict = EngRusDicts.at(name);
+    if (dict.containsTranslation(key, translation))
+    {
+      throw std::runtime_error("<INVALID COMMAND>");
+    }
+    else
+    {
+      dict.addTranslation(key, translation);
+    }
+  }
+  catch (const std::invalid_argument&)
+  {
+    EngRusDicts.at(name).addWord(key);
+    EngRusDicts.at(name).addTranslation(key, translation);
+  }
+}
+
+void belokurskaya::cmd::remove(BinarySearchTree< std::string, EngRusDict >& EngRusDicts, std::istream& in)
+{
+  std::string name;
+  in >> name;
+  std::string key, translation;
+  in >> key >> translation;
+  try
+  {
+    EngRusDict dict = EngRusDicts.at(name);
+
+    if (dict.containsWord(key) && dict.containsTranslation(key, translation))
+    {
+      dict.removeTranslation(key, translation);
+      dict.removeWord(key);
+    }
+    else
+    {
+      std::cerr << "<INVALID COMMAND>";
+    }
+  }
+  catch (const std::out_of_range&)
+  {
+    std::cerr << "<INVALID COMMAND>";
+  }
+}
+
+void belokurskaya::cmd::assign(BinarySearchTree< std::string, EngRusDict >& EngRusDicts, std::istream& in)
+{
+  std::string nameFirstDict, nameSecondDict;
+  in >> nameFirstDict >> nameSecondDict;
+  if (!EngRusDicts.contains(nameSecondDict))
+  {
+    throw std::runtime_error("<INVALID COMMAND>");
+  }
+  EngRusDicts.at(nameFirstDict).addWordFromEngRusDict(EngRusDicts.at(nameSecondDict));
+}
+
+void belokurskaya::cmd::removeWords(BinarySearchTree< std::string, EngRusDict >& EngRusDicts, std::istream& in)
+{
+  std::string nameFirstDict, nameSecondDict;
+  in >> nameFirstDict >> nameSecondDict;
+  if (!EngRusDicts.contains(nameSecondDict))
+  {
+    throw std::runtime_error("<INVALID COMMAND>");
+  }
+  EngRusDict firstDict = EngRusDicts.at(nameFirstDict);
+  EngRusDict secondDict = EngRusDicts.at(nameSecondDict);
+
+  bool foundDuplicates = false;
+
+  for (const auto& word : firstDict.getWords())
+  {
+    if (secondDict.containsWord(word))
+    {
+      firstDict.removeWord(word);
+      foundDuplicates = true;
+    }
+  }
+
+  if (!foundDuplicates)
+  {
+    throw std::runtime_error("<INVALID COMMAND>");
+  }
+}
+
+void belokurskaya::cmd::getIntersection(BinarySearchTree< std::string, EngRusDict >& EngRusDicts, std::istream& in)
+{
+  std::string name, nameFirstDict, nameSecondDict;
+  in >> name;
+  if (EngRusDicts.contains(name))
+  {
+    throw std::runtime_error("Use a different name");
+  }
+  in >> nameFirstDict >> nameSecondDict;
+  if (!EngRusDicts.contains(nameFirstDict) || !EngRusDicts.contains(nameSecondDict))
+  {
+    throw std::runtime_error("<INVALID COMMAND>");
+  }
+
+  EngRusDict firstDict = EngRusDicts.at(nameFirstDict);
+  EngRusDict secondDict = EngRusDicts.at(nameSecondDict);
+
+  bool hasIntersection = false;
+
+  for (const auto& word : firstDict.getWords())
+  {
+    if (secondDict.containsWord(word))
+    {
+      hasIntersection = true;
+      break;
+    }
+  }
+
+  if (!hasIntersection)
+  {
+    throw std::runtime_error("<INVALID COMMAND>");
+  }
+
+  EngRusDicts.at(name) = getIntersectionWithEngRusDict(EngRusDicts.at(nameFirstDict), EngRusDicts.at(nameSecondDict));
+}
+
+void belokurskaya::cmd::getDifference(BinarySearchTree< std::string, EngRusDict >& EngRusDicts, std::istream& in)
+{
+  std::string name, nameFirstDict, nameSecondDict;
+  in >> name;
+  if (EngRusDicts.contains(name))
+  {
+    throw std::runtime_error("Use a different name");
+  }
+  in >> nameFirstDict >> nameSecondDict;
+  if (!EngRusDicts.contains(nameFirstDict) || !EngRusDicts.contains(nameSecondDict))
+  {
+    throw std::runtime_error("<INVALID COMMAND>");
+  }
+  EngRusDict firstDict = EngRusDicts.at(nameFirstDict);
+  EngRusDict secondDict = EngRusDicts.at(nameSecondDict);
+
+  auto uniqueWords = getDifferenceWithEngRusDict(firstDict, secondDict);
+
+  if (uniqueWords.getCountWords() == 0)
+  {
+    throw std::runtime_error("<INVALID COMMAND>");
+  }
+
+  EngRusDicts.at(name) = uniqueWords;
+}
+
+void belokurskaya::cmd::clear(BinarySearchTree< std::string, EngRusDict >& EngRusDicts, std::istream& in)
+{
+  std::string name;
+  in >> name;
+  EngRusDicts.at(name).clear();
+}
+
+void belokurskaya::cmd::display(BinarySearchTree< std::string, EngRusDict >& EngRusDicts, std::istream& in, std::ostream& out)
+{
+  std::string dictName;
+  in >> dictName;
+
+  if (!EngRusDicts.contains(dictName))
+  {
+    throw std::runtime_error("<INVALID COMMAND>");
+  }
+  else
+  {
+    EngRusDicts.at(dictName).display(out);
+  }
+}
+
+void belokurskaya::cmd::getTranslation(BinarySearchTree< std::string, EngRusDict >& EngRusDicts, std::istream&, std::ostream& out)
+{
+  std::string key;
+  std::cin >> key;
+  MyVector< std::string > result;
+  for (const std::string& name : EngRusDicts.getAllKeys())
+  {
+    for (const std::string& translation : EngRusDicts.SEARCH(name).getTranslations(key))
+    {
+      if (translation != "" && !result.contains(translation))
+      {
+        result.push_back(translation);
+      }
+    }
+  }
+  if (result.size() == 0)
+  {
+    throw std::runtime_error("Error");
+  }
+  std::copy(result.begin(), result.end(), std::ostream_iterator< std::string >(out, "\n"));
+}
+
+void belokurskaya::cmd::countTranslations(BinarySearchTree< std::string, EngRusDict >& EngRusDicts, std::istream& in, std::ostream& out)
+{
+  std::string name, key;
+  in >> name >> key;
+  if (!EngRusDicts.contains(name) || !EngRusDicts.at(name).containsWord(key))
+  {
+    throw std::runtime_error("<INVALID COMMAND>");
+  }
+  else
+  {
+    MyVector< std::string > translations = EngRusDicts.at(name).getTranslations(key);
+    out << translations.size() << "\n";
+    std::copy(translations.begin(), translations.end(), std::ostream_iterator< std::string >(out, "\n"));
+  }
+}
+
+void belokurskaya::cmd::help(std::ostream& out)
+{
+  out << "add <dictionary> <key> <translation>\n";
+  out << "remove <dictionary> <key> <translation>\n";
+  out << "createDict <new dictionary>\n";
+  out << "removeDict <dictionary>\n";
+  out << "assign <dictionary1> <dictionary2>\n";
+  out << "removeWords <dictionary1> <dictionary2>\n";
+  out << "getTranslation <key>\n";
+  out << "countTranslations <dictionary> <key>\n";
+  out << "getIntersection <new dictionary> <dictionary1> <dictionary2>\n";
+  out << "getDifference <new dictionary> <dictionary1> <dictionary2>\n";
+  out << "clear <dictionary>\n";
+  out << "display <dictionary>\n";
+}
+
+void belokurskaya::cmd::checkFile(std::istream& in, std::ostream& out)
+{
+  std::string filename;
+  in >> filename;
+  std::ifstream file(filename);
+  if (file.good())
+  {
+    out << "File exists and is accessible\n";
+  }
+  else
+  {
+    out << "File does not exist or is not accessible\n";
+  }
+}
