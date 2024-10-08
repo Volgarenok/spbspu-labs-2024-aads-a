@@ -7,16 +7,13 @@
 
 namespace serter
 {
-
   template < typename T >
-
   class Iterator
   {
   public:
     Iterator();
     Iterator(Node< T >* node) : current_(node)
     {}
-
     Iterator< T >& operator++()
     {
       if(current_)
@@ -25,17 +22,14 @@ namespace serter
       }
       return *this;
     }
-
     Iterator<T>& operator--()
     {
       if(current_)
       {
         current_ = current_->prev_;
       }
-
       return *this;
     }
-
     Iterator< T >& operator+(size_t n)
     {
       Iterator< T > temp = *this;
@@ -45,7 +39,6 @@ namespace serter
       }
       return temp;
     }
-
     Iterator< T >& operator-(size_t n)
     {
       Iterator< T > temp = *this;
@@ -55,33 +48,25 @@ namespace serter
       }
       return temp;
     }
-
     bool operator==(const Iterator< T >& obj) const
     {
       return current_ == obj.current_;
     }
-
     bool operator!=(const Iterator< T >& obj) const
     {
       return current_ != obj.current_;
     }
-
     T& operator*() const
     {
       return current_->data_;
     }
-
     T* operator->() const
     {
       return &(current_->data_);
     }
-
   private:
     Node< T >* current_;
   };
-
 }
 
 #endif
-
-

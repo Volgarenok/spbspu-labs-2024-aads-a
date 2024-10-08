@@ -10,7 +10,6 @@
 namespace serter
 {
   template < typename T >
-
   class Doubly_linked_list
   {
   public:
@@ -19,7 +18,6 @@ namespace serter
       tail_(nullptr),
       size_(0)
     {}
-
     Doubly_linked_list(const Doubly_linked_list< T >& obj):
       Doubly_linked_list{}
     {
@@ -30,7 +28,6 @@ namespace serter
         ++objIt;
       }
     }
-
     Doubly_linked_list(Doubly_linked_list< T >&& obj):
       Doubly_linked_list{}
     {
@@ -41,45 +38,37 @@ namespace serter
       tail_ = nullptr;
       size_ = 0;
     }
-
     Doubly_linked_list& operator=(const Doubly_linked_list& obj)
     {
       Doubly_linked_list temp(obj);
       std::swap(temp, *this);
       return *this;
     }
-
     Doubly_linked_list& operator=(Doubly_linked_list&& obj)
     {
       Doubly_linked_list temp(obj);
       std::swap(temp, *this);
       return *this;
     }
-
     bool is_empty()
     {
       return size_ == 0;
     }
-
     T get_front()
     {
       return head_->data_;
     }
-
     T get_back()
     {
       return tail_->data_;
     }
-
     size_t get_size()
     {
       return size_;
     }
-
     void push(const T& value)
     {
       Node< T >* new_node = new Node< T >(value, nullptr);
-
       if (!head_)
       {
         head_ = new_node;
@@ -93,14 +82,12 @@ namespace serter
       }
       ++size_;
     }
-
     void pop_back()
     {
       if (!head_)
       {
         std::out_of_range("List is empty bruuhh");
       }
-
       if (head_ == tail_)
       {
         delete tail_;
@@ -115,7 +102,6 @@ namespace serter
       }
       --size_;
     }
-
     void pop_front()
     {
       if (head_ == tail_)
@@ -133,22 +119,18 @@ namespace serter
       }
       size_--;
     }
-
     void swap(size_t pos_1, size_t pos_2)
     {
       if (pos_1 < 0 || pos_1 >= size_ || pos_2 < 0 || pos_2 >= size_)
       {
         throw std::out_of_range("Index out of range :(");
       }
-
       T& data_1 = (*this)[pos_1];
       T& data_2 = (*this)[pos_2];
-
       T temp = data_1;
       data_1 = data_2;
       data_2 = temp;
     }
-
     void clear()
     {
       while (!is_empty())
@@ -158,22 +140,18 @@ namespace serter
       tail_ = nullptr;
       size_ = 0;
     }
-
     Iterator< T > begin() const
     {
       return Iterator< T >(head_);
     }
-
     Iterator< T > end() const
     {
       return Iterator< T >(nullptr);
     }
-
     ~Doubly_linked_list()
     {
       clear();
     };
-
   private:
     Node< T >* head_;
     Node< T >* tail_;
@@ -182,5 +160,3 @@ namespace serter
 }
 
 #endif
-
-
