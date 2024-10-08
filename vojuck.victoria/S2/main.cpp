@@ -18,7 +18,7 @@ int main(int argc, char* argv[])
   if (argc > 2)
   {
     std::cerr << "using: " << argv[0] << " [filename]" << '\n';
-    return EXIT_FAILURE;
+    return 1;
   }
 
   if (argc == 2)
@@ -27,7 +27,7 @@ int main(int argc, char* argv[])
     if (!file.is_open())
     {
       std::cerr << "cannot open file " << argv[1] << '\n';
-      return EXIT_FAILURE;
+      return 1;
     }
       inputStream = &file;
       fromFile = true;
@@ -86,7 +86,7 @@ int main(int argc, char* argv[])
       {
         file.close();
       }
-      return EXIT_FAILURE;
+      return 1;
     }
 
     if (fromFile)
@@ -94,5 +94,5 @@ int main(int argc, char* argv[])
       file.close();
     }
 
-    return EXIT_SUCCESS;
+    return 0;
 }
