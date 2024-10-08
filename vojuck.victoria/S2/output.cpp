@@ -3,6 +3,7 @@
 #include "queue.hpp"
 #include <string>
 #include <iostream>
+#include <cstdexept>
 
 bool vojuck::isOperator(const std::string& token)
 {
@@ -48,7 +49,7 @@ int vojuck::evaluatePostfix(const vojuck::Queue<std::string>& postfixQueue)
             else if (token == "/")
             {
                 if (right == 0) {
-                    throw std::runtime_error("Деление на ноль.");
+                    throw std::invalid_argument("zero devision");
                 }
                 result = left / right;
             }
@@ -56,13 +57,13 @@ int vojuck::evaluatePostfix(const vojuck::Queue<std::string>& postfixQueue)
             {
                 if (right == 0)
                 {
-                    throw std::runtime_error("Деление по модулю на ноль.");
+                    throw std::invalid_argument("Zero devision");
                 }
                 result = left % right;
             }
             else
             {
-                throw std::runtime_error("Неизвестный оператор: " + token);
+                throw std::invalid_argument("unknown argument: " + token);
             }
             evalStack.push(result);
         }
@@ -75,24 +76,24 @@ int vojuck::evaluatePostfix(const vojuck::Queue<std::string>& postfixQueue)
             }
             catch (const std::invalid_argument&)
             {
-                throw std::runtime_error("Неверный операнд: " + token);
+                throw std::invalid_argument("invalid token: " + token);
             }
             catch (const std::out_of_range&)
             {
-                throw std::runtime_error("Операнд вне диапазона: " + token);
+                throw std::invalid_argument("token out of range: " + token);
             }
         }
     }
 
     if (evalStack.size() != 1)
     {
-        throw std::runtime_error("Неверное арифметическое выражение.");
+        throw std::invalid_argument("invalid argument");
     }
 
     return evalStack.pop();
 }
 
-vojuck::Queue<std::string> vojuck:: infixToPostfix(const std::string& expression) 
+vojuck::Queue<std::string> vojuck:: infixToPostfix(const std::string& expression)
 {
     vojuck::Queue<std::string> outputQueue;
     vojuck::Stack<std::string> operatorStack;
@@ -119,7 +120,7 @@ vojuck::Queue<std::string> vojuck:: infixToPostfix(const std::string& expression
             }
             if (operatorStack.isEmpty())
             {
-                throw std::runtime_error("Несоответствие скобок.");
+                throw std::invalid_argument("invalid argument) ");
             }
             operatorStack.pop();
         }
@@ -134,15 +135,15 @@ vojuck::Queue<std::string> vojuck:: infixToPostfix(const std::string& expression
         }
         else
         {
-            throw std::runtime_error("Неверный токен: " + token);
+            throw std::invalid_argument("invalid token: " + token);
         }
     }
 
     while (!operatorStack.isEmpty())
     {
-        if (operatorStack.top() == "(" || operatorStack.top() == ")") 
+        if (operatorStack.top() == "(" || operatorStack.top() == ")")
         {
-            throw std::runtime_error("Несоответствие скобок.");
+            throw std::invalid_argument("invalid parenthesis.");
         }
         outputQueue.push(operatorStack.pop());
     }
