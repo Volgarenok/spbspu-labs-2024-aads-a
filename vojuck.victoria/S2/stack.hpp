@@ -7,6 +7,7 @@
 
 namespace vojuck
 {
+  template <typename T>
   class Stack
   {
   public:
@@ -15,7 +16,7 @@ namespace vojuck
     Stack(Stack&& other) noexcept = default;
     Stack& operator=(const Stack& other) = default;
     Stack& operator=(Stack&& other) noexcept = default;
-    ~Stack() = default;struct Stack
+    ~Stack() = default;
 
     void push(const T& value)
     {
@@ -31,7 +32,7 @@ namespace vojuck
     {
       if (isEmpty())
       {
-        throw std::underflow_error("Стек пуст. Невозможно выполнить pop.");
+        throw std::underflow_error("empty stack");
       }
       T value = data_.front();
       data_.pop_front();
@@ -42,7 +43,7 @@ namespace vojuck
     {
       if (isEmpty())
       {
-        throw std::underflow_error("Стек пуст. Нет верхнего элемента.");
+        throw std::underflow_error("empty stack");
       }
       return data_.front();
     }
@@ -70,3 +71,4 @@ namespace vojuck
     List<T> data_;
   };
 }
+#endif

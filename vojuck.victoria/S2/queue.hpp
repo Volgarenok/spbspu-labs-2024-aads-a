@@ -20,7 +20,7 @@ namespace vojuck
 
     void push(const T& value)
     {
-      data_.push_back;
+      data_.push_back(value);
     }
 
     void push(T&& value)
@@ -32,7 +32,7 @@ namespace vojuck
     {
       if (isEmpty())
       {
-        throw std::underflow_error("Очередь пуст. Невозможно выполнить drop.");
+        throw std::underflow_error("empty queue.");
       }
       T value = data_.front();
       data_.pop_front();
@@ -43,7 +43,7 @@ namespace vojuck
     {
       if (isEmpty())
       {
-        throw std::underflow_error("Очередь пуст. Нет переднего элемента.");
+        throw std::underflow_error("empty queue.");
       }
       return data_.front();
     }
@@ -69,7 +69,7 @@ namespace vojuck
     }
 
   private:
-    List<T>
+    List<T> data_;
   };
 }
 

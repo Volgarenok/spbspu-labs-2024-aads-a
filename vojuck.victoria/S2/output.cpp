@@ -1,9 +1,12 @@
 #include "output.hpp"
 #include "stack.hpp"
 #include "queue.hpp"
-#include <string>
 #include <iostream>
-#include <cstdexept>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <cctype>
+#include <cstdlib>
 
 bool vojuck::isOperator(const std::string& token)
 {
@@ -29,7 +32,7 @@ int vojuck::evaluatePostfix(const vojuck::Queue<std::string>& postfixQueue)
         {
             if (evalStack.size() < 2)
             {
-                throw std::runtime_error("Недостаточно операндов для оператора " + token);
+                throw std::runtime_error("not enough token " + token);
             }
             int right = evalStack.pop();
             int left = evalStack.pop();
@@ -93,7 +96,7 @@ int vojuck::evaluatePostfix(const vojuck::Queue<std::string>& postfixQueue)
     return evalStack.pop();
 }
 
-vojuck::Queue<std::string> vojuck:: infixToPostfix(const std::string& expression)
+vojuck::Queue<std::string> vojuck::infixToPostfix(const std::string& expression)
 {
     vojuck::Queue<std::string> outputQueue;
     vojuck::Stack<std::string> operatorStack;

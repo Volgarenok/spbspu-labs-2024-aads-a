@@ -182,8 +182,8 @@ namespace vojuck
     }
 
   private:
-    size_t size_;
     details::Node< T >* head_;
+    size_t size_;
   };
 }
 
