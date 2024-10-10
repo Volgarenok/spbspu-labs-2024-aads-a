@@ -54,6 +54,7 @@ void outputList(pairsOfList& pairsList, std::ostream& output)
   serter::Doubly_linked_list< size_t > lsums;
   bool anotherList = true;
   size_t maxvalue = std::numeric_limits< size_t >::max();
+  bool hasOverflow = false;
   while (anotherList)
   {
     size_t lsum = 0;
@@ -67,16 +68,20 @@ void outputList(pairsOfList& pairsList, std::ostream& output)
           output << " ";
         }
         output << pair->second.get_front();
-        if (maxvalue - lsum > pair->second.get_front())
+        if (!hasOverflow && maxvalue - lsum > pair->second.get_front())
         {
           lsum += pair->second.get_front();
         }
         else
         {
-          throw std::overflow_error("overflow");
+          hasOverflow = true;
         }
         anotherList = true;
       }
+    }
+    if (hasOverflow)
+    {
+      throw std::overflow_error("overflow");
     }
     if (anotherList)
     {
