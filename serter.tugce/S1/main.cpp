@@ -93,7 +93,7 @@ void outputList(pairsOfList& pairsList, std::ostream& output)
   }
   if (lsums.is_empty())
   {
-    output << "0\n";
+    output << "0";
   }
   else
   {
@@ -121,8 +121,7 @@ int main()
   }
   catch (const std::exception& e)
   {
-    std::cerr << e.what();
+    std::cerr << e.what() << '\n';
     return 1;
   }
 }
-
