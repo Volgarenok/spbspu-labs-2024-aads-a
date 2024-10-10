@@ -79,14 +79,15 @@ void outputList(pairsOfList& pairsList, std::ostream& output)
         anotherList = true;
       }
     }
-    output << "\n";
     if (hasOverflow)
     {
+      output << "\n";
       throw std::overflow_error("overflow");
     }
     if (anotherList)
     {
       lsums.push(lsum);
+      output << "\n";
     }
     for (auto pair = pairsList.begin(); pair != pairsList.end(); ++pair)
     {
