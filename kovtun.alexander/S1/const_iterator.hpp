@@ -9,12 +9,17 @@
 namespace kovtun
 {
   template< typename T >
+  class List;
+
+  template< typename T >
   class ConstIterator
   {
   public:
-    using this_t = ConstIterator<T>;
+    using this_t = ConstIterator< T >;
 
-    ConstIterator();
+    friend class List< T >;
+
+    ConstIterator() = default;
     ~ConstIterator() = default;
     ConstIterator(const this_t &) = default;
     this_t & operator=(const this_t &) = default;
@@ -33,11 +38,13 @@ namespace kovtun
 
   private:
     Node<T> *node_;
+
+    explicit ConstIterator(Node< T > * node);
   };
 
   template< typename T >
-  ConstIterator< T >::ConstIterator() :
-      node_(nullptr)
+  ConstIterator< T >::ConstIterator(Node< T > * node) :
+    node_(node)
   {}
 
   template< typename T >

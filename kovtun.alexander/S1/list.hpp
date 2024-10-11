@@ -27,16 +27,28 @@ namespace kovtun
   private:
     Node< T > * head_;
     Node< T > * tail_;
-    
+
     size_t size_;
   };
 
   template< typename T >
   List< T >::List() :
-      head_(nullptr),
-      tail_(nullptr),
+      head_(new Node< T >(T())),
+      tail_(head_),
       size_(0)
   {}
+
+  template< typename T >
+  ConstIterator< T > List< T >::cbegin() const
+  {
+    return ConstIterator< T >(head_);
+  }
+
+  template< typename T >
+  ConstIterator< T > List< T >::cend() const
+  {
+    return ConstIterator< T >(tail_);
+  }
 }
 
 #endif
