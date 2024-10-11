@@ -16,11 +16,11 @@ namespace stepanov
       Node(const T& value) : data(value), next(nullptr){}
     };
 
-  Node* head;
-  Node* tail;
-  size_t size;
+    Node* head;
+    Node* tail;
+    size_t size;
 
-  void clear();
+    void clear();
 
   public:
     List();
