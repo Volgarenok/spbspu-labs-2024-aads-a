@@ -71,6 +71,16 @@ public:
     return !(rhs == *this);
   }
 
+  T & operator*() const
+  {
+    return node_->val;
+  }
+
+  T * operator->() const
+  {
+    return std::addressof(node_->val);
+  }
+
 private:
   Node< T > * node_;
 };
