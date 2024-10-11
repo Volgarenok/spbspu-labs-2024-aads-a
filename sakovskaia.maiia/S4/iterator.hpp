@@ -65,6 +65,11 @@ namespace sakovskaia
         return result;
       }
 
+    private:
+      detail::Node< Key, T > * node_;
+      explicit Iterator(detail::Node< Key, T > * node):
+        node_(node)
+      {}
   };
 }
 
