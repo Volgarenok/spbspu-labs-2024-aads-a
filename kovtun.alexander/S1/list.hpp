@@ -94,13 +94,13 @@ namespace kovtun
       return;
     }
 
-    Node< T > temp = head_->next;
+    Node< T > * temp = head_->next;
     if (temp == nullptr)
     {
       tail_ = nullptr;
     }
 
-    temp.prev = nullptr;
+    temp->prev = nullptr;
     delete head_;
     head_ = temp;
 
@@ -115,13 +115,13 @@ namespace kovtun
       return;
     }
 
-    Node< T > temp = tail_->prev;
+    Node< T > * temp = tail_->prev;
     if (temp == nullptr)
     {
       head_ = nullptr;
     }
 
-    temp.next = nullptr;
+    temp->next = nullptr;
     delete tail_;
     tail_ = temp;
 
@@ -132,6 +132,15 @@ namespace kovtun
   bool List< T >::empty()
   {
     return size_ == 0;
+  }
+
+  template< typename T >
+  void List< T >::clear()
+  {
+    while (!empty())
+    {
+      pop_back();
+    }
   }
 }
 
