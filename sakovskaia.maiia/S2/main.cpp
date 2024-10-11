@@ -46,7 +46,7 @@ int main(int argc, char * argv[])
   Stack< int > outputStack;
   while (!results.empty())
   {
-    outputStack.push(results.pop());
+    std::cout << results.pop() << " ";
   }
   while (!outputStack.empty())
   {
