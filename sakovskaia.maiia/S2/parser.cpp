@@ -15,7 +15,6 @@ namespace sakovskaia
     return 0;
   }
 
-
   Queue< std::string > infix_to_postfix(const std::string & expression)
   {
     std::istringstream iss(expression);
@@ -62,7 +61,7 @@ namespace sakovskaia
     return output;
   }
 
-  int evaluate_postfix(const Queue<std::string> & postfix)
+  int evaluate_postfix(const Queue< std::string > & postfix)
   {
     Stack< int > operands;
     Queue< std::string > copy = postfix;
