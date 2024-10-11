@@ -36,10 +36,14 @@ template< typename T >
 class ConstIterator
 {
 public:
+  using this_t = ConstIterator< T >;
+
   ConstIterator() :
     node_(nullptr)
   {};
   ~ConstIterator() = default;
+  ConstIterator(const this_t &) = default;
+  this_t & operator=(const this_t &) = default;
 
 private:
   Node< T > * node_;
