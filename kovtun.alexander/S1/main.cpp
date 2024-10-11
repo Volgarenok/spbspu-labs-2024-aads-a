@@ -45,6 +45,12 @@ public:
   ConstIterator(const this_t &) = default;
   this_t & operator=(const this_t &) = default;
 
+  this_t & operator++()
+  {
+    node_ = node_->next;
+    return *this;
+  };
+
 private:
   Node< T > * node_;
 };
