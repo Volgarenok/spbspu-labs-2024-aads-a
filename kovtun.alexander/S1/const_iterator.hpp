@@ -8,74 +8,93 @@
 
 namespace kovtun
 {
-  template<typename T>
+  template< typename T >
   class ConstIterator
   {
   public:
     using this_t = ConstIterator<T>;
 
-    ConstIterator() :
-        node_(nullptr)
-    {};
-
+    ConstIterator();
     ~ConstIterator() = default;
-
     ConstIterator(const this_t &) = default;
+    this_t & operator=(const this_t &) = default;
 
-    this_t &operator=(const this_t &) = default;
+    this_t & operator++();
+    this_t & operator++(int);
 
-    this_t &operator++()
-    {
-      assert(node_ != nullptr);
-      node_ = node_->next;
-      return *this;
-    };
+    bool operator==(const this_t &rhs) const;
+    bool operator!=(const this_t &rhs) const;
 
-    this_t &operator++(int)
-    {
-      assert(node_ != nullptr);
-      this_t result(*this);
-      ++(*this);
-      return result;
-    }
+    T & operator*() const;
+    T * operator->() const;
 
-    bool operator==(const this_t &rhs) const
-    {
-      return node_ == rhs.node_;
-    }
-
-    bool operator!=(const this_t &rhs) const
-    {
-      return !(rhs == *this);
-    }
-
-    T &operator*() const
-    {
-      return node_->val;
-    }
-
-    T *operator->() const
-    {
-      return std::addressof(node_->val);
-    }
-
-    this_t &operator--()
-    {
-      node_ = node_->prev;
-      return node_;
-    }
-
-    this_t &operator--(int)
-    {
-      this_t result(*this);
-      --(*this);
-      return result;
-    }
+    this_t & operator--();
+    this_t & operator--(int);
 
   private:
     Node<T> *node_;
   };
 
+  template< typename T >
+  ConstIterator< T >::ConstIterator() :
+      node_(nullptr)
+  {}
+
+  template< typename T >
+  ConstIterator< T > & ConstIterator< T >::operator++()
+  {
+    assert(node_ != nullptr);
+    node_ = node_->next;
+    return *this;
+  }
+
+  template< typename T >
+  ConstIterator< T > & ConstIterator< T >::operator++(int)
+  {
+    assert(node_ != nullptr);
+    this_t result(*this);
+    ++(*this);
+    return result;
+  }
+
+  template< typename T >
+  bool ConstIterator< T >::operator==(const this_t &rhs) const
+  {
+    return node_ == rhs.node_;
+  }
+
+  template< typename T >
+  bool ConstIterator< T >::operator!=(const this_t &rhs) const
+  {
+    return !(rhs == *this);
+  }
+
+  template< typename T >
+  T & ConstIterator< T >::operator*() const
+  {
+    return node_->val;
+  }
+
+  template< typename T>
+  T * ConstIterator< T >::operator->() const
+  {
+    return std::addressof(node_->val);
+  }
+
+  template< typename T>
+  ConstIterator< T > & ConstIterator< T >::operator--()
+  {
+    node_ = node_->prev;
+    return node_;
+  }
+
+  template< typename T>
+  ConstIterator< T > & ConstIterator< T >::operator--(int)
+  {
+    this_t result(*this);
+    --(*this);
+    return result;
+  }
 }
 
 #endif
