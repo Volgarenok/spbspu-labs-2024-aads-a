@@ -1,4 +1,3 @@
-
 #ifndef LIST_HPP
 #define LIST_HPP
 #include <stdexcept>
@@ -182,12 +181,19 @@ namespace sakovskaia
     {
       return;
     }
-    node_t< T > * temp = head_;
-    while (temp->next)
+    if (head_ ->next == nullptr)
+    {
+      delete head_;
+      head_ = nullptr;
+      return;
+    }
+    node_t<T>* temp = head_;
+    while (temp->next->next)
     {
       temp = temp->next;
     }
-    delete temp;
+    delete temp->next;
+    temp->next = nullptr;
   }
 
   template< typename T >
@@ -226,11 +232,7 @@ namespace sakovskaia
   template< typename T >
   T & List< T >::front()
   {
-    if (!empty())
-    {
-      return front();
-    }
-    else
+    if (empty())
     {
       throw std::runtime_error("List is empty");
     }
