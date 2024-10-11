@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cassert>
 
 template< typename T >
 struct Node
@@ -47,12 +48,14 @@ public:
 
   this_t & operator++()
   {
+    assert(node_ != nullptr);
     node_ = node_->next;
     return *this;
   };
 
   this_t & operator++(int)
   {
+    assert(node_ != nullptr);
     this_t result(*this);
     ++(*this);
     return result;
