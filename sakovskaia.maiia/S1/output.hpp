@@ -2,7 +2,7 @@
 #define OUTPUT_HPP
 #include <string>
 #include <iostream>
-#include "list.hpp"
+#include <list.hpp>
 namespace sakovskaia
 {
   void outputSequences(const List< std::pair< std::string, List< unsigned long long int > > > & sequences);

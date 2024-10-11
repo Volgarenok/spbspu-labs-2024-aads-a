@@ -1,7 +1,7 @@
 #include "data_processing.hpp"
 #include "input.hpp"
-#include "list.hpp"
 #include "output.hpp"
+#include <list.hpp>
 #include <iostream>
 int main()
 {
