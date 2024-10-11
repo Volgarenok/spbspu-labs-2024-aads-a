@@ -1,7 +1,42 @@
 #include <iostream>
 
+template< typename T >
+struct Node
+{
+  Node(Node * prev, Node * next, T val) :
+      prev(prev),
+      next(next),
+      val(val)
+  {};
+  ~Node() = default;
+
+  Node * prev;
+  Node * next;
+  T val;
+};
+
+template< typename T >
+class List
+{
+public:
+  List() :
+    head_(nullptr),
+    tail_(nullptr),
+    size_(0)
+  {};
+  ~List();
+
+private:
+  Node< T > * head_;
+  Node< T > * tail_;
+  size_t size_;
+};
+
+
+
 int main()
 {
-  std::cout << "Hello komsa!\n";
+  List< int > * list = new List< int >();
+
   return 0;
 }
