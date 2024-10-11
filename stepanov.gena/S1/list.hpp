@@ -13,6 +13,7 @@ namespace stepanov
     {
       T data;
       Node* next;
+      Node(const T& value) : data(value), next(nullptr){}
     };
 
   Node* head;
@@ -29,7 +30,7 @@ namespace stepanov
     List& operator=(List&& other) noexcept;
     ~List();
 
-    void push_back();
+    void push_back(const T& value);
     size_t get_size() const;
   };
 }
