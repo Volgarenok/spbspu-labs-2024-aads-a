@@ -81,6 +81,19 @@ public:
     return std::addressof(node_->val);
   }
 
+  this_t & operator--()
+  {
+    node_ = node_->prev;
+    return node_;
+  }
+
+  this_t & operator--(int)
+  {
+    this_t result(*this);
+    --(*this);
+    return result;
+  }
+
 private:
   Node< T > * node_;
 };
