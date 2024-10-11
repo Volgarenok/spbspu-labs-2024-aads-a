@@ -64,6 +64,8 @@ namespace kovtun
 
     head_->prev = temp;
     head_ = temp;
+
+    size_++;
   }
 
   template< typename T >
@@ -80,6 +82,8 @@ namespace kovtun
 
     tail_->next = temp;
     tail_ = temp;
+
+    size_++;
   }
 
   template< typename T >
@@ -99,6 +103,8 @@ namespace kovtun
     temp.prev = nullptr;
     delete head_;
     head_ = temp;
+
+    size_--;
   }
 
   template< typename T >
@@ -118,6 +124,14 @@ namespace kovtun
     temp.next = nullptr;
     delete tail_;
     tail_ = temp;
+
+    size_--;
+  }
+
+  template< typename T >
+  bool List< T >::empty()
+  {
+    return size_ == 0;
   }
 }
 
