@@ -61,6 +61,11 @@ public:
     return result;
   }
 
+  bool operator==(const this_t & rhs) const
+  {
+    return node_ == rhs.node_;
+  }
+
 private:
   Node< T > * node_;
 };
