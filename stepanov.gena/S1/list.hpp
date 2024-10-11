@@ -11,28 +11,31 @@ namespace stepanov
   {
   public:
     List();
-    List(const List& other);
-    List& operator=(const List& other);
-    List(List&& other) noexcept;
-    List& operator=(List&& other) noexcept;
+    List(const List & other);
+    List(List && other) noexcept;
     ~List();
 
-    void push_back(const T& value);
-    void push_back(const T&& value);
-    void remove(const T& value);
-    template <typename Predicate>
+    List & operator=(const List & other);
+    List & operator=(List && other) noexcept;
+
+    T & front();
+    const T & front() const;
+    bool empty() const noexcept;
+    void push_front(const T & value);
+    void push_front(T && value);
+    void push_back(const T & value);
+    void pop_front();
+    void clear() noexcept;
+    void swap(List & fwdlst);
+
+    void remove(const T & value);
+    template < typename Predicate >
     void remove_if(Predicate pred);
-    T& front();
-    const T& front() const;
-    bool empty() const;
-    size_t get_size() const;
+    void assign(size_t n, const T & value);
 
   private:
-    Node<T>* head;
-    Node<T>* tail;
-    size_t list_size;
-
-    void clear();
+    Node<T> * head;
+    Node<T> * tail;
   };
 }
 

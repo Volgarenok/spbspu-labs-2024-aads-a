@@ -1,18 +1,18 @@
 #ifndef NODE_HPP
 #define NODE_HPP
 
-#include <utility>
-
 namespace stepanov
 {
-  template <typename T>
+  template < typename T >
   struct Node
   {
-    T data;
-    Node* next;
+    T data_;
+    Node< T > * next_;
 
-    Node(const T& value) : data(value), next(nullptr){}
-    Node(T&& value) : data(std::move(value)), next(nullptr){}
+    Node(const T & data):
+      data_(data),
+      next_(nullptr)
+    {}
   };
 }
 
