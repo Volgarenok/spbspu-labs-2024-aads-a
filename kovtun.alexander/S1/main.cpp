@@ -7,10 +7,16 @@ int main()
 {
   kovtun::List< int > * list = new kovtun::List< int >();
 
-  auto b = list->cbegin();
-  auto c = list->cend();
 
-  std::cout << &c << *b;
+  for (int i = 0; i < 10; i++)
+  {
+    list->push_front(i);
+  }
+
+  for (auto it = list->cbegin(); it != list->cend(); ++it)
+  {
+    std::cout << *it;
+  }
 
   return 0;
 }

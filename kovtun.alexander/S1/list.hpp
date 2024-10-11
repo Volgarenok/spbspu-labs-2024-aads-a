@@ -33,8 +33,8 @@ namespace kovtun
 
   template< typename T >
   List< T >::List() :
-      head_(new Node< T >(T())),
-      tail_(head_),
+      head_(nullptr),
+      tail_(nullptr),
       size_(0)
   {}
 
@@ -48,6 +48,76 @@ namespace kovtun
   ConstIterator< T > List< T >::cend() const
   {
     return ConstIterator< T >(tail_);
+  }
+
+  template< typename T >
+  void List< T >::push_front(const T & node)
+  {
+    Node< T > * temp = new Node< T >(node);
+    temp->next = head_;
+    if (head_ == nullptr)
+    {
+      head_ = temp;
+      tail_ = temp;
+      return;
+    }
+
+    head_->prev = temp;
+    head_ = temp;
+  }
+
+  template< typename T >
+  void List< T >::push_back(const T & node)
+  {
+    Node< T > * temp = new Node< T >(node);
+    temp->prev = tail_;
+    if (tail_ == nullptr)
+    {
+      head_ = temp;
+      tail_ = temp;
+      return;
+    }
+
+    tail_->next = temp;
+    tail_ = temp;
+  }
+
+  template< typename T >
+  void List< T >::pop_front()
+  {
+    if (head_ == nullptr)
+    {
+      return;
+    }
+
+    Node< T > temp = head_->next;
+    if (temp == nullptr)
+    {
+      tail_ = nullptr;
+    }
+
+    temp.prev = nullptr;
+    delete head_;
+    head_ = temp;
+  }
+
+  template< typename T >
+  void List< T >::pop_back()
+  {
+    if (tail_ == nullptr)
+    {
+      return;
+    }
+
+    Node< T > temp = tail_->prev;
+    if (temp == nullptr)
+    {
+      head_ = nullptr;
+    }
+
+    temp.next = nullptr;
+    delete tail_;
+    tail_ = temp;
   }
 }
 
