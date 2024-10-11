@@ -2,7 +2,21 @@
 
 namespace sakovskaia
 {
-  Queue<std::string> infix_to_postfix(const std::string & expression)
+  int get_precedence(const std::string &op)
+  {
+    if (op == "*" || op == "/" || op == "%")
+    {
+      return 2;
+    }
+    else if (op == "+" || op == "-")
+    {
+      return 1;
+    }
+    return 0;
+  }
+
+
+  Queue< std::string > infix_to_postfix(const std::string & expression)
   {
     std::istringstream iss(expression);
     std::string token;
@@ -17,7 +31,8 @@ namespace sakovskaia
       }
       else if (isOperator(token))
       {
-        while (!operators.empty() && isOperator(operators.top()) && token != "(")
+        while ((!operators.empty() && isOperator(operators.top())) &&
+        (get_precedence(operators.top()) >= get_precedence(token)) && (token != "("))
         {
           output.push(std::move(operators.pop()));
         }
@@ -106,3 +121,4 @@ namespace sakovskaia
     return operands.pop();
   }
 }
+
