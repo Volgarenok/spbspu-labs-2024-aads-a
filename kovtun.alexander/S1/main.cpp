@@ -51,6 +51,13 @@ public:
     return *this;
   };
 
+  this_t & operator++(int)
+  {
+    this_t result(*this);
+    ++(*this);
+    return result;
+  }
+
 private:
   Node< T > * node_;
 };
