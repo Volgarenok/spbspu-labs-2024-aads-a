@@ -7,9 +7,9 @@ int main()
 {
   kovtun::List< int > * list = new kovtun::List< int >();
 
-  for (int i = 0; i < 5; ++i)
+  for (int i = 0; i < 10; ++i)
   {
-    list->push_back(i);
+    list->push_front(i);
   }
 
   for (auto it = list->cbegin(); it != list->cend(); ++it)
@@ -17,7 +17,7 @@ int main()
     std::cout << *it << "\n";
   }
 
-  list->pop_back();
+  list->pop_front();
 
   for (auto it = list->cbegin(); it != list->cend(); ++it)
   {
