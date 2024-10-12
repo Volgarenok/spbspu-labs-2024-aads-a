@@ -3,7 +3,7 @@
 #include <string>
 #include <utility>
 #include <limits>
-#include <cstdlib>
+#include <stdexcept>
 
 #include "process_sequences.hpp"
 #include "node.hpp"
@@ -25,10 +25,9 @@ namespace stepanov
 
       while (std::cin.peek() != '\n' && std::cin >> num)
       {
-        if (num > std::numeric_limits<int>::max())
+        if (num > static_cast<unsigned long long>(std::numeric_limits<int>::max()))
         {
-          std::cerr << "Error: Overflow occurred" << std::endl;
-          exit(1);
+          throw std::overflow_error("Overflow occurred");
         }
         numbers.push_back(static_cast<int>(num));
       }
@@ -51,14 +50,6 @@ namespace stepanov
       }
     }
     std::cout << std::endl;
-
-    for (auto& seq : sequences)
-    {
-      if (seq.second.empty())
-      {
-        std::cout << "0" << std::endl;
-      }
-    }
 
     std::vector<List<int>::iterator> iters;
     for (auto& seq : sequences)
@@ -97,6 +88,7 @@ namespace stepanov
     {
       iters.push_back(seq.second.begin());
     }
+
     done = false;
     while (!done)
     {
