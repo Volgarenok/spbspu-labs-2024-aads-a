@@ -173,6 +173,41 @@ namespace stepanov
       }
     }
   }
+
+  template < typename T >
+  template < typename Predicate >
+  void List< T >::remove_if(Predicate pred)
+  {
+    while (head_ != nullptr && pred(head_->data_))
+    {
+      Node<T>* temp = head_;
+      head_ = head_->next_;
+      delete temp;
+    }
+    if (head_ == nullptr)
+    {
+      tail_ = nullptr;
+      return;
+    }
+    Node<T>* current = head_;
+    while (current->next_ != nullptr)
+    {
+      if (pred(current->next_->data_))
+      {
+        Node<T>* temp = current->next_;
+        current->next_ = current->next_->next_;
+        delete temp;
+        if(pred(current->next_ == nullptr))
+        {
+          tail_ = current;
+        }
+      }
+      else
+      {
+        current = current->next_;
+      }
+    }
+  }
 }
 
 #endif
