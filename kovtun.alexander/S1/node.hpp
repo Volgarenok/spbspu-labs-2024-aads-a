@@ -8,9 +8,10 @@ namespace kovtun
   template<typename T>
   struct Node
   {
+    Node() = default;
+    ~Node() = default;
     Node(Node * prev, Node * next, T val);
     Node(const T & val);
-    ~Node() = default;
 
     Node * prev;
     Node * next;

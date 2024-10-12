@@ -2,6 +2,7 @@
 #define LIST_HPP
 
 #include "const_iterator.hpp"
+#include <cassert>
 
 namespace kovtun
 {
@@ -53,35 +54,27 @@ namespace kovtun
   template< typename T >
   void List< T >::push_front(const T & node)
   {
-    Node< T > * temp = new Node< T >(node);
-    temp->next = head_;
-    if (head_ == nullptr)
-    {
-      head_ = temp;
-      tail_ = temp;
-      return;
-    }
-
-    head_->prev = temp;
-    head_ = temp;
-
     size_++;
   }
 
   template< typename T >
   void List< T >::push_back(const T & node)
   {
-    Node< T > * temp = new Node< T >(node);
-    temp->prev = tail_;
-    if (tail_ == nullptr)
+    if (head_ == nullptr)
     {
-      head_ = temp;
-      tail_ = temp;
-      return;
+      head_ = new Node< T >(node);
+      tail_ = new Node< T >();
+      head_->next = tail_;
+      tail_->prev = head_;
     }
-
-    tail_->next = temp;
-    tail_ = temp;
+    else
+    {
+      Node< T > * temp = new Node< T >(node);
+      temp->next = tail_;
+      temp->prev = tail_->prev;
+      tail_->prev->next = temp;
+      tail_->prev = temp;
+    }
 
     size_++;
   }
@@ -89,21 +82,6 @@ namespace kovtun
   template< typename T >
   void List< T >::pop_front()
   {
-    if (head_ == nullptr)
-    {
-      return;
-    }
-
-    Node< T > * temp = head_->next;
-    if (temp == nullptr)
-    {
-      tail_ = nullptr;
-    }
-
-    temp->prev = nullptr;
-    delete head_;
-    head_ = temp;
-
     size_--;
   }
 
@@ -115,15 +93,21 @@ namespace kovtun
       return;
     }
 
-    Node< T > * temp = tail_->prev;
-    if (temp == nullptr)
+    if (tail_->prev == head_)
     {
+      delete head_;
+      delete tail_;
       head_ = nullptr;
+      tail_ = nullptr;
     }
+    else
+    {
+      Node< T > * last = tail_->prev;
+      last->prev->next = tail_;
+      tail_->prev = last->prev;
 
-    temp->next = nullptr;
-    delete tail_;
-    tail_ = temp;
+      delete last;
+    }
 
     size_--;
   }
