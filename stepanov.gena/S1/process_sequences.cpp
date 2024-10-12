@@ -15,27 +15,26 @@ namespace stepanov
   void process_sequences()
   {
     std::vector<std::pair<std::string, List<int>>> sequences;
-    std::string line;
+    std::string name;
 
-    while (true)
+    while (std::cin >> name)
     {
-      std::string name;
-      std::cin >> name;
-      if (std::cin.fail())
-      {
-        break;
-      }
-
       List<int> numbers;
       int num;
+
       while (std::cin.peek() != '\n' && std::cin >> num)
       {
-        if (num > std::numeric_limits<int>::max())
+        if (num < 0)
+        {
+          std::cerr << "Error: Negative numbers are not allowed" << std::endl;
+          exit(1);
+        }
+        else if (static_cast<unsigned long long>(num) > std::numeric_limits<unsigned long long>::max())
         {
           std::cerr << "Error: Overflow occurred" << std::endl;
           exit(1);
         }
-        numbers.push_back(static_cast<int>(num));
+        numbers.push_back(num);
       }
       std::cin.ignore();
       sequences.push_back({ name, std::move(numbers) });
@@ -47,9 +46,13 @@ namespace stepanov
       return;
     }
 
-    for (const auto& seq : sequences)
+    for (auto it = sequences.begin(); it != sequences.end(); ++it)
     {
-      std::cout << seq.first << " ";
+      std::cout << it->first;
+      if (std::next(it) != sequences.end())
+      {
+        std::cout << " ";
+      }
     }
     std::cout << std::endl;
 
@@ -64,12 +67,13 @@ namespace stepanov
     {
       done = true;
       bool has_output = false;
-      for (size_t i = 0; i < sequences.size(); ++i)
+      for (auto it = iters.begin(); it != iters.end(); ++it)
       {
-        if (iters[i] != sequences[i].second.end())
+        size_t idx = std::distance(iters.begin(), it);
+        if (*it != sequences[idx].second.end())
         {
-          std::cout << *iters[i] << " ";
-          ++iters[i];
+          std::cout << **it << " ";
+          ++(*it);
           done = false;
           has_output = true;
         }
@@ -79,27 +83,32 @@ namespace stepanov
         std::cout << std::endl;
       }
     }
+
     iters.clear();
     for (auto& seq : sequences)
     {
       iters.push_back(seq.second.begin());
     }
-
     done = false;
     while (!done)
     {
       int sum = 0;
       done = true;
-      for (size_t i = 0; i < sequences.size(); ++i)
+      bool has_values = false;
+
+      for (auto it = iters.begin(); it != iters.end(); ++it)
       {
-        if (iters[i] != sequences[i].second.end())
+        size_t idx = std::distance(iters.begin(), it);
+        if (*it != sequences[idx].second.end())
         {
-          sum += *iters[i];
-          ++iters[i];
+          sum += **it;
+          ++(*it);
           done = false;
+          has_values = true;
         }
       }
-      if (!done)
+
+      if (has_values)
       {
         std::cout << sum << " ";
       }
