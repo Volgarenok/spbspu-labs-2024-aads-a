@@ -68,6 +68,27 @@ namespace stepanov
     other.tail_ = nullptr;
   }
 
+  template < typename T >
+  List< T >::List(size_t n):
+    List(n, T())
+  {}
+
+  template < typename T >
+  List< T >::List(size_t n, const T & value):
+    List()
+  {
+    for (size_t i = 0; i < n; ++i)
+    {
+      push_back(value);
+    }
+  }
+
+  template < typename T >
+  List< T >::~List()
+  {
+    clear();
+  }
+
   template <  typename T >
   T & List< T >::front()
   {
