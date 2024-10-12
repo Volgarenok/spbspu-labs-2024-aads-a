@@ -44,7 +44,11 @@ namespace kovtun
   template< typename T >
   List< T >::~List()
   {
-    clear();
+    assert(head_ != nullptr);
+    while (!head_)
+    {
+      pop_front();
+    }
   }
 
   template< typename T >

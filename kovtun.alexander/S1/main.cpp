@@ -5,26 +5,36 @@
 
 int main()
 {
-  using pair = std::pair< std::string, kovtun::List< size_t > >;
-  kovtun::List< pair > sequences;
+  using pair_t = std::pair< std::string, kovtun::List< size_t > >;
+  auto sequences = kovtun::List< pair_t >();
 
   std::string stub;
-  while(!std::cin.eof())
+  while(std::cin >> stub)
   {
-    std::cin.clear();
-    std::cin >> stub;
     if (stub.empty())
     {
       break;
     }
 
-    kovtun::List< size_t > list;
+    auto nums = kovtun::List< size_t >();
     size_t n = 0;
     while (std::cin >> n)
     {
-      list.push_back(n);
+      nums.push_back(n);
     }
-    sequences.push_back({ stub, list });
+    pair_t pair = std::make_pair(stub, nums);
+    sequences.push_back(pair);
+
+    if (!std::cin.eof())
+    {
+      std::cin.clear();
+    }
+  }
+
+  if (sequences.empty())
+  {
+    std::cout << 0 << "\n";
+    return 0;
   }
 
   size_t maxSeq = 0;
@@ -43,6 +53,7 @@ int main()
   }
   std::cout << "\n";
 
+
   kovtun::List< size_t > sums;
   for (size_t l = 0; l < maxSeq; l++)
   {
@@ -52,6 +63,11 @@ int main()
       if (!seq->second.empty())
       {
         size_t val = *seq->second.cbegin();
+        if (val > std::numeric_limits< size_t >::max() - sum)
+        {
+          std::cerr << "overflow" << "\n";
+          return 1;
+        }
         sum += val;
         std::cout << val << " ";
         seq->second.pop_front();
