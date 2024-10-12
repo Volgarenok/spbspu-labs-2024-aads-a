@@ -65,98 +65,25 @@ namespace kovtun
   template< typename T >
   void List< T >::push_front(const T & node)
   {
-    if (head_ == nullptr)
-    {
-      head_ = new Node< T >(node);
-      tail_ = new Node< T >();
-      head_->next = tail_;
-      tail_->prev = head_;
-    }
-    else
-    {
-      Node< T > * temp = new Node< T >(node);
-      temp->next = head_;
-      head_->prev = temp;
-      head_ = temp;
-    }
-
-    size_++;
+    
   }
 
   template< typename T >
   void List< T >::push_back(const T & node)
   {
-    if (head_ == nullptr)
-    {
-      head_ = new Node< T >(node);
-      tail_ = new Node< T >();
-      head_->next = tail_;
-      tail_->prev = head_;
-    }
-    else
-    {
-      Node< T > * temp = new Node< T >(node);
-      temp->next = tail_;
-      temp->prev = tail_->prev;
-      tail_->prev->next = temp;
-      tail_->prev = temp;
-    }
-
-    size_++;
+   // TODO: first
   }
 
   template< typename T >
   void List< T >::pop_front()
   {
-    if (head_ == nullptr)
-    {
-      return;
-    }
-
-    if (head_->next == tail_)
-    {
-      delete head_;
-      delete tail_;
-      head_ = nullptr;
-      tail_ = nullptr;
-    }
-    else
-    {
-      Node< T > * first = head_;
-      head_ = head_->next;
-      head_->prev = nullptr;
-
-      delete first;
-    }
-
-    size_--;
+    // TODO: first
   }
 
   template< typename T >
   void List< T >::pop_back()
   {
-    if (tail_ == nullptr)
-    {
-      return;
-    }
 
-    if (tail_->prev == head_)
-    {
-      delete head_;
-      delete tail_;
-      head_ = nullptr;
-      tail_ = nullptr;
-    }
-    else
-    {
-      Node< T > * last = tail_->prev;
-      last->prev->next = tail_;
-      tail_->prev = last->prev;
-
-      delete last;
-    }
-
-    size_--;
   }
 
   template< typename T >
