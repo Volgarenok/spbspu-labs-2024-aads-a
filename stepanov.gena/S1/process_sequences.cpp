@@ -2,7 +2,6 @@
 #include <vector>
 #include <string>
 #include <utility>
-#include <sstream>
 
 #include "process_sequences.hpp"
 #include "node.hpp"
@@ -17,17 +16,24 @@ namespace stepanov
     std::vector<std::pair<std::string, List<int>>> sequences;
     std::string line;
 
-    while (std::getline(std::cin, line))
+    while (true)
     {
-      std::istringstream iss(line);
       std::string name;
-      iss >> name;
+      std::cin >> name;  // Чтение названия последовательности
+
+      if (std::cin.fail()) {
+          break;  // Прекращаем чтение, если ввод завершен
+      }
+
       List<int> numbers;
       int num;
-      while (iss >> num)
+      // Считываем числа, пока не встретим конец строки
+      while (std::cin.peek() != '\n' && std::cin >> num)
       {
         numbers.push_back(num);
       }
+      std::cin.ignore();  // Игнорируем символ новой строки
+
       sequences.push_back({ name, std::move(numbers) });
     }
 
@@ -37,12 +43,14 @@ namespace stepanov
         return;
     }
 
+    // Вывод названий последовательностей
     for (const auto& seq : sequences)
     {
         std::cout << seq.first << " ";
     }
     std::cout << std::endl;
 
+    // Инициализируем итераторы для каждой последовательности
     std::vector<List<int>::iterator> iters;
     for (auto& seq : sequences)
     {
@@ -65,12 +73,14 @@ namespace stepanov
       std::cout << std::endl;
     }
 
+    // Возвращаем итераторы в начало для суммы
     iters.clear();
     for (auto& seq : sequences)
     {
         iters.push_back(seq.second.begin());
     }
 
+    // Цикл для подсчета суммы
     done = false;
     while (!done)
     {
