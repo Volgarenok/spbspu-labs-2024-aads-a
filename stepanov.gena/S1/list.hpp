@@ -14,6 +14,8 @@ namespace stepanov
     List();
     List(const List & other);
     List(List && other) noexcept;
+    explicit List(size_t n);
+    List(size_t n, const T & value);
     ~List();
 
     List & operator=(const List & other);
@@ -44,6 +46,27 @@ namespace stepanov
     head_(nullptr),
     tail_(nullptr)
   {}
+
+  template < typename T >
+  List< T >::List(const List & other):
+    List()
+  {
+    Node< T > * newnode = other.head_;
+    while (newnode)
+    {
+      push_back(newnode->data_);
+      newnode = newnode->next_;
+    }
+  }
+
+  template < typename T >
+  List< T >::List(List && other) noexcept:
+    head_(other.head_),
+    tail_(other.tail_)
+  {
+    other.head_ = nullptr;
+    other.tail_ = nullptr;
+  }
 
   template <  typename T >
   T & List< T >::front()
