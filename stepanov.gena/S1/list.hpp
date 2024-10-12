@@ -4,13 +4,20 @@
 #include <utility>
 #include <cstddef>
 #include "node.hpp"
+#include "iterator.hpp"
+#include "constiterator.hpp"
 
 namespace stepanov
 {
   template < typename T >
   class List
   {
+    friend class Iterator< T >;
+    friend class ConstIterator< T >;
+
   public:
+    using iterator = Iterator< T >;
+    using const_iterator = ConstIterator< T >;
     List();
     List(const List & other);
     List(List && other) noexcept;
@@ -20,7 +27,12 @@ namespace stepanov
 
     List & operator=(const List & other);
     List & operator=(List && other) noexcept;
-
+    iterator begin() noexcept;
+    iterator end() noexcept;
+    const_iterator begin() const noexcept;
+    const_iterator end() const noexcept;
+    const_iterator cbegin() const noexcept;
+    const_iterator cend() const noexcept;
     T & front();
     const T & front() const;
     bool empty() const noexcept;
@@ -112,6 +124,37 @@ namespace stepanov
       other.tail_ = nullptr;
     }
     return *this;
+  }
+
+  template < typename T >
+  Iterator< T > List< T >::begin() noexcept
+  {
+      return iterator(head_);
+  }
+  template < typename T >
+  Iterator< T > List< T >::end() noexcept
+  {
+      return iterator();
+  }
+  template < typename T >
+  ConstIterator< T > List< T >::begin() const noexcept
+  {
+      return const_iterator(head_);
+  }
+  template < typename T >
+  ConstIterator< T > List< T >::end() const noexcept
+  {
+      return const_iterator();
+  }
+  template < typename T >
+  ConstIterator< T > List< T >::cbegin() const noexcept
+  {
+      return const_iterator(head_);
+  }
+  template < typename T >
+  ConstIterator< T > List< T >::cend() const noexcept
+  {
+      return const_iterator();
   }
 
   template <  typename T >
