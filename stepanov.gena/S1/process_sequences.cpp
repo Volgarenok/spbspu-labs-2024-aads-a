@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include <utility>
+#include <limits>
 
 #include "process_sequences.hpp"
 #include "node.hpp"
@@ -29,7 +30,12 @@ namespace stepanov
       int num;
       while (std::cin.peek() != '\n' && std::cin >> num)
       {
-        numbers.push_back(num);
+        if (num > std::numeric_limits<int>::max())
+        {
+          std::cerr << "Error: Overflow occurred" << std::endl;
+          exit(1);
+        }
+        numbers.push_back(static_cast<int>(num));
       }
       std::cin.ignore();
       sequences.push_back({ name, std::move(numbers) });
