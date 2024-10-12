@@ -140,8 +140,40 @@ namespace stepanov
     list.tail_ = subtail;
   }
 
+  template < typename T >
+  void List< T >::remove(const T & value)
+  {
+    while (head_ != nullptr && head_->data_ == value)
+    {
+      Node< T >* temp = head_;
+      head_ = head_->next_;
+      delete temp;
+    }
+    if (head_ == nullptr)
+    {
+      tail_ = nullptr;
+      return;
+    }
+    Node< T > * current = head_;
+    while (current->next_ != nullptr)
+    {
+      if (current->next_->data_ == value)
+      {
+        Node< T >* temp = current->next_;
+        current->next_ = current->next_->next_;
+        delete temp;
+        if (current->next_ == nullptr)
+        {
+          tail_ = current;
+        }
+      }
+      else
+      {
+        current = current->next_;
+      }
+    }
+  }
 }
-
 
 #endif
 
