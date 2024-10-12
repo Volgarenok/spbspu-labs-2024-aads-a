@@ -25,6 +25,7 @@ namespace kovtun
     void pop_back();
     void clear();
     void swap(List< T > & list);
+    size_t size() const;
 
   private:
     Node< T > * head_;
@@ -170,6 +171,12 @@ namespace kovtun
     std::swap(list.head_, head_);
     std::swap(list.tail_, tail_);
     std::swap(list.size_, size_);
+  }
+
+  template< typename T >
+  size_t List< T >::size() const
+  {
+    return size_;
   }
 }
 
