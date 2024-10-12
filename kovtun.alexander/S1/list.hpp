@@ -12,7 +12,7 @@ namespace kovtun
   {
   public:
     List();
-    ~List() = default;
+    ~List();
 
     ConstIterator< T > cbegin() const;
     ConstIterator< T > cend() const;
@@ -41,6 +41,12 @@ namespace kovtun
       size_(0)
   {}
 
+  template< typename T >
+  List< T >::~List()
+  {
+    clear();
+  }
+  
   template< typename T >
   ConstIterator< T > List< T >::cbegin() const
   {
