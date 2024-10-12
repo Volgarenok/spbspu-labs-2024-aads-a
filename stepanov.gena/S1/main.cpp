@@ -6,6 +6,6 @@
 
 int main()
 {
-  using namespace stepanov;
-  return 0;
+    using namespace stepanov;
+    return 0;
 }
