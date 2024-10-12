@@ -46,7 +46,7 @@ namespace kovtun
   {
     clear();
   }
-  
+
   template< typename T >
   ConstIterator< T > List< T >::cbegin() const
   {
