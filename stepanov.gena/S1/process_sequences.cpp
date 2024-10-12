@@ -3,6 +3,7 @@
 #include <string>
 #include <utility>
 #include <limits>
+#include <cstdlib>
 
 #include "process_sequences.hpp"
 #include "node.hpp"
@@ -20,21 +21,16 @@ namespace stepanov
     while (std::cin >> name)
     {
       List<int> numbers;
-      int num;
+      unsigned long long num;
 
       while (std::cin.peek() != '\n' && std::cin >> num)
       {
-        if (num < 0)
-        {
-          std::cerr << "Error: Negative numbers are not allowed" << std::endl;
-          exit(1);
-        }
-        else if (static_cast<unsigned long long>(num) > std::numeric_limits<unsigned long long>::max())
+        if (num > std::numeric_limits<int>::max())
         {
           std::cerr << "Error: Overflow occurred" << std::endl;
           exit(1);
         }
-        numbers.push_back(num);
+        numbers.push_back(static_cast<int>(num));
       }
       std::cin.ignore();
       sequences.push_back({ name, std::move(numbers) });
