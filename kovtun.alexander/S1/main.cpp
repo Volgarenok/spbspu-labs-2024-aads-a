@@ -5,26 +5,27 @@
 
 int main()
 {
-  kovtun::List< int > * list = new kovtun::List< int >();
-  kovtun::List< int > * list2 = new kovtun::List< int >();
+  using pair = std::pair< std::string, kovtun::List< size_t > >;
+  kovtun::List< pair > sequences;
 
-  for (int i = 0; i < 10; ++i)
+  std::string stub;
+  while(!std::cin.eof())
   {
-    list->push_front(i);
-    list2->push_front(10-i);
+    std::cin.clear();
+    std::cin >> stub;
+    if (stub.empty())
+    {
+      break;
+    }
+
+    kovtun::List< size_t > list;
+    size_t n = 0;
+    while (std::cin >> n)
+    {
+      list.push_back(n);
+    }
+    sequences.push_back({ stub, list });
   }
-
-  for (auto it = list->cbegin(); it != list->cend(); ++it)
-  {
-    std::cout << *it << "\n";
-  }
-
-  list->swap(*list2);
-
-  for (auto it = list->cbegin(); it != list->cend(); ++it)
-  {
-    std::cout << *it << "\n";
-  }
-
+  
   return 0;
 }
