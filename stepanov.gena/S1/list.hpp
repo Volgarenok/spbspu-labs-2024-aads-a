@@ -89,6 +89,31 @@ namespace stepanov
     clear();
   }
 
+  template < typename T >
+  List< T > & List< T >::operator=(const List & other)
+  {
+    if (this != std::addressof(other))
+    {
+      List< T > copy{other};
+      swap(copy);
+    }
+    return *this;
+  }
+
+  template < typename T >
+  List< T > & List< T >::operator=(List && other) noexcept
+  {
+    if (this != std::addressof(other))
+    {
+      clear();
+      head_ = other.head_;
+      tail_ = other.tail_;
+      other.head_ = nullptr;
+      other.tail_ = nullptr;
+    }
+    return *this;
+  }
+
   template <  typename T >
   T & List< T >::front()
   {
