@@ -9,9 +9,9 @@ int main() {
     try {
         stepanov::process_sequences();
     }
-    catch (const std::exception& e) {
+    catch (const std::overflow_error& e) {
         std::cerr << "Error: " << e.what() << std::endl;
-        return 1;
+        std::exit(1);
     }
     return 0;
 }

@@ -10,6 +10,12 @@
 namespace stepanov
 {
   template < typename T >
+  class Iterator;
+
+  template < typename T >
+  class ConstIterator;
+
+  template < typename T >
   class List
   {
     friend class Iterator< T >;
