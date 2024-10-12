@@ -52,6 +52,14 @@ namespace stepanov
     }
     std::cout << std::endl;
 
+    for (auto& seq : sequences)
+    {
+      if (seq.second.empty())
+      {
+        std::cout << "0" << std::endl;
+      }
+    }
+
     std::vector<List<int>::iterator> iters;
     for (auto& seq : sequences)
     {
@@ -68,7 +76,11 @@ namespace stepanov
         size_t idx = std::distance(iters.begin(), it);
         if (*it != sequences[idx].second.end())
         {
-          std::cout << **it << " ";
+          std::cout << **it;
+          if (std::next(it) != iters.end())
+          {
+            std::cout << " ";
+          }
           ++(*it);
           done = false;
           has_output = true;
@@ -106,7 +118,11 @@ namespace stepanov
 
       if (has_values)
       {
-        std::cout << sum << " ";
+        std::cout << sum;
+        if (!done)
+        {
+          std::cout << " ";
+        }
       }
     }
     std::cout << std::endl;
