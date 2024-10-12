@@ -1,8 +1,9 @@
 #ifndef LIST_HPP
 #define LIST_HPP
 
-#include "const_iterator.hpp"
 #include <cassert>
+
+#include "const_iterator.hpp"
 
 namespace kovtun
 {
@@ -23,7 +24,7 @@ namespace kovtun
     void pop_front();
     void pop_back();
     void clear();
-    void swap();
+    void swap(List< T > & list);
 
   private:
     Node< T > * head_;
@@ -161,6 +162,14 @@ namespace kovtun
     {
       pop_front();
     }
+  }
+
+  template< typename T >
+  void List< T >::swap(List< T > & list)
+  {
+    std::swap(list.head_, head_);
+    std::swap(list.tail_, tail_);
+    std::swap(list.size_, size_);
   }
 }
 
