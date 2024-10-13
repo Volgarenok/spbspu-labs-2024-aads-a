@@ -1,98 +1,66 @@
 #ifndef NODE_HPP
 #define NODE_HPP
 #include <utility>
-#include <cstddef>
 
 namespace sakovskaia
 {
   namespace detail
   {
-    template< typename Key, typename T >
+    template < typename Key, typename Value >
     struct Node
     {
-      Node(Node * left, Node * parent, Node * right, Key key, T value):
-        data_(std::make_pair(key, value)),
-        parent_(parent),
-        right_(right),
-        left_(left),
-        height_(0)
+      Node * left;
+      Node * right;
+      Node * parent;
+      std::pair< Key, Value > data;
+
+      Node() :
+        left(nullptr),
+        right(nullptr),
+        parent(nullptr),
+        data(std::pair< Key, Value >())
       {}
 
-      std::pair< Key, T > data_;
-      Node< Key, T > * parent_;
-      Node< Key, T > * right_;
-      Node< Key, T > * left_;
-      size_t height_;
-
-      bool hasLeftChild() noexcept
-      {
-        return this->left_ != nullptr;
-      }
-
-      bool hasRightChild() noexcept
-      {
-        return this->right_ != nullptr;
-      }
-
-      bool isRoot() noexcept
-      {
-        return parent_ == nullptr;
-      }
-
-      bool isLeftChild() noexcept
-      {
-        return parent_->left_ == this;
-      }
-
-      bool isRightChild() noexcept
-      {
-        return parent_->right_ == this;
-      }
-
-      bool hasAnyChildren() const noexcept
-      {
-        return this->right_ || this->left_;
-      }
-
-      bool hasBothChildren() const noexcept
-      {
-        return this->right_ && this->left_;
-      }
+      Node(const Key & key, const Value & value) :
+        left(nullptr),
+        right(nullptr),
+        parent(nullptr),
+        data(std::make_pair(key, value))
+      {}
 
       Node< Key, Value > * rotate_right(Node< Key, Value > * root)
       {
-        if (root == nullptr || root->left_ == nullptr)
+        if (root == nullptr || root->left == nullptr)
         {
           return root;
         }
-        Node< Key, Value > * new_root = root->left_;
-        root->left_ = new_root->right_;
-        if (new_root->right_ != nullptr)
+        Node< Key, Value > * new_root = root->left;
+        root->left = new_root->right;
+        if (new_root->right != nullptr)
         {
-          new_root->right_->parent_ = root;
+          new_root->right->parent = root;
         }
-        new_root->right_ = root;
-        new_root->parent_ = root->parent_;
-        root->parent_ = new_root;
-
+        new_root->right = root;
+        new_root->parent = root->parent;
+        root->parent = new_root;
         return new_root;
       }
 
       Node< Key, Value > * rotate_left(Node< Key, Value > * root)
       {
-        if (root == nullptr || root->right_ == nullptr)
+        if (root == nullptr || root->right == nullptr)
         {
           return root;
         }
-        Node< Key, Value > * new_root = root->right_;
-        root->right_ = new_root->left_;
-        if (new_root->left_ != nullptr)
+        Node< Key, Value > * new_root = root->right;
+        root->right = new_root->left;
+        if (new_root->left != nullptr)
         {
-          new_root->left_->parent_ = root;
+          new_root->left->parent = root;
         }
-        new_root->left_ = root;
-        new_root->parent_ = root->parent_;
-        root->parent_ = new_root;
+        new_root->left = root;
+        new_root->parent = root->parent;
+        root->parent = new_root;
         return new_root;
       }
     };

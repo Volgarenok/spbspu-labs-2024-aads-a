@@ -14,7 +14,7 @@ namespace sakovskaia
   {
   public:
     Tree();
-    Tree(const Tree & other);
+    Tree(const Tree& other);
     Tree(Tree && other) noexcept;
     ~Tree();
     Tree & operator=(const Tree & other);
@@ -24,7 +24,7 @@ namespace sakovskaia
     bool empty() const noexcept;
     bool contains(const Key & key) const;
     size_t getSize() const;
-    void swap(Tree& other) noexcept;
+    void swap(Tree & other) noexcept;
     void push(const Key & key, const Value & value);
     ConstIterTree< Key, Value, Comp > cbegin() const;
     ConstIterTree< Key, Value, Comp > cend() const;
@@ -32,7 +32,7 @@ namespace sakovskaia
 
   private:
     size_t size_;
-    detail::TreeNode< Key, Value > * root_;
+    detail::Node< Key, Value > * root;
     Comp comp_;
     size_t getHeight(detail::Node< Key, Value > * node) const;
     size_t getBalance(detail::Node< Key, Value > * node) const;
@@ -50,14 +50,14 @@ namespace sakovskaia
   template < typename Key, typename Value, typename Comp >
   Tree< Key, Value, Comp >::Tree():
     size_(0),
-    root_(nullptr),
+    root(nullptr),
     comp_(Comp())
   {}
 
   template < typename Key, typename Value, typename Comp >
   Tree< Key, Value, Comp >::Tree(const Tree & other):
     size_(0),
-    root_(nullptr),
+    root(nullptr),
     comp_(other.comp_)
   {
     try
@@ -77,11 +77,11 @@ namespace sakovskaia
   template < typename Key, typename Value, typename Comp >
   Tree< Key, Value, Comp >::Tree(Tree && other) noexcept:
     size_(other.size_),
-    root_(other.root_),
+    root(other.root),
     comp_(other.comp_)
   {
     other.size_ = 0;
-    other.root_ = nullptr;
+    other.root = nullptr;
   }
 
   template < typename Key, typename Value, typename Comp >
@@ -115,7 +115,7 @@ namespace sakovskaia
   template < typename Key, typename Value, typename Comp >
   Value & Tree< Key, Value, Comp >::at(const Key & key)
   {
-    auto node = findNode(root_, key);
+    auto node = findNode(root, key);
     if (!node)
     {
       throw std::out_of_range("Key not found");
@@ -126,7 +126,7 @@ namespace sakovskaia
   template < typename Key, typename Value, typename Comp >
   const Value & Tree< Key, Value, Comp >::at(const Key & key) const
   {
-    auto node = findNode(root_, key);
+    auto node = findNode(root, key);
     if (!node)
     {
       throw std::out_of_range("Key not found");
@@ -141,9 +141,9 @@ namespace sakovskaia
   }
 
   template< typename Key, typename Value, typename Comp >
-  bool Tree< Key, Value, Comp >::contains(const Key & key) const
+  bool Tree< Key, Value, Comp >::contains(const Key& key) const
   {
-    return get(root_, key) != nullptr;
+    return get(root, key) != nullptr;
   }
 
   template < typename Key, typename Value, typename Comp >
@@ -155,15 +155,15 @@ namespace sakovskaia
   template < typename Key, typename Value, typename Comp >
   void Tree< Key, Value, Comp >::push(const Key & key, const Value & value)
   {
-    root_ = insertNode(root_, key, value);
+    root = insertNode(root, key, value);
   }
 
   template < typename Key, typename Value, typename Comp >
   ConstIterTree< Key, Value, Comp > Tree< Key, Value, Comp >::cbegin() const
   {
-    if (root_ != nullptr)
+    if (root != nullptr)
     {
-      return ConstIterTree< Key, Value, Comp >(find_min(root_));
+      return ConstIterTree< Key, Value, Comp >(find_min(root));
     }
     else
     {
@@ -180,7 +180,7 @@ namespace sakovskaia
   template < typename Key, typename Value, typename Comp >
   ConstIterTree< Key, Value, Comp > Tree< Key, Value, Comp >::find(const Key & key) const
   {
-    return ConstIterTree< Key, Value, Comp >(findNode(root_, key));
+    return ConstIterTree< Key, Value, Comp >(findNode(root, key));
   }
 
   template < typename Key, typename Value, typename Comp >
@@ -190,7 +190,7 @@ namespace sakovskaia
     {
       return 0;
     }
-    return 1 + std::max(getHeight(node->left_), getHeight(node->right_));
+    return 1 + std::max(getHeight(node->left), getHeight(node->right));
   }
 
   template < typename Key, typename Value, typename Comp >
@@ -198,7 +198,7 @@ namespace sakovskaia
   {
     if (node != nullptr)
     {
-      return getHeight(node->left_) - getHeight(node->right_);
+      return getHeight(node->left) - getHeight(node->right);
     }
     else
     {
@@ -209,9 +209,9 @@ namespace sakovskaia
   template< typename Key, typename Value, typename Comp >
   detail::Node< Key, Value > * Tree< Key, Value, Comp >::find_min(detail::Node< Key, Value > * node) const
   {
-    while (node->left_ != nullptr)
+    while (node->left != nullptr)
     {
-      node = node->left_;
+      node = node->left;
     }
     return node;
   }
@@ -219,41 +219,41 @@ namespace sakovskaia
   template< typename Key, typename Value, typename Comp >
   detail::Node< Key, Value > * Tree< Key, Value, Comp >::get(detail::Node< Key, Value > * node, const Key & key) const
   {
-    if (node == nullptr || (!comp_(key, node->data_.first) && !comp_(node->data_.first, key)))
+    if (node == nullptr || (!comp_(key, node->data.first) && !comp_(node->data.first, key)))
     {
       return node;
     }
-    if (comp_(key, node->data_.first))
+    if (comp_(key, node->data.first))
     {
-      return get(node->left_, key);
+      return get(node->left, key);
     }
     else
     {
-      return get(node->right_, key);
+      return get(node->right, key);
     }
   }
 
   template< typename Key, typename Value, typename Comp >
   Value & Tree< Key, Value, Comp >::get(const Key & key)
   {
-    detail::Node< Key, Value > * val = get(key, root_);
-    return val->data_.second;
+    detail::Node< Key, Value > * val = get(key, root);
+    return val->data.second;
   }
 
   template< typename Key, typename Value, typename Comp >
   detail::Node< Key, Value > * Tree< Key, Value, Comp >::get(detail::Node< Key, Value > * node, const Key & key)
   {
-    if (node == nullptr || node->data_.first == key)
+    if (node == nullptr || node->data.first == key)
     {
       return node;
     }
-    if (comp_(key, node->data_.first))
+    if (comp_(key, node->data.first))
     {
-      return get(node->left_, key);
+      return get(node->left, key);
     }
     else
     {
-      return get(node->right_, key);
+      return get(node->right, key);
     }
   }
 
@@ -263,7 +263,7 @@ namespace sakovskaia
     size_t balance = getBalance(node);
     if (balance > 1)
     {
-      if (getBalance(node->left_) < 0)
+      if (getBalance(node->left) < 0)
       {
         node->rotate_left(node);
       }
@@ -271,9 +271,9 @@ namespace sakovskaia
     }
     if (balance < -1)
     {
-      if (getBalance(node->right_) > 0)
+      if (getBalance(node->right) > 0)
       {
-        node->right_ = node->rotate_right(node->right_);
+        node->right = node->rotate_right(node->right);
       }
       return node->rotate_left(node);
     }
@@ -289,10 +289,10 @@ namespace sakovskaia
       try
       {
         new_node = new detail::Node< Key, Value >;
-        new_node->data_ = std::make_pair(key, value);
-        new_node->left_ = nullptr;
-        new_node->right_ = nullptr;
-        new_node->parent_ = nullptr;
+        new_node->data = std::make_pair(key, value);
+        new_node->left = nullptr;
+        new_node->right = nullptr;
+        new_node->parent = nullptr;
       }
       catch (...)
       {
@@ -302,19 +302,19 @@ namespace sakovskaia
       node = new_node;
       ++size_;
     }
-    else if (comp_(key, node->data_.first))
+    else if (comp_(key, node->data.first))
     {
-      node->left_ = insertNode(node->left_, key, value);
-      node->left_->parent_ = node;
+      node->left = insertNode(node->left, key, value);
+      node->left->parent = node;
     }
-    else if (comp_(node->data_.first, key))
+    else if (comp_(node->data.first, key))
     {
-      node->right_ = insertNode(node->right_, key, value);
-      node->right_->parent_ = node;
+      node->right = insertNode(node->right, key, value);
+      node->right->parent = node;
     }
     else
     {
-      node->data_.second = value;
+      node->data.second = value;
     }
     return balanceNode(node);
   }
@@ -322,23 +322,23 @@ namespace sakovskaia
   template < typename Key, typename Value, typename Comp >
   detail::Node< Key, Value > * Tree< Key, Value, Comp >::findNode(detail::Node< Key, Value > * node, const Key & key) const
   {
-    if (!node || (!comp_(key, node->data_.first) && !comp_(node->data_.first, key)))
+    if (!node || (!comp_(key, node->data.first) && !comp_(node->data.first, key)))
     {
       return node;
     }
 
-    if (comp_(key, node->data_.first))
+    if (comp_(key, node->data.first))
     {
-      return findNode(node->left_, key);
+      return findNode(node->left, key);
     }
-    return findNode(node->right_, key);
+    return findNode(node->right, key);
   }
 
   template < typename Key, typename Value, typename Comp >
   void Tree< Key, Value, Comp >::clear()
   {
-    clearNode(root_);
-    root_ = nullptr;
+    clearNode(root);
+    root = nullptr;
     size_ = 0;
   }
 
@@ -349,16 +349,18 @@ namespace sakovskaia
     {
       return;
     }
-    clearNode(node->left_);
-    clearNode(node->right_);
+    clearNode(node->left);
+    clearNode(node->right);
     delete node;
   }
 
   template < typename Key, typename Value, typename Comp >
-  void Tree< Key, Value, Comp >::swap(Tree & other) noexcept
+  void Tree< Key, Value, Comp >::swap(Tree& other) noexcept
   {
-    std::swap(root_, other.root_);
+    std::swap(root, other.root);
     std::swap(size_, other.size_);
     std::swap(comp_, other.comp_);
   }
 }
+
+#endif

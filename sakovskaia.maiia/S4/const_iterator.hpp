@@ -14,7 +14,7 @@ namespace sakovskaia
     friend class Tree< Key, Value, Comp >;
 
     public:
-      using Node = detail::TreeNode< Key, Value >;
+      using Node = detail::Node< Key, Value >;
 
       bool operator==(const ConstIterTree & other) const
       {
