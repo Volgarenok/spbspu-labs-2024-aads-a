@@ -4,7 +4,7 @@
 #include <fstream>
 #include <stdexcept>
 #include <functional>
-#include "tree.hpp"
+#include <tree.hpp>
 #include "input.hpp"
 #include "commands.hpp"
 

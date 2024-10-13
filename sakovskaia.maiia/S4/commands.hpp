@@ -1,6 +1,6 @@
 #ifndef COMMANDS_HPP
 #define COMMANDS_HPP
-#include "tree.hpp"
+#include <tree.hpp>
 
 namespace sakovskaia
 {

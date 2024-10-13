@@ -2,7 +2,7 @@
 #define INPUT_HPP
 #include <iostream>
 #include <string>
-#include "tree.hpp"
+#include <tree.hpp>
 
 namespace sakovskaia
 {
