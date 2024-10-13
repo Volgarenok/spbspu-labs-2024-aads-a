@@ -11,6 +11,9 @@ namespace stepanov
   class List;
 
   template < typename T>
+  class ConstIterator;
+
+  template < typename T>
   class Iterator: public std::iterator< std::forward_iterator_tag, T >
   {
     friend class List< T >;
