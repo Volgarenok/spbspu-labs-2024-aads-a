@@ -58,6 +58,43 @@ namespace sakovskaia
       {
         return this->right_ && this->left_;
       }
+
+      Node< Key, Value > * rotate_right(Node< Key, Value > * root)
+      {
+        if (root == nullptr || root->left_ == nullptr)
+        {
+          return root;
+        }
+        Node< Key, Value > * new_root = root->left_;
+        root->left_ = new_root->right_;
+        if (new_root->right_ != nullptr)
+        {
+          new_root->right_->parent_ = root;
+        }
+        new_root->right_ = root;
+        new_root->parent_ = root->parent_;
+        root->parent_ = new_root;
+
+        return new_root;
+      }
+
+      Node< Key, Value > * rotate_left(Node< Key, Value > * root)
+      {
+        if (root == nullptr || root->right_ == nullptr)
+        {
+          return root;
+        }
+        Node< Key, Value > * new_root = root->right_;
+        root->right_ = new_root->left_;
+        if (new_root->left_ != nullptr)
+        {
+          new_root->left_->parent_ = root;
+        }
+        new_root->left_ = root;
+        new_root->parent_ = root->parent_;
+        root->parent_ = new_root;
+        return new_root;
+      }
     };
   }
 }
