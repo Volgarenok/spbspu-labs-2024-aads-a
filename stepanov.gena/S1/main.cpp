@@ -19,12 +19,21 @@ int main()
     using namespace stepanov;
 
     auto sequences = read_sequences();
-    if (sequences.empty())
+    print_sequence_names(sequences);
+    bool isEmpty = true;
+    for (const auto& seq : sequences)
+    {
+      if (!seq.second.empty())
+      {
+        isEmpty = false;
+        break;
+      }
+    }
+    if (isEmpty)
     {
       std::cout << "0\n";
       return 0;
     }
-    print_sequence_names(sequences);
     print_sequence_values(sequences);
     sum_sequence_values(sequences);
   }
