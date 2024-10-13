@@ -4,9 +4,7 @@ namespace stepanov
 {
   void sum_sequence_values(const std::vector<std::pair<std::string, List<size_t>>>& sequences)
   {
-    // Используем константные итераторы, так как данные не изменяются
     std::vector<List<size_t>::const_iterator> iters;
-    
     for (const auto& seq : sequences)
     {
       iters.push_back(seq.second.begin());
@@ -23,7 +21,6 @@ namespace stepanov
       {
         if (iters[idx] != sequences[idx].second.end())
         {
-          // Проверка на переполнение при сложении
           if (sum > std::numeric_limits<size_t>::max() - *iters[idx])
           {
             throw std::overflow_error("Overflow occurred during summation");
