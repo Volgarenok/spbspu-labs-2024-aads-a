@@ -25,10 +25,6 @@ namespace stepanov
 
       while (std::cin.peek() != '\n' && std::cin >> num)
       {
-        if (num > std::numeric_limits<size_t>::max())
-        {
-          throw std::overflow_error("Overflow occurred");
-        }
         numbers.push_back(num);
       }
       std::cin.ignore();
@@ -92,7 +88,7 @@ namespace stepanov
     done = false;
     while (!done)
     {
-      int sum = 0;
+      size_t sum = 0;
       done = true;
       bool has_values = false;
 
@@ -101,6 +97,10 @@ namespace stepanov
         size_t idx = std::distance(iters.begin(), it);
         if (*it != sequences[idx].second.end())
         {
+          if (sum > std::numeric_limits<size_t>::max() - **it)
+          {
+            throw std::overflow_error("Overflow occurred during summation");
+          }
           sum += **it;
           ++(*it);
           done = false;
