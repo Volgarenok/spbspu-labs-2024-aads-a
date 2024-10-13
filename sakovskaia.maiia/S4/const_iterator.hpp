@@ -1,7 +1,7 @@
 #ifndef CONST_ITERATOR_HPP
 #define CONST_ITERATOR_HPP
 #include <functional>
-#include "node.hpp"
+#include "tree_node.hpp"
 
 namespace sakovskaia
 {
