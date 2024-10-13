@@ -10,8 +10,13 @@ int main() {
         stepanov::process_sequences();
     }
     catch (const std::overflow_error& e) {
-        std::cerr << "Error: " << e.what() << std::endl;
-        std::exit(1);
+        std::cerr << e.what() << std::endl;
+        return 1;
+    }
+    catch (const std::exception & e)
+    {
+      std::cerr << e.wnat() <<'\n';
+      return 1;
     }
     return 0;
 }
