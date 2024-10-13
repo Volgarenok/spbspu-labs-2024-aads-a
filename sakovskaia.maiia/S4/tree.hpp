@@ -1,12 +1,11 @@
 #ifndef TREE_HPP
 #define TREE_HPP
-
 #include <algorithm>
 #include <iostream>
 #include <stack>
 #include <queue>
-#include "treeNode.hpp"
-#include "constIterator.hpp"
+#include "node.hpp"
+#include "const_iterator.hpp"
 
 namespace sakovskaia
 {
