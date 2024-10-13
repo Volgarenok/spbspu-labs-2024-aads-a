@@ -15,21 +15,21 @@ namespace stepanov
 {
   void process_sequences()
   {
-    std::vector<std::pair<std::string, List<int>>> sequences;
+    std::vector<std::pair<std::string, List<size_t>>> sequences;
     std::string name;
 
     while (std::cin >> name)
     {
-      List<int> numbers;
-      unsigned long long num;
+      List<size_t> numbers;
+      size_t num;
 
       while (std::cin.peek() != '\n' && std::cin >> num)
       {
-        if (num > static_cast<unsigned long long>(std::numeric_limits<int>::max()))
+        if (num > std::numeric_limits<size_t>::max())
         {
           throw std::overflow_error("Overflow occurred");
         }
-        numbers.push_back(static_cast<int>(num));
+        numbers.push_back(num);
       }
       std::cin.ignore();
       sequences.push_back({ name, std::move(numbers) });
@@ -51,7 +51,7 @@ namespace stepanov
     }
     std::cout << std::endl;
 
-    std::vector<List<int>::iterator> iters;
+    std::vector<List<size_t>::iterator> iters;
     for (auto& seq : sequences)
     {
       iters.push_back(seq.second.begin());
