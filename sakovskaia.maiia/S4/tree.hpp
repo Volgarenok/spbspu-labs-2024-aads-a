@@ -5,7 +5,7 @@
 #include <stack>
 #include <queue>
 #include "tree_node.hpp"
-#include "const_iterator.hpp"
+#include "const_tree_iterator.hpp"
 
 namespace sakovskaia
 {
