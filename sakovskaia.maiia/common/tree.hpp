@@ -55,7 +55,7 @@ namespace sakovskaia
     comp_(other.comp_)
   {
     root = copy(other.root);
-    size = other.size;
+    size_ = other.size_;
   }
 
   template < typename Key, typename Value, typename Comp >
@@ -105,7 +105,7 @@ namespace sakovskaia
   template < typename Key, typename Value, typename Comp >
   Value & Tree< Key, Value, Comp >::at(const Key & key)
   {
-    auto node = findNode(root, key);
+    auto node = findNode(key);
     if (!node)
     {
       throw std::out_of_range("Key not found");
@@ -116,7 +116,7 @@ namespace sakovskaia
   template < typename Key, typename Value, typename Comp >
   const Value & Tree< Key, Value, Comp >::at(const Key & key) const
   {
-    auto node = findNode(root, key);
+    auto node = findNode(key);
     if (!node)
     {
       throw std::out_of_range("Key not found");
@@ -131,7 +131,7 @@ namespace sakovskaia
   }
 
   template< typename Key, typename Value, typename Comp >
-  bool Tree< Key, Value, Comp >::contains(const Key& key) const
+  bool Tree< Key, Value, Comp >::contains(const Key & key) const
   {
     return findNode(key) != nullptr;
   }
@@ -169,9 +169,30 @@ namespace sakovskaia
   }
 
   template < typename Key, typename Value, typename Comp >
+  detail::Node< Key, Value > * Tree< Key, Value, Comp >::findNode(const Key & key) const
+  {
+    detail::Node< Key, Value > * current = root;
+    while (current)
+    {
+      if (comp_(key, current->data.first))
+      {
+        current = current->left;                                                                                                           }
+      else if (comp_(current->data.first, key))
+      {
+        current = current->right;
+      }
+      else
+      {
+        return current;
+      }
+    }
+    return nullptr;
+  }
+
+  template < typename Key, typename Value, typename Comp >
   ConstIterTree< Key, Value, Comp > Tree< Key, Value, Comp >::find(const Key & key) const
   {
-    return ConstIterTree< Key, Value, Comp >(findNode(root, key));
+    return ConstIterTree< Key, Value, Comp >(findNode(key));
   }
 
   template < typename Key, typename Value, typename Comp >
@@ -197,28 +218,6 @@ namespace sakovskaia
       node->data.second = value;
     }
     return node;
-  }
-
-  template < typename Key, typename Value, typename Comp >
-  detail::Node< Key, Value > * Tree< Key, Value, Comp >::findNode(const Key & key) const
-  {
-    detail::Node< Key, Value > * current = root;
-    while (current)
-    {
-      if (comp_(key, current->data.first))
-      {
-        current = current->left;
-      }
-      else if (comp_(current->data.first, key))
-      {
-        current = current->right;
-      }
-      else
-      {
-        return current;
-      }
-    }
-    return nullptr;
   }
 
   template <typename Key, typename Value, typename Comp>
@@ -258,3 +257,4 @@ namespace sakovskaia
 }
 
 #endif
+
