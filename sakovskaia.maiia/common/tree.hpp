@@ -378,8 +378,8 @@ namespace sakovskaia
       throw std::logic_error("<EMPTY>");
     }
 
-    std::stack< detail::TreeNode< Key, Value > * > node_stack;
-    detail::TreeNode< Key, Value > * cur = root_;
+    std::stack< detail::Node< Key, Value > * > node_stack;
+    detail::Node< Key, Value > * cur = root;
 
     while (!node_stack.empty() || cur != nullptr)
     {
@@ -409,7 +409,7 @@ namespace sakovskaia
     }
 
     std::stack< detail::Node< Key, Value > * > node_stack;
-    detail::Node< Key, Value > * cur = root_;
+    detail::Node< Key, Value > * cur = root;
 
     while (!node_stack.empty() || cur != nullptr)
     {
