@@ -19,25 +19,20 @@ int main()
   try
   {
     using namespace stepanov;
-    std::vector<std::pair<std::string, List<size_t>>> sequences;
+    List<std::pair<std::string, List<size_t>>> sequences;
+
     read_sequences(sequences);
     if (sequences.empty())
     {
+      std::cout << 0 << '\n';
       return 0;
     }
-    if (isEmptyList(sequences))
-    {
-      print_sequence_names(sequences);
-      std::cout << "0\n" << std::endl;
-      return 0;
-    }
-    else
-    {
-      auto sums = sum_sequence_values(sequences);
-      print_sequence_names(sequences);
-      print_sequence_values(sequences);
-      output_sum_sequence_values(sums);
-    }
+
+    auto sums = sum_sequence_values(sequences);
+    print_sequence_names(sequences);
+    print_sequence_values(sequences);
+    output_sum_sequence_values(sums);
+
   }
   catch (const std::overflow_error& e)
   {

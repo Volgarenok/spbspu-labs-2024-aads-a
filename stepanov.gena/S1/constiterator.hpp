@@ -20,6 +20,11 @@ namespace stepanov
     friend class Iterator< T >;
 
   public:
+    using value_type = T;
+    using pointer = const T*;
+    using reference = const T&;
+    using iterator_category = std::forward_iterator_tag;
+    using difference_type = std::ptrdiff_t;
     using this_type = ConstIterator< T >;
     ConstIterator():
       node_(nullptr)

@@ -2,7 +2,7 @@
 
 namespace stepanov
 {
-  void print_sequence_names(const std::vector<std::pair<std::string, List<size_t>>>& sequences)
+  void print_sequence_names(const List<std::pair<std::string, List<size_t>>>& sequences)
   {
     for (auto it = sequences.begin(); it != sequences.end(); ++it)
     {

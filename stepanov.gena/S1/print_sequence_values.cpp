@@ -2,9 +2,9 @@
 
 namespace stepanov
 {
-  void print_sequence_values(const std::vector<std::pair<std::string, List<size_t>>>& sequences)
+  void print_sequence_values(const List<std::pair<std::string, List<size_t>>>& sequences)
   {
-    std::vector<List<size_t>::const_iterator> iters;
+    List<List<size_t>::const_iterator> iters;
     for (const auto& seq : sequences)
     {
       iters.push_back(seq.second.begin());

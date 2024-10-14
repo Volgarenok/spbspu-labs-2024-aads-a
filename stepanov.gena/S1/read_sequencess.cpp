@@ -2,7 +2,7 @@
 
 namespace stepanov
 {
-  void read_sequences(std::vector<std::pair<std::string, List<size_t>>>& sequences)
+  void read_sequences(List<std::pair<std::string, List<size_t>>>& sequences)
   {
     std::string name = "";
 

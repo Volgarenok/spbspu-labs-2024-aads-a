@@ -2,15 +2,15 @@
 
 namespace stepanov
 {
-  std::vector<size_t> sum_sequence_values(const std::vector<std::pair<std::string, List<size_t>>>& sequences)
+  List<size_t> sum_sequence_values(const List<std::pair<std::string, List<size_t>>>& sequences)
   {
-    std::vector<List<size_t>::const_iterator> iters;
+    List<List<size_t>::const_iterator> iters;
     for (const auto& seq : sequences)
     {
       iters.push_back(seq.second.begin());
     }
 
-    std::vector<size_t> sums;
+    List<size_t> sums;
     bool done = false;
 
     while (!done)

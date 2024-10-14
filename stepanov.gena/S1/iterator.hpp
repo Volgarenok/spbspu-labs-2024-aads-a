@@ -18,6 +18,11 @@ namespace stepanov
   {
     friend class List< T >;
     public:
+      using value_type = T;
+      using pointer = T*;
+      using reference = T&;
+      using iterator_category = std::forward_iterator_tag;
+      using difference_type = std::ptrdiff_t;
       using this_type = Iterator< T >;
       Iterator():
         node_(nullptr)
