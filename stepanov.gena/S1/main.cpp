@@ -28,6 +28,13 @@ int main()
       return 0;
     }
 
+    if (isEmptyList(sequences))
+    {
+      print_sequence_names(sequences);
+      std::cout << "0\n" <<std::endl;
+      return 0;
+    }
+
     auto sums = sum_sequence_values(sequences);
     print_sequence_names(sequences);
     print_sequence_values(sequences);

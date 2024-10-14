@@ -7,6 +7,6 @@
 
 namespace stepanov
 {
-  bool isEmptyList(std::vector<std::pair<std::string, List<size_t>>>& sequences);
+  bool isEmptyList(const List<std::pair<std::string, List<size_t>>>& sequences);
 }
 #endif
