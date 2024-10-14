@@ -11,6 +11,7 @@
 #include "print_sequence_names.hpp"
 #include "print_sequence_values.hpp"
 #include "sum_sequence_values.hpp"
+#include "output_sum_sequence_values.hpp"
 
 int main()
 {
@@ -19,6 +20,7 @@ int main()
     using namespace stepanov;
 
     auto sequences = read_sequences();
+    auto sums = sum_sequence_values(sequences);
     print_sequence_names(sequences);
 
     if (sequences.empty()) {
@@ -42,7 +44,7 @@ int main()
     }
 
     print_sequence_values(sequences);
-    sum_sequence_values(sequences);
+    output_sum_sequence_values(sums);
   }
   catch (const std::overflow_error& e)
   {

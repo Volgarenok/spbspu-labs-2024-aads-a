@@ -9,7 +9,7 @@
 
 namespace stepanov
 {
-  void sum_sequence_values(const std::vector<std::pair<std::string, List<size_t>>>& sequences);
+  std::vector<size_t> sum_sequence_values(const std::vector<std::pair<std::string, List<size_t>>>& sequences);
 }
 
 #endif

@@ -2,7 +2,7 @@
 
 namespace stepanov
 {
-  void sum_sequence_values(const std::vector<std::pair<std::string, List<size_t>>>& sequences)
+  std::vector<size_t> sum_sequence_values(const std::vector<std::pair<std::string, List<size_t>>>& sequences)
   {
     std::vector<List<size_t>::const_iterator> iters;
     for (const auto& seq : sequences)
@@ -10,7 +10,9 @@ namespace stepanov
       iters.push_back(seq.second.begin());
     }
 
+    std::vector<size_t> sums;
     bool done = false;
+
     while (!done)
     {
       size_t sum = 0;
@@ -34,13 +36,9 @@ namespace stepanov
 
       if (has_values)
       {
-        std::cout << sum;
-        if (!done)
-        {
-          std::cout << " ";
-        }
+        sums.push_back(sum);
       }
     }
-    std::cout << std::endl;
+    return sums;
   }
 }
