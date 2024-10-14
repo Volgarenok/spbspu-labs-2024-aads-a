@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <functional>
+#include <stdexcept>
 #include "tree.hpp"
 #include "commands.hpp"
 #include "key_sum.hpp"
