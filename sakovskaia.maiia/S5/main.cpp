@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <functional>
 #include "tree.hpp"
 #include "commands.hpp"
 #include "key_sum.hpp"
@@ -18,7 +19,7 @@ int main(int argc, char * argv[])
   }
   command = argv[1];
   filename = argv[2];
-  using function = std::function< void(avlTree &, KeySum &, std::ostream &)>;
+  using func = std::function< void(avlTree &, KeySum &, std::ostream &)>;
 
   Tree< std::string, func > commands;
   commands.push("ascending", ascending);
