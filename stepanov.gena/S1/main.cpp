@@ -12,7 +12,7 @@
 #include "print_sequence_values.hpp"
 #include "sum_sequence_values.hpp"
 
-int main() 
+int main()
 {
   try
   {
@@ -22,7 +22,7 @@ int main()
     print_sequence_names(sequences);
 
     if (sequences.empty()) {
-      std::cout << "0\n";  
+      std::cout << "0\n";
       return 0;
     }
 
@@ -32,12 +32,12 @@ int main()
       if (!seq.second.empty())
       {
         allEmpty = false;
-        break; 
+        break;
       }
     }
 
     if (allEmpty) {
-      std::cout << "0\n"; 
+      std::cout << "0\n";
       return 0;
     }
 
