@@ -1,6 +1,8 @@
 #ifndef STACK_H
 #define STACK_H
 
+#include <list.hpp>
+
 namespace stepanov
 {
   template < typename T >
@@ -9,7 +11,14 @@ namespace stepanov
   public:
     Stack() = default;
     ~Stack() = default;
+
+    void pushTop(const T& newHead);
+    void popTop();
+    bool isEmpty() const noexcept;
+    size_t& getSize() const noexcept;
+    const T& getHead() const;
   private:
+    List< T > dataBase_;
   };
 }
 
