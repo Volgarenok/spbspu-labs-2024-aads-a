@@ -6,8 +6,12 @@
 namespace agarkov
 {
   template< typename T >
+  class ForwardList;
+
+  template< typename T >
   class ForwardListIterator
   {
+  friend class ForwardList< T >;
   public:
     ForwardListIterator();
     ~ForwardListIterator() = default;
