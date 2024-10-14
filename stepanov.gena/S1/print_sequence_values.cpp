@@ -19,19 +19,20 @@ namespace stepanov
       {
         if (iters[idx] != sequences[idx].second.end())
         {
-          std::cout << *iters[idx];
-          if (idx + 1 < iters.size())
+          if (has_output)
           {
-            std::cout << " ";
+            std::cout << ' ';
           }
+          std::cout << *iters[idx];
           ++iters[idx];
           done = false;
           has_output = true;
         }
       }
+
       if (has_output)
       {
-        std::cout << std::endl;
+        std::cout << '\n';
       }
     }
   }

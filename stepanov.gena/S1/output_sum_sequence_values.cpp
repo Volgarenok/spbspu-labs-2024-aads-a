@@ -6,12 +6,12 @@ namespace stepanov
   {
     for (size_t i = 0; i < sums.size(); ++i)
     {
-      std::cout << sums[i];
-      if (i < sums.size() - 1)
+      if (i > 0)
       {
         std::cout << " ";
       }
+      std::cout << sums[i];
     }
-    std::cout << std::endl;
+    std::cout << "\n";
   }
 }

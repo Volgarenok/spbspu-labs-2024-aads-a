@@ -15,4 +15,3 @@ namespace stepanov
     std::cout << std::endl;
   }
 }
-
