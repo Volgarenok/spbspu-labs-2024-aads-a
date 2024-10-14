@@ -41,17 +41,11 @@ namespace sakovskaia
     size_t size_;
     detail::Node< Key, Value > * root;
     Comp comp_;
-    size_t getHeight(detail::Node< Key, Value > * node) const;
-    size_t getBalance(detail::Node< Key, Value > * node) const;
-    detail::Node< Key, Value > * find_min(detail::Node< Key, Value > * node) const;
-    detail::Node< Key, Value > * get(detail::Node< Key, Value > * node, const Key & key) const;
-    Value & get(const Key & key);
-    detail::Node< Key, Value > * get(detail::Node< Key, Value > * node, const Key & key);
-    detail::Node< Key, Value > * balanceNode(detail::Node< Key, Value > * node);
-    detail::Node< Key, Value > * insertNode(detail::Node< Key, Value > * node, const Key & key, const Value & value);
-    detail::Node< Key, Value > * findNode(detail::Node< Key, Value > * node, const Key & key) const;
-    void clear();
-    void clearNode(detail::Node< Key, Value > * node);
+    detail::Node< Key, Value > * insert(detail::Node< Key, Value > * node, detail::Node< Key, Value > * parent, const Key & key, const Value & value);
+    detail::Node< Key, Value > * findNode(const Key & key) const;
+    detail::Node< Key, Value > * copy(detail::Node< Key, Value > * node, detail::Node< Key, Value > * parent = nullptr);
+    void clear(detail::Node< Key, Value > * node);
+    detail::Node< Key, Value > * findMin(detail::Node< Key, Value > * node) const;
   };
 
   template < typename Key, typename Value, typename Comp >
@@ -67,18 +61,8 @@ namespace sakovskaia
     root(nullptr),
     comp_(other.comp_)
   {
-    try
-    {
-      for (auto it = other.cbegin(); it != other.cend(); ++it)
-      {
-        push(it->first, it->second);
-      }
-    }
-    catch (...)
-    {
-      clear();
-      throw;
-    }
+    root = copy(other.root);
+    size_ = other.size_;
   }
 
   template < typename Key, typename Value, typename Comp >
@@ -102,8 +86,10 @@ namespace sakovskaia
   {
     if (this != & other)
     {
-      Tree temp(other);
-      swap(temp);
+      clear(root);
+      root = copy(other.root);
+      size_ = other.size_;
+      comp_ = other.comp_;
     }
     return * this;
   }
@@ -113,8 +99,12 @@ namespace sakovskaia
   {
     if (this != & other)
     {
-      clear();
-      swap(other);
+      clear(root);
+      root = other.root;
+      size_ = other.size_;
+      comp_ = std::move(other.comp_);
+      other.root = nullptr;
+      other.size_ = 0;
     }
     return * this;
   }
@@ -122,7 +112,7 @@ namespace sakovskaia
   template < typename Key, typename Value, typename Comp >
   Value & Tree< Key, Value, Comp >::at(const Key & key)
   {
-    auto node = findNode(root, key);
+    auto node = findNode(key);
     if (!node)
     {
       throw std::out_of_range("Key not found");
@@ -133,7 +123,7 @@ namespace sakovskaia
   template < typename Key, typename Value, typename Comp >
   const Value & Tree< Key, Value, Comp >::at(const Key & key) const
   {
-    auto node = findNode(root, key);
+    auto node = findNode(key);
     if (!node)
     {
       throw std::out_of_range("Key not found");
@@ -148,9 +138,9 @@ namespace sakovskaia
   }
 
   template< typename Key, typename Value, typename Comp >
-  bool Tree< Key, Value, Comp >::contains(const Key& key) const
+  bool Tree< Key, Value, Comp >::contains(const Key & key) const
   {
-    return get(root, key) != nullptr;
+    return findNode(key) != nullptr;
   }
 
   template < typename Key, typename Value, typename Comp >
@@ -160,22 +150,23 @@ namespace sakovskaia
   }
 
   template < typename Key, typename Value, typename Comp >
+  void Tree< Key, Value, Comp >::swap(Tree & other) noexcept
+  {
+    std::swap(root, other.root);
+    std::swap(size_, other.size_);
+    std::swap(comp_, other.comp_);
+  }
+
+  template < typename Key, typename Value, typename Comp >
   void Tree< Key, Value, Comp >::push(const Key & key, const Value & value)
   {
-    root = insertNode(root, key, value);
+    root = insert(root, nullptr, key, value);
   }
 
   template < typename Key, typename Value, typename Comp >
   ConstIterTree< Key, Value, Comp > Tree< Key, Value, Comp >::cbegin() const
   {
-    if (root != nullptr)
-    {
-      return ConstIterTree< Key, Value, Comp >(find_min(root));
-    }
-    else
-    {
-      return ConstIterTree< Key, Value, Comp >(nullptr);
-    }
+    return ConstIterTree< Key, Value, Comp >(findMin(root));
   }
 
   template < typename Key, typename Value, typename Comp >
@@ -187,189 +178,91 @@ namespace sakovskaia
   template < typename Key, typename Value, typename Comp >
   ConstIterTree< Key, Value, Comp > Tree< Key, Value, Comp >::find(const Key & key) const
   {
-    return ConstIterTree< Key, Value, Comp >(findNode(root, key));
+    return ConstIterTree< Key, Value, Comp >(findNode(key));
   }
 
   template < typename Key, typename Value, typename Comp >
-  size_t Tree< Key, Value, Comp >::getHeight(detail::Node< Key, Value > * node) const
+  detail::Node< Key, Value > * Tree< Key, Value, Comp >::insert(detail::Node< Key, Value > * node, detail::Node< Key, Value > * parent, const Key & key, const Value & value)
   {
-    if (node == nullptr)
+    if (!node)
     {
-      return 0;
+      detail::Node< Key, Value > * newNode = new detail::Node< Key, Value >(key, value);
+      newNode->parent = parent;
+      ++size_;
+      return newNode;
     }
-    return 1 + std::max(getHeight(node->left), getHeight(node->right));
-  }
-
-  template < typename Key, typename Value, typename Comp >
-  size_t Tree< Key, Value, Comp >::getBalance(detail::Node< Key, Value > * node) const
-  {
-    if (node != nullptr)
+    if (comp_(key, node->data.first))
     {
-      return getHeight(node->left) - getHeight(node->right);
+      node->left = insert(node->left, node, key, value);
+    }
+    else if (comp_(node->data.first, key))
+    {
+      node->right = insert(node->right, node, key, value);
     }
     else
     {
-      return 0;
+      node->data.second = value;
+    }
+    return node;
+  }
+
+  template < typename Key, typename Value, typename Comp >
+  detail::Node< Key, Value > * Tree< Key, Value, Comp >::findNode(const Key & key) const
+  {
+    detail::Node< Key, Value > * current = root;
+    while (current)
+    {
+      if (comp_(key, current->data.first))
+      {
+        current = current->left;
+      }
+      else if (comp_(current->data.first, key))
+      {
+        current = current->right;
+      }
+      else
+      {
+        return current;
+      }
+    }
+    return nullptr;
+  }
+
+  template < typename Key, typename Value, typename Comp >
+  detail::Node< Key, Value > * Tree< Key, Value, Comp >::copy(detail::Node< Key, Value > * node, detail::Node< Key, Value > * parent)
+  {
+    if (!node)
+    {
+      return nullptr;
+    }
+    detail::Node< Key, Value > * newNode = new detail::Node< Key, Value >(node->data.first, node->data.second);
+    newNode->parent = parent;
+    newNode->left = copy(node->left, newNode);
+    newNode->right = copy(node->right, newNode);
+    return newNode;
+  }
+
+  template < typename Key, typename Value, typename Comp >
+  void Tree< Key, Value, Comp >::clear(detail::Node< Key, Value > * node)
+  {
+    if (node)
+    {
+      clear(node->left);
+      clear(node->right);
+      delete node;
     }
   }
 
-  template< typename Key, typename Value, typename Comp >
-  detail::Node< Key, Value > * Tree< Key, Value, Comp >::find_min(detail::Node< Key, Value > * node) const
+  template < typename Key, typename Value, typename Comp >
+  detail::Node< Key, Value > * Tree< Key, Value, Comp >::findMin(detail::Node< Key, Value > * node) const
   {
-    while (node->left != nullptr)
+    while (node && node->left)
     {
       node = node->left;
     }
     return node;
   }
 
-  template< typename Key, typename Value, typename Comp >
-  detail::Node< Key, Value > * Tree< Key, Value, Comp >::get(detail::Node< Key, Value > * node, const Key & key) const
-  {
-    if (node == nullptr || (!comp_(key, node->data.first) && !comp_(node->data.first, key)))
-    {
-      return node;
-    }
-    if (comp_(key, node->data.first))
-    {
-      return get(node->left, key);
-    }
-    else
-    {
-      return get(node->right, key);
-    }
-  }
-
-  template< typename Key, typename Value, typename Comp >
-  Value & Tree< Key, Value, Comp >::get(const Key & key)
-  {
-    detail::Node< Key, Value > * val = get(key, root);
-    return val->data.second;
-  }
-
-  template< typename Key, typename Value, typename Comp >
-  detail::Node< Key, Value > * Tree< Key, Value, Comp >::get(detail::Node< Key, Value > * node, const Key & key)
-  {
-    if (node == nullptr || node->data.first == key)
-    {
-      return node;
-    }
-    if (comp_(key, node->data.first))
-    {
-      return get(node->left, key);
-    }
-    else
-    {
-      return get(node->right, key);
-    }
-  }
-
-  template < typename Key, typename Value, typename Comp >
-  detail::Node< Key, Value > * Tree< Key, Value, Comp >::balanceNode(detail::Node< Key, Value > * node)
-  {
-    size_t balance = getBalance(node);
-    if (balance > 1)
-    {
-      if (getBalance(node->left) < 0)
-      {
-        node->rotate_left(node);
-      }
-      return node->rotate_right(node);
-    }
-    if (balance < -1)
-    {
-      if (getBalance(node->right) > 0)
-      {
-        node->right = node->rotate_right(node->right);
-      }
-      return node->rotate_left(node);
-    }
-    return node;
-  }
-
-  template < typename Key, typename Value, typename Comp >
-  detail::Node< Key, Value > * Tree< Key, Value, Comp >::insertNode(detail::Node< Key, Value > * node, const Key & key, const Value & value)
-  {
-    if (node == nullptr)
-    {
-      detail::Node< Key, Value > * new_node = nullptr;
-      try
-      {
-        new_node = new detail::Node< Key, Value >;
-        new_node->data = std::make_pair(key, value);
-        new_node->left = nullptr;
-        new_node->right = nullptr;
-        new_node->parent = nullptr;
-      }
-      catch (...)
-      {
-        delete new_node;
-        throw;
-      }
-      node = new_node;
-      ++size_;
-    }
-    else if (comp_(key, node->data.first))
-    {
-      node->left = insertNode(node->left, key, value);
-      node->left->parent = node;
-    }
-    else if (comp_(node->data.first, key))
-    {
-      node->right = insertNode(node->right, key, value);
-      node->right->parent = node;
-    }
-    else
-    {
-      node->data.second = value;
-    }
-    return balanceNode(node);
-  }
-
-  template < typename Key, typename Value, typename Comp >
-  detail::Node< Key, Value > * Tree< Key, Value, Comp >::findNode(detail::Node< Key, Value > * node, const Key & key) const
-  {
-    if (!node || (!comp_(key, node->data.first) && !comp_(node->data.first, key)))
-    {
-      return node;
-    }
-
-    if (comp_(key, node->data.first))
-    {
-      return findNode(node->left, key);
-    }
-    return findNode(node->right, key);
-  }
-
-  template < typename Key, typename Value, typename Comp >
-  void Tree< Key, Value, Comp >::clear()
-  {
-    clearNode(root);
-    root = nullptr;
-    size_ = 0;
-  }
-
-  template < typename Key, typename Value, typename Comp >
-  void Tree< Key, Value, Comp >::clearNode(detail::Node< Key, Value > * node)
-  {
-    if (!node)
-    {
-      return;
-    }
-    clearNode(node->left);
-    clearNode(node->right);
-    delete node;
-  }
-
-  template < typename Key, typename Value, typename Comp >
-  void Tree< Key, Value, Comp >::swap(Tree& other) noexcept
-  {
-    std::swap(root, other.root);
-    std::swap(size_, other.size_);
-    std::swap(comp_, other.comp_);
-  }
-
-  template< typename Key, typename Value, typename Comp >
   template< typename F>
   F Tree< Key, Value, Comp >::traverseLnr(F f) const
   {
