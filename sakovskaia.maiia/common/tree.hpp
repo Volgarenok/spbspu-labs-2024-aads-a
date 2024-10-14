@@ -30,6 +30,13 @@ namespace sakovskaia
     ConstIterTree< Key, Value, Comp > cend() const;
     ConstIterTree< Key, Value, Comp > find(const Key & key) const;
 
+    template< typename F >
+    F traverseLnr(F f) const;
+    template< typename F >
+    F traverseRnl(F f) const;
+    template< typename F >
+    F traverseBreadth(F f) const;
+
   private:
     size_t size_;
     detail::Node< Key, Value > * root;
@@ -360,6 +367,92 @@ namespace sakovskaia
     std::swap(root, other.root);
     std::swap(size_, other.size_);
     std::swap(comp_, other.comp_);
+  }
+
+  template< typename Key, typename Value, typename Comp >
+  template< typename F>
+  F Tree< Key, Value, Comp >::traverseLnr(F f) const
+  {
+    if (empty())
+    {
+      throw std::logic_error("<EMPTY>");
+    }
+
+    std::stack< detail::TreeNode< Key, Value > * > node_stack;
+    detail::TreeNode< Key, Value > * cur = root_;
+
+    while (!node_stack.empty() || cur != nullptr)
+    {
+      if (cur != nullptr)
+      {
+        node_stack.push(cur);
+        cur = cur->left;
+      }
+      else
+      {
+        cur = node_stack.top();
+        node_stack.pop();
+        f(cur->data);
+        cur = cur->right;
+      }
+    }
+    return f;
+  }
+
+  template< typename Key, typename Value, typename Comp >
+  template< typename F >
+  F Tree< Key, Value, Comp >::traverseRnl(F f) const
+  {
+    if (empty())
+    {
+      throw std::logic_error("<EMPTY>");
+    }
+
+    std::stack< detail::Node< Key, Value > * > node_stack;
+    detail::Node< Key, Value > * cur = root_;
+
+    while (!node_stack.empty() || cur != nullptr)
+    {
+      while (cur != nullptr)
+      {
+        node_stack.push(cur);
+        cur = cur->right;
+      }
+      cur = node_stack.top();
+      node_stack.pop();
+      f(cur->data);
+      cur = cur->left;
+    }
+    return f;
+  }
+
+  template< typename Key, typename Value, typename Comp >
+  template< typename F >
+  F Tree< Key, Value, Comp >::traverseBreadth(F f) const
+  {
+    if (empty())
+    {
+      throw std::logic_error("<EMPTY>");
+    }
+
+    std::queue< detail::Node<Key, Value > * > queueOfnodes;
+    queueOfnodes.push(root);
+
+    while (!queueOfnodes.empty())
+    {
+      detail::Node< Key, Value > * cur = queueOfnodes.front();
+      queueOfnodes.pop();
+      f(cur->data);
+      if (cur->left != nullptr)
+      {
+        queueOfnodes.push(cur->left);
+      }
+      if (cur->right != nullptr)
+      {
+        queueOfnodes.push(cur->right);
+      }
+    }
+    return f;
   }
 }
 
