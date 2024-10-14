@@ -31,7 +31,7 @@ int main()
     if (isEmptyList(sequences))
     {
       print_sequence_names(sequences);
-      std::cout << "0\n" <<std::endl;
+      std::cout << "0\n";
       return 0;
     }
 
