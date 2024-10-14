@@ -21,7 +21,8 @@ namespace agarkov
     ForwardListConstIterator< T > operator++(int);
     const T& operator*();
     const T* operator->();
-
+    bool operator==(const ForwardListConstIterator< T >& rhs) const;
+    bool operator!=(const ForwardListConstIterator< T >& rhs) const;
   private:
     const details::List< T >* ptr_;
   };
@@ -71,6 +72,17 @@ namespace agarkov
     return std::addressof(ptr_->data_);
   }
 
+  template< typename T >
+  bool ForwardListConstIterator< T >::operator==(const ForwardListConstIterator< T >& rhs) const
+  {
+    return ptr_ == rhs.ptr_;
+  }
+
+  template< typename T >
+  bool ForwardListConstIterator< T >::operator!=(const ForwardListConstIterator< T >& rhs) const
+  {
+    return ptr_ != rhs.ptr_;
+  }
 }
 
 #endif
