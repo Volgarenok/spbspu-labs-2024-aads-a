@@ -1,7 +1,8 @@
 #ifndef COMMANDS_HPP
 #define COMMANDS_HPP
 #include <string>
-#include "tree.hpp"
+#include <ostream>
+#include <tree.hpp>
 #include "key_sum.hpp"
 
 namespace sakovskaia

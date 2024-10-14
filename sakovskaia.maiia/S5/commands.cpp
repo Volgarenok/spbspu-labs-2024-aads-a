@@ -1,8 +1,4 @@
 #include "commands.hpp"
-#include <string>
-#include <ostream>
-#include "tree.hpp"
-#include "key_sum.hpp"
 
 namespace sakovskaia
 {

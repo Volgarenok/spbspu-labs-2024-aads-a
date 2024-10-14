@@ -2,6 +2,9 @@
 #define KEY_SUM_HPP
 #include <utility>
 #include <string>
+#include <limits>
+#include <stdexcept>
+#include <queue>
 
 namespace sakovskaia
 {

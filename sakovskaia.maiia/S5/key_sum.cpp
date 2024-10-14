@@ -1,9 +1,4 @@
 #include "key_sum.hpp"
-#include <utility>
-#include <string>
-#include <limits>
-#include <stdexcept>
-#include <queue>
 
 namespace sakovskaia
 {
