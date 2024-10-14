@@ -1,6 +1,8 @@
 #ifndef FORWARDLIST_HPP
 #define FORWARDLIST_HPP
 
+#include "list.hpp"
+
 namespace agarkov
 {
   template< typename T >
@@ -9,6 +11,11 @@ namespace agarkov
   public:
     ForwardList();
     ~ForwardList();
+    ForwardList(const ForwardList< T >& other);
+    ForwardList(ForwardList< T >&& other);
+    ForwardList< T >& operator=(const ForwardList< T >& other);
+    ForwardList< T >& operator=(ForwardList< T >&& other);
+
   private:
     details::List< T >* head_;
   };
@@ -27,6 +34,10 @@ namespace agarkov
     ::operator delete(head_);
   }
 
+  // ForwardList(const ForwardList< T >& other);
+  // ForwardList(ForwardList< T >&& other);
+  // ForwardList< T >& operator=(const ForwardList< T >& other);
+  // ForwardList< T >& operator=(ForwardList< T >&& other);
 }
 
 #endif
