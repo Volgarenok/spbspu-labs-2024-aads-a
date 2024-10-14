@@ -12,6 +12,10 @@ namespace agarkov
     ForwardListIterator();
     ~ForwardListIterator() = default;
     explicit ForwardListIterator(details::List< T >* rhs);
+    ForwardListIterator< T >& operator++();
+    ForwardListIterator< T > operator++(int);
+    T& operator*();
+    T* operator->();
   private:
     details::List< T >* ptr_;
   };
@@ -21,11 +25,44 @@ namespace agarkov
     ptr_(nullptr)
   {
   }
-  
+
   template< typename T >
   ForwardListIterator< T >::ForwardListIterator(details::List< T >* rhs):
     ptr_(rhs)
   {
+  }
+
+  template< typename T >
+  ForwardListIterator< T >& ForwardListIterator< T >::operator++()
+  {
+    if (ptr_)
+    {
+      ptr_ = ptr_->next_;
+    }
+    return *this;
+  }
+
+  template< typename T >
+  ForwardListIterator< T > ForwardListIterator< T >::operator++(int)
+  {
+    ForwardListIterator< T > temp(*this);
+    if (ptr_)
+    {
+      ptr_ = ptr_->next_;
+    }
+    return temp;
+  }
+
+  template< typename T >
+  T& ForwardListIterator< T >::operator*()
+  {
+    return ptr_->data_;
+  }
+
+  template< typename T >
+  T* ForwardListIterator< T >::operator->()
+  {
+    return std::addressof(ptr_->data_);
   }
 
 
