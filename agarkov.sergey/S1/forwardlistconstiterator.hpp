@@ -19,6 +19,8 @@ namespace agarkov
     explicit ForwardListConstIterator(const details::List< T >* rhs);
     ForwardListConstIterator< T >& operator++();
     ForwardListConstIterator< T > operator++(int);
+    const T& operator*();
+    const T* operator->();
 
   private:
     const details::List< T >* ptr_;
@@ -55,6 +57,18 @@ namespace agarkov
       ptr_ = ptr_->next_;
     }
     return temp;
+  }
+
+  template< typename T >
+  const T& ForwardListConstIterator< T >::operator*()
+  {
+    return ptr_->data_;
+  }
+
+  template< typename T >
+  const T* ForwardListConstIterator< T >::operator->()
+  {
+    return std::addressof(ptr_->data_);
   }
 
 }
