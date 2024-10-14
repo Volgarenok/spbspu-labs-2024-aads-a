@@ -15,6 +15,7 @@ namespace agarkov
     ForwardList(ForwardList< T >&& other);
     ForwardList< T >& operator=(const ForwardList< T >& other);
     ForwardList< T >& operator=(ForwardList< T >&& other);
+    void clear();
 
   private:
     details::List< T >* head_;
@@ -32,6 +33,24 @@ namespace agarkov
   {
     clear();
     ::operator delete(head_);
+  }
+
+  template< typename T >
+  void ForwardList< T >::clear()
+  {
+    if (!head_)
+    {
+      return;
+    }
+
+    while(head_->next_ != nullptr)
+    {
+      details::List< T >* temp = head_->next_;
+      delete head_;
+      head_ = temp;
+    }
+    delete head_;
+    head_ = nullptr;
   }
 
   // ForwardList(const ForwardList< T >& other);
