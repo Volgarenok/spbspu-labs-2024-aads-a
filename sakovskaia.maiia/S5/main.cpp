@@ -9,8 +9,8 @@
 int main(int argc, char * argv[])
 {
   using namespace sakovskaia;
-  using avlTree = Tree< int, std::string >;
-  avlTree tree;
+  using newTree = Tree< int, std::string >;
+  newTree tree;
   std::string command = "";
   std::string filename = "";
   if (argc != 3)
