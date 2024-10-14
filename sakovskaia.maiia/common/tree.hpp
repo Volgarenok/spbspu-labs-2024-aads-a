@@ -1,3 +1,4 @@
+
 #ifndef TREE_HPP
 #define TREE_HPP
 #include <algorithm>
@@ -78,7 +79,7 @@ namespace sakovskaia
   template < typename Key, typename Value, typename Comp >
   Tree< Key, Value, Comp >::~Tree()
   {
-    clear();
+    clear(root);
   }
 
   template < typename Key, typename Value, typename Comp >
@@ -263,6 +264,7 @@ namespace sakovskaia
     return node;
   }
 
+  template< typename Key, typename Value, typename Comp >
   template< typename F>
   F Tree< Key, Value, Comp >::traverseLnr(F f) const
   {
