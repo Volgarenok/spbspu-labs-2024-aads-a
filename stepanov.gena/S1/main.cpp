@@ -20,11 +20,8 @@ int main()
     using namespace stepanov;
 
     auto sequences = read_sequences();
-    auto sums = sum_sequence_values(sequences);
-    print_sequence_names(sequences);
 
     if (sequences.empty()) {
-      std::cout << "0\n";
       return 0;
     }
 
@@ -42,7 +39,8 @@ int main()
       std::cout << "0\n";
       return 0;
     }
-
+    auto sums = sum_sequence_values(sequences);
+    print_sequence_names(sequences);
     print_sequence_values(sequences);
     output_sum_sequence_values(sums);
   }
