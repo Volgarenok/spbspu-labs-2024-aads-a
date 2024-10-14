@@ -54,6 +54,8 @@ namespace stepanov
     void pop_front();
     void clear() noexcept;
     void swap(List & fwdlst);
+    T& getBack();
+    const T& getBack() const;
 
     void remove(const T & value);
     template < typename Predicate >
@@ -257,6 +259,26 @@ namespace stepanov
     {
       tail_ = newnode;
     }
+  }
+
+  template< typename T >
+  T& List< T >::getBack()
+  {
+    const List< T >& constList = static_cast<const List&>(*this);
+    const T& constElement = constList.getBack();
+    T& element = const_cast<T&>(constElement);
+    return element;
+  }
+
+  template< typename T >
+  const T& List< T >::getBack() const
+  {
+    Node* curEl = head_;
+    for (size_t i = 0; i < List< T >::size() - 1; ++i)
+    {
+      curEl = curEl->next_;
+    }
+    return curEl->data_;
   }
 
   template < typename T >

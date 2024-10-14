@@ -11,6 +11,10 @@ namespace stepanov
   public:
     Stack() = default;
     ~Stack() = default;
+    Stack(const Stack & stack) = default;
+    Stack(Stack && stack) = default;
+    Stack & operator=(const Stack & stack) = default;
+    Stack & operator=(Stack && rhStack) = default;
 
     void pushTop(const T& newHead);
     void popTop();
