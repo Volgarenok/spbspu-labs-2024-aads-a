@@ -12,37 +12,32 @@
 #include "print_sequence_values.hpp"
 #include "sum_sequence_values.hpp"
 #include "output_sum_sequence_values.hpp"
+#include "empty_list.hpp"
 
 int main()
 {
   try
   {
     using namespace stepanov;
-
-    auto sequences = read_sequences();
-
-    if (sequences.empty()) {
-      return 0;
-    }
-
-    bool allEmpty = true;
-    for (const auto& seq : sequences)
+    std::vector<std::pair<std::string, List<size_t>>> sequences;
+    read_sequences(sequences);
+    if (sequences.empty())
     {
-      if (!seq.second.empty())
-      {
-        allEmpty = false;
-        break;
-      }
-    }
-
-    if (allEmpty) {
-      std::cout << "0\n";
       return 0;
     }
-    auto sums = sum_sequence_values(sequences);
-    print_sequence_names(sequences);
-    print_sequence_values(sequences);
-    output_sum_sequence_values(sums);
+    if (isEmptyList(sequences))
+    {
+      print_sequence_names(sequences);
+      std::cout << "0\n" << std::endl;
+      return 0;
+    }
+    else
+    {
+      auto sums = sum_sequence_values(sequences);
+      print_sequence_names(sequences);
+      print_sequence_values(sequences);
+      output_sum_sequence_values(sums);
+    }
   }
   catch (const std::overflow_error& e)
   {

@@ -8,7 +8,7 @@
 
 namespace stepanov
 {
-  std::vector<std::pair<std::string, List<size_t>>> read_sequences();
+  void read_sequences(std::vector<std::pair<std::string, List<size_t>>>& sequences);
 }
 
 #endif

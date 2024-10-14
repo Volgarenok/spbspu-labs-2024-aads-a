@@ -2,13 +2,16 @@
 
 namespace stepanov
 {
-  std::vector<std::pair<std::string, List<size_t>>> read_sequences()
+  void read_sequences(std::vector<std::pair<std::string, List<size_t>>>& sequences)
   {
-    std::vector<std::pair<std::string, List<size_t>>> sequences;
-    std::string name;
+    std::string name = "";
 
     while (std::cin >> name)
     {
+      if (name.empty())
+      {
+        break;
+      }
       List<size_t> numbers;
       size_t num;
 
@@ -19,6 +22,5 @@ namespace stepanov
       std::cin.ignore();
       sequences.push_back({ name, std::move(numbers) });
     }
-    return sequences;
   }
 }
