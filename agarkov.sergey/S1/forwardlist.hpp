@@ -15,7 +15,11 @@ namespace agarkov
     ForwardList(ForwardList< T >&& other);
     ForwardList< T >& operator=(const ForwardList< T >& other);
     ForwardList< T >& operator=(ForwardList< T >&& other);
+    bool empty() const;
     void clear();
+    void push_front(const T& value);
+    void push_front(T&& value);
+
 
   private:
     details::List< T >* head_;
@@ -33,6 +37,20 @@ namespace agarkov
   {
     clear();
     ::operator delete(head_);
+  }
+
+
+
+  // ForwardList(const ForwardList< T >& other);
+  // ForwardList(ForwardList< T >&& other);
+  // ForwardList< T >& operator=(const ForwardList< T >& other);
+  // ForwardList< T >& operator=(ForwardList< T >&& other);
+
+
+  template< typename T >
+  bool ForwardList< T >::empty()
+  {
+    return head_ == nullptr;
   }
 
   template< typename T >
@@ -53,10 +71,23 @@ namespace agarkov
     head_ = nullptr;
   }
 
-  // ForwardList(const ForwardList< T >& other);
-  // ForwardList(ForwardList< T >&& other);
-  // ForwardList< T >& operator=(const ForwardList< T >& other);
-  // ForwardList< T >& operator=(ForwardList< T >&& other);
+  template< typename T >
+  void ForwardList< T >::push_front(const T& value)
+  {
+    details::List< T >* temp = new details::List< T >();
+    temp->data_ = value;
+    temp->next_ = head_;
+    head_ = temp;
+  }
+
+  template< typename T >
+  void ForwardList< T >::push_front(T&& value)
+  {
+    push_front(value);
+  }
+
+
+
 }
 
 #endif
