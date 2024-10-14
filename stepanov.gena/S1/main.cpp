@@ -35,9 +35,9 @@ int main()
       return 0;
     }
 
-    auto sums = sum_sequence_values(sequences);
     print_sequence_names(sequences);
     print_sequence_values(sequences);
+    auto sums = sum_sequence_values(sequences);
     output_sum_sequence_values(sums);
 
   }
