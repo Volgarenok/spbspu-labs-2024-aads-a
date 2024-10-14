@@ -11,8 +11,8 @@
 int main(int argc, char * argv[])
 {
   using namespace sakovskaia;
-  using TreeAvl = Tree< std::string, Tree< size_t, std::string > >;
-  TreeAvl dictionaries;
+  using NewTree = Tree< std::string, Tree< size_t, std::string > >;
+  NewTree dictionaries;
   if (argc != 2)
   {
     std::cerr << "Error arg. comand line\n";
@@ -24,10 +24,10 @@ int main(int argc, char * argv[])
     dictionaries = input(file);
   }
 
-  using funcForPrint = std::function< void(TreeAvl &, std::istream &, std::ostream &) >;
-  using func = std::function< void(TreeAvl &, std::istream &) >;
+  using funcForPrint = std::function< void(NewTree &, std::istream &, std::ostream &) >;
   Tree< std::string, funcForPrint > printTree;
   printTree.push("print", print);
+  using func = std::function< void(NewTree &, std::istream &) >;
   Tree< std::string, func > cmd;
 
   cmd.push("complement", complement);
@@ -50,7 +50,7 @@ int main(int argc, char * argv[])
         throw std::out_of_range("<INVALID COMMAND>");
       }
     }
-    catch (const std::out_of_range&)
+    catch (const std::out_of_range &)
     {
       try
       {
