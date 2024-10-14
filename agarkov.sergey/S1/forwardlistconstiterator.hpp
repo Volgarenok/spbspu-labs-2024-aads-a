@@ -10,9 +10,13 @@ namespace agarkov
   class ForwardList;
 
   template< typename T >
+  class ForwardListIterator;
+
+  template< typename T >
   class ForwardListConstIterator
   {
   friend class ForwardList< T >;
+  friend class ForwardListIterator< T >;
   public:
     ForwardListConstIterator();
     ~ForwardListConstIterator() = default;
@@ -23,6 +27,7 @@ namespace agarkov
     const T* operator->();
     bool operator==(const ForwardListConstIterator< T >& rhs) const;
     bool operator!=(const ForwardListConstIterator< T >& rhs) const;
+    ForwardListConstIterator(const ForwardListIterator< T >& other) noexcept;
   private:
     const details::List< T >* ptr_;
   };
@@ -82,6 +87,12 @@ namespace agarkov
   bool ForwardListConstIterator< T >::operator!=(const ForwardListConstIterator< T >& rhs) const
   {
     return ptr_ != rhs.ptr_;
+  }
+
+  template< typename T >
+  ForwardListConstIterator< T >::ForwardListConstIterator(const ForwardListIterator< T >& other) noexcept:
+    ptr_(const_cast< details::List< T > * >(other.ptr_))
+  {
   }
 }
 
