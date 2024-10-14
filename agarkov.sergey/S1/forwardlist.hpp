@@ -48,7 +48,7 @@ namespace agarkov
 
 
   template< typename T >
-  bool ForwardList< T >::empty()
+  bool ForwardList< T >::empty() const
   {
     return head_ == nullptr;
   }
