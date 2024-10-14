@@ -12,7 +12,7 @@
 #include "print_sequence_values.hpp"
 #include "sum_sequence_values.hpp"
 
-int main()
+int main() 
 {
   try
   {
@@ -20,25 +20,27 @@ int main()
 
     auto sequences = read_sequences();
     print_sequence_names(sequences);
-    bool isEmpty = true;
+
+    if (sequences.empty()) {
+      std::cout << "0\n";  
+      return 0;
+    }
+
+    bool allEmpty = true;
     for (const auto& seq : sequences)
     {
       if (!seq.second.empty())
       {
-        isEmpty = false;
-        break;
+        allEmpty = false;
+        break; 
       }
     }
-    bool vectorEmpty = false;
-    if (sequences.empty())
-    {
-      vectorEmpty = true;
-    }
-    if (!vectorEmpty && isEmpty)
-    {
-      std::cout << "0\n";
+
+    if (allEmpty) {
+      std::cout << "0\n"; 
       return 0;
     }
+
     print_sequence_values(sequences);
     sum_sequence_values(sequences);
   }
