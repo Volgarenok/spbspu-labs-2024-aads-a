@@ -20,7 +20,7 @@ int main(int argc, char * argv[])
   }
   command = argv[1];
   filename = argv[2];
-  using func = std::function< void(avlTree &, KeySum &, std::ostream &)>;
+  using func = std::function< void(newTree &, KeySum &, std::ostream &)>;
 
   Tree< std::string, func > commands;
   commands.push("ascending", ascending);
