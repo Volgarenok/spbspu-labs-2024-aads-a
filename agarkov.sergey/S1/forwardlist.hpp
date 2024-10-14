@@ -2,6 +2,8 @@
 #define FORWARDLIST_HPP
 
 #include "list.hpp"
+#include "forwardlistiterator.hpp"
+#include "forwardlistconstiterator.hpp"
 
 namespace agarkov
 {
@@ -9,6 +11,8 @@ namespace agarkov
   class ForwardList
   {
   public:
+    using iterator = ForwardListIterator< T >;
+    using const_iterator = ForwardListConstIterator< T >;
     ForwardList();
     ~ForwardList();
     ForwardList(const ForwardList< T >& other);
