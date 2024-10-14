@@ -57,8 +57,6 @@ namespace agarkov
     return temp;
   }
 
-
 }
-
 
 #endif
