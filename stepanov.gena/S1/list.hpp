@@ -25,7 +25,7 @@ namespace stepanov
   public:
     using iterator = Iterator< T >;
     using const_iterator = ConstIterator< T >;
-    
+
     List();
     List(const List & other);
     List(List && other) noexcept;
@@ -44,9 +44,9 @@ namespace stepanov
     T & front();
     const T & front() const;
     bool empty() const noexcept;
-    size_t size() const noexcept;        // Метод для подсчета количества элементов
-    T & operator[](size_t index);        // Оператор индексирования для неконстантного доступа
-    const T & operator[](size_t index) const;  // Оператор индексирования для константного доступа
+    size_t size() const noexcept;
+    T & operator[](size_t index);
+    const T & operator[](size_t index) const;
 
     void push_front(const T & value);
     void push_front(T && value);
@@ -65,14 +65,12 @@ namespace stepanov
     Node<T> * tail_;
   };
 
-  // Конструктор по умолчанию
   template < typename T >
   List< T >::List():
     head_(nullptr),
     tail_(nullptr)
   {}
 
-  // Конструктор копирования
   template < typename T >
   List< T >::List(const List & other):
     List()
@@ -85,7 +83,6 @@ namespace stepanov
     }
   }
 
-  // Конструктор перемещения
   template < typename T >
   List< T >::List(List && other) noexcept:
     head_(other.head_),
@@ -95,13 +92,11 @@ namespace stepanov
     other.tail_ = nullptr;
   }
 
-  // Конструктор с указанием размера списка
   template < typename T >
   List< T >::List(size_t n):
     List(n, T())
   {}
 
-  // Конструктор с указанием размера и значения
   template < typename T >
   List< T >::List(size_t n, const T & value):
     List()
@@ -112,14 +107,12 @@ namespace stepanov
     }
   }
 
-  // Деструктор
   template < typename T >
   List< T >::~List()
   {
     clear();
   }
 
-  // Оператор присваивания копированием
   template < typename T >
   List< T > & List< T >::operator=(const List & other)
   {
@@ -131,7 +124,6 @@ namespace stepanov
     return *this;
   }
 
-  // Оператор присваивания перемещением
   template < typename T >
   List< T > & List< T >::operator=(List && other) noexcept
   {
@@ -146,44 +138,42 @@ namespace stepanov
     return *this;
   }
 
-  // Методы begin и end
   template < typename T >
   Iterator< T > List< T >::begin() noexcept
   {
     return iterator(head_);
   }
-  
+
   template < typename T >
   Iterator< T > List< T >::end() noexcept
   {
     return iterator();
   }
-  
+
   template < typename T >
   ConstIterator< T > List< T >::begin() const noexcept
   {
     return const_iterator(head_);
   }
-  
+
   template < typename T >
   ConstIterator< T > List< T >::end() const noexcept
   {
     return const_iterator();
   }
-  
+
   template < typename T >
   ConstIterator< T > List< T >::cbegin() const noexcept
   {
     return const_iterator(head_);
   }
-  
+
   template < typename T >
   ConstIterator< T > List< T >::cend() const noexcept
   {
     return const_iterator();
   }
 
-  // Метод front
   template <  typename T >
   T & List< T >::front()
   {
@@ -196,14 +186,12 @@ namespace stepanov
     return head_->data_;
   }
 
-  // Метод empty
   template < typename T >
   bool List< T >::empty() const noexcept
   {
     return head_ == nullptr;
   }
 
-  // Метод size
   template <typename T>
   size_t List<T>::size() const noexcept
   {
@@ -217,7 +205,6 @@ namespace stepanov
     return count;
   }
 
-  // Оператор индексирования для неконстантного доступа
   template <typename T>
   T& List<T>::operator[](size_t index)
   {
@@ -233,7 +220,6 @@ namespace stepanov
     return current->data_;
   }
 
-  // Оператор индексирования для константного доступа
   template <typename T>
   const T& List<T>::operator[](size_t index) const
   {
@@ -249,7 +235,6 @@ namespace stepanov
     return current->data_;
   }
 
-  // Метод push_front
   template < typename T >
   void List< T >::push_front(const T & value)
   {
@@ -262,7 +247,6 @@ namespace stepanov
     }
   }
 
-  // Метод push_front с перемещением
   template < typename T >
   void List< T >::push_front(T && value)
   {
@@ -275,7 +259,6 @@ namespace stepanov
     }
   }
 
-  // Метод push_back
   template < typename T >
   void List< T >::push_back(const T & value)
   {
@@ -290,7 +273,6 @@ namespace stepanov
     tail_ = newnode;
   }
 
-  // Метод pop_front
   template < typename T >
   void List< T >::pop_front()
   {
@@ -310,7 +292,6 @@ namespace stepanov
     head_ = newhead;
   }
 
-  // Метод clear
   template < typename T >
   void List< T >::clear() noexcept
   {
@@ -320,7 +301,6 @@ namespace stepanov
     }
   }
 
-  // Метод swap
   template < typename T >
   void List< T >::swap(List< T > & list)
   {
@@ -332,7 +312,6 @@ namespace stepanov
     list.tail_ = subtail;
   }
 
-  // Метод remove
   template < typename T >
   void List< T >::remove(const T & value)
   {
@@ -367,7 +346,6 @@ namespace stepanov
     }
   }
 
-  // Метод remove_if с предикатом
   template < typename T >
   template < typename Predicate >
   void List< T >::remove_if(Predicate pred)
@@ -403,7 +381,6 @@ namespace stepanov
     }
   }
 
-  // Метод assign
   template < typename T >
   void List< T >::assign(size_t n, const T & value)
   {
