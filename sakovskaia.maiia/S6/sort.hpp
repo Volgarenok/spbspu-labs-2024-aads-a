@@ -48,6 +48,16 @@ namespace sakovskaia
       auto & bucket = * bucket_it;
       bucket.sort(comp);
     }
+    auto it = first;
+    for (auto bucket_it = buckets.begin(); bucket_it != buckets.end(); ++bucket_it)
+    {
+      const auto & bucket = * bucket_it;
+      for (auto elem_it = bucket.begin(); elem_it != bucket.end(); ++elem_it)
+      {
+        * it = * elem_it;
+        ++it;
+      }
+    }
   }
 
   template < typename RandomIt, typename Compare >
