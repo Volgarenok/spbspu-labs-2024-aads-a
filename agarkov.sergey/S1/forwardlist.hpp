@@ -23,6 +23,12 @@ namespace agarkov
     void clear();
     void push_front(const T& value);
     void push_front(T&& value);
+    iterator begin() noexcept;
+    const_iterator begin() const noexcept;
+    const_iterator cbegin() const noexcept;
+    iterator end() noexcept;
+    const_iterator end() const noexcept;
+    const_iterator cend() const noexcept;
     iterator insert_after(const_iterator pos, const T& value);
     iterator insert_after(const_iterator pos, T&& value );
     iterator insert_after(const_iterator pos, size_t count, const T& value );
@@ -120,6 +126,41 @@ namespace agarkov
   void ForwardList< T >::push_front(T&& value)
   {
     push_front(value);
+  }
+
+  template< typename T >
+  typename ForwardList< T >::iterator ForwardList< T >::begin() noexcept
+  {
+    return iterator(head_);
+  }
+
+  template< typename T >
+  typename ForwardList< T >::const_iterator ForwardList< T >::begin() const noexcept
+  {
+    return cbegin();
+  }
+
+  template< typename T >
+  typename ForwardList< T >::const_iterator ForwardList< T >::cbegin() const noexcept
+  {
+    return const_iterator(head_);
+  }
+  template< typename T >
+  typename ForwardList< T >::iterator ForwardList< T >::end() noexcept
+  {
+    return iterator(nullptr);
+  }
+
+  template< typename T >
+  typename ForwardList< T >::const_iterator ForwardList< T >::end() const noexcept
+  {
+    return cend();
+  }
+
+  template< typename T >
+  typename ForwardList< T >::const_iterator ForwardList< T >::cend() const noexcept
+  {
+    return const_iterator(nullptr);
   }
 
   template< typename T >
