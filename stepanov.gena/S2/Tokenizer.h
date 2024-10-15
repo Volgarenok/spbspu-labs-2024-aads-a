@@ -1,6 +1,9 @@
 #ifndef TOKENIZER_H
 #define TOKENIZER_H
 
+#include <iostream>
+#include <cstring>
+
 namespace stepanov
 {
   enum TokenType
@@ -36,7 +39,7 @@ namespace stepanov
       long long numData_;
       char charData_;
       TokenType getOperatorType() noexcept;
-  }
+  };
 }
 
 #endif
