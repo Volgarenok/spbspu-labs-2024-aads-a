@@ -8,8 +8,9 @@
 
 namespace agarkov
 {
-  std::pair< std::string, ForwardList< size_t > > inputList(std::istream &in);
-  ForwardList< std::pair < std::string, ForwardList< size_t > > > inputLists(std::istream& in);
+  using pair_t = std::pair< std::string, ForwardList< size_t > >;
+  pair_t inputList(std::istream &in);
+  ForwardList< pair_t > inputLists(std::istream& in);
 }
 
 #endif
