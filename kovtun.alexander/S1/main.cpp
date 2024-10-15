@@ -7,7 +7,7 @@
 int main()
 {
   using pair_t = std::pair< std::string, kovtun::List< size_t > >;
-  auto sequences = kovtun::List< pair_t >();
+  kovtun::List< pair_t > sequences;
 
   std::string stub;
   while(std::cin >> stub)

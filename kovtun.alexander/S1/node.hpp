@@ -10,8 +10,8 @@ namespace kovtun
   {
     Node() = default;
     ~Node() = default;
-    Node(Node * prev, Node * next, T val);
-    Node(const T & val);
+    Node(Node * prev, Node * next, const T & val);
+    explicit Node(const T & val);
 
     Node * prev;
     Node * next;
@@ -19,15 +19,15 @@ namespace kovtun
   };
 
   template< typename T >
-  Node< T >::Node(Node<T> *prev, Node<T> *next, T val) :
-      prev(prev),
-      next(next),
-      val(val)
+  Node< T >::Node(Node<T> *prev, Node<T> *next, const T & val) :
+    prev(prev),
+    next(next),
+    val(val)
   {}
 
   template< typename T >
   Node< T >::Node(const T & val) :
-      Node(nullptr, nullptr, val)
+    Node(nullptr, nullptr, val)
   {}
 }
 
