@@ -78,6 +78,7 @@ void agarkov::outputSum(std::ostream& out, const agarkov::ForwardList< agarkov::
   for (size_t i = 0; i < max_length; ++i)
   {
     size_t sum = 0;
+    bool outed = false;
     bool has_elements = false;
     for (auto iter = lists.cbegin(); iter != lists.cend(); ++iter)
     {
@@ -92,14 +93,14 @@ void agarkov::outputSum(std::ostream& out, const agarkov::ForwardList< agarkov::
     }
     if (has_elements)
     {
-      if (i != max_length)
+      if (outed)
       {
         out << sum << ' ';
       }
       else
       {
         out << sum;
-        return;
+        outed = true;
       }
     }
   }
