@@ -25,10 +25,17 @@ namespace
 
 void agarkov::outputName(std::ostream& out, const agarkov::ForwardList< agarkov::pair_t >& lists)
 {
-  out << (*(lists.cbegin())).first;
-  for (auto iter = (lists.cbegin())++; iter != lists.cend(); ++iter)
+  bool outed = false;
+  for (auto iter = lists.cbegin(); iter != lists.cend(); ++iter)
   {
-    out << ' ' << (*iter).first;
+    if (outed)
+    {
+      out << ' ' << (*iter).first;
+    }
+    else
+    {
+      out << (*iter).first;
+    }
   }
   out << '\n';
 }
@@ -103,4 +110,5 @@ void agarkov::outputSum(std::ostream& out, const agarkov::ForwardList< agarkov::
       }
     }
   }
+  out << '\n';
 }
