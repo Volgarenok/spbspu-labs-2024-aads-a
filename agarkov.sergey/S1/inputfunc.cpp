@@ -28,10 +28,6 @@ agarkov::pair_t agarkov::inputList(std::istream &in)
       list.insert_after(iter, num);
       iter++;
     }
-    if (!in.eof())
-    {
-      in.clear();
-    }
   }
   return std::make_pair(name, list);
 }
