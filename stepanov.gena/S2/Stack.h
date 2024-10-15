@@ -26,4 +26,37 @@ namespace stepanov
   };
 }
 
+template < typename T >
+void stepanov::Stack<T>::pushTop(const T& newHead)
+{
+  dataBase_.push_front(newHead);
+}
+
+template < typename T >
+void stepanov::Stack< T >::popTop()
+{
+  if (!isEmpty())
+  {
+    dataBase_.pop_front();
+  }
+}
+
+template < typename T >
+bool stepanov::Stack< T >::isEmpty() const noexcept
+{
+  return dataBase_.empty();
+}
+
+template < typename T >
+size_t& stepanov::Stack< T >::getSize() const noexcept
+{
+  return dataBase_.size();
+}
+
+template < typename T >
+const T& stepanov::Stack< T >::getHead() const
+{
+  return dataBase_.front();
+}
+
 #endif

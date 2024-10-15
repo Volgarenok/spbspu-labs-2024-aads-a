@@ -273,7 +273,7 @@ namespace stepanov
   template< typename T >
   const T& List< T >::getBack() const
   {
-    Node* curEl = head_;
+    Node< T > * curEl = head_;
     for (size_t i = 0; i < List< T >::size() - 1; ++i)
     {
       curEl = curEl->next_;
