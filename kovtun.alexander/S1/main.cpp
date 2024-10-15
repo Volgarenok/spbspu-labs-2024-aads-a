@@ -38,49 +38,84 @@ int main()
     return 0;
   }
 
-  size_t maxSeq = 0;
-  for (auto it = sequences.cbegin(); it != sequences.cend(); ++it)
+  size_t maxSize = 0;
+  for (auto seq = sequences.cbegin(); seq != sequences.cend(); ++seq)
   {
-    size_t size = it->second.size();
-    if (maxSeq < size)
+    if (maxSize < seq->second.size())
     {
-      maxSeq = it->second.size();
+      maxSize = seq->second.size();
     }
   }
 
   for (auto seq = sequences.cbegin(); seq != sequences.cend(); ++seq)
   {
-    std::cout << seq->first << " ";
+    std::cout << seq->first;
+    if (seq++ != sequences.cend())
+    {
+      std::cout << " ";
+    }
   }
   std::cout << "\n";
 
 
   kovtun::List< size_t > sums;
-  for (size_t l = 0; l < maxSeq; l++)
+  kovtun::List< kovtun::List< size_t > > output;
+
+  bool hasOverflow = false;
+  size_t sum = 0;
+  for (size_t l = 0; l < maxSize; l++)
   {
-    size_t sum = 0;
+    kovtun::List< size_t > row;
     for (auto seq = sequences.cbegin(); seq != sequences.cend(); ++seq)
     {
       if (!seq->second.empty())
       {
         size_t val = *seq->second.cbegin();
+        row.push_back(val);
+        seq->second.pop_front();
+
         if (val > std::numeric_limits< size_t >::max() - sum)
         {
-          std::cerr << "overflow" << "\n";
-          return 1;
+          hasOverflow = true;
+          continue;
         }
         sum += val;
-        std::cout << val << " ";
-        seq->second.pop_front();
       }
     }
-    std::cout << "\n";
     sums.push_back(sum);
+    output.push_back(row);
   }
 
+  if (hasOverflow)
+  {
+    std::cerr << "overflow\n";
+    return 1;
+  }
+
+  for (auto row = output.cbegin(); row != output.cend(); ++row)
+  {
+    for (auto num = row->cbegin(); num != row->cend(); ++num)
+    {
+      std::cout << *num;
+      if (num++ != row->cend())
+      {
+        std::cout << " ";
+      }
+    }
+  }
+  std::cout << "\n";
+
+  if (sums.empty())
+  {
+    sums.push_back(0);
+  }
   for (auto it = sums.cbegin(); it != sums.cend(); ++it)
   {
-    std::cout << *it << " ";
+    std::cout << *it;
+    if (it++ != sums.cend())
+    {
+      std::cout << " ";
+    }
   }
 
   return 0;
