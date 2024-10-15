@@ -3,6 +3,7 @@
 #include <istream>
 #include <utility>
 #include "forwardlist.hpp"
+#include "forwardlistiterator.hpp"
 
 #include <iostream>
 
@@ -16,21 +17,43 @@ std::pair< std::string, agarkov::ForwardList< size_t > > agarkov::inputList(std:
   }
   ForwardList< size_t > list;
   size_t num = 0;
+  auto iter = list.begin();
   while (in >> num )
   {
-    list.push_front(num);
+    if (list.empty())
+    {
+      list.push_front(num);
+      iter = list.begin();
+    }
+    else
+    {
+      list.insert_after(iter, num);
+      iter++;
+    }
   }
-  std::cout << "test2\n";
   return std::make_pair(name, list);
 }
 
 agarkov::ForwardList< std::pair < std::string, agarkov::ForwardList< size_t > > > agarkov::inputLists(std::istream& in)
 {
   ForwardList< std::pair < std::string, ForwardList< size_t > > > list_of_lists;
+  auto iter = list_of_lists.begin();
   while (in)
-  {
-    list_of_lists.push_front(inputList(in));
+  { 
+    if (list_of_lists.empty())
+    {
+      list_of_lists.push_front(inputList(in));
+      iter = list_of_lists.begin();
+    }
+    else
+    {
+      list_of_lists.insert_after(iter, inputList(in));
+      iter++;
+    }
+    if (!in.eof())
+    {
+      in.clear();
+    }
   }
-  std::cout << "test1\n";
   return list_of_lists;
 }

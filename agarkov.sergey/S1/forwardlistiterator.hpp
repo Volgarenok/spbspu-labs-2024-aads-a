@@ -16,6 +16,7 @@ namespace agarkov
   class ForwardListIterator
   {
   friend class ForwardList< T >;
+  friend class ForwardListConstIterator< T >;
   public:
     ForwardListIterator();
     ~ForwardListIterator() = default;
