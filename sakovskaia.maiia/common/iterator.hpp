@@ -2,6 +2,7 @@
 #define ITERATOR_HPP
 #include <stdexcept>
 #include <utility>
+#include <iterator>
 #include "node.hpp"
 namespace sakovskaia
 {
@@ -13,6 +14,10 @@ namespace sakovskaia
     using this_t = fwdIterator< T >;
     friend class List< T >;
    public:
+    using value_type = T;
+    using pointer = T*;
+    using reference = T&;
+    using iterator_category = std::forward_iterator_tag;
     fwdIterator();
     this_t operator++();
     this_t operator++(int);
