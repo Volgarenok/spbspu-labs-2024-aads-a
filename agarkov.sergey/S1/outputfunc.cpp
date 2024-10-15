@@ -77,7 +77,7 @@ void agarkov::outputSum(std::ostream& out, const agarkov::ForwardList< agarkov::
   bool outed = false;
   for (size_t i = 0; i < max_length; ++i)
   {
-    size_t sum = 0;  
+    size_t sum = 0;
     bool has_elements = false;
     for (auto iter = lists.cbegin(); iter != lists.cend(); ++iter)
     {
