@@ -5,7 +5,6 @@
 #include "outputfunc.hpp"
 #include "forwardlist.hpp"
 
-
 int main()
 {
   try
@@ -16,6 +15,10 @@ int main()
     agarkov::outputSum(std::cout, lists);
 
     return 0;
+  }
+  catch (const std::overflow_error& e)
+  {
+    return 1;
   }
   catch (const std::logic_error& e)
   {

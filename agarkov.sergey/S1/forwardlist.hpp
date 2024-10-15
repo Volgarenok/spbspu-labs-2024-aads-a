@@ -48,7 +48,6 @@ namespace agarkov
     details::List< T >* head_;
   };
 
-
   template< typename T >
   ForwardList< T >::ForwardList():
     head_(nullptr)
@@ -61,8 +60,6 @@ namespace agarkov
     clear();
     ::operator delete(head_);
   }
-
-
 
   template< typename T >
   ForwardList< T >::ForwardList(const ForwardList< T >& other):
@@ -79,6 +76,12 @@ namespace agarkov
       oth_it++;
       insert_after(cbegin(), oth_it, other.end());
     }
+  }
+
+  template< typename T >
+  ForwardList< T >::ForwardList(ForwardList< T >&& other):
+    head_(std::move(other.head_))
+  {
   }
 
   template< typename T >
@@ -105,9 +108,6 @@ namespace agarkov
     swap(temp);
     return *this;
   }
-
-  // ForwardList< T >& operator=(ForwardList< T >&& other);
-
 
   template< typename T >
   bool ForwardList< T >::empty() const
