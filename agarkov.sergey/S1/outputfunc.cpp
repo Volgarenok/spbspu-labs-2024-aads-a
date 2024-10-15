@@ -91,7 +91,14 @@ void agarkov::outputSum(std::ostream& out, const agarkov::ForwardList< agarkov::
     }
     if (has_elements)
     {
-      out << sum << ' ';
+      if (i != max_length)
+      {
+        out << sum << ' ';
+      }
+      else
+      {
+        out << sum;
+      }
     }
   }
   out << '\n';
