@@ -35,6 +35,7 @@ void agarkov::outputName(std::ostream& out, const agarkov::ForwardList< agarkov:
     else
     {
       out << (*iter).first;
+      outed = true;
     }
   }
   out << '\n';
