@@ -38,5 +38,17 @@ namespace sakovskaia
       }
     }
   }
+
+  template < typename T >
+  void print(std::ostream & output, const T & data)
+  {
+    output << std::fixed << std::setprecision(1);
+    output << * data.cbegin();
+    for (auto it = ++data.cbegin(); it != data.cend(); ++it)
+    {
+      output << ' ' << * it;
+    }
+    output << '\n';
+  }
 }
 #endif
