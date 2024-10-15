@@ -25,7 +25,7 @@ namespace kovtun
     this_t & operator=(const this_t &) = default;
 
     this_t & operator++();
-    this_t & operator++(int);
+    this_t operator++(int);
 
     bool operator==(const this_t &rhs) const;
     bool operator!=(const this_t &rhs) const;
@@ -34,7 +34,7 @@ namespace kovtun
     T * operator->() const;
 
     this_t & operator--();
-    this_t & operator--(int);
+    this_t operator--(int);
 
   private:
     Node<T> *node_;
@@ -56,9 +56,8 @@ namespace kovtun
   }
 
   template< typename T >
-  ConstIterator< T > & ConstIterator< T >::operator++(int)
+  ConstIterator< T > ConstIterator< T >::operator++(int)
   {
-    assert(node_ != nullptr);
     this_t result(*this);
     ++(*this);
     return result;
@@ -96,7 +95,7 @@ namespace kovtun
   }
 
   template< typename T>
-  ConstIterator< T > & ConstIterator< T >::operator--(int)
+  ConstIterator< T > ConstIterator< T >::operator--(int)
   {
     this_t result(*this);
     --(*this);
