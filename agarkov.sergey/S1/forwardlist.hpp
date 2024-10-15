@@ -27,7 +27,7 @@ namespace agarkov
     iterator insert_after(const_iterator pos, T&& value );
     iterator insert_after(const_iterator pos, size_t count, const T& value );
     iterator insert_after(const_iterator pos, iterator first, iterator last );
-
+    void swap(ForwardList< T >& other);
 
   private:
     details::List< T >* head_;
@@ -134,6 +134,12 @@ namespace agarkov
       first++;
     }
     return temp;
+  }
+
+  template< typename T >
+  void ForwardList< T >::swap(ForwardList< T >& other)
+  {
+    std::swap(head_, other.head_);
   }
 }
 
