@@ -23,6 +23,10 @@ namespace agarkov
     void clear();
     void push_front(const T& value);
     void push_front(T&& value);
+    iterator insert_after(const_iterator pos, const T& value);
+    iterator insert_after(const_iterator pos, T&& value );
+    iterator insert_after(const_iterator pos, size_t count, const T& value );
+    iterator insert_after(const_iterator pos, iterator first, iterator last );
 
 
   private:
@@ -90,8 +94,47 @@ namespace agarkov
     push_front(value);
   }
 
+  template< typename T >
+  typename ForwardList< T >::iterator ForwardList< T >::insert_after(const_iterator pos, const T& value)
+  {
+    details::List< T >* temp = new details::List< T >();
+    temp->data_ = value;
+    details::List< T >* cur = const_cast< details::List< T >* >(pos.ptr_);
+    temp->next_ = cur->next_;
+    cur->next_ = temp;
+    return iterator(temp);
+  }
 
+  template< typename T >
+  typename ForwardList< T >::iterator ForwardList< T >::insert_after(const_iterator pos, T&& value)
+  {
+    return insert_after(pos, value);
+  }
 
+  template< typename T >
+  typename ForwardList< T >::iterator ForwardList< T >::insert_after(const_iterator pos, size_t count, const T& value)
+  {
+    iterator temp;
+    for (size_t i = 0; i < count; i++)
+    {
+      temp = insert_after(pos, value);
+      pos++;
+    }
+    return temp;
+  }
+
+  template< typename T >
+  typename ForwardList< T >::iterator ForwardList< T >::insert_after(const_iterator pos, iterator first, iterator last)
+  {
+    iterator temp;
+    while (first != last)
+    {
+      temp = insert_after(pos, *first);
+      pos++;
+      first++;
+    }
+    return temp;
+  }
 }
 
 #endif
