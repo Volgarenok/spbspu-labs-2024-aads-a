@@ -4,6 +4,7 @@
 #include <list>
 #include <deque>
 #include <vector>
+#include <algorithm>
 #include "list.hpp"
 #include "input_output.hpp"
 
