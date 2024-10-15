@@ -34,6 +34,7 @@ namespace agarkov
     iterator insert_after(const_iterator pos, size_t count, const T& value );
     iterator insert_after(const_iterator pos, iterator first, iterator last );
     void swap(ForwardList< T >& other);
+    size_t max_size() const noexcept;
 
   private:
     details::List< T >* head_;
@@ -209,6 +210,54 @@ namespace agarkov
   void ForwardList< T >::swap(ForwardList< T >& other)
   {
     std::swap(head_, other.head_);
+  }
+  template< typename T >
+  size_t ForwardList< T >::max_size() const noexcept
+  {
+    size_t size = 0;
+    details::List< T >* temp = head_;
+    while (temp)
+    {
+      temp = temp->next_;
+      size++;
+    }
+    return size;
+  }
+
+  template< typename T >
+  void ForwardList< T >::resize(size_t count, const T& value)
+  {
+    size_t cur_size = max_size();
+    if (count == cur_size)
+    {
+      return;
+    }
+
+    else if (count < cur_size)
+    {
+      auto iter_to_erase = cbegin();
+      for (size_t i = 1; i < count; i++)
+      {
+        iter_to_erase++;
+      }
+      erase_after(iter_to_erase, cend());
+    }
+
+    else
+    {
+      auto iter_to_insert = cbegin();
+      for (size_t i = 1; i < cur_size; i++)
+      {
+        iter_to_insert++;
+      }
+      insert_after(iter_to_insert, count - cur_size, value);
+    }
+  }
+
+  template< typename T >
+  void ForwardList< T >::resize(size_t count)
+  {
+    resize(count, T());
   }
 }
 
