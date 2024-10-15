@@ -1,6 +1,8 @@
 #ifndef FORWARDLIST_HPP
 #define FORWARDLIST_HPP
 
+#include <cstddef>
+#include <stdexcept>
 #include "list.hpp"
 #include "forwardlistiterator.hpp"
 #include "forwardlistconstiterator.hpp"
@@ -41,6 +43,7 @@ namespace agarkov
     iterator emplace_after(const_iterator pos, Args&&... args);
     iterator erase_after(const_iterator pos);
     iterator erase_after(const_iterator first, const_iterator last);
+    void pop_front();
   private:
     details::List< T >* head_;
   };
@@ -301,7 +304,17 @@ namespace agarkov
     }
     return iterator(const_cast< details::List< T >* >(last.ptr_));
   }
-
+  template< typename T >
+  void ForwardList< T >::pop_front()
+  {
+    if (empty())
+    {
+      throw std::logic_error("empty list");
+    }
+    details::List< T >* temp = head_;
+    head_ = head_->next_;
+    delete temp;
+  }
 }
 
 #endif
