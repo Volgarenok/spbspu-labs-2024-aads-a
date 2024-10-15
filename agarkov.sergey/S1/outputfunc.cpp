@@ -94,7 +94,7 @@ void agarkov::outputSum(std::ostream& out, const agarkov::ForwardList< agarkov::
     {
       if (outed)
       {
-        out << ' ' sum;
+        out << ' ' << sum;
       }
       else
       {
