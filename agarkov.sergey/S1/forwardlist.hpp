@@ -49,7 +49,23 @@ namespace agarkov
 
 
 
-  // ForwardList(const ForwardList< T >& other);
+  template< typename T >
+  ForwardList< T >::ForwardList(const ForwardList< T >& other):
+    ForwardList()
+  {
+    if (other.empty())
+    {
+      return;
+    }
+    auto oth_it = other.begin();
+    push_front(*oth_it);
+    if (oth_it.ptr_->next_)
+    {
+      oth_it++;
+      insert_after(cbegin(), oth_it, other.end());
+    }
+  }
+
   // ForwardList(ForwardList< T >&& other);
   // ForwardList< T >& operator=(const ForwardList< T >& other);
   // ForwardList< T >& operator=(ForwardList< T >&& other);
