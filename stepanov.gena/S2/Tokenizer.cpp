@@ -7,7 +7,30 @@ namespace stepanov
     type_(NONE),
     numData_(0),
     charData_('a')
-  {}
+  {
+    if (isParenthesis())
+    {
+      if (*token_ == '(')
+      {
+        type_ = RIGHT_PAREN;
+      }
+      else
+      {
+        type_ = LEFT_PAREN;
+      }
+      charData_ = *token_;
+    }
+    if (isOperand())
+    {
+      type_ = OPERAND;
+      numData_ = std::atoll(token_);
+    }
+    if (isOperator())
+    {
+      type_ = getOperatorType();
+      charData_ = *token_;
+    }
+  }
 
   bool Token::isOperand() const noexcept
   {
