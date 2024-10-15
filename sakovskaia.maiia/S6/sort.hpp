@@ -75,6 +75,42 @@ namespace sakovskaia
       }
     }
   }
+
+  template < typename T >
+  void sorting(const std::string & type, std::deque< T > & deque, List< T > & fwdList, std::list< T > & biList, std::ostream & output)
+  {
+    std::list< T > seconsBiList = biList;
+    std::deque< T > scondDeque = deque;
+    std::deque< T > thirdDeque = deque;
+    if (type == "ascending")
+    {
+      bucketSort(fwdList.begin(), fwdList.end(), std::less< T >());
+      shellSort(biList.begin(), biList.end(), std::less< T >());
+      seconsBiList.sort(std::less< T >());
+      bucketSort(deque.begin(), deque.end(), std::less< T >());
+      shellSort(scondDeque.begin(), scondDeque.end(), std::less< T >());
+      std::sort(thirdDeque.begin(), thirdDeque.end(), std::less< T >());
+    }
+    else if (type == "descending")
+    {
+      bucketSort(fwdList.begin(), fwdList.end(), std::greater< T >());
+      shellSort(biList.begin(), biList.end(), std::greater< T >());
+      seconsBiList.sort(std::greater< T >());
+      bucketSort(deque.begin(), deque.end(), std::greater< T >());
+      shellSort(scondDeque.begin(), scondDeque.end(), std::greater< T >());
+      std::sort(thirdDeque.begin(), thirdDeque.end(), std::greater< T >());
+    }
+    else
+    {
+      throw std::invalid_argument("Error type of sort");
+    }
+    print(output, fwdList);
+    print(output, biList);
+    print(output, seconsBiList);
+    print(output, deque);
+    print(output, scondDeque);
+    print(output, thirdDeque);
+  }
 }
 
 #endif
