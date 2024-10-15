@@ -1,5 +1,5 @@
-#ifndef OUTPUT_FUNC_HPP 
-#define OUTPUT_FUNC_HPP 
+#ifndef OUTPUT_FUNC_HPP
+#define OUTPUT_FUNC_HPP
 
 #include <ostream>
 #include "forwardlist.hpp"

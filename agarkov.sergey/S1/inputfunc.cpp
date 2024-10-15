@@ -37,7 +37,7 @@ agarkov::ForwardList< agarkov::pair_t > agarkov::inputLists(std::istream& in)
   ForwardList< pair_t > list_of_lists;
   auto iter = list_of_lists.begin();
   while (in)
-  { 
+  {
     if (list_of_lists.empty())
     {
       list_of_lists.push_front(inputList(in));

@@ -1,5 +1,5 @@
-#ifndef INPUT_FUNC_HPP 
-#define INPUT_FUNC_HPP 
+#ifndef INPUT_FUNC_HPP
+#define INPUT_FUNC_HPP
 
 #include <string>
 #include <istream>

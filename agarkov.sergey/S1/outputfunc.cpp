@@ -14,11 +14,10 @@ namespace
   }
   constexpr size_t MAX = std::numeric_limits< size_t >::max();
   size_t trySum(const size_t& a, const size_t& b)
-  { 
+  {
     if (MAX - a < b)
     {
       throw std::overflow_error("Sum overflow");
-      
     }
     return a + b;
   }
