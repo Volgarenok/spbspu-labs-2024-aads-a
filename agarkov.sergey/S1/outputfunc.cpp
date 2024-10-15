@@ -40,7 +40,7 @@ void agarkov::outputNum(std::ostream& out, const agarkov::ForwardList< agarkov::
   for (size_t i = 0; i < max_length; ++i)
   {
     bool has_elements = false;
-    bool outed = false
+    bool outed = false;
     for (auto iter = lists.cbegin(); iter != lists.cend(); ++iter)
     {
       const auto& pair = *iter;
@@ -55,6 +55,7 @@ void agarkov::outputNum(std::ostream& out, const agarkov::ForwardList< agarkov::
         else
         {
           out << *inner_iter;
+          outed = true;
         }
         has_elements = true;
       }
