@@ -15,7 +15,7 @@ namespace
   constexpr size_t MAX = std::numeric_limits< size_t >::max();
   size_t trySum(const size_t& a, const size_t& b)
   {
-    if (MAX - a < b)
+    if (a > MAX - b)
     {
       throw std::overflow_error("Sum overflow");
     }
@@ -53,6 +53,10 @@ void agarkov::outputNum(std::ostream& out, const agarkov::ForwardList< agarkov::
     if (has_elements)
     {
       out << '\n';
+    }
+    else
+    {
+      out << 0;
     }
   }
 }
