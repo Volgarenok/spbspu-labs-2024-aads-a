@@ -7,7 +7,7 @@
 #include <vector>
 #include <algorithm>
 #include <iterator>
-#include "list.hpp"
+#include <list.hpp>
 #include "input_output.hpp"
 #include "sort.hpp"
 

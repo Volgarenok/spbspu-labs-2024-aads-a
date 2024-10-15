@@ -5,7 +5,7 @@
 #include <deque>
 #include <vector>
 #include <algorithm>
-#include "list.hpp"
+#include <list.hpp>
 #include "input_output.hpp"
 
 namespace sakovskaia

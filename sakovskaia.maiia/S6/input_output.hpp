@@ -5,7 +5,7 @@
 #include <deque>
 #include <random>
 #include <iomanip>
-#include "list.hpp"
+#include <list.hpp>
 
 namespace sakovskaia
 {
