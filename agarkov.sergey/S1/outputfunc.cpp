@@ -98,8 +98,8 @@ void agarkov::outputSum(std::ostream& out, const agarkov::ForwardList< agarkov::
       else
       {
         out << sum;
+        return;
       }
     }
   }
-  out << '\n';
 }
