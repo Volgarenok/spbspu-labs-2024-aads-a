@@ -1,4 +1,6 @@
 #include "outputfunc.hpp"
+#include <limits>
+#include <exception>
 
 namespace
 {
@@ -9,6 +11,16 @@ namespace
     {
       ++iter;
     }
+  }
+  constexpr size_t MAX = std::numeric_limits< size_t >::max();
+  size_t trySum(const size_t& a, const size_t& b)
+  { 
+    if (MAX - a < b)
+    {
+      throw std::overflow_error("Sum overflow");
+      
+    }
+    return a + b;
   }
 }
 
@@ -61,7 +73,7 @@ void agarkov::outputSum(std::ostream& out, const agarkov::ForwardList< agarkov::
       {
         auto inner_iter = pair.second.cbegin();
         advance(inner_iter, i);
-        sum += *inner_iter;
+        sum = trySum(sum,*inner_iter);
         has_elements = true;
       }
     }
