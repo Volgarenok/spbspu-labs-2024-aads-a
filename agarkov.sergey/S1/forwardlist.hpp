@@ -67,7 +67,19 @@ namespace agarkov
   }
 
   // ForwardList(ForwardList< T >&& other);
-  // ForwardList< T >& operator=(const ForwardList< T >& other);
+  template< typename T >
+  ForwardList< T >& ForwardList< T >::operator=(const ForwardList< T >& other)
+  {
+    if (this == std::addressof(other))
+    {
+      return *this;
+    }
+    ForwardList< T > temp(other);
+    clear();
+    swap(temp);
+    return *this;
+  }
+
   // ForwardList< T >& operator=(ForwardList< T >&& other);
 
 
