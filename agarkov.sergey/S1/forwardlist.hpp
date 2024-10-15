@@ -35,8 +35,12 @@ namespace agarkov
     iterator insert_after(const_iterator pos, iterator first, iterator last );
     void swap(ForwardList< T >& other);
     size_t max_size() const noexcept;
+    void resize(size_t count);
+    void resize(size_t count, const T& value);
     template< typename... Args >
     iterator emplace_after(const_iterator pos, Args&&... args);
+    iterator erase_after(const_iterator pos);
+    iterator erase_after(const_iterator first, const_iterator last);
   private:
     details::List< T >* head_;
   };
@@ -270,6 +274,32 @@ namespace agarkov
     temp->next_ = cur->next_;
     cur->next_ = temp;
     return iterator(temp);
+  }
+
+  template< typename T >
+  typename ForwardList< T >::iterator ForwardList< T >::erase_after(const_iterator pos)
+  {
+    if (!(pos.ptr_ || pos.ptr_->next_))
+    {
+      return end();
+    }
+
+    details::List< T >* cur = const_cast< details::List< T >* >(pos.ptr_);
+    details::List< T >* temp = cur;
+    temp = temp->next_->next_;
+    delete cur->next_;
+    cur->next_ = temp;
+    return iterator(cur);
+  }
+
+  template< typename T >
+  typename ForwardList< T >::iterator ForwardList< T >::erase_after(const_iterator first, const_iterator last)
+  {
+    while ((first.ptr_->next_ != last.ptr_) && first.ptr_->next_)
+    {
+      erase_after(first);
+    }
+    return iterator(const_cast< details::List< T >* >(last.ptr_));
   }
 
 }
