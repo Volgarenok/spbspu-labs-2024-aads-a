@@ -25,9 +25,11 @@ namespace
 
 void agarkov::outputName(std::ostream& out, const agarkov::ForwardList< agarkov::pair_t >& lists)
 {
-  for (auto iter = lists.cbegin(); iter != lists.cend(); ++iter)
+  out << (*(lists.cbegin())).first;
+  for (auto iter = (lists.cbegin())++; iter != lists.cend(); ++iter)
   {
-    out << (*iter).first << ' ';
+
+    out << ' ' << (*iter).first;
   }
   out << '\n';
 }
@@ -46,7 +48,14 @@ void agarkov::outputNum(std::ostream& out, const agarkov::ForwardList< agarkov::
       {
         auto inner_iter = pair.second.cbegin();
         advance(inner_iter, i);
-        out << *inner_iter << ' ';
+        if (i != max_length)
+        {
+          out << *inner_iter << ' ';
+        }
+        else
+        {
+          out << *inner_iter;
+        }
         has_elements = true;
       }
     }

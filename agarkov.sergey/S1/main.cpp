@@ -13,7 +13,6 @@ int main()
     agarkov::outputName(std::cout, lists);
     agarkov::outputNum(std::cout, lists);
     agarkov::outputSum(std::cout, lists);
-
     return 0;
   }
   catch (const std::overflow_error& e)
