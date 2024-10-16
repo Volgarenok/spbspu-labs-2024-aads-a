@@ -51,5 +51,39 @@ namespace sakovskaia
     tree.push("dict1", dict);
     return tree;
   }
+
+  void newCmd(Tree< std::string, Tree< std::string, size_t > > & dict, std::istream & input, std::ostream & output)
+  {
+    std::string name;
+    if (!(input >> name))
+    {
+      throw std::logic_error("<INVALID ARGUMENT>");
+    }
+    if (dict.contains(name))
+    {
+      throw std::logic_error("<ALREADY EXISTS>");
+    }
+    else
+    {
+      dict.push(name, Tree< std::string, size_t >());
+    }
+  }
+
+  void deleteCmd(Tree< std::string, Tree< std::string, size_t > > & dict, std::istream & input, std::ostream & output)
+  {
+    std::string name;
+    if (!(input >> name))
+    {
+      throw std::logic_error("<INVALID ARGUMENT>");
+    }
+    if (dict.contains(name))
+    {
+      dict.remove(name);
+    }
+    else
+    {
+      throw std::logic_error("<DICTIONARY NOT FOUND>");
+    }
+  }
 }
 
