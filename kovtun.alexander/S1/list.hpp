@@ -87,14 +87,19 @@ namespace kovtun
   template< typename T >
   void List< T >::push_front(const T & val)
   {
+    auto temp = new Node< T >(val);
 
+    temp->next = head_;
+    head_->prev = temp;
+    head_ = head_->prev;
+
+    size_++;
   }
 
   template< typename T >
   void List< T >::push_back(const T & val)
   {
-   // TODO: first
-   auto temp = new Node< T >(nullptr, nullptr, val);
+   auto temp = new Node< T >(val);
    if (head_ == tail_)
    {
       temp->next = tail_;
@@ -117,7 +122,6 @@ namespace kovtun
   template< typename T >
   void List< T >::pop_front()
   {
-    // TODO: first
     if (head_ == tail_)
     {
       return;
@@ -125,6 +129,7 @@ namespace kovtun
 
     auto temp = head_;
     head_ = head_->next;
+    head_->prev = nullptr;
     delete temp;
 
     size_--;
@@ -133,7 +138,25 @@ namespace kovtun
   template< typename T >
   void List< T >::pop_back()
   {
+    if (head_ == tail_)
+    {
+      return;
+    }
 
+    auto last = tail_->prev;
+    if (last == head_)
+    {
+      head_ = head_->next;
+      head_->prev = nullptr;
+    }
+    else
+    {
+      tail_->prev = last->prev;
+      tail_->prev->next = tail_;
+    }
+    delete last;
+
+    size_--;
   }
 
   template< typename T >
