@@ -137,31 +137,24 @@ namespace sakovskaia
 
   void saveCmd(Tree< std::string, Tree< std::string, size_t > > & dict, std::istream & input, std::ostream & output)
   {
-    std::string name;
-    std::string filename;
-    if (!(input >> name >> filename))
+    std::string filename = "";
+    input >> filename;
+    std::ofstream outFile(filename);
+    if (!outFile.is_open())
     {
-      throw std::logic_error("<INVALID ARGUMENT>");
+      throw std::logic_error("Cannot open file");
     }
-    if (!dict.contains(name))
+    for (auto it = dict.cbegin(); it != dict.cend(); ++it)
     {
-      output << "<DICTIONARY NOT FOUND>\n";
-      return;
+      outFile << it->first;
+      const Tree< std::string, size_t > dictionary = it->second;
+      for (auto it2 = dictionary.cbegin(); it2 != dictionary.cend(); ++it2)
+      {
+        outFile << " " << it2->first << " " << it2->second;
+      }
+      outFile << "\n";
     }
-    std::ofstream file(filename);
-    if (!file.is_open())
-    {
-      throw std::logic_error("<FILE ERROR>");
-    }
-    Tree< std::string, size_t > & innerDict = dict.at(name);
-    std::vector< std::pair< std::string, size_t > > wordFrequencies;
-    innerDict.traverseLnr(wordFrequencies);
-    for (const auto & wordFrequency : wordFrequencies)
-    {
-        file << wordFrequency.first << " " << wordFrequency.second << "\n";
-    }
-    file.close();
-    output << "The dictionary " << name << " has been saved.\n";
+    output << "The dictionary has been saved.\n";
   }
 
   void removeCmd(Tree< std::string, Tree< std::string, size_t > > & dict, std::istream & input, std::ostream & output)
