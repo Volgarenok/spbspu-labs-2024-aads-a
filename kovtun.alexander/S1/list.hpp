@@ -14,20 +14,20 @@ namespace kovtun
     List();
     ~List();
     List(const List< T > & list);
-    List(List< T > && list);
+    List(List< T > && list) noexcept;
 
     ConstIterator< T > cbegin() const;
     ConstIterator< T > cend() const;
 
-    bool empty();
+    bool empty() const noexcept;
 
     void push_front(const T & val);
     void push_back(const T & val);
     void pop_front();
     void pop_back();
     void clear();
-    void swap(List< T > & list);
-    size_t size() const;
+    void swap(List< T > & list) noexcept;
+    size_t size() const noexcept;
 
   private:
     Node< T > * head_;
@@ -62,7 +62,7 @@ namespace kovtun
   }
 
   template< typename T >
-  List< T >::List(List< T > && list) :
+  List< T >::List(List< T > && list) noexcept :
     head_(list.head_),
     tail_(list.tail_),
     size_(list.size_)
@@ -137,7 +137,7 @@ namespace kovtun
   }
 
   template< typename T >
-  bool List< T >::empty()
+  bool List< T >::empty() const noexcept
   {
     return size_ == 0;
   }
@@ -152,7 +152,7 @@ namespace kovtun
   }
 
   template< typename T >
-  void List< T >::swap(List< T > & list)
+  void List< T >::swap(List< T > & list) noexcept
   {
     std::swap(list.head_, head_);
     std::swap(list.tail_, tail_);
@@ -160,7 +160,7 @@ namespace kovtun
   }
 
   template< typename T >
-  size_t List< T >::size() const
+  size_t List< T >::size() const noexcept
   {
     return size_;
   }
