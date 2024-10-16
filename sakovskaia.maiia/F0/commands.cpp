@@ -79,7 +79,7 @@ namespace sakovskaia
     }
     if (dict.contains(name))
     {
-      dict.remove(name);
+      dict.at(name) = Tree< std::string, size_t >();
     }
     else
     {
@@ -178,14 +178,21 @@ namespace sakovskaia
     auto & innerDict = dict.at(name);
     if (innerDict.contains(word))
     {
-      innerDict.remove(word);
+      size_t & frequency = innerDict.at(word);
+      if (frequency > 1)
+      {
+        frequency--;
+      }
+      else
+      {
+        innerDict.push(word, 0);
+      }
       output << "<" << word << " removed from dictionary>\n";
     }
     else
     {
       throw std::logic_error("<WORD NOT FOUND>");
     }
-    output << "Word '" << word << "' removed and frequencies updated.\n";
   }
 
   void frequencyCmd(Tree< std::string, Tree< std::string, size_t > > & dict, std::istream & input, std::ostream & output)
