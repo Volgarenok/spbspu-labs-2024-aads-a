@@ -26,6 +26,7 @@ namespace sakovskaia
     size_t getSize() const;
     void swap(Tree & other) noexcept;
     void push(const Key & key, const Value & value);
+    void deleteKey(const Key & key);
     ConstIterTree< Key, Value, Comp > cbegin() const;
     ConstIterTree< Key, Value, Comp > cend() const;
     ConstIterTree< Key, Value, Comp > find(const Key & key) const;
@@ -41,6 +42,7 @@ namespace sakovskaia
     size_t size_;
     detail::Node< Key, Value > * root;
     Comp comp_;
+    detail::Node< Key, Value > * deleteNode(detail::Node< Key, Value > * node, const Key & key);
     detail::Node< Key, Value > * insert(detail::Node< Key, Value > * node, detail::Node< Key, Value > * parent, const Key & key, const Value & value);
     detail::Node< Key, Value > * findNode(const Key & key) const;
     detail::Node< Key, Value > * copy(detail::Node< Key, Value > * node, detail::Node< Key, Value > * parent = nullptr);
@@ -163,6 +165,12 @@ namespace sakovskaia
     root = insert(root, nullptr, key, value);
   }
 
+  template< typename Key, typename Value, typename Comp >
+  void Tree< Key, Value, Comp >::deleteKey(const Key & key)
+  {
+    root = deleteNode(root, key);
+  }
+
   template < typename Key, typename Value, typename Comp >
   ConstIterTree< Key, Value, Comp > Tree< Key, Value, Comp >::cbegin() const
   {
@@ -179,6 +187,44 @@ namespace sakovskaia
   ConstIterTree< Key, Value, Comp > Tree< Key, Value, Comp >::find(const Key & key) const
   {
     return ConstIterTree< Key, Value, Comp >(findNode(key));
+  }
+
+  template< typename Key, typename Value, typename Comp >
+  detail::Node< Key, Value > * Tree< Key, Value, Comp >::deleteNode(detail::Node< Key, Value > * node, const Key & key)
+  {
+    if (!node)
+    {
+      return nullptr;
+    }
+    if (comp_(key, node->data.first))
+    {
+      node->left = deleteNode(node->left, key);
+    }
+    else if (comp_(node->data.first, key))
+    {
+      node->right = deleteNode(node->right, key);
+    }
+    else
+    {
+      if (!node->left)
+      {
+        detail::Node< Key, Value >* rightChild = node->right;
+        delete node;
+        --size_;
+        return rightChild;
+      }
+      else if (!node->right)
+      {
+        detail::Node< Key, Value >* leftChild = node->left;
+        delete node;
+        --size_;
+        return leftChild;
+      }
+      detail::Node< Key, Value >* minNode = findMin(node->right);
+      node->data = minNode->data;
+      node->right = deleteNode(node->right, minNode->data.first);
+    }
+    return node;
   }
 
   template < typename Key, typename Value, typename Comp >
