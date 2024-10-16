@@ -1,8 +1,6 @@
 #ifndef LIST_HPP
 #define LIST_HPP
 
-#include <cassert>
-
 #include "const_iterator.hpp"
 
 namespace kovtun

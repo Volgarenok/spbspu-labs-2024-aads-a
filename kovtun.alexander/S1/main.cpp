@@ -2,7 +2,7 @@
 #include <cassert>
 #include <limits>
 
-#include "list.hpp"
+#include "../common/list/list.hpp"
 
 int main()
 {
