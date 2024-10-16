@@ -80,7 +80,7 @@ namespace kovtun
   {
     List< T > temp(list);
     swap(temp);
-    
+
     return *this;
   }
 
