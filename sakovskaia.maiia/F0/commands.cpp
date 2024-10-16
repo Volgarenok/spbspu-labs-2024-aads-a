@@ -234,5 +234,67 @@ namespace sakovskaia
       throw std::logic_error("<WORD NOT FOUND>");
     }
   }
+
+  void combiningCmd(Tree< std::string, Tree< std::string, size_t > > & dict, std::istream & input, std::ostream & output)
+  {
+    std::string name1, name2, result_name;
+    if (!(input >> name1 >> name2 >> result_name))
+    {
+      throw std::logic_error("<INVALID ARGUMENT>");
+    }
+
+    if (!dict.contains(name1) || !dict.contains(name2))
+    {
+      throw std::logic_error("<DICTIONARY NOT FOUND>");
+    }
+    const auto & dict1 = dict.at(name1);
+    const auto & dict2 = dict.at(name2);
+    Tree< std::string, size_t > resultDict;
+    for (auto it1 = dict1.cbegin(); it1 != dict1.cend(); ++it1)
+    {
+      resultDict.push(it1->first, it1->second);
+    }
+    for (auto it2 = dict2.cbegin(); it2 != dict2.cend(); ++it2)
+    {
+      if (resultDict.contains(it2->first))
+      {
+        size_t combinedFrequency = resultDict.at(it2->first) + it2->second;
+        resultDict.at(it2->first) = combinedFrequency;
+      }
+      else
+      {
+        resultDict.push(it2->first, it2->second);
+      }
+    }
+    dict.push(result_name, resultDict);
+    output << "Combined dictionaries successfully into " << result_name << ".\n";
+  }
+
+  void diffCmd(Tree< std::string, Tree< std::string, size_t > > & dict, std::istream & input, std::ostream & output)
+  {
+    std::string name1, name2, result_name;
+    if (!(input >> name1 >> name2 >> result_name))
+    {
+      throw std::logic_error("<INVALID ARGUMENT>");
+    }
+    if (!dict.contains(name1) || !dict.contains(name2))
+    {
+      throw std::logic_error("<DICTIONARY NOT FOUND>");
+    }
+    const auto & dict1 = dict.at(name1);
+    const auto & dict2 = dict.at(name2);
+    Tree< std::string, size_t > resultDict;
+    for (auto it = dict1.cbegin(); it != dict1.cend(); ++it)
+    {
+      const std::string& word = it->first;
+      size_t freq1 = it->second;
+      if (!dict2.contains(word) || dict2.at(word) < freq1)
+      {
+        resultDict.push(word, freq1);
+      }
+    }
+    dict.push(result_name, resultDict);
+    output << "Words unique to " << name1 << " saved in " << result_name << ".\n";
+  }
 }
 
