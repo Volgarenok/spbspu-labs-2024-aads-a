@@ -67,6 +67,7 @@ namespace sakovskaia
     {
       dict.push(name, Tree< std::string, size_t >());
     }
+    output << "The dictionary " << name << " has been created.\n";
   }
 
   void deleteCmd(Tree< std::string, Tree< std::string, size_t > > & dict, std::istream & input, std::ostream & output)
@@ -84,6 +85,111 @@ namespace sakovskaia
     {
       throw std::logic_error("<DICTIONARY NOT FOUND>");
     }
+    output << "The dictionary " << name << " has been deleted.\n";
+  }
+
+  void loadCmd(Tree< std::string, Tree< std::string, size_t > > & dict, std::istream & input, std::ostream & output)
+  {
+    std::string name;
+    std::string filename;
+    if (!(input >> name >> filename))
+    {
+      throw std::logic_error("<INVALID ARGUMENT>");
+    }
+    if (!dict.contains(name))
+    {
+      throw std::logic_error("<DICTIONARY NOT FOUND>");
+    }
+    else
+    {
+      std::ifstream file(filename);
+      if (!file.is_open())
+      {
+        throw std::logic_error("<FILE NOT FOUND>");
+      }
+      dict = inputCMD(filename);
+    }
+    output << "The dictionary " << name << " has been loaded.\n";
+  }
+
+  void addCmd(Tree< std::string, Tree< std::string, size_t > > & dict, std::istream & input, std::ostream & output)
+  {
+    std::string name, word;
+    if (!(input >> name >> word))
+    {
+      throw std::logic_error("<INVALID ARGUMENT>");
+    }
+
+    if (!dict.contains(name))
+    {
+      throw std::logic_error("<DICTIONARY NOT FOUND>");
+    }
+
+    auto & innerDict = dict.at(name);
+    if (innerDict.contains(word))
+    {
+      innerDict.at(word) += 1;
+    }
+    else
+    {
+      innerDict.push(word, 1);
+    }
+    output << word << " added to " << name << ".\n";
+  }
+
+  void saveCmd(Tree<std::string, Tree<std::string, size_t>>& dict, std::istream& input, std::ostream& output)
+  {
+    std::string name;
+    std::string filename;
+    if (!(input >> name >> filename))
+    {
+      throw std::logic_error("<INVALID ARGUMENT>");
+    }
+    if (!dict.contains(name))
+    {
+      output << "<DICTIONARY NOT FOUND>\n";
+      return;
+    }
+    std::ofstream file(filename);
+    if (!file.is_open())
+    {
+      throw std::logic_error("<FILE ERROR>");
+    }
+    Tree< std::string, size_t > & innerDict = dict.at(name);
+    std::vector< std::pair< std::string, size_t > > wordFrequencies;
+    innerDict.traverseLnr(wordFrequencies);
+    for (const auto & wordFrequency : wordFrequencies)
+    {
+        file << wordFrequency.first << " " << wordFrequency.second << "\n";
+    }
+    file.close();
+  }
+}
+
+  void removeCmd(Tree< std::string, Tree< std::string, size_t > > & dict, std::istream & input, std::ostream & output)
+  {
+    std::string name, word;
+    if (!(input >> name >> word))
+    {
+      throw std::logic_error("<INVALID ARGUMENT>");
+    }
+
+    if (!dict.contains(name))
+    {
+      throw std::logic_error("<DICTIONARY NOT FOUND>");
+    }
+
+    auto & innerDict = dict.at(name);
+    if (innerDict.contains(word))
+    {
+      innerDict.remove(word);
+      output << "<" << word << " removed from dictionary>\n";
+    }
+    else
+    {
+      throw std::logic_error("<WORD NOT FOUND>");
+    }
+    output << "Word '" << word << "' removed and frequencies updated.\n";
   }
 }
 
