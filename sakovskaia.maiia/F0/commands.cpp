@@ -119,12 +119,10 @@ namespace sakovskaia
     {
       throw std::logic_error("<INVALID ARGUMENT>");
     }
-
     if (!dict.contains(name))
     {
       throw std::logic_error("<DICTIONARY NOT FOUND>");
     }
-
     auto & innerDict = dict.at(name);
     if (innerDict.contains(word))
     {
@@ -163,8 +161,8 @@ namespace sakovskaia
         file << wordFrequency.first << " " << wordFrequency.second << "\n";
     }
     file.close();
+    output << "The dictionary " << name << " has been saved.\n";
   }
-}
 
   void removeCmd(Tree< std::string, Tree< std::string, size_t > > & dict, std::istream & input, std::ostream & output)
   {
@@ -173,12 +171,10 @@ namespace sakovskaia
     {
       throw std::logic_error("<INVALID ARGUMENT>");
     }
-
     if (!dict.contains(name))
     {
       throw std::logic_error("<DICTIONARY NOT FOUND>");
     }
-
     auto & innerDict = dict.at(name);
     if (innerDict.contains(word))
     {
@@ -190,6 +186,53 @@ namespace sakovskaia
       throw std::logic_error("<WORD NOT FOUND>");
     }
     output << "Word '" << word << "' removed and frequencies updated.\n";
+  }
+
+  void frequencyCmd(Tree< std::string, Tree< std::string, size_t > > & dict, std::istream & input, std::ostream & output)
+  {
+    std::string name, word;
+    if (!(input >> name >> word))
+    {
+      throw std::logic_error("<INVALID ARGUMENT>");
+    }
+    if (!dict.contains(name))
+    {
+      throw std::logic_error("<DICTIONARY NOT FOUND>");
+    }
+    auto & innerDict = dict.at(name);
+    if (innerDict.contains(word))
+    {
+      output << "Frequency of " << word << " in dictionary: " << innerDict.at(word) << "\n";
+    }
+    else
+    {
+      throw std::logic_error("<WORD NOT FOUND>");
+    }
+  }
+
+  void updateCmd(Tree< std::string, Tree< std::string, size_t > > & dict, std::istream & input, std::ostream & output)
+  {
+    std::string name, word;
+    size_t new_frequency;
+    if (!(input >> name >> word >> new_frequency))
+    {
+      throw std::logic_error("<INVALID ARGUMENT>");
+    }
+    if (!dict.contains(name))
+    {
+      throw std::logic_error("<DICTIONARY NOT FOUND>");
+    }
+
+    auto & innerDict = dict.at(name);
+    if (innerDict.contains(word))
+    {
+      innerDict.at(word) = new_frequency;
+      output << "Frequency of " << word << " in dictionary updated to " << new_frequency << ".\n";
+    }
+    else
+    {
+      throw std::logic_error("<WORD NOT FOUND>");
+    }
   }
 }
 
