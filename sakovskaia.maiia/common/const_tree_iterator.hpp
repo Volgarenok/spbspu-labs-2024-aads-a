@@ -1,5 +1,5 @@
-#ifndef CONST_ITERATOR_HPP
-#define CONST_ITERATOR_HPP
+#ifndef CONST_TREE_ITERATOR_HPP
+#define CONST_TREE_ITERATOR_HPP
 #include <functional>
 #include "tree_node.hpp"
 
