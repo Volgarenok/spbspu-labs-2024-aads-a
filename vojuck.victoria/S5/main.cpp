@@ -9,6 +9,7 @@
 #include <cstdlib>
 #include "tree.hpp"
 #include "traversalresult.hpp"
+
 using namespace vojuck;
 int main(int argc, char* argv[])
 {
