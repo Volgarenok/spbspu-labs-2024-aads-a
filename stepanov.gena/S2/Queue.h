@@ -38,21 +38,7 @@ void stepanov::Queue< T >::popBack()
 {
   if (!isEmpty())
   {
-    if (dataBase_.size() == 1)
-    {
-      dataBase_.clear();
-    }
-    else
-    {
-      typename List< T >::Node* newTail = dataBase_.head_;
-      while (newTail->next_->next_ != nullptr)
-      {
-        newTail = newTail->next_;
-      }
-      delete newTail->next_;
-      newTail->next_ = nullptr;
-    }
-    --dataBase_.size_;
+    dataBase_.pop_back();
   }
 }
 

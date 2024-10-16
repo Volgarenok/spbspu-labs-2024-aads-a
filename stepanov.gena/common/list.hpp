@@ -52,6 +52,7 @@ namespace stepanov
     void push_front(T && value);
     void push_back(const T & value);
     void pop_front();
+    void pop_back();
     void clear() noexcept;
     void swap(List & fwdlst);
     T& getBack();
@@ -259,6 +260,30 @@ namespace stepanov
     {
       tail_ = newnode;
     }
+  }
+
+  template< typename T >
+  void List< T >::pop_back()
+  {
+    if (empty())
+    {
+      return;
+    }
+    if (head_ == tail_)
+    {
+      delete head_;
+      head_ = nullptr;
+      tail_ = nullptr;
+      return;
+    }
+    Node< T >* current = head_;
+    while (current->next_ != tail_)
+    {
+      current = current->next_;
+    }
+    delete tail_;
+    tail_ = current;
+    tail_->next_ = nullptr;
   }
 
   template< typename T >

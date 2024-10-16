@@ -64,4 +64,60 @@ namespace stepanov
     }
   }
 
+  void manageExpression::convertToPolish(const std::string& newString)
+  {
+    parseExpression(newString);
+    while (!newExpr_.isEmpty())
+    {
+      if (newExpr_.getSize() == 1 && !newExpr_.getTail().isOperand())
+      {
+        throw std::runtime_error("Incorrect expression!");
+      }
+      if (newExpr_.getTail().isOperand())
+      {
+        postfQueue_.pushFront(newExpr_.getTail());
+      }
+      else if (newExpr_.getTail().getParenthesis() == '(')
+      {
+        stack_.pushTop(newExpr_.getTail());
+      }
+      else if (checkOperatorsPriority(newExpr_.getTail()) != 0)
+      {
+        while (!stack_.isEmpty() && (checkOperatorsPriority(newExpr_.getTail()) <= checkOperatorsPriority(stack_.getHead())))
+        {
+          postfQueue_.pushFront(stack_.getHead());
+          stack_.popTop();
+        }
+        stack_.pushTop(newExpr_.getTail());
+      }
+      else if (newExpr_.getTail().getParenthesis() == ')')
+      {
+        while (stack_.getHead().getParenthesis() != '(')
+        {
+          postfQueue_.pushFront(stack_.getHead());
+          stack_.popTop();
+        }
+        if (stack_.getHead().getParenthesis() == '(')
+        {
+          stack_.popTop();
+        }
+      }
+      newExpr_.popBack();
+    }
+    while (!stack_.isEmpty())
+    {
+      if (stack_.getHead().isParenthesis())
+      {
+        stack_.popTop();
+      }
+      else
+      {
+        postfQueue_.pushFront(stack_.getHead());
+        stack_.popTop();
+      }
+    }
+  }
 }
+
+
+
