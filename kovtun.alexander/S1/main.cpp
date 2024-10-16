@@ -47,20 +47,8 @@ int main()
     }
   }
 
-  for (auto seq = sequences.cbegin(); seq != sequences.cend(); ++seq)
-  {
-    std::cout << seq->first;
-    if (seq++ != sequences.cend())
-    {
-      std::cout << " ";
-    }
-  }
-  std::cout << "\n";
-
-
   kovtun::List< size_t > sums;
   kovtun::List< kovtun::List< size_t > > output;
-
   bool hasOverflow = false;
   size_t sum = 0;
   for (size_t l = 0; l < maxSize; l++)
@@ -92,12 +80,24 @@ int main()
     return 1;
   }
 
+  for (auto seq = sequences.cbegin(); seq != sequences.cend(); ++seq)
+  {
+    std::cout << seq->first;
+    auto t = seq;
+    if (++t != sequences.cend())
+    {
+      std::cout << " ";
+    }
+  }
+  std::cout << "\n";
+
   for (auto row = output.cbegin(); row != output.cend(); ++row)
   {
     for (auto num = row->cbegin(); num != row->cend(); ++num)
     {
       std::cout << *num;
-      if (num++ != row->cend())
+      auto t = num;
+      if (++t != row->cend())
       {
         std::cout << " ";
       }
@@ -112,7 +112,8 @@ int main()
   for (auto it = sums.cbegin(); it != sums.cend(); ++it)
   {
     std::cout << *it;
-    if (it++ != sums.cend())
+    auto t = it;
+    if (++t != sums.cend())
     {
       std::cout << " ";
     }
