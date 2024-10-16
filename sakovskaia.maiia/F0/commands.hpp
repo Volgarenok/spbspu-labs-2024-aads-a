@@ -4,7 +4,7 @@
 #include <map>
 #include <string>
 #include <fstream>
-#include "tree.hpp"
+#include <tree.hpp>
 
 namespace sakovskaia
 {

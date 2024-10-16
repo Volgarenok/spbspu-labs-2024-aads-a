@@ -4,7 +4,7 @@
 #include <functional>
 #include <limits>
 #include "commands.hpp"
-#include "tree.hpp"
+#include <tree.hpp>
 
 int main(int argc, char* argv[])
 {
