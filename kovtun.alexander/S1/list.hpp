@@ -16,6 +16,9 @@ namespace kovtun
     List(const List< T > & list);
     List(List< T > && list) noexcept;
 
+    List< T > & operator=(const List< T > & list);
+    List< T > & operator=(List< T > && list);
+
     ConstIterator< T > cbegin() const;
     ConstIterator< T > cend() const;
 
@@ -70,6 +73,34 @@ namespace kovtun
     list.head_ = nullptr;
     list.tail_ = nullptr;
     list.size_ = 0;
+  }
+
+  template< typename T >
+  List< T > & List< T >::operator=(const List< T > & list)
+  {
+    List< T > temp(list);
+    swap(temp);
+    
+    return *this;
+  }
+
+  template< typename T >
+  List< T > & List< T >::operator=(List< T > && list)
+  {
+    if (head_ != list.head_)
+    {
+      clear();
+
+      head_ = list.head_;
+      tail_ = list.tail_;
+      size_ = list.size_;
+
+      list.head_ = nullptr;
+      list.tail_ = nullptr;
+      list.size_ = 0;
+    }
+
+    return *this;
   }
 
   template< typename T >
