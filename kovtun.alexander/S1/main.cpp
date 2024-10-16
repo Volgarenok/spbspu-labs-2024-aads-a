@@ -68,7 +68,6 @@ int main()
       if (val > std::numeric_limits< size_t >::max() - sum)
       {
         hasOverflow = true;
-        sum = std::numeric_limits< size_t >::max();
         continue;
       }
 
@@ -103,6 +102,12 @@ int main()
     std::cout << "\n";
   }
 
+  if (hasOverflow)
+  {
+    std::cerr << "overflow\n";
+    return 1;
+  }
+
   if (sums.empty())
   {
     sums.push_back(0);
@@ -118,11 +123,6 @@ int main()
   }
   std::cout << "\n";
 
-  if (hasOverflow)
-  {
-    std::cerr << "overflow\n";
-    return 1;
-  }
 
   return 0;
 }
