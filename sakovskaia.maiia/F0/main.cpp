@@ -37,6 +37,7 @@ int main(int argc, char* argv[])
   cmd.push("delete", deleteCmd);
   cmd.push("load", loadCmd);
   cmd.push("add", addCmd);
+  cmd.push("save", saveCmd);
   cmd.push("remove", removeCmd);
   cmd.push("frequency", frequencyCmd);
   cmd.push("update", updateCmd);
