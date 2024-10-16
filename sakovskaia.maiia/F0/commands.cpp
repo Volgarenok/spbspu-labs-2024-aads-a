@@ -135,7 +135,7 @@ namespace sakovskaia
     output << word << " added to " << name << ".\n";
   }
 
-  void saveCmd(Tree<std::string, Tree<std::string, size_t>>& dict, std::istream& input, std::ostream& output)
+  void saveCmd(Tree< std::string, Tree< std::string, size_t > > & dict, std::istream & input, std::ostream & output)
   {
     std::string name;
     std::string filename;
