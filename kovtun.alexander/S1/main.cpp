@@ -56,28 +56,26 @@ int main()
     kovtun::List< size_t > row;
     for (auto seq = sequences.cbegin(); seq != sequences.cend(); ++seq)
     {
-      if (!seq->second.empty())
+      if (seq->second.empty())
       {
-        size_t val = *seq->second.cbegin();
-        row.push_back(val);
-        seq->second.pop_front();
-
-        if (val > std::numeric_limits< size_t >::max() - sum)
-        {
-          hasOverflow = true;
-          continue;
-        }
-        sum += val;
+        continue;
       }
+
+      size_t val = *seq->second.cbegin();
+      row.push_back(val);
+      seq->second.pop_front();
+
+      if (val > std::numeric_limits< size_t >::max() - sum)
+      {
+        hasOverflow = true;
+        sum = std::numeric_limits< size_t >::max();
+        continue;
+      }
+
+      sum += val;
     }
     sums.push_back(sum);
     output.push_back(row);
-  }
-
-  if (hasOverflow)
-  {
-    std::cerr << "overflow\n";
-    return 1;
   }
 
   for (auto seq = sequences.cbegin(); seq != sequences.cend(); ++seq)
@@ -117,6 +115,13 @@ int main()
     {
       std::cout << " ";
     }
+  }
+  std::cout << "\n";
+
+  if (hasOverflow)
+  {
+    std::cerr << "overflow\n";
+    return 1;
   }
 
   return 0;
