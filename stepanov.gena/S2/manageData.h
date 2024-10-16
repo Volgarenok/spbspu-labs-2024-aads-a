@@ -5,6 +5,9 @@
 #include "Stack.h"
 #include "Tokenizer.h"
 #include <string>
+#include <limits>
+#include <cmath>
+#include <iostream>
 
 namespace stepanov
 {

@@ -117,6 +117,100 @@ namespace stepanov
       }
     }
   }
+
+  void manageExpression::calculatePolish(Stack< long long > &stackResult)
+  {
+    while (!postfQueue_.isEmpty())
+    {
+      if (postfQueue_.getTail().isOperand() && checkOperatorsPriority(postfQueue_.getTail()) == 0)
+      {
+        try
+        {
+          stackResult.pushTop(postfQueue_.getTail().getOperand());
+        }
+        catch (...)
+        {
+          throw std::runtime_error("overflow");
+        }
+      }
+      else if (checkOperatorsPriority(postfQueue_.getTail()) != 0)
+      {
+        long long MAX_LONG = std::numeric_limits< long long >::max();
+        long long a = stackResult.getHead();
+        stackResult.popTop();
+        long long b = stackResult.getHead();
+        stackResult.popTop();
+        long long result;
+        switch (postfQueue_.getTail().getTokenType())
+        {
+          case PLUS:
+            if (MAX_LONG - b < a)
+            {
+              throw std::runtime_error("Overflow!");
+            }
+            result = a + b;
+            stackResult.pushTop(result);
+            break;
+          case MINUS:
+            if (MAX_LONG - std::abs(a) < -std::abs(b))
+            {
+              throw std::runtime_error("Overflow!");
+            }
+            result = b - a;
+            stackResult.pushTop(result);
+            break;
+          case MULTIPLICATION:
+            if (MAX_LONG / std::abs(b) < std::abs(a))
+            {
+              throw std::runtime_error("Overflow!");
+            }
+            result = b * a;
+            stackResult.pushTop(result);
+            break;
+          case MOD:
+            if (a == 0)
+            {
+              throw std::runtime_error("Overflow!");
+            }
+            result = 0l;
+            if (b < 0)
+            {
+              result = b - a * std::floor(static_cast<double>(b) / a);
+            }
+            else
+            {
+              result = b % a;
+            }
+            stackResult.pushTop(result);
+            break;
+          case DIV:
+            if (a == 0)
+            {
+              throw std::logic_error("Overflow!");
+            }
+            result = b / a;
+            stackResult.pushTop(result);
+            break;
+          default:
+            break;
+        }
+      }
+      postfQueue_.popBack();
+    }
+  }
+
+  void manageExpression::printResult(Stack< long long >& stackResult)
+  {
+    while (!stackResult.isEmpty())
+    {
+      std::cout << stackResult.getHead();
+      stackResult.popTop();
+      if (!stackResult.isEmpty())
+      {
+        std::cout << " ";
+      }
+    }
+  }
 }
 
 
