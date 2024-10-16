@@ -79,13 +79,13 @@ namespace sakovskaia
     }
     if (dict.contains(name))
     {
-      dict.at(name) = Tree< std::string, size_t >();
+      dict.deleteKey(name);
+      output << "The dictionary " << name << " has been deleted.\n";
     }
     else
     {
       throw std::logic_error("<DICTIONARY NOT FOUND>");
     }
-    output << "The dictionary " << name << " has been deleted.\n";
   }
 
   void loadCmd(Tree< std::string, Tree< std::string, size_t > > & dict, std::istream & input, std::ostream & output)
@@ -138,23 +138,34 @@ namespace sakovskaia
   void saveCmd(Tree< std::string, Tree< std::string, size_t > > & dict, std::istream & input, std::ostream & output)
   {
     std::string filename = "";
-    input >> filename;
-    std::ofstream outFile(filename);
-    if (!outFile.is_open())
+    std::string dictName = "";
+    input >> dictName >> filename;
+    if (dict.contains(dictName))
     {
-      throw std::logic_error("Cannot open file");
-    }
-    for (auto it = dict.cbegin(); it != dict.cend(); ++it)
-    {
-      outFile << it->first;
-      const Tree< std::string, size_t > dictionary = it->second;
-      for (auto it2 = dictionary.cbegin(); it2 != dictionary.cend(); ++it2)
+      for (auto it = dict.cbegin(); it != dict.cend(); ++it)
       {
-        outFile << " " << it2->first << " " << it2->second;
+        if (dictName == it->first)
+        {
+          std::ofstream outFile(filename);
+          if (!outFile.is_open())
+          {
+            throw std::logic_error("Cannot open file");
+          }
+          outFile << it->first;
+          const Tree< std::string, size_t > dictionary = it->second;
+          for (auto it2 = dictionary.cbegin(); it2 != dictionary.cend(); ++it2)
+          {
+            outFile << " " << it2->first << " " << it2->second;
+          }
+          outFile << "\n";
+        }
       }
-      outFile << "\n";
+      output << "The dictionary has been saved.\n";
     }
-    output << "The dictionary has been saved.\n";
+    else
+    {
+      output << "<DICTIONARY NOT FOUND>\n";
+    }
   }
 
   void removeCmd(Tree< std::string, Tree< std::string, size_t > > & dict, std::istream & input, std::ostream & output)
