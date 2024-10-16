@@ -50,9 +50,9 @@ int main()
   kovtun::List< size_t > sums;
   kovtun::List< kovtun::List< size_t > > output;
   bool hasOverflow = false;
-  size_t sum = 0;
   for (size_t l = 0; l < maxSize; l++)
   {
+    size_t sum = 0;
     kovtun::List< size_t > row;
     for (auto seq = sequences.cbegin(); seq != sequences.cend(); ++seq)
     {
