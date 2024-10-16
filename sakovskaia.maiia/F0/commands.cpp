@@ -2,7 +2,7 @@
 
 namespace sakovskaia
 {
-  void sakovskaia::printHelp(std::ostream & output)
+  void printHelp(std::ostream & output)
   {
     output << "1. Create new dictionary:\n";
     output << "   new <dictionary_name>\n";
