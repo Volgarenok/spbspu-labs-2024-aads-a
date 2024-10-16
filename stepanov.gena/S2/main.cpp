@@ -2,9 +2,15 @@
 #include <fstream>
 #include <string>
 
+#include "manageData.h"
+
+using namespace stepanov;
+
 int main(int argc, char* argv[])
 {
   std::string strInput = "";
+  manageExpression expression;
+  Stack< long long > stackResult;
 
   if (argc == 1)
   {
