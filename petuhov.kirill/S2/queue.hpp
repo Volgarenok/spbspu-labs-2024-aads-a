@@ -23,19 +23,17 @@ namespace petuhov {
 
   template < typename T >
   void Queue < T >::push(const T & value) {
-    list_.push_front(value);
-    list_.reverse();
+    list_.insert(list_.end(), value);
   }
 
   template < typename T >
   void Queue < T >::push(T && value) {
-    list_.push_front(std::move(value));
-    list_.reverse();
+    list_.insert(list_.end(), std::move(value));
   }
 
   template < typename T >
   void Queue < T >::pop() {
-    list_.pop_front();
+    list_.erase(list_.begin());
   }
 
   template < typename T >

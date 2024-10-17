@@ -252,19 +252,23 @@ namespace petuhov
   void List< T >::assign(std::size_t count, const T &value)
   {
     clear();
-    try
+
+    if (count == 0)
     {
-      for (std::size_t i = 0; i < count; ++i)
-      {
-        push_back(value);
-      }
+      return;
     }
-    catch (const std::bad_alloc &)
+
+    head_ = new detail::Node< T >{value, nullptr, nullptr};
+    tail_ = head_;
+
+    for (std::size_t i = 1; i < count; ++i)
     {
-      clear();
-      throw;
+      detail::Node< T >* newNode = new detail::Node< T >{value, nullptr, tail_};
+      tail_->next = newNode;
+      tail_ = newNode;
     }
   }
+
 
   template < typename T >
   void List< T >::remove(const T &value)
@@ -387,46 +391,46 @@ namespace petuhov
   {
     if (pos.node_ == nullptr)
     {
-      push_back(value);
+      detail::Node< T >* newNode = new detail::Node< T >(value);
+
+      if (!head_)
+      {
+        head_ = tail_ = newNode;
+      }
+      else
+      {
+        tail_->next_ = newNode;
+        tail_ = newNode;
+      }
       return Iterator< T >(tail_);
     }
 
-    detail::Node< T > *current = head_;
-    while (current && current != pos.node_)
-    {
-      current = current->next_;
-    }
-
-    if (current == nullptr)
-    {
-      throw std::invalid_argument("Iterator does not belong to this list");
-    }
-
-    detail::Node< T > *newNode = new detail::Node< T >(value);
-
     if (pos.node_ == head_)
     {
-      newNode->next_ = head_;
+      detail::Node< T >* newNode = new detail::Node< T >(value, head_);
       head_ = newNode;
       return Iterator< T >(newNode);
     }
 
-    current = head_;
+    detail::Node< T >* current = head_;
+    
     while (current->next_ != pos.node_)
     {
       current = current->next_;
     }
 
-    newNode->next_ = current->next_;
+    detail::Node< T >* newNode = new detail::Node< T >(value, pos.node_);
+
     current->next_ = newNode;
 
-    if (!newNode->next_)
+    if (newNode->next_ == nullptr)
     {
       tail_ = newNode;
     }
 
     return Iterator< T >(newNode);
-  }
+}
+
 
   template < typename T >
   Iterator< T > List< T >::erase(Iterator< T > pos)
