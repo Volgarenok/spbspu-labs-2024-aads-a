@@ -48,6 +48,16 @@ namespace agarkov
     }
   }
 
+  template < typename T >
+  void Queue< T >::clear()
+  {
+    while (!isEmpty())
+    {
+      pop();
+    }
+  }
+
+
 }
 
 #endif
