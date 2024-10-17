@@ -10,7 +10,7 @@ petuhov::Queue< std::string > petuhov::infixToPostfix(const std::string &express
   std::string token;
 
   for (size_t i = 0; i < expression.size(); ++i) {
-    if (isdigit(expression[i])) {
+    if (isdigit(expression[i]) || (expression[i] == '-' && (i == 0 || expression[i-1] == '('))) {
       token += expression[i];
       while (i + 1 < expression.size() && isdigit(expression[i + 1])) {
         token += expression[++i];
@@ -25,7 +25,7 @@ petuhov::Queue< std::string > petuhov::infixToPostfix(const std::string &express
         operators.pop();
       }
       operators.pop();
-    } else if (strchr("+-*/", expression[i])) {
+    } else if (strchr("+-*/%", expression[i])) {
       while (!operators.empty() && precedence(operators.top()) >= precedence(expression[i])) {
         output.push(std::string(1, operators.top()));
         operators.pop();

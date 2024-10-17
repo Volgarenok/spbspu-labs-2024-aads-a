@@ -6,17 +6,18 @@
 #include <cstring>
 
 int petuhov::evaluatePostfix(petuhov::Queue< std::string > &postfix) {
-  petuhov::Stack< int > values;
+  petuhov::Stack< long long > values;
 
   while (!postfix.empty()) {
     std::string token = postfix.front();
     postfix.pop();
 
-    if (isdigit(token[0])) {
-      values.push(std::stoi(token));
-    } else if (strchr("+-*/", token[0])) {
-      int b = values.top(); values.pop();
-      int a = values.top(); values.pop();
+    if (isdigit(token[0]) || (token.size() > 1 && token[0] == '-')) {
+      values.push(std::stoll(token));  // Используем stoll для больших чисел
+    } else if (strchr("+-*/%", token[0])) {
+      if (values.size() < 2) throw std::invalid_argument("Invalid expression: not enough values");
+      long long b = values.top(); values.pop();
+      long long a = values.top(); values.pop();
       values.push(petuhov::applyOperation(a, b, token[0]));
     }
   }
