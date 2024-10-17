@@ -39,7 +39,13 @@ long long petuhov::applyOperation(long long a, long long b, char op) {
       return a / b;
     case '%':
       if (b == 0) throw std::invalid_argument("Modulo by zero");
-      return a % b;
+      {
+        long long mod_result = a % b;
+        if (mod_result < 0) {
+          mod_result += std::abs(b);
+        }
+        return mod_result;
+      }
     default: throw std::invalid_argument("Invalid operator");
   }
 }
