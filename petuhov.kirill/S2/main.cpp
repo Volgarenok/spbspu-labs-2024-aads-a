@@ -41,7 +41,10 @@ int main(int argc, char* argv[]) {
   }
 
   for (auto it = results.rbegin(); it != results.rend(); ++it) {
-    std::cout << *it << " ";
+    std::cout << *it;
+    if (it + 1 != results.rend()) {
+      std::cout << " ";
+    }
   }
   std::cout << std::endl;
 
