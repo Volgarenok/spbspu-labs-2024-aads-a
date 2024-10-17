@@ -12,6 +12,8 @@ namespace agarkov
     public:
       Stack();
       ~Stack();
+      Stack(const Stack< T >& other);
+
       void push(const T& value);
       void pop();
       T get() const;
@@ -67,7 +69,25 @@ namespace agarkov
     clear();
   }
 
-
+  template< typename T >
+  Stack< T >::Stack(const Stack< T >& other):
+    top_(nullptr)
+  {
+    try
+    {
+      details::List< T >* other_value = other.top_;
+      while (other_value != nullptr)
+      {
+        push(other_value->data_);
+        other_value = other_value->next_;
+      }
+    }
+    catch (...)
+    {
+      clear();
+      throw;
+    }
+  }
 
 
   template < typename T >
