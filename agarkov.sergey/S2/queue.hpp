@@ -14,6 +14,8 @@ namespace agarkov
       ~Queue();
       Queue(const Queue< T >& other);
       Queue< T >& operator=(const Queue< T >& other);
+      Queue(Queue< T >&& other);
+      Queue< T >& operator=(Queue < T >&& other);
       bool isEmpty() const;
       void pop();
       void clear();
@@ -67,6 +69,28 @@ namespace agarkov
       std::swap(end_, temp,end_);
     }
     return *this;
+  }
+
+  template < typename T >
+  Queue< T >::Queue(Queue< T >&& other):
+    begin_(other.begin_),
+    end_(other.end_)
+  {
+    other.begin_ = nullptr;
+    other.end_ = nullptr;
+  }
+
+  template < typename T >
+  Queue< T >& Queue< T >::operator=(Queue< T >&& other)
+  {
+    if (this != std::addressof(other))
+    {
+      clear();
+      begin_ = other.begin_;
+      other.begin_ = nullptr;
+      end_ = other.end_;
+      other.end_ = nullptr;
+    }
   }
 
   template< typename T >
