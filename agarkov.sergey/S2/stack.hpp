@@ -14,6 +14,8 @@ namespace agarkov
       ~Stack();
       Stack(const Stack< T >& other);
       Stack< T >& operator=(const Stack< T >& other);
+      Stack(Stack< T >&& other);
+      Stack< T >& operator=(Stack< T >&& other);
       void push(const T& value);
       void pop();
       T get() const;
@@ -100,7 +102,23 @@ namespace agarkov
     return *this;
   }
 
+  template< typename T >
+  Stack< T >::Stack(Stack< T >&& other):
+    top_(other.top_)
+  {
+    other.top_ = nullptr;
+  }
 
+  template< typename T >
+  Stack< T >& Stack< T >::operator=(Stack< T >&& other)
+  {
+    if (this != std::addressof(other))
+    {
+      clear();
+      top_ = other.top_;
+      other.top_ = nullptr;
+    }
+  }
 
   template < typename T >
   void Stack< T >::clear()
