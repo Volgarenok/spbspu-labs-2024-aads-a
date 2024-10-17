@@ -12,8 +12,10 @@ namespace agarkov
     public:
       Queue();
       ~Queue();
+      Queue(const Queue< T >& other);
       bool isEmpty() const;
       void pop();
+      void clear();
       void push(const T& value);
       T get() const;
     private:
@@ -31,6 +33,27 @@ namespace agarkov
   Queue< T >::~Queue()
   {
     clear();
+  }
+
+  template< typename T >
+  Queue< T >::Queue(const Queue< T >& other):
+    begin_(nullptr),
+    end_(nullptr)
+  {
+    try
+    {
+      details::List< T >* curent = other.begin_;
+      while (curent != nullptr)
+      {
+        push(curent->data_);
+        curent = curent->next_;
+      }
+    }
+    catch (...)
+    {
+      clear();
+      throw;
+    }
   }
 
   template< typename T >
