@@ -440,23 +440,6 @@ namespace petuhov
       return Iterator< T >(nullptr);
     }
 
-    detail::Node< T > *current = head_;
-    bool found = false;
-    while (current)
-    {
-      if (current == pos.node_)
-      {
-        found = true;
-        break;
-      }
-      current = current->next_;
-    }
-
-    if (!found)
-    {
-      throw std::invalid_argument("Iterator does not belong to this list");
-    }
-
     detail::Node< T > *toDelete = pos.node_;
 
     if (toDelete == head_)
@@ -485,8 +468,9 @@ namespace petuhov
       }
     }
 
+    Iterator< T > nextIt(toDelete->next_);
     delete toDelete;
-    return Iterator< T >(toDelete->next_);
+    return nextIt;
   }
 
   template < typename T >
