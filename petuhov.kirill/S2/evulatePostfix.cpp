@@ -6,7 +6,7 @@
 
 int petuhov::evaluatePostfix(petuhov::Queue< std::string > &postfix) {
   petuhov::Stack< int > values;
-  
+
   while (!postfix.empty()) {
     std::string token = postfix.front();
     postfix.pop();

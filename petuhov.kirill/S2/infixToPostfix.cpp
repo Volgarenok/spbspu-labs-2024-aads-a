@@ -7,7 +7,7 @@ petuhov::Queue< std::string > petuhov::infixToPostfix(const std::string &express
   petuhov::Stack< char > operators;
   petuhov::Queue< std::string > output;
   std::string token;
-  
+
   for (size_t i = 0; i < expression.size(); ++i) {
     if (isdigit(expression[i])) {
       token += expression[i];

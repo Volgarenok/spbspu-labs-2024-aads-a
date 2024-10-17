@@ -8,7 +8,7 @@ namespace petuhov {
   template < typename T >
   class Queue {
   public:
-    Queue() = default;  
+    Queue() = default;
     void push(const T & value);
     void push(T && value);
     void pop();

@@ -4,7 +4,7 @@
 
 int main(int argc, char* argv[]) {
   std::string expression;
-  
+
   if (argc == 2) {
     expression = argv[1];
   } else {
