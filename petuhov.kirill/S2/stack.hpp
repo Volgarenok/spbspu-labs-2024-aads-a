@@ -8,6 +8,13 @@ namespace petuhov {
   template < typename T >
   class Stack {
   public:
+    Stack();
+    Stack(const Stack & other);
+    Stack(Stack && other) noexcept;
+    Stack & operator=(const Stack & other);
+    Stack & operator=(Stack && other) noexcept;
+    ~Stack();
+
     void push(const T & value);
     void push(T && value);
     void pop();
@@ -19,6 +26,34 @@ namespace petuhov {
   private:
     List < T > list_;
   };
+
+  template < typename T >
+  Stack < T >::Stack() : list_() {}
+
+  template < typename T >
+  Stack < T >::Stack(const Stack < T > & other) : list_(other.list_) {}
+
+  template < typename T >
+  Stack < T >::Stack(Stack < T > && other) noexcept : list_(std::move(other.list_)) {}
+
+  template < typename T >
+  Stack < T > & Stack < T >::operator=(const Stack < T > & other) {
+    if (this != &other) {
+      list_ = other.list_;
+    }
+    return *this;
+  }
+
+  template < typename T >
+  Stack < T > & Stack < T >::operator=(Stack < T > && other) noexcept {
+    if (this != &other) {
+      list_ = std::move(other.list_);
+    }
+    return *this;
+  }
+
+  template < typename T >
+  Stack < T >::~Stack() {}
 
   template < typename T >
   void Stack < T >::push(const T & value) {
