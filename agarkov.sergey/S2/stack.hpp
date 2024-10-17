@@ -12,7 +12,8 @@ namespace agarkov
     public:
       Stack();
       ~Stack();
-
+      void push(const T& value);
+      void pop();
       T get() const;
       bool isEmpty() const;
       void clear();
@@ -31,7 +32,12 @@ namespace agarkov
     return (top_ == nullptr);
   }
 
-
+  template< typename T >
+  void Stack< T >::push(const T& value)
+  {
+    details::List< T >* temp = new details::List< T >{value, top_};
+    top_ = temp;
+  }
 
   template< typename T >
   T Stack< T >::get() const
@@ -43,6 +49,17 @@ namespace agarkov
     return top_->data_;
   }
 
+  template< typename T >
+  void Stack< T >::pop()
+  {
+    if (isEmpty())
+    {
+      throw std::logic_error("Empty stack");
+    }
+    details::List< T >* temp = top_->next_;
+    delete top_;
+    top_ = temp;
+  }
 
   template< typename T >
   Stack< T >::~Stack()
