@@ -47,4 +47,25 @@ long long agarkov::multiply(long long a, long long b)
   return a * b;
 }
 
+long long agarkov::division(long long a, long long b)
+{
+  if (b == 0)
+  {
+    throw std::logic_error("Division by 0");
+  }
+  return a / b;
+}
+
+long long agarkov::remaind(long long a, long long b)
+{
+  if (b == 0)
+  {
+    throw std::logic_error("Remaind by 0");
+  }
+  if (a < 0)
+  {
+    return b + a % b;
+  }
+  return a % b;
+}
 
