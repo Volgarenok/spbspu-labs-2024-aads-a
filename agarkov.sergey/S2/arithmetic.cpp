@@ -26,3 +26,25 @@ long long agarkov::subtract(long long a, long long b)
   return a - b;
 }
 
+long long agarkov::multiply(long long a, long long b)
+{
+  if ((a > 0) && ((MAX / a) < b))
+  {
+    throw std::overflow_error("Multiply overflow");
+  }
+  else if ((a < 0) && ((MAX / a) > b))
+  {
+    throw std::overflow_error("Multiply overflow");
+  }
+  else if ((a > 0) && ((MIN / a) > b))
+  {
+    throw std::overflow_error("Multiply overflow");
+  }
+  else if ((a < 0) && ((MIN / a) < b))
+  {
+    throw std::overflow_error("Multiply overflow");
+  }
+  return a * b;
+}
+
+
