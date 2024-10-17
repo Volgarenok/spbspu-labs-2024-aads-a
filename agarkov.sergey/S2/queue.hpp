@@ -9,6 +9,7 @@ namespace agarkov
     public:
       Queue();
       bool isEmpty() const;
+      void pop();
     private:
       details::List< T >* begin_;
       details::List< T >* end_;
@@ -25,6 +26,28 @@ namespace agarkov
   {
     return (begin_ == nullptr);
   }
+
+  template< typename T >
+  void Queue< T >::pop()
+  {
+    if (isEmpty())
+    {
+      throw std::logic_error("Empty queue");
+    }
+    if (begin_ == end_)
+    {
+      delete begin_;
+      begin_ = nullptr;
+      end_ = nullptr;
+    }
+    else
+    {
+      details::List< T >* temp = begin_->next_;
+      delete begin_;
+      begin_ = temp;
+    }
+  }
+
 }
 
 #endif
