@@ -413,7 +413,7 @@ namespace petuhov
     }
 
     detail::Node< T >* current = head_;
-    
+
     while (current->next_ != pos.node_)
     {
       current = current->next_;
