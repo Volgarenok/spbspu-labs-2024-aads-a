@@ -17,3 +17,12 @@ long long agarkov::sum(long long a, long long b)
   return a + b;
 }
 
+long long agarkov::subtract(long long a, long long b)
+{
+  if ((b > 0) && (MIN + b > a))
+  {
+    throw std::overflow_error("Subtraction overflow");
+  }
+  return a - b;
+}
+
