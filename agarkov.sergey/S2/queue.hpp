@@ -1,6 +1,9 @@
 #ifndef QUEUE_HPP
 #define QUEUE_HPP
 
+#include <stdexcept>
+#include <list.hpp>
+
 namespace agarkov
 {
   template< typename T >
@@ -8,6 +11,7 @@ namespace agarkov
   {
     public:
       Queue();
+      ~Queue();
       bool isEmpty() const;
       void pop();
     private:
@@ -20,6 +24,12 @@ namespace agarkov
     begin_(nullptr),
     end_(nullptr)
   {}
+
+  template< typename T >
+  Queue< T >::~Queue()
+  {
+    clear();
+  }
 
   template< typename T >
   bool Queue< T >::isEmpty() const
