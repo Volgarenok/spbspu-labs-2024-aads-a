@@ -15,6 +15,7 @@ namespace agarkov
       bool isEmpty() const;
       void pop();
       void push(const T& value);
+      T get() const;
     private:
       details::List< T >* begin_;
       details::List< T >* end_;
@@ -82,6 +83,17 @@ namespace agarkov
     }
     end_ = temp;
   }
+
+  template< typename T >
+  T Queue< T >::get() const
+  {
+    if (isEmpty())
+    {
+      throw std::logic_error("Empty queue");
+    }
+    return begin_->data_;
+  }
+
 }
 
 #endif
