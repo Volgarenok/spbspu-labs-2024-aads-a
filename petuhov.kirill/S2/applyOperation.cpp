@@ -17,8 +17,10 @@ int petuhov::applyOperation(long long a, long long b, char op) {
       }
       return a - b;
     case '*':
-      if (a > 0 && b > 0 && a > std::numeric_limits<long long>::max() / b)
+      if ((a > 0 && b > 0 && a > std::numeric_limits<long long>::max() / b) ||
+          (a < 0 && b < 0 && a < std::numeric_limits<long long>::min() / b)) {
         throw std::overflow_error("Overflow in multiplication");
+      }
       return a * b;
     case '/':
       if (b == 0) throw std::invalid_argument("Division by zero");
