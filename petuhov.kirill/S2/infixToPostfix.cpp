@@ -2,6 +2,7 @@
 #include "precedence.hpp"
 #include "stack.hpp"
 #include <string>
+#include <cstring>
 
 petuhov::Queue< std::string > petuhov::infixToPostfix(const std::string &expression) {
   petuhov::Stack< char > operators;

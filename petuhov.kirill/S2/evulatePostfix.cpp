@@ -3,6 +3,7 @@
 #include "stack.hpp"
 #include <string>
 #include <stdexcept>
+#include <cstring>
 
 int petuhov::evaluatePostfix(petuhov::Queue< std::string > &postfix) {
   petuhov::Stack< int > values;
