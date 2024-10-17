@@ -1,0 +1,4 @@
+makedict name as as da re
+printdict name
+deleteDict name
+
