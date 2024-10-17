@@ -8,6 +8,7 @@ namespace agarkov
   {
     public:
       Queue();
+      bool isEmpty() const;
     private:
       details::List< T >* begin_;
       details::List< T >* end_;
@@ -18,6 +19,12 @@ namespace agarkov
     begin_(nullptr),
     end_(nullptr)
   {}
+
+  template< typename T >
+  bool Queue< T >::isEmpty() const
+  {
+    return (begin_ == nullptr);
+  }
 }
 
 #endif
