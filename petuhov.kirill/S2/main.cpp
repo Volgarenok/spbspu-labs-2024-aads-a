@@ -28,7 +28,9 @@ int main(int argc, char* argv[]) {
     infile.close();
   } else {
     while (std::getline(std::cin, line)) {
-      if (line.empty()) continue;
+      if (line.empty()) {
+        continue;
+      }
       try {
         auto postfix = petuhov::infixToPostfix(line);
         long long result = petuhov::evaluatePostfix(postfix);
