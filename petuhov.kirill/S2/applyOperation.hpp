@@ -2,7 +2,7 @@
 #define APPLY_OPERATION_HPP
 
 namespace petuhov {
-  int applyOperation(long long a, long long b, char op);
+  long long applyOperation(long long a, long long b, char op);
 }
 
 #endif

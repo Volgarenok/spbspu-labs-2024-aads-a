@@ -5,7 +5,7 @@
 #include <string>
 
 namespace petuhov {
-  int evaluatePostfix(petuhov::Queue< std::string > &postfix);
+  long long evaluatePostfix(petuhov::Queue< std::string > &postfix);
 }
 
 #endif
