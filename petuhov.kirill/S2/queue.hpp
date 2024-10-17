@@ -61,7 +61,6 @@ namespace petuhov {
     }
     return count;
   }
-
 }
 
 #endif
