@@ -11,11 +11,11 @@ namespace agarkov
   {
     public:
       Stack();
-
+      ~Stack();
 
       T get() const;
-
-
+      bool isEmpty() const;
+      void clear();
     private:
       details::List< T >* top_;
   };
@@ -25,6 +25,11 @@ namespace agarkov
     top_(nullptr)
   {}
 
+  template< typename T >
+  bool Stack< T >::isEmpty() const
+  {
+    return (top_ == nullptr);
+  }
 
 
 
@@ -39,11 +44,23 @@ namespace agarkov
   }
 
 
+  template< typename T >
+  Stack< T >::~Stack()
+  {
+    clear();
+  }
 
 
 
 
-
+  template < typename T >
+  void Stack< T >::clear()
+  {
+    while (!isEmpty())
+    {
+      pop();
+    }
+  }
 }
 
 #endif
