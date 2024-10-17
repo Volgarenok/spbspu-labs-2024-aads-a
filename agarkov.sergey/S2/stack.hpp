@@ -13,7 +13,7 @@ namespace agarkov
       Stack();
       ~Stack();
       Stack(const Stack< T >& other);
-
+      Stack< T >& operator=(const Stack< T >& other);
       void push(const T& value);
       void pop();
       T get() const;
@@ -88,6 +88,18 @@ namespace agarkov
       throw;
     }
   }
+
+  template< typename T >
+  Stack< T >& Stack< T >::operator=(const Stack< T >& other)
+  {
+    if (this != std::addressof(other))
+    {
+      Stack< T > temp(other);
+      std::swap(top_, other.top_);
+    }
+    return *this;
+  }
+
 
 
   template < typename T >
