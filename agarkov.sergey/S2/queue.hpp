@@ -14,6 +14,7 @@ namespace agarkov
       ~Queue();
       bool isEmpty() const;
       void pop();
+      void push(const T& value);
     private:
       details::List< T >* begin_;
       details::List< T >* end_;
@@ -67,7 +68,20 @@ namespace agarkov
     }
   }
 
-
+  template< typename T >
+  void Queue< T >::push(const T& value)
+  {
+    details::List< T >* temp = new details::List< T >{value, nullptr};
+    if (isEmpty())
+    {
+      begin_ = temp;
+    }
+    else
+    {
+      end_->next_ = temp;
+    }
+    end_ = temp;
+  }
 }
 
 #endif
