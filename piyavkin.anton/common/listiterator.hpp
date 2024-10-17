@@ -13,6 +13,7 @@ namespace piyavkin
   {
     friend class List< D >;
   public:
+    using value_type = D;
     ListIterator():
       node(nullptr)
     {}
@@ -76,6 +77,7 @@ namespace piyavkin
   {
     friend class List< D >;
   public:
+    using value_type = D;
     ConstListIterator():
       node(nullptr)
     {}

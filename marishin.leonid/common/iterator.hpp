@@ -2,6 +2,7 @@
 #define ITERATOR_HPP
 
 #include <memory>
+#include <iterator>
 #include "node.hpp"
 
 namespace marishin
@@ -9,7 +10,7 @@ namespace marishin
   template< class T >
   class LinkedList;
   template< class T >
-  class Iterator
+  class Iterator: public std::iterator < std::bidirectional_iterator_tag, T >
   {
     public:
       Iterator():
@@ -25,7 +26,7 @@ namespace marishin
         return *this;
       }
 
-      Iterator< T > & operator++(int)
+      Iterator< T > operator++(int)
       {
         Iterator< T > temp(*this);
         ++(*this);
@@ -45,12 +46,12 @@ namespace marishin
         return temp;
       }
 
-      bool operator!=(const Iterator< T > & other) const
+      bool operator!=(const Iterator< T > other) const
       {
-        return !(ptr_ == other.ptr_);
+        return !(*this == other);
       }
 
-      bool operator==(const Iterator< T > & other) const
+      bool operator==(const Iterator< T > other) const
       {
         return ptr_ == other.ptr_;
       }
@@ -100,7 +101,7 @@ namespace marishin
         return *this;
       }
 
-      ConstIterator< T > & operator++(int)
+      ConstIterator< T > operator++(int)
       {
         ConstIterator< T > temp(*this);
         ++(*this);
@@ -120,12 +121,12 @@ namespace marishin
         return temp;
       }
 
-      bool operator!=(const ConstIterator< T > & other) const
+      bool operator!=(const ConstIterator< T > other) const
       {
-        return !(ptr_ == other.ptr_);
+        return !(*this == other);
       }
 
-      bool operator==(const ConstIterator< T > & other) const
+      bool operator==(const ConstIterator< T > other) const
       {
         return ptr_ == other.ptr_;
       }
